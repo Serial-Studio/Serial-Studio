@@ -403,11 +403,16 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/MDF4ExportHandler.h
     src/API/Handlers/AudioHandler.h
     src/API/Handlers/MDF4PlayerHandler.h
+    src/API/Handlers/HIDHandler.h
+    src/API/Handlers/USBHandler.h
+    src/API/Handlers/ProcessHandler.h
     src/MQTT/Client.h
     src/IO/Drivers/Audio.h
     src/IO/Drivers/CANBus.h
     src/IO/Drivers/Modbus.h
+    src/IO/Drivers/HID.h
     src/IO/Drivers/USB.h
+    src/IO/Drivers/Process.h
     src/UI/Widgets/Plot3D.h
     src/DataModel/DBCImporter.h
     src/Licensing/Trial.h
@@ -424,11 +429,16 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/MDF4ExportHandler.cpp
     src/API/Handlers/AudioHandler.cpp
     src/API/Handlers/MDF4PlayerHandler.cpp
+    src/API/Handlers/HIDHandler.cpp
+    src/API/Handlers/USBHandler.cpp
+    src/API/Handlers/ProcessHandler.cpp
     src/MQTT/Client.cpp
     src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp
     src/IO/Drivers/Modbus.cpp
+    src/IO/Drivers/HID.cpp
     src/IO/Drivers/USB.cpp
+    src/IO/Drivers/Process.cpp
     src/UI/Widgets/Plot3D.cpp
     src/DataModel/DBCImporter.cpp
     src/Licensing/Trial.cpp
@@ -444,7 +454,10 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
     qml/Widgets/Dashboard/Plot3D.qml
@@ -616,6 +629,7 @@ target_link_openssl(
 
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
+  target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
 endif()
 
 #---------------------------------------------------------------------------------------------------

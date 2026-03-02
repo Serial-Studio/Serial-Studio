@@ -27,6 +27,10 @@
 #  include "API/CommandRegistry.h"
 #  include "MDF4/Export.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all MDF4 Export commands with the registry
  */
@@ -46,6 +50,10 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("mdf4.export.getStatus"), QStringLiteral("Get MDF4 export status"), &getStatus);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Enable or disable MDF4 export
@@ -81,6 +89,10 @@ API::CommandResponse API::Handlers::MDF4ExportHandler::close(const QString& id,
   result[QStringLiteral("closed")] = true;
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get MDF4 export status

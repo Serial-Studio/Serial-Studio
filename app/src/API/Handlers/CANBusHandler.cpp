@@ -27,6 +27,10 @@
 #  include "API/CommandRegistry.h"
 #  include "IO/Drivers/CANBus.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all CANBus commands with the registry
  */
@@ -72,6 +76,10 @@ void API::Handlers::CANBusHandler::registerCommands()
                            QStringLiteral("Get interface error message if any"),
                            &getInterfaceError);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Select CAN plugin by index
@@ -183,6 +191,10 @@ API::CommandResponse API::Handlers::CANBusHandler::setCanFD(const QString& id,
   result[QStringLiteral("enabled")] = enabled;
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get current CAN bus configuration

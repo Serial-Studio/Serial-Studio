@@ -24,6 +24,10 @@
 #include "API/CommandRegistry.h"
 #include "IO/Drivers/BluetoothLE.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all BluetoothLE commands with the registry
  */
@@ -72,6 +76,10 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
     QStringLiteral("Get Bluetooth adapter availability and connection status"),
     &getStatus);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Start scanning for Bluetooth LE devices
@@ -202,6 +210,10 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
   result[QStringLiteral("characteristicName")]  = characteristicNames.at(characteristicIndex);
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get list of discovered Bluetooth LE devices

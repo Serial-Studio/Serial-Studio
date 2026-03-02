@@ -24,6 +24,10 @@
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs an Accelerometer widget.
  * @param index The index of the accelerometer in the Dashboard.
@@ -49,6 +53,10 @@ Widgets::Accelerometer::Accelerometer(const int index, QQuickItem* parent)
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Accelerometer::updateData);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Axis value getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the current X-axis acceleration in G.
  */
@@ -72,6 +80,10 @@ double Widgets::Accelerometer::accelZ() const
 {
   return m_z;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Derived value getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the total 3D G-force magnitude sqrt(x^2+y^2+z^2).
@@ -125,6 +137,10 @@ double Widgets::Accelerometer::magnitude() const
   return m_magnitude;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Configuration getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the maximum G value for the polar plot range.
  */
@@ -143,6 +159,10 @@ bool Widgets::Accelerometer::inputInG() const
 {
   return m_inputInG;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Resets the peak G-force tracker to zero.
@@ -255,6 +275,10 @@ void Widgets::Accelerometer::updateData()
   if (changed)
     Q_EMIT updated();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Configuration setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the maximum G value for the polar plot range.

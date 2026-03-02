@@ -25,6 +25,10 @@
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs a MultiPlot widget.
  * @param index The index of the multiplot in the Dashboard.
@@ -81,6 +85,10 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Dimension getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the number of datasets in the multiplot.
  * @return The number of datasets.
@@ -107,6 +115,10 @@ int Widgets::MultiPlot::dataH() const
 {
   return m_dataH;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Axis range getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the minimum X-axis value.
@@ -144,6 +156,10 @@ double Widgets::MultiPlot::maxY() const
   return m_maxY;
 }
 
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Checks whether plot data updates are currently active.
  * @return @c true if updating is not paused, otherwise @c false.
@@ -152,6 +168,10 @@ bool Widgets::MultiPlot::running() const
 {
   return UI::Dashboard::instance().multiplotRunning(m_index);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Metadata getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the Y-axis label.
@@ -193,6 +213,10 @@ const QList<bool>& Widgets::MultiPlot::visibleCurves() const
   return m_visibleCurves;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Rendering
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Draws the data on the given QLineSeries.
  * @param series The QXYSeries to draw the data on.
@@ -205,6 +229,10 @@ void Widgets::MultiPlot::draw(QXYSeries* series, const int index)
     Q_EMIT series->update();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Property setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the size of the down-sampled X axis data.
@@ -243,6 +271,10 @@ void Widgets::MultiPlot::setRunning(const bool enabled)
   UI::Dashboard::instance().setMultiplotRunning(m_index, enabled);
   Q_EMIT runningChanged();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the data of the multiplot.
@@ -432,6 +464,10 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     Q_EMIT rangeChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Curve management
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Modifies the visibility state of a specific curve in the multi-plot.
  *
@@ -454,6 +490,10 @@ void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visib
     Q_EMIT curvesChanged();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Theme management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the theme of the multiplot.

@@ -28,6 +28,10 @@
 #include "IO/Manager.h"
 #include "Misc/Translator.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor, destructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Constructor function
  */
@@ -58,6 +62,10 @@ IO::FileTransmission& IO::FileTransmission::instance()
   static FileTransmission instance;
   return instance;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Status queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns @c true if the application is currently transmitting a file through
@@ -111,6 +119,10 @@ int IO::FileTransmission::lineTransmissionInterval() const
 {
   return m_timer.interval();
 }
+
+//--------------------------------------------------------------------------------------------------
+// File management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Allows the user to select a file to send to the serial port.
@@ -168,6 +180,10 @@ void IO::FileTransmission::closeFile()
   emit transmissionProgressChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Transmission control
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Pauses the file transmission process
  */
@@ -203,6 +219,10 @@ void IO::FileTransmission::beginTransmission()
     stopTransmission();
 }
 
+//--------------------------------------------------------------------------------------------------
+// External module connections
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Sets up external module connections for FileTransmission.
  */
@@ -228,6 +248,10 @@ void IO::FileTransmission::setupExternalConnections()
           &IO::FileTransmission::fileChanged);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Configuration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Changes the time interval to wait after sending one line from the
  * currently selected file.
@@ -236,6 +260,10 @@ void IO::FileTransmission::setLineTransmissionInterval(const int msec)
 {
   m_timer.setInterval(qMax(0, msec));
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data transmission
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Transmits a new line from the selected file to the serial port device.

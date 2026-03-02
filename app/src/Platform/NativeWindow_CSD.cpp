@@ -51,7 +51,7 @@ static bool isWindows11()
 }
 
 //--------------------------------------------------------------------------------------------------
-// NativeWindow Implementation
+// Constructor & initialization
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -68,6 +68,10 @@ NativeWindow::NativeWindow(QObject* parent) : QObject(parent)
           this,
           &NativeWindow::onThemeChanged);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Window management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the height of the title bar.
@@ -179,6 +183,10 @@ void NativeWindow::addWindow(QObject* window, const QString& color)
     connect(w, &QWindow::activeChanged, this, &NativeWindow::onActiveChanged);
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Theme management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles theme change events.

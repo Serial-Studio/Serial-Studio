@@ -36,6 +36,10 @@
 
 #include "AppInfo.h"
 
+//--------------------------------------------------------------------------------------------------
+// Singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Returns a pointer to the only instance of the class
  */
@@ -44,6 +48,10 @@ Misc::Utilities& Misc::Utilities::instance()
   static Utilities singleton;
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Application control
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Restarts the application - with macOS specific code to make it work
@@ -63,6 +71,10 @@ void Misc::Utilities::rebootApplication()
   qApp->exit();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Image handling
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns a @c QPixmap object with the appropiate resolution for the
  * screen.
@@ -77,6 +89,10 @@ QPixmap Misc::Utilities::getHiDpiPixmap(const QString& path)
 {
   return QPixmap(hdpiImagePath(path));
 }
+
+//--------------------------------------------------------------------------------------------------
+// User dialogs
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Asks the user if he/she wants the application to check for updates
@@ -212,6 +228,10 @@ void Misc::Utilities::aboutQt()
 {
   qApp->aboutQt();
 }
+
+//--------------------------------------------------------------------------------------------------
+// File operations
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Reveals the file contained in @a pathToReveal in Explorer/Finder.

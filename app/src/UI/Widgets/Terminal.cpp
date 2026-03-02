@@ -41,6 +41,10 @@
  */
 constexpr int MAX_LINES = 1000;
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs a Terminal object with the given parent item.
  *
@@ -181,6 +185,10 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
     }
   });
 }
+
+//--------------------------------------------------------------------------------------------------
+// Rendering pipeline
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Draws the selection highlight for one word-wrapped segment of a line.
@@ -537,6 +545,10 @@ void Widgets::Terminal::paint(QPainter* painter)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Character metrics
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the width of a single terminal character.
  * @return
@@ -554,6 +566,10 @@ int Widgets::Terminal::charHeight() const
 {
   return m_cHeight;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Style & display getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Gets the current font used by the terminal.
@@ -623,6 +639,10 @@ bool Widgets::Terminal::ansiColors() const
 {
   return m_ansiColors && m_emulateVt100;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Buffer & cursor info
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Gets the total number of lines in the terminal's data buffer.
@@ -696,6 +716,10 @@ const QPoint& Widgets::Terminal::cursorPosition() const
 {
   return m_cursorPosition;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Clipboard & selection
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Finds the character index within a line segment closest to a pixel X position.
@@ -904,6 +928,10 @@ void Widgets::Terminal::selectAll()
   Q_EMIT selectionChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Style setters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Sets the font used for rendering the terminal text.
  *
@@ -982,6 +1010,10 @@ void Widgets::Terminal::setPalette(const QPalette& palette)
   Q_EMIT colorPaletteChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Emulation setters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Enables or disables VT-100 emulation.
  *
@@ -1020,6 +1052,10 @@ void Widgets::Terminal::setAnsiColors(const bool enabled)
   Q_EMIT ansiColorsChanged();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Cursor management
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Toggles the visibility of the cursor.
  *
@@ -1031,6 +1067,10 @@ void Widgets::Terminal::toggleCursor()
   m_stateChanged  = true;
   m_cursorVisible = !m_cursorVisible;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Theme management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the terminal's color palette when the theme changes.
@@ -1056,6 +1096,10 @@ void Widgets::Terminal::onThemeChanged()
   update();
   // clang-format on
 }
+
+//--------------------------------------------------------------------------------------------------
+// Welcome & help
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Displays the localized welcome guide in the terminal widget, without
@@ -1100,6 +1144,10 @@ void Widgets::Terminal::loadWelcomeGuide()
   m_stateChanged = true;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Data append
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Appends a string of data to the terminal, processing each character
  *        accordingly.
@@ -1143,6 +1191,10 @@ void Widgets::Terminal::append(const QString& data)
   appendString(text);
   m_stateChanged = true;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Buffer management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Appends a string to the terminal's data buffer, updating the cursor
@@ -1303,6 +1355,10 @@ void Widgets::Terminal::initBuffer()
     m_currentColor = m_palette.color(QPalette::Text);
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// ANSI processing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Processes a single character in the context of normal text input.
@@ -1540,6 +1596,10 @@ void Widgets::Terminal::processResetFont(const QChar& byte, QString& text)
   (void)text;
   m_state = Text;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Color management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the ANSI color palette based on the current theme.
@@ -1953,6 +2013,10 @@ bool Widgets::Terminal::shouldEndSelection(const QChar& c)
   end |= (!c.isLetter() && !c.isNumber());
   return end;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Input event handling
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles mouse wheel events for scrolling the terminal content.

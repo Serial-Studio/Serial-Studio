@@ -33,6 +33,10 @@
 #include "MachineID.h"
 #include "Misc/Utilities.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the Trial licensing system.
  *
@@ -74,6 +78,10 @@ Licensing::Trial& Licensing::Trial::instance()
   static Trial instance;
   return instance;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Status queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns whether a trial query operation is currently running.
@@ -134,6 +142,10 @@ int Licensing::Trial::daysRemaining() const
 {
   return QDateTime::currentDateTimeUtc().daysTo(m_trialExpiry);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Trial management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Starts the trial if available.
@@ -199,6 +211,10 @@ void Licensing::Trial::writeSettings()
   m_settings.setValue("registd", m_crypt.encryptToString(regStr));
   m_settings.endGroup();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Backend communication
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sends a trial activation or validation request to the backend.

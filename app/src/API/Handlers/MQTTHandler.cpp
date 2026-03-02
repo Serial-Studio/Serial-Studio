@@ -27,6 +27,10 @@
 #  include "API/CommandRegistry.h"
 #  include "MQTT/Client.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all MQTT commands with the registry
  */
@@ -150,6 +154,10 @@ void API::Handlers::MQTTHandler::registerCommands()
                            QStringLiteral("Get available peer verify modes"),
                            &getPeerVerifyModes);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Set MQTT mode (Publisher or Subscriber)
@@ -687,6 +695,10 @@ API::CommandResponse API::Handlers::MQTTHandler::regenerateClientId(const QStrin
   result[QStringLiteral("clientId")] = mqtt.clientId();
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get current MQTT configuration

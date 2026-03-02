@@ -18,6 +18,10 @@
 #  include "API/CommandRegistry.h"
 #  include "IO/Drivers/Audio.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all Audio driver commands with the registry
  */
@@ -77,6 +81,10 @@ void API::Handlers::AudioHandler::registerCommands()
                            QStringLiteral("Get complete audio configuration"),
                            &getConfiguration);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Set input device
@@ -301,6 +309,10 @@ API::CommandResponse API::Handlers::AudioHandler::setOutputChannelConfig(const Q
   result[QStringLiteral("channelName")]  = channels.at(channel_index);
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get input devices list

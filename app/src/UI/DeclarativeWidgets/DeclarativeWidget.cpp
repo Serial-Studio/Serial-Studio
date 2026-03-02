@@ -23,6 +23,10 @@
 
 #include <QTableView>
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Configures item flags, sets fill color and connects signals/slots to
  * automatically resize the contained widget to the QML item's size.
@@ -64,6 +68,10 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem* parent)
   });
 }
 
+//--------------------------------------------------------------------------------------------------
+// Widget & palette access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Returns a pointer to the contained widget
  */
@@ -82,6 +90,10 @@ QPalette DeclarativeWidget::palette() const
 
   return {};
 }
+
+//--------------------------------------------------------------------------------------------------
+// Content sizing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Allows the sub-class widget to define its own content width hint for the
@@ -102,6 +114,10 @@ int DeclarativeWidget::contentHeight() const
 {
   return m_contentHeight;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Rendering
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Grabs an image/pixmap of the contained widget. The pixmap is later
@@ -132,6 +148,10 @@ void DeclarativeWidget::paint(QPainter* painter)
     painter->drawImage(0, 0, m_image);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Layout management
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Resizes the widget to fit inside the QML painted item.
  */
@@ -154,6 +174,10 @@ void DeclarativeWidget::requestUpdate()
 {
   m_updateRequested = true;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Property setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Changes the @param widget to be rendered in the QML interface.

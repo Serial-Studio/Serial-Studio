@@ -25,6 +25,10 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the WorkspaceManager and initializes the workspace path.
  *
@@ -56,6 +60,10 @@ Misc::WorkspaceManager& Misc::WorkspaceManager::instance()
   static WorkspaceManager instance;
   return instance;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Path queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the base workspace path.
@@ -97,6 +105,10 @@ QString Misc::WorkspaceManager::path(const QString& subdirectory) const
 
   return path;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Path management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Resets the workspace path to the default location.

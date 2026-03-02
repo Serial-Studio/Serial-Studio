@@ -24,6 +24,10 @@
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs a Bar widget.
  *
@@ -70,6 +74,10 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Checks if the dataset options indicate that a valid alarm range
  *        is available.
@@ -109,6 +117,10 @@ bool Widgets::Bar::alarmTriggered() const
 
   return false;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Value getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the measurement units associated with the dataset.
@@ -185,6 +197,10 @@ double Widgets::Bar::alarmHigh() const
   return m_alarmHigh;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Normalized position getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the normalized fractional position of the current value.
  *
@@ -224,6 +240,10 @@ double Widgets::Bar::normalizedAlarmHigh() const
 {
   return computeFractional(m_alarmHigh);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the current dataset value from the dashboard source.

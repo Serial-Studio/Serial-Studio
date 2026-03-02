@@ -29,6 +29,10 @@
 
 #include "UI/Taskbar.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the WindowManager singleton.
  */
@@ -56,6 +60,10 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
   connect(this, &UI::WindowManager::widthChanged, this, &UI::WindowManager::triggerLayoutUpdate);
   connect(this, &UI::WindowManager::heightChanged, this, &UI::WindowManager::triggerLayoutUpdate);
 }
+
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Gets the current z-order counter.
@@ -128,6 +136,10 @@ int UI::WindowManager::zOrder(QQuickItem* item) const
 
   return -1;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Layout management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Serializes the current window layout to a JSON object.

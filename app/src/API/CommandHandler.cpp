@@ -32,18 +32,27 @@
 #include "API/Handlers/ProjectHandler.h"
 #include "API/Handlers/UARTHandler.h"
 
-namespace {
-constexpr int kMaxBatchCommands = 256;
-}  // namespace
-
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/AudioHandler.h"
 #  include "API/Handlers/CANBusHandler.h"
+#  include "API/Handlers/HIDHandler.h"
 #  include "API/Handlers/MDF4ExportHandler.h"
 #  include "API/Handlers/MDF4PlayerHandler.h"
 #  include "API/Handlers/ModbusHandler.h"
 #  include "API/Handlers/MQTTHandler.h"
+#  include "API/Handlers/ProcessHandler.h"
+#  include "API/Handlers/USBHandler.h"
 #endif
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+constexpr int kMaxBatchCommands = 256;
+
+//--------------------------------------------------------------------------------------------------
+// Constructor/destructor & singleton access functions
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs the CommandHandler
@@ -63,6 +72,10 @@ API::CommandHandler& API::CommandHandler::instance()
 
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Message processing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Check if data appears to be an API message
@@ -141,6 +154,10 @@ API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& r
   return CommandRegistry::instance().execute(request.command, request.id, request.params);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Batch processing
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Process a batch of commands in sequential order
  * @param batch The parsed batch request
@@ -166,6 +183,10 @@ API::BatchResponse API::CommandHandler::processBatch(const BatchRequest& batch)
 
   return response;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Command metadata
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get information about all available commands
@@ -225,6 +246,9 @@ void API::CommandHandler::initializeHandlers()
   Handlers::MDF4ExportHandler::registerCommands();
   Handlers::AudioHandler::registerCommands();
   Handlers::MDF4PlayerHandler::registerCommands();
+  Handlers::HIDHandler::registerCommands();
+  Handlers::USBHandler::registerCommands();
+  Handlers::ProcessHandler::registerCommands();
 #endif
 
   m_initialized = true;

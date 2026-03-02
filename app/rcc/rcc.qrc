@@ -226,6 +226,8 @@
         <file>icons/miniwindow/restore.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
+        <file>icons/panes/important.svg</file>
+        <file>icons/panes/info.svg</file>
         <file>icons/panes/overview.svg</file>
         <file>icons/panes/setup.svg</file>
         <file>icons/project-editor/actions/add-bar.svg</file>
@@ -352,7 +354,9 @@
         <file>images/hammer.svg</file>
         <file>images/no-bluetooth.svg</file>
         <file>images/no-mic.svg</file>
+        <file>images/no-usb.svg</file>
         <file>images/spinner.svg</file>
+        <file>images/usb.svg</file>
         <file>instruments/attitude_crosshair.svg</file>
         <file>instruments/attitude_dial.svg</file>
         <file>instruments/attitude_pointer.svg</file>
@@ -374,9 +378,12 @@
         <file>messages/gpl3/Welcome_IT.txt</file>
         <file>messages/gpl3/Welcome_JA.txt</file>
         <file>messages/gpl3/Welcome_KO.txt</file>
+        <file>messages/gpl3/Welcome_NL.txt</file>
         <file>messages/gpl3/Welcome_PL.txt</file>
         <file>messages/gpl3/Welcome_PT.txt</file>
+        <file>messages/gpl3/Welcome_RO.txt</file>
         <file>messages/gpl3/Welcome_RU.txt</file>
+        <file>messages/gpl3/Welcome_SV.txt</file>
         <file>messages/gpl3/Welcome_TR.txt</file>
         <file>messages/gpl3/Welcome_UK.txt</file>
         <file>messages/gpl3/Welcome_ZH.txt</file>
@@ -389,9 +396,12 @@
         <file>messages/pro/Welcome_IT.txt</file>
         <file>messages/pro/Welcome_JA.txt</file>
         <file>messages/pro/Welcome_KO.txt</file>
+        <file>messages/pro/Welcome_NL.txt</file>
         <file>messages/pro/Welcome_PL.txt</file>
         <file>messages/pro/Welcome_PT.txt</file>
+        <file>messages/pro/Welcome_RO.txt</file>
         <file>messages/pro/Welcome_RU.txt</file>
+        <file>messages/pro/Welcome_SV.txt</file>
         <file>messages/pro/Welcome_TR.txt</file>
         <file>messages/pro/Welcome_UK.txt</file>
         <file>messages/pro/Welcome_ZH.txt</file>
@@ -404,15 +414,19 @@
         <file>messages/trial/Welcome_IT.txt</file>
         <file>messages/trial/Welcome_JA.txt</file>
         <file>messages/trial/Welcome_KO.txt</file>
+        <file>messages/trial/Welcome_NL.txt</file>
         <file>messages/trial/Welcome_PL.txt</file>
         <file>messages/trial/Welcome_PT.txt</file>
+        <file>messages/trial/Welcome_RO.txt</file>
         <file>messages/trial/Welcome_RU.txt</file>
+        <file>messages/trial/Welcome_SV.txt</file>
         <file>messages/trial/Welcome_TR.txt</file>
         <file>messages/trial/Welcome_UK.txt</file>
         <file>messages/trial/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
         <file>scripts/at_commands.js</file>
         <file>scripts/base64_encoded.js</file>
+        <file>scripts/batched_sensor_data.js</file>
         <file>scripts/binary_tlv.js</file>
         <file>scripts/cobs_encoded.js</file>
         <file>scripts/comma_separated.js</file>
@@ -433,6 +447,7 @@
         <file>scripts/sirf_binary.js</file>
         <file>scripts/slip_encoded.js</file>
         <file>scripts/tab_separated.js</file>
+        <file>scripts/time_series_2d.js</file>
         <file>scripts/ubx_ublox.js</file>
         <file>scripts/url_encoded.js</file>
         <file>scripts/xml_data.js</file>
@@ -453,20 +468,8 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
-        <file>messages/gpl3/Welcome_NL.txt</file>
-        <file>messages/gpl3/Welcome_RO.txt</file>
-        <file>messages/gpl3/Welcome_SV.txt</file>
-        <file>messages/pro/Welcome_NL.txt</file>
-        <file>messages/pro/Welcome_RO.txt</file>
-        <file>messages/pro/Welcome_SV.txt</file>
-        <file>messages/trial/Welcome_NL.txt</file>
-        <file>messages/trial/Welcome_RO.txt</file>
-        <file>messages/trial/Welcome_SV.txt</file>
-        <file>scripts/batched_sensor_data.js</file>
-        <file>scripts/time_series_2d.js</file>
-        <file>images/no-usb.svg</file>
-        <file>images/usb.svg</file>
-        <file>icons/panes/important.svg</file>
-        <file>icons/panes/info.svg</file>
+        <file>icons/toolbar/drivers/hid.svg</file>
+        <file>icons/toolbar/drivers/process.svg</file>
+        <file>icons/toolbar/drivers/usb.svg</file>
     </qresource>
 </RCC>

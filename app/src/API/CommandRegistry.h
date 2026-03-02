@@ -22,6 +22,7 @@
 #pragma once
 
 #include <functional>
+#include <QJsonObject>
 #include <QMap>
 #include <QString>
 
@@ -43,6 +44,7 @@ using CommandFunction =
 struct CommandDefinition {
   QString name;
   QString description;
+  QJsonObject inputSchema;
   CommandFunction handler;
 };
 
@@ -80,6 +82,18 @@ public:
    * @param handler Function to execute when command is invoked
    */
   void registerCommand(const QString& name, const QString& description, CommandFunction handler);
+
+  /**
+   * @brief Register a new command with a JSON Schema for MCP tool metadata
+   * @param name Command name (e.g., "io.manager.connect")
+   * @param description Human-readable description
+   * @param inputSchema JSON Schema object describing accepted parameters
+   * @param handler Function to execute when command is invoked
+   */
+  void registerCommand(const QString& name,
+                       const QString& description,
+                       const QJsonObject& inputSchema,
+                       CommandFunction handler);
 
   /**
    * @brief Check if a command is registered

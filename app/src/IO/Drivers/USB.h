@@ -31,6 +31,7 @@
 #  include <libusb.h>
 
 #  include <atomic>
+#  include <new>
 #  include <QList>
 #  include <QObject>
 #  include <QSettings>
@@ -183,6 +184,7 @@ private:
 
   void buildEndpointLists();
   void clearEndpointLists();
+  void collectEndpoint(const libusb_endpoint_descriptor& ep, int ifNum, bool wantIso);
   void eventLoop();
 
   [[nodiscard]] QString endpointErrorMessage() const;

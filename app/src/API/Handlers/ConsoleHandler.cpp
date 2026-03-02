@@ -25,6 +25,10 @@
 #include "Console/Export.h"
 #include "Console/Handler.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all Console commands with the registry
  */
@@ -88,6 +92,10 @@ void API::Handlers::ConsoleHandler::registerCommands()
                            QStringLiteral("Get all console settings"),
                            &getConfiguration);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Enable/disable echo
@@ -351,6 +359,10 @@ API::CommandResponse API::Handlers::ConsoleHandler::send(const QString& id,
   result[QStringLiteral("dataLength")] = data.length();
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get all console settings

@@ -140,10 +140,12 @@ public:
     Network,     /**< Network socket communication. */
     BluetoothLE, /**< Bluetooth Low Energy communication. */
 #ifdef BUILD_COMMERCIAL
-    Audio,  /**< Audio input device */
-    ModBus, /**< MODBUS communication */
-    CanBus, /**< CANBUS communication */
-    RawUsb, /**< Raw USB bulk/control transfers */
+    Audio,     /**< Audio input device */
+    ModBus,    /**< MODBUS communication */
+    CanBus,    /**< CANBUS communication */
+    RawUsb,    /**< Raw USB bulk/control transfers */
+    HidDevice, /**< HID device via hidapi */
+    Process,   /**< Child process stdout/stdin or named pipe */
 #endif
   };
   Q_ENUM(BusType)

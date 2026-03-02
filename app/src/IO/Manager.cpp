@@ -34,7 +34,9 @@
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
+#  include "IO/Drivers/HID.h"
 #  include "IO/Drivers/Modbus.h"
+#  include "IO/Drivers/Process.h"
 #  include "IO/Drivers/USB.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
@@ -46,9 +48,7 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-namespace {
 constexpr int kFrameBufferSize = 4096;
-}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton access functions
@@ -283,7 +283,9 @@ QStringList IO::Manager::availableBuses() const
   list.append(tr("Audio"));
   list.append(tr("Modbus"));
   list.append(tr("CAN Bus"));
-  list.append(tr("Raw USB"));
+  list.append(tr("USB Device"));
+  list.append(tr("HID Device"));
+  list.append(tr("Process"));
 #endif
   return list;
 }
@@ -674,6 +676,14 @@ void IO::Manager::setBusType(const SerialStudio::BusType driver)
   // Try to open a Raw USB connection
   else if (busType() == SerialStudio::BusType::RawUsb)
     setDriver(static_cast<HAL_Driver*>(&(Drivers::USB::instance())));
+
+  // Try to open a HID connection
+  else if (busType() == SerialStudio::BusType::HidDevice)
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::HID::instance())));
+
+  // Try to open a Process connection
+  else if (busType() == SerialStudio::BusType::Process)
+    setDriver(static_cast<HAL_Driver*>(&(Drivers::Process::instance())));
 #endif
 
   // Invalid driver

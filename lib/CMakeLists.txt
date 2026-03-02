@@ -121,7 +121,6 @@ if(MSVC)
     /Zc:inline                  # Remove unreferenced inline functions
     /Gy                         # Enable function-level linking
   )
-  # Add buffer security check for libraries when hardening is enabled
   if(ENABLE_HARDENING)
     list(APPEND LIB_FLAGS /GS)  # Buffer security check
   endif()
@@ -131,8 +130,7 @@ else()
     -fvisibility=hidden         # Hide all symbols
     -fvisibility-inlines-hidden # Hide C++ inline function symbols
   )
-  # Add stack protector for libraries when hardening is enabled
-  # This ensures third-party code also benefits from stack canary protection
+
   if(ENABLE_HARDENING)
     list(APPEND LIB_FLAGS -fstack-protector-strong)
   endif()
@@ -386,9 +384,6 @@ add_subdirectory(mdflib)
 if(BUILD_COMMERCIAL)
   message(STATUS "Fetching libusb-cmake (libusb 1.0.27) from GitHub...")
 
-  # libusb-cmake is a CMake wrapper around libusb that ships a proper
-  # CMakeLists.txt, enabling clean FetchContent_MakeAvailable usage without
-  # the deprecated FetchContent_Populate API or manual C-source assembly.
   set(LIBUSB_BUILD_SHARED_LIBS        OFF CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_TESTING            OFF CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_EXAMPLES           OFF CACHE BOOL "" FORCE)
@@ -406,6 +401,59 @@ if(BUILD_COMMERCIAL)
   FetchContent_MakeAvailable(libusb_cmake)
 
   message(STATUS "libusb-cmake configured")
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# hidapi (Pro edition only)
+#---------------------------------------------------------------------------------------------------
+#
+# hidapi provides cross-platform HID device access using native OS APIs:
+#   Windows : WinAPI (hid.dll)
+#   macOS   : IOHIDManager (IOKit)
+#   Linux   : hidraw kernel interface (no libusb; avoids symbol conflicts
+#             with the usb-1.0 Raw USB driver already in the build)
+#
+# Acquisition: FetchContent at configure time, static build, no tests/examples.
+# CMake target exposed: hidapi::hidapi
+#---------------------------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL)
+  message(STATUS "Fetching hidapi 0.14.0 from GitHub...")
+
+  set(HIDAPI_BUILD_HIDTEST   OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_WITH_TESTS      OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_INSTALL_TARGETS OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_PRINT_VERSION   OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_WITH_LIBUSB     OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_WITH_HIDRAW     ON  CACHE BOOL "" FORCE)
+  set(BUILD_SHARED_LIBS      OFF CACHE BOOL "" FORCE)
+
+  FetchContent_Declare(
+    hidapi
+    GIT_REPOSITORY https://github.com/libusb/hidapi.git
+    GIT_TAG        hidapi-0.14.0
+    GIT_SHALLOW    TRUE
+    GIT_PROGRESS   FALSE
+  )
+
+  FetchContent_MakeAvailable(hidapi)
+
+  # Resolve the concrete (non-ALIAS) hidapi target for flag application.
+  # hidapi's CMake always creates platform-specific concrete targets:
+  #   macOS   → hidapi_darwin
+  #   Windows → hidapi_winapi
+  #   Linux   → hidapi_hidraw
+  # The hidapi and hidapi::hidapi names are ALIAS targets; CMake forbids
+  # calling target_compile_options() on ALIAS targets.
+  if(APPLE)
+    set(HIDAPI_CONCRETE_TARGET hidapi_darwin)
+  elseif(WIN32)
+    set(HIDAPI_CONCRETE_TARGET hidapi_winapi)
+  else()
+    set(HIDAPI_CONCRETE_TARGET hidapi_hidraw)
+  endif()
+
+  message(STATUS "hidapi 0.14.0 configured")
 endif()
 
 #---------------------------------------------------------------------------------------------------
@@ -446,8 +494,6 @@ endif()
 #
 #---------------------------------------------------------------------------------------------------
 
-# Helper function to apply library flags and mark includes as SYSTEM
-# This suppresses warnings when app code includes third-party headers
 function(configure_third_party_lib TARGET_NAME)
   if(NOT TARGET ${TARGET_NAME})
     return()
@@ -458,7 +504,6 @@ function(configure_third_party_lib TARGET_NAME)
     target_link_options(${TARGET_NAME} PRIVATE ${LIB_LINK_FLAGS})
   endif()
 
-  # Mark include directories as SYSTEM to suppress warnings in consuming targets
   get_target_property(INC_DIRS ${TARGET_NAME} INTERFACE_INCLUDE_DIRECTORIES)
   if(INC_DIRS)
     set_property(TARGET ${TARGET_NAME} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
@@ -471,6 +516,7 @@ configure_third_party_lib(QCodeEditor)
 configure_third_party_lib(QSimpleUpdater)
 configure_third_party_lib(mdf)
 configure_third_party_lib(usb-1.0)
+configure_third_party_lib(${HIDAPI_CONCRETE_TARGET})
 
 #---------------------------------------------------------------------------------------------------
 # Restore global link flags
@@ -479,6 +525,7 @@ configure_third_party_lib(usb-1.0)
 # Restore the hardening link flags saved at the top of this file so they
 # apply to the main application executable in app/.
 #
+#---------------------------------------------------------------------------------------------------
 
 set(CMAKE_EXE_LINKER_FLAGS "${_SAVED_CMAKE_EXE_LINKER_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "${_SAVED_CMAKE_SHARED_LINKER_FLAGS}")

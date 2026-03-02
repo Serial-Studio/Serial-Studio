@@ -1,0 +1,122 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020–2025 Alex Spataru
+ *
+ * This file is part of Serial Studio Pro. All rights reserved.
+ *
+ * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
+ */
+
+#ifdef BUILD_COMMERCIAL
+
+#  include "API/Handlers/HIDHandler.h"
+
+#  include <QJsonArray>
+
+#  include "API/CommandRegistry.h"
+#  include "IO/Drivers/HID.h"
+
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Register all HID driver commands with the registry.
+ */
+void API::Handlers::HIDHandler::registerCommands()
+{
+  auto& registry = CommandRegistry::instance();
+
+  registry.registerCommand(QStringLiteral("io.driver.hid.setDeviceIndex"),
+                           QStringLiteral("Select HID device by index (params: deviceIndex)"),
+                           &setDeviceIndex);
+
+  registry.registerCommand(QStringLiteral("io.driver.hid.getDeviceList"),
+                           QStringLiteral("List available HID devices"),
+                           &getDeviceList);
+
+  registry.registerCommand(QStringLiteral("io.driver.hid.getConfiguration"),
+                           QStringLiteral("Get complete HID driver configuration"),
+                           &getConfiguration);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Select HID device by list index.
+ * @param params Requires "deviceIndex" (int, 0 = placeholder "Select Device")
+ */
+API::CommandResponse API::Handlers::HIDHandler::setDeviceIndex(const QString& id,
+                                                               const QJsonObject& params)
+{
+  if (!params.contains(QStringLiteral("deviceIndex"))) {
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
+  }
+
+  const int device_index = params.value(QStringLiteral("deviceIndex")).toInt();
+  const auto& devices    = IO::Drivers::HID::instance().deviceList();
+
+  if (device_index < 0 || device_index >= devices.count()) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QString(QStringLiteral("Invalid deviceIndex: %1. Valid range: 0-%2"))
+        .arg(device_index)
+        .arg(devices.count() - 1));
+  }
+
+  IO::Drivers::HID::instance().setDeviceIndex(device_index);
+
+  QJsonObject result;
+  result[QStringLiteral("deviceIndex")] = device_index;
+  result[QStringLiteral("deviceName")]  = devices.at(device_index);
+  return CommandResponse::makeSuccess(id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief List all available HID devices.
+ */
+API::CommandResponse API::Handlers::HIDHandler::getDeviceList(const QString& id,
+                                                              const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  const auto& devices = IO::Drivers::HID::instance().deviceList();
+
+  QJsonArray devices_array;
+  for (const auto& device : devices)
+    devices_array.append(device);
+
+  QJsonObject result;
+  result[QStringLiteral("devices")]       = devices_array;
+  result[QStringLiteral("selectedIndex")] = IO::Drivers::HID::instance().deviceIndex();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Get complete HID driver configuration and connected-device info.
+ */
+API::CommandResponse API::Handlers::HIDHandler::getConfiguration(const QString& id,
+                                                                 const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  auto& hid = IO::Drivers::HID::instance();
+
+  QJsonObject result;
+  result[QStringLiteral("deviceIndex")] = hid.deviceIndex();
+  result[QStringLiteral("usagePage")]   = hid.usagePage();
+  result[QStringLiteral("usage")]       = hid.usage();
+  return CommandResponse::makeSuccess(id, result);
+}
+
+#endif  // BUILD_COMMERCIAL

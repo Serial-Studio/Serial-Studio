@@ -24,6 +24,10 @@
 #include <QApplication>
 #include <QFontDatabase>
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the CommonFonts object, registering common fonts and
  *        initializing member variables.
@@ -89,6 +93,10 @@ Misc::CommonFonts& Misc::CommonFonts::instance()
   return instance;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Standard font accessors
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Retrieves the UI font.
  * @return The UI font.
@@ -115,6 +123,10 @@ const QFont& Misc::CommonFonts::boldUiFont() const
 {
   return m_boldUiFont;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Custom font builders
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Creates a custom UI font with specified size and boldness.
@@ -144,6 +156,10 @@ QFont Misc::CommonFonts::customMonoFont(const double fraction, const bool bold)
 
   return font;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Widget font properties
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the current widget font scale factor.
@@ -228,6 +244,10 @@ QFont Misc::CommonFonts::widgetFont(const double fraction, const bool bold) cons
 
   return font;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Font configuration setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the global widget font scale and persists it to QSettings.

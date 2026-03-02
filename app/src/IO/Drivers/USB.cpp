@@ -35,7 +35,6 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-namespace {
 constexpr unsigned int kBulkReadTimeout  = 100;
 constexpr unsigned int kBulkWriteTimeout = 1000;
 constexpr int kBulkReadBufSize           = 65536;
@@ -43,7 +42,6 @@ constexpr int kDefaultIsoPacketSize      = 1024;
 constexpr int kIsoNumTransfers           = 8;
 constexpr int kIsoPacketsPerTransfer     = 8;
 constexpr int kHotplugFallbackIntervalMs = 2000;
-}  // namespace
 
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton
@@ -822,9 +820,37 @@ void IO::Drivers::USB::enumerateDevices()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns true if the device's active configuration exposes at least one
+ *        endpoint of @p targetType.
+ *
+ * Used by endpointErrorMessage() to detect whether switching transfer mode
+ * would resolve the "no matching endpoint" situation.
+ *
+ * @param cfg         Active configuration descriptor (caller owns lifetime).
+ * @param targetType  LIBUSB_TRANSFER_TYPE_BULK or LIBUSB_TRANSFER_TYPE_ISOCHRONOUS.
+ * @return true if any endpoint matches targetType.
+ */
+static bool configHasTransferType(const libusb_config_descriptor* cfg, uint8_t targetType)
+{
+  for (int i = 0; i < cfg->bNumInterfaces; ++i) {
+    const libusb_interface& iface = cfg->interface[i];
+    for (int a = 0; a < iface.num_altsetting; ++a) {
+      const libusb_interface_descriptor& alt = iface.altsetting[a];
+      for (int e = 0; e < alt.bNumEndpoints; ++e) {
+        const uint8_t type = alt.endpoint[e].bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
+        if (type == targetType)
+          return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+/**
  * @brief Builds an actionable error message when no IN endpoint is found.
  *
- * Scans the device descriptor to detect whether endpoints of the opposite
+ * Uses configHasTransferType() to detect whether endpoints of the opposite
  * transfer type exist. If they do, the message tells the user exactly which
  * transfer mode to switch to. If no data endpoints are found at all, a
  * generic message is returned.
@@ -838,20 +864,9 @@ QString IO::Drivers::USB::endpointErrorMessage() const
 
   libusb_config_descriptor* cfg = nullptr;
   if (libusb_get_active_config_descriptor(m_devicePtrs.at(m_deviceIndex - 1), &cfg) == 0) {
-    for (int i = 0; i < cfg->bNumInterfaces && !hasOtherType; ++i) {
-      const libusb_interface& iface = cfg->interface[i];
-      for (int a = 0; a < iface.num_altsetting && !hasOtherType; ++a) {
-        const libusb_interface_descriptor& alt = iface.altsetting[a];
-        for (int e = 0; e < alt.bNumEndpoints && !hasOtherType; ++e) {
-          const uint8_t type = alt.endpoint[e].bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
-          if (wantIso && type == LIBUSB_TRANSFER_TYPE_BULK)
-            hasOtherType = true;
-          else if (!wantIso && type == LIBUSB_TRANSFER_TYPE_ISOCHRONOUS)
-            hasOtherType = true;
-        }
-      }
-    }
-
+    const uint8_t otherType =
+      wantIso ? LIBUSB_TRANSFER_TYPE_BULK : LIBUSB_TRANSFER_TYPE_ISOCHRONOUS;
+    hasOtherType = configHasTransferType(cfg, otherType);
     libusb_free_config_descriptor(cfg);
   }
 
@@ -868,6 +883,55 @@ QString IO::Drivers::USB::endpointErrorMessage() const
   return tr("No usable IN endpoint was found on this device.\n\n"
             "The device may not expose data endpoints in its active "
             "configuration, or it may require a specific driver.");
+}
+
+/**
+ * @brief Inspects a single endpoint descriptor and appends it to the IN or OUT
+ *        list if its transfer type matches the requested mode.
+ *
+ * Called from the triple-nested loop in buildEndpointLists() to keep that
+ * function within the 3-level nesting limit.
+ *
+ * @param ep       Endpoint descriptor to inspect.
+ * @param ifNum    Interface number the endpoint belongs to.
+ * @param wantIso  true when Isochronous mode is active; false for bulk.
+ */
+void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
+                                       int ifNum,
+                                       bool wantIso)
+{
+  const uint8_t type = ep.bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
+  const bool isBulk  = (type == LIBUSB_TRANSFER_TYPE_BULK);
+  const bool isIso   = (type == LIBUSB_TRANSFER_TYPE_ISOCHRONOUS);
+
+  if (wantIso && !isIso)
+    return;
+
+  if (!wantIso && !isBulk)
+    return;
+
+  const bool isIn       = (ep.bEndpointAddress & LIBUSB_ENDPOINT_IN) != 0;
+  const QString typeStr = isIso ? QStringLiteral("Iso") : QStringLiteral("Bulk");
+  const QString dirStr  = isIn ? QStringLiteral("IN") : QStringLiteral("OUT");
+
+  EndpointInfo info;
+  info.address         = ep.bEndpointAddress;
+  info.attributes      = ep.bmAttributes;
+  info.maxPacketSize   = ep.wMaxPacketSize;
+  info.interfaceNumber = ifNum;
+  const QString epHex  = QString::number(ep.bEndpointAddress, 16).toUpper().rightJustified(2, '0');
+  info.label           = QStringLiteral("EP 0x%1 – %2 %3  (IF%4, max %5 B)")
+                 .arg(epHex, typeStr, dirStr)
+                 .arg(ifNum)
+                 .arg(ep.wMaxPacketSize);
+
+  if (isIn) {
+    m_inEndpoints.append(info);
+    m_inEndpointLabels.append(info.label);
+  } else {
+    m_outEndpoints.append(info);
+    m_outEndpointLabels.append(info.label);
+  }
 }
 
 /**
@@ -906,57 +970,18 @@ void IO::Drivers::USB::buildEndpointLists()
     return;
 
   const bool wantIso = (m_transferMode == TransferMode::Isochronous);
-  auto scanConfig    = [&](bool scanIso) {
-    for (int i = 0; i < config->bNumInterfaces; ++i) {
-      const libusb_interface& iface = config->interface[i];
 
-      for (int a = 0; a < iface.num_altsetting; ++a) {
-        const libusb_interface_descriptor& alt = iface.altsetting[a];
-        const int ifNum                        = alt.bInterfaceNumber;
+  for (int i = 0; i < config->bNumInterfaces; ++i) {
+    const libusb_interface& iface = config->interface[i];
 
-        for (int e = 0; e < alt.bNumEndpoints; ++e) {
-          const libusb_endpoint_descriptor& ep = alt.endpoint[e];
-          const uint8_t type                   = ep.bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
+    for (int a = 0; a < iface.num_altsetting; ++a) {
+      const libusb_interface_descriptor& alt = iface.altsetting[a];
 
-          const bool isBulk = (type == LIBUSB_TRANSFER_TYPE_BULK);
-          const bool isIso  = (type == LIBUSB_TRANSFER_TYPE_ISOCHRONOUS);
-
-          if (scanIso && !isIso)
-            continue;
-
-          if (!scanIso && !isBulk)
-            continue;
-
-          const bool isIn = (ep.bEndpointAddress & LIBUSB_ENDPOINT_IN) != 0;
-
-          QString typeStr = isIso ? QStringLiteral("Iso") : QStringLiteral("Bulk");
-          QString dirStr  = isIn ? QStringLiteral("IN") : QStringLiteral("OUT");
-
-          EndpointInfo info;
-          info.address         = ep.bEndpointAddress;
-          info.attributes      = ep.bmAttributes;
-          info.maxPacketSize   = ep.wMaxPacketSize;
-          info.interfaceNumber = ifNum;
-          info.label =
-            QStringLiteral("EP 0x%1 – %2 %3  (IF%4, max %5 B)")
-              .arg(QString::number(ep.bEndpointAddress, 16).toUpper().rightJustified(2, '0'))
-              .arg(typeStr, dirStr)
-              .arg(ifNum)
-              .arg(ep.wMaxPacketSize);
-
-          if (isIn) {
-            m_inEndpoints.append(info);
-            m_inEndpointLabels.append(info.label);
-          } else {
-            m_outEndpoints.append(info);
-            m_outEndpointLabels.append(info.label);
-          }
-        }
-      }
+      for (int e = 0; e < alt.bNumEndpoints; ++e)
+        collectEndpoint(alt.endpoint[e], alt.bInterfaceNumber, wantIso);
     }
-  };
+  }
 
-  scanConfig(wantIso);
   libusb_free_config_descriptor(config);
 
   // Clamp saved indices to new list sizes
@@ -1127,7 +1152,11 @@ void IO::Drivers::USB::isoReadLoop()
     if (!t)
       break;
 
-    auto* buf = new unsigned char[totalBufSize];
+    auto* buf = new (std::nothrow) unsigned char[totalBufSize];
+    if (!buf) {
+      libusb_free_transfer(t);
+      break;
+    }
 
     libusb_fill_iso_transfer(t,
                              m_handle,
@@ -1174,7 +1203,12 @@ void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer
   auto* self = static_cast<USB*>(transfer->user_data);
 
   if (transfer->status == LIBUSB_TRANSFER_COMPLETED || transfer->status == LIBUSB_TRANSFER_ERROR) {
+    int totalLen = 0;
+    for (int i = 0; i < transfer->num_iso_packets; ++i)
+      totalLen += static_cast<int>(transfer->iso_packet_desc[i].actual_length);
+
     QByteArray received;
+    received.reserve(totalLen);
 
     for (int i = 0; i < transfer->num_iso_packets; ++i) {
       const libusb_iso_packet_descriptor& pkt = transfer->iso_packet_desc[i];

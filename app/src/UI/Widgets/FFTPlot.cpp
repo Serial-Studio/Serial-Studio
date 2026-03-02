@@ -23,6 +23,10 @@
 
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Static helper functions
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Computes a single coefficient of the 4-term Blackman-Harris window.
  *
@@ -61,6 +65,10 @@ inline float blackman_harris_coeff(unsigned int i, unsigned int N)
 
   return a0 - a1 * std::cos(x) + a2 * std::cos(2.0f * x) - a3 * std::cos(3.0f * x);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructs a new FFTPlot widget.
@@ -136,6 +144,10 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Data dimension getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the size of the down-sampled X axis data.
  * @return Size of down-sampled X axis data.
@@ -153,6 +165,10 @@ int Widgets::FFTPlot::dataH() const
 {
   return m_dataH;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Axis range getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the minimum X-axis value.
@@ -190,6 +206,10 @@ double Widgets::FFTPlot::maxY() const
   return m_maxY;
 }
 
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Checks whether plot data updates are currently active.
  * @return @c true if updating is not paused, otherwise @c false.
@@ -198,6 +218,10 @@ bool Widgets::FFTPlot::running() const
 {
   return UI::Dashboard::instance().fftPlotRunning(m_index);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Rendering
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Draws the FFT data on the given QLineSeries.
@@ -211,6 +235,10 @@ void Widgets::FFTPlot::draw(QLineSeries* series)
     Q_EMIT series->update();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Property setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the size of the down-sampled X axis data.
@@ -249,6 +277,10 @@ void Widgets::FFTPlot::setRunning(const bool enabled)
   UI::Dashboard::instance().setFFTPlotRunning(m_index, enabled);
   Q_EMIT runningChanged();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the FFT data.

@@ -24,6 +24,10 @@
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs an LEDPanel widget.
  * @param index The index of the LED panel in the Dashboard.
@@ -53,6 +57,10 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem* parent)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the number of LEDs in the panel.
  * @return An integer number with the number/count of LEDs in the panel.
@@ -61,6 +69,10 @@ int Widgets::LEDPanel::count() const
 {
   return m_titles.count();
 }
+
+//--------------------------------------------------------------------------------------------------
+// State getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the states of the LEDs in the panel.
@@ -88,6 +100,10 @@ const QStringList& Widgets::LEDPanel::titles() const
 {
   return m_titles;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the LED panel data from the Dashboard.
@@ -124,6 +140,10 @@ void Widgets::LEDPanel::updateData()
       Q_EMIT updated();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Theme management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the colors for each dataset in the widget based on the

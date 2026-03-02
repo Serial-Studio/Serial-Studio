@@ -21,8 +21,14 @@
 
 #include "API/Handlers/NetworkHandler.h"
 
+#include <QJsonArray>
+
 #include "API/CommandRegistry.h"
 #include "IO/Drivers/Network.h"
+
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Register all Network commands with the registry
@@ -32,30 +38,105 @@ void API::Handlers::NetworkHandler::registerCommands()
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
-  registry.registerCommand(QStringLiteral("io.driver.network.setRemoteAddress"),
-                           QStringLiteral("Set remote host address (params: address)"),
-                           &setRemoteAddress);
+  {
+    QJsonObject props;
+    props[QStringLiteral("address")] = QJsonObject{
+      {       QStringLiteral("type"),                               QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Remote host address (IP or hostname)")},
+      {    QStringLiteral("default"),                            QStringLiteral("localhost")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("address")};
+    registry.registerCommand(QStringLiteral("io.driver.network.setRemoteAddress"),
+                             QStringLiteral("Set remote host address (params: address)"),
+                             schema,
+                             &setRemoteAddress);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.network.setTcpPort"),
-                           QStringLiteral("Set TCP port (params: port)"),
-                           &setTcpPort);
+  {
+    QJsonObject portProp = QJsonObject{
+      {       QStringLiteral("type"),               QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Port number (1-65535)")},
+      {    QStringLiteral("minimum"),                                       1},
+      {    QStringLiteral("maximum"),                                   65535}
+    };
 
-  registry.registerCommand(QStringLiteral("io.driver.network.setUdpLocalPort"),
-                           QStringLiteral("Set UDP local port (params: port)"),
-                           &setUdpLocalPort);
+    {
+      QJsonObject props;
+      props[QStringLiteral("port")] = portProp;
+      QJsonObject schema;
+      schema[QStringLiteral("type")]       = QStringLiteral("object");
+      schema[QStringLiteral("properties")] = props;
+      schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("port")};
+      registry.registerCommand(QStringLiteral("io.driver.network.setTcpPort"),
+                               QStringLiteral("Set TCP port (params: port)"),
+                               schema,
+                               &setTcpPort);
+    }
 
-  registry.registerCommand(QStringLiteral("io.driver.network.setUdpRemotePort"),
-                           QStringLiteral("Set UDP remote port (params: port)"),
-                           &setUdpRemotePort);
+    {
+      QJsonObject props;
+      props[QStringLiteral("port")] = portProp;
+      QJsonObject schema;
+      schema[QStringLiteral("type")]       = QStringLiteral("object");
+      schema[QStringLiteral("properties")] = props;
+      schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("port")};
+      registry.registerCommand(QStringLiteral("io.driver.network.setUdpLocalPort"),
+                               QStringLiteral("Set UDP local port (params: port)"),
+                               schema,
+                               &setUdpLocalPort);
+    }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.network.setSocketType"),
-    QStringLiteral("Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)"),
-    &setSocketType);
+    {
+      QJsonObject props;
+      props[QStringLiteral("port")] = portProp;
+      QJsonObject schema;
+      schema[QStringLiteral("type")]       = QStringLiteral("object");
+      schema[QStringLiteral("properties")] = props;
+      schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("port")};
+      registry.registerCommand(QStringLiteral("io.driver.network.setUdpRemotePort"),
+                               QStringLiteral("Set UDP remote port (params: port)"),
+                               schema,
+                               &setUdpRemotePort);
+    }
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.network.setUdpMulticast"),
-                           QStringLiteral("Enable/disable UDP multicast (params: enabled)"),
-                           &setUdpMulticast);
+  {
+    QJsonObject props;
+    props[QStringLiteral("socketTypeIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                          QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Socket type index (0=TCP, 1=UDP)")},
+      {       QStringLiteral("enum"),                                   QJsonArray{0, 1}},
+      {    QStringLiteral("default"),                                                  0}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("socketTypeIndex")};
+    registry.registerCommand(
+      QStringLiteral("io.driver.network.setSocketType"),
+      QStringLiteral("Set socket type (params: socketTypeIndex - 0=TCP, 1=UDP)"),
+      schema,
+      &setSocketType);
+  }
+
+  {
+    QJsonObject props;
+    props[QStringLiteral("enabled")] = QJsonObject{
+      {       QStringLiteral("type"),                   QStringLiteral("boolean")},
+      {QStringLiteral("description"), QStringLiteral("Enable UDP multicast mode")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("enabled")};
+    registry.registerCommand(QStringLiteral("io.driver.network.setUdpMulticast"),
+                             QStringLiteral("Enable/disable UDP multicast (params: enabled)"),
+                             schema,
+                             &setUdpMulticast);
+  }
 
   registry.registerCommand(QStringLiteral("io.driver.network.lookup"),
                            QStringLiteral("Perform DNS lookup (params: host)"),
@@ -70,6 +151,10 @@ void API::Handlers::NetworkHandler::registerCommands()
                            QStringLiteral("Get available socket types"),
                            &getSocketTypes);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Set remote host address
@@ -252,6 +337,10 @@ API::CommandResponse API::Handlers::NetworkHandler::lookup(const QString& id,
   result[QStringLiteral("lookupStarted")] = true;
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get current network configuration

@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QTemporaryFile>
 
 #include "API/CommandRegistry.h"
@@ -34,6 +35,10 @@
 #include "IO/Manager.h"
 #include "SerialStudio.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all Project commands with the registry
  */
@@ -43,13 +48,39 @@ void API::Handlers::ProjectHandler::registerCommands()
 
   registry.registerCommand(
     QStringLiteral("project.file.new"), QStringLiteral("Create new project"), &fileNew);
-  registry.registerCommand(QStringLiteral("project.setTitle"),
-                           QStringLiteral("Set project title (params: title)"),
-                           &setTitle);
 
-  registry.registerCommand(QStringLiteral("project.file.open"),
-                           QStringLiteral("Open project file (params: filePath)"),
-                           &fileOpen);
+  {
+    QJsonObject props;
+    props[QStringLiteral("title")] = QJsonObject{
+      {       QStringLiteral("type"),        QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Project title")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("title")};
+    registry.registerCommand(QStringLiteral("project.setTitle"),
+                             QStringLiteral("Set project title (params: title)"),
+                             schema,
+                             &setTitle);
+  }
+
+  {
+    QJsonObject props;
+    props[QStringLiteral("filePath")] = QJsonObject{
+      {       QStringLiteral("type"),QStringLiteral("string")                                     },
+      {QStringLiteral("description"),
+       QStringLiteral("Absolute path to project file (.json or .ssproj)")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("filePath")};
+    registry.registerCommand(QStringLiteral("project.file.open"),
+                             QStringLiteral("Open project file (params: filePath)"),
+                             schema,
+                             &fileOpen);
+  }
 
   registry.registerCommand(QStringLiteral("project.file.save"),
                            QStringLiteral("Save project (params: askPath=false)"),
@@ -140,6 +171,10 @@ void API::Handlers::ProjectHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("project.actions.list"), QStringLiteral("List all actions"), &actionsList);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Create new project
@@ -238,6 +273,10 @@ API::CommandResponse API::Handlers::ProjectHandler::fileSave(const QString& id,
   result[QStringLiteral("filePath")] = DataModel::ProjectModel::instance().jsonFilePath();
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get project status

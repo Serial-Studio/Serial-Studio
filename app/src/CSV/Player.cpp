@@ -33,6 +33,10 @@
 #include "Misc/WorkspaceManager.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Constructor function
  */
@@ -55,6 +59,10 @@ CSV::Player& CSV::Player::instance()
   static Player singleton;
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Playback status queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns @c true if an CSV file is open for reading
@@ -84,6 +92,10 @@ bool CSV::Player::isPlaying() const
 {
   return m_playing;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Frame information
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns the total number of frames in the CSV file. This can be calculated
@@ -124,6 +136,10 @@ const QString& CSV::Player::timestamp() const
 {
   return m_timestamp;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Playback control
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Enables CSV playback at 'live' speed (as it happened when CSV file was
@@ -166,6 +182,10 @@ void CSV::Player::toggle()
   else
     play();
 }
+
+//--------------------------------------------------------------------------------------------------
+// File operations
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Lets the user select a CSV file
@@ -420,6 +440,10 @@ void CSV::Player::openFile(const QString& filePath)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Progress & seeking
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Adjusts the playback position in the CSV data based on a normalized
  *        progress value.
@@ -487,6 +511,10 @@ void CSV::Player::setProgress(const double progress)
     updateData();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data processing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the timestamp display for the current frame position.
@@ -797,6 +825,10 @@ void CSV::Player::convertColumnToDateTime(int columnIndex)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Date/time operations
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Retrieves the date/time value from a specific cell in the CSV.
  *
@@ -927,6 +959,10 @@ QString CSV::Player::formatTimestamp(double seconds) const
     .arg(secs, 6, 'f', 3, QChar('0'));
 }
 
+//--------------------------------------------------------------------------------------------------
+// Frame building
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Generates a frame from the data at the given @a row. The first item of each
  * row is ignored because it contains the RX date/time, which is used to
@@ -970,6 +1006,10 @@ const QString CSV::Player::getCellValue(const int row, const int column, bool& e
   error = true;
   return defaultValue;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Event handling
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Event filter to capture and handle key events for playback controls.

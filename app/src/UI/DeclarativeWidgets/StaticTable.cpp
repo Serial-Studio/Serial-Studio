@@ -28,6 +28,10 @@
 
 #include "Misc/ThemeManager.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & setup
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Constructor function
  */
@@ -62,6 +66,10 @@ StaticTable::StaticTable(QQuickItem* parent) : DeclarativeWidget(parent)
   redraw();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Returns the font used by the table widget to display data
  */
@@ -85,6 +93,10 @@ const QList<QStringList>& StaticTable::data() const
 {
   return m_data;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Updates the font used for the table widget to display data
@@ -160,6 +172,10 @@ void StaticTable::setData(const QList<QStringList>& data)
   requestUpdate();
   redraw();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Theme management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Set's the widgets theme based on the current theme manager values

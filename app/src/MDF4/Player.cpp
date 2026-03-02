@@ -42,6 +42,10 @@
 #include "Misc/WorkspaceManager.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Helper observer classes
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @class SampleCacheObserver
  * @brief Observer class that caches channel values during MDF4 data reading
@@ -150,6 +154,10 @@ private:
   mdf::IChannel* m_masterTimeChannel;
 };
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructor - Initializes the MDF4 player
  *
@@ -183,6 +191,10 @@ MDF4::Player& MDF4::Player::instance()
   static Player singleton;
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Playback status queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Checks if an MDF4 file is currently open
@@ -255,6 +267,10 @@ const QString& MDF4::Player::timestamp() const
   return m_timestamp;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Playback control
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Starts real-time playback from current position
  *
@@ -299,6 +315,10 @@ void MDF4::Player::toggle()
   else
     play();
 }
+
+//--------------------------------------------------------------------------------------------------
+// File operations
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Opens a file selection dialog for MDF4 files
@@ -487,6 +507,10 @@ void MDF4::Player::previousFrame()
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Progress & seeking
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Seeks to a specific position in the file
  * @param progress Playback position (0.0 to 1.0)
@@ -518,6 +542,10 @@ void MDF4::Player::setProgress(const double progress)
     updateData();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data processing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates current frame data and manages playback timing
@@ -594,6 +622,10 @@ void MDF4::Player::updateData()
     }
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Frame building
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Builds a sparse frame index for efficient streaming playback
@@ -736,6 +768,10 @@ void MDF4::Player::buildFrameIndex()
   });
 }
 
+//--------------------------------------------------------------------------------------------------
+// Frame transmission helpers
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Processes a batch of frames for plot history
  * @param startFrame First frame index to process
@@ -797,6 +833,10 @@ void MDF4::Player::sendHeaderFrame()
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(headers);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Date/time operations
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Formats a timestamp value as HH:MM:SS.mmm
  * @param timestamp Time in seconds
@@ -857,6 +897,10 @@ QByteArray MDF4::Player::getFrame(const int index)
   frame.append('\n');
   return frame;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Event handling
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handles keyboard shortcuts for playback control

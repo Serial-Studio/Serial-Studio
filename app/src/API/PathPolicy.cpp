@@ -24,8 +24,11 @@
 #include <QDir>
 #include <QFileInfo>
 
-namespace {
-QString normalizedPath(const QString& path, bool allowNonexistent)
+//--------------------------------------------------------------------------------------------------
+// Path validation
+//--------------------------------------------------------------------------------------------------
+
+static QString normalizedPath(const QString& path, bool allowNonexistent)
 {
   QFileInfo info(path);
   if (info.exists())
@@ -36,7 +39,6 @@ QString normalizedPath(const QString& path, bool allowNonexistent)
 
   return QString();
 }
-}  // namespace
 
 /**
  * @brief Validate a file path against the API allowlist, if configured.

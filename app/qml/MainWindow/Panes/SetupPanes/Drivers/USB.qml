@@ -100,6 +100,61 @@ Item {
     }
 
     //
+    // Info block — pre-connect, spans both columns
+    //
+    Item {
+      implicitHeight: 4
+      visible: !Cpp_IO_Manager.isConnected
+    } Item {
+      implicitHeight: 4
+      visible: !Cpp_IO_Manager.isConnected
+    }
+
+    RowLayout {
+      spacing: 8
+      Layout.columnSpan: 2
+      Layout.fillWidth: true
+      visible: !Cpp_IO_Manager.isConnected
+
+      Image {
+        sourceSize.width: 20
+        sourceSize.height: 20
+        Layout.alignment: Qt.AlignTop
+        source: "qrc:/rcc/icons/panes/info.svg"
+      }
+
+      ColumnLayout {
+        spacing: 2
+        Layout.fillWidth: true
+        Layout.alignment: Qt.AlignVCenter
+
+        Label {
+          opacity: 0.75
+          wrapMode: Label.WordWrap
+          Layout.fillWidth: true
+          font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
+          text: qsTr("Connect to USB devices using bulk, control, or "
+                   + "isochronous transfers. Suitable for data loggers, "
+                   + "custom firmware devices, and USB instruments.")
+        }
+
+        Label {
+          opacity: 0.7
+          font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
+          text: "<a href='https://www.usb.org/documents'>"
+              + qsTr("USB specifications (USB.org)")
+              + "</a>"
+          textFormat: Text.RichText
+          onLinkActivated: (link) => Qt.openUrlExternally(link)
+
+          HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+          }
+        }
+      }
+    }
+
+    //
     // IN endpoint (only shown while connected — populated after open())
     //
     Label {

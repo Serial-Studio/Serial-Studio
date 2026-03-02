@@ -113,7 +113,6 @@ static void little_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 // Checksum implementations
 //--------------------------------------------------------------------------------------------------
 
-namespace IO {
 /**
  * @brief Computes an 8-bit XOR checksum.
  *
@@ -356,7 +355,6 @@ static constexpr uint16_t crc16_ccitt(const char* data, const int length) noexce
 
   return crc;
 }
-}  // namespace IO
 
 //--------------------------------------------------------------------------------------------------
 // Checksum byte-packing helpers

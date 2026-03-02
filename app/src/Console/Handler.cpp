@@ -34,6 +34,10 @@
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Constructor function
  */
@@ -90,6 +94,10 @@ Console::Handler& Console::Handler::instance()
   static Handler singleton;
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Status & configuration queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns @c true if the console shall display sent commands
@@ -196,6 +204,10 @@ QString Console::Handler::currentHistoryString() const
   return "";
 }
 
+//--------------------------------------------------------------------------------------------------
+// Available options lists
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Returns a list with the available data (sending) modes. This list must be
  * synchronized with the order of the @c DataMode enums.
@@ -255,6 +267,10 @@ QStringList Console::Handler::checksumMethods() const
 
   return list;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Text formatting & validation
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns the current console font
@@ -330,6 +346,10 @@ int Console::Handler::defaultCharHeight() const
   const QFontMetrics metrics(defaultFont);
   return metrics.height();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Buffer & history management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns the number of bytes stored in the console buffer.
@@ -428,6 +448,10 @@ void Console::Handler::historyDown()
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// External module connections
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Configures the signal/slot connections with the rest of the modules of the
  * application.
@@ -439,6 +463,10 @@ void Console::Handler::setupExternalConnections()
           this,
           &Console::Handler::languageChanged);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data send & receive
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Sends the given @a data to the currently isConnected device using the options
@@ -490,6 +518,10 @@ void Console::Handler::send(const QString& data)
   if (!bin.isEmpty())
     IO::Manager::instance().writeData(bin);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Settings modification slots
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Enables/disables displaying a timestamp of each received data block.
@@ -644,6 +676,10 @@ void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Display helpers
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Inserts the given @a string into the list of lines of the console, if @a
  * addTimestamp is set to @c true, an timestamp is added for each line.
@@ -746,6 +782,10 @@ void Console::Handler::displaySentData(QByteArrayView data)
   if (echo())
     append(dataToString(data), showTimestamp());
 }
+
+//--------------------------------------------------------------------------------------------------
+// Internal utilities
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Updates the font based on current family and size settings

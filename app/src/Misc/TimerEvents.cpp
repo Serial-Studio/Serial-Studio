@@ -23,6 +23,10 @@
 
 #include <QTimerEvent>
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the TimerEvents singleton instance.
  *
@@ -46,6 +50,10 @@ Misc::TimerEvents& Misc::TimerEvents::instance()
   return singleton;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Frequency control
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Gets the current UI timer frequency.
  * @return The UI timer frequency in Hz.
@@ -54,6 +62,10 @@ int Misc::TimerEvents::fps() const
 {
   return m_uiTimerHz;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Timer management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Stops all timers managed by this class.

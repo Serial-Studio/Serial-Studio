@@ -1364,7 +1364,26 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   // Remove dataset
   m_groups[groupId].datasets.erase(m_groups[groupId].datasets.begin() + datasetId);
 
-  // Reassign dataset IDs
+  // If the parent group is now empty, remove it and renumber groups
+  if (m_groups[groupId].datasets.empty()) {
+    m_groups.erase(m_groups.begin() + groupId);
+
+    int id = 0;
+    for (auto g = m_groups.begin(); g != m_groups.end(); ++g, ++id) {
+      g->groupId = id;
+      for (auto d = g->datasets.begin(); d != g->datasets.end(); ++d)
+        d->groupId = id;
+    }
+
+    buildTreeModel();
+    setModified(true);
+
+    const auto index = m_treeModel->index(0, 0);
+    m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+    return;
+  }
+
+  // Reassign dataset IDs within the group
   int id     = 0;
   auto end   = m_groups[groupId].datasets.end();
   auto begin = m_groups[groupId].datasets.begin();

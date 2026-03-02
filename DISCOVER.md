@@ -49,6 +49,9 @@
 | **CAN Bus** | [FAQ: CAN Bus](FAQ.md#how-do-i-use-can-bus), [Examples](./examples/CAN%20Bus%20Example) |
 | **MDF4/MF4 Files** | [FAQ: MDF4](FAQ.md#how-do-i-play-mdf4mf4-files) |
 | **TCP/UDP** | [FAQ: Network](FAQ.md#how-do-i-connect-via-tcpudp), [Examples](./examples/UDP%20Function%20Generator) |
+| **Raw USB** | Direct bulk/isochronous transfers via libusb (Pro) |
+| **HID Devices** | Gamepads, sensors, custom USB HIDs via hidapi (Pro) |
+| **Process I/O** | Child process stdout or named pipe/FIFO (Pro) |
 
 ### Industries & Applications
 | Industry | Resource |
@@ -92,6 +95,9 @@ If you found this project via search, these are the topics we cover:
 - Bluetooth LE data monitor
 - MQTT dashboard
 - TCP/UDP data plotter
+- USB device data dashboard
+- HID gamepad joystick telemetry
+- Named pipe process output visualizer
 
 ### Use Case-Specific
 - Robot telemetry system
@@ -267,5 +273,5 @@ Help others discover Serial Studio:
 
 ---
 
-**Last updated:** 2025-12-02
+**Last updated:** 2026-03-02
 **Maintained by:** [Alex Spataru](https://github.com/alex-spataru)

@@ -9,7 +9,7 @@
 
 **Serial Studio** is an open-source dashboard tool for embedded developers who are tired of staring at scrolling terminals. Describe your data format once in a **project file**, and it builds a live dashboard for you.
 
-It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network.
+It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network. **Raw USB** gives direct bulk/isochronous access to USB devices via libusb. **HID devices** (gamepads, custom USB HIDs, sensors) connect through hidapi. **Process I/O** lets any program that writes to stdout — or any named pipe — feed data into the dashboard.
 
 Once the data is in, Serial Studio can visualize it using several kinds of widgets, including **plots**, **gauges** and **tables**. Export to **CSV** or **MDF4** for further analysis, or load it back later to replay a session in the dashboard. **Actions** let you define buttons that send commands back to the device, with optional timers for polling or periodic control.
 
@@ -73,7 +73,7 @@ Make sure your system meets these requirements before running the AppImage.
 
 #### What It Can Do:
 - **No Coding Needed:** Build dashboards using a simple visual interface
-- **Many Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, and audio input
+- **Many Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, Raw USB, HID devices, and Process I/O
 - **15+ Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids
 - **Save to CSV:** Automatically save all data for later analysis in Excel, Python, MATLAB, or R
 - **MDF4 Playback & Export:** Play and export MDF4/MF4 files for CAN Bus, LIN, FlexRay, and analog channels (Pro)
@@ -149,7 +149,7 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 - **Installation:** Platform-specific setup for Windows, macOS, Linux, Raspberry Pi
 - **Quick Start:** Connect Arduino/ESP32 and visualize data in 5 minutes
 - **Dashboard Creation:** Build custom layouts with Project Editor (no coding)
-- **Protocol Support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio
+- **Protocol Support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, Raw USB, HID devices, Process I/O
 - **Frame Parsing:** Handle binary protocols, checksums, custom data formats
 - **CSV Export & Playback:** Log sensor data and replay CSV files for analysis
 - **MDF4 Playback & Export:** Play and export MDF4/MF4 files (CAN Bus, LIN, FlexRay, analog)

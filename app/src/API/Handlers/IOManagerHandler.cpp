@@ -21,8 +21,14 @@
 
 #include "API/Handlers/IOManagerHandler.h"
 
+#include <QJsonArray>
+
 #include "API/CommandRegistry.h"
 #include "IO/Manager.h"
+
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Register all IO::Manager commands with the registry
@@ -39,19 +45,59 @@ void API::Handlers::IOManagerHandler::registerCommands()
                            QStringLiteral("Disconnect from the current device"),
                            &disconnect);
 
-  registry.registerCommand(QStringLiteral("io.manager.setPaused"),
-                           QStringLiteral("Pause or resume data streaming (params: paused)"),
-                           &setPaused);
+  {
+    QJsonObject props;
+    props[QStringLiteral("paused")] = QJsonObject{
+      {       QStringLiteral("type"),              QStringLiteral("boolean")},
+      {QStringLiteral("description"), QStringLiteral("Pause data streaming")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("paused")};
+    registry.registerCommand(QStringLiteral("io.manager.setPaused"),
+                             QStringLiteral("Pause or resume data streaming (params: paused)"),
+                             schema,
+                             &setPaused);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.manager.setBusType"),
-    QStringLiteral("Set the bus type (params: busType - 0=UART, 1=Network, 2=BLE)"),
-    &setBusType);
+  {
+    QJsonObject props;
+    props[QStringLiteral("busType")] = QJsonObject{
+      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
+      {QStringLiteral("description"),
+       QStringLiteral(
+       "Bus type (0=UART, 1=Network, 2=BLE, 3=Audio, 4=Modbus, 5=CAN, 6=USB, 7=HID, 8=Process)")  },
+      {       QStringLiteral("enum"),                        QJsonArray{0, 1, 2, 3, 4, 5, 6, 7, 8}},
+      {    QStringLiteral("default"),                                                            0}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("busType")};
+    registry.registerCommand(
+      QStringLiteral("io.manager.setBusType"),
+      QStringLiteral("Set the bus type (params: busType - 0=UART, 1=Network, 2=BLE)"),
+      schema,
+      &setBusType);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.manager.writeData"),
-    QStringLiteral("Write raw data to device (params: data - base64 encoded)"),
-    &writeData);
+  {
+    QJsonObject props;
+    props[QStringLiteral("data")] = QJsonObject{
+      {       QStringLiteral("type"),                                 QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Base64-encoded data to write to device")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("data")};
+    registry.registerCommand(
+      QStringLiteral("io.manager.writeData"),
+      QStringLiteral("Write raw data to device (params: data - base64 encoded)"),
+      schema,
+      &writeData);
+  }
 
   registry.registerCommand(QStringLiteral("io.manager.getStatus"),
                            QStringLiteral("Get current connection status and configuration"),
@@ -61,6 +107,10 @@ void API::Handlers::IOManagerHandler::registerCommands()
                            QStringLiteral("Get list of available bus types"),
                            &getAvailableBuses);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Connect to the configured device
@@ -200,6 +250,10 @@ API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& i
   result[QStringLiteral("bytesWritten")] = bytesWritten;
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get current connection status and configuration

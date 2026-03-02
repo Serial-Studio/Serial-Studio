@@ -5,7 +5,8 @@ Guidance for Claude Code when working in this repository.
 ## Project Overview
 
 Serial Studio is a cross-platform telemetry dashboard built with Qt 6.9.2 and C++20.
-It receives data from UART, TCP/UDP, Bluetooth LE, Audio, Modbus TCP/RTU, CAN Bus, and MQTT,
+It receives data from UART, TCP/UDP, Bluetooth LE, Audio, Modbus TCP/RTU, CAN Bus, MQTT,
+Raw USB (libusb bulk/isochronous), HID devices (hidapi), and Process I/O (stdout or named pipe),
 then visualizes it in real-time with 15+ widget types. Target data rate: 256 KHz+.
 
 ## Build

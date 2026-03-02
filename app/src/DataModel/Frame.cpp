@@ -23,6 +23,10 @@
 
 #include "SerialStudio.h"
 
+//--------------------------------------------------------------------------------------------------
+// Frame processing
+//--------------------------------------------------------------------------------------------------
+
 void DataModel::finalize_frame(DataModel::Frame& frame)
 {
   frame.containsCommercialFeatures = SerialStudio::commercialCfg(frame.groups);
@@ -32,6 +36,10 @@ void DataModel::finalize_frame(DataModel::Frame& frame)
     for (auto& dataset : group.datasets)
       dataset.uniqueId = id++;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Configuration reading
+//--------------------------------------------------------------------------------------------------
 
 void DataModel::read_io_settings(QByteArray& frameStart,
                                  QByteArray& frameEnd,
@@ -60,6 +68,10 @@ void DataModel::read_io_settings(QByteArray& frameStart,
     frameStart = SerialStudio::resolveEscapeSequences(fStartStr).toUtf8();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data conversion
+//--------------------------------------------------------------------------------------------------
 
 QByteArray DataModel::get_tx_bytes(const Action& action)
 {

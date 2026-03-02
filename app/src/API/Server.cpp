@@ -32,7 +32,10 @@
 #include "IO/Manager.h"
 #include "Misc/Utilities.h"
 
-namespace {
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
 constexpr int kMaxApiClients           = 32;
 constexpr int kApiWindowMs             = 1000;
 constexpr int kMaxApiJsonDepth         = 64;
@@ -41,6 +44,10 @@ constexpr int kMaxApiMessagesPerWindow = 200;
 constexpr int kMaxApiMessageBytes      = 1024 * 1024;
 constexpr int kMaxApiBufferBytes       = 4 * 1024 * 1024;
 constexpr int kMaxApiBytesPerWindow    = 128 * 1024 * 1024;
+
+//--------------------------------------------------------------------------------------------------
+// Static functions
+//--------------------------------------------------------------------------------------------------
 
 bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 {
@@ -85,7 +92,6 @@ bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 
   return false;
 }
-}  // namespace
 
 //--------------------------------------------------------------------------------------------------
 // ServerWorker implementation
@@ -285,8 +291,8 @@ API::Server::Server()
 
   connect(&m_server, &QTcpServer::newConnection, this, &Server::acceptConnection);
 
-  // Initialize API command handlers
   API::CommandHandler::instance();
+  setEnabled(m_settings.value("API/Enabled", false).toBool());
 }
 
 /**
@@ -378,7 +384,6 @@ void API::Server::setEnabled(const bool enabled)
   bool effectiveEnabled = enabled;
   bool closeResources   = false;
 
-  // Enable the TCP API server
   if (enabled) {
     if (!m_server.isListening()) {
       m_server.setMaxPendingConnections(kMaxApiClients);
@@ -393,7 +398,6 @@ void API::Server::setEnabled(const bool enabled)
     }
   }
 
-  // Disable the TCP API server
   else {
     m_server.close();
     closeResources = true;
@@ -416,6 +420,8 @@ void API::Server::setEnabled(const bool enabled)
     Q_EMIT enabledChanged();
   } else if (enabled != effectiveEnabled)
     Q_EMIT enabledChanged();
+
+  m_settings.setValue("API/Enabled", enabled);
 }
 
 /**
@@ -735,7 +741,8 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
   auto processNoNewlineBuffer = [&]() {
     const auto trimmed = buffer.trimmed();
 
-    if (!trimmed.isEmpty() && trimmed.at(0) == '{') {
+    const char firstChar = trimmed.isEmpty() ? '\0' : trimmed.at(0);
+    if (firstChar == '{' || firstChar == '[') {
       if (trimmed.size() > kMaxApiMessageBytes) {
         rejectOversize(trimmed.size());
         buffer.clear();
@@ -759,10 +766,13 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
 
       // Wrap JSON parsing in try-catch to prevent crashes
       try {
-        if (API::parseMessage(trimmed, type, json)) {
+        const char lastChar = trimmed.isEmpty() ? '\0' : trimmed.back();
+        const bool complete =
+          (firstChar == '{' && lastChar == '}') || (firstChar == '[' && lastChar == ']');
+        if (API::parseMessage(trimmed, type, json) || MCP::isMCPMessage(trimmed)) {
           handleJson(trimmed);
           buffer.clear();
-        } else if (trimmed.endsWith('}')) {
+        } else if (complete) {
           sendResponse(CommandResponse::makeError(QString(),
                                                   ErrorCode::InvalidJson,
                                                   QStringLiteral("Failed to parse JSON message"))
@@ -820,7 +830,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
     if (trimmedLine.isEmpty())
       continue;
 
-    if (trimmedLine.at(0) != '{') {
+    if (trimmedLine.at(0) != '{' && trimmedLine.at(0) != '[') {
       if (line.size() > kMaxApiRawBytes) {
         qWarning() << "[API] Raw line size limit exceeded:" << state.peerAddress << ":"
                    << state.peerPort << "- Line size:" << line.size()

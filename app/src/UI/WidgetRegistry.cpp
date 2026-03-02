@@ -21,6 +21,10 @@
 
 #include "UI/WidgetRegistry.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructor function
  */
@@ -37,6 +41,10 @@ UI::WidgetRegistry& UI::WidgetRegistry::instance()
   static WidgetRegistry instance;
   return instance;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Batch update control
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Begins a batch update operation.
@@ -80,6 +88,10 @@ bool UI::WidgetRegistry::isInBatchUpdate() const
 {
   return m_batchDepth > 0;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Widget management
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Creates a new widget and assigns a unique ID.

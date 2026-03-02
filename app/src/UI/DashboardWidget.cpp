@@ -39,6 +39,10 @@
 #  include "UI/Widgets/Plot3D.h"
 #endif
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & destructor
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Constructor function
  */
@@ -67,6 +71,10 @@ UI::DashboardWidget::~DashboardWidget()
     m_dbWidget->deleteLater();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Widget properties
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Returns the global index of the widget (index of the current widget in
  * relation to all registered widgets).
@@ -84,6 +92,10 @@ int UI::DashboardWidget::relativeIndex() const
 {
   return m_relativeIndex;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Color & style
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns the color of the widget based on the current theme & widget index.

@@ -27,6 +27,10 @@
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs a Gyroscope widget.
  *
@@ -54,6 +58,10 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem* parent)
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Gyroscope::updateData);
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Angle getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Gets the current yaw angle.
@@ -85,6 +93,10 @@ double Widgets::Gyroscope::pitch() const
   return m_pitch;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Configuration getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Indicates whether values are being integrated over time.
  *
@@ -94,6 +106,10 @@ bool Widgets::Gyroscope::integrateValues() const
 {
   return m_integrateValues;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates gyroscope orientation values.
@@ -253,6 +269,10 @@ void Widgets::Gyroscope::updateData()
   if (yawChanged || rollChanged || pitchChanged)
     Q_EMIT updated();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Configuration setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Enables or disables value integration.

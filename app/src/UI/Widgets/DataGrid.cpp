@@ -24,6 +24,10 @@
 #include "Misc/CommonFonts.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs a DataGrid widget and initializes it with dashboard data.
  *
@@ -59,6 +63,10 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem* parent)
   updateData();
 }
 
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns whether the DataGrid is paused.
  *
@@ -70,6 +78,10 @@ bool Widgets::DataGrid::paused() const
 {
   return m_paused;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Configuration setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the paused state of the DataGrid.
@@ -91,6 +103,10 @@ void Widgets::DataGrid::setPaused(const bool paused)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Font management
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Refreshes the table fonts when the global widget font settings change.
  */
@@ -100,6 +116,10 @@ void Widgets::DataGrid::onFontsChanged()
   setFont(fonts.widgetFont());
   setHeaderFont(fonts.widgetFont(1, true));
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the displayed values in the DataGrid.
@@ -164,6 +184,10 @@ void Widgets::DataGrid::updateData()
   if (changed)
     setData(rows);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Utility functions
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Generates a table row from a dataset.

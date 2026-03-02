@@ -24,6 +24,10 @@
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs a Plot widget.
  * @param index The index of the plot in the Dashboard.
@@ -71,6 +75,10 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Data dimension getters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Returns the size of the down-sampled X axis data.
  * @return Size of down-sampled X axis data.
@@ -88,6 +96,10 @@ int Widgets::Plot::dataH() const
 {
   return m_dataH;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Axis range getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the minimum X-axis value.
@@ -125,6 +137,10 @@ double Widgets::Plot::maxY() const
   return m_maxY;
 }
 
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Checks whether plot data updates are currently active.
  * @return @c true if updating is not paused, otherwise @c false.
@@ -133,6 +149,10 @@ bool Widgets::Plot::running() const
 {
   return UI::Dashboard::instance().plotRunning(m_index);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Label getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the Y-axis label.
@@ -152,6 +172,10 @@ const QString& Widgets::Plot::xLabel() const
   return m_xLabel;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Rendering
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Draws the data on the given QLineSeries.
  * @param series The QLineSeries to draw the data on.
@@ -165,6 +189,10 @@ void Widgets::Plot::draw(QXYSeries* series)
     Q_EMIT series->update();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Property setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the size of the down-sampled X axis data.
@@ -203,6 +231,10 @@ void Widgets::Plot::setRunning(const bool enabled)
   UI::Dashboard::instance().setPlotRunning(m_index, enabled);
   Q_EMIT runningChanged();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the plot data from the Dashboard.

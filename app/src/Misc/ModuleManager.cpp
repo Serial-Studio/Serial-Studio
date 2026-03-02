@@ -70,13 +70,19 @@
 #  include "DataModel/DBCImporter.h"
 #  include "IO/Drivers/Audio.h"
 #  include "IO/Drivers/CANBus.h"
+#  include "IO/Drivers/HID.h"
 #  include "IO/Drivers/Modbus.h"
+#  include "IO/Drivers/Process.h"
 #  include "IO/Drivers/USB.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #  include "MQTT/Client.h"
 #  include "UI/Widgets/Plot3D.h"
 #endif
+
+//--------------------------------------------------------------------------------------------------
+// Message handler
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Custom message handler for Qt debug, warning, critical, and fatal
@@ -131,6 +137,10 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Configures the application font and configures application signals/slots to
  * destroy singleton classes before the application quits.
@@ -144,6 +154,10 @@ Misc::ModuleManager::ModuleManager()
   // Stop modules when application is about to quit
   connect(&m_engine, &QQmlApplicationEngine::quit, this, &Misc::ModuleManager::onQuit);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Settings access
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns whether automatic update checks are enabled.
@@ -164,6 +178,10 @@ void Misc::ModuleManager::setAutomaticUpdates(const bool enabled)
     Q_EMIT automaticUpdatesChanged();
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Engine access
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns a pointer to the QML application engine
@@ -190,6 +208,10 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
+// Application shutdown
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Calls the functions needed to safely quit the application
  */
@@ -203,6 +225,10 @@ void Misc::ModuleManager::onQuit()
   IO::Manager::instance().disconnectDevice();
   API::Server::instance().removeConnection();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Updater configuration
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Sets the default options for QSimpleUpdater, which are:
@@ -219,6 +245,10 @@ void Misc::ModuleManager::configureUpdater()
   QSimpleUpdater::getInstance()->setNotifyOnFinish(APP_UPDATER_URL, false);
   QSimpleUpdater::getInstance()->setMandatoryUpdate(APP_UPDATER_URL, false);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Module registration
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Register custom QML types, for the moment, we have:
@@ -260,6 +290,10 @@ void Misc::ModuleManager::registerQmlTypes()
       return new SerialStudio();
     });
 }
+
+//--------------------------------------------------------------------------------------------------
+// QML initialization
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Initializes all the application modules, registers them with the QML engine
@@ -307,6 +341,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto canBusDriver                = &IO::Drivers::CANBus::instance();
   auto modbusDriver                = &IO::Drivers::Modbus::instance();
   auto usbDriver                   = &IO::Drivers::USB::instance();
+  auto hidDriver                   = &IO::Drivers::HID::instance();
+  auto processDriver               = &IO::Drivers::Process::instance();
 #else
   const bool qtCommercialAvailable = false;
 #endif
@@ -393,6 +429,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_CANBus", canBusDriver);
   c->setContextProperty("Cpp_IO_Modbus", modbusDriver);
   c->setContextProperty("Cpp_IO_USB", usbDriver);
+  c->setContextProperty("Cpp_IO_HID", hidDriver);
+  c->setContextProperty("Cpp_IO_Process", processDriver);
   c->setContextProperty("Cpp_JSON_DBCImporter", dbcImporter);
   c->setContextProperty("Cpp_Licensing_Trial", trial);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);

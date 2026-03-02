@@ -28,6 +28,10 @@
 #include "API/CommandRegistry.h"
 #include "AppInfo.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs the MCP handler
  * @param parent Optional parent QObject
@@ -43,6 +47,10 @@ API::MCPHandler& API::MCPHandler::instance()
   static MCPHandler singleton;
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Message detection & processing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Check if data appears to be an MCP message
@@ -149,6 +157,10 @@ QByteArray API::MCPHandler::processMessage(const QByteArray& data, const QString
   return processRequest(request, sessionId).toJsonBytes();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Session management
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Clear session state for disconnected client
  * @param sessionId Session identifier to remove
@@ -180,6 +192,10 @@ void API::MCPHandler::onFrameReceived(const DataModel::Frame& frame)
 {
   updateCurrentFrame(frame);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Request routing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Process an MCP request and generate response
@@ -233,6 +249,10 @@ API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& req
   return MCP::MCPResponse::makeError(
     request.id, MCP::ErrorCode::MethodNotFound, QStringLiteral("Unknown method: %1").arg(method));
 }
+
+//--------------------------------------------------------------------------------------------------
+// MCP method handlers
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Handle MCP initialize request
@@ -504,6 +524,10 @@ API::MCP::MCPResponse API::MCPHandler::handlePromptsGet(const MCP::MCPRequest& r
     request.id, MCP::ErrorCode::InvalidParams, QStringLiteral("Unknown prompt: %1").arg(name));
 }
 
+//--------------------------------------------------------------------------------------------------
+// Schema & metadata generation
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Apply IO-specific category and tags to an io.* tool.
  * @param tool      Tool to update in place.
@@ -543,7 +567,9 @@ QVector<API::MCP::Tool> API::MCPHandler::generateToolsFromRegistry() const
     MCP::Tool tool;
     tool.name        = name;
     tool.description = it.value().description;
-    tool.inputSchema = commandToToolSchema(name, it.value().description);
+    tool.inputSchema = it.value().inputSchema.isEmpty()
+                         ? QJsonObject{{QStringLiteral("type"), QStringLiteral("object")}}
+                         : it.value().inputSchema;
 
     const auto parts = name.split(QLatin1Char('.'));
     if (parts.size() >= 2) {
@@ -630,144 +656,4 @@ QVector<API::MCP::Prompt> API::MCPHandler::generatePrompts() const
   prompts.append(analyzeTelemetry);
 
   return prompts;
-}
-
-/**
- * @brief Convert command to JSON Schema for MCP tool
- *
- * This function generates proper JSON Schema definitions for MCP tools,
- * enabling AI models to understand parameter types, constraints, and
- * requirements.
- */
-QJsonObject API::MCPHandler::commandToToolSchema(const QString& name,
-                                                 const QString& description) const
-{
-  Q_UNUSED(description);
-
-  QJsonObject schema;
-  schema[QStringLiteral("type")] = QStringLiteral("object");
-
-  QJsonObject properties;
-  QJsonArray required;
-
-  if (name == QStringLiteral("io.driver.uart.setBaudRate")) {
-    properties[QStringLiteral("baudRate")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),            QStringLiteral("Baud rate in bits per second")},
-      {       QStringLiteral("enum"),
-       QJsonArray{
-       110, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600}  },
-      {    QStringLiteral("default"),                                                    115200}
-    };
-    required.append(QStringLiteral("baudRate"));
-  } else if (name == QStringLiteral("io.driver.uart.setPortIndex")) {
-    properties[QStringLiteral("portIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                     QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Serial port index (0-based)")},
-      {    QStringLiteral("minimum"),                                             0}
-    };
-    required.append(QStringLiteral("portIndex"));
-  } else if (name == QStringLiteral("io.driver.uart.setDataBits")) {
-    properties[QStringLiteral("dataBitsIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                              QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Data bits index (0=5, 1=6, 2=7, 3=8)")},
-      {       QStringLiteral("enum"),                                 QJsonArray{0, 1, 2, 3}},
-      {    QStringLiteral("default"),                                                      3}
-    };
-    required.append(QStringLiteral("dataBitsIndex"));
-  } else if (name == QStringLiteral("io.driver.uart.setParity")) {
-    properties[QStringLiteral("parityIndex")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Parity index (0=None, 1=Even, 2=Odd, 3=Space, 4=Mark)")},
-      {       QStringLiteral("enum"),                QJsonArray{0, 1, 2, 3, 4}},
-      {    QStringLiteral("default"),                                        0}
-    };
-    required.append(QStringLiteral("parityIndex"));
-  } else if (name == QStringLiteral("io.driver.uart.setStopBits")) {
-    properties[QStringLiteral("stopBitsIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                           QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Stop bits index (0=1, 1=1.5, 2=2)")},
-      {       QStringLiteral("enum"),                                 QJsonArray{0, 1, 2}},
-      {    QStringLiteral("default"),                                                   0}
-    };
-    required.append(QStringLiteral("stopBitsIndex"));
-  } else if (name == QStringLiteral("io.driver.network.setRemoteAddress")) {
-    properties[QStringLiteral("address")] = QJsonObject{
-      {       QStringLiteral("type"),                               QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Remote host address (IP or hostname)")},
-      {    QStringLiteral("default"),                            QStringLiteral("localhost")}
-    };
-    required.append(QStringLiteral("address"));
-  } else if (name == QStringLiteral("io.driver.network.setTcpPort")
-             || name == QStringLiteral("io.driver.network.setUdpLocalPort")
-             || name == QStringLiteral("io.driver.network.setUdpRemotePort")) {
-    properties[QStringLiteral("port")] = QJsonObject{
-      {       QStringLiteral("type"),               QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Port number (1-65535)")},
-      {    QStringLiteral("minimum"),                                       1},
-      {    QStringLiteral("maximum"),                                   65535}
-    };
-    required.append(QStringLiteral("port"));
-  } else if (name == QStringLiteral("io.driver.network.setUdpMulticast")) {
-    properties[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),                   QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Enable UDP multicast mode")}
-    };
-    required.append(QStringLiteral("enabled"));
-  } else if (name == QStringLiteral("io.driver.network.setSocketType")) {
-    properties[QStringLiteral("socketTypeIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                          QStringLiteral("integer")},
-      {QStringLiteral("description"), QStringLiteral("Socket type index (0=TCP, 1=UDP)")},
-      {       QStringLiteral("enum"),                                   QJsonArray{0, 1}},
-      {    QStringLiteral("default"),                                                  0}
-    };
-    required.append(QStringLiteral("socketTypeIndex"));
-  } else if (name == QStringLiteral("io.manager.setBusType")) {
-    properties[QStringLiteral("busType")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Bus type (0=UART, 1=Network, 2=BLE, 3=Audio, 4=Modbus, 5=CAN)")},
-      {       QStringLiteral("enum"),                     QJsonArray{0, 1, 2, 3, 4, 5}},
-      {    QStringLiteral("default"),                                                0}
-    };
-    required.append(QStringLiteral("busType"));
-  } else if (name == QStringLiteral("io.manager.writeData")) {
-    properties[QStringLiteral("data")] = QJsonObject{
-      {       QStringLiteral("type"),                           QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Data to send to connected device")}
-    };
-    required.append(QStringLiteral("data"));
-  } else if (name == QStringLiteral("project.file.open")) {
-    properties[QStringLiteral("filePath")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("string")                                     },
-      {QStringLiteral("description"),
-       QStringLiteral("Absolute path to project file (.json or .ssproj)")}
-    };
-    required.append(QStringLiteral("filePath"));
-  } else if (name == QStringLiteral("project.setTitle")) {
-    properties[QStringLiteral("title")] = QJsonObject{
-      {       QStringLiteral("type"),        QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Project title")}
-    };
-    required.append(QStringLiteral("title"));
-  } else if (name == QStringLiteral("csv.export.setEnabled")) {
-    properties[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),                      QStringLiteral("boolean")},
-      {QStringLiteral("description"), QStringLiteral("Enable or disable CSV export")}
-    };
-    required.append(QStringLiteral("enabled"));
-  } else if (name.contains(QStringLiteral("set")) || name.contains(QStringLiteral("write"))
-             || name.contains(QStringLiteral("create")) || name.contains(QStringLiteral("add"))) {
-    properties[QStringLiteral("value")] = QJsonObject{
-      {       QStringLiteral("type"),                        QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Value to set or data to write")}
-    };
-  }
-
-  schema[QStringLiteral("properties")] = properties;
-  if (!required.isEmpty())
-    schema[QStringLiteral("required")] = required;
-
-  return schema;
 }

@@ -66,8 +66,8 @@ Item {
   implicitWidth: Math.min(
                    maxButtonWidth,
                    horizontalLayout
-                   ? root.iconSize + Math.ceil(_metrics.width + 16)
-                   : Math.max(Math.ceil(_metrics.width + 16), icon.width / 32 * 72)
+                   ? root.iconSize + Math.ceil(Math.max(_metrics.width, _metricsBold.width) + 16)
+                   : Math.max(Math.ceil(Math.max(_metrics.width, _metricsBold.width) + 16), icon.width / 32 * 72)
                    )
 
   //
@@ -180,6 +180,14 @@ Item {
     id: _metrics
     font: _label.font
     text: " " + root.text + " "
+  } TextMetrics {
+    id: _metricsBold
+    text: " " + root.text + " "
+    font {
+      family: _label.font.family
+      pixelSize: _label.font.pixelSize
+      bold: true
+    }
   }
 
   //

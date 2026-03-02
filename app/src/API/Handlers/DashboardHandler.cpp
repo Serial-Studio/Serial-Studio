@@ -27,6 +27,10 @@
 #include "Misc/TimerEvents.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all dashboard configuration commands with the registry
  */
@@ -71,6 +75,10 @@ void API::Handlers::DashboardHandler::registerCommands()
                            &getData);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Set the operation mode
  * @param params Requires "mode" (int: 0=ProjectFile, 1=DeviceSendsJSON,
@@ -107,6 +115,10 @@ API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QSt
 
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get the current operation mode

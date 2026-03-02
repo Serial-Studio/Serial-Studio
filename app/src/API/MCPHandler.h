@@ -123,7 +123,6 @@ private:
   QVector<MCP::Resource> generateResources() const;
   QVector<MCP::Prompt> generatePrompts() const;
 
-  QJsonObject commandToToolSchema(const QString& name, const QString& description) const;
   void tagIoSubmodule(MCP::Tool& tool, const QString& submodule, const QStringList& parts) const;
 
 private:

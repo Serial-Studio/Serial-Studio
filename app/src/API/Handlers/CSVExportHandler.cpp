@@ -21,8 +21,15 @@
 
 #include "API/Handlers/CSVExportHandler.h"
 
+#include <QJsonArray>
+#include <QJsonObject>
+
 #include "API/CommandRegistry.h"
 #include "CSV/Export.h"
+
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Register all CSV Export commands with the registry
@@ -32,9 +39,21 @@ void API::Handlers::CSVExportHandler::registerCommands()
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
-  registry.registerCommand(QStringLiteral("csv.export.setEnabled"),
-                           QStringLiteral("Enable or disable CSV export (params: enabled)"),
-                           &setEnabled);
+  {
+    QJsonObject props;
+    props[QStringLiteral("enabled")] = QJsonObject{
+      {       QStringLiteral("type"),                      QStringLiteral("boolean")},
+      {QStringLiteral("description"), QStringLiteral("Enable or disable CSV export")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("enabled")};
+    registry.registerCommand(QStringLiteral("csv.export.setEnabled"),
+                             QStringLiteral("Enable or disable CSV export (params: enabled)"),
+                             schema,
+                             &setEnabled);
+  }
 
   registry.registerCommand(
     QStringLiteral("csv.export.close"), QStringLiteral("Close the current CSV file"), &close);
@@ -43,6 +62,10 @@ void API::Handlers::CSVExportHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("csv.export.getStatus"), QStringLiteral("Get CSV export status"), &getStatus);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Enable or disable CSV export
@@ -78,6 +101,10 @@ API::CommandResponse API::Handlers::CSVExportHandler::close(const QString& id,
   result[QStringLiteral("closed")] = true;
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get CSV export status

@@ -310,7 +310,7 @@ Rectangle {
       rowSpacing: 4
       columnSpacing: 4
       Layout.alignment: Qt.AlignVCenter
-      columns: Cpp_CommercialBuild ? 2 : 1
+      columns: Cpp_CommercialBuild ? 3 : 1
 
       Widgets.ToolbarButton {
         iconSize: 16
@@ -336,6 +336,23 @@ Rectangle {
             onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
             ToolTip.text: qsTr("Select audio input device (Pro)")
             icon.source: "qrc:/rcc/icons/toolbar/drivers/audio.svg"
+          }
+        }
+      }
+
+      Loader {
+        active: Cpp_CommercialBuild
+        Layout.alignment: Qt.AlignLeft
+        sourceComponent: Component {
+          Widgets.ToolbarButton {
+            iconSize: 16
+            text: qsTr("USB")
+            horizontalLayout: true
+            Layout.alignment: Qt.AlignLeft
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.RawUsb
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
+            ToolTip.text: qsTr("Select raw USB communication (Pro)")
+            icon.source: "qrc:/rcc/icons/toolbar/drivers/usb.svg"
           }
         }
       }
@@ -368,6 +385,23 @@ Rectangle {
         }
       }
 
+      Loader {
+        active: Cpp_CommercialBuild
+        Layout.alignment: Qt.AlignLeft
+        sourceComponent: Component {
+          Widgets.ToolbarButton {
+            iconSize: 16
+            text: qsTr("HID")
+            horizontalLayout: true
+            Layout.alignment: Qt.AlignLeft
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.HidDevice
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
+            ToolTip.text: qsTr("Select HID device communication (Pro)")
+            icon.source: "qrc:/rcc/icons/toolbar/drivers/hid.svg"
+          }
+        }
+      }
+
       Widgets.ToolbarButton {
         iconSize: 16
         horizontalLayout: true
@@ -392,6 +426,23 @@ Rectangle {
             onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
             ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
             icon.source: "qrc:/rcc/icons/toolbar/drivers/canbus.svg"
+          }
+        }
+      }
+
+      Loader {
+        active: Cpp_CommercialBuild
+        Layout.alignment: Qt.AlignLeft
+        sourceComponent: Component {
+          Widgets.ToolbarButton {
+            iconSize: 16
+            text: qsTr("Process")
+            horizontalLayout: true
+            Layout.alignment: Qt.AlignLeft
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.Process
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
+            ToolTip.text: qsTr("Select process pipe communication (Pro)")
+            icon.source: "qrc:/rcc/icons/toolbar/drivers/process.svg"
           }
         }
       }

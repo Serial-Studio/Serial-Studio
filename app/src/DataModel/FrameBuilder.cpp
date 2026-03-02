@@ -38,7 +38,6 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
-namespace {
 /**
  * @brief Parse comma-separated values from data.
  *
@@ -91,7 +90,6 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
     }
   }
 }
-}  // namespace
 
 //--------------------------------------------------------------------------------------------------
 // Constants

@@ -35,6 +35,10 @@
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Private constructor for the singleton pattern.
  */
@@ -49,6 +53,10 @@ DataModel::DBCImporter& DataModel::DBCImporter::instance()
   static DBCImporter instance;
   return instance;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Status queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the total number of signals across all messages.
@@ -102,6 +110,10 @@ QString DataModel::DBCImporter::messageInfo(int index) const
     .arg(QString::number(msgId, 16).toUpper())
     .arg(signalCount);
 }
+
+//--------------------------------------------------------------------------------------------------
+// User interface operations
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Opens a file dialog to select and import a DBC file.
@@ -188,6 +200,10 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
   Q_EMIT dbcFileNameChanged();
   Q_EMIT previewReady();
 }
+
+//--------------------------------------------------------------------------------------------------
+// Project generation
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Confirms the import and generates a Serial Studio project.
@@ -622,6 +638,10 @@ QString DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescript
   return code;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Signal processing
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Generates JavaScript code to extract a single CAN signal.
  *
@@ -667,6 +687,10 @@ QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescrip
 
   return code;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Widget selection helpers
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Selects an appropriate group widget type for a CAN message.
@@ -795,6 +819,10 @@ QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& 
   return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Text utilities
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Sanitizes a string for use as a JavaScript identifier.
  *
@@ -860,6 +888,10 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
 
   return QString("");
 }
+
+//--------------------------------------------------------------------------------------------------
+// Pattern detection helpers
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Counts the total number of signals across all messages.

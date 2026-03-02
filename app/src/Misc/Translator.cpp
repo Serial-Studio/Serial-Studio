@@ -28,6 +28,10 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * Constructor function
  */
@@ -46,6 +50,10 @@ Misc::Translator& Misc::Translator::instance()
   static Translator singleton;
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Language queries
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns the current language ID, which corresponds to the indexes of the
@@ -125,6 +133,10 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
 
   return lang;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Text resources
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns the welcome text displayed on the console
@@ -227,6 +239,10 @@ QString Misc::Translator::acknowledgementsText() const
 
   return text;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Language selection
+//--------------------------------------------------------------------------------------------------
 
 /**
  * Returns a list with the available translation languages.

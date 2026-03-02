@@ -27,6 +27,10 @@
 #  include "API/CommandRegistry.h"
 #  include "IO/Drivers/Modbus.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all Modbus commands with the registry
  */
@@ -126,6 +130,10 @@ void API::Handlers::ModbusHandler::registerCommands()
                            QStringLiteral("Get all configured register groups"),
                            &getRegisterGroups);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Set Modbus protocol (RTU or TCP)
@@ -520,6 +528,10 @@ API::CommandResponse API::Handlers::ModbusHandler::clearRegisterGroups(const QSt
   result[QStringLiteral("cleared")] = true;
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get current Modbus configuration

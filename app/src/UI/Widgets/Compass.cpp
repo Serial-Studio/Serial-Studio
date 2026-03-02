@@ -24,6 +24,10 @@
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Constructs a Compass widget.
  * @param index The index of the compass in the Dashboard.
@@ -35,6 +39,10 @@ Widgets::Compass::Compass(const int index, QQuickItem* parent)
   if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index))
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Compass::updateData);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Returns the current value of the compass.
@@ -53,6 +61,10 @@ QString Widgets::Compass::text() const
 {
   return m_text;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates the compass data from the Dashboard.

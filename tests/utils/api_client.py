@@ -229,6 +229,11 @@ class SerialStudioClient:
             "audio": 3,
             "modbus": 4,
             "canbus": 5,
+            "usb": 6,
+            "rawusb": 6,
+            "hid": 7,
+            "hiddevice": 7,
+            "process": 8,
         }
 
         if bus_type.lower() not in bus_map:

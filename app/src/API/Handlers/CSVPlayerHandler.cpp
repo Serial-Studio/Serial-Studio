@@ -25,6 +25,10 @@
 #include "API/PathPolicy.h"
 #include "CSV/Player.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all CSV Player commands with the registry
  */
@@ -61,6 +65,10 @@ void API::Handlers::CSVPlayerHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("csv.player.getStatus"), QStringLiteral("Get player status"), &getStatus);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Open CSV file
@@ -208,6 +216,10 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::setProgress(const QString&
   result[QStringLiteral("framePosition")] = CSV::Player::instance().framePosition();
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get player status

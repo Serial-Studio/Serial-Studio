@@ -21,6 +21,10 @@
 
 #include "API/CommandRegistry.h"
 
+//--------------------------------------------------------------------------------------------------
+// Singleton access
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Gets the singleton instance of the CommandRegistry
  * @return Reference to the singleton instance
@@ -30,6 +34,10 @@ API::CommandRegistry& API::CommandRegistry::instance()
   static CommandRegistry singleton;
   return singleton;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Register a new command handler
@@ -47,6 +55,30 @@ void API::CommandRegistry::registerCommand(const QString& name,
   def.handler     = std::move(handler);
   m_commands.insert(name, def);
 }
+
+/**
+ * @brief Register a new command handler with a JSON Schema for MCP tool metadata
+ * @param name Command name (dot-notation, e.g., "io.manager.connect")
+ * @param description Human-readable description of what the command does
+ * @param inputSchema JSON Schema object describing accepted parameters
+ * @param handler Function to call when the command is executed
+ */
+void API::CommandRegistry::registerCommand(const QString& name,
+                                           const QString& description,
+                                           const QJsonObject& inputSchema,
+                                           CommandFunction handler)
+{
+  CommandDefinition def;
+  def.name        = name;
+  def.description = description;
+  def.inputSchema = inputSchema;
+  def.handler     = std::move(handler);
+  m_commands.insert(name, def);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Command lookup & execution
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Check if a command is registered
@@ -81,6 +113,10 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
       id, ErrorCode::ExecutionError, QStringLiteral("Command execution failed: %1").arg(e.what()));
   }
 }
+
+//--------------------------------------------------------------------------------------------------
+// Command metadata
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get a sorted list of all available command names

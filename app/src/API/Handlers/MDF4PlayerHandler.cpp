@@ -17,6 +17,10 @@
 #  include "API/PathPolicy.h"
 #  include "MDF4/Player.h"
 
+//--------------------------------------------------------------------------------------------------
+// Command registration
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Register all MDF4 Player commands with the registry
  */
@@ -53,6 +57,10 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("mdf4.player.getStatus"), QStringLiteral("Get player status"), &getStatus);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Open MDF4 file
@@ -200,6 +208,10 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::setProgress(const QString
   result[QStringLiteral("framePosition")] = MDF4::Player::instance().framePosition();
   return CommandResponse::makeSuccess(id, result);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Getters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Get player status
