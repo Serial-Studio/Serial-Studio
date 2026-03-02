@@ -413,12 +413,14 @@ endif()
 #   Linux   : hidraw kernel interface (no libusb; avoids symbol conflicts
 #             with the usb-1.0 Raw USB driver already in the build)
 #
-# Acquisition: FetchContent at configure time, static build, no tests/examples.
+# Acquisition: bundled local copy in lib/hidapi (hidapi 0.14.0), static build,
+#              no tests/examples. cmake_minimum_required bumped to 3.5 to satisfy
+#              modern CMake's compatibility requirement.
 # CMake target exposed: hidapi::hidapi
 #---------------------------------------------------------------------------------------------------
 
 if(BUILD_COMMERCIAL)
-  message(STATUS "Fetching hidapi 0.14.0 from GitHub...")
+  message(STATUS "Configuring hidapi 0.14.0 (bundled)...")
 
   set(HIDAPI_BUILD_HIDTEST   OFF CACHE BOOL "" FORCE)
   set(HIDAPI_WITH_TESTS      OFF CACHE BOOL "" FORCE)
@@ -428,15 +430,7 @@ if(BUILD_COMMERCIAL)
   set(HIDAPI_WITH_HIDRAW     ON  CACHE BOOL "" FORCE)
   set(BUILD_SHARED_LIBS      OFF CACHE BOOL "" FORCE)
 
-  FetchContent_Declare(
-    hidapi
-    GIT_REPOSITORY https://github.com/libusb/hidapi.git
-    GIT_TAG        hidapi-0.14.0
-    GIT_SHALLOW    TRUE
-    GIT_PROGRESS   FALSE
-  )
-
-  FetchContent_MakeAvailable(hidapi)
+  add_subdirectory(hidapi)
 
   # Resolve the concrete (non-ALIAS) hidapi target for flag application.
   # hidapi's CMake always creates platform-specific concrete targets:
