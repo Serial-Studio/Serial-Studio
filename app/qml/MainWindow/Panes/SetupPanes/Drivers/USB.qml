@@ -44,6 +44,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("USB Device") + ":"
       enabled: !Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: deviceCombo
       Layout.fillWidth: true
@@ -73,6 +74,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Transfer Mode") + ":"
       enabled: deviceCombo.currentIndex > 0 && !Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: modeCombo
       Layout.fillWidth: true
@@ -162,6 +164,7 @@ Item {
       text: qsTr("IN Endpoint") + ":"
       visible: Cpp_IO_Manager.isConnected
       enabled: Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: inEndpointCombo
       Layout.fillWidth: true
@@ -197,6 +200,7 @@ Item {
       text: qsTr("OUT Endpoint") + ":"
       visible: Cpp_IO_Manager.isConnected
       enabled: Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: outEndpointCombo
       Layout.fillWidth: true
@@ -232,6 +236,7 @@ Item {
       text: qsTr("Max Packet Size") + ":"
       visible: Cpp_IO_Manager.isConnected && Cpp_IO_USB.isoModeEnabled
       enabled: Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } SpinBox {
       id: isoPacketSpin
       from: 1

@@ -44,6 +44,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Protocol") + ":"
       enabled: !Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _protocolCombo
       Layout.fillWidth: true
@@ -67,6 +68,7 @@ Item {
       text: qsTr("Serial Port") + ":"
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _serialPortCombo
       Layout.fillWidth: true
@@ -91,6 +93,7 @@ Item {
       text: qsTr("Baud Rate") + ":"
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _baudRateCombo
       editable: true
@@ -182,6 +185,7 @@ Item {
       text: qsTr("Parity") + ":"
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
@@ -205,6 +209,7 @@ Item {
       text: qsTr("Data Bits") + ":"
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
@@ -228,6 +233,7 @@ Item {
       text: qsTr("Stop Bits") + ":"
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
@@ -251,6 +257,7 @@ Item {
       text: qsTr("Host") + ":"
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 1
+      Layout.maximumWidth: root.width / 2
     } TextField {
       id: _hostField
       Layout.fillWidth: true
@@ -274,6 +281,7 @@ Item {
       text: qsTr("Port") + ":"
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 1
+      Layout.maximumWidth: root.width / 2
     } TextField {
       id: _portField
       Layout.fillWidth: true
@@ -307,6 +315,7 @@ Item {
     //
     Label {
       text: qsTr("Slave Address") + ":"
+      Layout.maximumWidth: root.width / 2
     } TextField {
       id: _slaveField
       Layout.fillWidth: true
@@ -326,6 +335,7 @@ Item {
     //
     Label {
       text: qsTr("Poll Interval (ms)") + ":"
+      Layout.maximumWidth: root.width / 2
     } TextField {
       id: _intervalField
       Layout.fillWidth: true

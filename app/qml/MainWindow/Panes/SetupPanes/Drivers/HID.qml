@@ -44,6 +44,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("HID Device") + ":"
       enabled: !Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: deviceCombo
       Layout.fillWidth: true
@@ -73,6 +74,7 @@ Item {
       opacity: 0.5
       text: qsTr("Usage Page") + ":"
       visible: Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } TextField {
       readOnly: true
       Layout.fillWidth: true
@@ -89,6 +91,7 @@ Item {
       opacity: 0.5
       text: qsTr("Usage") + ":"
       visible: Cpp_IO_Manager.isConnected
+      Layout.maximumWidth: root.width / 2
     } TextField {
       readOnly: true
       Layout.fillWidth: true
