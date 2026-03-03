@@ -28,6 +28,7 @@ import QtQuick.Controls
 Item {
   id: root
   implicitHeight: layout.implicitHeight
+  implicitWidth: layout.implicitWidth + 16
 
   //
   // No Plugin Available Indicator
@@ -90,7 +91,6 @@ Item {
       //
       Label {
         text: qsTr("CAN Driver") + ":"
-        Layout.maximumWidth: root.width / 2
       } ComboBox {
         id: _pluginCombo
         textRole: "display"
@@ -136,7 +136,6 @@ Item {
       Label {
         text: qsTr("Interface") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-        Layout.maximumWidth: root.width / 2
       } ComboBox {
         id: _interfaceCombo
         Layout.fillWidth: true
@@ -168,7 +167,6 @@ Item {
       Label {
         text: qsTr("Bitrate") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-        Layout.maximumWidth: root.width / 2
       } ComboBox {
         id: _bitrateCombo
         editable: true
@@ -240,7 +238,6 @@ Item {
       Label {
         text: qsTr("Flexible Data-Rate") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-        Layout.maximumWidth: root.width / 2
       } CheckBox {
         id: _canFDCheck
         Layout.leftMargin: -8
@@ -272,7 +269,6 @@ Item {
       Label {
         text: qsTr("DBC Database") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-        Layout.maximumWidth: root.width / 2
       } Button {
         Layout.fillWidth: true
         text: qsTr("Import DBC File...")

@@ -36,6 +36,7 @@ Item {
   required property color color
   required property var windowRoot
   required property BarModel model
+  required property string widgetId
 
   property real value: 0
   Behavior on value {NumberAnimation{duration: 100}}

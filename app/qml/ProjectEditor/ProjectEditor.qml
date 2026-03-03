@@ -134,84 +134,64 @@ Widgets.SmartWindow {
       //
       // Main Layout
       //
-      RowLayout {
-        spacing: 0
+      Widgets.PaneSplitter {
+        id: splitter
         Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumHeight: 480
+        minLeftWidth: 256
+        minRightWidth: 400
+        settingsKey: "ProjectEditor"
 
-        //
-        // Project structure
-        //
-        Sections.ProjectStructure {
-          id: projectStructure
-          Layout.fillHeight: true
-          Layout.minimumWidth: 256
-          Layout.maximumWidth: 256
-        }
-
-        //
-        // Panel border
-        //
-        Rectangle {
-          z: 2
-          implicitWidth: 1
-          Layout.fillHeight: true
-          color: Cpp_ThemeManager.colors["setup_border"]
-
-          Rectangle {
-            width: 1
-            height: 32
-            anchors.top: parent.top
-            anchors.left: parent.left
-            color: Cpp_ThemeManager.colors["pane_caption_border"]
+        leftPanel: Component {
+          Sections.ProjectStructure {
+            id: projectStructure
           }
         }
 
-        //
-        // Action view
-        //
-        Views.ActionView {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ActionView
-        }
+        rightPanel: Component {
+          Item {
+            //
+            // Action view
+            //
+            Views.ActionView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ActionView
+            }
 
-        //
-        // Project setup
-        //
-        Views.ProjectView {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ProjectView
-        }
+            //
+            // Project setup
+            //
+            Views.ProjectView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ProjectView
+            }
 
-        //
-        // Group view
-        //
-        Views.GroupView {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.GroupView
-        }
+            //
+            // Group view
+            //
+            Views.GroupView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.GroupView
+            }
 
-        //
-        // Dataset view
-        //
-        Views.DatasetView {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.DatasetView
-        }
+            //
+            // Dataset view
+            //
+            Views.DatasetView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.DatasetView
+            }
 
-        //
-        // Frame parser function
-        //
-        Views.FrameParserView {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.FrameParserView
+            //
+            // Frame parser function
+            //
+            Views.FrameParserView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.FrameParserView
+            }
+          }
         }
       }
     }

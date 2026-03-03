@@ -25,10 +25,15 @@ else
     exit 1
 fi
 
-# Ensure psutil is available; install it quietly if missing.
+# Ensure required packages are available; install them quietly if missing.
 if ! "$PYTHON" -c "import psutil" >/dev/null 2>&1; then
     echo "Installing psutil..." >&2
     "$PYTHON" -m pip install --quiet psutil >&2
+fi
+
+if ! "$PYTHON" -c "import cpuinfo" >/dev/null 2>&1; then
+    echo "Installing py-cpuinfo..." >&2
+    "$PYTHON" -m pip install --quiet py-cpuinfo >&2
 fi
 
 exec "$PYTHON" "$SCRIPT_DIR/system-monitor.py" "$@"

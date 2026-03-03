@@ -27,7 +27,6 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
-import QtCore as QtCore
 
 import "../"
 
@@ -40,6 +39,7 @@ Item {
   //
   required property color color
   required property var windowRoot
+  required property string widgetId
   required property GyroscopeModel model
 
   //
@@ -78,12 +78,13 @@ Item {
   property bool hasToolbar: root.height >= 296
 
   //
-  // Save settings
+  // Restore persisted settings
   //
-  QtCore.Settings {
-    id: settings
-    category: "Gyroscope"
-    property alias integrationEnabled: root.integrateValues
+  Component.onCompleted: {
+    const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
+
+    if (s["integrateValues"] !== undefined)
+      root.integrateValues = s["integrateValues"]
   }
 
   //
@@ -109,7 +110,10 @@ Item {
       icon.color: "transparent"
       checked: root.integrateValues
       text: qsTr("Integrate Angles")
-      onClicked: root.integrateValues = !root.integrateValues
+      onClicked: {
+        root.integrateValues = !root.integrateValues
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "integrateValues", root.integrateValues)
+      }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/integral.svg"
     }
 

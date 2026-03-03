@@ -34,10 +34,15 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameParser.h"
 #include "IO/Checksum.h"
+#include "IO/Manager.h"
 #include "Misc/JsonValidator.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
+
+#ifdef BUILD_COMMERCIAL
+#  include "MQTT/Client.h"
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // ProjectModel.cpp - Core data model for Serial Studio projects
@@ -180,7 +185,6 @@ DataModel::ProjectModel::ProjectModel()
   , m_groupModel(nullptr)
   , m_projectModel(nullptr)
   , m_datasetModel(nullptr)
-  , m_activeGroupId(-1)
 {
   // Generate data sources for project model
   generateComboBoxModels();
@@ -493,21 +497,68 @@ const QString& DataModel::ProjectModel::frameParserCode() const
  */
 int DataModel::ProjectModel::activeGroupId() const
 {
-  return m_activeGroupId;
+  return m_widgetSettings.value(Keys::kActiveGroupSubKey).toInt(-1);
 }
 
 /**
- * @brief Returns the stored dashboard layout configuration.
- *
- * The dashboard layout includes window positions, sizes, and order
- * for the current project. This is used to restore the user's
- * preferred window arrangement when reopening a project.
- *
- * @return A reference to the dashboard layout DataModel object.
+ * @brief Returns the persisted layout for a specific group.
+ * @param groupId The group ID (as used in the dashboard).
+ * @return The layout QJsonObject, or empty if none saved.
  */
-const QJsonObject& DataModel::ProjectModel::dashboardLayout() const
+QJsonObject DataModel::ProjectModel::groupLayout(int groupId) const
 {
-  return m_dashboardLayout;
+  return m_widgetSettings.value(Keys::layoutKey(groupId)).toObject();
+}
+
+/**
+ * @brief Returns the persisted settings object for a specific widget.
+ * @param widgetId The decimal string representation of the WidgetID.
+ * @return The settings QJsonObject for the widget, or an empty object if none.
+ */
+QJsonObject DataModel::ProjectModel::widgetSettings(const QString& widgetId) const
+{
+  return m_widgetSettings.value(widgetId).toObject();
+}
+
+/**
+ * @brief Saves a single key/value setting for a specific widget to the project
+ *        file.
+ *
+ * This is a no-op if the current operation mode is not ProjectFile or if no
+ * file path is set, so callers in other modes are safe.
+ *
+ * @param widgetId  Decimal string of the WidgetID (from DashboardWidget::widgetId())
+ * @param key       Setting key (e.g. "interpolate", "showAreaUnderPlot")
+ * @param value     Setting value to persist
+ */
+void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
+                                                const QString& key,
+                                                const QVariant& value)
+{
+  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+  if (opMode != SerialStudio::ProjectFile || m_filePath.isEmpty())
+    return;
+
+  const bool ioConnected = IO::Manager::instance().isConnected();
+#ifdef BUILD_COMMERCIAL
+  const bool mqttSubscribed =
+    MQTT::Client::instance().isConnected() && MQTT::Client::instance().isSubscriber();
+#else
+  const bool mqttSubscribed = false;
+#endif
+  if (!ioConnected && !mqttSubscribed)
+    return;
+
+  auto obj = m_widgetSettings.value(widgetId).toObject();
+  obj.insert(key, QJsonValue::fromVariant(value));
+  m_widgetSettings.insert(widgetId, obj);
+
+  QFile file(m_filePath);
+  if (!file.open(QFile::WriteOnly))
+    return;
+
+  file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+  file.close();
 }
 
 /**
@@ -940,9 +991,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_frameDetection        = SerialStudio::EndDelimiterOnly;
   m_frameParserCode       = FrameParser::defaultTemplateCode();
 
-  // Reset dashboard layout metadata
-  m_activeGroupId   = -1;
-  m_dashboardLayout = QJsonObject();
+  m_widgetSettings = QJsonObject();
 
   // Reset frame parser to default template
   auto* parser = DataModel::FrameBuilder::instance().frameParser();
@@ -1152,9 +1201,31 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
       m_actions.push_back(action);
   }
 
-  // Read dashboard layout metadata (if available)
-  m_activeGroupId   = json.value(Keys::ActiveGroupId).toInt(-1);
-  m_dashboardLayout = json.value(Keys::DashboardLayout).toObject();
+  m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
+
+  // Migrate legacy single "__layout__" sub-key (pre-per-group format)
+  const QString legacySingleKey = QStringLiteral("__layout__");
+  if (m_widgetSettings.contains(legacySingleKey)) {
+    const QJsonObject saved = m_widgetSettings.value(legacySingleKey).toObject();
+    const int savedGroupId  = m_widgetSettings.value(Keys::kActiveGroupSubKey).toInt(-1);
+    const auto newKey       = Keys::layoutKey(savedGroupId);
+    if (!saved.isEmpty() && !m_widgetSettings.contains(newKey))
+      m_widgetSettings.insert(newKey, saved);
+
+    m_widgetSettings.remove(legacySingleKey);
+  }
+
+  // Migrate legacy top-level dashboardLayout / activeGroupId keys
+  const QJsonObject legacyLayout = json.value(Keys::DashboardLayout).toObject();
+  const int legacyGroupId        = json.value(Keys::ActiveGroupId).toInt(-1);
+  if (!legacyLayout.isEmpty()) {
+    const auto newKey = Keys::layoutKey(legacyGroupId);
+    if (!m_widgetSettings.contains(newKey))
+      m_widgetSettings.insert(newKey, legacyLayout);
+  }
+
+  if (legacyGroupId >= 0 && !m_widgetSettings.contains(Keys::kActiveGroupSubKey))
+    m_widgetSettings.insert(Keys::kActiveGroupSubKey, legacyGroupId);
 
   // Regenerate the tree model
   buildProjectModel();
@@ -1212,11 +1283,11 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
-  // Notify dashboard about layout metadata
-  if (!m_dashboardLayout.isEmpty())
-    Q_EMIT dashboardLayoutChanged();
-  if (m_activeGroupId >= 0)
+  if (m_widgetSettings.contains(Keys::kActiveGroupSubKey))
     Q_EMIT activeGroupIdChanged();
+
+  if (!m_widgetSettings.isEmpty())
+    Q_EMIT widgetSettingsChanged();
 }
 
 /**
@@ -2173,27 +2244,56 @@ void DataModel::ProjectModel::setFrameParserCode(const QString& code)
  */
 void DataModel::ProjectModel::setActiveGroupId(const int groupId)
 {
-  if (m_activeGroupId != groupId) {
-    m_activeGroupId = groupId;
+  const int current = m_widgetSettings.value(Keys::kActiveGroupSubKey).toInt(-1);
+  if (current != groupId) {
+    if (groupId >= 0)
+      m_widgetSettings.insert(Keys::kActiveGroupSubKey, groupId);
+    else
+      m_widgetSettings.remove(Keys::kActiveGroupSubKey);
+
     Q_EMIT activeGroupIdChanged();
   }
 }
 
 /**
- * @brief Sets the dashboard layout configuration.
+ * @brief Stores the layout for a specific group in widgetSettings.
  *
- * This stores the window positions, sizes, and order for the dashboard.
- * The layout is saved to the project file so the user's window
- * arrangement is restored when reopening the project.
+ * Keyed by "__layout__:<groupId>__" to allow per-group layout persistence.
+ * Only updates in-memory state; callers are responsible for flushing to disk.
  *
- * @param layout The DataModel object containing the layout configuration.
+ * @param groupId The group ID.
+ * @param layout  The serialized window layout for this group.
  */
-void DataModel::ProjectModel::setDashboardLayout(const QJsonObject& layout)
+void DataModel::ProjectModel::setGroupLayout(int groupId, const QJsonObject& layout)
 {
-  if (m_dashboardLayout != layout) {
-    m_dashboardLayout = layout;
-    Q_EMIT dashboardLayoutChanged();
-  }
+  const auto key = Keys::layoutKey(groupId);
+  if (m_widgetSettings.value(key).toObject() == layout)
+    return;
+
+  if (!layout.isEmpty())
+    m_widgetSettings.insert(key, layout);
+  else
+    m_widgetSettings.remove(key);
+}
+
+/**
+ * @brief Writes the current project (including widgetSettings) to disk without
+ *        triggering a project reload.
+ *
+ * Unlike saveJsonFile(), this does a direct file write so it is safe to call
+ * from geometry-change handlers without causing a signal cascade.
+ */
+void DataModel::ProjectModel::flushLayoutToDisk()
+{
+  if (m_filePath.isEmpty())
+    return;
+
+  QFile file(m_filePath);
+  if (!file.open(QFile::WriteOnly))
+    return;
+
+  file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+  file.close();
 }
 
 /**
@@ -3913,11 +4013,8 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
     actionsArray.append(DataModel::serialize(action));
   json.insert("actions", actionsArray);
 
-  // Add dashboard layout metadata (if available)
-  if (!m_dashboardLayout.isEmpty())
-    json.insert(Keys::DashboardLayout, m_dashboardLayout);
-  if (m_activeGroupId >= 0)
-    json.insert(Keys::ActiveGroupId, m_activeGroupId);
+  if (!m_widgetSettings.isEmpty())
+    json.insert(Keys::WidgetSettings, m_widgetSettings);
 
   return json;
 }

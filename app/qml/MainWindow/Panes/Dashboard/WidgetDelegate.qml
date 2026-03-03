@@ -108,7 +108,8 @@ Widgets.MiniWindow {
           widgetInstance = component.createObject(loader, {
                                                     model: dashboardWidget.widgetModel,
                                                     windowRoot: loader.windowRoot,
-                                                    color: dashboardWidget.widgetColor
+                                                    color: dashboardWidget.widgetColor,
+                                                    widgetId: dashboardWidget.widgetId
                                                   })
 
           if (!widgetInstance) {

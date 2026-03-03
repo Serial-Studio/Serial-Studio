@@ -27,6 +27,7 @@ import QtQuick.Controls
 Item {
   id: root
   implicitHeight: layout.implicitHeight
+  implicitWidth: layout.implicitWidth + 16
 
   //
   // Update listbox models when translation is changed
@@ -63,7 +64,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("COM Port") + ":"
       enabled: !Cpp_IO_Manager.isConnected
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _portCombo
       Layout.fillWidth: true
@@ -91,7 +91,6 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Baud Rate") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _baudCombo
       editable: true
@@ -173,7 +172,6 @@ Item {
     //
     Label {
       text: qsTr("Data Bits") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _dataCombo
       Layout.fillWidth: true
@@ -190,7 +188,6 @@ Item {
     //
     Label {
       text: qsTr("Parity") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _parityCombo
       Layout.fillWidth: true
@@ -207,7 +204,6 @@ Item {
     //
     Label {
       text: qsTr("Stop Bits") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _stopBitsCombo
       Layout.fillWidth: true
@@ -224,7 +220,6 @@ Item {
     //
     Label {
       text: qsTr("Flow Control") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _flowCombo
       Layout.fillWidth: true
@@ -252,7 +247,6 @@ Item {
     //
     Label {
       text: qsTr("Auto Reconnect") + ":"
-      Layout.maximumWidth: root.width / 2
     } CheckBox {
       id: _autoreconnect
       Layout.maximumHeight: 18
@@ -270,7 +264,6 @@ Item {
     //
     Label {
       text: qsTr("Send DTR Signal") + ":"
-      Layout.maximumWidth: root.width / 2
     } CheckBox {
       id: _dtr
       Layout.maximumHeight: 18

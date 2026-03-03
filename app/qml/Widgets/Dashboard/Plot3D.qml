@@ -36,6 +36,7 @@ Item {
   //
   required property color color
   required property var windowRoot
+  required property string widgetId
   required property Plot3DWidget model
 
   //
@@ -57,13 +58,30 @@ Item {
   }
 
   //
-  // Configure widget on load
+  // Configure widget on load, then restore persisted settings
   //
   onModelChanged: {
     if (model) {
       model.visible = true
       model.parent = container
       model.anchors.fill = container
+
+      const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
+
+      if (s["interpolationEnabled"] !== undefined)
+        model.interpolationEnabled = s["interpolationEnabled"]
+
+      if (s["orbitNavigation"] !== undefined)
+        model.orbitNavigation = s["orbitNavigation"]
+
+      if (s["anaglyphEnabled"] !== undefined)
+        model.anaglyphEnabled = s["anaglyphEnabled"]
+
+      if (s["invertEyePositions"] !== undefined)
+        model.invertEyePositions = s["invertEyePositions"]
+
+      if (s["eyeSeparation"] !== undefined)
+        model.eyeSeparation = s["eyeSeparation"]
     }
   }
 
@@ -172,10 +190,14 @@ Item {
       icon.height: 18
       icon.color: "transparent"
       checked: model.interpolationEnabled
-      onClicked: model.interpolationEnabled = !model.interpolationEnabled
       icon.source: model.interpolationEnabled ?
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
+
+      onClicked: {
+        model.interpolationEnabled = !model.interpolationEnabled
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolationEnabled", model.interpolationEnabled)
+      }
     }
 
     Rectangle {
@@ -191,8 +213,11 @@ Item {
       icon.height: 18
       icon.color: "transparent"
       checked: model.orbitNavigation
-      onClicked: model.orbitNavigation = true
       icon.source: "qrc:/rcc/icons/dashboard-buttons/orbit.svg"
+      onClicked: {
+        model.orbitNavigation = true
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", true)
+      }
     }
 
     ToolButton {
@@ -202,8 +227,11 @@ Item {
       icon.height: 18
       icon.color: "transparent"
       checked: !model.orbitNavigation
-      onClicked: model.orbitNavigation = false
       icon.source: "qrc:/rcc/icons/dashboard-buttons/pan.svg"
+      onClicked: {
+        model.orbitNavigation = false
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", false)
+      }
     }
 
     Rectangle {
@@ -265,7 +293,10 @@ Item {
       icon.height: 18
       icon.color: "transparent"
       checked: model.anaglyphEnabled
-      onClicked: model.anaglyphEnabled = !model.anaglyphEnabled
+      onClicked: {
+        model.anaglyphEnabled = !model.anaglyphEnabled
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "anaglyphEnabled", model.anaglyphEnabled)
+      }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/anaglyph.svg"
     }
 
@@ -281,7 +312,10 @@ Item {
       checked: model.invertEyePositions
       opacity: model.anaglyphEnabled ? 1 : 0
       icon.source: "qrc:/rcc/icons/dashboard-buttons/invert.svg"
-      onClicked: model.invertEyePositions = !model.invertEyePositions
+      onClicked: {
+        model.invertEyePositions = !model.invertEyePositions
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "invertEyePositions", model.invertEyePositions)
+      }
     }
 
     Slider {
@@ -298,8 +332,11 @@ Item {
       onValueChanged: {
         if (!isNaN(value) && model) {
           var separation = value / 1e3
-          if (model.eyeSeparation !== separation)
+
+          if (model.eyeSeparation !== separation) {
             model.eyeSeparation = separation
+            Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "eyeSeparation", separation)
+          }
         }
       }
     }

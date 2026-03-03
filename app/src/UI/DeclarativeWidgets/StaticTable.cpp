@@ -105,6 +105,8 @@ void StaticTable::setFont(const QFont& font)
 {
   m_font = font;
   m_widget.setFont(font);
+  requestUpdate();
+  redraw();
 
   Q_EMIT fontChanged();
 }
@@ -116,6 +118,9 @@ void StaticTable::setHeaderFont(const QFont& font)
 {
   m_headerFont = font;
   m_widget.horizontalHeader()->setFont(font);
+  requestUpdate();
+  redraw();
+
   Q_EMIT headerFontChanged();
 }
 

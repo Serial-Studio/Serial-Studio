@@ -24,7 +24,6 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
-import QtCore as QtCore
 
 import "../"
 import "../../Dialogs" as Dialogs
@@ -38,6 +37,7 @@ Item {
   //
   required property color color
   required property var windowRoot
+  required property string widgetId
   required property AccelerometerModel model
 
   //
@@ -99,15 +99,19 @@ Item {
   property bool hasToolbar: root.height >= 296
 
   //
-  // Sync configurable properties to model
+  // Sync configurable properties to model and persist changes
   //
   onDisplayMaxGChanged: {
     if (root.model)
       root.model.maxG = root.displayMaxG
+
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "displayMaxG", root.displayMaxG)
   }
   onInputInGChanged: {
     if (root.model)
       root.model.inputInG = root.inputInG
+
+    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "inputInG", root.inputInG)
   }
 
   //
@@ -123,13 +127,16 @@ Item {
 
 
   //
-  // Save settings between sessions
+  // Restore persisted settings
   //
-  QtCore.Settings {
-    id: settings
-    category: "Accelerometer"
-    property alias maxG: root.displayMaxG
-    property alias inputInG: root.inputInG
+  Component.onCompleted: {
+    const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
+
+    if (s["displayMaxG"] !== undefined)
+      root.displayMaxG = s["displayMaxG"]
+
+    if (s["inputInG"] !== undefined)
+      root.inputInG = s["inputInG"]
   }
 
   //

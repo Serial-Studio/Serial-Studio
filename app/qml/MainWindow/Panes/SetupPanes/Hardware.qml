@@ -37,6 +37,23 @@ Rectangle {
   // Create list of device panels
   //
   property var buses: []
+  property int busCount: 0
+
+  function registerBus(item) {
+    buses.push(item)
+    ++busCount
+  }
+
+  implicitWidth: {
+    const _ = busCount
+    let maxW = 0
+    for (let i = 0; i < root.buses.length; ++i) {
+      const item = root.buses[i]
+      if (item && item.implicitWidth > maxW)
+        maxW = item.implicitWidth
+    }
+    return maxW
+  }
 
   //
   // Device configuration
@@ -47,15 +64,15 @@ Rectangle {
     anchors.fill: parent
     currentIndex: Cpp_IO_Manager.busType
     implicitHeight: {
-      let maxHeight = 0;
+      const _ = root.busCount
+      let maxHeight = 0
       for (let i = 0; i < root.buses.length; ++i) {
-        const item = root.buses[i];
-        if (item && item.implicitHeight > maxHeight) {
-          maxHeight = item.implicitHeight;
-        }
+        const item = root.buses[i]
+        if (item && item.implicitHeight > maxHeight)
+          maxHeight = item.implicitHeight
       }
 
-      return maxHeight + 32;
+      return maxHeight + 32
     }
 
     Loader {
@@ -65,7 +82,7 @@ Rectangle {
       Layout.fillHeight: true
       sourceComponent: Component {
         Drivers.UART {
-          Component.onCompleted: root.buses.push(this)
+          Component.onCompleted: root.registerBus(this)
         }
       }
     }
@@ -77,7 +94,7 @@ Rectangle {
       Layout.fillHeight: true
       sourceComponent: Component {
         Drivers.Network {
-          Component.onCompleted: root.buses.push(this)
+          Component.onCompleted: root.registerBus(this)
         }
       }
     }
@@ -89,7 +106,7 @@ Rectangle {
       Layout.fillHeight: true
       sourceComponent: Component {
         Drivers.BluetoothLE {
-          Component.onCompleted: root.buses.push(this)
+          Component.onCompleted: root.registerBus(this)
         }
       }
     }
@@ -103,7 +120,7 @@ Rectangle {
 
       onLoaded: {
         if (item)
-          root.buses.push(item)
+          root.registerBus(item)
       }
     }
 
@@ -116,7 +133,7 @@ Rectangle {
 
       onLoaded: {
         if (item)
-          root.buses.push(item)
+          root.registerBus(item)
       }
     }
 
@@ -129,7 +146,7 @@ Rectangle {
 
       onLoaded: {
         if (item)
-          root.buses.push(item)
+          root.registerBus(item)
       }
     }
 
@@ -142,7 +159,7 @@ Rectangle {
 
       onLoaded: {
         if (item)
-          root.buses.push(item)
+          root.registerBus(item)
       }
     }
 
@@ -155,7 +172,7 @@ Rectangle {
 
       onLoaded: {
         if (item)
-          root.buses.push(item)
+          root.registerBus(item)
       }
     }
 
@@ -168,7 +185,7 @@ Rectangle {
 
       onLoaded: {
         if (item)
-          root.buses.push(item)
+          root.registerBus(item)
       }
     }
   }

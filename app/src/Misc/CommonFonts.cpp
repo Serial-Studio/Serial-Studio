@@ -181,10 +181,7 @@ QString Misc::CommonFonts::widgetFontFamily() const
  * @brief Returns a monotonically incrementing counter that changes whenever
  *        the widget font scale or family is updated. QML bindings that call
  *        widgetFont() should read this property so the binding engine re-evaluates
- *        them on each font change:
- *        @code
- *        font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
- *        @endcode
+ *        them on each font change.
  */
 int Misc::CommonFonts::widgetFontRevision() const
 {

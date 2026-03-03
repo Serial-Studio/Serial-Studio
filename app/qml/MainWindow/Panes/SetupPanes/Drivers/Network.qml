@@ -27,6 +27,7 @@ import QtQuick.Controls
 Item {
   id: root
   implicitHeight: layout.implicitHeight
+  implicitWidth: layout.implicitWidth + 16
 
   //
   // React to network manager events
@@ -72,7 +73,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Socket Type") + ":"
         enabled: !Cpp_IO_Manager.isConnected
-        Layout.maximumWidth: root.width / 2
       } ComboBox {
         id: _typeCombo
         Layout.fillWidth: true
@@ -94,7 +94,6 @@ Item {
         text: qsTr("Local Port") + ":"
         enabled: !Cpp_IO_Manager.isConnected
         visible: Cpp_IO_Network.socketTypeIndex === 1
-        Layout.maximumWidth: root.width / 2
       } TextField {
         id: _udpLocalPort
         Layout.fillWidth: true
@@ -125,7 +124,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
         text: qsTr("Remote Address") + ":"
-        Layout.maximumWidth: root.width / 2
       } TextField {
         id: _address
         Layout.fillWidth: true
@@ -150,7 +148,6 @@ Item {
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
         visible: Cpp_IO_Network.socketTypeIndex === 0
-        Layout.maximumWidth: root.width / 2
       } TextField {
         id: _tcpPort
         Layout.fillWidth: true
@@ -183,7 +180,6 @@ Item {
         text: qsTr("Remote Port") + ":"
         enabled: !Cpp_IO_Manager.isConnected
         visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
-        Layout.maximumWidth: root.width / 2
       } TextField {
         id: _udpRemotePort
         Layout.fillWidth: true
@@ -214,7 +210,6 @@ Item {
         text: qsTr("Multicast") + ":"
         opacity: _udpMulticast.enabled ? 1 : 0.5
         visible: Cpp_IO_Network.socketTypeIndex === 1
-        Layout.maximumWidth: root.width / 2
       } CheckBox {
         id: _udpMulticast
         opacity: enabled ? 1 : 0.5

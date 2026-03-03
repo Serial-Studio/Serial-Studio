@@ -44,45 +44,59 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_minY(0)
   , m_maxY(0)
 {
-  // Obtain group information
-  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
-    // Obtain min/max values from datasets
-    const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
-    m_minY            = std::numeric_limits<double>::max();
-    m_maxY            = std::numeric_limits<double>::lowest();
+  // Validate dashboard configuration
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
+    return;
 
-    // Populate data from datasets
-    for (size_t i = 0; i < group.datasets.size(); ++i) {
-      const auto& dataset = group.datasets[i];
+  // Obtain min/max values from datasets
+  const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  m_minY            = std::numeric_limits<double>::max();
+  m_maxY            = std::numeric_limits<double>::lowest();
 
-      m_drawOrders.append(i);
-      m_visibleCurves.append(true);
-      m_labels.append(dataset.title);
-      m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
-      m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
-    }
+  // Populate data from datasets
+  for (size_t i = 0; i < group.datasets.size(); ++i) {
+    const auto& dataset = group.datasets[i];
 
-    // Obtain group title
-    m_yLabel = group.title;
-
-    // Resize data container to fit curves
-    m_data.resize(group.datasets.size());
-
-    // Connect to the dashboard signals
-    connect(
-      &UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
-
-    // Connect to the theme manager to update the curve colors
-    onThemeChanged();
-    connect(&Misc::ThemeManager::instance(),
-            &Misc::ThemeManager::themeChanged,
-            this,
-            &MultiPlot::onThemeChanged);
-
-    // Update the range
-    calculateAutoScaleRange();
-    updateRange();
+    m_drawOrders.append(i);
+    m_visibleCurves.append(true);
+    m_labels.append(dataset.title);
+    m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
+    m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
   }
+
+  // Obtain group title, appending the shared unit if all datasets agree
+  m_yLabel = group.title;
+  if (!group.datasets.empty()) {
+    const auto firstUnit = group.datasets[0].units.simplified();
+    if (!firstUnit.isEmpty()) {
+      bool allSame = true;
+      for (size_t i = 1; i < group.datasets.size(); ++i) {
+        allSame &= (group.datasets[i].units.simplified() == firstUnit);
+        if (!allSame)
+          break;
+      }
+
+      if (allSame)
+        m_yLabel += " (" + firstUnit + ")";
+    }
+  }
+
+  // Resize data container to fit curves
+  m_data.resize(group.datasets.size());
+
+  // Connect to the dashboard signals
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
+
+  // Connect to the theme manager to update the curve colors
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(),
+          &Misc::ThemeManager::themeChanged,
+          this,
+          &MultiPlot::onThemeChanged);
+
+  // Update the range
+  calculateAutoScaleRange();
+  updateRange();
 }
 
 //--------------------------------------------------------------------------------------------------

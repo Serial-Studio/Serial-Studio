@@ -1466,26 +1466,30 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
     loadLayout();
   }
 
-  // No auto-layout, but user snapped the window
-  else if (m_dragWindow && m_snapIndicatorVisible) {
-    // Get snap area geometry
-    auto x = m_snapIndicator.x();
-    auto y = m_snapIndicator.y();
-    auto w = m_snapIndicator.width();
-    auto h = m_snapIndicator.height();
+  // Manual layout: emit geometryChanged after drag or resize so layout is persisted
+  else {
+    if (m_dragWindow && m_snapIndicatorVisible) {
+      auto x = m_snapIndicator.x();
+      auto y = m_snapIndicator.y();
+      auto w = m_snapIndicator.width();
+      auto h = m_snapIndicator.height();
 
-    // Maximize the window
-    if (x == 0 && y == 0 && w >= width() && h >= height()) {
-      QMetaObject::invokeMethod(m_dragWindow, "maximizeClicked", Qt::DirectConnection);
+      if (x == 0 && y == 0 && w >= width() && h >= height())
+        QMetaObject::invokeMethod(m_dragWindow, "maximizeClicked", Qt::DirectConnection);
+
+      else {
+        m_dragWindow->setX(x);
+        m_dragWindow->setY(y);
+        m_dragWindow->setWidth(w);
+        m_dragWindow->setHeight(h);
+      }
     }
 
-    // Update window geometry
-    else {
-      m_dragWindow->setX(x);
-      m_dragWindow->setY(y);
-      m_dragWindow->setWidth(w);
-      m_dragWindow->setHeight(h);
-    }
+    if (m_dragWindow)
+      Q_EMIT geometryChanged(m_dragWindow);
+
+    else if (m_resizeWindow)
+      Q_EMIT geometryChanged(m_resizeWindow);
   }
 
   // Reset mouse cursor

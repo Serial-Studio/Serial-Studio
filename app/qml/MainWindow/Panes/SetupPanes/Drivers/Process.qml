@@ -29,6 +29,7 @@ import Qt.labs.platform as NativePlatform
 Item {
   id: root
   implicitHeight: layout.implicitHeight
+  implicitWidth: layout.implicitWidth + 16
 
   //
   // Process picker window — instantiated once, shown on demand
@@ -92,7 +93,6 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Mode") + ":"
       enabled: !Cpp_IO_Manager.isConnected
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: modeCombo
       Layout.fillWidth: true
@@ -127,7 +127,6 @@ Item {
       text: qsTr("Executable") + ":"
       visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
       enabled: !Cpp_IO_Manager.isConnected
-      Layout.maximumWidth: root.width / 2
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
@@ -171,7 +170,6 @@ Item {
       text: qsTr("Capture") + ":"
       visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
       enabled: !Cpp_IO_Manager.isConnected
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: captureCombo
       Layout.fillWidth: true
@@ -205,7 +203,6 @@ Item {
       text: qsTr("Arguments") + ":"
       visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
       enabled: !Cpp_IO_Manager.isConnected
-      Layout.maximumWidth: root.width / 2
     } TextField {
       id: argsField
       Layout.fillWidth: true
@@ -237,7 +234,6 @@ Item {
       text: qsTr("Working Dir") + ":"
       visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
       enabled: !Cpp_IO_Manager.isConnected
-      Layout.maximumWidth: root.width / 2
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
@@ -285,7 +281,6 @@ Item {
       text: qsTr("Pipe Path") + ":"
       visible: modeCombo.currentIndex === 1 && !Cpp_IO_Manager.isConnected
       enabled: !Cpp_IO_Manager.isConnected
-      Layout.maximumWidth: root.width / 2
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true

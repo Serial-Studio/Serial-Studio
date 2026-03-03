@@ -28,6 +28,7 @@ import QtQuick.Controls
 Item {
   id: root
   implicitHeight: layout.implicitHeight
+  implicitWidth: layout.implicitWidth + 16
 
   //
   // Save settings
@@ -99,7 +100,6 @@ Item {
     Label {
       visible: _inDev.visible
       text: qsTr("Input Device") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _inDev
       visible: count > 0
@@ -121,7 +121,6 @@ Item {
     Label {
       visible: _rate.visible
       text: qsTr("Sample Rate") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _rate
       Layout.fillWidth: true
@@ -143,7 +142,6 @@ Item {
     Label {
       visible: _inFmt.visible
       text: qsTr("Sample Format") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _inFmt
       Layout.fillWidth: true
@@ -165,7 +163,6 @@ Item {
     Label {
       visible: _inChan.visible
       text: qsTr("Channels") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _inChan
       Layout.fillWidth: true
@@ -199,7 +196,6 @@ Item {
     Label {
       visible: _outDev.visible
       text: qsTr("Output Device") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _outDev
       visible: count > 0
@@ -221,7 +217,6 @@ Item {
     Label {
       visible: _outFmt.visible
       text: qsTr("Sample Format") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _outFmt
       Layout.fillWidth: true
@@ -243,7 +238,6 @@ Item {
     Label {
       visible: _outChan.visible
       text: qsTr("Channels") + ":"
-      Layout.maximumWidth: root.width / 2
     } ComboBox {
       id: _outChan
       Layout.fillWidth: true

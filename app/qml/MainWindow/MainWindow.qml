@@ -266,6 +266,7 @@ Widgets.SmartWindow {
       // User interface
       //
       RowLayout {
+        id: mainLayout
         z: 1
         spacing: 0
         Layout.topMargin: -1
@@ -279,7 +280,7 @@ Widgets.SmartWindow {
           Layout.fillWidth: true
           Layout.fillHeight: true
           Layout.minimumHeight: Math.max(terminal.implicitHeight, setup.implicitHeight)
-          Layout.minimumWidth: terminal.implicitWidth + (setup.visible ? 0 : setup.displayedWidth + 1)
+          Layout.minimumWidth: terminal.implicitWidth + (setup.visible ? 0 : setup.kMinPaneWidth + 1)
 
           data: [
             Panes.Console {
@@ -314,6 +315,33 @@ Widgets.SmartWindow {
             anchors.left: parent.left
             color: Cpp_ThemeManager.colors["pane_caption_border"]
           }
+
+          MouseArea {
+            width: 8
+            height: parent.height
+            anchors.left: parent.left
+            anchors.leftMargin: -4
+            cursorShape: Qt.SizeHorCursor
+
+            property int _startX: 0
+            property int _startWidth: 0
+
+            onPressed: (mouse) => {
+              _startX = mouse.x
+              _startWidth = setup.width
+            }
+
+            onPositionChanged: (mouse) => {
+              if (!pressed)
+                return
+
+              const delta = _startX - mouse.x
+              const maxW = mainLayout.width - stack.Layout.minimumWidth - 1
+              const newW = Math.max(setup.kMinPaneWidth,
+                                    Math.min(_startWidth + delta, maxW))
+              setup.userPaneWidth = newW
+            }
+          }
         }
 
         //
@@ -323,8 +351,9 @@ Widgets.SmartWindow {
           id: setup
           Layout.fillHeight: true
           Layout.rightMargin: setupMargin
-          Layout.minimumWidth: displayedWidth
-          Layout.maximumWidth: displayedWidth
+          Layout.minimumWidth: setup.kMinPaneWidth
+          Layout.preferredWidth: setup.displayedWidth
+          Layout.maximumWidth: mainLayout.width - stack.Layout.minimumWidth - 1
         }
       }
     }

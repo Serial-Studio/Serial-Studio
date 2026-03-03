@@ -39,8 +39,18 @@ Widgets.Pane {
   // Custom properties
   //
   property int setupMargin: 0
-  property int displayedWidth: 360
+  property int userPaneWidth: 0
+  readonly property int kMinPaneWidth: 280
   readonly property int maxItemWidth: layout.width - 8
+
+  readonly property int displayedWidth: {
+    const contentWidth = hardware.implicitWidth
+                         + layout.anchors.leftMargin
+                         + layout.anchors.rightMargin
+                         + 2
+    const natural = Math.max(kMinPaneWidth, contentWidth)
+    return userPaneWidth > 0 ? Math.max(kMinPaneWidth, userPaneWidth) : natural
+  }
 
   //
   // Displays the setup panel
@@ -68,6 +78,7 @@ Widgets.Pane {
   Settings {
     category: "SetupPanel"
     property alias csvExport: csvLogging.checked
+    property alias paneWidth: root.userPaneWidth
   }
 
   //

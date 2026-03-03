@@ -77,6 +77,16 @@ inline constexpr auto Datasets = "datasets";
 
 inline constexpr auto DashboardLayout = "dashboardLayout";
 inline constexpr auto ActiveGroupId   = "activeGroupId";
+inline constexpr auto WidgetSettings  = "widgetSettings";
+
+// Reserved sub-keys stored inside the widgetSettings object.
+// Prefixed with "__" to avoid collisions with numeric widget IDs.
+inline constexpr auto kActiveGroupSubKey = "__activeGroup__";
+
+inline QString layoutKey(int groupId)
+{
+  return QStringLiteral("__layout__:") + QString::number(groupId) + QStringLiteral("__");
+}
 }  // namespace Keys
 
 namespace DataModel {

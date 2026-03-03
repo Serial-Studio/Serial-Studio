@@ -239,9 +239,9 @@ API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
       id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
   }
 
-  // Suppress messageboxes during API call
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
   DataModel::ProjectModel::instance().openJsonFile(file_path);
+  DataModel::ProjectModel::instance().enableProjectMode();
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
 
   QJsonObject result;
@@ -261,7 +261,9 @@ API::CommandResponse API::Handlers::ProjectHandler::fileSave(const QString& id,
                         ? params.value(QStringLiteral("askPath")).toBool()
                         : false;
 
+  DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
   const bool success = DataModel::ProjectModel::instance().saveJsonFile(ask_path);
+  DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
 
   if (!success) {
     return CommandResponse::makeError(

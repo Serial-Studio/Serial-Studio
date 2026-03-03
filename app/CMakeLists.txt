@@ -381,6 +381,7 @@ set(QML_SOURCES
   qml/Widgets/MenuButton.qml
   qml/Widgets/MiniWindow.qml
   qml/Widgets/Pane.qml
+  qml/Widgets/PaneSplitter.qml
   qml/Widgets/PlotWidget.qml
   qml/Widgets/ProNotice.qml
   qml/Widgets/SmartWindow.qml
@@ -630,6 +631,24 @@ target_link_openssl(
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
+
+  # Install the libusb shared library alongside the executable (LGPL-2.1 §6 compliance).
+  #
+  # libusb is LGPL-2.1+. Static linking in a commercial binary would require distributing
+  # object files so users can relink. Dynamic linking is the standard compliant alternative:
+  # the user can swap the shared library file without recompiling Serial Studio.
+  #
+  # Platform destinations mirror the Qt deploy tool layout:
+  #   Windows  : libusb-1.0.dll → bin/ (next to the .exe, alongside Qt DLLs)
+  #   Linux    : libusb-1.0.so* → lib/
+  #   macOS    : macdeployqt (MACOS_BUNDLE_POST_BUILD) scans otool -L and copies all
+  #              non-system dylibs into Contents/Frameworks/ automatically; no explicit
+  #              install rule is needed here for macOS.
+  install(
+    TARGETS usb-1.0
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}   # Windows: libusb-1.0.dll
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}   # Linux:   libusb-1.0.so*
+  )
 endif()
 
 #---------------------------------------------------------------------------------------------------

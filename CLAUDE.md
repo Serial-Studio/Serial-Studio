@@ -51,6 +51,7 @@ lib/             KissFFT, QCodeEditor, mdflib, OpenSSL
 | `app/src/IO/HAL_Driver.h` | Abstract driver interface; `ByteArrayPtr = shared_ptr<const QByteArray>` |
 | `app/src/DataModel/FrameBuilder.cpp:817` | Hotpath: zero-copy to Dashboard, single alloc to exports |
 | `app/src/DataModel/FrameConsumer.h` | Lock-free worker template (dual-trigger flush) |
+| `app/src/DataModel/ProjectModel.cpp` | `m_widgetSettings` is the single store for all UI persistence (layout, active group, widget properties) |
 
 ### Data Flow
 
@@ -155,6 +156,47 @@ void processGroup(const Group &g)
 ❌ `if (x) { return true; }`
 ✅ `if (x) return true;`
 
+**Single-statement bodies on their own line: always follow with a blank line.**
+
+When the body of an `if`, `for`, `while`, or `else` is on a separate line (brace-free),
+add a blank line after it before the next sibling statement. This is mandatory — it
+makes the boundary of the braces-free body unambiguous at a glance.
+
+❌ Bad:
+```cpp
+if (!frame.isValid())
+  return;
+doWork(frame);
+```
+
+✅ Good:
+```cpp
+if (!frame.isValid())
+  return;
+
+doWork(frame);
+```
+
+❌ Bad (multiple consecutive brace-free ifs):
+```cpp
+if (s["interpolate"] !== undefined)
+  root.interpolate = s["interpolate"]
+if (s["showArea"] !== undefined)
+  root.showArea = s["showArea"]
+```
+
+✅ Good:
+```cpp
+if (s["interpolate"] !== undefined)
+  root.interpolate = s["interpolate"]
+
+if (s["showArea"] !== undefined)
+  root.showArea = s["showArea"]
+```
+
+The one exception is guard-clause chains at the top of a function where all branches
+return/continue and the intent is visually obvious from context.
+
 **Functions: target 40–80 lines.** Split anything over 100 lines into named helpers.
 
 **Guard clauses over nested error handling:**
@@ -162,20 +204,36 @@ void processGroup(const Group &g)
 ❌ `if (ok) { if (valid) { if (!empty) { doWork(); } } }`
 ✅ `if (!ok || !valid || empty) return; doWork();`
 
+### QML Bindings
+
+**`Q_INVOKABLE` functions with arguments are not reactive in QML bindings.** When a binding
+calls a `Q_INVOKABLE` with arguments, QML's binding engine does not track it. The correct
+fix is to expose the result as a `Q_PROPERTY` with `NOTIFY` on the C++ side so the binding
+is naturally reactive — not to add workarounds in QML.
+
+The existing `widgetFontRevision` + comma pattern in this codebase is a known wart from
+before this rule existed. Do not introduce new instances of it and do not invent new
+workarounds (named hacks like `widgetFont083`, block expressions, etc.) — fix the C++ API.
+
 ### Comments
+
+**Prefer self-documenting code over comments.**
+
+Ideally, functions contain no comments at all — the code explains itself through
+good naming. When a comment is necessary, one line is the limit except in very
+unusual cases.
 
 **No inline end-of-line comments.**
 
 ❌ `doSomething(); // do x y z`
 
-✅ Block comment above the line:
+✅ Single-line block comment above the line (only when the intent is not obvious):
 ```cpp
-// Skip disabled groups to avoid stale dataset reads
-if (!group.isEnabled())
-  continue;
+// KMP search requires the needle to be re-initialised after a partial match
+m_kmpState = 0;
 ```
 
-✅ Doxygen for public APIs:
+✅ Doxygen for public APIs — keep it brief:
 ```cpp
 /**
  * @brief Validates CRC16-CCITT checksum over frame payload.
@@ -204,11 +262,13 @@ bool validateChecksum(const QByteArray &frame);
 1. **No mutexes in FrameReader or CircularBuffer.** Immutability is the design.
 2. **No inline end-of-line comments.** Block comments or self-documenting names only.
 3. **Max 3 nesting levels.** Use early returns, early continues, extract functions.
-4. **No braces on single-statement bodies** (enforced by `RemoveBracesLLVM`).
+4. **No braces on single-statement bodies** (enforced by `RemoveBracesLLVM`). Always follow a brace-free body on its own line with a blank line before the next sibling statement.
 5. **Validate at system boundaries only** (API input, file I/O, network). Trust internal data.
 6. **Maintain SPDX headers.** `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both.
 7. **Do not create markdown/doc files** unless explicitly asked.
 8. **Update CLAUDE.md** for any significant architectural change.
+10. **Prefer self-documenting code over comments.** Aim for zero comments inside function bodies. One line max when a comment is truly necessary.
+9. **Make QML bindings reactive via `Q_PROPERTY`, not workarounds.** If a `Q_INVOKABLE` result needs to be reactive, expose it as a `Q_PROPERTY` with `NOTIFY` on the C++ side. Never introduce new comma-expression hacks or named variants to work around missing signals.
 
 ## File Creation Policy
 

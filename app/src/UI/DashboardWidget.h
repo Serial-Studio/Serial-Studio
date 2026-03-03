@@ -87,6 +87,9 @@ class DashboardWidget : public QQuickItem {
   Q_PROPERTY(SerialStudio::DashboardWidget widgetType
              READ widgetType
              NOTIFY widgetIndexChanged)
+  Q_PROPERTY(QString widgetId
+             READ widgetId
+             NOTIFY widgetIndexChanged)
   // clang-format on
 
 signals:
@@ -103,6 +106,7 @@ public:
   [[nodiscard]] QString widgetTitle() const;
   [[nodiscard]] SerialStudio::DashboardWidget widgetType() const;
 
+  [[nodiscard]] QString widgetId() const;
   [[nodiscard]] QString widgetQmlPath() const;
   [[nodiscard]] QQuickItem* widgetModel() const;
 

@@ -25,7 +25,6 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
-import QtCore as QtCore
 
 import "../"
 import "../../Dialogs" as Dialogs
@@ -37,8 +36,9 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property MultiPlotModel model
   required property var windowRoot
+  required property string widgetId
+  required property MultiPlotModel model
 
   //
   // Window flags
@@ -69,20 +69,31 @@ Item {
   }
 
   //
-  // Sync model width/height with widget
+  // Sync model width/height with widget, then restore persisted settings
   //
-  Component.onCompleted: root.setDownsampleFactor()
+  Component.onCompleted: {
+    root.setDownsampleFactor()
 
-  //
-  // Save settings
-  //
-  QtCore.Settings {
-    id: settings
-    category: "MultiPlot"
-    property alias interpolateEnabled: root.interpolate
-    property alias userShowLegends: root.userShowLegends
-    property alias userShowXLabel: root.userShowXLabel
-    property alias userShowYLabel: root.userShowYLabel
+    const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
+
+    if (s["interpolate"] !== undefined)
+      root.interpolate = s["interpolate"]
+
+    if (s["userShowLegends"] !== undefined)
+      root.userShowLegends = s["userShowLegends"]
+
+    if (s["userShowXLabel"] !== undefined)
+      root.userShowXLabel = s["userShowXLabel"]
+
+    if (s["userShowYLabel"] !== undefined)
+      root.userShowYLabel = s["userShowYLabel"]
+
+    if (s["visibleCurves"] !== undefined) {
+      const curves = s["visibleCurves"]
+
+      for (let i = 0; i < curves.length && i < root.model.count; ++i)
+        root.model.modifyCurveVisibility(i, curves[i])
+    }
   }
 
   //
@@ -160,7 +171,10 @@ Item {
       icon.height: 18
       icon.color: "transparent"
       checked: root.interpolate
-      onClicked: root.interpolate = !root.interpolate
+      onClicked: {
+        root.interpolate = !root.interpolate
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolate", root.interpolate)
+      }
       icon.source: root.interpolate?
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
@@ -176,6 +190,7 @@ Item {
       onClicked: {
         root.userShowLegends = !root.userShowLegends
         root.updateWidgetOptions()
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowLegends", root.userShowLegends)
       }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/labels.svg"
     }
@@ -196,6 +211,7 @@ Item {
       onClicked: {
         root.userShowXLabel = !root.userShowXLabel
         root.updateWidgetOptions()
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
       }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
     }
@@ -210,6 +226,7 @@ Item {
       onClicked: {
         root.userShowYLabel = !root.userShowYLabel
         root.updateWidgetOptions()
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowYLabel", root.userShowYLabel)
       }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
     }
@@ -392,8 +409,11 @@ Item {
                 font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
                 palette.text: Cpp_ThemeManager.colors["widget_text"]
                 onCheckedChanged: {
-                  if (checked !== root.model.visibleCurves[index])
+                  if (checked !== root.model.visibleCurves[index]) {
                     root.model.modifyCurveVisibility(index, checked)
+                    Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "visibleCurves",
+                                                       root.model.visibleCurves)
+                  }
                 }
               }
             }

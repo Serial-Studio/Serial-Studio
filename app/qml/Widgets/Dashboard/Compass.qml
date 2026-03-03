@@ -35,8 +35,9 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property CompassModel model
   required property var windowRoot
+  required property string widgetId
+  required property CompassModel model
 
   //
   // Widget layout

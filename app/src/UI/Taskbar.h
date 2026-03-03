@@ -179,7 +179,6 @@ public slots:
 private slots:
   void onRegistryCleared();
   void onBatchUpdateCompleted();
-  void onDashboardLayoutChanged();
   void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);
   void onWidgetDestroyed(UI::WidgetID id);
 

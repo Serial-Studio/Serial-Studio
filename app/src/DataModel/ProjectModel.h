@@ -142,8 +142,8 @@ signals:
   void frameDetectionChanged();
   void editableOptionsChanged();
   void frameParserCodeChanged();
-  void dashboardLayoutChanged();
   void activeGroupIdChanged();
+  void widgetSettingsChanged();
 
 private:
   explicit ProjectModel();
@@ -231,7 +231,7 @@ public:
   [[nodiscard]] bool suppressMessageBoxes() const;
 
   [[nodiscard]] int activeGroupId() const;
-  [[nodiscard]] const QJsonObject& dashboardLayout() const;
+  [[nodiscard]] QJsonObject groupLayout(int groupId) const;
 
   [[nodiscard]] bool currentGroupIsEditable() const;
   [[nodiscard]] bool currentDatasetIsEditable() const;
@@ -251,8 +251,12 @@ public:
   [[nodiscard]] CustomModel* datasetModel() const;
 
   Q_INVOKABLE bool askSave();
-  Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
   Q_INVOKABLE QJsonObject serializeToJson() const;
+  Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
+  Q_INVOKABLE QJsonObject widgetSettings(const QString& widgetId) const;
+  Q_INVOKABLE void saveWidgetSetting(const QString& widgetId,
+                                     const QString& key,
+                                     const QVariant& value);
 
 public slots:
   void setupExternalConnections();
@@ -291,7 +295,8 @@ public slots:
   void setModified(const bool modified);
   void setFrameParserCode(const QString& code);
   void setActiveGroupId(const int groupId);
-  void setDashboardLayout(const QJsonObject& layout);
+  void setGroupLayout(int groupId, const QJsonObject& layout);
+  void flushLayoutToDisk();
 
   void displayFrameParserView();
 
@@ -368,8 +373,7 @@ private:
   DataModel::Action m_selectedAction;
   DataModel::Dataset m_selectedDataset;
 
-  int m_activeGroupId;
-  QJsonObject m_dashboardLayout;
+  QJsonObject m_widgetSettings;
 };
 
 /**

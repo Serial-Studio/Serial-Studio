@@ -36,6 +36,7 @@ Item {
   //
   required property color color
   required property var windowRoot
+  required property string widgetId
   required property LEDPanelModel model
 
   //

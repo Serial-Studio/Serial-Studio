@@ -28,7 +28,6 @@
 
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
-#include "IO/Manager.h"
 #include "UI/Dashboard.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/WindowManager.h"
@@ -117,21 +116,11 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
           &UI::Taskbar::rebuildModel);
 
   auto* pm = &DataModel::ProjectModel::instance();
-  connect(pm,
-          &DataModel::ProjectModel::dashboardLayoutChanged,
-          this,
-          &UI::Taskbar::onDashboardLayoutChanged);
   connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this, [this, pm] {
     setActiveGroupId(pm->activeGroupId());
   });
 
   connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
-
-  auto* io = &IO::Manager::instance();
-  connect(io, &IO::Manager::connectedChanged, this, [this, io] {
-    if (!io->isConnected())
-      saveLayout();
-  });
 
   rebuildModel();
 }
@@ -378,6 +367,26 @@ UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
   return TaskbarModel::WindowClosed;
 }
 
+/**
+ * @brief Serializes the active group's layout and writes it to the project file.
+ */
+void UI::Taskbar::saveLayout()
+{
+  if (!m_windowManager || m_windowIDs.isEmpty() || m_activeGroupId < -2)
+    return;
+
+  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+  if (opMode != SerialStudio::ProjectFile)
+    return;
+
+  auto* model = &DataModel::ProjectModel::instance();
+  if (model->jsonFilePath().isEmpty())
+    return;
+
+  model->setGroupLayout(m_activeGroupId, m_windowManager->serializeLayout());
+  model->flushLayoutToDisk();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Taskbar group selection code (e.g. when a tab is selected in the tab bar)
 //--------------------------------------------------------------------------------------------------
@@ -397,6 +406,9 @@ UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
  */
 void UI::Taskbar::setActiveGroupId(int groupId)
 {
+  // Persist current group's layout before switching
+  saveLayout();
+
   // Reset the models
   m_windowIDs.clear();
   m_taskbarButtons->clear();
@@ -616,11 +628,15 @@ void UI::Taskbar::unregisterWindow(QQuickItem* window)
  */
 void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
 {
-  if (manager) {
-    m_windowManager = static_cast<UI::WindowManager*>(manager);
-    m_windowManager->setTaskbar(this);
-    Q_EMIT windowManagerChanged();
-  }
+  if (!manager)
+    return;
+
+  m_windowManager = static_cast<UI::WindowManager*>(manager);
+  m_windowManager->setTaskbar(this);
+
+  connect(m_windowManager, &UI::WindowManager::geometryChanged, this, [this] { saveLayout(); });
+
+  Q_EMIT windowManagerChanged();
 }
 
 /**
@@ -646,7 +662,7 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager) {
     const auto opMode = DataModel::FrameBuilder::instance().operationMode();
     if (opMode == SerialStudio::ProjectFile) {
-      const auto& layout = DataModel::ProjectModel::instance().dashboardLayout();
+      const auto layout = DataModel::ProjectModel::instance().groupLayout(m_activeGroupId);
       if (!layout.isEmpty() && m_windowManager->restoreLayout(layout))
         return;
     }
@@ -907,10 +923,10 @@ void UI::Taskbar::rebuildModel()
 
     const auto opMode = DataModel::FrameBuilder::instance().operationMode();
     if (opMode == SerialStudio::ProjectFile) {
-      auto* pm = &DataModel::ProjectModel::instance();
-      if (!pm->dashboardLayout().isEmpty()) {
-        const int savedId = pm->activeGroupId();
-        const bool found  = std::any_of(model.begin(), model.end(), [savedId](const QVariant& v) {
+      auto* pm          = &DataModel::ProjectModel::instance();
+      const int savedId = pm->activeGroupId();
+      if (savedId >= 0) {
+        const bool found = std::any_of(model.begin(), model.end(), [savedId](const QVariant& v) {
           return v.toMap().value("id").toInt() == savedId;
         });
         if (found) {
@@ -1089,62 +1105,3 @@ void UI::Taskbar::onRegistryCleared()
  * trigger expensive operations like layout recalculation.
  */
 void UI::Taskbar::onBatchUpdateCompleted() {}
-
-/**
- * @brief Handles dashboard layout changes from the ProjectModel.
- *
- * This is called when a project file is loaded that contains a saved
- * dashboard layout. The layout is restored via the WindowManager.
- *
- * Note: Layout restoration is skipped when connected to avoid overwriting
- * user-modified layouts during active streaming sessions.
- */
-void UI::Taskbar::onDashboardLayoutChanged()
-{
-  if (!m_windowManager)
-    return;
-
-  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-  if (opMode == SerialStudio::ProjectFile) {
-    auto* model = &DataModel::ProjectModel::instance();
-    if (!model->jsonFilePath().isEmpty()) {
-      const auto& layout = model->dashboardLayout();
-      if (!layout.isEmpty()) {
-        QTimer::singleShot(100, this, [this, layout] {
-          if (m_windowManager) {
-            const bool isConnected = IO::Manager::instance().isConnected();
-            if (!isConnected)
-              m_windowManager->restoreLayout(layout);
-          }
-        });
-      }
-    }
-  }
-}
-
-/**
- * @brief Saves the current dashboard layout to the ProjectModel.
- *
- * This serializes the current window positions, sizes, and order
- * to the project file. Call this when the user modifies the layout
- * and you want to persist the changes.
- */
-void UI::Taskbar::saveLayout()
-{
-  if (!m_windowManager)
-    return;
-
-  if (m_windowIDs.isEmpty())
-    return;
-
-  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-  if (opMode == SerialStudio::ProjectFile) {
-    auto* model = &DataModel::ProjectModel::instance();
-    if (!model->jsonFilePath().isEmpty()) {
-      auto layout = m_windowManager->serializeLayout();
-      model->setDashboardLayout(layout);
-      model->setActiveGroupId(m_activeGroupId);
-      model->saveJsonFile();
-    }
-  }
-}

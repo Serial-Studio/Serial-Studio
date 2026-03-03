@@ -36,6 +36,7 @@ Item {
   required property color color
   required property var windowRoot
   required property GPSWidget model
+  required property string widgetId
 
   //
   // Window flags
@@ -44,7 +45,7 @@ Item {
   readonly property int toolbarHeight: windowRoot.objectName === "ExternalWindow" ? 47 : 48
 
   //
-  // Configure module widget on load
+  // Configure module widget on load, then restore persisted settings
   //
   onModelChanged: {
     if (model) {
@@ -52,11 +53,20 @@ Item {
       model.parent = container
       model.anchors.fill = container
       _mapType.model = model.mapTypes
+
+      const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
+
+      model.autoCenter = s["autoCenter"] !== undefined ? s["autoCenter"] : model.autoCenter
+      model.plotTrajectory = s["plotTrajectory"] !== undefined ? s["plotTrajectory"] : model.plotTrajectory
+      model.showWeather = s["showWeather"] !== undefined ? s["showWeather"] : model.showWeather
+      model.showNasaWeather = s["showNasaWeather"] !== undefined ? s["showNasaWeather"] : model.showNasaWeather
+      model.mapType = s["mapType"] !== undefined ? s["mapType"] : model.mapType
+
       _mapType.currentIndex = model.mapType
       _autoCenter.checked = model.autoCenter
-      _showWeather.checked = root.model.showWeather
+      _showWeather.checked = model.showWeather
       _plotTrajectory.checked = model.plotTrajectory
-      _showNasaWeather.checked = root.model.showNasaWeather
+      _showNasaWeather.checked = model.showNasaWeather
     }
   }
 
@@ -87,6 +97,7 @@ Item {
         if (root.model) {
           root.model.autoCenter = !root.model.autoCenter
           checked = root.model.autoCenter
+          Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "autoCenter", root.model.autoCenter)
         }
       }
     }
@@ -101,6 +112,7 @@ Item {
         if (root.model) {
           root.model.plotTrajectory = !root.model.plotTrajectory
           checked = root.model.plotTrajectory
+          Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "plotTrajectory", root.model.plotTrajectory)
         }
       }
     }
@@ -150,6 +162,8 @@ Item {
           root.model.showWeather = !root.model.showWeather
           _showWeather.checked = root.model.showWeather
           _showNasaWeather.checked = root.model.showNasaWeather
+          Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showWeather", root.model.showWeather)
+          Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showNasaWeather", root.model.showNasaWeather)
         }
       }
     }
@@ -165,6 +179,8 @@ Item {
           root.model.showNasaWeather = !root.model.showNasaWeather
           _showWeather.checked = root.model.showWeather
           _showNasaWeather.checked = root.model.showNasaWeather
+          Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showWeather", root.model.showWeather)
+          Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showNasaWeather", root.model.showNasaWeather)
         }
       }
     }
@@ -194,6 +210,7 @@ Item {
           if (root.model.mapType !== currentIndex) {
             root.model.mapType = currentIndex
             currentIndex = root.model.mapType
+            Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "mapType", root.model.mapType)
           }
         }
       }

@@ -46,4 +46,10 @@ if %errorlevel% neq 0 (
     %PYTHON% -m pip install --quiet psutil 1>&2
 )
 
+%PYTHON% -c "import cpuinfo" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Installing py-cpuinfo... 1>&2
+    %PYTHON% -m pip install --quiet py-cpuinfo 1>&2
+)
+
 %PYTHON% "%SCRIPT_DIR%system-monitor.py" %*

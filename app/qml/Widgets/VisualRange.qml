@@ -137,8 +137,9 @@ ColumnLayout {
     elide: Qt.ElideRight
     Layout.alignment: Qt.AlignHCenter
     horizontalAlignment: Text.AlignHCenter
-    font: root.rangeVisible ? (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(1.16)) :
-                              (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(1))
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision,
+           root.rangeVisible ? Cpp_Misc_CommonFonts.widgetFont(1.16) :
+                               Cpp_Misc_CommonFonts.widgetFont(1))
     color: Cpp_ThemeManager.colors["widget_text"]
 
     // Calculate max text width

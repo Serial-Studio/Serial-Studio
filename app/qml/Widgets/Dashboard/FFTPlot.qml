@@ -25,7 +25,6 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
-import QtCore as QtCore
 
 import "../"
 import "../../Dialogs" as Dialogs
@@ -37,8 +36,9 @@ Item {
   // Widget data inputs
   //
   required property color color
-  required property FFTPlotModel model
   required property var windowRoot
+  required property string widgetId
+  required property FFTPlotModel model
 
   //
   // Window flags
@@ -67,19 +67,21 @@ Item {
   }
 
   //
-  // Sync model width/height with widget
+  // Sync model width/height with widget, then restore persisted settings
   //
-  Component.onCompleted: root.setDownsampleFactor()
+  Component.onCompleted: {
+    root.setDownsampleFactor()
 
-  //
-  // Save settings
-  //
-  QtCore.Settings {
-    id: settings
-    category: "FFTPlot"
-    property alias displayArea: root.showAreaUnderPlot
-    property alias userShowXLabel: root.userShowXLabel
-    property alias userShowYLabel: root.userShowYLabel
+    const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
+
+    if (s["showAreaUnderPlot"] !== undefined)
+      root.showAreaUnderPlot = s["showAreaUnderPlot"]
+
+    if (s["userShowXLabel"] !== undefined)
+      root.userShowXLabel = s["userShowXLabel"]
+
+    if (s["userShowYLabel"] !== undefined)
+      root.userShowYLabel = s["userShowYLabel"]
   }
 
   //
@@ -142,7 +144,10 @@ Item {
       opacity: enabled ? 1 : 0.5
       checked: root.showAreaUnderPlot
       icon.source: "qrc:/rcc/icons/dashboard-buttons/area.svg"
-      onClicked: root.showAreaUnderPlot = !root.showAreaUnderPlot
+      onClicked: {
+        root.showAreaUnderPlot = !root.showAreaUnderPlot
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showAreaUnderPlot", root.showAreaUnderPlot)
+      }
     }
 
     Rectangle {
@@ -161,6 +166,7 @@ Item {
       onClicked: {
         root.userShowXLabel = !root.userShowXLabel
         root.updateWidgetOptions()
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
       }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
     }
@@ -175,6 +181,7 @@ Item {
       onClicked: {
         root.userShowYLabel = !root.userShowYLabel
         root.updateWidgetOptions()
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowYLabel", root.userShowYLabel)
       }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
     }

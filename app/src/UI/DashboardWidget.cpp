@@ -23,6 +23,7 @@
 
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
+#include "UI/WidgetRegistry.h"
 #include "UI/Widgets/Accelerometer.h"
 #include "UI/Widgets/Bar.h"
 #include "UI/Widgets/Compass.h"
@@ -138,6 +139,16 @@ QString UI::DashboardWidget::widgetTitle() const
 SerialStudio::DashboardWidget UI::DashboardWidget::widgetType() const
 {
   return m_widgetType;
+}
+
+/**
+ * Returns a stable string key identifying this specific widget instance,
+ * derived from the WidgetRegistry ID. Used by QML to key per-widget settings.
+ */
+QString UI::DashboardWidget::widgetId() const
+{
+  auto id = UI::WidgetRegistry::instance().widgetIdByTypeAndIndex(m_widgetType, m_relativeIndex);
+  return QString::number(id);
 }
 
 /**

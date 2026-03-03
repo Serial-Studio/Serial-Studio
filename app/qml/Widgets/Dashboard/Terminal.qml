@@ -36,6 +36,7 @@ Item {
   property var color
   property var model
   property var windowRoot
+  property string widgetId
 
   //
   // Super important to for shortcuts

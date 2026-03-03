@@ -371,8 +371,11 @@ add_subdirectory(mdflib)
 # libusb provides cross-platform access to USB devices via bulk/control transfers.
 # It is only included in BUILD_COMMERCIAL builds — the GPL binary contains no USB code.
 #
-# Acquisition: FetchContent downloads libusb 1.0.27 from GitHub at configure time.
-# libusb ships no CMakeLists.txt, so a minimal static target is assembled manually.
+# Acquisition: FetchContent downloads libusb 1.0.29 from GitHub at configure time.
+# libusb ships no CMakeLists.txt, so the libusb-cmake wrapper assembles the target.
+#
+# LGPL-2.1 compliance: libusb is built as a shared library in commercial builds so
+# that users can relink against a modified libusb (LGPL-2.1 §6).
 #
 # Platform source sets:
 #   Windows : windows_winusb.c + WinUSB / SetupAPI system libraries
@@ -382,9 +385,9 @@ add_subdirectory(mdflib)
 #---------------------------------------------------------------------------------------------------
 
 if(BUILD_COMMERCIAL)
-  message(STATUS "Fetching libusb-cmake (libusb 1.0.27) from GitHub...")
+  message(STATUS "Fetching libusb-cmake (libusb 1.0.29) from GitHub...")
 
-  set(LIBUSB_BUILD_SHARED_LIBS        OFF CACHE BOOL "" FORCE)
+  set(LIBUSB_BUILD_SHARED_LIBS        ON  CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_TESTING            OFF CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_EXAMPLES           OFF CACHE BOOL "" FORCE)
   set(LIBUSB_INSTALL_TARGETS          OFF CACHE BOOL "" FORCE)
@@ -393,7 +396,7 @@ if(BUILD_COMMERCIAL)
   FetchContent_Declare(
     libusb_cmake
     GIT_REPOSITORY https://github.com/libusb/libusb-cmake.git
-    GIT_TAG        main
+    GIT_TAG        v1.0.29-0
     GIT_SHALLOW    TRUE
     GIT_PROGRESS   FALSE
   )
@@ -431,14 +434,6 @@ if(BUILD_COMMERCIAL)
   set(BUILD_SHARED_LIBS      OFF CACHE BOOL "" FORCE)
 
   add_subdirectory(hidapi)
-
-  # Resolve the concrete (non-ALIAS) hidapi target for flag application.
-  # hidapi's CMake always creates platform-specific concrete targets:
-  #   macOS   → hidapi_darwin
-  #   Windows → hidapi_winapi
-  #   Linux   → hidapi_hidraw
-  # The hidapi and hidapi::hidapi names are ALIAS targets; CMake forbids
-  # calling target_compile_options() on ALIAS targets.
   if(APPLE)
     set(HIDAPI_CONCRETE_TARGET hidapi_darwin)
   elseif(WIN32)
@@ -462,8 +457,10 @@ endif()
 #   - This ensures our flags override any library defaults
 #
 # Applied flags (from LIB_FLAGS and LIB_LINK_FLAGS):
-#   Compile: -w (suppress warnings), -fvisibility=hidden
-#   Link:    -fvisibility=hidden (GCC/Clang only)
+#   Static targets  — Compile: -w, -fvisibility=hidden / Link: -fvisibility=hidden
+#   Shared targets  — Compile: -w only (-fvisibility=hidden is deliberately omitted;
+#                     applying it to a shared library hides all exported symbols and
+#                     causes undefined-symbol errors in the final executable)
 #
 # Target checks (if(TARGET ...)):
 #   - Verifies target exists before modifying it
@@ -471,10 +468,12 @@ endif()
 #   - Allows conditional library builds
 #
 # Libraries configured:
-#   kissfft       - FFT library (static, no dependencies)
-#   QCodeEditor   - Syntax highlighting editor (Qt-based)
-#   QSimpleUpdater - Auto-update framework (Qt-based)
-#   mdf           - MDF4 file parser (requires ZLIB, EXPAT)
+#   kissfft        - FFT library (static)
+#   QCodeEditor    - Syntax highlighting editor (static, Qt-based)
+#   QSimpleUpdater - Auto-update framework (static, Qt-based)
+#   mdf            - MDF4 file parser (static, requires ZLIB, EXPAT)
+#   usb-1.0        - Raw USB driver (shared in commercial builds, LGPL-2.1 compliance)
+#   hidapi         - HID device driver (static, commercial builds only)
 #
 # Not applied to:
 #   OpenSSL - Uses precompiled binaries (no compilation flags needed)
@@ -483,7 +482,7 @@ endif()
 #
 # Effect:
 #   - Cleaner build output (no third-party warnings)
-#   - Smaller binaries (hidden symbols)
+#   - Smaller binaries (hidden symbols on static targets)
 #   - Faster linking (fewer exported symbols)
 #
 #---------------------------------------------------------------------------------------------------
@@ -492,10 +491,16 @@ function(configure_third_party_lib TARGET_NAME)
   if(NOT TARGET ${TARGET_NAME})
     return()
   endif()
-
-  target_compile_options(${TARGET_NAME} PRIVATE ${LIB_FLAGS})
-  if(NOT MSVC AND LIB_LINK_FLAGS)
-    target_link_options(${TARGET_NAME} PRIVATE ${LIB_LINK_FLAGS})
+  get_target_property(_lib_type ${TARGET_NAME} TYPE)
+  if(NOT _lib_type STREQUAL "SHARED_LIBRARY")
+    target_compile_options(${TARGET_NAME} PRIVATE ${LIB_FLAGS})
+    if(NOT MSVC AND LIB_LINK_FLAGS)
+      target_link_options(${TARGET_NAME} PRIVATE ${LIB_LINK_FLAGS})
+    endif()
+  else()
+    set(_warn_flags ${LIB_FLAGS})
+    list(FILTER _warn_flags EXCLUDE REGEX "fvisibility")
+    target_compile_options(${TARGET_NAME} PRIVATE ${_warn_flags})
   endif()
 
   get_target_property(INC_DIRS ${TARGET_NAME} INTERFACE_INCLUDE_DIRECTORIES)
@@ -509,8 +514,11 @@ configure_third_party_lib(kissfft)
 configure_third_party_lib(QCodeEditor)
 configure_third_party_lib(QSimpleUpdater)
 configure_third_party_lib(mdf)
-configure_third_party_lib(usb-1.0)
-configure_third_party_lib(${HIDAPI_CONCRETE_TARGET})
+
+if(BUILD_COMMERCIAL)
+  configure_third_party_lib(usb-1.0)
+  configure_third_party_lib(${HIDAPI_CONCRETE_TARGET})
+endif()
 
 #---------------------------------------------------------------------------------------------------
 # Restore global link flags
