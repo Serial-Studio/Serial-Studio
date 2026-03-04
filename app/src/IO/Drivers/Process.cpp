@@ -40,6 +40,12 @@
 #    include <windows.h>
 #    include <tlhelp32.h>
 // clang-format on
+#    include <QDir>
+#  else
+#    include <fcntl.h>
+#    include <poll.h>
+#    include <sys/stat.h>
+#    include <unistd.h>
 #  endif
 
 //--------------------------------------------------------------------------------------------------
@@ -556,23 +562,121 @@ void IO::Drivers::Process::onPipeError()
  * Opens the named pipe / FIFO for reading and loops, forwarding data via
  * dataReceived(). If the pipe cannot be opened the loop exits and
  * onPipeError() is scheduled on the main thread via a queued invocation.
+ *
+ * QFile::waitForReadyRead() is not implemented for FIFOs/pipes and always
+ * returns false. We use native blocking I/O instead: poll() on Unix and
+ * ReadFile() on Windows, both with a 100 ms timeout so m_pipeRunning can be
+ * checked between iterations.
  */
 void IO::Drivers::Process::pipeReadLoop()
 {
-  QFile pipe(m_pipePath);
-  if (!pipe.open(QIODevice::ReadOnly)) {
+#  ifdef Q_OS_WIN
+  const QString dosPath = QDir::toNativeSeparators(m_pipePath);
+  HANDLE hPipe = CreateNamedPipeW(reinterpret_cast<LPCWSTR>(dosPath.utf16()),
+                                  PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED,
+                                  PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
+                                  1,
+                                  0,
+                                  4096,
+                                  0,
+                                  nullptr);
+
+  if (hPipe == INVALID_HANDLE_VALUE) {
     QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);
     return;
   }
 
+  // Wait for a writer to connect, checking m_pipeRunning every 100 ms
+  OVERLAPPED ov{};
+  ov.hEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+  ConnectNamedPipe(hPipe, &ov);
+
+  bool connected = (GetLastError() == ERROR_PIPE_CONNECTED);
+  while (!connected && m_pipeRunning.load()) {
+    const DWORD rc = WaitForSingleObject(ov.hEvent, 100);
+    if (rc == WAIT_OBJECT_0) {
+      connected = true;
+      break;
+    }
+  }
+
+  CloseHandle(ov.hEvent);
+
+  if (!connected) {
+    CloseHandle(hPipe);
+    return;
+  }
+
+  char buf[4096];
   while (m_pipeRunning.load()) {
-    if (!pipe.waitForReadyRead(100))
+    DWORD avail = 0;
+    if (!PeekNamedPipe(hPipe, nullptr, 0, nullptr, &avail, nullptr))
+      break;
+
+    if (avail == 0) {
+      ::Sleep(10);
+      continue;
+    }
+
+    DWORD bytesRead = 0;
+    const BOOL ok = ReadFile(hPipe, buf, sizeof(buf), &bytesRead, nullptr);
+    if (!ok || bytesRead == 0)
+      break;
+
+    Q_EMIT dataReceived(makeByteArray(QByteArray(buf, static_cast<int>(bytesRead))));
+  }
+
+  CloseHandle(hPipe);
+#  else
+  const QByteArray pathBytes = m_pipePath.toLocal8Bit();
+  struct stat st{};
+  const bool exists = (::stat(pathBytes.constData(), &st) == 0);
+  if (!exists)
+    ::mkfifo(pathBytes.constData(), 0600);
+  else if (!S_ISFIFO(st.st_mode)) {
+    QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);
+    return;
+  }
+
+  const int fd = ::open(pathBytes.constData(), O_RDONLY | O_NONBLOCK);
+  if (fd < 0) {
+    QMetaObject::invokeMethod(this, "onPipeError", Qt::QueuedConnection);
+    return;
+  }
+
+  char buf[4096];
+  struct pollfd pfd{};
+  pfd.fd     = fd;
+  pfd.events = POLLIN;
+
+  while (m_pipeRunning.load()) {
+    const int rc = ::poll(&pfd, 1, 100);
+    if (rc <= 0)
       continue;
 
-    const QByteArray data = pipe.readAll();
-    if (!data.isEmpty())
-      Q_EMIT dataReceived(makeByteArray(data));
+    if (!(pfd.revents & POLLIN)) {
+      if (pfd.revents & (POLLERR | POLLNVAL))
+        break;
+
+      continue;
+    }
+
+    const ssize_t n = ::read(fd, buf, sizeof(buf));
+    if (n < 0)
+      break;
+
+    if (n == 0) {
+      if (pfd.revents & POLLHUP)
+        break;
+
+      continue;
+    }
+
+    Q_EMIT dataReceived(makeByteArray(QByteArray(buf, static_cast<int>(n))));
   }
+
+  ::close(fd);
+#  endif
 }
 
 #endif  // BUILD_COMMERCIAL
