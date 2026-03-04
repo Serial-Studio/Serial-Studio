@@ -208,8 +208,8 @@ ColumnLayout {
           Layout.fillWidth: true
           Layout.rightMargin: -32
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.SectionHeader
-          visible: model.widgetType === ProjectModel.SectionHeader
+          active: model.widgetType === ProjectEditor.SectionHeader
+          visible: model.widgetType === ProjectEditor.SectionHeader
 
           sourceComponent: Rectangle {
             implicitHeight: root.rowHeight
@@ -279,7 +279,7 @@ ColumnLayout {
           Layout.minimumWidth: root.iconWidth
           Layout.maximumWidth: root.iconWidth
           visible: model.parameterIcon !== undefined &&
-                   model.widgetType !== ProjectModel.SectionHeader
+                   model.widgetType !== ProjectEditor.SectionHeader
 
           Rectangle {
             anchors.fill: parent
@@ -332,7 +332,7 @@ ColumnLayout {
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["table_separator"]
           visible: model.parameterIcon !== undefined &&
-                   model.widgetType !== ProjectModel.SectionHeader
+                   model.widgetType !== ProjectEditor.SectionHeader
         } Item {
           implicitWidth: 8
         }
@@ -345,12 +345,12 @@ ColumnLayout {
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.parameterWidth
           Layout.maximumWidth: root.parameterWidth
-          text: visible ? model.parameterName : ""
+          text: model.parameterName ?? ""
           color: Cpp_ThemeManager.colors["table_text"]
 
           ToolTip.delay: 700
-          visible: model.widgetType !== ProjectModel.SectionHeader
-          ToolTip.text: visible ? model.parameterDescription : ""
+          visible: model.widgetType !== ProjectEditor.SectionHeader
+          ToolTip.text: model.parameterDescription ?? ""
           ToolTip.visible: _paramMouseArea.containsMouse && ToolTip.text !== ""
 
           MouseArea {
@@ -367,10 +367,10 @@ ColumnLayout {
           width: 1
           Layout.fillHeight: true
           color: Cpp_ThemeManager.colors["table_separator"]
-          visible: model.widgetType !== ProjectModel.SectionHeader
+          visible: model.widgetType !== ProjectEditor.SectionHeader
         } Item {
           width: 8
-          visible: model.widgetType !== ProjectModel.SectionHeader
+          visible: model.widgetType !== ProjectEditor.SectionHeader
         }
 
         //
@@ -379,8 +379,8 @@ ColumnLayout {
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.TextField
-          visible: model.widgetType === ProjectModel.TextField
+          active: model.widgetType === ProjectEditor.TextField
+          visible: model.widgetType === ProjectEditor.TextField
 
           property var modelActive: model.active
           property var editableValue: model.editableValue
@@ -399,7 +399,7 @@ ColumnLayout {
                 root.modelPointer.setData(
                       view.index(row, column),
                       text,
-                      ProjectModel.EditableValue)
+                      ProjectEditor.EditableValue)
               }
 
               background: Item {}
@@ -413,8 +413,8 @@ ColumnLayout {
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.IconPicker
-          visible: model.widgetType === ProjectModel.IconPicker
+          active: model.widgetType === ProjectEditor.IconPicker
+          visible: model.widgetType === ProjectEditor.IconPicker
 
           property var modelActive: model.active
           property var editableValue: model.editableValue
@@ -485,8 +485,8 @@ ColumnLayout {
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.IntField
-          visible: model.widgetType === ProjectModel.IntField
+          active: model.widgetType === ProjectEditor.IntField
+          visible: model.widgetType === ProjectEditor.IntField
 
           property var modelActive: model.active
           property var editableValue: model.editableValue
@@ -508,7 +508,7 @@ ColumnLayout {
                   root.modelPointer.setData(
                         view.index(row, column),
                         Number(text),
-                        ProjectModel.EditableValue)
+                        ProjectEditor.EditableValue)
                 }
               }
 
@@ -528,8 +528,8 @@ ColumnLayout {
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.FloatField
-          visible: model.widgetType === ProjectModel.FloatField
+          active: model.widgetType === ProjectEditor.FloatField
+          visible: model.widgetType === ProjectEditor.FloatField
 
           property var modelActive: model.active
           property var editableValue: model.editableValue
@@ -556,7 +556,7 @@ ColumnLayout {
                   root.modelPointer.setData(
                         view.index(row, column),
                         num,
-                        ProjectModel.EditableValue
+                        ProjectEditor.EditableValue
                         );
                 }
               }
@@ -578,8 +578,8 @@ ColumnLayout {
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.ComboBox
-          visible: model.widgetType === ProjectModel.ComboBox
+          active: model.widgetType === ProjectEditor.ComboBox
+          visible: model.widgetType === ProjectEditor.ComboBox
 
           property var modelActive: model.active
           property var comboBoxData: model.comboBoxData
@@ -598,7 +598,7 @@ ColumnLayout {
                   root.modelPointer.setData(
                         view.index(row, column),
                         currentIndex,
-                        ProjectModel.EditableValue)
+                        ProjectEditor.EditableValue)
                 }
               }
             }
@@ -611,8 +611,8 @@ ColumnLayout {
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.CheckBox
-          visible: model.widgetType === ProjectModel.CheckBox
+          active: model.widgetType === ProjectEditor.CheckBox
+          visible: model.widgetType === ProjectEditor.CheckBox
 
           property var modelActive: model.active
           property var comboBoxData: model.comboBoxData
@@ -630,7 +630,7 @@ ColumnLayout {
                 root.modelPointer.setData(
                       view.index(row, column),
                       currentIndex === 1,
-                      ProjectModel.EditableValue)
+                      ProjectEditor.EditableValue)
               }
             }
           }
@@ -642,8 +642,8 @@ ColumnLayout {
         Loader {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
-          active: model.widgetType === ProjectModel.HexTextField
-          visible: model.widgetType === ProjectModel.HexTextField
+          active: model.widgetType === ProjectEditor.HexTextField
+          visible: model.widgetType === ProjectEditor.HexTextField
 
           property var modelActive: model.active
           property var editableValue: model.editableValue
@@ -707,7 +707,7 @@ ColumnLayout {
                 root.modelPointer.setData(
                       view.index(row, column),
                       formattedText,
-                      ProjectModel.EditableValue)
+                      ProjectEditor.EditableValue)
               }
 
               background: Item {}
@@ -720,7 +720,7 @@ ColumnLayout {
         //
         Item {
           implicitWidth: 8
-          visible: model.widgetType !== ProjectModel.SectionHeader
+          visible: model.widgetType !== ProjectEditor.SectionHeader
         }
       }
     }

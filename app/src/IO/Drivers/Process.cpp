@@ -44,8 +44,9 @@
 #  else
 #    include <fcntl.h>
 #    include <poll.h>
-#    include <sys/stat.h>
 #    include <unistd.h>
+
+#    include <sys/stat.h>
 #  endif
 
 //--------------------------------------------------------------------------------------------------
@@ -572,7 +573,7 @@ void IO::Drivers::Process::pipeReadLoop()
 {
 #  ifdef Q_OS_WIN
   const QString dosPath = QDir::toNativeSeparators(m_pipePath);
-  HANDLE hPipe = CreateNamedPipeW(reinterpret_cast<LPCWSTR>(dosPath.utf16()),
+  HANDLE hPipe          = CreateNamedPipeW(reinterpret_cast<LPCWSTR>(dosPath.utf16()),
                                   PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED,
                                   PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
                                   1,
@@ -619,7 +620,7 @@ void IO::Drivers::Process::pipeReadLoop()
     }
 
     DWORD bytesRead = 0;
-    const BOOL ok = ReadFile(hPipe, buf, sizeof(buf), &bytesRead, nullptr);
+    const BOOL ok   = ReadFile(hPipe, buf, sizeof(buf), &bytesRead, nullptr);
     if (!ok || bytesRead == 0)
       break;
 

@@ -34,6 +34,7 @@
 #include "CSV/Player.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameParser.h"
+#include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Drivers/BluetoothLE.h"
 #include "IO/Drivers/Network.h"
@@ -276,6 +277,7 @@ void Misc::ModuleManager::registerQmlTypes()
   // Register JSON custom items
   qmlRegisterType<DataModel::FrameParser>("SerialStudio", 1, 0, "FrameParser");
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
+  qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");
@@ -325,6 +327,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto ioNetwork            = &IO::Drivers::Network::instance();
   auto frameBuilder         = &DataModel::FrameBuilder::instance();
   auto projectModel         = &DataModel::ProjectModel::instance();
+  auto projectEditor        = &DataModel::ProjectEditor::instance();
   auto consoleHandler       = &Console::Handler::instance();
   auto miscTimerEvents      = &Misc::TimerEvents::instance();
   auto miscCommonFonts      = &Misc::CommonFonts::instance();
@@ -417,6 +420,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Console_Handler", consoleHandler);
   c->setContextProperty("Cpp_Misc_Translator", miscTranslator);
   c->setContextProperty("Cpp_JSON_ProjectModel", projectModel);
+  c->setContextProperty("Cpp_JSON_ProjectEditor", projectEditor);
   c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);

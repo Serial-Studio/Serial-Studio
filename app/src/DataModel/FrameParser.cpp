@@ -33,6 +33,7 @@
 #include <QtGui/qshortcut.h>
 #include <QThread>
 
+#include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
@@ -886,7 +887,7 @@ void DataModel::FrameParser::apply()
       const bool hasDatasets = model.datasetCount() > 0;
       if (modified && hasGroups && hasDatasets) {
         model.saveJsonFile();
-        model.displayFrameParserView();
+        DataModel::ProjectEditor::instance().displayFrameParserView();
       }
     }
   }

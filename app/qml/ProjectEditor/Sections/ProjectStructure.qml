@@ -40,9 +40,9 @@ Widgets.Pane {
     reuseItems: false
     interactive: true
     width: parent.width
-    model: Cpp_JSON_ProjectModel.treeModel
+    model: Cpp_JSON_ProjectEditor.treeModel
     boundsBehavior: TreeView.DragAndOvershootBounds
-    selectionModel: Cpp_JSON_ProjectModel.selectionModel
+    selectionModel: Cpp_JSON_ProjectEditor.selectionModel
 
     ScrollBar.vertical: ScrollBar {
       policy: treeView.contentHeight > treeView.height ? ScrollBar.AlwaysOn :
@@ -77,9 +77,9 @@ Widgets.Pane {
 
                       // Delete current item
                       else if (event.key === Qt.Key_Delete) {
-                        if (Cpp_JSON_ProjectModel.currentView === ProjectModel.DatasetView)
+                        if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView)
                         Cpp_JSON_ProjectModel.deleteCurrentDataset()
-                        else if (Cpp_JSON_ProjectModel.currentView === ProjectModel.GroupView)
+                        else if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.GroupView)
                         Cpp_JSON_ProjectModel.deleteCurrentGroup()
                       }
                     }

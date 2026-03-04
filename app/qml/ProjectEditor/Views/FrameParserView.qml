@@ -29,9 +29,9 @@ import "../../Widgets" as Widgets
 Widgets.Pane {
   id: root
   focus: true
-  icon: Cpp_JSON_ProjectModel.selectedIcon
+  icon: Cpp_JSON_ProjectEditor.selectedIcon
   Component.onCompleted: Cpp_JSON_FrameBuilder.setFrameParser(frameParser)
-  title: Cpp_JSON_ProjectModel.selectedText + (frameParser.isModified ? " (" + qsTr("modified") + ")" : "")
+  title: Cpp_JSON_ProjectEditor.selectedText + (frameParser.isModified ? " (" + qsTr("modified") + ")" : "")
 
   //
   // Super important to allow the user to type on a C++ widget from QML

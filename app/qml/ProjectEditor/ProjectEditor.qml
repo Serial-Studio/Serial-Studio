@@ -157,7 +157,7 @@ Widgets.SmartWindow {
             //
             Views.ActionView {
               anchors.fill: parent
-              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ActionView
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.ActionView
             }
 
             //
@@ -165,7 +165,7 @@ Widgets.SmartWindow {
             //
             Views.ProjectView {
               anchors.fill: parent
-              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.ProjectView
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.ProjectView
             }
 
             //
@@ -173,7 +173,7 @@ Widgets.SmartWindow {
             //
             Views.GroupView {
               anchors.fill: parent
-              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.GroupView
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.GroupView
             }
 
             //
@@ -181,7 +181,7 @@ Widgets.SmartWindow {
             //
             Views.DatasetView {
               anchors.fill: parent
-              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.DatasetView
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView
             }
 
             //
@@ -189,7 +189,7 @@ Widgets.SmartWindow {
             //
             Views.FrameParserView {
               anchors.fill: parent
-              visible: Cpp_JSON_ProjectModel.currentView === ProjectModel.FrameParserView
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.FrameParserView
             }
           }
         }

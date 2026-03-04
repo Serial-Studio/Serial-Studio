@@ -30,8 +30,8 @@ Widgets.Pane {
   id: root
   implicitWidth: 0
   implicitHeight: 0
-  icon: Cpp_JSON_ProjectModel.selectedIcon
-  title: Cpp_JSON_ProjectModel.selectedText
+  icon: Cpp_JSON_ProjectEditor.selectedIcon
+  title: Cpp_JSON_ProjectEditor.selectedText
 
   //
   // User interface elements
@@ -104,9 +104,9 @@ Widgets.Pane {
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
           ToolTip.text: qsTr("Change the icon used for this action")
-          icon.source: "qrc:/rcc/actions/" + Cpp_JSON_ProjectModel.actionIcon + ".svg"
+          icon.source: "qrc:/rcc/actions/" + Cpp_JSON_ProjectEditor.actionIcon + ".svg"
           onClicked: {
-            actionIconPicker.selectedIcon = Cpp_JSON_ProjectModel.actionIcon
+            actionIconPicker.selectedIcon = Cpp_JSON_ProjectEditor.actionIcon
             actionIconPicker.showNormal()
           }
         }
@@ -177,7 +177,7 @@ Widgets.Pane {
         Binding {
           target: delegate
           property: "modelPointer"
-          value: Cpp_JSON_ProjectModel.actionModel
+          value: Cpp_JSON_ProjectEditor.actionModel
         }
       }
     }

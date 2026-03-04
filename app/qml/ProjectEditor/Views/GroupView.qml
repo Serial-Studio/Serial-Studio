@@ -29,8 +29,8 @@ import "../../Widgets" as Widgets
 Widgets.Pane {
   implicitWidth: 0
   implicitHeight: 0
-  icon: Cpp_JSON_ProjectModel.selectedIcon
-  title: Cpp_JSON_ProjectModel.selectedText
+  icon: Cpp_JSON_ProjectEditor.selectedIcon
+  title: Cpp_JSON_ProjectEditor.selectedText
 
   //
   // User interface elements
@@ -115,7 +115,7 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Dataset")
             Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
             ToolTip.text: qsTr("Add a generic dataset to the current group")
@@ -129,7 +129,7 @@ Widgets.Pane {
             text: qsTr("Plot")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
             ToolTip.text: qsTr("Add a 2D plot to visualize numeric data")
@@ -143,7 +143,7 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("FFT Plot")
             Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
             ToolTip.text: qsTr("Add an FFT plot for frequency domain visualization")
@@ -157,7 +157,7 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Bar/Level")
             Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
             ToolTip.text: qsTr("Add a bar or level indicator for scaled values")
@@ -171,7 +171,7 @@ Widgets.Pane {
             text: qsTr("Gauge")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
             ToolTip.text: qsTr("Add a gauge widget for analog-style visualization")
@@ -185,7 +185,7 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Compass")
             Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
             ToolTip.text: qsTr("Add a compass to display directional or angular data")
@@ -199,7 +199,7 @@ Widgets.Pane {
             text: qsTr("LED")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            enabled: Cpp_JSON_ProjectModel.currentGroupIsEditable
+            enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
             ToolTip.text: qsTr("Add an LED indicator for binary status signals")
@@ -271,7 +271,7 @@ Widgets.Pane {
           Binding {
             target: delegate
             property: "modelPointer"
-            value: Cpp_JSON_ProjectModel.groupModel
+            value: Cpp_JSON_ProjectEditor.groupModel
           }
         }
       }

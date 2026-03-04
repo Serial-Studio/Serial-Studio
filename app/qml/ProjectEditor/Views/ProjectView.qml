@@ -29,9 +29,9 @@ Widgets.Pane {
   id: root
   implicitWidth: 0
   implicitHeight: 0
-  icon: Cpp_JSON_ProjectModel.selectedIcon
-  title: Cpp_JSON_ProjectModel.selectedText
-  Component.onCompleted: Cpp_JSON_ProjectModel.buildProjectModel()
+  icon: Cpp_JSON_ProjectEditor.selectedIcon
+  title: Cpp_JSON_ProjectEditor.selectedText
+  Component.onCompleted: Cpp_JSON_ProjectEditor.buildProjectModel()
 
   //
   // User interface elements
@@ -98,7 +98,7 @@ Widgets.Pane {
           Binding {
             target: delegate
             property: "modelPointer"
-            value: Cpp_JSON_ProjectModel.projectModel
+            value: Cpp_JSON_ProjectEditor.projectModel
           }
         }
       }

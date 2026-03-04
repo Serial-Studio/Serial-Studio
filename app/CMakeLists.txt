@@ -241,6 +241,7 @@ set(SOURCES
   src/IO/FrameReader.cpp
   src/DataModel/FrameParser.cpp
   src/DataModel/ProjectModel.cpp
+  src/DataModel/ProjectEditor.cpp
   src/DataModel/FrameBuilder.cpp
   src/DataModel/Frame.cpp
   src/DataModel/FrameConsumer.cpp
@@ -314,6 +315,7 @@ set(HEADERS
   src/IO/FrameReader.h
   src/DataModel/FrameParser.h
   src/DataModel/ProjectModel.h
+  src/DataModel/ProjectEditor.h
   src/DataModel/Frame.h
   src/DataModel/FrameBuilder.h
   src/DataModel/FrameConsumer.h

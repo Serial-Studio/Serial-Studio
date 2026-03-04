@@ -29,7 +29,7 @@ Key CMake flags: `ENABLE_HARDENING`, `ENABLE_PGO` (3-stage: GENERATE → run →
 ```
 app/src/
 ├── IO/          HAL drivers + CircularBuffer + FrameReader
-├── DataModel/   FrameBuilder, Frame, FrameConsumer, ProjectModel
+├── DataModel/   FrameBuilder, Frame, FrameConsumer, ProjectModel, ProjectEditor
 ├── UI/          Dashboard + 15 widget types
 ├── API/         TCP server port 7777 (MCP + legacy JSON-RPC)
 ├── CSV/ MDF4/   File playback & export
@@ -51,7 +51,8 @@ lib/             KissFFT, QCodeEditor, mdflib, OpenSSL
 | `app/src/IO/HAL_Driver.h` | Abstract driver interface; `ByteArrayPtr = shared_ptr<const QByteArray>` |
 | `app/src/DataModel/FrameBuilder.cpp:817` | Hotpath: zero-copy to Dashboard, single alloc to exports |
 | `app/src/DataModel/FrameConsumer.h` | Lock-free worker template (dual-trigger flush) |
-| `app/src/DataModel/ProjectModel.cpp` | `m_widgetSettings` is the single store for all UI persistence (layout, active group, widget properties) |
+| `app/src/DataModel/ProjectModel.cpp` | Pure data model: groups, actions, config, file I/O, serialization. `m_widgetSettings` is the single store for all UI persistence. |
+| `app/src/DataModel/ProjectEditor.cpp` | Editor controller: tree model, form models (group/dataset/action/project), selection state, combobox data, all item-change handlers. |
 
 ### Data Flow
 
@@ -83,12 +84,20 @@ Main thread    →  FrameReader → FrameBuilder → Frame
 Delimiter stack: `frameEnd` → optional `lineTerminator` → `parseCsvValues()` (comma, hardcoded).
 Custom delimiters require ProjectFile mode + JavaScript `frameParser`.
 
+### ProjectModel / ProjectEditor split
+
+`ProjectModel` is a pure data model (groups, actions, config, file I/O). `ProjectEditor` is the editor controller owning the Qt item models and all UI state. QML accesses data ops via `Cpp_JSON_ProjectModel` (context property) and editor state via `Cpp_JSON_ProjectEditor` (context property). Enum values are accessed via the registered QML type names `ProjectModel` and `ProjectEditor`.
+
+Signal flow for add/delete/duplicate operations:
+1. `ProjectModel` emits `groupsChanged()`/`actionsChanged()` + a targeted hint signal (`groupAdded(id)`, `datasetAdded(groupId, datasetId)`, etc.)
+2. `buildTreeModel()` fires via `Qt::QueuedConnection` on `groupsChanged`/`actionsChanged`
+3. The hint-signal handler fires (also queued) — searches the freshly built item maps and calls `setCurrentIndex()` → `onCurrentSelectionChanged()` → correct view + form model
+
 ### Known Architectural Debt
 
 - **36 singletons** — high coupling, hard to test
-- **ProjectModel.cpp** — 4,062 lines, refactoring target
 - **Large widgets** — Terminal (1,708), GPS (1,417), Plot3D (1,521) lines
-- **No automated tests** — no GTest/Catch2 yet
+- **No automated tests** — no GTest/Catch2 yet (integration tests via Python pytest + API server)
 
 ## Code Style
 

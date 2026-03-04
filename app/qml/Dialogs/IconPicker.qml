@@ -62,7 +62,7 @@ SmartDialog {
         cellHeight: 48
         anchors.margins: 4
         anchors.fill: parent
-        model: Cpp_JSON_ProjectModel.availableActionIcons
+        model: Cpp_JSON_ProjectEditor.availableActionIcons
         ScrollBar.vertical: ScrollBar {}
 
         delegate: Item {
