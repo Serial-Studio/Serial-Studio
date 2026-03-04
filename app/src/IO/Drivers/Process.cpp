@@ -36,8 +36,10 @@
 #    ifndef NOMINMAX
 #      define NOMINMAX
 #    endif
-#    include <tlhelp32.h>
+// clang-format off
 #    include <windows.h>
+#    include <tlhelp32.h>
+// clang-format on
 #  endif
 
 //--------------------------------------------------------------------------------------------------
