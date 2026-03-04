@@ -99,6 +99,7 @@ signals:
 
 public:
   WindowManager(QQuickItem* parent = nullptr);
+  ~WindowManager();
 
   [[nodiscard]] int zCounter() const;
   [[nodiscard]] bool autoLayoutEnabled() const;

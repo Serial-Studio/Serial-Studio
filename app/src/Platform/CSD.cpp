@@ -442,10 +442,7 @@ void Titlebar::drawButton(QPainter* painter, Button button, const QString& svgPa
     QColor bgColor;
 
     if (button == Button::Close)
-      if (pressed)
-        bgColor = QColor(0xB4, 0x27, 0x1A);
-      else
-        bgColor = QColor(0xC4, 0x2B, 0x1C);
+      bgColor = pressed ? QColor(0xB4, 0x27, 0x1A) : QColor(0xC4, 0x2B, 0x1C);
     else if (isDarkTheme)
       bgColor = QColor(255, 255, 255, pressed ? 11 : 20);
     else

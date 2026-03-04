@@ -199,6 +199,7 @@ set(SOURCES
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
   src/UI/WindowManager.cpp
+  src/UI/UISessionRegistry.cpp
   src/UI/WidgetRegistry.cpp
   src/UI/Widgets/LEDPanel.cpp
   src/UI/Widgets/Gauge.cpp
@@ -228,6 +229,7 @@ set(SOURCES
   src/API/Handlers/ConsoleHandler.cpp
   src/API/Handlers/CSVPlayerHandler.cpp
   src/API/Handlers/DashboardHandler.cpp
+  src/API/Handlers/WindowHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
@@ -296,6 +298,8 @@ set(HEADERS
   src/API/Handlers/ConsoleHandler.h
   src/API/Handlers/CSVPlayerHandler.h
   src/API/Handlers/DashboardHandler.h
+  src/API/Handlers/WindowHandler.h
+  src/UI/UISessionRegistry.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
   src/Console/Export.h

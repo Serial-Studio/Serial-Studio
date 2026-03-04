@@ -1535,14 +1535,42 @@
     "hexadecimalDelimiters": false,
     "title": "System Monitor",
     "widgetSettings": {
+        "101": {
+            "userShowLegends": false
+        },
+        "117": {
+            "showAreaUnderPlot": true
+        },
+        "118": {
+            "showAreaUnderPlot": true
+        },
+        "120": {
+            "showAreaUnderPlot": true
+        },
+        "134": {
+            "showAreaUnderPlot": true
+        },
+        "143": {
+            "userShowLegends": false
+        },
+        "145": {
+            "showAreaUnderPlot": true
+        },
+        "146": {
+            "showAreaUnderPlot": true
+        },
+        "148": {
+            "showAreaUnderPlot": true
+        },
         "17": {
             "userShowLegends": false
         },
         "19": {
             "interpolate": true,
-            "showAreaUnderPlot": true
+            "showAreaUnderPlot": false
         },
         "20": {
+            "interpolate": true,
             "showAreaUnderPlot": true
         },
         "22": {
@@ -1552,19 +1580,27 @@
         "3": {
             "userShowLegends": false
         },
+        "31": {
+            "userShowLegends": false
+        },
         "33": {
             "interpolate": true,
             "showAreaUnderPlot": true
         },
         "34": {
-            "showAreaUnderPlot": true
+            "interpolate": true,
+            "showAreaUnderPlot": false
         },
         "36": {
             "interpolate": true,
             "showAreaUnderPlot": true
         },
+        "45": {
+            "userShowLegends": false
+        },
         "47": {
-            "showAreaUnderPlot": true
+            "interpolate": true,
+            "showAreaUnderPlot": false
         },
         "48": {
             "showAreaUnderPlot": true
@@ -1574,30 +1610,160 @@
             "showAreaUnderPlot": true
         },
         "50": {
-            "showAreaUnderPlot": true
+            "interpolate": true,
+            "showAreaUnderPlot": false,
+            "userShowXLabel": false,
+            "userShowYLabel": false
         },
         "6": {
             "interpolate": true,
             "showAreaUnderPlot": true
         },
         "61": {
-            "showAreaUnderPlot": true
+            "interpolate": false,
+            "showAreaUnderPlot": false
         },
         "62": {
-            "showAreaUnderPlot": true
+            "interpolate": false,
+            "showAreaUnderPlot": false
         },
         "64": {
-            "showAreaUnderPlot": true
+            "interpolate": false,
+            "showAreaUnderPlot": false
+        },
+        "75": {
+            "interpolate": true,
+            "showAreaUnderPlot": false
+        },
+        "76": {
+            "interpolate": false,
+            "showAreaUnderPlot": false
+        },
+        "78": {
+            "interpolate": false,
+            "showAreaUnderPlot": false
         },
         "8": {
             "interpolate": true,
             "showAreaUnderPlot": true
         },
+        "87": {
+            "userShowLegends": false
+        },
+        "9:0:8": {
+            "showAreaUnderPlot": true
+        },
+        "9:2:9": {
+            "interpolate": true,
+            "showAreaUnderPlot": true
+        },
+        "9:3:11": {
+            "showAreaUnderPlot": true
+        },
         "__layout__:-1__": {
-            "autoLayout": true,
-            "windowOrder": [
-                4
-            ]
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    4,
+                    2,
+                    5,
+                    7,
+                    3,
+                    0,
+                    1
+                ]
+            }
+        },
+        "__layout__:-2__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    4,
+                    2,
+                    5,
+                    6,
+                    10,
+                    11,
+                    7,
+                    12,
+                    3,
+                    8,
+                    9,
+                    13,
+                    0,
+                    1
+                ]
+            }
+        },
+        "__layout__:0__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    4
+                ]
+            }
+        },
+        "__layout__:1__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    2
+                ]
+            }
+        },
+        "__layout__:2__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    5,
+                    6,
+                    10,
+                    11
+                ]
+            }
+        },
+        "__layout__:3__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    7,
+                    12
+                ]
+            }
+        },
+        "__layout__:4__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    3,
+                    8,
+                    9
+                ]
+            }
+        },
+        "__layout__:5__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    13
+                ]
+            }
+        },
+        "__layout__:6__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0
+                ]
+            }
+        },
+        "__layout__:7__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    1
+                ]
+            }
         }
     }
 }

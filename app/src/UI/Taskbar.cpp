@@ -29,6 +29,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "UI/Dashboard.h"
+#include "UI/UISessionRegistry.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/WindowManager.h"
 
@@ -123,6 +124,13 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
 
   rebuildModel();
+
+  UISessionRegistry::instance().registerTaskbar(this);
+}
+
+UI::Taskbar::~Taskbar()
+{
+  UISessionRegistry::instance().unregisterTaskbar(this);
 }
 
 /**
@@ -383,8 +391,11 @@ void UI::Taskbar::saveLayout()
   if (model->jsonFilePath().isEmpty())
     return;
 
-  model->setGroupLayout(m_activeGroupId, m_windowManager->serializeLayout());
-  model->flushLayoutToDisk();
+  if (m_taskbarButtons && m_windowIDs.count() < m_taskbarButtons->rowCount())
+    return;
+
+  model->saveWidgetSetting(
+    Keys::layoutKey(m_activeGroupId), QStringLiteral("data"), m_windowManager->serializeLayout());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -634,7 +645,10 @@ void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
   m_windowManager = static_cast<UI::WindowManager*>(manager);
   m_windowManager->setTaskbar(this);
 
-  connect(m_windowManager, &UI::WindowManager::geometryChanged, this, [this] { saveLayout(); });
+  connect(m_windowManager, &UI::WindowManager::geometryChanged, this, [this](QQuickItem* item) {
+    if (item != nullptr)
+      saveLayout();
+  });
 
   Q_EMIT windowManagerChanged();
 }

@@ -507,7 +507,7 @@ int DataModel::ProjectModel::activeGroupId() const
  */
 QJsonObject DataModel::ProjectModel::groupLayout(int groupId) const
 {
-  return m_widgetSettings.value(Keys::layoutKey(groupId)).toObject();
+  return m_widgetSettings.value(Keys::layoutKey(groupId)).toObject().value("data").toObject();
 }
 
 /**
@@ -549,15 +549,20 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
   if (!ioConnected && !mqttSubscribed)
     return;
 
-  auto obj = m_widgetSettings.value(widgetId).toObject();
-  obj.insert(key, QJsonValue::fromVariant(value));
+  auto obj            = m_widgetSettings.value(widgetId).toObject();
+  const auto newValue = QJsonValue::fromVariant(value);
+  if (obj.value(key) == newValue)
+    return;
+
+  obj.insert(key, newValue);
   m_widgetSettings.insert(widgetId, obj);
 
   QFile file(m_filePath);
   if (!file.open(QFile::WriteOnly))
     return;
 
-  file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+  const auto json = serializeToJson();
+  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
   file.close();
 }
 
@@ -1203,29 +1208,18 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
 
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
-  // Migrate legacy single "__layout__" sub-key (pre-per-group format)
-  const QString legacySingleKey = QStringLiteral("__layout__");
-  if (m_widgetSettings.contains(legacySingleKey)) {
-    const QJsonObject saved = m_widgetSettings.value(legacySingleKey).toObject();
-    const int savedGroupId  = m_widgetSettings.value(Keys::kActiveGroupSubKey).toInt(-1);
-    const auto newKey       = Keys::layoutKey(savedGroupId);
-    if (!saved.isEmpty() && !m_widgetSettings.contains(newKey))
-      m_widgetSettings.insert(newKey, saved);
+  for (const auto& key : m_widgetSettings.keys()) {
+    if (!key.startsWith(QStringLiteral("__layout__:")))
+      continue;
 
-    m_widgetSettings.remove(legacySingleKey);
+    auto entry = m_widgetSettings.value(key).toObject();
+    if (!entry.contains(QStringLiteral("data")))
+      continue;
+
+    QJsonObject cleaned;
+    cleaned[QStringLiteral("data")] = entry[QStringLiteral("data")];
+    m_widgetSettings.insert(key, cleaned);
   }
-
-  // Migrate legacy top-level dashboardLayout / activeGroupId keys
-  const QJsonObject legacyLayout = json.value(Keys::DashboardLayout).toObject();
-  const int legacyGroupId        = json.value(Keys::ActiveGroupId).toInt(-1);
-  if (!legacyLayout.isEmpty()) {
-    const auto newKey = Keys::layoutKey(legacyGroupId);
-    if (!m_widgetSettings.contains(newKey))
-      m_widgetSettings.insert(newKey, legacyLayout);
-  }
-
-  if (legacyGroupId >= 0 && !m_widgetSettings.contains(Keys::kActiveGroupSubKey))
-    m_widgetSettings.insert(Keys::kActiveGroupSubKey, legacyGroupId);
 
   // Regenerate the tree model
   buildProjectModel();
@@ -2253,47 +2247,6 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
 
     Q_EMIT activeGroupIdChanged();
   }
-}
-
-/**
- * @brief Stores the layout for a specific group in widgetSettings.
- *
- * Keyed by "__layout__:<groupId>__" to allow per-group layout persistence.
- * Only updates in-memory state; callers are responsible for flushing to disk.
- *
- * @param groupId The group ID.
- * @param layout  The serialized window layout for this group.
- */
-void DataModel::ProjectModel::setGroupLayout(int groupId, const QJsonObject& layout)
-{
-  const auto key = Keys::layoutKey(groupId);
-  if (m_widgetSettings.value(key).toObject() == layout)
-    return;
-
-  if (!layout.isEmpty())
-    m_widgetSettings.insert(key, layout);
-  else
-    m_widgetSettings.remove(key);
-}
-
-/**
- * @brief Writes the current project (including widgetSettings) to disk without
- *        triggering a project reload.
- *
- * Unlike saveJsonFile(), this does a direct file write so it is safe to call
- * from geometry-change handlers without causing a signal cascade.
- */
-void DataModel::ProjectModel::flushLayoutToDisk()
-{
-  if (m_filePath.isEmpty())
-    return;
-
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly))
-    return;
-
-  file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
-  file.close();
 }
 
 /**

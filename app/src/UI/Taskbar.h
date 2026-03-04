@@ -148,6 +148,7 @@ signals:
 
 public:
   Taskbar(QQuickItem* parent = nullptr);
+  ~Taskbar();
 
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] int activeGroupIndex() const;

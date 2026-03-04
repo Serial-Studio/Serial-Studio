@@ -28,6 +28,7 @@
 #include <QUrl>
 
 #include "UI/Taskbar.h"
+#include "UI/UISessionRegistry.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
@@ -59,6 +60,13 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
 
   connect(this, &UI::WindowManager::widthChanged, this, &UI::WindowManager::triggerLayoutUpdate);
   connect(this, &UI::WindowManager::heightChanged, this, &UI::WindowManager::triggerLayoutUpdate);
+
+  UISessionRegistry::instance().registerWindowManager(this);
+}
+
+UI::WindowManager::~WindowManager()
+{
+  UISessionRegistry::instance().unregisterWindowManager(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -244,11 +252,10 @@ bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
       win->setY(y);
       win->setWidth(w);
       win->setHeight(h);
-
-      Q_EMIT geometryChanged(win);
     }
 
     constrainWindows();
+    Q_EMIT geometryChanged(nullptr);
   }
 
   if (m_autoLayoutEnabled != autoLayout) {
@@ -281,6 +288,11 @@ void UI::WindowManager::clear()
   m_layoutRestored       = false;
   m_snapIndicatorVisible = false;
 
+  if (!m_autoLayoutEnabled) {
+    m_autoLayoutEnabled = true;
+    Q_EMIT autoLayoutEnabledChanged();
+  }
+
   Q_EMIT zCounterChanged();
   Q_EMIT snapIndicatorChanged();
 }
@@ -299,6 +311,7 @@ void UI::WindowManager::loadLayout()
 {
   if (m_layoutRestored)
     constrainWindows();
+
   else if (autoLayoutEnabled())
     autoLayout();
   else
@@ -350,12 +363,11 @@ void UI::WindowManager::autoLayout()
   const int availH       = canvasH - 2 * margin;
   const bool isLandscape = availW >= availH;
 
-  auto placeWindow = [&](QQuickItem* win, int x, int y, int w, int h) {
+  auto placeWindow = [](QQuickItem* win, int x, int y, int w, int h) {
     win->setX(x);
     win->setY(y);
     win->setWidth(w);
     win->setHeight(h);
-    Q_EMIT geometryChanged(win);
   };
 
   if (n == 1)
@@ -533,6 +545,8 @@ void UI::WindowManager::autoLayout()
         win->setVisible(true);
     }
   }
+
+  Q_EMIT geometryChanged(nullptr);
 }
 
 /**
@@ -633,7 +647,6 @@ void UI::WindowManager::cascadeLayout()
     win->setY(winY);
     win->setWidth(winW);
     win->setHeight(winH);
-    Q_EMIT geometryChanged(win);
   }
 
   for (auto* win : std::as_const(m_windows)) {
@@ -642,6 +655,8 @@ void UI::WindowManager::cascadeLayout()
         win->setVisible(true);
     }
   }
+
+  Q_EMIT geometryChanged(nullptr);
 }
 
 /**
@@ -737,7 +752,6 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem* item)
   // Update UI
   Q_EMIT zCounterChanged();
   Q_EMIT zOrderChanged(item);
-  Q_EMIT geometryChanged(item);
 }
 
 /**
@@ -917,10 +931,8 @@ void UI::WindowManager::triggerLayoutUpdate()
 {
   if (autoLayoutEnabled())
     autoLayout();
+
   else {
-    // Check for windows that need initial layout (registered but not yet
-    // visible). This handles the case where cascadeLayout() was called before
-    // the canvas had valid dimensions, leaving windows invisible.
     bool hasUninitializedWindows = false;
     for (auto* win : std::as_const(m_windows)) {
       if (win && !win->isVisible() && (win->state() == "normal" || win->state() == "maximized")) {

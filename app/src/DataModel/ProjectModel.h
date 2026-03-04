@@ -295,8 +295,6 @@ public slots:
   void setModified(const bool modified);
   void setFrameParserCode(const QString& code);
   void setActiveGroupId(const int groupId);
-  void setGroupLayout(int groupId, const QJsonObject& layout);
-  void flushLayoutToDisk();
 
   void displayFrameParserView();
 
@@ -319,7 +317,6 @@ private slots:
 private:
   int nextDatasetIndex();
   bool finalizeProjectSave();
-
   void saveExpandedStateMap(QStandardItem* item, QHash<QString, bool>& map, const QString& title);
   void restoreExpandedStateMap(QStandardItem* item,
                                QHash<QString, bool>& map,

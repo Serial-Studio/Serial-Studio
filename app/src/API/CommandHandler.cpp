@@ -31,6 +31,7 @@
 #include "API/Handlers/NetworkHandler.h"
 #include "API/Handlers/ProjectHandler.h"
 #include "API/Handlers/UARTHandler.h"
+#include "API/Handlers/WindowHandler.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/AudioHandler.h"
@@ -238,6 +239,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::ConsoleHandler::registerCommands();
   Handlers::CSVPlayerHandler::registerCommands();
   Handlers::DashboardHandler::registerCommands();
+  Handlers::WindowHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();

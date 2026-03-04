@@ -142,13 +142,18 @@ SerialStudio::DashboardWidget UI::DashboardWidget::widgetType() const
 }
 
 /**
- * Returns a stable string key identifying this specific widget instance,
- * derived from the WidgetRegistry ID. Used by QML to key per-widget settings.
+ * Returns a stable string key identifying this specific widget instance.
+ * Derived from widget type, group ID, and dataset index — all of which are
+ * structural properties defined by the project file, not session-scoped IDs.
  */
 QString UI::DashboardWidget::widgetId() const
 {
-  auto id = UI::WidgetRegistry::instance().widgetIdByTypeAndIndex(m_widgetType, m_relativeIndex);
-  return QString::number(id);
+  auto id   = UI::WidgetRegistry::instance().widgetIdByTypeAndIndex(m_widgetType, m_relativeIndex);
+  auto info = UI::WidgetRegistry::instance().widgetInfo(id);
+  return QStringLiteral("%1:%2:%3")
+    .arg(static_cast<int>(m_widgetType))
+    .arg(info.groupId)
+    .arg(info.datasetIndex);
 }
 
 /**

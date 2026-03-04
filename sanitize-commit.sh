@@ -47,7 +47,11 @@ while IFS= read -r -d '' file; do
         continue
     fi
 
-    [[ -f "$file" ]] && chmod 644 "$file"
+    if [[ -f "$file" && "$file" == *.sh ]]; then
+        chmod 755 "$file"
+    elif [[ -f "$file" ]]; then
+        chmod 644 "$file"
+    fi
     [[ -d "$file" ]] && chmod 755 "$file"
 done < "$tempfile"
 
