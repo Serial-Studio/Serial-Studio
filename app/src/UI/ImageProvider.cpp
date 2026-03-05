@@ -30,10 +30,7 @@ static UI::ImageProvider* s_globalProvider = nullptr;
 // Constructor & global access
 //--------------------------------------------------------------------------------------------------
 
-UI::ImageProvider::ImageProvider()
-  : QQuickImageProvider(QQuickImageProvider::Image)
-{
-}
+UI::ImageProvider::ImageProvider() : QQuickImageProvider(QQuickImageProvider::Image) {}
 
 UI::ImageProvider* UI::ImageProvider::global()
 {
@@ -49,9 +46,7 @@ void UI::ImageProvider::setGlobal(UI::ImageProvider* provider)
 // QQuickImageProvider interface
 //--------------------------------------------------------------------------------------------------
 
-QImage UI::ImageProvider::requestImage(const QString& id,
-                                       QSize* size,
-                                       const QSize& requestedSize)
+QImage UI::ImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
   // URL format: "<providerKey>/<frameCount>" — strip the version suffix
   const QString key = id.section(QLatin1Char('/'), 0, 0);

@@ -196,9 +196,9 @@ struct alignas(8) Group {
   std::vector<Dataset> datasets;  ///< Datasets contained in this group
 
   // Image View configuration (only used when widget == "image")
-  QString imgDetectionMode;   ///< "autodetect" | "manual" (default: "autodetect")
-  QString imgStartSequence;   ///< Hex start delimiter (manual mode only)
-  QString imgEndSequence;     ///< Hex end delimiter (manual mode only)
+  QString imgDetectionMode;  ///< "autodetect" | "manual" (default: "autodetect")
+  QString imgStartSequence;  ///< Hex start delimiter (manual mode only)
+  QString imgEndSequence;    ///< Hex end delimiter (manual mode only)
 };
 
 static_assert(sizeof(Group) % alignof(Group) == 0, "Unaligned Group struct");

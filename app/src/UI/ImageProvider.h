@@ -26,8 +26,8 @@
 
 #  include <QHash>
 #  include <QImage>
-#  include <QReadWriteLock>
 #  include <QQuickImageProvider>
+#  include <QReadWriteLock>
 
 namespace UI {
 
@@ -57,17 +57,14 @@ namespace UI {
  * the instance on shutdown. A raw global pointer @c s_globalProvider is kept
  * so @c ImageView widgets can reach the live instance via @c ImageProvider::global().
  */
-class ImageProvider : public QQuickImageProvider
-{
+class ImageProvider : public QQuickImageProvider {
 public:
   explicit ImageProvider();
 
   static ImageProvider* global();
   static void setGlobal(ImageProvider* provider);
 
-  QImage requestImage(const QString& id,
-                      QSize* size,
-                      const QSize& requestedSize) override;
+  QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize) override;
 
   void setImage(const QString& id, const QImage& image);
 

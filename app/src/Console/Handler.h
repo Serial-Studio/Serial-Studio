@@ -62,6 +62,9 @@ class Handler : public QObject {
              READ ansiColors
              WRITE setAnsiColors
              NOTIFY ansiColorsChanged)
+  Q_PROPERTY(bool imageWidgetActive
+             READ imageWidgetActive
+             NOTIFY imageWidgetActiveChanged)
   Q_PROPERTY(Console::Handler::DataMode dataMode
              READ dataMode
              WRITE setDataMode
@@ -133,6 +136,7 @@ signals:
   void ansiColorsEnabledChanged();
   void vt100EmulationChanged();
   void ansiColorsChanged();
+  void imageWidgetActiveChanged();
   void checksumMethodChanged();
   void displayString(const QString& text);
   void cleared();
@@ -172,6 +176,7 @@ public:
   [[nodiscard]] bool ansiColorsEnabled() const;
   [[nodiscard]] bool vt100Emulation() const;
   [[nodiscard]] bool ansiColors() const;
+  [[nodiscard]] bool imageWidgetActive() const;
   [[nodiscard]] int checksumMethod() const;
 
   [[nodiscard]] DataMode dataMode() const;
@@ -225,6 +230,7 @@ private slots:
   void addToHistory(const QString& command);
 
 private:
+  bool hasImageWidget() const;
   QString dataToString(QByteArrayView data);
   QString plainTextStr(QByteArrayView data);
   QString hexadecimalStr(QByteArrayView data);

@@ -28,6 +28,8 @@
 #include <QFontInfo>
 #include <QFontMetrics>
 
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
 #include "IO/Manager.h"
 #include "Misc/CommonFonts.h"
@@ -126,18 +128,26 @@ bool Console::Handler::ansiColorsEnabled() const
 
 /**
  * Returns @c true if VT-100 terminal emulation is enabled.
+ * Always returns @c false when the project contains an image widget,
+ * to prevent crashes caused by conflicting terminal escape processing.
  */
 bool Console::Handler::vt100Emulation() const
 {
+  if (hasImageWidget())
+    return false;
+
   return m_vt100Emulation;
 }
 
 /**
  * Returns @c true if ANSI color rendering is enabled.
- * Only meaningful when VT-100 emulation is also enabled.
+ * Always returns @c false when the project contains an image widget.
  */
 bool Console::Handler::ansiColors() const
 {
+  if (hasImageWidget())
+    return false;
+
   return m_ansiColors;
 }
 
@@ -462,6 +472,24 @@ void Console::Handler::setupExternalConnections()
           &Misc::Translator::languageChanged,
           this,
           &Console::Handler::languageChanged);
+
+  auto notifyTerminal = [this] {
+    Q_EMIT vt100EmulationChanged();
+    Q_EMIT ansiColorsChanged();
+    Q_EMIT imageWidgetActiveChanged();
+  };
+
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::groupsChanged,
+          this,
+          notifyTerminal);
+
+  connect(&DataModel::FrameBuilder::instance(),
+          &DataModel::FrameBuilder::operationModeChanged,
+          this,
+          notifyTerminal);
+
+  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, notifyTerminal);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -786,6 +814,33 @@ void Console::Handler::displaySentData(QByteArrayView data)
 //--------------------------------------------------------------------------------------------------
 // Internal utilities
 //--------------------------------------------------------------------------------------------------
+
+bool Console::Handler::hasImageWidget() const
+{
+  if (!IO::Manager::instance().isConnected())
+    return false;
+
+  const auto& fb = DataModel::FrameBuilder::instance();
+  if (fb.operationMode() != SerialStudio::ProjectFile)
+    return false;
+
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+  for (const auto& g : groups)
+    if (g.widget == QLatin1String("image"))
+      return true;
+
+  return false;
+}
+
+/**
+ * @brief Returns @c true when project mode is active and at least one image widget is present.
+ *
+ * Used by QML to disable and dim VT-100/ANSI checkboxes in this state.
+ */
+bool Console::Handler::imageWidgetActive() const
+{
+  return hasImageWidget();
+}
 
 /**
  * Updates the font based on current family and size settings

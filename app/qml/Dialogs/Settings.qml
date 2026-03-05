@@ -726,11 +726,14 @@ Widgets.SmartDialog {
 
           Label {
             text: qsTr("VT100 Emulation")
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : 1
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _vt100Emulation
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : 1
+            enabled: !Cpp_Console_Handler.imageWidgetActive
             checked: Cpp_Console_Handler.vt100Emulation
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
@@ -741,14 +744,14 @@ Widgets.SmartDialog {
 
           Label {
             text: qsTr("ANSI Colors")
-            opacity: enabled ? 1 : 0.5
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
             enabled: _vt100Emulation.checked
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
-            opacity: enabled ? 1 : 0.5
-            enabled: _vt100Emulation.checked
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
+            enabled: _vt100Emulation.checked && !Cpp_Console_Handler.imageWidgetActive
             checked: Cpp_Console_Handler.ansiColors
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {

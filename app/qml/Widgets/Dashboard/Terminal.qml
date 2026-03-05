@@ -383,6 +383,8 @@ Item {
         id: vt100Check
         text: qsTr("Emulate VT-100")
         Layout.alignment: Qt.AlignVCenter
+        enabled: !Cpp_Console_Handler.imageWidgetActive
+        opacity: enabled ? 1 : 0.8
         checked: Cpp_Console_Handler.vt100Emulation
         onCheckedChanged: {
           if (Cpp_Console_Handler.vt100Emulation !== checked)
@@ -393,8 +395,8 @@ Item {
       CheckBox {
         id: ansiColorsCheck
         text: qsTr("ANSI Colors")
-        opacity: enabled ? 1 : 0.5
-        enabled: Cpp_Console_Handler.vt100Emulation
+        enabled: Cpp_Console_Handler.vt100Emulation && !Cpp_Console_Handler.imageWidgetActive
+        opacity: enabled ? 1 : 0.8
         Layout.alignment: Qt.AlignVCenter
         checked: Cpp_Console_Handler.vt100Emulation && Cpp_Console_Handler.ansiColors
         onCheckedChanged: {

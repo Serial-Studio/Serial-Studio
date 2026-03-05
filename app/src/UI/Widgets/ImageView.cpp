@@ -36,24 +36,17 @@
 //--------------------------------------------------------------------------------------------------
 
 Widgets::ImageFrameReader::ImageFrameReader(QObject* parent)
-  : QObject(parent)
-  , m_mode(DetectionMode::Autodetect)
-  , m_inFrame(false)
-  , m_frameStartPos(-1)
-{
-}
+  : QObject(parent), m_mode(DetectionMode::Autodetect), m_inFrame(false), m_frameStartPos(-1)
+{}
 
-Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq,
-                                            QByteArray endSeq,
-                                            QObject* parent)
+Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endSeq, QObject* parent)
   : QObject(parent)
   , m_mode(DetectionMode::Manual)
   , m_startSeq(std::move(startSeq))
   , m_endSeq(std::move(endSeq))
   , m_inFrame(false)
   , m_frameStartPos(-1)
-{
-}
+{}
 
 void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
 {
@@ -90,7 +83,7 @@ void Widgets::ImageFrameReader::processAutodetect()
         break;
 
       m_accumulator.remove(0, startPos);
-      m_inFrame      = true;
+      m_inFrame       = true;
       m_frameStartPos = 0;
     }
 
@@ -104,7 +97,7 @@ void Widgets::ImageFrameReader::processAutodetect()
       endMarkerLen = kPngEnd.size();
     } else {
       m_accumulator.clear();
-      m_inFrame      = false;
+      m_inFrame       = false;
       m_frameStartPos = -1;
       break;
     }
@@ -116,7 +109,7 @@ void Widgets::ImageFrameReader::processAutodetect()
     qsizetype frameLen = endPos + endMarkerLen;
     QByteArray frame   = m_accumulator.left(frameLen);
     m_accumulator.remove(0, frameLen);
-    m_inFrame      = false;
+    m_inFrame       = false;
     m_frameStartPos = -1;
 
     Q_EMIT frameReady(frame);
@@ -126,7 +119,7 @@ void Widgets::ImageFrameReader::processAutodetect()
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
   if (m_accumulator.size() > kMaxAccumulator) {
     m_accumulator.clear();
-    m_inFrame      = false;
+    m_inFrame       = false;
     m_frameStartPos = -1;
   }
 }
@@ -143,7 +136,7 @@ void Widgets::ImageFrameReader::processManual()
         break;
 
       m_accumulator.remove(0, startPos + m_startSeq.size());
-      m_inFrame      = true;
+      m_inFrame       = true;
       m_frameStartPos = 0;
     }
 
@@ -153,7 +146,7 @@ void Widgets::ImageFrameReader::processManual()
 
     QByteArray frame = m_accumulator.left(endPos);
     m_accumulator.remove(0, endPos + m_endSeq.size());
-    m_inFrame      = false;
+    m_inFrame       = false;
     m_frameStartPos = -1;
 
     if (!frame.isEmpty())
@@ -164,7 +157,7 @@ void Widgets::ImageFrameReader::processManual()
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
   if (m_accumulator.size() > kMaxAccumulator) {
     m_accumulator.clear();
-    m_inFrame      = false;
+    m_inFrame       = false;
     m_frameStartPos = -1;
   }
 }
@@ -209,8 +202,8 @@ Widgets::ImageView::~ImageView()
 
 QString Widgets::ImageView::imageUrl() const
 {
-  return QStringLiteral("image://serial-studio-img/") + m_providerKey
-         + QStringLiteral("/") + QString::number(m_frameCount);
+  return QStringLiteral("image://serial-studio-img/") + m_providerKey + QStringLiteral("/")
+       + QString::number(m_frameCount);
 }
 
 const QString& Widgets::ImageView::imageFormat() const
@@ -288,42 +281,25 @@ void Widgets::ImageView::reconfigureReader()
           &ImageFrameReader::processData,
           Qt::QueuedConnection);
 
-  connect(m_reader,
-          &ImageFrameReader::frameReady,
-          this,
-          &ImageView::onFrameReady,
-          Qt::QueuedConnection);
+  connect(
+    m_reader, &ImageFrameReader::frameReady, this, &ImageView::onFrameReady, Qt::QueuedConnection);
 }
 
 QString Widgets::ImageView::detectFormat(const QByteArray& data)
 {
-  if (data.size() >= 3
-      && static_cast<quint8>(data[0]) == 0xFF
-      && static_cast<quint8>(data[1]) == 0xD8
-      && static_cast<quint8>(data[2]) == 0xFF)
+  if (data.size() >= 3 && static_cast<quint8>(data[0]) == 0xFF
+      && static_cast<quint8>(data[1]) == 0xD8 && static_cast<quint8>(data[2]) == 0xFF)
     return QStringLiteral("JPEG");
 
-  if (data.size() >= 8
-      && static_cast<quint8>(data[0]) == 0x89
-      && data[1] == 'P'
-      && data[2] == 'N'
+  if (data.size() >= 8 && static_cast<quint8>(data[0]) == 0x89 && data[1] == 'P' && data[2] == 'N'
       && data[3] == 'G')
     return QStringLiteral("PNG");
 
-  if (data.size() >= 2
-      && data[0] == 'B'
-      && data[1] == 'M')
+  if (data.size() >= 2 && data[0] == 'B' && data[1] == 'M')
     return QStringLiteral("BMP");
 
-  if (data.size() >= 12
-      && data[0] == 'R'
-      && data[1] == 'I'
-      && data[2] == 'F'
-      && data[3] == 'F'
-      && data[8] == 'W'
-      && data[9] == 'E'
-      && data[10] == 'B'
-      && data[11] == 'P')
+  if (data.size() >= 12 && data[0] == 'R' && data[1] == 'I' && data[2] == 'F' && data[3] == 'F'
+      && data[8] == 'W' && data[9] == 'E' && data[10] == 'B' && data[11] == 'P')
     return QStringLiteral("WebP");
 
   return QStringLiteral("Unknown");

@@ -64,12 +64,14 @@ namespace Widgets {
  * because images arrive infrequently and can be megabytes in size. The
  * accumulator is capped at 16 MiB and reset if exceeded.
  */
-class ImageFrameReader : public QObject
-{
+class ImageFrameReader : public QObject {
   Q_OBJECT
 
 public:
-  enum class DetectionMode { Autodetect, Manual };
+  enum class DetectionMode {
+    Autodetect,
+    Manual
+  };
 
   explicit ImageFrameReader(QObject* parent = nullptr);
   ImageFrameReader(QByteArray startSeq, QByteArray endSeq, QObject* parent = nullptr);
@@ -125,8 +127,7 @@ private:
  * 3. On driver disconnect the driver object is destroyed, severing the
  *    @c dataReceived connection automatically.
  */
-class ImageView : public QQuickItem
-{
+class ImageView : public QQuickItem {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QString imageUrl    READ imageUrl    NOTIFY imageReady)

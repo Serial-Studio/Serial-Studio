@@ -877,8 +877,8 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     m_groupModel->appendRow(imgHdr);
 
     static const QStringList kImgModeLabels = {tr("Auto-detect"), tr("Manual Delimiters")};
-    static const QStringList kImgModeValues = {
-      QStringLiteral("autodetect"), QStringLiteral("manual")};
+    static const QStringList kImgModeValues = {QStringLiteral("autodetect"),
+                                               QStringLiteral("manual")};
 
     int modeIndex = group.imgDetectionMode == QLatin1String("manual") ? 1 : 0;
 
@@ -903,8 +903,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     startItem->setData(kGroupView_ImgStart, ParameterType);
     startItem->setData(tr("Start Sequence (Hex)"), ParameterName);
     startItem->setData(tr("e.g. FF D8 FF"), PlaceholderValue);
-    startItem->setData(tr("Hex bytes marking the start of an image frame"),
-                       ParameterDescription);
+    startItem->setData(tr("Hex bytes marking the start of an image frame"), ParameterDescription);
     m_groupModel->appendRow(startItem);
 
     auto* endItem = new QStandardItem();
@@ -1677,7 +1676,7 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
       {     "datagrid",      SerialStudio::DataGrid},
       {       "plot3d",        SerialStudio::Plot3D},
 #ifdef BUILD_COMMERCIAL
-      {       "image",       SerialStudio::ImageView},
+      {        "image",     SerialStudio::ImageView},
 #endif
       {             "", SerialStudio::NoGroupWidget},
     };
