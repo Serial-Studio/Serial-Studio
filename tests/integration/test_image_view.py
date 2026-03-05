@@ -157,7 +157,7 @@ def _image_project(detection_mode: str = "autodetect",
         "frameEnd": "*/",
         "frameDetection": 1,
         "checksum": "",
-        "frameParser": "",
+        "frameParser": "function parse(frame) { return [frame]; }",
         "groups": [group],
     }
 

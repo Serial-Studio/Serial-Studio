@@ -21,6 +21,8 @@
 
 #include "DataModel/FrameBuilder.h"
 
+#include <algorithm>
+
 #include <QDateTime>
 #include <QFileInfo>
 
@@ -533,6 +535,20 @@ void DataModel::FrameBuilder::onConnectedChanged()
   for (const auto& action : actions)
     if (action.autoExecuteOnConnect)
       IO::Manager::instance().writeData(get_tx_bytes(action));
+
+  // For image-only projects (no datasets) FrameBuilder never produces a parsed
+  // frame, so the dashboard would never call reconfigureDashboard and the
+  // ImageView widget would not be registered. Emit the template frame directly
+  // on connect so the dashboard builds its widget model immediately.
+  const bool allImageGroups
+    = !m_frame.groups.empty()
+      && std::all_of(m_frame.groups.begin(), m_frame.groups.end(),
+                     [](const DataModel::Group& g) {
+                       return g.widget == QLatin1String("image");
+                     });
+
+  if (allImageGroups)
+    hotpathTxFrame(m_frame);
 }
 
 /**
