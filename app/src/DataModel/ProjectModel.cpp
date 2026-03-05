@@ -723,6 +723,16 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
     m_widgetSettings.insert(key, cleaned);
   }
 
+  if (json.contains(QStringLiteral("dashboardLayout"))) {
+    const int legacy_group_id = json.value(QStringLiteral("activeGroupId")).toInt(-1);
+    const auto layout         = json.value(QStringLiteral("dashboardLayout")).toObject();
+    if (legacy_group_id >= 0 && !layout.isEmpty())
+      m_widgetSettings.insert(Keys::layoutKey(legacy_group_id), layout);
+
+    if (legacy_group_id >= 0)
+      m_widgetSettings.insert(Keys::kActiveGroupSubKey, legacy_group_id);
+  }
+
   setModified(false);
 
   if (json.contains("separator")) {

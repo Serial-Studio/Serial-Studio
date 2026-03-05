@@ -296,6 +296,7 @@ API::CommandResponse API::Handlers::ProjectHandler::getStatus(const QString& id,
   result[QStringLiteral("modified")]     = project.modified();
   result[QStringLiteral("groupCount")]   = project.groupCount();
   result[QStringLiteral("datasetCount")] = project.datasetCount();
+  result[QStringLiteral("actionCount")]  = static_cast<int>(project.actions().size());
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -346,7 +347,10 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& i
 {
   Q_UNUSED(params)
 
-  DataModel::ProjectModel::instance().deleteCurrentGroup();
+  auto& project = DataModel::ProjectModel::instance();
+  project.setSuppressMessageBoxes(true);
+  project.deleteCurrentGroup();
+  project.setSuppressMessageBoxes(false);
 
   QJsonObject result;
   result[QStringLiteral("deleted")] = true;
@@ -402,7 +406,10 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString&
 {
   Q_UNUSED(params)
 
-  DataModel::ProjectModel::instance().deleteCurrentDataset();
+  auto& project = DataModel::ProjectModel::instance();
+  project.setSuppressMessageBoxes(true);
+  project.deleteCurrentDataset();
+  project.setSuppressMessageBoxes(false);
 
   QJsonObject result;
   result[QStringLiteral("deleted")] = true;
@@ -476,7 +483,10 @@ API::CommandResponse API::Handlers::ProjectHandler::actionDelete(const QString& 
 {
   Q_UNUSED(params)
 
-  DataModel::ProjectModel::instance().deleteCurrentAction();
+  auto& project = DataModel::ProjectModel::instance();
+  project.setSuppressMessageBoxes(true);
+  project.deleteCurrentAction();
+  project.setSuppressMessageBoxes(false);
 
   QJsonObject result;
   result[QStringLiteral("deleted")] = true;
@@ -595,9 +605,21 @@ API::CommandResponse API::Handlers::ProjectHandler::actionsList(const QString& i
 {
   Q_UNUSED(params)
 
+  const auto& actions = DataModel::ProjectModel::instance().actions();
+
+  QJsonArray actions_array;
+  for (const auto& action : actions) {
+    QJsonObject obj;
+    obj[QStringLiteral("actionId")] = action.actionId;
+    obj[QStringLiteral("title")]    = action.title;
+    obj[QStringLiteral("icon")]     = action.icon;
+    obj[QStringLiteral("txData")]   = action.txData;
+    actions_array.append(obj);
+  }
+
   QJsonObject result;
-  result[QStringLiteral("actions")]     = QJsonArray();
-  result[QStringLiteral("actionCount")] = 0;
+  result[QStringLiteral("actions")]     = actions_array;
+  result[QStringLiteral("actionCount")] = static_cast<int>(actions.size());
 
   return CommandResponse::makeSuccess(id, result);
 }
