@@ -74,35 +74,32 @@ Item {
   // Blurred background — slow-refreshed, fills letterbox bars
   // -------------------------------------------------------------------------
 
+  Rectangle {
+    color: "#000"
+    anchors.fill: parent
+  }
+
   Image {
     id: blurSrc
-    anchors.fill: parent
-    fillMode: Image.PreserveAspectCrop
-    asynchronous: true
     cache: false
     smooth: false
     mipmap: false
-    sourceSize: Qt.size(128, 128)
     visible: false
+    asynchronous: true
+    anchors.fill: parent
     source: root.blurUrl
+    sourceSize: Qt.size(128, 128)
+    fillMode: Image.PreserveAspectCrop
   }
 
   MultiEffect {
-    source: blurSrc
-    anchors.fill: blurSrc
-    visible: model && model.frameCount > 0
-    blurEnabled: true
     blur: 1.0
     blurMax: 64
+    source: blurSrc
+    blurEnabled: true
     blurMultiplier: 10
-    saturation: 0.10
-
-    opacity: 0
-    Behavior on opacity { NumberAnimation { duration: 600; easing.type: Easing.OutCubic } }
-
-    onVisibleChanged: {
-      if (visible) opacity = 1
-    }
+    anchors.fill: blurSrc
+    visible: model && model.frameCount > 0
   }
 
   // -------------------------------------------------------------------------

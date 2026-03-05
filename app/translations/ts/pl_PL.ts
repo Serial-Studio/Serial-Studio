@@ -43,6 +43,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="39"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="39"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="39"/>
         <source>About</source>
         <translation>O programie</translation>
@@ -50,6 +52,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="85"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="85"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="85"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="85"/>
         <source>Version %1</source>
         <translation>Wersja %1</translation>
@@ -57,6 +61,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="95"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="95"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="95"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="95"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="95"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
@@ -64,6 +70,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="100"/>
         <source>All Rights Reserved</source>
         <translation>Wszelkie Prawa Zastrzeżone</translation>
@@ -71,6 +79,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="116"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="116"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="116"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="116"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
@@ -82,6 +92,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="135"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="135"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="135"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="135"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Ta konfiguracja jest licencjonowana do użytku komercyjnego i zastrzeżonego. Może być używana w aplikacjach zamkniętego źródła i komercyjnych, zgodnie z warunkami licencji komercyjnej.</translation>
@@ -89,6 +101,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="149"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="149"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="149"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="149"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Ta konfiguracja jest przeznaczona wyłącznie do celów osobistych i oceny. Użycie komercyjne jest zabronione, chyba że zostanie aktywowana ważna licencja komercyjna.</translation>
@@ -96,6 +110,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="163"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="163"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="163"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="163"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>To oprogramowanie jest dostarczane 'tak jak jest', bez jakiejkolwiek gwarancji, wyraźnej ani dorozumianej, w tym między innymi gwarancji przydatności handlowej lub przydatności do określonego celu. W żadnym wypadku autor nie ponosi odpowiedzialności za jakiekolwiek szkody wynikające z użycia tego oprogramowania.</translation>
@@ -103,6 +119,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="183"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="183"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="183"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="183"/>
         <source>Manage License</source>
         <translation>Zarządzaj Licencją</translation>
@@ -110,6 +128,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="192"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="192"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="192"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="192"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="192"/>
         <source>Donate</source>
         <translation>Przekaż darowiznę</translation>
@@ -117,6 +137,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="203"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="203"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="203"/>
         <source>Check for Updates</source>
         <translation>Sprawdź aktualizacje</translation>
@@ -124,6 +146,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="212"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="212"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="212"/>
         <source>License Agreement</source>
         <translation>Umowa Licencyjna</translation>
@@ -131,6 +155,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="221"/>
         <source>Report Bug</source>
         <translation>Zgłoś Błąd</translation>
@@ -138,6 +164,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="230"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="230"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="230"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="230"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="230"/>
         <source>Acknowledgements</source>
         <translation>Podziękowania</translation>
@@ -145,6 +173,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="239"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="239"/>
         <source>Website</source>
         <translation>Strona internetowa</translation>
@@ -152,6 +182,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="254"/>
         <location filename="../../../build/app/gui/qml/Dialogs/About.qml" line="254"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="254"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/About.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="254"/>
         <source>Close</source>
         <translation>Zamknij</translation>
@@ -162,6 +194,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="169"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="169"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="169"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="169"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="169"/>
         <source>Settings</source>
         <translation>Ustawienia</translation>
@@ -169,6 +203,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="227"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="227"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="227"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="227"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="227"/>
         <source>G-FORCE</source>
         <translation>G-FORCE</translation>
@@ -176,6 +212,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="260"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="260"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="260"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="260"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="260"/>
         <source>PITCH ↕</source>
         <translation>PITCH ↕</translation>
@@ -183,6 +221,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="292"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="292"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="292"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="292"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="292"/>
         <source>ROLL ↔</source>
         <translation>ROLL ↔</translation>
@@ -193,6 +233,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="33"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="33"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="33"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="33"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="33"/>
         <source>Accelerometer Configuration</source>
         <translation>Konfiguracja Akcelerometru</translation>
@@ -200,6 +242,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="63"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="63"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="63"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="63"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="63"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Skonfiguruj zakres wyświetlania i jednostki wejściowe akcelerometru.</translation>
@@ -207,6 +251,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
         <source>Display Range</source>
         <translation>Zakres Wyświetlania</translation>
@@ -214,6 +260,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
         <source>Max G:</source>
         <translation>Maks G:</translation>
@@ -221,6 +269,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="113"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="113"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="113"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="113"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="113"/>
         <source>Enter max G value</source>
         <translation>Wprowadź maksymalną wartość G</translation>
@@ -228,6 +278,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="127"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="127"/>
         <source>Input Configuration</source>
         <translation>Konfiguracja Wejściowa</translation>
@@ -235,6 +287,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="148"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="148"/>
         <source>Input already in G</source>
         <translation>Wejście już w G</translation>
@@ -242,6 +296,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="178"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="178"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="178"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="178"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="178"/>
         <source>Close</source>
         <translation>Zamknij</translation>
@@ -252,6 +308,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Acknowledgements.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Acknowledgements.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="34"/>
         <source>Acknowledgements</source>
         <translation>Podziękowania</translation>
@@ -259,6 +317,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="69"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Acknowledgements.qml" line="69"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="69"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Acknowledgements.qml" line="69"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="69"/>
         <source>Close</source>
         <translation>Zamknij</translation>
@@ -266,6 +326,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="83"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Acknowledgements.qml" line="83"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="83"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Acknowledgements.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="83"/>
         <source>About Qt...</source>
         <translation>O Qt...</translation>
@@ -276,6 +338,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="104"/>
         <source>Change Icon</source>
         <translation>Zmień Ikonę</translation>
@@ -283,6 +347,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="106"/>
         <source>Change the icon used for this action</source>
         <translation>Zmień ikonę używaną dla tej akcji</translation>
@@ -290,6 +356,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="127"/>
         <source>Duplicate</source>
         <translation>Duplikuj</translation>
@@ -297,6 +365,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="129"/>
         <source>Duplicate this action with all its settings</source>
         <translation>Duplikuj tę akcję ze wszystkimi jej ustawieniami</translation>
@@ -304,6 +374,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="139"/>
         <source>Delete</source>
         <translation>Usuń</translation>
@@ -311,6 +383,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="143"/>
         <source>Delete this action from the project</source>
         <translation>Usuń tę akcję z projektu</translation>
@@ -320,24 +394,28 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <name>Audio</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="69"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="69"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="69"/>
         <source>No Microphone Detected</source>
         <translation>Nie Wykryto Mikrofonu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="78"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="78"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="78"/>
         <source>Connect a mic or check your settings</source>
         <translation>Podłącz mikrofon lub sprawdź ustawienia</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="102"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="102"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="102"/>
         <source>Input Device</source>
         <translation>Urządzenie Wejściowe</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="123"/>
         <source>Sample Rate</source>
         <translation>Częstotliwość Próbkowania</translation>
@@ -345,6 +423,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="144"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="219"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="144"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="219"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="144"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="219"/>
         <source>Sample Format</source>
@@ -353,6 +433,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="165"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="240"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="165"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="240"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="165"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="240"/>
         <source>Channels</source>
@@ -360,6 +442,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="198"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="198"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="198"/>
         <source>Output Device</source>
         <translation>Urządzenie Wyjściowe</translation>
@@ -370,6 +453,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="39"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="39"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="39"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="39"/>
         <source>Axis Range Configuration</source>
         <translation>Konfiguracja Zakresu Osi</translation>
@@ -377,6 +462,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="117"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="117"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="117"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="117"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Skonfiguruj widoczny zakres dla osi wykresu. Wartości aktualizują się w czasie rzeczywistym podczas pisania.</translation>
@@ -384,6 +471,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="131"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
         <source>X Axis</source>
         <translation>Oś X</translation>
@@ -393,6 +482,10 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="223"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="223"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="223"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="223"/>
         <source>Minimum:</source>
@@ -403,6 +496,10 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="234"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="165"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="234"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="165"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="165"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="234"/>
         <source>Enter min value</source>
@@ -413,6 +510,10 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="243"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="174"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="243"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="243"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="243"/>
         <source>Maximum:</source>
@@ -423,6 +524,10 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="254"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="185"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="185"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="185"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="254"/>
         <source>Enter max value</source>
@@ -431,6 +536,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="200"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="200"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="200"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="200"/>
         <source>Y Axis</source>
         <translation>Oś Y</translation>
@@ -438,6 +545,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="275"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="275"/>
         <source>Reset</source>
         <translation>Resetuj</translation>
@@ -445,6 +554,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="288"/>
         <location filename="../../../build/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="288"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="288"/>
         <source>Close</source>
         <translation>Zamknij</translation>
@@ -455,6 +566,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="50"/>
         <source>Device</source>
         <translation>Urządzenie</translation>
@@ -462,6 +575,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="92"/>
         <source>Service</source>
         <translation>Usługa</translation>
@@ -469,6 +584,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="118"/>
         <source>Characteristic</source>
         <translation>Charakterystyka</translation>
@@ -476,6 +593,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="174"/>
         <source>Scanning....</source>
         <translation>Skanowanie....</translation>
@@ -483,6 +602,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="210"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>Nie Wykryto Adaptera Bluetooth</translation>
@@ -490,6 +611,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="221"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>Podłącz adapter Bluetooth lub sprawdź ustawienia systemu</translation>
@@ -497,6 +620,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="248"/>
         <source>This OS is not Supported Yet.</source>
         <translation>Ten system operacyjny nie jest jeszcze obsługiwany.</translation>
@@ -504,6 +629,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="259"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Zaktualizujemy Serial Studio, aby działał z tym systemem operacyjnym, gdy Qt oficjalnie go wesprze</translation>
@@ -521,54 +648,63 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="53"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="53"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="53"/>
         <source>No CAN Drivers Found</source>
         <translation>Nie Znaleziono Sterowników CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="67"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="67"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="67"/>
         <source>Install CAN hardware drivers for your system</source>
         <translation>Zainstaluj sterowniki sprzętu CAN dla swojego systemu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="93"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="93"/>
         <source>CAN Driver</source>
         <translation>Sterownik CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="137"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="137"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="137"/>
         <source>Interface</source>
         <translation>Interfejs</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="168"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="168"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="168"/>
         <source>Bitrate</source>
         <translation>Przepustowość</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="239"/>
         <source>Flexible Data-Rate</source>
         <translation>Elastyczna Szybkość Przesyłania Danych</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="270"/>
         <source>DBC Database</source>
         <translation>Baza Danych DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="274"/>
         <source>Import DBC File...</source>
         <translation>Importuj Plik DBC...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="307"/>
         <source>No CAN Interfaces Found</source>
         <translation>Nie Znaleziono Interfejsów CAN</translation>
@@ -729,6 +865,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="31"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Console.qml" line="31"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="31"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Console.qml" line="31"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="31"/>
         <source>Console</source>
         <translation>Konsola</translation>
@@ -750,47 +888,47 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="218"/>
+        <location filename="../../src/Console/Handler.cpp" line="228"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="219"/>
+        <location filename="../../src/Console/Handler.cpp" line="229"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="230"/>
+        <location filename="../../src/Console/Handler.cpp" line="240"/>
         <source>No Line Ending</source>
         <translation>Brak Zakończenia Linii</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="231"/>
+        <location filename="../../src/Console/Handler.cpp" line="241"/>
         <source>New Line</source>
         <translation>Nowa Linia</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="232"/>
+        <location filename="../../src/Console/Handler.cpp" line="242"/>
         <source>Carriage Return</source>
         <translation>Powrót Karetki</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="233"/>
+        <location filename="../../src/Console/Handler.cpp" line="243"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="244"/>
+        <location filename="../../src/Console/Handler.cpp" line="254"/>
         <source>Plain Text</source>
         <translation>Zwykły Tekst</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="245"/>
+        <location filename="../../src/Console/Handler.cpp" line="255"/>
         <source>Hexadecimal</source>
         <translation>Szesnastkowy</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="265"/>
+        <location filename="../../src/Console/Handler.cpp" line="275"/>
         <source>No Checksum</source>
         <translation>Brak Sumy Kontrolnej</translation>
     </message>
@@ -800,6 +938,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <source>CSV Player</source>
         <translation>Odtwarzacz CSV</translation>
@@ -809,72 +949,84 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <name>DBCPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="41"/>
         <source>DBC File Preview</source>
         <translation>Podgląd Pliku DBC</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="162"/>
         <source>DBC File: %1</source>
         <translation>Plik DBC: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="169"/>
         <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
         <translation>Przejrzyj wiadomości i sygnały CAN, które zostaną zaimportowane do nowego projektu Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
         <source>Messages</source>
         <translation>Wiadomości</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="215"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="222"/>
         <source>Message Name</source>
         <translation>Nazwa Wiadomości</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="230"/>
         <source>CAN ID</source>
         <translation>CAN ID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="237"/>
         <source>Signals</source>
         <translation>Sygnały</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="319"/>
         <source>No messages found in DBC file.</source>
         <translation>Nie znaleziono wiadomości w pliku DBC.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="337"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>Łącznie: %1 wiadomości, %2 sygnały</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="346"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="360"/>
         <source>Create Project</source>
         <translation>Utwórz Projekt</translation>
@@ -901,6 +1053,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="113"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="113"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="113"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="113"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="113"/>
         <source>Dashboard %1</source>
         <translation>Panel %1</translation>
@@ -911,6 +1065,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <source>Set Wallpaper...</source>
         <translation>Ustaw Tapetę...</translation>
@@ -918,6 +1074,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <source>Clear Wallpaper</source>
         <translation>Usuń Tapetę</translation>
@@ -925,6 +1083,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <source>Tile Windows</source>
         <translation>Układaj Okna</translation>
@@ -932,6 +1092,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="84"/>
         <source>Pro features detected in this project.</source>
         <translation>Wykryto funkcje Pro w tym projekcie.</translation>
@@ -939,6 +1101,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="85"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
         <translation>Aktywne są widżety zastępcze. Kup licencję, aby uzyskać pełną funkcjonalność.</translation>
@@ -949,6 +1113,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="34"/>
         <source>Dashboard</source>
         <translation>Panel</translation>
@@ -956,6 +1122,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="127"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="127"/>
         <source>API Server Active (%1)</source>
         <translation>Serwer API Aktywny (%1)</translation>
@@ -963,6 +1131,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="128"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="128"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="128"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="128"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="128"/>
         <source>API Server Ready</source>
         <translation>Serwer API Gotowy</translation>
@@ -970,6 +1140,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
         <source>API Server Off</source>
         <translation>Serwer API Wyłączony</translation>
@@ -980,6 +1152,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
@@ -987,6 +1161,8 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <source>Resume</source>
         <translation>Wznów</translation>
@@ -1119,22 +1295,22 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 <context>
     <name>DataModel::FrameParser</name>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="576"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="577"/>
         <source>Frame parser code updated successfully!</source>
         <translation>Kod parsera ramki zaktualizowany pomyślnie!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="577"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="578"/>
         <source>No errors have been detected in the code.</source>
         <translation>Nie wykryto żadnych błędów w kodzie.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="634"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="635"/>
         <source>JavaScript Syntax Error</source>
         <translation>Błąd Składni JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="635"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="636"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -1143,12 +1319,12 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="650"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="651"/>
         <source>JavaScript Exception Occurred</source>
         <translation>Wystąpił Wyjątek JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="651"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="652"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -1157,12 +1333,12 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="666"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="667"/>
         <source>Missing Parse Function</source>
         <translation>Brak Funkcji Parsowania</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="667"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="668"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -1173,12 +1349,12 @@ Upewnij się, że Twój kod zawiera:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="680"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="681"/>
         <source>Invalid Parse Function</source>
         <translation>Nieprawidłowa Funkcja Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="681"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="682"/>
         <source>The 'parse' property exists but is not a callable function.
 
 Please ensure 'parse' is declared as a function.</source>
@@ -1187,12 +1363,12 @@ Please ensure 'parse' is declared as a function.</source>
 Upewnij się, że 'parse' jest zadeklarowana jako funkcja.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="696"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="697"/>
         <source>Invalid Function Declaration</source>
         <translation>Nieprawidłowa Deklaracja Funkcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="697"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="698"/>
         <source>No valid 'parse' function declaration found.
 
 Expected format:
@@ -1203,12 +1379,12 @@ Oczekiwany format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="714"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="715"/>
         <source>Invalid Function Parameter</source>
         <translation>Nieprawidłowy Parametr Funkcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="715"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="716"/>
         <source>The 'parse' function must have at least one parameter.
 
 Expected format:
@@ -1219,12 +1395,12 @@ Oczekiwany format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="728"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="729"/>
         <source>Deprecated Function Signature</source>
         <translation>Przestarzała Sygnatura Funkcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="729"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="730"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -1239,12 +1415,12 @@ function parse(%1) { ... }
 Parametr separatora nie jest już potrzebny.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="800"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="801"/>
         <source>Parse Function Runtime Error</source>
         <translation>Błąd Wykonania Funkcji Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="801"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="802"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -1257,189 +1433,189 @@ Please fix the error in the function body.</source>
 Proszę naprawić błąd w ciele funkcji.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="903"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="904"/>
         <source>The document has been modified.</source>
         <translation>Dokument został zmodyfikowany.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="904"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="924"/>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1244"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="905"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="925"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1245"/>
         <source>Are you sure you want to continue?</source>
         <translation>Czy na pewno chcesz kontynuować?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="923"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="924"/>
         <source>The document has been modified!</source>
         <translation>Dokument został zmodyfikowany!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="933"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="934"/>
         <source>Select Javascript file to import</source>
         <translation>Wybierz plik Javascript do importu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="977"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="978"/>
         <source>Code Validation Successful</source>
         <translation>Walidacja Kodu Zakończona Sukcesem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="978"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="979"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>Nie wykryto błędów składniowych w kodzie parsera.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1033"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1034"/>
         <source>Select Frame Parser Template</source>
         <translation>Wybierz Szablon Frame Parser</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1034"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1035"/>
         <source>Choose a template to load:</source>
         <translation>Wybierz szablon do załadowania:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1191"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1192"/>
         <source>AT command responses</source>
         <translation>Odpowiedzi na polecenia AT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1192"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1193"/>
         <source>Base64-encoded data</source>
         <translation>Dane zakodowane w Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1193"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1194"/>
         <source>Batched sensor data (multi-frame)</source>
         <translation>Zgrupowane dane z czujników (wieloklatkowe)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1194"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1195"/>
         <source>Binary TLV (Tag-Length-Value)</source>
         <translation>Binarny TLV (Tag-Length-Value)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1195"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1196"/>
         <source>COBS-encoded frames</source>
         <translation>Ramki zakodowane w COBS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1196"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1197"/>
         <source>Comma-separated data</source>
         <translation>Dane rozdzielane przecinkami</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1197"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1198"/>
         <source>Fixed-width fields</source>
         <translation>Pola o stałej szerokości</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1198"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1199"/>
         <source>Hexadecimal bytes</source>
         <translation>Bajty szesnastkowe</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1199"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1200"/>
         <source>INI/config format</source>
         <translation>Format INI/konfiguracyjny</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1200"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1201"/>
         <source>JSON data</source>
         <translation>Dane JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1201"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1202"/>
         <source>Key-value pairs</source>
         <translation>Pary klucz-wartość</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1202"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1203"/>
         <source>MAVLink messages</source>
         <translation>Wiadomości MAVLink</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1203"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1204"/>
         <source>MessagePack data</source>
         <translation>Dane MessagePack</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1204"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1205"/>
         <source>Modbus frames</source>
         <translation>Ramki Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1205"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1206"/>
         <source>NMEA 0183 sentences</source>
         <translation>Zdania NMEA 0183</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1206"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1207"/>
         <source>NMEA 2000 messages</source>
         <translation>Wiadomości NMEA 2000</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1207"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1208"/>
         <source>Pipe-delimited data</source>
         <translation>Dane rozdzielane pionową kreską</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1208"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1209"/>
         <source>Raw bytes</source>
         <translation>Surowe bajty</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1209"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1210"/>
         <source>RTCM corrections</source>
         <translation>Korekcje RTCM</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1210"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1211"/>
         <source>Semicolon-separated data</source>
         <translation>Dane rozdzielane średnikiem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1211"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1212"/>
         <source>SiRF binary protocol</source>
         <translation>Protokół binarny SiRF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1212"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1213"/>
         <source>SLIP-encoded frames</source>
         <translation>Ramki kodowane SLIP</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1213"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1214"/>
         <source>Tab-separated data</source>
         <translation>Dane rozdzielane tabulatorami</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1214"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1215"/>
         <source>Time-series 2D arrays (multi-frame)</source>
         <translation>Szereg czasowy 2D (wieloklatkowe)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1215"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1216"/>
         <source>UBX protocol (u-blox)</source>
         <translation>Protokół UBX (u-blox)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1216"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1217"/>
         <source>URL-encoded data</source>
         <translation>Dane kodowane w URL</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1217"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1218"/>
         <source>XML data</source>
         <translation>Dane XML</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1218"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1219"/>
         <source>YAML data</source>
         <translation>Dane YAML</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParser.cpp" line="1243"/>
+        <location filename="../../src/DataModel/FrameParser.cpp" line="1244"/>
         <source>Loading a template will replace your current code.</source>
         <translation>Wczytanie szablonu zastąpi Twój obecny kod.</translation>
     </message>
@@ -1534,885 +1710,1481 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     </message>
 </context>
 <context>
+    <name>DataModel::ProjectEditor</name>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="547"/>
+        <source>Frame Parser Code</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="677"/>
+        <source>Project Information</source>
+        <translation type="unfinished">Informacje o Projekcie</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="687"/>
+        <source>Project Title</source>
+        <translation type="unfinished">Tytuł Projektu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="688"/>
+        <source>Untitled Project</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="689"/>
+        <source>Name or description of the project</source>
+        <translation type="unfinished">Nazwa lub opis projektu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="705"/>
+        <source>Frame Detection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="716"/>
+        <source>Frame Detection Method</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="717"/>
+        <source>Select how incoming data frames are identified</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="727"/>
+        <source>Hexadecimal Delimiters</source>
+        <translation type="unfinished">Szesnastkowe Delimitery</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="728"/>
+        <source>Enter frame start/end sequences as hexadecimal values</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="744"/>
+        <source>Frame Start Delimiter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="745"/>
+        <source>e.g. /*</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="746"/>
+        <source>Sequence that marks the beginning of a data frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="758"/>
+        <source>Frame End Delimiter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="759"/>
+        <source>e.g. */</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="760"/>
+        <source>Sequence that marks the end of a data frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="769"/>
+        <source>Payload Processing &amp; Validation</source>
+        <translation type="unfinished">Przetwarzanie i Walidacja Ładunku</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="780"/>
+        <source>Data Conversion Method</source>
+        <translation type="unfinished">Metoda Konwersji Danych</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="781"/>
+        <source>Select how incoming binary data is decoded before parsing</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="798"/>
+        <source>Checksum Algorithm</source>
+        <translation type="unfinished">Algorytm Sumy Kontrolnej</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="799"/>
+        <source>Select the checksum algorithm used to validate frames</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="831"/>
+        <source>Group Information</source>
+        <translation type="unfinished">Informacje o Grupie</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="841"/>
+        <source>Group Title</source>
+        <translation type="unfinished">Tytuł Grupy</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="842"/>
+        <source>Untitled Group</source>
+        <translation type="unfinished">Grupa Bez Tytułu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="843"/>
+        <source>Title or description of this dataset group</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="865"/>
+        <source>Composite Widget</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="866"/>
+        <source>Select how this group of datasets should be visualized (optional)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="875"/>
+        <source>Image Configuration</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="879"/>
+        <source>Auto-detect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="879"/>
+        <source>Manual Delimiters</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="892"/>
+        <source>Detection Mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="894"/>
+        <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="904"/>
+        <source>Start Sequence (Hex)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="905"/>
+        <source>e.g. FF D8 FF</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="906"/>
+        <source>Hex bytes marking the start of an image frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="915"/>
+        <source>End Sequence (Hex)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="916"/>
+        <source>e.g. FF D9</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="917"/>
+        <source>Hex bytes marking the end of an image frame</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="950"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1150"/>
+        <source>General Information</source>
+        <translation type="unfinished">Informacje Ogólne</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="959"/>
+        <source>Action Title</source>
+        <translation type="unfinished">Tytuł Akcji</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="961"/>
+        <source>Untitled Action</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="962"/>
+        <source>Name or description of this action</source>
+        <translation type="unfinished">Nazwa lub opis tej akcji</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="971"/>
+        <source>Action Icon</source>
+        <translation type="unfinished">Ikona Akcji</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="972"/>
+        <source>Default Icon</source>
+        <translation type="unfinished">Domyślna Ikona</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="973"/>
+        <source>Icon displayed for this action in the dashboard</source>
+        <translation type="unfinished">Ikona wyświetlana dla tej akcji na pulpicie</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="979"/>
+        <source>Data Payload</source>
+        <translation type="unfinished">Ładunek Danych</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="990"/>
+        <source>Send as Binary</source>
+        <translation type="unfinished">Wyślij jako binarny</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="991"/>
+        <source>Send raw binary data when this action is triggered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1002"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1014"/>
+        <source>Command</source>
+        <translation type="unfinished">Komenda</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1003"/>
+        <source>Transmit Data (Hex)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1004"/>
+        <source>Hexadecimal payload to send when the action is triggered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1015"/>
+        <source>Transmit Data</source>
+        <translation type="unfinished">Przesyłaj Dane</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1016"/>
+        <source>Text payload to send when the action is triggered</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1040"/>
+        <source>End-of-Line Sequence</source>
+        <translation type="unfinished">Sekwencja Końca Linii</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1041"/>
+        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
+        <translation type="unfinished">Znaki EOL do dodania do wiadomości (np. </translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1048"/>
+        <source>Execution Behavior</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1059"/>
+        <source>Auto-Execute on Connect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1060"/>
+        <source>Automatically trigger this action when the device connects</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1067"/>
+        <source>Timer Behavior</source>
+        <translation type="unfinished">Zachowanie Timera</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1076"/>
+        <source>Timer Mode</source>
+        <translation type="unfinished">Tryb Timera</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1079"/>
+        <source>Choose when and how this action should repeat automatically</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1086"/>
+        <source>Interval (ms)</source>
+        <translation type="unfinished">Interwał (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1090"/>
+        <source>Timer Interval (ms)</source>
+        <translation type="unfinished">Interwał Timera (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1091"/>
+        <source>Milliseconds between each repeated trigger of this action</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1160"/>
+        <source>Untitled Dataset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1161"/>
+        <source>Dataset Title</source>
+        <translation type="unfinished">Tytuł Zestawu Danych</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1162"/>
+        <source>Name of the dataset, used for labeling and identification</source>
+        <translation type="unfinished">Nazwa zestawu danych, używana do etykietowania i identyfikacji</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1175"/>
+        <source>Frame Index</source>
+        <translation type="unfinished">Indeks Ramki</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1176"/>
+        <source>Frame position used for aligning datasets in time</source>
+        <translation type="unfinished">Pozycja ramki używana do wyrównywania zestawów danych w czasie</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1185"/>
+        <source>Measurement Unit</source>
+        <translation type="unfinished">Jednostka Miary</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1186"/>
+        <source>Volts, Amps, etc.</source>
+        <translation type="unfinished">Wolty, Ampery, itp.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1187"/>
+        <source>Unit of measurement, such as volts or amps (optional)</source>
+        <translation type="unfinished">Jednostka miary, taka jak wolty lub ampery (opcjonalnie)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1201"/>
+        <source>Plot Settings</source>
+        <translation type="unfinished">Ustawienia Wykresu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1224"/>
+        <source>Enable Plot Widget</source>
+        <translation type="unfinished">Włącz Widżet Wykresu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1226"/>
+        <source>Plot data in real-time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1251"/>
+        <source>X-Axis Source</source>
+        <translation type="unfinished">Źródło Osi X</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1252"/>
+        <source>Choose which dataset to use for the X-Axis in plots</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1263"/>
+        <source>Minimum Plot Value (optional)</source>
+        <translation type="unfinished">Minimalna Wartość Wykresu (opcjonalnie)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1264"/>
+        <source>Lower bound for plot display range</source>
+        <translation type="unfinished">Dolna granica zakresu wyświetlania wykresu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1274"/>
+        <source>Maximum Plot Value (optional)</source>
+        <translation type="unfinished">Maksymalna Wartość Wykresu (opcjonalnie)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1275"/>
+        <source>Upper bound for plot display range</source>
+        <translation type="unfinished">Górna granica zakresu wyświetlania wykresu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1288"/>
+        <source>FFT Configuration</source>
+        <translation type="unfinished">Konfiguracja FFT</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1299"/>
+        <source>Enable FFT Analysis</source>
+        <translation type="unfinished">Włącz Analizę FFT</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1300"/>
+        <source>Perform frequency-domain analysis of the dataset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1315"/>
+        <source>FFT Window Size</source>
+        <translation type="unfinished">Rozmiar Okna FFT</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1316"/>
+        <source>Number of samples used for each FFT calculation window</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1327"/>
+        <source>FFT Sampling Rate (Hz, required)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1328"/>
+        <source>Sampling frequency used for FFT (in Hz)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1338"/>
+        <source>Minimum Value (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1339"/>
+        <source>Lower bound for data normalization</source>
+        <translation type="unfinished">Dolna granica dla normalizacji danych</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1349"/>
+        <source>Maximum Value (recommended)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1350"/>
+        <source>Upper bound for data normalization</source>
+        <translation type="unfinished">Górna granica dla normalizacji danych</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1366"/>
+        <source>Widget Settings</source>
+        <translation type="unfinished">Ustawienia Widżetu</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1389"/>
+        <source>Widget</source>
+        <translation type="unfinished">Widżet</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1390"/>
+        <source>Select the visual widget used to display this dataset</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1401"/>
+        <source>Show in Overview</source>
+        <translation type="unfinished">Pokaż w Przeglądzie</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1402"/>
+        <source>Display this widget in the dashboard overview (if enabled)</source>
+        <translation type="unfinished">Wyświetl ten widżet w przeglądzie pulpitu (jeśli włączone)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1415"/>
+        <source>Minimum Display Value (required)</source>
+        <translation type="unfinished">Minimalna Wartość Wyświetlania (wymagana)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1416"/>
+        <source>Lower bound of the gauge or bar display range</source>
+        <translation type="unfinished">Dolna granica zakresu wyświetlania wskaźnika lub paska</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1426"/>
+        <source>Maximum Display Value (required)</source>
+        <translation type="unfinished">Maksymalna Wartość Wyświetlania (wymagana)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1427"/>
+        <source>Upper bound of the gauge or bar display range</source>
+        <translation type="unfinished">Górna granica zakresu wyświetlania wskaźnika lub paska</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1444"/>
+        <source>Alarm Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1455"/>
+        <source>Enable Alarms</source>
+        <translation type="unfinished">Włącz Alarmy</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1456"/>
+        <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1467"/>
+        <source>Low Threshold</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1468"/>
+        <source>Triggers a visual alarm when the value drops below this threshold</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1479"/>
+        <source>High Threshold</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1480"/>
+        <source>Triggers a visual alarm when the value exceeds this threshold</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1494"/>
+        <source>LED Display Settings</source>
+        <translation type="unfinished">Ustawienia Wyświetlacza LED</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1505"/>
+        <source>Show in LED Panel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1506"/>
+        <source>Enable visual status monitoring using an LED display</source>
+        <translation type="unfinished">Włącz monitorowanie statusu wizualnego za pomocą wyświetlacza LED</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1517"/>
+        <source>LED On Threshold (required)</source>
+        <translation type="unfinished">Próg Włączenia LED (wymagany)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1518"/>
+        <source>LED lights up when value meets or exceeds this threshold</source>
+        <translation type="unfinished">LED zapala się, gdy wartość osiąga lub przekracza ten próg</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1543"/>
+        <source>Off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1543"/>
+        <source>Auto Start</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1543"/>
+        <source>Start on Trigger</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1544"/>
+        <source>Toggle on Trigger</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1547"/>
+        <source>Plain Text (UTF8)</source>
+        <translation type="unfinished">Zwykły Tekst (UTF8)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1547"/>
+        <source>Hexadecimal</source>
+        <translation type="unfinished">Szesnastkowy</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1547"/>
+        <source>Base64</source>
+        <translation type="unfinished">Base64</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1548"/>
+        <source>Binary (Direct)</source>
+        <translation type="unfinished">Binarny (Bezpośredni)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1554"/>
+        <source>No Checksum</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1558"/>
+        <source>End Delimiter Only</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1558"/>
+        <source>Start Delimiter Only</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1559"/>
+        <source>Start + End Delimiter</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1559"/>
+        <source>No Delimiters</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1565"/>
+        <source>Data Grid</source>
+        <translation type="unfinished">Siatka Danych</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1566"/>
+        <source>GPS Map</source>
+        <translation type="unfinished">Mapa GPS</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1567"/>
+        <source>Gyroscope</source>
+        <translation type="unfinished">Żyroskop</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1568"/>
+        <source>Multiple Plot</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1569"/>
+        <source>Accelerometer</source>
+        <translation type="unfinished">Akcelerometr</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1570"/>
+        <source>3D Plot</source>
+        <translation type="unfinished">Wykres 3D</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1572"/>
+        <source>Image View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1574"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1577"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1583"/>
+        <source>None</source>
+        <translation type="unfinished">Brak</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1578"/>
+        <source>Bar</source>
+        <translation type="unfinished">Pasek</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1579"/>
+        <source>Gauge</source>
+        <translation type="unfinished">Wskaźnik</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1580"/>
+        <source>Compass</source>
+        <translation type="unfinished">Kompas</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1584"/>
+        <source>New Line (\n)</source>
+        <translation type="unfinished">Nowa Linia (</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1585"/>
+        <source>Carriage Return (\r)</source>
+        <translation type="unfinished">Powrót Karetki (\r)</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1586"/>
+        <source>CRLF (\r\n)</source>
+        <translation type="unfinished">CRLF (\r</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1589"/>
+        <source>No</source>
+        <translation type="unfinished">Nie</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1590"/>
+        <source>Yes</source>
+        <translation type="unfinished">Tak</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1613"/>
+        <source>Save changes to frame parser code?</source>
+        <translation type="unfinished">Zapisać zmiany w kodzie parsera ramek?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1614"/>
+        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
+        <translation type="unfinished">Wybierz 'Zapisz', aby zachować zmiany, 'Odrzuć', aby je trwale utracić, lub 'Anuluj', aby wrócić.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1617"/>
+        <source>Save Changes</source>
+        <translation type="unfinished">Zapisz Zmiany</translation>
+    </message>
+</context>
+<context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="314"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="132"/>
         <source>New Project</source>
         <translation>Nowy Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="379"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="151"/>
         <source>Samples</source>
         <translation>Próbki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="820"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="356"/>
         <source>Do you want to save your changes?</source>
         <translation>Czy chcesz zapisać zmiany?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="821"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="357"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Masz niezapisane zmiany w tym projekcie!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="859"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="871"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="393"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="403"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="413"/>
         <source>Project error</source>
         <translation>Błąd projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="859"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="393"/>
         <source>Project title cannot be empty!</source>
         <translation>Tytuł projektu nie może być pusty!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="871"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="403"/>
         <source>You need to add at least one group!</source>
         <translation>Musisz dodać przynajmniej jedną grupę!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="413"/>
         <source>You need to add at least one dataset!</source>
         <translation>Musisz dodać przynajmniej jeden zbiór danych!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="426"/>
         <source>Save Serial Studio Project</source>
         <translation>Zapisz Projekt Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="901"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="428"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Pliki Projektu Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="994"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2471"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="524"/>
         <source>Untitled Project</source>
         <translation>Projekt Bez Nazwy</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1111"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="626"/>
         <source>Select Project File</source>
         <translation>Wybierz Plik Projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1111"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="626"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Pliki Projektu (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1155"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="665"/>
         <source>JSON validation error</source>
         <translation>Błąd walidacji JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1258"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="757"/>
         <source>Legacy frame parser function updated</source>
         <translation>Zaktualizowano funkcję analizy ramki w starszym formacie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1259"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="758"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Twój projekt używał funkcji analizy ramki w starszym formacie z argumentem 'separator'. Został automatycznie zmigrowany do nowego formatu.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1299"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="800"/>
         <source>Switch Serial Studio to Project Mode?</source>
         <translation>Przełączyć Serial Studio na Tryb Projektu?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1300"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="801"/>
         <source>This operation mode is required to load and display dashboards from project files.</source>
         <translation>Ten tryb operacyjny jest wymagany do ładowania i wyświetlania pulpitów z plików projektu.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1333"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="932"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Czy chcesz usunąć grupę "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1334"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1376"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1416"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="933"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="966"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="999"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Ta akcja nie może zostać cofnięta. Czy chcesz kontynuować?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1375"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="965"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Czy chcesz usunąć akcję "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1415"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="998"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Czy chcesz usunąć zestaw danych "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1484"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1525"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1557"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1053"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1081"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1102"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopia)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1592"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1644"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1150"/>
         <source>Group</source>
         <translation>Grupa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1671"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1173"/>
         <source>New Dataset</source>
         <translation>Nowy Zestaw Danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1674"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1176"/>
         <source>New Plot</source>
         <translation>Nowy Wykres</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1678"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1180"/>
         <source>New FFT Plot</source>
         <translation>Nowy Wykres FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1682"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1184"/>
         <source>New Level Indicator</source>
         <translation>Nowy Wskaźnik Poziomu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1686"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1188"/>
         <source>New Gauge</source>
         <translation>Nowy Wskaźnik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1690"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1192"/>
         <source>New Compass</source>
         <translation>Nowy Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1200"/>
         <source>New LED Indicator</source>
         <translation>Nowy Wskaźnik LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1821"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1298"/>
         <source>New Action</source>
         <translation>Nowa Akcja</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1960"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1406"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Czy na pewno chcesz zmienić widżet na poziomie grupy?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1961"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1408"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Istniejące zestawy danych dla tej grupy zostaną usunięte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2031"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2032"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2033"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1468"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1469"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1470"/>
         <source>Accelerometer %1</source>
         <translation>Akcelerometr %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2088"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2089"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2090"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1517"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1518"/>
         <source>Gyro %1</source>
         <translation>Żyroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1561"/>
         <source>Latitude</source>
         <translation>Szerokość geograficzna</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2143"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1562"/>
         <source>Longitude</source>
         <translation>Długość geograficzna</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2144"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1563"/>
         <source>Altitude</source>
         <translation>Wysokość</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2191"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1602"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2192"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1603"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2193"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1604"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2323"/>
         <source>Frame Parser Code</source>
-        <translation>Kod Parsowania Ramki</translation>
+        <translation type="vanished">Kod Parsowania Ramki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2459"/>
         <source>Project Information</source>
-        <translation>Informacje o Projekcie</translation>
+        <translation type="vanished">Informacje o Projekcie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2470"/>
         <source>Project Title</source>
-        <translation>Tytuł Projektu</translation>
+        <translation type="vanished">Tytuł Projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2472"/>
         <source>Name or description of the project</source>
-        <translation>Nazwa lub opis projektu</translation>
+        <translation type="vanished">Nazwa lub opis projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2482"/>
         <source>Frame Detection</source>
-        <translation>Wykrywanie Ramki</translation>
+        <translation type="vanished">Wykrywanie Ramki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2494"/>
         <source>Frame Detection Method</source>
-        <translation>Metoda Wykrywania Ramki</translation>
+        <translation type="vanished">Metoda Wykrywania Ramki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2495"/>
         <source>Select how incoming data frames are identified</source>
-        <translation>Wybierz, jak identyfikowane są przychodzące ramki danych</translation>
+        <translation type="vanished">Wybierz, jak identyfikowane są przychodzące ramki danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2505"/>
         <source>Hexadecimal Delimiters</source>
-        <translation>Szesnastkowe Delimitery</translation>
+        <translation type="vanished">Szesnastkowe Delimitery</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2507"/>
         <source>Use hex values to define frame boundaries</source>
-        <translation>Użyj wartości szesnastkowych do definiowania granic ramki</translation>
+        <translation type="vanished">Użyj wartości szesnastkowych do definiowania granic ramki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2520"/>
         <source>Start Sequence</source>
-        <translation>Sekwencja Początkowa</translation>
+        <translation type="vanished">Sekwencja Początkowa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2523"/>
         <source>Marks the beginning of each data frame</source>
-        <translation>Oznacza początek każdej ramki danych</translation>
+        <translation type="vanished">Oznacza początek każdej ramki danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2533"/>
         <source>End Sequence</source>
-        <translation>Sekwencja Końcowa</translation>
+        <translation type="vanished">Sekwencja Końcowa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2536"/>
         <source>Marks the end of each data frame</source>
-        <translation>Oznacza koniec każdej ramki danych</translation>
+        <translation type="vanished">Oznacza koniec każdej ramki danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2546"/>
         <source>Payload Processing &amp; Validation</source>
-        <translation>Przetwarzanie i Walidacja Ładunku</translation>
+        <translation type="vanished">Przetwarzanie i Walidacja Ładunku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2557"/>
         <source>Data Format</source>
-        <translation>Format Danych</translation>
+        <translation type="vanished">Format Danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2559"/>
         <source>Format of raw data used for decoding each frame</source>
-        <translation>Format surowych danych używanych do dekodowania każdej ramki</translation>
+        <translation type="vanished">Format surowych danych używanych do dekodowania każdej ramki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2570"/>
         <source>Checksum Algorithm</source>
-        <translation>Algorytm Sumy Kontrolnej</translation>
+        <translation type="vanished">Algorytm Sumy Kontrolnej</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2572"/>
         <source>Method used to validate frame integrity</source>
-        <translation>Metoda używana do walidacji integralności ramki</translation>
+        <translation type="vanished">Metoda używana do walidacji integralności ramki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2618"/>
         <source>Group Information</source>
-        <translation>Informacje o Grupie</translation>
+        <translation type="vanished">Informacje o Grupie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
         <source>Group Title</source>
-        <translation>Tytuł Grupy</translation>
+        <translation type="vanished">Tytuł Grupy</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2630"/>
         <source>Untitled Group</source>
-        <translation>Grupa Bez Tytułu</translation>
+        <translation type="vanished">Grupa Bez Tytułu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2631"/>
         <source>Title or description of this dataset group</source>
-        <translation>Tytuł lub opis tej grupy zbioru danych</translation>
+        <translation type="vanished">Tytuł lub opis tej grupy zbioru danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2656"/>
         <source>Composite Widget</source>
-        <translation>Kompozytowy Widżet</translation>
+        <translation type="vanished">Kompozytowy Widżet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2657"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation>Wybierz, jak ta grupa zbiorów danych powinna być wizualizowana (opcjonalnie)</translation>
+        <translation type="vanished">Wybierz, jak ta grupa zbiorów danych powinna być wizualizowana (opcjonalnie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2707"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2924"/>
         <source>General Information</source>
-        <translation>Informacje Ogólne</translation>
+        <translation type="vanished">Informacje Ogólne</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2717"/>
         <source>Action Title</source>
-        <translation>Tytuł Akcji</translation>
+        <translation type="vanished">Tytuł Akcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2719"/>
         <source>Untitled Action</source>
-        <translation>Akcja Bez Tytułu</translation>
+        <translation type="vanished">Akcja Bez Tytułu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2720"/>
         <source>Name or description of this action</source>
-        <translation>Nazwa lub opis tej akcji</translation>
+        <translation type="vanished">Nazwa lub opis tej akcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2730"/>
         <source>Action Icon</source>
-        <translation>Ikona Akcji</translation>
+        <translation type="vanished">Ikona Akcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2731"/>
         <source>Default Icon</source>
-        <translation>Domyślna Ikona</translation>
+        <translation type="vanished">Domyślna Ikona</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2732"/>
         <source>Icon displayed for this action in the dashboard</source>
-        <translation>Ikona wyświetlana dla tej akcji na pulpicie</translation>
+        <translation type="vanished">Ikona wyświetlana dla tej akcji na pulpicie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2742"/>
         <source>Data Payload</source>
-        <translation>Ładunek Danych</translation>
+        <translation type="vanished">Ładunek Danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
         <source>Send as Binary</source>
-        <translation>Wyślij jako binarny</translation>
+        <translation type="vanished">Wyślij jako binarny</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2755"/>
         <source>Send raw binary data when this action is triggered</source>
-        <translation>Wyślij surowe dane binarne, gdy ta akcja jest wywołana</translation>
+        <translation type="vanished">Wyślij surowe dane binarne, gdy ta akcja jest wywołana</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2767"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2782"/>
         <source>Command</source>
-        <translation>Komenda</translation>
+        <translation type="vanished">Komenda</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2768"/>
         <source>Transmit Data (Hex)</source>
-        <translation>Transmituj Dane (Hex)</translation>
+        <translation type="vanished">Transmituj Dane (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2769"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation>Szesnastkowy ładunek do wysłania, gdy akcja jest wywołana</translation>
+        <translation type="vanished">Szesnastkowy ładunek do wysłania, gdy akcja jest wywołana</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2783"/>
         <source>Transmit Data</source>
-        <translation>Przesyłaj Dane</translation>
+        <translation type="vanished">Przesyłaj Dane</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2784"/>
         <source>Text payload to send when the action is triggered</source>
-        <translation>Tekst do wysłania po wywołaniu akcji</translation>
+        <translation type="vanished">Tekst do wysłania po wywołaniu akcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2810"/>
         <source>End-of-Line Sequence</source>
-        <translation>Sekwencja Końca Linii</translation>
+        <translation type="vanished">Sekwencja Końca Linii</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2811"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation>Znaki EOL do dodania do wiadomości (np. </translation>
+        <translation type="vanished">Znaki EOL do dodania do wiadomości (np. </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2822"/>
         <source>Execution Behavior</source>
-        <translation>Zachowanie Podczas Wykonania</translation>
+        <translation type="vanished">Zachowanie Podczas Wykonania</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2834"/>
         <source>Auto-Execute on Connect</source>
-        <translation>Auto-wykonanie po połączeniu</translation>
+        <translation type="vanished">Auto-wykonanie po połączeniu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2835"/>
         <source>Automatically trigger this action when the device connects</source>
-        <translation>Automatyczne wywołanie tej akcji po połączeniu urządzenia</translation>
+        <translation type="vanished">Automatyczne wywołanie tej akcji po połączeniu urządzenia</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2846"/>
         <source>Timer Behavior</source>
-        <translation>Zachowanie Timera</translation>
+        <translation type="vanished">Zachowanie Timera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2856"/>
         <source>Timer Mode</source>
-        <translation>Tryb Timera</translation>
+        <translation type="vanished">Tryb Timera</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2859"/>
         <source>Choose when and how this action should repeat automatically</source>
-        <translation>Wybierz, kiedy i jak ta akcja powinna się automatycznie powtarzać</translation>
+        <translation type="vanished">Wybierz, kiedy i jak ta akcja powinna się automatycznie powtarzać</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2867"/>
         <source>Interval (ms)</source>
-        <translation>Interwał (ms)</translation>
+        <translation type="vanished">Interwał (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2871"/>
         <source>Timer Interval (ms)</source>
-        <translation>Interwał Timera (ms)</translation>
+        <translation type="vanished">Interwał Timera (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2872"/>
         <source>Milliseconds between each repeated trigger of this action</source>
-        <translation>Milisekundy między każdym powtarzającym się wyzwoleniem tej akcji</translation>
+        <translation type="vanished">Milisekundy między każdym powtarzającym się wyzwoleniem tej akcji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2935"/>
         <source>Untitled Dataset</source>
-        <translation>Zestaw Danych Bez Tytułu</translation>
+        <translation type="vanished">Zestaw Danych Bez Tytułu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2936"/>
         <source>Dataset Title</source>
-        <translation>Tytuł Zestawu Danych</translation>
+        <translation type="vanished">Tytuł Zestawu Danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2937"/>
         <source>Name of the dataset, used for labeling and identification</source>
-        <translation>Nazwa zestawu danych, używana do etykietowania i identyfikacji</translation>
+        <translation type="vanished">Nazwa zestawu danych, używana do etykietowania i identyfikacji</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2949"/>
         <source>Frame Index</source>
-        <translation>Indeks Ramki</translation>
+        <translation type="vanished">Indeks Ramki</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2950"/>
         <source>Frame position used for aligning datasets in time</source>
-        <translation>Pozycja ramki używana do wyrównywania zestawów danych w czasie</translation>
+        <translation type="vanished">Pozycja ramki używana do wyrównywania zestawów danych w czasie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2960"/>
         <source>Measurement Unit</source>
-        <translation>Jednostka Miary</translation>
+        <translation type="vanished">Jednostka Miary</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2961"/>
         <source>Volts, Amps, etc.</source>
-        <translation>Wolty, Ampery, itp.</translation>
+        <translation type="vanished">Wolty, Ampery, itp.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2962"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation>Jednostka miary, taka jak wolty lub ampery (opcjonalnie)</translation>
+        <translation type="vanished">Jednostka miary, taka jak wolty lub ampery (opcjonalnie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2972"/>
         <source>Plot Settings</source>
-        <translation>Ustawienia Wykresu</translation>
+        <translation type="vanished">Ustawienia Wykresu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2998"/>
         <source>Enable Plot Widget</source>
-        <translation>Włącz Widżet Wykresu</translation>
+        <translation type="vanished">Włącz Widżet Wykresu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3000"/>
         <source>Plot data in real-time</source>
-        <translation>Rysuj dane w czasie rzeczywistym</translation>
+        <translation type="vanished">Rysuj dane w czasie rzeczywistym</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3026"/>
         <source>X-Axis Source</source>
-        <translation>Źródło Osi X</translation>
+        <translation type="vanished">Źródło Osi X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3027"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation>Wybierz, który zbiór danych użyć dla osi X na wykresach</translation>
+        <translation type="vanished">Wybierz, który zbiór danych użyć dla osi X na wykresach</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3038"/>
         <source>Minimum Plot Value (optional)</source>
-        <translation>Minimalna Wartość Wykresu (opcjonalnie)</translation>
+        <translation type="vanished">Minimalna Wartość Wykresu (opcjonalnie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3039"/>
         <source>Lower bound for plot display range</source>
-        <translation>Dolna granica zakresu wyświetlania wykresu</translation>
+        <translation type="vanished">Dolna granica zakresu wyświetlania wykresu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3050"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>Maksymalna Wartość Wykresu (opcjonalnie)</translation>
+        <translation type="vanished">Maksymalna Wartość Wykresu (opcjonalnie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3051"/>
         <source>Upper bound for plot display range</source>
-        <translation>Górna granica zakresu wyświetlania wykresu</translation>
+        <translation type="vanished">Górna granica zakresu wyświetlania wykresu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3061"/>
         <source>FFT Configuration</source>
-        <translation>Konfiguracja FFT</translation>
+        <translation type="vanished">Konfiguracja FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3073"/>
         <source>Enable FFT Analysis</source>
-        <translation>Włącz Analizę FFT</translation>
+        <translation type="vanished">Włącz Analizę FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3074"/>
         <source>Perform frequency-domain analysis of the dataset</source>
-        <translation>Wykonaj analizę w dziedzinie częstotliwości zestawu danych</translation>
+        <translation type="vanished">Wykonaj analizę w dziedzinie częstotliwości zestawu danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3091"/>
         <source>FFT Window Size</source>
-        <translation>Rozmiar Okna FFT</translation>
+        <translation type="vanished">Rozmiar Okna FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3092"/>
         <source>Number of samples used for each FFT calculation window</source>
-        <translation>Liczba próbek używanych dla każdego okna obliczeń FFT</translation>
+        <translation type="vanished">Liczba próbek używanych dla każdego okna obliczeń FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3104"/>
         <source>FFT Sampling Rate (Hz, required)</source>
-        <translation>Częstotliwość próbkowania FFT (Hz, wymagana)</translation>
+        <translation type="vanished">Częstotliwość próbkowania FFT (Hz, wymagana)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3105"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation>Częstotliwość próbkowania używana dla FFT (w Hz)</translation>
+        <translation type="vanished">Częstotliwość próbkowania używana dla FFT (w Hz)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3116"/>
         <source>Minimum Value (recommended)</source>
-        <translation>Wartość Minimalna (zalecana)</translation>
+        <translation type="vanished">Wartość Minimalna (zalecana)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3117"/>
         <source>Lower bound for data normalization</source>
-        <translation>Dolna granica dla normalizacji danych</translation>
+        <translation type="vanished">Dolna granica dla normalizacji danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3128"/>
         <source>Maximum Value (recommended)</source>
-        <translation>Wartość Maksymalna (zalecana)</translation>
+        <translation type="vanished">Wartość Maksymalna (zalecana)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3129"/>
         <source>Upper bound for data normalization</source>
-        <translation>Górna granica dla normalizacji danych</translation>
+        <translation type="vanished">Górna granica dla normalizacji danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3139"/>
         <source>Widget Settings</source>
-        <translation>Ustawienia Widżetu</translation>
+        <translation type="vanished">Ustawienia Widżetu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3165"/>
         <source>Widget</source>
-        <translation>Widżet</translation>
+        <translation type="vanished">Widżet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3166"/>
         <source>Select the visual widget used to display this dataset</source>
-        <translation>Wybierz widżet wizualny używany do wyświetlania tego zestawu danych</translation>
+        <translation type="vanished">Wybierz widżet wizualny używany do wyświetlania tego zestawu danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3177"/>
         <source>Show in Overview</source>
-        <translation>Pokaż w Przeglądzie</translation>
+        <translation type="vanished">Pokaż w Przeglądzie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3178"/>
         <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation>Wyświetl ten widżet w przeglądzie pulpitu (jeśli włączone)</translation>
+        <translation type="vanished">Wyświetl ten widżet w przeglądzie pulpitu (jeśli włączone)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3193"/>
         <source>Minimum Display Value (required)</source>
-        <translation>Minimalna Wartość Wyświetlania (wymagana)</translation>
+        <translation type="vanished">Minimalna Wartość Wyświetlania (wymagana)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3194"/>
         <source>Lower bound of the gauge or bar display range</source>
-        <translation>Dolna granica zakresu wyświetlania wskaźnika lub paska</translation>
+        <translation type="vanished">Dolna granica zakresu wyświetlania wskaźnika lub paska</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3205"/>
         <source>Maximum Display Value (required)</source>
-        <translation>Maksymalna Wartość Wyświetlania (wymagana)</translation>
+        <translation type="vanished">Maksymalna Wartość Wyświetlania (wymagana)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3206"/>
         <source>Upper bound of the gauge or bar display range</source>
-        <translation>Górna granica zakresu wyświetlania wskaźnika lub paska</translation>
+        <translation type="vanished">Górna granica zakresu wyświetlania wskaźnika lub paska</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3216"/>
         <source>Alarm Settings</source>
-        <translation>Ustawienia Alarmu</translation>
+        <translation type="vanished">Ustawienia Alarmu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3228"/>
         <source>Enable Alarms</source>
-        <translation>Włącz Alarmy</translation>
+        <translation type="vanished">Włącz Alarmy</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3229"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation>Wyzwala alarm wizualny, gdy wartość przekroczy progi alarmowe</translation>
+        <translation type="vanished">Wyzwala alarm wizualny, gdy wartość przekroczy progi alarmowe</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3241"/>
         <source>Low Threshold</source>
-        <translation>Dolny Próg</translation>
+        <translation type="vanished">Dolny Próg</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3242"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation>Wyzwala alarm wizualny, gdy wartość spadnie poniżej tego progu</translation>
+        <translation type="vanished">Wyzwala alarm wizualny, gdy wartość spadnie poniżej tego progu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3254"/>
         <source>High Threshold</source>
-        <translation>Górny Próg</translation>
+        <translation type="vanished">Górny Próg</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3255"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation>Wyzwala alarm wizualny, gdy wartość przekroczy ten próg</translation>
+        <translation type="vanished">Wyzwala alarm wizualny, gdy wartość przekroczy ten próg</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3266"/>
         <source>LED Display Settings</source>
-        <translation>Ustawienia Wyświetlacza LED</translation>
+        <translation type="vanished">Ustawienia Wyświetlacza LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3278"/>
         <source>Show in LED Panel</source>
-        <translation>Pokaż na Panelu LED</translation>
+        <translation type="vanished">Pokaż na Panelu LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
         <source>Enable visual status monitoring using an LED display</source>
-        <translation>Włącz monitorowanie statusu wizualnego za pomocą wyświetlacza LED</translation>
+        <translation type="vanished">Włącz monitorowanie statusu wizualnego za pomocą wyświetlacza LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3290"/>
         <source>LED On Threshold (required)</source>
-        <translation>Próg Włączenia LED (wymagany)</translation>
+        <translation type="vanished">Próg Włączenia LED (wymagany)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3291"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
-        <translation>LED zapala się, gdy wartość osiąga lub przekracza ten próg</translation>
+        <translation type="vanished">LED zapala się, gdy wartość osiąga lub przekracza ten próg</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3358"/>
         <source>Off</source>
-        <translation>Wyłączone</translation>
+        <translation type="vanished">Wyłączone</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3359"/>
         <source>Auto Start</source>
-        <translation>Auto Start</translation>
+        <translation type="vanished">Auto Start</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3360"/>
         <source>Start on Trigger</source>
-        <translation>Start na Wyzwalacz</translation>
+        <translation type="vanished">Start na Wyzwalacz</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3361"/>
         <source>Toggle on Trigger</source>
-        <translation>Przełącz na Wyzwalacz</translation>
+        <translation type="vanished">Przełącz na Wyzwalacz</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3365"/>
         <source>Plain Text (UTF8)</source>
-        <translation>Zwykły Tekst (UTF8)</translation>
+        <translation type="vanished">Zwykły Tekst (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3366"/>
         <source>Hexadecimal</source>
-        <translation>Szesnastkowy</translation>
+        <translation type="vanished">Szesnastkowy</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3367"/>
         <source>Base64</source>
-        <translation>Base64</translation>
+        <translation type="vanished">Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3368"/>
         <source>Binary (Direct)</source>
-        <translation>Binarny (Bezpośredni)</translation>
+        <translation type="vanished">Binarny (Bezpośredni)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3375"/>
         <source>No Checksum</source>
-        <translation>Brak Sumy Kontrolnej</translation>
+        <translation type="vanished">Brak Sumy Kontrolnej</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3380"/>
         <source>End Delimiter Only</source>
-        <translation>Tylko Końcowy Delimiter</translation>
+        <translation type="vanished">Tylko Końcowy Delimiter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3381"/>
         <source>Start Delimiter Only</source>
-        <translation>Tylko Początkowy Delimiter</translation>
+        <translation type="vanished">Tylko Początkowy Delimiter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
         <source>Start + End Delimiter</source>
-        <translation>Początkowy + Końcowy Delimiter</translation>
+        <translation type="vanished">Początkowy + Końcowy Delimiter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
         <source>No Delimiters</source>
-        <translation>Brak Delimiterów</translation>
+        <translation type="vanished">Brak Delimiterów</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3391"/>
         <source>Data Grid</source>
-        <translation>Siatka Danych</translation>
+        <translation type="vanished">Siatka Danych</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3392"/>
         <source>GPS Map</source>
-        <translation>Mapa GPS</translation>
+        <translation type="vanished">Mapa GPS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3393"/>
         <source>Gyroscope</source>
-        <translation>Żyroskop</translation>
+        <translation type="vanished">Żyroskop</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3394"/>
         <source>Multiple Plot</source>
-        <translation>Wiele Wykresów</translation>
+        <translation type="vanished">Wiele Wykresów</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3395"/>
         <source>Accelerometer</source>
-        <translation>Akcelerometr</translation>
+        <translation type="vanished">Akcelerometr</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3396"/>
         <source>3D Plot</source>
-        <translation>Wykres 3D</translation>
+        <translation type="vanished">Wykres 3D</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3397"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3401"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3408"/>
         <source>None</source>
-        <translation>Brak</translation>
+        <translation type="vanished">Brak</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3402"/>
         <source>Bar</source>
-        <translation>Pasek</translation>
+        <translation type="vanished">Pasek</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3403"/>
         <source>Gauge</source>
-        <translation>Wskaźnik</translation>
+        <translation type="vanished">Wskaźnik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3404"/>
         <source>Compass</source>
-        <translation>Kompas</translation>
+        <translation type="vanished">Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3409"/>
         <source>New Line (\n)</source>
-        <translation>Nowa Linia (</translation>
+        <translation type="vanished">Nowa Linia (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3410"/>
         <source>Carriage Return (\r)</source>
-        <translation>Powrót Karetki (\r)</translation>
+        <translation type="vanished">Powrót Karetki (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3411"/>
         <source>CRLF (\r\n)</source>
-        <translation>CRLF (\r</translation>
+        <translation type="vanished">CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>No</source>
-        <translation>Nie</translation>
+        <translation type="vanished">Nie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3416"/>
         <source>Yes</source>
-        <translation>Tak</translation>
+        <translation type="vanished">Tak</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3454"/>
         <source>Save changes to frame parser code?</source>
-        <translation>Zapisać zmiany w kodzie parsera ramek?</translation>
+        <translation type="vanished">Zapisać zmiany w kodzie parsera ramek?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3455"/>
         <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation>Wybierz 'Zapisz', aby zachować zmiany, 'Odrzuć', aby je trwale utracić, lub 'Anuluj', aby wrócić.</translation>
+        <translation type="vanished">Wybierz 'Zapisz', aby zachować zmiany, 'Odrzuć', aby je trwale utracić, lub 'Anuluj', aby wrócić.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3458"/>
         <source>Save Changes</source>
-        <translation>Zapisz Zmiany</translation>
+        <translation type="vanished">Zapisz Zmiany</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4006"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1740"/>
         <source>File open error</source>
         <translation>Błąd otwarcia pliku</translation>
     </message>
@@ -2422,6 +3194,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="82"/>
         <source>Pro features detected in this project.</source>
         <translation>Wykryto funkcje Pro w tym projekcie.</translation>
@@ -2429,6 +3203,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="84"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Zostaną użyte widżety zastępcze. Kup licencję, aby odblokować pełną funkcjonalność.</translation>
@@ -2436,6 +3212,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="116"/>
         <source>Plot</source>
         <translation>Wykres</translation>
@@ -2443,6 +3221,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="121"/>
         <source>Toggle 2D plot visualization for this dataset</source>
         <translation>Przełącz wizualizację wykresu 2D dla tego zestawu danych</translation>
@@ -2450,6 +3230,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="135"/>
         <source>FFT Plot</source>
         <translation>Wykres FFT</translation>
@@ -2457,6 +3239,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="139"/>
         <source>Toggle FFT plot to visualize frequency content</source>
         <translation>Przełącz wykres FFT, aby wizualizować zawartość częstotliwości</translation>
@@ -2464,6 +3248,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="153"/>
         <source>Bar/Level</source>
         <translation>Pasek/Poziom</translation>
@@ -2471,6 +3257,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="157"/>
         <source>Toggle bar/level indicator for this dataset</source>
         <translation>Przełącz wskaźnik paska/poziomu dla tego zestawu danych</translation>
@@ -2478,6 +3266,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="171"/>
         <source>Gauge</source>
         <translation>Wskaźnik</translation>
@@ -2485,6 +3275,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="176"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>Przełącz widżet wskaźnika dla wyświetlania analogowego</translation>
@@ -2492,6 +3284,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="191"/>
         <source>Compass</source>
         <translation>Kompas</translation>
@@ -2499,6 +3293,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="195"/>
         <source>Toggle compass widget for directional data</source>
         <translation>Przełącz widżet kompasu dla danych kierunkowych</translation>
@@ -2506,6 +3302,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="209"/>
         <source>LED</source>
         <translation>LED</translation>
@@ -2513,6 +3311,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="213"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Przełącz wskaźnik LED dla wartości binarnych lub progowych</translation>
@@ -2520,6 +3320,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="235"/>
         <source>Duplicate</source>
         <translation>Duplikuj</translation>
@@ -2527,6 +3329,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="239"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Zduplikuj ten zestaw danych z tą samą konfiguracją</translation>
@@ -2534,6 +3338,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="248"/>
         <source>Delete</source>
         <translation>Usuń</translation>
@@ -2541,6 +3347,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="253"/>
         <source>Delete this dataset from the group</source>
         <translation>Usuń ten zestaw danych z grupy</translation>
@@ -2551,6 +3359,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
         <translation>Wspieraj Serial Studio</translation>
@@ -2558,6 +3368,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="94"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Donate.qml" line="94"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="94"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="94"/>
         <source>Support the development of %1!</source>
         <translation>Wspieraj rozwój %1!</translation>
@@ -2565,6 +3377,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="105"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Donate.qml" line="105"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="105"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="105"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="105"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio to darmowe i otwarte oprogramowanie wspierane przez wolontariuszy. Rozważ darowiznę lub uzyskanie licencji Pro, aby wspierać rozwój :)</translation>
@@ -2572,6 +3386,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="118"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Donate.qml" line="118"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="118"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="118"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Możesz również wesprzeć ten projekt, udostępniając go, zgłaszając błędy i proponując nowe funkcje!</translation>
@@ -2579,6 +3395,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="134"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Donate.qml" line="134"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="134"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="134"/>
         <source>Close</source>
         <translation>Zamknij</translation>
@@ -2586,6 +3404,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="148"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Donate.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="148"/>
         <source>Donate</source>
         <translation>Wpłać darowiznę</translation>
@@ -2593,6 +3413,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="166"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Donate.qml" line="166"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="166"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Donate.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="166"/>
         <source>Get Serial Studio Pro</source>
         <translation>Pobierz Serial Studio Pro</translation>
@@ -2602,6 +3424,7 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <name>Downloader</name>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
@@ -2610,6 +3433,7 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
@@ -2673,6 +3497,7 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
@@ -2757,12 +3582,14 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
         <translation>1 sekunda</translation>
     </message>
     <message>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
         <translation>Pozostały czas: 0 minut</translation>
     </message>
     <message>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <location filename="../../../build/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
@@ -2774,6 +3601,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="274"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="274"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="274"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="274"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="274"/>
         <source>Magnitude (dB)</source>
         <translation>Magnituda (dB)</translation>
@@ -2781,6 +3610,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="275"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="275"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="275"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="275"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="275"/>
         <source>Frequency (Hz)</source>
         <translation>Częstotliwość (Hz)</translation>
@@ -2791,6 +3622,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/FileDropArea.qml" line="121"/>
         <location filename="../../../build/app/gui/qml/Widgets/FileDropArea.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/FileDropArea.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/FileDropArea.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/FileDropArea.qml" line="121"/>
         <source>Drop Projects and CSV files here</source>
         <translation>Upuść tutaj projekty i pliki CSV</translation>
@@ -2801,6 +3634,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="36"/>
         <source>File Transmission</source>
         <translation>Transmisja Pliku</translation>
@@ -2808,6 +3643,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="89"/>
         <source>File Selection:</source>
         <translation>Wybór Pliku:</translation>
@@ -2815,6 +3652,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="107"/>
         <source>Select File...</source>
         <translation>Wybierz Plik...</translation>
@@ -2822,6 +3661,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="124"/>
         <source>Transmission Interval:</source>
         <translation>Interwał Transmisji:</translation>
@@ -2829,6 +3670,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="148"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="148"/>
         <source>msecs</source>
         <translation>ms</translation>
@@ -2836,6 +3679,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="177"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="177"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="177"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="177"/>
         <source>Progress: %1</source>
         <translation>Postęp: %1</translation>
@@ -2843,6 +3688,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="193"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="193"/>
         <source>Pause Transmission</source>
         <translation>Wstrzymaj Transmisję</translation>
@@ -2850,6 +3697,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="194"/>
         <source>Resume Transmission</source>
         <translation>Wznów Transmisję</translation>
@@ -2857,6 +3706,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="195"/>
         <source>Stop Transmission</source>
         <translation>Zatrzymaj Transmisję</translation>
@@ -2864,6 +3715,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>Begin Transmission</source>
         <translation>Rozpocznij Transmisję</translation>
@@ -2874,6 +3727,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="34"/>
         <source>modified</source>
         <translation>zmodyfikowany</translation>
@@ -2883,6 +3738,10 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="248"/>
         <source>Undo</source>
@@ -2893,6 +3752,10 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="262"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="262"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="262"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="262"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="262"/>
         <source>Redo</source>
@@ -2903,6 +3766,10 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="287"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="287"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="287"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="287"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="287"/>
         <source>Cut</source>
@@ -2913,6 +3780,10 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="300"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="300"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="300"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="300"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="114"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="300"/>
         <source>Copy</source>
@@ -2923,6 +3794,10 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="313"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="313"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="313"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="313"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="119"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="313"/>
         <source>Paste</source>
@@ -2931,6 +3806,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="126"/>
         <source>Select All</source>
         <translation>Zaznacz Wszystko</translation>
@@ -2938,6 +3815,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="197"/>
         <source>Reset</source>
         <translation>Resetuj</translation>
@@ -2945,6 +3824,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="202"/>
         <source>Reset to the default parsing script</source>
         <translation>Przywróć domyślny skrypt parsowania</translation>
@@ -2952,6 +3833,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="210"/>
         <source>Open</source>
         <translation>Otwórz</translation>
@@ -2959,6 +3842,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="223"/>
         <source>Save</source>
         <translation>Zapisz</translation>
@@ -2966,6 +3851,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="387"/>
         <source>Select Template...</source>
         <translation>Wybierz Szablon...</translation>
@@ -2973,6 +3860,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="403"/>
         <source>Test With Sample Data</source>
         <translation>Przetestuj z Przykładowymi Danymi</translation>
@@ -2980,6 +3869,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
         <source>Evaluate</source>
         <translation>Oceń</translation>
@@ -2991,6 +3882,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="215"/>
         <source>Import a JavaScript file for data parsing</source>
         <translation>Importuj plik JavaScript do parsowania danych</translation>
@@ -3002,6 +3895,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="229"/>
         <source>Validate syntax and apply parsing changes</source>
         <translation>Sprawdź składnię i zastosuj zmiany parsowania</translation>
@@ -3009,6 +3904,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="254"/>
         <source>Undo the last code edit</source>
         <translation>Cofnij ostatnią edycję kodu</translation>
@@ -3016,6 +3913,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="268"/>
         <source>Redo the previously undone edit</source>
         <translation>Ponów cofniętą edycję</translation>
@@ -3023,6 +3922,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="292"/>
         <source>Cut selected code to clipboard</source>
         <translation>Wytnij wybrany kod do schowka</translation>
@@ -3030,6 +3931,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="305"/>
         <source>Copy selected code to clipboard</source>
         <translation>Skopiuj wybrany kod do schowka</translation>
@@ -3037,6 +3940,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="318"/>
         <source>Paste code from clipboard</source>
         <translation>Wklej kod ze schowka</translation>
@@ -3044,6 +3949,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="337"/>
         <source>Help</source>
         <translation>Pomoc</translation>
@@ -3051,6 +3958,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="342"/>
         <source>Open help documentation for JavaScript data parsing</source>
         <translation>Otwórz dokumentację pomocy dla parsowania danych JavaScript</translation>
@@ -3061,6 +3970,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="206"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/GPS.qml" line="206"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="206"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/GPS.qml" line="206"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="206"/>
         <source>Base Map: %1</source>
         <translation>Mapa Bazowa: %1</translation>
@@ -3071,6 +3982,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
         <translation>Wykryto funkcje Pro w tym projekcie.</translation>
@@ -3078,6 +3991,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Zostaną użyte widżety zastępcze. Kup licencję, aby odblokować pełną funkcjonalność.</translation>
@@ -3085,6 +4000,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="116"/>
         <source>Dataset</source>
         <translation>Zbiór danych</translation>
@@ -3092,6 +4009,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <source>Add a generic dataset to the current group</source>
         <translation>Dodaj ogólny zbiór danych do bieżącej grupy</translation>
@@ -3099,6 +4018,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="129"/>
         <source>Plot</source>
         <translation>Wykres</translation>
@@ -3106,6 +4027,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <source>Add a 2D plot to visualize numeric data</source>
         <translation>Dodaj wykres 2D do wizualizacji danych numerycznych</translation>
@@ -3113,6 +4036,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="144"/>
         <source>FFT Plot</source>
         <translation>Wykres FFT</translation>
@@ -3120,6 +4045,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="149"/>
         <source>Add an FFT plot for frequency domain visualization</source>
         <translation>Dodaj wykres FFT do wizualizacji w dziedzinie częstotliwości</translation>
@@ -3127,6 +4054,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <source>Bar/Level</source>
         <translation>Pasek/Poziom</translation>
@@ -3134,6 +4063,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="163"/>
         <source>Add a bar or level indicator for scaled values</source>
         <translation>Dodaj wskaźnik paska lub poziomu dla skalowanych wartości</translation>
@@ -3141,6 +4072,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="171"/>
         <source>Gauge</source>
         <translation>Wskaźnik</translation>
@@ -3148,6 +4081,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="177"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>Dodaj widget wskaźnika do wizualizacji analogowej</translation>
@@ -3155,6 +4090,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="186"/>
         <source>Compass</source>
         <translation>Kompas</translation>
@@ -3162,6 +4099,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="191"/>
         <source>Add a compass to display directional or angular data</source>
         <translation>Dodaj kompas do wyświetlania danych kierunkowych lub kątowych</translation>
@@ -3169,6 +4108,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="199"/>
         <source>LED</source>
         <translation>LED</translation>
@@ -3176,6 +4117,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="205"/>
         <source>Add an LED indicator for binary status signals</source>
         <translation>Dodaj wskaźnik LED dla sygnałów statusu binarnego</translation>
@@ -3183,6 +4126,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="221"/>
         <source>Duplicate</source>
         <translation>Duplikuj</translation>
@@ -3190,6 +4135,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="225"/>
         <source>Duplicate the current group and its contents</source>
         <translation>Zduplikuj bieżącą grupę i jej zawartość</translation>
@@ -3197,6 +4144,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="234"/>
         <source>Delete</source>
         <translation>Usuń</translation>
@@ -3204,6 +4153,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="238"/>
         <source>Delete the current group and all contained datasets</source>
         <translation>Usuń bieżącą grupę i wszystkie zawarte zestawy danych</translation>
@@ -3214,6 +4165,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="112"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="112"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="112"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="112"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="112"/>
         <source>Integrate Angles</source>
         <translation>Zintegrowane Kąty</translation>
@@ -3221,6 +4174,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="421"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="421"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="421"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="421"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="421"/>
         <source>ROLL ↔</source>
         <translation>PRZECHYŁ ↔</translation>
@@ -3228,6 +4183,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="449"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="449"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="449"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="449"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="449"/>
         <source>YAW ↻</source>
         <translation>ODCHYLENIE ↻</translation>
@@ -3235,6 +4192,8 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="477"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="477"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="477"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="477"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="477"/>
         <source>PITCH ↕</source>
         <translation>POCHYLENIE ↕</translation>
@@ -3268,30 +4227,35 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <name>HID</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="46"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="46"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="46"/>
         <source>HID Device</source>
         <translation>Urządzenie HID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="75"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="75"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="75"/>
         <source>Usage Page</source>
         <translation>Strona użycia</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="91"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="91"/>
         <source>Usage</source>
         <translation>Użycie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="132"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="132"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="132"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>Podłącz gamepady, joysticki, kierownice, kontrolery lotu i inne urządzenia USB klasy HID.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="140"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="140"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="140"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>Tabele Użycia HID (USB.org)</translation>
@@ -3785,42 +4749,42 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="214"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="223"/>
         <source>Failed to start process</source>
         <translation>Nie udało się uruchomić procesu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="504"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="513"/>
         <source>The process crashed.</source>
         <translation>Proces uległ awarii.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="505"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="514"/>
         <source>Exit code: %1</source>
         <translation>Kod zakończenia: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="508"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="517"/>
         <source>Process "%1" stopped</source>
         <translation>Proces "%1" zatrzymany</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="525"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="534"/>
         <source>Unknown error</source>
         <translation>Nieznany błąd</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="526"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="535"/>
         <source>Process Error</source>
         <translation>Błąd Procesu</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="546"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="555"/>
         <source>Pipe Error</source>
         <translation>Błąd Rury</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="546"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="555"/>
         <source>Could not open named pipe: %1</source>
         <translation>Nie można otworzyć nazwanej rury: %1</translation>
     </message>
@@ -4136,6 +5100,8 @@ Urządzenie może nie udostępniać punktów końcowych danych w swojej aktywnej
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
         <location filename="../../../build/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
         <translation>Wybierz Ikonę</translation>
@@ -4143,6 +5109,8 @@ Urządzenie może nie udostępniać punktów końcowych danych w swojej aktywnej
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="112"/>
         <location filename="../../../build/app/gui/qml/Dialogs/IconPicker.qml" line="112"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="112"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="112"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="112"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -4150,9 +5118,26 @@ Urządzenie może nie udostępniać punktów końcowych danych w swojej aktywnej
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="121"/>
         <location filename="../../../build/app/gui/qml/Dialogs/IconPicker.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/IconPicker.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="121"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
+    </message>
+</context>
+<context>
+    <name>ImageView</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="175"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="175"/>
+        <source>Waiting for image…</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="225"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="225"/>
+        <source>Frame %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -5547,30 +6532,35 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
     <name>LicenseManagement</name>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="36"/>
         <source>Licensing</source>
         <translation>Licencjonowanie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="75"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="75"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="75"/>
         <source>Please wait...</source>
         <translation>Proszę czekać...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="116"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Aktywuj Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="122"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="122"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="122"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Wklej swój klucz licencyjny poniżej, aby odblokować funkcje Pro, takie jak MQTT, wykresy 3D i inne.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="129"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="129"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="129"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
@@ -5579,6 +6569,7 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="141"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="141"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="141"/>
         <source>Paste your license key here…</source>
         <translation>Wklej tutaj swój klucz licencyjny…</translation>
@@ -5587,6 +6578,9 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="160"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="320"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="368"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="160"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="320"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="368"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="160"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="320"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="368"/>
@@ -5595,6 +6589,7 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="166"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="166"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="166"/>
         <source>Paste</source>
         <translation>Wklej</translation>
@@ -5603,6 +6598,9 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="172"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="326"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="374"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="172"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="326"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="374"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="172"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="326"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="374"/>
@@ -5611,78 +6609,91 @@ Plany obejmują opcje miesięczne, roczne i dożywotnie.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="223"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="223"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="223"/>
         <source>Product</source>
         <translation>Produkt</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="230"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="230"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="230"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="241"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="241"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="241"/>
         <source>Licensee</source>
         <translation>Licencjobiorca</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="260"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="260"/>
         <source>Licensee E-Mail</source>
         <translation>E-Mail Licencjobiorcy</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="277"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="277"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="277"/>
         <source>Device Usage</source>
         <translation>Użytkowanie Urządzenia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="285"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="285"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 urządzeń w użyciu (Plan bez ograniczeń)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="286"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="286"/>
         <source>%1 of %2 devices used</source>
         <translation>wykorzystano %1 z %2 urządzeń</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="296"/>
         <source>Device ID</source>
         <translation>ID Urządzenia</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="342"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="342"/>
         <source>License Key</source>
         <translation>Klucz Licencyjny</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="398"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="398"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="398"/>
         <source>Customer Portal</source>
         <translation>Portal Klienta</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="412"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="412"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="412"/>
         <source>Buy License</source>
         <translation>Kup Licencję</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="422"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="422"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="422"/>
         <source>Activate</source>
         <translation>Aktywuj</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="435"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Deactivate</source>
         <translation>Dezaktywuj</translation>
@@ -6204,198 +7215,231 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     <name>MQTTConfiguration</name>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="36"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="36"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="36"/>
         <source>MQTT Setup</source>
         <translation>Konfiguracja MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="96"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="96"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="96"/>
         <source>MQTT is a Pro Feature</source>
         <translation>MQTT jest funkcją premium</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
         <translation>Aktywuj swoją licencję lub odwiedź sklep, aby odblokować wsparcie MQTT.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="109"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="109"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="109"/>
         <source>General</source>
         <translation>Ogólne</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="115"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="115"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="115"/>
         <source>Authentication</source>
         <translation>Uwierzytelnianie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="121"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="121"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="121"/>
         <source>MQTT Options</source>
         <translation>Opcje MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="127"/>
         <source>SSL Properties</source>
         <translation>Właściwości SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="183"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="183"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="195"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="211"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="211"/>
         <source>Client ID</source>
         <translation>Identyfikator Klienta</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="223"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="223"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="223"/>
         <source>Keep Alive (s)</source>
         <translation>Czas Podtrzymania (s)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="236"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="236"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="236"/>
         <source>Clean Session</source>
         <translation>Czysta Sesja</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="285"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="285"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="285"/>
         <source>Username</source>
         <translation>Nazwa użytkownika</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="290"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="290"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="290"/>
         <source>MQTT Username</source>
         <translation>Nazwa Użytkownika MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="297"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="297"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="297"/>
         <source>Password</source>
         <translation>Hasło</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="307"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="307"/>
         <source>MQTT Password</source>
         <translation>Hasło MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="364"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="364"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="364"/>
         <source>Version</source>
         <translation>Wersja</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="376"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="376"/>
         <source>Mode</source>
         <translation>Tryb</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="388"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="388"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="388"/>
         <source>Topic</source>
         <translation>Temat</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="393"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="393"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="393"/>
         <source>e.g. sensors/temperature or home/+/status</source>
         <translation>np. czujniki/temperatura lub dom/+/status</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="400"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <source>Will Retain</source>
         <translation>Zachowaj Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="411"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="411"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="411"/>
         <source>Will QoS</source>
         <translation>Will QoS</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="423"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="423"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="423"/>
         <source>Will Topic</source>
         <translation>Temat Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="428"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="428"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="428"/>
         <source>e.g. device/alerts/offline</source>
         <translation>np. urządzenie/alerty/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="435"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="435"/>
         <source>Will Message</source>
         <translation>Wiadomość Will</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="440"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="440"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="440"/>
         <source>e.g. Device unexpectedly disconnected</source>
         <translation>np. Urządzenie nieoczekiwanie rozłączone</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="485"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="485"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="485"/>
         <source>Enable SSL</source>
         <translation>Włącz SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="496"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="496"/>
         <source>SSL Protocol</source>
         <translation>Protokół SSL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="512"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="512"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="512"/>
         <source>Verify Depth</source>
         <translation>Zweryfikuj Głębokość</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="530"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="530"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="530"/>
         <source>Verify Mode</source>
         <translation>Zweryfikuj Tryb</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="562"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="562"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Disconnect</source>
         <translation>Rozłącz</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="581"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="581"/>
         <source>Connect</source>
         <translation>Połącz</translation>
@@ -6406,6 +7450,8 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="88"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="88"/>
         <source>Device Defined Project</source>
         <translation>Projekt Zdefiniowany przez Urządzenie</translation>
@@ -6413,6 +7459,8 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="91"/>
         <source>Quick Plot Mode</source>
         <translation>Tryb Szybkiego Wykresu</translation>
@@ -6420,6 +7468,8 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="97"/>
         <location filename="../../../build/app/gui/qml/MainWindow/MainWindow.qml" line="97"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="97"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/MainWindow.qml" line="97"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="97"/>
         <source>Empty Project</source>
         <translation>Pusty Projekt</translation>
@@ -6455,6 +7505,8 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     <message>
         <location filename="../../qml/Dialogs/Mdf4Player.qml" line="23"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
         <source>MDF4 Player</source>
         <translation>Odtwarzacz MDF4</translation>
@@ -6594,72 +7646,84 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     <name>Modbus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="46"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="46"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="46"/>
         <source>Protocol</source>
         <translation>Protokół</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="68"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="68"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="68"/>
         <source>Serial Port</source>
         <translation>Port Szeregowy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="92"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="92"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="92"/>
         <source>Baud Rate</source>
         <translation>Szybkość Transmisji</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="183"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="183"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="183"/>
         <source>Parity</source>
         <translation>Parzystość</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="206"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="206"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="206"/>
         <source>Data Bits</source>
         <translation>Bity Danych</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="229"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="229"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="229"/>
         <source>Stop Bits</source>
         <translation>Bity Stopu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="252"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="252"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="252"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="261"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="261"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="261"/>
         <source>IP Address</source>
         <translation>Adres IP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="275"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="275"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="275"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
         <source>TCP Port</source>
         <translation>Port TCP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="310"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="310"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="310"/>
         <source>Slave Address</source>
         <translation>Adres Slave</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="314"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="314"/>
         <source>1-247</source>
         <translation>1-247</translation>
@@ -6690,30 +7754,35 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="358"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="358"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="358"/>
         <source>Configure Register Groups...</source>
         <translation>Skonfiguruj Grupy Rejestrów...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="369"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="369"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="369"/>
         <source>%1 group(s) configured</source>
         <translation>skonfigurowano %1 grup(y)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="370"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="370"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="370"/>
         <source>No groups configured</source>
         <translation>Brak skonfigurowanych grup</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>Poll Interval (ms)</source>
         <translation>Interwał Sondowania (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
         <source>Polling interval</source>
         <translation>Interwał sondowania</translation>
@@ -6723,102 +7792,119 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
     <name>ModbusGroupsDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <source>Modbus Register Groups</source>
         <translation>Grupy Rejestrów Modbus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="158"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>Skonfiguruj wiele grup rejestrów, aby kolejno odpytywać różne typy rejestrów.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
         <source>Add New Group</source>
         <translation>Dodaj Nową Grupę</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="193"/>
         <source>Register Type:</source>
         <translation>Typ Rejestru:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="204"/>
         <source>Start Address:</source>
         <translation>Adres Początkowy:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="211"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="216"/>
         <source>Register Count:</source>
         <translation>Liczba Rejestrów:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="227"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="232"/>
         <source>Add Group</source>
         <translation>Dodaj Grupę</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="255"/>
         <source>Configured Groups</source>
         <translation>Skonfigurowane Grupy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="289"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="296"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="303"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="310"/>
         <source>Count</source>
         <translation>Ilość</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="317"/>
         <source>Action</source>
         <translation>Akcja</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="392"/>
         <source>Remove</source>
         <translation>Usuń</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="405"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
@@ -6827,18 +7913,21 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="423"/>
         <source>Total groups: %1</source>
         <translation>Łączna liczba grup: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <source>Clear All</source>
         <translation>Wyczyść Wszystko</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="433"/>
         <source>Close</source>
         <translation>Zamknij</translation>
@@ -6849,6 +7938,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="323"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="323"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="323"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="323"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="323"/>
         <source>Samples</source>
         <translation>Próbki</translation>
@@ -6859,6 +7950,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="74"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="74"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="74"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="74"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="74"/>
         <source>Socket Type</source>
         <translation>Typ Gniazda</translation>
@@ -6866,6 +7959,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="126"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="126"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="126"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="126"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="126"/>
         <source>Remote Address</source>
         <translation>Zdalny Adres</translation>
@@ -6877,6 +7972,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="94"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="94"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="94"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="94"/>
         <source>Local Port</source>
         <translation>Lokalny Port</translation>
@@ -6884,6 +7981,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="100"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="100"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="100"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="100"/>
         <source>Type 0 for automatic port</source>
         <translation>Wpisz 0 dla automatycznego portu</translation>
@@ -6893,6 +7992,10 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="180"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="147"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="180"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="147"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="180"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="147"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="180"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="147"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="180"/>
         <source>Remote Port</source>
@@ -6901,6 +8004,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="210"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="210"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="210"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="210"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="210"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
@@ -6919,6 +8024,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1081"/>
         <location filename="../../../build/app/gui/qml/Widgets/PlotWidget.qml" line="1081"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1081"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/PlotWidget.qml" line="1081"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1081"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — Przeciągnij, aby przesunąć, kliknij prawym przyciskiem, aby wyczyścić</translation>
@@ -6926,6 +8033,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1083"/>
         <location filename="../../../build/app/gui/qml/Widgets/PlotWidget.qml" line="1083"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1083"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/PlotWidget.qml" line="1083"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1083"/>
         <source>Click to place cursor</source>
         <translation>Kliknij, aby umieścić kursor</translation>
@@ -6933,6 +8042,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1085"/>
         <location filename="../../../build/app/gui/qml/Widgets/PlotWidget.qml" line="1085"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1085"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/PlotWidget.qml" line="1085"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1085"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Kliknij, aby umieścić drugi kursor — Przeciągnij, aby przesunąć</translation>
@@ -6958,6 +8069,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="120"/>
         <location filename="../../../build/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="120"/>
         <source>Visit Website</source>
         <translation>Odwiedź Stronę Internetową</translation>
@@ -6965,6 +8078,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="131"/>
         <location filename="../../../build/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="131"/>
         <source>Buy License</source>
         <translation>Kup Licencję</translation>
@@ -6972,6 +8087,8 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="147"/>
         <location filename="../../../build/app/gui/qml/Widgets/ProNotice.qml" line="147"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="147"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/ProNotice.qml" line="147"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="147"/>
         <source>Activate</source>
         <translation>Aktywuj</translation>
@@ -6981,48 +8098,56 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <name>Process</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="57"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="57"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="57"/>
         <source>Select Executable</source>
         <translation>Wybierz Plik Wykonywalny</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="67"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="67"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="67"/>
         <source>Select Working Directory</source>
         <translation>Wybierz Katalog Roboczy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="76"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="76"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="76"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Wybierz Nazwaną Rurę / FIFO</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="94"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="94"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="94"/>
         <source>Mode</source>
         <translation>Tryb</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
         <source>Launch Process</source>
         <translation>Uruchom Proces</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
         <source>Named Pipe</source>
         <translation>Nazwana Rura</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="127"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="127"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="127"/>
         <source>Executable</source>
         <translation>Wykonywalny</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="140"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="140"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="140"/>
         <source>/path/to/executable</source>
         <translation>/ścieżka/do/wykonywalnego</translation>
@@ -7031,6 +8156,9 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="158"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="265"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="314"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="158"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="265"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="158"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="265"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="314"/>
@@ -7039,72 +8167,84 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="170"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="170"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="170"/>
         <source>Capture</source>
         <translation>Przechwyć</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="179"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="179"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="179"/>
         <source>Standard Output (stdout)</source>
         <translation>Standardowe Wyjście (stdout)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="180"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="180"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="180"/>
         <source>Standard Error (stderr)</source>
         <translation>Standardowy Błąd (stderr)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="181"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="181"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="181"/>
         <source>Stdout + Stderr (merged)</source>
         <translation>Stdout + Stderr (połączone)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="203"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="203"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="203"/>
         <source>Arguments</source>
         <translation>Argumenty</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="212"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="212"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="212"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 value1 --arg2 value2</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="234"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="234"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="234"/>
         <source>Working Dir</source>
         <translation>Katalog Roboczy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="247"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="247"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="247"/>
         <source>(optional) /working/directory</source>
         <translation>(opcjonalnie) /working/directory</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="281"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="281"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="281"/>
         <source>Pipe Path</source>
         <translation>Ścieżka Rury</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="331"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="331"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="331"/>
         <source>Pick Running Process…</source>
         <translation>Wybierz Działający Proces…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="368"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="368"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="368"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>Uruchom proces podrzędny i przechwyć jego stdout lub połącz się z nazwanym potokiem zapisanym przez istniejący proces.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="376"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="376"/>
         <source>Learn about named pipes</source>
         <translation>Dowiedz się o nazwanych potokach</translation>
@@ -7114,60 +8254,70 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
     <name>ProcessPicker</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="51"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="51"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="51"/>
         <source>Select Running Process</source>
         <translation>Wybierz Działający Proces</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="198"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="198"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="198"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
         <translation>Wybierz działający proces, aby uzyskać sugestię ścieżki do nazwanej rury.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="208"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="208"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="208"/>
         <source>Filter Processes</source>
         <translation>Filtruj Procesy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="221"/>
         <source>Type to filter by name…</source>
         <translation>Wpisz, aby filtrować według nazwy…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="225"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="225"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="225"/>
         <source>Refresh</source>
         <translation>Odśwież</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="233"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="233"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="233"/>
         <source>Running Processes</source>
         <translation>Uruchomione Procesy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="270"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="270"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="270"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="277"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="277"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="277"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="365"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="365"/>
         <source>No processes match the filter.</source>
         <translation>Żadne procesy nie pasują do filtra.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="366"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="366"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="366"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
@@ -7176,18 +8326,21 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="382"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="382"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="382"/>
         <source>%1 process(es)</source>
         <translation>%1 proces(y)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="386"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="386"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="386"/>
         <source>Select</source>
         <translation>Wybierz</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="392"/>
         <source>Close</source>
         <translation>Zamknij</translation>
@@ -7198,6 +8351,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <source>modified</source>
         <translation>zmodyfikowano</translation>
@@ -7208,6 +8363,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="31"/>
         <source>Project Structure</source>
         <translation>Struktura Projektu</translation>
@@ -7215,6 +8372,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="248"/>
         <source>IDX %1</source>
         <translation>IDX %1</translation>
@@ -7225,6 +8384,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="151"/>
         <source>New</source>
         <translation>Nowy</translation>
@@ -7232,6 +8393,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="154"/>
         <source>Create a new JSON project</source>
         <translation>Utwórz nowy projekt JSON</translation>
@@ -7239,6 +8402,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="170"/>
         <source>Open</source>
         <translation>Otwórz</translation>
@@ -7246,6 +8411,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="174"/>
         <source>Open an existing JSON project</source>
         <translation>Otwórz istniejący projekt JSON</translation>
@@ -7253,6 +8420,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="180"/>
         <source>Save</source>
         <translation>Zapisz</translation>
@@ -7260,6 +8429,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="184"/>
         <source>Save the current project</source>
         <translation>Zapisz bieżący projekt</translation>
@@ -7267,6 +8438,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="191"/>
         <source>Save As</source>
         <translation>Zapisz Jako</translation>
@@ -7274,6 +8447,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
         <source>Save the current project under a new name</source>
         <translation>Zapisz bieżący projekt pod nową nazwą</translation>
@@ -7281,6 +8456,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="215"/>
         <source>Action</source>
         <translation>Akcja</translation>
@@ -7288,6 +8465,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="218"/>
         <source>Add a new action to the project</source>
         <translation>Dodaj nową akcję do projektu</translation>
@@ -7295,6 +8474,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="237"/>
         <source>Dataset</source>
         <translation>Zbiór danych</translation>
@@ -7302,6 +8483,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="239"/>
         <source>Add a generic dataset</source>
         <translation>Dodaj ogólny zbiór danych</translation>
@@ -7309,6 +8492,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <source>Plot</source>
         <translation>Wykres</translation>
@@ -7316,6 +8501,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="260"/>
         <source>Add a 2D plot dataset</source>
         <translation>Dodaj zbiór danych wykresu 2D</translation>
@@ -7323,6 +8510,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>FFT Plot</source>
         <translation>Wykres FFT</translation>
@@ -7330,6 +8519,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
         <source>Add a Fast Fourier Transform plot</source>
         <translation>Dodaj wykres szybkiej transformaty Fouriera</translation>
@@ -7337,6 +8528,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="277"/>
         <source>Gauge</source>
         <translation>Wskaźnik</translation>
@@ -7344,6 +8537,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Add a gauge widget for numeric data</source>
         <translation>Dodaj widżet miernika dla danych liczbowych</translation>
@@ -7351,6 +8546,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="288"/>
         <source>Level Indicator</source>
         <translation>Wskaźnik Poziomu</translation>
@@ -7358,6 +8555,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="293"/>
         <source>Add a vertical bar level indicator</source>
         <translation>Dodaj pionowy wskaźnik poziomu</translation>
@@ -7365,6 +8564,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Compass</source>
         <translation>Kompas</translation>
@@ -7372,6 +8573,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
         <source>Add a compass widget for directional data</source>
         <translation>Dodaj widżet kompasu dla danych kierunkowych</translation>
@@ -7379,6 +8582,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="310"/>
         <source>LED Indicator</source>
         <translation>Wskaźnik LED</translation>
@@ -7386,6 +8591,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="315"/>
         <source>Add an LED-style status indicator</source>
         <translation>Dodaj wskaźnik statusu w stylu LED</translation>
@@ -7393,6 +8600,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <source>Group</source>
         <translation>Grupa</translation>
@@ -7400,6 +8609,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Add a dataset container group</source>
         <translation>Dodaj grupę kontenerów zestawu danych</translation>
@@ -7407,130 +8618,190 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="340"/>
         <source>Dataset Container</source>
         <translation>Kontener Zestawu Danych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="347"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="347"/>
+        <source>Image</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
+        <source>Add an image/video stream viewer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="351"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="351"/>
+        <source>Image View</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="354"/>
         <source>Table</source>
         <translation>Tabela</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="359"/>
         <source>Add a data table view</source>
         <translation>Dodaj widok tabeli danych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
         <source>Data Grid</source>
         <translation>Siatka Danych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>Multi-Plot</source>
         <translation>Multi-Wykres</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="370"/>
         <source>Add a 2D plot with multiple signals</source>
         <translation>Dodaj wykres 2D z wieloma sygnałami</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="372"/>
         <source>Multiple Plot</source>
         <translation>Wiele Wykresów</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="383"/>
         <source>3D Plot</source>
         <translation>Wykres 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="381"/>
         <source>Add a 3D plot visualization</source>
         <translation>Dodaj wizualizację wykresu 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="387"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="394"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="403"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="403"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <source>Add a group for 3-axis accelerometer data</source>
         <translation>Dodaj grupę dla danych z 3-osiowego akcelerometru</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="404"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="415"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="404"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="415"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="404"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="404"/>
         <source>Gyroscope</source>
         <translation>Żyroskop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="405"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
         <translation>Dodaj grupę dla danych żyroskopu 3-osiowego (prędkości kątowe są automatycznie integrowane w orientację)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="420"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="427"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="420"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="427"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
         <source>GPS Map</source>
         <translation>Mapa GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <source>Add a map widget for GPS data</source>
         <translation>Dodaj widżet mapy dla danych GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="446"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="446"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <source>Help</source>
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="449"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="449"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="438"/>
         <source>Open the online Project Editor documentation</source>
         <translation>Otwórz dokumentację Edytora Projektu online</translation>
@@ -7541,6 +8812,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="79"/>
         <source>Pro features detected in this project.</source>
         <translation>Wykryto funkcje Pro w tym projekcie.</translation>
@@ -7548,6 +8821,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Zostaną użyte widżety zastępcze. Kup licencję, aby odblokować pełną funkcjonalność.</translation>
@@ -7606,69 +8881,74 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="229"/>
+        <location filename="../../src/SerialStudio.cpp" line="247"/>
         <source>Data Grids</source>
         <translation>Siatki Danych</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="232"/>
+        <location filename="../../src/SerialStudio.cpp" line="250"/>
         <source>Multiple Data Plots</source>
         <translation>Wiele Wykresów Danych</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="235"/>
+        <location filename="../../src/SerialStudio.cpp" line="253"/>
         <source>Accelerometers</source>
         <translation>Akcelerometry</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="238"/>
+        <location filename="../../src/SerialStudio.cpp" line="256"/>
         <source>Gyroscopes</source>
         <translation>Żyroskopy</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="241"/>
+        <location filename="../../src/SerialStudio.cpp" line="259"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="244"/>
+        <location filename="../../src/SerialStudio.cpp" line="262"/>
         <source>FFT Plots</source>
         <translation>Wykresy FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="247"/>
+        <location filename="../../src/SerialStudio.cpp" line="265"/>
         <source>LED Panels</source>
         <translation>Panele LED</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="250"/>
+        <location filename="../../src/SerialStudio.cpp" line="268"/>
         <source>Data Plots</source>
         <translation>Wykresy Danych</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="253"/>
+        <location filename="../../src/SerialStudio.cpp" line="271"/>
         <source>Bars</source>
         <translation>Słupki</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="256"/>
+        <location filename="../../src/SerialStudio.cpp" line="274"/>
         <source>Gauges</source>
         <translation>Wskaźniki</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="259"/>
+        <location filename="../../src/SerialStudio.cpp" line="277"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="262"/>
+        <location filename="../../src/SerialStudio.cpp" line="280"/>
         <source>Compasses</source>
         <translation>Kompasy</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="265"/>
+        <location filename="../../src/SerialStudio.cpp" line="283"/>
         <source>3D Plots</source>
         <translation>Wykresy 3D</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="287"/>
+        <source>Image Views</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -7676,6 +8956,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="34"/>
         <source>Preferences</source>
         <translation>Preferencje</translation>
@@ -7683,6 +8965,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="53"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="53"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="53"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="53"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="53"/>
         <source>General</source>
         <translation>Ogólne</translation>
@@ -7690,6 +8974,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="133"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="133"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="133"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="133"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="133"/>
         <source>Language</source>
         <translation>Język</translation>
@@ -7697,6 +8983,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="149"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="149"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="149"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="149"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="149"/>
         <source>Theme</source>
         <translation>Motyw</translation>
@@ -7704,6 +8992,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="182"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="182"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="182"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="182"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="182"/>
         <source>Workspace Folder</source>
         <translation>Folder Roboczy</translation>
@@ -7723,6 +9013,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="213"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="213"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="213"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="213"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="213"/>
         <source>Automatically Check for Updates</source>
         <translation>Automatycznie sprawdzaj aktualizacje</translation>
@@ -7730,6 +9022,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="59"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="59"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="59"/>
         <source>Dashboard</source>
         <translation>Pulpit nawigacyjny</translation>
@@ -7737,6 +9031,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="347"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="347"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="347"/>
         <source>Data Plotting</source>
         <translation>Wykres Danych</translation>
@@ -7744,6 +9040,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="362"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="362"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="362"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="362"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="362"/>
         <source>Point Count</source>
         <translation>Liczba Punktów</translation>
@@ -7751,6 +9049,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="378"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="378"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="378"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="378"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="378"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Częstotliwość Odświeżania Interfejsu (Hz)</translation>
@@ -7758,6 +9058,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="513"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="513"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="513"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="513"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Zawsze Pokazuj Przyciski na Pasku Zadań</translation>
@@ -7773,6 +9075,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="498"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="498"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="498"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="498"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="498"/>
         <source>Show Actions Panel</source>
         <translation>Pokaż Panel Akcji</translation>
@@ -7788,6 +9092,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="247"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="247"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="247"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="247"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="247"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>Włącz Serwer API (Port 7777)</translation>
@@ -7803,6 +9109,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="65"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="65"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="65"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="65"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="65"/>
         <source>Console</source>
         <translation>Konsola</translation>
@@ -7810,6 +9118,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="118"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="118"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="118"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="118"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="118"/>
         <source>Appearance</source>
         <translation>Wygląd</translation>
@@ -7817,6 +9127,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="167"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="167"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="167"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="167"/>
         <source>Files &amp; Updates</source>
         <translation>Pliki i aktualizacje</translation>
@@ -7824,6 +9136,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="231"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="231"/>
         <source>Advanced</source>
         <translation>Zaawansowane</translation>
@@ -7831,6 +9145,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="264"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="264"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="264"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="264"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="264"/>
         <source>Allow External API Connections</source>
         <translation>Zezwolić na zewnętrzne połączenia API</translation>
@@ -7838,6 +9154,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="279"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="279"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="279"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Automatyczne ukrywanie paska narzędzi</translation>
@@ -7845,6 +9163,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="297"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="297"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="297"/>
         <source>Threaded Frame Extraction</source>
         <translation>Wątkowe wyodrębnianie ramek</translation>
@@ -7868,6 +9188,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <source>Small</source>
         <translation>Mały</translation>
@@ -7875,6 +9197,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <source>Normal</source>
         <translation>Normalny</translation>
@@ -7882,6 +9206,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <source>Large</source>
         <translation>Duży</translation>
@@ -7889,6 +9215,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <source>Extra Large</source>
         <translation>Bardzo Duży</translation>
@@ -7896,6 +9224,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="437"/>
         <source>Custom</source>
         <translation>Własny</translation>
@@ -7903,6 +9233,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="483"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="483"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="483"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="483"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="483"/>
         <source>Layout</source>
         <translation>Układ</translation>
@@ -7910,6 +9242,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="563"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="563"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="563"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="563"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="563"/>
         <source>Display</source>
         <translation>Wyświetlanie</translation>
@@ -7917,6 +9251,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="578"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="578"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="578"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="578"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="578"/>
         <source>Display Mode</source>
         <translation>Tryb Wyświetlania</translation>
@@ -7926,6 +9262,10 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <location filename="../../qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="591"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="414"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="414"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="591"/>
         <source>Font Family</source>
@@ -7934,6 +9274,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="399"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="399"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="399"/>
         <source>Dashboard Font</source>
         <translation>Czcionka Pulpitu</translation>
@@ -7943,6 +9285,10 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <location filename="../../qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="605"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="428"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="428"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="605"/>
         <source>Font Size</source>
@@ -7951,6 +9297,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="621"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="621"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="621"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="621"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="621"/>
         <source>Show Timestamps</source>
         <translation>Pokaż Znaczniki Czasu</translation>
@@ -7958,6 +9306,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="640"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="640"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="640"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="640"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="640"/>
         <source>Data Transmission</source>
         <translation>Transmisja Danych</translation>
@@ -7965,6 +9315,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="655"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="655"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="655"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="655"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="655"/>
         <source>Line Ending</source>
         <translation>Zakończenie Linii</translation>
@@ -7972,6 +9324,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="668"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="668"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="668"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="668"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="668"/>
         <source>Input Mode</source>
         <translation>Tryb Wejścia</translation>
@@ -7979,6 +9333,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="681"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="681"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="681"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="681"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="681"/>
         <source>Checksum</source>
         <translation>Suma Kontrolna</translation>
@@ -7986,6 +9342,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="694"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="694"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="694"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="694"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="694"/>
         <source>Echo Sent Data</source>
         <translation>Echo Wysłanych Danych</translation>
@@ -7993,6 +9351,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="713"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="713"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="713"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="713"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="713"/>
         <source>Escape Codes</source>
         <translation>Kody Ucieczki</translation>
@@ -8000,34 +9360,44 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="728"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="728"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="728"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="728"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="728"/>
         <source>VT100 Emulation</source>
         <translation>Emulacja VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="743"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="746"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="743"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="746"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="743"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="743"/>
         <source>ANSI Colors</source>
         <translation>Kolory ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="776"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="779"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="776"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="779"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="776"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="776"/>
         <source>Reset</source>
         <translation>Resetuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="815"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="818"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="815"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="818"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="815"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="815"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="826"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="829"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Settings.qml" line="826"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="829"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Settings.qml" line="826"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="826"/>
         <source>Apply</source>
         <translation>Zastosuj</translation>
@@ -8040,6 +9410,10 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="342"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="34"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="342"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="342"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="34"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="342"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="34"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="342"/>
         <source>Device Setup</source>
@@ -8048,6 +9422,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="151"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="151"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="151"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="151"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="151"/>
         <source>API Server Active (%1)</source>
         <translation>Serwer API Aktywny (%1)</translation>
@@ -8055,6 +9431,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="152"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="152"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="152"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="152"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="152"/>
         <source>API Server Ready</source>
         <translation>Serwer API Gotowy</translation>
@@ -8062,6 +9440,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="153"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="153"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="153"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="153"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="153"/>
         <source>API Server Off</source>
         <translation>Serwer API Wyłączony</translation>
@@ -8069,6 +9449,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="209"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="209"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="209"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="209"/>
         <source>Frame Parsing</source>
         <translation>Parsowanie Ramek</translation>
@@ -8076,6 +9458,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="217"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="217"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="217"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="217"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="217"/>
         <source>No Parsing (Device Sends JSON Data)</source>
         <translation>Bez Parsowania (urządzenie Wysyła Dane JSON)</translation>
@@ -8083,6 +9467,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="228"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="228"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="228"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="228"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="228"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Szybki Wykres (wartości Rozdzielone Przecinkami)</translation>
@@ -8090,6 +9476,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="239"/>
         <source>Parse via JSON Project File</source>
         <translation>Parsuj przez plik projektu JSON</translation>
@@ -8097,6 +9485,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="258"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="258"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="258"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="258"/>
         <source>Change Project File (%1)</source>
         <translation>Zmień Plik Projektu (%1)</translation>
@@ -8104,6 +9494,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="259"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="259"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="259"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="259"/>
         <source>Select Project File</source>
         <translation>Wybierz Plik Projektu</translation>
@@ -8111,6 +9503,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="273"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="273"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="273"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="273"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="273"/>
         <source>Data Export</source>
         <translation>Eksport Danych</translation>
@@ -8118,6 +9512,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="286"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="286"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="286"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="286"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="286"/>
         <source>Create CSV File</source>
         <translation>Utwórz Plik CSV</translation>
@@ -8125,6 +9521,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="304"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="304"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="304"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="304"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="304"/>
         <source>Create MDF4 File</source>
         <translation>Utwórz Plik MDF4</translation>
@@ -8132,6 +9530,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="321"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="321"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="321"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="321"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="321"/>
         <source>Export Console Data</source>
         <translation>Eksportuj Dane Konsoli</translation>
@@ -8139,6 +9539,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="350"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Setup.qml" line="350"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="350"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Setup.qml" line="350"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="350"/>
         <source>I/O Interface: %1</source>
         <translation>Interfejs I/O: %1</translation>
@@ -8149,6 +9551,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="148"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="148"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="148"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="148"/>
         <source>Workspaces</source>
         <translation>Przestrzenie robocze</translation>
@@ -8156,6 +9560,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="169"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="169"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="169"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="169"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="169"/>
         <source>No Groups Available</source>
         <translation>Brak Dostępnych Grup</translation>
@@ -8163,6 +9569,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="189"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="189"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="189"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="189"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="189"/>
         <source>Actions</source>
         <translation>Akcje</translation>
@@ -8170,6 +9578,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="209"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="209"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="209"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="209"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="209"/>
         <source>No Actions Available</source>
         <translation>Brak Dostępnych Akcji</translation>
@@ -8177,6 +9587,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="239"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="239"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="239"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="239"/>
         <source>Auto Layout</source>
         <translation>Automatyczny Układ</translation>
@@ -8184,6 +9596,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="251"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="251"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="251"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="251"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="251"/>
         <source>Full Screen</source>
         <translation>Pełny Ekran</translation>
@@ -8191,6 +9605,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="261"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="261"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="261"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="261"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="261"/>
         <source>Add External Window</source>
         <translation>Dodaj Zewnętrzne Okno</translation>
@@ -8198,6 +9614,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="279"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="279"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="279"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="279"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="279"/>
         <source>CSV Logging</source>
         <translation>Rejestrowanie CSV</translation>
@@ -8205,6 +9623,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
         <source>Console Logging</source>
         <translation>Rejestrowanie Konsoli</translation>
@@ -8212,6 +9632,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="288"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="288"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="288"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="288"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="288"/>
         <source>MDF4 Logging</source>
         <translation>Rejestrowanie MDF4</translation>
@@ -8219,6 +9641,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="314"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="314"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="314"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="314"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="314"/>
         <source>Console</source>
         <translation>Konsola</translation>
@@ -8226,6 +9650,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="329"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="329"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="329"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="329"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="329"/>
         <source>Preferences</source>
         <translation>Preferencje</translation>
@@ -8233,6 +9659,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
         <source>Help</source>
         <translation>Pomoc</translation>
@@ -8240,6 +9668,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="364"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="364"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="364"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="364"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="364"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
@@ -8247,6 +9677,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="389"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="389"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="389"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="389"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="389"/>
         <source>Resume</source>
         <translation>Wznów</translation>
@@ -8254,6 +9686,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="390"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="390"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="390"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="390"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="390"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
@@ -8261,6 +9695,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
         <source>Disconnect</source>
         <translation>Rozłącz</translation>
@@ -8271,6 +9707,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="80"/>
         <location filename="../../../build/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
         <translation>Brak Dostępnych Danych</translation>
@@ -8281,6 +9719,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="123"/>
         <source>Parameter</source>
         <translation>Parametr</translation>
@@ -8288,6 +9728,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="143"/>
         <source>Value</source>
         <translation>Wartość</translation>
@@ -8295,6 +9737,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>No</source>
         <translation>Nie</translation>
@@ -8302,6 +9746,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="626"/>
         <source>Yes</source>
         <translation>Tak</translation>
@@ -8312,6 +9758,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="88"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="88"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="88"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="88"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="88"/>
         <source>Menu</source>
         <translation>Menu</translation>
@@ -8322,6 +9770,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="110"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="110"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="110"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="110"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="110"/>
         <source>Copy</source>
         <translation>Kopiuj</translation>
@@ -8329,6 +9779,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="117"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="117"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="117"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="117"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="117"/>
         <source>Select all</source>
         <translation>Zaznacz wszystko</translation>
@@ -8336,6 +9788,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="124"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="124"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="124"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="124"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="124"/>
         <source>Clear</source>
         <translation>Wyczyść</translation>
@@ -8343,6 +9797,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="205"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="205"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="205"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="205"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="205"/>
         <source>Send Data to Device</source>
         <translation>Wyślij dane do urządzenia</translation>
@@ -8350,6 +9806,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="362"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="362"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="362"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="362"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="362"/>
         <source>Show Timestamp</source>
         <translation>Pokaż Znacznik Czasu</translation>
@@ -8357,6 +9815,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="373"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="373"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="373"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="373"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="373"/>
         <source>Echo</source>
         <translation>Echo</translation>
@@ -8364,20 +9824,26 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="384"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="384"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="384"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="384"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="384"/>
         <source>Emulate VT-100</source>
         <translation>Emuluj VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="395"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="397"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="395"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="397"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="395"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="395"/>
         <source>ANSI Colors</source>
         <translation>Kolory ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="419"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="421"/>
         <location filename="../../../build/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="419"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="421"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="419"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="419"/>
         <source>Display: %1</source>
         <translation>Wyświetl: %1</translation>
@@ -8388,6 +9854,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="195"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="195"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="195"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="195"/>
         <source>Project Editor</source>
         <translation>Edytor Projektu</translation>
@@ -8395,6 +9863,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="198"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="198"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="198"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="198"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="198"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Otwórz Edytor Projektu, aby utworzyć lub zmodyfikować układ JSON</translation>
@@ -8406,6 +9876,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="237"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="237"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Odtwórz plik CSV, jakby to były dane z czujników na żywo</translation>
@@ -8421,6 +9893,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="298"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="298"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="298"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="298"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="298"/>
         <source>Preferences</source>
         <translation>Preferencje</translation>
@@ -8428,6 +9902,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="302"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="302"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="302"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="302"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="302"/>
         <source>Open application settings and preferences</source>
         <translation>Otwórz ustawienia aplikacji i preferencje</translation>
@@ -8435,6 +9911,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="271"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="271"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="271"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="271"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="271"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
@@ -8442,6 +9920,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="231"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="231"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Open CSV</source>
         <translation>Otwórz CSV</translation>
@@ -8449,6 +9929,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="242"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="242"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <source>Open MDF4</source>
         <translation>Otwórz MDF4</translation>
@@ -8456,6 +9938,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="278"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="278"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="278"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="278"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="278"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>Skonfiguruj połączenie MQTT (publikuj lub subskrybuj)</translation>
@@ -8471,6 +9955,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="317"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="317"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="317"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="317"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="317"/>
         <source>UART</source>
         <translation>UART</translation>
@@ -8478,6 +9964,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="322"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="322"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="322"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="322"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="322"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Wybierz komunikację portu szeregowego (UART)</translation>
@@ -8485,6 +9973,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="332"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="332"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -8492,6 +9982,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="337"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="337"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="337"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="337"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="337"/>
         <source>Select audio input device (Pro)</source>
         <translation>Wybierz urządzenie wejściowe audio (Pro)</translation>
@@ -8499,6 +9991,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="349"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="349"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="349"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="349"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="349"/>
         <source>USB</source>
         <translation>USB</translation>
@@ -8506,6 +10000,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="354"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="354"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="354"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="354"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="354"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Wybierz surową komunikację USB (Pro)</translation>
@@ -8513,6 +10009,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="362"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="362"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="362"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="362"/>
         <source>Network</source>
         <translation>Sieć</translation>
@@ -8520,6 +10018,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="367"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="367"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Wybierz komunikację sieciową TCP/UDP</translation>
@@ -8531,6 +10031,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="382"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Wybierz komunikację MODBUS (Pro)</translation>
@@ -8538,6 +10040,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="394"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="394"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="394"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="394"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="394"/>
         <source>HID</source>
         <translation>HID</translation>
@@ -8545,6 +10049,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="399"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="399"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="399"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="399"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="399"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Wybierz komunikację z urządzeniem HID (Pro)</translation>
@@ -8552,6 +10058,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
@@ -8559,6 +10067,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="412"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="412"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="412"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="412"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Wybierz komunikację Bluetooth Low Energy</translation>
@@ -8566,6 +10076,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="422"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="422"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="422"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="422"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="422"/>
         <source>CAN Bus</source>
         <translation>Magistrala CAN</translation>
@@ -8573,6 +10085,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="427"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="427"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="427"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="427"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="427"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Wybierz komunikację magistrali CAN (Pro)</translation>
@@ -8580,6 +10094,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="439"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="439"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="439"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="439"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="439"/>
         <source>Process</source>
         <translation>Proces</translation>
@@ -8587,6 +10103,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="444"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="444"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="444"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="444"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="444"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Wybierz komunikację przez potok procesów (Pro)</translation>
@@ -8594,6 +10112,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="485"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="485"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="485"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="485"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="485"/>
         <source>Examples</source>
         <translation>Przykłady</translation>
@@ -8601,6 +10121,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="489"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="489"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="489"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="489"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="489"/>
         <source>Browse example projects on GitHub</source>
         <translation>Przeglądaj przykładowe projekty na GitHub</translation>
@@ -8612,6 +10134,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="499"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="499"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="499"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="499"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="499"/>
         <source>Open the online documentation for help and guidance</source>
         <translation>Otwórz dokumentację online, aby uzyskać pomoc i wskazówki</translation>
@@ -8623,6 +10147,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="509"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="509"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="509"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="509"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="509"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Przeglądaj szczegółową dokumentację i zadawaj pytania na DeepWiki</translation>
@@ -8630,6 +10156,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <source>About</source>
         <translation>O programie</translation>
@@ -8637,6 +10165,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="219"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="219"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="219"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="219"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="219"/>
         <source>Open Project</source>
         <translation>Otwórz Projekt</translation>
@@ -8644,6 +10174,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="221"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="221"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="221"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="221"/>
         <source>Open an existing JSON project</source>
         <translation>Otwórz istniejący projekt JSON</translation>
@@ -8659,6 +10191,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="248"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="248"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="248"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="248"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Odtwórz plik MDF4 jakby to były dane z czujnika na żywo (Pro)</translation>
@@ -8666,6 +10200,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="377"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="377"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="377"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="377"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="377"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
@@ -8681,6 +10217,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="470"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="470"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="470"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="470"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="470"/>
         <source>Show application info and license details</source>
         <translation>Pokaż informacje o aplikacji i szczegóły licencji</translation>
@@ -8688,6 +10226,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="496"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="496"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="496"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="496"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="496"/>
         <source>Getting Started</source>
         <translation>Pierwsze Kroki</translation>
@@ -8695,6 +10235,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="506"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="506"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI Wiki i Czat</translation>
@@ -8702,6 +10244,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="530"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="530"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="530"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="530"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="530"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Zarządzaj licencją i aktywuj Serial Studio Pro</translation>
@@ -8711,6 +10255,10 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="565"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="565"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="565"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="565"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="565"/>
         <source>Disconnect</source>
@@ -8719,6 +10267,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="545"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="545"/>
         <source>Connect</source>
         <translation>Połącz</translation>
@@ -8726,6 +10276,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="548"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="548"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="548"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="548"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="548"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Połącz lub odłącz od urządzenia lub brokera MQTT</translation>
@@ -8733,6 +10285,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="526"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="526"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="526"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="526"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="526"/>
         <source>Activate</source>
         <translation>Aktywuj</translation>
@@ -8747,6 +10301,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="65"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="65"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="65"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="65"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="65"/>
         <source>COM Port</source>
         <translation>Port COM</translation>
@@ -8754,6 +10310,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="93"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="93"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="93"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="93"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="93"/>
         <source>Baud Rate</source>
         <translation>Prędkość Transmisji (Baud Rate)</translation>
@@ -8761,6 +10319,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="174"/>
         <source>Data Bits</source>
         <translation>Bity Danych</translation>
@@ -8768,6 +10328,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="190"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="190"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="190"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="190"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="190"/>
         <source>Parity</source>
         <translation>Parzystość</translation>
@@ -8775,6 +10337,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="206"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="206"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="206"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="206"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="206"/>
         <source>Stop Bits</source>
         <translation>Bity Stopu</translation>
@@ -8782,6 +10346,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="222"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="222"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="222"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="222"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="222"/>
         <source>Flow Control</source>
         <translation>Kontrola Przepływu</translation>
@@ -8789,6 +10355,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="249"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="249"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="249"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="249"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="249"/>
         <source>Auto Reconnect</source>
         <translation>Auto Ponowne Połączenie</translation>
@@ -8796,6 +10364,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="266"/>
         <location filename="../../../build/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="266"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="266"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="266"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="266"/>
         <source>Send DTR Signal</source>
         <translation>Wyślij Sygnał DTR</translation>
@@ -8823,7 +10393,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
 <context>
     <name>UI::DashboardWidget</name>
     <message>
-        <location filename="../../src/UI/DashboardWidget.cpp" line="133"/>
+        <location filename="../../src/UI/DashboardWidget.cpp" line="134"/>
         <source>Invalid</source>
         <translation>Nieprawidłowy</translation>
     </message>
@@ -8858,84 +10428,98 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <name>USB</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="46"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="46"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="46"/>
         <source>USB Device</source>
         <translation>Urządzenie USB</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="75"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="75"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="75"/>
         <source>Transfer Mode</source>
         <translation>Tryb Transferu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="83"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="83"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="83"/>
         <source>Bulk Stream</source>
         <translation>Strumień Masowy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="84"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="84"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="84"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>Zaawansowane (Bulk + Control)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="85"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="85"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="85"/>
         <source>Isochronous</source>
         <translation>Izosynchroniczne</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="137"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="137"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="137"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>Połącz z urządzeniami USB używając transferów bulk, control lub izosynchronicznych. Odpowiednie dla rejestratorów danych, urządzeń z niestandardowym firmware i instrumentów USB.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="146"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="146"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="146"/>
         <source>USB specifications (USB.org)</source>
         <translation>Specyfikacje USB (USB.org)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
         <source>IN Endpoint</source>
         <translation>Punkt końcowy IN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="198"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="198"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="198"/>
         <source>OUT Endpoint</source>
         <translation>Punkt końcowy OUT</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="233"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="233"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="233"/>
         <source>Max Packet Size</source>
         <translation>Maksymalny rozmiar pakietu</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="293"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="293"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="293"/>
         <source>Control Transfers Enabled</source>
         <translation>Transfery kontrolne włączone</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="301"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="301"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="301"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>Wysyłanie niepoprawnych żądań kontrolnych może spowodować awarię lub uszkodzenie podłączonego sprzętu. Używaj ostrożnie.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="308"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="308"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="308"/>
         <source>Learn about USB control transfers</source>
         <translation>Dowiedz się o transferach kontrolnych USB</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="342"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="342"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="342"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>Rozmiar pakietu powinien odpowiadać maksymalnemu rozmiarowi transferu zgłoszonemu przez punkt końcowy. Typowe wartości: 192 B (FS audio), 1024 B (HS).</translation>
@@ -8974,6 +10558,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="174"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
         <source>Welcome to %1!</source>
         <translation>Witaj w %1!</translation>
@@ -8981,6 +10567,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="185"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
         <translation>Serial Studio to potężne narzędzie do wizualizacji w czasie rzeczywistym, stworzone dla inżynierów, studentów i twórców.</translation>
@@ -8988,6 +10576,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="196"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
         <translation>Możesz rozpocząć w pełni funkcjonalną 14-dniową wersję próbną, aktywować ją za pomocą klucza licencyjnego lub pobrać i skompilować kod źródłowy GPLv3 samodzielnie.</translation>
@@ -8997,6 +10587,10 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <location filename="../../qml/Dialogs/Welcome.qml" line="385"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="206"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="385"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="206"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="385"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="206"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="385"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="206"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="385"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
@@ -9007,6 +10601,10 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <location filename="../../qml/Dialogs/Welcome.qml" line="393"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="214"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="393"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="214"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="393"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="214"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="393"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="214"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="393"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
@@ -9015,6 +10613,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="235"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
         <source>Please wait...</source>
         <translation>Proszę czekać...</translation>
@@ -9022,6 +10622,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="269"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <source>%1 days remaining in your trial.</source>
         <translation>pozostało %1 dni w wersji próbnej.</translation>
@@ -9029,6 +10631,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="279"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
         <translation>Obecnie używasz w pełni funkcjonalnej wersji próbnej %1 Pro. Jest ważna przez 14 dni do osobistego, niekomercyjnego użytku.</translation>
@@ -9036,6 +10640,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="290"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
         <translation>Ulepsz do płatnego planu, aby nadal korzystać z Serial Studio Pro.</translation>
@@ -9043,6 +10649,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="298"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
         <translation>Lub skompiluj kod źródłowy GPLv3, aby używać go za darmo.</translation>
@@ -9050,6 +10658,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="306"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
         <translation>Aby zobaczyć dostępne plany subskrypcji, kliknij poniżej "Ulepsz teraz".</translation>
@@ -9057,6 +10667,8 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="326"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="326"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="326"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="326"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="326"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
@@ -9066,6 +10678,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="355"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
         <source>Your %1 trial has expired.</source>
         <translation>Twój okres próbny %1 wygasł.</translation>
@@ -9073,6 +10687,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="365"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
         <translation>Twój okres próbny dobiegł końca. Aby kontynuować korzystanie z %1 ze wszystkimi funkcjami Pro, prosimy o uaktualnienie do płatnego planu.</translation>
@@ -9080,6 +10696,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="376"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
         <translation>Jeśli wolisz, możesz również skompilować wersję open-source na licencji GPLv3.</translation>
@@ -9087,6 +10705,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="404"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
         <source>Thank you for trying %1!</source>
         <translation>Dziękujemy za wypróbowanie %1!</translation>
@@ -9094,6 +10714,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="448"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <source>Upgrade Now</source>
         <translation>Uaktualnij Teraz</translation>
@@ -9101,6 +10723,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="460"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
         <source>Activate</source>
         <translation>Aktywuj</translation>
@@ -9108,6 +10732,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Open in Limited Mode</source>
         <translation>Otwórz w trybie ograniczonym</translation>
@@ -9115,6 +10741,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Continue</source>
         <translation>Kontynuuj</translation>
@@ -9122,6 +10750,8 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_10_2_for_macOS-Debug/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <location filename="../../../build/Qt_6_9_3_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Start Trial</source>
         <translation>Rozpocznij Okres Próbny</translation>
