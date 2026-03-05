@@ -156,22 +156,33 @@ Item {
   ColumnLayout {
     anchors.centerIn: parent
     visible: !model || model.frameCount === 0
-    spacing: 10
+    spacing: 12
 
     Image {
-      opacity: 0.25
-      sourceSize.width: 52
-      sourceSize.height: 52
+      id: placeholderIcon
+      sourceSize.width: 48
+      sourceSize.height: 48
       Layout.alignment: Qt.AlignHCenter
       source: "qrc:/rcc/icons/dashboard-large/image.svg"
+
+      opacity: 0
+      layer.enabled: true
+      layer.effect: MultiEffect { colorization: 1.0; colorizationColor: "white" }
+
+      SequentialAnimation on opacity {
+        running: true
+        loops: Animation.Infinite
+        NumberAnimation { to: 0.55; duration: 900; easing.type: Easing.InOutSine }
+        NumberAnimation { to: 0.20; duration: 900; easing.type: Easing.InOutSine }
+      }
     }
 
     Text {
-      opacity: 0.4
+      color: "white"
+      opacity: 0.55
       font.pixelSize: root.fontSize
       text: qsTr("Waiting for image…")
       Layout.alignment: Qt.AlignHCenter
-      color: Cpp_ThemeManager.colors["text"]
       font.family: Cpp_Misc_CommonFonts.widgetFontFamily
     }
   }
