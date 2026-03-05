@@ -247,6 +247,21 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &IO::Manager::connectedChanged,
           this,
           &DataModel::FrameBuilder::onConnectedChanged);
+
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::frameDetectionChanged,
+          this,
+          [this] {
+            if (operationMode() != SerialStudio::ProjectFile)
+              return;
+
+            read_io_settings(m_frameStart, m_frameFinish, m_checksum,
+                             DataModel::ProjectModel::instance().serializeToJson());
+            IO::Manager::instance().setStartSequence(m_frameStart);
+            IO::Manager::instance().setFinishSequence(m_frameFinish);
+            IO::Manager::instance().setChecksumAlgorithm(m_checksum);
+            IO::Manager::instance().resetFrameReader();
+          });
 }
 
 /**

@@ -483,16 +483,18 @@ DataModel::CustomModel* DataModel::ProjectEditor::datasetModel() const
  */
 void DataModel::ProjectEditor::displayFrameParserView()
 {
-  for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
-    if (it.value() != kFrameParser)
-      continue;
+  QTimer::singleShot(100, this, [this] {
+    if (!m_selectionModel)
+      return;
 
-    QTimer::singleShot(100, this, [=, this] {
-      if (m_selectionModel)
-        m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
-    });
-    break;
-  }
+    for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
+      if (it.value() != kFrameParser)
+        continue;
+
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      break;
+    }
+  });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -632,6 +634,13 @@ void DataModel::ProjectEditor::buildTreeModel()
     const auto aid = m_selectedAction.actionId;
     for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
       if (it.value().actionId == aid) {
+        toSelect = it.key();
+        break;
+      }
+    }
+  } else if (m_currentView == FrameParserView) {
+    for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
+      if (it.value() == kFrameParser) {
         toSelect = it.key();
         break;
       }

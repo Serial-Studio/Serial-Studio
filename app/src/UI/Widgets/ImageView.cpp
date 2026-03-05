@@ -65,19 +65,37 @@ void Widgets::ImageFrameReader::processAutodetect()
 {
   static const QByteArray kJpegStart("\xFF\xD8\xFF", 3);
   static const QByteArray kPngStart("\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 8);
+  static const QByteArray kBmpStart("BM", 2);
+  static const QByteArray kWebpStart("RIFF", 4);
   static const QByteArray kJpegEnd("\xFF\xD9", 2);
   static const QByteArray kPngEnd("\x49\x45\x4E\x44\xAE\x42\x60\x82", 8);
 
   while (true) {
     if (!m_inFrame) {
-      qsizetype jpegPos = m_accumulator.indexOf(kJpegStart);
-      qsizetype pngPos  = m_accumulator.indexOf(kPngStart);
+      qsizetype jpegPos  = m_accumulator.indexOf(kJpegStart);
+      qsizetype pngPos   = m_accumulator.indexOf(kPngStart);
+      qsizetype bmpPos   = m_accumulator.indexOf(kBmpStart);
+      qsizetype webpPos  = m_accumulator.indexOf(kWebpStart);
+
+      if (webpPos >= 0 && m_accumulator.size() >= webpPos + 12) {
+        if (m_accumulator[webpPos + 8] != 'W' || m_accumulator[webpPos + 9] != 'E'
+            || m_accumulator[webpPos + 10] != 'B' || m_accumulator[webpPos + 11] != 'P')
+          webpPos = -1;
+      } else {
+        webpPos = -1;
+      }
 
       qsizetype startPos = -1;
-      if (jpegPos >= 0 && (pngPos < 0 || jpegPos <= pngPos))
-        startPos = jpegPos;
-      else if (pngPos >= 0)
-        startPos = pngPos;
+      auto pickEarliest  = [&](qsizetype a, qsizetype b) {
+        if (a >= 0 && (b < 0 || a <= b))
+          return a;
+
+        return b;
+      };
+
+      startPos = pickEarliest(jpegPos, pngPos);
+      startPos = pickEarliest(startPos, bmpPos);
+      startPos = pickEarliest(startPos, webpPos);
 
       if (startPos < 0)
         break;
@@ -85,6 +103,62 @@ void Widgets::ImageFrameReader::processAutodetect()
       m_accumulator.remove(0, startPos);
       m_inFrame       = true;
       m_frameStartPos = 0;
+    }
+
+    if (m_accumulator.startsWith(kWebpStart) && m_accumulator.size() >= 12
+        && m_accumulator[8] == 'W' && m_accumulator[9] == 'E' && m_accumulator[10] == 'B'
+        && m_accumulator[11] == 'P') {
+      const auto* raw  = reinterpret_cast<const quint8*>(m_accumulator.constData());
+      const quint32 chunkSize = static_cast<quint32>(raw[4]) | (static_cast<quint32>(raw[5]) << 8)
+                              | (static_cast<quint32>(raw[6]) << 16)
+                              | (static_cast<quint32>(raw[7]) << 24);
+      const qsizetype frameLen = 8 + static_cast<qsizetype>(chunkSize);
+
+      if (chunkSize > 64 * 1024 * 1024) {
+        m_accumulator.remove(0, 4);
+        m_inFrame       = false;
+        m_frameStartPos = -1;
+        continue;
+      }
+
+      if (m_accumulator.size() < frameLen)
+        break;
+
+      QByteArray frame = m_accumulator.left(frameLen);
+      m_accumulator.remove(0, frameLen);
+      m_inFrame       = false;
+      m_frameStartPos = -1;
+
+      Q_EMIT frameReady(frame);
+      continue;
+    }
+
+    if (m_accumulator.startsWith(kBmpStart)) {
+      if (m_accumulator.size() < 6)
+        break;
+
+      const auto* raw  = reinterpret_cast<const quint8*>(m_accumulator.constData());
+      const quint32 sz = static_cast<quint32>(raw[2]) | (static_cast<quint32>(raw[3]) << 8)
+                       | (static_cast<quint32>(raw[4]) << 16)
+                       | (static_cast<quint32>(raw[5]) << 24);
+
+      if (sz < 14 || sz > 64 * 1024 * 1024)  {
+        m_accumulator.remove(0, 2);
+        m_inFrame       = false;
+        m_frameStartPos = -1;
+        continue;
+      }
+
+      if (m_accumulator.size() < static_cast<qsizetype>(sz))
+        break;
+
+      QByteArray frame = m_accumulator.left(static_cast<qsizetype>(sz));
+      m_accumulator.remove(0, static_cast<qsizetype>(sz));
+      m_inFrame       = false;
+      m_frameStartPos = -1;
+
+      Q_EMIT frameReady(frame);
+      continue;
     }
 
     QByteArray endMarker;

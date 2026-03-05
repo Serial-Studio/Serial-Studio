@@ -2,63 +2,57 @@
 
 ## Overview
 
-This example streams live camera video and computed image analytics to Serial
-Studio over a single UDP connection at ~24 Hz.  It exercises the **Image View**
-widget (Pro) alongside standard dashboard widgets (gauge, bar, multiplot).
+Streams live camera video to Serial Studio over UDP as fast as possible.
+Only FPS and frame count are sent alongside the image — zero analytics overhead.
 
-**Difficulty:** 🔴 Advanced | **License:** Pro (Image View widget required)
+**Difficulty:** 🟡 Intermediate | **License:** Pro (Image View widget required)
 
-No microcontroller needed — a standard webcam or the built-in laptop camera is
-all the hardware required.  A synthetic test pattern is also available when no
-camera is connected (`--no-camera`).
+No microcontroller needed — a standard webcam or built-in laptop camera is all
+that's required.  A synthetic test pattern is available when no camera is
+connected (`--no-camera`).
+
+![Camera Telemetry Screenshot](doc/screenshot.png)
 
 ---
 
 ## What It Streams
 
 ### Image data (Image View widget)
-Raw JPEG frames captured from the camera, sent as-is over UDP.  The Image View
-widget uses **autodetect** mode: it finds JPEG frames by their `FF D8 FF` magic
-bytes and `FF D9` end-of-image marker, completely independently of the CSV
-telemetry parser.
+Raw JPEG frames sent directly over UDP.  The Image View widget uses **autodetect**
+mode: it finds frames by their `FF D8 FF` magic bytes and `FF D9` end-of-image
+marker, independently of the CSV telemetry parser.
 
-### Telemetry (normal dashboard widgets)
+### Telemetry (Performance group)
 
-| Index | Metric | Widget | Description |
-|-------|--------|--------|-------------|
-| 1 | Luminance | Gauge | Perceptual brightness (Y channel, 0–255) |
-| 2 | Contrast | Bar | Grayscale standard deviation |
-| 3 | Sharpness | Bar | Log-scaled Laplacian variance (0–100) |
-| 4 | Dominant Hue | Gauge | Circular mean of the H channel (0°–360°) |
-| 5 | Motion | Bar | Mean optical-flow magnitude (0–100) |
-| 6 | FPS | Gauge | Actual stream frame rate |
-| 7 | Frame Count | Data | Total frames sent since start |
+| Index | Metric | Description |
+|-------|--------|-------------|
+| 1 | FPS | Actual stream frame rate |
+| 2 | Frame Count | Total frames sent since start |
 
 ---
 
 ## Frame Format
 
-Everything goes through a single UDP stream.  Two types of data co-exist in the
-same byte flow:
+Two types of data share the same UDP byte stream:
 
-### 1 — JPEG image frame (binary)
-Raw JPEG bytes with no additional framing.  The Image View widget detects them
-automatically by magic bytes.
+**JPEG image frame** — raw bytes, no additional framing.  Autodetected by magic bytes.
 
-### 2 — CSV telemetry frame (ASCII)
-
+**CSV telemetry frame** — wrapped in a 3-byte start sentinel and 2-byte end sentinel:
 ```
-$luminance,contrast,sharpness,hue,motion,fps,frame_count;\n
+AB CD EF  fps,frame_count  FE ED
 ```
 
-Example:
+Example (hex):
 ```
-$142.37,18.52,62.14,215.3,3.47,23.9,1024;\n
+AB CD EF 32 39 2E 38 2C 31 30 32 34 FE ED
+         2  9  .  8  ,  1  0  2  4
 ```
 
-Both types co-exist in the same byte stream.  The FrameReader ignores JPEG
-binary data (no `$` start marker); the ImageFrameReader ignores the ASCII CSV
-frames (no JPEG magic bytes).
+The sentinels are chosen so they are statistically impossible to occur in JPEG,
+PNG, BMP, or WebP compressed data.  `AB CD EF` is not a valid JPEG marker
+sequence and does not arise from JPEG byte-stuffing rules.  The FrameReader
+extracts only bytes between the two sentinels; the ImageFrameReader ignores
+ASCII telemetry packets since they carry no image magic bytes.
 
 ---
 
@@ -67,7 +61,7 @@ frames (no JPEG magic bytes).
 ### Step 1 — Install dependencies
 
 ```bash
-pip install opencv-python numpy
+pip install opencv-python
 ```
 
 ### Step 2 — Start the script
@@ -82,13 +76,15 @@ python3 camera_telemetry.py
 |--------|---------|-------------|
 | `--camera INDEX` | `0` | Camera device index |
 | `--port PORT` | `9000` | UDP destination port |
-| `--fps FPS` | `24` | Target frame rate |
+| `--fps FPS` | `30` | Target frame rate |
+| `--quality Q` | `85` | JPEG quality (1–100) |
 | `--no-camera` | off | Use synthetic test pattern |
 
 ```bash
-python3 camera_telemetry.py --no-camera        # no hardware needed
-python3 camera_telemetry.py --camera 1         # secondary camera
-python3 camera_telemetry.py --fps 10           # lower rate / less CPU
+python3 camera_telemetry.py --no-camera          # no hardware needed
+python3 camera_telemetry.py --camera 1           # secondary camera
+python3 camera_telemetry.py --fps 60             # push higher rate
+python3 camera_telemetry.py --quality 60         # smaller packets
 ```
 
 ### Step 3 — Configure Serial Studio
@@ -100,29 +96,13 @@ python3 camera_telemetry.py --fps 10           # lower rate / less CPU
 
 ---
 
-## Dashboard Groups
+## Performance Tips
 
-| Group | Widget | Description |
-|-------|--------|-------------|
-| Luminance | Gauge | Real-time brightness meter |
-| Frame Quality | Bar × 2 | Contrast and sharpness side-by-side |
-| Colour | Gauge | Dominant hue angle |
-| Motion | Bar | Optical-flow activity level |
-| Performance | Gauge + data | Live FPS and total frame count |
-| Trends | Multiplot | Overlaid time plots of all metrics |
-| Camera Feed | Image View | Live JPEG camera stream (Pro) |
-
----
-
-## Notes
-
-- JPEG quality is set to 70 by default to keep UDP packets well under 64 KB.
-  Raise `JPEG_QUALITY` in the script for sharper images at the cost of larger
-  packets and possible fragmentation.
+- Lower `--quality` reduces JPEG size and UDP fragmentation pressure.
+  Quality 60–75 is usually sufficient for 640×480 preview.
 - Frames wider than 640 px are automatically downscaled before encoding.
-- Optical-flow computation adds CPU load; use `--fps 10` on slow machines.
-- The synthetic pattern (`--no-camera`) produces a scrolling colour gradient
-  with a moving white circle, giving non-trivial values for all metrics.
+- The synthetic pattern (`--no-camera`) animates a colour gradient with a
+  moving circle — useful for testing without any camera hardware.
 
 ---
 
@@ -130,7 +110,6 @@ python3 camera_telemetry.py --fps 10           # lower rate / less CPU
 
 - Python 3.8 or later
 - [`opencv-python`](https://pypi.org/project/opencv-python/) — `pip install opencv-python`
-- [`numpy`](https://pypi.org/project/numpy/) — installed as an opencv-python dependency
 
 ---
 

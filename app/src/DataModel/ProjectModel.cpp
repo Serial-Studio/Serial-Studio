@@ -405,7 +405,11 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
     return false;
   }
 
-  if (datasetCount() <= 0) {
+  const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
+    return g.widget == QLatin1String("image");
+  });
+
+  if (datasetCount() <= 0 && !hasImageGroup) {
     if (m_suppressMessageBoxes)
       qWarning() << "[ProjectModel] Project needs at least one dataset";
     else
@@ -575,6 +579,7 @@ void DataModel::ProjectModel::setFrameStartSequence(const QString& sequence)
 {
   if (m_frameStartSequence != sequence) {
     m_frameStartSequence = sequence;
+    Q_EMIT frameDetectionChanged();
     setModified(true);
   }
 }
@@ -586,6 +591,7 @@ void DataModel::ProjectModel::setFrameEndSequence(const QString& sequence)
 {
   if (m_frameEndSequence != sequence) {
     m_frameEndSequence = sequence;
+    Q_EMIT frameDetectionChanged();
     setModified(true);
   }
 }
@@ -597,6 +603,7 @@ void DataModel::ProjectModel::setChecksumAlgorithm(const QString& algorithm)
 {
   if (m_checksumAlgorithm != algorithm) {
     m_checksumAlgorithm = algorithm;
+    Q_EMIT frameDetectionChanged();
     setModified(true);
   }
 }
