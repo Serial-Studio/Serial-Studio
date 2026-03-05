@@ -421,6 +421,7 @@ Detailed feature comparison across all tools:
 | **GPS maps** | ✅ | ❌ | ⚠️ Manual | ⚠️ Toolbox | ⚠️ Manual | ⚠️ | ✅ Plugin |
 | **FFT spectrum** | ✅ Pro | ❌ | ⚠️ Manual | ✅ | ⚠️ Manual | ✅ | ⚠️ |
 | **3D visualization** | ✅ Pro | ❌ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| **Live image/camera stream** | ✅ Pro | ❌ | ⚠️ Manual | ✅ | ⚠️ Manual | ✅ | ⚠️ Plugin |
 | **Custom parsing** | ✅ JS | ❌ | ✅ | ✅ | ✅ | ✅ | ⚠️ |
 | **Cross-platform** | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ | ✅ |
 | **Open source** | ✅ GPL | ✅ | ✅ | ❌ | ✅ | ❌ | ✅ |

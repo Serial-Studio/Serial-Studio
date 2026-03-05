@@ -70,6 +70,11 @@ bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
       break;
     }
 
+    if (group.widget == QStringLiteral("image")) {
+      return true;
+      break;
+    }
+
     for (const auto& dataset : std::as_const((group.datasets))) {
       if (dataset.xAxisId > 0) {
         return true;
@@ -94,6 +99,11 @@ bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
 {
   for (const auto& group : std::as_const(g)) {
     if (group.widget == QStringLiteral("plot3d")) {
+      return true;
+      break;
+    }
+
+    if (group.widget == QStringLiteral("image")) {
       return true;
       break;
     }
@@ -129,6 +139,9 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardLED:
     case DashboardPlot3D:
     case DashboardTerminal:
+#ifdef BUILD_COMMERCIAL
+    case DashboardImageView:
+#endif
       return true;
       break;
     default:
@@ -208,6 +221,11 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
     case DashboardPlot3D:
       return iconPath + "plot3d.svg";
       break;
+#ifdef BUILD_COMMERCIAL
+    case DashboardImageView:
+      return iconPath + "image.svg";
+      break;
+#endif
     case DashboardNoWidget:
       return iconPath + "group.svg";
       break;
@@ -264,6 +282,11 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
     case DashboardPlot3D:
       return tr("3D Plots");
       break;
+#ifdef BUILD_COMMERCIAL
+    case DashboardImageView:
+      return tr("Image Views");
+      break;
+#endif
     case DashboardNoWidget:
       return "";
       break;
@@ -304,6 +327,11 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
 
   else if (widget == "terminal")
     return DashboardTerminal;
+
+#ifdef BUILD_COMMERCIAL
+  else if (widget == "image")
+    return DashboardImageView;
+#endif
 
   return DashboardNoWidget;
 }
@@ -371,6 +399,11 @@ QString SerialStudio::groupWidgetId(const GroupWidget widget)
     case Plot3D:
       return "plot3d";
       break;
+#ifdef BUILD_COMMERCIAL
+    case ImageView:
+      return "image";
+      break;
+#endif
     case NoGroupWidget:
       return "";
       break;
@@ -405,6 +438,11 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString& id)
 
   else if (id == "plot3d")
     return Plot3D;
+
+#ifdef BUILD_COMMERCIAL
+  else if (id == "image")
+    return ImageView;
+#endif
 
   return NoGroupWidget;
 }

@@ -161,6 +161,9 @@ public:
     MultiPlot,
     NoGroupWidget,
     Plot3D,
+#ifdef BUILD_COMMERCIAL
+    ImageView,
+#endif
   };
   Q_ENUM(GroupWidget)
 
@@ -196,6 +199,9 @@ public:
     DashboardGauge,
     DashboardCompass,
     DashboardNoWidget,
+#ifdef BUILD_COMMERCIAL
+    DashboardImageView,
+#endif
   };
   Q_ENUM(DashboardWidget)
 

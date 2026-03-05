@@ -1,0 +1,253 @@
+{
+    "actions": [
+    ],
+    "checksum": "",
+    "decoder": 0,
+    "frameDetection": 1,
+    "frameEnd": ";",
+    "frameParser": "/**\n * Parses a CSV camera telemetry frame.\n *\n * Frame format (7 values, comma-separated):\n *   luminance, contrast, sharpness, hue, motion, fps, frame_count\n *\n * @param frame  CSV string between frame delimiters\n * @return array of parsed values\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
+    "frameStart": "$",
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 24,
+                    "graph": true,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 360,
+                    "plotMin": 0,
+                    "title": "Dominant Hue",
+                    "units": "°",
+                    "value": "--.--",
+                    "widget": "gauge",
+                    "widgetMax": 360,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                }
+            ],
+            "title": "Colour",
+            "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 24,
+                    "graph": false,
+                    "index": 6,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": true,
+                    "plotMax": 30,
+                    "plotMin": 0,
+                    "title": "FPS",
+                    "units": "Hz",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 30,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 24,
+                    "graph": false,
+                    "index": 7,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 0,
+                    "plotMin": 0,
+                    "title": "Frame Count",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                }
+            ],
+            "title": "Performance",
+            "widget": "datagrid"
+        },
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 24,
+                    "graph": true,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 255,
+                    "plotMin": 0,
+                    "title": "Luminance",
+                    "units": "Y",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 24,
+                    "graph": true,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 80,
+                    "plotMin": 0,
+                    "title": "Contrast",
+                    "units": "σ",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 24,
+                    "graph": true,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "Sharpness",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 24,
+                    "graph": true,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "Motion",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
+                }
+            ],
+            "title": "Trends",
+            "widget": "multiplot"
+        },
+        {
+            "datasets": [
+            ],
+            "imgDetectionMode": "autodetect",
+            "imgEndSequence": "",
+            "imgStartSequence": "",
+            "title": "Camera Feed",
+            "widget": "image"
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "title": "Camera Telemetry",
+    "widgetSettings": {
+        "__layout__:-1__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    2,
+                    0,
+                    1
+                ]
+            }
+        },
+        "__layout__:-2__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    2,
+                    15,
+                    3,
+                    4,
+                    12,
+                    13,
+                    5,
+                    16,
+                    6,
+                    14,
+                    7,
+                    17,
+                    0,
+                    8,
+                    9,
+                    10,
+                    11,
+                    1
+                ]
+            }
+        }
+    }
+}

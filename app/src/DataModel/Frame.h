@@ -75,6 +75,10 @@ inline constexpr auto Groups   = "groups";
 inline constexpr auto Actions  = "actions";
 inline constexpr auto Datasets = "datasets";
 
+inline constexpr auto ImgMode  = "imgDetectionMode";
+inline constexpr auto ImgStart = "imgStartSequence";
+inline constexpr auto ImgEnd   = "imgEndSequence";
+
 inline constexpr auto DashboardLayout = "dashboardLayout";
 inline constexpr auto ActiveGroupId   = "activeGroupId";
 inline constexpr auto WidgetSettings  = "widgetSettings";
@@ -190,6 +194,11 @@ struct alignas(8) Group {
   QString title;                  ///< Group display name
   QString widget;                 ///< Group widget type
   std::vector<Dataset> datasets;  ///< Datasets contained in this group
+
+  // Image View configuration (only used when widget == "image")
+  QString imgDetectionMode;   ///< "autodetect" | "manual" (default: "autodetect")
+  QString imgStartSequence;   ///< Hex start delimiter (manual mode only)
+  QString imgEndSequence;     ///< Hex end delimiter (manual mode only)
 };
 
 static_assert(sizeof(Group) % alignof(Group) == 0, "Unaligned Group struct");
@@ -486,6 +495,13 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Datasets, datasetArray);
   obj.insert(Keys::Title, g.title.simplified());
   obj.insert(Keys::Widget, g.widget.simplified());
+
+  if (g.widget.simplified() == QLatin1String("image")) {
+    obj.insert(Keys::ImgMode, g.imgDetectionMode);
+    obj.insert(Keys::ImgStart, g.imgStartSequence);
+    obj.insert(Keys::ImgEnd, g.imgEndSequence);
+  }
+
   return obj;
 }
 
@@ -710,9 +726,20 @@ void read_io_settings(QByteArray& frameStart,
   const auto title  = ss_jsr(obj, Keys::Title, "").toString().simplified();
   const auto widget = ss_jsr(obj, Keys::Widget, "").toString().simplified();
 
-  if (!title.isEmpty() && !array.isEmpty()) {
+  // Image groups have no telemetry datasets; allow them with an empty array.
+  const bool isImageGroup = (widget == QLatin1String("image"));
+
+  if (!title.isEmpty() && (!array.isEmpty() || isImageGroup)) {
     g.title  = title;
     g.widget = widget;
+
+    if (isImageGroup) {
+      g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();
+      g.imgStartSequence = ss_jsr(obj, Keys::ImgStart, "").toString();
+      g.imgEndSequence   = ss_jsr(obj, Keys::ImgEnd, "").toString();
+      return true;
+    }
+
     g.datasets.clear();
     g.datasets.reserve(array.count());
 

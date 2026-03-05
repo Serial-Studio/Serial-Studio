@@ -421,6 +421,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/USB.h
     src/IO/Drivers/Process.h
     src/UI/Widgets/Plot3D.h
+    src/UI/Widgets/ImageView.h
+    src/UI/ImageProvider.h
     src/DataModel/DBCImporter.h
     src/Licensing/Trial.h
     src/Licensing/MachineID.h
@@ -447,6 +449,8 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/USB.cpp
     src/IO/Drivers/Process.cpp
     src/UI/Widgets/Plot3D.cpp
+    src/UI/Widgets/ImageView.cpp
+    src/UI/ImageProvider.cpp
     src/DataModel/DBCImporter.cpp
     src/Licensing/Trial.cpp
     src/ThirdParty/miniaudio.cpp
@@ -468,6 +472,7 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
     qml/Widgets/Dashboard/Plot3D.qml
+    qml/Widgets/Dashboard/ImageView.qml
   )
 endif()
 

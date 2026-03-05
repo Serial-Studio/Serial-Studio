@@ -74,7 +74,7 @@ Make sure your system meets these requirements before running the AppImage.
 #### What It Can Do:
 - **No Coding Needed:** Build dashboards using a simple visual interface
 - **Many Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, Raw USB, HID devices, and Process I/O
-- **15+ Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids
+- **15+ Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids, live image/camera feed (Pro)
 - **Save to CSV:** Automatically save all data for later analysis in Excel, Python, MATLAB, or R
 - **MDF4 Playback & Export:** Play and export MDF4/MF4 files for CAN Bus, LIN, FlexRay, and analog channels (Pro)
 - **Works Everywhere:** Windows 10/11, macOS 11+ (Intel + Apple Silicon), Linux x64, and Raspberry Pi ARM64
@@ -84,6 +84,7 @@ Make sure your system meets these requirements before running the AppImage.
 - **Modbus TCP/RTU:** Connect to industrial PLCs and equipment (Pro)
 - **CAN Bus Support:** Import DBC files for automotive and industrial applications (Pro)
 - **MQTT for IoT:** Connect to MQTT brokers for distributed sensors (Pro)
+- **Image View:** Display live JPEG/PNG camera streams alongside telemetry on the same connection (Pro)
 - **API Server (TCP port 7777):** Control Serial Studio programmatically with 182+ API commands (see [API Client example](./examples/API%20Test))
 - **AI Integration (MCP):** Connect AI models like Claude via Model Context Protocol for automated analysis and control (see [MCP Client](./examples/MCP%20Client))
 - **Dual Licensing:** Open-source GPL-3.0 core, proprietary Pro features (see [LICENSE.md](LICENSE.md))

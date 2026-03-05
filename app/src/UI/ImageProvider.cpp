@@ -1,0 +1,80 @@
+/*
+ * Serial Studio - https://serial-studio.com/
+ *
+ * Copyright (C) 2020–2025 Alex Spataru <https://aspatru.com>
+ *
+ * This file is part of the proprietary features of Serial Studio and is
+ * licensed under the Serial Studio Commercial License.
+ *
+ * Redistribution, modification, or use of this file in any form is permitted
+ * only under the terms of a valid Serial Studio Commercial License obtained
+ * from the author.
+ *
+ * This file must not be used or included in builds distributed under the
+ * GNU General Public License (GPL) unless explicitly permitted by a
+ * commercial agreement.
+ *
+ * For details, see:
+ * https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md
+ *
+ * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
+ */
+
+#ifdef BUILD_COMMERCIAL
+
+#  include "UI/ImageProvider.h"
+
+static UI::ImageProvider* s_globalProvider = nullptr;
+
+//--------------------------------------------------------------------------------------------------
+// Constructor & global access
+//--------------------------------------------------------------------------------------------------
+
+UI::ImageProvider::ImageProvider()
+  : QQuickImageProvider(QQuickImageProvider::Image)
+{
+}
+
+UI::ImageProvider* UI::ImageProvider::global()
+{
+  return s_globalProvider;
+}
+
+void UI::ImageProvider::setGlobal(UI::ImageProvider* provider)
+{
+  s_globalProvider = provider;
+}
+
+//--------------------------------------------------------------------------------------------------
+// QQuickImageProvider interface
+//--------------------------------------------------------------------------------------------------
+
+QImage UI::ImageProvider::requestImage(const QString& id,
+                                       QSize* size,
+                                       const QSize& requestedSize)
+{
+  // URL format: "<providerKey>/<frameCount>" — strip the version suffix
+  const QString key = id.section(QLatin1Char('/'), 0, 0);
+
+  QReadLocker locker(&m_lock);
+  const auto it = m_images.constFind(key);
+  if (it == m_images.cend())
+    return QImage();
+
+  QImage img = it.value();
+  if (size)
+    *size = img.size();
+
+  if (!requestedSize.isEmpty())
+    img = img.scaled(requestedSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+  return img;
+}
+
+void UI::ImageProvider::setImage(const QString& id, const QImage& image)
+{
+  QWriteLocker locker(&m_lock);
+  m_images.insert(id, image);
+}
+
+#endif  // BUILD_COMMERCIAL

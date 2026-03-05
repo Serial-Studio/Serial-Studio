@@ -377,6 +377,7 @@ Not recommended unless you need to create projects automatically with scripts.
 - XY plots (parametric plots)
 - 3D visualizations
 - Advanced plotting features
+- Image View (live JPEG/PNG camera feed widget)
 
 ---
 
@@ -511,6 +512,7 @@ ARM64 AppImage requires Ubuntu 24.04+ (glibc 2.38+). Upgrade your OS or use Flat
 | 3D visualization | ❌ | ✅ |
 | FFT spectrum analyzer | ❌ | ✅ |
 | Advanced plotting | ❌ | ✅ |
+| Image View (camera/image stream) | ❌ | ✅ |
 | CSV export & playback | ✅ | ✅ |
 | MDF4 playback & export | ❌ | ✅ |
 | DBC file import (CAN) | ❌ | ✅ |
@@ -792,6 +794,36 @@ Upvote relevant GitHub issues if you need this feature.
 4. Use oscilloscope widget for waveform
 
 **Use cases:** Audio analysis, ultrasonic sensors, software-defined radio (SDR) with audio output.
+
+---
+
+### Can Serial Studio display live camera or image data?
+
+**Pro version only** (Image View widget).
+
+Serial Studio can display live JPEG, PNG, BMP, or WebP images streamed from any connected device over any supported transport (UART, UDP, TCP, BLE, etc.).
+
+**How it works:**
+
+The Image View widget runs an independent frame reader alongside the telemetry path. It scans the raw byte stream for image data without interfering with CSV or JSON telemetry in the same stream.
+
+**Two detection modes:**
+
+- **Autodetect (default):** No configuration needed. The widget automatically detects JPEG (`FF D8 FF … FF D9`) and PNG (`89 50 4E 47 … 49 45 4E 44 AE 42 60 82`) frames by their magic bytes. Perfect for embedded cameras streaming raw JPEG.
+
+- **Manual delimiters:** Specify custom start/end byte sequences for proprietary framing (e.g. `$IMG_START$…$IMG_END$`). Configure these in the Project Editor group settings.
+
+**Quick setup:**
+
+1. In the Project Editor, add a new **Group** and set its widget type to **Image View**
+2. Leave detection mode as **Autodetect** (works for most cameras out of the box)
+3. Load your project and connect — the widget shows "Waiting for image…" until the first frame arrives
+
+**Mixed telemetry + image stream:**
+
+You can send image data and telemetry (gauges, plots, etc.) over the same connection simultaneously. The Image View widget extracts image frames by magic bytes; the normal telemetry parser ignores binary image data between its `frameStart`/`frameEnd` delimiters. See the **Camera Telemetry** example in the `/examples` folder for a complete Python + project file demo.
+
+**Use cases:** Embedded camera modules (OV2640, ESP32-CAM), UAV video feeds, industrial vision systems, any device that streams JPEG/PNG images over serial or network.
 
 ---
 

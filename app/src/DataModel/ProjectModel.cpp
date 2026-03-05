@@ -1608,6 +1608,11 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
     grp.datasets.push_back(z);
   }
 
+#ifdef BUILD_COMMERCIAL
+  else if (widget == SerialStudio::ImageView)
+    grp.widget = "image";
+#endif
+
   m_groups[group] = grp;
 
   Q_EMIT groupsChanged();

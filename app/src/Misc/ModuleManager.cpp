@@ -78,6 +78,8 @@
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #  include "MQTT/Client.h"
+#  include "UI/ImageProvider.h"
+#  include "UI/Widgets/ImageView.h"
 #  include "UI/Widgets/Plot3D.h"
 #endif
 
@@ -272,6 +274,7 @@ void Misc::ModuleManager::registerQmlTypes()
 
 #ifdef BUILD_COMMERCIAL
   qmlRegisterType<Widgets::Plot3D>("SerialStudio", 1, 0, "Plot3DWidget");
+  qmlRegisterType<Widgets::ImageView>("SerialStudio", 1, 0, "ImageViewModel");
 #endif
 
   // Register JSON custom items
@@ -453,6 +456,13 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
   c->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
+
+  // Register image provider for Image View widget (pro only)
+#ifdef BUILD_COMMERCIAL
+  auto* imgProvider = new UI::ImageProvider();
+  UI::ImageProvider::setGlobal(imgProvider);
+  m_engine.addImageProvider(QStringLiteral("serial-studio-img"), imgProvider);
+#endif
 
   // Load main.qml
   m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));

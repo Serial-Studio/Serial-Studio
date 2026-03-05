@@ -341,6 +341,17 @@ Rectangle {
     }
 
     //
+    // Image View group
+    //
+    Widgets.ToolbarButton {
+      text: qsTr("Image")
+      Layout.alignment: Qt.AlignVCenter
+      ToolTip.text: qsTr("Add an image/video stream viewer")
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/image.svg"
+      onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Image View"), SerialStudio.ImageView)
+    }
+
+    //
     // Other group types
     //
     GridLayout {
@@ -402,7 +413,7 @@ Rectangle {
         Layout.alignment: Qt.AlignLeft
         icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
         onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope)
-       ToolTip.text: qsTr("Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)")
+        ToolTip.text: qsTr("Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)")
       }
 
       Widgets.ToolbarButton {

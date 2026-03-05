@@ -85,7 +85,13 @@ typedef enum {
   kActionView_TimerInterval
 } ActionItem;
 
-typedef enum { kGroupView_Title, kGroupView_Widget } GroupItem;
+typedef enum {
+  kGroupView_Title,
+  kGroupView_Widget,
+  kGroupView_ImgMode,
+  kGroupView_ImgStart,
+  kGroupView_ImgEnd
+} GroupItem;
 
 // clang-format on
 
@@ -861,6 +867,59 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
                       ParameterDescription);
   m_groupModel->appendRow(widgetItem);
 
+  // Image View configuration fields (pro only, shown when widget == "image")
+#ifdef BUILD_COMMERCIAL
+  if (group.widget == QLatin1String("image")) {
+    auto* imgHdr = new QStandardItem();
+    imgHdr->setData(SectionHeader, WidgetType);
+    imgHdr->setData(tr("Image Configuration"), PlaceholderValue);
+    imgHdr->setData("qrc:/rcc/icons/project-editor/model/image.svg", ParameterIcon);
+    m_groupModel->appendRow(imgHdr);
+
+    static const QStringList kImgModeLabels = {tr("Auto-detect"), tr("Manual Delimiters")};
+    static const QStringList kImgModeValues = {
+      QStringLiteral("autodetect"), QStringLiteral("manual")};
+
+    int modeIndex = group.imgDetectionMode == QLatin1String("manual") ? 1 : 0;
+
+    auto* modeItem = new QStandardItem();
+    modeItem->setEditable(true);
+    modeItem->setData(true, Active);
+    modeItem->setData(ComboBox, WidgetType);
+    modeItem->setData(kImgModeLabels, ComboBoxData);
+    modeItem->setData(modeIndex, EditableValue);
+    modeItem->setData(kGroupView_ImgMode, ParameterType);
+    modeItem->setData(tr("Detection Mode"), ParameterName);
+    modeItem->setData(
+      tr("Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences"),
+      ParameterDescription);
+    m_groupModel->appendRow(modeItem);
+
+    auto* startItem = new QStandardItem();
+    startItem->setEditable(true);
+    startItem->setData(group.imgDetectionMode == QLatin1String("manual"), Active);
+    startItem->setData(TextField, WidgetType);
+    startItem->setData(group.imgStartSequence, EditableValue);
+    startItem->setData(kGroupView_ImgStart, ParameterType);
+    startItem->setData(tr("Start Sequence (Hex)"), ParameterName);
+    startItem->setData(tr("e.g. FF D8 FF"), PlaceholderValue);
+    startItem->setData(tr("Hex bytes marking the start of an image frame"),
+                       ParameterDescription);
+    m_groupModel->appendRow(startItem);
+
+    auto* endItem = new QStandardItem();
+    endItem->setEditable(true);
+    endItem->setData(group.imgDetectionMode == QLatin1String("manual"), Active);
+    endItem->setData(TextField, WidgetType);
+    endItem->setData(group.imgEndSequence, EditableValue);
+    endItem->setData(kGroupView_ImgEnd, ParameterType);
+    endItem->setData(tr("End Sequence (Hex)"), ParameterName);
+    endItem->setData(tr("e.g. FF D9"), PlaceholderValue);
+    endItem->setData(tr("Hex bytes marking the end of an image frame"), ParameterDescription);
+    m_groupModel->appendRow(endItem);
+  }
+#endif
+
   connect(
     m_groupModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onGroupItemChanged);
 
@@ -1510,6 +1569,9 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multiple Plot"));
   m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
   m_groupWidgets.insert(QStringLiteral("plot3d"), tr("3D Plot"));
+#ifdef BUILD_COMMERCIAL
+  m_groupWidgets.insert(QStringLiteral("image"), tr("Image View"));
+#endif
   m_groupWidgets.insert(QLatin1String(""), tr("None"));
 
   m_datasetWidgets.clear();
@@ -1614,6 +1676,9 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
       {          "map",           SerialStudio::GPS},
       {     "datagrid",      SerialStudio::DataGrid},
       {       "plot3d",        SerialStudio::Plot3D},
+#ifdef BUILD_COMMERCIAL
+      {       "image",       SerialStudio::ImageView},
+#endif
       {             "", SerialStudio::NoGroupWidget},
     };
 
@@ -1635,6 +1700,23 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
     }
 
     m_selectedGroup.widget = widgetStr;
+#ifdef BUILD_COMMERCIAL
+  } else if (id == kGroupView_ImgMode) {
+    const QStringList kImgModeValues = {QStringLiteral("autodetect"), QStringLiteral("manual")};
+    const int modeIdx                = value.toInt();
+    if (modeIdx >= 0 && modeIdx < kImgModeValues.size()) {
+      m_selectedGroup.imgDetectionMode = kImgModeValues.at(modeIdx);
+      pm.updateGroup(groupId, m_selectedGroup);
+      buildGroupModel(m_selectedGroup);
+      return;
+    }
+  } else if (id == kGroupView_ImgStart) {
+    m_selectedGroup.imgStartSequence = value.toString();
+    pm.updateGroup(groupId, m_selectedGroup);
+  } else if (id == kGroupView_ImgEnd) {
+    m_selectedGroup.imgEndSequence = value.toString();
+    pm.updateGroup(groupId, m_selectedGroup);
+#endif
   }
 
   Q_EMIT editableOptionsChanged();

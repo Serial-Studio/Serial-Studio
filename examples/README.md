@@ -276,6 +276,28 @@ Many devices (especially IoT/embedded systems) batch sensor readings to reduce c
   - Audio devices sending sample chunks
   - Any system where communication efficiency matters
 
+### 17. Camera Telemetry
+**Difficulty:** 🔴 Advanced | **Time:** ~10 minutes | **License:** Pro (Image View widget required)
+
+Streams live camera video and computed image analytics over a single UDP connection.
+Demonstrates the **Image View** widget alongside standard dashboard widgets using a
+mixed binary + ASCII byte stream.
+
+**Contents:**
+  - **camera_telemetry.py**: Python script that captures camera frames and sends JPEG + CSV analytics over UDP
+  - **Camera Telemetry.ssproj**: Serial Studio project file with Image View, gauges, bars, and multiplot
+  - **README.md**: Setup guide
+
+**Features:**
+  - **Single UDP stream**: JPEG frames and CSV telemetry co-exist in the same byte flow
+  - **Image View widget**: Live camera feed with JPEG autodetection (FF D8 FF magic bytes)
+  - **Luminance & Contrast**: Perceptual brightness and grayscale standard deviation
+  - **Sharpness**: Laplacian variance (focus quality metric)
+  - **Motion Detection**: Dense optical flow magnitude between consecutive frames
+  - **Dominant Hue**: Circular mean of the H channel (0°–360°)
+  - **Synthetic mode**: `--no-camera` flag for software-only testing (no hardware needed)
+  - Requires a webcam or built-in camera (synthetic pattern available without hardware)
+
 ## Getting Started
 
 To use these examples:
