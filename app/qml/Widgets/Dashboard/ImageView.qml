@@ -47,31 +47,18 @@ Item {
   readonly property real fontSize: Math.max(9, Math.min(11, Math.min(root.width, root.height) / 28))
 
   //
-  // Blur background updates at ~4 Hz
-  //
-  property string blurUrl: ""* Cpp_Misc_CommonFonts.widgetFontScale
-  Timer {
-    repeat: true
-    interval: 250
-    id: blurRefresh
-    running: model && model.frameCount > 0
-    onTriggered: root.blurUrl = model ? model.imageUrl : ""
-  }
-
-  //
   // Hot-reload the image
   //
   Connections {
     target: model
     function onImageReady() {
       mainImage.source = model.imageUrl
-      if (model.frameCount === 1)
-        root.blurUrl = model.imageUrl
+      blurSrc.source = model.imageUrl
     }
   }
 
   // -------------------------------------------------------------------------
-  // Blurred background — slow-refreshed, fills letterbox bars
+  // Blurred background — fills letterbox bars
   // -------------------------------------------------------------------------
 
   Rectangle {
@@ -85,9 +72,8 @@ Item {
     smooth: false
     mipmap: false
     visible: false
-    asynchronous: true
+    asynchronous: false
     anchors.fill: parent
-    source: root.blurUrl
     sourceSize: Qt.size(128, 128)
     fillMode: Image.PreserveAspectCrop
   }
@@ -98,7 +84,7 @@ Item {
     source: blurSrc
     blurEnabled: true
     blurMultiplier: 10
-    anchors.fill: blurSrc
+    anchors.fill: parent
     visible: model && model.frameCount > 0
   }
 
