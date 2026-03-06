@@ -249,7 +249,7 @@ ColumnLayout {
                   sourceSize.width: 18
                   sourceSize.height: 18
                   anchors.centerIn: parent
-                  source: visible ? model.parameterIcon : ""
+                  source: model.parameterIcon || ""
                 }
               }
 
@@ -313,7 +313,7 @@ ColumnLayout {
             sourceSize.height: 18
             visible: root.enabled
             anchors.centerIn: parent
-            source: visible ? model.parameterIcon : ""
+            source: model.parameterIcon || ""
           }
 
           MultiEffect {
