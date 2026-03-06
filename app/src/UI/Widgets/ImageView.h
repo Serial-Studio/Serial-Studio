@@ -130,15 +130,18 @@ private:
 class ImageView : public QQuickItem {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString imageUrl    READ imageUrl    NOTIFY imageReady)
-  Q_PROPERTY(QString imageFormat READ imageFormat NOTIFY imageReady)
-  Q_PROPERTY(int     frameCount  READ frameCount  NOTIFY imageReady)
-  Q_PROPERTY(int     imageWidth  READ imageWidth  NOTIFY imageReady)
-  Q_PROPERTY(int     imageHeight READ imageHeight NOTIFY imageReady)
+  Q_PROPERTY(QString imageUrl      READ imageUrl      NOTIFY imageReady)
+  Q_PROPERTY(QString imageFormat   READ imageFormat   NOTIFY imageReady)
+  Q_PROPERTY(int     frameCount    READ frameCount    NOTIFY imageReady)
+  Q_PROPERTY(int     imageWidth    READ imageWidth    NOTIFY imageReady)
+  Q_PROPERTY(int     imageHeight   READ imageHeight   NOTIFY imageReady)
+  Q_PROPERTY(bool    exportEnabled READ exportEnabled WRITE setExportEnabled NOTIFY exportEnabledChanged)
+  Q_PROPERTY(QString groupTitle   READ groupTitle                           CONSTANT)
   // clang-format on
 
 signals:
   void imageReady();
+  void exportEnabledChanged();
 
 public:
   explicit ImageView(int index = -1, QQuickItem* parent = nullptr);
@@ -149,6 +152,11 @@ public:
   [[nodiscard]] int frameCount() const;
   [[nodiscard]] int imageWidth() const;
   [[nodiscard]] int imageHeight() const;
+  [[nodiscard]] bool exportEnabled() const;
+  [[nodiscard]] const QString& groupTitle() const;
+
+public slots:
+  void setExportEnabled(bool enabled);
 
 private slots:
   void onFrameReady(const QByteArray& data);
@@ -162,8 +170,10 @@ private:
   int m_frameCount;
   int m_imageWidth;
   int m_imageHeight;
+  bool m_exportEnabled;
   QString m_imageFormat;
   QString m_providerKey;
+  QString m_groupTitle;
   ImageFrameReader* m_reader;
 };
 

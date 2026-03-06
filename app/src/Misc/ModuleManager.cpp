@@ -79,6 +79,7 @@
 #  include "Licensing/Trial.h"
 #  include "MQTT/Client.h"
 #  include "UI/ImageProvider.h"
+#  include "UI/Widgets/ImageExport.h"
 #  include "UI/Widgets/ImageView.h"
 #  include "UI/Widgets/Plot3D.h"
 #endif
@@ -462,6 +463,10 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto* imgProvider = new UI::ImageProvider();
   UI::ImageProvider::setGlobal(imgProvider);
   m_engine.addImageProvider(QStringLiteral("serial-studio-img"), imgProvider);
+
+  auto imageExport = &Widgets::ImageExport::instance();
+  imageExport->setupExternalConnections();
+  c->setContextProperty("Cpp_Image_Export", imageExport);
 #endif
 
   // Load main.qml

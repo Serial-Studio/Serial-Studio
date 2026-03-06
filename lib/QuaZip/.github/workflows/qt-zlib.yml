@@ -1,0 +1,321 @@
+on:
+  push:
+    branches:
+      - master
+      - feature/*
+  pull_request:
+
+name: qt-zlib
+
+permissions: read-all
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+
+  use-qt-zlib-ubuntu:
+    if: true
+    runs-on: ubuntu-22.04
+    name: use-qt-zlib-ubuntu-${{ matrix.qt_version }}
+    container: ghcr.io/cen1/qt:${{ matrix.qt_version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        qt_version: [ 5.15.12, 6.4.3, 6.8.2 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" -DBUILD_SHARED_LIBS=OFF -DQUAZIP_ENABLE_TESTS=ON -DQUAZIP_USE_QT_ZLIB=ON -DCMAKE_PREFIX_PATH="/usr/local/Qt-${{ matrix.qt_version }}" -B build
+
+      - name: Build
+        run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+      - name: Run tests
+        working-directory: build
+        run: ctest --verbose -C Release
+
+  use-qt6-zlib-windows:
+    if: true
+    runs-on: windows-latest
+    name: use-qt6-zlib-windows-${{ matrix.qt_version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        qt_version: [ 6.8.2 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+
+      - name: Restore Qt build cache
+        id: cache-qt-restore
+        uses: actions/cache@v4
+        with:
+          key: windows-qt-${{ matrix.qt_version }}
+          path: qt-everywhere-src-${{ matrix.qt_version }}
+
+      - name: Restore Qt zip
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        id: cache-qt-zip-restore
+        uses: actions/cache@v4
+        with:
+          key: windows-qt-${{ matrix.qt_version }}-zip
+          path: qt-everywhere-src-${{ matrix.qt_version }}.zip
+
+      - name: Download Qt 6
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true' && steps.cache-qt-zip-restore.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          curl https://ftp.fau.de/qtproject/archive/qt/6.8/${{ matrix.qt_version }}/single/qt-everywhere-src-${{ matrix.qt_version }}.zip --output qt-everywhere-src-${{ matrix.qt_version }}.zip
+
+      - name: Save Qt zip
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true' && steps.cache-qt-zip-restore.outputs.cache-hit != 'true'
+        id: cache-qt-zip-save
+        uses: actions/cache/save@v4
+        with:
+          path: qt-everywhere-src-${{ matrix.qt_version }}.zip
+          key: windows-qt-${{ matrix.qt_version }}-zip
+
+      - name: Extract Qt zip
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          unzip -q qt-everywhere-src-${{ matrix.qt_version }}.zip
+          ls -la
+
+      - name: Configure Qt
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        shell: cmd
+        working-directory: qt-everywhere-src-${{ matrix.qt_version }}
+        run: ./configure.bat -prefix "${{github.workspace}}/Qt" -qt-zlib \
+          -static \
+          -opensource \
+          -confirm-license \
+          -optimize-size \
+          -nomake examples \
+          -nomake tests \
+          -no-dbus \
+          -no-icu \
+          -no-fontconfig \
+          -no-opengl \
+          -no-openssl \
+          -no-gui \
+          -skip qtconnectivity \
+          -skip qtdatavis3d \
+          -skip qtdeclarative \
+          -skip qtdoc \
+          -skip qtactiveqt \
+          -skip qt3d \
+          -skip qtgraphs \
+          -skip qtgrpc \
+          -skip qtimageformats \
+          -skip qtlanguageserver \
+          -skip qtlocation \
+          -skip qthttpserver \
+          -skip qtmultimedia \
+          -skip qtopcua \
+          -skip qtpositioning \
+          -skip qtremoteobjects \
+          -skip qtscxml \
+          -skip qtsensors \
+          -skip qtserialbus \
+          -skip qtserialport \
+          -skip qtshadertools \
+          -skip qtspeech \
+          -skip qtsvg \
+          -skip qttools \
+          -skip qttranslations \
+          -skip qtwebchannel \
+          -skip qtwebengine \
+          -skip qtwebsockets \
+          -skip qtwebview \
+          -skip qtcharts \
+          -skip qtcoap \
+          -skip qtlottie \
+          -skip qtmqtt \
+          -skip qtnetworkauth \
+          -skip qtquick3d \
+          -skip qtquick3dphysics \
+          -skip qtquickeffectmaker \
+          -skip qtquicktimeline \
+          -skip qtvirtualkeyboard \
+          -skip qtwayland \
+          -skip qtcanvas3d \
+          -skip qtgamepad \
+          -skip qtpurchasing \
+          -skip qtscript
+
+      - name: Build Qt
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        shell: cmd
+        working-directory: qt-everywhere-src-${{ matrix.qt_version }}
+        run: cmake --build . --parallel
+
+      - name: Cache Qt
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        id: cache-qt
+        uses: actions/cache/save@v4
+        with:
+          path: qt-everywhere-src-${{ matrix.qt_version }}
+          key: windows-qt-${{ matrix.qt_version }}
+
+      - name: Install Qt
+        shell: cmd
+        working-directory: qt-everywhere-src-${{ matrix.qt_version }}
+        run: cmake --install .
+
+      - name: Configure CMake
+        run: cmake -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" -DQUAZIP_QT_MAJOR_VERSION=6 -DBUILD_SHARED_LIBS=OFF -DQUAZIP_ENABLE_TESTS=ON -DQUAZIP_USE_QT_ZLIB=ON -B "${{github.workspace}}/build" -DCMAKE_PREFIX_PATH="${{github.workspace}}\Qt"
+
+      - name: Build
+        shell: cmd
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+      - name: Run tests
+        shell: cmd
+        working-directory: ${{github.workspace}}/build
+        run: ctest --verbose --output-on-failure -C Release
+
+  use-qt5-zlib-windows:
+    if: true
+    runs-on: windows-latest
+    name: use-qt5-zlib-windows-${{ matrix.qt_version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        qt_version: [ 5.15.12 ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
+
+      - name: Restore Qt build cache
+        id: cache-qt-restore
+        uses: actions/cache@v4
+        with:
+          key: windows-qt-${{ matrix.qt_version }}
+          path: qt-everywhere-src-${{ matrix.qt_version }}
+
+      - name: Restore Qt zip
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        id: cache-qt-zip-restore
+        uses: actions/cache@v4
+        with:
+          key: windows-qt-${{ matrix.qt_version }}-zip
+          path: qt-everywhere-src-${{ matrix.qt_version }}.zip
+
+      - name: Download Qt 5
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true' && steps.cache-qt-zip-restore.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          curl https://ftp.fau.de/qtproject/archive/qt/5.15/${{ matrix.qt_version }}/single/qt-everywhere-opensource-src-${{ matrix.qt_version }}.zip --output qt-everywhere-src-${{ matrix.qt_version }}.zip
+
+      - name: Save Qt zip
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true' && steps.cache-qt-zip-restore.outputs.cache-hit != 'true'
+        id: cache-qt-zip-save
+        uses: actions/cache/save@v4
+        with:
+          path: qt-everywhere-src-${{ matrix.qt_version }}.zip
+          key: windows-qt-${{ matrix.qt_version }}-zip
+
+      - name: Extract Qt zip
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          unzip -q qt-everywhere-src-${{ matrix.qt_version }}.zip
+          ls -la
+
+      - name: Configure Qt
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        shell: cmd
+        working-directory: qt-everywhere-src-${{ matrix.qt_version }}
+        run: ./configure.bat -prefix "${{github.workspace}}/Qt" -qt-zlib ^
+          -static ^
+          -opensource ^
+          -confirm-license ^
+          -optimize-size ^
+          -nomake examples ^
+          -nomake tests ^
+          -no-dbus ^
+          -no-fontconfig ^
+          -no-opengl ^
+          -no-openssl ^
+          -no-gui ^
+          -skip qtconnectivity ^
+          -skip qtdatavis3d ^
+          -skip qtdeclarative ^
+          -skip qtdoc ^
+          -skip qtactiveqt ^
+          -skip qt3d ^
+          -skip qtimageformats ^
+          -skip qtlocation ^
+          -skip qtmultimedia ^
+          -skip qtopcua ^
+          -skip qtremoteobjects ^
+          -skip qtscxml ^
+          -skip qtsensors ^
+          -skip qtserialbus ^
+          -skip qtserialport ^
+          -skip qtspeech ^
+          -skip qtsvg ^
+          -skip qttools ^
+          -skip qttranslations ^
+          -skip qtwebchannel ^
+          -skip qtwebengine ^
+          -skip qtwebsockets ^
+          -skip qtwebview ^
+          -skip qtcharts ^
+          -skip qtcoap ^
+          -skip qtlottie ^
+          -skip qtmqtt ^
+          -skip qtnetworkauth ^
+          -skip qtquick3d ^
+          -skip qtquicktimeline ^
+          -skip qtvirtualkeyboard ^
+          -skip qtwayland ^
+          -skip qtcanvas3d ^
+          -skip qtgamepad ^
+          -skip qtpurchasing ^
+          -skip qtscript
+
+      - name: Build Qt
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        shell: cmd
+        working-directory: qt-everywhere-src-${{ matrix.qt_version }}
+        run: nmake
+
+      - name: Cache Qt
+        if: steps.cache-qt-restore.outputs.cache-hit != 'true'
+        id: cache-qt
+        uses: actions/cache/save@v4
+        with:
+          path: qt-everywhere-src-${{ matrix.qt_version }}
+          key: windows-qt-${{ matrix.qt_version }}
+
+      - name: Install Qt
+        shell: cmd
+        working-directory: qt-everywhere-src-${{ matrix.qt_version }}
+        run: nmake install
+
+      - name: Configure CMake
+        run: cmake -DCMAKE_BUILD_TYPE="${{env.BUILD_TYPE}}" -DQUAZIP_QT_MAJOR_VERSION=5 -DBUILD_SHARED_LIBS=OFF -DQUAZIP_ENABLE_TESTS=ON -DQUAZIP_USE_QT_ZLIB=ON -B build -DCMAKE_PREFIX_PATH="${{github.workspace}}\Qt"
+
+      - name: Build
+        run: cmake --build build --config ${{env.BUILD_TYPE}}
+
+      - name: Run tests
+        shell: cmd
+        working-directory: build
+        run: ctest --extra-verbose -C Release

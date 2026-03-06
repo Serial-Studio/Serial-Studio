@@ -446,6 +446,33 @@ if(BUILD_COMMERCIAL)
 endif()
 
 #---------------------------------------------------------------------------------------------------
+# QuaZip (Pro edition only)
+#---------------------------------------------------------------------------------------------------
+#
+# QuaZip provides ZIP archive creation/reading built on top of zlib's minizip.
+# Used in commercial builds to zip exported image sessions on disconnect.
+#
+# License: LGPL-2.1 — shipped as a static library; the LGPL-2.1 notice is
+#          reproduced in Acknowledgements.txt as required.
+#
+# CMake target exposed: QuaZip::QuaZip
+#---------------------------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL)
+  message(STATUS "Configuring QuaZip 1.5 (bundled)...")
+
+  set(QUAZIP_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+  set(QUAZIP_INSTALL      OFF CACHE BOOL "" FORCE)
+  set(QUAZIP_USE_QT_ZLIB  OFF CACHE BOOL "" FORCE)
+  set(QUAZIP_BZIP2        OFF CACHE BOOL "" FORCE)
+  set(BUILD_SHARED_LIBS   OFF CACHE BOOL "" FORCE)
+
+  add_subdirectory(QuaZip)
+
+  message(STATUS "QuaZip 1.5 configured")
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # Apply third-party library flags
 #---------------------------------------------------------------------------------------------------
 #
@@ -518,6 +545,7 @@ configure_third_party_lib(mdf)
 if(BUILD_COMMERCIAL)
   configure_third_party_lib(usb-1.0)
   configure_third_party_lib(${HIDAPI_CONCRETE_TARGET})
+  configure_third_party_lib(QuaZip)
 endif()
 
 #---------------------------------------------------------------------------------------------------

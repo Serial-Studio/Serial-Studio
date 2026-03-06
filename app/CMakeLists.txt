@@ -422,6 +422,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Process.h
     src/UI/Widgets/Plot3D.h
     src/UI/Widgets/ImageView.h
+    src/UI/Widgets/ImageExport.h
     src/UI/ImageProvider.h
     src/DataModel/DBCImporter.h
     src/Licensing/Trial.h
@@ -450,6 +451,7 @@ if(BUILD_COMMERCIAL)
     src/IO/Drivers/Process.cpp
     src/UI/Widgets/Plot3D.cpp
     src/UI/Widgets/ImageView.cpp
+    src/UI/Widgets/ImageExport.cpp
     src/UI/ImageProvider.cpp
     src/DataModel/DBCImporter.cpp
     src/Licensing/Trial.cpp
@@ -642,6 +644,7 @@ target_link_openssl(
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
+  target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC QuaZip::QuaZip)
 
   # Install the libusb shared library alongside the executable (LGPL-2.1 §6 compliance).
   #

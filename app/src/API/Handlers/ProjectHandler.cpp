@@ -22,7 +22,6 @@
 #include "API/Handlers/ProjectHandler.h"
 
 #include <algorithm>
-
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -793,9 +792,10 @@ API::CommandResponse API::Handlers::ProjectHandler::loadIntoFrameBuilder(const Q
   auto& project = DataModel::ProjectModel::instance();
   auto& builder = DataModel::FrameBuilder::instance();
 
-  const bool hasImageGroup = std::any_of(
-    project.groups().begin(), project.groups().end(),
-    [](const DataModel::Group& g) { return g.widget == QLatin1String("image"); });
+  const bool hasImageGroup =
+    std::any_of(project.groups().begin(), project.groups().end(), [](const DataModel::Group& g) {
+      return g.widget == QLatin1String("image");
+    });
 
   if (project.groupCount() == 0 || (project.datasetCount() == 0 && !hasImageGroup)) {
     return CommandResponse::makeError(

@@ -1,0 +1,201 @@
+/**
+\mainpage %QuaZip - %Qt/C++ wrapper for Minizip
+
+\section overview Overview
+
+<a href="http://www.winimage.com/zLibDll/minizip.html">Minizip, or
+Gilles Vollant's ZIP/UNZIP package</a> is a simple C library
+for creating, appending and reading ZIP archives.
+
+<a href="http://qt.io/">%Qt</a> is a very powerful cross-platform C++
+library with a lot of useful modules and classes. With %Qt, you can
+create rich GUIs, perform networking activities, accessing databases
+and much much more. If Java is “write once, run everywhere”, %Qt
+is “write once, compile everywhere” which is not that bad either.
+
+One thing %Qt can't do out-of-the-box is write and read ZIP archives.
+Of course, you can do it with Minizip, but Minizip has its own
+interface which isn't exactly compatible with %Qt. Namely, in %Qt
+there is an abstract class called QIODevice, which
+is %Qt-speak for “input/output stream”. There are a lot of classes
+that accept QIODevice to write some useful things to it—you could
+serialize XML to a QIODevice, for example. Therefore, wouldn't it
+be useful if you could open a QIODevice that would write directly
+to a file in a ZIP archive? Or read from one? That's exactly where
+%QuaZip comes into the picture.
+
+Technically speaking, %QuaZip is a simple C++ wrapper around Minizip.
+Or you could call it an implementation of the Adapter pattern.  With
+%QuaZip, both ZIP files and files inside ZIP archives can be accessed
+with QIODevice API. You can even write ZIP files to a sequential devices
+like TCP sockets, although some limitations apply in this case.
+
+\section download Download QuaZip
+
+The latest downloads are available from the
+<a href="https://github.com/stachenov/quazip/releases">GitHub page</a>.
+Downloads are in source format. The documentation you're reading
+right now can be build with the “doxygen” tool if you have one
+installed. Just run it from the project directory and it will
+create the “doc” directory for you. If you don't have Doxygen
+installed, you can still read offline docs in the “quazip/doc”
+subdir and in the header files. Don't confuse those dirs:
+
+- “doc” in the project's root is where Doxygen \em output is.
+- “quazip/doc” is where Doxygen \em input is, the part of it that
+  doesn't belong to any particular header files.
+
+Older downloads are available from
+<a href="http://sourceforge.net/projects/quazip/">%QuaZip project's page at SourceForge.net</a>.
+
+\section platforms Platforms supported
+
+%QuaZip 1.1 was tested on:
+- %Qt 5.15.0 MinGW 8.1 x32
+- %Qt 5.12.9 MinGW 7.3 x32
+- %Qt 5.9.7 CentOS 7 x64
+- %Qt 4.8.7 CentOS 7 x64
+- %Qt 5.11.0 Astra Linux CE 1.6 x64
+
+It should work fine on any platform supported by %Qt 4.8.7 or later.
+In theory, even versions as old as %Qt 4.6.2 might work as well, but
+aren't guaranteed to.
+
+Preliminary %Qt 6 support is available as well, but not tested at all.
+
+\section whats-new What is new in this version of QuaZip?
+
+See the NEWS.txt file supplied with the distribution.
+
+\section Dependencies
+
+Just <a href="http://www.zlib.org/">zlib</a> and %Qt 4/5/6. Sometimes
+you can get away with using zlib library bundled into %Qt (see below).
+
+CMake-wise, you need \c ZLIB::ZLIB and one of the following:
+\li \c Qt5::Core
+\li \c Qt6::Core and \c Qt6::Core5Compat
+\li \c Qt4::QtCore
+
+To build and run tests, the appropriate Test and Network submodules are needed as well.
+
+Make sure that you have %Qt installed with all required headers and
+utilities (that is, including the 'dev' or 'devel' package on some Linux distros).
+
+\section building Building, testing and installing
+
+%QuaZip uses CMake since 1.0. If you used qmake to build it,
+you'll have to switch to CMake now, and it's a good thing because
+two build systems made everything confusing and inconsistent. CMake
+may be confusing, badly designed and lack good tutorials, but
+it's \em the build system at the time of the writing. Some Linux
+distros are shipped with incredibly outdated CMake versions,
+but the good news is, there are official self-contained binary
+distributions, so just grab the newest version, unpack it
+somewhere, set up PATH (or symlinks) and you're all set.
+CMake minimum version 3.15 is required to build %QuaZip 1.0.
+
+\note Instructions given in this section assume that you are
+using some UNIX dialect, but the build process should be very similar
+on MinGW x32 too. On other platforms it's essentially the
+same process, maybe with some CMake adjustments not specific to
+%QuaZip itself.
+
+To build the library, run:
+\verbatim
+$ cd /wherever/quazip/source/is/quazip-x.y.z
+$ cmake -S . -B wherever/you/want/your/build/to/be -D QUAZIP_QT_MAJOR_VERSION=6, 5 or 4
+$ cmake --build wherever/you/want/your/build/to/be
+\endverbatim
+
+\c QUAZIP_QT_MAJOR_VERSION is just one number, and it defaults to the first Qt major version that can be found by CMake.
+
+On Windows, it may be required to use <tt>-G "MinGW Makefiles"</tt> or something like that to convince
+CMake that you really want to use, say, MinGW and not Visual Studio, for example.
+
+It can be a pain to install zlib on Windows, so there's a possible workaround using zlib bundled into Qt itself.
+Note that this zlib is Qt's internal implementation detail, so it's more like a dirty hack, but it can be convenient.
+To enable this feature, configure %QuaZip with
+\verbatim
+-D QUAZIP_USE_QT_ZLIB=ON
+\endverbatim
+This option defaults to OFF, and even when enabled, if it fails to find zlib that comes with Qt, it will fall back to looking for a stand-alone zlib.
+
+To install, run
+\verbatim
+$ cmake --build wherever/you/want/your/build/to/be --target install
+\endverbatim
+
+%QuaZip installs as CMake package QuaZip-QtX, where X is the major
+version of %Qt. For example, QuaZip-Qt5. Different major versions of
+%QuaZip have different binary names (libquazip1-qt5, for example),
+which allows to install them in parallel.
+
+To reconfigure (for another %Qt version or release/debug, or anything else), just nuke the whole build directory
+and repeat everything.
+
+By default, %QuaZip compiles as a DLL/SO, but respects the standard BUILD_SHARED_LIBS CMake option, adjusting
+its imports/exports accordingly.
+
+Binary compatibility is guaranteed between minor releases starting
+with version 1.0, thanks to the Pimpl idiom. That is, the next binary
+incompatible version will be 2.x in the worst case.
+
+\section test Testing
+
+The tests are not built by default. Set the QUAZIP_ENABLE_TESTS option
+to build them.
+
+To run the tests, execute:
+\verbatim
+$ cmake --build wherever/you/want/your/build/to/be --target check
+\endverbatim
+
+On some systems you may need to set PATH, LD_LIBRARY_PATH or
+SHLIB_PATH to get “qztest” to actually run and to use the version of %QuaZip you've just built,
+especially if you already have some version of %QuaZip installed somewhere.
+
+If everything went fine, the test suite should report a lot of PASS
+messages and the “All tests executed successfully” message.
+If something goes wrong, it will provide details and a
+warning that some tests failed.
+
+\section using Using
+
+See the \ref usage "Usage Page".
+
+\section contacts Authors and contacts
+
+This wrapper has been written by Sergei Tachenov.
+This is my first open source project, and it's pretty old, but it
+works and many people are happily using it, including myself.
+
+If you have anything to say to me about %QuaZip library, feel free to
+do so (read the \ref faq first, though). I can not promise,
+though, that I fix all the bugs you report in, add any features you
+want, or respond to your critics, or respond to your feedback at all.
+I may be busy, I may be tired of working on %QuaZip, I may be even
+dead already (you never know...).
+
+To report bugs or to post ideas about what should be done, use
+<a href="https://github.com/stachenov/quazip">GitHub</a>. It's an
+awesome site, where you can report bugs or register yourself an
+account, fork %QuaZip (don't hesitate to do so), create a new branch,
+make some changes and issue a
+<a href="https://help.github.com/articles/about-pull-requests/">pull
+request</a>, which is GitHub's way of offering patches. See CONTRIBUTING.md
+file for details.
+
+Do not use e-mail to report bugs, please. Reporting bugs and problems
+with GitHub has that advantage that
+it is visible to public, and I can always search for open tickets
+that were created long ago. It is highly unlikely that I will search
+my mail for that kind of stuff, so if a bug reported by mail isn't
+fixed immediately, it will likely be forgotten forever.
+
+Old bugs may still be available at
+<a href="https://sourceforge.net/projects/quazip/">SourceForge</a>
+for reference.
+
+Copyright (C) 2005-2021 Sergei Tachenov and contributors
+*/

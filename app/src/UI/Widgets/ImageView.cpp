@@ -30,15 +30,26 @@
 #  include "SerialStudio.h"
 #  include "UI/Dashboard.h"
 #  include "UI/ImageProvider.h"
+#  include "UI/Widgets/ImageExport.h"
 
 //--------------------------------------------------------------------------------------------------
 // ImageFrameReader
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs an autodetect-mode reader.
+ * @param parent Optional QObject parent.
+ */
 Widgets::ImageFrameReader::ImageFrameReader(QObject* parent)
   : QObject(parent), m_mode(DetectionMode::Autodetect), m_inFrame(false), m_frameStartPos(-1)
 {}
 
+/**
+ * @brief Constructs a manual-mode reader with explicit start/end byte sequences.
+ * @param startSeq  Raw bytes marking the beginning of an image frame.
+ * @param endSeq    Raw bytes marking the end of an image frame.
+ * @param parent    Optional QObject parent.
+ */
 Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endSeq, QObject* parent)
   : QObject(parent)
   , m_mode(DetectionMode::Manual)
@@ -48,6 +59,11 @@ Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endS
   , m_frameStartPos(-1)
 {}
 
+/**
+ * @brief Appends incoming bytes to the accumulator and dispatches to the
+ *        active detection mode.
+ * @param data  Shared pointer to the raw byte chunk from the HAL driver.
+ */
 void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
 {
   if (!data || data->isEmpty())
@@ -61,6 +77,10 @@ void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
     processManual();
 }
 
+/**
+ * @brief Scans the accumulator for JPEG, PNG, BMP, and WebP magic bytes and
+ *        emits @c frameReady() for each complete frame found.
+ */
 void Widgets::ImageFrameReader::processAutodetect()
 {
   static const QByteArray kJpegStart("\xFF\xD8\xFF", 3);
@@ -72,10 +92,10 @@ void Widgets::ImageFrameReader::processAutodetect()
 
   while (true) {
     if (!m_inFrame) {
-      qsizetype jpegPos  = m_accumulator.indexOf(kJpegStart);
-      qsizetype pngPos   = m_accumulator.indexOf(kPngStart);
-      qsizetype bmpPos   = m_accumulator.indexOf(kBmpStart);
-      qsizetype webpPos  = m_accumulator.indexOf(kWebpStart);
+      qsizetype jpegPos = m_accumulator.indexOf(kJpegStart);
+      qsizetype pngPos  = m_accumulator.indexOf(kPngStart);
+      qsizetype bmpPos  = m_accumulator.indexOf(kBmpStart);
+      qsizetype webpPos = m_accumulator.indexOf(kWebpStart);
 
       if (webpPos >= 0 && m_accumulator.size() >= webpPos + 12) {
         if (m_accumulator[webpPos + 8] != 'W' || m_accumulator[webpPos + 9] != 'E'
@@ -108,7 +128,7 @@ void Widgets::ImageFrameReader::processAutodetect()
     if (m_accumulator.startsWith(kWebpStart) && m_accumulator.size() >= 12
         && m_accumulator[8] == 'W' && m_accumulator[9] == 'E' && m_accumulator[10] == 'B'
         && m_accumulator[11] == 'P') {
-      const auto* raw  = reinterpret_cast<const quint8*>(m_accumulator.constData());
+      const auto* raw         = reinterpret_cast<const quint8*>(m_accumulator.constData());
       const quint32 chunkSize = static_cast<quint32>(raw[4]) | (static_cast<quint32>(raw[5]) << 8)
                               | (static_cast<quint32>(raw[6]) << 16)
                               | (static_cast<quint32>(raw[7]) << 24);
@@ -142,7 +162,7 @@ void Widgets::ImageFrameReader::processAutodetect()
                        | (static_cast<quint32>(raw[4]) << 16)
                        | (static_cast<quint32>(raw[5]) << 24);
 
-      if (sz < 14 || sz > 64 * 1024 * 1024)  {
+      if (sz < 14 || sz > 64 * 1024 * 1024) {
         m_accumulator.remove(0, 2);
         m_inFrame       = false;
         m_frameStartPos = -1;
@@ -198,6 +218,10 @@ void Widgets::ImageFrameReader::processAutodetect()
   }
 }
 
+/**
+ * @brief Searches the accumulator for the user-supplied start/end sequences
+ *        and emits @c frameReady() for each complete frame found.
+ */
 void Widgets::ImageFrameReader::processManual()
 {
   if (m_startSeq.isEmpty() || m_endSeq.isEmpty())
@@ -240,6 +264,11 @@ void Widgets::ImageFrameReader::processManual()
 // ImageView
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the ImageView widget model and wires the driver connection.
+ * @param index   Dashboard widget index used to look up group metadata.
+ * @param parent  Optional QQuickItem parent.
+ */
 Widgets::ImageView::ImageView(int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(index)
@@ -247,12 +276,14 @@ Widgets::ImageView::ImageView(int index, QQuickItem* parent)
   , m_frameCount(0)
   , m_imageWidth(0)
   , m_imageHeight(0)
+  , m_exportEnabled(ImageExport::instance().exportEnabled())
   , m_imageFormat(QStringLiteral("Unknown"))
   , m_reader(nullptr)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardImageView, m_index)) {
     const auto& group = GET_GROUP(SerialStudio::DashboardImageView, m_index);
     m_groupId         = group.groupId;
+    m_groupTitle      = group.title;
   }
 
   m_providerKey = QStringLiteral("imageview:%1").arg(m_groupId);
@@ -266,6 +297,9 @@ Widgets::ImageView::ImageView(int index, QQuickItem* parent)
   reconfigureReader();
 }
 
+/**
+ * @brief Destroys the widget and its associated @c ImageFrameReader.
+ */
 Widgets::ImageView::~ImageView()
 {
   if (m_reader) {
@@ -274,32 +308,90 @@ Widgets::ImageView::~ImageView()
   }
 }
 
+/**
+ * @brief Returns a cache-busting URL for the current frame.
+ *
+ * The frame counter is appended so each call produces a unique URL, forcing
+ * Qt's scene graph to re-request the texture instead of serving a cached copy.
+ */
 QString Widgets::ImageView::imageUrl() const
 {
   return QStringLiteral("image://serial-studio-img/") + m_providerKey + QStringLiteral("/")
        + QString::number(m_frameCount);
 }
 
+/**
+ * @brief Returns the detected format of the last decoded frame (e.g. "JPEG").
+ */
 const QString& Widgets::ImageView::imageFormat() const
 {
   return m_imageFormat;
 }
 
+/**
+ * @brief Returns the total number of frames decoded since the last connection.
+ */
 int Widgets::ImageView::frameCount() const
 {
   return m_frameCount;
 }
 
+/**
+ * @brief Returns the pixel width of the last decoded frame.
+ */
 int Widgets::ImageView::imageWidth() const
 {
   return m_imageWidth;
 }
 
+/**
+ * @brief Returns the pixel height of the last decoded frame.
+ */
 int Widgets::ImageView::imageHeight() const
 {
   return m_imageHeight;
 }
 
+/**
+ * @brief Returns the dashboard group title associated with this widget.
+ */
+const QString& Widgets::ImageView::groupTitle() const
+{
+  return m_groupTitle;
+}
+
+/**
+ * @brief Returns whether per-widget image export is currently enabled.
+ */
+bool Widgets::ImageView::exportEnabled() const
+{
+  return m_exportEnabled;
+}
+
+/**
+ * @brief Enables or disables per-widget image export.
+ * @param enabled  @c true to start exporting frames, @c false to stop.
+ */
+void Widgets::ImageView::setExportEnabled(bool enabled)
+{
+  if (m_exportEnabled == enabled)
+    return;
+
+  m_exportEnabled = enabled;
+
+  if (!enabled)
+    ImageExport::instance().closeSession(m_groupId);
+
+  Q_EMIT exportEnabledChanged();
+}
+
+/**
+ * @brief Decodes a complete image frame and pushes it to the image provider.
+ *
+ * Detects the format, decodes via @c QImage::fromData, updates dimensions,
+ * publishes to @c UI::ImageProvider, and enqueues for export when enabled.
+ * @param data  Raw bytes of a single image frame.
+ */
 void Widgets::ImageView::onFrameReady(const QByteArray& data)
 {
   if (data.isEmpty())
@@ -316,10 +408,24 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
 
   if (auto* prov = UI::ImageProvider::global())
     prov->setImage(m_providerKey, img);
+
+  if (m_exportEnabled) {
+    const auto& dash = UI::Dashboard::instance();
+    ImageExport::instance().enqueueImage(
+      data, m_imageFormat, m_groupId, m_groupTitle, dash.title());
+  }
+
   ++m_frameCount;
   Q_EMIT imageReady();
 }
 
+/**
+ * @brief Destroys the current @c ImageFrameReader and creates a new one with
+ *        the latest delimiter configuration from the project model.
+ *
+ * Called whenever the active driver changes. The old reader is scheduled for
+ * deletion via @c deleteLater() to avoid destroying it mid-signal.
+ */
 void Widgets::ImageView::reconfigureReader()
 {
   if (m_reader) {
@@ -359,6 +465,11 @@ void Widgets::ImageView::reconfigureReader()
     m_reader, &ImageFrameReader::frameReady, this, &ImageView::onFrameReady, Qt::QueuedConnection);
 }
 
+/**
+ * @brief Identifies the image format from the first few bytes of @p data.
+ * @param data  Raw image bytes.
+ * @return "JPEG", "PNG", "BMP", "WebP", or "Unknown".
+ */
 QString Widgets::ImageView::detectFormat(const QByteArray& data)
 {
   if (data.size() >= 3 && static_cast<quint8>(data[0]) == 0xFF

@@ -524,6 +524,47 @@ Widgets.SmartDialog {
             }
           }
 
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+            visible: Cpp_CommercialBuild
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            visible: Cpp_CommercialBuild
+            text: qsTr("Image Export")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            visible: Cpp_CommercialBuild
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+            visible: Cpp_CommercialBuild
+          }
+
+          Label {
+            visible: Cpp_CommercialBuild
+            text: qsTr("Save Images by Default")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: _saveImages
+            Layout.rightMargin: -8
+            visible: Cpp_CommercialBuild
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_CommercialBuild && Cpp_Image_Export.exportEnabled
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (Cpp_CommercialBuild && checked !== Cpp_Image_Export.exportEnabled)
+                Cpp_Image_Export.exportEnabled = checked
+            }
+          }
+
           Item { Layout.fillHeight: true }
           Item { Layout.fillHeight: true }
         }

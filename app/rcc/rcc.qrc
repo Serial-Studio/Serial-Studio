@@ -476,5 +476,8 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
+        <file>icons/dashboard-buttons/filter.svg</file>
+        <file>icons/dashboard-buttons/archive.svg</file>
+        <file>icons/dashboard-buttons/pictures-folder.svg</file>
     </qresource>
 </RCC>

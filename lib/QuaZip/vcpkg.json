@@ -1,0 +1,22 @@
+{
+  "version": "1.5",
+  "name": "quazip",
+  "dependencies": [
+    "zlib",
+    "bzip2"
+  ],
+  "vcpkg-configuration": {
+    "default-registry": {
+      "kind": "git",
+      "baseline": "2c401863dd54a640aeb26ed736c55489c079323b",
+      "repository": "https://github.com/microsoft/vcpkg"
+    },
+    "registries": [
+      {
+        "kind": "artifact",
+        "location": "https://github.com/microsoft/vcpkg-ce-catalog/archive/refs/heads/main.zip",
+        "name": "microsoft"
+      }
+    ]
+  }
+}

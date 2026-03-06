@@ -22,7 +22,6 @@
 #include "DataModel/FrameBuilder.h"
 
 #include <algorithm>
-
 #include <QDateTime>
 #include <QFileInfo>
 
@@ -257,7 +256,9 @@ void DataModel::FrameBuilder::setupExternalConnections()
             if (operationMode() != SerialStudio::ProjectFile)
               return;
 
-            read_io_settings(m_frameStart, m_frameFinish, m_checksum,
+            read_io_settings(m_frameStart,
+                             m_frameFinish,
+                             m_checksum,
                              DataModel::ProjectModel::instance().serializeToJson());
             IO::Manager::instance().setStartSequence(m_frameStart);
             IO::Manager::instance().setFinishSequence(m_frameFinish);
@@ -540,12 +541,11 @@ void DataModel::FrameBuilder::onConnectedChanged()
   // frame, so the dashboard would never call reconfigureDashboard and the
   // ImageView widget would not be registered. Emit the template frame directly
   // on connect so the dashboard builds its widget model immediately.
-  const bool allImageGroups
-    = !m_frame.groups.empty()
-      && std::all_of(m_frame.groups.begin(), m_frame.groups.end(),
-                     [](const DataModel::Group& g) {
-                       return g.widget == QLatin1String("image");
-                     });
+  const bool allImageGroups =
+    !m_frame.groups.empty()
+    && std::all_of(m_frame.groups.begin(), m_frame.groups.end(), [](const DataModel::Group& g) {
+         return g.widget == QLatin1String("image");
+       });
 
   if (allImageGroups)
     hotpathTxFrame(m_frame);

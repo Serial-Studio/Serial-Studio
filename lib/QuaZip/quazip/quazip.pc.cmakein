@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib@LIB_SUFFIX@
+includedir=${prefix}/include
+
+Name: QuaZip-Qt@QUAZIP_QT_MAJOR_VERSION@
+Description: Minizip wrapper library for Qt @QUAZIP_QT_MAJOR_VERSION@.x
+Version: @QUAZIP_LIB_VERSION@
+Libs: -l@QUAZIP_LIB_FILE_NAME@
+Cflags: -I${includedir}/@QUAZIP_DIR_NAME@ -I${includedir}/@QUAZIP_INCLUDE_PATH@
+Requires: @QUAZIP_PKGCONFIG_REQUIRES@

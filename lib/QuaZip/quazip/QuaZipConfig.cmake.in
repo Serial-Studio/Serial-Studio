@@ -1,0 +1,29 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+include("${CMAKE_CURRENT_LIST_DIR}/@QUAZIP_EXPORT_SET@.cmake")
+
+if(@QUAZIP_QT_MAJOR_VERSION@ EQUAL 6)
+	find_dependency(Qt6 REQUIRED COMPONENTS Core Core5Compat)
+elseif(@QUAZIP_QT_MAJOR_VERSION@ EQUAL 5)
+	find_dependency(Qt5 REQUIRED COMPONENTS Core)
+elseif(@QUAZIP_QT_MAJOR_VERSION@ EQUAL 4)
+	find_dependency(Qt4 4.5.0 REQUIRED COMPONENTS QtCore)
+else()
+    message(FATAL_ERROR "Qt version QUAZIP_QT_MAJOR_VERSION=@QUAZIP_QT_MAJOR_VERSION@ is unsupported")
+endif()
+
+if(@QUAZIP_BZIP2@)
+    find_dependency(BZip2 REQUIRED)
+endif()
+
+if(@QUAZIP_USE_QT_ZLIB@)
+    find_dependency(Qt@QUAZIP_QT_MAJOR_VERSION@ REQUIRED COMPONENTS @QUAZIP_QT_ZLIB_COMPONENT@)
+else()
+    find_dependency(ZLIB REQUIRED)
+endif()
+
+set_target_properties(QuaZip::QuaZip PROPERTIES IMPORTED_GLOBAL TRUE)
+
+check_required_components(@QUAZIP_PACKAGE_NAME@)

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>test_files/issue43_cant_get_dates.zip</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,93 @@
+/**
+\page faq %QuaZip FAQ
+
+<!--
+
+\ref faq-QuaZip-name "Q. QuaZIP, QuaZip, Quazip, quazip... what's with these names?"
+
+\ref faq-non-QIODevice "Q. Is there any way to use QuaZipFile in Qt where you are supposed to use normal (non-zipped) file, but not through QIODevice API?"
+
+\ref faq-zip64 "Q. Can QuaZip handle files larger than 4GB? What about zip64 standard?"
+
+\ref faq-seekable "Q. Can QuaZip write archives to (or read from) a sequential QIODevice like QTcpSocket?"
+
+\ref faq-thread-safe "Q. Is QuaZip thread safe? Reentrant?"
+
+-->
+
+\anchor faq-QuaZip-name <b>Q. QuaZIP, %QuaZip, Quazip, quazip... what's with these names?</b>
+
+In QuaZIP 0.x, there was this rule that QuaZIP is the library name, while %QuaZip is
+a class in this library. Since %QuaZip 1.0, it's now obsolete, and both are %QuaZip
+now to avoid confusion. The lowercase version is used in places where lowercase
+is the convention, such as some file names. Quazip is not used anywhere except maybe
+by mistake.
+
+One reason using QuaZIP actually made some sense is that Doxygen (used to generate
+this documentation) is very insistent on linking every mention of a class name
+to its documentation, meaning every %QuaZip became QuaZip (linked to the QuaZip class docs).
+This can be avoided by proper escaping, but it's pretty annoying to do it every time.
+Too bad I realized it \em after I'd renamed QuaZIP to %QuaZip, so if you see
+too many links to the QuaZip class in places where they don't belong, well... you now
+know the reason.
+
+\anchor faq-non-QIODevice <b>Q. Is there any way to use QuaZipFile in Qt
+where you are supposed to use normal (non-zipped) file, but not
+through QIODevice API?</b>
+
+A. Usually not. For example, if you are passing file name to some
+database driver (like SQLite), Qt usually just passes this name down
+to the 3rd-party library, which is usually does not know anything
+about QIODevice and therefore there is no way to pass QuaZipFile as
+a normal file. However, if we are talking about some place where you
+pass file name, and then internally use QFile to open it, then it is
+a good idea to make an overloaded method, which accepts a QIODevice
+pointer. Then you would be able to pass QuaZipFile as well as many
+other nice things such as QBuffer or QProcess. Of course, that's only
+possible if you have control over the sources of the particular class.
+
+\anchor faq-zip64 <b>Q. Can %QuaZip handle files larger than 4GB? What
+about zip64 standard?</b>
+
+A. Starting with version 0.6, %QuaZip uses Minizip 1.1 with zip64
+support which should handle large files perfectly. The zip64 support
+in Minizip looks like it's not 100% conforming to the standard, but
+3rd party tools seem to have no problem with the resulting archives.
+
+\anchor faq-seekable <b>Q. Can %QuaZip write archives to a sequential QIODevice like QTcpSocket?</b>
+
+A. Writing is possible since %QuaZip v0.7. It's only possible in
+mdCreate mode, no mdAppend support. Reading is not supported either.
+
+\anchor faq-Minizip-update <b>Q. Can I use another version of Minizip in %QuaZip, not the bundled one?</b>
+
+A. No, unfortunately not. To support reading/writing ZIP archives from/to QIODevice objects,
+some modifications were needed to Minizip. Now that there is a Minizip fork on GitHub, it is
+theoretically possible to backport these modifications into Minizip in a backward-compatible
+manner to ensure seamless integration with %QuaZip, but it hasn't been done yet, and there
+are no short-term plans, only a long-term goal.
+
+\anchor faq-thread-safe <b>Q. Is %QuaZip thread safe? Reentrant?</b>
+
+A. This is actually two questions: is Minizip thread safe or reentrant, and is %QuaZip thread safe or reentrant?
+
+The answer is that Minizip and %QuaZip are mostly just regular I/O libraries using some data structures to
+store the current I/O state. This means that most of the library is reentrant, but not thread-safe,
+as is the usual case with most regular libraries. That is, using different unrelated instances of the same class
+is mostly safe. “Unrelated” means that QuaZip / QuaZipFile pairs should be treated as single objects
+as they are tightly coupled together (and should have been a single class in the first place).
+
+Since it's an I/O library, to achieve reentrancy it is required to avoid OS-level conflicts. This
+means that concurrent writing to the same ZIP file is impossible, no matter how careful you are
+with class instances. Concurrent reading using different instances is possible.
+
+An attentive reader would probably notice by this point all these “mostly safe”, “mostly regular libraries”.
+This is, of course, about static (global) variables. %QuaZip has just a few, and they are only available
+through obviously named static setters, like QuaZip::setDefaultOsCode() and QuaZip::setDefaultFileNameCodec().
+If you need to use these, be sure to call them before starting any other threads.
+
+As far as Minizip goes, it is mostly safe I/O library, but the crypting part contains some code
+that is definitely not thread safe, namely srand() and rand() (not even rand_r()) calls.
+This code is used for encryption only, so decryption is safe.
+
+*/

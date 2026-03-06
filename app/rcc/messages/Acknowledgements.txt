@@ -30,6 +30,21 @@ Satellite and mapping imagery in this application is sourced from the following 
 Basemaps and geographic reference layers are provided by Esri through ArcGIS Online services, including World Imagery, Street Map, Topographic, and others.
 [https://www.esri.com/en-us/arcgis/products/arcgis-online/overview](https://www.esri.com/en-us/arcgis/products/arcgis-online/overview)
 
+## QuaZip
+
+Copyright (C) 2005-2020 Sergei Tachenov and contributors
+
+QuaZip is free software: you can redistribute it and/or modify it under the
+terms of the GNU Lesser General Public License as published by the Free Software
+Foundation, either version 2.1 of the License, or (at your option) any later
+version.
+
+QuaZip is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+Source: [https://github.com/stachenov/quazip](https://github.com/stachenov/quazip)
+
 ## HIDAPI
 
 Copyright (c) 2010, Alan Ott, Signal 11 Software

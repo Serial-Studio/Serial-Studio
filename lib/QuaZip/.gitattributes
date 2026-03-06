@@ -1,0 +1,23 @@
+# old Git versions
+*.h -crlf
+*.cpp -crlf
+*.c -crlf
+*.dox -crlf
+# NOT *.txt because NEWS.txt is in CRLF format for historic reasons
+CMakeLists.txt -crlf
+*.in -crlf
+*.cmakein -crlf
+*.symbols -crlf
+.editorconfig -crlf
+
+# new Git versions
+*.h text eol=lf
+*.cpp text eol=lf
+*.c text eol=lf
+*.dox text eol=lf
+# NOT *.txt because NEWS.txt is in CRLF format for historic reasons
+CMakeLists.txt text eol=lf
+*.in text eol=lf
+*.cmakein text eol=lf
+*.symbols text eol=lf
+.editorconfig eol=lf

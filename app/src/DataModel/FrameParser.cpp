@@ -882,11 +882,12 @@ void DataModel::FrameParser::apply()
   if (save(true)) {
     auto& model = DataModel::ProjectModel::instance();
     if (!model.jsonFilePath().isEmpty()) {
-      const bool modified    = model.modified();
+      const bool modified  = model.modified();
       const bool hasGroups = model.groupCount() > 0;
-      const bool hasImageGroup = std::any_of(
-        model.groups().begin(), model.groups().end(),
-        [](const DataModel::Group& g) { return g.widget == QLatin1String("image"); });
+      const bool hasImageGroup =
+        std::any_of(model.groups().begin(), model.groups().end(), [](const DataModel::Group& g) {
+          return g.widget == QLatin1String("image");
+        });
       const bool hasDatasets = model.datasetCount() > 0 || hasImageGroup;
       if (modified && hasGroups && hasDatasets) {
         model.saveJsonFile();

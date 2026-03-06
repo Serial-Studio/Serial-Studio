@@ -1,0 +1,177 @@
+on:
+  push:
+    branches:
+      - master
+      - feature/*
+  pull_request:
+
+name: CI
+permissions: read-all
+
+jobs:
+  ubuntu:
+    if: true
+    name: Ubuntu-${{ matrix.os_version }}-Qt-${{ matrix.qt_version }}-shared-${{ matrix.shared }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os_version: [22.04, 24.04]
+        qt_version: [5.15.2, 6.8.2]
+        shared: [ON, OFF]
+    uses: ./.github/workflows/reusable.yml
+    with:
+        runs_on: ubuntu-${{ matrix.os_version }}
+        os_version: ${{ matrix.os_version }}
+        qt_version: ${{ matrix.qt_version }}
+        shared: ${{ matrix.shared }}
+
+  ubuntu-zlibconst:
+    if: true
+    name: Ubuntu-${{ matrix.os_version }}-Qt-${{ matrix.qt_version }}-shared-zlibconst
+    strategy:
+      fail-fast: false
+      matrix:
+        os_version: [ 24.04 ]
+        qt_version: [ 6.8.2 ]
+    uses: ./.github/workflows/reusable.yml
+    with:
+      runs_on: ubuntu-${{ matrix.os_version }}
+      os_version: ${{ matrix.os_version }}
+      qt_version: ${{ matrix.qt_version }}
+      shared: "ON"
+      zlib_const: "ON"
+
+  macos:
+    if: true
+    name: macos-${{ matrix.os_version }}-Qt-${{ matrix.qt_version }}-shared-${{ matrix.shared }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os_version: [14, 13]
+        qt_version: [5.15.2, 6.8.2]
+        shared: [ON, OFF]
+        exclude:
+          - os_version: 14
+            qt_version: 5.15.2 #Not available on macos-14 due to ARM arch
+    uses: ./.github/workflows/reusable.yml
+    with:
+      runs_on: macos-${{ matrix.os_version }}
+      os_version: ${{ matrix.os_version }}
+      qt_version: ${{ matrix.qt_version }}
+      shared: ${{ matrix.shared }}
+
+  alpine:
+    if: true
+    name: "cmake on ${{ matrix.runner }}"
+    runs-on: "ubuntu-22.04"
+    container:
+      image: "${{ matrix.runner }}"
+    strategy:
+      matrix:
+        runner:
+          - "alpine:3.13"  # cmake 3.15, qt 5.15
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Show OS info
+        run: cat /etc/os-release
+      - uses: actions/checkout@v4
+      - name: Install qt and build tools
+        run: apk add --update g++ make cmake qt5-qtbase-dev
+      - name: Show cmake version
+        run: cmake --version
+      - name: Run cmake
+        run: cmake -S . -B build -DQUAZIP_ENABLE_TESTS=ON
+      - name: Build quazip
+        run: cd build && VERBOSE=1 make -j8
+      - name: Build tests
+        run: cd build/qztest && VERBOSE=1 make -j8
+      - name: Run tests
+        run: build/qztest/qztest
+
+  windows-x64:
+    if: true
+    name: Win-Qt-${{ matrix.qt_version }}-preset-${{ matrix.preset }}
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [ conan, vcpkg ]
+        qt_version: [ 5.15.2, 6.8.2 ]
+    uses: ./.github/workflows/reusable-win.yml
+    with:
+      runs_on: "win-x64"
+      arch: x64
+      qt_version: ${{ matrix.qt_version }}
+      preset: ${{ matrix.preset }}
+      pe_str: "x86-64"
+
+  windows-x86:
+    if: true
+    name: Win-Qt-${{ matrix.qt_version }}-preset-${{ matrix.preset }}
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [ conan_x86, vcpkg_x86 ]
+        qt_version: [ 5.15.2 ]
+    uses: ./.github/workflows/reusable-win.yml
+    with:
+      runs_on: "win-x86"
+      arch: x86
+      qt_version: ${{ matrix.qt_version }}
+      preset: ${{ matrix.preset }}
+      pe_str: "i386"
+
+  # Cross platform extraction jobs
+  ubuntu-ci-extract:
+    if: true
+    name: extract-Ubuntu-${{ matrix.os_version }}-Qt-${{ matrix.qt_version }}-shared-${{ matrix.shared }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os_version: [ 24.04 ]
+        qt_version: [ 6.8.2 ]
+        shared: [ ON ]
+    uses: ./.github/workflows/reusable.yml
+    needs: [ ubuntu, macos, windows-x64, windows-x86 ]
+    with:
+      runs_on: ubuntu-${{ matrix.os_version }}
+      os_version: ${{ matrix.os_version }}
+      qt_version: ${{ matrix.qt_version }}
+      shared: ${{ matrix.shared }}
+      cross_extract: true
+
+  macos-ci-extract:
+    if: true
+    name: extract-macos-${{ matrix.os_version }}-Qt-${{ matrix.qt_version }}-shared-${{ matrix.shared }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os_version: [ 14 ]
+        qt_version: [ 6.8.2 ]
+        shared: [ ON ]
+    uses: ./.github/workflows/reusable.yml
+    needs: [ ubuntu, macos, windows-x64, windows-x86 ]
+    with:
+      runs_on: macos-${{ matrix.os_version }}
+      os_version: ${{ matrix.os_version }}
+      qt_version: ${{ matrix.qt_version }}
+      shared: ${{ matrix.shared }}
+      cross_extract: true
+
+  windows-x64-ci-extract:
+    if: true
+    name: extract-Win-Qt-${{ matrix.qt_version }}-preset-${{ matrix.preset }}
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [ vcpkg ]
+        qt_version: [ 6.8.2 ]
+    uses: ./.github/workflows/reusable-win.yml
+    needs: [ ubuntu, macos, windows-x64, windows-x86 ]
+    with:
+      runs_on: "win-x64"
+      arch: x64
+      qt_version: ${{ matrix.qt_version }}
+      preset: ${{ matrix.preset }}
+      pe_str: "x86-64"
+      cross_extract: true
