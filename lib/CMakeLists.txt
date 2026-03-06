@@ -29,6 +29,7 @@ cmake_minimum_required(VERSION 3.20)
 # static libraries. Save them here and restore at the end so they only apply
 # to the main application executable in app/.
 #
+#---------------------------------------------------------------------------------------------------
 
 set(_SAVED_CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 set(_SAVED_CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
@@ -208,11 +209,14 @@ else()
 
   if(NOT TARGET ZLIB::ZLIB)
     add_library(ZLIB::ZLIB ALIAS zlibstatic)
-    set(ZLIB_FOUND TRUE CACHE INTERNAL "ZLIB found via FetchContent")
-    set(ZLIB_INCLUDE_DIRS "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE INTERNAL "ZLIB include directories")
-    set(ZLIB_LIBRARIES zlibstatic CACHE INTERNAL "ZLIB libraries")
-    set(ZLIB_VERSION_STRING "1.3.1" CACHE INTERNAL "ZLIB version")
   endif()
+
+  set(ZLIB_FOUND          TRUE                                    CACHE INTERNAL "ZLIB found via FetchContent")
+  set(ZLIB_INCLUDE_DIR    "${zlib_SOURCE_DIR}"                    CACHE INTERNAL "ZLIB include directory")
+  set(ZLIB_INCLUDE_DIRS   "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE INTERNAL "ZLIB include directories")
+  set(ZLIB_LIBRARY        "zlibstatic"                            CACHE INTERNAL "ZLIB library target")
+  set(ZLIB_LIBRARIES      "zlibstatic"                            CACHE INTERNAL "ZLIB libraries")
+  set(ZLIB_VERSION_STRING "1.3.1"                                 CACHE INTERNAL "ZLIB version")
 
   message(STATUS "ZLIB 1.3.1 fetched and configured")
 endif()
