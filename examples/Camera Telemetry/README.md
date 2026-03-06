@@ -3,11 +3,9 @@
 ## Overview
 
 Streams live camera video to Serial Studio over UDP as fast as possible.
-Only FPS and frame count are sent alongside the image — zero analytics overhead.
+Only FPS and frame count are sent alongside the image.
 
-**Difficulty:** 🟡 Intermediate | **License:** Pro (Image View widget required)
-
-No microcontroller needed — a standard webcam or built-in laptop camera is all
+No microcontroller needed, a standard webcam or built-in laptop camera is all
 that's required.  A synthetic test pattern is available when no camera is
 connected (`--no-camera`).
 

@@ -34,7 +34,7 @@ Reads signal quality data from an LTE modem and transmits it over Virtual Serial
   - **Screenshot**: Example view in Serial Studio
  
 ### 3. Lorenz Attractor
-**Difficulty:** 🔴 Advanced | **Time:** ~25 minutes | **License:** Pro (XY Plot required)
+**Difficulty:** 🟢 Beginner | **Time:** ~25 minutes | **License:** Pro (XY Plot required)
 
 Simulates the Lorenz attractor (chaotic differential equations) and transmits x, y, z values over serial. Serial Studio visualizes these in real-time, producing the iconic butterfly-shaped pattern.
 
@@ -277,7 +277,7 @@ Many devices (especially IoT/embedded systems) batch sensor readings to reduce c
   - Any system where communication efficiency matters
 
 ### 17. Camera Telemetry
-**Difficulty:** 🔴 Advanced | **Time:** ~10 minutes | **License:** Pro (Image View widget required)
+**Difficulty:** 🟢 Beginner | **Time:** ~10 minutes | **License:** Pro (Image View widget required)
 
 Streams live camera video and computed image analytics over a single UDP connection.
 Demonstrates the **Image View** widget alongside standard dashboard widgets using a
