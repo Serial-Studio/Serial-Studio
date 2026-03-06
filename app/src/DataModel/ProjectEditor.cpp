@@ -885,7 +885,6 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     imgHdr->setData("qrc:/rcc/icons/project-editor/model/image.svg", ParameterIcon);
     m_groupModel->appendRow(imgHdr);
 
-    static const QStringList kImgModeLabels = {tr("Auto-detect"), tr("Manual Delimiters")};
     static const QStringList kImgModeValues = {QStringLiteral("autodetect"),
                                                QStringLiteral("manual")};
 
@@ -895,7 +894,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     modeItem->setEditable(true);
     modeItem->setData(true, Active);
     modeItem->setData(ComboBox, WidgetType);
-    modeItem->setData(kImgModeLabels, ComboBoxData);
+    modeItem->setData(m_imgDetectionModes, ComboBoxData);
     modeItem->setData(modeIndex, EditableValue);
     modeItem->setData(kGroupView_ImgMode, ParameterType);
     modeItem->setData(tr("Detection Mode"), ParameterName);
@@ -1569,6 +1568,11 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_frameDetectionMethodsValues << SerialStudio::EndDelimiterOnly
                                 << SerialStudio::StartDelimiterOnly
                                 << SerialStudio::StartAndEndDelimiter << SerialStudio::NoDelimiters;
+
+#ifdef BUILD_COMMERCIAL
+  m_imgDetectionModes.clear();
+  m_imgDetectionModes << tr("Auto-detect") << tr("Manual Delimiters");
+#endif
 
   m_groupWidgets.clear();
   m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));

@@ -230,6 +230,7 @@ private:
   QStringList m_checksumMethods;
   QStringList m_frameDetectionMethods;
   QList<SerialStudio::FrameDetection> m_frameDetectionMethodsValues;
+  QStringList m_imgDetectionModes;
 
   QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;
