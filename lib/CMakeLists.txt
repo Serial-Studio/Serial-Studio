@@ -500,7 +500,7 @@ endif()
 #   QCodeEditor    - Syntax highlighting editor (static, Qt-based)
 #   QSimpleUpdater - Auto-update framework (static, Qt-based)
 #   mdf            - MDF4 file parser (static, requires ZLIB, EXPAT)
-#   usb-1.0        - Raw USB driver (shared in commercial builds, LGPL-2.1 compliance)
+#   usb-1.0        - Raw USB driver (static, commercial builds only)
 #   hidapi         - HID device driver (static, commercial builds only)
 #
 # Not applied to:
