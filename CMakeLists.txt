@@ -874,6 +874,7 @@ if(ENABLE_HARDENING)
       add_link_options(
          /GUARD:CF                      # Control Flow Guard at link time
          /DYNAMICBASE                   # ASLR
+         /CETCOMPAT                     # Enable Intel CET hardware shadow stack
       )
    else()
       add_compile_options(
@@ -902,6 +903,10 @@ if(ENABLE_HARDENING)
       # - ARM64 Linux:  Clang CFI (Control Flow Integrity) via -fsanitize=cfi
       # Note: ARM64 CFI requires LTO and is only available with upstream LLVM Clang
       # Note: AppleClang does not support -fsanitize=cfi or -fcf-protection, skip on macOS
+      if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
+         add_compile_options(-mbranch-protection=standard)
+      endif()
+
       if(NOT APPLE)
          if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
             add_compile_options(
