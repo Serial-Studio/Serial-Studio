@@ -37,6 +37,7 @@
 #  include "API/Handlers/AudioHandler.h"
 #  include "API/Handlers/CANBusHandler.h"
 #  include "API/Handlers/HIDHandler.h"
+#  include "API/Handlers/LicensingHandler.h"
 #  include "API/Handlers/MDF4ExportHandler.h"
 #  include "API/Handlers/MDF4PlayerHandler.h"
 #  include "API/Handlers/ModbusHandler.h"
@@ -251,6 +252,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::HIDHandler::registerCommands();
   Handlers::USBHandler::registerCommands();
   Handlers::ProcessHandler::registerCommands();
+  Handlers::LicensingHandler::registerCommands();
 #endif
 
   m_initialized = true;

@@ -150,7 +150,7 @@ Window {
           Layout.maximumHeight: banner.implicitHeight
           Layout.minimumWidth: Math.max(248, titleA.implicitWidth, titleB.implicitWidth, titleC.implicitWidth) + 48
           Layout.maximumWidth: Math.max(248, titleA.implicitWidth, titleB.implicitWidth, titleC.implicitWidth) + 48
-          currentIndex : Cpp_Licensing_Trial.firstRun ? 0 : (Cpp_Licensing_Trial.trialEnabled ? 1 : (Cpp_Licensing_Trial.trialExpired ? 2 : -1))
+          currentIndex : Cpp_Licensing_Trial.firstRun ? 0 : (Cpp_Licensing_Trial.trialEnabled ? 1 : (Cpp_Licensing_Trial.trialExpired ? 2 : 0))
 
           //
           // Welcome message

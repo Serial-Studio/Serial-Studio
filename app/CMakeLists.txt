@@ -442,6 +442,7 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/HIDHandler.cpp
     src/API/Handlers/USBHandler.cpp
     src/API/Handlers/ProcessHandler.cpp
+    src/API/Handlers/LicensingHandler.cpp
     src/MQTT/Client.cpp
     src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp
