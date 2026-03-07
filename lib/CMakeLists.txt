@@ -378,9 +378,6 @@ add_subdirectory(mdflib)
 # Acquisition: FetchContent downloads libusb 1.0.29 from GitHub at configure time.
 # libusb ships no CMakeLists.txt, so the libusb-cmake wrapper assembles the target.
 #
-# LGPL-2.1 compliance: libusb is built as a shared library in commercial builds so
-# that users can relink against a modified libusb (LGPL-2.1 §6).
-#
 # Platform source sets:
 #   Windows : windows_winusb.c + WinUSB / SetupAPI system libraries
 #   macOS   : darwin_usb.c + IOKit / CoreFoundation frameworks
@@ -391,7 +388,7 @@ add_subdirectory(mdflib)
 if(BUILD_COMMERCIAL)
   message(STATUS "Fetching libusb-cmake (libusb 1.0.29) from GitHub...")
 
-  set(LIBUSB_BUILD_SHARED_LIBS        ON  CACHE BOOL "" FORCE)
+  set(LIBUSB_BUILD_SHARED_LIBS        OFF CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_TESTING            OFF CACHE BOOL "" FORCE)
   set(LIBUSB_BUILD_EXAMPLES           OFF CACHE BOOL "" FORCE)
   set(LIBUSB_INSTALL_TARGETS          OFF CACHE BOOL "" FORCE)

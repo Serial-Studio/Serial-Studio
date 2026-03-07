@@ -647,23 +647,6 @@ if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC QuaZip::QuaZip)
 
-  # Install the libusb shared library alongside the executable (LGPL-2.1 §6 compliance).
-  #
-  # libusb is LGPL-2.1+. Static linking in a commercial binary would require distributing
-  # object files so users can relink. Dynamic linking is the standard compliant alternative:
-  # the user can swap the shared library file without recompiling Serial Studio.
-  #
-  # Platform destinations mirror the Qt deploy tool layout:
-  #   Windows  : libusb-1.0.dll → bin/ (next to the .exe, alongside Qt DLLs)
-  #   Linux    : libusb-1.0.so* → lib/
-  #   macOS    : macdeployqt (MACOS_BUNDLE_POST_BUILD) scans otool -L and copies all
-  #              non-system dylibs into Contents/Frameworks/ automatically; no explicit
-  #              install rule is needed here for macOS.
-  install(
-    TARGETS usb-1.0
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}   # Windows: libusb-1.0.dll
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}   # Linux:   libusb-1.0.so*
-  )
 endif()
 
 #---------------------------------------------------------------------------------------------------
@@ -979,9 +962,9 @@ install(SCRIPT ${deploy_script})
 #
 # To generate installer:
 #   cmake --build build --target package
-#   # Creates: Serial-Studio-GPL3-v3.2.4.msi (Windows)
-#   #          Serial-Studio-GPL3-v3.2.4.dmg (macOS)
-#   #          Serial-Studio-GPL3-v3.2.4.tar.gz (Linux)
+#   Creates: Serial-Studio-GPL3-v3.2.4.msi (Windows)
+#            Serial-Studio-GPL3-v3.2.4.dmg (macOS)
+#            Serial-Studio-GPL3-v3.2.4.tar.gz (Linux)
 #
 #---------------------------------------------------------------------------------------------------
 
