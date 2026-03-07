@@ -385,28 +385,6 @@ Item {
       }
 
       //
-      // Subtle vignete
-      //
-      Item {
-        visible: model && model.frameCount > 0
-        width:  root.paintedW
-        height: root.paintedH
-        x: root.paintedX - imageArea.x
-        y: root.paintedY - imageArea.y
-
-        Rectangle {
-          anchors.fill: parent
-          gradient: Gradient {
-            orientation: Gradient.Vertical
-            GradientStop { position: 0.0; color: Qt.rgba(0, 0, 0, 0.35) }
-            GradientStop { position: 0.3; color: Qt.rgba(0, 0, 0, 0.00) }
-            GradientStop { position: 0.7; color: Qt.rgba(0, 0, 0, 0.00) }
-            GradientStop { position: 1.0; color: Qt.rgba(0, 0, 0, 0.55) }
-          }
-        }
-      }
-
-      //
       // Interaction handler
       //
       PinchArea {
