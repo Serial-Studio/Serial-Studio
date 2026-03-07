@@ -614,33 +614,6 @@ Item {
         }
 
         Text {
-          color: "white"
-          opacity: 0.55
-          style: Text.Raised
-          styleColor: Qt.rgba(0, 0, 0, 0.8)
-          font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85))
-          text: {
-            if (!model) return ""
-            var parts = []
-            if (model.imageWidth > 0)
-              parts.push(model.imageWidth + "×" + model.imageHeight)
-            if (model.imageFormat.length > 0)
-              parts.push(model.imageFormat)
-            return parts.join("  ·  ")
-          }
-        }
-
-        Text {
-          color: "white"
-          opacity: 0.55
-          style: Text.Raised
-          styleColor: Qt.rgba(0, 0, 0, 0.8)
-          visible: model && model.exportEnabled
-          font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85))
-          text: "  ·  "
-        }
-
-        Text {
           id: savingLabel
           color: "white"
           opacity: 0.55
@@ -650,7 +623,7 @@ Item {
           font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85))
 
           property int dotCount: 1
-          text: qsTr("Saving") + ".".repeat(dotCount)
+          text: qsTr("Recording Images") + ".".repeat(dotCount)
 
           Timer {
             interval: 500

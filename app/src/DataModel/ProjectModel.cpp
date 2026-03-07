@@ -935,15 +935,17 @@ void DataModel::ProjectModel::updateAction(const int actionId, const DataModel::
  */
 void DataModel::ProjectModel::deleteCurrentGroup()
 {
-  const auto ret = Misc::Utilities::showMessageBox(
-    tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
-    tr("This action cannot be undone. Do you wish to proceed?"),
-    QMessageBox::Question,
-    APP_NAME,
-    QMessageBox::Yes | QMessageBox::No);
+  if (!m_suppressMessageBoxes) {
+    const auto ret = Misc::Utilities::showMessageBox(
+      tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question,
+      APP_NAME,
+      QMessageBox::Yes | QMessageBox::No);
 
-  if (ret != QMessageBox::Yes)
-    return;
+    if (ret != QMessageBox::Yes)
+      return;
+  }
 
   const auto gid = m_selectedGroup.groupId;
   if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
@@ -968,15 +970,17 @@ void DataModel::ProjectModel::deleteCurrentGroup()
  */
 void DataModel::ProjectModel::deleteCurrentAction()
 {
-  const auto ret = Misc::Utilities::showMessageBox(
-    tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
-    tr("This action cannot be undone. Do you wish to proceed?"),
-    QMessageBox::Question,
-    APP_NAME,
-    QMessageBox::Yes | QMessageBox::No);
+  if (!m_suppressMessageBoxes) {
+    const auto ret = Misc::Utilities::showMessageBox(
+      tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question,
+      APP_NAME,
+      QMessageBox::Yes | QMessageBox::No);
 
-  if (ret != QMessageBox::Yes)
-    return;
+    if (ret != QMessageBox::Yes)
+      return;
+  }
 
   const auto aid = m_selectedAction.actionId;
   if (aid < 0 || static_cast<size_t>(aid) >= m_actions.size())
@@ -1001,15 +1005,17 @@ void DataModel::ProjectModel::deleteCurrentAction()
  */
 void DataModel::ProjectModel::deleteCurrentDataset()
 {
-  const auto ret = Misc::Utilities::showMessageBox(
-    tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
-    tr("This action cannot be undone. Do you wish to proceed?"),
-    QMessageBox::Question,
-    APP_NAME,
-    QMessageBox::Yes | QMessageBox::No);
+  if (!m_suppressMessageBoxes) {
+    const auto ret = Misc::Utilities::showMessageBox(
+      tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question,
+      APP_NAME,
+      QMessageBox::Yes | QMessageBox::No);
 
-  if (ret != QMessageBox::Yes)
-    return;
+    if (ret != QMessageBox::Yes)
+      return;
+  }
 
   const auto groupId   = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;

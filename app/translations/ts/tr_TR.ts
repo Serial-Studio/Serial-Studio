@@ -2287,130 +2287,130 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation>Bu işlem modu, proje dosyalarından panoları yüklemek ve görüntülemek için gereklidir.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="939"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="940"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>"%1" grubunu silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="940"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="973"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1006"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="941"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="976"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1011"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Bu işlem geri alınamaz. Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="972"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="975"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>"%1" eylemini silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1005"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1010"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>"%1" veri setini silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1060"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1088"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1109"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1066"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1094"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1115"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopya)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Group</source>
         <translation>Grup</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1180"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1186"/>
         <source>New Dataset</source>
         <translation>Yeni Veri Seti</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1189"/>
         <source>New Plot</source>
         <translation>Yeni Grafik</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1193"/>
         <source>New FFT Plot</source>
         <translation>Yeni FFT Grafiği</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1191"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1197"/>
         <source>New Level Indicator</source>
         <translation>Yeni Seviye Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1201"/>
         <source>New Gauge</source>
         <translation>Yeni Gösterge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1199"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1205"/>
         <source>New Compass</source>
         <translation>Yeni Pusula</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1207"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1213"/>
         <source>New LED Indicator</source>
         <translation>Yeni LED Göstergesi</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1305"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
         <source>New Action</source>
         <translation>Yeni Eylem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1413"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1419"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Grup düzeyi widget'ını değiştirmek istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1415"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1421"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Bu grup için mevcut veri kümeleri silinecek</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1475"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1476"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1477"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1483"/>
         <source>Accelerometer %1</source>
         <translation>İvmeölçer %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1523"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1524"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1529"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
         <source>Gyro %1</source>
         <translation>Jiroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1568"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1574"/>
         <source>Latitude</source>
         <translation>Enlem</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1575"/>
         <source>Longitude</source>
         <translation>Boylam</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1576"/>
         <source>Altitude</source>
         <translation>İrtifa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1609"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1610"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1616"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1611"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1617"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
@@ -2935,7 +2935,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation type="vanished">Değişiklikleri Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1747"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1753"/>
         <source>File open error</source>
         <translation>Dosya açma hatası</translation>
     </message>
@@ -4637,6 +4637,10 @@ Cihaz, aktif yapılandırmasında veri uç noktalarını açığa çıkarmayabil
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="653"/>
+        <source>Recording Images</source>
+        <translation>Görüntüleri Kaydetme</translation>
+    </message>
+    <message>
         <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="653"/>
         <source>Saving</source>
         <translation>Kaydediliyor</translation>

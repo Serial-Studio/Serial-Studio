@@ -2237,130 +2237,130 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
         <translation>Deze bedrijfsmodus is vereist om dashboards uit projectbestanden te laden en weer te geven.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="939"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="940"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Wilt u groep "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="940"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="973"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1006"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="941"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="976"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1011"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Deze actie kan niet ongedaan worden gemaakt. Wilt u doorgaan?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="972"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="975"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Wilt u actie "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1005"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1010"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Wilt u dataset "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1060"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1088"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1109"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1066"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1094"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1115"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1157"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Group</source>
         <translation>Groep</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1180"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1186"/>
         <source>New Dataset</source>
         <translation>Nieuw Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1183"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1189"/>
         <source>New Plot</source>
         <translation>Nieuw Plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1193"/>
         <source>New FFT Plot</source>
         <translation>Nieuw FFT-Plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1191"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1197"/>
         <source>New Level Indicator</source>
         <translation>Nieuwe Niveau Indicator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1195"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1201"/>
         <source>New Gauge</source>
         <translation>Nieuwe Meter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1199"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1205"/>
         <source>New Compass</source>
         <translation>Nieuw Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1207"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1213"/>
         <source>New LED Indicator</source>
         <translation>Nieuwe LED Indicator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1305"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1311"/>
         <source>New Action</source>
         <translation>Nieuwe Actie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1413"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1419"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Weet u zeker dat u de groep-niveau widget wilt wijzigen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1415"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1421"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Bestaande datasets voor deze groep worden verwijderd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1475"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1476"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1477"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1483"/>
         <source>Accelerometer %1</source>
         <translation>Versnellingsmeter %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1523"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1524"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1529"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1531"/>
         <source>Gyro %1</source>
         <translation>Gyro %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1568"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1574"/>
         <source>Latitude</source>
         <translation>Breedtegraad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1569"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1575"/>
         <source>Longitude</source>
         <translation>Lengtegraad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1570"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1576"/>
         <source>Altitude</source>
         <translation>Hoogte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1609"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1610"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1616"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1611"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1617"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
@@ -2885,7 +2885,7 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
         <translation type="vanished">Wijzigingen Opslaan</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1747"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1753"/>
         <source>File open error</source>
         <translation>Fout bij openen bestand</translation>
     </message>
@@ -4517,6 +4517,10 @@ Het apparaat heeft mogelijk geen data-eindpunten in zijn actieve configuratie, o
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="653"/>
+        <source>Recording Images</source>
+        <translation>Opnemen van Afbeeldingen</translation>
+    </message>
+    <message>
         <location filename="../../../build/Qt_6_10_2_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="653"/>
         <source>Saving</source>
         <translation>Opslaan</translation>
