@@ -277,6 +277,7 @@ Widgets::ImageView::ImageView(int index, QQuickItem* parent)
   , m_imageWidth(0)
   , m_imageHeight(0)
   , m_exportEnabled(ImageExport::instance().exportEnabled())
+  , m_primaryColor(Qt::black)
   , m_imageFormat(QStringLiteral("Unknown"))
   , m_reader(nullptr)
 {
@@ -353,6 +354,14 @@ int Widgets::ImageView::imageHeight() const
 }
 
 /**
+ * @brief Returns the dominant color of the last decoded frame.
+ */
+QColor Widgets::ImageView::primaryColor() const
+{
+  return m_primaryColor;
+}
+
+/**
  * @brief Returns the dashboard group title associated with this widget.
  */
 const QString& Widgets::ImageView::groupTitle() const
@@ -405,6 +414,23 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
 
   m_imageWidth  = img.width();
   m_imageHeight = img.height();
+
+  {
+    const QImage thumb = img.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::FastTransformation)
+                           .convertToFormat(QImage::Format_RGB32);
+    quint64 r = 0, g = 0, b = 0;
+    const int n = thumb.width() * thumb.height();
+    for (int y = 0; y < thumb.height(); ++y) {
+      const QRgb* line = reinterpret_cast<const QRgb*>(thumb.constScanLine(y));
+      for (int x = 0; x < thumb.width(); ++x) {
+        r += qRed(line[x]);
+        g += qGreen(line[x]);
+        b += qBlue(line[x]);
+      }
+    }
+    m_primaryColor =
+      QColor(static_cast<int>(r / n), static_cast<int>(g / n), static_cast<int>(b / n));
+  }
 
   if (auto* prov = UI::ImageProvider::global())
     prov->setImage(m_providerKey, img);

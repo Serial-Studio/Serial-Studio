@@ -56,6 +56,7 @@ Item {
 
     Image {
       id: _icon
+
       sourceSize.width: 27
       sourceSize.height: 27
       Layout.alignment: Qt.AlignVCenter
@@ -67,6 +68,7 @@ Item {
 
     Label {
       id: _label
+
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignVCenter
       color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
@@ -94,6 +96,7 @@ Item {
 
   MouseArea {
     id: _mouseArea
+
     hoverEnabled: true
     anchors.fill: parent
     onClicked: {

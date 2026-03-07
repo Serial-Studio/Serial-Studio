@@ -26,6 +26,7 @@ import QtQuick.Controls
 
 RowLayout {
   id: root
+
   spacing: 0
 
   //
@@ -61,10 +62,11 @@ RowLayout {
   //
   Loader {
     id: leftLoader
+
     Layout.fillHeight: true
+    sourceComponent: root.leftPanel
     Layout.preferredWidth: root.effectiveLeftWidth
     Layout.maximumWidth: Math.max(root.minLeftWidth, root.width - root.minRightWidth - 1)
-    sourceComponent: root.leftPanel
   }
 
   //
@@ -87,8 +89,8 @@ RowLayout {
     MouseArea {
       width: 8
       height: parent.height
-      anchors.left: parent.left
       anchors.leftMargin: -4
+      anchors.left: parent.left
       cursorShape: Qt.SizeHorCursor
 
       property int _startX: 0
@@ -116,6 +118,7 @@ RowLayout {
   //
   Loader {
     id: rightLoader
+
     Layout.fillWidth: true
     Layout.fillHeight: true
     sourceComponent: root.rightPanel

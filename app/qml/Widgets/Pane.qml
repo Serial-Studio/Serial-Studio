@@ -25,6 +25,7 @@ import QtQuick.Controls as Controls
 
 Controls.GroupBox {
   id: root
+
   bottomPadding: 8
   topPadding: label.height + 16
 
@@ -116,6 +117,7 @@ Controls.GroupBox {
 
   background: Rectangle {
     id: _bg
+
     color: Cpp_ThemeManager.colors["pane_background"]
 
     anchors {

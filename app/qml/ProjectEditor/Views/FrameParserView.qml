@@ -28,6 +28,7 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
+
   focus: true
   icon: Cpp_JSON_ProjectEditor.selectedIcon
   Component.onCompleted: Cpp_JSON_FrameBuilder.setFrameParser(frameParser)
@@ -87,6 +88,7 @@ Widgets.Pane {
   //
   Menu {
     id: contextMenu
+
     onClosed: frameParser.forceActiveFocus()
 
     MenuItem {
@@ -172,14 +174,15 @@ Widgets.Pane {
       Rectangle {
         Layout.fillWidth: true
         Layout.maximumHeight: Layout.minimumHeight
-        Layout.minimumHeight: toolbarLayout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]
+        Layout.minimumHeight: toolbarLayout.implicitHeight + 12
 
         //
         // Buttons
         //
         RowLayout {
           id: toolbarLayout
+
           spacing: 4
 
           anchors {
@@ -196,8 +199,8 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Reset")
             toolbarButton: false
-            onClicked: frameParser.reload(true)
             Layout.alignment: Qt.AlignVCenter
+            onClicked: frameParser.reload(true)
             icon.source: "qrc:/rcc/icons/code-editor/reload.svg"
             ToolTip.text: qsTr("Reset to the default parsing script")
           }
@@ -250,8 +253,8 @@ Widgets.Pane {
             onClicked: frameParser.undo()
             Layout.alignment: Qt.AlignVCenter
             enabled: frameParser.undoAvailable
-            icon.source: "qrc:/rcc/icons/code-editor/undo.svg"
             ToolTip.text: qsTr("Undo the last code edit")
+            icon.source: "qrc:/rcc/icons/code-editor/undo.svg"
           }
 
           //
@@ -314,8 +317,8 @@ Widgets.Pane {
             toolbarButton: false
             onClicked: frameParser.paste()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/paste.svg"
             ToolTip.text: qsTr("Paste code from clipboard")
+            icon.source: "qrc:/rcc/icons/code-editor/paste.svg"
           }
 
           //
@@ -366,11 +369,12 @@ Widgets.Pane {
       Rectangle {
         implicitHeight: 32
         Layout.fillWidth: true
-        Layout.minimumHeight: templateLayout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]
+        Layout.minimumHeight: templateLayout.implicitHeight + 12
 
         RowLayout {
           id: templateLayout
+
           spacing: 4
 
           anchors {
@@ -413,8 +417,8 @@ Widgets.Pane {
             text: qsTr("Evaluate")
             onClicked: frameParser.evaluate()
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/buttons/media-play.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
+            icon.source: "qrc:/rcc/icons/buttons/media-play.svg"
           }
         }
       }
@@ -434,12 +438,14 @@ Widgets.Pane {
       //
       SerialStudio.FrameParser {
         id: frameParser
+
+        Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.topMargin: -1
 
         MouseArea {
           id: mouseArea
+
           anchors.fill: parent
           cursorShape: Qt.IBeamCursor
           propagateComposedEvents: true

@@ -24,6 +24,7 @@
 
 #ifdef BUILD_COMMERCIAL
 
+#  include <QColor>
 #  include <QQuickItem>
 
 #  include "IO/HAL_Driver.h"
@@ -135,6 +136,7 @@ class ImageView : public QQuickItem {
   Q_PROPERTY(int     frameCount    READ frameCount    NOTIFY imageReady)
   Q_PROPERTY(int     imageWidth    READ imageWidth    NOTIFY imageReady)
   Q_PROPERTY(int     imageHeight   READ imageHeight   NOTIFY imageReady)
+  Q_PROPERTY(QColor  primaryColor  READ primaryColor  NOTIFY imageReady)
   Q_PROPERTY(bool    exportEnabled READ exportEnabled WRITE setExportEnabled NOTIFY exportEnabledChanged)
   Q_PROPERTY(QString groupTitle   READ groupTitle                           CONSTANT)
   // clang-format on
@@ -152,6 +154,7 @@ public:
   [[nodiscard]] int frameCount() const;
   [[nodiscard]] int imageWidth() const;
   [[nodiscard]] int imageHeight() const;
+  [[nodiscard]] QColor primaryColor() const;
   [[nodiscard]] bool exportEnabled() const;
   [[nodiscard]] const QString& groupTitle() const;
 
@@ -171,6 +174,7 @@ private:
   int m_imageWidth;
   int m_imageHeight;
   bool m_exportEnabled;
+  QColor m_primaryColor;
   QString m_imageFormat;
   QString m_providerKey;
   QString m_groupTitle;

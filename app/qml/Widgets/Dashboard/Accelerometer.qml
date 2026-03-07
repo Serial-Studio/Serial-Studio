@@ -189,8 +189,8 @@ Item {
       leftMargin: 8
       rightMargin: 8
       bottomMargin: 8
-      top: toolbar.bottom
       left: parent.left
+      top: toolbar.bottom
       right: parent.right
       bottom: parent.bottom
     }
@@ -217,25 +217,25 @@ Item {
                       : Cpp_ThemeManager.colors["widget_border"]
 
         Column {
-          anchors.fill: parent
-          anchors.margins: 4
           spacing: 1
+          anchors.margins: 4
+          anchors.fill: parent
 
           Label {
-            width: parent.width
             opacity: 0.6
+            width: parent.width
             text: qsTr("G-FORCE")
+            horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
-            horizontalAlignment: Text.AlignHCenter
           }
 
           Label {
             width: parent.width
+            elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
-            horizontalAlignment: Text.AlignHCenter
-            elide: Text.ElideRight
             text: (root.currentG.toFixed(2) + "").padStart(5, ' ') + " @ " +
                   (root.normalize360(root.currentTheta).toFixed(0) + "").padStart(3, ' ') + "°"
           }
@@ -250,26 +250,26 @@ Item {
         border.color: Cpp_ThemeManager.colors["widget_border"]
 
         Column {
-          anchors.fill: parent
-          anchors.margins: 4
           spacing: 1
+          anchors.margins: 4
+          anchors.fill: parent
 
           Label {
-            width: parent.width
             opacity: 0.6
+            width: parent.width
             text: qsTr("PITCH ↕")
+            horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
-            horizontalAlignment: Text.AlignHCenter
           }
 
           Label {
             width: parent.width
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
-            text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
-            color: Cpp_ThemeManager.colors["widget_text"]
-            horizontalAlignment: Text.AlignHCenter
             elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
+            color: Cpp_ThemeManager.colors["widget_text"]
+            text: (root.currentPitch.toFixed(2) + "").padStart(7, ' ') + "°"
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
           }
         }
       }
@@ -282,26 +282,26 @@ Item {
         border.color: Cpp_ThemeManager.colors["widget_border"]
 
         Column {
-          anchors.fill: parent
-          anchors.margins: 4
           spacing: 1
+          anchors.margins: 4
+          anchors.fill: parent
 
           Label {
-            width: parent.width
             opacity: 0.6
+            width: parent.width
             text: qsTr("ROLL ↔")
+            horizontalAlignment: Text.AlignHCenter
             color: Cpp_ThemeManager.colors["widget_text"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
-            horizontalAlignment: Text.AlignHCenter
           }
 
           Label {
             width: parent.width
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
-            text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
-            color: Cpp_ThemeManager.colors["widget_text"]
-            horizontalAlignment: Text.AlignHCenter
             elide: Text.ElideRight
+            horizontalAlignment: Text.AlignHCenter
+            color: Cpp_ThemeManager.colors["widget_text"]
+            text: (root.currentRoll.toFixed(2) + "").padStart(7, ' ') + "°"
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
           }
         }
       }
@@ -342,9 +342,9 @@ Item {
       //
       Item {
         id: rings
+        anchors.centerIn: parent
         width: polarArea.gaugeSize
         height: polarArea.gaugeSize
-        anchors.centerIn: parent
 
         //
         // Radial dotted lines for each 30° angle
@@ -396,15 +396,15 @@ Item {
 
             readonly property real fraction: 1.0 - (index * 0.25)
 
+            z: 1
+            opacity: 0.4
+            border.width: 1
             radius: width / 2
             color: "transparent"
-            border.width: 1
-            opacity: 0.4
-            border.color: Cpp_ThemeManager.colors["polar_foreground"]
+            anchors.centerIn: parent
             width: rings.width * fraction
             height: rings.height * fraction
-            anchors.centerIn: parent
-            z: 1
+            border.color: Cpp_ThemeManager.colors["polar_foreground"]
           }
         }
 
@@ -412,40 +412,40 @@ Item {
         // Center dot
         //
         Rectangle {
-          radius: width / 2
-          anchors.centerIn: parent
+          z: 2
           width: 4
           height: 4
           opacity: 0.5
+          radius: width / 2
+          anchors.centerIn: parent
           color: Cpp_ThemeManager.colors["polar_foreground"]
-          z: 2
         }
 
         //
         // Crosshair lines (main axes)
         //
         Rectangle {
+          z: 1
           width: 1
-          opacity: 0.3
-          color: Cpp_ThemeManager.colors["polar_foreground"]
           anchors {
             top: parent.top
             bottom: parent.bottom
             horizontalCenter: parent.horizontalCenter
           }
-          z: 1
+          opacity: 0.3
+          color: Cpp_ThemeManager.colors["polar_foreground"]
         }
 
         Rectangle {
+          z: 1
           height: 1
-          opacity: 0.3
-          color: Cpp_ThemeManager.colors["polar_foreground"]
           anchors {
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
           }
-          z: 1
+          opacity: 0.3
+          color: Cpp_ThemeManager.colors["polar_foreground"]
         }
 
 
@@ -462,13 +462,13 @@ Item {
             readonly property real angleRad: angle * Math.PI / 180
             readonly property real radius: rings.width / 2 + 18
 
+            visible: rings.width >= 180
             x: rings.width / 2 + radius * Math.cos(angleRad) - width / 2
             y: rings.height / 2 - radius * Math.sin(angleRad) - height / 2
-            visible: rings.width >= 180
 
+            opacity: 0.5
             text: angle + "°"
             color: Cpp_ThemeManager.colors["polar_foreground"]
-            opacity: 0.5
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.6))
           }
         }
@@ -508,8 +508,9 @@ Item {
       //
       MouseArea {
         id: cursorTracker
-        anchors.fill: rings
+
         hoverEnabled: true
+        anchors.fill: rings
         acceptedButtons: Qt.NoButton
         propagateComposedEvents: true
 
@@ -540,62 +541,63 @@ Item {
         Rectangle {
           width: 1
           height: 12
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
           x: cursorTracker.mouseX - width / 2
           y: cursorTracker.mouseY - height - 4
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
         }
 
         Rectangle {
           width: 1
           height: 12
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
           x: cursorTracker.mouseX - width / 2
           y: cursorTracker.mouseY + 4
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
         }
 
         //
         // Cursor crosshair (horizontal arms)
         //
         Rectangle {
-          width: 12
           height: 1
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
+          width: 12
           x: cursorTracker.mouseX - width - 4
           y: cursorTracker.mouseY - height / 2
-        } Rectangle {
-          width: 12
-          height: 1
           color: Cpp_ThemeManager.colors["polar_indicator"]
           opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
+        } Rectangle {
+          height: 1
+          width: 12
           x: cursorTracker.mouseX + 4
           y: cursorTracker.mouseY - height / 2
+          color: Cpp_ThemeManager.colors["polar_indicator"]
+          opacity: cursorTracker.containsMouse && cursorTracker.isInsideCircle ? 0.6 : 0
         }
 
         //
         // Cursor value label (positioned below and right of cursor to stay visible)
         //
         Rectangle {
-          visible: cursorTracker.containsMouse && cursorTracker.isInsideCircle
-          x: Math.min(cursorTracker.mouseX + 16, rings.width - width - 4)
-          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, rings.height - height - 4))
+          radius: 3
+          border.width: 1
           width: valueLabel.width + 8
           height: valueLabel.height + 4
           color: Cpp_ThemeManager.colors["tooltip_base"]
-          radius: 3
-          border.width: 1
           border.color: Cpp_ThemeManager.colors["tooltip_text"]
+          x: Math.min(cursorTracker.mouseX + 16, rings.width - width - 4)
+          visible: cursorTracker.containsMouse && cursorTracker.isInsideCircle
+          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, rings.height - height - 4))
 
           Label {
             id: valueLabel
+
+            elide: Text.ElideRight
             anchors.centerIn: parent
+            color: Cpp_ThemeManager.colors["tooltip_text"]
             text: cursorTracker.cursorMagnitude.toFixed(2) + "G @ " +
                   cursorTracker.cursorAngle.toFixed(0) + "°"
-            color: Cpp_ThemeManager.colors["tooltip_text"]
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
-            elide: Text.ElideRight
           }
         }
       }

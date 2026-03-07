@@ -89,10 +89,7 @@ Item {
 
     ToolButton {
       id: _autoCenter
-      icon.width: 24
-      icon.height: 24
-      icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
+
       onClicked: {
         if (root.model) {
           root.model.autoCenter = !root.model.autoCenter
@@ -100,14 +97,15 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "autoCenter", root.model.autoCenter)
         }
       }
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
     }
 
     ToolButton {
       id: _plotTrajectory
-      icon.width: 24
-      icon.height: 24
-      icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/poliline.svg"
+
       onClicked: {
         if (root.model) {
           root.model.plotTrajectory = !root.model.plotTrajectory
@@ -115,6 +113,10 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "plotTrajectory", root.model.plotTrajectory)
         }
       }
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/poliline.svg"
     }
 
     Rectangle {
@@ -124,25 +126,25 @@ Item {
     }
 
     ToolButton {
-      icon.width: 24
-      icon.height: 24
-      icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-in.svg"
       onClicked: {
         if (root.model)
           root.model.zoomLevel = root.model.zoomLevel + 1
       }
-    }
-
-    ToolButton {
       icon.width: 24
       icon.height: 24
       icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-out.svg"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-in.svg"
+    }
+
+    ToolButton {
       onClicked: {
         if (root.model)
           root.model.zoomLevel = root.model.zoomLevel - 1
       }
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-out.svg"
     }
 
     Rectangle {
@@ -153,10 +155,7 @@ Item {
 
     ToolButton {
       id: _showWeather
-      icon.width: 24
-      icon.height: 24
-      icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/weather.svg"
+
       onClicked: {
         if (root.model) {
           root.model.showWeather = !root.model.showWeather
@@ -166,14 +165,15 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showNasaWeather", root.model.showNasaWeather)
         }
       }
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/weather.svg"
     }
 
     ToolButton {
       id: _showNasaWeather
-      icon.width: 24
-      icon.height: 24
-      icon.color: "transparent"
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/nasa.svg"
+
       onClicked: {
         if (root.model) {
           root.model.showNasaWeather = !root.model.showNasaWeather
@@ -183,6 +183,10 @@ Item {
           Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showNasaWeather", root.model.showNasaWeather)
         }
       }
+      icon.width: 24
+      icon.height: 24
+      icon.color: "transparent"
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/nasa.svg"
     }
 
     Rectangle {
@@ -201,10 +205,8 @@ Item {
 
     ComboBox {
       id: _mapType
-      Layout.fillWidth: true
-      Layout.alignment: Qt.AlignVCenter
-      displayText: qsTr("Base Map: %1").arg(currentText)
 
+      Layout.fillWidth: true
       onCurrentIndexChanged: {
         if (root.model) {
           if (root.model.mapType !== currentIndex) {
@@ -214,6 +216,8 @@ Item {
           }
         }
       }
+      Layout.alignment: Qt.AlignVCenter
+      displayText: qsTr("Base Map: %1").arg(currentText)
     }
   }
 

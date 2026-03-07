@@ -69,8 +69,8 @@ SmartDialog {
           text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
         }
 
         Item {
@@ -82,8 +82,8 @@ SmartDialog {
           icon.height: 18
           text: qsTr("About Qt...")
           onClicked: Cpp_Misc_Utilities.aboutQt()
-          icon.source: "qrc:/rcc/icons/buttons/info.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/info.svg"
         }
       }
     }

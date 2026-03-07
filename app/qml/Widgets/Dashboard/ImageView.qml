@@ -46,6 +46,21 @@ Item {
   readonly property real fontSize: Math.max(9, Math.min(11, Math.min(root.width, root.height) / 28))
 
   //
+  // Text color for status bar labels — white on dark backgrounds, black on light ones.
+  // Uses the WCAG relative luminance formula (sRGB).
+  //
+  readonly property color statusTextColor: {
+    const c = model ? model.primaryColor : "#000000"
+    const r = c.r <= 0.04045 ? c.r / 12.92 : Math.pow((c.r + 0.055) / 1.055, 2.4)
+    const g = c.g <= 0.04045 ? c.g / 12.92 : Math.pow((c.g + 0.055) / 1.055, 2.4)
+    const b = c.b <= 0.04045 ? c.b / 12.92 : Math.pow((c.b + 0.055) / 1.055, 2.4)
+    return (0.2126 * r + 0.7152 * g + 0.0722 * b) > 0.179 ? "#000000" : "#ffffff"
+  }
+
+  readonly property color statusShadowColor: statusTextColor === "#ffffff" ? Qt.rgba(0, 0, 0, 0.6)
+                                                                           : Qt.rgba(1, 1, 1, 0.6)
+
+  //
   // Toolbar visibility
   //
   property bool hasToolbar: true
@@ -129,15 +144,9 @@ Item {
     const bh   = base.height
     const aw   = imageArea.width
     const ah   = imageArea.height
-
-    // Transform order: Scale(origin=center) then Translate(panX).
-    // Left  edge screen pos: (aw-bw)/2 scaled from center + panX = -bw*z/2 + aw/2 + panX >= 0
-    //   → panX >= bw*z/2 - aw/2
-    // Right edge screen pos: bw*z/2 + aw/2 + panX <= aw
-    //   → panX <= aw/2 - bw*z/2
-    // Valid range: ±(bw*z/2 - aw/2), clamped to 0 when image fits inside area.
     const limitX = Math.max(0, (bw * z2 - aw) / 2)
     const limitY = Math.max(0, (bh * z2 - ah) / 2)
+
     panX = Math.max(-limitX, Math.min(limitX, panX))
     panY = Math.max(-limitY, Math.min(limitY, panY))
   }
@@ -174,6 +183,7 @@ Item {
     //
     RowLayout {
       id: toolbar
+
       spacing: 4
       Layout.fillWidth: true
       Layout.preferredHeight: 48
@@ -289,6 +299,7 @@ Item {
 
       ComboBox {
         id: filterCombo
+
         implicitHeight: 24
         implicitWidth: 120
         currentIndex: root.filterIndex
@@ -304,16 +315,20 @@ Item {
     //
     Rectangle {
       id: imageArea
+
       clip: true
-      color: "#000"
       Layout.fillWidth: true
       Layout.fillHeight: true
+      color: model && model.frameCount > 0 ? model.primaryColor : "#000"
+
+      Behavior on color { ColorAnimation { duration: 600; easing.type: Easing.OutCubic } }
 
       //
       // Blurred background
       //
       Image {
         id: blurSrc
+
         cache: false
         smooth: false
         mipmap: false
@@ -330,9 +345,9 @@ Item {
         blurMultiplier: 10
         anchors.fill: parent
         visible: model && model.frameCount > 0
-        brightness:        root.currentFilter.bright
         contrast:          root.currentFilter.cont
         saturation:        root.currentFilter.sat
+        brightness:        root.currentFilter.bright
         colorization:      root.currentFilter.colorize ? 1.0 : 0.0
         colorizationColor: root.currentFilter.color
       }
@@ -342,9 +357,10 @@ Item {
       //
       Item {
         id: imageContainer
-        anchors.fill: parent
 
         opacity: 0
+        anchors.fill: parent
+
         Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
 
         transform: [
@@ -360,9 +376,9 @@ Item {
 
         layer.enabled: true
         layer.effect: MultiEffect {
-          brightness:        root.currentFilter.bright
           contrast:          root.currentFilter.cont
           saturation:        root.currentFilter.sat
+          brightness:        root.currentFilter.bright
           colorization:      root.currentFilter.colorize ? 1.0 : 0.0
           colorizationColor: root.currentFilter.color
         }
@@ -482,6 +498,7 @@ Item {
       //
       Item {
         id: crosshairLayer
+
         anchors.fill: parent
         visible: root.showCrosshair && root.cursorImgX >= 0 && model && model.frameCount > 0
 
@@ -491,49 +508,50 @@ Item {
         readonly property real cy: lpY + (root.cursorImgY + 0.5) / (model ? model.imageHeight : 1) * root.paintedH
 
         Rectangle {
-          x: crosshairLayer.cx - width / 2
-          y: crosshairLayer.lpY
           width: 1
+          opacity: 0.7
+          color: "white"
+          y: crosshairLayer.lpY
           height: root.paintedH
-          color: "white"
-          opacity: 0.7
-        }
-
-        Rectangle {
-          x: crosshairLayer.lpX
-          y: crosshairLayer.cy - height / 2
-          width: root.paintedW
-          height: 1
-          color: "white"
-          opacity: 0.7
-        }
-
-        Rectangle {
           x: crosshairLayer.cx - width / 2
+        }
+
+        Rectangle {
+          height: 1
+          opacity: 0.7
+          color: "white"
+          x: crosshairLayer.lpX
+          width: root.paintedW
           y: crosshairLayer.cy - height / 2
+        }
+
+        Rectangle {
           width: 7
           height: 7
           radius: 3.5
+          border.width: 1.5
           color: "transparent"
           border.color: "white"
-          border.width: 1.5
+          x: crosshairLayer.cx - width / 2
+          y: crosshairLayer.cy - height / 2
         }
 
         Rectangle {
-          x: crosshairLayer.cx + 8
-          y: crosshairLayer.cy - height / 2
           radius: 3
+          x: crosshairLayer.cx + 8
           color: Qt.rgba(0, 0, 0, 0.65)
-          width: coordLabel.implicitWidth + 10
+          y: crosshairLayer.cy - height / 2
           height: coordLabel.implicitHeight + 6
+          width: coordLabel.implicitWidth + 10
 
           Text {
             id: coordLabel
-            anchors.centerIn: parent
+
             color: "white"
+            anchors.centerIn: parent
             font.pixelSize: root.fontSize
-            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
             text: root.cursorImgX + ", " + root.cursorImgY
+            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
           }
         }
       }
@@ -542,19 +560,19 @@ Item {
       // "Waiting for image…" placeholder
       //
       ColumnLayout {
+        spacing: 12
         anchors.centerIn: parent
         visible: !model || model.frameCount === 0
-        spacing: 12
 
         Image {
           id: placeholderIcon
+
+          opacity: 0
+          layer.enabled: true
           sourceSize.width: 48
           sourceSize.height: 48
           Layout.alignment: Qt.AlignHCenter
           source: "qrc:/rcc/icons/dashboard-large/image.svg"
-
-          opacity: 0
-          layer.enabled: true
           layer.effect: MultiEffect { colorization: 1.0; colorizationColor: "white" }
 
           SequentialAnimation on opacity {
@@ -566,8 +584,8 @@ Item {
         }
 
         Text {
-          color: "white"
           opacity: 0.55
+          color: "white"
           font.pixelSize: root.fontSize
           text: qsTr("Waiting for image…")
           Layout.alignment: Qt.AlignHCenter
@@ -585,18 +603,19 @@ Item {
         anchors {
           leftMargin: 10
           rightMargin: 10
-          bottomMargin: 7
           left: parent.left
           right: parent.right
+          bottomMargin: 7
           bottom: parent.bottom
         }
 
         Text {
           id: savingLabel
-          color: "white"
-          opacity: 0.55
+
+          opacity: 0.75
           style: Text.Raised
-          styleColor: Qt.rgba(0, 0, 0, 0.8)
+          color: root.statusTextColor
+          styleColor: root.statusShadowColor
           visible: model && model.exportEnabled
           font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85))
 
@@ -614,10 +633,10 @@ Item {
         Item { Layout.fillWidth: true }
 
         Text {
-          color: "white"
-          opacity: 0.55
+          opacity: 0.75
           style: Text.Raised
-          styleColor: Qt.rgba(0, 0, 0, 0.8)
+          color: root.statusTextColor
+          styleColor: root.statusShadowColor
           font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85))
           text: {
             var parts = []

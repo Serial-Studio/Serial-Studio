@@ -449,6 +449,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
     return false;
   }
 
+  // File already on disk, just write new data to it
   return finalizeProjectSave();
 }
 

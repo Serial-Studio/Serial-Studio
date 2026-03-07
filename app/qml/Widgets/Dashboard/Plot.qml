@@ -151,13 +151,6 @@ Item {
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      checked: root.interpolate
-      icon.source: root.interpolate?
-                     "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
-                     "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
       onClicked: {
         root.interpolate = !root.interpolate
 
@@ -167,22 +160,29 @@ Item {
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolate", root.interpolate)
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showAreaUnderPlot", root.showAreaUnderPlot)
       }
+      icon.width: 18
+      icon.height: 18
+      checked: root.interpolate
+      icon.color: "transparent"
+      icon.source: root.interpolate?
+                     "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
+                     "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
     }
 
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      enabled: root.interpolate
-      opacity: enabled ? 1 : 0.5
-      checked: root.showAreaUnderPlot
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/area.svg"
       onClicked: {
         root.showAreaUnderPlot = !root.showAreaUnderPlot
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showAreaUnderPlot", root.showAreaUnderPlot)
       }
+      icon.width: 18
+      icon.height: 18
+      enabled: root.interpolate
+      icon.color: "transparent"
+      opacity: enabled ? 1 : 0.5
+      checked: root.showAreaUnderPlot
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/area.svg"
     }
 
     Rectangle {
@@ -194,30 +194,30 @@ Item {
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      checked: root.userShowXLabel
       onClicked: {
         root.userShowXLabel = !root.userShowXLabel
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: root.userShowXLabel
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
     }
 
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      checked: root.userShowYLabel
       onClicked: {
         root.userShowYLabel = !root.userShowYLabel
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowYLabel", root.userShowYLabel)
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: root.userShowYLabel
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
     }
 
@@ -245,21 +245,15 @@ Item {
       icon.height: 18
       checked: !model.running
       icon.color: "transparent"
-      onClicked: model.running = !model.running
       icon.source: model.running?
                      "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/resume.svg"
+      onClicked: model.running = !model.running
     }
 
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      opacity: enabled ? 1 : 0.5
-      enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
       onClicked: {
         plot.xAxis.pan = 0
         plot.yAxis.pan = 0
@@ -270,6 +264,12 @@ Item {
         plot.yMin = Qt.binding(function() { return root.model.minY })
         plot.yMax = Qt.binding(function() { return root.model.maxY })
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      opacity: enabled ? 1 : 0.5
+      enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
     }
 
     ToolButton {
@@ -306,8 +306,8 @@ Item {
     yMin: root.model.minY
     yMax: root.model.maxY
     curveColors: [root.color]
-    yLabel: root.model.yLabel
     xLabel: root.model.xLabel
+    yLabel: root.model.yLabel
     mouseAreaEnabled: windowRoot.focused
     xAxis.tickInterval: plot.xTickInterval
     yAxis.tickInterval: plot.yTickInterval
@@ -332,6 +332,7 @@ Item {
 
     ScatterSeries {
       id: scatterSeries
+
       visible: !root.interpolate
       pointDelegate: Rectangle {
         width: 2
@@ -343,18 +344,21 @@ Item {
 
     LineSeries {
       id: upperSeries
+
       width: 2
       visible: root.interpolate
     }
 
     LineSeries {
       id: lowerSeries
+
       width: 0
       visible: false
     }
 
     AreaSeries {
       id: areaSeries
+
       upperSeries: upperSeries
       lowerSeries: lowerSeries
       borderColor: "transparent"

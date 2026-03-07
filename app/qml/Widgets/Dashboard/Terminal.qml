@@ -27,6 +27,7 @@ import SerialStudio
 
 Item {
   id: root
+
   implicitWidth: layout.implicitWidth + 32
   implicitHeight: layout.implicitHeight + 32
 
@@ -89,13 +90,13 @@ Item {
   // Shortcuts
   //
   Shortcut {
-    onActivated: root.selectAll()
     enabled: terminal.activeFocus
+    onActivated: root.selectAll()
     sequences: [StandardKey.SelectAll]
   } Shortcut {
     onActivated: root.copy()
-    enabled: terminal.activeFocus
     sequences: [StandardKey.Copy]
+    enabled: terminal.activeFocus
   }
 
   //
@@ -103,10 +104,12 @@ Item {
   //
   Menu {
     id: contextMenu
+
     onClosed: terminal.forceActiveFocus()
 
     MenuItem {
       id: copyMenu
+
       text: qsTr("Copy")
       opacity: enabled ? 1 : 0.5
       onClicked: terminal.copy()
@@ -114,16 +117,16 @@ Item {
     }
 
     MenuItem {
-      text: qsTr("Select all")
       enabled: !terminal.empty
+      text: qsTr("Select all")
       opacity: enabled ? 1 : 0.5
       onTriggered: terminal.selectAll()
     }
 
     MenuItem {
       text: qsTr("Clear")
-      opacity: enabled ? 1 : 0.5
       onTriggered: root.clear()
+      opacity: enabled ? 1 : 0.5
     }
   }
 
@@ -132,6 +135,7 @@ Item {
   //
   ColumnLayout {
     id: layout
+
     spacing: 4
     anchors.margins: 8
     anchors.fill: parent
@@ -141,10 +145,11 @@ Item {
     //
     TerminalWidget {
       id: terminal
-      ansiColors: Cpp_Console_Handler.ansiColors
-      vt100emulation: Cpp_Console_Handler.vt100Emulation
+
       Layout.fillWidth: true
       Layout.fillHeight: true
+      ansiColors: Cpp_Console_Handler.ansiColors
+      vt100emulation: Cpp_Console_Handler.vt100Emulation
       Layout.minimumHeight: root.minimal ? 0 : Cpp_Console_Handler.defaultCharHeight * root.minimumRows
       Layout.minimumWidth: root.minimal ? 0 : Cpp_Console_Handler.defaultCharWidth * root.minimumColumns
 
@@ -157,6 +162,7 @@ Item {
 
       MouseArea {
         id: mouseArea
+
         anchors.fill: parent
         cursorShape: Qt.IBeamCursor
         propagateComposedEvents: true
@@ -176,18 +182,20 @@ Item {
     //
     RowLayout {
       id: sendCtrl
+
       Layout.fillWidth: true
       visible: root.width > implicitWidth
 
       Button {
         id: ftButton
+
         icon.width: 18
         icon.height: 18
         implicitHeight: 24
         Layout.maximumWidth: 24
         opacity: enabled ? 1 : 0.5
-        Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
+        Layout.alignment: Qt.AlignVCenter
         onClicked: app.showFileTransmission()
         icon.source: "qrc:/rcc/icons/buttons/attach.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -195,12 +203,13 @@ Item {
 
       TextField {
         id: send
+
         implicitWidth: 128
         implicitHeight: 24
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
-        Layout.alignment: Qt.AlignVCenter
         enabled: Cpp_IO_Manager.readWrite
+        Layout.alignment: Qt.AlignVCenter
         font: Cpp_Misc_CommonFonts.monoFont
         placeholderText: qsTr("Send Data to Device") + "..."
         palette.base: Cpp_ThemeManager.colors["console_base"]
@@ -296,54 +305,58 @@ Item {
       }
 
       CheckBox {
-        text: "HEX"
         id: hexCheckbox
-        opacity: enabled ? 1 : 0.5
-        Layout.alignment: Qt.AlignVCenter
-        enabled: Cpp_IO_Manager.readWrite
-        checked: Cpp_Console_Handler.dataMode === 1
+
+        text: "HEX"
         onCheckedChanged: {
           const newValue = checked ? 1 : 0
           if (Cpp_Console_Handler.dataMode !== newValue)
             Cpp_Console_Handler.dataMode = newValue
         }
+        opacity: enabled ? 1 : 0.5
+        enabled: Cpp_IO_Manager.readWrite
+        Layout.alignment: Qt.AlignVCenter
+        checked: Cpp_Console_Handler.dataMode === 1
       }
 
       ComboBox {
         id: lineEndingCombo
+
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_Console_Handler.lineEnding)
+            Cpp_Console_Handler.lineEnding = currentIndex
+        }
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
         model: Cpp_Console_Handler.lineEndings
         currentIndex: Cpp_Console_Handler.lineEnding
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_Console_Handler.lineEnding)
-            Cpp_Console_Handler.lineEnding = currentIndex
-        }
       }
 
       ComboBox {
         id: checkumCombo
+
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_Console_Handler.checksumMethod)
+            Cpp_Console_Handler.checksumMethod = currentIndex
+        }
         Layout.minimumWidth: 128
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
         model: Cpp_Console_Handler.checksumMethods
         currentIndex: Cpp_Console_Handler.checksumMethod
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_Console_Handler.checksumMethod)
-            Cpp_Console_Handler.checksumMethod = currentIndex
-        }
       }
 
       Button {
         id: sendBt
+
         icon.width: 18
         icon.height: 18
         implicitHeight: 24
         Layout.maximumWidth: 32
-        onClicked: root.sendData()
         opacity: enabled ? 1 : 0.5
+        onClicked: root.sendData()
         icon.source: "qrc:/rcc/icons/buttons/send.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: Cpp_IO_Manager.readWrite && (send.length > 0 || Cpp_Console_Handler.lineEnding != 0)
@@ -359,50 +372,54 @@ Item {
 
       CheckBox {
         id: timestampCheck
-        text: qsTr("Show Timestamp")
-        Layout.alignment: Qt.AlignVCenter
-        checked: Cpp_Console_Handler.showTimestamp
+
         onCheckedChanged: {
           if (Cpp_Console_Handler.showTimestamp !== checked)
             Cpp_Console_Handler.showTimestamp = checked
         }
+        text: qsTr("Show Timestamp")
+        Layout.alignment: Qt.AlignVCenter
+        checked: Cpp_Console_Handler.showTimestamp
       }
 
       CheckBox {
         id: echoCheck
+
         text: qsTr("Echo")
-        checked: Cpp_Console_Handler.echo
-        Layout.alignment: Qt.AlignVCenter
         onCheckedChanged: {
           if (Cpp_Console_Handler.echo !== checked)
             Cpp_Console_Handler.echo = checked
         }
+        checked: Cpp_Console_Handler.echo
+        Layout.alignment: Qt.AlignVCenter
       }
 
       CheckBox {
         id: vt100Check
-        text: qsTr("Emulate VT-100")
-        Layout.alignment: Qt.AlignVCenter
-        enabled: !Cpp_Console_Handler.imageWidgetActive
-        opacity: enabled ? 1 : 0.8
-        checked: Cpp_Console_Handler.vt100Emulation
+
         onCheckedChanged: {
           if (Cpp_Console_Handler.vt100Emulation !== checked)
             Cpp_Console_Handler.vt100Emulation = checked
         }
+        opacity: enabled ? 1 : 0.8
+        text: qsTr("Emulate VT-100")
+        Layout.alignment: Qt.AlignVCenter
+        checked: Cpp_Console_Handler.vt100Emulation
+        enabled: !Cpp_Console_Handler.imageWidgetActive
       }
 
       CheckBox {
         id: ansiColorsCheck
-        text: qsTr("ANSI Colors")
-        enabled: Cpp_Console_Handler.vt100Emulation && !Cpp_Console_Handler.imageWidgetActive
-        opacity: enabled ? 1 : 0.8
-        Layout.alignment: Qt.AlignVCenter
-        checked: Cpp_Console_Handler.vt100Emulation && Cpp_Console_Handler.ansiColors
+
         onCheckedChanged: {
           if (enabled && Cpp_Console_Handler.ansiColors !== checked)
             Cpp_Console_Handler.ansiColors = checked
         }
+        text: qsTr("ANSI Colors")
+        opacity: enabled ? 1 : 0.8
+        Layout.alignment: Qt.AlignVCenter
+        checked: Cpp_Console_Handler.vt100Emulation && Cpp_Console_Handler.ansiColors
+        enabled: Cpp_Console_Handler.vt100Emulation && !Cpp_Console_Handler.imageWidgetActive
       }
 
       Item {
@@ -414,15 +431,15 @@ Item {
 
         implicitHeight: 24
         Layout.fillWidth: true
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_Console_Handler.displayMode)
+            Cpp_Console_Handler.displayMode = currentIndex
+        }
         Layout.maximumWidth: 164
         Layout.alignment: Qt.AlignVCenter
         model: Cpp_Console_Handler.displayModes
         currentIndex: Cpp_Console_Handler.displayMode
         displayText: qsTr("Display: %1").arg(currentText)
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_Console_Handler.displayMode)
-            Cpp_Console_Handler.displayMode = currentIndex
-        }
       }
 
       Button {

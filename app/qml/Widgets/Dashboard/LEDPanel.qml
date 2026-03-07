@@ -56,17 +56,18 @@ Item {
 
     GridLayout {
       id: grid
-      rowSpacing: 4
-      columnSpacing: 4
-      width: parent.width - 8
-      anchors.centerIn: parent
-      anchors.horizontalCenterOffset: -4
+
       columns: {
         const itemHeight = 32 + 4
         const availableHeight = root.height - 16
         const itemsPerColumn = Math.floor(availableHeight / itemHeight)
         return (root.model.count <= itemsPerColumn) ? 1 : 2
       }
+      rowSpacing: 4
+      columnSpacing: 4
+      width: parent.width - 8
+      anchors.centerIn: parent
+      anchors.horizontalCenterOffset: -4
 
       Repeater {
         model: root.model.count
@@ -81,6 +82,7 @@ Item {
 
           RowLayout {
             id: layout
+
             spacing: 12
             anchors.margins: 4
             anchors.leftMargin: 24
@@ -90,6 +92,7 @@ Item {
 
             Rectangle {
               id: led
+
               readonly property color ledColor: root.model.colors[index]
 
               border.width: 1
@@ -108,10 +111,10 @@ Item {
               Layout.fillWidth: true
               text: root.model.titles[index]
               Layout.alignment: Qt.AlignVCenter
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               horizontalAlignment: Label.AlignLeft
               Layout.maximumWidth: layout.width - 12 - 24
               color: Cpp_ThemeManager.colors["widget_text"]
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
 
               Behavior on color {ColorAnimation{}}
             }

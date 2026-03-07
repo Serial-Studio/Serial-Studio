@@ -98,12 +98,12 @@ Item {
   //
   Shortcut {
     enabled: windowRoot.focused
-    onActivated: model.worldScale += 0.1
     sequences: [StandardKey.ZoomIn]
+    onActivated: model.worldScale += 0.1
   } Shortcut {
     enabled: windowRoot.focused
-    onActivated: model.worldScale -= 0.1
     sequences: [StandardKey.ZoomOut]
+    onActivated: model.worldScale -= 0.1
   }
 
   //
@@ -111,34 +111,40 @@ Item {
   //
   NumberAnimation {
     id: zoomAnimation
+
     target: model
-    property: "worldScale"
     duration: 400
+    property: "worldScale"
   } NumberAnimation {
     id: angleXAnimation
+
     target: model
-    property: "cameraAngleX"
     duration: 400
+    property: "cameraAngleX"
   } NumberAnimation {
     id: angleYAnimation
+
     target: model
-    property: "cameraAngleY"
     duration: 400
+    property: "cameraAngleY"
   } NumberAnimation {
     id: angleZAnimation
+
     target: model
-    property: "cameraAngleZ"
     duration: 400
+    property: "cameraAngleZ"
   } NumberAnimation {
     id: offsetXAnimation
+
     target: model
-    property: "cameraOffsetX"
     duration: 400
+    property: "cameraOffsetX"
   } NumberAnimation {
     id: offsetYAnimation
+
     target: model
-    property: "cameraOffsetY"
     duration: 400
+    property: "cameraOffsetY"
   }
 
   //
@@ -186,6 +192,10 @@ Item {
 
       width: 24
       height: 24
+      onClicked: {
+        model.interpolationEnabled = !model.interpolationEnabled
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolationEnabled", model.interpolationEnabled)
+      }
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
@@ -193,11 +203,6 @@ Item {
       icon.source: model.interpolationEnabled ?
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
-
-      onClicked: {
-        model.interpolationEnabled = !model.interpolationEnabled
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolationEnabled", model.interpolationEnabled)
-      }
     }
 
     Rectangle {
@@ -209,29 +214,29 @@ Item {
     ToolButton {
       width: 24
       height: 24
+      onClicked: {
+        model.orbitNavigation = true
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", true)
+      }
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
       checked: model.orbitNavigation
       icon.source: "qrc:/rcc/icons/dashboard-buttons/orbit.svg"
-      onClicked: {
-        model.orbitNavigation = true
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", true)
-      }
     }
 
     ToolButton {
       width: 24
       height: 24
+      onClicked: {
+        model.orbitNavigation = false
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", false)
+      }
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
       checked: !model.orbitNavigation
       icon.source: "qrc:/rcc/icons/dashboard-buttons/pan.svg"
-      onClicked: {
-        model.orbitNavigation = false
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", false)
-      }
     }
 
     Rectangle {
@@ -289,14 +294,14 @@ Item {
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      checked: model.anaglyphEnabled
       onClicked: {
         model.anaglyphEnabled = !model.anaglyphEnabled
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "anaglyphEnabled", model.anaglyphEnabled)
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: model.anaglyphEnabled
       icon.source: "qrc:/rcc/icons/dashboard-buttons/anaglyph.svg"
     }
 
@@ -305,6 +310,10 @@ Item {
 
       width: 24
       height: 24
+      onClicked: {
+        model.invertEyePositions = !model.invertEyePositions
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "invertEyePositions", model.invertEyePositions)
+      }
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
@@ -312,10 +321,6 @@ Item {
       checked: model.invertEyePositions
       opacity: model.anaglyphEnabled ? 1 : 0
       icon.source: "qrc:/rcc/icons/dashboard-buttons/invert.svg"
-      onClicked: {
-        model.invertEyePositions = !model.invertEyePositions
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "invertEyePositions", model.invertEyePositions)
-      }
     }
 
     Slider {
@@ -324,11 +329,6 @@ Item {
       to: 100
       from: 30
       stepSize: 1
-      Layout.fillWidth: true
-      Layout.maximumWidth: 128
-      enabled: model.anaglyphEnabled
-      value: model.eyeSeparation * 1e3
-      opacity: model.anaglyphEnabled ? 1 : 0
       onValueChanged: {
         if (!isNaN(value) && model) {
           var separation = value / 1e3
@@ -339,6 +339,11 @@ Item {
           }
         }
       }
+      Layout.fillWidth: true
+      Layout.maximumWidth: 128
+      enabled: model.anaglyphEnabled
+      value: model.eyeSeparation * 1e3
+      opacity: model.anaglyphEnabled ? 1 : 0
     }
 
     Item {
@@ -351,6 +356,7 @@ Item {
   //
   Item {
     id: container
+
     anchors.fill: parent
     anchors.topMargin: root.hasToolbar ? root.toolbarHeight : 0
   }

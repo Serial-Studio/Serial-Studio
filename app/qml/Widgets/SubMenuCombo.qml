@@ -108,6 +108,7 @@ Popup {
 
       RowLayout {
         id: _layout
+
         spacing: 0
         anchors.fill: parent
 
@@ -131,8 +132,8 @@ Popup {
         }
 
         Label {
-          Layout.fillWidth: true
           elide: Label.ElideRight
+          Layout.fillWidth: true
           text: modelData[root.textRole]
           color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
                                             Cpp_ThemeManager.colors["start_menu_text"]
@@ -157,6 +158,7 @@ Popup {
 
       MouseArea {
         id: _mouseArea
+
         hoverEnabled: true
         anchors.fill: parent
         onClicked: {

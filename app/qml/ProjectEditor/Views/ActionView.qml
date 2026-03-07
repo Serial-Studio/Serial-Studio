@@ -28,6 +28,7 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
+
   implicitWidth: 0
   implicitHeight: 0
   icon: Cpp_JSON_ProjectEditor.selectedIcon
@@ -61,8 +62,8 @@ Widgets.Pane {
 
     anchors {
       fill: parent
-      topMargin: -16
       leftMargin: -9
+      topMargin: -16
       rightMargin: -9
       bottomMargin: -10
     }
@@ -71,21 +72,23 @@ Widgets.Pane {
     // Actions panel
     //
     Rectangle {
-      z: 2
       id: header
-      height: layout.implicitHeight + 12
-      color: Cpp_ThemeManager.colors["groupbox_background"]
+
+      z: 2
       anchors {
         top: parent.top
         left: parent.left
         right: parent.right
       }
+      height: layout.implicitHeight + 12
+      color: Cpp_ThemeManager.colors["groupbox_background"]
 
       //
       // Buttons
       //
       RowLayout {
         id: layout
+
         spacing: 4
 
         anchors {
@@ -100,15 +103,15 @@ Widgets.Pane {
         //
         Widgets.ToolbarButton {
           iconSize: 24
+          onClicked: {
+            actionIconPicker.selectedIcon = Cpp_JSON_ProjectEditor.actionIcon
+            actionIconPicker.showNormal()
+          }
           toolbarButton: false
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
           ToolTip.text: qsTr("Change the icon used for this action")
           icon.source: "qrc:/rcc/actions/" + Cpp_JSON_ProjectEditor.actionIcon + ".svg"
-          onClicked: {
-            actionIconPicker.selectedIcon = Cpp_JSON_ProjectEditor.actionIcon
-            actionIconPicker.showNormal()
-          }
         }
 
         //
@@ -126,8 +129,8 @@ Widgets.Pane {
           toolbarButton: false
           text: qsTr("Duplicate")
           Layout.alignment: Qt.AlignVCenter
-          ToolTip.text: qsTr("Duplicate this action with all its settings")
           onClicked: Cpp_JSON_ProjectModel.duplicateCurrentAction()
+          ToolTip.text: qsTr("Duplicate this action with all its settings")
           icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
         }
 
@@ -136,11 +139,11 @@ Widgets.Pane {
         //
         Widgets.ToolbarButton {
           iconSize: 24
-          text: qsTr("Delete")
           toolbarButton: false
+          text: qsTr("Delete")
           Layout.alignment: Qt.AlignVCenter
-          onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
           ToolTip.text: qsTr("Delete this action from the project")
+          onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
         }
       }
@@ -162,14 +165,16 @@ Widgets.Pane {
     //
     ScrollView {
       id: view
-      anchors.fill: parent
+
       contentWidth: width
+      anchors.fill: parent
       anchors.topMargin: header.height
       contentHeight: delegate.implicitHeight
       ScrollBar.vertical.policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
 
       TableDelegate {
         id: delegate
+
         width: parent.width
         headerVisible: false
         parameterWidth: Math.min(delegate.width * 0.3, 256)

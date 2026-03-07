@@ -30,8 +30,8 @@ Widgets.SmartDialog {
 
   property var accelModel: null
 
-  title: qsTr("Accelerometer Configuration")
   staysOnTop: true
+  title: qsTr("Accelerometer Configuration")
 
   function openDialog(model) {
     root.accelModel = model
@@ -60,13 +60,13 @@ Widgets.SmartDialog {
     spacing: 4
 
     Label {
-      text: qsTr("Configure the accelerometer display range and input units.")
-      wrapMode: Text.WordWrap
-      Layout.fillWidth: true
-      Layout.minimumWidth: 300
-      font: Cpp_Misc_CommonFonts.customUiFont(0.9)
-      color: Cpp_ThemeManager.colors["text"]
       opacity: 0.7
+      Layout.fillWidth: true
+      wrapMode: Text.WordWrap
+      Layout.minimumWidth: 300
+      color: Cpp_ThemeManager.colors["text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.9)
+      text: qsTr("Configure the accelerometer display range and input units.")
     }
 
     Item {
@@ -86,8 +86,8 @@ Widgets.SmartDialog {
       background: Rectangle {
         radius: 2
         border.width: 1
-        color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
       }
 
       GridLayout {
@@ -103,9 +103,10 @@ Widgets.SmartDialog {
 
         TextField {
           id: maxGField
+
+          selectByMouse: true
           Layout.fillWidth: true
           Layout.minimumWidth: 140
-          selectByMouse: true
           validator: DoubleValidator {
             bottom: 0.5
           }
@@ -136,8 +137,8 @@ Widgets.SmartDialog {
       background: Rectangle {
         radius: 2
         border.width: 1
-        color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
       }
 
       RowLayout {
@@ -145,13 +146,14 @@ Widgets.SmartDialog {
         anchors.fill: parent
 
         Label {
+          Layout.fillWidth: true
           text: qsTr("Input already in G")
           color: Cpp_ThemeManager.colors["text"]
-          Layout.fillWidth: true
         }
 
         Switch {
           id: inputInGSwitch
+
           onToggled: {
             if (root.accelModel)
               root.accelModel.inputInG = checked
@@ -177,8 +179,8 @@ Widgets.SmartDialog {
         icon.height: 18
         text: qsTr("Close")
         onClicked: root.close()
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
+        icon.source: "qrc:/rcc/icons/buttons/close.svg"
       }
     }
   }

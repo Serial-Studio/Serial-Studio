@@ -86,7 +86,7 @@ IO::FrameReader::FrameReader(QObject* parent)
  */
 void IO::FrameReader::processData(const ByteArrayPtr& data)
 {
-  if (IO::Manager::instance().paused())
+  if (!data || data->isEmpty() || IO::Manager::instance().paused())
     return;
 
   bool framesEnqueued = false;

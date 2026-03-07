@@ -135,8 +135,6 @@ Window {
   //
   x: 100
   y: 100
-  onWidthChanged: savePreviousDimensions()
-  onHeightChanged: savePreviousDimensions()
   onXChanged: {
     savePreviousDimensions()
     updateScreenName()
@@ -145,6 +143,8 @@ Window {
     savePreviousDimensions()
     updateScreenName()
   }
+  onWidthChanged: savePreviousDimensions()
+  onHeightChanged: savePreviousDimensions()
 
   //
   // React to maximize/unmaximize event
@@ -168,6 +168,7 @@ Window {
   //
   Timer {
     id: saveTimer
+
     interval: 300
     repeat: false
     onTriggered: {

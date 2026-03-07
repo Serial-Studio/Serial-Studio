@@ -57,6 +57,7 @@ Item {
   //
   ColumnLayout {
     id: layout
+
     anchors.margins: 0
     anchors.fill: parent
 
@@ -75,6 +76,7 @@ Item {
         enabled: !Cpp_IO_Manager.isConnected
       } ComboBox {
         id: _typeCombo
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         model: Cpp_IO_Network.socketTypes
@@ -96,6 +98,7 @@ Item {
         visible: Cpp_IO_Network.socketTypeIndex === 1
       } TextField {
         id: _udpLocalPort
+
         Layout.fillWidth: true
         placeholderText: qsTr("Type 0 for automatic port")
         Component.onCompleted: text = Cpp_IO_Network.udpLocalPort
@@ -126,6 +129,7 @@ Item {
         text: qsTr("Remote Address") + ":"
       } TextField {
         id: _address
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
@@ -144,12 +148,13 @@ Item {
       // TCP port
       //
       Label {
-        text: qsTr("Remote Port") + ":"
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
+        text: qsTr("Remote Port") + ":"
         visible: Cpp_IO_Network.socketTypeIndex === 0
       } TextField {
         id: _tcpPort
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
@@ -177,11 +182,12 @@ Item {
       //
       Label {
         opacity: enabled ? 1 : 0.5
-        text: qsTr("Remote Port") + ":"
         enabled: !Cpp_IO_Manager.isConnected
+        text: qsTr("Remote Port") + ":"
         visible: Cpp_IO_Network.socketTypeIndex === 1 && !_udpMulticast.checked
       } TextField {
         id: _udpRemotePort
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
@@ -212,9 +218,10 @@ Item {
         visible: Cpp_IO_Network.socketTypeIndex === 1
       } CheckBox {
         id: _udpMulticast
+
+        Layout.leftMargin: -8
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignLeft
-        Layout.leftMargin: -8
         checked: Cpp_IO_Network.udpMulticast
         visible: Cpp_IO_Network.socketTypeIndex === 1
         enabled: Cpp_IO_Network.socketTypeIndex === 1 && !Cpp_IO_Manager.isConnected

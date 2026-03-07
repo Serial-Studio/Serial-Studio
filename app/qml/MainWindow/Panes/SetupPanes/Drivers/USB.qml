@@ -27,11 +27,13 @@ import QtQuick.Controls
 
 Item {
   id: root
+
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
   GridLayout {
     id: layout
+
     columns: 2
     rowSpacing: 4
     columnSpacing: 4
@@ -47,6 +49,7 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: deviceCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_USB.deviceList
@@ -76,6 +79,7 @@ Item {
       enabled: deviceCombo.currentIndex > 0 && !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: modeCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       enabled: deviceCombo.currentIndex > 0 && !Cpp_IO_Manager.isConnected
@@ -131,8 +135,8 @@ Item {
 
         Label {
           opacity: 0.75
-          wrapMode: Label.WordWrap
           Layout.fillWidth: true
+          wrapMode: Label.WordWrap
           font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
           text: qsTr("Connect to USB devices using bulk, control, or "
                    + "isochronous transfers. Suitable for data loggers, "
@@ -165,11 +169,12 @@ Item {
       enabled: Cpp_IO_Manager.isConnected
     } ComboBox {
       id: inEndpointCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
+      model: Cpp_IO_USB.inEndpointList
       visible: Cpp_IO_Manager.isConnected
       enabled: Cpp_IO_Manager.isConnected
-      model: Cpp_IO_USB.inEndpointList
       currentIndex: Cpp_IO_USB.inEndpointIndex
 
       onCurrentIndexChanged: {
@@ -200,11 +205,12 @@ Item {
       enabled: Cpp_IO_Manager.isConnected
     } ComboBox {
       id: outEndpointCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
+      model: Cpp_IO_USB.outEndpointList
       visible: Cpp_IO_Manager.isConnected
       enabled: Cpp_IO_Manager.isConnected
-      model: Cpp_IO_USB.outEndpointList
       currentIndex: Cpp_IO_USB.outEndpointIndex
 
       onCurrentIndexChanged: {
@@ -235,14 +241,15 @@ Item {
       enabled: Cpp_IO_Manager.isConnected
     } SpinBox {
       id: isoPacketSpin
+
       from: 1
       to: 49152
       stepSize: 64
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
-      visible: Cpp_IO_Manager.isConnected && Cpp_IO_USB.isoModeEnabled
-      enabled: Cpp_IO_Manager.isConnected
       value: Cpp_IO_USB.isoPacketSize
+      enabled: Cpp_IO_Manager.isConnected
+      visible: Cpp_IO_Manager.isConnected && Cpp_IO_USB.isoModeEnabled
 
       onValueModified: Cpp_IO_USB.isoPacketSize = value
 
@@ -295,8 +302,8 @@ Item {
 
         Label {
           opacity: 0.85
-          wrapMode: Label.WordWrap
           Layout.fillWidth: true
+          wrapMode: Label.WordWrap
           font: Cpp_Misc_CommonFonts.customUiFont(1.0, false)
           text: qsTr("Sending incorrect control requests may crash or damage connected hardware. Use with caution.")
         }
@@ -335,8 +342,8 @@ Item {
 
       Label {
         opacity: 0.75
-        wrapMode: Label.WordWrap
         Layout.fillWidth: true
+        wrapMode: Label.WordWrap
         Layout.alignment: Qt.AlignVCenter
         font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
         text: qsTr("Packet size should match the maximum transfer size reported "

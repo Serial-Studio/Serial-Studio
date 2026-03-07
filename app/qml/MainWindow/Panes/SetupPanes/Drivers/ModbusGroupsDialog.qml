@@ -150,16 +150,17 @@ Window {
 
     ColumnLayout {
       id: column
+
       spacing: 4
-      anchors.fill: parent
       anchors.margins: 16
+      anchors.fill: parent
 
       Label {
-        text: qsTr("Configure multiple register groups to poll different register types in sequence.")
+        opacity: 0.7
+        color: palette.text
         wrapMode: Text.WordWrap
         Layout.fillWidth: true
-        color: palette.text
-        opacity: 0.7
+        text: qsTr("Configure multiple register groups to poll different register types in sequence.")
       }
 
       Item {
@@ -190,31 +191,33 @@ Window {
           anchors.fill: parent
 
           Label {
-            text: qsTr("Register Type:")
             color: palette.text
+            text: qsTr("Register Type:")
           }
 
           ComboBox {
             id: _typeCombo
+
             Layout.fillWidth: true
             model: Cpp_IO_Modbus.registerTypeList
           }
 
           Label {
-            text: qsTr("Start Address:")
             color: palette.text
+            text: qsTr("Start Address:")
           }
 
           TextField {
             id: _startField
+
             Layout.fillWidth: true
             placeholderText: qsTr("0-65535")
             validator: IntValidator { bottom: 0; top: 65535 }
           }
 
           Label {
-            text: qsTr("Register Count:")
             color: palette.text
+            text: qsTr("Register Count:")
           }
 
           RowLayout {
@@ -223,6 +226,7 @@ Window {
 
             TextField {
               id: _countField
+
               Layout.fillWidth: true
               placeholderText: qsTr("1-125")
               validator: IntValidator { bottom: 1; top: 125 }
@@ -271,52 +275,52 @@ Window {
 
         ColumnLayout {
           spacing: 0
-          anchors.fill: parent
           anchors.margins: -7
+          anchors.fill: parent
 
           Rectangle {
-            Layout.fillWidth: true
             height: 32
+            Layout.fillWidth: true
             color: palette.alternateBase
 
             RowLayout {
+              spacing: 8
               anchors.fill: parent
               anchors.leftMargin: 8
               anchors.rightMargin: 8
-              spacing: 8
 
               Label {
-                text: qsTr("#")
                 font.bold: true
                 color: palette.text
+                text: qsTr("#")
                 Layout.preferredWidth: 30
               }
 
               Label {
-                text: qsTr("Type")
                 font.bold: true
                 color: palette.text
+                text: qsTr("Type")
                 Layout.preferredWidth: 180
               }
 
               Label {
+                font.bold: true
+                color: palette.text
                 text: qsTr("Start")
-                font.bold: true
-                color: palette.text
                 Layout.preferredWidth: 60
               }
 
               Label {
+                font.bold: true
+                color: palette.text
                 text: qsTr("Count")
-                font.bold: true
-                color: palette.text
                 Layout.preferredWidth: 60
               }
 
               Label {
-                text: qsTr("Action")
                 font.bold: true
                 color: palette.text
+                text: qsTr("Action")
                 Layout.fillWidth: true
               }
             }
@@ -337,8 +341,8 @@ Window {
             model: Cpp_IO_Modbus.registerGroupCount
 
             delegate: Rectangle {
-              width: ListView.view.width
               height: 36
+              width: ListView.view.width
               color: index % 2 === 0 ? "transparent" : palette.alternateBase
 
               RowLayout {
@@ -354,8 +358,8 @@ Window {
                 }
 
                 Label {
-                  Layout.preferredWidth: 180
                   elide: Text.ElideRight
+                  Layout.preferredWidth: 180
                   text: {
                     const types = Cpp_IO_Modbus.registerTypeList
                     const info = Cpp_IO_Modbus.registerGroupInfo(index)
@@ -389,8 +393,8 @@ Window {
                 }
 
                 Button {
-                  text: qsTr("Remove")
                   implicitHeight: 28
+                  text: qsTr("Remove")
                   onClicked: Cpp_IO_Modbus.removeRegisterGroup(index)
                 }
               }

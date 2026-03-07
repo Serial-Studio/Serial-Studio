@@ -60,8 +60,8 @@ Widgets.Pane {
 
     anchors {
       fill: parent
-      topMargin: -16
       leftMargin: -9
+      topMargin: -16
       rightMargin: -9
       bottomMargin: -10
     }
@@ -87,8 +87,9 @@ Widgets.Pane {
       // Group actions panel
       //
       Rectangle {
-        z: 2
         id: header
+
+        z: 2
         Layout.fillWidth: true
         height: layout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]
@@ -98,6 +99,7 @@ Widgets.Pane {
         //
         RowLayout {
           id: layout
+
           spacing: 4
 
           anchors {
@@ -116,9 +118,9 @@ Widgets.Pane {
             text: qsTr("Dataset")
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
             ToolTip.text: qsTr("Add a generic dataset to the current group")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
           }
 
           //
@@ -130,9 +132,9 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
             ToolTip.text: qsTr("Add a 2D plot to visualize numeric data")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
           }
 
           //
@@ -144,8 +146,8 @@ Widgets.Pane {
             text: qsTr("FFT Plot")
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
             ToolTip.text: qsTr("Add an FFT plot for frequency domain visualization")
           }
 
@@ -158,9 +160,9 @@ Widgets.Pane {
             text: qsTr("Bar/Level")
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
             ToolTip.text: qsTr("Add a bar or level indicator for scaled values")
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
           }
 
           //
@@ -172,9 +174,9 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
             ToolTip.text: qsTr("Add a gauge widget for analog-style visualization")
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
           }
 
           //
@@ -186,9 +188,9 @@ Widgets.Pane {
             text: qsTr("Compass")
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
             ToolTip.text: qsTr("Add a compass to display directional or angular data")
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
           }
 
           //
@@ -200,9 +202,9 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
             ToolTip.text: qsTr("Add an LED indicator for binary status signals")
+            onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
           }
 
           //
@@ -221,8 +223,8 @@ Widgets.Pane {
             text: qsTr("Duplicate")
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_JSON_ProjectModel.duplicateCurrentGroup()
-            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
             ToolTip.text: qsTr("Duplicate the current group and its contents")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
           }
 
           //
@@ -256,6 +258,7 @@ Widgets.Pane {
       //
       ScrollView {
         id: view
+
         contentWidth: width
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -264,6 +267,7 @@ Widgets.Pane {
 
         TableDelegate {
           id: delegate
+
           width: parent.width
           headerVisible: false
           parameterWidth: Math.min(delegate.width * 0.3, 256)

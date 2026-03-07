@@ -120,6 +120,7 @@ Widgets.SmartWindow {
 
     ColumnLayout {
       id: layout
+
       spacing: 0
       anchors.fill: parent
 
@@ -136,12 +137,13 @@ Widgets.SmartWindow {
       //
       Widgets.PaneSplitter {
         id: splitter
+
+        minLeftWidth: 256
+        minRightWidth: 400
         Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.minimumHeight: 480
-        minLeftWidth: 256
-        minRightWidth: 400
         settingsKey: "ProjectEditor"
 
         leftPanel: Component {

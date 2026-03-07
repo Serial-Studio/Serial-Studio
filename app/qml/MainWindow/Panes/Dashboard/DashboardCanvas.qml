@@ -77,12 +77,7 @@ Item {
   // Commercial features notification
   //
   Widgets.ProNotice {
-    z: 2
     id: commercialNotification
-
-    activationFlag: Cpp_UI_Dashboard.containsCommercialFeatures
-    titleText: qsTr("Pro features detected in this project.")
-    subtitleText: qsTr("Fallback widgets are active. Purchase a license for full functionality.")
 
     anchors {
       margins: -1
@@ -90,6 +85,11 @@ Item {
       left: parent.left
       right: parent.right
     }
+
+    z: 2
+    titleText: qsTr("Pro features detected in this project.")
+    activationFlag: Cpp_UI_Dashboard.containsCommercialFeatures
+    subtitleText: qsTr("Fallback widgets are active. Purchase a license for full functionality.")
   }
 
   //
@@ -97,6 +97,7 @@ Item {
   //
   Item {
     id: windowCanvas
+
     anchors {
       left: parent.left
       right: parent.right
@@ -111,6 +112,7 @@ Item {
     //
     SS_Ui.WindowManager {
       id: _wm
+
       anchors.fill: parent
       onRightClicked: (x, y) => contextMenu.popup(x, y)
     }
@@ -120,6 +122,7 @@ Item {
     //
     Instantiator {
       id: loader
+
       model: taskBar.taskbarButtons
 
       delegate: WidgetDelegate {

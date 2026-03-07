@@ -30,6 +30,7 @@ import "../../../Widgets" as Widgets
 
 Widgets.MiniWindow {
   id: root
+
   state: "normal"
   width: minimumWidth
   height: minimumHeight
@@ -67,9 +68,10 @@ Widgets.MiniWindow {
   onStateChanged: _timer.start()
   Timer {
     id: _timer
-    running: false
+
     interval: 250
     repeat: false
+    running: false
     onTriggered: windowManager.triggerLayoutUpdate()
   }
 
@@ -88,6 +90,7 @@ Widgets.MiniWindow {
 
       DashboardWidget {
         id: dashboardWidget
+
         widgetIndex: root.widgetIndex
         Component.onCompleted: {
           windowRoot.title = widgetTitle
@@ -187,8 +190,6 @@ Widgets.MiniWindow {
     anchors.topMargin: root.captionHeight + (root.hasToolbar ? 48 : 0) - 1
 
     Rectangle {
-      color: parent.color
-      height: root.radius
       anchors {
         topMargin: 1
         leftMargin: 1
@@ -197,6 +198,9 @@ Widgets.MiniWindow {
         left: parent.left
         right: parent.right
       }
+
+      color: parent.color
+      height: root.radius
     }
   }
 
@@ -204,8 +208,9 @@ Widgets.MiniWindow {
   // Embedded contents
   //
   Item {
-    clip: true
     id: container
+
+    clip: true
     anchors.margins: 1
     anchors.fill: parent
     anchors.topMargin: root.captionHeight
@@ -262,18 +267,18 @@ Widgets.MiniWindow {
           palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
           Rectangle {
-            height: 48
-            border.width: 1
-            visible: window.hasToolbar
-            border.color: Cpp_ThemeManager.colors["window_border"]
-            color: Cpp_ThemeManager.colors["window_toolbar_background"]
-
             anchors {
               margins: -1
               top: parent.top
               left: parent.left
               right: parent.right
             }
+
+            height: 48
+            border.width: 1
+            visible: window.hasToolbar
+            border.color: Cpp_ThemeManager.colors["window_border"]
+            color: Cpp_ThemeManager.colors["window_toolbar_background"]
           }
 
           Item {

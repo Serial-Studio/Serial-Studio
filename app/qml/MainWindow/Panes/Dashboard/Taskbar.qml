@@ -32,6 +32,7 @@ import "../../../Widgets" as Widgets
 
 Item {
   id: root
+
   implicitHeight: 30
 
   //
@@ -69,20 +70,22 @@ Item {
   // Taskbar components
   //
   RowLayout {
-    spacing: 2
     anchors {
-      left: parent.left
-      right: parent.right
       leftMargin: 2
       rightMargin: 2
+      left: parent.left
+      right: parent.right
       verticalCenter: parent.verticalCenter
     }
+
+    spacing: 2
 
     //
     // Start Menu
     //
     Widgets.TaskbarButton {
       id: start
+
       iconSize: 16
       startMenu: true
       text: qsTr("Menu")
@@ -129,6 +132,7 @@ Item {
     //
     Item {
       id: buttonsContainer
+
       implicitHeight: 24
       Layout.fillWidth: true
       Layout.alignment: Qt.AlignVCenter
@@ -170,6 +174,7 @@ Item {
             required property var model
 
             id: button
+
             text: model.widgetName
             icon.source: SerialStudio.dashboardWidgetIcon(model.widgetType)
             forceVisible: Cpp_UI_Dashboard.showTaskbarButtons || taskBar.hasMaximizedWindow
@@ -230,6 +235,7 @@ Item {
     //
     ComboBox {
       id: _switcher
+
       textRole: "text"
       model: taskBar.groupModel
       Layout.alignment: Qt.AlignVCenter
@@ -242,8 +248,8 @@ Item {
       indicator: Item {}
 
       background: Rectangle {
-        color: "transparent"
         border.width: 0
+        color: "transparent"
       }
 
       delegate: ItemDelegate {
@@ -265,13 +271,13 @@ Item {
           }
 
           Label {
+            Layout.fillWidth: true
             text: modelData["text"]
             elide: Text.ElideRight
-            Layout.fillWidth: true
-            verticalAlignment: Text.AlignVCenter
             font: text === _switcher.currentText
                   ? Cpp_Misc_CommonFonts.boldUiFont
                   : Cpp_Misc_CommonFonts.uiFont
+            verticalAlignment: Text.AlignVCenter
           }
         }
       }
@@ -284,8 +290,8 @@ Item {
           Layout.fillWidth: true
           text: _switcher.currentText
           horizontalAlignment: Text.AlignRight
-          verticalAlignment: Text.AlignVCenter
           font: Cpp_Misc_CommonFonts.boldUiFont
+          verticalAlignment: Text.AlignVCenter
           color: Cpp_ThemeManager.colors["pane_caption_foreground"]
         }
 
@@ -366,12 +372,13 @@ Item {
   // Taskbar border
   //
   Rectangle {
-    height: 1
-    color: Cpp_ThemeManager.colors["taskbar_border"]
     anchors {
       top: parent.top
       left: parent.left
       right: parent.right
     }
+
+    height: 1
+    color: Cpp_ThemeManager.colors["taskbar_border"]
   }
 }

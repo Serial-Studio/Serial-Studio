@@ -22,6 +22,7 @@
 #include "DataModel/FrameParser.h"
 
 #include <QAtomicInt>
+#include <QCoreApplication>
 #include <QDesktopServices>
 #include <QFile>
 #include <QFileDialog>
@@ -40,18 +41,6 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
-
-/**
- * Creates a subclass of @c QCodeEditor that allows us to call the given
- * protected/private @a function and pass the given @a event as a parameter to
- * the @a function.
- */
-#define DW_EXEC_EVENT(pointer, function, event) \
-  class PwnedWidget : public QCodeEditor {      \
-  public:                                       \
-    using QCodeEditor::function;                \
-  };                                            \
-  static_cast<PwnedWidget*>(pointer)->function(event);
 
 //--------------------------------------------------------------------------------------------------
 // Multi-frame parsing helper functions
@@ -1280,7 +1269,7 @@ void DataModel::FrameParser::paint(QPainter* painter)
  */
 void DataModel::FrameParser::keyPressEvent(QKeyEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, keyPressEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1288,7 +1277,7 @@ void DataModel::FrameParser::keyPressEvent(QKeyEvent* event)
  */
 void DataModel::FrameParser::keyReleaseEvent(QKeyEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, keyReleaseEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1296,7 +1285,7 @@ void DataModel::FrameParser::keyReleaseEvent(QKeyEvent* event)
  */
 void DataModel::FrameParser::inputMethodEvent(QInputMethodEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, inputMethodEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1304,7 +1293,7 @@ void DataModel::FrameParser::inputMethodEvent(QInputMethodEvent* event)
  */
 void DataModel::FrameParser::focusInEvent(QFocusEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, focusInEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1312,7 +1301,7 @@ void DataModel::FrameParser::focusInEvent(QFocusEvent* event)
  */
 void DataModel::FrameParser::focusOutEvent(QFocusEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, focusOutEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1330,7 +1319,7 @@ void DataModel::FrameParser::mousePressEvent(QMouseEvent* event)
                         event->modifiers(),
                         event->pointingDevice());
 
-  DW_EXEC_EVENT(&m_widget, mousePressEvent, &eventCopy);
+  QCoreApplication::sendEvent(&m_widget, &eventCopy);
   forceActiveFocus();
 }
 
@@ -1349,7 +1338,7 @@ void DataModel::FrameParser::mouseMoveEvent(QMouseEvent* event)
                         event->modifiers(),
                         event->pointingDevice());
 
-  DW_EXEC_EVENT(&m_widget, mouseMoveEvent, &eventCopy);
+  QCoreApplication::sendEvent(&m_widget, &eventCopy);
 }
 
 /**
@@ -1367,7 +1356,7 @@ void DataModel::FrameParser::mouseReleaseEvent(QMouseEvent* event)
                         event->modifiers(),
                         event->pointingDevice());
 
-  DW_EXEC_EVENT(&m_widget, mouseReleaseEvent, &eventCopy);
+  QCoreApplication::sendEvent(&m_widget, &eventCopy);
 }
 
 /**
@@ -1385,7 +1374,7 @@ void DataModel::FrameParser::mouseDoubleClickEvent(QMouseEvent* event)
                         event->modifiers(),
                         event->pointingDevice());
 
-  DW_EXEC_EVENT(&m_widget, mouseDoubleClickEvent, &eventCopy);
+  QCoreApplication::sendEvent(&m_widget, &eventCopy);
 }
 
 /**
@@ -1393,7 +1382,7 @@ void DataModel::FrameParser::mouseDoubleClickEvent(QMouseEvent* event)
  */
 void DataModel::FrameParser::wheelEvent(QWheelEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, wheelEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1401,7 +1390,7 @@ void DataModel::FrameParser::wheelEvent(QWheelEvent* event)
  */
 void DataModel::FrameParser::dragEnterEvent(QDragEnterEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, dragEnterEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1409,7 +1398,7 @@ void DataModel::FrameParser::dragEnterEvent(QDragEnterEvent* event)
  */
 void DataModel::FrameParser::dragMoveEvent(QDragMoveEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, dragMoveEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1417,7 +1406,7 @@ void DataModel::FrameParser::dragMoveEvent(QDragMoveEvent* event)
  */
 void DataModel::FrameParser::dragLeaveEvent(QDragLeaveEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, dragLeaveEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }
 
 /**
@@ -1425,5 +1414,5 @@ void DataModel::FrameParser::dragLeaveEvent(QDragLeaveEvent* event)
  */
 void DataModel::FrameParser::dropEvent(QDropEvent* event)
 {
-  DW_EXEC_EVENT(&m_widget, dropEvent, event);
+  QCoreApplication::sendEvent(&m_widget, event);
 }

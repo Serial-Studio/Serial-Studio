@@ -106,9 +106,10 @@ Item {
     //
     VisualRange {
       id: range
+
       units: "°"
-      alarm: false
       minValue: 0
+      alarm: false
       maxValue: 360
       rangeVisible: false
       textValue: root.model.text

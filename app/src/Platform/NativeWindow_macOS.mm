@@ -57,8 +57,16 @@ NativeWindow::NativeWindow(QObject *parent)
 int NativeWindow::titlebarHeight(QObject *window)
 {
   QWindow *win = qobject_cast<QWindow *>(window);
+  if (!win)
+    return 0;
+
   NSView *view = reinterpret_cast<NSView *>(win->winId());
+  if (!view)
+    return 32;
+
   NSWindow *w = [view window];
+  if (!w)
+    return 32;
 
   if (([w styleMask] & NSWindowStyleMaskFullScreen))
     return 0;
@@ -94,7 +102,13 @@ void NativeWindow::removeWindow(QObject *window)
  */
 static void applyMacOSWindowStyle(QWindow *win)
 {
+  if (!win)
+    return;
+
   NSView *view = reinterpret_cast<NSView *>(win->winId());
+  if (!view)
+    return;
+
   NSWindow *w = [view window];
 
   if (w)

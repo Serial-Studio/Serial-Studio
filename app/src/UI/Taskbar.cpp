@@ -642,7 +642,7 @@ void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
   if (!manager)
     return;
 
-  m_windowManager = static_cast<UI::WindowManager*>(manager);
+  m_windowManager = manager;
   m_windowManager->setTaskbar(this);
 
   connect(m_windowManager, &UI::WindowManager::geometryChanged, this, [this](QQuickItem* item) {
@@ -664,9 +664,14 @@ void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
  */
 void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
 {
+  if (!window)
+    return;
+
   // Register the window
   m_windowIDs.insert(window, id);
-  m_windowManager->registerWindow(id, window);
+  if (m_windowManager)
+    m_windowManager->registerWindow(id, window);
+
   Q_EMIT registeredWindowsChanged();
 
   // Keep track of window state

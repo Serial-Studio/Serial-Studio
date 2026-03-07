@@ -133,8 +133,9 @@ Item {
   //
   Rectangle {
     id: _background
-    anchors.fill: parent
+
     visible: false
+    anchors.fill: parent
     border.width: root.focused || _mouseArea.containsMouse ? 1 : 0
     border.color: Cpp_ThemeManager.colors["taskbar_checked_button_border"]
 
@@ -171,6 +172,7 @@ Item {
   //
   RowLayout {
     id: _layout
+
     spacing: 0
     anchors.fill: parent
     visible: root.startMenu ? !Cpp_ThemeManager.colors["start_menu_button_gradient_enabled"] : true
@@ -184,6 +186,7 @@ Item {
 
       Image {
         id: _icon
+
         visible: false
         anchors.fill: parent
         sourceSize.width: root.iconSize
@@ -192,10 +195,11 @@ Item {
 
       MultiEffect {
         id: _effects
+
         source: _icon
         anchors.fill: _icon
-        saturation: !root.open ? -1 : (_mouseArea.containsMouse && root.enabled ? 0.07 : 0)
         brightness: _mouseArea.containsMouse && root.enabled ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
+        saturation: !root.open ? -1 : (_mouseArea.containsMouse && root.enabled ? 0.07 : 0)
       }
     }
 
@@ -203,6 +207,7 @@ Item {
 
     Label {
       id: _label
+
       elide: Qt.ElideRight
       Layout.fillWidth: true
       font: Cpp_Misc_CommonFonts.uiFont
@@ -217,6 +222,7 @@ Item {
   //
   MouseArea {
     id: _mouseArea
+
     hoverEnabled: true
     anchors.fill: parent
     onClicked: {

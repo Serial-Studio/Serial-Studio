@@ -58,17 +58,17 @@ Item {
   //
   // Layout properties
   //
-  Layout.minimumWidth: implicitWidth
-  Layout.maximumWidth: maxButtonWidth
-  implicitHeight: horizontalLayout ?
-                    Math.max(root.iconSize, _label.implicitHeight) :
-                    Math.max(16, _label.implicitHeight) * 3 + 16
   implicitWidth: Math.min(
                    maxButtonWidth,
                    horizontalLayout
                    ? root.iconSize + Math.ceil(Math.max(_metrics.width, _metricsBold.width) + 16)
                    : Math.max(Math.ceil(Math.max(_metrics.width, _metricsBold.width) + 16), icon.width / 32 * 72)
                    )
+  implicitHeight: horizontalLayout ?
+                    Math.max(root.iconSize, _label.implicitHeight) :
+                    Math.max(16, _label.implicitHeight) * 3 + 16
+  Layout.minimumWidth: implicitWidth
+  Layout.maximumWidth: maxButtonWidth
 
   //
   // Enabled/disabled opacity effect
@@ -81,15 +81,16 @@ Item {
   //
   Rectangle {
     id: _background
+
     radius: 3
     border.width: 1
     anchors.fill: parent
-    visible: root.toolbarButton && !root.horizontalLayout
-    color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
-    border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
     opacity: (root.checked || _mouseArea.pressed)
              ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
              : 0.0
+    visible: root.toolbarButton && !root.horizontalLayout
+    color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
+    border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
     Behavior on opacity { NumberAnimation {} }
   }
 
@@ -109,9 +110,11 @@ Item {
   //
   Item {
     id: _scaleContainer
+
     anchors.fill: parent
     transform: Scale {
       id: _pressScale
+
       origin.x: _scaleContainer.width / 2
       origin.y: _scaleContainer.height / 2
       xScale: _mouseArea.pressed ? 0.95 : 1.0
@@ -123,6 +126,7 @@ Item {
 
     GridLayout {
       id: _layout
+
       anchors.fill: parent
       flow: GridLayout.LeftToRight
       rows: horizontalLayout ? 1 : 2
@@ -134,6 +138,7 @@ Item {
 
       Item {
         id: _iconContainer
+
         Layout.row: 0
         Layout.column: 0
         implicitWidth: root.iconSize
@@ -142,6 +147,7 @@ Item {
 
         Image {
           id: _icon
+
           visible: false
           anchors.fill: parent
           sourceSize.width: root.iconSize
@@ -151,24 +157,25 @@ Item {
         MultiEffect {
           source: _icon
           anchors.fill: _icon
-          saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
           brightness: _mouseArea.containsMouse && root.enabled ?
                         (_mouseArea.containsPress ? -0.07 : 0.07) : 0
+          saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
         }
       }
 
       Label {
         id: _label
+
         elide: Qt.ElideRight
-        Layout.fillWidth: horizontalLayout
-        Layout.row: horizontalLayout ? 0 : 1
-        Layout.column: horizontalLayout ? 1 : 0
-        Layout.maximumWidth: root.maxButtonWidth - (horizontalLayout ? root.iconSize + 4 : 0)
-        Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
-        horizontalAlignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignHCenter
         color: root.toolbarButton
                ? Cpp_ThemeManager.colors["toolbar_text"]
                : Cpp_ThemeManager.colors["button_text"]
+        Layout.fillWidth: horizontalLayout
+        Layout.row: horizontalLayout ? 0 : 1
+        Layout.column: horizontalLayout ? 1 : 0
+        Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
+        horizontalAlignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignHCenter
+        Layout.maximumWidth: root.maxButtonWidth - (horizontalLayout ? root.iconSize + 4 : 0)
       }
     }
   }
@@ -178,16 +185,18 @@ Item {
   //
   TextMetrics {
     id: _metrics
+
     font: _label.font
     text: " " + root.text + " "
   } TextMetrics {
     id: _metricsBold
-    text: " " + root.text + " "
+
     font {
       family: _label.font.family
       pixelSize: _label.font.pixelSize
       bold: true
     }
+    text: " " + root.text + " "
   }
 
   //
@@ -195,6 +204,7 @@ Item {
   //
   ToolTip {
     id: _tooltip
+
     delay: 700
     parent: _mouseArea
     text: root.ToolTip.text
@@ -208,6 +218,7 @@ Item {
   //
   MouseArea {
     id: _mouseArea
+
     hoverEnabled: true
     anchors.fill: parent
 

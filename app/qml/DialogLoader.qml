@@ -23,6 +23,7 @@ import QtQuick
 
 Loader {
   id: root
+
   active: false
   asynchronous: true
 

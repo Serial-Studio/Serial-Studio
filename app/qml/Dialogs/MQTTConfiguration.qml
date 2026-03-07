@@ -81,6 +81,7 @@ Widgets.SmartDialog {
   //
   contentItem: ColumnLayout {
     id: column
+
     spacing: 12
     anchors.centerIn: parent
 
@@ -102,6 +103,7 @@ Widgets.SmartDialog {
       //
       TabBar {
         id: _tab
+
         implicitHeight: 24
         Layout.fillWidth: true
 
@@ -135,6 +137,7 @@ Widgets.SmartDialog {
       //
       StackLayout {
         id: stack
+
         clip: true
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -160,8 +163,8 @@ Widgets.SmartDialog {
             radius: 2
             border.width: 1
             anchors.fill: parent
-            color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            color: Cpp_ThemeManager.colors["groupbox_background"]
 
             DragHandler {
               target: null
@@ -171,18 +174,18 @@ Widgets.SmartDialog {
           GridLayout {
             id: connectionSettingsLayout
 
-            enabled: app.proVersion
-            opacity: enabled ? 1 : 0.8
-
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
+            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Host") + ":" }
             TextField {
               id: _host
+
               Layout.fillWidth: true
               placeholderText: "127.0.0.1"
               text: Cpp_MQTT_Client.hostname
@@ -195,6 +198,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Port") + ":" }
             TextField {
               id: _port
+
               Layout.fillWidth: true
               placeholderText: "1883"
               text: Cpp_MQTT_Client.port
@@ -211,6 +215,7 @@ Widgets.SmartDialog {
               text: qsTr("Client ID") + ":"
             } TextField {
               id: _clientID
+
               Layout.fillWidth: true
               opacity: enabled ? 1 : 0.5
               text: Cpp_MQTT_Client.clientId
@@ -223,6 +228,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Keep Alive (s)") + ":" }
             TextField {
               id: _keepAlive
+
               Layout.fillWidth: true
               text: Cpp_MQTT_Client.keepAlive.toString()
               inputMethodHints: Qt.ImhDigitsOnly
@@ -236,6 +242,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Clean Session") + ":" }
             Switch {
               id: _cleanSession
+
               Layout.leftMargin: -8
               checked: Cpp_MQTT_Client.cleanSession
               onCheckedChanged: {
@@ -254,6 +261,7 @@ Widgets.SmartDialog {
         //
         Item {
           id: authentication
+
           Layout.fillWidth: true
           Layout.fillHeight: true
           implicitHeight: authenticationLayout.implicitHeight + 16
@@ -262,8 +270,8 @@ Widgets.SmartDialog {
             radius: 2
             border.width: 1
             anchors.fill: parent
-            color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            color: Cpp_ThemeManager.colors["groupbox_background"]
 
             DragHandler {
               target: null
@@ -273,18 +281,18 @@ Widgets.SmartDialog {
           GridLayout {
             id: authenticationLayout
 
-            enabled: app.proVersion
-            opacity: enabled ? 1 : 0.8
-
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
+            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Username") + ":" }
             TextField {
               id: _username
+
               Layout.fillWidth: true
               text: Cpp_MQTT_Client.username
               placeholderText: qsTr("MQTT Username")
@@ -301,6 +309,7 @@ Widgets.SmartDialog {
 
               TextField {
                 id: _password
+
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
                 text: Cpp_MQTT_Client.password
@@ -333,6 +342,7 @@ Widgets.SmartDialog {
         //
         Item {
           id: mqttOptions
+
           Layout.fillWidth: true
           Layout.fillHeight: true
           implicitHeight: mqttOptionsLayout.implicitHeight + 16
@@ -341,8 +351,8 @@ Widgets.SmartDialog {
             radius: 2
             border.width: 1
             anchors.fill: parent
-            color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            color: Cpp_ThemeManager.colors["groupbox_background"]
 
             DragHandler {
               target: null
@@ -352,18 +362,18 @@ Widgets.SmartDialog {
           GridLayout {
             id: mqttOptionsLayout
 
-            enabled: app.proVersion
-            opacity: enabled ? 1 : 0.8
-
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
+            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Version") + ":" }
             ComboBox {
               id: _version
+
               Layout.fillWidth: true
               model: Cpp_MQTT_Client.mqttVersions
               currentIndex: Cpp_MQTT_Client.mqttVersion
@@ -376,6 +386,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Mode") + ":" }
             ComboBox {
               id: _mode
+
               Layout.fillWidth: true
               model: Cpp_MQTT_Client.modes
               currentIndex: Cpp_MQTT_Client.mode
@@ -388,6 +399,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Topic") + ":" }
             TextField {
               id: _topic
+
               Layout.fillWidth: true
               text: Cpp_MQTT_Client.topicFilter
               placeholderText: qsTr("e.g. sensors/temperature or home/+/status")
@@ -400,6 +412,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Will Retain") + ":" }
             Switch {
               id: _willRetain
+
               Layout.leftMargin: -8
               checked: Cpp_MQTT_Client.willRetain
               onCheckedChanged: {
@@ -411,6 +424,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Will QoS") + ":" }
             ComboBox {
               id: _willQoS
+
               model: ["0", "1", "2"]
               Layout.fillWidth: true
               currentIndex: Cpp_MQTT_Client.willQoS
@@ -423,6 +437,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Will Topic") + ":" }
             TextField {
               id: _willTopic
+
               Layout.fillWidth: true
               text: Cpp_MQTT_Client.willTopic
               placeholderText: qsTr("e.g. device/alerts/offline")
@@ -435,6 +450,7 @@ Widgets.SmartDialog {
             Label { text: qsTr("Will Message") + ":" }
             TextField {
               id: _willMessage
+
               Layout.fillWidth: true
               text: Cpp_MQTT_Client.willMessage
               placeholderText: qsTr("e.g. Device unexpectedly disconnected")
@@ -454,6 +470,7 @@ Widgets.SmartDialog {
         //
         Item {
           id: sslProperties
+
           Layout.fillWidth: true
           Layout.fillHeight: true
           implicitHeight: sslPropertiesLayout.implicitHeight + 16
@@ -462,8 +479,8 @@ Widgets.SmartDialog {
             radius: 2
             border.width: 1
             anchors.fill: parent
-            color: Cpp_ThemeManager.colors["groupbox_background"]
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            color: Cpp_ThemeManager.colors["groupbox_background"]
 
             DragHandler {
               target: null
@@ -473,18 +490,18 @@ Widgets.SmartDialog {
           GridLayout {
             id: sslPropertiesLayout
 
-            enabled: app.proVersion
-            opacity: enabled ? 1 : 0.8
-
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
+            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Enable SSL") + ":" }
             Switch {
               id: _enableSSL
+
               Layout.leftMargin: -8
               checked: Cpp_MQTT_Client.sslEnabled
               onCheckedChanged: {
@@ -498,6 +515,7 @@ Widgets.SmartDialog {
               enabled: Cpp_MQTT_Client.sslEnabled
             } ComboBox {
               id: _sslProtocol
+
               Layout.fillWidth: true
               opacity: enabled ? 1 : 0.8
               enabled: Cpp_MQTT_Client.sslEnabled
@@ -514,12 +532,13 @@ Widgets.SmartDialog {
               enabled: Cpp_MQTT_Client.sslEnabled
             } TextField {
               id: _verifyDepth
+
               Layout.fillWidth: true
               opacity: enabled ? 1 : 0.8
-              enabled: Cpp_MQTT_Client.sslEnabled
-              text: Cpp_MQTT_Client.peerVerifyDepth.toString()
               inputMethodHints: Qt.ImhDigitsOnly
+              enabled: Cpp_MQTT_Client.sslEnabled
               validator: IntValidator { bottom: 0; top: 10 }
+              text: Cpp_MQTT_Client.peerVerifyDepth.toString()
               onTextChanged: {
                 if (Cpp_MQTT_Client.peerVerifyDepth !== parseInt(text))
                   Cpp_MQTT_Client.peerVerifyDepth = parseInt(text)
@@ -532,6 +551,7 @@ Widgets.SmartDialog {
               enabled: Cpp_MQTT_Client.sslEnabled
             } ComboBox {
               id: _verifyMode
+
               Layout.fillWidth: true
               opacity: enabled ? 1 : 0.8
               enabled: Cpp_MQTT_Client.sslEnabled
@@ -553,8 +573,8 @@ Widgets.SmartDialog {
       // Buttons
       //
       RowLayout {
-        Layout.alignment: Qt.AlignRight
         spacing: 12
+        Layout.alignment: Qt.AlignRight
 
         Button {
           icon.width: 18
@@ -562,8 +582,8 @@ Widgets.SmartDialog {
           text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
         }
 
         Item {

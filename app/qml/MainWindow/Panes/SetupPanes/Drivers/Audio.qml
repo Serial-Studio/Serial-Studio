@@ -27,6 +27,7 @@ import QtQuick.Controls
 
 Item {
   id: root
+
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
@@ -85,13 +86,14 @@ Item {
   //
   GridLayout {
     id: layout
+
     columns: 2
     rowSpacing: 4
     columnSpacing: 4
     anchors.margins: 0
     anchors.fill: parent
-    opacity: enabled ? 1 : 0.5
     visible: _inDev.count > 0
+    opacity: enabled ? 1 : 0.5
     enabled: !Cpp_IO_Manager.isConnected
 
     //
@@ -102,6 +104,7 @@ Item {
       text: qsTr("Input Device") + ":"
     } ComboBox {
       id: _inDev
+
       visible: count > 0
       Layout.fillWidth: true
       model: Cpp_IO_Audio.inputDeviceList
@@ -123,6 +126,7 @@ Item {
       text: qsTr("Sample Rate") + ":"
     } ComboBox {
       id: _rate
+
       Layout.fillWidth: true
       model: Cpp_IO_Audio.sampleRates
       visible: count > 0 && _inDev.visible
@@ -144,6 +148,7 @@ Item {
       text: qsTr("Sample Format") + ":"
     } ComboBox {
       id: _inFmt
+
       Layout.fillWidth: true
       visible: count > 0 && _inDev.visible
       model: Cpp_IO_Audio.inputSampleFormats
@@ -165,6 +170,7 @@ Item {
       text: qsTr("Channels") + ":"
     } ComboBox {
       id: _inChan
+
       Layout.fillWidth: true
       visible: count > 0 && _inDev.visible
       model: Cpp_IO_Audio.inputChannelConfigurations
@@ -198,6 +204,7 @@ Item {
       text: qsTr("Output Device") + ":"
     } ComboBox {
       id: _outDev
+
       visible: count > 0
       Layout.fillWidth: true
       model: Cpp_IO_Audio.outputDeviceList
@@ -219,6 +226,7 @@ Item {
       text: qsTr("Sample Format") + ":"
     } ComboBox {
       id: _outFmt
+
       Layout.fillWidth: true
       visible: count > 0 && _outDev.visible
       model: Cpp_IO_Audio.outputSampleFormats
@@ -240,6 +248,7 @@ Item {
       text: qsTr("Channels") + ":"
     } ComboBox {
       id: _outChan
+
       Layout.fillWidth: true
       visible: count > 0 && _outDev.visible
       model: Cpp_IO_Audio.outputChannelConfigurations

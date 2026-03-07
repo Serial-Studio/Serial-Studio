@@ -52,6 +52,7 @@ Item {
   //
   DbItems.DashboardLayout {
     id: _mainLayout
+
     taskBar: root.taskBar
     anchors.fill: parent
     onExternalWindowClicked: root.openExternalWindow()
@@ -162,13 +163,14 @@ Item {
       // Titlebar background
       //
       Rectangle {
-        height: _extWindow.titlebarHeight
-        color: Cpp_ThemeManager.colors["dashboard_background"]
         anchors {
           top: parent.top
           left: parent.left
           right: parent.right
         }
+
+        height: _extWindow.titlebarHeight
+        color: Cpp_ThemeManager.colors["dashboard_background"]
 
         DragHandler {
           target: null
@@ -183,16 +185,16 @@ Item {
       // Titlebar text
       //
       Label {
-        text: _extWindow.title
-        visible: _extWindow.titlebarHeight > 0
-        color: Cpp_ThemeManager.colors["text"]
-        font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
-
         anchors {
           topMargin: 6
           top: parent.top
           horizontalCenter: parent.horizontalCenter
         }
+
+        text: _extWindow.title
+        visible: _extWindow.titlebarHeight > 0
+        color: Cpp_ThemeManager.colors["text"]
+        font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
       }
 
       //

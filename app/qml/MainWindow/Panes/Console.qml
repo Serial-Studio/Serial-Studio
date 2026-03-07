@@ -28,6 +28,7 @@ import "../../Widgets/Dashboard" as Dashboard
 
 Widgets.Pane {
   id: root
+
   title: qsTr("Console")
   icon: "qrc:/rcc/icons/panes/console.svg"
 
@@ -81,6 +82,7 @@ Widgets.Pane {
 
     Dashboard.Terminal {
       id: terminal
+
       minimal: false
       anchors.fill: parent
     }

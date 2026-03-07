@@ -166,7 +166,7 @@ void API::ServerWorker::removeSocket(QTcpSocket* socket)
  */
 void API::ServerWorker::writeRawData(const IO::ByteArrayPtr& data)
 {
-  if (m_sockets.isEmpty())
+  if (!data || data->isEmpty() || m_sockets.isEmpty())
     return;
 
   QJsonObject object;

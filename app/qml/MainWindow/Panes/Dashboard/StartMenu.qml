@@ -84,20 +84,21 @@ Popup {
   //
   background: Rectangle {
     id: _bg
+
     border.width: 1
     color: Cpp_ThemeManager.colors["start_menu_background"]
     border.color: Cpp_ThemeManager.colors["start_menu_border"]
 
     Rectangle {
-      width: root.gradientWidth
-      border.width: _bg.border.width
-      border.color: _bg.border.color
-
       anchors {
         top: _bg.top
         left: _bg.left
         bottom: _bg.bottom
       }
+
+      width: root.gradientWidth
+      border.width: _bg.border.width
+      border.color: _bg.border.color
 
       gradient: Gradient {
         GradientStop {
@@ -114,16 +115,16 @@ Popup {
       Label {
         id: _versionLabel
 
-        rotation: -90
-        font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
-        text: Application.displayName + " " + Cpp_AppVersion
-        color: Cpp_ThemeManager.colors["start_menu_version_text"]
-
         anchors {
           bottom: parent.bottom
           bottomMargin: implicitWidth / 2
           horizontalCenter: parent.horizontalCenter
         }
+
+        rotation: -90
+        font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+        text: Application.displayName + " " + Cpp_AppVersion
+        color: Cpp_ThemeManager.colors["start_menu_version_text"]
       }
     }
   }
@@ -133,7 +134,6 @@ Popup {
   //
   ColumnLayout {
     id: _layout
-    spacing: 4
 
     anchors {
       margins: 4
@@ -141,8 +141,11 @@ Popup {
       leftMargin: root.gradientWidth + 4
     }
 
+    spacing: 4
+
     Widgets.MenuButton {
       id: _groups
+
       expandable: true
       Layout.fillWidth: true
       text: qsTr("Workspaces")
@@ -185,6 +188,7 @@ Popup {
 
     Widgets.MenuButton {
       id: _actions
+
       expandable: true
       text: qsTr("Actions")
       Layout.fillWidth: true
@@ -309,10 +313,11 @@ Popup {
 
     Widgets.MenuButton {
       id: _consoleBt
+
       checkable: true
       expandable: false
-      text: qsTr("Console")
       Layout.fillWidth: true
+      text: qsTr("Console")
       checked: Cpp_UI_Dashboard.terminalEnabled
       icon.source: "qrc:/rcc/icons/start/console.svg"
       onCheckedChanged: {
@@ -385,12 +390,12 @@ Popup {
     Widgets.MenuButton {
       expandable: false
       Layout.fillWidth: true
-      onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
-      text: Cpp_IO_Manager.paused ? qsTr("Resume") :
-                                    qsTr("Pause")
       icon.source: Cpp_IO_Manager.paused ?
                      "qrc:/rcc/icons/start/resume.svg" :
                      "qrc:/rcc/icons/start/pause.svg"
+      text: Cpp_IO_Manager.paused ? qsTr("Resume") :
+                                    qsTr("Pause")
+      onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
     }
 
     Widgets.MenuButton {

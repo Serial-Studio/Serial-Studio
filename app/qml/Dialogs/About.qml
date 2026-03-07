@@ -47,6 +47,7 @@ SmartDialog {
 
       RowLayout {
         id: _logo
+
         spacing: 8
         Layout.fillWidth: true
 
@@ -97,8 +98,8 @@ SmartDialog {
 
           Label {
             opacity: 0.8
-            text: qsTr("All Rights Reserved")
             visible: Cpp_CommercialBuild
+            text: qsTr("All Rights Reserved")
           }
         }
       }
@@ -180,8 +181,8 @@ SmartDialog {
       //
       Button {
         Layout.fillWidth: true
-        text: qsTr("Manage License")
         visible: Cpp_CommercialBuild
+        text: qsTr("Manage License")
         onClicked: app.showLicenseDialog()
       }
 
@@ -189,8 +190,8 @@ SmartDialog {
       // Donate button (free & GPL3)
       //
       Button {
-        text: qsTr("Donate")
         Layout.fillWidth: true
+        text: qsTr("Donate")
         visible: !app.proVersion
         onClicked: donateDialog.show()
       }

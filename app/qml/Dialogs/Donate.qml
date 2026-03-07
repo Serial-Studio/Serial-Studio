@@ -57,6 +57,7 @@ SmartDialog {
   //
   contentItem: ColumnLayout {
     id: column
+
     spacing: 16
     anchors.centerIn: parent
 
@@ -73,8 +74,8 @@ SmartDialog {
           Rectangle {
             border.width: 2
             color: "transparent"
-            anchors.fill: parent
             border.color: "#000"
+            anchors.fill: parent
           }
         }
 
@@ -89,6 +90,7 @@ SmartDialog {
 
           Label {
             id: title
+
             Layout.fillWidth: true
             font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
             text: qsTr("Support the development of %1!").arg("Serial Studio")
@@ -134,8 +136,8 @@ SmartDialog {
           text: qsTr("Close")
           onClicked: root.close()
           Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
         }
 
         Item {
@@ -147,8 +149,8 @@ SmartDialog {
           icon.height: 18
           text: qsTr("Donate")
           Layout.alignment: Qt.AlignVCenter
-          icon.source: "qrc:/rcc/icons/buttons/paypal.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/paypal.svg"
           onClicked: {
             root.close()
             Qt.openUrlExternally("https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE")
@@ -164,9 +166,9 @@ SmartDialog {
           Keys.onReturnPressed: clicked()
           Layout.alignment: Qt.AlignVCenter
           text: qsTr("Get Serial Studio Pro")
-          Component.onCompleted: Qt.callLater(forceActiveFocus)
-          icon.source: "qrc:/rcc/icons/buttons/buy.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/buy.svg"
+          Component.onCompleted: Qt.callLater(forceActiveFocus)
           onClicked: {
             root.close()
             Qt.openUrlExternally("https://store.serial-studio.com/buy/ba46c099-0d51-4d98-9154-6be5c35bc1ec")

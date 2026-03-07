@@ -31,6 +31,7 @@ import "../../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
+
   title: qsTr("Dashboard")
   icon: "qrc:/rcc/icons/panes/dashboard.svg"
   headerVisible: mainWindow.toolbarVisible && !isExternalWindow
@@ -62,19 +63,20 @@ Widgets.Pane {
   //
   actionComponent: Component {
     Item {
-      implicitWidth: label.implicitWidth
-      implicitHeight: label.implicitHeight
       opacity: Cpp_API_Server.enabled ?
                  (Cpp_API_Server.clientCount > 0 ? 1 : 0.5) :
                  0.0
+      implicitWidth: label.implicitWidth
+      implicitHeight: label.implicitHeight
       Behavior on opacity { NumberAnimation { duration: 200 } }
 
       MultiEffect {
         id: glow
+
         source: label
         shadowBlur: 2.0
-        anchors.fill: label
         shadowEnabled: true
+        anchors.fill: label
         shadowVerticalOffset: 0
         shadowHorizontalOffset: 0
         visible: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
@@ -86,14 +88,14 @@ Widgets.Pane {
           running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
 
           NumberAnimation {
-            from: 0.4
             to: 1.00
+            from: 0.4
             duration: 800
             easing.type: Easing.InOutSine
           }
           NumberAnimation {
-            from: 1.00
             to: 0.4
+            from: 1.00
             duration: 800
             easing.type: Easing.InOutSine
           }
@@ -104,14 +106,14 @@ Widgets.Pane {
           running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
 
           NumberAnimation {
-            from: 0.15
             to: 0.6
+            from: 0.15
             duration: 800
             easing.type: Easing.InOutSine
           }
           NumberAnimation {
-            from: 0.6
             to: 0.15
+            from: 0.6
             duration: 800
             easing.type: Easing.InOutSine
           }
@@ -120,13 +122,14 @@ Widgets.Pane {
 
       Label {
         id: label
+
         visible: opacity > 0
-        font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
-        color: Cpp_ThemeManager.colors["pane_caption_foreground"]
         text: Cpp_API_Server.enabled ?
                 (Cpp_API_Server.clientCount > 0 ? qsTr("API Server Active (%1)").arg(Cpp_API_Server.clientCount) :
                                                   qsTr("API Server Ready")) :
                 qsTr("API Server Off")
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
+        color: Cpp_ThemeManager.colors["pane_caption_foreground"]
       }
     }
   }
@@ -178,10 +181,10 @@ Widgets.Pane {
         Layout.rightMargin: -1
         Layout.fillWidth: true
         implicitHeight: _actions.implicitHeight + 20
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-        border.color: Cpp_ThemeManager.colors["groupbox_border"]
         visible: Cpp_UI_Dashboard.actionCount > 0
                  && Cpp_UI_Dashboard.showActionPanel
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
         ListView {
           id: _actions
@@ -204,12 +207,12 @@ Widgets.Pane {
 
             iconSize: 24
             implicitHeight: 32
-            maxButtonWidth: 256
             text: model["text"]
+            maxButtonWidth: 256
             toolbarButton: false
             horizontalLayout: true
-            checked: model["checked"]
             icon.source: model["icon"]
+            checked: model["checked"]
             enabled: !Cpp_IO_Manager.paused
                      && Cpp_IO_Manager.isConnected
             onClicked: Cpp_UI_Dashboard.activateAction(
@@ -223,6 +226,7 @@ Widgets.Pane {
       //
       DashboardCanvas {
         id: _canvas
+
         taskBar: root.taskBar
         Layout.topMargin: -1
         Layout.leftMargin: -1
@@ -237,6 +241,7 @@ Widgets.Pane {
       //
       Taskbar {
         id: _taskbar
+
         taskBar: root.taskBar
         Layout.fillWidth: true
         onStartClicked: {
@@ -253,6 +258,7 @@ Widgets.Pane {
     //
     StartMenu {
       id: _startMenu
+
       taskBar: root.taskBar
       isExternalWindow: root.isExternalWindow
       y: parent.height - height - _taskbar.height + 1

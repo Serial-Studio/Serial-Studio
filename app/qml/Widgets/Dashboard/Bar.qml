@@ -103,27 +103,29 @@ Item {
     //
     Item {
       id: barContainer
+
       Layout.fillWidth: true
       Layout.fillHeight: true
-      Layout.preferredHeight: isHorizontal ? Math.min(80, root.height * 0.5) : root.height * 0.7
-      Layout.preferredWidth: !isHorizontal ? Math.min(root.width * 0.6, 300) : 30
       Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+      Layout.preferredWidth: !isHorizontal ? Math.min(root.width * 0.6, 300) : 30
+      Layout.preferredHeight: isHorizontal ? Math.min(80, root.height * 0.5) : root.height * 0.7
 
       ProgressBar {
         id: progressBar
-        from: model.minValue
-        to: model.maxValue
+
         value: root.value
+        to: model.maxValue
+        from: model.minValue
 
         anchors.centerIn: parent
         width: isHorizontal ? Math.max(100, parent.width - labelMetrics.width) : Math.min(80, parent.width * 0.5)
         height: isHorizontal ? Math.min(50, parent.height * 0.7) : Math.max(100, parent.height - labelMetrics.height * 2)
 
         background: Rectangle {
-          implicitWidth: 200
-          implicitHeight: 30
           radius: 3
           border.width: 2
+          implicitWidth: 200
+          implicitHeight: 30
           border.color: Cpp_ThemeManager.colors["widget_border"]
 
           gradient: Gradient {
@@ -134,26 +136,26 @@ Item {
           }
 
           Rectangle {
-            anchors.fill: parent
-            anchors.margins: 1
-            radius: parent.radius - 1
-            color: "transparent"
             border.width: 1
+            anchors.margins: 1
+            anchors.fill: parent
+            color: "transparent"
+            radius: parent.radius - 1
             border.color: Qt.rgba(0, 0, 0, 0.1)
           }
         }
 
         contentItem: Item {
+          clip: true
           implicitWidth: 200
           implicitHeight: 30
-          clip: true
 
           Rectangle {
             x: 2
+            radius: 1
             y: isHorizontal ? 2 : (1 - progressBar.visualPosition) * (parent.height - 4) + 2
             width: isHorizontal ? Math.max(0, progressBar.visualPosition * (parent.width - 4)) : parent.width - 4
             height: isHorizontal ? parent.height - 4 : Math.max(0, progressBar.visualPosition * (parent.height - 4))
-            radius: 1
 
             gradient: Gradient {
               orientation: isHorizontal ? Gradient.Horizontal : Gradient.Vertical
@@ -163,10 +165,10 @@ Item {
             }
 
             Rectangle {
-              anchors.left: parent.left
-              anchors.top: parent.top
-              anchors.bottom: parent.bottom
               width: 1
+              anchors.top: parent.top
+              anchors.left: parent.left
+              anchors.bottom: parent.bottom
               color: Qt.rgba(1, 1, 1, 0.3)
             }
           }
@@ -180,26 +182,25 @@ Item {
             readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
 
             Rectangle {
-              x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width
-              y: isHorizontal ? progressBar.height : ((1 - frac) * progressBar.height - height / 2)
               width: isHorizontal ? 2 : 8
               height: isHorizontal ? 8 : 2
               color: Cpp_ThemeManager.colors["widget_border"]
+              x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width
+              y: isHorizontal ? progressBar.height : ((1 - frac) * progressBar.height - height / 2)
             }
 
             Text {
+              font.pixelSize: fontSize
+              text: formatValue(parent.tickValue)
+              color: Cpp_ThemeManager.colors["widget_text"]
+              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
               x: isHorizontal ? (frac * progressBar.width - width / 2) : progressBar.width + 10
               y: isHorizontal ? progressBar.height + 10 : ((1 - frac) * progressBar.height - height / 2)
-              text: formatValue(parent.tickValue)
-              font.pixelSize: fontSize
-              font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-              color: Cpp_ThemeManager.colors["widget_text"]
             }
           }
         }
 
         Rectangle {
-          visible: root.model.alarmsDefined
           x: {
             if (isHorizontal) {
               const alarmFrac = (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
@@ -216,14 +217,14 @@ Item {
               return (1 - alarmFrac) * progressBar.height - height / 2
             }
           }
+          radius: 1
           width: isHorizontal ? 3 : 12
           height: isHorizontal ? 12 : 3
+          visible: root.model.alarmsDefined
           color: Cpp_ThemeManager.colors["alarm"]
-          radius: 1
         }
 
         Rectangle {
-          visible: root.model.alarmsDefined
           x: {
             if (isHorizontal) {
               const alarmFrac = (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
@@ -240,10 +241,11 @@ Item {
               return (1 - alarmFrac) * progressBar.height - height / 2
             }
           }
+          radius: 1
           width: isHorizontal ? 3 : 12
           height: isHorizontal ? 12 : 3
+          visible: root.model.alarmsDefined
           color: Cpp_ThemeManager.colors["alarm"]
-          radius: 1
         }
       }
 
@@ -252,8 +254,9 @@ Item {
       //
       MouseArea {
         id: cursorTracker
-        anchors.fill: progressBar
+
         hoverEnabled: true
+        anchors.fill: progressBar
         acceptedButtons: Qt.NoButton
         propagateComposedEvents: true
 
@@ -273,14 +276,14 @@ Item {
         // Measurement line (full height when horizontal, full width when vertical)
         //
         Rectangle {
-          width: isHorizontal ? 2 : cursorTracker.width
-          height: isHorizontal ? cursorTracker.height : 2
           radius: 1
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
           antialiasing: true
+          width: isHorizontal ? 2 : cursorTracker.width
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
           x: isHorizontal ? cursorTracker.mouseX - 1 : 0
           y: isHorizontal ? 0 : cursorTracker.mouseY - 1
+          height: isHorizontal ? cursorTracker.height : 2
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         //
@@ -289,19 +292,19 @@ Item {
         Rectangle {
           width: 1
           height: 12
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
           x: cursorTracker.mouseX - width / 2
           y: cursorTracker.mouseY - height - 4
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         Rectangle {
           width: 1
           height: 12
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          x: cursorTracker.mouseX - width / 2
           y: cursorTracker.mouseY + 4
+          x: cursorTracker.mouseX - width / 2
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         //
@@ -310,42 +313,43 @@ Item {
         Rectangle {
           width: 12
           height: 1
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
           x: cursorTracker.mouseX - width - 4
           y: cursorTracker.mouseY - height / 2
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         Rectangle {
           width: 12
           height: 1
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
           x: cursorTracker.mouseX + 4
           y: cursorTracker.mouseY - height / 2
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         //
         // Cursor value label (tooltip style)
         //
         Rectangle {
-          visible: cursorTracker.containsMouse
-          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
-          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
-          width: tooltipLabel.width + 8
-          height: tooltipLabel.height + 4
-          color: Cpp_ThemeManager.colors["tooltip_base"]
           radius: 3
           border.width: 1
+          width: tooltipLabel.width + 8
+          height: tooltipLabel.height + 4
+          visible: cursorTracker.containsMouse
+          color: Cpp_ThemeManager.colors["tooltip_base"]
           border.color: Cpp_ThemeManager.colors["tooltip_text"]
+          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
+          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
 
           Label {
             id: tooltipLabel
-            anchors.centerIn: parent
-            text: formatValue(cursorTracker.cursorValue) + " " + model.units
-            color: Cpp_ThemeManager.colors["tooltip_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
+
             elide: Text.ElideRight
+            anchors.centerIn: parent
+            color: Cpp_ThemeManager.colors["tooltip_text"]
+            text: formatValue(cursorTracker.cursorValue) + " " + model.units
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
           }
         }
       }
@@ -361,15 +365,16 @@ Item {
     //
     VisualRange {
       id: range
+
       value: model.value
       units: model.units
       rangeVisible: false
       maxValue: model.maxValue
       minValue: model.minValue
       alarm: model.alarmTriggered
-      maximumWidth: Math.min(root.width * 0.8, 200)
-      Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
+      Layout.alignment: Qt.AlignHCenter
+      maximumWidth: Math.min(root.width * 0.8, 200)
     }
 
     Item {

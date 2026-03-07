@@ -27,6 +27,7 @@ import "Drivers" as Drivers
 
 Rectangle {
   id: root
+
   radius: 2
   border.width: 1
   implicitHeight: layout.implicitHeight + 32
@@ -60,6 +61,7 @@ Rectangle {
   //
   StackLayout {
     id: layout
+
     anchors.margins: 8
     anchors.fill: parent
     currentIndex: Cpp_IO_Manager.busType

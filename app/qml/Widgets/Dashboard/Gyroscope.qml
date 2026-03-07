@@ -105,15 +105,15 @@ Item {
     }
 
     ToolButton {
+      onClicked: {
+        root.integrateValues = !root.integrateValues
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "integrateValues", root.integrateValues)
+      }
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
       checked: root.integrateValues
       text: qsTr("Integrate Angles")
-      onClicked: {
-        root.integrateValues = !root.integrateValues
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "integrateValues", root.integrateValues)
-      }
       icon.source: "qrc:/rcc/icons/dashboard-buttons/integral.svg"
     }
 
@@ -127,6 +127,7 @@ Item {
   //
   Item {
     id: container
+
     clip: true
 
     anchors {
@@ -140,8 +141,8 @@ Item {
     // Dark background fills the entire widget
     //
     Rectangle {
-      anchors.fill: parent
       color: "#0e1117"
+      anchors.fill: parent
     }
 
     //
@@ -149,6 +150,7 @@ Item {
     //
     Item {
       id: instrument
+
       clip: true
       anchors.fill: parent
 
@@ -161,11 +163,12 @@ Item {
         //
         Item {
           id: movingLayer
-          width: Math.max(instrument.width, instrument.height) * 3
-          height: Math.max(instrument.width, instrument.height) * 3
+
+          antialiasing: true
           x: (instrument.width - width) / 2
           y: (instrument.instrumentHeight - height) / 2
-          antialiasing: true
+          width: Math.max(instrument.width, instrument.height) * 3
+          height: Math.max(instrument.width, instrument.height) * 3
 
           //
           // Sky gradient (Garmin-style blue)
@@ -185,8 +188,8 @@ Item {
           // Ground gradient (warm brown)
           //
           Rectangle {
-            y: parent.height / 2
             width: parent.width
+            y: parent.height / 2
             height: parent.height / 2
             gradient: Gradient {
               GradientStop { position: 0.0; color: "#a06848" }
@@ -200,11 +203,11 @@ Item {
           // Horizon line
           //
           Rectangle {
-            y: parent.height / 2 - 1.5
-            width: parent.width
             height: 3
             color: "#e8e8e8"
             antialiasing: true
+            width: parent.width
+            y: parent.height / 2 - 1.5
           }
 
           //
@@ -214,6 +217,7 @@ Item {
             model: root.pitchMarkCount
             delegate: Item {
               id: mark
+
               required property int index
 
               readonly property real pitch: root.maxPitch - (index * root.pitchStep)
@@ -235,39 +239,40 @@ Item {
 
               Rectangle {
                 id: pitchLine
-                height: mark.horizonMark ? 3 : (mark.majorMark ? 2 : 1.5)
+
+                color: "#e8e8e8"
+                antialiasing: true
                 width: mark.horizonMark
                        ? movingLayer.width
                        : mark.majorMark
                          ? instrument.dialSize * 0.22
                          : instrument.dialSize * 0.12
-                color: "#e8e8e8"
                 anchors.centerIn: parent
-                antialiasing: true
+                height: mark.horizonMark ? 3 : (mark.majorMark ? 2 : 1.5)
               }
 
               Label {
-                text: Math.round(Math.abs(mark.pitch)).toString()
                 color: "#e8e8e8"
-                visible: !mark.horizonMark && mark.majorMark
-                         && root.height >= 140
-                font.pixelSize: Math.max(9, instrument.dialSize / 22) * Cpp_Misc_CommonFonts.widgetFontScale
-                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-                anchors.verticalCenter: pitchLine.verticalCenter
-                anchors.right: pitchLine.left
                 anchors.rightMargin: 6
+                anchors.right: pitchLine.left
+                visible: !mark.horizonMark && mark.majorMark
+                         && root.height >= 140
+                anchors.verticalCenter: pitchLine.verticalCenter
+                text: Math.round(Math.abs(mark.pitch)).toString()
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                font.pixelSize: Math.max(9, instrument.dialSize / 22) * Cpp_Misc_CommonFonts.widgetFontScale
               }
 
               Label {
-                text: Math.round(Math.abs(mark.pitch)).toString()
                 color: "#e8e8e8"
+                anchors.leftMargin: 6
+                anchors.left: pitchLine.right
                 visible: !mark.horizonMark && mark.majorMark
                          && root.height >= 140
-                font.pixelSize: Math.max(9, instrument.dialSize / 22) * Cpp_Misc_CommonFonts.widgetFontScale
-                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                 anchors.verticalCenter: pitchLine.verticalCenter
-                anchors.left: pitchLine.right
-                anchors.leftMargin: 6
+                text: Math.round(Math.abs(mark.pitch)).toString()
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+                font.pixelSize: Math.max(9, instrument.dialSize / 22) * Cpp_Misc_CommonFonts.widgetFontScale
               }
             }
           }
@@ -333,21 +338,21 @@ Item {
         //
         Image {
           id: rollDial
-          width: instrument.dialSize
-          height: instrument.dialSize
-          x: (instrument.width - width) / 2
-          y: instrument.centerY - height / 2
-          sourceSize.height: instrument.dialSize
-          fillMode: Image.PreserveAspectFit
-          source: "qrc:/rcc/instruments/attitude_dial.svg"
-          antialiasing: true
-          smooth: true
 
+          smooth: true
+          antialiasing: true
+          width: instrument.dialSize
           transform: Rotation {
             angle: -root.rollAngle
             origin.x: rollDial.width / 2
             origin.y: rollDial.height / 2
           }
+          height: instrument.dialSize
+          x: (instrument.width - width) / 2
+          fillMode: Image.PreserveAspectFit
+          y: instrument.centerY - height / 2
+          sourceSize.height: instrument.dialSize
+          source: "qrc:/rcc/instruments/attitude_dial.svg"
         }
 
         //
@@ -355,15 +360,16 @@ Item {
         //
         Image {
           id: rollPointer
+
+          smooth: true
+          antialiasing: true
           width: instrument.dialSize
           height: instrument.dialSize
           x: (instrument.width - width) / 2
+          fillMode: Image.PreserveAspectFit
           y: instrument.centerY - height / 2
           sourceSize.height: instrument.dialSize
-          fillMode: Image.PreserveAspectFit
           source: "qrc:/rcc/instruments/attitude_pointer.svg"
-          antialiasing: true
-          smooth: true
         }
 
         //
@@ -371,14 +377,15 @@ Item {
         //
         Image {
           id: crosshair
-          width: instrument.dialSize * 0.75
+
+          smooth: true
+          antialiasing: true
           sourceSize.width: width
           x: (instrument.width - width) / 2
-          y: instrument.centerY - height / 2
           fillMode: Image.PreserveAspectFit
+          width: instrument.dialSize * 0.75
+          y: instrument.centerY - height / 2
           source: "qrc:/rcc/instruments/attitude_crosshair.svg"
-          antialiasing: true
-          smooth: true
         }
       }
 
@@ -387,17 +394,17 @@ Item {
     //
     Item {
       id: angles
-      visible: container.height >= 120
 
       height: visible ? 38 : 0
+      visible: container.height >= 120
 
       anchors {
-        left: parent.left
-        right: parent.right
-        bottom: parent.bottom
         leftMargin: 4
         rightMargin: 4
         bottomMargin: 4
+        left: parent.left
+        right: parent.right
+        bottom: parent.bottom
       }
 
       RowLayout {
@@ -408,26 +415,26 @@ Item {
           color: "#333"
           border.width: 1
           implicitHeight: 38
-          border.color: "#bebebe"
           Layout.fillWidth: true
+          border.color: "#bebebe"
 
           Column {
-            anchors.centerIn: parent
             spacing: 1
+            anchors.centerIn: parent
 
             Text {
               opacity: 0.6
               color: "#ffffff"
               text: qsTr("ROLL ↔")
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
               anchors.horizontalCenter: parent.horizontalCenter
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
             }
 
             Text {
               color: "#ffffff"
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.rollAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
             }
           }
         }
@@ -436,26 +443,26 @@ Item {
           color: "#333"
           border.width: 1
           implicitHeight: 38
-          border.color: "#bebebe"
           Layout.fillWidth: true
+          border.color: "#bebebe"
 
           Column {
-            anchors.centerIn: parent
             spacing: 1
+            anchors.centerIn: parent
 
             Text {
               opacity: 0.6
               color: "#ffffff"
               text: qsTr("YAW ↻")
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
               anchors.horizontalCenter: parent.horizontalCenter
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
             }
 
             Text {
               color: "#ffffff"
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.yawAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
             }
           }
         }
@@ -464,26 +471,26 @@ Item {
           color: "#333"
           border.width: 1
           implicitHeight: 38
-          border.color: "#bebebe"
           Layout.fillWidth: true
+          border.color: "#bebebe"
 
           Column {
-            anchors.centerIn: parent
             spacing: 1
+            anchors.centerIn: parent
 
             Text {
               opacity: 0.6
               color: "#ffffff"
               text: qsTr("PITCH ↕")
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
               anchors.horizontalCenter: parent.horizontalCenter
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.66))
             }
 
             Text {
               color: "#ffffff"
-              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
               anchors.horizontalCenter: parent.horizontalCenter
               text: (root.normalize180(root.pitchAngle).toFixed(2) + "").padStart(7, ' ') + "\u00B0"
+              font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
             }
           }
         }

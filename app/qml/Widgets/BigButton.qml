@@ -101,6 +101,7 @@ Item {
   //
   ColumnLayout {
     id: _layout
+
     visible: false
 
     spacing: 0
@@ -112,6 +113,7 @@ Item {
 
     Image {
       id: _icon
+
       sourceSize.width: root.iconSize
       sourceSize.height: root.iconSize
       Layout.alignment: Qt.AlignHCenter
@@ -123,6 +125,7 @@ Item {
 
     Label {
       id: _label
+
       elide: Qt.ElideRight
       Layout.maximumWidth: root.width
       Layout.alignment: Qt.AlignHCenter
@@ -141,6 +144,7 @@ Item {
   //
   TextMetrics {
     id: metrics
+
     font: _label.font
     text: " " + root.text + " "
   }
@@ -150,6 +154,7 @@ Item {
   //
   MouseArea {
     id: _mouseArea
+
     hoverEnabled: true
     anchors.fill: parent
     onClicked: {
@@ -166,9 +171,9 @@ Item {
   MultiEffect {
     source: _layout
     anchors.fill: _layout
-    saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
     brightness: _mouseArea.containsMouse && root.enabled ?
                   (_mouseArea.containsPress ? -0.07 : 0.07) : 0
+    saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
 
     Behavior on saturation {NumberAnimation{}}
     Behavior on brightness {NumberAnimation{}}

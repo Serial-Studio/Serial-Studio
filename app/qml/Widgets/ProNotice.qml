@@ -88,6 +88,7 @@ Rectangle {
 
       Label {
         id: title
+
         text: root.titleText
         Layout.fillWidth: true
         elide: Text.ElideRight
@@ -145,8 +146,8 @@ Rectangle {
           icon.height: 18
           horizontalPadding: 8
           text: qsTr("Activate")
-          onClicked: app.showLicenseDialog()
           visible: Cpp_CommercialBuild
+          onClicked: app.showLicenseDialog()
           icon.source: "qrc:/rcc/icons/buttons/activate.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
         }

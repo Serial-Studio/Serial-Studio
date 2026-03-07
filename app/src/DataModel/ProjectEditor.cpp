@@ -1678,8 +1678,12 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
     m_selectedGroup.title = value.toString();
     pm.updateGroup(groupId, m_selectedGroup);
   } else if (id == kGroupView_Widget) {
-    const auto keys      = m_groupWidgets.keys();
-    const auto widgetStr = keys.at(value.toInt());
+    const auto keys     = m_groupWidgets.keys();
+    const int widgetIdx = value.toInt();
+    if (widgetIdx < 0 || widgetIdx >= keys.size())
+      return;
+
+    const auto widgetStr = keys.at(widgetIdx);
 
     static const QMap<QString, SerialStudio::GroupWidget> kWidgetEnumMap = {
       {"accelerometer", SerialStudio::Accelerometer},
@@ -1762,9 +1766,14 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
     case kActionView_Data:
       m_selectedAction.txData = value.toString();
       break;
-    case kActionView_EOL:
-      m_selectedAction.eolSequence = eolKeys.at(value.toInt());
+    case kActionView_EOL: {
+      const int eolIdx = value.toInt();
+      if (eolIdx < 0 || eolIdx >= eolKeys.size())
+        return;
+
+      m_selectedAction.eolSequence = eolKeys.at(eolIdx);
       break;
+    }
     case kActionView_Icon:
       m_selectedAction.icon = value.toString();
       Q_EMIT actionModelChanged();
@@ -1825,17 +1834,28 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
     case kProjectView_FrameDecoder:
       pm.setDecoderMethod(static_cast<SerialStudio::DecoderMethod>(value.toInt()));
       break;
-    case kProjectView_ChecksumFunction:
-      pm.setChecksumAlgorithm(IO::availableChecksums().at(value.toInt()));
+    case kProjectView_ChecksumFunction: {
+      const auto checksums = IO::availableChecksums();
+      const int checksumId = value.toInt();
+      if (checksumId < 0 || checksumId >= checksums.size())
+        return;
+
+      pm.setChecksumAlgorithm(checksums.at(checksumId));
       break;
+    }
     case kProjectView_HexadecimalSequence:
       pm.setHexadecimalDelimiters(value.toBool());
       buildProjectModel();
       break;
-    case kProjectView_FrameDetection:
-      pm.setFrameDetection(m_frameDetectionMethodsValues.at(value.toInt()));
+    case kProjectView_FrameDetection: {
+      const int detectionIdx = value.toInt();
+      if (detectionIdx < 0 || detectionIdx >= m_frameDetectionMethodsValues.size())
+        return;
+
+      pm.setFrameDetection(m_frameDetectionMethodsValues.at(detectionIdx));
       buildProjectModel();
       break;
+    }
     default:
       break;
   }
@@ -1883,8 +1903,12 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     case kDatasetView_Units:
       m_selectedDataset.units = value.toString();
       break;
-    case kDatasetView_Widget:
-      m_selectedDataset.widget = datasetWidgetKeys.at(value.toInt());
+    case kDatasetView_Widget: {
+      const int widgetIdx = value.toInt();
+      if (widgetIdx < 0 || widgetIdx >= datasetWidgetKeys.size())
+        return;
+
+      m_selectedDataset.widget = datasetWidgetKeys.at(widgetIdx);
       if (m_selectedDataset.widget == "compass") {
         m_selectedDataset.wgtMin    = 0;
         m_selectedDataset.wgtMax    = 360;
@@ -1893,6 +1917,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
       }
       buildDatasetModel(m_selectedDataset);
       break;
+    }
     case kDatasetView_FFT:
       m_selectedDataset.fft = value.toBool();
       buildDatasetModel(m_selectedDataset);
@@ -1907,11 +1932,16 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     case kDatasetView_Overview:
       m_selectedDataset.overviewDisplay = value.toBool();
       break;
-    case kDatasetView_Plot:
-      m_selectedDataset.plt = plotOptionKeys.at(value.toInt()).first;
-      m_selectedDataset.log = plotOptionKeys.at(value.toInt()).second;
+    case kDatasetView_Plot: {
+      const int plotIdx = value.toInt();
+      if (plotIdx < 0 || plotIdx >= plotOptionKeys.size())
+        return;
+
+      m_selectedDataset.plt = plotOptionKeys.at(plotIdx).first;
+      m_selectedDataset.log = plotOptionKeys.at(plotIdx).second;
       buildDatasetModel(m_selectedDataset);
       break;
+    }
     case kDatasetView_xAxis:
       m_selectedDataset.xAxisId = value.toInt();
       break;
@@ -1943,9 +1973,14 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
       m_selectedDataset.alarmEnabled = value.toBool();
       buildDatasetModel(m_selectedDataset);
       break;
-    case kDatasetView_FFT_Samples:
-      m_selectedDataset.fftSamples = m_fftSamples.at(value.toInt()).toInt();
+    case kDatasetView_FFT_Samples: {
+      const int sampleIdx = value.toInt();
+      if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())
+        return;
+
+      m_selectedDataset.fftSamples = m_fftSamples.at(sampleIdx).toInt();
       break;
+    }
     case kDatasetView_FFT_SamplingRate:
       m_selectedDataset.fftSamplingRate = value.toInt();
       break;

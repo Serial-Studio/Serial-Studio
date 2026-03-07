@@ -723,7 +723,7 @@ void UI::WindowManager::bringToFront(QQuickItem* item)
  */
 void UI::WindowManager::setTaskbar(QQuickItem* taskbar)
 {
-  m_taskbar = static_cast<UI::Taskbar*>(taskbar);
+  m_taskbar = qobject_cast<UI::Taskbar*>(taskbar);
 }
 
 /**
@@ -1376,7 +1376,9 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
   // Find the topmost window under the mouse
   m_focusedWindow = getWindow(m_initialMousePos.x(), m_initialMousePos.y());
   if (!m_focusedWindow) {
-    m_taskbar->setActiveWindow(nullptr);
+    if (m_taskbar)
+      m_taskbar->setActiveWindow(nullptr);
+
     if (event->button() == Qt::RightButton)
       Q_EMIT rightClicked(m_initialMousePos.x(), m_initialMousePos.y());
 

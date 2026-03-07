@@ -38,6 +38,7 @@ Widgets.SmartDialog {
   //
   contentItem: ColumnLayout {
     id: layout
+
     spacing: 12
     anchors.centerIn: parent
 
@@ -46,6 +47,7 @@ Widgets.SmartDialog {
     //
     TabBar {
       id: _tab
+
       implicitHeight: 24
       Layout.fillWidth: true
 
@@ -73,6 +75,7 @@ Widgets.SmartDialog {
     //
     StackLayout {
       id: stack
+
       clip: true
       Layout.fillWidth: true
       Layout.minimumWidth: 480
@@ -89,6 +92,7 @@ Widgets.SmartDialog {
       //
       Item {
         id: generalTab
+
         Layout.fillWidth: true
         Layout.fillHeight: true
         implicitHeight: generalLayout.implicitHeight + 16
@@ -97,12 +101,13 @@ Widgets.SmartDialog {
           radius: 2
           border.width: 1
           anchors.fill: parent
-          color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
+          color: Cpp_ThemeManager.colors["groupbox_background"]
         }
 
         GridLayout {
           id: generalLayout
+
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
@@ -150,6 +155,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             id: _themeCombo
+
             Layout.fillWidth: true
             currentIndex: Cpp_ThemeManager.theme
             model: Cpp_ThemeManager.availableThemes
@@ -202,9 +208,9 @@ Widgets.SmartDialog {
               Layout.maximumWidth: 24
               Layout.maximumHeight: 24
               Layout.alignment: Qt.AlignVCenter
-              icon.source: "qrc:/rcc/icons/buttons/open.svg"
               onClicked: Cpp_Misc_WorkspaceManager.selectPath()
               icon.color: Cpp_ThemeManager.colors["button_text"]
+              icon.source: "qrc:/rcc/icons/buttons/open.svg"
             }
           }
 
@@ -247,6 +253,7 @@ Widgets.SmartDialog {
             text: qsTr("Enable API Server (Port 7777)")
           } Switch {
             id: _apiServer
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             checked: Cpp_API_Server.enabled
@@ -258,15 +265,15 @@ Widgets.SmartDialog {
           }
 
           Label {
-            opacity: enabled ? 1 : 0.5
             enabled: _apiServer.checked
+            opacity: enabled ? 1 : 0.5
             color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Allow External API Connections")
           } Switch {
             Layout.rightMargin: -8
-            Layout.alignment: Qt.AlignRight
             opacity: enabled ? 1 : 0.5
             enabled: _apiServer.checked
+            Layout.alignment: Qt.AlignRight
             checked: Cpp_API_Server.externalConnections
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
             onCheckedChanged: {
@@ -280,6 +287,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _autoHideToolbar
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             checked: Cpp_UI_Dashboard.autoHideToolbar
@@ -318,6 +326,7 @@ Widgets.SmartDialog {
       //
       Item {
         id: dashboardTab
+
         Layout.fillWidth: true
         Layout.fillHeight: true
         implicitHeight: dashboardLayout.implicitHeight + 16
@@ -326,12 +335,13 @@ Widgets.SmartDialog {
           radius: 2
           border.width: 1
           anchors.fill: parent
-          color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
+          color: Cpp_ThemeManager.colors["groupbox_background"]
         }
 
         GridLayout {
           id: dashboardLayout
+
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
@@ -363,6 +373,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
             id: _points
+
             from: 1
             to: 1e6
             editable: true
@@ -379,6 +390,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
             id: _refreshRate
+
             from: 1
             to: 240
             editable: true
@@ -415,6 +427,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             id: _widgetFontFamily
+
             Layout.fillWidth: true
             model: Cpp_Misc_CommonFonts.availableFonts
             currentIndex: Cpp_Misc_CommonFonts.widgetFontIndex
@@ -433,6 +446,7 @@ Widgets.SmartDialog {
 
             ComboBox {
               id: _widgetSizePreset
+
               Layout.fillWidth: true
               model: [qsTr("Small"), qsTr("Normal"), qsTr("Large"), qsTr("Extra Large"), qsTr("Custom")]
 
@@ -459,6 +473,7 @@ Widgets.SmartDialog {
 
             SpinBox {
               id: _widgetFontCustom
+
               from: 50
               to: 300
               editable: true
@@ -499,6 +514,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _actionsPanel
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             checked: Cpp_UI_Dashboard.showActionPanel
@@ -514,6 +530,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _taskbarButtons
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             checked: Cpp_UI_Dashboard.showTaskbarButtons
@@ -554,11 +571,12 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: _saveImages
+
             Layout.rightMargin: -8
             visible: Cpp_CommercialBuild
             Layout.alignment: Qt.AlignRight
-            checked: Cpp_CommercialBuild && Cpp_Image_Export.exportEnabled
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            checked: Cpp_CommercialBuild && Cpp_Image_Export.exportEnabled
             onCheckedChanged: {
               if (Cpp_CommercialBuild && checked !== Cpp_Image_Export.exportEnabled)
                 Cpp_Image_Export.exportEnabled = checked
@@ -575,6 +593,7 @@ Widgets.SmartDialog {
       //
       Item {
         id: consoleTab
+
         Layout.fillWidth: true
         Layout.fillHeight: true
         implicitHeight: consoleLayout.implicitHeight + 16
@@ -583,12 +602,13 @@ Widgets.SmartDialog {
           radius: 2
           border.width: 1
           anchors.fill: parent
-          color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
+          color: Cpp_ThemeManager.colors["groupbox_background"]
         }
 
         GridLayout {
           id: consoleLayout
+
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
@@ -633,6 +653,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
             id: _consoleFontFamily
+
             Layout.fillWidth: true
             model: Cpp_Console_Handler.availableFonts
             currentIndex: Cpp_Console_Handler.fontFamilyIndex
@@ -647,6 +668,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } SpinBox {
             id: _consoleFontSize
+
             from: 6
             to: 72
             editable: true
@@ -767,16 +789,17 @@ Widgets.SmartDialog {
 
           Label {
             text: qsTr("VT100 Emulation")
-            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : 1
             color: Cpp_ThemeManager.colors["text"]
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : 1
           } Switch {
             id: _vt100Emulation
+
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
-            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : 1
-            enabled: !Cpp_Console_Handler.imageWidgetActive
             checked: Cpp_Console_Handler.vt100Emulation
+            enabled: !Cpp_Console_Handler.imageWidgetActive
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : 1
             onCheckedChanged: {
               if (checked !== Cpp_Console_Handler.vt100Emulation)
                 Cpp_Console_Handler.vt100Emulation = checked
@@ -785,16 +808,16 @@ Widgets.SmartDialog {
 
           Label {
             text: qsTr("ANSI Colors")
-            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
             enabled: _vt100Emulation.checked
             color: Cpp_ThemeManager.colors["text"]
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
           } Switch {
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
-            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
-            enabled: _vt100Emulation.checked && !Cpp_Console_Handler.imageWidgetActive
             checked: Cpp_Console_Handler.ansiColors
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            enabled: _vt100Emulation.checked && !Cpp_Console_Handler.imageWidgetActive
+            opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
             onCheckedChanged: {
               if (checked !== Cpp_Console_Handler.ansiColors)
                 Cpp_Console_Handler.ansiColors = checked
@@ -817,12 +840,12 @@ Widgets.SmartDialog {
       Button {
         icon.width: 18
         icon.height: 18
-        text: qsTr("Reset")
         horizontalPadding: 8
+        text: qsTr("Reset")
         opacity: enabled ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
+        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
         onClicked: {
           Cpp_ThemeManager.theme = 0
           Cpp_UI_Dashboard.points = 100
@@ -856,23 +879,23 @@ Widgets.SmartDialog {
       Button {
         icon.width: 18
         icon.height: 18
-        text: qsTr("Close")
         horizontalPadding: 8
+        text: qsTr("Close")
         onClicked: root.hide()
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
+        icon.source: "qrc:/rcc/icons/buttons/close.svg"
       }
 
       Button {
         icon.width: 18
         icon.height: 18
-        text: qsTr("Apply")
         horizontalPadding: 8
+        text: qsTr("Apply")
         onClicked: root.hide()
         Layout.alignment: Qt.AlignVCenter
-        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
+        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
       }
     }
   }

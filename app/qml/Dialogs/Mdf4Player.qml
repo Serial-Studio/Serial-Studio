@@ -48,6 +48,7 @@ SmartDialog {
   //
   contentItem: ColumnLayout {
     id: column
+
     spacing: 4
     anchors.centerIn: parent
 

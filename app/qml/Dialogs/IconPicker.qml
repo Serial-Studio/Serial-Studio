@@ -53,8 +53,8 @@ SmartDialog {
       implicitHeight: 480
       Layout.fillWidth: true
       Layout.fillHeight: true
-      color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: Cpp_ThemeManager.colors["groupbox_border"]
+      color: Cpp_ThemeManager.colors["groupbox_background"]
 
       GridView {
         clip: true
@@ -62,8 +62,8 @@ SmartDialog {
         cellHeight: 48
         anchors.margins: 4
         anchors.fill: parent
-        model: Cpp_JSON_ProjectEditor.availableActionIcons
         ScrollBar.vertical: ScrollBar {}
+        model: Cpp_JSON_ProjectEditor.availableActionIcons
 
         delegate: Item {
           width: 48

@@ -242,6 +242,7 @@ Item {
   //
   Rectangle {
     id: _shadowSrc
+
     visible: false
     radius: root.radius
     anchors.fill: parent
@@ -252,8 +253,8 @@ Item {
   // Window shadow effect
   //
   MultiEffect {
-    anchors.fill: _shadowSrc
     source: _shadowSrc
+    anchors.fill: _shadowSrc
 
     // Blur config
     blurEnabled: true
@@ -275,9 +276,10 @@ Item {
   //
   Rectangle {
     id: _bg
+
     clip: true
-    anchors.fill: parent
     radius: defaultRadius
+    anchors.fill: parent
 
     //
     // Window caption background
@@ -355,6 +357,7 @@ Item {
     //
     Item {
       id: _caption
+
       visible: root.headerVisible
       height: visible ? root.captionHeight : 0
 
@@ -369,6 +372,7 @@ Item {
       //
       Controls.ToolButton {
         id: expandBt
+
         flat: true
         icon.width: 18
         icon.height: 18
@@ -385,6 +389,7 @@ Item {
 
         MouseArea {
           id: externalWinBt
+
           anchors.fill: parent
           onClicked: root.externalWindowClicked()
         }
@@ -401,6 +406,7 @@ Item {
 
         Controls.Label {
           id: _title
+
           text: root.title
           elide: Qt.ElideRight
           Layout.fillWidth: true
@@ -423,6 +429,7 @@ Item {
 
           MouseArea {
             id: minBtMa
+
             anchors.fill: parent
             onClicked: root.minimizeClicked()
           }
@@ -430,10 +437,6 @@ Item {
 
         Controls.ToolButton {
           flat: true
-          background: Item {}
-          Layout.alignment: Qt.AlignVCenter
-          icon.width: root.captionHeight / 2
-          icon.height: root.captionHeight / 2
           onClicked: {
             if (root.state === "maximized")
               root.restoreClicked()
@@ -441,6 +444,10 @@ Item {
             else
               root.maximizeClicked()
           }
+          background: Item {}
+          Layout.alignment: Qt.AlignVCenter
+          icon.width: root.captionHeight / 2
+          icon.height: root.captionHeight / 2
 
           icon.color: _title.color
           icon.source: root.state === "maximized" ? "qrc:/rcc/icons/miniwindow/restore.svg" :
@@ -448,6 +455,7 @@ Item {
 
           MouseArea {
             id: maxBtMa
+
             anchors.fill: parent
             onClicked: {
               if (root.state === "maximized")
@@ -471,6 +479,7 @@ Item {
 
           MouseArea {
             id: closeBtMa
+
             anchors.fill: parent
             onClicked: root.closeClicked()
           }
@@ -487,6 +496,7 @@ Item {
     //
     Rectangle {
       id: _toolbar
+
       visible: root.hasToolbar
       height: visible ? 48 : 0
       color: Cpp_ThemeManager.colors["window_toolbar_background"]

@@ -191,15 +191,15 @@ Window {
 
     ColumnLayout {
       spacing: 4
-      anchors.fill: parent
       anchors.margins: 16
+      anchors.fill: parent
 
       Label {
-        text: qsTr("Select a running process to derive a named-pipe path suggestion.")
+        opacity: 0.7
+        color: palette.text
         wrapMode: Text.WordWrap
         Layout.fillWidth: true
-        color: palette.text
-        opacity: 0.7
+        text: qsTr("Select a running process to derive a named-pipe path suggestion.")
       }
 
       Item { implicitHeight: 4 }
@@ -217,6 +217,7 @@ Window {
 
         TextField {
           id: filterField
+
           Layout.fillWidth: true
           placeholderText: qsTr("Type to filter by name…")
         }
@@ -249,34 +250,34 @@ Window {
 
         ColumnLayout {
           spacing: 0
-          anchors.fill: parent
           anchors.margins: -7
+          anchors.fill: parent
 
           //
           // Header row
           //
           Rectangle {
-            Layout.fillWidth: true
             height: 32
+            Layout.fillWidth: true
             color: palette.alternateBase
 
             RowLayout {
+              spacing: 8
               anchors.fill: parent
               anchors.leftMargin: 8
               anchors.rightMargin: 8
-              spacing: 8
 
               Label {
-                text: qsTr("Process")
                 font.bold: true
                 color: palette.text
+                text: qsTr("Process")
                 Layout.fillWidth: true
               }
 
               Label {
-                text: qsTr("PID")
                 font.bold: true
                 color: palette.text
+                text: qsTr("PID")
                 Layout.preferredWidth: 60
               }
             }
@@ -290,17 +291,18 @@ Window {
 
           ListView {
             id: processList
+
             clip: true
+            currentIndex: -1
+            model: filteredModel
             Layout.fillWidth: true
             Layout.fillHeight: true
-            model: filteredModel
-            currentIndex: -1
 
             ScrollBar.vertical: ScrollBar {}
 
             delegate: Rectangle {
-              width: ListView.view.width
               height: 32
+              width: ListView.view.width
               color: processList.currentIndex === index
                      ? palette.highlight
                      : (index % 2 === 0 ? "transparent" : palette.alternateBase)
@@ -333,8 +335,8 @@ Window {
                   color: processList.currentIndex === index
                          ? palette.highlightedText
                          : palette.text
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
                   opacity: 0.7
+                  font.family: Cpp_Misc_CommonFonts.monoFont.family
 
                   // Show only the PID part inside "[ ]"
                   text: {
@@ -384,8 +386,8 @@ Window {
 
         Button {
           text: qsTr("Select")
-          enabled: processList.currentIndex >= 0
           onClicked: root.confirmSelection()
+          enabled: processList.currentIndex >= 0
         }
 
         Button {

@@ -106,8 +106,9 @@ DropArea {
     border.color: Cpp_ThemeManager.colors["text"]
 
     ColumnLayout {
-      spacing: 16
       id: dropLayout
+
+      spacing: 16
       anchors.centerIn: parent
 
       Image {
@@ -126,6 +127,7 @@ DropArea {
 
     Timer {
       id: rectTimer
+
       interval: 200
       repeat: false
       onTriggered: dropRectangle.opacity = 0

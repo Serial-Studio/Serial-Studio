@@ -25,6 +25,7 @@ import QtQuick.Controls
 
 Item {
   id: root
+
   implicitHeight: layout.implicitHeight
 
   //
@@ -32,6 +33,7 @@ Item {
   //
   ColumnLayout {
     id: layout
+
     spacing: 4
     anchors.margins: 0
     anchors.fill: parent
@@ -46,8 +48,9 @@ Item {
 
       Label {
         id: devLabel
-        opacity: enabled ? 1 : 0.5
+
         text: qsTr("Device") + ":"
+        opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
         Layout.minimumWidth: Math.max(devLabel.implicitWidth,
                                       servLabel.implicitWidth,
@@ -56,6 +59,7 @@ Item {
 
       ComboBox {
         id: _deviceCombo
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
@@ -89,6 +93,7 @@ Item {
 
       Label {
         id: servLabel
+
         text: qsTr("Service") + ":"
         Layout.minimumWidth: Math.max(devLabel.implicitWidth,
                                       servLabel.implicitWidth,
@@ -97,6 +102,7 @@ Item {
 
       ComboBox {
         id: serviceNames
+
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.serviceNames
         onCurrentIndexChanged: Cpp_IO_Bluetooth_LE.selectService(currentIndex)
@@ -115,6 +121,7 @@ Item {
 
       Label {
         id: charLabel
+
         text: qsTr("Characteristic") + ":"
         Layout.minimumWidth: Math.max(devLabel.implicitWidth,
                                       servLabel.implicitWidth,
@@ -123,6 +130,7 @@ Item {
 
       ComboBox {
         id: characteristicNames
+
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.characteristicNames
         currentIndex: Cpp_IO_Bluetooth_LE.characteristicIndex
@@ -145,6 +153,7 @@ Item {
 
       Image {
         id: spinner
+
         visible: running
         sourceSize: Qt.size(18, 18)
         Layout.alignment: Qt.AlignVCenter
@@ -205,8 +214,8 @@ Item {
     Label {
       wrapMode: Label.WordWrap
       Layout.alignment: Qt.AlignHCenter
-      horizontalAlignment: Label.AlignHCenter
       Layout.maximumWidth: root.width - 64
+      horizontalAlignment: Label.AlignHCenter
       text: qsTr("No Bluetooth Adapter Detected")
       font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
     }
@@ -243,8 +252,8 @@ Item {
     Label {
       wrapMode: Label.WordWrap
       Layout.alignment: Qt.AlignHCenter
-      horizontalAlignment: Label.AlignHCenter
       Layout.maximumWidth: root.width - 64
+      horizontalAlignment: Label.AlignHCenter
       text: qsTr("This OS is not Supported Yet.")
       font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
     }

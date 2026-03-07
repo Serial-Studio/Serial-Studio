@@ -27,11 +27,13 @@ import QtQuick.Controls
 
 Item {
   id: root
+
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
   GridLayout {
     id: layout
+
     columns: 2
     rowSpacing: 4
     columnSpacing: 4
@@ -47,6 +49,7 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: deviceCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_HID.deviceList
@@ -76,8 +79,8 @@ Item {
       visible: Cpp_IO_Manager.isConnected
     } TextField {
       readOnly: true
-      Layout.fillWidth: true
       opacity: 0.8
+      Layout.fillWidth: true
       text: Cpp_IO_HID.usagePage
       visible: Cpp_IO_Manager.isConnected
       font.family: Cpp_Misc_CommonFonts.monoFont.family
@@ -92,8 +95,8 @@ Item {
       visible: Cpp_IO_Manager.isConnected
     } TextField {
       readOnly: true
-      Layout.fillWidth: true
       opacity: 0.8
+      Layout.fillWidth: true
       text: Cpp_IO_HID.usage
       visible: Cpp_IO_Manager.isConnected
       font.family: Cpp_Misc_CommonFonts.monoFont.family
@@ -126,8 +129,8 @@ Item {
 
         Label {
           opacity: 0.75
-          wrapMode: Label.WordWrap
           Layout.fillWidth: true
+          wrapMode: Label.WordWrap
           font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
           text: qsTr("Connect gamepads, joysticks, steering wheels, "
                    + "flight controllers, and other HID-class USB devices.")

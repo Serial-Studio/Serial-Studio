@@ -39,7 +39,7 @@ void API::Handlers::LicensingHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("licenseKey")] = QJsonObject{
-      {       QStringLiteral("type"),       QStringLiteral("string")},
+      {       QStringLiteral("type"),           QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("License key UUID")}
     };
     QJsonObject schema;
@@ -52,15 +52,13 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &setLicense);
   }
 
-  registry.registerCommand(
-    QStringLiteral("licensing.activate"),
-    QStringLiteral("Activate the stored license key against the server"),
-    &activate);
+  registry.registerCommand(QStringLiteral("licensing.activate"),
+                           QStringLiteral("Activate the stored license key against the server"),
+                           &activate);
 
-  registry.registerCommand(
-    QStringLiteral("licensing.deactivate"),
-    QStringLiteral("Deactivate the license on this machine, freeing a seat"),
-    &deactivate);
+  registry.registerCommand(QStringLiteral("licensing.deactivate"),
+                           QStringLiteral("Deactivate the license on this machine, freeing a seat"),
+                           &deactivate);
 
   registry.registerCommand(QStringLiteral("licensing.validate"),
                            QStringLiteral("Re-validate the current license with the server"),
@@ -84,7 +82,7 @@ void API::Handlers::LicensingHandler::registerCommands()
 //--------------------------------------------------------------------------------------------------
 
 API::CommandResponse API::Handlers::LicensingHandler::setLicense(const QString& id,
-                                                                  const QJsonObject& params)
+                                                                 const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("licenseKey"))) {
     return CommandResponse::makeError(
@@ -117,7 +115,7 @@ API::CommandResponse API::Handlers::LicensingHandler::activate(const QString& id
 }
 
 API::CommandResponse API::Handlers::LicensingHandler::deactivate(const QString& id,
-                                                                  const QJsonObject&)
+                                                                 const QJsonObject&)
 {
   auto& ls = Licensing::LemonSqueezy::instance();
 
@@ -150,7 +148,7 @@ API::CommandResponse API::Handlers::LicensingHandler::validate(const QString& id
 }
 
 API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& id,
-                                                                 const QJsonObject&)
+                                                                const QJsonObject&)
 {
   const auto& ls = Licensing::LemonSqueezy::instance();
 
@@ -172,29 +170,30 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
 }
 
 API::CommandResponse API::Handlers::LicensingHandler::trialGetStatus(const QString& id,
-                                                                      const QJsonObject&)
+                                                                     const QJsonObject&)
 {
   const auto& trial = Licensing::Trial::instance();
 
   QJsonObject result;
-  result[QStringLiteral("busy")]          = trial.busy();
-  result[QStringLiteral("firstRun")]      = trial.firstRun();
-  result[QStringLiteral("trialEnabled")]  = trial.trialEnabled();
-  result[QStringLiteral("trialExpired")]  = trial.trialExpired();
+  result[QStringLiteral("busy")]           = trial.busy();
+  result[QStringLiteral("firstRun")]       = trial.firstRun();
+  result[QStringLiteral("trialEnabled")]   = trial.trialEnabled();
+  result[QStringLiteral("trialExpired")]   = trial.trialExpired();
   result[QStringLiteral("trialAvailable")] = trial.trialAvailable();
-  result[QStringLiteral("daysRemaining")] = trial.daysRemaining();
+  result[QStringLiteral("daysRemaining")]  = trial.daysRemaining();
 
   return CommandResponse::makeSuccess(id, result);
 }
 
 API::CommandResponse API::Handlers::LicensingHandler::trialEnable(const QString& id,
-                                                                   const QJsonObject&)
+                                                                  const QJsonObject&)
 {
   auto& trial = Licensing::Trial::instance();
 
   if (!trial.trialAvailable()) {
     return CommandResponse::makeError(
-      id, ErrorCode::ExecutionError,
+      id,
+      ErrorCode::ExecutionError,
       QStringLiteral("Trial is not available (license already active or trial already used)"));
   }
 

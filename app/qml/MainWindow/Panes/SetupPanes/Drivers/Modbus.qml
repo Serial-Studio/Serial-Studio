@@ -27,11 +27,13 @@ import QtQuick.Controls
 
 Item {
   id: root
+
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
   GridLayout {
     id: layout
+
     columns: 2
     rowSpacing: 4
     columnSpacing: 4
@@ -47,6 +49,7 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: _protocolCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.protocolList
@@ -70,6 +73,7 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       id: _serialPortCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.serialPortList
@@ -94,6 +98,7 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       id: _baudRateCombo
+
       editable: true
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
@@ -188,8 +193,8 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.parityList
       enabled: !Cpp_IO_Manager.isConnected
-      visible: Cpp_IO_Modbus.protocolIndex === 0
       currentIndex: Cpp_IO_Modbus.parityIndex
+      visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
         if (enabled) {
           if (currentIndex !== Cpp_IO_Modbus.parityIndex)
@@ -211,8 +216,8 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.dataBitsList
       enabled: !Cpp_IO_Manager.isConnected
-      visible: Cpp_IO_Modbus.protocolIndex === 0
       currentIndex: Cpp_IO_Modbus.dataBitsIndex
+      visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
         if (enabled) {
           if (currentIndex !== Cpp_IO_Modbus.dataBitsIndex)
@@ -234,8 +239,8 @@ Item {
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.stopBitsList
       enabled: !Cpp_IO_Manager.isConnected
-      visible: Cpp_IO_Modbus.protocolIndex === 0
       currentIndex: Cpp_IO_Modbus.stopBitsIndex
+      visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
         if (enabled) {
           if (currentIndex !== Cpp_IO_Modbus.stopBitsIndex)
@@ -254,11 +259,12 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } TextField {
       id: _hostField
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
+      placeholderText: qsTr("IP Address")
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 1
-      placeholderText: qsTr("IP Address")
       Component.onCompleted: text = Cpp_IO_Modbus.host
 
       onEditingFinished: {
@@ -277,11 +283,12 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } TextField {
       id: _portField
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
+      placeholderText: qsTr("TCP Port")
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 1
-      placeholderText: qsTr("TCP Port")
       validator: IntValidator { bottom: 1; top: 65535 }
       Component.onCompleted: text = Cpp_IO_Modbus.port
 
@@ -310,6 +317,7 @@ Item {
       text: qsTr("Slave Address") + ":"
     } TextField {
       id: _slaveField
+
       Layout.fillWidth: true
       placeholderText: qsTr("1-247")
       validator: IntValidator { bottom: 1; top: 247 }
@@ -329,6 +337,7 @@ Item {
       text: qsTr("Poll Interval (ms)") + ":"
     } TextField {
       id: _intervalField
+
       Layout.fillWidth: true
       placeholderText: qsTr("Polling interval")
       validator: IntValidator { bottom: 50; top: 60000 }
@@ -352,19 +361,21 @@ Item {
 
       Button {
         id: _groupButton
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        text: qsTr("Configure Register Groups...")
         onClicked: _groupsDialog.show()
+        text: qsTr("Configure Register Groups...")
       }
 
       Label {
         id: _groupStatus
-        anchors.top: _groupButton.bottom
+
+        anchors.topMargin: 4
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: 4
+        anchors.top: _groupButton.bottom
         text: Cpp_IO_Modbus.registerGroupCount > 0 ?
                 qsTr("%1 group(s) configured").arg(Cpp_IO_Modbus.registerGroupCount) :
                 qsTr("No groups configured")

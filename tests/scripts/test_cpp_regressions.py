@@ -83,28 +83,25 @@ def test_api_server_enabled_state_tracks_listen_failure():
 
 
 def test_mcp_schema_matches_registered_command_names():
-    text = _read("app/src/API/MCPHandler.cpp")
+    network = _read("app/src/API/Handlers/NetworkHandler.cpp")
+    project = _read("app/src/API/Handlers/ProjectHandler.cpp")
+    csv = _read("app/src/API/Handlers/CSVExportHandler.cpp")
+    uart = _read("app/src/API/Handlers/UARTHandler.cpp")
 
-    for expected in [
-        'name == QStringLiteral("io.driver.network.setRemoteAddress")',
-        'name == QStringLiteral("io.driver.network.setUdpMulticast")',
-        'name == QStringLiteral("project.file.open")',
-        'name == QStringLiteral("csv.export.setEnabled")',
-        'properties[QStringLiteral("dataBitsIndex")]',
-        'properties[QStringLiteral("parityIndex")]',
-        'properties[QStringLiteral("stopBitsIndex")]',
-        'properties[QStringLiteral("socketTypeIndex")]',
-        'properties[QStringLiteral("address")]',
-    ]:
-        assert expected in text
+    assert 'QStringLiteral("io.driver.network.setRemoteAddress")' in network
+    assert 'QStringLiteral("io.driver.network.setUdpMulticast")' in network
+    assert 'QStringLiteral("project.file.open")' in project
+    assert 'QStringLiteral("csv.export.setEnabled")' in csv
+    assert 'QStringLiteral("dataBitsIndex")' in uart
+    assert 'QStringLiteral("parityIndex")' in uart
+    assert 'QStringLiteral("stopBitsIndex")' in uart
+    assert 'QStringLiteral("socketTypeIndex")' in network
+    assert 'QStringLiteral("address")' in network
 
-    for obsolete in [
-        'name == QStringLiteral("io.driver.network.setTcpHost")',
-        'name == QStringLiteral("io.driver.network.setUdpMulticastEnabled")',
-        'name == QStringLiteral("project.openFromFile")',
-        'name == QStringLiteral("csv.export.start")',
-    ]:
-        assert obsolete not in text
+    assert 'QStringLiteral("io.driver.network.setTcpHost")' not in network
+    assert 'QStringLiteral("io.driver.network.setUdpMulticastEnabled")' not in network
+    assert 'QStringLiteral("project.openFromFile")' not in project
+    assert 'QStringLiteral("csv.export.start")' not in csv
 
 
 def test_declarative_widget_avoids_unsafe_table_cast():
@@ -112,3 +109,63 @@ def test_declarative_widget_avoids_unsafe_table_cast():
 
     assert "tableView->doItemsLayout();" in text
     assert "reinterpret_cast<PwnedWidget*>" not in text
+
+
+def test_ble_characteristic_path_guards_index_before_at():
+    text = _read("app/src/IO/Drivers/BluetoothLE.cpp")
+
+    assert "if (m_selectedCharacteristic == -1)" in text
+    assert "m_selectedCharacteristic < m_characteristics.count()" in text
+
+
+def test_macos_native_window_validates_qwindow_before_winid():
+    text = _read("app/src/Platform/NativeWindow_macOS.mm")
+
+    assert "if (!win)" in text
+    assert "if (!view)" in text
+
+
+def test_hotpath_byte_array_ptrs_are_null_guarded():
+    frame_reader = _read("app/src/IO/FrameReader.cpp")
+    server = _read("app/src/API/Server.cpp")
+    console = _read("app/src/Console/Handler.cpp")
+
+    assert "if (!data || data->isEmpty() || IO::Manager::instance().paused())" in frame_reader
+    assert "if (!data || data->isEmpty() || m_sockets.isEmpty())" in server
+    assert "if (!data)" in console
+
+
+def test_window_manager_taskbar_access_is_guarded():
+    text = _read("app/src/UI/WindowManager.cpp")
+
+    assert "m_taskbar = qobject_cast<UI::Taskbar*>(taskbar);" in text
+    assert "if (m_taskbar)\n      m_taskbar->setActiveWindow(nullptr);" in text
+
+
+def test_usb_close_forces_thread_stop_before_handle_close():
+    text = _read("app/src/IO/Drivers/USB.cpp")
+
+    assert "if (m_readThread.isRunning() && !m_readThread.wait(500))" in text
+    assert "m_readThread.terminate();" in text
+
+
+def test_frame_parser_uses_qcoreapplication_event_forwarding():
+    text = _read("app/src/DataModel/FrameParser.cpp")
+
+    assert "QCoreApplication::sendEvent(&m_widget, event);" in text
+    assert "DW_EXEC_EVENT" not in text
+
+
+def test_project_editor_bounds_checks_combo_indices():
+    text = _read("app/src/DataModel/ProjectEditor.cpp")
+
+    for expected in [
+        "if (widgetIdx < 0 || widgetIdx >= keys.size())",
+        "if (eolIdx < 0 || eolIdx >= eolKeys.size())",
+        "if (checksumId < 0 || checksumId >= checksums.size())",
+        "if (detectionIdx < 0 || detectionIdx >= m_frameDetectionMethodsValues.size())",
+        "if (widgetIdx < 0 || widgetIdx >= datasetWidgetKeys.size())",
+        "if (plotIdx < 0 || plotIdx >= plotOptionKeys.size())",
+        "if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())",
+    ]:
+        assert expected in text

@@ -27,6 +27,7 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
+
   implicitWidth: 0
   implicitHeight: 0
   icon: Cpp_JSON_ProjectEditor.selectedIcon
@@ -61,8 +62,8 @@ Widgets.Pane {
 
     anchors {
       fill: parent
-      topMargin: -16
       leftMargin: -9
+      topMargin: -16
       rightMargin: -9
       bottomMargin: -10
     }
@@ -83,6 +84,7 @@ Widgets.Pane {
 
       ScrollView {
         id: view
+
         contentWidth: width
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -91,6 +93,7 @@ Widgets.Pane {
 
         TableDelegate {
           id: delegate
+
           width: parent.width
           headerVisible: false
           parameterWidth: Math.min(delegate.width * 0.3, 256)

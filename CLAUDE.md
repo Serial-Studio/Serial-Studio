@@ -213,6 +213,31 @@ return/continue and the intent is visually obvious from context.
 ❌ `if (ok) { if (valid) { if (!empty) { doWork(); } } }`
 ✅ `if (!ok || !valid || empty) return; doWork();`
 
+### QML Property Order — Christmas Tree
+
+Within each QML object, order properties shortest line first, longest line last (the "Christmas tree" principle). `id` is always first, separated from the remaining properties by a blank line.
+
+❌ Bad:
+```qml
+Rectangle {
+  anchors.fill: parent
+  id: myRect
+  color: "red"
+  width: 10
+}
+```
+
+✅ Good:
+```qml
+Rectangle {
+  id: myRect
+
+  width: 10
+  color: "red"
+  anchors.fill: parent
+}
+```
+
 ### QML Bindings
 
 **`Q_INVOKABLE` functions with arguments are not reactive in QML bindings.** When a binding

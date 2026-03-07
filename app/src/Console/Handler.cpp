@@ -537,10 +537,13 @@ void Console::Handler::send(const QString& data)
   }
 
   // Add checksum
-  const auto checksumName = IO::availableChecksums().at(m_checksumMethod);
-  auto checksum           = IO::checksum(checksumName, bin);
-  if (!checksum.isEmpty())
-    bin.append(checksum);
+  const auto checksums = IO::availableChecksums();
+  if (m_checksumMethod >= 0 && m_checksumMethod < checksums.count()) {
+    const auto checksumName = checksums.at(m_checksumMethod);
+    auto checksum           = IO::checksum(checksumName, bin);
+    if (!checksum.isEmpty())
+      bin.append(checksum);
+  }
 
   // Write data to device
   if (!bin.isEmpty())
@@ -797,6 +800,9 @@ void Console::Handler::displayDebugData(const QString& data)
  */
 void Console::Handler::hotpathRxData(const IO::ByteArrayPtr& data)
 {
+  if (!data)
+    return;
+
   append(dataToString(*data), showTimestamp());
 }
 

@@ -29,6 +29,7 @@ import "../../Widgets" as Widgets
 
 Rectangle {
   id: root
+
   implicitWidth: (layout.implicitWidth + 32)
 
   //
@@ -70,38 +71,38 @@ Rectangle {
   // Top toolbar section
   //
   Rectangle {
-    height: root.titlebarHeight
-    color: Cpp_ThemeManager.colors["toolbar_top"]
-
-    Behavior on color {
-      ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
-    }
-
     anchors {
       top: parent.top
       left: parent.left
       right: parent.right
     }
+
+    Behavior on color {
+      ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
+    }
+
+    height: root.titlebarHeight
+    color: Cpp_ThemeManager.colors["toolbar_top"]
   }
 
   //
   // Titlebar text
   //
   Label {
-    text: mainWindow.title
-    visible: root.titlebarHeight > 0
-    color: Cpp_ThemeManager.colors["titlebar_text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
-
-    Behavior on color {
-      ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
-    }
-
     anchors {
       topMargin: 6
       top: parent.top
       horizontalCenter: parent.horizontalCenter
     }
+
+    Behavior on color {
+      ColorAnimation { duration: 250; easing.type: Easing.OutCubic }
+    }
+
+    text: mainWindow.title
+    visible: root.titlebarHeight > 0
+    color: Cpp_ThemeManager.colors["titlebar_text"]
+    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
   }
 
   //
@@ -109,7 +110,6 @@ Rectangle {
   //
   Rectangle {
     anchors.fill: parent
-    anchors.topMargin: root.titlebarHeight
     gradient: Gradient {
       GradientStop {
         position: 0
@@ -129,20 +129,22 @@ Rectangle {
         }
       }
     }
+
+    anchors.topMargin: root.titlebarHeight
   }
 
   //
   // Toolbar border
   //
   Rectangle {
-    height: 1
-    color: Cpp_ThemeManager.colors["toolbar_border"]
-
     anchors {
       left: parent.left
       right: parent.right
       bottom: parent.bottom
     }
+
+    height: 1
+    color: Cpp_ThemeManager.colors["toolbar_border"]
   }
 
   //
@@ -161,17 +163,19 @@ Rectangle {
   //
   RowLayout {
     id: layout
+
     spacing: 4
     visible: root.showContent
     enabled: root.showContent
 
-    opacity: root.showContent ? 1 : 0
     Behavior on opacity {
       NumberAnimation {
         duration: 200
         easing.type: Easing.InOutQuad
       }
     }
+
+    opacity: root.showContent ? 1 : 0
 
     anchors {
       margins: 2
@@ -233,8 +237,8 @@ Rectangle {
         Layout.alignment: Qt.AlignLeft
         onClicked: Cpp_CSV_Player.openFile()
         icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
-        enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
         ToolTip.text: qsTr("Play a CSV file as if it were live sensor data")
+        enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
       }
 
       Widgets.ToolbarButton {
@@ -256,8 +260,8 @@ Rectangle {
       implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
-      Layout.alignment: Qt.AlignVCenter
       visible: Cpp_CommercialBuild
+      Layout.alignment: Qt.AlignVCenter
       color: Cpp_ThemeManager.colors["toolbar_separator"]
     }
 
@@ -298,8 +302,8 @@ Rectangle {
       text: qsTr("Preferences")
       Layout.alignment: Qt.AlignLeft
       onClicked: app.showSettingsDialog()
-      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
       ToolTip.text: qsTr("Open application settings and preferences")
+      icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
     }
 
     //
@@ -317,10 +321,10 @@ Rectangle {
         text: qsTr("UART")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
-        font.bold: Cpp_IO_Manager.busType === SerialStudio.UART
         onClicked: Cpp_IO_Manager.busType = SerialStudio.UART
-        ToolTip.text: qsTr("Select Serial port (UART) communication")
         icon.source: "qrc:/rcc/icons/toolbar/drivers/uart.svg"
+        font.bold: Cpp_IO_Manager.busType === SerialStudio.UART
+        ToolTip.text: qsTr("Select Serial port (UART) communication")
       }
 
       Loader {
@@ -332,10 +336,10 @@ Rectangle {
             text: qsTr("Audio")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.Audio
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
             ToolTip.text: qsTr("Select audio input device (Pro)")
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
             icon.source: "qrc:/rcc/icons/toolbar/drivers/audio.svg"
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.Audio
           }
         }
       }
@@ -349,10 +353,10 @@ Rectangle {
             text: qsTr("USB")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.RawUsb
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
             ToolTip.text: qsTr("Select raw USB communication (Pro)")
             icon.source: "qrc:/rcc/icons/toolbar/drivers/usb.svg"
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.RawUsb
           }
         }
       }
@@ -362,10 +366,10 @@ Rectangle {
         text: qsTr("Network")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
-        font.bold: Cpp_IO_Manager.busType === SerialStudio.Network
-        onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
         ToolTip.text: qsTr("Select TCP/UDP network communication")
         icon.source: "qrc:/rcc/icons/toolbar/drivers/network.svg"
+        onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
+        font.bold: Cpp_IO_Manager.busType === SerialStudio.Network
       }
 
       Loader {
@@ -377,10 +381,10 @@ Rectangle {
             text: qsTr("Modbus")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.ModBus
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
             ToolTip.text: qsTr("Select MODBUS communication (Pro)")
             icon.source: "qrc:/rcc/icons/toolbar/drivers/modbus.svg"
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.ModBus
           }
         }
       }
@@ -394,10 +398,10 @@ Rectangle {
             text: qsTr("HID")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.HidDevice
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
             ToolTip.text: qsTr("Select HID device communication (Pro)")
             icon.source: "qrc:/rcc/icons/toolbar/drivers/hid.svg"
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.HidDevice
           }
         }
       }
@@ -407,10 +411,10 @@ Rectangle {
         horizontalLayout: true
         text: qsTr("Bluetooth")
         Layout.alignment: Qt.AlignLeft
-        font.bold: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE
-        onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
         ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
         icon.source: "qrc:/rcc/icons/toolbar/drivers/bluetooth.svg"
+        onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
+        font.bold: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE
       }
 
       Loader {
@@ -422,10 +426,10 @@ Rectangle {
             text: qsTr("CAN Bus")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.CanBus
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
             ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
             icon.source: "qrc:/rcc/icons/toolbar/drivers/canbus.svg"
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.CanBus
           }
         }
       }
@@ -439,10 +443,10 @@ Rectangle {
             text: qsTr("Process")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.Process
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
             ToolTip.text: qsTr("Select process pipe communication (Pro)")
             icon.source: "qrc:/rcc/icons/toolbar/drivers/process.svg"
+            onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
+            font.bold: Cpp_IO_Manager.busType === SerialStudio.Process
           }
         }
       }
@@ -466,8 +470,8 @@ Rectangle {
       text: qsTr("About")
       Layout.alignment: Qt.AlignLeft
       onClicked: app.showAboutDialog()
-      icon.source: "qrc:/rcc/icons/toolbar/about.svg"
       ToolTip.text: qsTr("Show application info and license details")
+      icon.source: "qrc:/rcc/icons/toolbar/about.svg"
     }
 
     //
@@ -536,16 +540,17 @@ Rectangle {
     //
     Widgets.ToolbarButton {
       id: _connectButton
+
       Layout.alignment: Qt.AlignVCenter
       implicitWidth: metrics.width + 16
       font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.minimumWidth: metrics.width + 16
       Layout.maximumWidth: metrics.width + 16
-      checked: Cpp_IO_Manager.isConnected || mqttSubscriber
       text: checked ? qsTr("Disconnect") : qsTr("Connect")
+      checked: Cpp_IO_Manager.isConnected || mqttSubscriber
+      ToolTip.text: qsTr("Connect or disconnect from device or MQTT broker")
       icon.source: checked ? "qrc:/rcc/icons/toolbar/connect.svg" :
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
-      ToolTip.text: qsTr("Connect or disconnect from device or MQTT broker")
 
       visible: Cpp_CommercialBuild ? (Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated ? false : true) : true
 
@@ -562,6 +567,7 @@ Rectangle {
 
       TextMetrics {
         id: metrics
+
         text: " " + qsTr("Disconnect") + " "
         font: Cpp_Misc_CommonFonts.boldUiFont
       }

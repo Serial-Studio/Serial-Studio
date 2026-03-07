@@ -88,11 +88,11 @@ Item {
       icon.height: 18
       checked: !root.running
       icon.color: "transparent"
-      text: root.running ? qsTr("Pause") : qsTr("Resume")
-      onClicked: root.running = !root.running
       icon.source: root.running?
                      "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/resume.svg"
+      onClicked: root.running = !root.running
+      text: root.running ? qsTr("Pause") : qsTr("Resume")
     }
 
     Item {

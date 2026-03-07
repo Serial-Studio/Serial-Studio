@@ -37,8 +37,8 @@ Window {
   width: 700
   height: 500
   minimumWidth: 600
-  minimumHeight: 400 + titlebarHeight
   title: qsTr("DBC File Preview")
+  minimumHeight: 400 + titlebarHeight
 
   Component.onCompleted: {
     root.flags = Qt.Dialog |
@@ -154,23 +154,24 @@ Window {
 
     ColumnLayout {
       id: column
+
       spacing: 4
-      anchors.fill: parent
       anchors.margins: 16
+      anchors.fill: parent
 
       Label {
-        text: qsTr("DBC File: %1").arg(Cpp_JSON_DBCImporter.dbcFileName)
-        font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
         color: palette.text
         Layout.fillWidth: true
+        font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
+        text: qsTr("DBC File: %1").arg(Cpp_JSON_DBCImporter.dbcFileName)
       }
 
       Label {
-        text: qsTr("Review the CAN messages and signals that will be imported into a new Serial Studio project.")
-        wrapMode: Text.WordWrap
-        Layout.fillWidth: true
-        color: palette.text
         opacity: 0.7
+        color: palette.text
+        Layout.fillWidth: true
+        wrapMode: Text.WordWrap
+        text: qsTr("Review the CAN messages and signals that will be imported into a new Serial Studio project.")
       }
 
       Item {
@@ -191,25 +192,25 @@ Window {
         background: Rectangle {
           radius: 2
           border.width: 1
-          color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
+          color: Cpp_ThemeManager.colors["groupbox_background"]
         }
 
         ColumnLayout {
           spacing: 0
-          anchors.fill: parent
           anchors.margins: -7
+          anchors.fill: parent
 
           Rectangle {
-            Layout.fillWidth: true
             height: 32
+            Layout.fillWidth: true
             color: palette.alternateBase
 
             RowLayout {
+              spacing: 8
               anchors.fill: parent
               anchors.leftMargin: 8
               anchors.rightMargin: 8
-              spacing: 8
 
               Label {
                 text: qsTr("#")
@@ -219,24 +220,24 @@ Window {
               }
 
               Label {
-                text: qsTr("Message Name")
                 font.bold: true
                 color: palette.text
                 Layout.fillWidth: true
                 Layout.minimumWidth: 150
+                text: qsTr("Message Name")
               }
 
               Label {
-                text: qsTr("CAN ID")
                 font.bold: true
+                text: qsTr("CAN ID")
                 color: palette.text
                 Layout.preferredWidth: 80
               }
 
               Label {
-                text: qsTr("Signals")
                 font.bold: true
                 color: palette.text
+                text: qsTr("Signals")
                 Layout.preferredWidth: 60
               }
             }
@@ -252,13 +253,13 @@ Window {
             id: _messagesTable
 
             clip: true
+            model: Cpp_JSON_DBCImporter.messageCount
             Layout.fillWidth: true
             Layout.fillHeight: true
-            model: Cpp_JSON_DBCImporter.messageCount
 
             delegate: Rectangle {
-              width: ListView.view.width
               height: 36
+              width: ListView.view.width
               color: index % 2 === 0 ? "transparent" : palette.alternateBase
 
               RowLayout {
@@ -268,17 +269,17 @@ Window {
                 anchors.rightMargin: 8
 
                 Label {
+                  color: palette.text
                   Layout.preferredWidth: 40
                   text: (index + 1).toString()
                   font.family: Cpp_Misc_CommonFonts.monoFont.family
-                  color: palette.text
                 }
 
                 Label {
-                  Layout.fillWidth: true
-                  Layout.minimumWidth: 150
-                  elide: Text.ElideRight
                   color: palette.text
+                  Layout.fillWidth: true
+                  elide: Text.ElideRight
+                  Layout.minimumWidth: 150
                   text: {
                     const info = Cpp_JSON_DBCImporter.messageInfo(index)
                     const match = info.match(/:\s*([^@]+)\s*@/)
@@ -287,9 +288,9 @@ Window {
                 }
 
                 Label {
+                  color: palette.text
                   Layout.preferredWidth: 80
                   font.family: Cpp_Misc_CommonFonts.monoFont.family
-                  color: palette.text
                   text: {
                     const info = Cpp_JSON_DBCImporter.messageInfo(index)
                     const match = info.match(/@\s*(0x[0-9A-F]+)/)
@@ -298,9 +299,9 @@ Window {
                 }
 
                 Label {
+                  color: palette.text
                   Layout.preferredWidth: 60
                   font.family: Cpp_Misc_CommonFonts.monoFont.family
-                  color: palette.text
                   text: {
                     const info = Cpp_JSON_DBCImporter.messageInfo(index)
                     const match = info.match(/\((\d+)\s+signals?\)/)
@@ -344,8 +345,8 @@ Window {
           icon.height: 18
           horizontalPadding: 8
           text: qsTr("Cancel")
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
           onClicked: {
             Cpp_JSON_DBCImporter.cancelImport()
             root.close()
@@ -358,9 +359,9 @@ Window {
           highlighted: true
           horizontalPadding: 8
           text: qsTr("Create Project")
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
           icon.color: Cpp_ThemeManager.colors["button_text"]
           enabled: Cpp_JSON_DBCImporter.messageCount > 0
+          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
           onClicked: {
             Cpp_JSON_DBCImporter.confirmImport()
             root.close()

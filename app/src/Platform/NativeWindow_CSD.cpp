@@ -237,7 +237,7 @@ void NativeWindow::onActiveChanged()
     return;
 
   // Get caller window
-  auto* window = static_cast<QWindow*>(sender());
+  auto* window = qobject_cast<QWindow*>(sender());
   if (!window || !m_windows.contains(window))
     return;
 

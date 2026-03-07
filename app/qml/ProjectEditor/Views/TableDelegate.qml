@@ -28,6 +28,7 @@ import SerialStudio
 
 ColumnLayout {
   id: root
+
   spacing: 0
 
   //
@@ -50,9 +51,7 @@ ColumnLayout {
   //
   Rectangle {
     id: header
-    Layout.fillWidth: true
-    visible: view.rows > 0 && headerVisible
-    implicitHeight: root.rowHeight
+
     gradient: Gradient {
       GradientStop {
         position: 0
@@ -64,15 +63,18 @@ ColumnLayout {
         color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
       }
     }
+    Layout.fillWidth: true
+    implicitHeight: root.rowHeight
+    visible: view.rows > 0 && headerVisible
 
     Rectangle {
-      height: 1
-      color: Cpp_ThemeManager.colors["table_border_header"]
       anchors {
         left: parent.left
         right: parent.right
         bottom: parent.bottom
       }
+      height: 1
+      color: Cpp_ThemeManager.colors["table_border_header"]
     }
 
     RowLayout {
@@ -85,8 +87,8 @@ ColumnLayout {
 
         Canvas {
           opacity: 0.8
-          anchors.centerIn: parent
           width: parent.width / 2
+          anchors.centerIn: parent
           height: parent.height / 2
 
           onPaint: {
@@ -155,6 +157,7 @@ ColumnLayout {
   //
   TableView {
     id: view
+
     clip: true
     reuseItems: false
     interactive: false
@@ -167,6 +170,7 @@ ColumnLayout {
     //
     delegate: Item {
       id: item
+
       implicitWidth: view.width
       implicitHeight: root.rowHeight
 
@@ -180,17 +184,18 @@ ColumnLayout {
       //
       Rectangle {
         id: background
+
         anchors.fill: parent
         color: Cpp_ThemeManager.colors["table_cell_bg"]
 
         Rectangle {
-          height: 1
-          color: Cpp_ThemeManager.colors["table_separator"]
           anchors {
             left: parent.left
             right: parent.right
             bottom: parent.bottom
           }
+          height: 1
+          color: Cpp_ThemeManager.colors["table_separator"]
         }
       }
 
@@ -228,12 +233,12 @@ ColumnLayout {
 
             Rectangle {
               height: 1
-              color: Cpp_ThemeManager.colors["table_border_header"]
               anchors {
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
               }
+              color: Cpp_ThemeManager.colors["table_border_header"]
             }
 
             RowLayout {
@@ -309,6 +314,7 @@ ColumnLayout {
 
           Image {
             id: parameterIcon
+
             sourceSize.width: 18
             sourceSize.height: 18
             visible: root.enabled
@@ -330,9 +336,9 @@ ColumnLayout {
         Rectangle {
           implicitWidth: 1
           Layout.fillHeight: true
-          color: Cpp_ThemeManager.colors["table_separator"]
           visible: model.parameterIcon !== undefined &&
                    model.widgetType !== ProjectEditor.SectionHeader
+          color: Cpp_ThemeManager.colors["table_separator"]
         } Item {
           implicitWidth: 8
         }
@@ -341,20 +347,21 @@ ColumnLayout {
         // Parameter name
         //
         Label {
+          text: model.parameterName ?? ""
           opacity: model.active ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.parameterWidth
           Layout.maximumWidth: root.parameterWidth
-          text: model.parameterName ?? ""
           color: Cpp_ThemeManager.colors["table_text"]
 
           ToolTip.delay: 700
-          visible: model.widgetType !== ProjectEditor.SectionHeader
           ToolTip.text: model.parameterDescription ?? ""
+          visible: model.widgetType !== ProjectEditor.SectionHeader
           ToolTip.visible: _paramMouseArea.containsMouse && ToolTip.text !== ""
 
           MouseArea {
             id: _paramMouseArea
+
             hoverEnabled: true
             anchors.fill: parent
           }
@@ -393,14 +400,14 @@ ColumnLayout {
               opacity: modelActive ? 1 : 0.5
               placeholderText: placeholderValue
 
-              font: Cpp_Misc_CommonFonts.monoFont
-              color: Cpp_ThemeManager.colors["table_text"]
               onTextEdited: {
                 root.modelPointer.setData(
                       view.index(row, column),
                       text,
                       ProjectEditor.EditableValue)
               }
+              font: Cpp_Misc_CommonFonts.monoFont
+              color: Cpp_ThemeManager.colors["table_text"]
 
               background: Item {}
             }
@@ -443,11 +450,11 @@ ColumnLayout {
                 placeholderText: placeholderValue
 
                 readOnly: true
+                background: Item {}
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
                 font: Cpp_Misc_CommonFonts.monoFont
                 color: Cpp_ThemeManager.colors["table_text"]
-                background: Item {}
               }
 
               Item {
@@ -458,16 +465,16 @@ ColumnLayout {
                 enabled: modelActive
                 opacity: modelActive ? 1 : 0.5
 
+                onClicked: {
+                  actionIconPicker.selectedIcon = model.editableValue
+                  actionIconPicker.showNormal()
+                }
                 icon.width: 16
                 icon.height: 16
                 Layout.maximumWidth: 32
                 Layout.alignment: Qt.AlignVCenter
                 icon.color: Cpp_ThemeManager.colors["table_text"]
                 icon.source: "qrc:/rcc/icons/project-editor/open.svg"
-                onClicked: {
-                  actionIconPicker.selectedIcon = model.editableValue
-                  actionIconPicker.showNormal()
-                }
 
                 background: Item {}
               }
@@ -563,6 +570,7 @@ ColumnLayout {
 
               validator: DoubleValidator {
                 id: validator
+
                 bottom: -1000000
                 top: 1000000
               }
@@ -590,9 +598,6 @@ ColumnLayout {
               flat: true
               model: comboBoxData
               enabled: modelActive
-              opacity: modelActive ? 1 : 0.5
-              currentIndex: editableValue
-              font: Cpp_Misc_CommonFonts.monoFont
               onCurrentIndexChanged: {
                 if (currentIndex !== editableValue) {
                   root.modelPointer.setData(
@@ -601,6 +606,9 @@ ColumnLayout {
                         ProjectEditor.EditableValue)
                 }
               }
+              currentIndex: editableValue
+              opacity: modelActive ? 1 : 0.5
+              font: Cpp_Misc_CommonFonts.monoFont
             }
           }
         }
@@ -622,16 +630,16 @@ ColumnLayout {
             ComboBox {
               flat: true
               enabled: modelActive
-              opacity: modelActive ? 1 : 0.5
-              model: [qsTr("No"), qsTr("Yes")]
-              currentIndex: editableValue ? 1 : 0
-              font: Cpp_Misc_CommonFonts.monoFont
               onCurrentIndexChanged: {
                 root.modelPointer.setData(
                       view.index(row, column),
                       currentIndex === 1,
                       ProjectEditor.EditableValue)
               }
+              opacity: modelActive ? 1 : 0.5
+              model: [qsTr("No"), qsTr("Yes")]
+              currentIndex: editableValue ? 1 : 0
+              font: Cpp_Misc_CommonFonts.monoFont
             }
           }
         }
@@ -651,12 +659,13 @@ ColumnLayout {
 
           sourceComponent: Component {
             TextField {
+              id: _hexComponent
+
               text: editableValue
               enabled: modelActive
               opacity: modelActive ? 1 : 0.5
               placeholderText: placeholderValue
 
-              id: _hexComponent
               font: Cpp_Misc_CommonFonts.monoFont
               color: Cpp_ThemeManager.colors["table_text"]
 

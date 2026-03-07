@@ -82,6 +82,7 @@ ColumnLayout {
   //
   FontMetrics {
     id: fontMetrics
+
     font: valueLabel.font
   }
 
@@ -95,10 +96,10 @@ ColumnLayout {
     elide: Qt.ElideRight
     visible: root.rangeVisible
     Layout.alignment: Qt.AlignHCenter
-    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
     Layout.maximumWidth: root.maximumWidth
     horizontalAlignment: Text.AlignHCenter
     color: Cpp_ThemeManager.colors["widget_text"]
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
     text: Cpp_UI_Dashboard.formatValue(root.maxValue, root.minValue, root.maxValue) + " " + root.units
   }
 
@@ -134,13 +135,14 @@ ColumnLayout {
   //
   Label {
     id: valueLabel
+
     elide: Qt.ElideRight
     Layout.alignment: Qt.AlignHCenter
     horizontalAlignment: Text.AlignHCenter
+    color: Cpp_ThemeManager.colors["widget_text"]
     font: (Cpp_Misc_CommonFonts.widgetFontRevision,
            root.rangeVisible ? Cpp_Misc_CommonFonts.widgetFont(1.16) :
                                Cpp_Misc_CommonFonts.widgetFont(1))
-    color: Cpp_ThemeManager.colors["widget_text"]
 
     // Calculate max text width
     readonly property string paddedMaxText: root.getPaddedText(root.maxValue) + " " + root.units
@@ -156,9 +158,10 @@ ColumnLayout {
                                   root.getPaddedText(root.value) + " " + root.units
 
     background: Rectangle {
+      id: labelBg
+
       z: 0
       radius: 5
-      id: labelBg
       border.width: 2
       anchors.fill: parent
       anchors.margins: root.rangeVisible ? -8 : -4
@@ -203,10 +206,10 @@ ColumnLayout {
     elide: Qt.ElideRight
     visible: root.rangeVisible
     Layout.alignment: Qt.AlignHCenter
-    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
     Layout.maximumWidth: root.maximumWidth
     horizontalAlignment: Text.AlignHCenter
     color: Cpp_ThemeManager.colors["widget_text"]
+    font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont())
     text: Cpp_UI_Dashboard.formatValue(root.minValue, root.minValue, root.maxValue) + " " + root.units
   }
 }

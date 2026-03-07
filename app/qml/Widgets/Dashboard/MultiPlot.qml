@@ -169,8 +169,8 @@ Item {
       height: 24
       icon.width: 18
       icon.height: 18
-      icon.color: "transparent"
       checked: root.interpolate
+      icon.color: "transparent"
       onClicked: {
         root.interpolate = !root.interpolate
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolate", root.interpolate)
@@ -183,15 +183,15 @@ Item {
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      checked: root.userShowLegends
       onClicked: {
         root.userShowLegends = !root.userShowLegends
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowLegends", root.userShowLegends)
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: root.userShowLegends
       icon.source: "qrc:/rcc/icons/dashboard-buttons/labels.svg"
     }
 
@@ -204,30 +204,30 @@ Item {
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      checked: root.userShowXLabel
       onClicked: {
         root.userShowXLabel = !root.userShowXLabel
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: root.userShowXLabel
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
     }
 
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      checked: root.userShowYLabel
       onClicked: {
         root.userShowYLabel = !root.userShowYLabel
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowYLabel", root.userShowYLabel)
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      checked: root.userShowYLabel
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
     }
 
@@ -255,21 +255,15 @@ Item {
       icon.height: 18
       checked: !model.running
       icon.color: "transparent"
-      onClicked: model.running = !model.running
       icon.source: model.running?
                      "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/resume.svg"
+      onClicked: model.running = !model.running
     }
 
     ToolButton {
       width: 24
       height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
-      opacity: enabled ? 1 : 0.5
-      enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
       onClicked: {
         plot.xAxis.pan = 0
         plot.yAxis.pan = 0
@@ -280,6 +274,12 @@ Item {
         plot.yMin = Qt.binding(function() { return root.model.minY })
         plot.yMax = Qt.binding(function() { return root.model.maxY })
       }
+      icon.width: 18
+      icon.height: 18
+      icon.color: "transparent"
+      opacity: enabled ? 1 : 0.5
+      enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
     }
 
     ToolButton {
@@ -401,13 +401,6 @@ Item {
             Repeater {
               model: root.model.count
               delegate: Switch {
-                Layout.fillWidth: true
-                text: root.model.labels[index]
-                Layout.alignment: Qt.AlignVCenter
-                checked: root.model.visibleCurves[index]
-                palette.highlight: root.model.colors[index]
-                font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
-                palette.text: Cpp_ThemeManager.colors["widget_text"]
                 onCheckedChanged: {
                   if (checked !== root.model.visibleCurves[index]) {
                     root.model.modifyCurveVisibility(index, checked)
@@ -415,6 +408,13 @@ Item {
                                                        root.model.visibleCurves)
                   }
                 }
+                Layout.fillWidth: true
+                text: root.model.labels[index]
+                Layout.alignment: Qt.AlignVCenter
+                checked: root.model.visibleCurves[index]
+                palette.highlight: root.model.colors[index]
+                palette.text: Cpp_ThemeManager.colors["widget_text"]
+                font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
               }
             }
           }

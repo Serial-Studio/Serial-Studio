@@ -154,7 +154,8 @@ bool IO::Drivers::BluetoothLE::configurationOk() const noexcept
  */
 qint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
 {
-  if (m_service && m_selectedCharacteristic >= 0) {
+  if (m_service && m_selectedCharacteristic >= 0
+      && m_selectedCharacteristic < m_characteristics.count()) {
     const auto& characteristic = m_characteristics.at(m_selectedCharacteristic);
     if (characteristic.isValid()) {
       m_service->writeCharacteristic(characteristic, data, QLowEnergyService::WriteWithResponse);
@@ -647,10 +648,15 @@ void IO::Drivers::BluetoothLE::onServiceStateChanged(QLowEnergyService::ServiceS
 void IO::Drivers::BluetoothLE::onCharacteristicChanged(const QLowEnergyCharacteristic& info,
                                                        const QByteArray& value)
 {
-  const bool anyCharacteristic = (m_selectedCharacteristic == -1);
-  const bool current           = (info == m_characteristics.at(m_selectedCharacteristic));
-  if (anyCharacteristic || current)
+  if (m_selectedCharacteristic == -1) {
     Q_EMIT dataReceived(makeByteArray(value));
+    return;
+  }
+
+  if (m_selectedCharacteristic >= 0 && m_selectedCharacteristic < m_characteristics.count()
+      && info == m_characteristics.at(m_selectedCharacteristic)) {
+    Q_EMIT dataReceived(makeByteArray(value));
+  }
 }
 
 /**

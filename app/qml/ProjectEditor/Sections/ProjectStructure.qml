@@ -28,6 +28,7 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
+
   title: qsTr("Project Structure")
   icon: "qrc:/rcc/icons/project-editor/windows/project-structure.svg"
 
@@ -36,6 +37,7 @@ Widgets.Pane {
 
   TreeView {
     id: treeView
+
     focus: true
     reuseItems: false
     interactive: true
@@ -51,8 +53,8 @@ Widgets.Pane {
 
     anchors {
       fill: parent
-      topMargin: -16
       leftMargin: -9
+      topMargin: -16
       rightMargin: -9
       bottomMargin: -9
     }
@@ -89,6 +91,7 @@ Widgets.Pane {
     //
     delegate: Item {
       id: item
+
       implicitWidth: treeView.width
       implicitHeight: depth === 0 ? 30 : 18
       Component.onCompleted: syncExpandedState()
@@ -160,6 +163,7 @@ Widgets.Pane {
       //
       Rectangle {
         id: background
+
         anchors.fill: parent
         color: current ? Cpp_ThemeManager.colors["highlight"] : "transparent"
 
@@ -184,6 +188,7 @@ Widgets.Pane {
         //
         Image {
           id: indicator
+
           enabled: hasChildren
           sourceSize: Qt.size(8, 8)
           opacity: hasChildren ? 1 : 0
@@ -209,6 +214,7 @@ Widgets.Pane {
         //
         Image {
           id: icon
+
           source: model.treeViewIcon
           sourceSize: Qt.size(12, 12)
           Layout.alignment: Qt.AlignVCenter
@@ -226,6 +232,7 @@ Widgets.Pane {
         //
         Label {
           id: label
+
           Layout.fillWidth: true
           elide: Label.ElideRight
           text: model.treeViewText
@@ -240,14 +247,15 @@ Widgets.Pane {
         // Frame index indicator (only for datasets)
         //
         Label {
-          opacity: 0.7
           id: frameIndex
+
+          opacity: 0.7
           visible: depth > 1
           Layout.alignment: Qt.AlignVCenter
           font: Cpp_Misc_CommonFonts.monoFont
-          text: "[" + qsTr("IDX %1").arg(model.treeViewFrameIndex) + "]"
           color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
                            Cpp_ThemeManager.colors["text"]
+          text: "[" + qsTr("IDX %1").arg(model.treeViewFrameIndex) + "]"
         }
       }
     }

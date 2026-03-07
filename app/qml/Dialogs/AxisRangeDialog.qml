@@ -36,8 +36,8 @@ Widgets.SmartDialog {
   property real customYMax: 0
   property bool hasCustomRanges: false
 
-  title: qsTr("Axis Range Configuration")
   staysOnTop: true
+  title: qsTr("Axis Range Configuration")
 
   function openDialog(plot, model) {
     root.plotWidget = plot
@@ -114,13 +114,13 @@ Widgets.SmartDialog {
     spacing: 4
 
     Label {
-      text: qsTr("Configure the visible range for the plot axes. Values update in real-time as you type.")
-      wrapMode: Text.WordWrap
-      Layout.fillWidth: true
-      Layout.minimumWidth: 356
-      font: Cpp_Misc_CommonFonts.customUiFont(0.9)
-      color: Cpp_ThemeManager.colors["text"]
       opacity: 0.7
+      Layout.fillWidth: true
+      wrapMode: Text.WordWrap
+      Layout.minimumWidth: 356
+      color: Cpp_ThemeManager.colors["text"]
+      font: Cpp_Misc_CommonFonts.customUiFont(0.9)
+      text: qsTr("Configure the visible range for the plot axes. Values update in real-time as you type.")
     }
 
     Item {
@@ -140,8 +140,8 @@ Widgets.SmartDialog {
       background: Rectangle {
         radius: 2
         border.width: 1
-        color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
       }
 
       GridLayout {
@@ -157,9 +157,10 @@ Widgets.SmartDialog {
 
         TextField {
           id: xMinField
+
+          selectByMouse: true
           Layout.fillWidth: true
           Layout.minimumWidth: 140
-          selectByMouse: true
           validator: DoubleValidator {}
           font: Cpp_Misc_CommonFonts.monoFont
           placeholderText: qsTr("Enter min value")
@@ -177,9 +178,10 @@ Widgets.SmartDialog {
 
         TextField {
           id: xMaxField
+
+          selectByMouse: true
           Layout.fillWidth: true
           Layout.minimumWidth: 140
-          selectByMouse: true
           validator: DoubleValidator {}
           font: Cpp_Misc_CommonFonts.monoFont
           placeholderText: qsTr("Enter max value")
@@ -209,8 +211,8 @@ Widgets.SmartDialog {
       background: Rectangle {
         radius: 2
         border.width: 1
-        color: Cpp_ThemeManager.colors["groupbox_background"]
         border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        color: Cpp_ThemeManager.colors["groupbox_background"]
       }
 
       GridLayout {
@@ -226,9 +228,10 @@ Widgets.SmartDialog {
 
         TextField {
           id: yMinField
+
+          selectByMouse: true
           Layout.fillWidth: true
           Layout.minimumWidth: 140
-          selectByMouse: true
           validator: DoubleValidator {}
           font: Cpp_Misc_CommonFonts.monoFont
           placeholderText: qsTr("Enter min value")
@@ -246,9 +249,10 @@ Widgets.SmartDialog {
 
         TextField {
           id: yMaxField
+
+          selectByMouse: true
           Layout.fillWidth: true
           Layout.minimumWidth: 140
-          selectByMouse: true
           validator: DoubleValidator {}
           font: Cpp_Misc_CommonFonts.monoFont
           placeholderText: qsTr("Enter max value")
@@ -274,8 +278,8 @@ Widgets.SmartDialog {
         icon.height: 18
         text: qsTr("Reset")
         onClicked: root.resetToAuto()
-        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
+        icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
       }
 
       Item {
@@ -287,8 +291,8 @@ Widgets.SmartDialog {
         icon.height: 18
         text: qsTr("Close")
         onClicked: root.close()
-        icon.source: "qrc:/rcc/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
+        icon.source: "qrc:/rcc/icons/buttons/close.svg"
       }
     }
   }

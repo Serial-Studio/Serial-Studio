@@ -51,6 +51,7 @@ Item {
   //
   GridLayout {
     id: layout
+
     columns: 2
     rowSpacing: 4
     columnSpacing: 4
@@ -66,6 +67,7 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: _portCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.portList
@@ -93,6 +95,7 @@ Item {
       text: qsTr("Baud Rate") + ":"
     } ComboBox {
       id: _baudCombo
+
       editable: true
       Layout.fillWidth: true
 
@@ -174,6 +177,7 @@ Item {
       text: qsTr("Data Bits") + ":"
     } ComboBox {
       id: _dataCombo
+
       Layout.fillWidth: true
       model: Cpp_IO_Serial.dataBitsList
       currentIndex: Cpp_IO_Serial.dataBitsIndex
@@ -190,6 +194,7 @@ Item {
       text: qsTr("Parity") + ":"
     } ComboBox {
       id: _parityCombo
+
       Layout.fillWidth: true
       model: Cpp_IO_Serial.parityList
       currentIndex: Cpp_IO_Serial.parityIndex
@@ -206,6 +211,7 @@ Item {
       text: qsTr("Stop Bits") + ":"
     } ComboBox {
       id: _stopBitsCombo
+
       Layout.fillWidth: true
       model: Cpp_IO_Serial.stopBitsList
       currentIndex: Cpp_IO_Serial.stopBitsIndex
@@ -222,6 +228,7 @@ Item {
       text: qsTr("Flow Control") + ":"
     } ComboBox {
       id: _flowCombo
+
       Layout.fillWidth: true
       model: Cpp_IO_Serial.flowControlList
       currentIndex: Cpp_IO_Serial.flowControlIndex
@@ -249,8 +256,9 @@ Item {
       text: qsTr("Auto Reconnect") + ":"
     } CheckBox {
       id: _autoreconnect
-      Layout.maximumHeight: 18
+
       Layout.leftMargin: -8
+      Layout.maximumHeight: 18
       checked: Cpp_IO_Serial.autoReconnect
       Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
       onCheckedChanged: {
@@ -266,8 +274,9 @@ Item {
       text: qsTr("Send DTR Signal") + ":"
     } CheckBox {
       id: _dtr
-      Layout.maximumHeight: 18
+
       Layout.leftMargin: -8
+      Layout.maximumHeight: 18
       checked: Cpp_IO_Serial.dtrEnabled
       Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
       onCheckedChanged: {

@@ -31,6 +31,7 @@ import "../Widgets" as Widgets
 
 Widgets.SmartWindow {
   id: root
+
   title: documentTitle
   category: "MainWindow"
   minimumWidth: layout.implicitWidth
@@ -248,6 +249,7 @@ Widgets.SmartWindow {
 
     ColumnLayout {
       id: layout
+
       spacing: 0
       anchors.fill: parent
 
@@ -255,11 +257,12 @@ Widgets.SmartWindow {
       // Toolbar
       //
       Panes.Toolbar {
-        z: 2
         id: toolbar
+
+        z: 2
         Layout.fillWidth: true
-        autoHide: Cpp_UI_Dashboard.autoHideToolbar
         dashboardVisible: root.dashboardVisible
+        autoHide: Cpp_UI_Dashboard.autoHideToolbar
       }
 
       //
@@ -267,6 +270,7 @@ Widgets.SmartWindow {
       //
       RowLayout {
         id: mainLayout
+
         z: 1
         spacing: 0
         Layout.topMargin: -1
@@ -276,6 +280,7 @@ Widgets.SmartWindow {
         //
         StackView {
           id: stack
+
           initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true
@@ -285,12 +290,14 @@ Widgets.SmartWindow {
           data: [
             Panes.Console {
               id: terminal
+
               width: parent.width
               height: parent.height
             },
 
             Panes.Dashboard {
               id: dashboard
+
               visible: false
               width: parent.width
               height: parent.height
@@ -319,8 +326,8 @@ Widgets.SmartWindow {
           MouseArea {
             width: 8
             height: parent.height
-            anchors.left: parent.left
             anchors.leftMargin: -4
+            anchors.left: parent.left
             cursorShape: Qt.SizeHorCursor
 
             property int _startX: 0
@@ -349,6 +356,7 @@ Widgets.SmartWindow {
         //
         Panes.Setup {
           id: setup
+
           Layout.fillHeight: true
           Layout.rightMargin: setupMargin
           Layout.minimumWidth: setup.kMinPaneWidth

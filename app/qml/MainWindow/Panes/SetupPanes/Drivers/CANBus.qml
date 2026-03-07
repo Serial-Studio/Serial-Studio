@@ -27,6 +27,7 @@ import QtQuick.Controls
 
 Item {
   id: root
+
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
@@ -50,8 +51,8 @@ Item {
 
     Label {
       wrapMode: Label.WordWrap
-      text: qsTr("No CAN Drivers Found")
       Layout.alignment: Qt.AlignHCenter
+      text: qsTr("No CAN Drivers Found")
       Layout.maximumWidth: root.width - 64
       horizontalAlignment: Label.AlignHCenter
       font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
@@ -79,6 +80,7 @@ Item {
 
     GridLayout {
       id: layout
+
       columns: 2
       rowSpacing: 4
       columnSpacing: 4
@@ -93,6 +95,7 @@ Item {
         text: qsTr("CAN Driver") + ":"
       } ComboBox {
         id: _pluginCombo
+
         textRole: "display"
         Layout.fillWidth: true
         currentIndex: Cpp_IO_CANBus.pluginIndex
@@ -138,10 +141,11 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } ComboBox {
         id: _interfaceCombo
+
         Layout.fillWidth: true
         model: Cpp_IO_CANBus.interfaceList
-        visible: Cpp_IO_CANBus.interfaceList.length > 0
         currentIndex: Cpp_IO_CANBus.interfaceIndex
+        visible: Cpp_IO_CANBus.interfaceList.length > 0
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_CANBus.interfaceIndex)
             Cpp_IO_CANBus.interfaceIndex = currentIndex
@@ -169,6 +173,7 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } ComboBox {
         id: _bitrateCombo
+
         editable: true
         Layout.fillWidth: true
         model: Cpp_IO_CANBus.bitrateList
@@ -240,6 +245,7 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } CheckBox {
         id: _canFDCheck
+
         Layout.leftMargin: -8
         checked: Cpp_IO_CANBus.canFD
         Layout.alignment: Qt.AlignLeft

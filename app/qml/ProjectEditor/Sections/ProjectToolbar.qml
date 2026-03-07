@@ -30,6 +30,7 @@ import "../../Widgets" as Widgets
 
 Rectangle {
   id: root
+
   implicitWidth: layout.implicitWidth + 32
 
   //
@@ -127,6 +128,7 @@ Rectangle {
   //
   RowLayout {
     id: layout
+
     spacing: 4
 
     anchors {

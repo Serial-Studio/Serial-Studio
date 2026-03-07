@@ -48,12 +48,14 @@ Item {
   //
   TextMetrics {
     id: _xLabelMetrics
+
     text: "-8888.88"
     font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
   }
 
   TextMetrics {
     id: _yLabelMetrics
+
     text: "-8888.88"
     font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.83))
   }
@@ -379,6 +381,7 @@ Item {
   //
   GraphsView {
     id: _graph
+
     anchors {
       margins: 2
       leftMargin: 4
@@ -399,14 +402,16 @@ Item {
     readonly property real yLabelMargin: Math.max(_maxYMetric.width, _minYMetric.width) + 8 + _yPosLabel.padding * 2
 
     TextMetrics {
-      text: yMax
       id: _maxYMetric
+
+      text: yMax
       font: _yPosLabel.font
     }
 
     TextMetrics {
-      text: yMin
       id: _minYMetric
+
+      text: yMin
       font: _yPosLabel.font
     }
 
@@ -417,9 +422,9 @@ Item {
       id: _theme
 
       // Background
+      borderColors: [Cpp_ThemeManager.colors["widget_border"]]
       plotAreaBackgroundVisible: true
       theme: GraphsTheme.Theme.UserDefined
-      borderColors: [Cpp_ThemeManager.colors["widget_border"]]
       backgroundColor: Cpp_ThemeManager.colors["widget_window"]
       plotAreaBackgroundColor: Cpp_ThemeManager.colors["widget_base"]
 
@@ -442,8 +447,8 @@ Item {
 
       // Grid settings
       grid.subWidth: 1
-      grid.mainWidth: 1
       gridVisible: true
+      grid.mainWidth: 1
       grid.subColor: Cpp_ThemeManager.colors["widget_border"]
       grid.mainColor: Cpp_ThemeManager.colors["widget_border"]
 
@@ -465,6 +470,7 @@ Item {
     //
     axisY: ValueAxis {
       id: _axisY
+
       subTickCount: 1
       tickAnchor: root.yMin
       visible: root.yLabelVisible
@@ -475,6 +481,7 @@ Item {
     //
     axisX: ValueAxis {
       id: _axisX
+
       subTickCount: 1
       tickAnchor: root.xMin
       visible: root.xLabelVisible
@@ -501,8 +508,8 @@ Item {
       propagateComposedEvents: true
       acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-      visible: root.mouseAreaEnabled
       enabled: root.mouseAreaEnabled
+      visible: root.mouseAreaEnabled
       hoverEnabled: root.mouseAreaEnabled
 
       cursorShape: dragging ? Qt.ClosedHandCursor :
@@ -689,18 +696,20 @@ Item {
     //
     Item {
       id: _cursorA
-      visible: root.cursorMode && root.cursorAVisible && (root.cursorAXInRange || root.cursorAYInRange)
+
       x: root.worldToPixelX(root.cursorAX)
       y: root.worldToPixelY(root.cursorAY)
+      visible: root.cursorMode && root.cursorAVisible && (root.cursorAXInRange || root.cursorAYInRange)
 
       // Vertical line with dash-dot pattern (full height) - visible when X is in range
       Canvas {
         id: _cursorAVertical
-        visible: root.cursorAXInRange
-        width: 2
-        height: parent.parent.height
+
         x: 0
+        width: 2
         y: -parent.y
+        height: parent.parent.height
+        visible: root.cursorAXInRange
 
         onPaint: {
           var ctx = getContext("2d")
@@ -720,11 +729,12 @@ Item {
       // Horizontal line with dash-dot pattern (full width) - visible when Y is in range
       Canvas {
         id: _cursorAHorizontal
-        visible: root.cursorAYInRange
-        width: parent.parent.width
+
+        y: 0
         height: 2
         x: -parent.x
-        y: 0
+        width: parent.parent.width
+        visible: root.cursorAYInRange
 
         onPaint: {
           var ctx = getContext("2d")
@@ -743,33 +753,33 @@ Item {
 
       // Center marker - only visible when fully in view
       Rectangle {
-        visible: root.cursorAInView
         width: 10
-        height: 10
         radius: 5
-        color: root.cursorAColor
+        height: 10
         border.width: 2
-        border.color: Cpp_ThemeManager.colors["widget_base"]
+        color: root.cursorAColor
         anchors.centerIn: parent
+        visible: root.cursorAInView
+        border.color: Cpp_ThemeManager.colors["widget_base"]
       }
 
       // Cursor A identifier label - only visible when fully in view
       Label {
-        visible: root.cursorAInView
         text: "A"
+        padding: 4
+        visible: root.cursorAInView
         color: root.cursorATextColor
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.9, true))
-        padding: 4
         background: Rectangle {
           color: root.cursorAColor
           opacity: 0.9
           radius: 3
         }
         anchors {
+          topMargin: 5
+          leftMargin: 5
           left: parent.right
           top: parent.bottom
-          leftMargin: 5
-          topMargin: 5
         }
       }
 
@@ -789,18 +799,20 @@ Item {
     //
     Item {
       id: _cursorB
-      visible: root.cursorMode && root.cursorBVisible && (root.cursorBXInRange || root.cursorBYInRange)
+
       x: root.worldToPixelX(root.cursorBX)
       y: root.worldToPixelY(root.cursorBY)
+      visible: root.cursorMode && root.cursorBVisible && (root.cursorBXInRange || root.cursorBYInRange)
 
       // Vertical line with dash-dot pattern (full height) - visible when X is in range
       Canvas {
         id: _cursorBVertical
-        visible: root.cursorBXInRange
-        width: 2
-        height: parent.parent.height
+
         x: 0
+        width: 2
         y: -parent.y
+        height: parent.parent.height
+        visible: root.cursorBXInRange
 
         onPaint: {
           var ctx = getContext("2d")
@@ -820,11 +832,12 @@ Item {
       // Horizontal line with dash-dot pattern (full width) - visible when Y is in range
       Canvas {
         id: _cursorBHorizontal
-        visible: root.cursorBYInRange
-        width: parent.parent.width
+
+        y: 0
         height: 2
         x: -parent.x
-        y: 0
+        width: parent.parent.width
+        visible: root.cursorBYInRange
 
         onPaint: {
           var ctx = getContext("2d")
@@ -843,33 +856,33 @@ Item {
 
       // Center marker - only visible when fully in view
       Rectangle {
-        visible: root.cursorBInView
         width: 10
-        height: 10
         radius: 5
-        color: root.cursorBColor
+        height: 10
         border.width: 2
-        border.color: Cpp_ThemeManager.colors["widget_base"]
+        color: root.cursorBColor
         anchors.centerIn: parent
+        visible: root.cursorBInView
+        border.color: Cpp_ThemeManager.colors["widget_base"]
       }
 
       // Cursor B identifier label - only visible when fully in view
       Label {
-        visible: root.cursorBInView
         text: "B"
+        padding: 4
+        visible: root.cursorBInView
         color: root.cursorBTextColor
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.9, true))
-        padding: 4
         background: Rectangle {
           color: root.cursorBColor
           opacity: 0.9
           radius: 3
         }
         anchors {
+          topMargin: 5
+          leftMargin: 5
           left: parent.right
           top: parent.bottom
-          leftMargin: 5
-          topMargin: 5
         }
       }
 
@@ -889,11 +902,12 @@ Item {
     //
     Label {
       id: _cursorAXPosLabel
-      text: root.cursorAX.toFixed(root.xPrecision)
+
       padding: 4
-      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorATextColor
+      text: root.cursorAX.toFixed(root.xPrecision)
       visible: root.cursorMode && root.cursorAVisible && root.cursorAXInRange
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
         opacity: 0.9
@@ -903,8 +917,8 @@ Item {
 
       x: Math.max(0, Math.min(parent.width - width, root.worldToPixelX(root.cursorAX) - width / 2))
       anchors {
-        top: parent.bottom
         topMargin: 2
+        top: parent.bottom
       }
     }
 
@@ -913,11 +927,12 @@ Item {
     //
     Label {
       id: _cursorAYPosLabel
-      text: root.cursorAY.toFixed(root.yPrecision)
+
       padding: 4
-      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorATextColor
+      text: root.cursorAY.toFixed(root.yPrecision)
       visible: root.cursorMode && root.cursorAVisible && root.cursorAYInRange
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
         opacity: 0.9
@@ -927,8 +942,8 @@ Item {
 
       y: Math.max(0, Math.min(parent.height - height, root.worldToPixelY(root.cursorAY) - height / 2))
       anchors {
-        right: parent.left
         rightMargin: 2
+        right: parent.left
       }
     }
 
@@ -937,11 +952,12 @@ Item {
     //
     Label {
       id: _cursorBXPosLabel
-      text: root.cursorBX.toFixed(root.xPrecision)
+
       padding: 4
-      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorBTextColor
+      text: root.cursorBX.toFixed(root.xPrecision)
       visible: root.cursorMode && root.cursorBVisible && root.cursorBXInRange
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
         opacity: 0.9
@@ -951,8 +967,8 @@ Item {
 
       x: Math.max(0, Math.min(parent.width - width, root.worldToPixelX(root.cursorBX) - width / 2))
       anchors {
-        top: parent.bottom
         topMargin: 2
+        top: parent.bottom
       }
     }
 
@@ -961,11 +977,12 @@ Item {
     //
     Label {
       id: _cursorBYPosLabel
-      text: root.cursorBY.toFixed(root.yPrecision)
+
       padding: 4
-      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
       color: root.cursorBTextColor
+      text: root.cursorBY.toFixed(root.yPrecision)
       visible: root.cursorMode && root.cursorBVisible && root.cursorBYInRange
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
         opacity: 0.9
@@ -975,8 +992,8 @@ Item {
 
       y: Math.max(0, Math.min(parent.height - height, root.worldToPixelY(root.cursorBY) - height / 2))
       anchors {
-        right: parent.left
         rightMargin: 2
+        right: parent.left
       }
     }
 
@@ -985,10 +1002,11 @@ Item {
     //
     Label {
       id: _xPosLabel
-      visible: false
+
       padding: 4
-      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
+      visible: false
       color: Cpp_ThemeManager.colors["widget_base"]
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
     }
 
     //
@@ -996,10 +1014,11 @@ Item {
     //
     Label {
       id: _yPosLabel
-      visible: false
+
       padding: 4
-      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
+      visible: false
       color: Cpp_ThemeManager.colors["widget_base"]
+      font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
     }
   }
 
@@ -1008,6 +1027,7 @@ Item {
   //
   Item {
     id: _yLabelContainer
+
     width: _yLabel.height
     visible: root.yLabelVisible
 
@@ -1019,6 +1039,7 @@ Item {
 
     Label {
       id: _yLabel
+
       rotation: 270
       elide: Qt.ElideRight
       width: parent.height
@@ -1036,17 +1057,19 @@ Item {
   //
   Item {
     id: _xLabelContainer
+
     height: _layout.implicitHeight
 
     anchors {
+      leftMargin: 4
       right: parent.right
       bottom: parent.bottom
       left: _yLabelContainer.right
-      leftMargin: 4
     }
 
     ColumnLayout {
       id: _layout
+
       spacing: 0
       width: parent.width
       anchors.centerIn: parent
@@ -1054,6 +1077,7 @@ Item {
 
       Label {
         id: _xLabel
+
         elide: Qt.ElideRight
         visible: root.xLabelVisible
         Layout.alignment: Qt.AlignHCenter
@@ -1069,13 +1093,14 @@ Item {
 
       Label {
         id: _deltaLabel
+
         elide: Qt.ElideRight
+        visible: root.cursorMode
         Layout.maximumWidth: parent.width
         Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
         color: Cpp_ThemeManager.colors["widget_text"]
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85, false))
-        visible: root.cursorMode
         text: {
           if (root.cursorAVisible && root.cursorBVisible)
             return qsTr("ΔX: %1  ΔY: %2 — Drag to move, right-click to clear").arg(root.deltaX.toFixed(root.xPrecision)).arg(root.deltaY.toFixed(root.yPrecision))

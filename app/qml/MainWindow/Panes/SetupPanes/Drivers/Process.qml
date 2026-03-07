@@ -28,6 +28,7 @@ import Qt.labs.platform as NativePlatform
 
 Item {
   id: root
+
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
@@ -80,6 +81,7 @@ Item {
 
   GridLayout {
     id: layout
+
     columns: 2
     rowSpacing: 4
     columnSpacing: 4
@@ -95,6 +97,7 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: modeCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
@@ -134,11 +137,12 @@ Item {
 
       TextField {
         id: execField
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
+        text: Cpp_IO_Process.executable
         enabled: !Cpp_IO_Manager.isConnected
         placeholderText: qsTr("/path/to/executable")
-        text: Cpp_IO_Process.executable
 
         onTextChanged: {
           if (enabled && text !== Cpp_IO_Process.executable)
@@ -172,6 +176,7 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: captureCombo
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
@@ -205,12 +210,13 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
     } TextField {
       id: argsField
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
-      placeholderText: qsTr("--arg1 value1 --arg2 value2")
       text: Cpp_IO_Process.arguments
+      enabled: !Cpp_IO_Manager.isConnected
+      placeholderText: qsTr("--arg1 value1 --arg2 value2")
+      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
 
       onTextChanged: {
         if (enabled && text !== Cpp_IO_Process.arguments)
@@ -241,11 +247,12 @@ Item {
 
       TextField {
         id: workDirField
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
+        text: Cpp_IO_Process.workingDir
         enabled: !Cpp_IO_Manager.isConnected
         placeholderText: qsTr("(optional) /working/directory")
-        text: Cpp_IO_Process.workingDir
 
         onTextChanged: {
           if (enabled && text !== Cpp_IO_Process.workingDir)
@@ -288,6 +295,7 @@ Item {
 
       TextField {
         id: pipeField
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
@@ -326,9 +334,9 @@ Item {
     } Button {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
+      text: qsTr("Pick Running Process…")
       enabled: !Cpp_IO_Manager.isConnected
       visible: modeCombo.currentIndex === 1 && !Cpp_IO_Manager.isConnected
-      text: qsTr("Pick Running Process…")
       onClicked: {
         Cpp_IO_Process.refreshProcessList()
         picker.show()
@@ -362,8 +370,8 @@ Item {
 
         Label {
           opacity: 0.75
-          wrapMode: Label.WordWrap
           Layout.fillWidth: true
+          wrapMode: Label.WordWrap
           font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
           text: qsTr("Launch a child process and capture its stdout, or "
                    + "connect to a named pipe written by an existing process.")

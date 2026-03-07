@@ -95,8 +95,8 @@ Item {
       Layout.fillHeight: true
       Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-      to: model.maxValue
       value: model.value
+      to: model.maxValue
       from: model.minValue
       endAngle: endAngleDeg
       snapMode: Dial.NoSnap
@@ -111,9 +111,10 @@ Item {
 
         Rectangle {
           id: gaugeFace
+
           radius: width / 2
-          anchors.centerIn: parent
           width: parent.gaugeSize
+          anchors.centerIn: parent
           height: parent.gaugeSize
           border.color: "transparent"
           border.width: Math.max(8, width / 18)
@@ -128,19 +129,19 @@ Item {
           Rectangle {
             border.width: 1
             radius: width / 2
-            color: "transparent"
             anchors.fill: parent
-            border.color: Qt.rgba(0, 0, 0, 0.1)
+            color: "transparent"
             anchors.margins: parent.border.width
+            border.color: Qt.rgba(0, 0, 0, 0.1)
           }
 
           Rectangle {
             opacity: 0.5
             border.width: 2
             radius: width / 2
-            color: "transparent"
             width: parent.width
             height: parent.height
+            color: "transparent"
             anchors.centerIn: parent
             Behavior on border.color {ColorAnimation{duration: 300}}
             border.color: fillColor
@@ -158,29 +159,29 @@ Item {
               readonly property real labelRadius: gaugeFace.width / 2 + Math.max(24, fontSize * 2.8)
 
               Rectangle {
-                x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
-                y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
-                width: gaugeFace.border.width * 0.7
                 height: 2
                 radius: 1
-                color: Qt.darker(fillColor, 1.3)
-                rotation: parent.angleDeg + 90
-                transformOrigin: Item.Center
-                antialiasing: true
                 opacity: 0.8
+                antialiasing: true
+                transformOrigin: Item.Center
+                rotation: parent.angleDeg + 90
+                color: Qt.darker(fillColor, 1.3)
+                width: gaugeFace.border.width * 0.7
+                x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
+                y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
               }
 
               Text {
+                style: Text.Raised
+                font.pixelSize: fontSize
+                styleColor: Qt.rgba(0, 0, 0, 0.3)
+                text: formatValue(parent.tickValue)
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                color: Cpp_ThemeManager.colors["widget_text"]
+                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
                 x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.labelRadius - width / 2
                 y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.labelRadius - height / 2
-                text: formatValue(parent.tickValue)
-                font.pixelSize: fontSize
-                font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-                color: Cpp_ThemeManager.colors["widget_text"]
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                style: Text.Raised
-                styleColor: Qt.rgba(0, 0, 0, 0.3)
               }
             }
           }
@@ -193,15 +194,15 @@ Item {
             readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
 
             Rectangle {
-              x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
-              y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
-              width: gaugeFace.border.width * 1.0
               height: 4
               radius: 2
-              color: Cpp_ThemeManager.colors["alarm"]
-              rotation: parent.angleDeg + 90
-              transformOrigin: Item.Center
               antialiasing: true
+              transformOrigin: Item.Center
+              rotation: parent.angleDeg + 90
+              width: gaugeFace.border.width * 1.0
+              color: Cpp_ThemeManager.colors["alarm"]
+              x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
+              y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
             }
           }
 
@@ -213,15 +214,15 @@ Item {
             readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
 
             Rectangle {
-              x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
-              y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
-              width: gaugeFace.border.width * 1.0
               height: 4
               radius: 2
-              color: Cpp_ThemeManager.colors["alarm"]
-              rotation: parent.angleDeg + 90
-              transformOrigin: Item.Center
               antialiasing: true
+              transformOrigin: Item.Center
+              rotation: parent.angleDeg + 90
+              width: gaugeFace.border.width * 1.0
+              color: Cpp_ThemeManager.colors["alarm"]
+              x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
+              y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
             }
           }
 
@@ -237,31 +238,31 @@ Item {
               readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
 
               Rectangle {
-                x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
-                y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
-                width: gaugeFace.border.width * 0.5
                 height: 1
                 radius: 0.5
-                color: Cpp_ThemeManager.colors["widget_border"]
-                rotation: parent.angleDeg + 90
-                transformOrigin: Item.Center
-                antialiasing: true
                 opacity: 0.6
+                antialiasing: true
+                transformOrigin: Item.Center
+                rotation: parent.angleDeg + 90
+                width: gaugeFace.border.width * 0.5
+                color: Cpp_ThemeManager.colors["widget_border"]
+                x: gaugeFace.width / 2 + Math.cos(parent.angleRad) * parent.tickRadius - width / 2
+                y: gaugeFace.height / 2 + Math.sin(parent.angleRad) * parent.tickRadius - height / 2
               }
             }
           }
 
           Text {
-            visible: model.units.length > 0 && gaugeFace.width > 120
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: parent.border.width + 8
-            text: model.units
-            font.pixelSize: fontSize
-            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
             color: fillColor
+            text: model.units
             style: Text.Raised
+            font.pixelSize: fontSize
+            anchors.bottom: parent.bottom
             styleColor: Qt.rgba(0, 0, 0, 0.3)
+            anchors.bottomMargin: parent.border.width + 8
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+            visible: model.units.length > 0 && gaugeFace.width > 120
           }
         }
       }
@@ -273,14 +274,15 @@ Item {
 
         Rectangle {
           id: needle
-          x: parent.width / 2 - width / 2
-          y: parent.height / 2 - height
-          width: Math.max(5, parent.width * 0.025)
-          height: parent.height * 0.38
+
           radius: width / 2
           antialiasing: true
-          transformOrigin: Item.Bottom
           rotation: control.angle
+          transformOrigin: Item.Bottom
+          height: parent.height * 0.38
+          y: parent.height / 2 - height
+          x: parent.width / 2 - width / 2
+          width: Math.max(5, parent.width * 0.025)
 
           gradient: Gradient {
             GradientStop { position: 0.0; color: Qt.lighter(fillColor, 1.3) }
@@ -289,20 +291,20 @@ Item {
           }
 
           Rectangle {
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
             width: 1
             radius: width / 2
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
             color: Qt.rgba(1, 1, 1, 0.4)
           }
 
           Rectangle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: parent.height - height / 2
-            width: Math.max(14, needle.parent.width * 0.08)
             height: width
             radius: width / 2
+            y: parent.height - height / 2
+            width: Math.max(14, needle.parent.width * 0.08)
+            anchors.horizontalCenter: parent.horizontalCenter
 
             gradient: Gradient {
               GradientStop { position: 0.0; color: Qt.lighter(Cpp_ThemeManager.colors["widget_border"], 1.2) }
@@ -311,10 +313,10 @@ Item {
             }
 
             Rectangle {
+              radius: width / 2
               anchors.centerIn: parent
               width: parent.width * 0.4
               height: parent.height * 0.4
-              radius: width / 2
               color: Qt.rgba(0, 0, 0, 0.3)
             }
           }
@@ -326,12 +328,13 @@ Item {
       //
       MouseArea {
         id: cursorTracker
-        anchors.centerIn: parent
-        width: control.background.gaugeSize
-        height: control.background.gaugeSize
+
         hoverEnabled: true
+        anchors.centerIn: parent
         acceptedButtons: Qt.NoButton
         propagateComposedEvents: true
+        width: control.background.gaugeSize
+        height: control.background.gaugeSize
 
         property real cursorValue: model.minValue
         property real cursorAngleDeg: startAngleDeg
@@ -369,14 +372,14 @@ Item {
           readonly property real tickRadius: gaugeSize / 2 - borderWidth / 2
 
           width: 2
-          height: tickRadius
           radius: 1
+          antialiasing: true
+          height: tickRadius
           color: Cpp_ThemeManager.colors["polar_indicator"]
           opacity: cursorTracker.containsMouse && cursorTracker.isValidAngle ? 0.6 : 0
-          antialiasing: true
 
-          x: cursorTracker.width / 2 - width / 2
           y: cursorTracker.height / 2 - height
+          x: cursorTracker.width / 2 - width / 2
 
           transformOrigin: Item.Bottom
           rotation: cursorTracker.cursorAngleDeg
@@ -388,19 +391,19 @@ Item {
         Rectangle {
           width: 1
           height: 12
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
           x: cursorTracker.mouseX - width / 2
           y: cursorTracker.mouseY - height - 4
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         Rectangle {
           width: 1
           height: 12
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
-          x: cursorTracker.mouseX - width / 2
           y: cursorTracker.mouseY + 4
+          x: cursorTracker.mouseX - width / 2
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         //
@@ -409,42 +412,43 @@ Item {
         Rectangle {
           width: 12
           height: 1
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
           x: cursorTracker.mouseX - width - 4
           y: cursorTracker.mouseY - height / 2
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         Rectangle {
           width: 12
           height: 1
-          color: Cpp_ThemeManager.colors["polar_indicator"]
-          opacity: cursorTracker.containsMouse ? 0.6 : 0
           x: cursorTracker.mouseX + 4
           y: cursorTracker.mouseY - height / 2
+          opacity: cursorTracker.containsMouse ? 0.6 : 0
+          color: Cpp_ThemeManager.colors["polar_indicator"]
         }
 
         //
         // Cursor value label (tooltip style)
         //
         Rectangle {
-          visible: cursorTracker.containsMouse
-          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
-          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
-          width: tooltipLabel.width + 8
-          height: tooltipLabel.height + 4
-          color: Cpp_ThemeManager.colors["tooltip_base"]
           radius: 3
           border.width: 1
+          width: tooltipLabel.width + 8
+          height: tooltipLabel.height + 4
+          visible: cursorTracker.containsMouse
+          color: Cpp_ThemeManager.colors["tooltip_base"]
           border.color: Cpp_ThemeManager.colors["tooltip_text"]
+          x: Math.min(cursorTracker.mouseX + 16, cursorTracker.width - width - 4)
+          y: Math.max(4, Math.min(cursorTracker.mouseY + 16, cursorTracker.height - height - 4))
 
           Label {
             id: tooltipLabel
-            anchors.centerIn: parent
-            text: formatValue(cursorTracker.cursorValue) + " " + model.units
-            color: Cpp_ThemeManager.colors["tooltip_text"]
-            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
+
             elide: Text.ElideRight
+            anchors.centerIn: parent
+            color: Cpp_ThemeManager.colors["tooltip_text"]
+            text: formatValue(cursorTracker.cursorValue) + " " + model.units
+            font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
           }
         }
       }
@@ -459,15 +463,16 @@ Item {
     //
     VisualRange {
       id: range
+
       value: model.value
       units: model.units
       rangeVisible: false
       maxValue: model.maxValue
       minValue: model.minValue
       alarm: model.alarmTriggered
-      maximumWidth: Math.min(root.width * 0.8, 200)
       Layout.alignment: Qt.AlignHCenter
       Layout.minimumWidth: implicitWidth
+      maximumWidth: Math.min(root.width * 0.8, 200)
     }
 
     Item {

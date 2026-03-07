@@ -296,8 +296,10 @@ void IO::Drivers::USB::close()
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_cancel_transfer(t);
 
-  if (m_readThread.isRunning())
-    m_readThread.wait(500);
+  if (m_readThread.isRunning() && !m_readThread.wait(500)) {
+    m_readThread.terminate();
+    m_readThread.wait();
+  }
 
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_free_transfer(t);

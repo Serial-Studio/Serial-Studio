@@ -31,6 +31,7 @@ import "../../Widgets" as Widgets
 
 Widgets.Pane {
   id: root
+
   title: qsTr("Device Setup")
   icon: "qrc:/rcc/icons/panes/setup.svg"
   implicitHeight: layout.implicitHeight + 32
@@ -86,19 +87,20 @@ Widgets.Pane {
   //
   actionComponent: Component {
     Item {
-      implicitWidth: label.implicitWidth
-      implicitHeight: label.implicitHeight
       opacity: Cpp_API_Server.enabled ?
                  (Cpp_API_Server.clientCount > 0 ? 1 : 0.5) :
                  0.0
+      implicitWidth: label.implicitWidth
+      implicitHeight: label.implicitHeight
       Behavior on opacity { NumberAnimation { duration: 200 } }
 
       MultiEffect {
         id: glow
+
         source: label
         shadowBlur: 2.0
-        anchors.fill: label
         shadowEnabled: true
+        anchors.fill: label
         shadowVerticalOffset: 0
         shadowHorizontalOffset: 0
         visible: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
@@ -110,14 +112,14 @@ Widgets.Pane {
           running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
 
           NumberAnimation {
-            from: 0.4
             to: 1.00
+            from: 0.4
             duration: 800
             easing.type: Easing.InOutSine
           }
           NumberAnimation {
-            from: 1.00
             to: 0.4
+            from: 1.00
             duration: 800
             easing.type: Easing.InOutSine
           }
@@ -128,14 +130,14 @@ Widgets.Pane {
           running: Cpp_API_Server.enabled && Cpp_API_Server.clientCount > 0
 
           NumberAnimation {
-            from: 0.15
             to: 0.6
+            from: 0.15
             duration: 800
             easing.type: Easing.InOutSine
           }
           NumberAnimation {
-            from: 0.6
             to: 0.15
+            from: 0.6
             duration: 800
             easing.type: Easing.InOutSine
           }
@@ -144,13 +146,14 @@ Widgets.Pane {
 
       Label {
         id: label
+
         visible: opacity > 0
-        font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
-        color: Cpp_ThemeManager.colors["pane_caption_foreground"]
         text: Cpp_API_Server.enabled ?
                 (Cpp_API_Server.clientCount > 0 ? qsTr("API Server Active (%1)").arg(Cpp_API_Server.clientCount) :
                                                   qsTr("API Server Ready")) :
                 qsTr("API Server Off")
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
+        color: Cpp_ThemeManager.colors["pane_caption_foreground"]
       }
     }
   }
@@ -193,7 +196,7 @@ Widgets.Pane {
     //
     ColumnLayout {
       id: layout
-      spacing: 4
+
       anchors {
         fill: parent
         topMargin: 10
@@ -201,6 +204,8 @@ Widgets.Pane {
         rightMargin: 9
         bottomMargin: 9
       }
+
+      spacing: 4
 
       //
       // Comm mode selector
@@ -253,10 +258,10 @@ Widgets.Pane {
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         onClicked: Cpp_JSON_ProjectModel.openJsonFile()
-        enabled: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.ProjectFile
         text: (Cpp_JSON_FrameBuilder.jsonMapFilename.length ?
                  qsTr("Change Project File (%1)").arg(Cpp_JSON_FrameBuilder.jsonMapFilename) :
                  qsTr("Select Project File") + "...")
+        enabled: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.ProjectFile
       }
 
       //
@@ -300,10 +305,10 @@ Widgets.Pane {
       CheckBox {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
-        Layout.alignment: Qt.AlignLeft
         text: qsTr("Create MDF4 File")
-        Layout.maximumWidth: root.maxItemWidth
+        Layout.alignment: Qt.AlignLeft
         checked: Cpp_MDF4_Export.exportEnabled
+        Layout.maximumWidth: root.maxItemWidth
 
         onCheckedChanged: {
           if (Cpp_MDF4_Export.exportEnabled !== checked)
