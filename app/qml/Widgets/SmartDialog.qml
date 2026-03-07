@@ -31,6 +31,7 @@ Window {
   //
   property int titlebarHeight: 0
   property bool staysOnTop: false
+  property bool nativeWindow: true
   property int contentPadding: 16
   property alias contentItem: contentArea.contentItem
   property color titleColor: Cpp_ThemeManager.colors["text"]
@@ -74,6 +75,9 @@ Window {
   // Native window integration
   //
   onVisibilityChanged: {
+    if (!root.nativeWindow)
+      return
+
     if (visible)
       Cpp_NativeWindow.addWindow(root, root.backgroundColor)
     else
@@ -88,6 +92,9 @@ Window {
   Connections {
     target: Cpp_ThemeManager
     function onThemeChanged() {
+      if (!root.nativeWindow)
+        return
+
       Cpp_NativeWindow.removeWindow(root)
       if (root.visible)
         Cpp_NativeWindow.addWindow(root, root.backgroundColor)

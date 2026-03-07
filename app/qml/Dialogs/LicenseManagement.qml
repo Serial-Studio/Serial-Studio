@@ -34,6 +34,7 @@ SmartDialog {
   // Window options
   //
   title: qsTr("Licensing")
+  nativeWindow: false
 
   //
   // Window controls
