@@ -41,7 +41,7 @@ on:
 env:
   QT_VERSION_LINUX: 6.10.2
   UNIXNAME: "serial-studio-pro"
-  INSTALL_QT_LINUX_INTEL: true
+  INSTALL_QT_LINUX_INTEL: false
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
 
 #-------------------------------------------------------------------------------
@@ -161,12 +161,14 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build \
-          -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DPRODUCTION_OPTIMIZATION=ON \
+          -DENABLE_HARDENING=ON \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
     - name: '🚧 Build application'
-      run: cmake --build build --config RelWithDebInfo -j$(nproc)
+      run: cmake --build build --config Release -j$(nproc)
 
     - name: '🐍 Set up Python'
       uses: actions/setup-python@v5
