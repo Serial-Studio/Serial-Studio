@@ -177,6 +177,14 @@ jobs:
     - name: '🐍 Install Python dependencies'
       run: pip install -r tests/requirements.txt
 
+    - name: '🔑 Activate Serial Studio license'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --activate "${{secrets.SERIAL_STUDIO_LICENSE_KEY}}"
+
     - name: '🚀 Start Serial Studio (headless)'
       env:
         QT_QPA_PLATFORM: offscreen
@@ -201,8 +209,7 @@ jobs:
           -m "not destructive and not dos" \
           -v \
           --tb=short \
-          --timeout=60 \
-          -x
+          --timeout=60
 
     - name: '🛑 Stop Serial Studio'
       if: always()

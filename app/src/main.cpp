@@ -40,8 +40,10 @@
 #include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
+#  include <QTimer>
 #  include "IO/Drivers/CANBus.h"
 #  include "IO/Drivers/Modbus.h"
+#  include "Licensing/LemonSqueezy.h"
 #endif
 
 #ifdef Q_OS_WIN
@@ -67,6 +69,7 @@ static bool argvHasFlag(int argc, char** argv, const char* flag);
 static char** injectPlatformArg(int& argc, char** argv, const char* platform);
 
 #ifdef BUILD_COMMERCIAL
+static int cliActivateLicense(QApplication& app, const QString& licenseKey);
 static void applyModbusRegister(const QString& spec);
 static void configureCanbusInterface(const QCommandLineParser& parser,
                                      const QCommandLineOption& bitrateOpt,
@@ -169,6 +172,9 @@ int main(int argc, char** argv)
   QCLO udpMltcstOpt("udp-multicast", "Enables multicast mode for UDP");
 
 #ifdef BUILD_COMMERCIAL
+  // License activation option
+  QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
+
   // ModBus RTU options
   QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
   QCLO modbusTcpOpt("modbus-tcp", "Connects to ModBus TCP server (e.g., 192.168.1.100:502)", "host:port");
@@ -208,6 +214,7 @@ int main(int argc, char** argv)
   parser.addOption(udpRemoteOpt);
   parser.addOption(udpMltcstOpt);
 #ifdef BUILD_COMMERCIAL
+  parser.addOption(activateOpt);
   parser.addOption(modbusRtuOpt);
   parser.addOption(modbusTcpOpt);
   parser.addOption(modbusSlaveOpt);
@@ -234,6 +241,12 @@ int main(int argc, char** argv)
     cliResetSettings();
     return EXIT_SUCCESS;
   }
+
+#ifdef BUILD_COMMERCIAL
+  // Handle license activation option (activates and exits; for CI/headless setup)
+  if (parser.isSet(activateOpt))
+    return cliActivateLicense(app, parser.value(activateOpt));
+#endif
 
   // Ensure resources are loaded
   Q_INIT_RESOURCE(rcc);
@@ -698,6 +711,54 @@ static void cliResetSettings()
 }
 
 #ifdef BUILD_COMMERCIAL
+/**
+ * @brief Activates a license key against the Lemon Squeezy API and exits.
+ *
+ * Intended for CI/headless environments where the license must be stored in
+ * QSettings before running the application in server mode. Runs the event loop
+ * until activation completes (success or failure) or a 30-second timeout fires.
+ *
+ * @param app        The QApplication instance.
+ * @param licenseKey The 36-character UUID license key to activate.
+ * @return EXIT_SUCCESS if the license was activated and saved, EXIT_FAILURE otherwise.
+ */
+static int cliActivateLicense(QApplication& app, const QString& licenseKey)
+{
+  auto& ls = Licensing::LemonSqueezy::instance();
+
+  ls.setLicense(licenseKey);
+  if (!ls.canActivate()) {
+    qCritical() << "Invalid license key format:" << licenseKey;
+    return EXIT_FAILURE;
+  }
+
+  int result = EXIT_FAILURE;
+
+  QTimer timeout;
+  timeout.setSingleShot(true);
+  timeout.setInterval(30'000);
+
+  QObject::connect(&ls, &Licensing::LemonSqueezy::activatedChanged, &app, [&] {
+    result = ls.isActivated() ? EXIT_SUCCESS : EXIT_FAILURE;
+    if (ls.isActivated())
+      qInfo() << "License activated successfully.";
+    else
+      qCritical() << "License activation failed.";
+    app.quit();
+  });
+
+  QObject::connect(&timeout, &QTimer::timeout, &app, [&] {
+    qCritical() << "License activation timed out.";
+    app.quit();
+  });
+
+  QTimer::singleShot(0, &ls, &Licensing::LemonSqueezy::activate);
+  timeout.start();
+
+  app.exec();
+  return result;
+}
+
 /**
  * @brief Parses a Modbus register spec string and registers it with the Modbus driver.
  *

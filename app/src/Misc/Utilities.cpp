@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QGridLayout>
+#include <QGuiApplication>
 #include <QMessageBox>
 #include <QPalette>
 #include <QProcess>
@@ -140,7 +141,8 @@ QString Misc::Utilities::hdpiImagePath(const QString& path)
 }
 
 /**
- * Shows a macOS-like message box with the given properties
+ * @brief Shows a macOS-like message box with the given properties.
+ * @return The StandardButton value of the button pressed, or QMessageBox::Ok in headless mode.
  */
 int Misc::Utilities::showMessageBox(const QString& text,
                                     const QString& informativeText,
@@ -150,6 +152,9 @@ int Misc::Utilities::showMessageBox(const QString& text,
                                     QMessageBox::StandardButton defaultButton,
                                     const ButtonTextMap& buttonTexts)
 {
+  if (qApp->platformName() == QLatin1String("offscreen"))
+    return QMessageBox::Ok;
+
   // Create message box & set options
   QMessageBox box;
   box.setStandardButtons(bt);
