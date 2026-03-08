@@ -240,6 +240,7 @@ set(SOURCES
   src/IO/FileTransmission.cpp
   src/IO/FrameReader.cpp
   src/DataModel/FrameParser.cpp
+  src/DataModel/JsCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
   src/DataModel/ProjectEditor.cpp
   src/DataModel/FrameBuilder.cpp
@@ -314,6 +315,7 @@ set(HEADERS
   src/IO/FileTransmission.h
   src/IO/FrameReader.h
   src/DataModel/FrameParser.h
+  src/DataModel/JsCodeEditor.h
   src/DataModel/ProjectModel.h
   src/DataModel/ProjectEditor.h
   src/DataModel/Frame.h

@@ -92,11 +92,7 @@ DataModel::ProjectModel& DataModel::ProjectModel::instance()
  */
 bool DataModel::ProjectModel::modified() const
 {
-  bool parserModified = false;
-  if (DataModel::FrameBuilder::instance().frameParser())
-    parserModified = DataModel::FrameBuilder::instance().frameParser()->isModified();
-
-  return m_modified || parserModified;
+  return m_modified;
 }
 
 /**
@@ -419,12 +415,6 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
     return false;
   }
 
-  auto* parser = DataModel::FrameBuilder::instance().frameParser();
-  if (parser && parser->isModified()) {
-    if (!parser->save(true))
-      return false;
-  }
-
   if (jsonFilePath().isEmpty() || askPath) {
     auto* dialog = new QFileDialog(nullptr,
                                    tr("Save Serial Studio Project"),
@@ -529,14 +519,8 @@ void DataModel::ProjectModel::newJsonFile()
   m_title                 = tr("Untitled Project");
   m_frameDecoder          = SerialStudio::PlainText;
   m_frameDetection        = SerialStudio::EndDelimiterOnly;
-  m_frameParserCode       = FrameParser::defaultTemplateCode();
-  m_widgetSettings        = QJsonObject();
-
-  auto* parser = DataModel::FrameBuilder::instance().frameParser();
-  if (parser) {
-    parser->readCode();
-    parser->loadDefaultTemplate(false);
-  }
+  m_frameParserCode = FrameParser::defaultTemplateCode();
+  m_widgetSettings  = QJsonObject();
 
   m_filePath = "";
 

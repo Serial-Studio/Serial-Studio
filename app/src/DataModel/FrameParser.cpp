@@ -22,22 +22,12 @@
 #include "DataModel/FrameParser.h"
 
 #include <QAtomicInt>
-#include <QCoreApplication>
-#include <QDesktopServices>
 #include <QFile>
-#include <QFileDialog>
-#include <QInputDialog>
-#include <QJavascriptHighlighter>
-#include <QJSEngine>
-#include <QLineNumberArea>
+#include <QMessageBox>
 #include <QRegularExpression>
-#include <QtGui/qshortcut.h>
 #include <QThread>
 
-#include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
-#include "Misc/CommonFonts.h"
-#include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -50,7 +40,8 @@
  * @brief Enum to classify JavaScript return value types from the parse
  * function.
  */
-enum class ArrayType {
+enum class ArrayType
+{
   Scalar,
   Array1D,
   Array2D,
@@ -63,16 +54,14 @@ enum class ArrayType {
  * @param jsValue JavaScript array to convert.
  * @return QStringList containing string representation of each element.
  */
-static QStringList jsArrayToStringList(const QJSValue& jsValue)
+static QStringList jsArrayToStringList(const QJSValue &jsValue)
 {
   QStringList result;
   const int length = jsValue.property("length").toInt();
   result.reserve(length);
 
-  for (int i = 0; i < length; ++i) {
-    const auto element = jsValue.property(i);
-    result.append(element.toString());
-  }
+  for (int i = 0; i < length; ++i)
+    result.append(jsValue.property(i).toString());
 
   return result;
 }
@@ -89,7 +78,7 @@ static QStringList jsArrayToStringList(const QJSValue& jsValue)
  * @param jsValue JavaScript value to classify.
  * @return ArrayType classification.
  */
-static ArrayType detectArrayType(const QJSValue& jsValue)
+static ArrayType detectArrayType(const QJSValue &jsValue)
 {
   if (!jsValue.isArray())
     return ArrayType::Scalar;
@@ -126,7 +115,7 @@ static ArrayType detectArrayType(const QJSValue& jsValue)
  * @param jsValue JavaScript 2D array.
  * @return List of QStringList, one per row/frame.
  */
-static QList<QStringList> convert2DArray(const QJSValue& jsValue)
+static QList<QStringList> convert2DArray(const QJSValue &jsValue)
 {
   QList<QStringList> results;
   const int rowCount = jsValue.property("length").toInt();
@@ -162,7 +151,7 @@ static QList<QStringList> convert2DArray(const QJSValue& jsValue)
  * @param jsValue JavaScript mixed array.
  * @return List of QStringList, one per frame.
  */
-static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
+static QList<QStringList> convertMixedArray(const QJSValue &jsValue)
 {
   const int elementCount = jsValue.property("length").toInt();
 
@@ -190,7 +179,7 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
     return results;
   }
 
-  for (auto& vec : vectors) {
+  for (auto &vec : vectors) {
     if (!vec.isEmpty() && vec.size() < maxVectorLength) {
       const QString lastValue = vec.last();
       while (vec.size() < maxVectorLength)
@@ -207,9 +196,10 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 
     frame.append(scalars);
 
-    for (const auto& vec : std::as_const(vectors))
+    for (const auto &vec : std::as_const(vectors)) {
       if (i < vec.size())
         frame.append(vec[i]);
+    }
 
     results.append(frame);
   }
@@ -218,281 +208,97 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 }
 
 //--------------------------------------------------------------------------------------------------
-// FrameParser class implementation
+// FrameParser singleton implementation
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructor function for the code editor widget.
+ * @brief Initialises the JS engine and loads template names.
+ *
+ * Cross-singleton connections to ProjectModel are deferred to
+ * @c setupExternalConnections() to avoid static-init-order deadlocks.
  */
-DataModel::FrameParser::FrameParser(QQuickItem* parent)
-  : QQuickPaintedItem(parent), m_suppressMessageBoxes(false), m_testDialog(this, nullptr)
+DataModel::FrameParser::FrameParser()
+  : m_templateIdx(-1)
+  , m_suppressMessageBoxes(false)
 {
-  // Disable mipmap & antialiasing, we don't need them
-  setMipmap(false);
-  setAntialiasing(false);
+  m_engine.installExtensions(QJSEngine::ConsoleExtension
+                             | QJSEngine::GarbageCollectionExtension);
 
-  // Disable alpha channel
-  setOpaquePainting(true);
-  setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
-
-  // Widgets don't process touch events, disable it
-  setAcceptTouchEvents(true);
-
-  // Set item flags, we need these to forward Quick events to the widget
-  setFlag(ItemHasContents, true);
-  setFlag(ItemIsFocusScope, true);
-  setFlag(ItemAcceptsInputMethod, true);
-  setAcceptedMouseButtons(Qt::AllButtons);
-
-  // Configure code editor
-  m_widget.setTabReplace(true);
-  m_widget.setTabReplaceSize(4);
-  m_widget.setAutoIndentation(true);
-  m_widget.setHighlighter(new QJavascriptHighlighter());
-  m_widget.setFont(Misc::CommonFonts::instance().monoFont());
-
-  // Configure JavaScript engine
-  m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
-
-  // Set widget palette
-  onThemeChanged();
-  connect(&Misc::ThemeManager::instance(),
-          &Misc::ThemeManager::themeChanged,
+  // Collect JS garbage at 1 Hz
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::timeout1Hz,
           this,
-          &DataModel::FrameParser::onThemeChanged);
+          &DataModel::FrameParser::collectGarbage);
 
-  // Load template names
-  loadTemplateNames();
-  loadDefaultTemplate();
+  // ProjectModel connections are deferred to setupExternalConnections() to
+  // avoid a static-init-order deadlock (ProjectModel calls FrameBuilder which
+  // calls FrameParser before ProjectModel finishes constructing).
+
+  // Reload template names when the UI language changes
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
           &DataModel::FrameParser::loadTemplateNames);
 
-  // Connect modification check signals
-  connect(&m_widget, &QCodeEditor::textChanged, this, [=, this] { Q_EMIT modifiedChanged(); });
+  loadTemplateNames();
+}
 
-  // Make project editor modification status depend on code modification status
-  connect(this,
-          &DataModel::FrameParser::modifiedChanged,
-          &ProjectModel::instance(),
-          &ProjectModel::modifiedChanged);
+/**
+ * @brief Returns the singleton instance.
+ */
+DataModel::FrameParser &DataModel::FrameParser::instance()
+{
+  static FrameParser singleton;
+  return singleton;
+}
 
-  // Load code from JSON model automatically
+/**
+ * @brief Wires cross-singleton connections and performs the initial script load.
+ *
+ * Called by ModuleManager after all singletons are constructed so that
+ * accessing ProjectModel::instance() here cannot deadlock.
+ */
+void DataModel::FrameParser::setupExternalConnections()
+{
   connect(&DataModel::ProjectModel::instance(),
-          &ProjectModel::frameParserCodeChanged,
+          &DataModel::ProjectModel::frameParserCodeChanged,
           this,
           &DataModel::FrameParser::readCode);
 
-  // Bridge signals
-  connect(&m_widget, &QCodeEditor::textChanged, this, &FrameParser::textChanged);
-
-  // Resize widget to fit QtQuick item
-  connect(this, &QQuickPaintedItem::widthChanged, this, &DataModel::FrameParser::resizeWidget);
-  connect(this, &QQuickPaintedItem::heightChanged, this, &DataModel::FrameParser::resizeWidget);
-
-  // Collect JS garbage at 1 Hz
-  connect(&Misc::TimerEvents::instance(),
-          &Misc::TimerEvents::timeout1Hz,
-          &m_engine,
-          &QJSEngine::collectGarbage);
-
-  // Configure render loop
-  connect(&Misc::TimerEvents::instance(),
-          &Misc::TimerEvents::uiTimeout,
-          this,
-          &DataModel::FrameParser::renderWidget);
-
-  // Load template code
-  reload();
+  readCode();
 }
 
 /**
- * @brief Returns the current text/data displayed in the code editor.
- */
-QString DataModel::FrameParser::text() const
-{
-  return m_widget.toPlainText();
-}
-
-/**
- * @brief Indicates whenever there are any unsaved changes in the code editor.
- * @return
- */
-bool DataModel::FrameParser::isModified() const
-{
-  if (m_widget.document())
-    return m_widget.document()->isModified();
-
-  return false;
-}
-
-/**
- * @brief Executes the current frame parser function over UTF-8 text data.
+ * @brief Returns the source code of the default frame parser template.
  *
- * This version is used when the frame is already a decoded QString
- * (e.g., ASCII or UTF-8 text). It avoids any binary conversion and
- * sends the string directly to the JavaScript parser function.
- *
- * @param frame Decoded UTF-8 string frame (e.g., "value1,value2,value3").
- * @return An array of strings returned by the JS parser.
+ * @return The default template source code, or an empty string if the
+ *         resource could not be read.
  */
-QStringList DataModel::FrameParser::parse(const QString& frame)
+QString DataModel::FrameParser::defaultTemplateCode()
 {
-  QJSValueList args;
-  args << frame;
-
-  return m_parseFunction.call(args).toVariant().toStringList();
-}
-
-/**
- * @brief Executes the current frame parser function over the input binary data.
- *
- * @param frame Binary frame data (e.g., from serial input).
- * @return Parsed string fields returned by the JS frame parser.
- */
-QStringList DataModel::FrameParser::parse(const QByteArray& frame)
-{
-  QJSValue jsArray;
-  if (m_hexToArray.isCallable()) [[likely]] {
-    QJSValueList hexArgs;
-    hexArgs << QString::fromLatin1(frame.toHex());
-    jsArray = m_hexToArray.call(hexArgs);
-  } else {
-    jsArray          = m_engine.newArray(frame.size());
-    const auto* data = reinterpret_cast<const quint8*>(frame.constData());
-    for (int i = 0; i < frame.size(); ++i)
-      jsArray.setProperty(i, data[i]);
+  QString code;
+  QFile file(QStringLiteral(":/rcc/scripts/comma_separated.js"));
+  if (file.open(QFile::ReadOnly)) {
+    code = QString::fromUtf8(file.readAll());
+    file.close();
   }
 
-  QJSValueList args;
-  args << jsArray;
-
-  return m_parseFunction.call(args).toVariant().toStringList();
+  return code;
 }
 
 /**
- * @brief Executes the frame parser function and returns one or more frames.
+ * @brief Returns the JavaScript source of the currently selected template.
  *
- * This version handles UTF-8 text data and supports:
- * - Flat arrays: [1, 2, 3] → single frame
- * - 2D arrays: [[1,2], [3,4]] → multiple frames (one per row)
- * - Mixed scalar/vector: [s1, s2, [v1,v2,v3]] → multiple frames with scalars
- * repeated
- *
- * Enables efficient BLE packet parsing where batched samples are automatically
- * expanded into individual frames without JavaScript code duplication.
- *
- * @param frame Decoded UTF-8 string frame.
- * @return List of QStringList, each representing one frame.
- */
-QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame)
-{
-  QList<QStringList> results;
-
-  QJSValueList args;
-  args << frame;
-  const auto jsResult = m_parseFunction.call(args);
-
-  if (jsResult.isError()) [[unlikely]] {
-    qWarning() << "[FrameParser] JS error:" << jsResult.property("message").toString();
-    return results;
-  }
-
-  const auto arrayType = detectArrayType(jsResult);
-
-  switch (arrayType) {
-    case ArrayType::Array2D:
-      return convert2DArray(jsResult);
-
-    case ArrayType::ArrayMixed:
-      return convertMixedArray(jsResult);
-
-    case ArrayType::Array1D:
-    case ArrayType::Scalar:
-    default:
-      results.append(jsResult.toVariant().toStringList());
-      return results;
-  }
-}
-
-/**
- * @brief Executes the frame parser function over binary data and returns one or
- * more frames.
- *
- * This version handles binary frame data and supports the same array types as
- * parseMultiFrame(QString):
- * - Flat arrays: single frame
- * - 2D arrays: multiple frames (one per row)
- * - Mixed scalar/vector: multiple frames with scalars repeated
- *
- * @param frame Binary frame data (e.g., from serial input).
- * @return List of QStringList, each representing one frame.
- */
-QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& frame)
-{
-  QList<QStringList> results;
-
-  QJSValue jsArray;
-  if (m_hexToArray.isCallable()) [[likely]] {
-    QJSValueList hexArgs;
-    hexArgs << QString::fromLatin1(frame.toHex());
-    jsArray = m_hexToArray.call(hexArgs);
-  } else {
-    jsArray          = m_engine.newArray(frame.size());
-    const auto* data = reinterpret_cast<const quint8*>(frame.constData());
-    for (int i = 0; i < frame.size(); ++i)
-      jsArray.setProperty(i, data[i]);
-  }
-
-  QJSValueList args;
-  args << jsArray;
-  const auto jsResult = m_parseFunction.call(args);
-
-  if (jsResult.isError()) [[unlikely]] {
-    qWarning() << "[FrameParser] JS error:" << jsResult.property("message").toString();
-    return results;
-  }
-
-  const auto arrayType = detectArrayType(jsResult);
-
-  switch (arrayType) {
-    case ArrayType::Array2D:
-      return convert2DArray(jsResult);
-
-    case ArrayType::ArrayMixed:
-      return convertMixedArray(jsResult);
-
-    case ArrayType::Array1D:
-    case ArrayType::Scalar:
-    default:
-      results.append(jsResult.toVariant().toStringList());
-      return results;
-  }
-}
-
-/**
- * @brief Retrieves the JavaScript code for the currently selected template
- *
- * Loads and returns the JavaScript parser code from the template file
- * corresponding to the current template index.
- *
- * The template files are stored in the application's resource system under
- * ":/rcc/scripts/".
- *
- * The function constructs the file path using the template filename, reads
- * the entire file contents, and returns it as a QString.
- *
- * @return QString containing the JavaScript parser code from the selected
- *         template file.
+ * @return Template source code, or an empty string if the index is invalid.
  */
 QString DataModel::FrameParser::templateCode() const
 {
   if (m_templateIdx < 0 || m_templateIdx >= m_templateFiles.count())
-    return "";
+    return {};
 
   QString code;
-  auto path = QString(":/rcc/scripts/%1").arg(m_templateFiles[m_templateIdx]);
+  const auto path =
+    QStringLiteral(":/rcc/scripts/%1").arg(m_templateFiles.at(m_templateIdx));
 
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
@@ -504,121 +310,171 @@ QString DataModel::FrameParser::templateCode() const
 }
 
 /**
- * @brief Returns the source code of the default frame parser template.
- *
- * Reads the built-in comma-separated values parser script from the
- * application resources and returns it as a string.
- *
- * @return The default template source code, or an empty string if the
- *         resource could not be read.
+ * @brief Returns the list of localised template display names.
  */
-QString DataModel::FrameParser::defaultTemplateCode()
+const QStringList &DataModel::FrameParser::templateNames() const
 {
-  QString code;
-  QFile file(":/rcc/scripts/comma_separated.js");
-  if (file.open(QFile::ReadOnly)) {
-    code = QString::fromUtf8(file.readAll());
-    file.close();
+  return m_templateNames;
+}
+
+/**
+ * @brief Returns the list of template file basenames.
+ */
+const QStringList &DataModel::FrameParser::templateFiles() const
+{
+  return m_templateFiles;
+}
+
+/**
+ * @brief Executes the current frame parser function over UTF-8 text data.
+ *
+ * @param frame Decoded UTF-8 string frame.
+ * @return An array of strings returned by the JS parser.
+ */
+QStringList DataModel::FrameParser::parse(const QString &frame)
+{
+  QJSValueList args;
+  args << frame;
+
+  return m_parseFunction.call(args).toVariant().toStringList();
+}
+
+/**
+ * @brief Executes the current frame parser function over binary data.
+ *
+ * @param frame Binary frame data.
+ * @return Parsed string fields returned by the JS frame parser.
+ */
+QStringList DataModel::FrameParser::parse(const QByteArray &frame)
+{
+  QJSValue jsArray;
+  if (m_hexToArray.isCallable()) [[likely]] {
+    QJSValueList hexArgs;
+    hexArgs << QString::fromLatin1(frame.toHex());
+    jsArray = m_hexToArray.call(hexArgs);
+  } else {
+    jsArray = m_engine.newArray(frame.size());
+    const auto *data = reinterpret_cast<const quint8 *>(frame.constData());
+    for (int i = 0; i < frame.size(); ++i)
+      jsArray.setProperty(i, data[i]);
   }
 
-  return code;
+  QJSValueList args;
+  args << jsArray;
+
+  return m_parseFunction.call(args).toVariant().toStringList();
 }
 
 /**
- * @brief Returns @c true whenever if there are any actions that can be undone.
- */
-bool DataModel::FrameParser::undoAvailable() const
-{
-  if (m_widget.document())
-    return isModified() && m_widget.document()->isUndoAvailable();
-
-  return false;
-}
-
-/**
- * @brief Returns @c true whenever if there are any actions that can be redone.
- */
-bool DataModel::FrameParser::redoAvailable() const
-{
-  if (m_widget.document())
-    return isModified() && m_widget.document()->isRedoAvailable();
-
-  return false;
-}
-
-/**
- * @brief Validates the script and stores it into the project model.
- * @param silent if set to @c false, the user shall be notified that the script
- *               data was processed correctly.
+ * @brief Executes the frame parser function over text data, returning one or
+ * more frames.
  *
- * @return @c true on success, @c false on failure
+ * Supports flat 1D arrays (single frame), pure 2D arrays (one frame per row),
+ * and mixed scalar/vector arrays (scalars repeated across frames).
+ *
+ * @param frame Decoded UTF-8 string frame.
+ * @return List of QStringList, each representing one frame.
  */
-bool DataModel::FrameParser::save(const bool silent)
+QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString &frame)
 {
-  if (loadScript(text(), !m_suppressMessageBoxes)) {
-    auto& model    = ProjectModel::instance();
-    bool prevModif = model.modified();
-    model.setFrameParserCode(text());
-    m_widget.document()->setModified(false);
-    m_widget.document()->clearUndoRedoStacks();
+  QList<QStringList> results;
 
-    if (!silent)
-      Misc::Utilities::showMessageBox(tr("Frame parser code updated successfully!"),
-                                      tr("No errors have been detected in the code."),
-                                      QMessageBox::Information);
-    else
-      model.setModified(prevModif);
+  QJSValueList args;
+  args << frame;
+  const auto jsResult = m_parseFunction.call(args);
 
-    Q_EMIT modifiedChanged();
-    return true;
+  if (jsResult.isError()) [[unlikely]] {
+    qWarning() << "[FrameParser] JS error:" << jsResult.property("message").toString();
+    return results;
   }
 
-  // Something did not work quite right
-  return false;
+  switch (detectArrayType(jsResult)) {
+    case ArrayType::Array2D:
+      return convert2DArray(jsResult);
+
+    case ArrayType::ArrayMixed:
+      return convertMixedArray(jsResult);
+
+    case ArrayType::Array1D:
+    case ArrayType::Scalar:
+    default:
+      results.append(jsResult.toVariant().toStringList());
+      return results;
+  }
 }
 
 /**
- * @brief Validates and loads the JavaScript frame parser code
+ * @brief Executes the frame parser function over binary data, returning one or
+ * more frames.
  *
- * Performs comprehensive validation of the JavaScript parser code to ensure it:
- * - Contains no syntax exceptionStackTrace
- * - Declares a callable 'parse' function
- * - Uses the correct function signature (single parameter)
- * - Can be executed by the JavaScript engine
- *
- * The validation process checks for:
- * 1. JavaScript syntax exceptionStackTrace during compilation
- * 2. Existence of the 'parse' function in global scope
- * 3. Correct function signature (parse(frame) not parse(frame, separator))
- * 4. Function callability
- *
- * If validation succeeds, stores the parse function for later use.
- * If validation fails, displays an appropriate error message to the user.
- *
- * @param script The JavaScript parser code to validate and load
- * @param showMessageBoxes If false, suppresses UI messageboxes (for API calls)
- *
- * @return true if the code is valid and the parse function is ready to use,
- *         false if validation failed
- *
- * @note Legacy two-parameter parse functions (parse(frame, separator)) are
- *       no longer supported and will trigger a warning
- *
- * @see evaluate()
- * @see m_parseFunction
+ * @param frame Binary frame data.
+ * @return List of QStringList, each representing one frame.
  */
-bool DataModel::FrameParser::loadScript(const QString& script, const bool showMessageBoxes)
+QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray &frame)
 {
-  // Reset any previously loaded function
+  QList<QStringList> results;
+
+  QJSValue jsArray;
+  if (m_hexToArray.isCallable()) [[likely]] {
+    QJSValueList hexArgs;
+    hexArgs << QString::fromLatin1(frame.toHex());
+    jsArray = m_hexToArray.call(hexArgs);
+  } else {
+    jsArray = m_engine.newArray(frame.size());
+    const auto *data = reinterpret_cast<const quint8 *>(frame.constData());
+    for (int i = 0; i < frame.size(); ++i)
+      jsArray.setProperty(i, data[i]);
+  }
+
+  QJSValueList args;
+  args << jsArray;
+  const auto jsResult = m_parseFunction.call(args);
+
+  if (jsResult.isError()) [[unlikely]] {
+    qWarning() << "[FrameParser] JS error:" << jsResult.property("message").toString();
+    return results;
+  }
+
+  switch (detectArrayType(jsResult)) {
+    case ArrayType::Array2D:
+      return convert2DArray(jsResult);
+
+    case ArrayType::ArrayMixed:
+      return convertMixedArray(jsResult);
+
+    case ArrayType::Array1D:
+    case ArrayType::Scalar:
+    default:
+      results.append(jsResult.toVariant().toStringList());
+      return results;
+  }
+}
+
+/**
+ * @brief Validates and loads a JavaScript frame parser script into the engine.
+ *
+ * Checks for syntax errors, verifies that a callable single-parameter
+ * @c parse() function exists, probes it with representative inputs, and
+ * installs an optimised hex-to-byte-array helper on success.
+ *
+ * @param script           The JavaScript source to validate and load.
+ * @param showMessageBoxes When @c false, errors are logged instead of shown.
+ * @return @c true on success, @c false if validation failed.
+ */
+bool DataModel::FrameParser::loadScript(const QString &script,
+                                        const bool showMessageBoxes)
+{
   m_parseFunction = QJSValue();
-  m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+  m_engine.installExtensions(QJSEngine::ConsoleExtension
+                             | QJSEngine::GarbageCollectionExtension);
 
   // Check for JavaScript syntax errors
   QStringList exceptionStackTrace;
-  auto result = m_engine.evaluate(script, "parser.js", 1, &exceptionStackTrace);
+  auto result = m_engine.evaluate(script, QStringLiteral("parser.js"), 1,
+                                  &exceptionStackTrace);
   if (result.isError()) {
-    QString errorMsg = result.property("message").toString();
-    int lineNumber   = result.property("lineNumber").toInt();
+    const QString errorMsg = result.property("message").toString();
+    const int lineNumber   = result.property("lineNumber").toInt();
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         tr("JavaScript Syntax Error"),
@@ -627,29 +483,28 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
           .arg(errorMsg),
         QMessageBox::Critical);
     } else {
-      qWarning() << "[FrameParser] JavaScript syntax error at line" << lineNumber << ":"
-                 << errorMsg;
+      qWarning() << "[FrameParser] JavaScript syntax error at line" << lineNumber
+                 << ":" << errorMsg;
     }
     return false;
   }
 
-  // Get list of exceptions
   if (!exceptionStackTrace.isEmpty()) {
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
         tr("JavaScript Exception Occurred"),
         tr("The parser code triggered the following exceptions:\n\n%1")
-          .arg(exceptionStackTrace.join("\n")),
+          .arg(exceptionStackTrace.join(QStringLiteral("\n"))),
         QMessageBox::Critical);
     } else {
-      qWarning() << "[FrameParser] JavaScript exceptions occurred:"
-                 << exceptionStackTrace.join(", ");
+      qWarning() << "[FrameParser] JavaScript exceptions:"
+                 << exceptionStackTrace.join(QStringLiteral(", "));
     }
     return false;
   }
 
-  // Verify that the 'parse' function exists
-  auto parseFunction = m_engine.globalObject().property("parse");
+  // Verify the 'parse' function exists and is callable
+  auto parseFunction = m_engine.globalObject().property(QStringLiteral("parse"));
   if (parseFunction.isNull()) {
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
@@ -663,7 +518,6 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     return false;
   }
 
-  // Verify that the 'parse' function is callable
   if (!parseFunction.isCallable()) {
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
@@ -677,27 +531,26 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     return false;
   }
 
-  // Validate function signature using regex
+  // Validate function signature
   static QRegularExpression functionRegex(
     R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
-  auto match = functionRegex.match(script);
+  const auto match = functionRegex.match(script);
   if (!match.hasMatch()) {
     if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(tr("Invalid Function Declaration"),
-                                      tr("No valid 'parse' function declaration found.\n\n"
-                                         "Expected format:\nfunction parse(frame) { ... }"),
-                                      QMessageBox::Critical);
-    } else
+      Misc::Utilities::showMessageBox(
+        tr("Invalid Function Declaration"),
+        tr("No valid 'parse' function declaration found.\n\n"
+           "Expected format:\nfunction parse(frame) { ... }"),
+        QMessageBox::Critical);
+    } else {
       qWarning() << "[FrameParser] No valid 'parse' function declaration found";
-
+    }
     return false;
   }
 
-  // Extract function parameters
-  QString firstArg  = match.captured(1);
-  QString secondArg = match.captured(3);
+  const QString firstArg  = match.captured(1);
+  const QString secondArg = match.captured(3);
 
-  // Check for empty or invalid first argument
   if (firstArg.isEmpty()) {
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
@@ -711,7 +564,6 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     return false;
   }
 
-  // Check for deprecated two-parameter format
   if (!secondArg.isEmpty()) {
     if (showMessageBoxes) {
       Misc::Utilities::showMessageBox(
@@ -753,7 +605,7 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
   const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
   {
     QAtomicInt probeDone(0);
-    auto* watchdog = QThread::create([this, &probeDone]() {
+    auto *watchdog = QThread::create([this, &probeDone]() {
       constexpr int kTimeoutMs = 500;
       constexpr int kSliceMs   = 20;
       for (int t = 0; t < kTimeoutMs && !probeDone.loadAcquire(); t += kSliceMs)
@@ -764,7 +616,7 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     });
     watchdog->start();
 
-    for (const auto& input : probeInputs) {
+    for (const auto &input : probeInputs) {
       QJSValueList probeArgs;
       probeArgs << input;
       const auto probeResult = parseFunction.call(probeArgs);
@@ -782,200 +634,41 @@ bool DataModel::FrameParser::loadScript(const QString& script, const bool showMe
     watchdog->deleteLater();
   }
 
-  // All validations failed
   if (!probeOk) {
     const QString errorMsg = lastError.property("message").toString();
     const int lineNumber   = lastError.property("lineNumber").toInt();
     if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(tr("Parse Function Runtime Error"),
-                                      tr("The parse function contains an error at line %1:\n\n"
-                                         "%2\n\n"
-                                         "Please fix the error in the function body.")
-                                        .arg(lineNumber)
-                                        .arg(errorMsg),
-                                      QMessageBox::Critical);
+      Misc::Utilities::showMessageBox(
+        tr("Parse Function Runtime Error"),
+        tr("The parse function contains an error at line %1:\n\n"
+           "%2\n\n"
+           "Please fix the error in the function body.")
+          .arg(lineNumber)
+          .arg(errorMsg),
+        QMessageBox::Critical);
     } else {
-      qWarning() << "[FrameParser] Parse function runtime error at line" << lineNumber << ":"
-                 << errorMsg;
+      qWarning() << "[FrameParser] Parse function runtime error at line" << lineNumber
+                 << ":" << errorMsg;
     }
     return false;
   }
 
-  // All validations passed, store the function for use
   m_parseFunction = parseFunction;
 
-  // Install optimized hex-to-byte-array helper for binary frame parsing.
+  // Install optimised hex-to-byte-array helper for binary frame parsing
   m_engine.evaluate(QStringLiteral(
-    "function __ss_internal_hex_to_array__(h){var n=h.length>>1,a=new Array(n);for(var i=0,j=0;i<h.length;i+=2,j++)a[j]=parseInt(h.substr(i,2),16);return a;}"));
-  m_hexToArray = m_engine.globalObject().property("__ss_internal_hex_to_array__");
+    "function __ss_internal_hex_to_array__(h){"
+    "var n=h.length>>1,a=new Array(n);"
+    "for(var i=0,j=0;i<h.length;i+=2,j++)"
+    "a[j]=parseInt(h.substr(i,2),16);return a;}"));
+  m_hexToArray =
+    m_engine.globalObject().property(QStringLiteral("__ss_internal_hex_to_array__"));
+
   return true;
 }
 
 /**
- * @brief Removes the selected text from the code editor widget and copies it
- *        into the system's clipboard.
- */
-void DataModel::FrameParser::cut()
-{
-  m_widget.cut();
-}
-
-/**
- * @brief Undoes the last user's action.
- */
-void DataModel::FrameParser::undo()
-{
-  m_widget.undo();
-}
-
-/**
- * @brief Redoes an undone action.
- */
-void DataModel::FrameParser::redo()
-{
-  m_widget.redo();
-}
-
-/**
- * @brief Opens a website with documentation relevant to the frame parser.
- */
-void DataModel::FrameParser::help()
-{
-  // clang-format off
-  const auto url = QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki/Data-Flow-in-Serial-Studio#frame-parser-function");
-  QDesktopServices::openUrl(QUrl(url));
-  // clang-format on
-}
-
-/**
- * @brief Copies the selected text into the system's clipboard.
- */
-void DataModel::FrameParser::copy()
-{
-  m_widget.copy();
-}
-
-/**
- * @brief Pastes data from the system's clipboard into the code editor.
- */
-void DataModel::FrameParser::paste()
-{
-  m_widget.paste();
-}
-
-/**
- * @brief Writes the current code into the project file.
- */
-void DataModel::FrameParser::apply()
-{
-  if (save(true)) {
-    auto& model = DataModel::ProjectModel::instance();
-    if (!model.jsonFilePath().isEmpty()) {
-      const bool modified  = model.modified();
-      const bool hasGroups = model.groupCount() > 0;
-      const bool hasImageGroup =
-        std::any_of(model.groups().begin(), model.groups().end(), [](const DataModel::Group& g) {
-          return g.widget == QLatin1String("image");
-        });
-      const bool hasDatasets = model.datasetCount() > 0 || hasImageGroup;
-      if (modified && hasGroups && hasDatasets) {
-        model.saveJsonFile();
-        DataModel::ProjectEditor::instance().displayFrameParserView();
-      }
-    }
-  }
-}
-
-/**
- * @brief Loads the default frame parser function into the code editor.
- * @param guiTrigger If true, marks the project as modified (user action)
- */
-void DataModel::FrameParser::reload(const bool guiTrigger)
-{
-  // Document has been modified, ask user if he/she wants to continue
-  if (isModified()) {
-    auto ret = Misc::Utilities::showMessageBox(tr("The document has been modified."),
-                                               tr("Are you sure you want to continue?"),
-                                               QMessageBox::Question,
-                                               qAppName(),
-                                               QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::No)
-      return;
-  }
-
-  // Load default template
-  loadDefaultTemplate(guiTrigger);
-}
-
-/**
- * @brief Prompts the user to select a JS file to import into the code editor.
- */
-void DataModel::FrameParser::import()
-{
-  // Document has been modified, ask user if he/she wants to continue
-  if (isModified()) {
-    auto ret = Misc::Utilities::showMessageBox(tr("The document has been modified!"),
-                                               tr("Are you sure you want to continue?"),
-                                               QMessageBox::Question,
-                                               qAppName(),
-                                               QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::No)
-      return;
-  }
-
-  auto* dialog =
-    new QFileDialog(nullptr, tr("Select Javascript file to import"), QDir::homePath(), "*.js");
-
-  dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
-  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
-    if (path.isEmpty()) {
-      dialog->deleteLater();
-      return;
-    }
-
-    QFile file(path);
-    if (file.open(QFile::ReadOnly)) {
-      m_widget.setPlainText(QString::fromUtf8(file.readAll()));
-      file.close();
-      (void)save(true);
-    }
-
-    dialog->deleteLater();
-  });
-
-  dialog->open();
-}
-
-/**
- * @brief Evaluates the JavaScript parser code for syntax errors
- *
- * Attempts to load and compile the current JavaScript parser code to detect
- * any syntax errors before the code is used for actual frame parsing.
- * If successful, displays a confirmation message to the user.
- *
- * This validation step helps users identify coding mistakes early, preventing
- * runtime errors when processing incoming data frames.
- *
- * @note This only validates JavaScript syntax, not logical correctness or
- *       runtime behavior. The parser may still fail during actual use if
- *       the logic is incorrect. Use the @c testWithSampleData() function
- *       to validate logic.
- *
- * @see loadScript()
- * @see text()
- */
-void DataModel::FrameParser::evaluate()
-{
-  if (loadScript(text(), !m_suppressMessageBoxes)) {
-    Misc::Utilities::showMessageBox(tr("Code Validation Successful"),
-                                    tr("No syntax errors detected in the parser code."),
-                                    QMessageBox::Information);
-  }
-}
-
-/**
- * @brief Sets whether to suppress messageboxes temporarily (for API calls).
+ * @brief Enables or disables UI message boxes (suppressed during API calls).
  */
 void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
 {
@@ -983,205 +676,71 @@ void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
 }
 
 /**
- * @brief Loads the code stored in the project file into the code editor.
+ * @brief Loads the code stored in the project model into the JS engine.
  */
 void DataModel::FrameParser::readCode()
 {
-  const auto code = ProjectModel::instance().frameParserCode();
+  const auto &model  = ProjectModel::instance();
+  const auto code    = model.frameParserCode();
+  const bool suppress =
+    m_suppressMessageBoxes || model.suppressMessageBoxes();
 
-  const bool suppress = m_suppressMessageBoxes || ProjectModel::instance().suppressMessageBoxes();
   (void)loadScript(code, !suppress);
-  m_widget.setPlainText(code);
-  m_widget.document()->clearUndoRedoStacks();
-  m_widget.document()->setModified(false);
 
   Q_EMIT modifiedChanged();
 }
 
 /**
- * @brief Selects all the text present in the code editor widget.
- */
-void DataModel::FrameParser::selectAll()
-{
-  m_widget.selectAll();
-}
-
-/**
- * @brief Resets the JS context used for testing the frame parser code.
+ * @brief Resets the JS execution context by re-loading the current code.
  */
 void DataModel::FrameParser::clearContext()
 {
-  // Respect suppression flag
-  (void)loadScript(text(), !m_suppressMessageBoxes);
+  (void)loadScript(ProjectModel::instance().frameParserCode(),
+                   !m_suppressMessageBoxes);
 }
 
 /**
- * @brief Sets the frame template index, prompting user confirmation if
- *        the document is modified.
+ * @brief Runs one cycle of JS garbage collection.
  */
-void DataModel::FrameParser::selectTemplate()
+void DataModel::FrameParser::collectGarbage()
 {
-  // Show combobox dialog to get template selection
-  bool ok;
-  auto name = QInputDialog::getItem(Q_NULLPTR,
-                                    tr("Select Frame Parser Template"),
-                                    tr("Choose a template to load:"),
-                                    m_templateNames,
-                                    m_templateIdx,
-                                    false,
-                                    &ok);
-
-  // User cancelled the dialog
-  if (!ok)
-    return;
-
-  // Get the selected index
-  int idx = m_templateNames.indexOf(name);
-  if (idx < 0)
-    return;
-
-  // Load template
-  setTemplateIdx(idx);
+  m_engine.collectGarbage();
 }
 
 /**
- * @brief Opens the frame parser test dialog with the current script.
- *
- * Loads the current script text and displays the test dialog if loading
- * succeeds. Clears any previous test results before showing.
- */
-void DataModel::FrameParser::testWithSampleData()
-{
-  if (loadScript(text(), true)) {
-    m_testDialog.clear();
-    m_testDialog.showNormal();
-  }
-}
-
-/**
- * @brief Loads the default comma-separated values (CSV) template
- *
- * Sets the current template to the comma-separated parser by finding its index
- * in the template files list and updating the template index accordingly.
- *
- * This is typically called during initialization or when resetting the parser
- * to default settings.
- *
- * The CSV template is chosen as the default because it's one of the most common
- * and simple data formats for serial communication.
- *
- * @param guiTrigger If true, marks the project as modified (user action)
- *
- * @note If "comma_separated.js" is not found in m_templateFiles, the index will
- *       be -1, which may result in undefined behavior. Ensure loadTemplates()
- *       is called before this function.
- *
- * @see setTemplateIdx()
- * @see loadTemplates()
- */
-void DataModel::FrameParser::loadDefaultTemplate(const bool guiTrigger)
-{
-  const auto idx = m_templateFiles.indexOf("comma_separated.js");
-  setTemplateIdx(idx);
-
-  if (!guiTrigger)
-    DataModel::ProjectModel::instance().setModified(false);
-}
-
-/**
- * @brief Modifies the palette of the code editor to match the colorscheme
- *        of the currently loaded theme file.
- */
-void DataModel::FrameParser::onThemeChanged()
-{
-  static const auto* t = &Misc::ThemeManager::instance();
-  const auto name      = t->parameters().value("code-editor-theme").toString();
-  const auto path      = QString(":/rcc/themes/code-editor/%1.xml").arg(name);
-
-  QFile file(path);
-  if (file.open(QFile::ReadOnly)) {
-    m_style.load(QString::fromUtf8(file.readAll()));
-    m_widget.setSyntaxStyle(&m_style);
-    file.close();
-  }
-}
-
-/**
- * @brief Renders the widget as a pixmap, which is then painted in the QML
- *        user interface.
- */
-void DataModel::FrameParser::renderWidget()
-{
-  if (isVisible()) {
-    m_pixmap = m_widget.grab();
-    update();
-  }
-}
-
-/**
- * Resizes the widget to fit inside the QML painted item.
- */
-void DataModel::FrameParser::resizeWidget()
-{
-  if (width() > 0 && height() > 0) {
-    m_widget.setFixedSize(width(), height());
-    renderWidget();
-  }
-}
-
-/**
- * @brief Loads the available JavaScript frame parser templates
- *
- * Initializes the list of template files and their corresponding user-friendly
- * display names. The templates provide pre-written JavaScript code for parsing
- * various serial communication protocols and data formats.
- *
- * The template files are loaded from the application resources and include
- * parsers for common protocols like NMEA, Modbus, CAN bus, MAVLink, as well
- * as generic formats like CSV, DataModel, XML, and various binary encodings.
- *
- * Template files and display names are stored in parallel arrays with matching
- * indices, allowing UI components to display localized names while referencing
- * the correct template file.
- *
- * @note Template names are marked for translation using tr() to support
- *       internationalization
- *
- * @note The order of m_templateFiles and m_templateNames must be kept in sync
+ * @brief Rebuilds the list of available JS template files and display names.
  */
 void DataModel::FrameParser::loadTemplateNames()
 {
-  m_templateFiles.clear();
-  m_templateFiles = {"at_commands.js",
-                     "base64_encoded.js",
-                     "batched_sensor_data.js",
-                     "binary_tlv.js",
-                     "cobs_encoded.js",
-                     "comma_separated.js",
-                     "fixed_width_fields.js",
-                     "hexadecimal_bytes.js",
-                     "ini_config.js",
-                     "json_data.js",
-                     "key_value_pairs.js",
-                     "mavlink.js",
-                     "messagepack.js",
-                     "modbus.js",
-                     "nmea_0183.js",
-                     "nmea_2000.js",
-                     "pipe_delimited.js",
-                     "raw_bytes.js",
-                     "rtcm_corrections.js",
-                     "semicolon_separated.js",
-                     "sirf_binary.js",
-                     "slip_encoded.js",
-                     "tab_separated.js",
-                     "time_series_2d.js",
-                     "ubx_ublox.js",
-                     "url_encoded.js",
-                     "xml_data.js",
-                     "yaml_data.js"};
+  m_templateFiles = {QStringLiteral("at_commands.js"),
+                     QStringLiteral("base64_encoded.js"),
+                     QStringLiteral("batched_sensor_data.js"),
+                     QStringLiteral("binary_tlv.js"),
+                     QStringLiteral("cobs_encoded.js"),
+                     QStringLiteral("comma_separated.js"),
+                     QStringLiteral("fixed_width_fields.js"),
+                     QStringLiteral("hexadecimal_bytes.js"),
+                     QStringLiteral("ini_config.js"),
+                     QStringLiteral("json_data.js"),
+                     QStringLiteral("key_value_pairs.js"),
+                     QStringLiteral("mavlink.js"),
+                     QStringLiteral("messagepack.js"),
+                     QStringLiteral("modbus.js"),
+                     QStringLiteral("nmea_0183.js"),
+                     QStringLiteral("nmea_2000.js"),
+                     QStringLiteral("pipe_delimited.js"),
+                     QStringLiteral("raw_bytes.js"),
+                     QStringLiteral("rtcm_corrections.js"),
+                     QStringLiteral("semicolon_separated.js"),
+                     QStringLiteral("sirf_binary.js"),
+                     QStringLiteral("slip_encoded.js"),
+                     QStringLiteral("tab_separated.js"),
+                     QStringLiteral("time_series_2d.js"),
+                     QStringLiteral("ubx_ublox.js"),
+                     QStringLiteral("url_encoded.js"),
+                     QStringLiteral("xml_data.js"),
+                     QStringLiteral("yaml_data.js")};
 
-  m_templateNames.clear();
   m_templateNames = {tr("AT command responses"),
                      tr("Base64-encoded data"),
                      tr("Batched sensor data (multi-frame)"),
@@ -1210,209 +769,45 @@ void DataModel::FrameParser::loadTemplateNames()
                      tr("URL-encoded data"),
                      tr("XML data"),
                      tr("YAML data")};
+
+  Q_EMIT templateNamesChanged();
 }
 
 /**
- * @brief Sets the frame template index, prompting user confirmation if
- *        modified.
+ * @brief Sets the active template index and saves the resulting code to the
+ * project model.
  *
- * If the current document has been modified, prompts the user before switching
- * templates. Loads the new template code and saves it automatically.
+ * Loads the template source, evaluates it in the engine, and persists it via
+ * @c ProjectModel::setFrameParserCode(). The @c JsCodeEditor picks up the
+ * change through the @c frameParserCodeChanged signal.
  *
- * @param idx The template index to set
+ * @param idx Template index into @c m_templateFiles.
  */
 void DataModel::FrameParser::setTemplateIdx(const int idx)
 {
-  // Get current code and template code
-  auto code                = m_widget.toPlainText().simplified();
-  auto currentTemplateCode = templateCode().simplified();
-
-  // Don't do anything if the template index is the same
-  if (idx == m_templateIdx && code == currentTemplateCode)
+  if (idx < 0 || idx >= m_templateFiles.size())
     return;
 
-  // Document has been modified, ask user if he/she wants to continue
-  if (isModified() || (!code.isEmpty() && code != currentTemplateCode)) {
-    auto ret =
-      Misc::Utilities::showMessageBox(tr("Loading a template will replace your current code."),
-                                      tr("Are you sure you want to continue?"),
-                                      QMessageBox::Question,
-                                      qAppName(),
-                                      QMessageBox::Yes | QMessageBox::No);
-
-    if (ret == QMessageBox::No)
-      return;
-  }
-
-  // Load template code
   m_templateIdx = idx;
-  m_widget.setPlainText(templateCode());
-  (void)save(true);
+  const QString code = templateCode();
 
-  // Mark the project file as modified
-  DataModel::ProjectModel::instance().setFrameParserCode(templateCode());
-  DataModel::ProjectModel::instance().setModified(true);
+  if (loadScript(code, !m_suppressMessageBoxes)) {
+    DataModel::ProjectModel::instance().setFrameParserCode(code);
+    DataModel::ProjectModel::instance().setModified(true);
+  }
 }
 
 /**
- * Displays the pixmap generated in the @c update() function in the QML
- * interface through the given @a painter pointer.
+ * @brief Loads the default comma-separated-values template.
+ *
+ * @param guiTrigger When @c false, clears the project's modified flag after
+ *                   loading (silent default reset).
  */
-void DataModel::FrameParser::paint(QPainter* painter)
+void DataModel::FrameParser::loadDefaultTemplate(const bool guiTrigger)
 {
-  if (painter && isVisible())
-    painter->drawPixmap(0, 0, m_pixmap);
-}
+  const auto idx = m_templateFiles.indexOf(QStringLiteral("comma_separated.js"));
+  setTemplateIdx(idx);
 
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::keyPressEvent(QKeyEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::keyReleaseEvent(QKeyEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::inputMethodEvent(QInputMethodEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::focusInEvent(QFocusEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::focusOutEvent(QFocusEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::mousePressEvent(QMouseEvent* event)
-{
-  auto pos = event->position();
-  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
-  QMouseEvent eventCopy(event->type(),
-                        pos,
-                        event->globalPosition(),
-                        event->button(),
-                        event->buttons(),
-                        event->modifiers(),
-                        event->pointingDevice());
-
-  QCoreApplication::sendEvent(&m_widget, &eventCopy);
-  forceActiveFocus();
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::mouseMoveEvent(QMouseEvent* event)
-{
-  auto pos = event->position();
-  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
-  QMouseEvent eventCopy(event->type(),
-                        pos,
-                        event->globalPosition(),
-                        event->button(),
-                        event->buttons(),
-                        event->modifiers(),
-                        event->pointingDevice());
-
-  QCoreApplication::sendEvent(&m_widget, &eventCopy);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::mouseReleaseEvent(QMouseEvent* event)
-{
-  auto pos = event->position();
-  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
-  QMouseEvent eventCopy(event->type(),
-                        pos,
-                        event->globalPosition(),
-                        event->button(),
-                        event->buttons(),
-                        event->modifiers(),
-                        event->pointingDevice());
-
-  QCoreApplication::sendEvent(&m_widget, &eventCopy);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::mouseDoubleClickEvent(QMouseEvent* event)
-{
-  auto pos = event->position();
-  pos.setX(pos.x() - m_widget.lineNumberArea()->sizeHint().width());
-  QMouseEvent eventCopy(event->type(),
-                        pos,
-                        event->globalPosition(),
-                        event->button(),
-                        event->buttons(),
-                        event->modifiers(),
-                        event->pointingDevice());
-
-  QCoreApplication::sendEvent(&m_widget, &eventCopy);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::wheelEvent(QWheelEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::dragEnterEvent(QDragEnterEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::dragMoveEvent(QDragMoveEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::dragLeaveEvent(QDragLeaveEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
-}
-
-/**
- * Passes the given @param event to the contained widget (if any).
- */
-void DataModel::FrameParser::dropEvent(QDropEvent* event)
-{
-  QCoreApplication::sendEvent(&m_widget, event);
+  if (!guiTrigger)
+    DataModel::ProjectModel::instance().setModified(false);
 }

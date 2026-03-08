@@ -31,7 +31,6 @@ Widgets.Pane {
 
   focus: true
   icon: Cpp_JSON_ProjectEditor.selectedIcon
-  Component.onCompleted: Cpp_JSON_FrameBuilder.setFrameParser(frameParser)
   title: Cpp_JSON_ProjectEditor.selectedText + (frameParser.isModified ? " (" + qsTr("modified") + ")" : "")
 
   //
@@ -436,7 +435,7 @@ Widgets.Pane {
       //
       // Code editor widget
       //
-      SerialStudio.FrameParser {
+      SerialStudio.JsCodeEditor {
         id: frameParser
 
         Layout.topMargin: -1

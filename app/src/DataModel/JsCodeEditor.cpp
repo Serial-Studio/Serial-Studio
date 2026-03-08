@@ -1,0 +1,525 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020–2025 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ *
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ */
+
+#include "DataModel/JsCodeEditor.h"
+
+#include <algorithm>
+
+#include <QCoreApplication>
+#include <QDesktopServices>
+#include <QFile>
+#include <QFileDialog>
+#include <QInputDialog>
+#include <QJavascriptHighlighter>
+#include <QLineNumberArea>
+#include <QMessageBox>
+#include <QUrl>
+
+#include "DataModel/FrameParser.h"
+#include "DataModel/ProjectEditor.h"
+#include "DataModel/ProjectModel.h"
+#include "Misc/CommonFonts.h"
+#include "Misc/ThemeManager.h"
+#include "Misc/TimerEvents.h"
+#include "Misc/Utilities.h"
+
+/**
+ * @brief Constructs the JsCodeEditor and wires all signal connections.
+ *
+ * @param parent Optional QQuickItem parent.
+ */
+DataModel::JsCodeEditor::JsCodeEditor(QQuickItem *parent)
+  : QQuickPaintedItem(parent)
+  , m_testDialog(&DataModel::FrameParser::instance(), nullptr)
+{
+  setMipmap(false);
+  setAntialiasing(false);
+  setOpaquePainting(true);
+  setAcceptTouchEvents(true);
+  setFlag(ItemHasContents, true);
+  setFlag(ItemIsFocusScope, true);
+  setFlag(ItemAcceptsInputMethod, true);
+  setAcceptedMouseButtons(Qt::AllButtons);
+  setFillColor(Misc::ThemeManager::instance().getColor(QStringLiteral("base")));
+
+  // Configure code editor
+  m_widget.setTabReplace(true);
+  m_widget.setTabReplaceSize(4);
+  m_widget.setAutoIndentation(true);
+  m_widget.setHighlighter(new QJavascriptHighlighter());
+  m_widget.setFont(Misc::CommonFonts::instance().monoFont());
+
+  // Apply current theme
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(),
+          &Misc::ThemeManager::themeChanged,
+          this,
+          &DataModel::JsCodeEditor::onThemeChanged);
+
+  // Emit modification signals when the editor document changes
+  connect(&m_widget, &QCodeEditor::textChanged, this, [this] {
+    Q_EMIT modifiedChanged();
+  });
+  connect(&m_widget, &QCodeEditor::textChanged, this,
+          &DataModel::JsCodeEditor::textChanged);
+
+  // Bridge editor modified state to ProjectModel so the title bar stays updated
+  connect(this, &DataModel::JsCodeEditor::modifiedChanged,
+          &ProjectModel::instance(), &ProjectModel::modifiedChanged);
+
+  // Keep display in sync when the project loads new parser code
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::frameParserCodeChanged,
+          this,
+          &DataModel::JsCodeEditor::readCode);
+
+  // Resize backing widget to match QML item dimensions
+  connect(this, &QQuickPaintedItem::widthChanged,
+          this, &DataModel::JsCodeEditor::resizeWidget);
+  connect(this, &QQuickPaintedItem::heightChanged,
+          this, &DataModel::JsCodeEditor::resizeWidget);
+
+  // Drive the render loop
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::uiTimeout,
+          this,
+          &DataModel::JsCodeEditor::renderWidget);
+
+  // Populate editor text from the current project state
+  readCode();
+}
+
+/**
+ * @brief Returns the current text displayed in the code editor.
+ */
+QString DataModel::JsCodeEditor::text() const
+{
+  return m_widget.toPlainText();
+}
+
+/**
+ * @brief Returns @c true when the editor document has unsaved changes.
+ */
+bool DataModel::JsCodeEditor::isModified() const
+{
+  if (m_widget.document())
+    return m_widget.document()->isModified();
+
+  return false;
+}
+
+/**
+ * @brief Returns @c true when an undo action is available.
+ */
+bool DataModel::JsCodeEditor::undoAvailable() const
+{
+  if (m_widget.document())
+    return isModified() && m_widget.document()->isUndoAvailable();
+
+  return false;
+}
+
+/**
+ * @brief Returns @c true when a redo action is available.
+ */
+bool DataModel::JsCodeEditor::redoAvailable() const
+{
+  if (m_widget.document())
+    return isModified() && m_widget.document()->isRedoAvailable();
+
+  return false;
+}
+
+/**
+ * @brief Removes selected text and copies it to the clipboard.
+ */
+void DataModel::JsCodeEditor::cut()
+{
+  m_widget.cut();
+}
+
+/**
+ * @brief Undoes the last edit.
+ */
+void DataModel::JsCodeEditor::undo()
+{
+  m_widget.undo();
+}
+
+/**
+ * @brief Redoes the previously undone edit.
+ */
+void DataModel::JsCodeEditor::redo()
+{
+  m_widget.redo();
+}
+
+/**
+ * @brief Opens the online documentation for the frame parser.
+ */
+void DataModel::JsCodeEditor::help()
+{
+  // clang-format off
+  QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/Serial-Studio/Serial-Studio/wiki/Data-Flow-in-Serial-Studio#frame-parser-function")));
+  // clang-format on
+}
+
+/**
+ * @brief Copies selected text to the clipboard.
+ */
+void DataModel::JsCodeEditor::copy()
+{
+  m_widget.copy();
+}
+
+/**
+ * @brief Pastes clipboard content into the editor.
+ */
+void DataModel::JsCodeEditor::paste()
+{
+  m_widget.paste();
+}
+
+/**
+ * @brief Validates the current code and saves it to the project.
+ *
+ * On success, saves the project file if one is already open and the project
+ * has groups and datasets.
+ */
+void DataModel::JsCodeEditor::apply()
+{
+  auto &parser = DataModel::FrameParser::instance();
+  if (!parser.loadScript(text(), true))
+    return;
+
+  auto &model = DataModel::ProjectModel::instance();
+  const bool prevModif = model.modified();
+  model.setFrameParserCode(text());
+  m_widget.document()->setModified(false);
+  m_widget.document()->clearUndoRedoStacks();
+  model.setModified(prevModif);
+
+  Q_EMIT modifiedChanged();
+
+  if (!model.jsonFilePath().isEmpty()) {
+    const bool hasImageGroup =
+      std::any_of(model.groups().begin(), model.groups().end(),
+                  [](const DataModel::Group &g) {
+                    return g.widget == QLatin1String("image");
+                  });
+
+    if (model.modified() && model.groupCount() > 0
+        && (model.datasetCount() > 0 || hasImageGroup)) {
+      model.saveJsonFile();
+      DataModel::ProjectEditor::instance().displayFrameParserView();
+    }
+  }
+}
+
+/**
+ * @brief Opens a file dialog to import an external JavaScript file.
+ */
+void DataModel::JsCodeEditor::import()
+{
+  if (isModified()) {
+    const auto ret = Misc::Utilities::showMessageBox(
+      tr("The document has been modified!"),
+      tr("Are you sure you want to continue?"),
+      QMessageBox::Question, qAppName(),
+      QMessageBox::Yes | QMessageBox::No);
+    if (ret == QMessageBox::No)
+      return;
+  }
+
+  auto *dialog = new QFileDialog(nullptr,
+                                 tr("Select Javascript file to import"),
+                                 QDir::homePath(),
+                                 QStringLiteral("*.js"));
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this,
+          [this, dialog](const QString &path) {
+            if (!path.isEmpty()) {
+              QFile file(path);
+              if (file.open(QFile::ReadOnly)) {
+                m_widget.setPlainText(QString::fromUtf8(file.readAll()));
+                file.close();
+                apply();
+              }
+            }
+            dialog->deleteLater();
+          });
+
+  dialog->open();
+}
+
+/**
+ * @brief Validates the current code for syntax errors and reports the result.
+ */
+void DataModel::JsCodeEditor::evaluate()
+{
+  if (DataModel::FrameParser::instance().loadScript(text(), true)) {
+    Misc::Utilities::showMessageBox(tr("Code Validation Successful"),
+                                    tr("No syntax errors detected in the parser code."),
+                                    QMessageBox::Information);
+  }
+}
+
+/**
+ * @brief Reloads the editor text from the current project model code.
+ *
+ * Also tells the FrameParser singleton to reload its JS engine state.
+ */
+void DataModel::JsCodeEditor::readCode()
+{
+  const auto code = DataModel::ProjectModel::instance().frameParserCode();
+  m_widget.setPlainText(code);
+  m_widget.document()->clearUndoRedoStacks();
+  m_widget.document()->setModified(false);
+
+  Q_EMIT modifiedChanged();
+}
+
+/**
+ * @brief Selects all text in the editor.
+ */
+void DataModel::JsCodeEditor::selectAll()
+{
+  m_widget.selectAll();
+}
+
+/**
+ * @brief Shows a template picker dialog and loads the selected template.
+ */
+void DataModel::JsCodeEditor::selectTemplate()
+{
+  auto &parser = DataModel::FrameParser::instance();
+
+  if (isModified()) {
+    const auto ret = Misc::Utilities::showMessageBox(
+      tr("Loading a template will replace your current code."),
+      tr("Are you sure you want to continue?"),
+      QMessageBox::Question, qAppName(),
+      QMessageBox::Yes | QMessageBox::No);
+    if (ret == QMessageBox::No)
+      return;
+  }
+
+  bool ok;
+  const auto name = QInputDialog::getItem(
+    nullptr, tr("Select Frame Parser Template"),
+    tr("Choose a template to load:"),
+    parser.templateNames(), 0, false, &ok);
+
+  if (!ok)
+    return;
+
+  const int idx = parser.templateNames().indexOf(name);
+  if (idx >= 0)
+    parser.setTemplateIdx(idx);
+}
+
+/**
+ * @brief Validates the current script and opens the test dialog on success.
+ */
+void DataModel::JsCodeEditor::testWithSampleData()
+{
+  if (DataModel::FrameParser::instance().loadScript(text(), true)) {
+    m_testDialog.clear();
+    m_testDialog.showNormal();
+  }
+}
+
+/**
+ * @brief Reloads the default template after confirming with the user if
+ * the document is modified.
+ *
+ * @param guiTrigger Passed through to @c loadDefaultTemplate().
+ */
+void DataModel::JsCodeEditor::reload(const bool guiTrigger)
+{
+  if (isModified()) {
+    const auto ret = Misc::Utilities::showMessageBox(
+      tr("The document has been modified."),
+      tr("Are you sure you want to continue?"),
+      QMessageBox::Question, qAppName(),
+      QMessageBox::Yes | QMessageBox::No);
+    if (ret == QMessageBox::No)
+      return;
+  }
+
+  loadDefaultTemplate(guiTrigger);
+}
+
+/**
+ * @brief Loads the default comma-separated-values template.
+ *
+ * @param guiTrigger Forwarded to @c FrameParser::loadDefaultTemplate().
+ */
+void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
+{
+  DataModel::FrameParser::instance().loadDefaultTemplate(guiTrigger);
+}
+
+/**
+ * @brief Updates the editor colour scheme to match the active application theme.
+ */
+void DataModel::JsCodeEditor::onThemeChanged()
+{
+  static const auto *t = &Misc::ThemeManager::instance();
+  const auto name = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
+  const auto path = QStringLiteral(":/rcc/themes/code-editor/%1.xml").arg(name);
+
+  QFile file(path);
+  if (file.open(QFile::ReadOnly)) {
+    m_style.load(QString::fromUtf8(file.readAll()));
+    m_widget.setSyntaxStyle(&m_style);
+    file.close();
+  }
+}
+
+/**
+ * @brief Captures the editor widget as a pixmap for QML painting.
+ */
+void DataModel::JsCodeEditor::renderWidget()
+{
+  if (isVisible()) {
+    m_pixmap = m_widget.grab();
+    update();
+  }
+}
+
+/**
+ * @brief Resizes the backing widget to match the QML item dimensions.
+ */
+void DataModel::JsCodeEditor::resizeWidget()
+{
+  if (width() > 0 && height() > 0) {
+    m_widget.setFixedSize(static_cast<int>(width()),
+                          static_cast<int>(height()));
+    renderWidget();
+  }
+}
+
+/**
+ * @brief Paints the captured pixmap into the QML scene.
+ */
+void DataModel::JsCodeEditor::paint(QPainter *painter)
+{
+  if (painter && isVisible())
+    painter->drawPixmap(0, 0, m_pixmap);
+}
+
+void DataModel::JsCodeEditor::keyPressEvent(QKeyEvent *event)
+{
+  QCoreApplication::sendEvent(&m_widget, event);
+}
+
+void DataModel::JsCodeEditor::keyReleaseEvent(QKeyEvent *event)
+{
+  QCoreApplication::sendEvent(&m_widget, event);
+}
+
+void DataModel::JsCodeEditor::inputMethodEvent(QInputMethodEvent *event)
+{
+  QCoreApplication::sendEvent(&m_widget, event);
+}
+
+void DataModel::JsCodeEditor::focusInEvent(QFocusEvent *event)
+{
+  QCoreApplication::sendEvent(&m_widget, event);
+}
+
+void DataModel::JsCodeEditor::focusOutEvent(QFocusEvent *event)
+{
+  QCoreApplication::sendEvent(&m_widget, event);
+}
+
+void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent *event)
+{
+  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
+  QMouseEvent copy(event->type(),
+                   event->position() - QPointF(lineNumWidth, 0),
+                   event->globalPosition(),
+                   event->button(), event->buttons(), event->modifiers(),
+                   event->pointingDevice());
+  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+  forceActiveFocus();
+}
+
+void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent *event)
+{
+  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
+  QMouseEvent copy(event->type(),
+                   event->position() - QPointF(lineNumWidth, 0),
+                   event->globalPosition(),
+                   event->button(), event->buttons(), event->modifiers(),
+                   event->pointingDevice());
+  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+}
+
+void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent *event)
+{
+  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
+  QMouseEvent copy(event->type(),
+                   event->position() - QPointF(lineNumWidth, 0),
+                   event->globalPosition(),
+                   event->button(), event->buttons(), event->modifiers(),
+                   event->pointingDevice());
+  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+}
+
+void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
+  QMouseEvent copy(event->type(),
+                   event->position() - QPointF(lineNumWidth, 0),
+                   event->globalPosition(),
+                   event->button(), event->buttons(), event->modifiers(),
+                   event->pointingDevice());
+  QCoreApplication::sendEvent(m_widget.viewport(), &copy);
+}
+
+void DataModel::JsCodeEditor::wheelEvent(QWheelEvent *event)
+{
+  QCoreApplication::sendEvent(m_widget.viewport(), event);
+}
+
+void DataModel::JsCodeEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+  QCoreApplication::sendEvent(m_widget.viewport(), event);
+}
+
+void DataModel::JsCodeEditor::dragMoveEvent(QDragMoveEvent *event)
+{
+  QCoreApplication::sendEvent(m_widget.viewport(), event);
+}
+
+void DataModel::JsCodeEditor::dragLeaveEvent(QDragLeaveEvent *event)
+{
+  QCoreApplication::sendEvent(m_widget.viewport(), event);
+}
+
+void DataModel::JsCodeEditor::dropEvent(QDropEvent *event)
+{
+  QCoreApplication::sendEvent(m_widget.viewport(), event);
+}

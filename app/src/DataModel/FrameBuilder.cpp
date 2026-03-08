@@ -27,6 +27,7 @@
 
 #include "API/Server.h"
 #include "CSV/Export.h"
+#include "DataModel/FrameParser.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Manager.h"
 #include "MDF4/Export.h"
@@ -102,7 +103,6 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
 DataModel::FrameBuilder::FrameBuilder()
   : m_quickPlotChannels(-1)
   , m_quickPlotHasHeader(false)
-  , m_frameParser(nullptr)
   , m_opMode(SerialStudio::ProjectFile)
   , m_timestampedFramesEnabled(false)
 {
@@ -198,14 +198,6 @@ QString DataModel::FrameBuilder::jsonMapFilename() const
 const DataModel::Frame& DataModel::FrameBuilder::frame() const
 {
   return m_frame;
-}
-
-/**
- * Returns a pointer to the currently loaded frame parser editor.
- */
-DataModel::FrameParser* DataModel::FrameBuilder::frameParser() const
-{
-  return m_frameParser;
 }
 
 /**
@@ -333,8 +325,7 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray& jsonData,
                                                   const bool showMessageBoxes)
 {
   // Suppress parser messageboxes for API calls
-  if (m_frameParser)
-    m_frameParser->setSuppressMessageBoxes(!showMessageBoxes);
+  DataModel::FrameParser::instance().setSuppressMessageBoxes(!showMessageBoxes);
 
   // Validate JSON with security bounds checking
   const auto result = Misc::JsonValidator::parseAndValidate(jsonData);
@@ -349,10 +340,7 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray& jsonData,
     } else
       qWarning() << "[FrameBuilder] JSON validation error:" << result.errorMessage;
 
-    // Restore parser messagebox behavior before returning
-    if (m_frameParser && !showMessageBoxes)
-      m_frameParser->setSuppressMessageBoxes(false);
-
+    DataModel::FrameParser::instance().setSuppressMessageBoxes(false);
     Q_EMIT jsonFileMapChanged();
     return;
   }
@@ -372,15 +360,10 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray& jsonData,
       Misc::Utilities::showMessageBox(tr("This file isn't a valid project file"),
                                       tr("Make sure it's a properly formatted JSON project."),
                                       QMessageBox::Warning);
-    }
-
-    else
+    } else
       qWarning() << "[FrameBuilder] This file isn't a valid project file";
 
-    // Restore parser messagebox behavior before returning
-    if (m_frameParser && !showMessageBoxes)
-      m_frameParser->setSuppressMessageBoxes(false);
-
+    DataModel::FrameParser::instance().setSuppressMessageBoxes(false);
     Q_EMIT jsonFileMapChanged();
     return;
   }
@@ -403,20 +386,11 @@ void DataModel::FrameBuilder::loadJsonMapFromData(const QByteArray& jsonData,
   }
 
   // Restore parser messagebox behavior
-  if (m_frameParser && !showMessageBoxes)
-    m_frameParser->setSuppressMessageBoxes(false);
+  if (!showMessageBoxes)
+    DataModel::FrameParser::instance().setSuppressMessageBoxes(false);
 
   // Notify UI that JSON has been successfully loaded
   Q_EMIT jsonFileMapChanged();
-}
-
-/**
- * @brief Assigns an instance to the frame parser to be used to split frame
- *        data/elements into individual parts.
- */
-void DataModel::FrameBuilder::setFrameParser(DataModel::FrameParser* parser)
-{
-  m_frameParser = parser;
 }
 
 /**
@@ -528,8 +502,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
     return;
 
   // Reset the frame parser execution context
-  if (m_frameParser)
-    m_frameParser->readCode();
+  DataModel::FrameParser::instance().readCode();
 
   // Auto-execute actions if required
   const auto& actions = m_frame.actions;
@@ -588,22 +561,23 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
 {
   QList<QStringList> multiChannels;
 
-  if (!SerialStudio::isAnyPlayerOpen() && m_frameParser) [[likely]] {
+  if (!SerialStudio::isAnyPlayerOpen()) [[likely]] {
+    auto& parser = DataModel::FrameParser::instance();
     const auto decoderMethod = DataModel::ProjectModel::instance().decoderMethod();
 
     switch (decoderMethod) {
       case SerialStudio::Hexadecimal:
-        multiChannels = m_frameParser->parseMultiFrame(QString::fromLatin1(data.toHex()));
+        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data.toHex()));
         break;
       case SerialStudio::Base64:
-        multiChannels = m_frameParser->parseMultiFrame(QString::fromLatin1(data.toBase64()));
+        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data.toBase64()));
         break;
       case SerialStudio::Binary:
-        multiChannels = m_frameParser->parseMultiFrame(data);
+        multiChannels = parser.parseMultiFrame(data);
         break;
       case SerialStudio::PlainText:
       default:
-        multiChannels = m_frameParser->parseMultiFrame(QString::fromUtf8(data));
+        multiChannels = parser.parseMultiFrame(QString::fromUtf8(data));
         break;
     }
   } else {

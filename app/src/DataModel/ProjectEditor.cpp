@@ -25,8 +25,6 @@
 #include <QFileInfo>
 #include <QTimer>
 
-#include "DataModel/FrameBuilder.h"
-#include "DataModel/FrameParser.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
 #include "Misc/Translator.h"
@@ -1608,40 +1606,14 @@ void DataModel::ProjectEditor::generateComboBoxModels()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Transitions the editor to @p view, prompting to save unsaved frame-parser
- *        changes when leaving FrameParserView.
+ * @brief Transitions the editor to @p view.
  *
- * Emits currentViewChanged() and editableOptionsChanged() after the transition.
- * A no-op when @p view equals the current view.
+ * Emits currentViewChanged() and selectedTextChanged() after the transition.
  *
  * @param view  The target editor view.
  */
 void DataModel::ProjectEditor::setCurrentView(const DataModel::ProjectEditor::CurrentView view)
 {
-  auto* parser = DataModel::FrameBuilder::instance().frameParser();
-  if (parser && m_currentView == FrameParserView && m_currentView != view) {
-    if (parser->isModified()) {
-      bool changeView = false;
-      const auto ret  = Misc::Utilities::showMessageBox(
-        tr("Save changes to frame parser code?"),
-        tr("Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' "
-            "to return."),
-        QMessageBox::Question,
-        tr("Save Changes"),
-        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-
-      if (ret == QMessageBox::Save)
-        changeView = parser->save(true);
-      else if (ret == QMessageBox::Discard) {
-        changeView = true;
-        parser->readCode();
-      }
-
-      if (!changeView)
-        displayFrameParserView();
-    }
-  }
-
   m_currentView = view;
   Q_EMIT currentViewChanged();
   Q_EMIT selectedTextChanged();

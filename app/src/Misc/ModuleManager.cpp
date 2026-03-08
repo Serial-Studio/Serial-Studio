@@ -34,6 +34,7 @@
 #include "CSV/Player.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameParser.h"
+#include "DataModel/JsCodeEditor.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Drivers/BluetoothLE.h"
@@ -286,7 +287,7 @@ void Misc::ModuleManager::registerQmlTypes()
 #endif
 
   // Register JSON custom items
-  qmlRegisterType<DataModel::FrameParser>("SerialStudio", 1, 0, "FrameParser");
+  qmlRegisterType<DataModel::JsCodeEditor>("SerialStudio", 1, 0, "JsCodeEditor");
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
   qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
 
@@ -345,6 +346,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto ioBluetoothLE        = &IO::Drivers::BluetoothLE::instance();
   auto ioFileTransmission   = &IO::FileTransmission::instance();
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
+  auto frameParser          = &DataModel::FrameParser::instance();
 
   // Initialize commercial modules
 #ifdef BUILD_COMMERCIAL
@@ -378,6 +380,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   csvExport->setupExternalConnections();
   ioManager->setupExternalConnections();
   mdf4Export->setupExternalConnections();
+  frameParser->setupExternalConnections();
   projectModel->setupExternalConnections();
   frameBuilder->setupExternalConnections();
   consoleExport->setupExternalConnections();

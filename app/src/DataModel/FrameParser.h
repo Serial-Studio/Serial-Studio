@@ -21,106 +21,73 @@
 
 #pragma once
 
-#include <QCodeEditor>
-#include <QEvent>
 #include <QJSEngine>
 #include <QJSValue>
-#include <QPainter>
-#include <QQuickPaintedItem>
-#include <QSyntaxStyle>
-
-#include "DataModel/FrameParserTestDialog.h"
+#include <QObject>
+#include <QStringList>
 
 namespace DataModel {
-class FrameParser : public QQuickPaintedItem {
+
+/**
+ * @brief Singleton JS engine for frame parsing.
+ *
+ * Owns the QJSEngine, validates and loads JavaScript parser scripts, and
+ * executes them against incoming frames. Has no GUI dependency — safe to use
+ * in headless / CI mode.
+ */
+class FrameParser : public QObject
+{
   Q_OBJECT
-  Q_PROPERTY(QString text READ text NOTIFY textChanged)
-  Q_PROPERTY(bool isModified READ isModified NOTIFY modifiedChanged)
-  Q_PROPERTY(bool undoAvailable READ undoAvailable NOTIFY modifiedChanged)
-  Q_PROPERTY(bool redoAvailable READ redoAvailable NOTIFY modifiedChanged)
 
 signals:
-  void textChanged();
   void modifiedChanged();
+  void templateNamesChanged();
+
+private:
+  explicit FrameParser();
+  FrameParser(FrameParser &&) = delete;
+  FrameParser(const FrameParser &) = delete;
+  FrameParser &operator=(FrameParser &&) = delete;
+  FrameParser &operator=(const FrameParser &) = delete;
 
 public:
-  FrameParser(QQuickItem* parent = 0);
+  static FrameParser &instance();
 
-  [[nodiscard]] QString text() const;
-  [[nodiscard]] bool isModified() const;
-  [[nodiscard]] QString templateCode() const;
   [[nodiscard]] static QString defaultTemplateCode();
 
-  [[nodiscard]] QStringList parse(const QString& frame);
-  [[nodiscard]] QStringList parse(const QByteArray& frame);
+  [[nodiscard]] QString templateCode() const;
+  [[nodiscard]] const QStringList &templateNames() const;
+  [[nodiscard]] const QStringList &templateFiles() const;
 
-  [[nodiscard]] QList<QStringList> parseMultiFrame(const QString& frame);
-  [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray& frame);
+  [[nodiscard]] QStringList parse(const QString &frame);
+  [[nodiscard]] QStringList parse(const QByteArray &frame);
 
-  [[nodiscard]] bool undoAvailable() const;
-  [[nodiscard]] bool redoAvailable() const;
-  [[nodiscard]] bool save(const bool silent = false);
-  [[nodiscard]] bool loadScript(const QString& script, const bool showMessageBoxes = true);
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QString &frame);
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray &frame);
+
+  [[nodiscard]] bool loadScript(const QString &script,
+                                const bool showMessageBoxes = true);
 
   void setSuppressMessageBoxes(const bool suppress);
 
 public slots:
-  void cut();
-  void undo();
-  void redo();
-  void help();
-  void copy();
-  void paste();
-  void apply();
-  void import();
-  void evaluate();
   void readCode();
-  void selectAll();
   void clearContext();
-  void selectTemplate();
-  void testWithSampleData();
-  void reload(const bool guiTrigger = false);
-  void loadDefaultTemplate(const bool guiTrigger = false);
-
-private slots:
-  void onThemeChanged();
-
-private slots:
-  void renderWidget();
-  void resizeWidget();
+  void collectGarbage();
   void loadTemplateNames();
+  void setupExternalConnections();
   void setTemplateIdx(const int idx);
-
-private:
-  virtual void paint(QPainter* painter) override;
-  virtual void keyPressEvent(QKeyEvent* event) override;
-  virtual void keyReleaseEvent(QKeyEvent* event) override;
-  virtual void inputMethodEvent(QInputMethodEvent* event) override;
-  virtual void focusInEvent(QFocusEvent* event) override;
-  virtual void focusOutEvent(QFocusEvent* event) override;
-  virtual void mousePressEvent(QMouseEvent* event) override;
-  virtual void mouseMoveEvent(QMouseEvent* event) override;
-  virtual void mouseReleaseEvent(QMouseEvent* event) override;
-  virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
-  virtual void wheelEvent(QWheelEvent* event) override;
-  virtual void dragEnterEvent(QDragEnterEvent* event) override;
-  virtual void dragMoveEvent(QDragMoveEvent* event) override;
-  virtual void dragLeaveEvent(QDragLeaveEvent* event) override;
-  virtual void dropEvent(QDropEvent* event) override;
+  void loadDefaultTemplate(const bool guiTrigger = false);
 
 private:
   int m_templateIdx;
   bool m_suppressMessageBoxes;
 
-  QPixmap m_pixmap;
   QJSEngine m_engine;
-  QSyntaxStyle m_style;
-  QCodeEditor m_widget;
   QJSValue m_parseFunction;
   QJSValue m_hexToArray;
   QStringList m_templateFiles;
   QStringList m_templateNames;
-
-  FrameParserTestDialog m_testDialog;
 };
-}  // namespace DataModel
+
+} // namespace DataModel
