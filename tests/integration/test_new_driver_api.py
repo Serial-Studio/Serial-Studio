@@ -27,6 +27,13 @@ def _skip_if_missing(api_client, command_name):
         pytest.skip(f"Command '{command_name}' not available (Pro build required)")
 
 
+def _skip_if_headless(api_client):
+    """Skip the test when running without a GUI session (headless mode)."""
+    status = api_client.command("ui.window.getStatus")
+    if not status.get("sessionActive", True):
+        pytest.skip("Skipped in headless mode (no GUI to confirm dialogs)")
+
+
 # ---------------------------------------------------------------------------
 # HID Driver tests
 # ---------------------------------------------------------------------------
@@ -195,6 +202,7 @@ class TestUSBDriver:
     def test_usb_set_transfer_mode_all_valid(self, api_client, clean_state):
         """All three transfer modes (0-2) should be accepted."""
         _skip_if_missing(api_client, "io.driver.usb.setTransferMode")
+        _skip_if_headless(api_client)
 
         api_client.command("io.manager.setBusType", {"busType": 6})
         time.sleep(0.2)
