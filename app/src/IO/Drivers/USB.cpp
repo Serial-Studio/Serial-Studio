@@ -603,7 +603,7 @@ void IO::Drivers::USB::setTransferMode(const int mode)
       QMessageBox::Yes | QMessageBox::No,
       QMessageBox::No);
 
-    if (choice != QMessageBox::Yes) {
+    if (choice != QMessageBox::Yes && choice != QMessageBox::Ok) {
       Q_EMIT transferModeChanged();
       return;
     }

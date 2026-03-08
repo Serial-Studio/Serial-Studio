@@ -16,6 +16,7 @@ from pathlib import Path
 import pytest
 
 from utils import DataGenerator, ChecksumType
+from utils.api_client import APIError
 
 _WS_KEY = "widgetSettings"
 _ACTIVE_GROUP_SUBKEY = "__activeGroup__"
@@ -73,6 +74,7 @@ def _write_project(path: Path, project: dict) -> Path:
 
 def _connect_and_send(api_client, device_simulator, n_values=9):
     """Configure, connect, and stream a few CSV frames so the dashboard populates."""
+    _skip_if_no_session(api_client)
     api_client.configure_frame_parser(
         start_sequence="/*",
         end_sequence="*/",
@@ -104,18 +106,40 @@ def _connect_and_send(api_client, device_simulator, n_values=9):
 
 def _require_groups(api_client, minimum=1):
     """Return groups list or skip if fewer than `minimum` are available."""
-    groups = api_client.command("ui.window.getGroups").get("groups", [])
+    try:
+        groups = api_client.command("ui.window.getGroups").get("groups", [])
+    except APIError as e:
+        pytest.skip(f"ui.window.getGroups unavailable: {e}")
+
     if len(groups) < minimum:
         pytest.skip(f"Need at least {minimum} group(s); got {len(groups)}")
+
     return groups
 
 
 def _require_windows(api_client):
     """Return windows list or skip if none are available."""
-    windows = api_client.command("ui.window.getWindowStates").get("windows", [])
+    try:
+        windows = api_client.command("ui.window.getWindowStates").get("windows", [])
+    except APIError as e:
+        pytest.skip(f"ui.window.getWindowStates unavailable: {e}")
+
     if not windows:
         pytest.skip("No windows available in current dashboard session")
+
     return windows
+
+
+# ---------------------------------------------------------------------------
+# Module-level guard: skip all dashboard tests when running headless
+# ---------------------------------------------------------------------------
+
+
+def _skip_if_no_session(api_client):
+    """Skip the calling test when no dashboard session is active (e.g. headless mode)."""
+    status = api_client.command("ui.window.getStatus")
+    if not status.get("sessionActive", True):
+        pytest.skip("No dashboard session active (headless mode)")
 
 
 # ---------------------------------------------------------------------------

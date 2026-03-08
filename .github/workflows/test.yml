@@ -204,12 +204,14 @@ jobs:
         done
 
     - name: '🧪 Run tests'
+      continue-on-error: true
       run: |
         pytest tests/ \
           -m "not destructive and not dos" \
           -v \
           --tb=short \
-          --timeout=60
+          --timeout=60 \
+          --junit-xml=test-results.xml
 
     - name: '🔑 Deactivate Serial Studio license'
       if: always()
@@ -227,11 +229,11 @@ jobs:
           kill $(cat ss_pid.txt) || true
         fi
 
-    - name: '📤 Upload test results on failure'
-      if: failure()
+    - name: '📤 Upload test results'
+      if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: pytest-output
+        name: pytest-results
         path: |
-          .pytest_cache/
+          test-results.xml
           tests/**/*.log

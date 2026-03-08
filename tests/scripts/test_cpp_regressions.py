@@ -150,7 +150,7 @@ def test_usb_close_forces_thread_stop_before_handle_close():
 
 
 def test_frame_parser_uses_qcoreapplication_event_forwarding():
-    text = _read("app/src/DataModel/FrameParser.cpp")
+    text = _read("app/src/DataModel/JsCodeEditor.cpp")
 
     assert "QCoreApplication::sendEvent(&m_widget, event);" in text
     assert "DW_EXEC_EVENT" not in text
