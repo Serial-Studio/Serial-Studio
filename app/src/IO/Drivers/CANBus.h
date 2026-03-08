@@ -172,6 +172,7 @@ private slots:
   void onErrorOccurred(QCanBusDevice::CanBusError error);
 
 private:
+  void doClose();
   void refreshInterfaces();
   [[nodiscard]] bool canSupportAvailable() const;
 

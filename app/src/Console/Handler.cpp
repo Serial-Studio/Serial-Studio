@@ -906,17 +906,26 @@ QString Console::Handler::dataToString(QByteArrayView data)
 }
 
 /**
- * @brief Converts a QByteArray to a QString, preserving printable characters
- *        and line breaks.
+ * @brief Converts raw received bytes to a display string.
  *
- * Non-printable characters are replaced with a dot ('.') for readability.
+ * @param data The raw bytes to convert.
+ * @return A QString ready for the terminal widget.
  *
- * @param data The QByteArray to convert.
- * @return QString A human-readable string representation of the input data.
+ * In VT-100 emulation mode every byte (except NUL) is passed through
+ * unchanged so that the terminal's own state machine can process control
+ * characters such as backspace (0x08), which zsh's line editor sends
+ * constantly for in-place redraws.  Replacing those with '.' would make
+ * typed commands appear corrupted (e.g. "ls" → "l.ls").
+ *
+ * In plain-text mode non-printable characters that are not recognised
+ * control codes are substituted with '.' for readability.
  */
 QString Console::Handler::plainTextStr(QByteArrayView data)
 {
   QString utf8Data = QString::fromUtf8(data);
+
+  if (vt100Emulation())
+    return utf8Data;
 
   QString filteredData;
   filteredData.reserve(utf8Data.size());

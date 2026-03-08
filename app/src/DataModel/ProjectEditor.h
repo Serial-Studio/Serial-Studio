@@ -64,7 +64,7 @@ class ProjectEditor : public QObject {
              NOTIFY currentViewChanged)
   Q_PROPERTY(QString selectedText
              READ selectedText
-             NOTIFY currentViewChanged)
+             NOTIFY selectedTextChanged)
   Q_PROPERTY(QString selectedIcon
              READ selectedIcon
              NOTIFY currentViewChanged)
@@ -89,6 +89,7 @@ signals:
   void treeModelChanged();
   void groupModelChanged();
   void currentViewChanged();
+  void selectedTextChanged();
   void actionModelChanged();
   void projectModelChanged();
   void datasetModelChanged();

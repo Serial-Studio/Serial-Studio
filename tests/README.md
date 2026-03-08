@@ -43,27 +43,204 @@ pytest tests/integration/test_csv_export.py::test_csv_export_basic -v
 | Performance | `tests/performance/` | Yes | Throughput benchmarks |
 | Scripts | `tests/scripts/` | No (Node.js only) | Unit tests for JS frame-parser scripts |
 
+## Integration Tests (`tests/integration/`)
+
+Each test connects to Serial Studio via TCP, configures it through the API, streams
+simulated telemetry, and asserts the correct outcome.
+
+| File | What it covers |
+|------|----------------|
+| `test_frame_parsing.py` | All 8 checksum types, JSON/CSV parsing, custom delimiters, high-frequency frames |
+| `test_csv_export.py` | Export enable/disable, timestamps, high-frequency sessions |
+| `test_csv_parsing_verified.py` | Custom CSV delimiters: comma, semicolon, tab, pipe via JS parsers |
+| `test_csv_player.py` | CSV player lifecycle: open, play, pause, seek, next/prev frame, progress |
+| `test_project_configuration.py` | Operation modes, JS parsers, project creation, actions |
+| `test_project_editor.py` | Add/delete/duplicate groups, datasets, and actions via API |
+| `test_project_import_export.py` | `project.exportJson`, `project.loadFromJSON`, round-trip fidelity |
+| `test_project_save.py` | File save/reload, widget settings persistence, layout storage |
+| `test_console_configuration.py` | Echo, timestamps, display/data modes, font, send, line endings |
+| `test_console_ansi_vt100.py` | ANSI SGR colors (standard, bright, 256, RGB), VT100 cursor, edge cases |
+| `test_dashboard_configuration.py` | FPS, data points, operation mode, status/data query fields |
+| `test_window_layout.py` | Active group, window states, auto/manual layout, widget settings persistence |
+| `test_batch_api.py` | Batch command processing, size limits, ordering, partial failure |
+| `test_2d_array_parsing.py` | Multi-frame expansion from 2D-array JS parsers, BLE use cases |
+| `test_driver_api_comprehensive.py` | Every driver command: UART, Network, BLE, Modbus, CAN Bus, Audio |
+| `test_new_driver_api.py` | HID, Raw USB, and Process driver commands; bus-type enumeration |
+| `test_api_drivers.py` | Driver switching, UART/Network/BLE basics, console/export status |
+| `test_mcp.py` | MCP JSON-RPC 2.0: lifecycle, tools list, read/write calls, resources, prompts |
+| `test_licensing.py` | License status shape, set/activate/deactivate, concurrent connections |
+| `test_image_view.py` | ImageView widget: autodetect, manual mode, corrupted data |
+| `test_performance_concepts.py` | Data rate vs. render rate decoupling, FPS range limits |
+| `test_workflows.py` | End-to-end: configure → connect → receive → export; reconnection, pause/resume |
+| `test_fuzzy.py` | Malformed JSON, binary garbage, partial frames, oversized frames, chaos |
+
+```bash
+# Run all integration tests
+pytest tests/integration/ -v --tb=short
+
+# Run a specific file
+pytest tests/integration/test_frame_parsing.py -v
+
+# Run a specific test
+pytest tests/integration/test_frame_parsing.py::test_checksum_validation -v -s
+
+# Run only CSV-related tests
+pytest tests/integration/ -m "csv" -v
+
+# Run only project-related tests
+pytest tests/integration/ -m "project" -v
+```
+
+## Security Tests (`tests/security/`)
+
+Adversarial tests targeting the TCP API server. They do not reset state between tests
+and use a dedicated `security_client` fixture that tolerates disconnections.
+
+| File | What it covers |
+|------|----------------|
+| `test_api_security.py` | JSON exploits, injection attacks, buffer abuse, batch exploits, connection exhaustion |
+| `test_api_vulnerabilities.py` | Input validation bypass, command injection, state manipulation, info disclosure |
+| `test_denial_of_service.py` | Memory exhaustion, CPU spikes, connection floods, Slowloris, amplification, queue overflow |
+| `test_exploit_techniques.py` | Race conditions, integer overflow, parser confusion, timing attacks, deserialization |
+| `test_zero_day_adversarial.py` | JS sandbox escape, prototype pollution, null-byte injection, terminal escape injection |
+| `test_protocol_fuzzing.py` | Malformed protocol messages, encoding confusion, framing attacks |
+| `test_access_control.py` | Auth bypass, privilege escalation, cross-client interference, info disclosure |
+
+```bash
+# Run all security tests
+pytest tests/security/ -v
+
+# Skip tests that may crash or hang the server
+pytest tests/security/ -m "not destructive" -v
+
+# Critical vulnerabilities only
+pytest tests/security/ -m "security and critical" -v
+
+# DoS tests only
+pytest tests/security/ -m "dos" -v
+
+# Run the convenience shell script
+bash tests/security/run_all_security_tests.sh
+```
+
+## Performance Tests (`tests/performance/`)
+
+Benchmarks that measure frame throughput and overhead using `pytest-benchmark`.
+
+| File | What it covers |
+|------|----------------|
+| `benchmark_frame_rate.py` | Throughput at 10–1000 Hz, checksum algorithm overhead, frame-size impact |
+
+```bash
+# Run benchmarks
+pytest tests/performance/ -v
+
+# With pytest-benchmark output
+pytest tests/performance/ --benchmark-only -v
+
+# Compare against a saved baseline
+pytest tests/performance/ --benchmark-compare
+```
+
+## Script Tests (`tests/scripts/`)
+
+Unit tests for the JavaScript frame-parser scripts in `app/rcc/scripts/`. Node.js is
+required; Serial Studio does not need to be running.
+
+Each test calls `run_parser(script_name, frame)`, which spawns a fresh Node.js subprocess,
+runs the parser against the given frame, and returns the decoded values. Because each call
+is a new process, there is no shared state between tests.
+
+| File | What it covers |
+|------|----------------|
+| `test_frame_parsers.py` | 28 parser classes: AT commands, Base64, Binary TLV, COBS, CSV, Fixed-width, Hex bytes, INI, JSON, Key-value, MAVLink, MessagePack, Modbus, NMEA 0183, NMEA 2000, Pipe-delimited, Raw bytes, RTCM, Semicolon CSV, SiRF binary, SLIP, Tab CSV, UBX/u-blox, URL-encoded, XML, YAML, Batched sensor data, Time-series 2D |
+| `test_cpp_regressions.py` | Logic-only regressions for C++ bugs that don't require a running app (bounds checks, null guards, API schema consistency) |
+
+```bash
+# Run all script tests (Node.js required)
+pytest tests/scripts/ -v
+
+# Run a single parser class
+pytest tests/scripts/test_frame_parsers.py::TestNmea0183 -v
+
+# Run C++ regression checks
+pytest tests/scripts/test_cpp_regressions.py -v
+```
+
+## Running Across Multiple Categories
+
+```bash
+# Parallel execution (4 workers, integration only)
+pytest tests/integration/ -n 4
+
+# All tests, skip destructive ones
+pytest tests/ -m "not destructive" -v
+
+# With coverage
+pytest tests/ --cov=app/src --cov-report=html
+
+# Single test with printed output
+pytest tests/integration/test_frame_parsing.py::test_checksum_validation -v -s
+```
+
+## Markers
+
+```bash
+pytest -m "csv"                      # CSV export and player tests
+pytest -m "project"                  # Project configuration tests
+pytest -m "network"                  # Network driver tests
+pytest -m "not slow"                 # Skip slow tests (>10 s)
+pytest -m "security and critical"    # Critical security checks only
+pytest -m "destructive"              # Tests that may crash or hang the server
+```
+
+| Marker | Meaning |
+|--------|---------|
+| `integration` | Requires a running Serial Studio instance |
+| `security` | Security and penetration tests |
+| `performance` | Benchmarks |
+| `slow` | Takes a long time |
+| `csv` | CSV export or player tests |
+| `project` | Project configuration tests |
+| `network` | Network driver tests |
+| `uart` | UART driver tests |
+| `ble` | Bluetooth LE driver tests |
+| `fuzzing` | Fuzzing and chaos tests |
+| `dos` | Denial-of-service tests |
+| `destructive` | May crash or hang the server |
+| `critical` | Critical severity security checks |
+| `high` | High severity security checks |
+| `exploit` | Active exploitation attempts |
+
 ## Directory Structure
 
 ```
 tests/
 ├── integration/                        # Functional tests against the API
-│   ├── conftest.py                     # Shared fixtures (api_client, device_simulator …)
+│   ├── conftest.py                     # Shared fixtures (api_client, device_simulator, …)
 │   ├── test_frame_parsing.py           # All 8 checksum types, JSON/CSV parsing, delimiters
 │   ├── test_csv_export.py              # Export enable/disable, timestamps, high-frequency
 │   ├── test_csv_parsing_verified.py    # Custom CSV delimiters (comma, semicolon, tab, pipe)
 │   ├── test_csv_player.py              # CSV player commands (open, play, pause, seek, status)
 │   ├── test_project_configuration.py   # Operation modes, JS parsers, project creation
+│   ├── test_project_editor.py          # Add/delete/duplicate groups, datasets, actions
 │   ├── test_project_import_export.py   # project.exportJson, project.loadFromJSON, roundtrip
+│   ├── test_project_save.py            # File save/reload, widget settings, layout persistence
 │   ├── test_console_configuration.py   # Console settings: echo, timestamps, modes, font, send
+│   ├── test_console_ansi_vt100.py      # ANSI/VT100 color codes, cursor sequences, edge cases
 │   ├── test_dashboard_configuration.py # FPS, data points, operation mode, status/data queries
+│   ├── test_window_layout.py           # Active group, window states, layout, widget settings
 │   ├── test_batch_api.py               # Batch command processing, size limits, partial failure
+│   ├── test_2d_array_parsing.py        # Multi-frame expansion from 2D array JS parsers
+│   ├── test_driver_api_comprehensive.py# Every driver command (UART, Network, BLE, Modbus …)
+│   ├── test_new_driver_api.py          # HID, Raw USB, Process driver APIs
+│   ├── test_api_drivers.py             # Driver switching and console/export basics
+│   ├── test_mcp.py                     # MCP JSON-RPC 2.0 protocol (tools, resources, prompts)
+│   ├── test_licensing.py               # License status, set/activate/deactivate
+│   ├── test_image_view.py              # ImageView widget modes and corrupted data handling
 │   ├── test_performance_concepts.py    # Data rate vs. render rate decoupling
 │   ├── test_workflows.py               # End-to-end: configure → connect → receive → export
-│   ├── test_fuzzy.py                   # Malformed JSON, binary garbage, unicode stress, chaos
-│   ├── test_2d_array_parsing.py        # Multi-frame expansion from 2D array JS parsers
-│   ├── test_driver_api_comprehensive.py# Every driver command (UART, Network, BLE …)
-│   └── test_api_drivers.py             # Driver and console basics
+│   └── test_fuzzy.py                   # Malformed JSON, binary garbage, unicode, chaos
 │
 ├── security/                           # Penetration and adversarial tests
 │   ├── conftest.py                     # Security fixtures (vuln_tracker, check_server_alive)
@@ -81,7 +258,8 @@ tests/
 │
 ├── scripts/                            # Unit tests for JS frame-parser scripts
 │   ├── conftest.py                     # run_parser() helper + parse_script fixture
-│   └── test_frame_parsers.py           # One test class per script (27 scripts covered)
+│   ├── test_frame_parsers.py           # 28 parser classes (AT, Base64, NMEA, MAVLink …)
+│   └── test_cpp_regressions.py         # Logic-only C++ regression checks
 │
 └── utils/                              # Shared test utilities
     ├── api_client.py                   # SerialStudioClient — TCP API wrapper
@@ -153,62 +331,6 @@ Tests exercise three modes. Knowing which mode you are in matters for frame pars
 | **ProjectFile** | `0` | Configurable (`/*` `*/` default) | JavaScript |
 | **DeviceSendsJSON** | `1` | Fixed `/*` `*/` | None (full JSON) |
 | **QuickPlot** | `2` | None (line-based `\n`) | None (comma CSV) |
-
-## Markers
-
-Tests are tagged so you can run subsets:
-
-```bash
-pytest -m "csv"           # CSV export and player tests
-pytest -m "project"       # Project configuration tests
-pytest -m "network"       # Network driver tests
-pytest -m "not slow"      # Skip slow tests (>10 s)
-pytest -m "security and critical"   # Critical security checks only
-pytest -m "destructive"   # Tests that may crash or hang the server
-```
-
-| Marker | Meaning |
-|--------|---------|
-| `integration` | Requires a running Serial Studio instance |
-| `security` | Security and penetration tests |
-| `performance` | Benchmarks |
-| `slow` | Takes a long time |
-| `csv` | CSV export or player tests |
-| `project` | Project configuration tests |
-| `network` | Network driver tests |
-| `uart` | UART driver tests |
-| `ble` | Bluetooth LE driver tests |
-| `fuzzing` | Fuzzing and chaos tests |
-| `dos` | Denial-of-service tests |
-| `destructive` | May crash or hang the server |
-
-## Running Tests
-
-```bash
-# All integration tests (verbose)
-pytest tests/integration/ -v --tb=short
-
-# All security tests (skip destructive)
-pytest tests/security/ -m "not destructive" -v
-
-# All frame-parser script tests (Node.js required, Serial Studio not needed)
-pytest tests/scripts/ -v
-
-# Run a single parser class
-pytest tests/scripts/test_frame_parsers.py::TestNmea0183 -v
-
-# Parallel execution (4 workers)
-pytest tests/integration/ -n 4
-
-# Performance benchmarks
-pytest tests/performance/ -v --benchmark-only
-
-# With coverage
-pytest tests/ --cov=app/src --cov-report=html
-
-# Single test with printed output
-pytest tests/integration/test_frame_parsing.py::test_checksum_validation -v -s
-```
 
 ## Tutorial: Writing a New Integration Test
 

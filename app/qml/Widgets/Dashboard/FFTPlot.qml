@@ -48,7 +48,7 @@ Item {
   //
   // Custom properties
   //
-  property bool showAreaUnderPlot: false
+  property bool showAreaUnderPlot: true
 
   //
   // User-controlled visibility preferences (persisted, ANDed with size thresholds)
@@ -138,16 +138,17 @@ Item {
     ToolButton {
       width: 24
       height: 24
-      onClicked: {
-        root.showAreaUnderPlot = !root.showAreaUnderPlot
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showAreaUnderPlot", root.showAreaUnderPlot)
-      }
       icon.width: 18
       icon.height: 18
       opacity: enabled ? 1 : 0.5
       icon.color: "transparent"
       checked: root.showAreaUnderPlot
       icon.source: "qrc:/rcc/icons/dashboard-buttons/area.svg"
+
+      onClicked: {
+        root.showAreaUnderPlot = !root.showAreaUnderPlot
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "showAreaUnderPlot", root.showAreaUnderPlot)
+      }
     }
 
     Rectangle {
@@ -159,31 +160,33 @@ Item {
     ToolButton {
       width: 24
       height: 24
-      onClicked: {
-        root.userShowXLabel = !root.userShowXLabel
-        root.updateWidgetOptions()
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
-      }
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
       checked: root.userShowXLabel
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
+
+      onClicked: {
+        root.userShowXLabel = !root.userShowXLabel
+        root.updateWidgetOptions()
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
+      }
     }
 
     ToolButton {
       width: 24
       height: 24
-      onClicked: {
-        root.userShowYLabel = !root.userShowYLabel
-        root.updateWidgetOptions()
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowYLabel", root.userShowYLabel)
-      }
       icon.width: 18
       icon.height: 18
       icon.color: "transparent"
       checked: root.userShowYLabel
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
+
+      onClicked: {
+        root.userShowYLabel = !root.userShowYLabel
+        root.updateWidgetOptions()
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowYLabel", root.userShowYLabel)
+      }
     }
 
     Rectangle {

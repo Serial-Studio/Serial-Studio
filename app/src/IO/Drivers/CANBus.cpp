@@ -68,25 +68,11 @@ IO::Drivers::CANBus::CANBus()
 }
 
 /**
- * @brief Destructor function
- *
- * Safely closes the CAN bus device before exiting the application.
- * Uses same cleanup pattern as close() to prevent crashes.
- *
- * @note Disconnects all signals before deletion to prevent callbacks
- * @note Sets m_device to nullptr after deleteLater() for safety
+ * @brief Destructor — releases the CAN bus device without invoking virtual functions.
  */
 IO::Drivers::CANBus::~CANBus()
 {
-  if (m_device) {
-    disconnect(m_device, nullptr, this, nullptr);
-
-    if (m_device->state() == QCanBusDevice::ConnectedState)
-      m_device->disconnectDevice();
-
-    m_device->deleteLater();
-    m_device = nullptr;
-  }
+  doClose();
 }
 
 /**
@@ -103,33 +89,37 @@ IO::Drivers::CANBus& IO::Drivers::CANBus::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the current CAN bus connection
+ * @brief Closes the current CAN bus connection.
  *
- * Performs complete cleanup of CAN bus device and resources:
- * - Disconnects all signal connections to prevent crashes
- * - Safely disconnects from CAN bus
- * - Deletes device using deleteLater() for thread safety
- * - Clears device reference
- * - Notifies Manager of configuration and list changes
- *
- * @note This method is safe to call multiple times
- * @note All Qt objects are deleted using deleteLater() to prevent crashes
+ * Delegates to doClose() and emits state-change signals so the UI updates.
  */
 void IO::Drivers::CANBus::close()
 {
-  if (m_device) {
-    disconnect(m_device, nullptr, this, nullptr);
-
-    if (m_device->state() != QCanBusDevice::UnconnectedState)
-      m_device->disconnectDevice();
-
-    m_device->deleteLater();
-    m_device = nullptr;
-  }
+  doClose();
 
   Q_EMIT configurationChanged();
   Q_EMIT availablePluginsChanged();
   Q_EMIT availableInterfacesChanged();
+}
+
+/**
+ * @brief Non-virtual cleanup implementation shared by close() and ~CANBus().
+ *
+ * Disconnects signals, calls disconnectDevice() on the Qt object if needed,
+ * and schedules deletion.  Safe to call when m_device is null.
+ */
+void IO::Drivers::CANBus::doClose()
+{
+  if (!m_device)
+    return;
+
+  disconnect(m_device, nullptr, this, nullptr);
+
+  if (m_device->state() != QCanBusDevice::UnconnectedState)
+    m_device->disconnectDevice();
+
+  m_device->deleteLater();
+  m_device = nullptr;
 }
 
 /**

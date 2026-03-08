@@ -878,13 +878,18 @@ void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
 /**
  * @brief Replaces the group at @p groupId with @p group and emits groupsChanged.
  */
-void DataModel::ProjectModel::updateGroup(const int groupId, const DataModel::Group& group)
+void DataModel::ProjectModel::updateGroup(const int groupId,
+                                          const DataModel::Group& group,
+                                          const bool rebuildTree)
 {
   if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
     return;
 
   m_groups[groupId] = group;
-  Q_EMIT groupsChanged();
+
+  if (rebuildTree)
+    Q_EMIT groupsChanged();
+
   setModified(true);
 }
 

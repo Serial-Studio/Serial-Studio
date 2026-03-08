@@ -25,6 +25,7 @@
 #include <QPalette>
 #include <QQuickPaintedItem>
 #include <QTimer>
+#include <QKeyEvent>
 
 namespace Widgets {
 /**
@@ -89,6 +90,12 @@ class Terminal : public QQuickPaintedItem {
              READ ansiColors
              WRITE setAnsiColors
              NOTIFY ansiColorsChanged)
+  Q_PROPERTY(int terminalColumns
+             READ terminalColumns
+             NOTIFY terminalSizeChanged)
+  Q_PROPERTY(int terminalRows
+             READ terminalRows
+             NOTIFY terminalSizeChanged)
   // clang-format on
 
 signals:
@@ -101,6 +108,7 @@ signals:
   void scrollOffsetYChanged();
   void vt100EmulationChanged();
   void ansiColorsChanged();
+  void terminalSizeChanged();
 
 public:
   Terminal(QQuickItem* parent = 0);
@@ -117,7 +125,9 @@ public:
     Text,
     Escape,
     Format,
-    ResetFont
+    ResetFont,
+    OSC,
+    IgnoreSeq
   };
 
   Q_ENUM(State);
@@ -137,6 +147,8 @@ public:
   [[nodiscard]] int linesPerPage() const;
   [[nodiscard]] int scrollOffsetY() const;
   [[nodiscard]] int maxCharsPerLine() const;
+  [[nodiscard]] int terminalColumns() const;
+  [[nodiscard]] int terminalRows() const;
 
   [[nodiscard]] const QPoint& cursorPosition() const;
   [[nodiscard]] QPoint positionToCursor(const QPoint& pos) const;
@@ -196,11 +208,13 @@ private:
 
 protected:
   bool shouldEndSelection(const QChar& c);
+  void keyPressEvent(QKeyEvent* event) override;
   void wheelEvent(QWheelEvent* event) override;
   void mouseMoveEvent(QMouseEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;
   void mouseReleaseEvent(QMouseEvent* event) override;
   void mouseDoubleClickEvent(QMouseEvent* event) override;
+  void geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
 private:
   QPalette m_palette;
@@ -231,8 +245,11 @@ private:
 
   QList<int> m_formatValues;
   int m_currentFormatValue;
+  bool m_privateMode;
 
   bool m_stateChanged;
+  bool m_cursorHidden;
+  QPoint m_savedCursorPosition;
   QColor m_currentColor;
   QColor m_currentBgColor;
 

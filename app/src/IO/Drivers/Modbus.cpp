@@ -107,38 +107,11 @@ IO::Drivers::Modbus::Modbus()
 }
 
 /**
- * @brief Destructor function
- *
- * Safely cleans up all Modbus resources before destruction.
- * Uses same cleanup pattern as close() to prevent crashes.
- *
- * @note Stops poll timer to prevent callbacks after destruction
- * @note Disconnects all signals before deletion
- * @note Sets pointers to nullptr after deleteLater() for safety
+ * @brief Destructor — releases all Modbus resources without invoking virtual functions.
  */
 IO::Drivers::Modbus::~Modbus()
 {
-  if (m_pollTimer) {
-    m_pollTimer->stop();
-    m_pollTimer->deleteLater();
-    m_pollTimer = nullptr;
-  }
-
-  if (m_lastReply) {
-    disconnect(m_lastReply, nullptr, this, nullptr);
-    m_lastReply->deleteLater();
-    m_lastReply = nullptr;
-  }
-
-  if (m_device) {
-    disconnect(m_device, nullptr, this, nullptr);
-
-    if (m_device->state() == QModbusDevice::ConnectedState)
-      m_device->disconnectDevice();
-
-    m_device->deleteLater();
-    m_device = nullptr;
-  }
+  doClose();
 }
 
 /**
@@ -155,20 +128,25 @@ IO::Drivers::Modbus& IO::Drivers::Modbus::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the current Modbus connection
+ * @brief Closes the current Modbus connection.
  *
- * Performs complete cleanup of Modbus device and resources:
- * - Stops polling timer to prevent further requests
- * - Cancels any pending reply operations
- * - Disconnects all signal connections to prevent dangling pointers
- * - Safely deletes device using deleteLater() for thread safety
- * - Clears all device references
- * - Notifies Manager of configuration change via signal emission
- *
- * @note This method is safe to call multiple times
- * @note All Qt objects are deleted using deleteLater() to prevent crashes
+ * Delegates resource release to doClose() and emits state-change signals.
  */
 void IO::Drivers::Modbus::close()
+{
+  doClose();
+
+  Q_EMIT configurationChanged();
+  Q_EMIT availableSerialPortsChanged();
+}
+
+/**
+ * @brief Non-virtual cleanup implementation shared by close() and ~Modbus().
+ *
+ * Stops the poll timer, cancels any pending reply, and disconnects/deletes
+ * the device.  Safe to call when all pointers are null.
+ */
+void IO::Drivers::Modbus::doClose()
 {
   if (m_pollTimer)
     m_pollTimer->stop();
@@ -188,9 +166,6 @@ void IO::Drivers::Modbus::close()
     m_device->deleteLater();
     m_device = nullptr;
   }
-
-  Q_EMIT configurationChanged();
-  Q_EMIT availableSerialPortsChanged();
 }
 
 /**

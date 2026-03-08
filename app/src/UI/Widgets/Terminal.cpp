@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QFontMetrics>
+#include <QKeyEvent>
 #include <QPainter>
 
 #include "Console/Handler.h"
@@ -90,16 +91,19 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
   , m_cursorVisible(true)
   , m_mouseTracking(false)
   , m_currentFormatValue(0)
+  , m_privateMode(false)
   , m_stateChanged(false)
+  , m_cursorHidden(false)
 {
   // Initialize data buffer
   initBuffer();
 
-  // Configure QML item flags to accept mouse input
+  // Configure QML item flags to accept mouse and keyboard input
   setFlag(ItemHasContents, true);
   setFlag(ItemIsFocusScope, true);
   setFlag(ItemAcceptsInputMethod, true);
   setAcceptedMouseButtons(Qt::AllButtons);
+  setActiveFocusOnTab(true);
 
   // Set rendering hints
   setMipmap(true);
@@ -513,8 +517,8 @@ void Widgets::Terminal::paint(QPainter* painter)
     }
   }
 
-  // Draw cursor if visible
-  if (m_cursorVisible)
+  // Draw cursor if visible and not hidden by escape sequence
+  if (m_cursorVisible && !m_cursorHidden)
     drawCursor(painter, firstLine, lastVLine, lineHeight);
 
   // Draw scrollbar if required
@@ -704,6 +708,192 @@ int Widgets::Terminal::maxCharsPerLine() const
 
   const auto realValue = (width() - 2 * m_borderX) / m_cWidth;
   return qMax<int>(84, realValue);
+}
+
+/**
+ * @brief Returns the number of character columns currently visible.
+ *
+ * Delegates to maxCharsPerLine() and is exposed as a reactive Q_PROPERTY so
+ * QML bindings update automatically when the widget is resized.
+ */
+int Widgets::Terminal::terminalColumns() const
+{
+  return maxCharsPerLine();
+}
+
+/**
+ * @brief Returns the number of character rows currently visible.
+ *
+ * Delegates to linesPerPage() and is exposed as a reactive Q_PROPERTY so QML
+ * bindings update automatically when the widget is resized.
+ */
+int Widgets::Terminal::terminalRows() const
+{
+  return linesPerPage();
+}
+
+/**
+ * @brief Handles key press events and forwards them to the active driver as
+ *        VT-100 byte sequences.
+ *
+ * When VT-100 emulation is active and the IO manager is connected in
+ * read-write mode, each key press is translated to the canonical VT-100 /
+ * xterm sequence and written directly to the driver.  This makes interactive
+ * CLI programs (shells, editors, REPLs) work correctly inside the widget
+ * without any QML-level workarounds.
+ *
+ * Keys handled:
+ * - Printable characters → UTF-8 bytes
+ * - Return / Enter      → CR (\r)
+ * - Backspace           → BS (\x7f) per modern xterm default
+ * - Delete              → ESC[3~
+ * - Tab                 → HT (\t)
+ * - Escape              → ESC (\x1b)
+ * - Arrow keys          → ESC[A … ESC[D
+ * - Home / End          → ESC[H / ESC[F
+ * - Page Up / Down      → ESC[5~ / ESC[6~
+ * - Insert              → ESC[2~
+ * - F1–F12              → standard xterm sequences
+ * - Ctrl+letter         → control codes 0x01–0x1a
+ *
+ * @param event The key press event.
+ */
+void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
+{
+  if (!vt100emulation() || !IO::Manager::instance().isConnected()
+      || !IO::Manager::instance().readWrite()) {
+    QQuickPaintedItem::keyPressEvent(event);
+    return;
+  }
+
+  QByteArray seq;
+  const Qt::KeyboardModifiers mods = event->modifiers();
+  const int key                    = event->key();
+
+  // Ctrl+letter → control code
+  if ((mods & Qt::ControlModifier) && key >= Qt::Key_A && key <= Qt::Key_Z) {
+    seq.append(char(key - Qt::Key_A + 1));
+    IO::Manager::instance().writeData(seq);
+    event->accept();
+    return;
+  }
+
+  // Ctrl+[ → ESC
+  if ((mods & Qt::ControlModifier) && key == Qt::Key_BracketLeft) {
+    seq.append('\x1b');
+    IO::Manager::instance().writeData(seq);
+    event->accept();
+    return;
+  }
+
+  switch (key) {
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+      seq.append('\r');
+      break;
+    case Qt::Key_Backspace:
+      seq.append('\x7f');
+      break;
+    case Qt::Key_Delete:
+      seq.append("\x1b[3~");
+      break;
+    case Qt::Key_Tab:
+      seq.append('\t');
+      break;
+    case Qt::Key_Backtab:
+      seq.append("\x1b[Z");
+      break;
+    case Qt::Key_Escape:
+      seq.append('\x1b');
+      break;
+    case Qt::Key_Up:
+      seq.append("\x1b[A");
+      break;
+    case Qt::Key_Down:
+      seq.append("\x1b[B");
+      break;
+    case Qt::Key_Right:
+      seq.append("\x1b[C");
+      break;
+    case Qt::Key_Left:
+      seq.append("\x1b[D");
+      break;
+    case Qt::Key_Home:
+      seq.append("\x1b[H");
+      break;
+    case Qt::Key_End:
+      seq.append("\x1b[F");
+      break;
+    case Qt::Key_PageUp:
+      seq.append("\x1b[5~");
+      break;
+    case Qt::Key_PageDown:
+      seq.append("\x1b[6~");
+      break;
+    case Qt::Key_Insert:
+      seq.append("\x1b[2~");
+      break;
+    case Qt::Key_F1:
+      seq.append("\x1bOP");
+      break;
+    case Qt::Key_F2:
+      seq.append("\x1bOQ");
+      break;
+    case Qt::Key_F3:
+      seq.append("\x1bOR");
+      break;
+    case Qt::Key_F4:
+      seq.append("\x1bOS");
+      break;
+    case Qt::Key_F5:
+      seq.append("\x1b[15~");
+      break;
+    case Qt::Key_F6:
+      seq.append("\x1b[17~");
+      break;
+    case Qt::Key_F7:
+      seq.append("\x1b[18~");
+      break;
+    case Qt::Key_F8:
+      seq.append("\x1b[19~");
+      break;
+    case Qt::Key_F9:
+      seq.append("\x1b[20~");
+      break;
+    case Qt::Key_F10:
+      seq.append("\x1b[21~");
+      break;
+    case Qt::Key_F11:
+      seq.append("\x1b[23~");
+      break;
+    case Qt::Key_F12:
+      seq.append("\x1b[24~");
+      break;
+    default:
+      if (!event->text().isEmpty())
+        seq = event->text().toUtf8();
+
+      break;
+  }
+
+  if (!seq.isEmpty()) {
+    IO::Manager::instance().writeData(seq);
+    event->accept();
+    return;
+  }
+
+  QQuickPaintedItem::keyPressEvent(event);
+}
+
+/**
+ * @brief Emits terminalSizeChanged() whenever the widget is resized.
+ */
+void Widgets::Terminal::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+  QQuickPaintedItem::geometryChange(newGeometry, oldGeometry);
+
+  if (newGeometry.size() != oldGeometry.size())
+    Q_EMIT terminalSizeChanged();
 }
 
 /**
@@ -1183,6 +1373,19 @@ void Widgets::Terminal::append(const QString& data)
       case ResetFont:
         processResetFont(byte, text);
         break;
+      case OSC:
+        if (byte.toLatin1() == 0x07)
+          m_state = Text;
+
+        else if (byte.toLatin1() == 0x1b)
+          m_state = Escape;
+
+        break;
+      case IgnoreSeq:
+        if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
+          m_state = Text;
+
+        break;
     }
 
     ++it;
@@ -1368,14 +1571,13 @@ void Widgets::Terminal::initBuffer()
  *
  * This method handles normal text input processing, managing different
  * character cases:
- * - If the character is an escape character (`0x1b`) and VT-100 emulation is
- *   enabled, it switches the state to `Escape` after appending the current
- *   accumulated text.
- * - If the character is a newline (`'\n'`), the accumulated text is appended,
- *   and a new line is created in the buffer.
- * - If the character is a backspace (`'\b'`) and VT-100 emulation is enabled,
- *   the cursor is moved one position to the left.
- * - If the character is printable, it is appended to the accumulated `text`.
+ * - ESC (0x1B) with VT-100 on → flush text and enter Escape state.
+ * - CR (`\r`) with VT-100 on → move cursor to column 0.
+ * - LF (`\n`) → move cursor to next line.
+ * - BS (`\b`) with VT-100 on → move cursor left one column.
+ * - DEL (0x7F) with VT-100 on → delete character under cursor.
+ * - TAB (`\t`) with VT-100 on → advance to next 8-column tab stop.
+ * - Printable characters → append to accumulated @p text.
  *
  * This function helps manage cursor positioning and character input depending
  * on the current state.
@@ -1388,6 +1590,12 @@ void Widgets::Terminal::processText(const QChar& byte, QString& text)
     appendString(text);
     text.clear();
     m_state = Escape;
+  }
+
+  else if (byte == '\r' && vt100emulation()) {
+    appendString(text);
+    text.clear();
+    setCursorPosition(0, m_cursorPosition.y());
   }
 
   else if (byte == '\n') {
@@ -1404,25 +1612,43 @@ void Widgets::Terminal::processText(const QChar& byte, QString& text)
     }
   }
 
+  else if (byte.toLatin1() == 0x7F && vt100emulation()) {
+    appendString(text);
+    text.clear();
+    removeStringFromCursor(RightDirection, 1);
+  }
+
+  else if (byte == '\t' && vt100emulation()) {
+    appendString(text);
+    text.clear();
+    const int nextTab = (m_cursorPosition.x() / 8 + 1) * 8;
+    const int spaces  = nextTab - m_cursorPosition.x();
+    text.fill(' ', spaces);
+    appendString(text);
+    text.clear();
+  }
+
   else if (byte.isPrint())
     text.append(byte);
 }
 
 /**
- * @brief Processes an escape sequence character.
+ * @brief Processes the character immediately following ESC (0x1B).
  *
  * @param byte The character to be processed as part of the escape sequence.
- * @param text A reference to a QString (currently unused in this method).
+ * @param text Accumulated printable text (flushed before entering this state).
  *
- * This method handles the initial part of an escape sequence:
- * - Resets the format values (`m_formatValue`, `m_formatValueY`) and related
- *   state.
- * - If the character is `'['`, it switches to `Format` state to process
- *   additional formatting characters.
- * - If the character is `'('`, it switches to `ResetFont` state for further
- *   processing.
+ * Dispatches to the correct follow-on state or performs a single-character
+ * ESC action:
+ * - `[` → CSI (Format state for cursor/SGR sequences)
+ * - `(` → Designate character set (ResetFont state, consumed silently)
+ * - `]` → OSC string (title, colour palette, etc.)
+ * - `7` → Save cursor position (DECSC)
+ * - `8` → Restore cursor position (DECRC)
+ * - `M` → Reverse index (scroll up one line)
+ * - All others → silently ignored, return to Text state
  *
- * @see processFormat(), m_state, m_formatValue, m_formatValueY
+ * @see processFormat(), m_state
  */
 void Widgets::Terminal::processEscape(const QChar& byte, QString& text)
 {
@@ -1430,41 +1656,58 @@ void Widgets::Terminal::processEscape(const QChar& byte, QString& text)
 
   m_formatValues.clear();
   m_currentFormatValue = 0;
+  m_privateMode        = false;
 
   if (byte == '[')
     m_state = Format;
 
   else if (byte == '(')
     m_state = ResetFont;
+
+  else if (byte == ']')
+    m_state = OSC;
+
+  else if (byte == '7') {
+    m_savedCursorPosition = m_cursorPosition;
+    m_state               = Text;
+  }
+
+  else if (byte == '8') {
+    setCursorPosition(m_savedCursorPosition);
+    m_state = Text;
+  }
+
+  else if (byte == 'M') {
+    const int newY = qMax(0, m_cursorPosition.y() - 1);
+    setCursorPosition(m_cursorPosition.x(), newY);
+    m_state = Text;
+  }
+
+  else
+    m_state = Text;
 }
 
 /**
- * @brief Processes characters in the context of a terminal format command.
+ * @brief Processes one byte of a CSI (ESC[…) parameter or final sequence.
  *
- * @param byte The character to be processed as part of a format command.
- * @param text A reference to a QString (currently unused in this method).
+ * @param byte The character to process.
+ * @param text Accumulated printable text (unused here; passed for API symmetry).
  *
- * This method handles terminal formatting commands, including text formatting,
- * cursor movement, and screen clearing:
- * - Numeric characters are accumulated as format values (`m_formatValue`,
- *   `m_formatValueY`).
- * - The `';'` character indicates multiple format values, and subsequent values
- *   are processed.
- * - The `'m'` character exits the formatting state and returns to normal text.
- * - Cursor movement commands (`'A'`, `'B'`, `'C'`, `'D'`) adjust the cursor
- *   position.
- * - The `'H'` character moves the cursor to the specified position
- *   (`m_formatValue`, `m_formatValueY`).
- * - The `'J'` character clears the screen based on `m_formatValue`.
- * - The `'K'` character clears part of the current line, depending on
- *   `m_formatValue`.
- * - The `'P'` character removes characters from the cursor position.
- * - If an unrecognized character is received, the state is reset to `Text`.
+ * Accumulates numeric parameters separated by `;`, then dispatches on the
+ * final letter:
+ * - `m`     — SGR: apply ANSI colors/attributes
+ * - `A`–`F` — cursor movement (up/down/right/left/next-line/prev-line)
+ * - `H`/`f` — cursor position (CUP / HVP), 1-based row;col
+ * - `G`     — cursor horizontal absolute (1-based column)
+ * - `d`     — cursor vertical absolute (1-based row)
+ * - `J`     — erase in display (0=to end, 1=to start, 2/3=full clear)
+ * - `K`     — erase in line (0=to end, 1=to start, 2=whole line)
+ * - `P`     — delete characters
+ * - `s`/`u` — save/restore cursor position (ANSI)
+ * - `h`/`l` — DEC private mode set/reset (`?25h` show cursor, `?25l` hide)
+ * - All other final letters → silently consumed, return to Text state
  *
- * @note Some functions (`J` and `K` with certain values) are not implemented
- *       and will produce warnings.
- *
- * @see setCursorPosition(), removeStringFromCursor(), m_state, m_formatValue
+ * @see setCursorPosition(), removeStringFromCursor(), applyAnsiColor()
  */
 void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
 {
@@ -1473,6 +1716,11 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
   // Obtain format value
   if (byte >= '0' && byte <= '9') {
     m_currentFormatValue = m_currentFormatValue * 10 + (byte.cell() - '0');
+  }
+
+  // DEC private mode prefix — silently note it, stay in Format state
+  else if (byte == '?' || byte == '>' || byte == '=') {
+    m_privateMode = true;
   }
 
   // Control sequences
@@ -1486,93 +1734,179 @@ void Widgets::Terminal::processFormat(const QChar& byte, QString& text)
 
     // Exit text formatting and apply ANSI color if enabled
     else if (byte == 'm') {
-      m_formatValues.append(m_currentFormatValue);
-      if (ansiColors())
-        applyAnsiColor(m_formatValues);
-
-      m_state = Text;
-    }
-
-    // Cursor movement
-    else if (byte >= 'A' && byte <= 'D') {
-      const int value = m_currentFormatValue ? m_currentFormatValue : 1;
-      int x           = 0;
-      int y           = 0;
-      switch (byte.toLatin1()) {
-        case 'A':
-          x = m_cursorPosition.x();
-          y = qMax(0, m_cursorPosition.y() - value);
-          setCursorPosition(x, y);
-          break;
-        case 'B':
-          x = m_cursorPosition.x();
-          y = m_cursorPosition.y() + value;
-          setCursorPosition(x, y);
-          break;
-        case 'C':
-          x = m_cursorPosition.x() + value;
-          y = m_cursorPosition.y();
-          setCursorPosition(x, y);
-          break;
-        case 'D':
-          x = qMax(0, m_cursorPosition.x() - value);
-          y = m_cursorPosition.y();
-          setCursorPosition(x, y);
-          break;
-        default:
-          break;
+      if (!m_privateMode) {
+        m_formatValues.append(m_currentFormatValue);
+        if (ansiColors())
+          applyAnsiColor(m_formatValues);
       }
 
       m_state = Text;
     }
 
-    // Move cursor to current format value?
-    else if (byte == 'H') {
-      const int x = m_formatValues.value(0, 0);
-      const int y = m_formatValues.value(1, 0);
-      setCursorPosition(x, y);
+    // s — save cursor position (ANSI)
+    else if (byte == 's') {
+      if (!m_privateMode)
+        m_savedCursorPosition = m_cursorPosition;
+
       m_state = Text;
     }
 
-    // J function
+    // u — restore cursor position (ANSI)
+    else if (byte == 'u') {
+      if (!m_privateMode)
+        setCursorPosition(m_savedCursorPosition);
+
+      m_state = Text;
+    }
+
+    // Cursor movement (A-D) and cursor next/prev line (E/F)
+    else if (byte >= 'A' && byte <= 'F') {
+      if (!m_privateMode) {
+        const int value = m_currentFormatValue ? m_currentFormatValue : 1;
+        switch (byte.toLatin1()) {
+          case 'A':
+            setCursorPosition(m_cursorPosition.x(), qMax(0, m_cursorPosition.y() - value));
+            break;
+          case 'B':
+            setCursorPosition(m_cursorPosition.x(), m_cursorPosition.y() + value);
+            break;
+          case 'C':
+            setCursorPosition(m_cursorPosition.x() + value, m_cursorPosition.y());
+            break;
+          case 'D':
+            setCursorPosition(qMax(0, m_cursorPosition.x() - value), m_cursorPosition.y());
+            break;
+          case 'E':
+            setCursorPosition(0, m_cursorPosition.y() + value);
+            break;
+          case 'F':
+            setCursorPosition(0, qMax(0, m_cursorPosition.y() - value));
+            break;
+          default:
+            break;
+        }
+      }
+
+      m_state = Text;
+    }
+
+    // Move cursor to position — H (CUP) and f (HVP), 1-based row;col
+    else if (byte == 'H' || byte == 'f') {
+      if (!m_privateMode) {
+        const int row = qMax(0, m_formatValues.value(0, 1) - 1);
+        const int col = qMax(
+          0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : m_formatValues.value(1, 1) - 1);
+        setCursorPosition(col, row);
+      }
+
+      m_state = Text;
+    }
+
+    // G — Cursor Horizontal Absolute (1-based column)
+    else if (byte == 'G') {
+      if (!m_privateMode) {
+        const int col = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
+        setCursorPosition(col, m_cursorPosition.y());
+      }
+
+      m_state = Text;
+    }
+
+    // d — Cursor Vertical Absolute (1-based row)
+    else if (byte == 'd') {
+      if (!m_privateMode) {
+        const int row = qMax(0, m_currentFormatValue > 0 ? m_currentFormatValue - 1 : 0);
+        setCursorPosition(m_cursorPosition.x(), row);
+      }
+
+      m_state = Text;
+    }
+
+    // J function — Erase in display
     else if (byte == 'J') {
-      switch (m_currentFormatValue) {
-        case 0:
-        case 1:
-        case 2:
-          clear();
-          break;
-        default:
-          qWarning() << "J" << m_currentFormatValue << "function not implemented!";
-          break;
+      if (!m_privateMode) {
+        const int cy = m_cursorPosition.y();
+        switch (m_currentFormatValue) {
+          case 0:
+            // Erase from cursor to end of screen
+            removeStringFromCursor(RightDirection);
+            if (cy + 1 < m_data.size()) {
+              m_data.erase(m_data.begin() + cy + 1, m_data.end());
+              if (ansiColors() && cy + 1 < m_colorData.size())
+                m_colorData.erase(m_colorData.begin() + cy + 1, m_colorData.end());
+            }
+
+            break;
+          case 1:
+            // Erase from start of screen to cursor
+            removeStringFromCursor(LeftDirection);
+            if (cy > 0) {
+              m_data.erase(m_data.begin(), m_data.begin() + cy);
+              if (ansiColors() && cy < m_colorData.size())
+                m_colorData.erase(m_colorData.begin(), m_colorData.begin() + cy);
+            }
+
+            setCursorPosition(m_cursorPosition.x(), 0);
+            break;
+          case 2:
+          case 3:
+            clear();
+            break;
+          default:
+            break;
+        }
       }
 
       m_state = Text;
     }
 
-    // K function
+    // K function — Erase in line
     else if (byte == 'K') {
-      switch (m_currentFormatValue) {
-        case 0:
-          removeStringFromCursor(RightDirection);
-          break;
-        case 1:
-        case 2:
-          qWarning() << "K" << m_currentFormatValue << "function not implemented!";
-          break;
+      if (!m_privateMode) {
+        switch (m_currentFormatValue) {
+          case 0:
+            removeStringFromCursor(RightDirection);
+            break;
+          case 1:
+            removeStringFromCursor(LeftDirection);
+            break;
+          case 2:
+            removeStringFromCursor(RightDirection);
+            removeStringFromCursor(LeftDirection);
+            break;
+          default:
+            break;
+        }
       }
 
       m_state = Text;
     }
 
-    // P function
+    // P function — Delete characters
     else if (byte == 'P') {
-      removeStringFromCursor(LeftDirection, m_currentFormatValue);
-      removeStringFromCursor(RightDirection);
+      if (!m_privateMode) {
+        removeStringFromCursor(LeftDirection, m_currentFormatValue);
+        removeStringFromCursor(RightDirection);
+      }
+
       m_state = Text;
     }
 
-    // Reset state
+    // h / l — DEC private mode set/reset (e.g. ?25h show cursor, ?25l hide cursor)
+    else if (byte == 'h' || byte == 'l') {
+      if (m_privateMode && m_currentFormatValue == 25) {
+        m_cursorHidden = (byte == 'l');
+        m_stateChanged = true;
+      }
+
+      m_state = Text;
+    }
+
+    // Any other uppercase/lowercase letter terminates the sequence silently
+    else if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
+      m_state = Text;
+
+    // Reset state for anything else
     else
       m_state = Text;
   }
@@ -1980,11 +2314,11 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar& byte)
   if (x > line.size())
     line = line.leftJustified(x, ' ');
 
-  // Set or append the printable character
+  // Set or append the printable character; use space for non-printable
   if (x >= 0 && x < line.size())
-    line[x] = byte.isPrint() ? byte : '.';
+    line[x] = byte.isPrint() ? byte : ' ';
   else if (x >= 0)
-    line.append(byte.isPrint() ? byte : '.');
+    line.append(byte.isPrint() ? byte : ' ');
 }
 
 /**

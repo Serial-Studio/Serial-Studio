@@ -240,6 +240,8 @@ private slots:
   void onErrorOccurred(QModbusDevice::Error error);
 
 private:
+  void doClose();
+
   QTimer* m_pollTimer;
   QModbusClient* m_device;
   QModbusReply* m_lastReply;

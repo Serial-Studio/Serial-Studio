@@ -267,21 +267,51 @@ unusual cases.
 m_kmpState = 0;
 ```
 
-✅ Doxygen for public APIs — keep it brief:
-```cpp
-/**
- * @brief Validates CRC16-CCITT checksum over frame payload.
- * @param frame  Raw bytes including checksum suffix
- * @return true if checksum matches, false otherwise
- */
-bool validateChecksum(const QByteArray &frame);
-```
-
 ✅ TODO/FIXME for known issues:
 ```cpp
 // TODO: exponential backoff on reconnection
 // FIXME: possible race if FrameReader destroyed mid-processData
 ```
+
+### Doxygen Comments — Mandatory for Every Generated Function and Class
+
+**Every function and class you generate must have a Doxygen comment.** No exceptions.
+
+**Placement rules:**
+- **Class-level Doxygen**: in the `.h` file, immediately above the `class` declaration. One `@brief` only — do not document members or methods in the header Doxygen block.
+- **Function-level Doxygen**: in the `.cpp` file, immediately above the function definition. Never in the header.
+
+✅ Header (class only):
+```cpp
+/**
+ * @brief Parses raw byte frames from a serial stream using KMP delimiter search.
+ */
+class FrameReader : public QObject
+{
+  ...
+};
+```
+
+✅ Implementation (every function):
+```cpp
+/**
+ * @brief Searches the buffer for the configured end delimiter.
+ * @param data  Raw bytes received from the driver.
+ * @return Index of the delimiter end, or -1 if not found.
+ */
+int FrameReader::findDelimiter(const QByteArray &data)
+{
+  ...
+}
+```
+
+**Tags to use (keep it brief):**
+- `@brief` — one sentence, always present.
+- `@param name` — one per parameter (omit for obvious getters/setters with a single self-explanatory param).
+- `@return` — what is returned and what values mean (omit for `void`).
+- `@note` / `@warning` — only when genuinely non-obvious.
+
+Do **not** add `@author`, `@date`, `@version`, or `@file` — SPDX headers cover ownership.
 
 ### Performance
 
@@ -301,8 +331,9 @@ bool validateChecksum(const QByteArray &frame);
 6. **Maintain SPDX headers.** `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both.
 7. **Do not create markdown/doc files** unless explicitly asked.
 8. **Update CLAUDE.md** for any significant architectural change.
-10. **Prefer self-documenting code over comments.** Aim for zero comments inside function bodies. One line max when a comment is truly necessary.
-9. **Make QML bindings reactive via `Q_PROPERTY`, not workarounds.** If a `Q_INVOKABLE` result needs to be reactive, expose it as a `Q_PROPERTY` with `NOTIFY` on the C++ side. Never introduce new comma-expression hacks or named variants to work around missing signals.
+9. **Prefer self-documenting code over comments.** Aim for zero comments inside function bodies. One line max when a comment is truly necessary.
+10. **Make QML bindings reactive via `Q_PROPERTY`, not workarounds.** If a `Q_INVOKABLE` result needs to be reactive, expose it as a `Q_PROPERTY` with `NOTIFY` on the C++ side. Never introduce new comma-expression hacks or named variants to work around missing signals.
+11. **Add Doxygen to every generated function and class.** Class `@brief` goes in the `.h` above the `class` keyword; function Doxygen goes in the `.cpp` above the definition. See the "Doxygen Comments" section for tags and examples.
 
 ## File Creation Policy
 

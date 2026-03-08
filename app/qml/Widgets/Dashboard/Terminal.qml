@@ -48,6 +48,19 @@ Item {
   }
 
   //
+  // When a device connects in VT-100 mode, give the terminal widget focus
+  // so the user can start typing immediately without clicking first.
+  //
+  Connections {
+    target: Cpp_IO_Manager
+
+    function onConnectedChanged() {
+      if (Cpp_IO_Manager.isConnected && Cpp_Console_Handler.vt100Emulation)
+        Qt.callLater(terminal.forceActiveFocus)
+    }
+  }
+
+  //
   // Custom properties
   //
   property bool minimal: true
@@ -55,6 +68,13 @@ Item {
   property int minimumColumns: 80
   property int minimumHeight: Cpp_Console_Handler.defaultCharHeight * root.minimumRows
   property int minimumWidth: Cpp_Console_Handler.defaultCharWidth * root.minimumColumns
+
+  //
+  // Expose the live terminal dimensions (columns/rows) so parent items can
+  // react to resize events and update the PTY size accordingly.
+  //
+  readonly property int terminalColumns: terminal.terminalColumns
+  readonly property int terminalRows: terminal.terminalRows
 
   //
   // Function to send through serial port data

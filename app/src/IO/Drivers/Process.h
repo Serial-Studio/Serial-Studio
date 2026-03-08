@@ -27,6 +27,7 @@
 #  include <QList>
 #  include <QObject>
 #  include <QProcess>
+#  include <QProcessEnvironment>
 #  include <QSettings>
 #  include <QString>
 #  include <QStringList>
@@ -34,24 +35,39 @@
 
 #  include "IO/HAL_Driver.h"
 
+#  ifdef Q_OS_WIN
+#    ifndef WIN32_LEAN_AND_MEAN
+#      define WIN32_LEAN_AND_MEAN
+#    endif
+#    ifndef NOMINMAX
+#      define NOMINMAX
+#    endif
+// clang-format off
+#    include <windows.h>
+// clang-format on
+#  else
+#    include <sys/types.h>
+#  endif
+
 namespace IO {
 namespace Drivers {
 
 /**
  * @brief Process I/O driver supporting two modes: child-process and named pipe.
  *
- * In Launch mode, Serial Studio spawns a child process and reads its stdout
- * while writing to its stdin. In NamedPipe mode, Serial Studio opens a named
- * pipe or FIFO written by an external process and reads from it.
+ * In Launch mode, Serial Studio spawns a child process under a PTY (Unix) or
+ * ConPTY (Windows) so interactive CLI tools (claude, gemini, python REPL, etc.)
+ * see a real terminal and produce output normally.  Falls back to QProcess
+ * anonymous pipes when PTY creation fails.
  *
- * No additional third-party libraries are required — QProcess and QFile are
- * used from Qt Core.
+ * In NamedPipe mode, Serial Studio opens a named pipe / FIFO written by an
+ * external process and reads from it.
  *
  * Threading:
- *   Launch mode: m_process runs on the main thread; readyRead() signals are
- *   handled synchronously.
- *   Pipe mode: m_pipeThread runs pipeReadLoop() with blocking waitForReadyRead()
- *   calls. Fatal errors are marshalled back to the main thread via
+ *   Launch mode PTY: m_ptyThread runs ptyReadLoop() which polls the master fd.
+ *   Launch mode pipe fallback: m_process runs on the main thread.
+ *   Pipe mode: m_pipeThread runs pipeReadLoop().
+ *   Fatal errors from worker threads are marshalled to the main thread via
  *   QMetaObject::invokeMethod().
  */
 class Process : public HAL_Driver {
@@ -95,8 +111,8 @@ public:
   Q_ENUM(Mode)
 
   enum class OutputCapture {
-    StdOut = 0, /**< Capture only stdout */
-    StdErr = 1, /**< Capture only stderr */
+    StdOut = 0, /**< Capture only stdout (pipe fallback only) */
+    StdErr = 1, /**< Capture only stderr (pipe fallback only) */
     Both   = 2  /**< Merge stdout and stderr */
   };
   Q_ENUM(OutputCapture)
@@ -127,6 +143,7 @@ public slots:
   void setPipePath(const QString& path);
   void setOutputCapture(int capture);
   void refreshProcessList();
+  void setTerminalSize(int columns, int rows);
 
 signals:
   void modeChanged();
@@ -139,29 +156,59 @@ signals:
 
 private:
   explicit Process();
-  ~Process() = default;
+  ~Process();
 
   Process(Process&&)                 = delete;
   Process(const Process&)            = delete;
   Process& operator=(Process&&)      = delete;
   Process& operator=(const Process&) = delete;
 
-  // Called on main thread (via queued invokeMethod) when pipe open fails
   Q_SLOT void onPipeError();
+  Q_SLOT void onPtyStopped();
 
+  void doClose();
   void onProcessFinished(int exitCode, QProcess::ExitStatus status);
   void onProcessError(QProcess::ProcessError error);
   void onReadyRead();
   void pipeReadLoop();
+  void ptyReadLoop();
+
+  bool openWithPty(const QString& resolved,
+                   const QStringList& args,
+                   const QProcessEnvironment& env);
+  bool openWithQProcess(const QString& resolved,
+                        const QStringList& args,
+                        const QProcessEnvironment& env);
+
+  static const QProcessEnvironment& shellEnvironment();
+  static QString resolveExecutable(const QString& name, const QProcessEnvironment& env);
 
   Mode m_mode;
   OutputCapture m_outputCapture;
-  QProcess* m_process;
-  QThread m_pipeThread;
-  QSettings m_settings;
 
+  // QProcess fallback (pipe mode)
+  QProcess* m_process;
+
+  // PTY (Launch mode)
+  QThread m_ptyThread;
+  std::atomic<bool> m_ptyRunning{false};
+
+#  ifdef Q_OS_WIN
+  HANDLE m_conPtyIn{INVALID_HANDLE_VALUE};   // write end  → child stdin
+  HANDLE m_conPtyOut{INVALID_HANDLE_VALUE};  // read end   ← child stdout
+  HANDLE m_hPseudoConsole{nullptr};
+  HANDLE m_hProcess{INVALID_HANDLE_VALUE};
+  HANDLE m_hThread{INVALID_HANDLE_VALUE};
+#  else
+  int m_ptyMasterFd{-1};
+  pid_t m_childPid{-1};
+#  endif
+
+  // Named-pipe mode
+  QThread m_pipeThread;
   std::atomic<bool> m_pipeRunning{false};
 
+  QSettings m_settings;
   QString m_executable;
   QString m_arguments;
   QString m_workingDir;

@@ -29,10 +29,7 @@
 
 namespace Misc {
 /**
- * @brief The ModuleManager class
- *
- * The @c ModuleManager class is in charge of initializing all the C++ modules
- * that are part of Serial Studio in the correct order.
+ * @brief Manages application module lifecycle, QML engine setup, and headless operation.
  */
 class ModuleManager : public QObject {
   Q_OBJECT
@@ -54,9 +51,11 @@ public slots:
   void configureUpdater();
   void registerQmlTypes();
   void initializeQmlInterface();
+  void setHeadless(const bool headless);
   void setAutomaticUpdates(const bool enabled);
 
 private:
+  bool m_headless;
   QSettings m_settings;
   bool m_automaticUpdates;
   NativeWindow m_nativeWindow;

@@ -28,6 +28,7 @@
 #include <QStyleFactory>
 #include <QSysInfo>
 
+#include "API/Server.h"
 #include "AppInfo.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
@@ -45,8 +46,6 @@
 
 #ifdef Q_OS_WIN
 #  include <windows.h>
-
-#  include <cstring>
 #endif
 
 #ifdef Q_OS_LINUX
@@ -56,12 +55,16 @@
 #  include <QStandardPaths>
 #endif
 
+#include <cstring>
+
 //--------------------------------------------------------------------------------------------------
 // Declare utility functions
 //--------------------------------------------------------------------------------------------------
 
 static void cliShowVersion();
 static void cliResetSettings();
+static bool argvHasFlag(int argc, char** argv, const char* flag);
+static char** injectPlatformArg(int& argc, char** argv, const char* platform);
 
 #ifdef BUILD_COMMERCIAL
 static void applyModbusRegister(const QString& spec);
@@ -106,6 +109,12 @@ int main(int argc, char** argv)
   // Disable native menubar
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 
+  // Pre-scan argv for --headless before QApplication is constructed so we can
+  // inject the offscreen platform plugin before Qt reads argv.
+  const bool headless = argvHasFlag(argc, argv, "--headless");
+  if (headless)
+    argv = injectPlatformArg(argc, argv, "offscreen");
+
   // Windows specific initialization code
 #if defined(Q_OS_WIN)
   attachToConsole();
@@ -137,6 +146,8 @@ int main(int argc, char** argv)
   QCLO vOpt({"v", "version"}, "Displays application version");
   QCLO rOpt({"r", "reset"}, "Resets all application settings");
   QCLO fOpt({"f", "fullscreen"}, "Launches dashboard in fullscreen mode");
+  QCLO headlessOpt("headless", "Run without GUI (headless/server mode)");
+  QCLO apiServerOpt("api-server", "Enable API server on startup (port 7777)");
   QCLO pOpt({"p", "project"}, "Loads the specified project file", "file");
   QCLO qOpt({"q", "quick-plot"}, "Enables quick plot mode (auto-detect CSV data)");
   QCLO jOpt({"j", "device-sends-json"}, "Expects pre-formatted JSON from device");
@@ -183,6 +194,8 @@ int main(int argc, char** argv)
   parser.addOption(vOpt);
   parser.addOption(rOpt);
   parser.addOption(fOpt);
+  parser.addOption(headlessOpt);
+  parser.addOption(apiServerOpt);
   parser.addOption(pOpt);
   parser.addOption(qOpt);
   parser.addOption(jOpt);
@@ -228,15 +241,20 @@ int main(int argc, char** argv)
 
   // Create module manager
   Misc::ModuleManager moduleManager;
+  moduleManager.setHeadless(headless);
   moduleManager.configureUpdater();
 
   // Initialize QML interface
   moduleManager.registerQmlTypes();
   moduleManager.initializeQmlInterface();
-  if (moduleManager.engine().rootObjects().isEmpty()) {
+  if (!headless && moduleManager.engine().rootObjects().isEmpty()) {
     qCritical() << "Critical QML error";
     return EXIT_FAILURE;
   }
+
+  // Force-enable API server when requested from the command line
+  if (parser.isSet(apiServerOpt))
+    API::Server::instance().setEnabled(true);
 
   // Handle project file option
   if (parser.isSet(pOpt)) {
@@ -613,6 +631,53 @@ int main(int argc, char** argv)
 //--------------------------------------------------------------------------------------------------
 // Implement utility functions
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Scans raw argv for an exact match of @p flag before Qt parses arguments.
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @param flag The flag string to search for (e.g. "--headless").
+ * @return @c true if the flag is present.
+ */
+static bool argvHasFlag(int argc, char** argv, const char* flag)
+{
+  for (int i = 1; i < argc; ++i) {
+    if (std::strcmp(argv[i], flag) == 0)
+      return true;
+  }
+
+  return false;
+}
+
+/**
+ * @brief Injects "-platform <platform>" into argv before Qt reads it.
+ *
+ * Allocates a new argv array with two extra slots prepended after argv[0].
+ * The caller owns the returned memory; on Windows, the original argv is already
+ * heap-allocated by adjustArgumentsForFreeType and will be freed at exit.
+ *
+ * @param argc  Reference to the argument count; incremented by 2.
+ * @param argv  Original argument vector.
+ * @param platform  Platform plugin name (e.g. "offscreen").
+ * @return New argv array with the platform arguments injected.
+ */
+static char** injectPlatformArg(int& argc, char** argv, const char* platform)
+{
+  char** newArgv = static_cast<char**>(malloc(sizeof(char*) * (argc + 3)));
+  if (!newArgv)
+    return argv;
+
+  newArgv[0] = argv[0];
+  newArgv[1] = const_cast<char*>("-platform");
+  newArgv[2] = const_cast<char*>(platform);
+
+  for (int i = 1; i < argc; ++i)
+    newArgv[i + 2] = argv[i];
+
+  newArgv[argc + 2] = nullptr;
+  argc += 2;
+  return newArgv;
+}
 
 /**
  * Prints the current application version to the console

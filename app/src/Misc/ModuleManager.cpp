@@ -95,14 +95,13 @@
  * This static function handles messages of various types (debug, warning,
  * critical, fatal) emitted by the Qt framework.
  *
- * It formats the message with a corresponding prefix based on the message type
- * (e.g., "[Debug]", "[Warning]").
+ * Formats each message twice: once without ANSI codes for stdout (so piped
+ * output or terminals that do not support color never see escape sequences),
+ * and once with the user's ANSI setting for the in-app console widget.
  *
  * @param type The type of the message.
  * @param context The message log context (file, line, function).
  * @param msg The actual message that was emitted by the Qt system.
- *
- * @note The function appends the formatted message to the console handler.
  */
 static void MessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {
@@ -128,17 +127,15 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   }
 #endif
 
-  // Format message with ANSI colors (only if enabled by user)
   const bool useAnsiColors = Console::Handler::instance().ansiColorsEnabled();
-  QString output           = Widgets::Terminal::formatDebugMessage(type, message, useAnsiColors);
-  if (!output.isEmpty()) {
-    // Add a newline at the end
-    std::cout << output.toStdString() << std::endl;
-    output.append("\n");
+  const QString output     = Widgets::Terminal::formatDebugMessage(type, message, useAnsiColors);
+  if (output.isEmpty())
+    return;
 
-    // Display data in console
-    Console::Handler::instance().displayDebugData(output);
-  }
+  std::cout << Widgets::Terminal::formatDebugMessage(type, message, false).toStdString()
+            << std::endl;
+
+  Console::Handler::instance().displayDebugData(output + "\n");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,7 +147,8 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
  * destroy singleton classes before the application quits.
  */
 Misc::ModuleManager::ModuleManager()
-  : m_automaticUpdates(m_settings.value("App/AutomaticUpdates", true).toBool())
+  : m_headless(false)
+  , m_automaticUpdates(m_settings.value("App/AutomaticUpdates", true).toBool())
 {
   // Init translator
   (void)Misc::Translator::instance();
@@ -169,6 +167,15 @@ Misc::ModuleManager::ModuleManager()
 bool Misc::ModuleManager::automaticUpdates() const
 {
   return m_automaticUpdates;
+}
+
+/**
+ * @brief Enables headless mode, suppressing QML and GUI loading on init.
+ * @param headless Pass @c true to skip the QML engine load.
+ */
+void Misc::ModuleManager::setHeadless(const bool headless)
+{
+  m_headless = headless;
 }
 
 /**
@@ -354,8 +361,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   const bool qtCommercialAvailable = false;
 #endif
 
-  // Initialize third-party modules
-  auto updater = QSimpleUpdater::getInstance();
+  // Initialize third-party modules (not needed in headless mode)
+  QSimpleUpdater* updater = m_headless ? nullptr : QSimpleUpdater::getInstance();
 
   // Start common event timers
   miscTimerEvents->startTimers();
@@ -391,17 +398,18 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Construct a QML-friendly list of available screens
   QVariantList screenList;
-  for (int i = 0; i < qApp->screens().count(); ++i) {
-    QVariantMap map;
-    map["name"]     = qApp->screens()[i]->name();
-    map["geometry"] = QVariant::fromValue(qApp->screens()[i]->geometry());
-    screenList.append(map);
-  }
-
-  // Get primary screen
   QVariantMap primaryScreen;
-  primaryScreen["name"]     = qApp->primaryScreen()->name();
-  primaryScreen["geometry"] = qApp->primaryScreen()->geometry();
+  if (!m_headless) {
+    for (int i = 0; i < qApp->screens().count(); ++i) {
+      QVariantMap map;
+      map["name"]     = qApp->screens()[i]->name();
+      map["geometry"] = QVariant::fromValue(qApp->screens()[i]->geometry());
+      screenList.append(map);
+    }
+
+    primaryScreen["name"]     = qApp->primaryScreen()->name();
+    primaryScreen["geometry"] = qApp->primaryScreen()->geometry();
+  }
 
   // Register C++ modules with QML
   const auto c = m_engine.rootContext();
@@ -458,19 +466,21 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
-  // Register image provider for Image View widget (pro only)
+  if (!m_headless) {
+    // Register image provider for Image View widget (pro only)
 #ifdef BUILD_COMMERCIAL
-  auto* imgProvider = new UI::ImageProvider();
-  UI::ImageProvider::setGlobal(imgProvider);
-  m_engine.addImageProvider(QStringLiteral("serial-studio-img"), imgProvider);
+    auto* imgProvider = new UI::ImageProvider();
+    UI::ImageProvider::setGlobal(imgProvider);
+    m_engine.addImageProvider(QStringLiteral("serial-studio-img"), imgProvider);
 
-  auto imageExport = &Widgets::ImageExport::instance();
-  imageExport->setupExternalConnections();
-  c->setContextProperty("Cpp_Image_Export", imageExport);
+    auto imageExport = &Widgets::ImageExport::instance();
+    imageExport->setupExternalConnections();
+    c->setContextProperty("Cpp_Image_Export", imageExport);
 #endif
 
-  // Load main.qml
-  m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));
+    // Load main.qml
+    m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));
+  }
 
   // Try to contact activation server to validate license
 #ifdef BUILD_COMMERCIAL

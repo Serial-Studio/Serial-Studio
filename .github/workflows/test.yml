@@ -1,0 +1,221 @@
+#
+# Serial Studio
+# https://serial-studio.com/
+#
+# Copyright (C) 2020–2025 Alex Spataru
+#
+# This file is dual-licensed:
+#
+# - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+# - Under the Serial Studio Commercial License for builds that include
+#   any Pro functionality.
+#
+# You must comply with the terms of one of these licenses, depending
+# on your use case.
+#
+# For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+# For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+#
+# SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+#
+
+#-------------------------------------------------------------------------------
+# Workflow configuration
+#-------------------------------------------------------------------------------
+
+name: Tests
+
+on:
+  push:               # Run on push
+    paths-ignore:     # File patterns to ignore
+    - '**.md'         # Ignore changes to *.md files
+
+  pull_request:       # Run on pull-request
+    paths-ignore:     # File patterns to ignore
+    - '**.md'         # Ignore changes to *.md files
+
+#-------------------------------------------------------------------------------
+# Define application name & version
+#-------------------------------------------------------------------------------
+
+env:
+  QT_VERSION_LINUX: 6.10.2
+  UNIXNAME: "serial-studio-pro"
+  INSTALL_QT_LINUX_INTEL: false
+  QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
+
+#-------------------------------------------------------------------------------
+# Begin workflow jobs definition
+#-------------------------------------------------------------------------------
+
+jobs:
+
+#-------------------------------------------------------------------------------
+# Integration & script test job (Linux x86_64, headless)
+#-------------------------------------------------------------------------------
+
+  test-linux:
+    runs-on: ubuntu-22.04
+    name: '🧪 Tests (Linux)'
+    steps:
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          fakeroot \
+          libcups2-dev \
+          libegl1 \
+          libgl1-mesa-dev \
+          libasound2-dev \
+          libssl-dev \
+          libudev-dev \
+          libzstd-dev \
+          zlib1g-dev \
+          libexpat1-dev \
+          libxcb1 \
+          libxcb-cursor0 \
+          libxcb-cursor-dev \
+          libxcb-glx0 \
+          libxcb-icccm4 \
+          libxcb-image0 \
+          libxcb-image0-dev \
+          libxcb-keysyms1 \
+          libxcb-randr0 \
+          libxcb-render0 \
+          libxcb-render-util0 \
+          libxcb-shape0 \
+          libxcb-shm0 \
+          libxcb-sync1 \
+          libxcb-util0-dev \
+          libxcb-util1 \
+          libxcb-xfixes0 \
+          libxcb-xinerama0 \
+          libxcb-xkb-dev \
+          libxcb-xtest0 \
+          libxkbcommon-dev \
+          libxkbcommon-x11-0 \
+          libxkbcommon-x11-dev \
+          nodejs \
+          npm
+
+    - name: '⚙️ Restore Qt Cache'
+      uses: actions/cache/restore@v3
+      if: env.INSTALL_QT_LINUX_INTEL == 'false'
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+
+    - name: '⚙️ Install Qt'
+      shell: bash
+      if: env.INSTALL_QT_LINUX_INTEL == 'true'
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_ARCH: x64
+        QT_USERNAME: ${{secrets.QT_USERNAME}}
+        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        chmod +x ./scripts/install-qt.sh
+        ./scripts/install-qt.sh
+
+    - name: '⚙️ Save Qt Cache'
+      if: env.INSTALL_QT_LINUX_INTEL == 'true'
+      uses: actions/cache/save@v3
+      with:
+        path: |
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+          ${{env.USERPROFILE}}/.qt-license
+        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+
+    - name: '⚙️ Add Qt to PATH'
+      shell: bash
+      env:
+        QT_VERSION: ${{env.QT_VERSION_LINUX}}
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+      run: |
+        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
+        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
+        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
+
+        echo "$QT_BIN_PATH" >> $GITHUB_PATH
+        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@latest
+      with:
+        useLocalCache: true
+
+    - name: '🚧 Configure with CMake'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+      run: |
+        cmake -B build \
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DBUILD_COMMERCIAL=ON \
+          -DBUILD_GPL3=OFF
+
+    - name: '🚧 Build application'
+      run: cmake --build build --config RelWithDebInfo -j$(nproc)
+
+    - name: '🐍 Set up Python'
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: '🐍 Install Python dependencies'
+      run: pip install -r tests/requirements.txt
+
+    - name: '🚀 Start Serial Studio (headless)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --headless --api-server &
+        echo $! > ss_pid.txt
+
+        # Wait for the API server to accept connections on port 7777
+        for i in $(seq 1 30); do
+          if nc -z 127.0.0.1 7777 2>/dev/null; then
+            echo "API server is ready (attempt $i)"
+            break
+          fi
+          sleep 1
+        done
+
+    - name: '🧪 Run tests'
+      run: |
+        pytest tests/ \
+          -m "not destructive and not dos" \
+          -v \
+          --tb=short \
+          --timeout=60 \
+          -x
+
+    - name: '🛑 Stop Serial Studio'
+      if: always()
+      run: |
+        if [ -f ss_pid.txt ]; then
+          kill $(cat ss_pid.txt) || true
+        fi
+
+    - name: '📤 Upload test results on failure'
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: pytest-output
+        path: |
+          .pytest_cache/
+          tests/**/*.log

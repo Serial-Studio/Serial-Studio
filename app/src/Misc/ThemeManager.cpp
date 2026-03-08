@@ -101,7 +101,9 @@ Misc::ThemeManager::ThemeManager() : m_theme(0)
       QStringLiteral("midday"),
       QStringLiteral("midnight"),
       QStringLiteral("fluent-light"),
-      QStringLiteral("fluent-dark")
+      QStringLiteral("fluent-dark"),
+      QStringLiteral("aether-light"),
+      QStringLiteral("aether-dark")
   };
   // clang-format on
 
@@ -459,6 +461,18 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
         break;
       case Translator::Czech:
         localized = translations.value("cs_CZ").toString();
+        break;
+      case Translator::Hindi:
+        localized = translations.value("hi_IN").toString();
+        break;
+      case Translator::Dutch:
+        localized = translations.value("nl_NL").toString();
+        break;
+      case Translator::Romanian:
+        localized = translations.value("ro_RO").toString();
+        break;
+      case Translator::Swedish:
+        localized = translations.value("sv_SE").toString();
         break;
       case Translator::English:
       default:

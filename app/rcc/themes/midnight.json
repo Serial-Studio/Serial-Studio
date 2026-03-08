@@ -71,8 +71,8 @@
     "highlighted_text":"#ffffff",
 
     "console_text":"#98c379",
-    "console_base":"#202326",
-    "console_border":"#3a3d42",
+    "console_base":"#101214",
+    "console_border":"#2a2d31",
     "console_highlight":"#4b6cb7",
 
     "widget_text":"#b0b3b8",

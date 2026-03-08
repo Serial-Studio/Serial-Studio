@@ -49,6 +49,22 @@ Widgets.Pane {
   }
 
   //
+  // Forward terminal resize events to the PTY so interactive programs
+  // (claude, gemini, etc.) reflow their output to the visible dimensions.
+  //
+  Connections {
+    target: terminal
+
+    function onTerminalColumnsChanged() {
+      Cpp_IO_Process.setTerminalSize(terminal.terminalColumns, terminal.terminalRows)
+    }
+
+    function onTerminalRowsChanged() {
+      Cpp_IO_Process.setTerminalSize(terminal.terminalColumns, terminal.terminalRows)
+    }
+  }
+
+  //
   // Use page item to set application palette
   //
   Page {

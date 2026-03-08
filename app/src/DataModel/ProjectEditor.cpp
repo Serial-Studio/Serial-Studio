@@ -1644,6 +1644,7 @@ void DataModel::ProjectEditor::setCurrentView(const DataModel::ProjectEditor::Cu
 
   m_currentView = view;
   Q_EMIT currentViewChanged();
+  Q_EMIT selectedTextChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1672,11 +1673,25 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
   const auto groupId = m_selectedGroup.groupId;
 
   if (id == kGroupView_Title) {
-    if (m_selectedGroup.title == value.toString())
+    const auto newTitle = value.toString();
+    if (m_selectedGroup.title == newTitle)
       return;
 
-    m_selectedGroup.title = value.toString();
-    pm.updateGroup(groupId, m_selectedGroup);
+    m_selectedGroup.title = newTitle;
+    pm.updateGroup(groupId, m_selectedGroup, false);
+
+    for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
+      if (it.value().groupId != groupId)
+        continue;
+
+      auto* treeItem = it.key();
+      treeItem->setText(newTitle);
+      treeItem->setData(newTitle, TreeViewText);
+      m_groupItems[treeItem].title = newTitle;
+      break;
+    }
+
+    Q_EMIT selectedTextChanged();
   } else if (id == kGroupView_Widget) {
     const auto keys     = m_groupWidgets.keys();
     const int widgetIdx = value.toInt();
@@ -1993,10 +2008,28 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
   const auto datasetId = m_selectedDataset.datasetId;
   const auto idInt     = static_cast<DatasetItem>(id.toInt());
 
-  // Rebuild tree only when title or index changes (affects tree display).
-  // All other field edits update in-place without triggering a tree rebuild.
-  const bool rebuildTree = (idInt == kDatasetView_Title || idInt == kDatasetView_Index);
-  pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
+  // Title changes update the tree item in-place; index changes require a full rebuild
+  // (the frame index label shown next to the item reflects this).
+  if (idInt == kDatasetView_Title) {
+    const auto newTitle = m_selectedDataset.title;
+    pm.updateDataset(groupId, datasetId, m_selectedDataset, false);
+
+    for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+      if (it.value().groupId != groupId || it.value().datasetId != datasetId)
+        continue;
+
+      auto* treeItem = it.key();
+      treeItem->setText(newTitle);
+      treeItem->setData(newTitle, TreeViewText);
+      m_datasetItems[treeItem].title = newTitle;
+      break;
+    }
+
+    Q_EMIT selectedTextChanged();
+  } else {
+    const bool rebuildTree = (idInt == kDatasetView_Index);
+    pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
+  }
 
   Q_EMIT datasetOptionsChanged();
   Q_EMIT editableOptionsChanged();
