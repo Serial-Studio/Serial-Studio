@@ -70,6 +70,7 @@ static char** injectPlatformArg(int& argc, char** argv, const char* platform);
 
 #ifdef BUILD_COMMERCIAL
 static int cliActivateLicense(QApplication& app, const QString& licenseKey);
+static int cliDeactivateLicense(QApplication& app);
 static void applyModbusRegister(const QString& spec);
 static void configureCanbusInterface(const QCommandLineParser& parser,
                                      const QCommandLineOption& bitrateOpt,
@@ -172,8 +173,9 @@ int main(int argc, char** argv)
   QCLO udpMltcstOpt("udp-multicast", "Enables multicast mode for UDP");
 
 #ifdef BUILD_COMMERCIAL
-  // License activation option
+  // License activation / deactivation options
   QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
+  QCLO deactivateOpt("deactivate", "Deactivate the current license instance and exit (for CI cleanup)");
 
   // ModBus RTU options
   QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
@@ -215,6 +217,7 @@ int main(int argc, char** argv)
   parser.addOption(udpMltcstOpt);
 #ifdef BUILD_COMMERCIAL
   parser.addOption(activateOpt);
+  parser.addOption(deactivateOpt);
   parser.addOption(modbusRtuOpt);
   parser.addOption(modbusTcpOpt);
   parser.addOption(modbusSlaveOpt);
@@ -246,6 +249,10 @@ int main(int argc, char** argv)
   // Handle license activation option (activates and exits; for CI/headless setup)
   if (parser.isSet(activateOpt))
     return cliActivateLicense(app, parser.value(activateOpt));
+
+  // Handle license deactivation option (deactivates and exits; for CI cleanup)
+  if (parser.isSet(deactivateOpt))
+    return cliDeactivateLicense(app);
 #endif
 
   // Ensure resources are loaded
@@ -753,6 +760,51 @@ static int cliActivateLicense(QApplication& app, const QString& licenseKey)
   });
 
   QTimer::singleShot(0, &ls, &Licensing::LemonSqueezy::activate);
+  timeout.start();
+
+  app.exec();
+  return result;
+}
+
+/**
+ * @brief Deactivates the stored license instance on this machine and exits.
+ *
+ * Intended for CI environments to release the activation seat after tests complete.
+ * Runs the event loop until deactivation completes or a 30-second timeout fires.
+ *
+ * @param app The QApplication instance.
+ * @return EXIT_SUCCESS if the license was deactivated, EXIT_FAILURE otherwise.
+ */
+static int cliDeactivateLicense(QApplication& app)
+{
+  auto& ls = Licensing::LemonSqueezy::instance();
+
+  if (!ls.isActivated()) {
+    qInfo() << "License is not active on this machine; nothing to deactivate.";
+    return EXIT_SUCCESS;
+  }
+
+  int result = EXIT_FAILURE;
+
+  QTimer timeout;
+  timeout.setSingleShot(true);
+  timeout.setInterval(30'000);
+
+  QObject::connect(&ls, &Licensing::LemonSqueezy::activatedChanged, &app, [&] {
+    result = !ls.isActivated() ? EXIT_SUCCESS : EXIT_FAILURE;
+    if (!ls.isActivated())
+      qInfo() << "License deactivated successfully.";
+    else
+      qCritical() << "License deactivation failed.";
+    app.quit();
+  });
+
+  QObject::connect(&timeout, &QTimer::timeout, &app, [&] {
+    qCritical() << "License deactivation timed out.";
+    app.quit();
+  });
+
+  QTimer::singleShot(0, &ls, &Licensing::LemonSqueezy::deactivate);
   timeout.start();
 
   app.exec();

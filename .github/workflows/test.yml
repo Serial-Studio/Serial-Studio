@@ -211,6 +211,15 @@ jobs:
           --tb=short \
           --timeout=60
 
+    - name: '🔑 Deactivate Serial Studio license'
+      if: always()
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --deactivate || true
+
     - name: '🛑 Stop Serial Studio'
       if: always()
       run: |
