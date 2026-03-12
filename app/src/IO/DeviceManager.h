@@ -86,6 +86,7 @@ private:
 private:
   int m_deviceId;
   bool m_threadedExtraction;
+  FrameConfig m_frameConfig;
   std::unique_ptr<HAL_Driver> m_driver;
   QThread m_workerThread;
   QPointer<FrameReader> m_frameReader;

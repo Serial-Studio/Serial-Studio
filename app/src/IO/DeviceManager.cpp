@@ -31,8 +31,8 @@
  * Takes ownership of @p driver, stores the initial @p config, and connects the
  * driver's dataReceived() signal so raw bytes are forwarded to consumers.
  *
- * The FrameReader is NOT started here — call open() to establish the connection
- * and start the reader.
+ * The FrameReader is created immediately and will be recreated each time
+ * open() is called after a close().
  *
  * @param deviceId           Opaque identifier for this device (matches ProjectModel sourceId).
  * @param driver             Unique ownership of the HAL driver instance.
@@ -48,6 +48,7 @@ IO::DeviceManager::DeviceManager(int deviceId,
   : QObject(parent)
   , m_deviceId(deviceId)
   , m_threadedExtraction(threadedExtraction)
+  , m_frameConfig(config)
   , m_driver(std::move(driver))
 {
   m_frameScratch.reserve(4096);
@@ -124,13 +125,21 @@ qint64 IO::DeviceManager::write(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the driver in the given mode and starts the FrameReader.
+ * @brief Opens the driver in the given mode and restarts the FrameReader if needed.
+ *
+ * The FrameReader is destroyed by close() to discard stale buffered data.
+ * open() recreates it from the stored config so the device is fully ready
+ * to extract frames on the next connection without requiring a rebuildDevices().
+ *
  * @param mode Open mode (default ReadWrite).
  */
 void IO::DeviceManager::open(QIODevice::OpenMode mode)
 {
   if (!m_driver)
     return;
+
+  if (m_frameReader.isNull())
+    startFrameReader(m_frameConfig);
 
   (void)m_driver->open(mode);
 }
@@ -157,6 +166,7 @@ void IO::DeviceManager::close()
  */
 void IO::DeviceManager::reconfigure(const FrameConfig& config)
 {
+  m_frameConfig = config;
   killFrameReader();
   startFrameReader(config);
 }

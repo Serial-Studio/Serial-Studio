@@ -57,7 +57,7 @@ Item {
     id: executableDialog
     title: qsTr("Select Executable")
     fileMode: NativePlatform.FileDialog.OpenFile
-    onAccepted: Cpp_IO_Process.executable = executableDialog.file.toString().replace("file://", "")
+    onAccepted: Cpp_IO_Process.executable = executableDialog.file.toLocalFile()
   }
 
   //
@@ -66,7 +66,7 @@ Item {
   NativePlatform.FolderDialog {
     id: workingDirDialog
     title: qsTr("Select Working Directory")
-    onAccepted: Cpp_IO_Process.workingDir = workingDirDialog.folder.toString().replace("file://", "")
+    onAccepted: Cpp_IO_Process.workingDir = workingDirDialog.folder.toLocalFile()
   }
 
   //
@@ -76,7 +76,7 @@ Item {
     id: pipePathDialog
     title: qsTr("Select Named Pipe / FIFO")
     fileMode: NativePlatform.FileDialog.OpenFile
-    onAccepted: Cpp_IO_Process.pipePath = pipePathDialog.file.toString().replace("file://", "")
+    onAccepted: Cpp_IO_Process.pipePath = pipePathDialog.file.toLocalFile()
   }
 
   GridLayout {

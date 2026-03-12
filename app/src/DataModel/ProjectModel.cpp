@@ -1212,8 +1212,6 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
-  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
-
   if (m_widgetSettings.contains(Keys::kActiveGroupSubKey))
     Q_EMIT activeGroupIdChanged();
 

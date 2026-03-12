@@ -87,6 +87,13 @@ IO::Drivers::Process::Process()
 
   connect(&m_pipeThread, &QThread::started, this, &Process::pipeReadLoop, Qt::DirectConnection);
   connect(&m_ptyThread, &QThread::started, this, &Process::ptyReadLoop, Qt::DirectConnection);
+
+  // Pre-warm the shell environment cache on a background thread so that the
+  // first call to open() does not block the main thread for up to 5 seconds.
+  auto* warmup = QThread::create([] { (void)IO::Drivers::Process::shellEnvironment(); });
+  warmup->setObjectName("ProcessEnvWarmup");
+  connect(warmup, &QThread::finished, warmup, &QObject::deleteLater);
+  warmup->start();
 }
 
 /**

@@ -355,6 +355,27 @@ DataModel::ProjectEditor::ProjectEditor()
     }
   });
 
+  // Rebuild the source model when the user changes the bus type from the Setup panel.
+  // setBusType() calls setSource0BusType() (no sourcesChanged signal) then driverChanged(),
+  // so without this connection the ProjectEditor form stays stale after a bus type switch.
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::driverChanged,
+          this,
+          [this] {
+            if (m_currentView != SourceView)
+              return;
+
+            const auto& sources = DataModel::ProjectModel::instance().sources();
+            for (const auto& src : sources) {
+              if (src.sourceId == m_selectedSource.sourceId) {
+                m_selectedSource = src;
+                break;
+              }
+            }
+
+            buildSourceModel(m_selectedSource);
+          });
+
   buildTreeModel();
   buildProjectModel();
 }
