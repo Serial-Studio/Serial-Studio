@@ -281,6 +281,9 @@ public:
   // Utility functions
   //
   [[nodiscard]] static QColor getDatasetColor(const int index);
+  Q_INVOKABLE [[nodiscard]] static QColor getDeviceColor(const int sourceId);
+  Q_INVOKABLE [[nodiscard]] static QColor getDeviceTopColor(const int sourceId);
+  Q_INVOKABLE [[nodiscard]] static QColor getDeviceBottomColor(const int sourceId);
   [[nodiscard]] static bool isAnyPlayerOpen();
 
   //

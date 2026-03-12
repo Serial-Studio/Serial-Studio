@@ -25,7 +25,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Licensing/LemonSqueezy.h"
 #include "Misc/Utilities.h"
 
@@ -932,6 +932,6 @@ void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopic
     if (m_topicName != topic)
       return;
 
-    IO::Manager::instance().processPayload(message);
+    IO::ConnectionManager::instance().processPayload(message);
   }
 }

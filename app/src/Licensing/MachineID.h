@@ -49,9 +49,15 @@ namespace Licensing {
  * while remaining secure and non-reversible.
  */
 class MachineID : public QObject {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString machineId READ machineId CONSTANT)
-  Q_PROPERTY(quint64 machineSpecificKey READ machineSpecificKey CONSTANT)
+  Q_PROPERTY(QString machineId
+             READ machineId
+             CONSTANT)
+  Q_PROPERTY(quint64 machineSpecificKey
+             READ machineSpecificKey
+             CONSTANT)
+  // clang-format on
 
 private:
   explicit MachineID();
@@ -62,10 +68,10 @@ private:
 
 public:
   [[nodiscard]] static MachineID& instance();
-  [[nodiscard]] const QString& machineId() const;
-  [[nodiscard]] const QString& appVerMachineId() const;
 
-  [[nodiscard]] quint64 machineSpecificKey() const;
+  [[nodiscard]] const QString& machineId() const noexcept;
+  [[nodiscard]] const QString& appVerMachineId() const noexcept;
+  [[nodiscard]] quint64 machineSpecificKey() const noexcept;
 
 private:
   void readInformation();

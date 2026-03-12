@@ -29,7 +29,7 @@
 #include "API/CommandProtocol.h"
 #include "API/MCPHandler.h"
 #include "API/MCPProtocol.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -330,7 +330,7 @@ API::Server& API::Server::instance()
  * @return true if the API subsystem is active and serving connections;
  *         false otherwise.
  */
-bool API::Server::enabled() const
+bool API::Server::enabled() const noexcept
 {
   return m_enabled;
 }
@@ -339,7 +339,7 @@ bool API::Server::enabled() const
  * @brief Returns whether the server accepts connections from external hosts.
  * @return true if listening on all interfaces; false if localhost only.
  */
-bool API::Server::externalConnections() const
+bool API::Server::externalConnections() const noexcept
 {
   return m_externalConnections;
 }
@@ -349,7 +349,7 @@ bool API::Server::externalConnections() const
  *
  * @return The count of active client connections.
  */
-int API::Server::clientCount() const
+int API::Server::clientCount() const noexcept
 {
   return m_clientCount;
 }
@@ -712,7 +712,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
         return;
       }
 
-      auto& manager = IO::Manager::instance();
+      auto& manager = IO::ConnectionManager::instance();
       if (!manager.isConnected()) {
         sendResponse(
           CommandResponse::makeError(id, ErrorCode::ExecutionError, QStringLiteral("Not connected"))
@@ -811,7 +811,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
       return;
     }
 
-    IO::Manager::instance().writeData(buffer);
+    IO::ConnectionManager::instance().writeData(buffer);
     buffer.clear();
   };
 
@@ -845,7 +845,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
         continue;
       }
 
-      IO::Manager::instance().writeData(line);
+      IO::ConnectionManager::instance().writeData(line);
       continue;
     }
 

@@ -45,19 +45,14 @@ IO::Drivers::BluetoothLE::BluetoothLE()
           &IO::Drivers::BluetoothLE::deviceIndexChanged,
           this,
           &IO::Drivers::BluetoothLE::configurationChanged);
+  connect(this,
+          &IO::Drivers::BluetoothLE::characteristicIndexChanged,
+          this,
+          &IO::Drivers::BluetoothLE::configurationChanged);
 
   connect(this, &IO::Drivers::BluetoothLE::error, this, [=](const QString& message) {
     Misc::Utilities::showMessageBox(tr("BLE I/O Module Error"), message, QMessageBox::Critical);
   });
-}
-
-/**
- * Returns the only instance of the class
- */
-IO::Drivers::BluetoothLE& IO::Drivers::BluetoothLE::instance()
-{
-  static BluetoothLE singleton;
-  return singleton;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -519,11 +514,9 @@ void IO::Drivers::BluetoothLE::configureCharacteristics()
 
   // Test & validate all service characteristics
   foreach (const QLowEnergyCharacteristic& c, m_service->characteristics()) {
-    // Validate characteristic
     if (!c.isValid())
       continue;
 
-    // Register characteristic
     m_characteristics.append(c);
     if (!c.name().simplified().isEmpty())
       m_characteristicNames.append(c.name());
@@ -673,17 +666,14 @@ void IO::Drivers::BluetoothLE::onHostModeStateChanged(QBluetoothLocalDevice::Hos
     Q_EMIT adapterAvailabilityChanged();
 
     if (!m_adapterAvailable) {
-      // If adapter becomes unavailable while scanning, stop scanning
       if (m_discoveryAgent && m_discoveryAgent->isActive())
         m_discoveryAgent->stop();
 
-      // Clear any discovered devices
       m_devices.clear();
       m_deviceIndex = -1;
       m_deviceNames.clear();
       Q_EMIT devicesChanged();
     } else {
-      // Adapter became available, automatically start discovery
       startDiscovery();
     }
   }
@@ -714,4 +704,49 @@ void IO::Drivers::BluetoothLE::initializeBluetoothAdapter()
 
   // Notify QML of initial state
   Q_EMIT adapterAvailabilityChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the Bluetooth LE configuration as a flat list of editable properties.
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::BluetoothLE::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty dev;
+  dev.key     = QStringLiteral("deviceIndex");
+  dev.label   = tr("BLE Device");
+  dev.type    = IO::DriverProperty::ComboBox;
+  dev.value   = m_deviceIndex;
+  dev.options = m_deviceNames;
+  props.append(dev);
+
+  IO::DriverProperty ch;
+  ch.key     = QStringLiteral("characteristicIndex");
+  ch.label   = tr("Characteristic");
+  ch.type    = IO::DriverProperty::ComboBox;
+  ch.value   = m_selectedCharacteristic;
+  ch.options = m_characteristicNames;
+  props.append(ch);
+
+  return props;
+}
+
+/**
+ * @brief Applies a single Bluetooth LE configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::BluetoothLE::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("deviceIndex"))
+    selectDevice(value.toInt());
+
+  else if (key == QLatin1String("characteristicIndex"))
+    setCharacteristicIndex(value.toInt());
 }

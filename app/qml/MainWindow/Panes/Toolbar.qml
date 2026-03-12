@@ -202,7 +202,7 @@ Rectangle {
       ToolTip.text: qsTr("Open the Project Editor to create or modify your JSON layout")
 
       onClicked: {
-        Cpp_JSON_ProjectModel.enableProjectMode()
+        Cpp_AppState.operationMode = SerialStudio.ProjectFile
         app.showProjectEditor()
       }
     }
@@ -225,7 +225,7 @@ Rectangle {
         ToolTip.text: qsTr("Open an existing JSON project")
         icon.source: "qrc:/rcc/icons/toolbar/open-project.svg"
         onClicked: {
-          Cpp_JSON_ProjectModel.enableProjectMode()
+          Cpp_AppState.operationMode = SerialStudio.ProjectFile
           Cpp_JSON_ProjectModel.openJsonFile()
         }
       }
@@ -322,8 +322,8 @@ Rectangle {
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
         onClicked: Cpp_IO_Manager.busType = SerialStudio.UART
-        icon.source: "qrc:/rcc/icons/toolbar/drivers/uart.svg"
-        font.bold: Cpp_IO_Manager.busType === SerialStudio.UART
+        icon.source: "qrc:/rcc/icons/devices/drivers/uart.svg"
+        font: Cpp_IO_Manager.busType === SerialStudio.UART ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
         ToolTip.text: qsTr("Select Serial port (UART) communication")
       }
 
@@ -338,8 +338,8 @@ Rectangle {
             Layout.alignment: Qt.AlignLeft
             ToolTip.text: qsTr("Select audio input device (Pro)")
             onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
-            icon.source: "qrc:/rcc/icons/toolbar/drivers/audio.svg"
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.Audio
+            icon.source: "qrc:/rcc/icons/devices/drivers/audio.svg"
+            font: Cpp_IO_Manager.busType === SerialStudio.Audio ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           }
         }
       }
@@ -354,9 +354,9 @@ Rectangle {
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
             ToolTip.text: qsTr("Select raw USB communication (Pro)")
-            icon.source: "qrc:/rcc/icons/toolbar/drivers/usb.svg"
+            icon.source: "qrc:/rcc/icons/devices/drivers/usb.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.RawUsb
+            font: Cpp_IO_Manager.busType === SerialStudio.RawUsb ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           }
         }
       }
@@ -367,9 +367,9 @@ Rectangle {
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
         ToolTip.text: qsTr("Select TCP/UDP network communication")
-        icon.source: "qrc:/rcc/icons/toolbar/drivers/network.svg"
+        icon.source: "qrc:/rcc/icons/devices/drivers/network.svg"
         onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
-        font.bold: Cpp_IO_Manager.busType === SerialStudio.Network
+        font: Cpp_IO_Manager.busType === SerialStudio.Network ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
       }
 
       Loader {
@@ -382,9 +382,9 @@ Rectangle {
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
             ToolTip.text: qsTr("Select MODBUS communication (Pro)")
-            icon.source: "qrc:/rcc/icons/toolbar/drivers/modbus.svg"
+            icon.source: "qrc:/rcc/icons/devices/drivers/modbus.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.ModBus
+            font: Cpp_IO_Manager.busType === SerialStudio.ModBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           }
         }
       }
@@ -399,9 +399,9 @@ Rectangle {
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
             ToolTip.text: qsTr("Select HID device communication (Pro)")
-            icon.source: "qrc:/rcc/icons/toolbar/drivers/hid.svg"
+            icon.source: "qrc:/rcc/icons/devices/drivers/hid.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.HidDevice
+            font: Cpp_IO_Manager.busType === SerialStudio.HidDevice ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           }
         }
       }
@@ -412,9 +412,9 @@ Rectangle {
         text: qsTr("Bluetooth")
         Layout.alignment: Qt.AlignLeft
         ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
-        icon.source: "qrc:/rcc/icons/toolbar/drivers/bluetooth.svg"
+        icon.source: "qrc:/rcc/icons/devices/drivers/bluetooth.svg"
         onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
-        font.bold: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE
+        font: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
       }
 
       Loader {
@@ -427,9 +427,9 @@ Rectangle {
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
             ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
-            icon.source: "qrc:/rcc/icons/toolbar/drivers/canbus.svg"
+            icon.source: "qrc:/rcc/icons/devices/drivers/canbus.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.CanBus
+            font: Cpp_IO_Manager.busType === SerialStudio.CanBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           }
         }
       }
@@ -444,9 +444,9 @@ Rectangle {
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
             ToolTip.text: qsTr("Select process pipe communication (Pro)")
-            icon.source: "qrc:/rcc/icons/toolbar/drivers/process.svg"
+            icon.source: "qrc:/rcc/icons/devices/drivers/process.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
-            font.bold: Cpp_IO_Manager.busType === SerialStudio.Process
+            font: Cpp_IO_Manager.busType === SerialStudio.Process ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           }
         }
       }

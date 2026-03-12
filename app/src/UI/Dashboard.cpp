@@ -21,9 +21,10 @@
 
 #include "UI/Dashboard.h"
 
+#include "AppState.h"
 #include "CSV/Player.h"
 #include "DataModel/FrameBuilder.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "MDF4/Player.h"
 #include "Misc/TimerEvents.h"
 #include "UI/WidgetRegistry.h"
@@ -65,11 +66,11 @@ UI::Dashboard::Dashboard()
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] {
-    if (!IO::Manager::instance().isConnected())
+  connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [=, this] {
+    if (!IO::ConnectionManager::instance().isConnected())
       resetData(true);
   }, Qt::QueuedConnection);
-  connect(&DataModel::FrameBuilder::instance(), &DataModel::FrameBuilder::jsonFileMapChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
+  connect(&AppState::instance(), &AppState::projectFileChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
@@ -136,7 +137,7 @@ bool UI::Dashboard::available() const
  * @brief Returns @c true if a rectangle with a list of actions should be
  *        displayed alongside the dashboard.
  */
-bool UI::Dashboard::showActionPanel() const
+bool UI::Dashboard::showActionPanel() const noexcept
 {
   return m_showActionPanel;
 }
@@ -145,7 +146,7 @@ bool UI::Dashboard::showActionPanel() const
  * @brief Returns @c true if the toolbar should automatically hide when the
  *        dashboard is visible.
  */
-bool UI::Dashboard::autoHideToolbar() const
+bool UI::Dashboard::autoHideToolbar() const noexcept
 {
   return m_autoHideToolbar;
 }
@@ -158,7 +159,7 @@ bool UI::Dashboard::autoHideToolbar() const
  */
 bool UI::Dashboard::streamAvailable() const
 {
-  static auto& manager   = IO::Manager::instance();
+  static auto& manager   = IO::ConnectionManager::instance();
   static auto& csvPlayer = CSV::Player::instance();
   static auto& mf4Player = MDF4::Player::instance();
 
@@ -179,7 +180,7 @@ bool UI::Dashboard::streamAvailable() const
  * @brief Returns @c true if a terminal widget should be displayed within
  *        the dashboard.
  */
-bool UI::Dashboard::terminalEnabled() const
+bool UI::Dashboard::terminalEnabled() const noexcept
 {
   return m_terminalEnabled;
 }
@@ -195,7 +196,7 @@ bool UI::Dashboard::terminalEnabled() const
  * what someone would expect from GNOME 2 or Windows, where all taskbar
  * buttons are active regardless of window state.
  */
-bool UI::Dashboard::showTaskbarButtons() const
+bool UI::Dashboard::showTaskbarButtons() const noexcept
 {
   return m_showTaskbarButtons;
 }
@@ -222,9 +223,13 @@ bool UI::Dashboard::pointsWidgetVisible() const
  * Returns @c true if the frame contains features that should only be enabled
  * for commercial users with a valid license, such as the 3D plot widget.
  */
-bool UI::Dashboard::containsCommercialFeatures() const
+bool UI::Dashboard::containsCommercialFeatures() const noexcept
 {
-  return m_rawFrame.containsCommercialFeatures;
+  for (const auto& f : m_sourceRawFrames)
+    if (f.containsCommercialFeatures)
+      return true;
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -235,7 +240,7 @@ bool UI::Dashboard::containsCommercialFeatures() const
  * @brief Gets the current point/sample count setting for the dashboard plots.
  * @return Current point count.
  */
-int UI::Dashboard::points() const
+int UI::Dashboard::points() const noexcept
 {
   return m_points;
 }
@@ -253,7 +258,7 @@ int UI::Dashboard::actionCount() const
  * @brief Gets the total count of widgets currently available on the dashboard.
  * @return Total widget count.
  */
-int UI::Dashboard::totalWidgetCount() const
+int UI::Dashboard::totalWidgetCount() const noexcept
 {
   return m_widgetCount;
 }
@@ -279,7 +284,7 @@ bool UI::Dashboard::frameValid() const
  * @param widgetIndex The global index of the widget.
  * @return The relative index if found; -1 otherwise.
  */
-int UI::Dashboard::relativeIndex(const int widgetIndex)
+int UI::Dashboard::relativeIndex(const int widgetIndex) const
 {
   const auto it = m_widgetMap.constFind(widgetIndex);
   return it != m_widgetMap.cend() ? it->second : -1;
@@ -312,7 +317,7 @@ QString UI::Dashboard::formatValue(double val, double min, double max) const
  * @return The widget type, or SerialStudio::DashboardNoWidget if the index is
  * not found.
  */
-SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex)
+SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex) const
 {
   const auto it = m_widgetMap.constFind(widgetIndex);
   return it != m_widgetMap.cend() ? it->first : SerialStudio::DashboardNoWidget;
@@ -521,7 +526,7 @@ const DataModel::Dataset& UI::Dashboard::getDatasetWidget(
  */
 const DataModel::Frame& UI::Dashboard::rawFrame()
 {
-  return m_rawFrame;
+  return m_lastFrame;
 }
 
 /**
@@ -720,14 +725,13 @@ void UI::Dashboard::resetData(const bool notify)
   m_activeMultiplots.clear();
 
   // Reset frame data
-  m_rawFrame              = DataModel::Frame();
-  m_lastFrame             = DataModel::Frame();
+  m_lastFrame = DataModel::Frame();
+  m_sourceRawFrames.clear();
   m_updateRetryInProgress = false;
 
   // Configure actions
-  auto* frameBuilder = &DataModel::FrameBuilder::instance();
-  if (frameBuilder->operationMode() == SerialStudio::ProjectFile)
-    configureActions(frameBuilder->frame());
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    configureActions(DataModel::FrameBuilder::instance().frame());
 
   // Notify user interface
   if (notify) {
@@ -863,7 +867,7 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
     auto& registry    = WidgetRegistry::instance();
 
     // Use incremental update if we have an active dashboard with widgets
-    if (m_rawFrame.groups.size() > 0 && m_widgetCount > 0) {
+    if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
       if (enabled) {
         // Create terminal group and add to internal structures
         DataModel::Group terminal;
@@ -967,8 +971,8 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   }
 
   // Send data payload
-  if (!IO::Manager::instance().paused())
-    IO::Manager::instance().writeData(DataModel::get_tx_bytes(action));
+  if (!IO::ConnectionManager::instance().paused())
+    IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
   // Update action model
   Q_EMIT actionStatusChanged();
@@ -1040,15 +1044,35 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::Frame& frame)
   if (frame.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
 
-  // Regenerate dashboard model if frame structure changed
-  if (!DataModel::compare_frames(frame, m_rawFrame) || m_datasetReferences.isEmpty()) [[unlikely]] {
-    const bool hadProFeatures = m_rawFrame.containsCommercialFeatures;
-    reconfigureDashboard(frame);
-    if (hadProFeatures != frame.containsCommercialFeatures)
+  const int sid             = frame.sourceId;
+  const bool hadProFeatures = containsCommercialFeatures();
+
+  // Check if this source's frame structure changed
+  const auto it               = m_sourceRawFrames.find(sid);
+  const bool structureChanged = it == m_sourceRawFrames.end()
+                             || !DataModel::compare_frames(frame, it.value())
+                             || m_datasetReferences.isEmpty();
+
+  if (structureChanged) [[unlikely]] {
+    m_sourceRawFrames[sid] = frame;
+
+    // Build a combined frame from all known sources for reconfigureDashboard
+    DataModel::Frame combined;
+    combined.title   = frame.title;
+    combined.actions = frame.actions;
+    for (const auto& sf : std::as_const(m_sourceRawFrames)) {
+      combined.containsCommercialFeatures |= sf.containsCommercialFeatures;
+      for (const auto& g : sf.groups)
+        combined.groups.push_back(g);
+    }
+
+    reconfigureDashboard(combined);
+
+    if (hadProFeatures != containsCommercialFeatures())
       Q_EMIT containsCommercialFeaturesChanged();
   }
 
-  // Update dashboard data
+  // Update dashboard data (only this source's datasets)
   updateDashboardData(frame);
 
   // Set dashboard update flag
@@ -1072,8 +1096,8 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
   if (m_updateRetryInProgress) {
     qWarning() << "Failed to build dashboard widget model";
 
-    if (IO::Manager::instance().isConnected())
-      IO::Manager::instance().disconnectDevice();
+    if (IO::ConnectionManager::instance().isConnected())
+      IO::ConnectionManager::instance().disconnectDevice();
     else if (CSV::Player::instance().isOpen())
       CSV::Player::instance().closeFile();
     else if (MDF4::Player::instance().isOpen())
@@ -1170,24 +1194,31 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
 /**
  * @brief Reconfigures the dashboard layout and widgets based on the new frame.
  *
- * Clears existing dashboard and plot data, detects appropriate widget mappings
- * for each group and dataset, handles commercial-only widgets (with fallback),
- * and regenerates widget model mappings. Emits signals if the widget or action
- * counts have changed.
+ * Clears existing widget structures and plot data, then rebuilds widget
+ * mappings for each group and dataset. Handles commercial-only widgets with a
+ * multiplot fallback. The per-source structure cache (@c m_sourceRawFrames) is
+ * preserved across the internal reset so that subsequent frames from other
+ * sources can still build the correct combined frame.
  *
- * @param frame The JSON frame with the new structure to configure.
- * @param pro Indicates whether commercial (pro) features are enabled.
+ * @param frame The combined frame (all sources merged) to configure from.
  */
 void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
   // Check if we can use pro features
   const bool pro = SerialStudio::activated();
 
+  // Preserve per-source structure cache across the widget reset so that
+  // subsequent frames from other sources can still build the combined frame.
+  auto savedSourceFrames = m_sourceRawFrames;
+
   // Reset dashboard data
   resetData(false);
 
-  // Save frame structure
-  m_rawFrame  = frame;
+  // Restore per-source cache (resetData clears it for disconnect/project-change
+  // semantics, but here we need it intact for multi-source merging).
+  m_sourceRawFrames = std::move(savedSourceFrames);
+
+  // Save combined frame structure for terminal/widget tracking
   m_lastFrame = frame;
 
   // Add terminal group
@@ -1756,7 +1787,7 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
     m_actions.append(action);
 
   // Configure timers
-  if (IO::Manager::instance().isConnected()) {
+  if (IO::ConnectionManager::instance().isConnected()) {
     for (int i = 0; i < m_actions.count(); ++i) {
       const auto& action = m_actions[i];
       if (action.timerMode == DataModel::TimerMode::Off)

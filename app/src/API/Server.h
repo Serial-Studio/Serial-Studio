@@ -48,13 +48,20 @@ class Server;
  * thread
  */
 class ServerWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
+  // clang-format off
   Q_OBJECT
+  // clang-format on
+
+signals:
+  void socketRemoved(QTcpSocket* socket);
+  void clientCountChanged(int count);
+  void dataReceived(QTcpSocket* socket, const QByteArray& data);
 
 public:
   using DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::FrameConsumerWorker;
   ~ServerWorker() override;
 
-  bool isResourceOpen() const override;
+  [[nodiscard]] bool isResourceOpen() const override;
 
 public slots:
   void closeResources() override;
@@ -63,11 +70,6 @@ public slots:
   void writeRawData(const IO::ByteArrayPtr& data);
   void writeToSocket(QTcpSocket* socket, const QByteArray& data);
   void disconnectSocket(QTcpSocket* socket);
-
-signals:
-  void dataReceived(QTcpSocket* socket, const QByteArray& data);
-  void clientCountChanged(int count);
-  void socketRemoved(QTcpSocket* socket);
 
 protected:
   void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
@@ -113,11 +115,20 @@ private:
  * @note Socket management must be on the main Qt thread.
  */
 class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(int clientCount READ clientCount NOTIFY clientCountChanged)
-  Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
-  Q_PROPERTY(bool externalConnections READ externalConnections WRITE setExternalConnections NOTIFY
-               externalConnectionsChanged)
+  Q_PROPERTY(int clientCount
+             READ clientCount
+             NOTIFY clientCountChanged)
+  Q_PROPERTY(bool enabled
+             READ enabled
+             WRITE setEnabled
+             NOTIFY enabledChanged)
+  Q_PROPERTY(bool externalConnections
+             READ externalConnections
+             WRITE setExternalConnections
+             NOTIFY externalConnectionsChanged)
+  // clang-format on
 
 signals:
   void enabledChanged();
@@ -135,9 +146,9 @@ private:
 
 public:
   static Server& instance();
-  [[nodiscard]] bool enabled() const;
-  [[nodiscard]] bool externalConnections() const;
-  [[nodiscard]] int clientCount() const;
+  [[nodiscard]] bool enabled() const noexcept;
+  [[nodiscard]] int clientCount() const noexcept;
+  [[nodiscard]] bool externalConnections() const noexcept;
 
 public slots:
   void removeConnection();

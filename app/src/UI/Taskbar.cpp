@@ -26,6 +26,7 @@
 #include <QSignalBlocker>
 #include <QTimer>
 
+#include "AppState.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "UI/Dashboard.h"
@@ -383,7 +384,7 @@ void UI::Taskbar::saveLayout()
   if (!m_windowManager || m_windowIDs.isEmpty() || m_activeGroupId < -2)
     return;
 
-  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+  const auto opMode = AppState::instance().operationMode();
   if (opMode != SerialStudio::ProjectFile)
     return;
 
@@ -679,7 +680,7 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
 
   // Trigger a layout update when the QML code created all the windows
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager) {
-    const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+    const auto opMode = AppState::instance().operationMode();
     if (opMode == SerialStudio::ProjectFile) {
       const auto layout = DataModel::ProjectModel::instance().groupLayout(m_activeGroupId);
       if (!layout.isEmpty() && m_windowManager->restoreLayout(layout))
@@ -940,7 +941,7 @@ void UI::Taskbar::rebuildModel()
     int targetGroupId = -1;
     bool restored     = false;
 
-    const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+    const auto opMode = AppState::instance().operationMode();
     if (opMode == SerialStudio::ProjectFile) {
       auto* pm          = &DataModel::ProjectModel::instance();
       const int savedId = pm->activeGroupId();

@@ -107,7 +107,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
  * @brief Returns the number of datasets in the multiplot.
  * @return The number of datasets.
  */
-int Widgets::MultiPlot::count() const
+int Widgets::MultiPlot::count() const noexcept
 {
   return m_data.count();
 }
@@ -116,7 +116,7 @@ int Widgets::MultiPlot::count() const
  * @brief Returns the size of the down-sampled X axis data.
  * @return Size of down-sampled X axis data.
  */
-int Widgets::MultiPlot::dataW() const
+int Widgets::MultiPlot::dataW() const noexcept
 {
   return m_dataW;
 }
@@ -125,7 +125,7 @@ int Widgets::MultiPlot::dataW() const
  * @brief Returns the size of the down-sampled Y axis data.
  * @return Size of down-sampled Y axis data.
  */
-int Widgets::MultiPlot::dataH() const
+int Widgets::MultiPlot::dataH() const noexcept
 {
   return m_dataH;
 }
@@ -138,7 +138,7 @@ int Widgets::MultiPlot::dataH() const
  * @brief Returns the minimum X-axis value.
  * @return The minimum X-axis value.
  */
-double Widgets::MultiPlot::minX() const
+double Widgets::MultiPlot::minX() const noexcept
 {
   return m_minX;
 }
@@ -147,7 +147,7 @@ double Widgets::MultiPlot::minX() const
  * @brief Returns the maximum X-axis value.
  * @return The maximum X-axis value.
  */
-double Widgets::MultiPlot::maxX() const
+double Widgets::MultiPlot::maxX() const noexcept
 {
   return m_maxX;
 }
@@ -156,7 +156,7 @@ double Widgets::MultiPlot::maxX() const
  * @brief Returns the minimum Y-axis value.
  * @return The minimum Y-axis value.
  */
-double Widgets::MultiPlot::minY() const
+double Widgets::MultiPlot::minY() const noexcept
 {
   return m_minY;
 }
@@ -165,7 +165,7 @@ double Widgets::MultiPlot::minY() const
  * @brief Returns the maximum Y-axis value.
  * @return The maximum Y-axis value.
  */
-double Widgets::MultiPlot::maxY() const
+double Widgets::MultiPlot::maxY() const noexcept
 {
   return m_maxY;
 }
@@ -178,7 +178,7 @@ double Widgets::MultiPlot::maxY() const
  * @brief Checks whether plot data updates are currently active.
  * @return @c true if updating is not paused, otherwise @c false.
  */
-bool Widgets::MultiPlot::running() const
+bool Widgets::MultiPlot::running() const noexcept
 {
   return UI::Dashboard::instance().multiplotRunning(m_index);
 }
@@ -191,7 +191,7 @@ bool Widgets::MultiPlot::running() const
  * @brief Returns the Y-axis label.
  * @return The Y-axis label.
  */
-const QString& Widgets::MultiPlot::yLabel() const
+const QString& Widgets::MultiPlot::yLabel() const noexcept
 {
   return m_yLabel;
 }
@@ -200,7 +200,7 @@ const QString& Widgets::MultiPlot::yLabel() const
  * @brief Returns the colors of the datasets.
  * @return The colors of the datasets.
  */
-const QStringList& Widgets::MultiPlot::colors() const
+const QStringList& Widgets::MultiPlot::colors() const noexcept
 {
   return m_colors;
 }
@@ -209,7 +209,7 @@ const QStringList& Widgets::MultiPlot::colors() const
  * @brief Returns the labels of the datasets.
  * @return The labels of the datasets.
  */
-const QStringList& Widgets::MultiPlot::labels() const
+const QStringList& Widgets::MultiPlot::labels() const noexcept
 {
   return m_labels;
 }
@@ -222,7 +222,7 @@ const QStringList& Widgets::MultiPlot::labels() const
  *
  * @return Reference to a QList of booleans representing curve visibility.
  */
-const QList<bool>& Widgets::MultiPlot::visibleCurves() const
+const QList<bool>& Widgets::MultiPlot::visibleCurves() const noexcept
 {
   return m_visibleCurves;
 }

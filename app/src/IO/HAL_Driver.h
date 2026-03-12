@@ -23,9 +23,39 @@
 
 #include <memory>
 #include <QIODevice>
+#include <QList>
 #include <QObject>
+#include <QString>
+#include <QVariant>
 
 namespace IO {
+
+/**
+ * @brief Describes a single editable configuration parameter for a HAL driver.
+ *
+ * Drivers return a flat list of these from driverProperties() so that the
+ * ProjectEditor can build a generic form model without knowing the bus type.
+ */
+struct DriverProperty {
+  enum Type {
+    Text,
+    HexText,
+    IntField,
+    FloatField,
+    CheckBox,
+    ComboBox,
+  };
+
+  QString key;
+  QString label;
+  QString description;
+  Type type = Text;
+  QVariant value;
+  QStringList options;
+  QVariant min;
+  QVariant max;
+};
+
 /**
  * @brief Type alias for shared byte array pointers used in data hotpath.
  *
@@ -245,5 +275,24 @@ public:
    * @return True if successfully opened.
    */
   [[nodiscard]] virtual bool open(const QIODevice::OpenMode mode) = 0;
+
+  /**
+   * @brief Returns the current driver configuration as a flat property list.
+   *
+   * Each entry describes one editable parameter. The ProjectEditor calls this
+   * to build a generic form model without knowing the concrete bus type.
+   *
+   * @return List of DriverProperty descriptors with current values.
+   */
+  [[nodiscard]] virtual QList<IO::DriverProperty> driverProperties() const = 0;
+
+public slots:
+  /**
+   * @brief Applies a single configuration change identified by its key.
+   *
+   * @param key   The DriverProperty::key that was edited.
+   * @param value The new value chosen by the user.
+   */
+  virtual void setDriverProperty(const QString& key, const QVariant& value) = 0;
 };
 }  // namespace IO

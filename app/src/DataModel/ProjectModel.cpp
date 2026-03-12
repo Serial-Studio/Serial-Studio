@@ -32,14 +32,15 @@
 #include <QTimer>
 
 #include "AppInfo.h"
-#include "DataModel/FrameBuilder.h"
+#include "AppState.h"
 #include "DataModel/FrameParser.h"
 #include "IO/Checksum.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/JsonValidator.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
+#include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "MQTT/Client.h"
@@ -57,7 +58,6 @@
  */
 DataModel::ProjectModel::ProjectModel()
   : m_title("")
-  , m_frameParserCode("")
   , m_frameEndSequence("")
   , m_checksumAlgorithm("")
   , m_frameStartSequence("")
@@ -68,10 +68,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_filePath("")
   , m_suppressMessageBoxes(false)
 {
-  if (!DataModel::FrameBuilder::instance().jsonMapFilepath().isEmpty())
-    onJsonLoaded();
-  else
-    newJsonFile();
+  newJsonFile();
 }
 
 /**
@@ -90,7 +87,7 @@ DataModel::ProjectModel& DataModel::ProjectModel::instance()
 /**
  * @brief Returns true if the project has unsaved modifications.
  */
-bool DataModel::ProjectModel::modified() const
+bool DataModel::ProjectModel::modified() const noexcept
 {
   return m_modified;
 }
@@ -98,7 +95,7 @@ bool DataModel::ProjectModel::modified() const
 /**
  * @brief Returns the current frame decoder method.
  */
-SerialStudio::DecoderMethod DataModel::ProjectModel::decoderMethod() const
+SerialStudio::DecoderMethod DataModel::ProjectModel::decoderMethod() const noexcept
 {
   return m_frameDecoder;
 }
@@ -106,7 +103,7 @@ SerialStudio::DecoderMethod DataModel::ProjectModel::decoderMethod() const
 /**
  * @brief Returns the current frame detection method.
  */
-SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const
+SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const noexcept
 {
   return m_frameDetection;
 }
@@ -172,7 +169,7 @@ void DataModel::ProjectModel::setSuppressMessageBoxes(const bool suppress)
 /**
  * @brief Returns whether modal dialogs are suppressed.
  */
-bool DataModel::ProjectModel::suppressMessageBoxes() const
+bool DataModel::ProjectModel::suppressMessageBoxes() const noexcept
 {
   return m_suppressMessageBoxes;
 }
@@ -180,7 +177,7 @@ bool DataModel::ProjectModel::suppressMessageBoxes() const
 /**
  * @brief Returns the project title.
  */
-const QString& DataModel::ProjectModel::title() const
+const QString& DataModel::ProjectModel::title() const noexcept
 {
   return m_title;
 }
@@ -188,17 +185,23 @@ const QString& DataModel::ProjectModel::title() const
 /**
  * @brief Returns the file path of the current project file.
  */
-const QString& DataModel::ProjectModel::jsonFilePath() const
+const QString& DataModel::ProjectModel::jsonFilePath() const noexcept
 {
   return m_filePath;
 }
 
 /**
- * @brief Returns the frame parser JavaScript source code.
+ * @brief Returns the frame parser JavaScript source code for the primary source.
+ *
+ * The code lives exclusively in sources[0].frameParserCode. Returns an empty
+ * string when no sources exist.
  */
-const QString& DataModel::ProjectModel::frameParserCode() const
+QString DataModel::ProjectModel::frameParserCode() const
 {
-  return m_frameParserCode;
+  if (m_sources.empty())
+    return QString();
+
+  return m_sources[0].frameParserCode;
 }
 
 /**
@@ -245,11 +248,11 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
                                                 const QVariant& value)
 {
-  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
+  const auto opMode = AppState::instance().operationMode();
   if (opMode != SerialStudio::ProjectFile || m_filePath.isEmpty())
     return;
 
-  const bool ioConnected = IO::Manager::instance().isConnected();
+  const bool ioConnected = IO::ConnectionManager::instance().isConnected();
 #ifdef BUILD_COMMERCIAL
   const bool mqttSubscribed =
     MQTT::Client::instance().isConnected() && MQTT::Client::instance().isSubscriber();
@@ -288,7 +291,7 @@ bool DataModel::ProjectModel::containsCommercialFeatures() const
 /**
  * @brief Returns the total number of groups in the project.
  */
-int DataModel::ProjectModel::groupCount() const
+int DataModel::ProjectModel::groupCount() const noexcept
 {
   return static_cast<int>(m_groups.size());
 }
@@ -308,7 +311,7 @@ int DataModel::ProjectModel::datasetCount() const
 /**
  * @brief Returns a const reference to the vector of groups.
  */
-const std::vector<DataModel::Group>& DataModel::ProjectModel::groups() const
+const std::vector<DataModel::Group>& DataModel::ProjectModel::groups() const noexcept
 {
   return m_groups;
 }
@@ -316,9 +319,294 @@ const std::vector<DataModel::Group>& DataModel::ProjectModel::groups() const
 /**
  * @brief Returns a const reference to the vector of actions.
  */
-const std::vector<DataModel::Action>& DataModel::ProjectModel::actions() const
+const std::vector<DataModel::Action>& DataModel::ProjectModel::actions() const noexcept
 {
   return m_actions;
+}
+
+/**
+ * @brief Returns a const reference to the vector of sources.
+ */
+const std::vector<DataModel::Source>& DataModel::ProjectModel::sources() const noexcept
+{
+  return m_sources;
+}
+
+/**
+ * @brief Returns the number of sources in the project.
+ */
+int DataModel::ProjectModel::sourceCount() const noexcept
+{
+  return static_cast<int>(m_sources.size());
+}
+
+/**
+ * @brief Adds a new source to the project with default settings.
+ *
+ * In GPL builds, a project may have at most one source. Attempting to add a
+ * second source shows an informational message and is otherwise a no-op.
+ */
+void DataModel::ProjectModel::addSource()
+{
+#ifndef BUILD_COMMERCIAL
+  if (!m_sources.empty()) {
+    if (!m_suppressMessageBoxes)
+      Misc::Utilities::showMessageBox(
+        tr("Multiple data sources require a Pro license"),
+        tr("Serial Studio Pro allows connecting to multiple devices simultaneously. "
+           "Please upgrade to unlock this feature."),
+        QMessageBox::Information);
+
+    return;
+  }
+#endif
+
+  const int newId = static_cast<int>(m_sources.size());
+
+  DataModel::Source source;
+  source.sourceId              = newId;
+  source.title                 = tr("Device %1").arg(QChar('A' + newId));
+  source.busType               = static_cast<int>(SerialStudio::BusType::UART);
+  source.frameStart            = m_frameStartSequence;
+  source.frameEnd              = m_frameEndSequence;
+  source.checksumAlgorithm     = m_checksumAlgorithm;
+  source.frameDetection        = static_cast<int>(m_frameDetection);
+  source.decoderMethod         = static_cast<int>(m_frameDecoder);
+  source.hexadecimalDelimiters = m_hexadecimalDelimiters;
+  source.frameParserCode       = FrameParser::defaultTemplateCode();
+
+  m_sources.push_back(source);
+  setModified(true);
+  Q_EMIT sourcesChanged();
+  Q_EMIT sourceStructureChanged();
+  Q_EMIT sourceAdded(newId);
+}
+
+/**
+ * @brief Deletes the source with the given @p sourceId.
+ *
+ * The default source (id == 0) cannot be deleted.
+ * Any groups referencing the deleted source are reassigned to source 0.
+ *
+ * @param sourceId The id of the source to delete.
+ */
+void DataModel::ProjectModel::deleteSource(int sourceId)
+{
+#ifndef BUILD_COMMERCIAL
+  (void)sourceId;
+  return;
+#else
+  if (sourceId <= 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  m_sources.erase(m_sources.begin() + sourceId);
+
+  for (auto& group : m_sources)
+    (void)group;
+
+  for (auto& group : m_groups)
+    if (group.sourceId == sourceId)
+      group.sourceId = 0;
+    else if (group.sourceId > sourceId)
+      --group.sourceId;
+
+  for (size_t i = 0; i < m_sources.size(); ++i)
+    m_sources[i].sourceId = static_cast<int>(i);
+
+  setModified(true);
+  Q_EMIT groupsChanged();
+  Q_EMIT sourcesChanged();
+  Q_EMIT sourceStructureChanged();
+  Q_EMIT sourceDeleted();
+#endif
+}
+
+/**
+ * @brief Duplicates the source with the given @p sourceId.
+ * @param sourceId The id of the source to duplicate.
+ */
+void DataModel::ProjectModel::duplicateSource(int sourceId)
+{
+#ifndef BUILD_COMMERCIAL
+  (void)sourceId;
+  return;
+#else
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  DataModel::Source copy  = m_sources[sourceId];
+  copy.sourceId           = static_cast<int>(m_sources.size());
+  copy.title              = copy.title + tr(" (Copy)");
+  copy.connectionSettings = QJsonObject();
+
+  m_sources.push_back(copy);
+  setModified(true);
+  Q_EMIT sourcesChanged();
+  Q_EMIT sourceStructureChanged();
+  Q_EMIT sourceAdded(copy.sourceId);
+#endif
+}
+
+/**
+ * @brief Updates the source with the given @p sourceId.
+ * @param sourceId The id of the source to update.
+ * @param source   New source data.
+ */
+void DataModel::ProjectModel::updateSource(int sourceId, const DataModel::Source& source)
+{
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  m_sources[sourceId]          = source;
+  m_sources[sourceId].sourceId = sourceId;
+
+  if (sourceId == 0) {
+    m_frameStartSequence    = source.frameStart;
+    m_frameEndSequence      = source.frameEnd;
+    m_checksumAlgorithm     = source.checksumAlgorithm;
+    m_hexadecimalDelimiters = source.hexadecimalDelimiters;
+    m_frameDetection        = static_cast<SerialStudio::FrameDetection>(source.frameDetection);
+    m_frameDecoder          = static_cast<SerialStudio::DecoderMethod>(source.decoderMethod);
+    Q_EMIT frameDetectionChanged();
+  }
+
+  setModified(true);
+  Q_EMIT sourcesChanged();
+}
+
+/**
+ * @brief Updates the title of the source with the given @p sourceId.
+ * @param sourceId The id of the source to update.
+ * @param title    New title string.
+ */
+void DataModel::ProjectModel::updateSourceTitle(int sourceId, const QString& title)
+{
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  m_sources[sourceId].title = title.simplified();
+  setModified(true);
+  Q_EMIT sourcesChanged();
+}
+
+/**
+ * @brief Updates the bus type of the source with the given @p sourceId.
+ * @param sourceId The id of the source to update.
+ * @param busType  New bus type as int (cast to SerialStudio::BusType at use).
+ */
+void DataModel::ProjectModel::updateSourceBusType(int sourceId, int busType)
+{
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  m_sources[sourceId].busType = busType;
+  setModified(true);
+  Q_EMIT sourcesChanged();
+  Q_EMIT sourceStructureChanged();
+}
+
+/**
+ * @brief Updates the per-source JavaScript frame parser code.
+ * @param sourceId The id of the source to update.
+ * @param code     The new JavaScript source string.
+ */
+void DataModel::ProjectModel::updateSourceFrameParser(int sourceId, const QString& code)
+{
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  m_sources[sourceId].frameParserCode = code;
+  DataModel::FrameParser::instance().setSourceCode(sourceId, code);
+  setModified(true);
+}
+
+/**
+ * @brief Snapshots the current driver settings for source @p sourceId into
+ *        Source::connectionSettings.
+ *
+ * Calls driverProperties() on the live driver to get the current values and
+ * serialises them to JSON. The driver is retrieved via SourceManager so this
+ * works for both source 0 (singleton) and secondary sources (owned instances).
+ *
+ * @param sourceId The source whose connectionSettings should be updated.
+ */
+void DataModel::ProjectModel::captureSourceSettings(int sourceId)
+{
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(sourceId);
+  if (!driver)
+    return;
+
+  QJsonObject settings;
+  for (const auto& prop : driver->driverProperties())
+    settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+
+  m_sources[sourceId].connectionSettings = settings;
+  setModified(true);
+}
+
+/**
+ * @brief Restores driver settings from Source::connectionSettings for source @p sourceId.
+ *
+ * Calls setDriverProperty() on the live driver for every key stored in the JSON
+ * snapshot. Works for both source 0 (singleton) and secondary sources.
+ *
+ * @param sourceId The source whose connectionSettings should be applied.
+ */
+void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
+{
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  const auto& source = m_sources[sourceId];
+  if (source.connectionSettings.isEmpty())
+    return;
+
+  IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(sourceId);
+  if (!driver)
+    return;
+
+  for (auto it = source.connectionSettings.constBegin(); it != source.connectionSettings.constEnd();
+       ++it)
+    driver->setDriverProperty(it.key(), it.value().toVariant());
+}
+
+/**
+ * @brief Directly overwrites source[0].connectionSettings without triggering a
+ *        rebuildDevices() cycle.
+ *
+ * Called by ConnectionManager::onUiDriverConfigurationChanged() to capture the
+ * UI-config driver state back into the project model without emitting sourcesChanged()
+ * (which would cause an infinite sync loop).
+ *
+ * @param settings Serialized driver properties to store.
+ */
+void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& settings)
+{
+  if (m_sources.empty())
+    return;
+
+  m_sources[0].connectionSettings = settings;
+  setModified(true);
+}
+
+/**
+ * @brief Directly sets source[0].busType without emitting sourceStructureChanged.
+ *
+ * Used by ConnectionManager to keep the in-memory model in sync with the UI bus type
+ * selection without triggering a full device rebuild cycle.
+ *
+ * @param busType New bus type as int.
+ */
+void DataModel::ProjectModel::setSource0BusType(int busType)
+{
+  if (m_sources.empty())
+    return;
+
+  m_sources[0].busType = busType;
+  setModified(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -455,12 +743,6 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   QJsonObject json;
 
   json.insert("title", m_title);
-  json.insert("decoder", m_frameDecoder);
-  json.insert("frameEnd", m_frameEndSequence);
-  json.insert("frameParser", m_frameParserCode);
-  json.insert("checksum", m_checksumAlgorithm);
-  json.insert("frameDetection", m_frameDetection);
-  json.insert("frameStart", m_frameStartSequence);
   json.insert("hexadecimalDelimiters", m_hexadecimalDelimiters);
 
   QJsonArray groupArray;
@@ -475,6 +757,12 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
   json.insert("actions", actionsArray);
 
+  QJsonArray sourcesArray;
+  for (const auto& source : std::as_const(m_sources))
+    sourcesArray.append(DataModel::serialize(source));
+
+  json.insert(Keys::Sources, sourcesArray);
+
   if (!m_widgetSettings.isEmpty())
     json.insert(Keys::WidgetSettings, m_widgetSettings);
 
@@ -488,16 +776,26 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 /**
  * @brief Connects external signals to this model.
  *
- * Connects the FrameBuilder's jsonFileMapChanged signal so that the project is
- * reloaded when the underlying JSON map file changes. Language-change rebuilds
- * are handled by ProjectEditor.
+ * Wires Dashboard::pointsChanged so the new point count is persisted into the
+ * project file's widgetSettings whenever the user changes it.
  */
 void DataModel::ProjectModel::setupExternalConnections()
 {
-  connect(&DataModel::FrameBuilder::instance(),
-          &DataModel::FrameBuilder::jsonFileMapChanged,
-          this,
-          &DataModel::ProjectModel::onJsonLoaded);
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::pointsChanged, this, [this]() {
+    const auto opMode = AppState::instance().operationMode();
+    if (opMode != SerialStudio::ProjectFile || m_filePath.isEmpty())
+      return;
+
+    const int points = UI::Dashboard::instance().points();
+    m_widgetSettings.insert(Keys::kPointCountSubKey, points);
+
+    QFile file(m_filePath);
+    if (!file.open(QFile::WriteOnly))
+      return;
+
+    file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+    file.close();
+  });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -511,6 +809,7 @@ void DataModel::ProjectModel::newJsonFile()
 {
   m_groups.clear();
   m_actions.clear();
+  m_sources.clear();
 
   m_frameEndSequence      = "\\n";
   m_checksumAlgorithm     = "";
@@ -519,13 +818,26 @@ void DataModel::ProjectModel::newJsonFile()
   m_title                 = tr("Untitled Project");
   m_frameDecoder          = SerialStudio::PlainText;
   m_frameDetection        = SerialStudio::EndDelimiterOnly;
-  m_frameParserCode = FrameParser::defaultTemplateCode();
-  m_widgetSettings  = QJsonObject();
+  m_widgetSettings        = QJsonObject();
+
+  DataModel::Source defaultSource;
+  defaultSource.sourceId              = 0;
+  defaultSource.title                 = tr("Device A");
+  defaultSource.busType               = static_cast<int>(SerialStudio::BusType::UART);
+  defaultSource.frameStart            = m_frameStartSequence;
+  defaultSource.frameEnd              = m_frameEndSequence;
+  defaultSource.checksumAlgorithm     = m_checksumAlgorithm;
+  defaultSource.frameDetection        = static_cast<int>(m_frameDetection);
+  defaultSource.decoderMethod         = static_cast<int>(m_frameDecoder);
+  defaultSource.hexadecimalDelimiters = m_hexadecimalDelimiters;
+  defaultSource.frameParserCode       = FrameParser::defaultTemplateCode();
+  m_sources.push_back(defaultSource);
 
   m_filePath = "";
 
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
+  Q_EMIT sourcesChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT frameDetectionChanged();
@@ -559,50 +871,82 @@ void DataModel::ProjectModel::clearJsonFilePath()
 
 /**
  * @brief Sets the frame start delimiter sequence.
+ *
+ * Also syncs into sources[0].frameStart in single-source mode so that
+ * buildFrameConfig() uses the correct delimiter for the FrameReader.
  */
 void DataModel::ProjectModel::setFrameStartSequence(const QString& sequence)
 {
-  if (m_frameStartSequence != sequence) {
-    m_frameStartSequence = sequence;
-    Q_EMIT frameDetectionChanged();
-    setModified(true);
-  }
+  if (m_frameStartSequence == sequence)
+    return;
+
+  m_frameStartSequence = sequence;
+
+  if (m_sources.size() == 1)
+    m_sources[0].frameStart = sequence;
+
+  Q_EMIT frameDetectionChanged();
+  setModified(true);
 }
 
 /**
  * @brief Sets the frame end delimiter sequence.
+ *
+ * Also syncs into sources[0].frameEnd in single-source mode so that
+ * buildFrameConfig() uses the correct delimiter for the FrameReader.
  */
 void DataModel::ProjectModel::setFrameEndSequence(const QString& sequence)
 {
-  if (m_frameEndSequence != sequence) {
-    m_frameEndSequence = sequence;
-    Q_EMIT frameDetectionChanged();
-    setModified(true);
-  }
+  if (m_frameEndSequence == sequence)
+    return;
+
+  m_frameEndSequence = sequence;
+
+  if (m_sources.size() == 1)
+    m_sources[0].frameEnd = sequence;
+
+  Q_EMIT frameDetectionChanged();
+  setModified(true);
 }
 
 /**
  * @brief Sets the checksum algorithm name.
+ *
+ * Also syncs into sources[0].checksumAlgorithm in single-source mode so that
+ * buildFrameConfig() uses the correct checksum for the FrameReader.
  */
 void DataModel::ProjectModel::setChecksumAlgorithm(const QString& algorithm)
 {
-  if (m_checksumAlgorithm != algorithm) {
-    m_checksumAlgorithm = algorithm;
-    Q_EMIT frameDetectionChanged();
-    setModified(true);
-  }
+  if (m_checksumAlgorithm == algorithm)
+    return;
+
+  m_checksumAlgorithm = algorithm;
+
+  if (m_sources.size() == 1)
+    m_sources[0].checksumAlgorithm = algorithm;
+
+  Q_EMIT frameDetectionChanged();
+  setModified(true);
 }
 
 /**
  * @brief Sets the frame detection strategy.
+ *
+ * Also syncs into sources[0].frameDetection in single-source mode so that
+ * buildFrameConfig() uses the correct detection mode for the FrameReader.
  */
 void DataModel::ProjectModel::setFrameDetection(const SerialStudio::FrameDetection detection)
 {
-  if (m_frameDetection != detection) {
-    m_frameDetection = detection;
-    setModified(true);
-    Q_EMIT frameDetectionChanged();
-  }
+  if (m_frameDetection == detection)
+    return;
+
+  m_frameDetection = detection;
+
+  if (m_sources.size() == 1)
+    m_sources[0].frameDetection = static_cast<int>(detection);
+
+  setModified(true);
+  Q_EMIT frameDetectionChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -670,14 +1014,14 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
 
   m_filePath = path;
 
-  auto json               = document.object();
-  m_title                 = json.value("title").toString();
-  m_frameEndSequence      = json.value("frameEnd").toString();
-  m_checksumAlgorithm     = json.value("checksum").toString();
-  m_frameParserCode       = json.value("frameParser").toString();
-  m_frameStartSequence    = json.value("frameStart").toString();
-  m_hexadecimalDelimiters = json.value("hexadecimalDelimiters").toBool();
-  m_frameDecoder          = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
+  auto json                      = document.object();
+  m_title                        = json.value("title").toString();
+  m_frameEndSequence             = json.value("frameEnd").toString();
+  m_checksumAlgorithm            = json.value("checksum").toString();
+  m_frameStartSequence           = json.value("frameStart").toString();
+  const QString legacyParserCode = json.value("frameParser").toString();
+  m_hexadecimalDelimiters        = json.value("hexadecimalDelimiters").toBool();
+  m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
   m_frameDetection =
     static_cast<SerialStudio::FrameDetection>(json.value("frameDetection").toInt());
 
@@ -700,7 +1044,109 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
       m_actions.push_back(action);
   }
 
+  m_sources.clear();
+  if (json.contains(Keys::Sources)) {
+    auto sourcesArr = json.value(Keys::Sources).toArray();
+    for (int s = 0; s < sourcesArr.count(); ++s) {
+      DataModel::Source source;
+      if (DataModel::read(source, sourcesArr.at(s).toObject()))
+        m_sources.push_back(source);
+    }
+  }
+
+  const bool legacyFormat = !json.contains(Keys::Sources);
+
+  if (m_sources.empty()) {
+    auto& cm = IO::ConnectionManager::instance();
+
+    DataModel::Source defaultSource;
+    defaultSource.sourceId              = 0;
+    defaultSource.title                 = tr("Device A");
+    defaultSource.busType               = static_cast<int>(cm.busType());
+    defaultSource.frameStart            = m_frameStartSequence;
+    defaultSource.frameEnd              = m_frameEndSequence;
+    defaultSource.checksumAlgorithm     = m_checksumAlgorithm;
+    defaultSource.frameDetection        = static_cast<int>(m_frameDetection);
+    defaultSource.decoderMethod         = static_cast<int>(m_frameDecoder);
+    defaultSource.hexadecimalDelimiters = m_hexadecimalDelimiters;
+    defaultSource.frameParserCode =
+      legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
+
+    IO::HAL_Driver* uiDriver = nullptr;
+    switch (cm.busType()) {
+      case SerialStudio::BusType::UART:
+        uiDriver = cm.uart();
+        break;
+      case SerialStudio::BusType::Network:
+        uiDriver = cm.network();
+        break;
+      case SerialStudio::BusType::BluetoothLE:
+        uiDriver = cm.bluetoothLE();
+        break;
+#ifdef BUILD_COMMERCIAL
+      case SerialStudio::BusType::Audio:
+        uiDriver = cm.audio();
+        break;
+      case SerialStudio::BusType::ModBus:
+        uiDriver = cm.modbus();
+        break;
+      case SerialStudio::BusType::CanBus:
+        uiDriver = cm.canBus();
+        break;
+      case SerialStudio::BusType::RawUsb:
+        uiDriver = cm.usb();
+        break;
+      case SerialStudio::BusType::HidDevice:
+        uiDriver = cm.hid();
+        break;
+      case SerialStudio::BusType::Process:
+        uiDriver = cm.process();
+        break;
+#endif
+      default:
+        break;
+    }
+
+    if (uiDriver) {
+      QJsonObject settings;
+      for (const auto& prop : uiDriver->driverProperties())
+        settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+
+      defaultSource.connectionSettings = settings;
+    }
+
+    m_sources.push_back(defaultSource);
+  } else if (!m_sources.empty() && m_sources[0].frameParserCode.isEmpty()) {
+    m_sources[0].frameParserCode =
+      legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
+  }
+
+#ifndef BUILD_COMMERCIAL
+  if (m_sources.size() > 1) {
+    m_sources.resize(1);
+    for (auto& g : m_groups)
+      if (g.sourceId > 0)
+        g.sourceId = 0;
+
+    if (!m_suppressMessageBoxes)
+      Misc::Utilities::showMessageBox(
+        tr("Multi-source projects require a Pro license"),
+        tr("This project contains multiple data sources. Only the first source "
+           "has been loaded. A Serial Studio Pro license is required to use "
+           "multi-source projects."),
+        QMessageBox::Information);
+    else
+      qWarning() << "[ProjectModel] Multi-source project truncated to 1 source (GPL build)";
+  }
+#endif
+
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
+
+  if (m_widgetSettings.contains(Keys::kPointCountSubKey)) {
+    const int points = m_widgetSettings.value(Keys::kPointCountSubKey).toInt();
+    if (points > 0)
+      UI::Dashboard::instance().setPoints(points);
+  }
 
   for (const auto& key : m_widgetSettings.keys()) {
     if (!key.startsWith(QStringLiteral("__layout__:")))
@@ -732,14 +1178,14 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
     static QRegularExpression legacyRegex(
       R"(function\s+parse\s*\(\s*frame\s*,\s*separator\s*\)\s*\{\s*return\s+frame\.split\(separator\);\s*\})");
 
-    if (legacyRegex.match(m_frameParserCode).hasMatch()) {
+    if (!m_sources.empty() && legacyRegex.match(m_sources[0].frameParserCode).hasMatch()) {
       if (separator.length() > 1)
-        m_frameParserCode =
+        m_sources[0].frameParserCode =
           QStringLiteral("/**\n * Automatically migrated frame parser function.\n"
                          " */\nfunction parse(frame) {\n    return frame.split(\"%1\");\n}")
             .arg(separator);
       else
-        m_frameParserCode =
+        m_sources[0].frameParserCode =
           QStringLiteral("/**\n * Automatically migrated frame parser function.\n"
                          " */\nfunction parse(frame) {\n    return frame.split(\'%1\');\n}")
             .arg(separator);
@@ -758,50 +1204,29 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
     }
   }
 
-  if (DataModel::FrameBuilder::instance().jsonMapFilepath() != path)
-    DataModel::FrameBuilder::instance().loadJsonMap(path, !m_suppressMessageBoxes);
-
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
+  Q_EMIT sourcesChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+
+  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
 
   if (m_widgetSettings.contains(Keys::kActiveGroupSubKey))
     Q_EMIT activeGroupIdChanged();
 
   if (!m_widgetSettings.isEmpty())
     Q_EMIT widgetSettingsChanged();
-}
 
-/**
- * @brief Ensures Serial Studio is in Project File mode.
- *
- * Prompts the user (or silently switches in API mode) when the current
- * operation mode is not ProjectFile.
- */
-void DataModel::ProjectModel::enableProjectMode()
-{
-  const auto opMode = DataModel::FrameBuilder::instance().operationMode();
-  if (opMode == SerialStudio::ProjectFile)
-    return;
-
-  if (!m_suppressMessageBoxes) {
-    auto answ =
-      Misc::Utilities::showMessageBox(tr("Switch Serial Studio to Project Mode?"),
-                                      tr("This operation mode is required to load and display "
-                                         "dashboards from project files."),
-                                      QMessageBox::Question,
-                                      qApp->applicationDisplayName(),
-                                      QMessageBox::Yes | QMessageBox::No,
-                                      QMessageBox::Yes);
-
-    if (answ == QMessageBox::Yes)
-      DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
-  } else {
-    qWarning() << "[ProjectModel] Automatically switching to ProjectFile mode";
-    DataModel::FrameBuilder::instance().setOperationMode(SerialStudio::ProjectFile);
+  if (legacyFormat) {
+    qInfo() << "[ProjectModel] Migrating legacy project to multi-source format, saving...";
+    QFile f(m_filePath);
+    if (f.open(QFile::WriteOnly)) {
+      f.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+      f.close();
+    }
   }
 }
 
@@ -835,6 +1260,8 @@ void DataModel::ProjectModel::setSelectedDataset(const DataModel::Dataset& datas
 
 /**
  * @brief Sets the frame decoder method and emits frameDetectionChanged.
+ *
+ * Also syncs into sources[0].decoderMethod in single-source mode.
  */
 void DataModel::ProjectModel::setDecoderMethod(const SerialStudio::DecoderMethod method)
 {
@@ -842,12 +1269,18 @@ void DataModel::ProjectModel::setDecoderMethod(const SerialStudio::DecoderMethod
     return;
 
   m_frameDecoder = method;
+
+  if (m_sources.size() == 1)
+    m_sources[0].decoderMethod = static_cast<int>(method);
+
   Q_EMIT frameDetectionChanged();
   setModified(true);
 }
 
 /**
  * @brief Toggles hexadecimal delimiter mode and converts existing sequences.
+ *
+ * Also syncs into sources[0].hexadecimalDelimiters in single-source mode.
  */
 void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
 {
@@ -855,6 +1288,10 @@ void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
     return;
 
   m_hexadecimalDelimiters = hexadecimal;
+
+  if (m_sources.size() == 1)
+    m_sources[0].hexadecimalDelimiters = hexadecimal;
+
   Q_EMIT frameDetectionChanged();
   setModified(true);
 }
@@ -873,6 +1310,8 @@ void DataModel::ProjectModel::updateGroup(const int groupId,
 
   if (rebuildTree)
     Q_EMIT groupsChanged();
+  else
+    Q_EMIT groupDataChanged();
 
   setModified(true);
 }
@@ -1636,15 +2075,20 @@ void DataModel::ProjectModel::setModified(const bool modified)
 }
 
 /**
- * @brief Sets the frame parser JavaScript source and marks the project modified.
+ * @brief Sets the frame parser JavaScript source code.
+ *
+ * The code is stored directly in sources[0].frameParserCode, which is the
+ * single authoritative location. Emits frameParserCodeChanged() so that
+ * FrameParser::readCode() and the JsCodeEditor are notified.
  */
 void DataModel::ProjectModel::setFrameParserCode(const QString& code)
 {
-  if (code != m_frameParserCode) {
-    m_frameParserCode = code;
-    setModified(true);
-    Q_EMIT frameParserCodeChanged();
-  }
+  if (m_sources.empty() || code == m_sources[0].frameParserCode)
+    return;
+
+  m_sources[0].frameParserCode = code;
+  setModified(true);
+  Q_EMIT frameParserCodeChanged();
 }
 
 /**
@@ -1693,18 +2137,6 @@ void DataModel::ProjectModel::setGroupLayout(const int groupId, const QJsonObjec
 }
 
 //--------------------------------------------------------------------------------------------------
-// Internal slot
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Reloads the project from the path reported by FrameBuilder.
- */
-void DataModel::ProjectModel::onJsonLoaded()
-{
-  openJsonFile(DataModel::FrameBuilder::instance().jsonMapFilepath());
-}
-
-//--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
 
@@ -1726,9 +2158,83 @@ int DataModel::ProjectModel::nextDatasetIndex()
 }
 
 /**
+ * @brief Returns a snapshot of all sources suitable for QML diagram consumption.
+ * @return QVariantList of QVariantMaps with keys: sourceId, busType, title.
+ */
+QVariantList DataModel::ProjectModel::sourcesForDiagram() const
+{
+  QVariantList result;
+  result.reserve(static_cast<qsizetype>(m_sources.size()));
+
+  for (const auto& src : m_sources) {
+    QVariantMap map;
+    map[QStringLiteral("sourceId")] = src.sourceId;
+    map[QStringLiteral("busType")]  = src.busType;
+    map[QStringLiteral("title")]    = src.title;
+    result.append(map);
+  }
+
+  return result;
+}
+
+/**
+ * @brief Returns a snapshot of all groups (with their datasets) for QML diagram consumption.
+ * @return QVariantList of QVariantMaps with keys: groupId, sourceId, title, widget, datasets.
+ */
+QVariantList DataModel::ProjectModel::groupsForDiagram() const
+{
+  QVariantList result;
+  result.reserve(static_cast<qsizetype>(m_groups.size()));
+
+  for (const auto& grp : m_groups) {
+    QVariantList datasets;
+    datasets.reserve(static_cast<qsizetype>(grp.datasets.size()));
+
+    for (const auto& ds : grp.datasets) {
+      QVariantMap dsMap;
+      dsMap[QStringLiteral("datasetId")] = ds.datasetId;
+      dsMap[QStringLiteral("title")]     = ds.title;
+      dsMap[QStringLiteral("units")]     = ds.units;
+      dsMap[QStringLiteral("widget")]    = ds.widget;
+      datasets.append(dsMap);
+    }
+
+    QVariantMap map;
+    map[QStringLiteral("groupId")]  = grp.groupId;
+    map[QStringLiteral("sourceId")] = grp.sourceId;
+    map[QStringLiteral("title")]    = grp.title;
+    map[QStringLiteral("widget")]   = grp.widget;
+    map[QStringLiteral("datasets")] = datasets;
+    result.append(map);
+  }
+
+  return result;
+}
+
+/**
+ * @brief Returns a snapshot of all actions suitable for QML diagram consumption.
+ * @return QVariantList of QVariantMaps with keys: actionId, title, icon.
+ */
+QVariantList DataModel::ProjectModel::actionsForDiagram() const
+{
+  QVariantList result;
+  result.reserve(static_cast<qsizetype>(m_actions.size()));
+
+  for (const auto& act : m_actions) {
+    QVariantMap map;
+    map[QStringLiteral("actionId")] = act.actionId;
+    map[QStringLiteral("title")]    = act.title;
+    map[QStringLiteral("icon")]     = act.icon;
+    result.append(map);
+  }
+
+  return result;
+}
+
+/**
  * @brief Writes the current project to m_filePath and reloads it.
  *
- * Calls enableProjectMode() and openJsonFile() after a successful write.
+ * Switches to ProjectFile mode via AppState and emits jsonFileChanged.
  *
  * @return true if the file was written successfully.
  */
@@ -1749,9 +2255,8 @@ bool DataModel::ProjectModel::finalizeProjectSave()
   file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
   file.close();
 
-  enableProjectMode();
-
-  openJsonFile(file.fileName());
-  DataModel::FrameBuilder::instance().loadJsonMap(file.fileName(), !m_suppressMessageBoxes);
+  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+  setModified(false);
+  Q_EMIT jsonFileChanged();
   return true;
 }

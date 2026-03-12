@@ -152,7 +152,7 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
  * @brief Returns the size of the down-sampled X axis data.
  * @return Size of down-sampled X axis data.
  */
-int Widgets::FFTPlot::dataW() const
+int Widgets::FFTPlot::dataW() const noexcept
 {
   return m_dataW;
 }
@@ -161,7 +161,7 @@ int Widgets::FFTPlot::dataW() const
  * @brief Returns the size of the down-sampled Y axis data.
  * @return Size of down-sampled Y axis data.
  */
-int Widgets::FFTPlot::dataH() const
+int Widgets::FFTPlot::dataH() const noexcept
 {
   return m_dataH;
 }
@@ -174,7 +174,7 @@ int Widgets::FFTPlot::dataH() const
  * @brief Returns the minimum X-axis value.
  * @return The minimum X-axis value.
  */
-double Widgets::FFTPlot::minX() const
+double Widgets::FFTPlot::minX() const noexcept
 {
   return m_minX;
 }
@@ -183,7 +183,7 @@ double Widgets::FFTPlot::minX() const
  * @brief Returns the maximum X-axis value.
  * @return The maximum X-axis value.
  */
-double Widgets::FFTPlot::maxX() const
+double Widgets::FFTPlot::maxX() const noexcept
 {
   return m_maxX;
 }
@@ -192,7 +192,7 @@ double Widgets::FFTPlot::maxX() const
  * @brief Returns the minimum Y-axis value.
  * @return The minimum Y-axis value.
  */
-double Widgets::FFTPlot::minY() const
+double Widgets::FFTPlot::minY() const noexcept
 {
   return m_minY;
 }
@@ -201,7 +201,7 @@ double Widgets::FFTPlot::minY() const
  * @brief Returns the maximum Y-axis value.
  * @return The maximum Y-axis value.
  */
-double Widgets::FFTPlot::maxY() const
+double Widgets::FFTPlot::maxY() const noexcept
 {
   return m_maxY;
 }
@@ -214,7 +214,7 @@ double Widgets::FFTPlot::maxY() const
  * @brief Checks whether plot data updates are currently active.
  * @return @c true if updating is not paused, otherwise @c false.
  */
-bool Widgets::FFTPlot::running() const
+bool Widgets::FFTPlot::running() const noexcept
 {
   return UI::Dashboard::instance().fftPlotRunning(m_index);
 }

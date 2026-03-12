@@ -29,7 +29,7 @@
 #  include <QDateTime>
 #  include <QFile>
 
-#  include "IO/Manager.h"
+#  include "IO/ConnectionManager.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "SerialStudio.h"
 
@@ -258,13 +258,14 @@ void Widgets::ImageExport::closeSession(int groupId)
  */
 void Widgets::ImageExport::setupExternalConnections()
 {
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [this] {
-    if (!IO::Manager::instance().isConnected())
-      closeSession();
-  });
+  connect(
+    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
+      if (!IO::ConnectionManager::instance().isConnected())
+        closeSession();
+    });
 
-  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [this] {
-    if (IO::Manager::instance().paused())
+  connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
+    if (IO::ConnectionManager::instance().paused())
       closeSession();
   });
 }

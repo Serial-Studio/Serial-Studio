@@ -84,7 +84,7 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
  *
  * @return `true` if the dataset configuration permits enabling alarm values.
  */
-bool Widgets::Bar::alarmsDefined() const
+bool Widgets::Bar::alarmsDefined() const noexcept
 {
   return m_alarmsDefined;
 }
@@ -101,7 +101,7 @@ bool Widgets::Bar::alarmsDefined() const
  *         valid (not NaN). Returns `false` if the value is within the safe
  *         range or no thresholds are defined.
  */
-bool Widgets::Bar::alarmTriggered() const
+bool Widgets::Bar::alarmTriggered() const noexcept
 {
   if (m_alarmsDefined) {
     if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue) {
@@ -129,7 +129,7 @@ bool Widgets::Bar::alarmTriggered() const
  *
  * @return A constant reference to the units string.
  */
-const QString& Widgets::Bar::units() const
+const QString& Widgets::Bar::units() const noexcept
 {
   return m_units;
 }
@@ -142,7 +142,7 @@ const QString& Widgets::Bar::units() const
  *
  * @return The current value displayed by the bar.
  */
-double Widgets::Bar::value() const
+double Widgets::Bar::value() const noexcept
 {
   return m_value;
 }
@@ -154,7 +154,7 @@ double Widgets::Bar::value() const
  *
  * @return The minimum value on the bar's scale.
  */
-double Widgets::Bar::minValue() const
+double Widgets::Bar::minValue() const noexcept
 {
   return m_minValue;
 }
@@ -166,7 +166,7 @@ double Widgets::Bar::minValue() const
  *
  * @return The maximum value on the bar's scale.
  */
-double Widgets::Bar::maxValue() const
+double Widgets::Bar::maxValue() const noexcept
 {
   return m_maxValue;
 }
@@ -179,7 +179,7 @@ double Widgets::Bar::maxValue() const
  *
  * @return The low alarm threshold.
  */
-double Widgets::Bar::alarmLow() const
+double Widgets::Bar::alarmLow() const noexcept
 {
   return m_alarmLow;
 }
@@ -192,7 +192,7 @@ double Widgets::Bar::alarmLow() const
  *
  * @return The high alarm threshold.
  */
-double Widgets::Bar::alarmHigh() const
+double Widgets::Bar::alarmHigh() const noexcept
 {
   return m_alarmHigh;
 }
@@ -209,7 +209,7 @@ double Widgets::Bar::alarmHigh() const
  *
  * @return Fractional position of the current value.
  */
-double Widgets::Bar::normalizedValue() const
+double Widgets::Bar::normalizedValue() const noexcept
 {
   return computeFractional(m_value);
 }
@@ -222,7 +222,7 @@ double Widgets::Bar::normalizedValue() const
  *
  * @return Fractional position of the low alarm.
  */
-double Widgets::Bar::normalizedAlarmLow() const
+double Widgets::Bar::normalizedAlarmLow() const noexcept
 {
   return computeFractional(m_alarmLow);
 }
@@ -236,7 +236,7 @@ double Widgets::Bar::normalizedAlarmLow() const
  *
  * @return Fractional position of the high alarm.
  */
-double Widgets::Bar::normalizedAlarmHigh() const
+double Widgets::Bar::normalizedAlarmHigh() const noexcept
 {
   return computeFractional(m_alarmHigh);
 }

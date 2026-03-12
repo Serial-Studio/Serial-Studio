@@ -23,6 +23,7 @@
 
 #include <QJsonObject>
 #include <QObject>
+#include <QVariantList>
 
 #include "DataModel/Frame.h"
 #include "SerialStudio.h"
@@ -60,6 +61,9 @@ class ProjectModel : public QObject {
   Q_PROPERTY(bool containsCommercialFeatures
              READ containsCommercialFeatures
              NOTIFY groupsChanged)
+  Q_PROPERTY(int sourceCount
+             READ sourceCount
+             NOTIFY sourcesChanged)
   // clang-format on
 
 signals:
@@ -67,7 +71,10 @@ signals:
   void jsonFileChanged();
   void modifiedChanged();
   void groupsChanged();
+  void groupDataChanged();
   void actionsChanged();
+  void sourcesChanged();
+  void sourceStructureChanged();
   void frameDetectionChanged();
   void frameParserCodeChanged();
   void activeGroupIdChanged();
@@ -79,6 +86,8 @@ signals:
   void datasetDeleted(int survivingGroupId);
   void actionAdded(int actionId);
   void actionDeleted();
+  void sourceAdded(int sourceId);
+  void sourceDeleted();
 
 private:
   explicit ProjectModel();
@@ -90,32 +99,37 @@ private:
 public:
   static ProjectModel& instance();
 
-  [[nodiscard]] bool modified() const;
-  [[nodiscard]] SerialStudio::DecoderMethod decoderMethod() const;
-  [[nodiscard]] SerialStudio::FrameDetection frameDetection() const;
+  [[nodiscard]] bool modified() const noexcept;
+  [[nodiscard]] SerialStudio::DecoderMethod decoderMethod() const noexcept;
+  [[nodiscard]] SerialStudio::FrameDetection frameDetection() const noexcept;
 
   [[nodiscard]] QString jsonFileName() const;
   [[nodiscard]] QString jsonProjectsPath() const;
 
   [[nodiscard]] QStringList xDataSources() const;
 
-  [[nodiscard]] const QString& title() const;
-  [[nodiscard]] const QString& jsonFilePath() const;
-  [[nodiscard]] const QString& frameParserCode() const;
+  [[nodiscard]] const QString& title() const noexcept;
+  [[nodiscard]] const QString& jsonFilePath() const noexcept;
+  [[nodiscard]] QString frameParserCode() const;
 
-  [[nodiscard]] bool suppressMessageBoxes() const;
+  [[nodiscard]] bool suppressMessageBoxes() const noexcept;
 
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] QJsonObject groupLayout(int groupId) const;
 
   [[nodiscard]] bool containsCommercialFeatures() const;
 
-  [[nodiscard]] int groupCount() const;
+  [[nodiscard]] int groupCount() const noexcept;
   [[nodiscard]] int datasetCount() const;
-  [[nodiscard]] const std::vector<Group>& groups() const;
-  [[nodiscard]] const std::vector<Action>& actions() const;
+  [[nodiscard]] int sourceCount() const noexcept;
+  [[nodiscard]] const std::vector<Group>& groups() const noexcept;
+  [[nodiscard]] const std::vector<Action>& actions() const noexcept;
+  [[nodiscard]] const std::vector<Source>& sources() const noexcept;
 
   Q_INVOKABLE bool askSave();
+  Q_INVOKABLE QVariantList sourcesForDiagram() const;
+  Q_INVOKABLE QVariantList groupsForDiagram() const;
+  Q_INVOKABLE QVariantList actionsForDiagram() const;
   Q_INVOKABLE QJsonObject serializeToJson() const;
   Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
   Q_INVOKABLE QJsonObject widgetSettings(const QString& widgetId) const;
@@ -139,8 +153,6 @@ public slots:
   void setChecksumAlgorithm(const QString& algorithm);
   void setFrameDetection(const SerialStudio::FrameDetection detection);
 
-  void enableProjectMode();
-
   void deleteCurrentGroup();
   void deleteCurrentAction();
   void deleteCurrentDataset();
@@ -154,6 +166,17 @@ public slots:
   void changeDatasetOption(const SerialStudio::DatasetOption option, const bool checked);
 
   void addAction();
+  void addSource();
+  void deleteSource(int sourceId);
+  void duplicateSource(int sourceId);
+  void updateSource(int sourceId, const DataModel::Source& source);
+  void updateSourceTitle(int sourceId, const QString& title);
+  void updateSourceBusType(int sourceId, int busType);
+  void updateSourceFrameParser(int sourceId, const QString& code);
+  void captureSourceSettings(int sourceId);
+  void restoreSourceSettings(int sourceId);
+  void setSource0BusType(int busType);
+  void setSource0ConnectionSettings(const QJsonObject& settings);
   void addGroup(const QString& title, const SerialStudio::GroupWidget widget);
   bool setGroupWidget(const int group, const SerialStudio::GroupWidget widget);
 
@@ -175,16 +198,12 @@ public slots:
   void setSelectedAction(const DataModel::Action& action);
   void setSelectedDataset(const DataModel::Dataset& dataset);
 
-private slots:
-  void onJsonLoaded();
-
 private:
   int nextDatasetIndex();
   bool finalizeProjectSave();
 
 private:
   QString m_title;
-  QString m_frameParserCode;
   QString m_frameEndSequence;
   QString m_checksumAlgorithm;
   QString m_frameStartSequence;
@@ -199,6 +218,7 @@ private:
 
   std::vector<DataModel::Group> m_groups;
   std::vector<DataModel::Action> m_actions;
+  std::vector<DataModel::Source> m_sources;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

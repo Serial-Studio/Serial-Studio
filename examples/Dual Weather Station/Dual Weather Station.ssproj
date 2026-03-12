@@ -1,0 +1,481 @@
+{
+    "actions": [
+    ],
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": true,
+                    "plotMax": 45,
+                    "plotMin": 0,
+                    "title": "Outdoor Temperature",
+                    "units": "°C",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 45,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "Outdoor Humidity",
+                    "units": "%",
+                    "value": "--.--",
+                    "widget": "bar",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                }
+            ],
+            "title": "Outdoor Temperature & Humidity",
+            "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": true,
+                    "plotMax": 80,
+                    "plotMin": 0,
+                    "title": "Wind Speed",
+                    "units": "km/h",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 80,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 360,
+                    "plotMin": 0,
+                    "title": "Wind Direction",
+                    "units": "°",
+                    "value": "--.--",
+                    "widget": "compass",
+                    "widgetMax": 360,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                }
+            ],
+            "title": "Wind",
+            "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": true,
+                    "plotMax": 1030,
+                    "plotMin": 980,
+                    "title": "Pressure",
+                    "units": "hPa",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 1030,
+                    "widgetMin": 980,
+                    "xAxis": 0
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 6,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 11,
+                    "plotMin": 0,
+                    "title": "UV Index",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "bar",
+                    "widgetMax": 11,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                }
+            ],
+            "title": "Atmospheric",
+            "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "datasetSourceId": 1,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": true,
+                    "plotMax": 30,
+                    "plotMin": 15,
+                    "title": "Indoor Temperature",
+                    "units": "°C",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 30,
+                    "widgetMin": 15,
+                    "xAxis": 0
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "datasetSourceId": 1,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "Indoor Humidity",
+                    "units": "%",
+                    "value": "--.--",
+                    "widget": "bar",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "datasetSourceId": 1,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 25,
+                    "plotMin": 0,
+                    "title": "Indoor Dew Point",
+                    "units": "°C",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 25,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                }
+            ],
+            "sourceId": 1,
+            "title": "Indoor Climate",
+            "widget": ""
+        },
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "datasetSourceId": 1,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 4,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": true,
+                    "plotMax": 2000,
+                    "plotMin": 400,
+                    "title": "Indoor CO2",
+                    "units": "ppm",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 2000,
+                    "widgetMin": 400,
+                    "xAxis": 0
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "datasetSourceId": 1,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 5,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 75,
+                    "plotMin": 0,
+                    "title": "PM2.5",
+                    "units": "µg/m³",
+                    "value": "--.--",
+                    "widget": "bar",
+                    "widgetMax": 75,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "datasetSourceId": 1,
+                    "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 6,
+                    "led": false,
+                    "ledHigh": 100,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 500,
+                    "plotMin": 0,
+                    "title": "VOC Index",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 500,
+                    "widgetMin": 0,
+                    "xAxis": 0
+                }
+            ],
+            "sourceId": 1,
+            "title": "Air Quality",
+            "widget": ""
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "sources": [
+        {
+            "busType": 1,
+            "checksum": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9001,
+                "udpRemotePort": 9001
+            },
+            "decoder": 0,
+            "frameDetection": 1,
+            "frameEnd": "*/",
+            "frameParserCode": "/**\n * Frame parser for the first device\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
+            "frameStart": "/*",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Outdoor Station"
+        },
+        {
+            "busType": 1,
+            "checksum": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9002,
+                "udpRemotePort": 9002
+            },
+            "decoder": 0,
+            "frameDetection": 1,
+            "frameEnd": "%>",
+            "frameParserCode": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
+            "frameStart": "<%",
+            "hexadecimalDelimiters": false,
+            "sourceId": 1,
+            "title": "Indoor Station"
+        }
+    ],
+    "title": "Dual Weather Station",
+    "widgetSettings": {
+        "__layout__:-1__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    3,
+                    0,
+                    2,
+                    5,
+                    1
+                ]
+            }
+        },
+        "__layout__:-2__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    1,
+                    11,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    12,
+                    16,
+                    17,
+                    13,
+                    14,
+                    18,
+                    15,
+                    19,
+                    20
+                ]
+            }
+        },
+        "__layout__:0__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    7
+                ]
+            }
+        },
+        "__layout__:1__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    1,
+                    11
+                ]
+            }
+        },
+        "__layout__:2__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    2,
+                    8
+                ]
+            }
+        },
+        "__layout__:3__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    3,
+                    4,
+                    9
+                ]
+            }
+        },
+        "__layout__:4__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    10,
+                    5,
+                    6
+                ]
+            }
+        },
+        "__layout__:5__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0
+                ]
+            }
+        }
+    }
+}

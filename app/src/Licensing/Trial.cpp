@@ -89,7 +89,7 @@ Licensing::Trial& Licensing::Trial::instance()
  * Useful to disable UI elements while the API is validating,
  * activating, or deactivating a license key.
  */
-bool Licensing::Trial::busy() const
+bool Licensing::Trial::busy() const noexcept
 {
   return m_busy;
 }

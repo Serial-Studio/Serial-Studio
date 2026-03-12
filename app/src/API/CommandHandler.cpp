@@ -30,6 +30,7 @@
 #include "API/Handlers/IOManagerHandler.h"
 #include "API/Handlers/NetworkHandler.h"
 #include "API/Handlers/ProjectHandler.h"
+#include "API/Handlers/SourceHandler.h"
 #include "API/Handlers/UARTHandler.h"
 #include "API/Handlers/WindowHandler.h"
 
@@ -241,6 +242,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::CSVPlayerHandler::registerCommands();
   Handlers::DashboardHandler::registerCommands();
   Handlers::WindowHandler::registerCommands();
+  Handlers::SourceHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();

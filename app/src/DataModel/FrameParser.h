@@ -23,20 +23,20 @@
 
 #include <QJSEngine>
 #include <QJSValue>
+#include <QMap>
 #include <QObject>
 #include <QStringList>
 
 namespace DataModel {
 
 /**
- * @brief Singleton JS engine for frame parsing.
+ * @brief Singleton JS engine manager for frame parsing.
  *
- * Owns the QJSEngine, validates and loads JavaScript parser scripts, and
- * executes them against incoming frames. Has no GUI dependency — safe to use
- * in headless / CI mode.
+ * Maintains one QJSEngine per source ID (source 0 = global / single-source
+ * projects). All parse, load, and template operations are sourceId-scoped so
+ * that multi-source projects can run independent parser code per device.
  */
-class FrameParser : public QObject
-{
+class FrameParser : public QObject {
   Q_OBJECT
 
 signals:
@@ -45,30 +45,28 @@ signals:
 
 private:
   explicit FrameParser();
-  FrameParser(FrameParser &&) = delete;
-  FrameParser(const FrameParser &) = delete;
-  FrameParser &operator=(FrameParser &&) = delete;
-  FrameParser &operator=(const FrameParser &) = delete;
+  FrameParser(FrameParser&&)                 = delete;
+  FrameParser(const FrameParser&)            = delete;
+  FrameParser& operator=(FrameParser&&)      = delete;
+  FrameParser& operator=(const FrameParser&) = delete;
 
 public:
-  static FrameParser &instance();
+  static FrameParser& instance();
 
   [[nodiscard]] static QString defaultTemplateCode();
 
-  [[nodiscard]] QString templateCode() const;
-  [[nodiscard]] const QStringList &templateNames() const;
-  [[nodiscard]] const QStringList &templateFiles() const;
+  [[nodiscard]] QString templateCode(int sourceId = 0) const;
+  [[nodiscard]] const QStringList& templateNames() const;
+  [[nodiscard]] const QStringList& templateFiles() const;
 
-  [[nodiscard]] QStringList parse(const QString &frame);
-  [[nodiscard]] QStringList parse(const QByteArray &frame);
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QString& frame, int sourceId);
+  [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray& frame, int sourceId);
 
-  [[nodiscard]] QList<QStringList> parseMultiFrame(const QString &frame);
-  [[nodiscard]] QList<QStringList> parseMultiFrame(const QByteArray &frame);
+  [[nodiscard]] bool loadScript(int sourceId, const QString& script, bool showMessageBoxes = true);
 
-  [[nodiscard]] bool loadScript(const QString &script,
-                                const bool showMessageBoxes = true);
-
-  void setSuppressMessageBoxes(const bool suppress);
+  void setSuppressMessageBoxes(bool suppress);
+  void setSourceCode(int sourceId, const QString& code);
+  void clearSourceEngine(int sourceId);
 
 public slots:
   void readCode();
@@ -76,18 +74,26 @@ public slots:
   void collectGarbage();
   void loadTemplateNames();
   void setupExternalConnections();
-  void setTemplateIdx(const int idx);
-  void loadDefaultTemplate(const bool guiTrigger = false);
+  void setTemplateIdx(int sourceId, int idx);
+  void loadDefaultTemplate(int sourceId, bool guiTrigger = false);
 
 private:
-  int m_templateIdx;
+  struct SourceEngine {
+    QJSEngine engine;
+    QJSValue parseFunction;
+    QJSValue hexToArray;
+    int templateIdx = -1;
+  };
+
+  [[nodiscard]] SourceEngine& engineForSource(int sourceId);
+
+private:
   bool m_suppressMessageBoxes;
 
-  QJSEngine m_engine;
-  QJSValue m_parseFunction;
-  QJSValue m_hexToArray;
   QStringList m_templateFiles;
   QStringList m_templateNames;
+
+  QMap<int, SourceEngine*> m_engines;
 };
 
-} // namespace DataModel
+}  // namespace DataModel

@@ -287,13 +287,22 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
   const auto dbcInfo      = QFileInfo(m_dbcFilePath);
   const auto projectTitle = dbcInfo.baseName();
 
-  project["title"]          = projectTitle;
-  project["frameStart"]     = QString("");
-  project["frameEnd"]       = QString("");
-  project["frameParser"]    = generateFrameParser(messages);
-  project["decoder"]        = static_cast<int>(SerialStudio::Binary);
-  project["frameDetection"] = static_cast<int>(SerialStudio::NoDelimiters);
-  project["actions"]        = QJsonArray();
+  project["title"]   = projectTitle;
+  project["actions"] = QJsonArray();
+
+  QJsonObject source;
+  source["sourceId"]              = 0;
+  source["title"]                 = tr("CAN Bus");
+  source["busType"]               = static_cast<int>(SerialStudio::BusType::CanBus);
+  source["frameStart"]            = QString("");
+  source["frameEnd"]              = QString("");
+  source["checksum"]              = QString("");
+  source["frameDetection"]        = static_cast<int>(SerialStudio::NoDelimiters);
+  source["decoder"]               = static_cast<int>(SerialStudio::Binary);
+  source["hexadecimalDelimiters"] = false;
+  source["frameParserCode"]       = generateFrameParser(messages);
+
+  project["sources"] = QJsonArray{source};
 
   const auto groups = generateGroups(messages);
   QJsonArray groupArray;

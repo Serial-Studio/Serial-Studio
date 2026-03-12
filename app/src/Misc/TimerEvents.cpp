@@ -58,7 +58,7 @@ Misc::TimerEvents& Misc::TimerEvents::instance()
  * @brief Gets the current UI timer frequency.
  * @return The UI timer frequency in Hz.
  */
-int Misc::TimerEvents::fps() const
+int Misc::TimerEvents::fps() const noexcept
 {
   return m_uiTimerHz;
 }

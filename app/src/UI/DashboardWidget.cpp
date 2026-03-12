@@ -158,6 +158,30 @@ QString UI::DashboardWidget::widgetId() const
 }
 
 /**
+ * @brief Returns the source/device index (sourceId) of the group this widget belongs to.
+ *
+ * Used by the dashboard MiniWindow to apply a per-device color tint to the caption.
+ * Returns 0 when the widget has no group or belongs to the default source.
+ */
+int UI::DashboardWidget::widgetSourceId() const
+{
+  if (!VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
+    return 0;
+
+  if (SerialStudio::isGroupWidget(m_widgetType)) {
+    const auto& group = GET_GROUP(m_widgetType, m_relativeIndex);
+    return group.sourceId;
+  }
+
+  if (SerialStudio::isDatasetWidget(m_widgetType)) {
+    const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
+    return dataset.sourceId;
+  }
+
+  return 0;
+}
+
+/**
  * Returns the QML path of the current widget.
  */
 QString UI::DashboardWidget::widgetQmlPath() const

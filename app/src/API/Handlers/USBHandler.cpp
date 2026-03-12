@@ -16,7 +16,7 @@
 #  include <QJsonArray>
 
 #  include "API/CommandRegistry.h"
-#  include "IO/Drivers/USB.h"
+#  include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -78,7 +78,7 @@ API::CommandResponse API::Handlers::USBHandler::setDeviceIndex(const QString& id
   }
 
   const int device_index = params.value(QStringLiteral("deviceIndex")).toInt();
-  const auto& devices    = IO::Drivers::USB::instance().deviceList();
+  const auto& devices    = IO::ConnectionManager::instance().usb()->deviceList();
 
   if (device_index < 0 || device_index >= devices.count()) {
     return CommandResponse::makeError(
@@ -89,7 +89,7 @@ API::CommandResponse API::Handlers::USBHandler::setDeviceIndex(const QString& id
         .arg(devices.count() - 1));
   }
 
-  IO::Drivers::USB::instance().setDeviceIndex(device_index);
+  IO::ConnectionManager::instance().usb()->setDeviceIndex(device_index);
 
   QJsonObject result;
   result[QStringLiteral("deviceIndex")] = device_index;
@@ -118,7 +118,7 @@ API::CommandResponse API::Handlers::USBHandler::setTransferMode(const QString& i
         .arg(mode));
   }
 
-  IO::Drivers::USB::instance().setTransferMode(mode);
+  IO::ConnectionManager::instance().usb()->setTransferMode(mode);
 
   QJsonObject result;
   result[QStringLiteral("mode")] = mode;
@@ -138,7 +138,7 @@ API::CommandResponse API::Handlers::USBHandler::setInEndpointIndex(const QString
   }
 
   const int ep_index    = params.value(QStringLiteral("endpointIndex")).toInt();
-  const auto& endpoints = IO::Drivers::USB::instance().inEndpointList();
+  const auto& endpoints = IO::ConnectionManager::instance().usb()->inEndpointList();
 
   if (ep_index < 0 || ep_index >= endpoints.count()) {
     return CommandResponse::makeError(
@@ -149,7 +149,7 @@ API::CommandResponse API::Handlers::USBHandler::setInEndpointIndex(const QString
         .arg(endpoints.count() - 1));
   }
 
-  IO::Drivers::USB::instance().setInEndpointIndex(ep_index);
+  IO::ConnectionManager::instance().usb()->setInEndpointIndex(ep_index);
 
   QJsonObject result;
   result[QStringLiteral("endpointIndex")] = ep_index;
@@ -170,7 +170,7 @@ API::CommandResponse API::Handlers::USBHandler::setOutEndpointIndex(const QStrin
   }
 
   const int ep_index    = params.value(QStringLiteral("endpointIndex")).toInt();
-  const auto& endpoints = IO::Drivers::USB::instance().outEndpointList();
+  const auto& endpoints = IO::ConnectionManager::instance().usb()->outEndpointList();
 
   if (ep_index < 0 || ep_index >= endpoints.count()) {
     return CommandResponse::makeError(
@@ -181,7 +181,7 @@ API::CommandResponse API::Handlers::USBHandler::setOutEndpointIndex(const QStrin
         .arg(endpoints.count() - 1));
   }
 
-  IO::Drivers::USB::instance().setOutEndpointIndex(ep_index);
+  IO::ConnectionManager::instance().usb()->setOutEndpointIndex(ep_index);
 
   QJsonObject result;
   result[QStringLiteral("endpointIndex")] = ep_index;
@@ -209,7 +209,7 @@ API::CommandResponse API::Handlers::USBHandler::setIsoPacketSize(const QString& 
       QStringLiteral("Invalid size: %1. Valid range: 1-49152").arg(size));
   }
 
-  IO::Drivers::USB::instance().setIsoPacketSize(size);
+  IO::ConnectionManager::instance().usb()->setIsoPacketSize(size);
 
   QJsonObject result;
   result[QStringLiteral("size")] = size;
@@ -228,7 +228,7 @@ API::CommandResponse API::Handlers::USBHandler::getDeviceList(const QString& id,
 {
   Q_UNUSED(params)
 
-  const auto& devices = IO::Drivers::USB::instance().deviceList();
+  const auto& devices = IO::ConnectionManager::instance().usb()->deviceList();
 
   QJsonArray devices_array;
   for (const auto& device : devices)
@@ -236,7 +236,7 @@ API::CommandResponse API::Handlers::USBHandler::getDeviceList(const QString& id,
 
   QJsonObject result;
   result[QStringLiteral("devices")]       = devices_array;
-  result[QStringLiteral("selectedIndex")] = IO::Drivers::USB::instance().deviceIndex();
+  result[QStringLiteral("selectedIndex")] = IO::ConnectionManager::instance().usb()->deviceIndex();
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -248,22 +248,22 @@ API::CommandResponse API::Handlers::USBHandler::getConfiguration(const QString& 
 {
   Q_UNUSED(params)
 
-  auto& usb = IO::Drivers::USB::instance();
+  auto* usb = IO::ConnectionManager::instance().usb();
 
   QJsonArray in_endpoints;
-  for (const auto& ep : usb.inEndpointList())
+  for (const auto& ep : usb->inEndpointList())
     in_endpoints.append(ep);
 
   QJsonArray out_endpoints;
-  for (const auto& ep : usb.outEndpointList())
+  for (const auto& ep : usb->outEndpointList())
     out_endpoints.append(ep);
 
   QJsonObject result;
-  result[QStringLiteral("deviceIndex")]      = usb.deviceIndex();
-  result[QStringLiteral("transferMode")]     = usb.transferMode();
-  result[QStringLiteral("inEndpointIndex")]  = usb.inEndpointIndex();
-  result[QStringLiteral("outEndpointIndex")] = usb.outEndpointIndex();
-  result[QStringLiteral("isoPacketSize")]    = usb.isoPacketSize();
+  result[QStringLiteral("deviceIndex")]      = usb->deviceIndex();
+  result[QStringLiteral("transferMode")]     = usb->transferMode();
+  result[QStringLiteral("inEndpointIndex")]  = usb->inEndpointIndex();
+  result[QStringLiteral("outEndpointIndex")] = usb->outEndpointIndex();
+  result[QStringLiteral("isoPacketSize")]    = usb->isoPacketSize();
   result[QStringLiteral("inEndpoints")]      = in_endpoints;
   result[QStringLiteral("outEndpoints")]     = out_endpoints;
   return CommandResponse::makeSuccess(id, result);

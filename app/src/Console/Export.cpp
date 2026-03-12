@@ -32,7 +32,7 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "Console/Handler.h"
-#  include "IO/Manager.h"
+#  include "IO/ConnectionManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "SerialStudio.h"
@@ -65,7 +65,7 @@ void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items
   if (items.empty())
     return;
 
-  if (!IO::Manager::instance().isConnected())
+  if (!IO::ConnectionManager::instance().isConnected())
     return;
 
   if (!isResourceOpen())
@@ -236,8 +236,10 @@ void Console::Export::setupExternalConnections()
           &Console::Handler::displayString,
           this,
           &Console::Export::registerData);
-  connect(
-    &IO::Manager::instance(), &IO::Manager::connectedChanged, this, &Console::Export::closeFile);
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::connectedChanged,
+          this,
+          &Console::Export::closeFile);
 #endif
 }
 

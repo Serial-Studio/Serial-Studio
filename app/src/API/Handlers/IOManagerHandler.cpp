@@ -24,7 +24,7 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -120,7 +120,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::connect(const QString& id,
 {
   Q_UNUSED(params)
 
-  auto& manager = IO::Manager::instance();
+  auto& manager = IO::ConnectionManager::instance();
 
   // Check if already connected
   if (manager.isConnected()) {
@@ -151,7 +151,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::disconnect(const QString& 
 {
   Q_UNUSED(params)
 
-  auto& manager = IO::Manager::instance();
+  auto& manager = IO::ConnectionManager::instance();
 
   if (!manager.isConnected()) {
     return CommandResponse::makeError(
@@ -178,7 +178,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::setPaused(const QString& i
   }
 
   const bool paused = params.value(QStringLiteral("paused")).toBool();
-  IO::Manager::instance().setPaused(paused);
+  IO::ConnectionManager::instance().setPaused(paused);
 
   QJsonObject result;
   result[QStringLiteral("paused")] = paused;
@@ -197,8 +197,8 @@ API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& 
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: busType"));
   }
 
-  const int busType          = params.value(QStringLiteral("busType")).toInt();
-  const auto& availableBuses = IO::Manager::instance().availableBuses();
+  const int busType         = params.value(QStringLiteral("busType")).toInt();
+  const auto availableBuses = IO::ConnectionManager::instance().availableBuses();
 
   if (busType < 0 || busType >= availableBuses.count()) {
     return CommandResponse::makeError(id,
@@ -208,7 +208,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& 
                                         .arg(availableBuses.count() - 1));
   }
 
-  IO::Manager::instance().setBusType(static_cast<SerialStudio::BusType>(busType));
+  IO::ConnectionManager::instance().setBusType(static_cast<SerialStudio::BusType>(busType));
 
   QJsonObject result;
   result[QStringLiteral("busType")]     = busType;
@@ -238,7 +238,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& i
   }
 
   // Now check execution preconditions
-  auto& manager = IO::Manager::instance();
+  auto& manager = IO::ConnectionManager::instance();
   if (!manager.isConnected()) {
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Not connected"));
@@ -263,7 +263,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
 {
   Q_UNUSED(params)
 
-  auto& manager = IO::Manager::instance();
+  auto& manager = IO::ConnectionManager::instance();
 
   QJsonObject result;
   result[QStringLiteral("isConnected")]     = manager.isConnected();
@@ -290,7 +290,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::getAvailableBuses(const QS
 {
   Q_UNUSED(params)
 
-  const auto& buses = IO::Manager::instance().availableBuses();
+  const auto buses = IO::ConnectionManager::instance().availableBuses();
 
   QJsonArray busArray;
   for (int i = 0; i < buses.count(); ++i) {

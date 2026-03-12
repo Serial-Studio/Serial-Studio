@@ -37,7 +37,7 @@
 #  include <mdf/mdfwriter.h>
 
 #  include "CSV/Player.h"
-#  include "IO/Manager.h"
+#  include "IO/ConnectionManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "MDF4/Player.h"
 #  include "Misc/WorkspaceManager.h"
@@ -86,7 +86,7 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   if (items.empty())
     return;
 
-  if (!IO::Manager::instance().isConnected())
+  if (!IO::ConnectionManager::instance().isConnected())
     return;
 
   if (!isResourceOpen() && !items.empty()) {
@@ -376,9 +376,12 @@ void MDF4::Export::closeFile()
 void MDF4::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, &Export::closeFile);
-  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [this] {
-    if (IO::Manager::instance().paused())
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::connectedChanged,
+          this,
+          &Export::closeFile);
+  connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
+    if (IO::ConnectionManager::instance().paused())
       closeFile();
   });
 #endif

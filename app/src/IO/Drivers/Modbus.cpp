@@ -95,13 +95,39 @@ IO::Drivers::Modbus::Modbus()
   // Configure poll timer callback function
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
 
-  // Connect signals/slots for IO manager connect button
+  // Propagate all configuration-relevant changes to configurationChanged()
   connect(this,
           &IO::Drivers::Modbus::protocolIndexChanged,
           this,
           &IO::Drivers::Modbus::configurationChanged);
   connect(this,
           &IO::Drivers::Modbus::serialPortIndexChanged,
+          this,
+          &IO::Drivers::Modbus::configurationChanged);
+  connect(
+    this, &IO::Drivers::Modbus::hostChanged, this, &IO::Drivers::Modbus::configurationChanged);
+  connect(
+    this, &IO::Drivers::Modbus::portChanged, this, &IO::Drivers::Modbus::configurationChanged);
+  connect(this,
+          &IO::Drivers::Modbus::slaveAddressChanged,
+          this,
+          &IO::Drivers::Modbus::configurationChanged);
+  connect(this,
+          &IO::Drivers::Modbus::pollIntervalChanged,
+          this,
+          &IO::Drivers::Modbus::configurationChanged);
+  connect(
+    this, &IO::Drivers::Modbus::baudRateChanged, this, &IO::Drivers::Modbus::configurationChanged);
+  connect(this,
+          &IO::Drivers::Modbus::parityIndexChanged,
+          this,
+          &IO::Drivers::Modbus::configurationChanged);
+  connect(this,
+          &IO::Drivers::Modbus::dataBitsIndexChanged,
+          this,
+          &IO::Drivers::Modbus::configurationChanged);
+  connect(this,
+          &IO::Drivers::Modbus::stopBitsIndexChanged,
           this,
           &IO::Drivers::Modbus::configurationChanged);
 }
@@ -112,15 +138,6 @@ IO::Drivers::Modbus::Modbus()
 IO::Drivers::Modbus::~Modbus()
 {
   doClose();
-}
-
-/**
- * @brief Returns the only instance of the class
- */
-IO::Drivers::Modbus& IO::Drivers::Modbus::instance()
-{
-  static Modbus singleton;
-  return singleton;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1116,5 +1133,152 @@ void IO::Drivers::Modbus::refreshSerialPorts()
       m_settings.setValue("ModbusDriver/serialPortIndex", 0);
       Q_EMIT serialPortIndexChanged();
     }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the Modbus configuration as a flat list of editable properties.
+ *
+ * Only the properties relevant to the current protocol are included:
+ *   - RTU (index 0): serial port, baud rate, parity, data bits, stop bits.
+ *   - TCP (index 1): host address, port.
+ * Slave address and poll interval are common to both protocols.
+ *
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty proto;
+  proto.key     = QStringLiteral("protocolIndex");
+  proto.label   = tr("Protocol");
+  proto.type    = IO::DriverProperty::ComboBox;
+  proto.value   = m_protocolIndex;
+  proto.options = protocolList();
+  props.append(proto);
+
+  IO::DriverProperty slave;
+  slave.key   = QStringLiteral("slaveAddress");
+  slave.label = tr("Slave Address");
+  slave.type  = IO::DriverProperty::IntField;
+  slave.value = m_slaveAddress;
+  slave.min   = 1;
+  slave.max   = 247;
+  props.append(slave);
+
+  IO::DriverProperty poll;
+  poll.key   = QStringLiteral("pollInterval");
+  poll.label = tr("Poll Interval (ms)");
+  poll.type  = IO::DriverProperty::IntField;
+  poll.value = m_pollInterval;
+  poll.min   = 10;
+  poll.max   = 60000;
+  props.append(poll);
+
+  if (m_protocolIndex == 1) {
+    IO::DriverProperty host;
+    host.key   = QStringLiteral("host");
+    host.label = tr("Host / IP");
+    host.type  = IO::DriverProperty::Text;
+    host.value = m_host;
+    props.append(host);
+
+    IO::DriverProperty port;
+    port.key   = QStringLiteral("port");
+    port.label = tr("Port");
+    port.type  = IO::DriverProperty::IntField;
+    port.value = m_port;
+    port.min   = 1;
+    port.max   = 65535;
+    props.append(port);
+  } else {
+    IO::DriverProperty serial;
+    serial.key     = QStringLiteral("serialPortIndex");
+    serial.label   = tr("Serial Port");
+    serial.type    = IO::DriverProperty::ComboBox;
+    serial.value   = m_serialPortIndex;
+    serial.options = serialPortList();
+    props.append(serial);
+
+    IO::DriverProperty baud;
+    baud.key     = QStringLiteral("baudRate");
+    baud.label   = tr("Baud Rate");
+    baud.type    = IO::DriverProperty::ComboBox;
+    baud.value   = baudRateList().indexOf(QString::number(m_baudRate));
+    baud.options = baudRateList();
+    props.append(baud);
+
+    IO::DriverProperty parity;
+    parity.key     = QStringLiteral("parityIndex");
+    parity.label   = tr("Parity");
+    parity.type    = IO::DriverProperty::ComboBox;
+    parity.value   = m_parityIndex;
+    parity.options = parityList();
+    props.append(parity);
+
+    IO::DriverProperty data;
+    data.key     = QStringLiteral("dataBitsIndex");
+    data.label   = tr("Data Bits");
+    data.type    = IO::DriverProperty::ComboBox;
+    data.value   = m_dataBitsIndex;
+    data.options = dataBitsList();
+    props.append(data);
+
+    IO::DriverProperty stop;
+    stop.key     = QStringLiteral("stopBitsIndex");
+    stop.label   = tr("Stop Bits");
+    stop.type    = IO::DriverProperty::ComboBox;
+    stop.value   = m_stopBitsIndex;
+    stop.options = stopBitsList();
+    props.append(stop);
+  }
+
+  return props;
+}
+
+/**
+ * @brief Applies a single Modbus configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("protocolIndex"))
+    setProtocolIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("slaveAddress"))
+    setSlaveAddress(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("pollInterval"))
+    setPollInterval(static_cast<quint16>(value.toInt()));
+
+  else if (key == QLatin1String("host"))
+    setHost(value.toString());
+
+  else if (key == QLatin1String("port"))
+    setPort(static_cast<quint16>(value.toInt()));
+
+  else if (key == QLatin1String("serialPortIndex"))
+    setSerialPortIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("parityIndex"))
+    setParityIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("dataBitsIndex"))
+    setDataBitsIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("stopBitsIndex"))
+    setStopBitsIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("baudRate")) {
+    const auto list = baudRateList();
+    const int idx   = value.toInt();
+    if (idx >= 0 && idx < list.size())
+      setBaudRate(list.at(idx).toInt());
   }
 }

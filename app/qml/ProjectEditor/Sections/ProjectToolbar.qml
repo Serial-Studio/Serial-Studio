@@ -211,6 +211,30 @@ Rectangle {
     }
 
     //
+    // Add source
+    //
+    Widgets.ToolbarButton {
+      text: qsTr("Add Device")
+      visible: Cpp_CommercialBuild
+      Layout.alignment: Qt.AlignVCenter
+      onClicked: Cpp_JSON_ProjectModel.addSource()
+      ToolTip.text: qsTr("Add a new data source (device) to the project")
+      icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-device.svg"
+    }
+
+    //
+    // Separator
+    //
+    Rectangle {
+      width: 1
+      visible: Cpp_CommercialBuild
+      Layout.fillHeight: true
+      Layout.maximumHeight: 64
+      Layout.alignment: Qt.AlignVCenter
+      color: Cpp_ThemeManager.colors["toolbar_separator"]
+    }
+
+    //
     // Add action
     //
     Widgets.ToolbarButton {

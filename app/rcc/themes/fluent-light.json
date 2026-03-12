@@ -168,6 +168,19 @@
       "#FF2D55",
       "#FF6482",
       "#FF375F"
+    ],
+
+    "device_colors":[
+      { "top": "#ddeaf8", "bottom": "#ccdcf2" },
+      { "top": "#d5f0eb", "bottom": "#c0e4dc" },
+      { "top": "#feecd5", "bottom": "#f8dcc0" },
+      { "top": "#ead5f8", "bottom": "#dcc0f2" },
+      { "top": "#fef8d5", "bottom": "#f8ecb0" },
+      { "top": "#d5eadc", "bottom": "#c0dcca" },
+      { "top": "#f8d5ea", "bottom": "#f2c0dc" },
+      { "top": "#d5eef8", "bottom": "#c0e4f2" },
+      { "top": "#fef0d5", "bottom": "#f8e4c0" },
+      { "top": "#e8d5f8", "bottom": "#dcc0f2" }
     ]
   }
 }

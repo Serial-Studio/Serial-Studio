@@ -51,6 +51,8 @@ class FrameParserTestDialog : public QDialog {
 public:
   explicit FrameParserTestDialog(FrameParser* parser, QWidget* parent = nullptr);
 
+  void setSourceId(int sourceId);
+
 public slots:
   void clear();
   void parseData();
@@ -67,6 +69,7 @@ private:
   void displayOutput(const QString& input, const QStringList& output);
 
 private:
+  int m_sourceId = 0;
   QLabel* m_inputTitle;
   QLabel* m_outputTitle;
   FrameParser* m_parser;

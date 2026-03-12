@@ -31,7 +31,7 @@
 #  include <QProcessEnvironment>
 #  include <QStandardPaths>
 
-#  include "IO/Manager.h"
+#  include "IO/ConnectionManager.h"
 #  include "Misc/Utilities.h"
 
 #  ifdef Q_OS_WIN
@@ -90,15 +90,6 @@ IO::Drivers::Process::Process()
 }
 
 /**
- * @brief Returns the singleton Process driver instance.
- */
-IO::Drivers::Process& IO::Drivers::Process::instance()
-{
-  static Process instance;
-  return instance;
-}
-
-/**
  * @brief Destructor — ensures both worker threads are stopped before the
  *        QThread members are destroyed.
  *
@@ -129,10 +120,12 @@ void IO::Drivers::Process::close()
 /**
  * @brief Non-virtual cleanup implementation shared by close() and ~Process().
  *
- * Launch mode (PTY): closes the master fd / ConPTY output pipe first to
- * unblock the read loop, waits for m_ptyThread to exit, then terminates the
- * child process and releases all handles.  Falls back to stopping the
- * QProcess if PTY creation had failed during open().
+ * Launch mode (PTY): sets m_ptyRunning to false, then closes the master fd /
+ * ConPTY output pipe to unblock any blocking read in ptyReadLoop().  On
+ * Windows a local copy of the pipe handle is taken before zeroing the member
+ * so that any in-flight GetOverlappedResult() in ptyReadLoop() can finish
+ * cleanly against the still-valid local copy.  Waits for m_ptyThread to exit,
+ * then terminates the child process and releases all remaining handles.
  *
  * Launch mode (pipe fallback): terminates the QProcess gracefully (SIGTERM),
  * waits up to 2 s, then kills it forcefully if still running.
@@ -145,11 +138,12 @@ void IO::Drivers::Process::doClose()
     m_ptyRunning = false;
 
 #  ifdef Q_OS_WIN
-    // Close the output pipe first to unblock ReadFile in ptyReadLoop
-    if (m_conPtyOut != INVALID_HANDLE_VALUE) {
-      CloseHandle(m_conPtyOut);
-      m_conPtyOut = INVALID_HANDLE_VALUE;
-    }
+    // Take a local copy and zero the member *before* closing so that any
+    // in-flight GetOverlappedResult() in ptyReadLoop() uses the valid handle.
+    HANDLE outPipe = m_conPtyOut;
+    m_conPtyOut    = INVALID_HANDLE_VALUE;
+    if (outPipe != INVALID_HANDLE_VALUE)
+      CloseHandle(outPipe);
 #  else
     // Close master fd first — unblocks poll() in ptyReadLoop immediately
     if (m_ptyMasterFd >= 0) {
@@ -904,10 +898,14 @@ void IO::Drivers::Process::onReadyRead()
  * @brief Handles QProcess pipe-fallback termination.
  *
  * Shows an informational message box and requests disconnection via a queued
- * call so the UI is updated on the main thread.
+ * call so the UI is updated on the main thread. The isConnected() guard
+ * prevents a spurious dialog when doClose() already initiated the disconnect.
  */
 void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus status)
 {
+  if (!IO::ConnectionManager::instance().isConnected())
+    return;
+
   const QString reason = (status == QProcess::CrashExit) ? tr("The process crashed.")
                                                          : tr("Exit code: %1").arg(exitCode);
 
@@ -916,24 +914,31 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
     reason,
     QMessageBox::Warning);
 
-  QMetaObject::invokeMethod(&IO::Manager::instance(), "disconnectDevice", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(
+    &IO::ConnectionManager::instance(), "disconnectDevice", Qt::QueuedConnection);
 }
 
 /**
  * @brief Handles a QProcess-level error during execution.
  *
- * FailedToStart is ignored here — it is already reported by open() via
- * waitForStarted().  All other errors show a warning and trigger disconnect.
+ * FailedToStart is ignored — it is already reported by open() via
+ * waitForStarted(). Crashed is ignored when not connected (it fires after
+ * doClose() calls terminate()). All other errors show a warning and trigger
+ * disconnect.
  */
 void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 {
   if (error == QProcess::FailedToStart)
     return;
 
+  if (!IO::ConnectionManager::instance().isConnected())
+    return;
+
   const QString detail = m_process ? m_process->errorString() : tr("Unknown error");
   Misc::Utilities::showMessageBox(tr("Process Error"), detail, QMessageBox::Warning);
 
-  QMetaObject::invokeMethod(&IO::Manager::instance(), "disconnectDevice", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(
+    &IO::ConnectionManager::instance(), "disconnectDevice", Qt::QueuedConnection);
 }
 
 /**
@@ -948,7 +953,8 @@ void IO::Drivers::Process::onPipeError()
   Misc::Utilities::showMessageBox(
     tr("Pipe Error"), tr("Could not open named pipe: %1").arg(m_pipePath), QMessageBox::Warning);
 
-  QMetaObject::invokeMethod(&IO::Manager::instance(), "disconnectDevice", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(
+    &IO::ConnectionManager::instance(), "disconnectDevice", Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -967,6 +973,11 @@ void IO::Drivers::Process::onPipeError()
 void IO::Drivers::Process::ptyReadLoop()
 {
 #  ifdef Q_OS_WIN
+  // Capture the pipe handle locally. doClose() zeros m_conPtyOut before
+  // closing the real HANDLE so that we never pass INVALID_HANDLE_VALUE to
+  // GetOverlappedResult() while I/O is still completing.
+  const HANDLE pipe = m_conPtyOut;
+
   char buf[4096];
   OVERLAPPED ov{};
   ov.hEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
@@ -974,7 +985,7 @@ void IO::Drivers::Process::ptyReadLoop()
   while (m_ptyRunning.load()) {
     DWORD bytesRead = 0;
     ResetEvent(ov.hEvent);
-    const BOOL ok = ReadFile(m_conPtyOut, buf, sizeof(buf), &bytesRead, &ov);
+    const BOOL ok = ReadFile(pipe, buf, sizeof(buf), &bytesRead, &ov);
 
     if (!ok && GetLastError() == ERROR_IO_PENDING) {
       const DWORD rc = WaitForSingleObject(ov.hEvent, 100);
@@ -984,7 +995,7 @@ void IO::Drivers::Process::ptyReadLoop()
       if (rc != WAIT_OBJECT_0)
         break;
 
-      if (!GetOverlappedResult(m_conPtyOut, &ov, &bytesRead, FALSE))
+      if (!GetOverlappedResult(pipe, &ov, &bytesRead, FALSE))
         break;
     } else if (!ok) {
       break;
@@ -1041,14 +1052,14 @@ void IO::Drivers::Process::ptyReadLoop()
  */
 void IO::Drivers::Process::onPtyStopped()
 {
-  if (!IO::Manager::instance().isConnected())
+  if (!IO::ConnectionManager::instance().isConnected())
     return;
 
   const QString name = QFileInfo(m_executable).fileName();
   Misc::Utilities::showMessageBox(
     tr("Process \"%1\" stopped").arg(name), tr("The process has exited."), QMessageBox::Warning);
 
-  IO::Manager::instance().disconnectDevice();
+  IO::ConnectionManager::instance().disconnectDevice();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1254,6 +1265,91 @@ QString IO::Drivers::Process::resolveExecutable(const QString& name, const QProc
 #  endif
 
   return QStandardPaths::findExecutable(name, dirs);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the Process configuration as a flat list of editable properties.
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::Process::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty procMode;
+  procMode.key     = QStringLiteral("mode");
+  procMode.label   = tr("Mode");
+  procMode.type    = IO::DriverProperty::ComboBox;
+  procMode.value   = static_cast<int>(m_mode);
+  procMode.options = {tr("Launch Process"), tr("Named Pipe")};
+  props.append(procMode);
+
+  IO::DriverProperty exe;
+  exe.key   = QStringLiteral("executable");
+  exe.label = tr("Executable");
+  exe.type  = IO::DriverProperty::Text;
+  exe.value = m_executable;
+  props.append(exe);
+
+  IO::DriverProperty args;
+  args.key   = QStringLiteral("arguments");
+  args.label = tr("Arguments");
+  args.type  = IO::DriverProperty::Text;
+  args.value = m_arguments;
+  props.append(args);
+
+  IO::DriverProperty dir;
+  dir.key   = QStringLiteral("workingDir");
+  dir.label = tr("Working Directory");
+  dir.type  = IO::DriverProperty::Text;
+  dir.value = m_workingDir;
+  props.append(dir);
+
+  IO::DriverProperty pipe;
+  pipe.key   = QStringLiteral("pipePath");
+  pipe.label = tr("Pipe Path");
+  pipe.type  = IO::DriverProperty::Text;
+  pipe.value = m_pipePath;
+  props.append(pipe);
+
+  IO::DriverProperty capture;
+  capture.key     = QStringLiteral("outputCapture");
+  capture.label   = tr("Output Capture");
+  capture.type    = IO::DriverProperty::ComboBox;
+  capture.value   = static_cast<int>(m_outputCapture);
+  capture.options = {tr("Stdout"), tr("Stderr"), tr("Both")};
+  props.append(capture);
+
+  return props;
+}
+
+/**
+ * @brief Applies a single Process configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::Process::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("mode"))
+    setMode(value.toInt());
+
+  else if (key == QLatin1String("executable"))
+    setExecutable(value.toString());
+
+  else if (key == QLatin1String("arguments"))
+    setArguments(value.toString());
+
+  else if (key == QLatin1String("workingDir"))
+    setWorkingDir(value.toString());
+
+  else if (key == QLatin1String("pipePath"))
+    setPipePath(value.toString());
+
+  else if (key == QLatin1String("outputCapture"))
+    setOutputCapture(value.toInt());
 }
 
 #endif  // BUILD_COMMERCIAL

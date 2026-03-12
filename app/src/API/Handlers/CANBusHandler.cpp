@@ -25,7 +25,7 @@
 #  include "API/Handlers/CANBusHandler.h"
 
 #  include "API/CommandRegistry.h"
-#  include "IO/Drivers/CANBus.h"
+#  include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -94,8 +94,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setPluginIndex(const QString&
   }
 
   const int pluginIndex  = params.value(QStringLiteral("pluginIndex")).toInt();
-  auto& canbus           = IO::Drivers::CANBus::instance();
-  const auto& pluginList = canbus.pluginList();
+  auto* canbus           = IO::ConnectionManager::instance().canBus();
+  const auto& pluginList = canbus->pluginList();
 
   if (pluginIndex < 0 || pluginIndex >= pluginList.count()) {
     return CommandResponse::makeError(id,
@@ -105,7 +105,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setPluginIndex(const QString&
                                         .arg(pluginList.count() - 1));
   }
 
-  canbus.setPluginIndex(static_cast<quint8>(pluginIndex));
+  canbus->setPluginIndex(static_cast<quint8>(pluginIndex));
 
   QJsonObject result;
   result[QStringLiteral("pluginIndex")] = pluginIndex;
@@ -126,8 +126,8 @@ API::CommandResponse API::Handlers::CANBusHandler::setInterfaceIndex(const QStri
   }
 
   const int interfaceIndex  = params.value(QStringLiteral("interfaceIndex")).toInt();
-  auto& canbus              = IO::Drivers::CANBus::instance();
-  const auto& interfaceList = canbus.interfaceList();
+  auto* canbus              = IO::ConnectionManager::instance().canBus();
+  const auto& interfaceList = canbus->interfaceList();
 
   if (interfaceIndex < 0 || interfaceIndex >= interfaceList.count()) {
     return CommandResponse::makeError(
@@ -138,7 +138,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setInterfaceIndex(const QStri
         .arg(interfaceList.count() - 1));
   }
 
-  canbus.setInterfaceIndex(static_cast<quint8>(interfaceIndex));
+  canbus->setInterfaceIndex(static_cast<quint8>(interfaceIndex));
 
   QJsonObject result;
   result[QStringLiteral("interfaceIndex")] = interfaceIndex;
@@ -165,7 +165,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setBitrate(const QString& id,
       id, ErrorCode::InvalidParam, QStringLiteral("bitrate must be positive"));
   }
 
-  IO::Drivers::CANBus::instance().setBitrate(static_cast<quint32>(bitrate));
+  IO::ConnectionManager::instance().canBus()->setBitrate(static_cast<quint32>(bitrate));
 
   QJsonObject result;
   result[QStringLiteral("bitrate")] = bitrate;
@@ -185,7 +185,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setCanFD(const QString& id,
   }
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
-  IO::Drivers::CANBus::instance().setCanFD(enabled);
+  IO::ConnectionManager::instance().canBus()->setCanFD(enabled);
 
   QJsonObject result;
   result[QStringLiteral("enabled")] = enabled;
@@ -204,32 +204,32 @@ API::CommandResponse API::Handlers::CANBusHandler::getConfiguration(const QStrin
 {
   Q_UNUSED(params)
 
-  auto& canbus = IO::Drivers::CANBus::instance();
+  auto* canbus = IO::ConnectionManager::instance().canBus();
 
   QJsonObject result;
 
   // Plugin info
-  result[QStringLiteral("pluginIndex")] = canbus.pluginIndex();
-  const auto& pluginList                = canbus.pluginList();
-  if (canbus.pluginIndex() < pluginList.count())
-    result[QStringLiteral("pluginName")] = pluginList.at(canbus.pluginIndex());
+  result[QStringLiteral("pluginIndex")] = canbus->pluginIndex();
+  const auto& pluginList                = canbus->pluginList();
+  if (canbus->pluginIndex() < pluginList.count())
+    result[QStringLiteral("pluginName")] = pluginList.at(canbus->pluginIndex());
 
   // Interface info
-  result[QStringLiteral("interfaceIndex")] = canbus.interfaceIndex();
-  const auto& interfaceList                = canbus.interfaceList();
-  if (canbus.interfaceIndex() < interfaceList.count())
-    result[QStringLiteral("interfaceName")] = interfaceList.at(canbus.interfaceIndex());
+  result[QStringLiteral("interfaceIndex")] = canbus->interfaceIndex();
+  const auto& interfaceList                = canbus->interfaceList();
+  if (canbus->interfaceIndex() < interfaceList.count())
+    result[QStringLiteral("interfaceName")] = interfaceList.at(canbus->interfaceIndex());
 
   // CAN settings
-  result[QStringLiteral("bitrate")] = static_cast<qint64>(canbus.bitrate());
-  result[QStringLiteral("canFD")]   = canbus.canFD();
+  result[QStringLiteral("bitrate")] = static_cast<qint64>(canbus->bitrate());
+  result[QStringLiteral("canFD")]   = canbus->canFD();
 
   // Connection status
-  result[QStringLiteral("isOpen")]          = canbus.isOpen();
-  result[QStringLiteral("configurationOk")] = canbus.configurationOk();
+  result[QStringLiteral("isOpen")]          = canbus->isOpen();
+  result[QStringLiteral("configurationOk")] = canbus->configurationOk();
 
   // Error info
-  const QString interfaceError = canbus.interfaceError();
+  const QString interfaceError = canbus->interfaceError();
   if (!interfaceError.isEmpty())
     result[QStringLiteral("interfaceError")] = interfaceError;
 
@@ -244,21 +244,21 @@ API::CommandResponse API::Handlers::CANBusHandler::getPluginList(const QString& 
 {
   Q_UNUSED(params)
 
-  auto& canbus           = IO::Drivers::CANBus::instance();
-  const auto& pluginList = canbus.pluginList();
+  auto* canbus           = IO::ConnectionManager::instance().canBus();
+  const auto& pluginList = canbus->pluginList();
 
   QJsonArray plugins;
   for (int i = 0; i < pluginList.count(); ++i) {
     QJsonObject plugin;
     plugin[QStringLiteral("index")]       = i;
     plugin[QStringLiteral("name")]        = pluginList.at(i);
-    plugin[QStringLiteral("displayName")] = canbus.pluginDisplayName(pluginList.at(i));
+    plugin[QStringLiteral("displayName")] = canbus->pluginDisplayName(pluginList.at(i));
     plugins.append(plugin);
   }
 
   QJsonObject result;
   result[QStringLiteral("pluginList")]         = plugins;
-  result[QStringLiteral("currentPluginIndex")] = canbus.pluginIndex();
+  result[QStringLiteral("currentPluginIndex")] = canbus->pluginIndex();
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -270,8 +270,8 @@ API::CommandResponse API::Handlers::CANBusHandler::getInterfaceList(const QStrin
 {
   Q_UNUSED(params)
 
-  auto& canbus              = IO::Drivers::CANBus::instance();
-  const auto& interfaceList = canbus.interfaceList();
+  auto* canbus              = IO::ConnectionManager::instance().canBus();
+  const auto& interfaceList = canbus->interfaceList();
 
   QJsonArray interfaces;
   for (int i = 0; i < interfaceList.count(); ++i) {
@@ -283,7 +283,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getInterfaceList(const QStrin
 
   QJsonObject result;
   result[QStringLiteral("interfaceList")]         = interfaces;
-  result[QStringLiteral("currentInterfaceIndex")] = canbus.interfaceIndex();
+  result[QStringLiteral("currentInterfaceIndex")] = canbus->interfaceIndex();
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -295,7 +295,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getBitrateList(const QString&
 {
   Q_UNUSED(params)
 
-  const auto& bitrateList = IO::Drivers::CANBus::instance().bitrateList();
+  const auto& bitrateList = IO::ConnectionManager::instance().canBus()->bitrateList();
 
   QJsonArray bitrates;
   for (const auto& rate : bitrateList)
@@ -304,7 +304,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getBitrateList(const QString&
   QJsonObject result;
   result[QStringLiteral("bitrateList")] = bitrates;
   result[QStringLiteral("currentBitrate")] =
-    static_cast<qint64>(IO::Drivers::CANBus::instance().bitrate());
+    static_cast<qint64>(IO::ConnectionManager::instance().canBus()->bitrate());
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -316,7 +316,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getInterfaceError(const QStri
 {
   Q_UNUSED(params)
 
-  const QString error = IO::Drivers::CANBus::instance().interfaceError();
+  const QString error = IO::ConnectionManager::instance().canBus()->interfaceError();
 
   QJsonObject result;
   result[QStringLiteral("hasError")] = !error.isEmpty();

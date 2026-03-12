@@ -30,10 +30,11 @@
 
 #include "API/CommandRegistry.h"
 #include "API/PathPolicy.h"
+#include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -242,7 +243,7 @@ API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
 
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
   DataModel::ProjectModel::instance().openJsonFile(file_path);
-  DataModel::ProjectModel::instance().enableProjectMode();
+  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
 
   QJsonObject result;
@@ -510,8 +511,8 @@ API::CommandResponse API::Handlers::ProjectHandler::actionDuplicate(const QStrin
 }
 
 /**
- * @brief Set frame parser code
- * @param params Requires "code" (string)
+ * @brief Set frame parser code for a source.
+ * @param params Requires "code" (string). Optional "sourceId" (int, default 0).
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString& id,
                                                                   const QJsonObject& params)
@@ -522,24 +523,49 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
   }
 
   const QString code = params.value(QStringLiteral("code")).toString();
-  DataModel::ProjectModel::instance().setFrameParserCode(code);
+  const int sourceId = params.contains(QStringLiteral("sourceId"))
+                       ? params.value(QStringLiteral("sourceId")).toInt()
+                       : 0;
+  auto& model        = DataModel::ProjectModel::instance();
+  const int srcCount = static_cast<int>(model.sources().size());
+
+  if (sourceId < 0 || sourceId >= srcCount)
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
+
+  if (sourceId == 0)
+    model.setFrameParserCode(code);
+  else
+    model.updateSourceFrameParser(sourceId, code);
 
   QJsonObject result;
+  result[QStringLiteral("sourceId")]   = sourceId;
   result[QStringLiteral("codeLength")] = code.length();
   return CommandResponse::makeSuccess(id, result);
 }
 
 /**
- * @brief Get frame parser code
+ * @brief Get frame parser code for a source.
+ * @param params Optional "sourceId" (int, default 0).
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString& id,
                                                                   const QJsonObject& params)
 {
-  Q_UNUSED(params)
+  const int sourceId = params.contains(QStringLiteral("sourceId"))
+                       ? params.value(QStringLiteral("sourceId")).toInt()
+                       : 0;
+  const auto& model  = DataModel::ProjectModel::instance();
+  const int srcCount = static_cast<int>(model.sources().size());
 
-  const QString code = DataModel::ProjectModel::instance().frameParserCode();
+  if (sourceId < 0 || sourceId >= srcCount)
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
+
+  const QString code =
+    sourceId == 0 ? model.frameParserCode() : model.sources()[sourceId].frameParserCode;
 
   QJsonObject result;
+  result[QStringLiteral("sourceId")]   = sourceId;
   result[QStringLiteral("code")]       = code;
   result[QStringLiteral("codeLength")] = code.length();
   return CommandResponse::makeSuccess(id, result);
@@ -679,60 +705,107 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
 }
 
 /**
- * @brief Configure frame parser settings
- * @param params Optional parameters: startSequence, endSequence,
- * checksumAlgorithm (string or int), operationMode
+ * @brief Configure frame parser settings for a specific source.
+ *
+ * Optional "sourceId" (int, default 0) selects which source to configure.
+ * When sourceId == 0 the top-level ProjectModel setters are used so that
+ * the ConnectionManager's FrameReader is updated immediately. For sourceId > 0
+ * the Source struct is updated directly via updateSource().
+ *
+ * @param params Optional: sourceId, startSequence, endSequence,
+ *               checksumAlgorithm, frameDetection, operationMode.
  */
 API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const QString& id,
                                                                          const QJsonObject& params)
 {
+  auto& model   = DataModel::ProjectModel::instance();
+  auto& manager = IO::ConnectionManager::instance();
   bool updated  = false;
-  auto& manager = IO::Manager::instance();
+
+  const int sourceId = params.contains(QStringLiteral("sourceId"))
+                       ? params.value(QStringLiteral("sourceId")).toInt()
+                       : 0;
+  const int srcCount = static_cast<int>(model.sources().size());
+
+  if (sourceId < 0 || (!model.sources().empty() && sourceId >= srcCount))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
 
   if (params.contains(QStringLiteral("operationMode"))) {
     const int modeIdx = params.value(QStringLiteral("operationMode")).toInt();
     if (modeIdx >= 0 && modeIdx <= 2) {
-      const auto mode = static_cast<SerialStudio::OperationMode>(modeIdx);
-      DataModel::FrameBuilder::instance().setOperationMode(mode);
+      AppState::instance().setOperationMode(static_cast<SerialStudio::OperationMode>(modeIdx));
       updated = true;
     }
   }
 
-  if (params.contains(QStringLiteral("startSequence"))) {
-    const QString start = params.value(QStringLiteral("startSequence")).toString();
-    manager.setStartSequence(start.toUtf8());
-    DataModel::ProjectModel::instance().setFrameStartSequence(start);
-    updated = true;
-  }
-
-  if (params.contains(QStringLiteral("endSequence"))) {
-    const QString end = params.value(QStringLiteral("endSequence")).toString();
-    manager.setFinishSequence(end.toUtf8());
-    DataModel::ProjectModel::instance().setFrameEndSequence(end);
-    updated = true;
-  }
-
-  if (params.contains(QStringLiteral("checksumAlgorithm"))) {
-    const QString checksumName = params.value(QStringLiteral("checksumAlgorithm")).toString();
-    manager.setChecksumAlgorithm(checksumName);
-    DataModel::ProjectModel::instance().setChecksumAlgorithm(checksumName);
-    updated = true;
-  }
-
-  if (params.contains(QStringLiteral("frameDetection"))) {
-    const int detectionIdx = params.value(QStringLiteral("frameDetection")).toInt();
-    if (detectionIdx >= 0 && detectionIdx <= 3) {
-      const auto detection = static_cast<SerialStudio::FrameDetection>(detectionIdx);
-      DataModel::ProjectModel::instance().setFrameDetection(detection);
+  if (sourceId == 0) {
+    // Route through top-level setters — they sync into source[0] and update the FrameReader.
+    if (params.contains(QStringLiteral("startSequence"))) {
+      const QString start = params.value(QStringLiteral("startSequence")).toString();
+      manager.setStartSequence(start.toUtf8());
+      model.setFrameStartSequence(start);
       updated = true;
     }
+
+    if (params.contains(QStringLiteral("endSequence"))) {
+      const QString end = params.value(QStringLiteral("endSequence")).toString();
+      manager.setFinishSequence(end.toUtf8());
+      model.setFrameEndSequence(end);
+      updated = true;
+    }
+
+    if (params.contains(QStringLiteral("checksumAlgorithm"))) {
+      const QString checksumName = params.value(QStringLiteral("checksumAlgorithm")).toString();
+      manager.setChecksumAlgorithm(checksumName);
+      model.setChecksumAlgorithm(checksumName);
+      updated = true;
+    }
+
+    if (params.contains(QStringLiteral("frameDetection"))) {
+      const int detectionIdx = params.value(QStringLiteral("frameDetection")).toInt();
+      if (detectionIdx >= 0 && detectionIdx <= 3) {
+        model.setFrameDetection(static_cast<SerialStudio::FrameDetection>(detectionIdx));
+        updated = true;
+      }
+    }
+  } else {
+    // Update the source struct directly and trigger a device reconfigure.
+    DataModel::Source src = model.sources()[sourceId];
+
+    if (params.contains(QStringLiteral("startSequence"))) {
+      src.frameStart = params.value(QStringLiteral("startSequence")).toString();
+      updated        = true;
+    }
+
+    if (params.contains(QStringLiteral("endSequence"))) {
+      src.frameEnd = params.value(QStringLiteral("endSequence")).toString();
+      updated      = true;
+    }
+
+    if (params.contains(QStringLiteral("checksumAlgorithm"))) {
+      src.checksumAlgorithm = params.value(QStringLiteral("checksumAlgorithm")).toString();
+      updated               = true;
+    }
+
+    if (params.contains(QStringLiteral("frameDetection"))) {
+      const int detectionIdx = params.value(QStringLiteral("frameDetection")).toInt();
+      if (detectionIdx >= 0 && detectionIdx <= 3) {
+        src.frameDetection = detectionIdx;
+        updated            = true;
+      }
+    }
+
+    if (updated)
+      model.updateSource(sourceId, src);
   }
 
-  if (updated)
+  if (updated && sourceId == 0)
     manager.resetFrameReader();
 
   QJsonObject result;
-  result[QStringLiteral("updated")] = updated;
+  result[QStringLiteral("updated")]  = updated;
+  result[QStringLiteral("sourceId")] = sourceId;
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -744,14 +817,12 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
 {
   Q_UNUSED(params)
 
-  auto& manager = IO::Manager::instance();
-  auto& builder = DataModel::FrameBuilder::instance();
-
+  auto& manager = IO::ConnectionManager::instance();
   QJsonObject result;
   result[QStringLiteral("startSequence")]     = QString::fromUtf8(manager.startSequence());
   result[QStringLiteral("endSequence")]       = QString::fromUtf8(manager.finishSequence());
   result[QStringLiteral("checksumAlgorithm")] = manager.checksumAlgorithm();
-  result[QStringLiteral("operationMode")]     = static_cast<int>(builder.operationMode());
+  result[QStringLiteral("operationMode")] = static_cast<int>(AppState::instance().operationMode());
   result[QStringLiteral("frameDetection")] =
     static_cast<int>(DataModel::ProjectModel::instance().frameDetection());
 
@@ -802,15 +873,7 @@ API::CommandResponse API::Handlers::ProjectHandler::loadIntoFrameBuilder(const Q
       id, ErrorCode::InvalidParam, QStringLiteral("Project has no groups or datasets"));
   }
 
-  // Serialize project using the public method
-  const QJsonObject json = project.serializeToJson();
-
-  // Convert to JSON document and load into FrameBuilder
-  const QJsonDocument document(json);
-  const QByteArray jsonData = document.toJson(QJsonDocument::Compact);
-
-  // Load into FrameBuilder with messageboxes suppressed for API calls
-  builder.loadJsonMapFromData(jsonData, QStringLiteral("[API]"), false);
+  builder.syncFromProjectModel();
 
   QJsonObject result;
   result[QStringLiteral("loaded")]       = true;

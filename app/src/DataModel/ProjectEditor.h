@@ -53,6 +53,15 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(QAbstractItemModel* datasetModel
              READ datasetModel
              NOTIFY datasetModelChanged)
+  Q_PROPERTY(QAbstractItemModel* sourceModel
+             READ sourceModel
+             NOTIFY sourceModelChanged)
+  Q_PROPERTY(int selectedSourceId
+             READ selectedSourceId
+             NOTIFY sourceModelChanged)
+  Q_PROPERTY(int selectedSourceBusType
+             READ selectedSourceBusType
+             NOTIFY sourceModelChanged)
   Q_PROPERTY(QAbstractItemModel* treeModel
              READ treeModel
              NOTIFY treeModelChanged)
@@ -83,11 +92,17 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(QStringList availableActionIcons
              READ availableActionIcons
              CONSTANT)
+  Q_PROPERTY(QString selectedSourceFrameParserCode
+             READ  selectedSourceFrameParserCode
+             WRITE setSelectedSourceFrameParserCode
+             NOTIFY selectedSourceFrameParserCodeChanged)
   // clang-format on
 
 signals:
   void treeModelChanged();
+  void selectedSourceFrameParserCodeChanged();
   void groupModelChanged();
+  void sourceModelChanged();
   void currentViewChanged();
   void selectedTextChanged();
   void actionModelChanged();
@@ -115,7 +130,9 @@ public:
     GroupView,
     DatasetView,
     FrameParserView,
-    ActionView
+    ActionView,
+    SourceView,
+    SourceFrameParserView
   };
   Q_ENUM(CurrentView)
 
@@ -156,6 +173,10 @@ public:
 
     WidgetType   = Qt::UserRole + 11,
     ComboBoxData = Qt::UserRole + 12,
+    ParameterKey = Qt::UserRole + 13,
+
+    TreeViewSourceName = Qt::UserRole + 14,
+    TreeViewSourceId   = Qt::UserRole + 15,
   };
   Q_ENUM(CustomRoles)
 
@@ -168,9 +189,14 @@ public:
   [[nodiscard]] bool currentDatasetIsEditable() const;
   [[nodiscard]] quint8 datasetOptions() const;
 
+  [[nodiscard]] int selectedSourceId() const noexcept;
+  [[nodiscard]] int selectedSourceBusType() const noexcept;
+  [[nodiscard]] QString selectedSourceFrameParserCode() const;
+
   [[nodiscard]] CustomModel* treeModel() const;
   [[nodiscard]] QItemSelectionModel* selectionModel() const;
   [[nodiscard]] CustomModel* groupModel() const;
+  [[nodiscard]] CustomModel* sourceModel() const;
   [[nodiscard]] CustomModel* actionModel() const;
   [[nodiscard]] CustomModel* projectModel() const;
   [[nodiscard]] CustomModel* datasetModel() const;
@@ -179,13 +205,21 @@ public slots:
   void buildTreeModel();
   void buildProjectModel();
   void buildGroupModel(const DataModel::Group& group);
+  void buildSourceModel(const DataModel::Source& source);
   void buildActionModel(const DataModel::Action& action);
   void buildDatasetModel(const DataModel::Dataset& dataset);
   void displayFrameParserView();
+  void selectSource(int sourceId);
+  void selectGroup(int groupId);
+  void selectDataset(int groupId, int datasetId);
+  void selectAction(int actionId);
+  void selectFrameParser();
+  void setSelectedSourceFrameParserCode(const QString& code);
 
 private slots:
   void generateComboBoxModels();
   void onGroupItemChanged(QStandardItem* item);
+  void onSourceItemChanged(QStandardItem* item);
   void onActionItemChanged(QStandardItem* item);
   void onProjectItemChanged(QStandardItem* item);
   void onDatasetItemChanged(QStandardItem* item);
@@ -210,17 +244,21 @@ private:
 
   QMap<QStandardItem*, int> m_rootItems;
   QMap<QStandardItem*, DataModel::Group> m_groupItems;
+  QMap<QStandardItem*, DataModel::Source> m_sourceItems;
   QMap<QStandardItem*, DataModel::Action> m_actionItems;
   QMap<QStandardItem*, DataModel::Dataset> m_datasetItems;
+  QMap<QStandardItem*, DataModel::Source> m_sourceParserItems;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;
+  DataModel::Source m_selectedSource;
   DataModel::Dataset m_selectedDataset;
 
   CustomModel* m_treeModel;
   QItemSelectionModel* m_selectionModel;
 
   CustomModel* m_groupModel;
+  CustomModel* m_sourceModel;
   CustomModel* m_actionModel;
   CustomModel* m_projectModel;
   CustomModel* m_datasetModel;
@@ -266,6 +304,9 @@ public:
     names.insert(ProjectEditor::TreeViewExpanded,     BAL("treeViewExpanded"));
     names.insert(ProjectEditor::TreeViewFrameIndex,   BAL("treeViewFrameIndex"));
     names.insert(ProjectEditor::ParameterDescription, BAL("parameterDescription"));
+    names.insert(ProjectEditor::ParameterKey,         BAL("parameterKey"));
+    names.insert(ProjectEditor::TreeViewSourceName,   BAL("treeViewSourceName"));
+    names.insert(ProjectEditor::TreeViewSourceId,     BAL("treeViewSourceId"));
 #undef BAL
     // clang-format on
 

@@ -96,15 +96,13 @@ signals:
   void udpMulticastChanged();
   void lookupActiveChanged();
 
-private:
+public:
   explicit Network();
+
   Network(Network&&)                 = delete;
   Network(const Network&)            = delete;
   Network& operator=(Network&&)      = delete;
   Network& operator=(const Network&) = delete;
-
-public:
-  static Network& instance();
 
   void close() override;
 
@@ -114,6 +112,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] quint16 tcpPort() const;
   [[nodiscard]] quint16 udpLocalPort() const;
@@ -144,6 +143,7 @@ public:
   }
 
 public slots:
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void setTcpSocket();
   void setUdpSocket();
   void lookup(const QString& host);

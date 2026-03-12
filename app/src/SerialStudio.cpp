@@ -532,6 +532,76 @@ QColor SerialStudio::getDatasetColor(const int index)
 }
 
 /**
+ * @brief Returns the top gradient color for the given device source index.
+ *
+ * Used for window caption gradient tops and text/badge coloring. Wraps around
+ * when sourceId exceeds the number of defined device colors.
+ *
+ * @param sourceId 1-based device index (1 = first device).
+ * @return Top gradient QColor, or transparent if no colors are defined.
+ */
+QColor SerialStudio::getDeviceTopColor(const int sourceId)
+{
+  if (sourceId <= 0)
+    return QColor(Qt::transparent);
+
+  static const auto* theme = &Misc::ThemeManager::instance();
+  const auto& colors       = theme->deviceColors();
+
+  if (colors.isEmpty())
+    return QColor(Qt::transparent);
+
+  return colors.at((sourceId - 1) % colors.count()).first;
+}
+
+/**
+ * @brief Returns the bottom gradient color for the given device source index.
+ *
+ * Used for window caption gradient bottoms. Wraps around when sourceId exceeds
+ * the number of defined device colors.
+ *
+ * @param sourceId 1-based device index (1 = first device).
+ * @return Bottom gradient QColor, or transparent if no colors are defined.
+ */
+QColor SerialStudio::getDeviceBottomColor(const int sourceId)
+{
+  if (sourceId <= 0)
+    return QColor(Qt::transparent);
+
+  static const auto* theme = &Misc::ThemeManager::instance();
+  const auto& colors       = theme->deviceColors();
+
+  if (colors.isEmpty())
+    return QColor(Qt::transparent);
+
+  return colors.at((sourceId - 1) % colors.count()).second;
+}
+
+/**
+ * @brief Returns a saturated accent color for a given device index.
+ *
+ * Used for tree view source/frame-index badge text coloring. Draws from the
+ * widget_colors palette and returns a fully opaque, readable color. Falls back
+ * to transparent for sourceId <= 0.
+ *
+ * @param sourceId 1-based device index (1 = first device).
+ * @return QColor suitable for use as text or badge fill.
+ */
+QColor SerialStudio::getDeviceColor(const int sourceId)
+{
+  if (sourceId <= 0)
+    return QColor(Qt::transparent);
+
+  static const auto* theme = &Misc::ThemeManager::instance();
+  const auto& colors       = theme->widgetColors();
+
+  if (colors.isEmpty())
+    return QColor(Qt::transparent);
+
+  return colors.at((sourceId - 1) % colors.count());
+}
+
+/**
  * @brief Checks if any playback players (CSV or MDF4) are currently open.
  *
  * This function provides a centralized check to determine if any file players

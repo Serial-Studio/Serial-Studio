@@ -21,7 +21,7 @@
 
 #include "IO/Drivers/Network.h"
 
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -81,15 +81,6 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
   connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
   connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
 #endif
-}
-
-/**
- * Returns the only instance of this class
- */
-IO::Drivers::Network& IO::Drivers::Network::instance()
-{
-  static Network singleton;
-  return singleton;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -519,6 +510,102 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
   else
     error = QString::number(socketError);
 
-  Manager::instance().disconnectDevice();
+  ConnectionManager::instance().disconnectDevice();
   Misc::Utilities::showMessageBox(tr("Network socket error"), error, QMessageBox::Critical);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the Network configuration as a flat list of editable properties.
+ *
+ * Only the properties relevant to the current socket type are included so the
+ * ProjectEditor form never shows TCP fields when UDP is selected and vice versa.
+ *
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty socketTypeProp;
+  socketTypeProp.key     = QStringLiteral("socketTypeIndex");
+  socketTypeProp.label   = tr("Socket Type");
+  socketTypeProp.type    = IO::DriverProperty::ComboBox;
+  socketTypeProp.value   = socketTypeIndex();
+  socketTypeProp.options = socketTypes();
+  props.append(socketTypeProp);
+
+  IO::DriverProperty addr;
+  addr.key   = QStringLiteral("address");
+  addr.label = tr("Remote Address");
+  addr.type  = IO::DriverProperty::Text;
+  addr.value = m_address;
+  props.append(addr);
+
+  if (m_socketType == QAbstractSocket::TcpSocket) {
+    IO::DriverProperty tcp;
+    tcp.key   = QStringLiteral("tcpPort");
+    tcp.label = tr("TCP Port");
+    tcp.type  = IO::DriverProperty::IntField;
+    tcp.value = m_tcpPort;
+    tcp.min   = 1;
+    tcp.max   = 65535;
+    props.append(tcp);
+  } else {
+    IO::DriverProperty udpLocal;
+    udpLocal.key   = QStringLiteral("udpLocalPort");
+    udpLocal.label = tr("UDP Local Port");
+    udpLocal.type  = IO::DriverProperty::IntField;
+    udpLocal.value = m_udpLocalPort;
+    udpLocal.min   = 0;
+    udpLocal.max   = 65535;
+    props.append(udpLocal);
+
+    IO::DriverProperty udpRemote;
+    udpRemote.key   = QStringLiteral("udpRemotePort");
+    udpRemote.label = tr("UDP Remote Port");
+    udpRemote.type  = IO::DriverProperty::IntField;
+    udpRemote.value = m_udpRemotePort;
+    udpRemote.min   = 1;
+    udpRemote.max   = 65535;
+    props.append(udpRemote);
+
+    IO::DriverProperty multicast;
+    multicast.key   = QStringLiteral("udpMulticast");
+    multicast.label = tr("UDP Multicast");
+    multicast.type  = IO::DriverProperty::CheckBox;
+    multicast.value = m_udpMulticast;
+    props.append(multicast);
+  }
+
+  return props;
+}
+
+/**
+ * @brief Applies a single Network configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::Network::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("socketTypeIndex"))
+    setSocketTypeIndex(value.toInt());
+
+  else if (key == QLatin1String("address"))
+    setRemoteAddress(value.toString());
+
+  else if (key == QLatin1String("tcpPort"))
+    setTcpPort(static_cast<quint16>(value.toInt()));
+
+  else if (key == QLatin1String("udpLocalPort"))
+    setUdpLocalPort(static_cast<quint16>(value.toInt()));
+
+  else if (key == QLatin1String("udpRemotePort"))
+    setUdpRemotePort(static_cast<quint16>(value.toInt()));
+
+  else if (key == QLatin1String("udpMulticast"))
+    setUdpMulticast(value.toBool());
 }

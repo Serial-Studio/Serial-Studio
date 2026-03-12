@@ -105,15 +105,6 @@ IO::Drivers::HID::~HID()
   hid_exit();
 }
 
-/**
- * @brief Returns the singleton HID driver instance.
- */
-IO::Drivers::HID& IO::Drivers::HID::instance()
-{
-  static HID instance;
-  return instance;
-}
-
 //--------------------------------------------------------------------------------------------------
 // HAL_Driver interface
 //--------------------------------------------------------------------------------------------------
@@ -422,6 +413,40 @@ void IO::Drivers::HID::enumerateDevices()
 
   Q_EMIT deviceListChanged();
   Q_EMIT configurationChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the HID configuration as a flat list of editable properties.
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::HID::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty dev;
+  dev.key     = QStringLiteral("deviceIndex");
+  dev.label   = tr("HID Device");
+  dev.type    = IO::DriverProperty::ComboBox;
+  dev.value   = m_deviceIndex;
+  dev.options = m_deviceLabels;
+  props.append(dev);
+
+  return props;
+}
+
+/**
+ * @brief Applies a single HID configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::HID::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("deviceIndex"))
+    setDeviceIndex(value.toInt());
 }
 
 //--------------------------------------------------------------------------------------------------

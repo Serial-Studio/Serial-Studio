@@ -28,6 +28,7 @@
 
 #include "API/Server.h"
 #include "AppInfo.h"
+#include "AppState.h"
 #include "Console/Export.h"
 #include "Console/Handler.h"
 #include "CSV/Export.h"
@@ -37,11 +38,8 @@
 #include "DataModel/JsCodeEditor.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
-#include "IO/Drivers/BluetoothLE.h"
-#include "IO/Drivers/Network.h"
-#include "IO/Drivers/UART.h"
+#include "IO/ConnectionManager.h"
 #include "IO/FileTransmission.h"
-#include "IO/Manager.h"
 #include "MDF4/Export.h"
 #include "MDF4/Player.h"
 #include "Misc/CommonFonts.h"
@@ -70,12 +68,6 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "DataModel/DBCImporter.h"
-#  include "IO/Drivers/Audio.h"
-#  include "IO/Drivers/CANBus.h"
-#  include "IO/Drivers/HID.h"
-#  include "IO/Drivers/Modbus.h"
-#  include "IO/Drivers/Process.h"
-#  include "IO/Drivers/USB.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #  include "MQTT/Client.h"
@@ -148,8 +140,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
  * destroy singleton classes before the application quits.
  */
 Misc::ModuleManager::ModuleManager()
-  : m_headless(false)
-  , m_automaticUpdates(m_settings.value("App/AutomaticUpdates", true).toBool())
+  : m_headless(false), m_automaticUpdates(m_settings.value("App/AutomaticUpdates", true).toBool())
 {
   // Init translator
   (void)Misc::Translator::instance();
@@ -165,7 +156,7 @@ Misc::ModuleManager::ModuleManager()
 /**
  * @brief Returns whether automatic update checks are enabled.
  */
-bool Misc::ModuleManager::automaticUpdates() const
+bool Misc::ModuleManager::automaticUpdates() const noexcept
 {
   return m_automaticUpdates;
 }
@@ -198,7 +189,7 @@ void Misc::ModuleManager::setAutomaticUpdates(const bool enabled)
 /**
  * Returns a pointer to the QML application engine
  */
-const QQmlApplicationEngine& Misc::ModuleManager::engine() const
+const QQmlApplicationEngine& Misc::ModuleManager::engine() const noexcept
 {
   return m_engine;
 }
@@ -211,7 +202,7 @@ const QQmlApplicationEngine& Misc::ModuleManager::engine() const
  * expected to update the application using the same package manager they used
  * for installing it.
  */
-bool Misc::ModuleManager::autoUpdaterEnabled() const
+bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
 {
 #ifdef DISABLE_QSU
   return false;
@@ -234,7 +225,7 @@ void Misc::ModuleManager::onQuit()
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
   MDF4::Export::instance().closeFile();
-  IO::Manager::instance().disconnectDevice();
+  IO::ConnectionManager::instance().disconnectAllDevices();
   API::Server::instance().removeConnection();
 }
 
@@ -326,24 +317,25 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscThemeManager = &Misc::ThemeManager::instance();
 
   // Initialize modules
-  auto ioManager            = &IO::Manager::instance();
+  auto appState             = &AppState::instance();
+  auto ioManager            = &IO::ConnectionManager::instance();
   auto csvExport            = &CSV::Export::instance();
   auto csvPlayer            = &CSV::Player::instance();
   auto mdf4Export           = &MDF4::Export::instance();
   auto mdf4Player           = &MDF4::Player::instance();
   auto uiDashboard          = &UI::Dashboard::instance();
-  auto ioSerial             = &IO::Drivers::UART::instance();
+  auto ioSerial             = ioManager->uart();
   auto pluginsBridge        = &API::Server::instance();
   auto miscUtilities        = &Misc::Utilities::instance();
   auto consoleExport        = &Console::Export::instance();
-  auto ioNetwork            = &IO::Drivers::Network::instance();
+  auto ioNetwork            = ioManager->network();
   auto frameBuilder         = &DataModel::FrameBuilder::instance();
   auto projectModel         = &DataModel::ProjectModel::instance();
   auto projectEditor        = &DataModel::ProjectEditor::instance();
   auto consoleHandler       = &Console::Handler::instance();
   auto miscTimerEvents      = &Misc::TimerEvents::instance();
   auto miscCommonFonts      = &Misc::CommonFonts::instance();
-  auto ioBluetoothLE        = &IO::Drivers::BluetoothLE::instance();
+  auto ioBluetoothLE        = ioManager->bluetoothLE();
   auto ioFileTransmission   = &IO::FileTransmission::instance();
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
   auto frameParser          = &DataModel::FrameParser::instance();
@@ -353,12 +345,12 @@ void Misc::ModuleManager::initializeQmlInterface()
   const bool qtCommercialAvailable = true;
   auto mqttClient                  = &MQTT::Client::instance();
   auto dbcImporter                 = &DataModel::DBCImporter::instance();
-  auto audioDriver                 = &IO::Drivers::Audio::instance();
-  auto canBusDriver                = &IO::Drivers::CANBus::instance();
-  auto modbusDriver                = &IO::Drivers::Modbus::instance();
-  auto usbDriver                   = &IO::Drivers::USB::instance();
-  auto hidDriver                   = &IO::Drivers::HID::instance();
-  auto processDriver               = &IO::Drivers::Process::instance();
+  auto audioDriver                 = ioManager->audio();
+  auto canBusDriver                = ioManager->canBus();
+  auto modbusDriver                = ioManager->modbus();
+  auto usbDriver                   = ioManager->usb();
+  auto hidDriver                   = ioManager->hid();
+  auto processDriver               = ioManager->process();
 #else
   const bool qtCommercialAvailable = false;
 #endif
@@ -376,7 +368,7 @@ void Misc::ModuleManager::initializeQmlInterface()
           &QQmlApplicationEngine::retranslate);
 
   // Setup singleton module interconnections
-  ioSerial->setupExternalConnections();
+  appState->setupExternalConnections();
   csvExport->setupExternalConnections();
   ioManager->setupExternalConnections();
   mdf4Export->setupExternalConnections();
@@ -386,11 +378,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   consoleExport->setupExternalConnections();
   consoleHandler->setupExternalConnections();
 
-#ifdef BUILD_COMMERCIAL
-  modbusDriver->setupExternalConnections();
-  canBusDriver->setupExternalConnections();
-  usbDriver->setupExternalConnections();
-#endif
+  // Restore last project after all modules are wired so all signals fire correctly
+  appState->restoreLastProject();
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);
@@ -416,6 +405,7 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Register C++ modules with QML
   const auto c = m_engine.rootContext();
+  c->setContextProperty("Cpp_AppState", appState);
   c->setContextProperty("Cpp_Updater", updater);
   c->setContextProperty("Cpp_IO_Serial", ioSerial);
   c->setContextProperty("Cpp_CSV_Export", csvExport);

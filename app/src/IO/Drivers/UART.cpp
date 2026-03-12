@@ -21,7 +21,7 @@
 
 #include "IO/Drivers/UART.h"
 
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -90,9 +90,22 @@ IO::Drivers::UART::UART()
   setAutoReconnect(m_settings.value("UartDriver/autoReconnect", 0).toBool());
   setFlowControl(m_settings.value("UartDriver/flowControl", defFlow).toInt());
 
-  // Update connect button status when user selects a serial device
+  // Propagate all configuration-relevant changes to configurationChanged()
   connect(
     this, &IO::Drivers::UART::portIndexChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(
+    this, &IO::Drivers::UART::baudRateChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(this, &IO::Drivers::UART::parityChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(
+    this, &IO::Drivers::UART::dataBitsChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(
+    this, &IO::Drivers::UART::stopBitsChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(
+    this, &IO::Drivers::UART::flowControlChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(
+    this, &IO::Drivers::UART::dtrEnabledChanged, this, &IO::Drivers::UART::configurationChanged);
+  connect(
+    this, &IO::Drivers::UART::autoReconnectChanged, this, &IO::Drivers::UART::configurationChanged);
 
   // Update error list when language is changed
   connect(this, &IO::Drivers::UART::languageChanged, this, &IO::Drivers::UART::populateErrors);
@@ -110,15 +123,6 @@ IO::Drivers::UART::~UART()
 
     port()->deleteLater();
   }
-}
-
-/**
- * Returns the only instance of the class
- */
-IO::Drivers::UART& IO::Drivers::UART::instance()
-{
-  static UART singleton;
-  return singleton;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -824,11 +828,11 @@ void IO::Drivers::UART::refreshSerialDevices()
     }
 
     // Auto reconnect
-    if (Manager::instance().busType() == SerialStudio::BusType::UART) {
+    if (ConnectionManager::instance().busType() == SerialStudio::BusType::UART) {
       if (autoReconnect() && m_lastSerialDeviceIndex > 0
           && m_lastSerialDeviceIndex < portList().count()) {
         setPortIndex(m_lastSerialDeviceIndex);
-        Manager::instance().connectDevice();
+        ConnectionManager::instance().connectDevice();
       }
     }
 
@@ -864,7 +868,7 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
     return;
 
   // No need to show error if device was disconnected from previous error
-  if (!Manager::instance().isConnected())
+  if (!ConnectionManager::instance().isConnected())
     return;
 
   // Log error
@@ -876,7 +880,7 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
     }
 
     // Disconnect the device
-    Manager::instance().disconnectDevice();
+    ConnectionManager::instance().disconnectDevice();
 
     // Display error
     if (!m_autoReconnect || error != QSerialPort::ResourceError)
@@ -941,4 +945,117 @@ QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
 
   // Return list
   return ports;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the UART configuration as a flat list of editable properties.
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::UART::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty port;
+  port.key     = QStringLiteral("portIndex");
+  port.label   = tr("Serial Port");
+  port.type    = IO::DriverProperty::ComboBox;
+  port.value   = m_portIndex;
+  port.options = portList();
+  props.append(port);
+
+  IO::DriverProperty baud;
+  baud.key     = QStringLiteral("baudRate");
+  baud.label   = tr("Baud Rate");
+  baud.type    = IO::DriverProperty::ComboBox;
+  baud.value   = baudRateList().indexOf(QString::number(m_baudRate));
+  baud.options = baudRateList();
+  props.append(baud);
+
+  IO::DriverProperty parity;
+  parity.key     = QStringLiteral("parityIndex");
+  parity.label   = tr("Parity");
+  parity.type    = IO::DriverProperty::ComboBox;
+  parity.value   = m_parityIndex;
+  parity.options = parityList();
+  props.append(parity);
+
+  IO::DriverProperty data;
+  data.key     = QStringLiteral("dataBitsIndex");
+  data.label   = tr("Data Bits");
+  data.type    = IO::DriverProperty::ComboBox;
+  data.value   = m_dataBitsIndex;
+  data.options = dataBitsList();
+  props.append(data);
+
+  IO::DriverProperty stop;
+  stop.key     = QStringLiteral("stopBitsIndex");
+  stop.label   = tr("Stop Bits");
+  stop.type    = IO::DriverProperty::ComboBox;
+  stop.value   = m_stopBitsIndex;
+  stop.options = stopBitsList();
+  props.append(stop);
+
+  IO::DriverProperty flow;
+  flow.key     = QStringLiteral("flowControlIndex");
+  flow.label   = tr("Flow Control");
+  flow.type    = IO::DriverProperty::ComboBox;
+  flow.value   = m_flowControlIndex;
+  flow.options = flowControlList();
+  props.append(flow);
+
+  IO::DriverProperty dtr;
+  dtr.key   = QStringLiteral("dtr");
+  dtr.label = tr("DTR");
+  dtr.type  = IO::DriverProperty::CheckBox;
+  dtr.value = m_dtrEnabled;
+  props.append(dtr);
+
+  IO::DriverProperty reconnect;
+  reconnect.key   = QStringLiteral("autoReconnect");
+  reconnect.label = tr("Auto-Reconnect");
+  reconnect.type  = IO::DriverProperty::CheckBox;
+  reconnect.value = m_autoReconnect;
+  props.append(reconnect);
+
+  return props;
+}
+
+/**
+ * @brief Applies a single UART configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::UART::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("portIndex"))
+    setPortIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("baudRate")) {
+    const auto list = baudRateList();
+    const int idx   = value.toInt();
+    if (idx >= 0 && idx < list.size())
+      setBaudRate(list.at(idx).toInt());
+  }
+
+  else if (key == QLatin1String("parityIndex"))
+    setParity(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("dataBitsIndex"))
+    setDataBits(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("stopBitsIndex"))
+    setStopBits(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("flowControlIndex"))
+    setFlowControl(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("dtr"))
+    setDtrEnabled(value.toBool());
+
+  else if (key == QLatin1String("autoReconnect"))
+    setAutoReconnect(value.toBool());
 }

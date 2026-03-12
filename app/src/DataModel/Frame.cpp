@@ -27,14 +27,30 @@
 // Frame processing
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Finalises a frame by computing the commercial-features flag and
+ * assigning a globally stable uniqueId to every dataset.
+ *
+ * uniqueId encodes (sourceId, groupId, datasetId) as a single integer so the
+ * same logical dataset always gets the same ID regardless of how many sources
+ * are active.  The encoding is:
+ *   uniqueId = sourceId * 1 000 000 + groupId * 10 000 + datasetId
+ *
+ * This guarantees no collision even when two sources share the same groupId
+ * (e.g. both have a group 0 with datasets 0–9).  It also propagates
+ * group.sourceId down to each dataset so callers never need to walk back up
+ * to the group to discover which source a dataset belongs to.
+ */
 void DataModel::finalize_frame(DataModel::Frame& frame)
 {
   frame.containsCommercialFeatures = SerialStudio::commercialCfg(frame.groups);
 
-  int id = 1;
-  for (auto& group : frame.groups)
-    for (auto& dataset : group.datasets)
-      dataset.uniqueId = id++;
+  for (auto& group : frame.groups) {
+    for (auto& dataset : group.datasets) {
+      dataset.sourceId = group.sourceId;
+      dataset.uniqueId = group.sourceId * 1000000 + dataset.groupId * 10000 + dataset.datasetId;
+    }
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

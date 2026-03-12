@@ -53,11 +53,21 @@ namespace Widgets {
  *       is fixed after initialization.
  */
 class LEDPanel : public QQuickItem {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(int count READ count CONSTANT)
-  Q_PROPERTY(QStringList titles READ titles CONSTANT)
-  Q_PROPERTY(QVector<bool> states READ states NOTIFY updated)
-  Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
+  Q_PROPERTY(int count
+             READ count
+             CONSTANT)
+  Q_PROPERTY(QStringList titles
+             READ titles
+             CONSTANT)
+  Q_PROPERTY(QStringList colors
+             READ colors
+             NOTIFY themeChanged)
+  Q_PROPERTY(QVector<bool> states
+             READ states
+             NOTIFY updated)
+  // clang-format on
 
 signals:
   void updated();
@@ -66,10 +76,10 @@ signals:
 public:
   explicit LEDPanel(const int index = -1, QQuickItem* parent = nullptr);
 
-  [[nodiscard]] int count() const;
-  [[nodiscard]] const QList<bool>& states() const;
-  [[nodiscard]] const QStringList& colors() const;
-  [[nodiscard]] const QStringList& titles() const;
+  [[nodiscard]] int count() const noexcept;
+  [[nodiscard]] const QList<bool>& states() const noexcept;
+  [[nodiscard]] const QStringList& colors() const noexcept;
+  [[nodiscard]] const QStringList& titles() const noexcept;
 
 private slots:
   void updateData();

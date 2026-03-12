@@ -137,6 +137,7 @@ public:
   [[nodiscard]] const QVariantMap& colors() const;
   [[nodiscard]] const QVariantMap& parameters() const;
   [[nodiscard]] const QVector<QColor>& widgetColors() const;
+  [[nodiscard]] const QVector<QPair<QColor, QColor>>& deviceColors() const;
 
   [[nodiscard]] const QStringList& availableThemes() const;
   [[nodiscard]] QColor getColor(const QString& name) const;
@@ -166,5 +167,6 @@ private:
   QMap<QString, QJsonObject> m_themes;
 
   QVector<QColor> m_widgetColors;
+  QVector<QPair<QColor, QColor>> m_deviceColors;
 };
 }  // namespace Misc

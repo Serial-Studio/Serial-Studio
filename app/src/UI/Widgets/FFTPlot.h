@@ -61,14 +61,33 @@ namespace Widgets {
  *       automatically determined from the dataset configuration.
  */
 class FFTPlot : public QQuickItem {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(double minX READ minX CONSTANT)
-  Q_PROPERTY(double maxX READ maxX CONSTANT)
-  Q_PROPERTY(double minY READ minY CONSTANT)
-  Q_PROPERTY(double maxY READ maxY CONSTANT)
-  Q_PROPERTY(int dataW READ dataW WRITE setDataW NOTIFY dataSizeChanged)
-  Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
-  Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+  Q_PROPERTY(bool running
+             READ running
+             WRITE setRunning
+             NOTIFY runningChanged)
+  Q_PROPERTY(int dataW
+             READ dataW
+             WRITE setDataW
+             NOTIFY dataSizeChanged)
+  Q_PROPERTY(int dataH
+             READ dataH
+             WRITE setDataH
+             NOTIFY dataSizeChanged)
+  Q_PROPERTY(double minX
+             READ minX
+             CONSTANT)
+  Q_PROPERTY(double maxX
+             READ maxX
+             CONSTANT)
+  Q_PROPERTY(double minY
+             READ minY
+             CONSTANT)
+  Q_PROPERTY(double maxY
+             READ maxY
+             CONSTANT)
+  // clang-format on
 
 signals:
   void runningChanged();
@@ -85,13 +104,13 @@ public:
     }
   }
 
-  [[nodiscard]] int dataW() const;
-  [[nodiscard]] int dataH() const;
-  [[nodiscard]] double minX() const;
-  [[nodiscard]] double maxX() const;
-  [[nodiscard]] double minY() const;
-  [[nodiscard]] double maxY() const;
-  [[nodiscard]] bool running() const;
+  [[nodiscard]] int dataW() const noexcept;
+  [[nodiscard]] int dataH() const noexcept;
+  [[nodiscard]] double minX() const noexcept;
+  [[nodiscard]] double maxX() const noexcept;
+  [[nodiscard]] double minY() const noexcept;
+  [[nodiscard]] double maxY() const noexcept;
+  [[nodiscard]] bool running() const noexcept;
 
 public slots:
   void draw(QLineSeries* series);

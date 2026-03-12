@@ -66,7 +66,12 @@ namespace Widgets {
  * accumulator is capped at 16 MiB and reset if exceeded.
  */
 class ImageFrameReader : public QObject {
+  // clang-format off
   Q_OBJECT
+  // clang-format on
+
+signals:
+  void frameReady(QByteArray imageData);
 
 public:
   enum class DetectionMode {
@@ -79,9 +84,6 @@ public:
 
 public slots:
   void processData(const IO::ByteArrayPtr& data);
-
-signals:
-  void frameReady(QByteArray imageData);
 
 private:
   void processAutodetect();
@@ -131,14 +133,31 @@ private:
 class ImageView : public QQuickItem {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString imageUrl      READ imageUrl      NOTIFY imageReady)
-  Q_PROPERTY(QString imageFormat   READ imageFormat   NOTIFY imageReady)
-  Q_PROPERTY(int     frameCount    READ frameCount    NOTIFY imageReady)
-  Q_PROPERTY(int     imageWidth    READ imageWidth    NOTIFY imageReady)
-  Q_PROPERTY(int     imageHeight   READ imageHeight   NOTIFY imageReady)
-  Q_PROPERTY(QColor  primaryColor  READ primaryColor  NOTIFY imageReady)
-  Q_PROPERTY(bool    exportEnabled READ exportEnabled WRITE setExportEnabled NOTIFY exportEnabledChanged)
-  Q_PROPERTY(QString groupTitle   READ groupTitle                           CONSTANT)
+  Q_PROPERTY(bool exportEnabled
+             READ exportEnabled
+             WRITE setExportEnabled
+             NOTIFY exportEnabledChanged)
+  Q_PROPERTY(int frameCount
+             READ frameCount
+             NOTIFY imageReady)
+  Q_PROPERTY(int imageWidth
+             READ imageWidth
+             NOTIFY imageReady)
+  Q_PROPERTY(int imageHeight
+             READ imageHeight
+             NOTIFY imageReady)
+  Q_PROPERTY(QColor primaryColor
+             READ primaryColor
+             NOTIFY imageReady)
+  Q_PROPERTY(QString groupTitle
+             READ groupTitle
+             CONSTANT)
+  Q_PROPERTY(QString imageUrl
+             READ imageUrl
+             NOTIFY imageReady)
+  Q_PROPERTY(QString imageFormat
+             READ imageFormat
+             NOTIFY imageReady)
   // clang-format on
 
 signals:
@@ -149,14 +168,14 @@ public:
   explicit ImageView(int index = -1, QQuickItem* parent = nullptr);
   ~ImageView();
 
+  [[nodiscard]] int frameCount() const noexcept;
+  [[nodiscard]] int imageWidth() const noexcept;
+  [[nodiscard]] int imageHeight() const noexcept;
+  [[nodiscard]] bool exportEnabled() const noexcept;
   [[nodiscard]] QString imageUrl() const;
-  [[nodiscard]] const QString& imageFormat() const;
-  [[nodiscard]] int frameCount() const;
-  [[nodiscard]] int imageWidth() const;
-  [[nodiscard]] int imageHeight() const;
   [[nodiscard]] QColor primaryColor() const;
-  [[nodiscard]] bool exportEnabled() const;
-  [[nodiscard]] const QString& groupTitle() const;
+  [[nodiscard]] const QString& imageFormat() const noexcept;
+  [[nodiscard]] const QString& groupTitle() const noexcept;
 
 public slots:
   void setExportEnabled(bool enabled);

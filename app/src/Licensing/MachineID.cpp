@@ -71,7 +71,7 @@ Licensing::MachineID& Licensing::MachineID::instance()
  *
  * @return A reference to the machine-specific ID string (Base64-encoded).
  */
-const QString& Licensing::MachineID::machineId() const
+const QString& Licensing::MachineID::machineId() const noexcept
 {
   return m_machineId;
 }
@@ -87,7 +87,7 @@ const QString& Licensing::MachineID::machineId() const
  *
  * @return A reference to the app-version machine ID string (Base64-encoded).
  */
-const QString& Licensing::MachineID::appVerMachineId() const
+const QString& Licensing::MachineID::appVerMachineId() const noexcept
 {
   return m_appVerMachineId;
 }
@@ -103,7 +103,7 @@ const QString& Licensing::MachineID::appVerMachineId() const
  * @return A 64-bit unsigned integer representing the machine-specific
  *         encryption key.
  */
-quint64 Licensing::MachineID::machineSpecificKey() const
+quint64 Licensing::MachineID::machineSpecificKey() const noexcept
 {
   return m_machineSpecificKey;
 }

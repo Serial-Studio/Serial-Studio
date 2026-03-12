@@ -56,8 +56,13 @@ namespace Misc {
  * @endcode
  */
 class TimerEvents : public QObject {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(int fps READ fps WRITE setFPS NOTIFY fpsChanged)
+  Q_PROPERTY(int fps
+             READ fps
+             WRITE setFPS
+             NOTIFY fpsChanged)
+  // clang-format on
 
 signals:
   void uiTimeout();
@@ -67,7 +72,7 @@ signals:
   void timeout20Hz();
 
 private:
-  TimerEvents();
+  explicit TimerEvents();
   TimerEvents(TimerEvents&&)                 = delete;
   TimerEvents(const TimerEvents&)            = delete;
   TimerEvents& operator=(TimerEvents&&)      = delete;
@@ -76,7 +81,7 @@ private:
 public:
   static TimerEvents& instance();
 
-  [[nodiscard]] int fps() const;
+  [[nodiscard]] int fps() const noexcept;
 
 protected:
   void timerEvent(QTimerEvent* event) override;

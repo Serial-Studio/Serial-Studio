@@ -48,7 +48,7 @@ Widgets::Compass::Compass(const int index, QQuickItem* parent)
  * @brief Returns the current value of the compass.
  * @return The current value of the compass.
  */
-double Widgets::Compass::value() const
+double Widgets::Compass::value() const noexcept
 {
   return m_value;
 }
@@ -57,7 +57,7 @@ double Widgets::Compass::value() const
  * @brief Returns the text representation of the compass value.
  * @return The text representation of the compass value.
  */
-QString Widgets::Compass::text() const
+QString Widgets::Compass::text() const noexcept
 {
   return m_text;
 }

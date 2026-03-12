@@ -28,10 +28,11 @@
 #include <QFontInfo>
 #include <QFontMetrics>
 
+#include "AppState.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
@@ -484,12 +485,12 @@ void Console::Handler::setupExternalConnections()
           this,
           notifyTerminal);
 
-  connect(&DataModel::FrameBuilder::instance(),
-          &DataModel::FrameBuilder::operationModeChanged,
+  connect(&AppState::instance(), &AppState::operationModeChanged, this, notifyTerminal);
+
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::connectedChanged,
           this,
           notifyTerminal);
-
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, notifyTerminal);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -506,7 +507,7 @@ void Console::Handler::setupExternalConnections()
 void Console::Handler::send(const QString& data)
 {
   // Check conditions
-  if (!IO::Manager::instance().isConnected())
+  if (!IO::ConnectionManager::instance().isConnected())
     return;
 
   // Add user command to history
@@ -547,7 +548,7 @@ void Console::Handler::send(const QString& data)
 
   // Write data to device
   if (!bin.isEmpty())
-    IO::Manager::instance().writeData(bin);
+    IO::ConnectionManager::instance().writeData(bin);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -823,11 +824,10 @@ void Console::Handler::displaySentData(QByteArrayView data)
 
 bool Console::Handler::hasImageWidget() const
 {
-  if (!IO::Manager::instance().isConnected())
+  if (!IO::ConnectionManager::instance().isConnected())
     return false;
 
-  const auto& fb = DataModel::FrameBuilder::instance();
-  if (fb.operationMode() != SerialStudio::ProjectFile)
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return false;
 
   const auto& groups = DataModel::ProjectModel::instance().groups();

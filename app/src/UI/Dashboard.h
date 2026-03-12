@@ -51,18 +51,47 @@ namespace UI {
 class Dashboard : public QObject {
   // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString title READ title NOTIFY widgetCountChanged)
-  Q_PROPERTY(bool available READ available NOTIFY widgetCountChanged)
-  Q_PROPERTY(int actionCount READ actionCount NOTIFY widgetCountChanged)
-  Q_PROPERTY(int points READ points WRITE setPoints NOTIFY pointsChanged)
-  Q_PROPERTY(QVariantList actions READ actions NOTIFY actionStatusChanged)
-  Q_PROPERTY(int totalWidgetCount READ totalWidgetCount NOTIFY widgetCountChanged)
-  Q_PROPERTY(bool pointsWidgetVisible READ pointsWidgetVisible NOTIFY widgetCountChanged)
-  Q_PROPERTY(bool showActionPanel READ showActionPanel WRITE setShowActionPanel NOTIFY showActionPanelChanged)
-  Q_PROPERTY(bool terminalEnabled READ terminalEnabled WRITE setTerminalEnabled NOTIFY terminalEnabledChanged)
-  Q_PROPERTY(bool containsCommercialFeatures READ containsCommercialFeatures NOTIFY containsCommercialFeaturesChanged)
-  Q_PROPERTY(bool showTaskbarButtons READ showTaskbarButtons WRITE setShowTaskbarButtons NOTIFY showTaskbarButtonsChanged)
-  Q_PROPERTY(bool autoHideToolbar READ autoHideToolbar WRITE setAutoHideToolbar NOTIFY autoHideToolbarChanged)
+  Q_PROPERTY(bool available
+             READ available
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int  points
+             READ  points
+             WRITE setPoints
+             NOTIFY pointsChanged)
+  Q_PROPERTY(int  actionCount
+             READ actionCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(int  totalWidgetCount
+             READ totalWidgetCount
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool pointsWidgetVisible
+             READ pointsWidgetVisible
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(bool showActionPanel
+             READ  showActionPanel
+             WRITE setShowActionPanel
+             NOTIFY showActionPanelChanged)
+  Q_PROPERTY(bool terminalEnabled
+             READ  terminalEnabled
+             WRITE setTerminalEnabled
+             NOTIFY terminalEnabledChanged)
+  Q_PROPERTY(bool autoHideToolbar
+             READ  autoHideToolbar
+             WRITE setAutoHideToolbar
+             NOTIFY autoHideToolbarChanged)
+  Q_PROPERTY(bool showTaskbarButtons
+             READ  showTaskbarButtons
+             WRITE setShowTaskbarButtons
+             NOTIFY showTaskbarButtonsChanged)
+  Q_PROPERTY(bool containsCommercialFeatures
+             READ containsCommercialFeatures
+             NOTIFY containsCommercialFeaturesChanged)
+  Q_PROPERTY(QString title
+             READ title
+             NOTIFY widgetCountChanged)
+  Q_PROPERTY(QVariantList actions
+             READ actions
+             NOTIFY actionStatusChanged)
   // clang-format on
 
 signals:
@@ -88,22 +117,22 @@ public:
   static Dashboard& instance();
 
   [[nodiscard]] bool available() const;
-  [[nodiscard]] bool showActionPanel() const;
+  [[nodiscard]] bool showActionPanel() const noexcept;
   [[nodiscard]] bool streamAvailable() const;
-  [[nodiscard]] bool terminalEnabled() const;
-  [[nodiscard]] bool autoHideToolbar() const;
-  [[nodiscard]] bool showTaskbarButtons() const;
+  [[nodiscard]] bool terminalEnabled() const noexcept;
+  [[nodiscard]] bool autoHideToolbar() const noexcept;
+  [[nodiscard]] bool showTaskbarButtons() const noexcept;
   [[nodiscard]] bool pointsWidgetVisible() const;
-  [[nodiscard]] bool containsCommercialFeatures() const;
+  [[nodiscard]] bool containsCommercialFeatures() const noexcept;
 
-  [[nodiscard]] int points() const;
+  [[nodiscard]] int points() const noexcept;
   [[nodiscard]] int actionCount() const;
-  [[nodiscard]] int totalWidgetCount() const;
+  [[nodiscard]] int totalWidgetCount() const noexcept;
 
   Q_INVOKABLE bool frameValid() const;
-  Q_INVOKABLE int relativeIndex(const int widgetIndex);
+  Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
   Q_INVOKABLE QString formatValue(double val, double min, double max) const;
-  Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex);
+  Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex) const;
   Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
 
   [[nodiscard]] const QString& title() const;
@@ -208,8 +237,8 @@ private:
   // Datasets by widget type
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
 
-  DataModel::Frame m_rawFrame;
   DataModel::Frame m_lastFrame;
+  QMap<int, DataModel::Frame> m_sourceRawFrames;
 };
 }  // namespace UI
 

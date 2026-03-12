@@ -46,9 +46,9 @@ Widgets.Pane {
 
   readonly property int displayedWidth: {
     const contentWidth = hardware.implicitWidth
-                         + layout.anchors.leftMargin
-                         + layout.anchors.rightMargin
-                         + 2
+                       + layout.anchors.leftMargin
+                       + layout.anchors.rightMargin
+                       + 2
     const natural = Math.max(kMinPaneWidth, contentWidth)
     return userPaneWidth > 0 ? Math.max(kMinPaneWidth, userPaneWidth) : natural
   }
@@ -220,33 +220,33 @@ Widgets.Pane {
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("No Parsing (Device Sends JSON Data)")
-        checked: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.DeviceSendsJSON
+        checked: Cpp_AppState.operationMode === SerialStudio.DeviceSendsJSON
         onCheckedChanged: {
-          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== SerialStudio.DeviceSendsJSON
+          const shouldChange = Cpp_AppState.operationMode !== SerialStudio.DeviceSendsJSON
           if (checked && shouldChange)
-            Cpp_JSON_FrameBuilder.operationMode = SerialStudio.DeviceSendsJSON
+            Cpp_AppState.operationMode = SerialStudio.DeviceSendsJSON
         }
       } RadioButton {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Quick Plot (Comma Separated Values)")
-        checked: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.QuickPlot
+        checked: Cpp_AppState.operationMode === SerialStudio.QuickPlot
         onCheckedChanged: {
-          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== SerialStudio.QuickPlot
+          const shouldChange = Cpp_AppState.operationMode !== SerialStudio.QuickPlot
           if (checked && shouldChange)
-            Cpp_JSON_FrameBuilder.operationMode = SerialStudio.QuickPlot
+            Cpp_AppState.operationMode = SerialStudio.QuickPlot
         }
       } RadioButton {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
-        checked: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.ProjectFile
+        checked: Cpp_AppState.operationMode === SerialStudio.ProjectFile
         onCheckedChanged: {
-          const shouldChange = Cpp_JSON_FrameBuilder.operationMode !== SerialStudio.ProjectFile
+          const shouldChange = Cpp_AppState.operationMode !== SerialStudio.ProjectFile
           if (checked && shouldChange)
-            Cpp_JSON_FrameBuilder.operationMode = SerialStudio.ProjectFile
+            Cpp_AppState.operationMode = SerialStudio.ProjectFile
         }
       }
 
@@ -258,10 +258,10 @@ Widgets.Pane {
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         onClicked: Cpp_JSON_ProjectModel.openJsonFile()
-        text: (Cpp_JSON_FrameBuilder.jsonMapFilename.length ?
-                 qsTr("Change Project File (%1)").arg(Cpp_JSON_FrameBuilder.jsonMapFilename) :
+        text: (Cpp_AppState.projectFileName.length ?
+                 qsTr("Change Project File (%1)").arg(Cpp_AppState.projectFileName) :
                  qsTr("Select Project File") + "...")
-        enabled: Cpp_JSON_FrameBuilder.operationMode === SerialStudio.ProjectFile
+        enabled: Cpp_AppState.operationMode === SerialStudio.ProjectFile
       }
 
       //
@@ -341,31 +341,156 @@ Widgets.Pane {
       }
 
       //
-      // Driver selection
+      // Multi-source redirect or driver selection
       //
-      Label {
-        text: qsTr("Device Setup") + ":"
-        font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-        color: Cpp_ThemeManager.colors["pane_section_label"]
-        Component.onCompleted: font.capitalization = Font.AllUppercase
-      } ComboBox {
-        Layout.fillWidth: true
-        model: Cpp_IO_Manager.availableBuses
-        currentIndex: Cpp_IO_Manager.busType
-        displayText: qsTr("I/O Interface: %1").arg(currentText)
-        onCurrentIndexChanged: {
-          if (Cpp_IO_Manager.busType !== currentIndex)
-            Cpp_IO_Manager.busType = currentIndex
-        }
-      }
-
-      //
-      // Hardware setup
-      //
-      SetupPanes.Hardware {
-        id: hardware
+      StackLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
+
+        currentIndex: {
+          const isProjectFile = Cpp_AppState.operationMode === SerialStudio.ProjectFile
+          const multiSource   = Cpp_JSON_ProjectModel.sourceCount > 1
+          return (isProjectFile && multiSource) ? 1 : 0
+        }
+
+        //
+        // Normal hardware panel with drivers
+        //
+        ColumnLayout {
+          spacing: 4
+
+          Label {
+            text: qsTr("Device Setup") + ":"
+            font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          }
+
+          ComboBox {
+            Layout.fillWidth: true
+            model: Cpp_IO_Manager.availableBuses
+            currentIndex: Cpp_IO_Manager.busType
+            displayText: qsTr("I/O Interface: %1").arg(currentText)
+
+            onCurrentIndexChanged: {
+              if (Cpp_IO_Manager.busType !== currentIndex)
+                Cpp_IO_Manager.busType = currentIndex
+            }
+          }
+
+          SetupPanes.Hardware {
+            id: hardware
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+          }
+        }
+
+        //
+        // Multi-source redirect panel
+        //
+        ColumnLayout {
+          spacing: 0
+
+          Item {
+            implicitHeight: 8
+          }
+
+          Item {
+            Layout.fillWidth: true
+            implicitHeight: _panelLayout.implicitHeight + 24
+
+            Rectangle {
+              radius: 2
+              border.width: 1
+              anchors.fill: parent
+              border.color: Cpp_ThemeManager.colors["groupbox_border"]
+              color: Cpp_ThemeManager.colors["groupbox_background"]
+            }
+
+            ColumnLayout {
+              id: _panelLayout
+
+              spacing: 0
+              anchors {
+                fill: parent
+                margins: 12
+              }
+
+              Image {
+                source: "qrc:/rcc/images/multi-device.svg"
+                fillMode: Image.PreserveAspectFit
+                Layout.alignment: Qt.AlignHCenter
+              }
+
+              Item {
+                implicitHeight: 12
+              }
+
+              Label {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                color: Cpp_ThemeManager.colors["text"]
+                font: Cpp_Misc_CommonFonts.customUiFont(1.15, true)
+                text: qsTr("Multi-Device Project")
+              }
+
+              Item {
+                implicitHeight: 6
+              }
+
+              Label {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                color: Cpp_ThemeManager.colors["text"]
+                font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
+                text: qsTr("This project streams data from %n independent device(s).", "", Cpp_JSON_ProjectModel.sourceCount)
+              }
+
+              Item {
+                implicitHeight: 4
+              }
+
+              Label {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                color: Cpp_ThemeManager.colors["pane_section_label"]
+                font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+                text: qsTr("Each device has its own connection settings. Configure them in the Project Editor under the Sources tab.")
+              }
+
+              Item {
+                implicitHeight: 16
+              }
+
+              Rectangle {
+                implicitHeight: 1
+                Layout.fillWidth: true
+                color: Cpp_ThemeManager.colors["groupbox_border"]
+              }
+
+              Item {
+                implicitHeight: 12
+              }
+
+              Button {
+                icon.width: 18
+                icon.height: 18
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Open Project Editor")
+                onClicked: app.showProjectEditor()
+                icon.source: "qrc:/rcc/icons/buttons/wrench.svg"
+                icon.color: Cpp_ThemeManager.colors["button_text"]
+              }
+            }
+          }
+
+          Item {
+            Layout.fillHeight: true
+          }
+        }
       }
     }
   }

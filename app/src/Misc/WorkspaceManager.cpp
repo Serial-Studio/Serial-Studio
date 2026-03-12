@@ -70,7 +70,7 @@ Misc::WorkspaceManager& Misc::WorkspaceManager::instance()
  *
  * @return Current workspace path.
  */
-QString Misc::WorkspaceManager::path() const
+QString Misc::WorkspaceManager::path() const noexcept
 {
   return m_path;
 }
@@ -147,7 +147,7 @@ void Misc::WorkspaceManager::selectPath()
     m_path = path;
     m_settings.setValue(QStringLiteral("Workspace"), path);
 
-    emit pathChanged();
+    Q_EMIT pathChanged();
   });
 
   dialog->open();

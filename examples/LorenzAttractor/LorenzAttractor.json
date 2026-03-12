@@ -2,13 +2,6 @@
     "actions": [
     ],
     "checksum": "",
-    "dashboardLayout": {
-        "autoLayout": true,
-        "windowOrder": [
-            0,
-            1
-        ]
-    },
     "decoder": 0,
     "frameDetection": 0,
     "frameEnd": "\\n",
@@ -179,5 +172,68 @@
         }
     ],
     "hexadecimalDelimiters": false,
-    "title": "Lorenz Attractor"
+    "sources": [
+        {
+            "busType": 1,
+            "checksum": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9000,
+                "udpMulticast": false,
+                "udpRemotePort": 9000
+            },
+            "decoder": 0,
+            "frameDetection": 0,
+            "frameEnd": "\\n",
+            "frameParserCode": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
+            "frameStart": "",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
+    "title": "Lorenz Attractor",
+    "widgetSettings": {
+        "__layout__:-1__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "__layout__:-2__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    2,
+                    3,
+                    4,
+                    1
+                ]
+            }
+        },
+        "__layout__:0__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    2,
+                    3,
+                    4
+                ]
+            }
+        },
+        "__layout__:1__": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    1
+                ]
+            }
+        }
+    }
 }

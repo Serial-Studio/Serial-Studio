@@ -243,19 +243,43 @@ Widgets.Pane {
                            Cpp_ThemeManager.colors["text"]
         }
 
-        //
-        // Frame index indicator (only for datasets)
-        //
+        Label {
+          id: sourceBadge
+
+          opacity: current ? 1.0 : 0.85
+          font: Cpp_Misc_CommonFonts.monoFont
+          text: "[" + String.fromCharCode(65 + model.treeViewSourceId) + "]"
+          visible: model.treeViewSourceName !== undefined
+                && model.treeViewSourceName !== ""
+          Layout.alignment: Qt.AlignVCenter
+          color: {
+            if (current)
+              return Cpp_ThemeManager.colors["highlighted_text"]
+
+            if (Cpp_JSON_ProjectModel.sourceCount > 1)
+              return SerialStudio.getDeviceColor(model.treeViewSourceId + 1)
+
+            return Cpp_ThemeManager.colors["text"]
+          }
+        }
+
         Label {
           id: frameIndex
 
-          opacity: 0.7
-          visible: depth > 1
-          Layout.alignment: Qt.AlignVCenter
+          opacity: current ? 1.0 : 0.85
           font: Cpp_Misc_CommonFonts.monoFont
-          color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
-                           Cpp_ThemeManager.colors["text"]
-          text: "[" + qsTr("IDX %1").arg(model.treeViewFrameIndex) + "]"
+          visible: depth > 1 && model.treeViewFrameIndex >= 0
+          text: "[" + String.fromCharCode(65 + model.treeViewSourceId) + "-" + model.treeViewFrameIndex + "]"
+          Layout.alignment: Qt.AlignVCenter
+          color: {
+            if (current)
+              return Cpp_ThemeManager.colors["highlighted_text"]
+
+            if (Cpp_JSON_ProjectModel.sourceCount > 1)
+              return SerialStudio.getDeviceColor(model.treeViewSourceId + 1)
+
+            return Cpp_ThemeManager.colors["text"]
+          }
         }
       }
     }

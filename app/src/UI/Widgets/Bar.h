@@ -36,18 +36,42 @@ namespace Widgets {
  * Designed for use in real-time UI components like bar or gauge widgets.
  */
 class Bar : public QQuickItem {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString units READ units CONSTANT)
-  Q_PROPERTY(double value READ value NOTIFY updated)
-  Q_PROPERTY(double minValue READ minValue CONSTANT)
-  Q_PROPERTY(double maxValue READ maxValue CONSTANT)
-  Q_PROPERTY(double alarmLow READ alarmLow CONSTANT)
-  Q_PROPERTY(double alarmHigh READ alarmHigh CONSTANT)
-  Q_PROPERTY(bool alarmsDefined READ alarmsDefined CONSTANT)
-  Q_PROPERTY(bool alarmTriggered READ alarmTriggered NOTIFY updated)
-  Q_PROPERTY(double normalizedValue READ normalizedValue NOTIFY updated)
-  Q_PROPERTY(double normalizedAlarmLow READ normalizedAlarmLow CONSTANT)
-  Q_PROPERTY(double normalizedAlarmHigh READ normalizedAlarmHigh CONSTANT)
+  Q_PROPERTY(bool alarmsDefined
+             READ alarmsDefined
+             CONSTANT)
+  Q_PROPERTY(bool alarmTriggered
+             READ alarmTriggered
+             NOTIFY updated)
+  Q_PROPERTY(double value
+             READ value
+             NOTIFY updated)
+  Q_PROPERTY(double minValue
+             READ minValue
+             CONSTANT)
+  Q_PROPERTY(double maxValue
+             READ maxValue
+             CONSTANT)
+  Q_PROPERTY(double alarmLow
+             READ alarmLow
+             CONSTANT)
+  Q_PROPERTY(double alarmHigh
+             READ alarmHigh
+             CONSTANT)
+  Q_PROPERTY(double normalizedValue
+             READ normalizedValue
+             NOTIFY updated)
+  Q_PROPERTY(double normalizedAlarmLow
+             READ normalizedAlarmLow
+             CONSTANT)
+  Q_PROPERTY(double normalizedAlarmHigh
+             READ normalizedAlarmHigh
+             CONSTANT)
+  Q_PROPERTY(QString units
+             READ units
+             CONSTANT)
+  // clang-format on
 
 signals:
   void updated();
@@ -57,18 +81,18 @@ public:
                QQuickItem* parent          = nullptr,
                bool autoInitFromBarDataset = true);
 
-  [[nodiscard]] bool alarmsDefined() const;
-  [[nodiscard]] bool alarmTriggered() const;
-  [[nodiscard]] const QString& units() const;
+  [[nodiscard]] bool alarmsDefined() const noexcept;
+  [[nodiscard]] bool alarmTriggered() const noexcept;
+  [[nodiscard]] const QString& units() const noexcept;
 
-  [[nodiscard]] double value() const;
-  [[nodiscard]] double minValue() const;
-  [[nodiscard]] double maxValue() const;
-  [[nodiscard]] double alarmLow() const;
-  [[nodiscard]] double alarmHigh() const;
-  [[nodiscard]] double normalizedValue() const;
-  [[nodiscard]] double normalizedAlarmLow() const;
-  [[nodiscard]] double normalizedAlarmHigh() const;
+  [[nodiscard]] double value() const noexcept;
+  [[nodiscard]] double minValue() const noexcept;
+  [[nodiscard]] double maxValue() const noexcept;
+  [[nodiscard]] double alarmLow() const noexcept;
+  [[nodiscard]] double alarmHigh() const noexcept;
+  [[nodiscard]] double normalizedValue() const noexcept;
+  [[nodiscard]] double normalizedAlarmLow() const noexcept;
+  [[nodiscard]] double normalizedAlarmHigh() const noexcept;
 
 protected slots:
   virtual void updateData();

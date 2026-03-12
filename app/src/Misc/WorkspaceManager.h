@@ -71,9 +71,15 @@ namespace Misc {
  *       created if they don't exist.
  */
 class WorkspaceManager : public QObject {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString path READ path NOTIFY pathChanged)
-  Q_PROPERTY(QString shortPath READ shortPath NOTIFY pathChanged)
+  Q_PROPERTY(QString path
+             READ path
+             NOTIFY pathChanged)
+  Q_PROPERTY(QString shortPath
+             READ shortPath
+             NOTIFY pathChanged)
+  // clang-format on
 
 signals:
   void pathChanged();
@@ -88,7 +94,7 @@ private:
 public:
   static WorkspaceManager& instance();
 
-  [[nodiscard]] QString path() const;
+  [[nodiscard]] QString path() const noexcept;
   [[nodiscard]] QString shortPath() const;
 
   [[nodiscard]] QString path(const QString& subdirectory) const;

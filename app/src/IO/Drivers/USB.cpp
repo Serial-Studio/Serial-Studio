@@ -115,23 +115,28 @@ IO::Drivers::USB::USB()
 /**
  * @brief Destroys the USB driver.
  *
- * Stops both threads unconditionally before freeing libusb resources.
- * This guards against the case where setupExternalConnections() was never
- * called or where the aboutToQuit wait timed out — QThread::~QThread()
- * calls qFatal if the thread is still running at destruction time.
+ * Cancels any in-flight isochronous transfers so the event thread can drain,
+ * then stops both threads gracefully before freeing libusb resources. Each
+ * thread is given 500 ms to exit cleanly; terminate() is used only as a last
+ * resort so QThread::~QThread() does not call qFatal on a live thread.
  */
 IO::Drivers::USB::~USB()
 {
   m_running          = false;
   m_eventLoopRunning = false;
 
+  for (auto* t : std::as_const(m_isoTransfers))
+    libusb_cancel_transfer(t);
+
   if (m_readThread.isRunning()) {
-    m_readThread.terminate();
+    if (!m_readThread.wait(500))
+      m_readThread.terminate();
     m_readThread.wait();
   }
 
   if (m_eventThread.isRunning()) {
-    m_eventThread.terminate();
+    if (!m_eventThread.wait(500))
+      m_eventThread.terminate();
     m_eventThread.wait();
   }
 
@@ -153,16 +158,6 @@ IO::Drivers::USB::~USB()
 
     libusb_exit(m_ctx);
   }
-}
-
-/**
- * @brief Returns the global USB driver singleton.
- * @return Reference to the single USB instance.
- */
-IO::Drivers::USB& IO::Drivers::USB::instance()
-{
-  static USB instance;
-  return instance;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -266,10 +261,12 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
 
   m_running = true;
 
-  if (m_transferMode == TransferMode::Isochronous)
+  if (m_transferMode == TransferMode::Isochronous) {
+    allocateIsoTransfers();
     connect(&m_readThread, &QThread::started, this, &USB::isoReadLoop, Qt::DirectConnection);
-  else
+  } else {
     connect(&m_readThread, &QThread::started, this, &USB::readLoop, Qt::DirectConnection);
+  }
 
   m_readThread.start();
 
@@ -701,13 +698,18 @@ void IO::Drivers::USB::setupExternalConnections()
     m_running          = false;
     m_eventLoopRunning = false;
 
+    for (auto* t : std::as_const(m_isoTransfers))
+      libusb_cancel_transfer(t);
+
     if (m_readThread.isRunning()) {
-      m_readThread.terminate();
+      if (!m_readThread.wait(500))
+        m_readThread.terminate();
       m_readThread.wait();
     }
 
     if (m_eventThread.isRunning()) {
-      m_eventThread.terminate();
+      if (!m_eventThread.wait(500))
+        m_eventThread.terminate();
       m_eventThread.wait();
     }
   });
@@ -1133,22 +1135,17 @@ void IO::Drivers::USB::readLoop()
 }
 
 /**
- * @brief Async isochronous read loop for Isochronous mode.
+ * @brief Allocates and submits the isochronous transfer pool on the main thread.
  *
- * Allocates a pool of kIsoNumTransfers libusb_transfer structs, each carrying
- * kIsoPacketsPerTransfer packets of m_isoPacketSize bytes, and submits them
- * all upfront. isoTransferCallback() resubmits each completed transfer to keep
- * the pool continuously in flight.
- *
- * Transfer callbacks are driven by the permanent m_eventThread event loop so
- * this function only submits the initial pool and then blocks until m_running
- * is cleared by close().
- *
- * Runs on m_readThread.
+ * Called from open() before m_readThread starts, ensuring that m_isoTransfers
+ * is written only from the main thread and is fully populated before
+ * isoReadLoop() runs or close() reads it. Any transfer that fails allocation
+ * or submission is freed immediately and not added to the pool.
  */
-void IO::Drivers::USB::isoReadLoop()
+void IO::Drivers::USB::allocateIsoTransfers()
 {
   const int totalBufSize = m_isoPacketSize * kIsoPacketsPerTransfer;
+
   for (int i = 0; i < kIsoNumTransfers; ++i) {
     libusb_transfer* t = libusb_alloc_transfer(kIsoPacketsPerTransfer);
     if (!t)
@@ -1179,7 +1176,23 @@ void IO::Drivers::USB::isoReadLoop()
       m_isoTransfers.append(t);
     }
   }
+}
 
+/**
+ * @brief Async isochronous read loop for Isochronous mode.
+ *
+ * The transfer pool is allocated and submitted on the main thread by
+ * allocateIsoTransfers() before this function runs, so m_isoTransfers is
+ * never written from this thread. isoTransferCallback() resubmits each
+ * completed transfer to keep the pool continuously in flight. Transfer
+ * callbacks are driven by the permanent m_eventThread event loop.
+ *
+ * This function simply blocks until m_running is cleared by close().
+ *
+ * Runs on m_readThread.
+ */
+void IO::Drivers::USB::isoReadLoop()
+{
   while (m_running.load(std::memory_order_relaxed))
     QThread::msleep(10);
 }
@@ -1274,6 +1287,85 @@ qint64 IO::Drivers::USB::sendControlTransfer(uint8_t bmRequestType,
                                          static_cast<uint16_t>(data.size()),
                                          timeout_ms);
   return rc < 0 ? -1 : static_cast<qint64>(rc);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the USB configuration as a flat list of editable properties.
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::USB::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty dev;
+  dev.key     = QStringLiteral("deviceIndex");
+  dev.label   = tr("USB Device");
+  dev.type    = IO::DriverProperty::ComboBox;
+  dev.value   = m_deviceIndex;
+  dev.options = deviceList();
+  props.append(dev);
+
+  IO::DriverProperty mode;
+  mode.key     = QStringLiteral("transferMode");
+  mode.label   = tr("Transfer Mode");
+  mode.type    = IO::DriverProperty::ComboBox;
+  mode.value   = static_cast<int>(m_transferMode);
+  mode.options = {tr("Bulk Stream"), tr("Advanced Control"), tr("Isochronous")};
+  props.append(mode);
+
+  IO::DriverProperty inEp;
+  inEp.key     = QStringLiteral("inEndpointIndex");
+  inEp.label   = tr("IN Endpoint");
+  inEp.type    = IO::DriverProperty::ComboBox;
+  inEp.value   = m_inEndpointIndex;
+  inEp.options = inEndpointList();
+  props.append(inEp);
+
+  IO::DriverProperty outEp;
+  outEp.key     = QStringLiteral("outEndpointIndex");
+  outEp.label   = tr("OUT Endpoint");
+  outEp.type    = IO::DriverProperty::ComboBox;
+  outEp.value   = m_outEndpointIndex;
+  outEp.options = outEndpointList();
+  props.append(outEp);
+
+  IO::DriverProperty iso;
+  iso.key   = QStringLiteral("isoPacketSize");
+  iso.label = tr("ISO Packet Size");
+  iso.type  = IO::DriverProperty::IntField;
+  iso.value = m_isoPacketSize;
+  iso.min   = 1;
+  iso.max   = 65535;
+  props.append(iso);
+
+  return props;
+}
+
+/**
+ * @brief Applies a single USB configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::USB::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("deviceIndex"))
+    setDeviceIndex(value.toInt());
+
+  else if (key == QLatin1String("transferMode"))
+    setTransferMode(value.toInt());
+
+  else if (key == QLatin1String("inEndpointIndex"))
+    setInEndpointIndex(value.toInt());
+
+  else if (key == QLatin1String("outEndpointIndex"))
+    setOutEndpointIndex(value.toInt());
+
+  else if (key == QLatin1String("isoPacketSize"))
+    setIsoPacketSize(value.toInt());
 }
 
 #endif  // BUILD_COMMERCIAL

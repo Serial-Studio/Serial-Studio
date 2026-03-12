@@ -74,7 +74,7 @@ Widgets::DataGrid::DataGrid(const int index, QQuickItem* parent)
  *
  * @return True if updates are paused, false otherwise.
  */
-bool Widgets::DataGrid::paused() const
+bool Widgets::DataGrid::paused() const noexcept
 {
   return m_paused;
 }

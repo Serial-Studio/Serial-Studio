@@ -28,7 +28,7 @@
 #include <QPainter>
 
 #include "Console/Handler.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
@@ -136,12 +136,13 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
     &Console::Handler::instance(), &Console::Handler::cleared, this, &Widgets::Terminal::clear);
 
   // Clear the screen when device is connected/disconnected
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, [=, this] {
-    if (IO::Manager::instance().isConnected())
-      clear();
-    else if (m_data.isEmpty())
-      loadWelcomeGuide();
-  });
+  connect(
+    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [=, this] {
+      if (IO::ConnectionManager::instance().isConnected())
+        clear();
+      else if (m_data.isEmpty())
+        loadWelcomeGuide();
+    });
 
   // Redraw widget as soon as it is visible
   connect(this, &Widgets::Terminal::visibleChanged, this, [=, this] {
@@ -760,8 +761,8 @@ int Widgets::Terminal::terminalRows() const
  */
 void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
 {
-  if (!vt100emulation() || !IO::Manager::instance().isConnected()
-      || !IO::Manager::instance().readWrite()) {
+  if (!vt100emulation() || !IO::ConnectionManager::instance().isConnected()
+      || !IO::ConnectionManager::instance().readWrite()) {
     QQuickPaintedItem::keyPressEvent(event);
     return;
   }
@@ -773,7 +774,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   // Ctrl+letter → control code
   if ((mods & Qt::ControlModifier) && key >= Qt::Key_A && key <= Qt::Key_Z) {
     seq.append(char(key - Qt::Key_A + 1));
-    IO::Manager::instance().writeData(seq);
+    IO::ConnectionManager::instance().writeData(seq);
     event->accept();
     return;
   }
@@ -781,7 +782,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   // Ctrl+[ → ESC
   if ((mods & Qt::ControlModifier) && key == Qt::Key_BracketLeft) {
     seq.append('\x1b');
-    IO::Manager::instance().writeData(seq);
+    IO::ConnectionManager::instance().writeData(seq);
     event->accept();
     return;
   }
@@ -877,7 +878,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   }
 
   if (!seq.isEmpty()) {
-    IO::Manager::instance().writeData(seq);
+    IO::ConnectionManager::instance().writeData(seq);
     event->accept();
     return;
   }

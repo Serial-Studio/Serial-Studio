@@ -24,6 +24,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import "../../Widgets" as Widgets
+import "." as Views
 
 Widgets.Pane {
   id: root
@@ -82,26 +83,288 @@ Widgets.Pane {
         subtitleText: qsTr("Fallback widgets will be used. Buy a license to unlock full functionality.")
       }
 
-      ScrollView {
-        id: view
+      Rectangle {
+        id: titleBar
 
-        contentWidth: width
+        implicitHeight: 48
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+
+        Rectangle {
+          height: 1
+          width: parent.width
+          anchors.top: parent.top
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        Rectangle {
+          height: 1
+          width: parent.width
+          anchors.bottom: parent.bottom
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        RowLayout {
+          anchors {
+            leftMargin: 8
+            rightMargin: 8
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+          }
+
+          Label {
+            text: qsTr("Project Title:")
+            Layout.alignment: Qt.AlignVCenter
+          }
+
+          TextField {
+            id: titleField
+
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            font: Cpp_Misc_CommonFonts.uiFont
+            text: Cpp_JSON_ProjectModel.title
+            placeholderText: qsTr("Untitled Project")
+            onTextEdited: Cpp_JSON_ProjectModel.setTitle(text)
+
+            Connections {
+              target: Cpp_JSON_ProjectModel
+              function onTitleChanged() {
+                if (!titleField.activeFocus)
+                  titleField.text = Cpp_JSON_ProjectModel.title
+              }
+            }
+          }
+        }
+      }
+
+      Rectangle {
+        id: statsBar
+
+        implicitHeight: 64
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+
+        Rectangle {
+          height: 1
+          width: parent.width
+          anchors.bottom: parent.bottom
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        property int actionCount: 0
+
+        Connections {
+          target: Cpp_JSON_ProjectModel
+          function onActionsChanged() {
+            statsBar.actionCount = Cpp_JSON_ProjectModel.actionsForDiagram().length
+          }
+        }
+
+        Component.onCompleted: {
+          statsBar.actionCount = Cpp_JSON_ProjectModel.actionsForDiagram().length
+        }
+
+        Row {
+          spacing: 0
+          anchors.fill: parent
+
+          Repeater {
+            model: [
+              {
+                icon:     "qrc:/rcc/icons/project-editor/summary/device.svg",
+                value:    Cpp_JSON_ProjectModel.sourceCount,
+                singular: qsTr("Source"),
+                plural:   qsTr("Sources")
+              },
+              {
+                icon:     "qrc:/rcc/icons/project-editor/summary/group.svg",
+                value:    Cpp_JSON_ProjectModel.groupCount,
+                singular: qsTr("Group"),
+                plural:   qsTr("Groups")
+              },
+              {
+                icon:     "qrc:/rcc/icons/project-editor/summary/dataset.svg",
+                value:    Cpp_JSON_ProjectModel.datasetCount,
+                singular: qsTr("Dataset"),
+                plural:   qsTr("Datasets")
+              },
+              {
+                icon:     "qrc:/rcc/icons/project-editor/summary/action.svg",
+                value:    statsBar.actionCount,
+                singular: qsTr("Action"),
+                plural:   qsTr("Actions")
+              }
+            ]
+
+            delegate: Item {
+              width:  statsBar.width / 4
+              height: statsBar.height
+
+              Rectangle {
+                width: 1
+                height: parent.height * 0.6
+                visible: index > 0
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                color: Cpp_ThemeManager.colors["groupbox_border"]
+              }
+
+              RowLayout {
+                spacing: 8
+                anchors.centerIn: parent
+
+                Image {
+                  source: modelData.icon
+                  sourceSize: Qt.size(42, 42)
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                ColumnLayout {
+                  spacing: 2
+                  Layout.alignment: Qt.AlignVCenter
+
+                  Item {
+                    Layout.fillHeight: true
+                  }
+
+                  Label {
+                    text: modelData.value
+                    color: Cpp_ThemeManager.colors["text"]
+                    font: Cpp_Misc_CommonFonts.customUiFont(1.2)
+                  }
+
+                  Label {
+                    opacity: 0.55
+                    color: Cpp_ThemeManager.colors["text"]
+                    text: modelData.value === 1 ? modelData.singular : modelData.plural
+                  }
+
+                  Item {
+                    Layout.fillHeight: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Views.FlowDiagram {
+        id: diagram
+
         Layout.fillWidth: true
         Layout.fillHeight: true
-        contentHeight: delegate.implicitHeight
-        ScrollBar.vertical.policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
+        Layout.minimumHeight: 280
+      }
 
-        TableDelegate {
-          id: delegate
+      Rectangle {
+        id: diagramToolbar
 
+        implicitHeight: 36
+        Layout.topMargin: -1
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+
+        Rectangle {
+          height: 1
           width: parent.width
-          headerVisible: false
-          parameterWidth: Math.min(delegate.width * 0.3, 256)
+          anchors.top: parent.top
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
 
-          Binding {
-            target: delegate
-            property: "modelPointer"
-            value: Cpp_JSON_ProjectEditor.projectModel
+        Row {
+          spacing: 2
+          anchors {
+            right: parent.right
+            rightMargin: 8
+            verticalCenter: parent.verticalCenter
+          }
+
+          Rectangle {
+            radius: 5
+            width: 26
+            height: 26
+            border.width: 1
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            color: zoomOutArea.pressed
+                   ? Cpp_ThemeManager.colors["highlight"]
+                   : Cpp_ThemeManager.colors["groupbox_background"]
+
+            Text {
+              text: "−"
+              font.pixelSize: 16
+              anchors.centerIn: parent
+              color: zoomOutArea.pressed
+                     ? Cpp_ThemeManager.colors["highlighted_text"]
+                     : Cpp_ThemeManager.colors["text"]
+            }
+
+            MouseArea {
+              id: zoomOutArea
+              anchors.fill: parent
+              hoverEnabled: true
+              cursorShape: Qt.PointingHandCursor
+              onClicked: diagram.zoom = Math.max(diagram.minZoom, diagram.zoom - 0.15)
+            }
+          }
+
+          Rectangle {
+            radius: 5
+            width: 44
+            height: 26
+            border.width: 1
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            color: resetArea.pressed
+                   ? Cpp_ThemeManager.colors["highlight"]
+                   : Cpp_ThemeManager.colors["groupbox_background"]
+
+            Text {
+              font.pixelSize: 11
+              anchors.centerIn: parent
+              text: Math.round(diagram.zoom * 100) + "%"
+              color: resetArea.pressed
+                     ? Cpp_ThemeManager.colors["highlighted_text"]
+                     : Cpp_ThemeManager.colors["text"]
+            }
+
+            MouseArea {
+              id: resetArea
+              anchors.fill: parent
+              hoverEnabled: true
+              cursorShape: Qt.PointingHandCursor
+              onClicked: diagram.resetZoom()
+            }
+          }
+
+          Rectangle {
+            radius: 5
+            width: 26
+            height: 26
+            border.width: 1
+            border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            color: zoomInArea.pressed
+                   ? Cpp_ThemeManager.colors["highlight"]
+                   : Cpp_ThemeManager.colors["groupbox_background"]
+
+            Text {
+              text: "+"
+              font.pixelSize: 16
+              anchors.centerIn: parent
+              color: zoomInArea.pressed
+                     ? Cpp_ThemeManager.colors["highlighted_text"]
+                     : Cpp_ThemeManager.colors["text"]
+            }
+
+            MouseArea {
+              id: zoomInArea
+
+              hoverEnabled: true
+              anchors.fill: parent
+              cursorShape: Qt.PointingHandCursor
+              onClicked: diagram.zoom = Math.min(diagram.maxZoom, diagram.zoom + 0.15)
+            }
           }
         }
       }

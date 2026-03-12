@@ -38,25 +38,40 @@ namespace DataModel {
  * mouse and drag events to the underlying widget. Delegates JS execution and
  * script persistence entirely to the @c FrameParser singleton.
  */
-class JsCodeEditor : public QQuickPaintedItem
-{
+class JsCodeEditor : public QQuickPaintedItem {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString text READ text NOTIFY textChanged)
-  Q_PROPERTY(bool isModified READ isModified NOTIFY modifiedChanged)
-  Q_PROPERTY(bool undoAvailable READ undoAvailable NOTIFY modifiedChanged)
-  Q_PROPERTY(bool redoAvailable READ redoAvailable NOTIFY modifiedChanged)
+  Q_PROPERTY(bool isModified
+             READ isModified
+             NOTIFY modifiedChanged)
+  Q_PROPERTY(bool undoAvailable
+             READ undoAvailable
+             NOTIFY modifiedChanged)
+  Q_PROPERTY(bool redoAvailable
+             READ redoAvailable
+             NOTIFY modifiedChanged)
+  Q_PROPERTY(QString text
+             READ text
+             NOTIFY textChanged)
+  Q_PROPERTY(int sourceId
+             READ  sourceId
+             WRITE setSourceId
+             NOTIFY sourceIdChanged)
+  // clang-format on
 
 signals:
   void textChanged();
   void modifiedChanged();
+  void sourceIdChanged();
 
 public:
-  explicit JsCodeEditor(QQuickItem *parent = nullptr);
+  explicit JsCodeEditor(QQuickItem* parent = nullptr);
 
+  [[nodiscard]] bool isModified() const noexcept;
+  [[nodiscard]] bool undoAvailable() const noexcept;
+  [[nodiscard]] bool redoAvailable() const noexcept;
+  [[nodiscard]] int sourceId() const noexcept;
   [[nodiscard]] QString text() const;
-  [[nodiscard]] bool isModified() const;
-  [[nodiscard]] bool undoAvailable() const;
-  [[nodiscard]] bool redoAvailable() const;
 
 public slots:
   void cut();
@@ -74,6 +89,7 @@ public slots:
   void testWithSampleData();
   void reload(const bool guiTrigger = false);
   void loadDefaultTemplate(const bool guiTrigger = false);
+  void setSourceId(const int sourceId);
 
 private slots:
   void onThemeChanged();
@@ -81,27 +97,28 @@ private slots:
   void resizeWidget();
 
 private:
-  void paint(QPainter *painter) override;
-  void keyPressEvent(QKeyEvent *event) override;
-  void keyReleaseEvent(QKeyEvent *event) override;
-  void inputMethodEvent(QInputMethodEvent *event) override;
-  void focusInEvent(QFocusEvent *event) override;
-  void focusOutEvent(QFocusEvent *event) override;
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void mouseReleaseEvent(QMouseEvent *event) override;
-  void mouseDoubleClickEvent(QMouseEvent *event) override;
-  void wheelEvent(QWheelEvent *event) override;
-  void dragEnterEvent(QDragEnterEvent *event) override;
-  void dragMoveEvent(QDragMoveEvent *event) override;
-  void dragLeaveEvent(QDragLeaveEvent *event) override;
-  void dropEvent(QDropEvent *event) override;
+  void paint(QPainter* painter) override;
+  void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
+  void inputMethodEvent(QInputMethodEvent* event) override;
+  void focusInEvent(QFocusEvent* event) override;
+  void focusOutEvent(QFocusEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
+  void wheelEvent(QWheelEvent* event) override;
+  void dragEnterEvent(QDragEnterEvent* event) override;
+  void dragMoveEvent(QDragMoveEvent* event) override;
+  void dragLeaveEvent(QDragLeaveEvent* event) override;
+  void dropEvent(QDropEvent* event) override;
 
 private:
+  int m_sourceId = 0;
   QPixmap m_pixmap;
   QSyntaxStyle m_style;
   QCodeEditor m_widget;
   FrameParserTestDialog m_testDialog;
 };
 
-} // namespace DataModel
+}  // namespace DataModel

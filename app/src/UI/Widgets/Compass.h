@@ -48,9 +48,15 @@ namespace Widgets {
  * - Directional antenna alignment
  */
 class Compass : public QQuickItem {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(double value READ value NOTIFY updated)
-  Q_PROPERTY(QString text READ text NOTIFY updated)
+  Q_PROPERTY(double value
+             READ value
+             NOTIFY updated)
+  Q_PROPERTY(QString text
+             READ text
+             NOTIFY updated)
+  // clang-format on
 
 signals:
   void updated();
@@ -58,8 +64,8 @@ signals:
 public:
   explicit Compass(const int index = -1, QQuickItem* parent = nullptr);
 
-  [[nodiscard]] double value() const;
-  [[nodiscard]] QString text() const;
+  [[nodiscard]] double value() const noexcept;
+  [[nodiscard]] QString text() const noexcept;
 
 private slots:
   void updateData();

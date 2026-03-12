@@ -21,10 +21,7 @@
 
 #include "FrameReader.h"
 
-#include "DataModel/FrameBuilder.h"
-#include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
-#include "IO/Manager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor function
@@ -54,12 +51,6 @@ IO::FrameReader::FrameReader(QObject* parent)
   m_quickPlotEndSequenceLps.reserve(m_quickPlotEndSequences.size());
   for (const auto& delimiter : std::as_const(m_quickPlotEndSequences))
     m_quickPlotEndSequenceLps.append(m_circularBuffer.buildKMPTable(delimiter));
-
-  setChecksum(IO::Manager::instance().checksumAlgorithm());
-  setStartSequence(IO::Manager::instance().startSequence());
-  setFinishSequence(IO::Manager::instance().finishSequence());
-  setOperationMode(DataModel::FrameBuilder::instance().operationMode());
-  setFrameDetectionMode(DataModel::ProjectModel::instance().frameDetection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -86,7 +77,7 @@ IO::FrameReader::FrameReader(QObject* parent)
  */
 void IO::FrameReader::processData(const ByteArrayPtr& data)
 {
-  if (!data || data->isEmpty() || IO::Manager::instance().paused())
+  if (!data || data->isEmpty())
     return;
 
   bool framesEnqueued = false;

@@ -26,7 +26,7 @@
 
 #  include <QImage>
 
-#  include "IO/Manager.h"
+#  include "IO/ConnectionManager.h"
 #  include "SerialStudio.h"
 #  include "UI/Dashboard.h"
 #  include "UI/ImageProvider.h"
@@ -289,8 +289,8 @@ Widgets::ImageView::ImageView(int index, QQuickItem* parent)
 
   m_providerKey = QStringLiteral("imageview:%1").arg(m_groupId);
 
-  connect(&IO::Manager::instance(),
-          &IO::Manager::driverChanged,
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::driverChanged,
           this,
           &ImageView::reconfigureReader,
           Qt::QueuedConnection);
@@ -324,7 +324,7 @@ QString Widgets::ImageView::imageUrl() const
 /**
  * @brief Returns the detected format of the last decoded frame (e.g. "JPEG").
  */
-const QString& Widgets::ImageView::imageFormat() const
+const QString& Widgets::ImageView::imageFormat() const noexcept
 {
   return m_imageFormat;
 }
@@ -332,7 +332,7 @@ const QString& Widgets::ImageView::imageFormat() const
 /**
  * @brief Returns the total number of frames decoded since the last connection.
  */
-int Widgets::ImageView::frameCount() const
+int Widgets::ImageView::frameCount() const noexcept
 {
   return m_frameCount;
 }
@@ -340,7 +340,7 @@ int Widgets::ImageView::frameCount() const
 /**
  * @brief Returns the pixel width of the last decoded frame.
  */
-int Widgets::ImageView::imageWidth() const
+int Widgets::ImageView::imageWidth() const noexcept
 {
   return m_imageWidth;
 }
@@ -348,7 +348,7 @@ int Widgets::ImageView::imageWidth() const
 /**
  * @brief Returns the pixel height of the last decoded frame.
  */
-int Widgets::ImageView::imageHeight() const
+int Widgets::ImageView::imageHeight() const noexcept
 {
   return m_imageHeight;
 }
@@ -364,7 +364,7 @@ QColor Widgets::ImageView::primaryColor() const
 /**
  * @brief Returns the dashboard group title associated with this widget.
  */
-const QString& Widgets::ImageView::groupTitle() const
+const QString& Widgets::ImageView::groupTitle() const noexcept
 {
   return m_groupTitle;
 }
@@ -372,7 +372,7 @@ const QString& Widgets::ImageView::groupTitle() const
 /**
  * @brief Returns whether per-widget image export is currently enabled.
  */
-bool Widgets::ImageView::exportEnabled() const
+bool Widgets::ImageView::exportEnabled() const noexcept
 {
   return m_exportEnabled;
 }
@@ -459,7 +459,7 @@ void Widgets::ImageView::reconfigureReader()
     m_reader = nullptr;
   }
 
-  auto* driver = IO::Manager::instance().driver();
+  auto* driver = IO::ConnectionManager::instance().driver();
   if (!driver)
     return;
 

@@ -50,8 +50,13 @@ namespace Widgets {
  *       and adds data frame integration.
  */
 class DataGrid : public StaticTable {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(bool paused READ paused WRITE setPaused NOTIFY pausedChanged)
+  Q_PROPERTY(bool paused
+             READ  paused
+             WRITE setPaused
+             NOTIFY pausedChanged)
+  // clang-format on
 
 signals:
   void pausedChanged();
@@ -59,7 +64,7 @@ signals:
 public:
   explicit DataGrid(const int index = -1, QQuickItem* parent = nullptr);
 
-  [[nodiscard]] bool paused() const;
+  [[nodiscard]] bool paused() const noexcept;
 
 public slots:
   void setPaused(const bool paused);

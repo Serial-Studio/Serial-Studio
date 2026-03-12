@@ -52,13 +52,45 @@ Item {
   property alias radius: _bg.radius
 
   //
+  property int deviceIndex: 0
+
+  //
   // Colors
   //
   property color backgroundColor: Cpp_ThemeManager.colors["widget_base"]
-  property color captionTopColor: root.focused ? Cpp_ThemeManager.colors["window_caption_active_top"] :
-                                                 Cpp_ThemeManager.colors["window_caption_inactive_top"]
-  property color captionBottomColor: root.focused ? Cpp_ThemeManager.colors["window_caption_active_bottom"] :
-                                                    Cpp_ThemeManager.colors["window_caption_inactive_bottom"]
+
+  property color captionTopColor: {
+    // Touch Cpp_ThemeManager.theme to make this binding re-evaluate on theme changes.
+    // getDeviceTopColor/Bottom are Q_INVOKABLE (not Q_PROPERTY) so they are not
+    // tracked automatically by the binding engine.
+    const _t = Cpp_ThemeManager.theme
+    const singleDevice = Cpp_JSON_ProjectModel.sourceCount <= 1
+                         || Cpp_AppState.operationMode !== SerialStudio.ProjectFile
+    if (singleDevice)
+      return root.focused ? Cpp_ThemeManager.colors["window_caption_active_top"]
+                          : Cpp_ThemeManager.colors["window_caption_inactive_top"]
+
+    const top = SerialStudio.getDeviceTopColor(root.deviceIndex + 1)
+    if (root.focused)
+      return top
+
+    return Qt.hsla(top.hslHue, top.hslSaturation * 0.45, top.hslLightness, 1.0)
+  }
+
+  property color captionBottomColor: {
+    const _t = Cpp_ThemeManager.theme
+    const singleDevice = Cpp_JSON_ProjectModel.sourceCount <= 1
+                         || Cpp_AppState.operationMode !== SerialStudio.ProjectFile
+    if (singleDevice)
+      return root.focused ? Cpp_ThemeManager.colors["window_caption_active_bottom"]
+                          : Cpp_ThemeManager.colors["window_caption_inactive_bottom"]
+
+    const bot = SerialStudio.getDeviceBottomColor(root.deviceIndex + 1)
+    if (root.focused)
+      return bot
+
+    return Qt.hsla(bot.hslHue, bot.hslSaturation * 0.45, bot.hslLightness, 1.0)
+  }
 
   //
   // Window state properties

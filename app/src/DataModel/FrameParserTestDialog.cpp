@@ -143,6 +143,19 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
 }
 
 //--------------------------------------------------------------------------------------------------
+// Public interface
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Sets the source ID used when executing the parser.
+ * @param sourceId Source whose engine is tested (0 = global).
+ */
+void DataModel::FrameParserTestDialog::setSourceId(int sourceId)
+{
+  m_sourceId = sourceId;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Button actions
 //--------------------------------------------------------------------------------------------------
 
@@ -177,10 +190,15 @@ void DataModel::FrameParserTestDialog::parseData()
   }
 
   QStringList result;
-  if (m_hexCheckBox->isChecked())
-    result = m_parser->parse(SerialStudio::hexToBytes(input));
-  else
-    result = m_parser->parse(input);
+  if (m_hexCheckBox->isChecked()) {
+    const auto frames = m_parser->parseMultiFrame(SerialStudio::hexToBytes(input), m_sourceId);
+    if (!frames.isEmpty())
+      result = frames.first();
+  } else {
+    const auto frames = m_parser->parseMultiFrame(input, m_sourceId);
+    if (!frames.isEmpty())
+      result = frames.first();
+  }
 
   displayOutput(input, result);
   m_userInput->clear();

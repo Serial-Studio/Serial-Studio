@@ -93,7 +93,8 @@ Widgets.MiniWindow {
 
         widgetIndex: root.widgetIndex
         Component.onCompleted: {
-          windowRoot.title = widgetTitle
+          windowRoot.title       = widgetTitle
+          windowRoot.deviceIndex = widgetSourceId
           if (windowRoot.icon !== undefined)
             windowRoot.icon = SerialStudio.dashboardWidgetIcon(widgetType)
         }

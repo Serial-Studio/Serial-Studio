@@ -158,9 +158,11 @@
         <file>icons/csd/restore.svg</file>
         <file>icons/dashboard-buttons/abscissa.svg</file>
         <file>icons/dashboard-buttons/anaglyph.svg</file>
+        <file>icons/dashboard-buttons/archive.svg</file>
         <file>icons/dashboard-buttons/area.svg</file>
         <file>icons/dashboard-buttons/center.svg</file>
         <file>icons/dashboard-buttons/crosshair.svg</file>
+        <file>icons/dashboard-buttons/filter.svg</file>
         <file>icons/dashboard-buttons/front_view.svg</file>
         <file>icons/dashboard-buttons/integral.svg</file>
         <file>icons/dashboard-buttons/interpolate-off.svg</file>
@@ -174,6 +176,7 @@
         <file>icons/dashboard-buttons/orthogonal_view.svg</file>
         <file>icons/dashboard-buttons/pan.svg</file>
         <file>icons/dashboard-buttons/pause.svg</file>
+        <file>icons/dashboard-buttons/pictures-folder.svg</file>
         <file>icons/dashboard-buttons/poliline.svg</file>
         <file>icons/dashboard-buttons/resume.svg</file>
         <file>icons/dashboard-buttons/return.svg</file>
@@ -214,6 +217,15 @@
         <file>icons/dashboard-small/plot.svg</file>
         <file>icons/dashboard-small/plot3d.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
+        <file>icons/devices/drivers/audio.svg</file>
+        <file>icons/devices/drivers/bluetooth.svg</file>
+        <file>icons/devices/drivers/canbus.svg</file>
+        <file>icons/devices/drivers/hid.svg</file>
+        <file>icons/devices/drivers/modbus.svg</file>
+        <file>icons/devices/drivers/network.svg</file>
+        <file>icons/devices/drivers/process.svg</file>
+        <file>icons/devices/drivers/uart.svg</file>
+        <file>icons/devices/drivers/usb.svg</file>
         <file>icons/licensing/devices.svg</file>
         <file>icons/licensing/email.svg</file>
         <file>icons/licensing/key.svg</file>
@@ -269,6 +281,7 @@
         <file>icons/project-editor/toolbar/add-compass.svg</file>
         <file>icons/project-editor/toolbar/add-datagrid.svg</file>
         <file>icons/project-editor/toolbar/add-dataset.svg</file>
+        <file>icons/project-editor/toolbar/add-device.svg</file>
         <file>icons/project-editor/toolbar/add-fft.svg</file>
         <file>icons/project-editor/toolbar/add-gauge.svg</file>
         <file>icons/project-editor/toolbar/add-gps.svg</file>
@@ -285,6 +298,10 @@
         <file>icons/project-editor/toolbar/Opened Folder Office M.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
+        <file>icons/project-editor/summary/action.svg</file>
+        <file>icons/project-editor/summary/dataset.svg</file>
+        <file>icons/project-editor/summary/device.svg</file>
+        <file>icons/project-editor/summary/group.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
@@ -329,15 +346,6 @@
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
         <file>icons/taskbar/settings.svg</file>
-        <file>icons/toolbar/drivers/audio.svg</file>
-        <file>icons/toolbar/drivers/bluetooth.svg</file>
-        <file>icons/toolbar/drivers/canbus.svg</file>
-        <file>icons/toolbar/drivers/hid.svg</file>
-        <file>icons/toolbar/drivers/modbus.svg</file>
-        <file>icons/toolbar/drivers/network.svg</file>
-        <file>icons/toolbar/drivers/process.svg</file>
-        <file>icons/toolbar/drivers/uart.svg</file>
-        <file>icons/toolbar/drivers/usb.svg</file>
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/activate.svg</file>
         <file>icons/toolbar/connect.svg</file>
@@ -480,8 +488,7 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
-        <file>icons/dashboard-buttons/filter.svg</file>
-        <file>icons/dashboard-buttons/archive.svg</file>
-        <file>icons/dashboard-buttons/pictures-folder.svg</file>
+        <file>images/multi-device.svg</file>
+        <file>icons/buttons/wrench.svg</file>
     </qresource>
 </RCC>

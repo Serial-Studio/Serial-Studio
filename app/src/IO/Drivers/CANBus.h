@@ -125,17 +125,14 @@ signals:
   void interfaceErrorChanged();
   void connectionError(const QString& error);
 
-private:
+public:
   explicit CANBus();
+  ~CANBus();
+
   CANBus(CANBus&&)                 = delete;
   CANBus(const CANBus&)            = delete;
   CANBus& operator=(CANBus&&)      = delete;
   CANBus& operator=(const CANBus&) = delete;
-
-  ~CANBus();
-
-public:
-  static CANBus& instance();
 
   void close() override;
 
@@ -145,6 +142,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] bool canFD() const;
   [[nodiscard]] quint8 pluginIndex() const;
@@ -159,6 +157,7 @@ public:
   Q_INVOKABLE QString pluginDisplayName(const QString& plugin) const;
 
 public slots:
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void setupExternalConnections();
   void setCanFD(const bool enabled);
   void setBitrate(const quint32 bitrate);

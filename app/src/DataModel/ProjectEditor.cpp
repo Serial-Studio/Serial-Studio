@@ -27,6 +27,7 @@
 
 #include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
@@ -39,13 +40,7 @@
 typedef enum { kRootItem, kFrameParser } TopLevelItem;
 
 typedef enum {
-  kProjectView_Title,
-  kProjectView_FrameStartSequence,
-  kProjectView_FrameEndSequence,
-  kProjectView_FrameDecoder,
-  kProjectView_HexadecimalSequence,
-  kProjectView_FrameDetection,
-  kProjectView_ChecksumFunction
+  kProjectView_Title
 } ProjectItem;
 
 typedef enum {
@@ -69,7 +64,8 @@ typedef enum {
   kDatasetView_AlarmEnabled,
   kDatasetView_FFT_SamplingRate,
   kDatasetView_xAxis,
-  kDatasetView_Overview
+  kDatasetView_Overview,
+  kDatasetView_Source
 } DatasetItem;
 
 typedef enum {
@@ -86,12 +82,54 @@ typedef enum {
 typedef enum {
   kGroupView_Title,
   kGroupView_Widget,
+  kGroupView_Source,
   kGroupView_ImgMode,
   kGroupView_ImgStart,
   kGroupView_ImgEnd
 } GroupItem;
 
+typedef enum {
+  kSourceView_Title,
+  kSourceView_BusType,
+  kSourceView_Property,
+  kSourceView_FrameParser,
+  kSourceView_FrameDetection,
+  kSourceView_HexadecimalSequence,
+  kSourceView_FrameStartSequence,
+  kSourceView_FrameEndSequence,
+  kSourceView_FrameDecoder,
+  kSourceView_ChecksumFunction
+} SourceItem;
+
 // clang-format on
+
+static QString busTypeIcon(int busType)
+{
+  switch (static_cast<SerialStudio::BusType>(busType)) {
+    case SerialStudio::BusType::UART:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/uart.svg");
+    case SerialStudio::BusType::Network:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/network.svg");
+    case SerialStudio::BusType::BluetoothLE:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/bluetooth.svg");
+#ifdef BUILD_COMMERCIAL
+    case SerialStudio::BusType::Audio:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/audio.svg");
+    case SerialStudio::BusType::ModBus:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/modbus.svg");
+    case SerialStudio::BusType::CanBus:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/canbus.svg");
+    case SerialStudio::BusType::RawUsb:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/usb.svg");
+    case SerialStudio::BusType::HidDevice:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/hid.svg");
+    case SerialStudio::BusType::Process:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/process.svg");
+#endif
+    default:
+      return QStringLiteral("qrc:/rcc/icons/devices/drivers/uart.svg");
+  }
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor / singleton
@@ -102,6 +140,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_treeModel(nullptr)
   , m_selectionModel(nullptr)
   , m_groupModel(nullptr)
+  , m_sourceModel(nullptr)
   , m_actionModel(nullptr)
   , m_projectModel(nullptr)
   , m_datasetModel(nullptr)
@@ -120,6 +159,19 @@ DataModel::ProjectEditor::ProjectEditor()
           this,
           &DataModel::ProjectEditor::buildTreeModel,
           Qt::QueuedConnection);
+  connect(
+    &pm,
+    &DataModel::ProjectModel::sourcesChanged,
+    this,
+    [this] {
+      buildTreeModel();
+
+      if (m_currentView == GroupView)
+        buildGroupModel(m_selectedGroup);
+      else if (m_currentView == DatasetView)
+        buildDatasetModel(m_selectedDataset);
+    },
+    Qt::QueuedConnection);
   connect(&pm, &DataModel::ProjectModel::modifiedChanged, this, [this] {
     if (m_currentView == ProjectView)
       buildProjectModel();
@@ -235,6 +287,36 @@ DataModel::ProjectEditor::ProjectEditor()
     },
     Qt::QueuedConnection);
 
+  connect(
+    &pm,
+    &DataModel::ProjectModel::sourceAdded,
+    this,
+    [this](int sourceId) {
+      if (!m_selectionModel)
+        return;
+
+      for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
+        if (it.value().sourceId != sourceId)
+          continue;
+
+        m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+        break;
+      }
+    },
+    Qt::QueuedConnection);
+
+  connect(
+    &pm,
+    &DataModel::ProjectModel::sourceDeleted,
+    this,
+    [this] {
+      if (m_selectionModel) {
+        auto index = m_treeModel->index(0, 0);
+        m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+      }
+    },
+    Qt::QueuedConnection);
+
   connect(this,
           &DataModel::ProjectEditor::groupModelChanged,
           this,
@@ -264,6 +346,9 @@ DataModel::ProjectEditor::ProjectEditor()
         break;
       case DatasetView:
         buildDatasetModel(m_selectedDataset);
+        break;
+      case SourceView:
+        buildSourceModel(m_selectedSource);
         break;
       default:
         break;
@@ -446,6 +531,52 @@ DataModel::CustomModel* DataModel::ProjectEditor::groupModel() const
 }
 
 /**
+ * @brief Returns the form model for the currently selected source.
+ */
+DataModel::CustomModel* DataModel::ProjectEditor::sourceModel() const
+{
+  return m_sourceModel;
+}
+
+/**
+ * @brief Returns the sourceId of the currently selected source.
+ */
+int DataModel::ProjectEditor::selectedSourceId() const noexcept
+{
+  return m_selectedSource.sourceId;
+}
+
+/**
+ * @brief Returns the bus type (int) of the currently selected source.
+ */
+int DataModel::ProjectEditor::selectedSourceBusType() const noexcept
+{
+  return m_selectedSource.busType;
+}
+
+/**
+ * @brief Returns the JavaScript frame parser code of the currently selected source.
+ */
+QString DataModel::ProjectEditor::selectedSourceFrameParserCode() const
+{
+  return m_selectedSource.frameParserCode;
+}
+
+/**
+ * @brief Updates the frame parser code of the selected source.
+ * @param code The new JavaScript source string.
+ */
+void DataModel::ProjectEditor::setSelectedSourceFrameParserCode(const QString& code)
+{
+  if (m_selectedSource.frameParserCode == code)
+    return;
+
+  m_selectedSource.frameParserCode = code;
+  DataModel::ProjectModel::instance().updateSourceFrameParser(m_selectedSource.sourceId, code);
+  Q_EMIT selectedSourceFrameParserCodeChanged();
+}
+
+/**
  * @brief Returns the form model for the currently selected action.
  */
 DataModel::CustomModel* DataModel::ProjectEditor::actionModel() const
@@ -474,7 +605,7 @@ DataModel::CustomModel* DataModel::ProjectEditor::datasetModel() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Selects the Frame Parser Code item in the tree after a short delay.
+ * @brief Selects the Frame Parser item for source 0 in the tree after a short delay.
  *
  * The delay allows any pending tree rebuild to complete before the selection
  * is applied, ensuring the item exists in the model.
@@ -485,8 +616,8 @@ void DataModel::ProjectEditor::displayFrameParserView()
     if (!m_selectionModel)
       return;
 
-    for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
-      if (it.value() != kFrameParser)
+    for (auto it = m_sourceParserItems.begin(); it != m_sourceParserItems.end(); ++it) {
+      if (it.value().sourceId != 0)
         continue;
 
       m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
@@ -514,8 +645,10 @@ void DataModel::ProjectEditor::buildTreeModel()
 {
   m_rootItems.clear();
   m_groupItems.clear();
+  m_sourceItems.clear();
   m_actionItems.clear();
   m_datasetItems.clear();
+  m_sourceParserItems.clear();
 
   QHash<QString, bool> expandedStates;
   if (m_treeModel)
@@ -535,24 +668,40 @@ void DataModel::ProjectEditor::buildTreeModel()
 
   m_treeModel = new CustomModel(this);
 
-  const auto& pm      = DataModel::ProjectModel::instance();
-  const auto& groups  = pm.groups();
-  const auto& actions = pm.actions();
+  const auto& pm         = DataModel::ProjectModel::instance();
+  const auto& groups     = pm.groups();
+  const auto& actions    = pm.actions();
+  const auto& sources    = pm.sources();
+  const bool multiSource = sources.size() > 1;
 
   auto* root = new QStandardItem(pm.title());
   root->setData(root->text(), TreeViewText);
   root->setData("qrc:/rcc/icons/project-editor/treeview/project-setup.svg", TreeViewIcon);
   root->setData(true, TreeViewExpanded);
 
-  auto* frameParsingCode = new QStandardItem(tr("Frame Parser Code"));
-  frameParsingCode->setData(frameParsingCode->text(), TreeViewText);
-  frameParsingCode->setData("qrc:/rcc/icons/project-editor/treeview/code.svg", TreeViewIcon);
-
-  root->appendRow(frameParsingCode);
   m_treeModel->appendRow(root);
 
   m_rootItems.insert(root, kRootItem);
-  m_rootItems.insert(frameParsingCode, kFrameParser);
+
+  for (const auto& source : sources) {
+    auto* sourceItem = new QStandardItem(source.title);
+    sourceItem->setData(-1, TreeViewFrameIndex);
+    sourceItem->setData(busTypeIcon(source.busType), TreeViewIcon);
+    sourceItem->setData(source.title, TreeViewText);
+    sourceItem->setData(source.sourceId, TreeViewSourceId);
+    sourceItem->setData(multiSource ? source.title : QString(), TreeViewSourceName);
+    sourceItem->setData(true, TreeViewExpanded);
+
+    auto* parserItem = new QStandardItem(tr("Frame Parser"));
+    parserItem->setData(-1, TreeViewFrameIndex);
+    parserItem->setData("qrc:/rcc/icons/project-editor/treeview/code.svg", TreeViewIcon);
+    parserItem->setData(tr("Frame Parser"), TreeViewText);
+    sourceItem->appendRow(parserItem);
+    m_sourceParserItems.insert(parserItem, source);
+
+    root->appendRow(sourceItem);
+    m_sourceItems.insert(sourceItem, source);
+  }
 
   for (const auto& action : actions) {
     auto* actionItem = new QStandardItem(action.title);
@@ -571,6 +720,8 @@ void DataModel::ProjectEditor::buildTreeModel()
     groupItem->setData(icon, TreeViewIcon);
     groupItem->setData(-1, TreeViewFrameIndex);
     groupItem->setData(group.title, TreeViewText);
+    groupItem->setData(QString(), TreeViewSourceName);
+    groupItem->setData(group.sourceId, TreeViewSourceId);
 
     for (const auto& dataset : group.datasets) {
       auto* datasetItem = new QStandardItem(dataset.title);
@@ -582,6 +733,8 @@ void DataModel::ProjectEditor::buildTreeModel()
       datasetItem->setData(dIcon, TreeViewIcon);
       datasetItem->setData(dataset.title, TreeViewText);
       datasetItem->setData(dataset.index, TreeViewFrameIndex);
+      datasetItem->setData(group.sourceId, TreeViewSourceId);
+      datasetItem->setData(QString(), TreeViewSourceName);
       groupItem->appendRow(datasetItem);
       m_datasetItems.insert(datasetItem, dataset);
     }
@@ -636,9 +789,10 @@ void DataModel::ProjectEditor::buildTreeModel()
         break;
       }
     }
-  } else if (m_currentView == FrameParserView) {
-    for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
-      if (it.value() == kFrameParser) {
+  } else if (m_currentView == SourceView) {
+    const auto sid = m_selectedSource.sourceId;
+    for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
+      if (it.value().sourceId == sid) {
         toSelect = it.key();
         break;
       }
@@ -696,117 +850,6 @@ void DataModel::ProjectEditor::buildProjectModel()
   title->setData(tr("Name or description of the project"), ParameterDescription);
   m_projectModel->appendRow(title);
 
-  // -----------------------------------------------------------------------
-  // Frame Detection section — re-read current state from serialized JSON
-  // -----------------------------------------------------------------------
-  const auto json          = pm.serializeToJson();
-  const bool hexDelimiters = json.value("hexadecimalDelimiters").toBool();
-  const auto detection     = pm.frameDetection();
-  const auto frameStart    = json.value("frameStart").toString();
-  const auto frameEnd      = json.value("frameEnd").toString();
-  const auto checksum      = json.value("checksum").toString();
-  const auto decoder       = pm.decoderMethod();
-
-  hdr = new QStandardItem();
-  hdr->setData(SectionHeader, WidgetType);
-  hdr->setData(tr("Frame Detection"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
-  m_projectModel->appendRow(hdr);
-
-  auto* frameDetection = new QStandardItem();
-  frameDetection->setEditable(true);
-  frameDetection->setData(true, Active);
-  frameDetection->setData(ComboBox, WidgetType);
-  frameDetection->setData(m_frameDetectionMethods, ComboBoxData);
-  frameDetection->setData(m_frameDetectionMethodsValues.indexOf(detection), EditableValue);
-  frameDetection->setData(kProjectView_FrameDetection, ParameterType);
-  frameDetection->setData(tr("Frame Detection Method"), ParameterName);
-  frameDetection->setData(tr("Select how incoming data frames are identified"),
-                          ParameterDescription);
-  m_projectModel->appendRow(frameDetection);
-
-  auto* hexSeq = new QStandardItem();
-  hexSeq->setEditable(true);
-  hexSeq->setData(true, Active);
-  hexSeq->setData(CheckBox, WidgetType);
-  hexSeq->setData(hexDelimiters, EditableValue);
-  hexSeq->setData(kProjectView_HexadecimalSequence, ParameterType);
-  hexSeq->setData(tr("Hexadecimal Delimiters"), ParameterName);
-  hexSeq->setData(tr("Enter frame start/end sequences as hexadecimal values"),
-                  ParameterDescription);
-  m_projectModel->appendRow(hexSeq);
-
-  const bool showStart = (detection == SerialStudio::StartDelimiterOnly
-                          || detection == SerialStudio::StartAndEndDelimiter);
-  const bool showEnd   = (detection == SerialStudio::EndDelimiterOnly
-                        || detection == SerialStudio::StartAndEndDelimiter);
-
-  if (showStart) {
-    auto* startSeq = new QStandardItem();
-    startSeq->setEditable(true);
-    startSeq->setData(true, Active);
-    startSeq->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
-    startSeq->setData(frameStart, EditableValue);
-    startSeq->setData(kProjectView_FrameStartSequence, ParameterType);
-    startSeq->setData(tr("Frame Start Delimiter"), ParameterName);
-    startSeq->setData(tr("e.g. /*"), PlaceholderValue);
-    startSeq->setData(tr("Sequence that marks the beginning of a data frame"),
-                      ParameterDescription);
-    m_projectModel->appendRow(startSeq);
-  }
-
-  if (showEnd) {
-    auto* endSeq = new QStandardItem();
-    endSeq->setEditable(true);
-    endSeq->setData(true, Active);
-    endSeq->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
-    endSeq->setData(frameEnd, EditableValue);
-    endSeq->setData(kProjectView_FrameEndSequence, ParameterType);
-    endSeq->setData(tr("Frame End Delimiter"), ParameterName);
-    endSeq->setData(tr("e.g. */"), PlaceholderValue);
-    endSeq->setData(tr("Sequence that marks the end of a data frame"), ParameterDescription);
-    m_projectModel->appendRow(endSeq);
-  }
-
-  // -----------------------------------------------------------------------
-  // Payload Processing section
-  // -----------------------------------------------------------------------
-  hdr = new QStandardItem();
-  hdr->setData(SectionHeader, WidgetType);
-  hdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
-  hdr->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg", ParameterIcon);
-  m_projectModel->appendRow(hdr);
-
-  auto* decoderItem = new QStandardItem();
-  decoderItem->setEditable(true);
-  decoderItem->setData(true, Active);
-  decoderItem->setData(ComboBox, WidgetType);
-  decoderItem->setData(m_decoderOptions, ComboBoxData);
-  decoderItem->setData(static_cast<int>(decoder), EditableValue);
-  decoderItem->setData(kProjectView_FrameDecoder, ParameterType);
-  decoderItem->setData(tr("Data Conversion Method"), ParameterName);
-  decoderItem->setData(tr("Select how incoming binary data is decoded before parsing"),
-                       ParameterDescription);
-  m_projectModel->appendRow(decoderItem);
-
-  // Find checksum index
-  const auto availableChecksums = IO::availableChecksums();
-  int checksumIdx               = availableChecksums.indexOf(checksum);
-  if (checksumIdx < 0)
-    checksumIdx = 0;
-
-  auto* checksumItem = new QStandardItem();
-  checksumItem->setEditable(true);
-  checksumItem->setData(true, Active);
-  checksumItem->setData(ComboBox, WidgetType);
-  checksumItem->setData(m_checksumMethods, ComboBoxData);
-  checksumItem->setData(checksumIdx, EditableValue);
-  checksumItem->setData(kProjectView_ChecksumFunction, ParameterType);
-  checksumItem->setData(tr("Checksum Algorithm"), ParameterName);
-  checksumItem->setData(tr("Select the checksum algorithm used to validate frames"),
-                        ParameterDescription);
-  m_projectModel->appendRow(checksumItem);
-
   connect(m_projectModel,
           &CustomModel::itemChanged,
           this,
@@ -849,6 +892,37 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
   titleItem->setData(tr("Untitled Group"), PlaceholderValue);
   titleItem->setData(tr("Title or description of this dataset group"), ParameterDescription);
   m_groupModel->appendRow(titleItem);
+
+  const auto& sources    = DataModel::ProjectModel::instance().sources();
+  const bool isImageGrp  = group.widget == QLatin1String("image");
+  const bool multiSource = sources.size() > 1;
+
+  if (isImageGrp && multiSource) {
+    QStringList sourceLabels;
+    for (const auto& src : sources)
+      sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
+                                              : src.title);
+
+    int sourceIndex = 0;
+    for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
+      if (sources[i].sourceId == group.sourceId) {
+        sourceIndex = i;
+        break;
+      }
+    }
+
+    auto* sourceItem = new QStandardItem();
+    sourceItem->setEditable(true);
+    sourceItem->setData(true, Active);
+    sourceItem->setData(ComboBox, WidgetType);
+    sourceItem->setData(sourceLabels, ComboBoxData);
+    sourceItem->setData(sourceIndex, EditableValue);
+    sourceItem->setData(kGroupView_Source, ParameterType);
+    sourceItem->setData(tr("Input Device"), ParameterName);
+    sourceItem->setData(tr("Select which connected device provides data for this group"),
+                        ParameterDescription);
+    m_groupModel->appendRow(sourceItem);
+  }
 
   int index  = 0;
   bool found = false;
@@ -929,6 +1003,365 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     m_groupModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onGroupItemChanged);
 
   Q_EMIT groupModelChanged();
+}
+
+/**
+ * @brief Rebuilds the source-settings form model for @p source.
+ *
+ * Queries the live driver via SourceManager::driverForEditing() to get a
+ * flat list of DriverProperty descriptors, then populates m_sourceModel with
+ * one row per property (plus a bus-type ComboBox at the top). QML renders this
+ * through the same TableDelegate used by group/dataset/action views.
+ *
+ * @param source The source whose properties should be displayed.
+ */
+void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
+{
+  if (m_sourceModel) {
+    disconnect(m_sourceModel);
+    m_sourceModel->deleteLater();
+  }
+
+  m_selectedSource = source;
+  m_sourceModel    = new CustomModel(this);
+
+  auto* identHdr = new QStandardItem();
+  identHdr->setData(SectionHeader, WidgetType);
+  identHdr->setData(tr("Identity"), PlaceholderValue);
+  identHdr->setData("qrc:/rcc/icons/project-editor/model/project.svg", ParameterIcon);
+  m_sourceModel->appendRow(identHdr);
+
+  auto* titleItem = new QStandardItem();
+  titleItem->setEditable(true);
+  titleItem->setData(true, Active);
+  titleItem->setData(TextField, WidgetType);
+  titleItem->setData(source.title, EditableValue);
+  titleItem->setData(kSourceView_Title, ParameterType);
+  titleItem->setData(tr("Device Name"), ParameterName);
+  titleItem->setData(tr("Device 1"), PlaceholderValue);
+  titleItem->setData(tr("Human-readable name for this input device"), ParameterDescription);
+  m_sourceModel->appendRow(titleItem);
+
+  auto* hdr = new QStandardItem();
+  hdr->setData(SectionHeader, WidgetType);
+  hdr->setData(tr("Input Device"), PlaceholderValue);
+  hdr->setData("qrc:/rcc/icons/project-editor/model/project.svg", ParameterIcon);
+  m_sourceModel->appendRow(hdr);
+
+  auto* busItem = new QStandardItem();
+  busItem->setEditable(true);
+  busItem->setData(true, Active);
+  busItem->setData(ComboBox, WidgetType);
+  busItem->setData(kSourceView_BusType, ParameterType);
+  busItem->setData(source.busType, EditableValue);
+  busItem->setData(tr("Bus Type"), ParameterName);
+  busItem->setData(tr("Select the hardware interface for this input device"), ParameterDescription);
+
+  QStringList busTypes = {tr("Serial Port"), tr("Network Socket"), tr("Bluetooth LE")};
+#ifdef BUILD_COMMERCIAL
+  busTypes << tr("Audio Input") << tr("Modbus") << tr("CAN Bus") << tr("Raw USB")
+           << tr("HID Device") << tr("Process");
+#endif
+
+  busItem->setData(busTypes, ComboBoxData);
+  m_sourceModel->appendRow(busItem);
+
+  auto* driverHdr = new QStandardItem();
+  driverHdr->setData(SectionHeader, WidgetType);
+  driverHdr->setData(tr("Connection Settings"), PlaceholderValue);
+  driverHdr->setData(busTypeIcon(source.busType), ParameterIcon);
+  m_sourceModel->appendRow(driverHdr);
+
+  IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(source.sourceId);
+  if (driver) {
+    const auto props = driver->driverProperties();
+    for (const auto& prop : props) {
+      auto* item = new QStandardItem();
+      item->setEditable(true);
+      item->setData(true, Active);
+      item->setData(prop.key, ParameterKey);
+      item->setData(kSourceView_Property, ParameterType);
+      item->setData(prop.label, ParameterName);
+
+      if (!prop.description.isEmpty())
+        item->setData(prop.description, ParameterDescription);
+
+      switch (prop.type) {
+        case IO::DriverProperty::Text:
+          item->setData(TextField, WidgetType);
+          break;
+        case IO::DriverProperty::HexText:
+          item->setData(HexTextField, WidgetType);
+          break;
+        case IO::DriverProperty::IntField:
+          item->setData(IntField, WidgetType);
+          break;
+        case IO::DriverProperty::FloatField:
+          item->setData(FloatField, WidgetType);
+          break;
+        case IO::DriverProperty::CheckBox:
+          item->setData(CheckBox, WidgetType);
+          break;
+        case IO::DriverProperty::ComboBox:
+          item->setData(ComboBox, WidgetType);
+          item->setData(prop.options, ComboBoxData);
+          break;
+      }
+
+      item->setData(prop.value, EditableValue);
+      m_sourceModel->appendRow(item);
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Frame Detection section
+  // -------------------------------------------------------------------------
+  auto* fdHdr = new QStandardItem();
+  fdHdr->setData(SectionHeader, WidgetType);
+  fdHdr->setData(tr("Frame Detection"), PlaceholderValue);
+  fdHdr->setData("qrc:/rcc/icons/project-editor/model/frame-detection.svg", ParameterIcon);
+  m_sourceModel->appendRow(fdHdr);
+
+  const auto detection     = static_cast<SerialStudio::FrameDetection>(source.frameDetection);
+  const bool hexDelimiters = source.hexadecimalDelimiters;
+  const auto frameStart    = source.frameStart;
+  const auto frameEnd      = source.frameEnd;
+
+  auto* frameDetectionItem = new QStandardItem();
+  frameDetectionItem->setEditable(true);
+  frameDetectionItem->setData(true, Active);
+  frameDetectionItem->setData(ComboBox, WidgetType);
+  frameDetectionItem->setData(m_frameDetectionMethods, ComboBoxData);
+  frameDetectionItem->setData(m_frameDetectionMethodsValues.indexOf(detection), EditableValue);
+  frameDetectionItem->setData(kSourceView_FrameDetection, ParameterType);
+  frameDetectionItem->setData(tr("Frame Detection Method"), ParameterName);
+  frameDetectionItem->setData(tr("Select how incoming data frames are identified"),
+                              ParameterDescription);
+  m_sourceModel->appendRow(frameDetectionItem);
+
+  auto* hexSeqItem = new QStandardItem();
+  hexSeqItem->setEditable(true);
+  hexSeqItem->setData(true, Active);
+  hexSeqItem->setData(CheckBox, WidgetType);
+  hexSeqItem->setData(hexDelimiters, EditableValue);
+  hexSeqItem->setData(kSourceView_HexadecimalSequence, ParameterType);
+  hexSeqItem->setData(tr("Hexadecimal Delimiters"), ParameterName);
+  hexSeqItem->setData(tr("Enter frame start/end sequences as hexadecimal values"),
+                      ParameterDescription);
+  m_sourceModel->appendRow(hexSeqItem);
+
+  const bool showStart = (detection == SerialStudio::StartDelimiterOnly
+                          || detection == SerialStudio::StartAndEndDelimiter);
+  const bool showEnd   = (detection == SerialStudio::EndDelimiterOnly
+                        || detection == SerialStudio::StartAndEndDelimiter);
+
+  if (showStart) {
+    auto* startSeqItem = new QStandardItem();
+    startSeqItem->setEditable(true);
+    startSeqItem->setData(true, Active);
+    startSeqItem->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
+    startSeqItem->setData(frameStart, EditableValue);
+    startSeqItem->setData(kSourceView_FrameStartSequence, ParameterType);
+    startSeqItem->setData(tr("Frame Start Delimiter"), ParameterName);
+    startSeqItem->setData(tr("e.g. /*"), PlaceholderValue);
+    startSeqItem->setData(tr("Sequence that marks the beginning of a data frame"),
+                          ParameterDescription);
+    m_sourceModel->appendRow(startSeqItem);
+  }
+
+  if (showEnd) {
+    auto* endSeqItem = new QStandardItem();
+    endSeqItem->setEditable(true);
+    endSeqItem->setData(true, Active);
+    endSeqItem->setData(hexDelimiters ? HexTextField : TextField, WidgetType);
+    endSeqItem->setData(frameEnd, EditableValue);
+    endSeqItem->setData(kSourceView_FrameEndSequence, ParameterType);
+    endSeqItem->setData(tr("Frame End Delimiter"), ParameterName);
+    endSeqItem->setData(tr("e.g. */"), PlaceholderValue);
+    endSeqItem->setData(tr("Sequence that marks the end of a data frame"), ParameterDescription);
+    m_sourceModel->appendRow(endSeqItem);
+  }
+
+  // -------------------------------------------------------------------------
+  // Payload Processing section
+  // -------------------------------------------------------------------------
+  auto* ppHdr = new QStandardItem();
+  ppHdr->setData(SectionHeader, WidgetType);
+  ppHdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
+  ppHdr->setData("qrc:/rcc/icons/project-editor/model/data-conversion.svg", ParameterIcon);
+  m_sourceModel->appendRow(ppHdr);
+
+  auto* decoderItem = new QStandardItem();
+  decoderItem->setEditable(true);
+  decoderItem->setData(true, Active);
+  decoderItem->setData(ComboBox, WidgetType);
+  decoderItem->setData(m_decoderOptions, ComboBoxData);
+  decoderItem->setData(source.decoderMethod, EditableValue);
+  decoderItem->setData(kSourceView_FrameDecoder, ParameterType);
+  decoderItem->setData(tr("Data Conversion Method"), ParameterName);
+  decoderItem->setData(tr("Select how incoming binary data is decoded before parsing"),
+                       ParameterDescription);
+  m_sourceModel->appendRow(decoderItem);
+
+  const auto availableChecksums = IO::availableChecksums();
+  int checksumIdx               = availableChecksums.indexOf(source.checksumAlgorithm);
+  if (checksumIdx < 0)
+    checksumIdx = 0;
+
+  auto* checksumItem = new QStandardItem();
+  checksumItem->setEditable(true);
+  checksumItem->setData(true, Active);
+  checksumItem->setData(ComboBox, WidgetType);
+  checksumItem->setData(m_checksumMethods, ComboBoxData);
+  checksumItem->setData(checksumIdx, EditableValue);
+  checksumItem->setData(kSourceView_ChecksumFunction, ParameterType);
+  checksumItem->setData(tr("Checksum Algorithm"), ParameterName);
+  checksumItem->setData(tr("Select the checksum algorithm used to validate frames"),
+                        ParameterDescription);
+  m_sourceModel->appendRow(checksumItem);
+
+  connect(
+    m_sourceModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onSourceItemChanged);
+
+  Q_EMIT sourceModelChanged();
+}
+
+/**
+ * @brief Handles edits from the source settings form model.
+ *
+ * Dispatches changes to either ProjectModel (for bus-type changes) or the live
+ * driver via setDriverProperty() (for all other connection parameters). After a
+ * driver property change the updated values are captured back into
+ * Source::connectionSettings so they survive project save/load.
+ *
+ * @param item The QStandardItem whose data was changed.
+ */
+void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
+{
+  if (!item)
+    return;
+
+  const int id = item->data(ParameterType).toInt();
+
+  if (id == kSourceView_Title) {
+    const QString newTitle = item->data(EditableValue).toString();
+    if (m_selectedSource.title == newTitle)
+      return;
+
+    m_selectedSource.title = newTitle;
+    DataModel::ProjectModel::instance().updateSourceTitle(m_selectedSource.sourceId, newTitle);
+
+    for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
+      if (it.value().sourceId != m_selectedSource.sourceId)
+        continue;
+
+      auto* treeItem = it.key();
+      treeItem->setText(newTitle);
+      treeItem->setData(newTitle, TreeViewText);
+      m_sourceItems[treeItem].title = newTitle;
+      break;
+    }
+
+    Q_EMIT selectedTextChanged();
+    return;
+  }
+
+  if (id == kSourceView_BusType) {
+    const int busType = item->data(EditableValue).toInt();
+    DataModel::ProjectModel::instance().updateSourceBusType(m_selectedSource.sourceId, busType);
+    m_selectedSource.busType = busType;
+    connect(
+      &IO::ConnectionManager::instance(),
+      &IO::ConnectionManager::contextsRebuilt,
+      this,
+      [this] {
+        disconnect(&IO::ConnectionManager::instance(),
+                   &IO::ConnectionManager::contextsRebuilt,
+                   this,
+                   nullptr);
+        buildSourceModel(m_selectedSource);
+      },
+      Qt::QueuedConnection);
+    return;
+  }
+
+  if (id == kSourceView_Property) {
+    const QString key  = item->data(ParameterKey).toString();
+    const QVariant val = item->data(EditableValue);
+    IO::HAL_Driver* drv =
+      IO::ConnectionManager::instance().driverForEditing(m_selectedSource.sourceId);
+    if (drv)
+      drv->setDriverProperty(key, val);
+
+    DataModel::ProjectModel::instance().captureSourceSettings(m_selectedSource.sourceId);
+
+    // Switching the transport mode changes which properties are visible;
+    // rebuild the form so only the relevant fields are shown.
+    static const QStringList kModeKeys = {
+      QStringLiteral("socketTypeIndex"),
+      QStringLiteral("protocolIndex"),
+    };
+    if (kModeKeys.contains(key))
+      buildSourceModel(m_selectedSource);
+
+    return;
+  }
+
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  const int sid       = m_selectedSource.sourceId;
+
+  if (sid < 0 || sid >= static_cast<int>(sources.size()))
+    return;
+
+  DataModel::Source updated = sources[sid];
+
+  switch (static_cast<SourceItem>(id)) {
+    case kSourceView_FrameDetection: {
+      const int idx = item->data(EditableValue).toInt();
+      if (idx < 0 || idx >= m_frameDetectionMethodsValues.size())
+        return;
+
+      updated.frameDetection = static_cast<int>(m_frameDetectionMethodsValues.at(idx));
+      DataModel::ProjectModel::instance().updateSource(sid, updated);
+      m_selectedSource = updated;
+      buildSourceModel(m_selectedSource);
+      break;
+    }
+    case kSourceView_HexadecimalSequence:
+      updated.hexadecimalDelimiters = item->data(EditableValue).toBool();
+      DataModel::ProjectModel::instance().updateSource(sid, updated);
+      m_selectedSource = updated;
+      buildSourceModel(m_selectedSource);
+      break;
+    case kSourceView_FrameStartSequence:
+      updated.frameStart = item->data(EditableValue).toString();
+      DataModel::ProjectModel::instance().updateSource(sid, updated);
+      m_selectedSource = updated;
+      break;
+    case kSourceView_FrameEndSequence:
+      updated.frameEnd = item->data(EditableValue).toString();
+      DataModel::ProjectModel::instance().updateSource(sid, updated);
+      m_selectedSource = updated;
+      break;
+    case kSourceView_FrameDecoder:
+      updated.decoderMethod = item->data(EditableValue).toInt();
+      DataModel::ProjectModel::instance().updateSource(sid, updated);
+      m_selectedSource = updated;
+      break;
+    case kSourceView_ChecksumFunction: {
+      const auto checksums = IO::availableChecksums();
+      const int checksumId = item->data(EditableValue).toInt();
+      if (checksumId < 0 || checksumId >= checksums.size())
+        return;
+
+      updated.checksumAlgorithm = checksums.at(checksumId);
+      DataModel::ProjectModel::instance().updateSource(sid, updated);
+      m_selectedSource = updated;
+      break;
+    }
+    default:
+      break;
+  }
 }
 
 /**
@@ -1168,6 +1601,34 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
   titleItem->setData(tr("Name of the dataset, used for labeling and identification"),
                      ParameterDescription);
   model->appendRow(titleItem);
+
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  if (sources.size() > 1) {
+    QStringList sourceLabels;
+    for (const auto& src : sources)
+      sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
+                                              : src.title);
+
+    int sourceIndex = 0;
+    for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
+      if (sources[i].sourceId == dataset.sourceId) {
+        sourceIndex = i;
+        break;
+      }
+    }
+
+    auto* srcItem = new QStandardItem();
+    srcItem->setEditable(true);
+    srcItem->setData(true, Active);
+    srcItem->setData(ComboBox, WidgetType);
+    srcItem->setData(sourceLabels, ComboBoxData);
+    srcItem->setData(sourceIndex, EditableValue);
+    srcItem->setData(kDatasetView_Source, ParameterType);
+    srcItem->setData(tr("Input Device"), ParameterName);
+    srcItem->setData(tr("Select which connected device provides this dataset's values"),
+                     ParameterDescription);
+    model->appendRow(srcItem);
+  }
 
   const auto& pm = DataModel::ProjectModel::instance();
 
@@ -1664,6 +2125,13 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
     }
 
     Q_EMIT selectedTextChanged();
+  } else if (id == kGroupView_Source) {
+    const auto& sources = DataModel::ProjectModel::instance().sources();
+    const int srcIdx    = value.toInt();
+    if (srcIdx >= 0 && srcIdx < static_cast<int>(sources.size())) {
+      m_selectedGroup.sourceId = sources[srcIdx].sourceId;
+      pm.updateGroup(groupId, m_selectedGroup, false);
+    }
   } else if (id == kGroupView_Widget) {
     const auto keys     = m_groupWidgets.keys();
     const int widgetIdx = value.toInt();
@@ -1812,37 +2280,6 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
     case kProjectView_Title:
       pm.setTitle(value.toString());
       break;
-    case kProjectView_FrameEndSequence:
-      pm.setFrameEndSequence(value.toString());
-      break;
-    case kProjectView_FrameStartSequence:
-      pm.setFrameStartSequence(value.toString());
-      break;
-    case kProjectView_FrameDecoder:
-      pm.setDecoderMethod(static_cast<SerialStudio::DecoderMethod>(value.toInt()));
-      break;
-    case kProjectView_ChecksumFunction: {
-      const auto checksums = IO::availableChecksums();
-      const int checksumId = value.toInt();
-      if (checksumId < 0 || checksumId >= checksums.size())
-        return;
-
-      pm.setChecksumAlgorithm(checksums.at(checksumId));
-      break;
-    }
-    case kProjectView_HexadecimalSequence:
-      pm.setHexadecimalDelimiters(value.toBool());
-      buildProjectModel();
-      break;
-    case kProjectView_FrameDetection: {
-      const int detectionIdx = value.toInt();
-      if (detectionIdx < 0 || detectionIdx >= m_frameDetectionMethodsValues.size())
-        return;
-
-      pm.setFrameDetection(m_frameDetectionMethodsValues.at(detectionIdx));
-      buildProjectModel();
-      break;
-    }
     default:
       break;
   }
@@ -1971,6 +2408,14 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     case kDatasetView_FFT_SamplingRate:
       m_selectedDataset.fftSamplingRate = value.toInt();
       break;
+    case kDatasetView_Source: {
+      const auto& sources = DataModel::ProjectModel::instance().sources();
+      const int srcIdx    = value.toInt();
+      if (srcIdx >= 0 && srcIdx < static_cast<int>(sources.size()))
+        m_selectedDataset.sourceId = sources[srcIdx].sourceId;
+
+      break;
+    }
     default:
       break;
   }
@@ -1999,7 +2444,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
 
     Q_EMIT selectedTextChanged();
   } else {
-    const bool rebuildTree = (idInt == kDatasetView_Index);
+    const bool rebuildTree = (idInt == kDatasetView_Index || idInt == kDatasetView_Source);
     pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
   }
 
@@ -2034,7 +2479,20 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
   if (!item)
     return;
 
-  if (m_groupItems.contains(item)) {
+  if (m_sourceParserItems.contains(item)) {
+    const auto source = m_sourceParserItems.value(item);
+    m_selectedSource  = source;
+    setCurrentView(SourceFrameParserView);
+    Q_EMIT selectedSourceFrameParserCodeChanged();
+    Q_EMIT sourceModelChanged();
+  } else if (m_sourceItems.contains(item)) {
+    const auto source = m_sourceItems.value(item);
+    if (m_currentView == SourceView && source.sourceId == m_selectedSource.sourceId)
+      return;
+
+    setCurrentView(SourceView);
+    buildSourceModel(source);
+  } else if (m_groupItems.contains(item)) {
     const auto group = m_groupItems.value(item);
     DataModel::ProjectModel::instance().setSelectedGroup(group);
     setCurrentView(GroupView);
@@ -2050,18 +2508,90 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
     setCurrentView(ActionView);
     buildActionModel(action);
   } else if (m_rootItems.contains(item)) {
-    const auto id = m_rootItems.value(item);
-    if (id == kFrameParser)
-      setCurrentView(FrameParserView);
-    else {
-      setCurrentView(ProjectView);
-      buildProjectModel();
-    }
+    setCurrentView(ProjectView);
+    buildProjectModel();
   }
 }
 
 //--------------------------------------------------------------------------------------------------
 // Private helpers: expanded state persistence
+/**
+ * @brief Selects the source item with the given @p sourceId in the tree.
+ * @param sourceId The source identifier to navigate to.
+ */
+void DataModel::ProjectEditor::selectSource(int sourceId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
+    if (it.value().sourceId == sourceId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Selects the group item with the given @p groupId in the tree.
+ * @param groupId The group identifier to navigate to.
+ */
+void DataModel::ProjectEditor::selectGroup(int groupId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
+    if (it.value().groupId == groupId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Selects the dataset item identified by @p groupId and @p datasetId in the tree.
+ * @param groupId   The owning group identifier.
+ * @param datasetId The dataset identifier within that group.
+ */
+void DataModel::ProjectEditor::selectDataset(int groupId, int datasetId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+    if (it.value().groupId == groupId && it.value().datasetId == datasetId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Selects the action item with the given @p actionId in the tree.
+ * @param actionId The action identifier to navigate to.
+ */
+void DataModel::ProjectEditor::selectAction(int actionId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
+    if (it.value().actionId == actionId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Selects the Frame Parser Code item in the tree.
+ */
+void DataModel::ProjectEditor::selectFrameParser()
+{
+  displayFrameParserView();
+}
+
 //--------------------------------------------------------------------------------------------------
 
 /**

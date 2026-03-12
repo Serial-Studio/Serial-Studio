@@ -106,17 +106,14 @@ signals:
   void availablePortsChanged();
   void connectionError(const QString& name);
 
-private:
+public:
   explicit UART();
+  ~UART();
+
   UART(UART&&)                 = delete;
   UART(const UART&)            = delete;
   UART& operator=(UART&&)      = delete;
   UART& operator=(const UART&) = delete;
-
-  ~UART();
-
-public:
-  static UART& instance();
 
   void close() override;
 
@@ -126,6 +123,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] QSerialPort* port() const;
   [[nodiscard]] bool autoReconnect() const;
@@ -154,6 +152,7 @@ public:
 
 public slots:
   void setupExternalConnections();
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void setBaudRate(const qint32 rate);
   void setDtrEnabled(const bool enabled);
   void setParity(const quint8 parityIndex);

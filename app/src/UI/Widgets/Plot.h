@@ -54,16 +54,39 @@ namespace Widgets {
  *       Serial Studio data frame system.
  */
 class Plot : public QQuickItem {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
-  Q_PROPERTY(QString xLabel READ xLabel CONSTANT)
-  Q_PROPERTY(double minX READ minX NOTIFY rangeChanged)
-  Q_PROPERTY(double maxX READ maxX NOTIFY rangeChanged)
-  Q_PROPERTY(double minY READ minY NOTIFY rangeChanged)
-  Q_PROPERTY(double maxY READ maxY NOTIFY rangeChanged)
-  Q_PROPERTY(int dataW READ dataW WRITE setDataW NOTIFY dataSizeChanged)
-  Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
-  Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+  Q_PROPERTY(bool running
+             READ running
+             WRITE setRunning
+             NOTIFY runningChanged)
+  Q_PROPERTY(int dataW
+             READ dataW
+             WRITE setDataW
+             NOTIFY dataSizeChanged)
+  Q_PROPERTY(int dataH
+             READ dataH
+             WRITE setDataH
+             NOTIFY dataSizeChanged)
+  Q_PROPERTY(double minX
+             READ minX
+             NOTIFY rangeChanged)
+  Q_PROPERTY(double maxX
+             READ maxX
+             NOTIFY rangeChanged)
+  Q_PROPERTY(double minY
+             READ minY
+             NOTIFY rangeChanged)
+  Q_PROPERTY(double maxY
+             READ maxY
+             NOTIFY rangeChanged)
+  Q_PROPERTY(QString yLabel
+             READ yLabel
+             CONSTANT)
+  Q_PROPERTY(QString xLabel
+             READ xLabel
+             CONSTANT)
+  // clang-format on
 
 signals:
   void rangeChanged();
@@ -79,15 +102,15 @@ public:
     m_data.squeeze();
   }
 
-  [[nodiscard]] int dataW() const;
-  [[nodiscard]] int dataH() const;
-  [[nodiscard]] double minX() const;
-  [[nodiscard]] double maxX() const;
-  [[nodiscard]] double minY() const;
-  [[nodiscard]] double maxY() const;
-  [[nodiscard]] bool running() const;
-  [[nodiscard]] const QString& yLabel() const;
-  [[nodiscard]] const QString& xLabel() const;
+  [[nodiscard]] int dataW() const noexcept;
+  [[nodiscard]] int dataH() const noexcept;
+  [[nodiscard]] double minX() const noexcept;
+  [[nodiscard]] double maxX() const noexcept;
+  [[nodiscard]] double minY() const noexcept;
+  [[nodiscard]] double maxY() const noexcept;
+  [[nodiscard]] bool running() const noexcept;
+  [[nodiscard]] const QString& yLabel() const noexcept;
+  [[nodiscard]] const QString& xLabel() const noexcept;
 
 public slots:
   void draw(QXYSeries* series);

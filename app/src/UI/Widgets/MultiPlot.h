@@ -56,19 +56,48 @@ namespace Widgets {
  *       cannot be changed after initialization.
  */
 class MultiPlot : public QQuickItem {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(double count READ count CONSTANT)
-  Q_PROPERTY(QString yLabel READ yLabel CONSTANT)
-  Q_PROPERTY(QStringList labels READ labels CONSTANT)
-  Q_PROPERTY(double minX READ minX NOTIFY rangeChanged)
-  Q_PROPERTY(double maxX READ maxX NOTIFY rangeChanged)
-  Q_PROPERTY(double minY READ minY NOTIFY rangeChanged)
-  Q_PROPERTY(double maxY READ maxY NOTIFY rangeChanged)
-  Q_PROPERTY(QStringList colors READ colors NOTIFY themeChanged)
-  Q_PROPERTY(int dataW READ dataW WRITE setDataW NOTIFY dataSizeChanged)
-  Q_PROPERTY(int dataH READ dataH WRITE setDataH NOTIFY dataSizeChanged)
-  Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
-  Q_PROPERTY(QList<bool> visibleCurves READ visibleCurves NOTIFY curvesChanged)
+  Q_PROPERTY(int count
+             READ count
+             CONSTANT)
+  Q_PROPERTY(bool running
+             READ running
+             WRITE setRunning
+             NOTIFY runningChanged)
+  Q_PROPERTY(int dataW
+             READ dataW
+             WRITE setDataW
+             NOTIFY dataSizeChanged)
+  Q_PROPERTY(int dataH
+             READ dataH
+             WRITE setDataH
+             NOTIFY dataSizeChanged)
+  Q_PROPERTY(double minX
+             READ minX
+             NOTIFY rangeChanged)
+  Q_PROPERTY(double maxX
+             READ maxX
+             NOTIFY rangeChanged)
+  Q_PROPERTY(double minY
+             READ minY
+             NOTIFY rangeChanged)
+  Q_PROPERTY(double maxY
+             READ maxY
+             NOTIFY rangeChanged)
+  Q_PROPERTY(QString yLabel
+             READ yLabel
+             CONSTANT)
+  Q_PROPERTY(QStringList labels
+             READ labels
+             CONSTANT)
+  Q_PROPERTY(QStringList colors
+             READ colors
+             NOTIFY themeChanged)
+  Q_PROPERTY(QList<bool> visibleCurves
+             READ visibleCurves
+             NOTIFY curvesChanged)
+  // clang-format on
 
 signals:
   void rangeChanged();
@@ -91,18 +120,18 @@ public:
     m_data.squeeze();
   }
 
-  [[nodiscard]] int count() const;
-  [[nodiscard]] int dataW() const;
-  [[nodiscard]] int dataH() const;
-  [[nodiscard]] double minX() const;
-  [[nodiscard]] double maxX() const;
-  [[nodiscard]] double minY() const;
-  [[nodiscard]] double maxY() const;
-  [[nodiscard]] bool running() const;
-  [[nodiscard]] const QString& yLabel() const;
-  [[nodiscard]] const QStringList& colors() const;
-  [[nodiscard]] const QStringList& labels() const;
-  [[nodiscard]] const QList<bool>& visibleCurves() const;
+  [[nodiscard]] int count() const noexcept;
+  [[nodiscard]] int dataW() const noexcept;
+  [[nodiscard]] int dataH() const noexcept;
+  [[nodiscard]] double minX() const noexcept;
+  [[nodiscard]] double maxX() const noexcept;
+  [[nodiscard]] double minY() const noexcept;
+  [[nodiscard]] double maxY() const noexcept;
+  [[nodiscard]] bool running() const noexcept;
+  [[nodiscard]] const QString& yLabel() const noexcept;
+  [[nodiscard]] const QStringList& colors() const noexcept;
+  [[nodiscard]] const QStringList& labels() const noexcept;
+  [[nodiscard]] const QList<bool>& visibleCurves() const noexcept;
 
 public slots:
   void draw(QXYSeries* series, const int index);

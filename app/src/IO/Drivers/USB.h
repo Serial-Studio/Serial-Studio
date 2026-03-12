@@ -126,7 +126,7 @@ public:
   };
   Q_ENUM(TransferMode)
 
-private:
+public:
   explicit USB();
   ~USB();
 
@@ -134,9 +134,6 @@ private:
   USB(const USB&)            = delete;
   USB& operator=(USB&&)      = delete;
   USB& operator=(const USB&) = delete;
-
-public:
-  static USB& instance();
 
   void close() override;
 
@@ -146,6 +143,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] int transferMode() const;
   [[nodiscard]] bool advancedModeEnabled() const;
@@ -162,6 +160,7 @@ public:
   [[nodiscard]] int isoPacketSize() const;
 
 public slots:
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void setDeviceIndex(const int index);
   void setTransferMode(const int mode);
   void setInEndpointIndex(const int index);
@@ -184,6 +183,7 @@ private:
 
   void buildEndpointLists();
   void clearEndpointLists();
+  void allocateIsoTransfers();
   void collectEndpoint(const libusb_endpoint_descriptor& ep, int ifNum, bool wantIso);
   void eventLoop();
 

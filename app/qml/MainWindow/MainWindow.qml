@@ -85,13 +85,13 @@ Widgets.SmartWindow {
   // Obtain document title
   //
   function updateDocumentTitle() {
-    if (Cpp_JSON_FrameBuilder.operationMode == SerialStudio.DeviceSendsJSON)
+    if (Cpp_AppState.operationMode == SerialStudio.DeviceSendsJSON)
       documentTitle = qsTr("Device Defined Project")
 
-    else if (Cpp_JSON_FrameBuilder.operationMode == SerialStudio.QuickPlot)
+    else if (Cpp_AppState.operationMode == SerialStudio.QuickPlot)
       documentTitle = qsTr("Quick Plot Mode")
 
-    else if (Cpp_JSON_FrameBuilder.jsonMapFilename.length > 0)
+    else if (Cpp_AppState.projectFileName.length > 0)
       documentTitle = Cpp_JSON_ProjectModel.title
 
     else
@@ -136,12 +136,12 @@ Widgets.SmartWindow {
   // Update document title automatically
   //
   Connections {
-    target: Cpp_JSON_FrameBuilder
+    target: Cpp_AppState
     function onOperationModeChanged() { root.updateDocumentTitle() }
-    function onJsonFileMapChanged()   { root.updateDocumentTitle() }
+    function onProjectFileChanged()   { root.updateDocumentTitle() }
   } Connections {
     target: Cpp_JSON_ProjectModel
-    function onJsonFileChanged() { root.updateDocumentTitle() }
+    function onTitleChanged() { root.updateDocumentTitle() }
   } Connections {
     target: Cpp_Misc_Translator
     function onLanguageChanged() { root.updateDocumentTitle() }

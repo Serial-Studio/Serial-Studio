@@ -171,17 +171,14 @@ signals:
   void languageChanged();
   void connectionError(const QString& error);
 
-private:
+public:
   explicit Modbus();
+  ~Modbus();
+
   Modbus(Modbus&&)                 = delete;
   Modbus(const Modbus&)            = delete;
   Modbus& operator=(Modbus&&)      = delete;
   Modbus& operator=(const Modbus&) = delete;
-
-  ~Modbus();
-
-public:
-  static Modbus& instance();
 
   void close() override;
 
@@ -191,6 +188,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] quint8 protocolIndex() const;
   [[nodiscard]] quint8 slaveAddress() const;
@@ -216,6 +214,7 @@ public:
   Q_INVOKABLE QString registerGroupInfo(const int index) const;
 
 public slots:
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void clearRegisterGroups();
   void setupExternalConnections();
   void setPort(const quint16 port);

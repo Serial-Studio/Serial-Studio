@@ -24,7 +24,7 @@
 
 #include <QtEndian>
 
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 
@@ -211,7 +211,7 @@ static bool checkAndUpdateDeviceList(ma_context* context,
 
   // Device was disconnected, update IO::Manager & close the connection
   if (!stillConnected) {
-    IO::Manager::instance().disconnectDevice();
+    IO::ConnectionManager::instance().disconnectDevice();
     currentList = newList;
     capabilities.clear();
     for (const auto& info : std::as_const(currentList))
@@ -321,20 +321,6 @@ IO::Drivers::Audio::~Audio()
   closeDevice();
   if (m_init)
     ma_context_uninit(&m_context);
-}
-
-/**
- * @brief Returns the singleton instance of the Audio driver.
- *
- * This ensures a single shared instance of the audio system throughout
- * the application lifetime.
- *
- * @return Reference to the singleton Audio object.
- */
-IO::Drivers::Audio& IO::Drivers::Audio::instance()
-{
-  static Audio instance;
-  return instance;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1639,4 +1625,71 @@ void IO::Drivers::Audio::callback(ma_device* device,
   // Get pointer to origin class & call callback function
   auto* self = static_cast<IO::Drivers::Audio*>(device->pUserData);
   self->handleCallback(output, input, frameCount);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the Audio configuration as a flat list of editable properties.
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::Audio::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty inDev;
+  inDev.key     = QStringLiteral("inputDevice");
+  inDev.label   = tr("Input Device");
+  inDev.type    = IO::DriverProperty::ComboBox;
+  inDev.value   = m_selectedInputDevice;
+  inDev.options = inputDeviceList();
+  props.append(inDev);
+
+  IO::DriverProperty rate;
+  rate.key     = QStringLiteral("sampleRate");
+  rate.label   = tr("Sample Rate");
+  rate.type    = IO::DriverProperty::ComboBox;
+  rate.value   = m_selectedSampleRate;
+  rate.options = sampleRates();
+  props.append(rate);
+
+  IO::DriverProperty fmt;
+  fmt.key     = QStringLiteral("inputFormat");
+  fmt.label   = tr("Sample Format");
+  fmt.type    = IO::DriverProperty::ComboBox;
+  fmt.value   = m_selectedInputSampleFormat;
+  fmt.options = inputSampleFormats();
+  props.append(fmt);
+
+  IO::DriverProperty ch;
+  ch.key     = QStringLiteral("inputChannels");
+  ch.label   = tr("Channels");
+  ch.type    = IO::DriverProperty::ComboBox;
+  ch.value   = m_selectedInputChannelConfiguration;
+  ch.options = inputChannelConfigurations();
+  props.append(ch);
+
+  return props;
+}
+
+/**
+ * @brief Applies a single Audio configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::Audio::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("inputDevice"))
+    setSelectedInputDevice(value.toInt());
+
+  else if (key == QLatin1String("sampleRate"))
+    setSelectedSampleRate(value.toInt());
+
+  else if (key == QLatin1String("inputFormat"))
+    setSelectedInputSampleFormat(value.toInt());
+
+  else if (key == QLatin1String("inputChannels"))
+    setSelectedInputChannelConfiguration(value.toInt());
 }

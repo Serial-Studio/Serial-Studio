@@ -24,7 +24,7 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
-#include "IO/Drivers/Network.h"
+#include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -175,7 +175,7 @@ API::CommandResponse API::Handlers::NetworkHandler::setRemoteAddress(const QStri
       id, ErrorCode::InvalidParam, QStringLiteral("Address cannot be empty"));
   }
 
-  IO::Drivers::Network::instance().setRemoteAddress(address);
+  IO::ConnectionManager::instance().network()->setRemoteAddress(address);
 
   QJsonObject result;
   result[QStringLiteral("address")] = address;
@@ -200,7 +200,7 @@ API::CommandResponse API::Handlers::NetworkHandler::setTcpPort(const QString& id
       id, ErrorCode::InvalidParam, QStringLiteral("Port must be between 1 and 65535"));
   }
 
-  IO::Drivers::Network::instance().setTcpPort(static_cast<quint16>(port));
+  IO::ConnectionManager::instance().network()->setTcpPort(static_cast<quint16>(port));
 
   QJsonObject result;
   result[QStringLiteral("tcpPort")] = port;
@@ -225,7 +225,7 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpLocalPort(const QStrin
       id, ErrorCode::InvalidParam, QStringLiteral("Port must be between 0 and 65535"));
   }
 
-  IO::Drivers::Network::instance().setUdpLocalPort(static_cast<quint16>(port));
+  IO::ConnectionManager::instance().network()->setUdpLocalPort(static_cast<quint16>(port));
 
   QJsonObject result;
   result[QStringLiteral("udpLocalPort")] = port;
@@ -250,7 +250,7 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpRemotePort(const QStri
       id, ErrorCode::InvalidParam, QStringLiteral("Port must be between 1 and 65535"));
   }
 
-  IO::Drivers::Network::instance().setUdpRemotePort(static_cast<quint16>(port));
+  IO::ConnectionManager::instance().network()->setUdpRemotePort(static_cast<quint16>(port));
 
   QJsonObject result;
   result[QStringLiteral("udpRemotePort")] = port;
@@ -270,7 +270,7 @@ API::CommandResponse API::Handlers::NetworkHandler::setSocketType(const QString&
   }
 
   const int socketTypeIndex = params.value(QStringLiteral("socketTypeIndex")).toInt();
-  const auto& socketTypes   = IO::Drivers::Network::instance().socketTypes();
+  const auto& socketTypes   = IO::ConnectionManager::instance().network()->socketTypes();
 
   if (socketTypeIndex < 0 || socketTypeIndex >= socketTypes.count()) {
     return CommandResponse::makeError(
@@ -281,7 +281,7 @@ API::CommandResponse API::Handlers::NetworkHandler::setSocketType(const QString&
         .arg(socketTypes.count() - 1));
   }
 
-  IO::Drivers::Network::instance().setSocketTypeIndex(socketTypeIndex);
+  IO::ConnectionManager::instance().network()->setSocketTypeIndex(socketTypeIndex);
 
   QJsonObject result;
   result[QStringLiteral("socketTypeIndex")] = socketTypeIndex;
@@ -302,7 +302,7 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpMulticast(const QStrin
   }
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
-  IO::Drivers::Network::instance().setUdpMulticast(enabled);
+  IO::ConnectionManager::instance().network()->setUdpMulticast(enabled);
 
   QJsonObject result;
   result[QStringLiteral("udpMulticast")] = enabled;
@@ -330,7 +330,7 @@ API::CommandResponse API::Handlers::NetworkHandler::lookup(const QString& id,
       id, ErrorCode::InvalidParam, QStringLiteral("Host cannot be empty"));
   }
 
-  IO::Drivers::Network::instance().lookup(host);
+  IO::ConnectionManager::instance().network()->lookup(host);
 
   QJsonObject result;
   result[QStringLiteral("host")]          = host;
@@ -350,35 +350,35 @@ API::CommandResponse API::Handlers::NetworkHandler::getConfiguration(const QStri
 {
   Q_UNUSED(params)
 
-  auto& network = IO::Drivers::Network::instance();
+  auto* network = IO::ConnectionManager::instance().network();
 
   QJsonObject result;
 
   // Address
-  result[QStringLiteral("remoteAddress")] = network.remoteAddress();
+  result[QStringLiteral("remoteAddress")] = network->remoteAddress();
 
   // Ports
-  result[QStringLiteral("tcpPort")]       = network.tcpPort();
-  result[QStringLiteral("udpLocalPort")]  = network.udpLocalPort();
-  result[QStringLiteral("udpRemotePort")] = network.udpRemotePort();
+  result[QStringLiteral("tcpPort")]       = network->tcpPort();
+  result[QStringLiteral("udpLocalPort")]  = network->udpLocalPort();
+  result[QStringLiteral("udpRemotePort")] = network->udpRemotePort();
 
   // Socket type
-  result[QStringLiteral("socketTypeIndex")] = network.socketTypeIndex();
-  const auto& socketTypes                   = network.socketTypes();
-  if (network.socketTypeIndex() < socketTypes.count())
-    result[QStringLiteral("socketTypeName")] = socketTypes.at(network.socketTypeIndex());
+  result[QStringLiteral("socketTypeIndex")] = network->socketTypeIndex();
+  const auto& socketTypes                   = network->socketTypes();
+  if (network->socketTypeIndex() < socketTypes.count())
+    result[QStringLiteral("socketTypeName")] = socketTypes.at(network->socketTypeIndex());
 
   // Other settings
-  result[QStringLiteral("udpMulticast")]    = network.udpMulticast();
-  result[QStringLiteral("lookupActive")]    = network.lookupActive();
-  result[QStringLiteral("isOpen")]          = network.isOpen();
-  result[QStringLiteral("configurationOk")] = network.configurationOk();
+  result[QStringLiteral("udpMulticast")]    = network->udpMulticast();
+  result[QStringLiteral("lookupActive")]    = network->lookupActive();
+  result[QStringLiteral("isOpen")]          = network->isOpen();
+  result[QStringLiteral("configurationOk")] = network->configurationOk();
 
   // Default values for reference
-  result[QStringLiteral("defaultAddress")]       = network.defaultAddress();
-  result[QStringLiteral("defaultTcpPort")]       = network.defaultTcpPort();
-  result[QStringLiteral("defaultUdpLocalPort")]  = network.defaultUdpLocalPort();
-  result[QStringLiteral("defaultUdpRemotePort")] = network.defaultUdpRemotePort();
+  result[QStringLiteral("defaultAddress")]       = network->defaultAddress();
+  result[QStringLiteral("defaultTcpPort")]       = network->defaultTcpPort();
+  result[QStringLiteral("defaultUdpLocalPort")]  = network->defaultUdpLocalPort();
+  result[QStringLiteral("defaultUdpRemotePort")] = network->defaultUdpRemotePort();
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -391,7 +391,7 @@ API::CommandResponse API::Handlers::NetworkHandler::getSocketTypes(const QString
 {
   Q_UNUSED(params)
 
-  const auto& socketTypes = IO::Drivers::Network::instance().socketTypes();
+  const auto& socketTypes = IO::ConnectionManager::instance().network()->socketTypes();
 
   QJsonArray types;
   for (int i = 0; i < socketTypes.count(); ++i) {
@@ -404,6 +404,6 @@ API::CommandResponse API::Handlers::NetworkHandler::getSocketTypes(const QString
   QJsonObject result;
   result[QStringLiteral("socketTypes")] = types;
   result[QStringLiteral("currentSocketTypeIndex")] =
-    IO::Drivers::Network::instance().socketTypeIndex();
+    IO::ConnectionManager::instance().network()->socketTypeIndex();
   return CommandResponse::makeSuccess(id, result);
 }

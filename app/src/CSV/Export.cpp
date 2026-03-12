@@ -22,7 +22,7 @@
 #include "Export.h"
 
 #include "CSV/Player.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "MDF4/Player.h"
 #include "Misc/WorkspaceManager.h"
 
@@ -278,9 +278,12 @@ void CSV::Export::onWorkerOpenChanged()
  */
 void CSV::Export::setupExternalConnections()
 {
-  connect(&IO::Manager::instance(), &IO::Manager::connectedChanged, this, &Export::closeFile);
-  connect(&IO::Manager::instance(), &IO::Manager::pausedChanged, this, [this] {
-    if (IO::Manager::instance().paused())
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::connectedChanged,
+          this,
+          &Export::closeFile);
+  connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
+    if (IO::ConnectionManager::instance().paused())
       closeFile();
   });
 }

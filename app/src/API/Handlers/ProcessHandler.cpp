@@ -16,7 +16,7 @@
 #  include <QJsonArray>
 
 #  include "API/CommandRegistry.h"
-#  include "IO/Drivers/Process.h"
+#  include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -91,7 +91,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setMode(const QString& id,
       QStringLiteral("Invalid mode: %1. Valid values: 0=Launch, 1=NamedPipe").arg(mode));
   }
 
-  IO::Drivers::Process::instance().setMode(mode);
+  IO::ConnectionManager::instance().process()->setMode(mode);
 
   QJsonObject result;
   result[QStringLiteral("mode")] = mode;
@@ -111,7 +111,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setExecutable(const QString&
   }
 
   const QString path = params.value(QStringLiteral("executable")).toString();
-  IO::Drivers::Process::instance().setExecutable(path);
+  IO::ConnectionManager::instance().process()->setExecutable(path);
 
   QJsonObject result;
   result[QStringLiteral("executable")] = path;
@@ -131,7 +131,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setArguments(const QString& 
   }
 
   const QString args = params.value(QStringLiteral("arguments")).toString();
-  IO::Drivers::Process::instance().setArguments(args);
+  IO::ConnectionManager::instance().process()->setArguments(args);
 
   QJsonObject result;
   result[QStringLiteral("arguments")] = args;
@@ -151,7 +151,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setWorkingDir(const QString&
   }
 
   const QString dir = params.value(QStringLiteral("workingDir")).toString();
-  IO::Drivers::Process::instance().setWorkingDir(dir);
+  IO::ConnectionManager::instance().process()->setWorkingDir(dir);
 
   QJsonObject result;
   result[QStringLiteral("workingDir")] = dir;
@@ -171,7 +171,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setPipePath(const QString& i
   }
 
   const QString path = params.value(QStringLiteral("pipePath")).toString();
-  IO::Drivers::Process::instance().setPipePath(path);
+  IO::ConnectionManager::instance().process()->setPipePath(path);
 
   QJsonObject result;
   result[QStringLiteral("pipePath")] = path;
@@ -198,7 +198,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setOutputCapture(const QStri
       QStringLiteral("Invalid capture: %1. Valid values: 0=StdOut, 1=StdErr, 2=Both").arg(capture));
   }
 
-  IO::Drivers::Process::instance().setOutputCapture(capture);
+  IO::ConnectionManager::instance().process()->setOutputCapture(capture);
 
   QJsonObject result;
   result[QStringLiteral("capture")] = capture;
@@ -220,9 +220,9 @@ API::CommandResponse API::Handlers::ProcessHandler::getRunningProcesses(const QS
 {
   Q_UNUSED(params)
 
-  IO::Drivers::Process::instance().refreshProcessList();
+  IO::ConnectionManager::instance().process()->refreshProcessList();
 
-  const auto& processes = IO::Drivers::Process::instance().runningProcesses();
+  const auto& processes = IO::ConnectionManager::instance().process()->runningProcesses();
 
   QJsonArray processes_array;
   for (const auto& proc : processes)
@@ -242,15 +242,15 @@ API::CommandResponse API::Handlers::ProcessHandler::getConfiguration(const QStri
 {
   Q_UNUSED(params)
 
-  auto& proc = IO::Drivers::Process::instance();
+  auto* proc = IO::ConnectionManager::instance().process();
 
   QJsonObject result;
-  result[QStringLiteral("mode")]          = proc.mode();
-  result[QStringLiteral("outputCapture")] = proc.outputCapture();
-  result[QStringLiteral("executable")]    = proc.executable();
-  result[QStringLiteral("arguments")]     = proc.arguments();
-  result[QStringLiteral("workingDir")]    = proc.workingDir();
-  result[QStringLiteral("pipePath")]      = proc.pipePath();
+  result[QStringLiteral("mode")]          = proc->mode();
+  result[QStringLiteral("outputCapture")] = proc->outputCapture();
+  result[QStringLiteral("executable")]    = proc->executable();
+  result[QStringLiteral("arguments")]     = proc->arguments();
+  result[QStringLiteral("workingDir")]    = proc->workingDir();
+  result[QStringLiteral("pipePath")]      = proc->pipePath();
   return CommandResponse::makeSuccess(id, result);
 }
 

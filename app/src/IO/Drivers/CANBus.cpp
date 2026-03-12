@@ -75,15 +75,6 @@ IO::Drivers::CANBus::~CANBus()
   doClose();
 }
 
-/**
- * @brief Returns the only instance of the class
- */
-IO::Drivers::CANBus& IO::Drivers::CANBus::instance()
-{
-  static CANBus singleton;
-  return singleton;
-}
-
 //--------------------------------------------------------------------------------------------------
 // HAL-driver implementation
 //--------------------------------------------------------------------------------------------------
@@ -776,4 +767,74 @@ void IO::Drivers::CANBus::refreshPlugins()
 bool IO::Drivers::CANBus::canSupportAvailable() const
 {
   return !m_pluginList.isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Driver property model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the CAN Bus configuration as a flat list of editable properties.
+ * @return List of DriverProperty descriptors with current values.
+ */
+QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
+{
+  QList<IO::DriverProperty> props;
+
+  IO::DriverProperty plugin;
+  plugin.key     = QStringLiteral("pluginIndex");
+  plugin.label   = tr("Plugin");
+  plugin.type    = IO::DriverProperty::ComboBox;
+  plugin.value   = m_pluginIndex;
+  plugin.options = m_pluginList;
+  props.append(plugin);
+
+  IO::DriverProperty iface;
+  iface.key     = QStringLiteral("interfaceIndex");
+  iface.label   = tr("Interface");
+  iface.type    = IO::DriverProperty::ComboBox;
+  iface.value   = m_interfaceIndex;
+  iface.options = m_interfaceList;
+  props.append(iface);
+
+  IO::DriverProperty bitrate;
+  bitrate.key     = QStringLiteral("bitrate");
+  bitrate.label   = tr("Bitrate");
+  bitrate.type    = IO::DriverProperty::ComboBox;
+  bitrate.value   = bitrateList().indexOf(QString::number(m_bitrate));
+  bitrate.options = bitrateList();
+  props.append(bitrate);
+
+  IO::DriverProperty canFd;
+  canFd.key   = QStringLiteral("canFD");
+  canFd.label = tr("CAN FD");
+  canFd.type  = IO::DriverProperty::CheckBox;
+  canFd.value = m_canFD;
+  props.append(canFd);
+
+  return props;
+}
+
+/**
+ * @brief Applies a single CAN Bus configuration change by key.
+ * @param key   The DriverProperty::key that was edited.
+ * @param value The new value chosen by the user.
+ */
+void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& value)
+{
+  if (key == QLatin1String("pluginIndex"))
+    setPluginIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("interfaceIndex"))
+    setInterfaceIndex(static_cast<quint8>(value.toInt()));
+
+  else if (key == QLatin1String("bitrate")) {
+    const auto list = bitrateList();
+    const int idx   = value.toInt();
+    if (idx >= 0 && idx < list.size())
+      setBitrate(static_cast<quint32>(list.at(idx).toUInt()));
+  }
+
+  else if (key == QLatin1String("canFD"))
+    setCanFD(value.toBool());
 }

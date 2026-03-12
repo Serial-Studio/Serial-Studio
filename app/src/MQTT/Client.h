@@ -48,47 +48,120 @@ class Client : public QObject {
   Q_OBJECT
 
   // Connection and identification
-  Q_PROPERTY(QString clientId READ clientId WRITE setClientId NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(QString hostname READ hostname WRITE setHostname NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(quint16 port READ port WRITE setPort NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(bool cleanSession READ cleanSession WRITE setCleanSession NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(bool     cleanSession
+             READ     cleanSession
+             WRITE    setCleanSession
+             NOTIFY   mqttConfigurationChanged)
+  Q_PROPERTY(quint16  port
+             READ     port
+             WRITE    setPort
+             NOTIFY   mqttConfigurationChanged)
+  Q_PROPERTY(QString  clientId
+             READ     clientId
+             WRITE    setClientId
+             NOTIFY   mqttConfigurationChanged)
+  Q_PROPERTY(QString  hostname
+             READ     hostname
+             WRITE    setHostname
+             NOTIFY   mqttConfigurationChanged)
+  Q_PROPERTY(QString  username
+             READ     username
+             WRITE    setUsername
+             NOTIFY   mqttConfigurationChanged)
+  Q_PROPERTY(QString  password
+             READ     password
+             WRITE    setPassword
+             NOTIFY   mqttConfigurationChanged)
 
   // MQTT mode and state
-  Q_PROPERTY(quint8 mode READ mode WRITE setMode NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectedChanged)
-  Q_PROPERTY(bool isPublisher READ isPublisher NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(bool isSubscriber READ isSubscriber NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(bool isConnected
+             READ isConnected
+             NOTIFY connectedChanged)
+  Q_PROPERTY(bool isPublisher
+             READ isPublisher
+             NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(bool isSubscriber
+             READ isSubscriber
+             NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(quint8 mode
+             READ mode
+             WRITE setMode
+             NOTIFY mqttConfigurationChanged)
 
   // MQTT protocol config
-  Q_PROPERTY(quint8 mqttVersion READ mqttVersion WRITE setMqttVersion NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(QStringList mqttVersions READ mqttVersions CONSTANT)
+  Q_PROPERTY(quint8 mqttVersion
+             READ mqttVersion
+             WRITE setMqttVersion
+             NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(QStringList mqttVersions
+             READ mqttVersions
+             CONSTANT)
 
   // Will message
-  Q_PROPERTY(quint8 willQoS READ willQoS WRITE setWillQoS NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(bool willRetain READ willRetain WRITE setWillRetain NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(QString willTopic READ willTopic WRITE setWillTopic NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(QString willMessage READ willMessage WRITE setWillMessage NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(bool    willRetain
+             READ    willRetain
+             WRITE   setWillRetain
+             NOTIFY  mqttConfigurationChanged)
+  Q_PROPERTY(quint8  willQoS
+             READ    willQoS
+             WRITE   setWillQoS
+             NOTIFY  mqttConfigurationChanged)
+  Q_PROPERTY(QString willTopic
+             READ    willTopic
+             WRITE   setWillTopic
+             NOTIFY  mqttConfigurationChanged)
+  Q_PROPERTY(QString willMessage
+             READ    willMessage
+             WRITE   setWillMessage
+             NOTIFY  mqttConfigurationChanged)
 
   // Keep alive
-  Q_PROPERTY(quint16 keepAlive READ keepAlive WRITE setKeepAlive NOTIFY mqttConfigurationChanged)
-  Q_PROPERTY(bool autoKeepAlive READ autoKeepAlive WRITE setAutoKeepAlive NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(bool    autoKeepAlive
+             READ    autoKeepAlive
+             WRITE   setAutoKeepAlive
+             NOTIFY  mqttConfigurationChanged)
+  Q_PROPERTY(quint16 keepAlive
+             READ    keepAlive
+             WRITE   setKeepAlive
+             NOTIFY  mqttConfigurationChanged)
 
   // Topic
-  Q_PROPERTY(QString topicFilter READ topicFilter WRITE setTopic NOTIFY mqttConfigurationChanged)
+  Q_PROPERTY(QString topicFilter
+             READ    topicFilter
+             WRITE   setTopic
+             NOTIFY  mqttConfigurationChanged)
 
   // SSL
-  Q_PROPERTY(bool sslEnabled READ sslEnabled WRITE setSslEnabled NOTIFY sslConfigurationChanged)
-  Q_PROPERTY(quint8 sslProtocol READ sslProtocol WRITE setSslProtocol NOTIFY sslConfigurationChanged)
-  Q_PROPERTY(int peerVerifyDepth READ peerVerifyDepth WRITE setPeerVerifyDepth NOTIFY sslConfigurationChanged)
-  Q_PROPERTY(quint8 peerVerifyMode READ peerVerifyMode WRITE setPeerVerifyMode NOTIFY sslConfigurationChanged)
-  Q_PROPERTY(QStringList caCertificates READ caCertificates CONSTANT)
-  Q_PROPERTY(QStringList sslProtocols READ sslProtocols CONSTANT)
-  Q_PROPERTY(QStringList peerVerifyModes READ peerVerifyModes CONSTANT)
+  Q_PROPERTY(bool    sslEnabled
+             READ    sslEnabled
+             WRITE   setSslEnabled
+             NOTIFY  sslConfigurationChanged)
+  Q_PROPERTY(int     peerVerifyDepth
+             READ    peerVerifyDepth
+             WRITE   setPeerVerifyDepth
+             NOTIFY  sslConfigurationChanged)
+  Q_PROPERTY(quint8  sslProtocol
+             READ    sslProtocol
+             WRITE   setSslProtocol
+             NOTIFY  sslConfigurationChanged)
+  Q_PROPERTY(quint8  peerVerifyMode
+             READ    peerVerifyMode
+             WRITE   setPeerVerifyMode
+             NOTIFY  sslConfigurationChanged)
+  Q_PROPERTY(QStringList caCertificates
+             READ caCertificates
+             CONSTANT)
+  Q_PROPERTY(QStringList sslProtocols
+             READ sslProtocols
+             CONSTANT)
+  Q_PROPERTY(QStringList peerVerifyModes
+             READ peerVerifyModes
+             CONSTANT)
 
   // Modes (Publisher/Subscriber descriptions)
-  Q_PROPERTY(QStringList modes READ modes CONSTANT)
+  Q_PROPERTY(QStringList modes
+             READ modes
+             CONSTANT)
   // clang-format on
 
 signals:

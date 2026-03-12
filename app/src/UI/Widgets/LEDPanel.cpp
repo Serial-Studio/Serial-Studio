@@ -65,7 +65,7 @@ Widgets::LEDPanel::LEDPanel(const int index, QQuickItem* parent)
  * @brief Returns the number of LEDs in the panel.
  * @return An integer number with the number/count of LEDs in the panel.
  */
-int Widgets::LEDPanel::count() const
+int Widgets::LEDPanel::count() const noexcept
 {
   return m_titles.count();
 }
@@ -78,7 +78,7 @@ int Widgets::LEDPanel::count() const
  * @brief Returns the states of the LEDs in the panel.
  * @return A vector of boolean values representing the states of the LEDs.
  */
-const QList<bool>& Widgets::LEDPanel::states() const
+const QList<bool>& Widgets::LEDPanel::states() const noexcept
 {
   return m_states;
 }
@@ -87,7 +87,7 @@ const QList<bool>& Widgets::LEDPanel::states() const
  * @brief Returns the colors of the LEDs in the panel.
  * @return A vector of strings representing the activated colors of the LEDs.
  */
-const QStringList& Widgets::LEDPanel::colors() const
+const QStringList& Widgets::LEDPanel::colors() const noexcept
 {
   return m_colors;
 }
@@ -96,7 +96,7 @@ const QStringList& Widgets::LEDPanel::colors() const
  * @brief Returns the titles of the LEDs in the panel.
  * @return A vector of strings representing the titles of the LEDs.
  */
-const QStringList& Widgets::LEDPanel::titles() const
+const QStringList& Widgets::LEDPanel::titles() const noexcept
 {
   return m_titles;
 }

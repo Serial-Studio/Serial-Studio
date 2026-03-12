@@ -99,14 +99,14 @@ signals:
   void inputSettingsChanged();
   void outputSettingsChanged();
 
-private:
+public:
   explicit Audio();
+  ~Audio();
+
   Audio(Audio&&)                 = delete;
   Audio(const Audio&)            = delete;
   Audio& operator=(Audio&&)      = delete;
   Audio& operator=(const Audio&) = delete;
-
-  ~Audio();
 
 public:
   typedef struct {
@@ -114,8 +114,6 @@ public:
     QList<ma_format> supportedFormats;
     QList<int> supportedChannelCounts;
   } AudioDeviceInfo;
-
-  static Audio& instance();
 
   void closeDevice();
   void close() override;
@@ -126,6 +124,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] inline const ma_device_config& config() const { return m_config; }
 
@@ -149,6 +148,7 @@ public:
   [[nodiscard]] QStringList outputChannelConfigurations() const;
 
 public slots:
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void setSelectedSampleRate(int index);
 
   void setSelectedInputDevice(int index);

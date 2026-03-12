@@ -670,11 +670,20 @@ function parse(frame) {
         """
         return {
             "title": title,
-            "frameStart": start,
-            "frameEnd": end,
-            "frameDetection": detection_mode,
-            "checksum": checksum_algorithm if checksum_algorithm != "None" else "",
-            "frameParser": DataGenerator.CSV_PARSER_TEMPLATE,
+            "sources": [
+                {
+                    "sourceId": 0,
+                    "title": "Device A",
+                    "busType": 0,
+                    "frameStart": start,
+                    "frameEnd": end,
+                    "frameDetection": detection_mode,
+                    "checksum": checksum_algorithm if checksum_algorithm != "None" else "",
+                    "decoder": 0,
+                    "hexadecimalDelimiters": False,
+                    "frameParserCode": DataGenerator.CSV_PARSER_TEMPLATE,
+                }
+            ],
             "groups": [
                 {
                     "title": "Test Group",

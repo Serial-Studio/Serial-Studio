@@ -95,13 +95,42 @@ class DeviceSimulator:
             if self.protocol == "tcp":
                 try:
                     client, addr = self._socket.accept()
+                    if self._client_socket:
+                        try:
+                            self._client_socket.close()
+                        except Exception:
+                            pass
                     self._client_socket = client
+                    self._monitor_client(client)
                 except socket.timeout:
                     continue
                 except Exception:
                     break
             else:
                 break
+
+    def _monitor_client(self, client: socket.socket) -> None:
+        """Spawn a thread that clears _client_socket when the remote side closes."""
+        import select
+
+        def _watch() -> None:
+            try:
+                while self._running and self._client_socket is client:
+                    readable, _, _ = select.select([client], [], [], 0.5)
+                    if not readable:
+                        continue
+                    try:
+                        data = client.recv(1, socket.MSG_PEEK)
+                        if not data:
+                            break
+                    except Exception:
+                        break
+            finally:
+                if self._client_socket is client:
+                    self._client_socket = None
+
+        t = threading.Thread(target=_watch, daemon=True)
+        t.start()
 
     def send_frame(self, frame: bytes) -> None:
         """

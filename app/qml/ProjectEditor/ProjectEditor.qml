@@ -59,7 +59,7 @@ Widgets.SmartWindow {
   onVisibleChanged: {
     if (visible) {
       Cpp_NativeWindow.addWindow(root)
-      Cpp_JSON_ProjectModel.openJsonFile(Cpp_JSON_FrameBuilder.jsonMapFilepath)
+      Cpp_JSON_ProjectModel.openJsonFile(Cpp_AppState.projectFilePath)
     }
 
     else
@@ -69,7 +69,7 @@ Widgets.SmartWindow {
   //
   // Load project file on start
   //
-  Component.onCompleted: Cpp_JSON_ProjectModel.openJsonFile(Cpp_JSON_FrameBuilder.jsonMapFilepath)
+  Component.onCompleted: Cpp_JSON_ProjectModel.openJsonFile(Cpp_AppState.projectFilePath)
 
   //
   // Dummy string to increase width of buttons
@@ -187,11 +187,19 @@ Widgets.SmartWindow {
             }
 
             //
-            // Frame parser function
+            // Source view
             //
-            Views.FrameParserView {
+            Views.SourceView {
               anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.FrameParserView
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.SourceView
+            }
+
+            //
+            // Per-source frame parser
+            //
+            Views.SourceFrameParserView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.SourceFrameParserView
             }
           }
         }

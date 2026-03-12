@@ -61,10 +61,18 @@ namespace DataModel {
  * @note This is a Pro-only feature (commercial license required).
  */
 class DBCImporter : public QObject {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(int signalCount READ signalCount NOTIFY messagesChanged)
-  Q_PROPERTY(int messageCount READ messageCount NOTIFY messagesChanged)
-  Q_PROPERTY(QString dbcFileName READ dbcFileName NOTIFY dbcFileNameChanged)
+  Q_PROPERTY(int signalCount
+             READ signalCount
+             NOTIFY messagesChanged)
+  Q_PROPERTY(int messageCount
+             READ messageCount
+             NOTIFY messagesChanged)
+  Q_PROPERTY(QString dbcFileName
+             READ dbcFileName
+             NOTIFY dbcFileNameChanged)
+  // clang-format on
 
 signals:
   void previewReady();

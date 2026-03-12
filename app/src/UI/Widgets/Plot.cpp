@@ -83,7 +83,7 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
  * @brief Returns the size of the down-sampled X axis data.
  * @return Size of down-sampled X axis data.
  */
-int Widgets::Plot::dataW() const
+int Widgets::Plot::dataW() const noexcept
 {
   return m_dataW;
 }
@@ -92,7 +92,7 @@ int Widgets::Plot::dataW() const
  * @brief Returns the size of the down-sampled Y axis data.
  * @return Size of down-sampled Y axis data.
  */
-int Widgets::Plot::dataH() const
+int Widgets::Plot::dataH() const noexcept
 {
   return m_dataH;
 }
@@ -105,7 +105,7 @@ int Widgets::Plot::dataH() const
  * @brief Returns the minimum X-axis value.
  * @return The minimum X-axis value.
  */
-double Widgets::Plot::minX() const
+double Widgets::Plot::minX() const noexcept
 {
   return m_minX;
 }
@@ -114,7 +114,7 @@ double Widgets::Plot::minX() const
  * @brief Returns the maximum X-axis value.
  * @return The maximum X-axis value.
  */
-double Widgets::Plot::maxX() const
+double Widgets::Plot::maxX() const noexcept
 {
   return m_maxX;
 }
@@ -123,7 +123,7 @@ double Widgets::Plot::maxX() const
  * @brief Returns the minimum Y-axis value.
  * @return The minimum Y-axis value.
  */
-double Widgets::Plot::minY() const
+double Widgets::Plot::minY() const noexcept
 {
   return m_minY;
 }
@@ -132,7 +132,7 @@ double Widgets::Plot::minY() const
  * @brief Returns the maximum Y-axis value.
  * @return The maximum Y-axis value.
  */
-double Widgets::Plot::maxY() const
+double Widgets::Plot::maxY() const noexcept
 {
   return m_maxY;
 }
@@ -145,7 +145,7 @@ double Widgets::Plot::maxY() const
  * @brief Checks whether plot data updates are currently active.
  * @return @c true if updating is not paused, otherwise @c false.
  */
-bool Widgets::Plot::running() const
+bool Widgets::Plot::running() const noexcept
 {
   return UI::Dashboard::instance().plotRunning(m_index);
 }
@@ -158,7 +158,7 @@ bool Widgets::Plot::running() const
  * @brief Returns the Y-axis label.
  * @return The Y-axis label.
  */
-const QString& Widgets::Plot::yLabel() const
+const QString& Widgets::Plot::yLabel() const noexcept
 {
   return m_yLabel;
 }
@@ -167,7 +167,7 @@ const QString& Widgets::Plot::yLabel() const
  * @brief Returns the X-axis label.
  * @return The X-axis label.
  */
-const QString& Widgets::Plot::xLabel() const
+const QString& Widgets::Plot::xLabel() const noexcept
 {
   return m_xLabel;
 }

@@ -83,7 +83,7 @@ signals:
   void deviceIndexChanged();
   void deviceInfoChanged();
 
-private:
+public:
   explicit HID();
   ~HID();
 
@@ -91,9 +91,6 @@ private:
   HID(const HID&)            = delete;
   HID& operator=(HID&&)      = delete;
   HID& operator=(const HID&) = delete;
-
-public:
-  static HID& instance();
 
   void close() override;
 
@@ -103,6 +100,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] QStringList deviceList() const;
   [[nodiscard]] int deviceIndex() const;
@@ -110,6 +108,7 @@ public:
   [[nodiscard]] QString usage() const;
 
 public slots:
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void setDeviceIndex(const int index);
 
 private slots:

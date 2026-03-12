@@ -37,7 +37,7 @@
 #include <QtMath>
 
 #include "DataModel/FrameBuilder.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "UI/Dashboard.h"
@@ -362,7 +362,7 @@ void MDF4::Player::openFile()
  */
 void MDF4::Player::openFile(const QString& filePath)
 {
-  if (IO::Manager::instance().isConnected()) {
+  if (IO::ConnectionManager::instance().isConnected()) {
     int response = Misc::Utilities::showMessageBox(
       tr("Disconnect from device?"),
       tr("You must disconnect from the current device before opening a MDF4 file."),
@@ -371,7 +371,7 @@ void MDF4::Player::openFile(const QString& filePath)
       QMessageBox::Yes | QMessageBox::No);
 
     if (response == QMessageBox::Yes)
-      IO::Manager::instance().disconnectDevice();
+      IO::ConnectionManager::instance().disconnectDevice();
     else
       return;
   }
@@ -800,7 +800,7 @@ void MDF4::Player::sendFrame(int frameIndex)
   if (!isOpen() || frameIndex < 0 || frameIndex >= frameCount())
     return;
 
-  IO::Manager::instance().processPayload(getFrame(frameIndex));
+  IO::ConnectionManager::instance().processPayload(getFrame(frameIndex));
 }
 
 /**

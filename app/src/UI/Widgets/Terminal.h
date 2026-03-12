@@ -22,10 +22,10 @@
 #pragma once
 
 #include <QColor>
+#include <QKeyEvent>
 #include <QPalette>
 #include <QQuickPaintedItem>
 #include <QTimer>
-#include <QKeyEvent>
 
 namespace Widgets {
 /**

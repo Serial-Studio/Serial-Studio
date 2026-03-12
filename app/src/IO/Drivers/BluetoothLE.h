@@ -78,15 +78,13 @@ signals:
   void adapterAvailabilityChanged();
   void error(const QString& message);
 
-private:
+public:
   explicit BluetoothLE();
+
   BluetoothLE(BluetoothLE&&)                 = delete;
   BluetoothLE(const BluetoothLE&)            = delete;
   BluetoothLE& operator=(BluetoothLE&&)      = delete;
   BluetoothLE& operator=(const BluetoothLE&) = delete;
-
-public:
-  static BluetoothLE& instance();
 
   void close() override;
 
@@ -96,6 +94,7 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] bool ignoreDataDelimeters() const;
   [[nodiscard]] bool operatingSystemSupported() const;
@@ -110,6 +109,7 @@ public:
   [[nodiscard]] QStringList characteristicNames() const;
 
 public slots:
+  void setDriverProperty(const QString& key, const QVariant& value) override;
   void startDiscovery();
   void selectDevice(const int index);
   void selectService(const int index);

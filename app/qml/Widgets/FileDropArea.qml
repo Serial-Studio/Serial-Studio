@@ -67,8 +67,8 @@ DropArea {
 
     // Process JSON files
     if (lowerCase.endsWith(".json") || lowerCase.endsWith(".ssproj")) {
-      Cpp_JSON_FrameBuilder.operationMode = SerialStudio.ProjectFile
-      Cpp_JSON_FrameBuilder.loadJsonMap(cleanPath)
+      Cpp_AppState.operationMode = SerialStudio.ProjectFile
+      Cpp_JSON_ProjectModel.openJsonFile(cleanPath)
     }
 
     // Process CSV files

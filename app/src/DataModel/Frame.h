@@ -45,6 +45,11 @@ inline constexpr auto TimerMode     = "timerMode";
 inline constexpr auto TimerInterval = "timerIntervalMs";
 inline constexpr auto AutoExecute   = "autoExecuteOnConnect";
 
+inline constexpr auto Sources         = "sources";
+inline constexpr auto SourceId        = "sourceId";
+inline constexpr auto SourceConn      = "connection";
+inline constexpr auto DatasetSourceId = "datasetSourceId";
+
 inline constexpr auto FFT             = "fft";
 inline constexpr auto LED             = "led";
 inline constexpr auto Log             = "log";
@@ -86,6 +91,7 @@ inline constexpr auto WidgetSettings  = "widgetSettings";
 // Reserved sub-keys stored inside the widgetSettings object.
 // Prefixed with "__" to avoid collisions with numeric widget IDs.
 inline constexpr auto kActiveGroupSubKey = "__activeGroup__";
+inline constexpr auto kPointCountSubKey  = "__pointCount__";
 
 inline QString layoutKey(int groupId)
 {
@@ -152,6 +158,7 @@ struct alignas(8) Dataset {
   int index            = 0;      ///< Frame offset index
   int xAxisId          = -1;     ///< Optional reference to x-axis dataset
   int groupId          = 0;      ///< Owning group ID
+  int sourceId         = 0;      ///< Source this dataset belongs to
   int uniqueId         = 0;      ///< Unique ID within frame
   int datasetId        = 0;      ///< Unique ID within group
   int fftSamples       = 256;    ///< Number of samples for FFT
@@ -190,7 +197,8 @@ static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct
  * specific sensor).
  */
 struct alignas(8) Group {
-  int groupId = -1;               ///< Unique group identifier
+  int groupId  = -1;              ///< Unique group identifier
+  int sourceId = 0;               ///< Source this group reads from (0 = default)
   QString title;                  ///< Group display name
   QString widget;                 ///< Group widget type
   std::vector<Dataset> datasets;  ///< Datasets contained in this group
@@ -204,6 +212,60 @@ struct alignas(8) Group {
 static_assert(sizeof(Group) % alignof(Group) == 0, "Unaligned Group struct");
 
 //--------------------------------------------------------------------------------------------------
+// Source structure
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Describes a single data source (device + connection settings) within a
+ * project. Each source owns its own frame detection configuration and opaque
+ * connection settings.
+ *
+ * busType is stored as int to avoid a circular dependency with SerialStudio.h
+ * (which already includes Frame.h). Cast to SerialStudio::BusType at call sites.
+ */
+struct alignas(8) Source {
+  int sourceId = 0;                    ///< Unique source identifier (0 = default/backward-compat)
+  int busType  = 0;                    ///< SerialStudio::BusType cast to int
+  QString title;                       ///< Human-readable source name
+  QString frameStart;                  ///< Frame start delimiter sequence
+  QString frameEnd;                    ///< Frame end delimiter sequence
+  QString checksumAlgorithm;           ///< Checksum algorithm name
+  int frameDetection         = 0;      ///< SerialStudio::FrameDetection cast to int
+  int decoderMethod          = 0;      ///< SerialStudio::DecoderMethod cast to int
+  bool hexadecimalDelimiters = false;  ///< True if delimiters are hex-encoded
+  QJsonObject connectionSettings;      ///< Opaque bus-specific connection params
+  QString frameParserCode;             ///< Per-source JavaScript frame parser
+};
+
+static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
+
+/**
+ * @brief Serializes a Source to a QJsonObject.
+ * @param s The Source to serialize.
+ * @return QJsonObject representing the Source.
+ */
+[[nodiscard]] inline QJsonObject serialize(const Source& s)
+{
+  QJsonObject obj;
+  obj.insert(Keys::SourceId, s.sourceId);
+  obj.insert(Keys::Title, s.title.simplified());
+  obj.insert("busType", s.busType);
+  obj.insert("frameStart", s.frameStart);
+  obj.insert("frameEnd", s.frameEnd);
+  obj.insert("checksum", s.checksumAlgorithm);
+  obj.insert("frameDetection", s.frameDetection);
+  obj.insert("decoder", s.decoderMethod);
+  obj.insert("hexadecimalDelimiters", s.hexadecimalDelimiters);
+  if (!s.connectionSettings.isEmpty())
+    obj.insert(Keys::SourceConn, s.connectionSettings);
+
+  if (!s.frameParserCode.isEmpty())
+    obj.insert("frameParserCode", s.frameParserCode);
+
+  return obj;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Frame structure
 //--------------------------------------------------------------------------------------------------
 
@@ -212,6 +274,7 @@ static_assert(sizeof(Group) % alignof(Group) == 0, "Unaligned Group struct");
  *        This is the root structure for each UI update.
  */
 struct alignas(8) Frame {
+  int sourceId = 0;                         ///< Source that produced this frame
   QString title;                            ///< Frame title
   std::vector<Group> groups;                ///< Sensor groups in this frame
   std::vector<Action> actions;              ///< Triggerable actions
@@ -471,6 +534,10 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::FFTSamplingRate, d.fftSamplingRate);
   obj.insert(Keys::AlarmLow, qMin(d.alarmLow, d.alarmHigh));
   obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
+
+  if (d.sourceId != 0)
+    obj.insert(Keys::DatasetSourceId, d.sourceId);
+
   return obj;
 }
 
@@ -495,6 +562,9 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Datasets, datasetArray);
   obj.insert(Keys::Title, g.title.simplified());
   obj.insert(Keys::Widget, g.widget.simplified());
+
+  if (g.sourceId != 0)
+    obj.insert(Keys::SourceId, g.sourceId);
 
   if (g.widget.simplified() == QLatin1String("image")) {
     obj.insert(Keys::ImgMode, g.imgDetectionMode);
@@ -567,6 +637,31 @@ void read_io_settings(QByteArray& frameStart,
 //--------------------------------------------------------------------------------------------------
 // Data deserialization
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Deserializes a Source from a QJsonObject.
+ * @param s Output Source to populate.
+ * @param obj JSON object to read from.
+ * @return true if successfully parsed.
+ */
+[[nodiscard]] inline bool read(Source& s, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  s.sourceId              = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  s.title                 = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  s.busType               = ss_jsr(obj, "busType", 0).toInt();
+  s.frameStart            = ss_jsr(obj, "frameStart", "").toString();
+  s.frameEnd              = ss_jsr(obj, "frameEnd", "\\n").toString();
+  s.checksumAlgorithm     = ss_jsr(obj, "checksum", "").toString();
+  s.frameDetection        = ss_jsr(obj, "frameDetection", 0).toInt();
+  s.decoderMethod         = ss_jsr(obj, "decoder", 0).toInt();
+  s.hexadecimalDelimiters = ss_jsr(obj, "hexadecimalDelimiters", false).toBool();
+  s.connectionSettings    = ss_jsr(obj, Keys::SourceConn, QJsonObject()).toJsonObject();
+  s.frameParserCode       = ss_jsr(obj, "frameParserCode", "").toString();
+  return true;
+}
 
 /**
  * @brief Deserializes an Action from a QJsonObject.
@@ -655,6 +750,8 @@ void read_io_settings(QByteArray& frameStart,
   d.alarmLow        = ss_jsr(obj, Keys::AlarmLow, 0).toDouble();
   d.fftSamplingRate = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
   d.alarmHigh       = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
+  d.sourceId        = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
+
   if (d.value.isEmpty())
     d.value = QStringLiteral("--.--");
   else
@@ -730,8 +827,9 @@ void read_io_settings(QByteArray& frameStart,
   const bool isImageGroup = (widget == QLatin1String("image"));
 
   if (!title.isEmpty() && (!array.isEmpty() || isImageGroup)) {
-    g.title  = title;
-    g.widget = widget;
+    g.title    = title;
+    g.widget   = widget;
+    g.sourceId = ss_jsr(obj, Keys::SourceId, 0).toInt();
 
     if (isImageGroup) {
       g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();

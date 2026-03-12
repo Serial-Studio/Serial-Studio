@@ -28,7 +28,7 @@
 #include <QtMath>
 
 #include "DataModel/FrameBuilder.h"
-#include "IO/Manager.h"
+#include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
 #include "UI/Dashboard.h"
@@ -322,7 +322,7 @@ void CSV::Player::openFile(const QString& filePath)
   closeFile();
 
   // Device is connected, warn user & disconnect
-  if (IO::Manager::instance().isConnected()) {
+  if (IO::ConnectionManager::instance().isConnected()) {
     auto response = Misc::Utilities::showMessageBox(
       tr("Device Connection Active"),
       tr("To use this feature, you must disconnect from the device. Do you want to proceed?"),
@@ -330,7 +330,7 @@ void CSV::Player::openFile(const QString& filePath)
       qAppName(),
       QMessageBox::No | QMessageBox::Yes);
     if (response == QMessageBox::Yes)
-      IO::Manager::instance().disconnectDevice();
+      IO::ConnectionManager::instance().disconnectDevice();
     else
       return;
   }
@@ -556,7 +556,7 @@ void CSV::Player::updateData()
   if (!isPlaying())
     return;
 
-  IO::Manager::instance().processPayload(getFrame(framePosition()));
+  IO::ConnectionManager::instance().processPayload(getFrame(framePosition()));
 
   if (framePosition() >= frameCount() - 1) {
     pause();
@@ -593,7 +593,7 @@ void CSV::Player::updateData()
     int processed               = 0;
     while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize && msUntilNext <= 0) {
       ++m_framePos;
-      IO::Manager::instance().processPayload(getFrame(m_framePos));
+      IO::ConnectionManager::instance().processPayload(getFrame(m_framePos));
       ++processed;
 
       if (m_useHighPrecisionTimestamps) {
@@ -657,7 +657,7 @@ void CSV::Player::processFrameBatch(int startFrame, int endFrame)
     return;
 
   for (int i = startFrame; i <= endFrame; ++i)
-    IO::Manager::instance().processPayload(getFrame(i));
+    IO::ConnectionManager::instance().processPayload(getFrame(i));
 }
 
 /**

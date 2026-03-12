@@ -32,19 +32,25 @@ namespace Misc {
  * @brief Manages application module lifecycle, QML engine setup, and headless operation.
  */
 class ModuleManager : public QObject {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(bool autoUpdaterEnabled READ autoUpdaterEnabled CONSTANT)
-  Q_PROPERTY(bool automaticUpdates READ automaticUpdates WRITE setAutomaticUpdates NOTIFY
-               automaticUpdatesChanged)
+  Q_PROPERTY(bool autoUpdaterEnabled
+             READ autoUpdaterEnabled
+             CONSTANT)
+  Q_PROPERTY(bool automaticUpdates
+             READ  automaticUpdates
+             WRITE setAutomaticUpdates
+             NOTIFY automaticUpdatesChanged)
+  // clang-format on
 
 signals:
   void automaticUpdatesChanged();
 
 public:
   ModuleManager();
-  [[nodiscard]] bool autoUpdaterEnabled() const;
-  [[nodiscard]] bool automaticUpdates() const;
-  [[nodiscard]] const QQmlApplicationEngine& engine() const;
+  [[nodiscard]] bool autoUpdaterEnabled() const noexcept;
+  [[nodiscard]] bool automaticUpdates() const noexcept;
+  [[nodiscard]] const QQmlApplicationEngine& engine() const noexcept;
 
 public slots:
   void onQuit();

@@ -78,32 +78,49 @@ class Process : public HAL_Driver {
              READ  mode
              WRITE setMode
              NOTIFY modeChanged)
-  Q_PROPERTY(QString executable
-             READ  executable
-             WRITE setExecutable
-             NOTIFY executableChanged)
-  Q_PROPERTY(QString arguments
-             READ  arguments
-             WRITE setArguments
-             NOTIFY argumentsChanged)
-  Q_PROPERTY(QString workingDir
-             READ  workingDir
-             WRITE setWorkingDir
-             NOTIFY workingDirChanged)
-  Q_PROPERTY(QString pipePath
-             READ  pipePath
-             WRITE setPipePath
-             NOTIFY pipePathChanged)
-  Q_PROPERTY(QStringList runningProcesses
-             READ  runningProcesses
-             NOTIFY runningProcessesChanged)
   Q_PROPERTY(int outputCapture
              READ  outputCapture
              WRITE setOutputCapture
              NOTIFY outputCaptureChanged)
+  Q_PROPERTY(QString pipePath
+             READ  pipePath
+             WRITE setPipePath
+             NOTIFY pipePathChanged)
+  Q_PROPERTY(QString workingDir
+             READ  workingDir
+             WRITE setWorkingDir
+             NOTIFY workingDirChanged)
+  Q_PROPERTY(QString arguments
+             READ  arguments
+             WRITE setArguments
+             NOTIFY argumentsChanged)
+  Q_PROPERTY(QString executable
+             READ  executable
+             WRITE setExecutable
+             NOTIFY executableChanged)
+  Q_PROPERTY(QStringList runningProcesses
+             READ  runningProcesses
+             NOTIFY runningProcessesChanged)
   // clang-format on
 
+signals:
+  void modeChanged();
+  void pipePathChanged();
+  void argumentsChanged();
+  void workingDirChanged();
+  void executableChanged();
+  void outputCaptureChanged();
+  void runningProcessesChanged();
+
 public:
+  explicit Process();
+  ~Process();
+
+  Process(Process&&)                 = delete;
+  Process(const Process&)            = delete;
+  Process& operator=(Process&&)      = delete;
+  Process& operator=(const Process&) = delete;
+
   enum class Mode {
     Launch    = 0, /**< Spawn a child process; read stdout, write stdin */
     NamedPipe = 1  /**< Open an existing named pipe / FIFO */
@@ -117,59 +134,44 @@ public:
   };
   Q_ENUM(OutputCapture)
 
-  static Process& instance();
-
   void close() override;
+
   [[nodiscard]] bool isOpen() const noexcept override;
   [[nodiscard]] bool isReadable() const noexcept override;
   [[nodiscard]] bool isWritable() const noexcept override;
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
 
   [[nodiscard]] int mode() const;
-  [[nodiscard]] QString executable() const;
-  [[nodiscard]] QString arguments() const;
-  [[nodiscard]] QString workingDir() const;
-  [[nodiscard]] QString pipePath() const;
-  [[nodiscard]] QStringList runningProcesses() const;
   [[nodiscard]] int outputCapture() const;
+  [[nodiscard]] QString pipePath() const;
+  [[nodiscard]] QString workingDir() const;
+  [[nodiscard]] QString arguments() const;
+  [[nodiscard]] QString executable() const;
+  [[nodiscard]] QStringList runningProcesses() const;
 
 public slots:
   void setMode(int mode);
-  void setExecutable(const QString& path);
-  void setArguments(const QString& args);
-  void setWorkingDir(const QString& dir);
-  void setPipePath(const QString& path);
   void setOutputCapture(int capture);
+  void setPipePath(const QString& path);
+  void setWorkingDir(const QString& dir);
+  void setArguments(const QString& args);
+  void setExecutable(const QString& path);
   void refreshProcessList();
   void setTerminalSize(int columns, int rows);
+  void setDriverProperty(const QString& key, const QVariant& value) override;
 
-signals:
-  void modeChanged();
-  void executableChanged();
-  void argumentsChanged();
-  void workingDirChanged();
-  void pipePathChanged();
-  void outputCaptureChanged();
-  void runningProcessesChanged();
-
-private:
-  explicit Process();
-  ~Process();
-
-  Process(Process&&)                 = delete;
-  Process(const Process&)            = delete;
-  Process& operator=(Process&&)      = delete;
-  Process& operator=(const Process&) = delete;
-
-  Q_SLOT void onPipeError();
-  Q_SLOT void onPtyStopped();
-
-  void doClose();
+private slots:
+  void onPipeError();
+  void onPtyStopped();
+  void onReadyRead();
   void onProcessFinished(int exitCode, QProcess::ExitStatus status);
   void onProcessError(QProcess::ProcessError error);
-  void onReadyRead();
+
+private:
+  void doClose();
   void pipeReadLoop();
   void ptyReadLoop();
 
@@ -183,19 +185,18 @@ private:
   static const QProcessEnvironment& shellEnvironment();
   static QString resolveExecutable(const QString& name, const QProcessEnvironment& env);
 
+private:
   Mode m_mode;
   OutputCapture m_outputCapture;
 
-  // QProcess fallback (pipe mode)
   QProcess* m_process;
 
-  // PTY (Launch mode)
   QThread m_ptyThread;
   std::atomic<bool> m_ptyRunning{false};
 
 #  ifdef Q_OS_WIN
-  HANDLE m_conPtyIn{INVALID_HANDLE_VALUE};   // write end  → child stdin
-  HANDLE m_conPtyOut{INVALID_HANDLE_VALUE};  // read end   ← child stdout
+  HANDLE m_conPtyIn{INVALID_HANDLE_VALUE};
+  HANDLE m_conPtyOut{INVALID_HANDLE_VALUE};
   HANDLE m_hPseudoConsole{nullptr};
   HANDLE m_hProcess{INVALID_HANDLE_VALUE};
   HANDLE m_hThread{INVALID_HANDLE_VALUE};
@@ -204,7 +205,6 @@ private:
   pid_t m_childPid{-1};
 #  endif
 
-  // Named-pipe mode
   QThread m_pipeThread;
   std::atomic<bool> m_pipeRunning{false};
 

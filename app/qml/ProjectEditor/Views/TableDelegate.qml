@@ -28,16 +28,15 @@ import SerialStudio
 
 ColumnLayout {
   id: root
-
   spacing: 0
 
   //
   // Custom properties
   //
-  property bool headerVisible: true
   property var modelPointer: null
+  property bool headerVisible: true
+  property bool spacerVisible: true
   property Component footerItem: null
-  readonly property real tableHeight: header.height - view.height - 64
 
   //
   // Set width & height for column cells
@@ -51,6 +50,9 @@ ColumnLayout {
   //
   Rectangle {
     id: header
+    Layout.fillWidth: true
+    implicitHeight: root.rowHeight
+    visible: view.rows > 0 && headerVisible
 
     gradient: Gradient {
       GradientStop {
@@ -63,9 +65,6 @@ ColumnLayout {
         color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
       }
     }
-    Layout.fillWidth: true
-    implicitHeight: root.rowHeight
-    visible: view.rows > 0 && headerVisible
 
     Rectangle {
       anchors {
@@ -384,6 +383,8 @@ ColumnLayout {
         // Text field value editor
         //
         Loader {
+          id: textFieldLoader
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.TextField
@@ -392,25 +393,25 @@ ColumnLayout {
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
+          property int modelRow: row
+          property int modelColumn: column
 
-          sourceComponent: Component {
-            TextField {
-              text: editableValue
-              enabled: modelActive
-              opacity: modelActive ? 1 : 0.5
-              placeholderText: placeholderValue
+          sourceComponent: TextField {
+            text: textFieldLoader.editableValue
+            enabled: textFieldLoader.modelActive
+            opacity: textFieldLoader.modelActive ? 1 : 0.5
+            placeholderText: textFieldLoader.modelPlaceholder ?? ""
 
-              onTextEdited: {
-                root.modelPointer.setData(
-                      view.index(row, column),
-                      text,
-                      ProjectEditor.EditableValue)
-              }
-              font: Cpp_Misc_CommonFonts.monoFont
-              color: Cpp_ThemeManager.colors["table_text"]
-
-              background: Item {}
+            onTextEdited: {
+              root.modelPointer.setData(
+                    view.index(textFieldLoader.modelRow, textFieldLoader.modelColumn),
+                    text,
+                    ProjectEditor.EditableValue)
             }
+            font: Cpp_Misc_CommonFonts.monoFont
+            color: Cpp_ThemeManager.colors["table_text"]
+
+            background: Item {}
           }
         }
 
@@ -418,6 +419,8 @@ ColumnLayout {
         // Icon picker
         //
         Loader {
+          id: iconPickerLoader
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.IconPicker
@@ -426,62 +429,66 @@ ColumnLayout {
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
+          property int modelRow: row
+          property int modelColumn: column
 
-          sourceComponent: Component {
-            RowLayout {
-              id: layout
+          sourceComponent: RowLayout {
+            id: iconPickerRow
 
-              enabled: modelActive
-              opacity: modelActive ? 1 : 0.5
+            enabled: iconPickerLoader.modelActive
+            opacity: iconPickerLoader.modelActive ? 1 : 0.5
 
-              Connections {
-                target: actionIconPicker
+            Connections {
+              target: actionIconPicker
 
-                function onIconSelected(icon) {
-                  if (layout.visible)
-                    model.editableValue = icon
+              function onIconSelected(icon) {
+                if (iconPickerRow.visible) {
+                  root.modelPointer.setData(
+                        view.index(iconPickerLoader.modelRow, iconPickerLoader.modelColumn),
+                        icon,
+                        ProjectEditor.EditableValue)
                 }
               }
+            }
 
-              TextField {
-                text: editableValue
-                enabled: modelActive
-                opacity: modelActive ? 1 : 0.5
-                placeholderText: placeholderValue
+            TextField {
+              text: iconPickerLoader.editableValue
+              enabled: iconPickerLoader.modelActive
+              opacity: iconPickerLoader.modelActive ? 1 : 0.5
+              placeholderText: iconPickerLoader.modelPlaceholder ?? ""
 
-                readOnly: true
-                background: Item {}
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
-                font: Cpp_Misc_CommonFonts.monoFont
-                color: Cpp_ThemeManager.colors["table_text"]
+              readOnly: true
+              background: Item {}
+              Layout.fillWidth: true
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
+              color: Cpp_ThemeManager.colors["table_text"]
+            }
+
+            Item {
+              width: 2
+            }
+
+            Button {
+              enabled: iconPickerLoader.modelActive
+              opacity: iconPickerLoader.modelActive ? 1 : 0.5
+
+              onClicked: {
+                actionIconPicker.selectedIcon = iconPickerLoader.editableValue
+                actionIconPicker.showNormal()
               }
+              icon.width: 16
+              icon.height: 16
+              Layout.maximumWidth: 32
+              Layout.alignment: Qt.AlignVCenter
+              icon.color: Cpp_ThemeManager.colors["table_text"]
+              icon.source: "qrc:/rcc/icons/project-editor/open.svg"
 
-              Item {
-                width: 2
-              }
+              background: Item {}
+            }
 
-              Button {
-                enabled: modelActive
-                opacity: modelActive ? 1 : 0.5
-
-                onClicked: {
-                  actionIconPicker.selectedIcon = model.editableValue
-                  actionIconPicker.showNormal()
-                }
-                icon.width: 16
-                icon.height: 16
-                Layout.maximumWidth: 32
-                Layout.alignment: Qt.AlignVCenter
-                icon.color: Cpp_ThemeManager.colors["table_text"]
-                icon.source: "qrc:/rcc/icons/project-editor/open.svg"
-
-                background: Item {}
-              }
-
-              Item {
-                width: 2
-              }
+            Item {
+              width: 2
             }
           }
         }
@@ -490,6 +497,8 @@ ColumnLayout {
         // Int number field value editor
         //
         Loader {
+          id: intFieldLoader
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.IntField
@@ -498,34 +507,36 @@ ColumnLayout {
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
+          property int modelRow: row
+          property int modelColumn: column
+          property int modelMin: model.minValue ?? 0
+          property int modelMax: model.maxValue ?? 1000000
 
-          sourceComponent: Component {
-            TextField {
-              text: editableValue
-              enabled: modelActive
-              opacity: modelActive ? 1 : 0.5
-              placeholderText: placeholderValue
+          sourceComponent: TextField {
+            text: intFieldLoader.editableValue
+            enabled: intFieldLoader.modelActive
+            opacity: intFieldLoader.modelActive ? 1 : 0.5
+            placeholderText: intFieldLoader.modelPlaceholder ?? ""
 
-              font: Cpp_Misc_CommonFonts.monoFont
-              color: Cpp_ThemeManager.colors["table_text"]
+            font: Cpp_Misc_CommonFonts.monoFont
+            color: Cpp_ThemeManager.colors["table_text"]
 
-              onTextEdited: {
-                const num = Number(text);
-                if (!isNaN(num) && num > 0) {
-                  root.modelPointer.setData(
-                        view.index(row, column),
-                        Number(text),
-                        ProjectEditor.EditableValue)
-                }
+            onTextEdited: {
+              const num = parseInt(text, 10);
+              if (!isNaN(num)) {
+                root.modelPointer.setData(
+                      view.index(intFieldLoader.modelRow, intFieldLoader.modelColumn),
+                      num,
+                      ProjectEditor.EditableValue)
               }
-
-              validator: IntValidator {
-                bottom: 1
-                top: 1000000
-              }
-
-              background: Item {}
             }
+
+            validator: IntValidator {
+              bottom: intFieldLoader.modelMin
+              top: intFieldLoader.modelMax
+            }
+
+            background: Item {}
           }
         }
 
@@ -533,6 +544,8 @@ ColumnLayout {
         // Double number field value editor
         //
         Loader {
+          id: floatFieldLoader
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.FloatField
@@ -541,42 +554,39 @@ ColumnLayout {
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
+          property int modelRow: row
+          property int modelColumn: column
+          property real modelMin: model.minValue ?? -1000000
+          property real modelMax: model.maxValue ?? 1000000
 
-          sourceComponent: Component {
-            TextField {
-              text: editableValue
-              enabled: modelActive
-              opacity: modelActive ? 1 : 0.5
-              placeholderText: placeholderValue
+          sourceComponent: TextField {
+            text: floatFieldLoader.editableValue
+            enabled: floatFieldLoader.modelActive
+            opacity: floatFieldLoader.modelActive ? 1 : 0.5
+            placeholderText: floatFieldLoader.modelPlaceholder ?? ""
 
-              font: Cpp_Misc_CommonFonts.monoFont
-              color: Cpp_ThemeManager.colors["table_text"]
+            font: Cpp_Misc_CommonFonts.monoFont
+            color: Cpp_ThemeManager.colors["table_text"]
 
-              onTextEdited: {
-                // Don't convert or set the data if it's an incomplete number
-                if (text === "-" || text === "." || text === "-.")
-                  return;
+            onTextEdited: {
+              if (text === "-" || text === "." || text === "-.")
+                return;
 
-                // Convert to number only if the input is valid
-                const num = Number(text);
-                if (!isNaN(num)) {
-                  root.modelPointer.setData(
-                        view.index(row, column),
-                        num,
-                        ProjectEditor.EditableValue
-                        );
-                }
+              const num = Number(text);
+              if (!isNaN(num)) {
+                root.modelPointer.setData(
+                      view.index(floatFieldLoader.modelRow, floatFieldLoader.modelColumn),
+                      num,
+                      ProjectEditor.EditableValue)
               }
-
-              validator: DoubleValidator {
-                id: validator
-
-                bottom: -1000000
-                top: 1000000
-              }
-
-              background: Item {}
             }
+
+            validator: DoubleValidator {
+              bottom: floatFieldLoader.modelMin
+              top: floatFieldLoader.modelMax
+            }
+
+            background: Item {}
           }
         }
 
@@ -584,6 +594,8 @@ ColumnLayout {
         // ComboBox value editor
         //
         Loader {
+          id: comboBoxLoader
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.ComboBox
@@ -592,24 +604,24 @@ ColumnLayout {
           property var modelActive: model.active
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
+          property int modelRow: row
+          property int modelColumn: column
 
-          sourceComponent: Component {
-            ComboBox {
-              flat: true
-              model: comboBoxData
-              enabled: modelActive
-              onCurrentIndexChanged: {
-                if (currentIndex !== editableValue) {
-                  root.modelPointer.setData(
-                        view.index(row, column),
-                        currentIndex,
-                        ProjectEditor.EditableValue)
-                }
+          sourceComponent: ComboBox {
+            flat: true
+            model: comboBoxLoader.comboBoxData
+            enabled: comboBoxLoader.modelActive
+            onCurrentIndexChanged: {
+              if (currentIndex !== comboBoxLoader.editableValue) {
+                root.modelPointer.setData(
+                      view.index(comboBoxLoader.modelRow, comboBoxLoader.modelColumn),
+                      currentIndex,
+                      ProjectEditor.EditableValue)
               }
-              currentIndex: editableValue
-              opacity: modelActive ? 1 : 0.5
-              font: Cpp_Misc_CommonFonts.monoFont
             }
+            currentIndex: comboBoxLoader.editableValue
+            opacity: comboBoxLoader.modelActive ? 1 : 0.5
+            font: Cpp_Misc_CommonFonts.monoFont
           }
         }
 
@@ -617,30 +629,31 @@ ColumnLayout {
         // CheckBox value editor
         //
         Loader {
+          id: checkBoxLoader
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.CheckBox
           visible: model.widgetType === ProjectEditor.CheckBox
 
           property var modelActive: model.active
-          property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
+          property int modelRow: row
+          property int modelColumn: column
 
-          sourceComponent: Component {
-            ComboBox {
-              flat: true
-              enabled: modelActive
-              onCurrentIndexChanged: {
-                root.modelPointer.setData(
-                      view.index(row, column),
-                      currentIndex === 1,
-                      ProjectEditor.EditableValue)
-              }
-              opacity: modelActive ? 1 : 0.5
-              model: [qsTr("No"), qsTr("Yes")]
-              currentIndex: editableValue ? 1 : 0
-              font: Cpp_Misc_CommonFonts.monoFont
+          sourceComponent: ComboBox {
+            flat: true
+            enabled: checkBoxLoader.modelActive
+            onCurrentIndexChanged: {
+              root.modelPointer.setData(
+                    view.index(checkBoxLoader.modelRow, checkBoxLoader.modelColumn),
+                    currentIndex === 1,
+                    ProjectEditor.EditableValue)
             }
+            opacity: checkBoxLoader.modelActive ? 1 : 0.5
+            model: [qsTr("No"), qsTr("Yes")]
+            currentIndex: checkBoxLoader.editableValue ? 1 : 0
+            font: Cpp_Misc_CommonFonts.monoFont
           }
         }
 
@@ -648,6 +661,8 @@ ColumnLayout {
         // HexTextEdit editor
         //
         Loader {
+          id: hexFieldLoader
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           active: model.widgetType === ProjectEditor.HexTextField
@@ -656,15 +671,16 @@ ColumnLayout {
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
+          property int modelRow: row
+          property int modelColumn: column
 
-          sourceComponent: Component {
-            TextField {
-              id: _hexComponent
+          sourceComponent: TextField {
+            id: _hexComponent
 
-              text: editableValue
-              enabled: modelActive
-              opacity: modelActive ? 1 : 0.5
-              placeholderText: placeholderValue
+            text: hexFieldLoader.editableValue
+            enabled: hexFieldLoader.modelActive
+            opacity: hexFieldLoader.modelActive ? 1 : 0.5
+            placeholderText: hexFieldLoader.modelPlaceholder ?? ""
 
               font: Cpp_Misc_CommonFonts.monoFont
               color: Cpp_ThemeManager.colors["table_text"]
@@ -714,13 +730,12 @@ ColumnLayout {
 
                 // Set model data
                 root.modelPointer.setData(
-                      view.index(row, column),
+                      view.index(hexFieldLoader.modelRow, hexFieldLoader.modelColumn),
                       formattedText,
                       ProjectEditor.EditableValue)
               }
 
               background: Item {}
-            }
           }
         }
 
@@ -741,6 +756,7 @@ ColumnLayout {
   Item {
     Layout.fillHeight: true
     Layout.minimumHeight: 32
+    visible: root.spacerVisible
   }
 
   //
@@ -758,5 +774,6 @@ ColumnLayout {
   Item {
     Layout.fillHeight: true
     Layout.minimumHeight: 32
+    visible: root.spacerVisible
   }
 }

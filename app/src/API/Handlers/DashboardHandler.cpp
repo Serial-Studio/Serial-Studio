@@ -22,6 +22,7 @@
 #include "API/Handlers/DashboardHandler.h"
 
 #include "API/CommandRegistry.h"
+#include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "Misc/TimerEvents.h"
@@ -104,7 +105,7 @@ API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QSt
   }
 
   const auto operationMode = static_cast<SerialStudio::OperationMode>(mode);
-  DataModel::FrameBuilder::instance().setOperationMode(operationMode);
+  AppState::instance().setOperationMode(operationMode);
 
   QJsonObject result;
   result[QStringLiteral("mode")] = mode;
@@ -128,7 +129,7 @@ API::CommandResponse API::Handlers::DashboardHandler::getOperationMode(const QSt
 {
   Q_UNUSED(params)
 
-  const auto mode     = DataModel::FrameBuilder::instance().operationMode();
+  const auto mode     = AppState::instance().operationMode();
   const int modeIndex = static_cast<int>(mode);
 
   QJsonObject result;
@@ -237,7 +238,7 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
 {
   Q_UNUSED(params)
 
-  const auto mode     = DataModel::FrameBuilder::instance().operationMode();
+  const auto mode     = AppState::instance().operationMode();
   const int modeIndex = static_cast<int>(mode);
   const int fps       = Misc::TimerEvents::instance().fps();
   const int points    = UI::Dashboard::instance().points();

@@ -76,6 +76,31 @@ static QVector<QColor> extractWidgetColors(const QJsonObject& colorsObject)
   return result;
 }
 
+/**
+ * @brief Extracts device color gradient pairs from a JSON object.
+ *
+ * Reads the array at the "device_colors" key. Each element must be an object
+ * with "top" and "bottom" hex string keys. Returns up to 10 pairs.
+ *
+ * @return QVector of (top, bottom) QColor pairs for each device slot.
+ */
+static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& colorsObject)
+{
+  QVector<QPair<QColor, QColor>> result;
+  const QJsonArray array = colorsObject.value("device_colors").toArray();
+  result.reserve(array.size());
+
+  for (const auto& val : array) {
+    if (!val.isObject())
+      continue;
+
+    const auto obj = val.toObject();
+    result.append({QColor(obj.value("top").toString()), QColor(obj.value("bottom").toString())});
+  }
+
+  return result;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
@@ -234,6 +259,20 @@ const QVector<QColor>& Misc::ThemeManager::widgetColors() const
 }
 
 /**
+ * @brief Returns the list of per-device caption gradient color pairs.
+ *
+ * Each pair contains a (top, bottom) gradient color for use in dashboard
+ * MiniWindow captions. Designed to harmonize with each theme's chrome while
+ * providing distinct, readable per-device tints.
+ *
+ * @return const reference to a QVector of (top, bottom) QColor pairs.
+ */
+const QVector<QPair<QColor, QColor>>& Misc::ThemeManager::deviceColors() const
+{
+  return m_deviceColors;
+}
+
+/**
  * @brief Returns a list of theme names that are available.
  * @return QStringList containing the names of all loaded themes.
  */
@@ -289,6 +328,7 @@ void Misc::ThemeManager::setTheme(const int index)
   auto data      = m_themes.value(m_themeName);
   m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
+  m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
 
   // Set application palette
@@ -377,6 +417,7 @@ void Misc::ThemeManager::loadSystemTheme()
   m_theme        = m_availableThemes.indexOf(m_themeName);
   m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
   m_widgetColors = extractWidgetColors(data.value("colors").toObject());
+  m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
 
   // Update user interface

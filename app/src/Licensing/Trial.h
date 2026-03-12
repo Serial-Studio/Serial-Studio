@@ -53,13 +53,32 @@ namespace Licensing {
  * - Check trial eligibility via `trialAvailable()`
  */
 class Trial : public QObject {
+  // clang-format off
   Q_OBJECT
-  Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
-  Q_PROPERTY(bool firstRun READ firstRun NOTIFY enabledChanged)
-  Q_PROPERTY(bool trialEnabled READ trialEnabled NOTIFY enabledChanged)
-  Q_PROPERTY(bool trialExpired READ trialExpired NOTIFY enabledChanged)
-  Q_PROPERTY(int daysRemaining READ daysRemaining NOTIFY enabledChanged)
-  Q_PROPERTY(bool trialAvailable READ trialAvailable NOTIFY availableChanged)
+  Q_PROPERTY(bool busy
+             READ busy
+             NOTIFY busyChanged)
+  Q_PROPERTY(bool firstRun
+             READ firstRun
+             NOTIFY enabledChanged)
+  Q_PROPERTY(int  daysRemaining
+             READ daysRemaining
+             NOTIFY enabledChanged)
+  Q_PROPERTY(bool trialEnabled
+             READ trialEnabled
+             NOTIFY enabledChanged)
+  Q_PROPERTY(bool trialExpired
+             READ trialExpired
+             NOTIFY enabledChanged)
+  Q_PROPERTY(bool trialAvailable
+             READ trialAvailable
+             NOTIFY availableChanged)
+  // clang-format on
+
+signals:
+  void busyChanged();
+  void enabledChanged();
+  void availableChanged();
 
 private:
   explicit Trial();
@@ -68,15 +87,10 @@ private:
   Trial& operator=(Trial&&)      = delete;
   Trial& operator=(const Trial&) = delete;
 
-signals:
-  void busyChanged();
-  void enabledChanged();
-  void availableChanged();
-
 public:
   [[nodiscard]] static Trial& instance();
 
-  [[nodiscard]] bool busy() const;
+  [[nodiscard]] bool busy() const noexcept;
   [[nodiscard]] bool firstRun() const;
   [[nodiscard]] bool trialEnabled() const;
   [[nodiscard]] bool trialExpired() const;

@@ -496,3 +496,66 @@ class SerialStudioClient:
         """
         status = self.get_dashboard_status()
         return status.get("widgetCount", 0)
+
+    # ------------------------------------------------------------------
+    # Multi-source (project.source.*) helpers
+    # ------------------------------------------------------------------
+
+    def source_list(self) -> list:
+        """Return list of all sources in the current project."""
+        result = self.command("project.source.list")
+        return result.get("sources", [])
+
+    def source_add(self) -> int:
+        """Add a new source (Commercial only). Returns the new sourceId."""
+        result = self.command("project.source.add")
+        return result.get("sourceId", -1)
+
+    def source_delete(self, source_id: int) -> None:
+        """Delete a source by ID (Commercial only; sourceId >= 1)."""
+        self.command("project.source.delete", {"sourceId": source_id})
+
+    def source_update(self, source_id: int, **kwargs) -> None:
+        """Update source fields. Accepted kwargs: title, busType, frameStart,
+        frameEnd, checksumAlgorithm, frameDetection, decoderMethod,
+        hexadecimalDelimiters (Commercial only for multi-source projects).
+        """
+        params = {"sourceId": source_id}
+        params.update(kwargs)
+        self.command("project.source.update", params)
+
+    def source_set_property(self, source_id: int, key: str, value) -> None:
+        """Set a driver connection property for a source."""
+        self.command("project.source.setProperty",
+                     {"sourceId": source_id, "key": key, "value": value})
+
+    def source_get_configuration(self, source_id: int) -> dict:
+        """Return full Source struct including connectionSettings."""
+        return self.command("project.source.getConfiguration", {"sourceId": source_id})
+
+    def source_configure(self, source_id: int, settings: dict) -> None:
+        """
+        Apply multiple driver connection properties to a source in one call.
+
+        For source 0 in single-source ProjectFile mode this is equivalent to
+        the user editing the Setup panel: changes propagate to the UI and are
+        saved into source[0].connectionSettings. For multi-source projects
+        (sourceId >= 1) uses the editing-driver path.
+
+        Args:
+            source_id: Source ID (0 for primary/single-source projects)
+            settings: Dict of driver property key/value pairs, e.g.
+                      {"address": "127.0.0.1", "tcpPort": 9000, "socketTypeIndex": 0}
+        """
+        self.command("project.source.configure",
+                     {"sourceId": source_id, "settings": settings})
+
+    def source_set_frame_parser_code(self, source_id: int, code: str) -> None:
+        """Set per-source JavaScript frame parser code."""
+        self.command("project.source.setFrameParserCode",
+                     {"sourceId": source_id, "code": code})
+
+    def source_get_frame_parser_code(self, source_id: int) -> str:
+        """Return per-source JavaScript frame parser code."""
+        result = self.command("project.source.getFrameParserCode", {"sourceId": source_id})
+        return result.get("code", "")

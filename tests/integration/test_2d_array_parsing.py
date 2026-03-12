@@ -82,17 +82,22 @@ def _send_frame(api_client, device_simulator, payload: dict):
     time.sleep(0.3)
 
 
-def _connect_device(api_client):
-    """Configure project mode, load into frame builder, and connect device."""
+def _connect_device(api_client, device_simulator):
+    """Configure network driver, frame parser, load project, and connect device."""
+    # Set bus type to Network before loading into FrameBuilder so the correct
+    # driver is active when the connection is opened.
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+    time.sleep(0.1)
     api_client.set_operation_mode("project")
     api_client.configure_frame_parser(
         start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
     )
     api_client.command("project.loadIntoFrameBuilder")
     time.sleep(0.2)
-    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
     api_client.connect_device()
-    time.sleep(0.5)
+    assert device_simulator.wait_for_connection(timeout=5.0), (
+        "Serial Studio did not connect to the device simulator within 5 seconds"
+    )
 
 
 class TestBasic2DArrayParsing:
@@ -111,7 +116,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = {"values": [[1.1, 2.2, 3.3], [4.4, 5.5, 6.6]]}
         _send_frame(api_client, device_simulator, payload)
@@ -134,7 +139,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = {"values": [[1.1, 2.2], [3.3, 4.4, 5.5], [6.6]]}
         _send_frame(api_client, device_simulator, payload)
@@ -166,7 +171,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = {"humidity": 25.5, "temp": 60.0, "accel": [1.1, 2.2, 3.3]}
         _send_frame(api_client, device_simulator, payload)
@@ -191,7 +196,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = {"scalar": 100.0, "vec1": [1.1, 2.2], "vec2": [3.3, 4.4]}
         _send_frame(api_client, device_simulator, payload)
@@ -216,7 +221,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = {
             "scalar": 99.9,
@@ -250,7 +255,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         accel_samples = [float(i) * 0.1 for i in range(120)]
         payload = {"humidity": 45.2, "temp": 22.5, "accel_samples": accel_samples}
@@ -285,7 +290,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         values_before = _get_dataset_values(api_client)
 
@@ -312,7 +317,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = {"scalar": 50.0, "vec": [1.1, 2.2]}
         _send_frame(api_client, device_simulator, payload)
@@ -342,7 +347,7 @@ function parse(frame) {
 }
 """
         _configure_js_parser(api_client, js_code)
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = {"values": [1.1, 2.2, 3.3]}
         _send_frame(api_client, device_simulator, payload)
@@ -362,7 +367,7 @@ function parse(frame) {
         )
         time.sleep(0.2)
 
-        _connect_device(api_client)
+        _connect_device(api_client, device_simulator)
 
         payload = DataGenerator.generate_csv_frame()
         frame = f"/*{payload}*/"

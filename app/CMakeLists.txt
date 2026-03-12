@@ -230,12 +230,15 @@ set(SOURCES
   src/API/Handlers/CSVPlayerHandler.cpp
   src/API/Handlers/DashboardHandler.cpp
   src/API/Handlers/WindowHandler.cpp
+  src/API/Handlers/SourceHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
   src/IO/Checksum.cpp
   src/Console/Handler.cpp
-  src/IO/Manager.cpp
+  src/IO/FrameConfig.h
+  src/IO/DeviceManager.cpp
+  src/IO/ConnectionManager.cpp
   src/Console/Export.cpp
   src/IO/FileTransmission.cpp
   src/IO/FrameReader.cpp
@@ -252,6 +255,7 @@ set(SOURCES
   src/MDF4/Player.cpp
   src/MDF4/Export.cpp
   src/main.cpp
+  src/AppState.cpp
   src/SerialStudio.cpp
 )
 
@@ -301,6 +305,7 @@ set(HEADERS
   src/API/Handlers/CSVPlayerHandler.h
   src/API/Handlers/DashboardHandler.h
   src/API/Handlers/WindowHandler.h
+  src/API/Handlers/SourceHandler.h
   src/UI/UISessionRegistry.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
@@ -308,7 +313,9 @@ set(HEADERS
   src/IO/Drivers/UART.h
   src/IO/Drivers/Network.h
   src/IO/Drivers/BluetoothLE.h
-  src/IO/Manager.h
+  src/IO/FrameConfig.h
+  src/IO/DeviceManager.h
+  src/IO/ConnectionManager.h
   src/IO/HAL_Driver.h
   src/IO/Checksum.h
   src/IO/CircularBuffer.h
@@ -331,6 +338,7 @@ set(HEADERS
   src/ThirdParty/readerwritercircularbuffer.h
   src/AppInfo.h
   src/DSP.h
+  src/AppState.h
   src/Concepts.h
   src/SerialStudio.h
 )
@@ -366,9 +374,12 @@ set(QML_SOURCES
   qml/ProjectEditor/Sections/ProjectToolbar.qml
   qml/ProjectEditor/Views/ActionView.qml
   qml/ProjectEditor/Views/DatasetView.qml
+  qml/ProjectEditor/Views/FlowDiagram.qml
   qml/ProjectEditor/Views/FrameParserView.qml
   qml/ProjectEditor/Views/GroupView.qml
   qml/ProjectEditor/Views/ProjectView.qml
+  qml/ProjectEditor/Views/SourceView.qml
+  qml/ProjectEditor/Views/SourceFrameParserView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
   qml/ProjectEditor/ProjectEditor.qml
   qml/Widgets/Dashboard/Accelerometer.qml
