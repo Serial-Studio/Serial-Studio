@@ -73,7 +73,7 @@ Item {
   // Layout engine
   //
   // Column layout (left → right):
-  //   Col 0  Device cards  (one per source; hidden when single-source)
+  //   Col 0  Device cards  (one per source; always shown)
   //   Col 1  Frame Parser  (one per source; always shown)
   //   Col 2  Group cards   (one per group)
   //   Col 3  Dataset pills (stacked per group)
@@ -96,11 +96,9 @@ Item {
     const newNodes  = []
     const newArrows = []
 
-    const multiSrc = sources.length > 1
-
     // ── column x positions ────────────────────────────────────────────────
-    const colDev  = pad                               // device column (hidden if single)
-    const colFP   = multiSrc ? pad + nodeW + hGap : pad  // frame-parser column
+    const colDev  = pad                               // device column
+    const colFP   = pad + nodeW + hGap                // frame-parser column
     const colGrp  = colFP  + nodeW + hGap            // group column
     const colChip = colGrp + nodeW + hGap            // dataset column
     const colAct  = colChip + chipW + hGap           // action column
@@ -168,31 +166,31 @@ Item {
         icon:      "qrc:/rcc/icons/project-editor/treeview/code.svg"
       })
 
-      if (multiSrc) {
-        // Device card
-        const devTitle = src.title || qsTr("Device %1").arg(sid + 1)
-        newNodes.push({
-          type:      "source",
-          sourceId:  sid,
-          groupId:   -1,
-          datasetId: -1,
-          actionId:  -1,
-          x:         colDev,
-          y:         midY,
-          w:         nodeW,
-          h:         nodeH,
-          label:     devTitle,
-          icon:      busTypeIcon(src.busType),
-          badge:     "[" + String.fromCharCode(65 + sid) + "]"
-        })
+      // Device card (always shown)
+      const devTitle = src.title || qsTr("Device %1").arg(sid + 1)
+      newNodes.push({
+        type:      "source",
+        sourceId:  sid,
+        groupId:   -1,
+        datasetId: -1,
+        actionId:  -1,
+        x:         colDev,
+        y:         midY,
+        w:         nodeW,
+        h:         nodeH,
+        label:     devTitle,
+        icon:      busTypeIcon(src.busType),
+        badge:     sources.length > 1
+          ? "[" + String.fromCharCode(65 + sid) + "]"
+          : ""
+      })
 
-        // Arrow: device → frame-parser
-        newArrows.push({
-          x1: colDev + nodeW, y1: midY + nodeH / 2,
-          x2: colFP,          y2: midY + nodeH / 2,
-          dashed: false
-        })
-      }
+      // Arrow: device → frame-parser
+      newArrows.push({
+        x1: colDev + nodeW, y1: midY + nodeH / 2,
+        x2: colFP,          y2: midY + nodeH / 2,
+        dashed: false
+      })
     }
 
     // ── place group + dataset nodes ────────────────────────────────────────
@@ -483,16 +481,15 @@ Item {
             ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2)
             ctx.stroke()
 
-            // Arrowhead
-            const hl    = 7 * z
-            const angle = Math.atan2(y2 - y1, x2 - x1)
+            // Arrowhead — tangent at bezier endpoint is always horizontal
+            // (last control point shares y with endpoint), so arrow points right.
+            const hl  = 7 * z
+            const sin = Math.sin(Math.PI / 6)
             ctx.setLineDash([])
             ctx.beginPath()
             ctx.moveTo(x2, y2)
-            ctx.lineTo(x2 - hl * Math.cos(angle - Math.PI / 6),
-                       y2 - hl * Math.sin(angle - Math.PI / 6))
-            ctx.lineTo(x2 - hl * Math.cos(angle + Math.PI / 6),
-                       y2 - hl * Math.sin(angle + Math.PI / 6))
+            ctx.lineTo(x2 - hl, y2 - hl * sin)
+            ctx.lineTo(x2 - hl, y2 + hl * sin)
             ctx.closePath()
             ctx.fill()
           }
