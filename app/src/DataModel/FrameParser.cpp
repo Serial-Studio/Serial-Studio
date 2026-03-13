@@ -839,9 +839,10 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
 
   if (loadScript(sourceId, code, !m_suppressMessageBoxes)) {
     auto& model = DataModel::ProjectModel::instance();
-    model.updateSourceFrameParser(sourceId, code);
     if (sourceId == 0)
       model.setFrameParserCode(code);
+    else
+      model.updateSourceFrameParser(sourceId, code);
 
     model.setModified(true);
   }

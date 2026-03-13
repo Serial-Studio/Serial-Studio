@@ -238,10 +238,10 @@ void DataModel::JsCodeEditor::apply()
   if (!parser.loadScript(m_sourceId, text(), true))
     return;
 
-  model.updateSourceFrameParser(m_sourceId, text());
-
   if (m_sourceId == 0)
     model.setFrameParserCode(text());
+  else
+    model.updateSourceFrameParser(m_sourceId, text());
 
   const bool prevModif = model.modified();
   m_widget.document()->setModified(false);
@@ -385,7 +385,7 @@ void DataModel::JsCodeEditor::selectTemplate()
     const QString code = parser.templateCode(m_sourceId);
     m_widget.setPlainText(code);
     m_widget.document()->clearUndoRedoStacks();
-    m_widget.document()->setModified(true);
+    m_widget.document()->setModified(false);
     Q_EMIT modifiedChanged();
     return;
   }
