@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <QIODevice>
+#include <QJsonObject>
 #include <QList>
 #include <QObject>
 #include <QString>
@@ -285,6 +286,35 @@ public:
    * @return List of DriverProperty descriptors with current values.
    */
   [[nodiscard]] virtual QList<IO::DriverProperty> driverProperties() const = 0;
+
+  /**
+   * @brief Returns stable hardware identifiers for the currently selected device.
+   *
+   * Subclasses override this to provide cross-platform metadata (e.g. VID/PID/serial
+   * for UART, BLE address/name for Bluetooth LE) that survives device re-enumeration
+   * and platform changes. The returned JSON is stored alongside connectionSettings
+   * and used by selectByIdentifier() on project reload.
+   *
+   * @return JSON object with hardware identifiers, or empty if no device is selected.
+   */
+  [[nodiscard]] virtual QJsonObject deviceIdentifier() const { return {}; }
+
+  /**
+   * @brief Attempts to find and select a device matching a previously saved identifier.
+   *
+   * Called during project load after all driver properties have been applied. The driver
+   * searches its current device list for a match and updates its selection index if found.
+   * If no match is found, the current selection is left unchanged so the user can pick
+   * any available device manually.
+   *
+   * @param id The identifier object previously returned by deviceIdentifier().
+   * @return True if a matching device was found and selected.
+   */
+  virtual bool selectByIdentifier(const QJsonObject& id)
+  {
+    Q_UNUSED(id);
+    return false;
+  }
 
 public slots:
   /**

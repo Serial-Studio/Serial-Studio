@@ -143,7 +143,9 @@ public:
   [[nodiscard]] bool configurationOk() const noexcept override;
   [[nodiscard]] qint64 write(const QByteArray& data) override;
   [[nodiscard]] bool open(const QIODevice::OpenMode mode) override;
+  [[nodiscard]] QJsonObject deviceIdentifier() const override;
   [[nodiscard]] QList<IO::DriverProperty> driverProperties() const override;
+  bool selectByIdentifier(const QJsonObject& id) override;
 
   [[nodiscard]] int transferMode() const;
   [[nodiscard]] bool advancedModeEnabled() const;

@@ -98,53 +98,41 @@ static char** adjustArgumentsForFreeType(int& argc, char** argv);
  */
 int main(int argc, char** argv)
 {
-  // Configure logging categories
   QLoggingCategory::setFilterRules("*font*=false");
 
-  // Set application info
   QApplication::setApplicationName(APP_EXECUTABLE);
   QApplication::setOrganizationName(APP_DEVELOPER);
   QApplication::setApplicationVersion(APP_VERSION);
   QApplication::setApplicationDisplayName(APP_NAME);
   QApplication::setOrganizationDomain(APP_SUPPORT_URL);
 
-  // Disable native menubar
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 
-  // Pre-scan argv for --headless before QApplication is constructed so we can
-  // inject the offscreen platform plugin before Qt reads argv.
   const bool headless = argvHasFlag(argc, argv, "--headless");
   if (headless)
     argv = injectPlatformArg(argc, argv, "offscreen");
 
-  // Windows specific initialization code
 #if defined(Q_OS_WIN)
   attachToConsole();
   argv = adjustArgumentsForFreeType(argc, argv);
 #endif
 
-  // Avoid 200% scaling on 150% scaling...
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
 
-  // Initialize application
   QApplication app(argc, argv);
 
-  // Set window icon, skip on macOS as AppBundle already does this for us
 #if !defined(Q_OS_MAC)
   QIcon appIcon(QStringLiteral(":/rcc/logo/icon.svg"));
   if (!appIcon.isNull())
     app.setWindowIcon(appIcon);
 #endif
 
-  // Set application style
   app.setStyle(QStyleFactory::create("Fusion"));
   QQuickStyle::setStyle("Fusion");
 
-  // Define CLI options
   // clang-format off
   typedef QCommandLineOption QCLO;
-  // General options
   QCLO vOpt({"v", "version"}, "Displays application version");
   QCLO rOpt({"r", "reset"}, "Resets all application settings");
   QCLO fOpt({"f", "fullscreen"}, "Launches dashboard in fullscreen mode");
@@ -154,28 +142,22 @@ int main(int argc, char** argv)
   QCLO qOpt({"q", "quick-plot"}, "Enables quick plot mode (auto-detect CSV data)");
   QCLO jOpt({"j", "device-sends-json"}, "Expects pre-formatted JSON from device");
 
-  // Dashboard options
   QCLO fpsOpt({"t", "fps"}, "Sets visualization refresh rate", "Hz");
   QCLO pointsOpt({"n", "points"}, "Sets data points per plot", "count");
 
-  // UART/Serial port options
   QCLO uartOpt("uart", "Specifies serial port (e.g., /dev/ttyUSB0, COM3)", "port");
   QCLO baudOpt("baud", "Sets serial baud rate (default: 9600)", "rate");
 
-  // TCP client options
   QCLO tcpOpt("tcp", "Connects to TCP server (e.g., 192.168.1.100:8080)", "host:port");
 
-  // UDP options
   QCLO udpOpt("udp", "Binds to UDP local port (e.g., 8080)", "port");
   QCLO udpRemoteOpt("udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port");
   QCLO udpMltcstOpt("udp-multicast", "Enables multicast mode for UDP");
 
 #ifdef BUILD_COMMERCIAL
-  // License activation / deactivation options
   QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
   QCLO deactivateOpt("deactivate", "Deactivate the current license instance and exit (for CI cleanup)");
 
-  // ModBus RTU options
   QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
   QCLO modbusTcpOpt("modbus-tcp", "Connects to ModBus TCP server (e.g., 192.168.1.100:502)", "host:port");
   QCLO modbusSlaveOpt("modbus-slave", "Sets ModBus slave address (1-247, default: 1)", "address");
@@ -186,14 +168,12 @@ int main(int argc, char** argv)
   QCLO modbusStopBitsOpt("modbus-stopbits", "Sets ModBus RTU stop bits (1/1.5/2, default: 1)", "bits");
   QCLO modbusRegisterOpt("modbus-register", "Adds ModBus register group: type:start:count (repeatable)", "spec");
 
-  // CANBus options
   QCLO canbusOpt("canbus", "Connects to CAN bus (e.g., socketcan:can0, peakcan:pcan0)", "plugin:interface");
   QCLO canbusBitrateOpt("canbus-bitrate", "Sets CAN bus bitrate in bps (default: 500000)", "rate");
   QCLO canbusFdOpt("canbus-fd", "Enables CAN-FD mode");
 #endif
   // clang-format on
 
-  // Setup command line parser
   QCommandLineParser parser;
   parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
   parser.addHelpOption();
@@ -231,38 +211,31 @@ int main(int argc, char** argv)
 #endif
   parser.process(app);
 
-  // Handle version option
   if (parser.isSet(vOpt)) {
     cliShowVersion();
     return EXIT_SUCCESS;
   }
 
-  // Handle reset option
   if (parser.isSet(rOpt)) {
     cliResetSettings();
     return EXIT_SUCCESS;
   }
 
 #ifdef BUILD_COMMERCIAL
-  // Handle license activation option (activates and exits; for CI/headless setup)
   if (parser.isSet(activateOpt))
     return cliActivateLicense(app, parser.value(activateOpt));
 
-  // Handle license deactivation option (deactivates and exits; for CI cleanup)
   if (parser.isSet(deactivateOpt))
     return cliDeactivateLicense(app);
 #endif
 
-  // Ensure resources are loaded
   Q_INIT_RESOURCE(rcc);
   Q_INIT_RESOURCE(translations);
 
-  // Create module manager
   Misc::ModuleManager moduleManager;
   moduleManager.setHeadless(headless);
   moduleManager.configureUpdater();
 
-  // Initialize QML interface
   moduleManager.registerQmlTypes();
   moduleManager.initializeQmlInterface();
   if (!headless && moduleManager.engine().rootObjects().isEmpty()) {
@@ -270,30 +243,24 @@ int main(int argc, char** argv)
     return EXIT_FAILURE;
   }
 
-  // Force-enable API server when requested from the command line
   if (parser.isSet(apiServerOpt))
     API::Server::instance().setEnabled(true);
 
-  // Handle project file option
   if (parser.isSet(pOpt)) {
     QString projectPath = parser.value(pOpt);
     DataModel::ProjectModel::instance().openJsonFile(projectPath);
     AppState::instance().setOperationMode(SerialStudio::ProjectFile);
   }
 
-  // Enable quick plot mode
   else if (parser.isSet(qOpt))
     AppState::instance().setOperationMode(SerialStudio::QuickPlot);
 
-  // Disable frame processing
   else if (parser.isSet(jOpt))
     AppState::instance().setOperationMode(SerialStudio::DeviceSendsJSON);
 
-  // Handle fullscreen option
   const auto ctx = moduleManager.engine().rootContext();
   ctx->setContextProperty("CLI_START_FULLSCREEN", parser.isSet(fOpt));
 
-  // Set FPS
   if (parser.isSet(fpsOpt)) {
     bool ok;
     auto fps = parser.value(fpsOpt).toUInt(&ok);
@@ -301,7 +268,6 @@ int main(int argc, char** argv)
       Misc::TimerEvents::instance().setFPS(fps);
   }
 
-  // Set plot point count
   if (parser.isSet(pointsOpt)) {
     bool ok;
     auto points = parser.value(pointsOpt).toUInt(&ok);
@@ -309,18 +275,14 @@ int main(int argc, char** argv)
       UI::Dashboard::instance().setPoints(points);
   }
 
-  // Handle UART device and baud rate options
   if (parser.isSet(uartOpt) || parser.isSet(baudOpt)) {
-    // Set bus type to UART
     IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::UART);
 
-    // Set device if provided
     if (parser.isSet(uartOpt)) {
       QString device = parser.value(uartOpt);
       IO::ConnectionManager::instance().uart()->registerDevice(device);
     }
 
-    // Set baud rate if provided
     if (parser.isSet(baudOpt)) {
       bool ok;
       qint32 baudRate = parser.value(baudOpt).toInt(&ok);
@@ -330,11 +292,9 @@ int main(int argc, char** argv)
         qWarning() << "Invalid baud rate:" << parser.value(baudOpt);
     }
 
-    // Connect to device
     IO::ConnectionManager::instance().connectDevice();
   }
 
-  // Handle TCP connection option
   else if (parser.isSet(tcpOpt)) {
     QString tcpAddress = parser.value(tcpOpt);
     QStringList parts  = tcpAddress.split(':');
@@ -359,7 +319,6 @@ int main(int argc, char** argv)
       qWarning() << "Invalid TCP address format. Expected: host:port";
   }
 
-  // Handle UDP connection options
   else if (parser.isSet(udpOpt)) {
     bool ok;
     quint16 localPort = parser.value(udpOpt).toUInt(&ok);
@@ -397,20 +356,17 @@ int main(int argc, char** argv)
       qWarning() << "Invalid UDP local port:" << parser.value(udpOpt);
   }
 #ifdef BUILD_COMMERCIAL
-  // Handle ModBus RTU connection options
   else if (parser.isSet(modbusRtuOpt)) {
     QString portPath = parser.value(modbusRtuOpt);
     IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::ModBus);
     IO::ConnectionManager::instance().modbus()->setProtocolIndex(0);
 
-    // Find serial port index
     QStringList ports = IO::ConnectionManager::instance().modbus()->serialPortList();
     int portIndex     = ports.indexOf(portPath);
 
     if (portIndex >= 0) {
       IO::ConnectionManager::instance().modbus()->setSerialPortIndex(portIndex);
 
-      // Set slave address if provided
       if (parser.isSet(modbusSlaveOpt)) {
         bool ok;
         quint8 slave = parser.value(modbusSlaveOpt).toUInt(&ok);
@@ -420,7 +376,6 @@ int main(int argc, char** argv)
           qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
       }
 
-      // Set poll interval if provided
       if (parser.isSet(modbusPollOpt)) {
         bool ok;
         quint16 interval = parser.value(modbusPollOpt).toUInt(&ok);
@@ -431,7 +386,6 @@ int main(int argc, char** argv)
                      << parser.value(modbusPollOpt);
       }
 
-      // Set baud rate if provided
       if (parser.isSet(modbusBaudOpt)) {
         bool ok;
         qint32 baudRate = parser.value(modbusBaudOpt).toInt(&ok);
@@ -441,7 +395,6 @@ int main(int argc, char** argv)
           qWarning() << "Invalid ModBus baud rate:" << parser.value(modbusBaudOpt);
       }
 
-      // Set parity if provided
       if (parser.isSet(modbusParityOpt)) {
         QString parity     = parser.value(modbusParityOpt).toLower();
         quint8 parityIndex = 0;
@@ -464,7 +417,6 @@ int main(int argc, char** argv)
         IO::ConnectionManager::instance().modbus()->setParityIndex(parityIndex);
       }
 
-      // Set data bits if provided
       if (parser.isSet(modbusDataBitsOpt)) {
         QString dataBits     = parser.value(modbusDataBitsOpt);
         quint8 dataBitsIndex = 3;
@@ -485,7 +437,6 @@ int main(int argc, char** argv)
         IO::ConnectionManager::instance().modbus()->setDataBitsIndex(dataBitsIndex);
       }
 
-      // Set stop bits if provided
       if (parser.isSet(modbusStopBitsOpt)) {
         QString stopBits     = parser.value(modbusStopBitsOpt);
         quint8 stopBitsIndex = 0;
@@ -504,7 +455,6 @@ int main(int argc, char** argv)
         IO::ConnectionManager::instance().modbus()->setStopBitsIndex(stopBitsIndex);
       }
 
-      // Clear and add register groups
       IO::ConnectionManager::instance().modbus()->clearRegisterGroups();
 
       if (parser.isSet(modbusRegisterOpt)) {
@@ -527,7 +477,6 @@ int main(int argc, char** argv)
     }
   }
 
-  // Handle ModBus TCP connection options
   else if (parser.isSet(modbusTcpOpt)) {
     QString tcpAddress = parser.value(modbusTcpOpt);
     QStringList parts  = tcpAddress.split(':');
@@ -550,7 +499,6 @@ int main(int argc, char** argv)
       IO::ConnectionManager::instance().modbus()->setHost(host);
       IO::ConnectionManager::instance().modbus()->setPort(port);
 
-      // Set slave address if provided
       if (parser.isSet(modbusSlaveOpt)) {
         bool ok;
         quint8 slave = parser.value(modbusSlaveOpt).toUInt(&ok);
@@ -560,7 +508,6 @@ int main(int argc, char** argv)
           qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
       }
 
-      // Set poll interval if provided
       if (parser.isSet(modbusPollOpt)) {
         bool ok;
         quint16 interval = parser.value(modbusPollOpt).toUInt(&ok);
@@ -571,7 +518,6 @@ int main(int argc, char** argv)
                      << parser.value(modbusPollOpt);
       }
 
-      // Clear and add register groups
       IO::ConnectionManager::instance().modbus()->clearRegisterGroups();
       if (parser.isSet(modbusRegisterOpt)) {
         QStringList registerSpecs = parser.values(modbusRegisterOpt);
@@ -590,7 +536,6 @@ int main(int argc, char** argv)
       qWarning() << "Invalid ModBus TCP address format. Expected: host[:port]";
   }
 
-  // Handle CANBus connection options
   else if (parser.isSet(canbusOpt)) {
     QString canbusSpec = parser.value(canbusOpt);
     QStringList parts  = canbusSpec.split(':');
@@ -601,7 +546,6 @@ int main(int argc, char** argv)
 
       IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::CanBus);
 
-      // Get available plugins and find the requested one
       QStringList availablePlugins = IO::ConnectionManager::instance().canBus()->pluginList();
       int pluginIndex              = availablePlugins.indexOf(plugin);
 
@@ -632,10 +576,8 @@ int main(int argc, char** argv)
   }
 #endif
 
-  // Enter application event loop
   const auto status = app.exec();
 
-  // Free dynamically-generated argv on Windows
 #ifdef Q_OS_WIN
   for (int i = 0; i < argc; ++i)
     free(argv[i]);
@@ -643,7 +585,6 @@ int main(int argc, char** argv)
   free(argv);
 #endif
 
-  // Exit application
   return status;
 }
 
@@ -935,20 +876,16 @@ static void attachToConsole()
  */
 static char** adjustArgumentsForFreeType(int& argc, char** argv)
 {
-  // Define the additional FreeType arguments for Windows
   const char* platformArgument = "-platform";
   const char* platformOption   = "windows:fontengine=freetype";
 
-  // Allocate new argv array
   char** newArgv = static_cast<char**>(malloc(sizeof(char*) * (argc + 2)));
   if (!newArgv)
     return argv;
 
-  // Copy original argv content
   for (int i = 0; i < argc; ++i)
     newArgv[i] = _strdup(argv[i]);
 
-  // Append FreeType platform arguments
   newArgv[argc]     = _strdup(platformArgument);
   newArgv[argc + 1] = _strdup(platformOption);
 

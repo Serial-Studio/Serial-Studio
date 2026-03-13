@@ -24,6 +24,7 @@
 
 #  include "IO/Drivers/HID.h"
 
+#  include <QJsonObject>
 #  include <QMetaObject>
 #  include <QSet>
 #  include <QTimer>
@@ -413,6 +414,87 @@ void IO::Drivers::HID::enumerateDevices()
 
   Q_EMIT deviceListChanged();
   Q_EMIT configurationChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Stable device identification
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns VID, PID, and serial number of the currently selected HID device.
+ *
+ * Walks the cached enumeration list to find the entry whose path matches the
+ * currently selected device.
+ */
+QJsonObject IO::Drivers::HID::deviceIdentifier() const
+{
+  if (m_deviceIndex < 1 || m_deviceIndex >= m_devicePaths.size())
+    return {};
+
+  const auto& selectedPath = m_devicePaths.at(m_deviceIndex);
+  if (selectedPath.isEmpty())
+    return {};
+
+  for (hid_device_info* dev = m_deviceInfoList; dev != nullptr; dev = dev->next) {
+    if (QString::fromUtf8(dev->path) != selectedPath)
+      continue;
+
+    QJsonObject id;
+    id.insert(QStringLiteral("vid"),
+              QString::number(dev->vendor_id, 16).rightJustified(4, '0').toUpper());
+    id.insert(QStringLiteral("pid"),
+              QString::number(dev->product_id, 16).rightJustified(4, '0').toUpper());
+
+    if (dev->serial_number && dev->serial_number[0] != L'\0')
+      id.insert(QStringLiteral("serial"), QString::fromWCharArray(dev->serial_number));
+
+    return id;
+  }
+
+  return {};
+}
+
+/**
+ * @brief Tries to find and select an HID device matching a previously saved VID/PID/serial.
+ */
+bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
+{
+  if (id.isEmpty())
+    return false;
+
+  const auto savedVid = id.value(QStringLiteral("vid")).toString();
+  const auto savedPid = id.value(QStringLiteral("pid")).toString();
+  const auto savedSer = id.value(QStringLiteral("serial")).toString();
+
+  if (savedVid.isEmpty() || savedPid.isEmpty())
+    return false;
+
+  for (hid_device_info* dev = m_deviceInfoList; dev != nullptr; dev = dev->next) {
+    const auto vid = QString::number(dev->vendor_id, 16).rightJustified(4, '0').toUpper();
+    const auto pid = QString::number(dev->product_id, 16).rightJustified(4, '0').toUpper();
+
+    if (vid != savedVid || pid != savedPid)
+      continue;
+
+    // Check serial if available
+    if (!savedSer.isEmpty()) {
+      const QString serial = (dev->serial_number && dev->serial_number[0] != L'\0')
+                             ? QString::fromWCharArray(dev->serial_number)
+                             : QString();
+      if (serial != savedSer)
+        continue;
+    }
+
+    // Found a match — find its index in m_devicePaths
+    const auto path = QString::fromUtf8(dev->path);
+    const int idx   = m_devicePaths.indexOf(path);
+    if (idx > 0) {
+      setDeviceIndex(idx);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -105,14 +105,14 @@ void API::Handlers::SourceHandler::registerCommands()
       {       QStringLiteral("type"),              QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Driver property key")}
     };
-    props[QStringLiteral("value")] = QJsonObject{
+    props[QStringLiteral("propertyValue")] = QJsonObject{
       {QStringLiteral("description"), QStringLiteral("Property value")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")] =
-      QJsonArray{QStringLiteral("sourceId"), QStringLiteral("key"), QStringLiteral("value")};
+    schema[QStringLiteral("required")]   = QJsonArray{
+      QStringLiteral("sourceId"), QStringLiteral("key"), QStringLiteral("propertyValue")};
     registry.registerCommand(
       QStringLiteral("project.source.setProperty"),
       QStringLiteral("Set a driver connection property (params: sourceId, key, value)"),
@@ -412,10 +412,15 @@ API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString
 API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QString& id,
                                                                      const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("key"))
-      || !params.contains(QStringLiteral("value")))
+  if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("key")))
     return CommandResponse::makeError(
-      id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId, key and value are required"));
+      id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and key are required"));
+
+  const bool hasValue =
+    params.contains(QStringLiteral("propertyValue")) || params.contains(QStringLiteral("value"));
+  if (!hasValue)
+    return CommandResponse::makeError(
+      id, QStringLiteral("MISSING_PARAM"), QStringLiteral("propertyValue is required"));
 
   const int sourceId = params[QStringLiteral("sourceId")].toInt(-1);
   if (sourceId < 0)
@@ -423,7 +428,9 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
       id, QStringLiteral("INVALID_PARAM"), QStringLiteral("Invalid sourceId"));
 
   const QString key  = params[QStringLiteral("key")].toString();
-  const QVariant val = params[QStringLiteral("value")].toVariant();
+  const QVariant val = params.contains(QStringLiteral("propertyValue"))
+                       ? params[QStringLiteral("propertyValue")].toVariant()
+                       : params[QStringLiteral("value")].toVariant();
 
   const auto& model = DataModel::ProjectModel::instance();
   const bool isSingleSourceSource0 =

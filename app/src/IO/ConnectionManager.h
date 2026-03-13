@@ -115,6 +115,7 @@ signals:
   void writeEnabledChanged();
   void configurationChanged();
   void startSequenceChanged();
+  void deviceListRefreshed();
   void finishSequenceChanged();
   void checksumAlgorithmChanged();
   void threadedFrameExtractionChanged();

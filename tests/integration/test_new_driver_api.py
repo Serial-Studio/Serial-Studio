@@ -312,7 +312,6 @@ class TestProcessDriver:
             "io.driver.process.setArguments",
             "io.driver.process.setWorkingDir",
             "io.driver.process.setPipePath",
-            "io.driver.process.setOutputCapture",
             "io.driver.process.getRunningProcesses",
             "io.driver.process.getConfiguration",
         ]
@@ -321,14 +320,14 @@ class TestProcessDriver:
 
     @pytest.mark.integration
     def test_process_get_configuration(self, api_client, clean_state):
-        """getConfiguration returns all expected keys including outputCapture."""
+        """getConfiguration returns all expected keys."""
         _skip_if_missing(api_client, "io.driver.process.getConfiguration")
 
         api_client.command("io.manager.setBusType", {"busType": 8})
         time.sleep(0.2)
 
         config = api_client.command("io.driver.process.getConfiguration")
-        for key in ("mode", "outputCapture", "executable", "arguments", "workingDir", "pipePath"):
+        for key in ("mode", "executable", "arguments", "workingDir", "pipePath"):
             assert key in config, f"Missing key: {key}"
 
     @pytest.mark.integration
@@ -628,13 +627,11 @@ class TestProcessDriver:
         api_client.command("io.driver.process.setArguments",
                            {"arguments": "-c \"import sys; sys.stdout.write('hello\\n')\""})
         api_client.command("io.driver.process.setWorkingDir", {"workingDir": "/tmp"})
-        api_client.command("io.driver.process.setOutputCapture", {"capture": 2})
 
         config = api_client.command("io.driver.process.getConfiguration")
         assert config["mode"] == 0
         assert config["executable"] == "/usr/bin/python3"
         assert config["workingDir"] == "/tmp"
-        assert config["outputCapture"] == 2
 
     @pytest.mark.integration
     def test_process_full_pipe_config_roundtrip(self, api_client, clean_state):

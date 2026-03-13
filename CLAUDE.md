@@ -2,6 +2,43 @@
 
 Guidance for Claude Code when working in this repository.
 
+## How Claude Should Work in This Repo
+
+These rules govern Claude's behavior before writing any code.
+
+### Always read before writing
+
+**Never suggest or write code for a file you have not read in the current session.**
+If a user asks to change, fix, or extend something, read the relevant file(s) first — even
+if you think you know what's there. This prevents stale assumptions from corrupting edits.
+
+**Before writing any new driver**, read `app/src/IO/Drivers/BluetoothLE.h` and
+`app/src/IO/Drivers/BluetoothLE.cpp` in full. They are the canonical reference.
+
+**Before touching any hotpath code** (FrameBuilder, CircularBuffer, FrameReader, Dashboard),
+read the complete current implementation first. Hotpath bugs are silent and hard to profile.
+
+**Before adding or changing any Qt signal/slot connection**, read how the existing connections
+in that file are wired. Incorrect connection order or type (direct vs. queued) causes races
+or missed signals that are very hard to debug.
+
+### Plan before multi-file changes
+
+For any change touching more than 3 files, state the full plan (which files change and why)
+before writing any code. Get confirmation if the scope is unclear.
+
+### Edit, don't rewrite
+
+Prefer targeted `Edit` calls over full-file rewrites. Rewrites destroy git blame, risk
+introducing drift from the current implementation, and make review harder. Only rewrite
+a file when the user explicitly asks or when >70% of the file changes.
+
+### No response preamble, no trailing summary
+
+Do not narrate what you are about to do ("I'll now read the file…"). Do not summarize
+what you just did at the end of a response ("I've updated X, Y, and Z…"). The diff is
+self-evident. Lead with the result or the first action.
+
 ## Project Overview
 
 Serial Studio is a cross-platform telemetry dashboard built with Qt 6.9.2 and C++20.
@@ -28,12 +65,22 @@ Key CMake flags: `ENABLE_HARDENING`, `ENABLE_PGO` (3-stage: GENERATE → run →
 
 ```
 app/src/
-├── IO/          HAL drivers + CircularBuffer + FrameReader
-├── DataModel/   FrameBuilder, Frame, FrameConsumer, ProjectModel, ProjectEditor
-├── UI/          Dashboard + 15 widget types
+├── IO/          HAL drivers + CircularBuffer + FrameReader + ConnectionManager + DeviceManager
+│   └── Drivers/ UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, Process, USB
+├── DataModel/   FrameBuilder, Frame, FrameConsumer, FrameParser, ProjectModel, ProjectEditor
+│               DBCImporter, JsCodeEditor, FrameParserTestDialog
+├── UI/          Dashboard + 15+ widget types
 ├── API/         TCP server port 7777 (MCP + legacy JSON-RPC)
+│   └── Handlers/ 20 handler classes (one per domain)
+├── Console/     Terminal handler + export
 ├── CSV/ MDF4/   File playback & export
-└── Misc/        JsonValidator, ThemeManager, utilities
+├── MQTT/        MQTT client
+├── Licensing/   LemonSqueezy, Trial, MachineID, SimpleCrypt (Commercial)
+├── Platform/    CSD (client-side decorations), NativeWindow
+├── Misc/        JsonValidator, ThemeManager, ModuleManager, utilities
+├── AppState.h   Singleton: OperationMode, projectFilePath, FrameConfig (source of truth)
+├── SerialStudio.h Central enums (BusType, OperationMode, FrameDetection)
+└── Concepts.h   C++20 concepts (Numeric, ByteLike, Driver, Frameable…)
 app/qml/         Declarative UI
 lib/             KissFFT, QCodeEditor, mdflib, OpenSSL
 ```
@@ -140,6 +187,29 @@ Each project can have multiple `DataModel::Source` entries (`Frame.h`). Key rule
 | Source JSON keys | `"title"`, `"sourceId"`, `"busType"`, `"frameStart"`, `"frameEnd"`, `"frameDetection"`, `"decoder"`, `"hexadecimalDelimiters"`, `"frameParserCode"`, `"connection"` (opaque driver settings object). |
 | `connectionSettings` keys (Network) | `"socketTypeIndex"` (0=TCP, 1=UDP), `"address"`, `"tcpPort"`, `"udpLocalPort"`, `"udpRemotePort"`. |
 
+### Stable Device Identifiers (`__deviceId__`)
+
+Drivers that enumerate physical devices (UART, Modbus RTU, BLE, USB, HID) implement two virtual methods on `HAL_Driver`:
+
+- `QJsonObject deviceIdentifier() const` — returns stable hardware metadata (VID/PID/serial for USB-based devices, address/name for BLE) for the currently selected device.
+- `bool selectByIdentifier(const QJsonObject& id)` — searches the current device list for a match and auto-selects it. Returns `false` if no match is found (the user can still select any device manually).
+
+The identifier is stored under the `"__deviceId__"` key inside `Source::connectionSettings`. It is saved by `captureSourceSettings()` and restored by `restoreSourceSettings()` (after applying all driver properties, so the identifier-based match overrides any stale index). The same logic runs in `ConnectionManager::driverForEditing()` and `rebuildDevices()`.
+
+**Matching strategy by bus type:**
+
+| Bus type | Primary match | Fallback match | Notes |
+|----------|--------------|----------------|-------|
+| UART | VID+PID+serial (score 150) | description (10), portName (5) | `portName` differs per OS; VID/PID/serial from `QSerialPortInfo` |
+| Modbus RTU | VID+PID+serial (score 150) | description (10), portName (5) | Same as UART; only active when `protocolIndex == 0` |
+| BLE | address (100) | name (10) | On macOS, addresses are randomized — `name` is the primary identifier. If the device is not found, the identifier is saved in `m_pendingIdentifier` and `startDiscovery()` is called. `onDeviceDiscovered()` checks new devices against the pending identifier. |
+| USB | VID+PID+serial | VID+PID only | Serial read via `libusb_get_string_descriptor_ascii()` |
+| HID | VID+PID+serial | VID+PID only | Serial from `hid_device_info::serial_number` |
+
+**Key design rule:** The saved identifier is always a *hint*, never a constraint. If the device is not found, the user retains full control of the device selector. The identifier never blocks connections or forces project recreation.
+
+**Editing driver refresh:** When UI-config drivers emit device-list-change signals (`availablePortsChanged`, `devicesChanged`, `deviceListChanged`), `ConnectionManager` clears `m_editingDrivers` and emits `deviceListRefreshed()`. `ProjectEditor::buildSourceModel()` connects to this signal to rebuild the form with fresh ComboBox options.
+
 ### ProjectEditor Form Model Patterns
 
 Consistent patterns used across all form builders (`buildGroupModel`, `buildDatasetModel`, `buildSourceModel`):
@@ -180,9 +250,26 @@ In `addGeneralSection()`, the row order within General Information is:
 
 The bus type toolbar was removed from `ProjectToolbar.qml`. Bus type is now changed via the Source view form model (ComboBox row in `buildSourceModel`).
 
+### Common Mistakes to Avoid
+
+These are the recurring errors that look correct but break things silently:
+
+| Mistake | Why it breaks | Correct approach |
+|---------|--------------|-----------------|
+| Calling `buildTreeModel()` directly inside an item-change handler | Destroys the model while Qt is still iterating it | Use `QTimer::singleShot(0, ...)` |
+| Adding mutexes to `FrameReader` or `CircularBuffer` | Violates the immutability/SPSC contract; introduces deadlock risk | Recreate via `resetFrameReader()` or `reconfigure()` |
+| Using `QMap::operator[]` on `m_sourceFrames[sourceId]` | Silently inserts a default entry for invalid sourceIds | Use `.find()` and validate first |
+| `disconnect(nullptr)` as the slot argument | Disconnects ALL connections from that signal, not just the lambda | Capture the `QMetaObject::Connection` and disconnect it specifically |
+| Calling a mutating `ProjectModel` function on every title keystroke | Triggers tree rebuild → re-selection → form rebuild → cursor jumps | Update tree item text in-place via `m_*Items` map only |
+| Writing `emit` instead of `Q_EMIT` | Breaks grep, may conflict with other frameworks | Always `Q_EMIT` |
+| Setting `font.pixelSize` etc. in QML | Partially overrides the font, breaks typography system | Assign whole font: `font: Cpp_Misc_CommonFonts.uiFont` |
+| Hardcoding bus type as integer `0`, `1`, etc. | Silent mismatch when enum order changes | Use `SerialStudio::BusType::UART` etc. |
+| Accessing a driver via `createDriver()` for UI config | Creates a live connection instance, not a UI-config instance | Use `ConnectionManager::instance().uart()` etc. |
+| Force-rebuilding `buildSourceModel` on every selection change | Causes the stale driver to flash in during bus-type change | Guard with `m_awaitingContextRebuild` flag |
+
 ### Known Architectural Debt
 
-- **36 singletons** — high coupling, hard to test
+- **~27 singletons** — high coupling, hard to test (IO drivers are no longer singletons)
 - **Large widgets** — Terminal (1,708), GPS (1,417), Plot3D (1,521) lines
 - **No automated tests** — no GTest/Catch2 yet (integration tests via Python pytest + API server)
 - **Live-connection driver instances share QSettings** — `DeviceManager` creates fresh drivers via `createDriver()` which calls the public constructor. That constructor reads `QSettings` (saved baud rate, port index, etc.) — same as the UI-config instance does. This means a live-connection UART driver will pick up whatever the UI has saved, which is correct for single-source but worth knowing for multi-source setups where each source has its own `connectionSettings` applied via `setDriverProperty()` after construction.
@@ -196,14 +283,18 @@ The bus type toolbar was removed from `ProjectToolbar.qml`. Bus type is now chan
 
 ### Naming
 
-| Kind | Convention |
-|------|------------|
-| Classes | `CamelCase` |
-| Functions | `camelCase` |
-| Variables / parameters | `lower_case` |
-| Private members | `lower_case_` (trailing underscore) |
-| Constants / constexpr | `kCamelCase` |
-| Macros | `UPPER_CASE` |
+| Kind | Convention | Example |
+|------|------------|---------|
+| Classes | `CamelCase` | `FrameReader` |
+| Functions | `camelCase` | `hotpathRxFrame` |
+| Local variables / parameters | `lower_case` | `frame_data` |
+| Private member variables | `m_lowerCase` (prefix + camelCase) | `m_deviceIndex` |
+| Public / protected member variables | `lower_case` | `sourceId` |
+| Constants / constexpr | `kCamelCase` | `kMaxBufferSize` |
+| Macros | `UPPER_CASE` | `BUILD_COMMERCIAL` |
+
+**`m_` prefix is mandatory for all private member variables.** Never use bare `lower_case_`
+(trailing underscore only) — the `m_` prefix is the house style.
 
 ### Control Flow — The Most Important Rules
 
@@ -723,24 +814,27 @@ may throw. When in doubt, omit `noexcept` rather than lie to the compiler.
 
 ## Development Rules
 
-1. **No mutexes in FrameReader or CircularBuffer.** Immutability is the design.
-2. **No inline end-of-line comments.** Block comments or self-documenting names only.
-3. **Max 3 nesting levels.** Use early returns, early continues, extract functions.
-4. **No braces on single-statement bodies** (enforced by `RemoveBracesLLVM`). Always follow a brace-free body on its own line with a blank line before the next sibling statement.
-5. **Validate at system boundaries only** (API input, file I/O, network). Trust internal data.
-6. **Maintain SPDX headers.** `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both.
-7. **Do not create markdown/doc files** unless explicitly asked.
-8. **Update CLAUDE.md** for any significant architectural change.
-9. **Prefer self-documenting code over comments.** Aim for zero comments inside function bodies. One line max when a comment is truly necessary.
-10. **Make QML bindings reactive via `Q_PROPERTY`, not workarounds.** If a `Q_INVOKABLE` result needs to be reactive, expose it as a `Q_PROPERTY` with `NOTIFY` on the C++ side. Never introduce new comma-expression hacks or named variants to work around missing signals.
-11. **Add Doxygen to every generated function and class.** Class `@brief` in the `.h` above `class`; every function's Doxygen in the `.cpp` above its definition. Never in the header. See "Doxygen Comments" for tags and examples.
-12. **Follow the C++ Header Structure rules.** `Q_PROPERTY` block first (inside `clang-format off/on`), then `signals:`, then constructor/operators `private:` block, then `public:`, `public slots:`, `private slots:`, private helpers, private variables — each in their own section. `[[nodiscard]]` on every non-`void` return. Christmas-tree ordering within each block. See `app/src/IO/Drivers/BluetoothLE.h`.
-13. **Use `//---` section banners in `.cpp` files** to separate logical concern groups (constructor, HAL impl, driver specifics, private slots, private helpers). See "Source File Section Separators" and `app/src/IO/Drivers/BluetoothLE.cpp` as the reference.
-14. **Always use `Q_EMIT`** to emit signals. Never use the bare `emit` keyword.
-15. **Format `connect()` calls correctly.** One line if it fits; multi-line with one argument per line otherwise. Never use `SIGNAL()`/`SLOT()` macros.
-16. **Mark trivial `const` accessors `noexcept`.** Only when the body cannot throw. Never lie to the compiler — omit `noexcept` if the function calls anything that may throw.
-17. **Never hardcode enum values as raw integers.** Always use the named enum from `SerialStudio.h` (e.g. `SerialStudio::BusType::UART`, not `0`). When storing as `int` in a struct field, use `static_cast<int>(SerialStudio::BusType::UART)` at the assignment site. In QML, use the registered `SerialStudio.BusType` enum names, not numeric literals.
-18. **Never set individual `font.*` sub-properties in QML.** Always assign the `font` property as a whole from `Cpp_Misc_CommonFonts` (e.g. `font: Cpp_Misc_CommonFonts.uiFont`). Setting `font.pixelSize`, `font.bold`, `font.family`, etc. individually breaks typography consistency. See "QML Typography" for the full reference.
+1. **Read the file before editing it.** Never suggest changes to code you haven't read in the current session.
+2. **Plan before touching more than 3 files.** State which files change and why; get confirmation if scope is unclear.
+3. **Prefer Edit over Write.** Rewrite a whole file only when the user asks or >70% changes.
+4. **No mutexes in FrameReader or CircularBuffer.** Immutability is the design.
+5. **No inline end-of-line comments.** Block comments or self-documenting names only.
+6. **Max 3 nesting levels.** Use early returns, early continues, extract functions.
+7. **No braces on single-statement bodies** (enforced by `RemoveBracesLLVM`). Always follow a brace-free body on its own line with a blank line before the next sibling statement.
+8. **Validate at system boundaries only** (API input, file I/O, network). Trust internal data.
+9. **Maintain SPDX headers.** `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both.
+10. **Do not create markdown/doc files** unless explicitly asked.
+11. **Update CLAUDE.md** for any significant architectural change.
+12. **Prefer self-documenting code over comments.** Aim for zero comments inside function bodies. One line max when a comment is truly necessary.
+13. **Make QML bindings reactive via `Q_PROPERTY`, not workarounds.** If a `Q_INVOKABLE` result needs to be reactive, expose it as a `Q_PROPERTY` with `NOTIFY` on the C++ side. Never introduce new comma-expression hacks or named variants to work around missing signals.
+14. **Add Doxygen to every generated function and class.** Class `@brief` in the `.h` above `class`; every function's Doxygen in the `.cpp` above its definition. Never in the header. See "Doxygen Comments" for tags and examples.
+15. **Follow the C++ Header Structure rules.** `Q_PROPERTY` block first (inside `clang-format off/on`), then `signals:`, then constructor/operators `private:` block, then `public:`, `public slots:`, `private slots:`, private helpers, private variables — each in their own section. `[[nodiscard]]` on every non-`void` return. Christmas-tree ordering within each block. See `app/src/IO/Drivers/BluetoothLE.h`.
+16. **Use `//---` section banners in `.cpp` files** to separate logical concern groups (constructor, HAL impl, driver specifics, private slots, private helpers). See "Source File Section Separators" and `app/src/IO/Drivers/BluetoothLE.cpp` as the reference.
+17. **Always use `Q_EMIT`** to emit signals. Never use the bare `emit` keyword.
+18. **Format `connect()` calls correctly.** One line if it fits; multi-line with one argument per line otherwise. Never use `SIGNAL()`/`SLOT()` macros.
+19. **Mark trivial `const` accessors `noexcept`.** Only when the body cannot throw. Never lie to the compiler — omit `noexcept` if the function calls anything that may throw.
+20. **Never hardcode enum values as raw integers.** Always use the named enum from `SerialStudio.h` (e.g. `SerialStudio::BusType::UART`, not `0`). When storing as `int` in a struct field, use `static_cast<int>(SerialStudio::BusType::UART)` at the assignment site. In QML, use the registered `SerialStudio.BusType` enum names, not numeric literals.
+21. **Never set individual `font.*` sub-properties in QML.** Always assign the `font` property as a whole from `Cpp_Misc_CommonFonts` (e.g. `font: Cpp_Misc_CommonFonts.uiFont`). Setting `font.pixelSize`, `font.bold`, `font.family`, etc. individually breaks typography consistency. See "QML Typography" for the full reference.
 
 ## File Creation Policy
 

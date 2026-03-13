@@ -817,14 +817,13 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
 {
   Q_UNUSED(params)
 
-  auto& manager = IO::ConnectionManager::instance();
+  const auto& cfg = AppState::instance().frameConfig();
   QJsonObject result;
-  result[QStringLiteral("startSequence")]     = QString::fromUtf8(manager.startSequence());
-  result[QStringLiteral("endSequence")]       = QString::fromUtf8(manager.finishSequence());
-  result[QStringLiteral("checksumAlgorithm")] = manager.checksumAlgorithm();
-  result[QStringLiteral("operationMode")] = static_cast<int>(AppState::instance().operationMode());
-  result[QStringLiteral("frameDetection")] =
-    static_cast<int>(DataModel::ProjectModel::instance().frameDetection());
+  result[QStringLiteral("startSequence")]     = QString::fromUtf8(cfg.startSequence);
+  result[QStringLiteral("endSequence")]       = QString::fromUtf8(cfg.finishSequence);
+  result[QStringLiteral("checksumAlgorithm")] = cfg.checksumAlgorithm;
+  result[QStringLiteral("operationMode")]     = static_cast<int>(cfg.operationMode);
+  result[QStringLiteral("frameDetection")]    = static_cast<int>(cfg.frameDetection);
 
   return CommandResponse::makeSuccess(id, result);
 }

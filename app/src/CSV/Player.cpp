@@ -150,11 +150,9 @@ void CSV::Player::play()
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
-  // Initialize elapsed timer and record the starting CSV timestamp
   m_startTimestamp = getDateTime(m_framePos);
   m_elapsedTimer.start();
 
-  // Update high-precision timestamp baseline for seeking support
   if (m_useHighPrecisionTimestamps && m_framePos < m_timestampCache.size())
     m_startTimestampSeconds = m_timestampCache[m_framePos];
 
@@ -248,18 +246,14 @@ void CSV::Player::closeFile()
 void CSV::Player::nextFrame()
 {
   if (framePosition() < frameCount() - 1) {
-    // Increase the frame position
     ++m_framePos;
 
-    // Clear only plot data (preserves widget layout)
     UI::Dashboard::instance().clearPlotData();
 
-    // Populate the dashboard with a range of frames up to the new position
     int framesToLoad = UI::Dashboard::instance().points();
     int startFrame   = std::max(1, m_framePos - framesToLoad);
     processFrameBatch(startFrame, m_framePos);
 
-    // Keep timestamp and data in sync
     updateData();
   }
 }
@@ -274,18 +268,14 @@ void CSV::Player::nextFrame()
 void CSV::Player::previousFrame()
 {
   if (framePosition() > 0) {
-    // Decrease the frame position
     --m_framePos;
 
-    // Clear only plot data (preserves widget layout)
     UI::Dashboard::instance().clearPlotData();
 
-    // Populate the dashboard with a range of frames up to the new position
     int framesToLoad = UI::Dashboard::instance().points();
     int startFrame   = std::max(1, m_framePos - framesToLoad);
     processFrameBatch(startFrame, m_framePos);
 
-    // Keep timestamp and data in sync
     updateData();
   }
 }
@@ -314,14 +304,11 @@ void CSV::Player::previousFrame()
  */
 void CSV::Player::openFile(const QString& filePath)
 {
-  // File name empty, abort
   if (filePath.isEmpty())
     return;
 
-  // Close previous file
   closeFile();
 
-  // Device is connected, warn user & disconnect
   if (IO::ConnectionManager::instance().isConnected()) {
     auto response = Misc::Utilities::showMessageBox(
       tr("Device Connection Active"),
@@ -335,44 +322,34 @@ void CSV::Player::openFile(const QString& filePath)
       return;
   }
 
-  // Try to open the current file
   m_csvFile.setFileName(filePath);
   if (m_csvFile.open(QIODevice::ReadOnly)) {
-    // Read CSV file into string matrix
     QTextStream in(&m_csvFile);
     while (!in.atEnd()) {
-      // Read a line and split it into a list of items
       QStringList row = in.readLine().split(',');
 
-      // Remove surrounding quotes and trim whitespace from each item
       for (auto& item : row) {
         item = item.simplified();
         item.remove(QStringLiteral("\""));
       }
 
-      // Filter out rows that are empty or contain only empty items
       bool isRowValid =
         !row.isEmpty() && std::any_of(row.cbegin(), row.cend(), [](const QString& item) {
           return !item.isEmpty();
         });
 
-      // Only register valid rows
       if (isRowValid)
         m_csvData.append(row);
     }
 
-    // Detect timestamp format and validate
-    // First try high-precision format (fractional seconds)
     bool error            = false;
     QString firstCell     = getCellValue(1, 0, error);
     double firstTimestamp = error ? -1.0 : getTimestampSeconds(firstCell);
 
     if (firstTimestamp >= 0.0) {
-      // High-precision timestamps detected - build cache
       m_timestampCache.clear();
       m_timestampCache.reserve(m_csvData.count());
 
-      // Cache all timestamps for efficient playback
       for (int i = 0; i < m_csvData.count(); ++i) {
         bool err     = false;
         QString cell = getCellValue(i, 0, err);
@@ -382,45 +359,35 @@ void CSV::Player::openFile(const QString& filePath)
 
       m_startTimestampSeconds      = m_timestampCache[1];
       m_useHighPrecisionTimestamps = true;
-    }
-    // Fall back to legacy date/time format
-    else if (getDateTime(1).isValid()) {
+    } else if (getDateTime(1).isValid()) {
       m_useHighPrecisionTimestamps = false;
       m_timestampCache.clear();
-    }
-    // Neither format worked - prompt user
-    else {
+    } else {
       m_useHighPrecisionTimestamps = false;
       m_timestampCache.clear();
 
-      // Ask user to select date/time column or set interval manually
       if (!promptUserForDateTimeOrInterval()) {
         closeFile();
         return;
       }
     }
 
-    // Send the header row before removing it
     sendHeaderFrame();
 
-    // Remove the header row from the data
     m_framePos = 0;
     m_csvData.removeFirst();
 
-    // Adjust cached timestamps if header was removed
     if (m_useHighPrecisionTimestamps && !m_timestampCache.isEmpty()) {
       m_timestampCache.removeFirst();
       if (!m_timestampCache.isEmpty())
         m_startTimestampSeconds = m_timestampCache[0];
     }
 
-    // Begin reading data
     if (m_csvData.count() >= 1) {
       updateData();
       Q_EMIT openChanged();
     }
 
-    // Handle case where CSV file does not contain at least two frames
     else {
       Misc::Utilities::showMessageBox(
         tr("Insufficient Data in CSV File"),
@@ -431,7 +398,6 @@ void CSV::Player::openFile(const QString& filePath)
     }
   }
 
-  // Open error
   else {
     Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
                                     tr("Please check file permissions & location"),
@@ -481,33 +447,24 @@ void CSV::Player::openFile(const QString& filePath)
  */
 void CSV::Player::setProgress(const double progress)
 {
-  // Clamp progress between 0 and 1
   const auto validProgress = std::clamp(progress, 0.0, 1.0);
 
-  // Pause if playing to avoid interference with the timer
   if (isPlaying())
     pause();
 
-  // Calculate new frame position based on progress
   int newFramePos = qMin(frameCount() - 1, qCeil(frameCount() * validProgress));
 
-  // Only process if position changes
   if (newFramePos != m_framePos) {
-    // Update frame position
     m_framePos = newFramePos;
 
-    // Clear only plot data (preserves widget layout)
     UI::Dashboard::instance().clearPlotData();
 
-    // Calculate frames to load around the new frame position
     int framesToLoad = UI::Dashboard::instance().points();
     int startFrame   = std::max(1, m_framePos - framesToLoad);
     int endFrame     = std::min(frameCount() - 1, m_framePos);
 
-    // Populate dashboard with frames within capped range
     processFrameBatch(startFrame, endFrame);
 
-    // Update with current data
     updateData();
   }
 }
@@ -698,7 +655,6 @@ void CSV::Player::sendHeaderFrame()
  */
 bool CSV::Player::promptUserForDateTimeOrInterval()
 {
-  // Check if there are headers available for the combobox
   if (m_csvData.isEmpty() || m_csvData.first().isEmpty()) {
     Misc::Utilities::showMessageBox(tr("Invalid CSV"),
                                     tr("The CSV file does not contain any data or headers."),
@@ -706,10 +662,8 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
     return false;
   }
 
-  // Obtain header labels
   const auto headerLabels = m_csvData.first().toList();
 
-  // Ask the user if they want to select a date/time column or enter an interval
   bool ok;
   QStringList options;
   options << tr("Select a date/time column") << tr("Set interval manually");
@@ -721,11 +675,9 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
                                          false,
                                          &ok);
 
-  // Check if user cancelled
   if (!ok)
     return false;
 
-  // Ask the user to input the interval in milliseconds
   if (choice == tr("Set interval manually")) {
     const auto interval =
       QInputDialog::getInt(nullptr,
@@ -743,7 +695,6 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
     }
   }
 
-  // Ask user to pick a date/time column
   else {
     const auto column =
       QInputDialog::getItem(nullptr,
@@ -755,7 +706,6 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
                             &ok);
 
     if (ok) {
-      // Find the index of the selected column
       int columnIndex = headerLabels.indexOf(column);
       if (columnIndex == -1) {
         Misc::Utilities::showMessageBox(
@@ -763,13 +713,11 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
         return false;
       }
 
-      // Convert the selected column to date/time
       convertColumnToDateTime(columnIndex);
       return true;
     }
   }
 
-  // Should not reach here
   return false;
 }
 
@@ -814,12 +762,10 @@ void CSV::Player::convertColumnToDateTime(int columnIndex)
 {
   const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
   for (int i = 1; i < m_csvData.size(); ++i) {
-    // Parse the date/time from the specified column
     auto dateTime = getDateTime(i);
     if (!dateTime.isValid())
       dateTime = QDateTime::currentDateTime();
 
-    // Move the $TIME column to the start
     m_csvData[i].remove(columnIndex);
     m_csvData[i].prepend(dateTime.toString(format));
   }
@@ -872,30 +818,24 @@ QDateTime CSV::Player::getDateTime(const int row)
  */
 QDateTime CSV::Player::getDateTime(const QString& cell)
 {
-  // If the cell is a pure number (fractional seconds), don't try to parse as
-  // date
   bool isNumber = false;
   cell.toDouble(&isNumber);
   if (isNumber)
     return QDateTime();
 
-  // Initialize parameters
   QDateTime dateTime;
 
-  // Create a list of available date/time formats
   static const QStringList formats = {QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz"),
                                       QStringLiteral("yyyy/MM/dd/ HH:mm:ss::zzz"),
                                       QStringLiteral("yyyy/MM/dd HH:mm:ss"),
                                       QStringLiteral("yyyy/MM/dd/ HH:mm:ss")};
 
-  // Try to obtain date/time string
   for (const auto& format : formats) {
     dateTime = QDateTime::fromString(cell, format);
     if (dateTime.isValid())
       break;
   }
 
-  // Return date/time
   return dateTime;
 }
 
@@ -907,11 +847,9 @@ QDateTime CSV::Player::getDateTime(const QString& cell)
  */
 double CSV::Player::getTimestampSeconds(int row)
 {
-  // Use cached value if available and valid
   if (m_useHighPrecisionTimestamps && row >= 0 && row < m_timestampCache.size())
     return m_timestampCache[row];
 
-  // Fallback to parsing from cell
   bool error   = false;
   QString cell = getCellValue(row, 0, error);
   if (error)

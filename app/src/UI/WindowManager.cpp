@@ -1466,21 +1466,20 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
  */
 void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
 {
-  // Finalize reordering after drag in auto-layout mode
   if (autoLayoutEnabled()) {
     if (m_dragWindow && m_targetWindow && m_snapIndicatorVisible) {
       const int draggedId    = getIdForWindow(m_dragWindow);
       const int targetId     = getIdForWindow(m_targetWindow);
       const int newIndex     = m_windowOrder.indexOf(targetId);
       const int currentIndex = m_windowOrder.indexOf(draggedId);
-      if (draggedId >= 0 && targetId >= 0 && newIndex >= 0 && newIndex != currentIndex)
+      if (draggedId >= 0 && targetId >= 0 && currentIndex >= 0 && newIndex >= 0
+          && newIndex != currentIndex)
         std::swap(m_windowOrder[currentIndex], m_windowOrder[newIndex]);
     }
 
     loadLayout();
   }
 
-  // Manual layout: emit geometryChanged after drag or resize so layout is persisted
   else {
     if (m_dragWindow && m_snapIndicatorVisible) {
       auto x = m_snapIndicator.x();
@@ -1506,17 +1505,14 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
       Q_EMIT geometryChanged(m_resizeWindow);
   }
 
-  // Reset mouse cursor
   ungrabMouse();
   unsetCursor();
 
-  // Reset snap indicator
   if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
   }
 
-  // Reset window tracking parameters
   m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
   m_resizeWindow    = nullptr;
@@ -1524,7 +1520,6 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
   m_resizeEdge      = ResizeEdge::None;
   m_initialMousePos = event->pos();
 
-  // Pass the event through
   QQuickItem::mouseReleaseEvent(event);
 }
 

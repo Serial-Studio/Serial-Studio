@@ -527,7 +527,7 @@ class SerialStudioClient:
     def source_set_property(self, source_id: int, key: str, value) -> None:
         """Set a driver connection property for a source."""
         self.command("project.source.setProperty",
-                     {"sourceId": source_id, "key": key, "value": value})
+                     {"sourceId": source_id, "key": key, "propertyValue": value})
 
     def source_get_configuration(self, source_id: int) -> dict:
         """Return full Source struct including connectionSettings."""

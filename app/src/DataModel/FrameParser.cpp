@@ -217,20 +217,13 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
  */
 DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
 {
-  // Pre-create the global engine (source 0) so it is always available
   (void)engineForSource(0);
 
-  // Collect JS garbage at 1 Hz
   connect(&Misc::TimerEvents::instance(),
           &Misc::TimerEvents::timeout1Hz,
           this,
           &DataModel::FrameParser::collectGarbage);
 
-  // ProjectModel connections are deferred to setupExternalConnections() to
-  // avoid a static-init-order deadlock (ProjectModel calls FrameBuilder which
-  // calls FrameParser before ProjectModel finishes constructing).
-
-  // Reload template names when the UI language changes
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,

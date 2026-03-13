@@ -243,6 +243,7 @@ def test_frame_parser_getconfig_operation_mode_matches_dashboard(api_client, cle
 @pytest.mark.project
 def test_frame_parser_configure_sets_start_sequence(api_client, clean_state):
     """project.frameParser.configure startSequence is reflected in getConfig."""
+    _new_project(api_client)
     api_client.configure_frame_parser(start_sequence="$")
     time.sleep(0.1)
 
@@ -255,6 +256,7 @@ def test_frame_parser_configure_sets_start_sequence(api_client, clean_state):
 @pytest.mark.project
 def test_frame_parser_configure_sets_end_sequence(api_client, clean_state):
     """project.frameParser.configure endSequence is reflected in getConfig."""
+    _new_project(api_client)
     api_client.configure_frame_parser(end_sequence="\n")
     time.sleep(0.1)
 
@@ -267,6 +269,7 @@ def test_frame_parser_configure_sets_end_sequence(api_client, clean_state):
 @pytest.mark.project
 def test_frame_parser_configure_sets_checksum(api_client, clean_state):
     """project.frameParser.configure checksumAlgorithm is reflected in getConfig."""
+    _new_project(api_client)
     api_client.configure_frame_parser(checksum_algorithm="CRC-16")
     time.sleep(0.1)
 
@@ -279,6 +282,7 @@ def test_frame_parser_configure_sets_checksum(api_client, clean_state):
 @pytest.mark.project
 def test_frame_parser_configure_sets_frame_detection(api_client, clean_state):
     """project.frameParser.configure frameDetection is reflected in getConfig."""
+    _new_project(api_client)
     api_client.configure_frame_parser(frame_detection=1)
     time.sleep(0.1)
 
@@ -384,6 +388,7 @@ def test_project_set_title_empty_rejected(api_client, clean_state):
 @pytest.mark.project
 def test_frame_detection_change_persists(api_client, clean_state):
     """Changing frameDetection via configure persists in getConfig."""
+    _new_project(api_client)
     api_client.configure_frame_parser(frame_detection=1)
     time.sleep(0.1)
 

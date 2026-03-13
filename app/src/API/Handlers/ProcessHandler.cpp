@@ -53,11 +53,6 @@ void API::Handlers::ProcessHandler::registerCommands()
     QStringLiteral("Set named pipe / FIFO path for NamedPipe mode (params: pipePath)"),
     &setPipePath);
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.process.setOutputCapture"),
-    QStringLiteral("Set output capture mode (params: capture - 0=StdOut, 1=StdErr, 2=Both)"),
-    &setOutputCapture);
-
   registry.registerCommand(QStringLiteral("io.driver.process.getRunningProcesses"),
                            QStringLiteral("Refresh and return the list of running processes"),
                            &getRunningProcesses);
@@ -178,33 +173,6 @@ API::CommandResponse API::Handlers::ProcessHandler::setPipePath(const QString& i
   return CommandResponse::makeSuccess(id, result);
 }
 
-/**
- * @brief Set the output capture mode.
- * @param params Requires "capture" (int: 0=StdOut, 1=StdErr, 2=Both)
- */
-API::CommandResponse API::Handlers::ProcessHandler::setOutputCapture(const QString& id,
-                                                                     const QJsonObject& params)
-{
-  if (!params.contains(QStringLiteral("capture"))) {
-    return CommandResponse::makeError(
-      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: capture"));
-  }
-
-  const int capture = params.value(QStringLiteral("capture")).toInt();
-  if (capture < 0 || capture > 2) {
-    return CommandResponse::makeError(
-      id,
-      ErrorCode::InvalidParam,
-      QStringLiteral("Invalid capture: %1. Valid values: 0=StdOut, 1=StdErr, 2=Both").arg(capture));
-  }
-
-  IO::ConnectionManager::instance().process()->setOutputCapture(capture);
-
-  QJsonObject result;
-  result[QStringLiteral("capture")] = capture;
-  return CommandResponse::makeSuccess(id, result);
-}
-
 //--------------------------------------------------------------------------------------------------
 // Getters
 //--------------------------------------------------------------------------------------------------
@@ -245,12 +213,11 @@ API::CommandResponse API::Handlers::ProcessHandler::getConfiguration(const QStri
   auto* proc = IO::ConnectionManager::instance().process();
 
   QJsonObject result;
-  result[QStringLiteral("mode")]          = proc->mode();
-  result[QStringLiteral("outputCapture")] = proc->outputCapture();
-  result[QStringLiteral("executable")]    = proc->executable();
-  result[QStringLiteral("arguments")]     = proc->arguments();
-  result[QStringLiteral("workingDir")]    = proc->workingDir();
-  result[QStringLiteral("pipePath")]      = proc->pipePath();
+  result[QStringLiteral("mode")]       = proc->mode();
+  result[QStringLiteral("executable")] = proc->executable();
+  result[QStringLiteral("arguments")]  = proc->arguments();
+  result[QStringLiteral("workingDir")] = proc->workingDir();
+  result[QStringLiteral("pipePath")]   = proc->pipePath();
   return CommandResponse::makeSuccess(id, result);
 }
 

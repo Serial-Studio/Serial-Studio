@@ -184,17 +184,15 @@ def test_source_set_property(api_client, clean_state):
     """source.setProperty persists a driver property in connectionSettings."""
     _new_project(api_client)
 
-    cfg_before = api_client.source_get_configuration(0)
-    settings_before = cfg_before.get("connectionSettings", {})
-
-    api_client.source_set_property(0, "baudRate", 115200)
-    time.sleep(0.1)
+    # Use autoReconnect (a boolean property) to avoid index-based ComboBox issues
+    api_client.source_set_property(0, "autoReconnect", True)
+    time.sleep(0.2)
 
     cfg_after = api_client.source_get_configuration(0)
-    settings_after = cfg_after.get("connectionSettings", {})
+    settings_after = cfg_after.get("connection", {})
 
-    assert settings_after.get("baudRate") == 115200, (
-        f"baudRate should be 115200 after setProperty, got {settings_after.get('baudRate')}"
+    assert settings_after.get("autoReconnect") is True, (
+        f"autoReconnect should be True after setProperty, got {settings_after.get('autoReconnect')}"
     )
 
 

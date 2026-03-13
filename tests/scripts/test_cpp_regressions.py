@@ -41,7 +41,7 @@ def test_hal_write_api_uses_signed_sizes():
 
 
 def test_io_manager_bounds_written_byte_count():
-    text = _read("app/src/IO/Manager.cpp")
+    text = _read("app/src/IO/ConnectionManager.cpp")
 
     assert "const qint64 boundedBytes = qMin<qint64>(bytes, writtenData.size());" in text
     assert "writtenData.chop(writtenData.length() - boundedBytes);" in text
@@ -130,7 +130,7 @@ def test_hotpath_byte_array_ptrs_are_null_guarded():
     server = _read("app/src/API/Server.cpp")
     console = _read("app/src/Console/Handler.cpp")
 
-    assert "if (!data || data->isEmpty() || IO::Manager::instance().paused())" in frame_reader
+    assert "if (!data || data->isEmpty())" in frame_reader
     assert "if (!data || data->isEmpty() || m_sockets.isEmpty())" in server
     assert "if (!data)" in console
 
@@ -163,7 +163,7 @@ def test_project_editor_bounds_checks_combo_indices():
         "if (widgetIdx < 0 || widgetIdx >= keys.size())",
         "if (eolIdx < 0 || eolIdx >= eolKeys.size())",
         "if (checksumId < 0 || checksumId >= checksums.size())",
-        "if (detectionIdx < 0 || detectionIdx >= m_frameDetectionMethodsValues.size())",
+        "if (idx < 0 || idx >= m_frameDetectionMethodsValues.size())",
         "if (widgetIdx < 0 || widgetIdx >= datasetWidgetKeys.size())",
         "if (plotIdx < 0 || plotIdx >= plotOptionKeys.size())",
         "if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())",

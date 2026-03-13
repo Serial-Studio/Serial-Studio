@@ -377,15 +377,12 @@ qsizetype Console::Handler::bufferLength() const
  */
 bool Console::Handler::validateUserHex(const QString& text)
 {
-  // Remove spaces to check the actual HEX content
   QString cleanText = text.simplified().remove(' ');
 
-  // Match the string against a HEX pattern (only [0-9A-Fa-f])
   static QRegularExpression hexPattern("^[0-9A-Fa-f]*$");
   if (!hexPattern.match(cleanText).hasMatch())
     return false;
 
-  // Check for even length to ensure complete byte pairs
   if (cleanText.length() % 2 != 0)
     return false;
 
@@ -398,11 +395,9 @@ bool Console::Handler::validateUserHex(const QString& text)
  */
 QString Console::Handler::formatUserHex(const QString& text)
 {
-  // Remove spaces and ensure the input is a valid HEX string
   static QRegularExpression exp("[^0-9A-Fa-f]");
   QString data = text.simplified().remove(exp);
 
-  // Convert to hex string with spaces between bytes
   QString str;
   for (int i = 0; i < data.length(); ++i) {
     str.append(data.at(i));
@@ -410,11 +405,9 @@ QString Console::Handler::formatUserHex(const QString& text)
       str.append(" ");
   }
 
-  // Chop last space
   while (str.endsWith(" "))
     str.chop(1);
 
-  // Return string
   return str;
 }
 
@@ -506,22 +499,18 @@ void Console::Handler::setupExternalConnections()
  */
 void Console::Handler::send(const QString& data)
 {
-  // Check conditions
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
-  // Add user command to history
   if (!data.isEmpty())
     addToHistory(data);
 
-  // Convert data to byte array
   QByteArray bin;
   if (dataMode() == DataMode::DataHexadecimal)
     bin = SerialStudio::hexToBytes(data);
   else
     bin = SerialStudio::resolveEscapeSequences(data).toUtf8();
 
-  // Add EOL character
   switch (lineEnding()) {
     case LineEnding::NoLineEnding:
       break;
@@ -537,7 +526,6 @@ void Console::Handler::send(const QString& data)
       break;
   }
 
-  // Add checksum
   const auto checksums = IO::availableChecksums();
   if (m_checksumMethod >= 0 && m_checksumMethod < checksums.count()) {
     const auto checksumName = checksums.at(m_checksumMethod);
@@ -546,7 +534,6 @@ void Console::Handler::send(const QString& data)
       bin.append(checksum);
   }
 
-  // Write data to device
   if (!bin.isEmpty())
     IO::ConnectionManager::instance().writeData(bin);
 }
@@ -718,23 +705,18 @@ void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
  */
 void Console::Handler::append(const QString& string, const bool addTimestamp)
 {
-  // Abort on empty strings
   if (string.isEmpty())
     return;
 
-  // Omit leading \n if a trailing \r was already rendered from previous payload
   auto data = string;
   if (m_lastCharWasCR && data.startsWith('\n'))
     data.removeFirst();
 
-  // Record trailing \r
   m_lastCharWasCR = data.endsWith('\r');
 
-  // Only use \n as line separator for rendering
   data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
   data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
 
-  // Get timestamp with optional ANSI color codes
   QString timestamp;
   if (addTimestamp) {
     QDateTime dateTime    = QDateTime::currentDateTime();
@@ -749,11 +731,9 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
     }
   }
 
-  // Initialize final string
   QString processedString;
   processedString.reserve(data.length() + timestamp.length());
 
-  // Create list with lines (keep separators)
   QStringList tokens;
   QString currentToken;
   for (int i = 0; i < data.length(); ++i)
@@ -766,11 +746,9 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
     else
       currentToken += data.at(i);
 
-  // Add last item to list
   if (!currentToken.isEmpty())
     tokens.append(currentToken);
 
-  // Process lines
   while (!tokens.isEmpty()) {
     auto token = tokens.first();
     if (m_isStartingLine && !token.simplified().isEmpty())
@@ -781,10 +759,8 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
     tokens.removeFirst();
   }
 
-  // Add data to saved text buffer
   m_textBuffer.append(processedString.toUtf8());
 
-  // Update UI
   Q_EMIT displayString(processedString);
 }
 
@@ -876,11 +852,9 @@ void Console::Handler::updateFont()
  */
 void Console::Handler::addToHistory(const QString& command)
 {
-  // Remove old commands from history
   while (m_historyItems.count() > 100)
     m_historyItems.removeFirst();
 
-  // Register command
   m_historyItems.append(command);
   m_historyItem = m_historyItems.count();
   Q_EMIT historyItemChanged();
@@ -955,33 +929,25 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
  */
 QString Console::Handler::hexadecimalStr(QByteArrayView data)
 {
-  // Initialize parameters
   QString out;
   constexpr auto rowSize = 16;
 
-  // Print hexadecimal row by row
   for (int i = 0; i < data.length(); i += rowSize) {
-    // Add offset to output
     out += QStringLiteral("%1 | ").arg(i, 6, 16, QLatin1Char('0'));
 
-    // Print hexadecimal bytes
     for (int j = 0; j < rowSize; ++j) {
-      // Print existing data
       if (i + j < data.length()) {
         out += QStringLiteral("%1 ").arg(
           static_cast<unsigned char>(data[i + j]), 2, 16, QLatin1Char('0'));
       }
 
-      // Space out inexistent data
       else
         out += QStringLiteral("   ");
 
-      // Add padding in 8th byte
       if ((j + 1) == 8)
         out += ' ';
     }
 
-    // Add ASCII representation
     out += QStringLiteral("| ");
     for (int j = 0; j < rowSize; ++j) {
       if (i + j >= data.length()) {
@@ -996,11 +962,9 @@ QString Console::Handler::hexadecimalStr(QByteArrayView data)
         out += '.';
     }
 
-    // Add line break
     out += QStringLiteral(" |\n");
   }
 
-  // Add additional line break & return data
   out += "\n";
   return out;
 }

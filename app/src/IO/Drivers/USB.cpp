@@ -25,6 +25,7 @@
 #  include "IO/Drivers/USB.h"
 
 #  include <QApplication>
+#  include <QJsonObject>
 #  include <QMessageBox>
 #  include <QMetaObject>
 #  include <QTimer>
@@ -1287,6 +1288,97 @@ qint64 IO::Drivers::USB::sendControlTransfer(uint8_t bmRequestType,
                                          static_cast<uint16_t>(data.size()),
                                          timeout_ms);
   return rc < 0 ? -1 : static_cast<qint64>(rc);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Stable device identification
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns VID, PID, and serial number of the currently selected USB device.
+ */
+QJsonObject IO::Drivers::USB::deviceIdentifier() const
+{
+  if (!m_ctx || m_deviceIndex < 1 || m_deviceIndex > m_devicePtrs.size())
+    return {};
+
+  auto* dev = m_devicePtrs.at(m_deviceIndex - 1);
+  libusb_device_descriptor desc{};
+  if (libusb_get_device_descriptor(dev, &desc) < 0)
+    return {};
+
+  QJsonObject id;
+  id.insert(QStringLiteral("vid"),
+            QString::number(desc.idVendor, 16).rightJustified(4, '0').toUpper());
+  id.insert(QStringLiteral("pid"),
+            QString::number(desc.idProduct, 16).rightJustified(4, '0').toUpper());
+
+  // Try to read serial number string descriptor
+  libusb_device_handle* tmp = nullptr;
+  if (desc.iSerialNumber && libusb_open(dev, &tmp) == 0) {
+    unsigned char buf[256] = {};
+    const int rc           = libusb_get_string_descriptor_ascii(
+      tmp, desc.iSerialNumber, buf, static_cast<int>(sizeof(buf)));
+
+    if (rc > 0) {
+      id.insert(QStringLiteral("serial"),
+                QString::fromLatin1(reinterpret_cast<const char*>(buf), rc).trimmed());
+    }
+
+    libusb_close(tmp);
+  }
+
+  return id;
+}
+
+/**
+ * @brief Tries to find and select a USB device matching a previously saved VID/PID/serial.
+ */
+bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
+{
+  if (id.isEmpty() || !m_ctx)
+    return false;
+
+  const auto savedVid = id.value(QStringLiteral("vid")).toString();
+  const auto savedPid = id.value(QStringLiteral("pid")).toString();
+  const auto savedSer = id.value(QStringLiteral("serial")).toString();
+
+  if (savedVid.isEmpty() || savedPid.isEmpty())
+    return false;
+
+  for (int i = 0; i < m_devicePtrs.size(); ++i) {
+    libusb_device_descriptor desc{};
+    if (libusb_get_device_descriptor(m_devicePtrs.at(i), &desc) < 0)
+      continue;
+
+    const auto vid = QString::number(desc.idVendor, 16).rightJustified(4, '0').toUpper();
+    const auto pid = QString::number(desc.idProduct, 16).rightJustified(4, '0').toUpper();
+
+    if (vid != savedVid || pid != savedPid)
+      continue;
+
+    // VID+PID match — check serial if available
+    if (!savedSer.isEmpty() && desc.iSerialNumber) {
+      libusb_device_handle* tmp = nullptr;
+      if (libusb_open(m_devicePtrs.at(i), &tmp) == 0) {
+        unsigned char buf[256] = {};
+        const int rc           = libusb_get_string_descriptor_ascii(
+          tmp, desc.iSerialNumber, buf, static_cast<int>(sizeof(buf)));
+        libusb_close(tmp);
+
+        if (rc > 0) {
+          const auto serial = QString::fromLatin1(reinterpret_cast<const char*>(buf), rc).trimmed();
+          if (serial != savedSer)
+            continue;
+        }
+      }
+    }
+
+    setDeviceIndex(i + 1);
+    return true;
+  }
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

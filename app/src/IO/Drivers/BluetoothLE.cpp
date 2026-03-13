@@ -21,6 +21,7 @@
 
 #include "IO/Drivers/BluetoothLE.h"
 
+#include <QJsonObject>
 #include <QOperatingSystemVersion>
 
 #include "Misc/Utilities.h"
@@ -568,6 +569,23 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& de
       m_devices.append(device);
       m_deviceNames.append(device.name());
       Q_EMIT devicesChanged();
+
+      // Check if this device matches a pending identifier from project load
+      if (!m_pendingIdentifier.isEmpty()) {
+        const auto savedAddr = m_pendingIdentifier.value(QStringLiteral("address")).toString();
+        const auto savedName = m_pendingIdentifier.value(QStringLiteral("name")).toString();
+
+        bool match = false;
+        if (!savedAddr.isEmpty() && device.address().toString() == savedAddr)
+          match = true;
+        else if (!savedName.isEmpty() && device.name() == savedName)
+          match = true;
+
+        if (match) {
+          selectDevice(m_devices.count());
+          m_pendingIdentifier = {};
+        }
+      }
     }
   }
 }
@@ -704,6 +722,87 @@ void IO::Drivers::BluetoothLE::initializeBluetoothAdapter()
 
   // Notify QML of initial state
   Q_EMIT adapterAvailabilityChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Stable device identification
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the BLE address and name of the currently selected device.
+ *
+ * On macOS, BLE addresses are randomized by the OS, so the device name becomes
+ * the primary identifier. Both are saved to allow cross-platform matching.
+ */
+QJsonObject IO::Drivers::BluetoothLE::deviceIdentifier() const
+{
+  if (m_deviceIndex < 0 || m_deviceIndex >= m_devices.count())
+    return {};
+
+  const auto& device = m_devices.at(m_deviceIndex);
+  QJsonObject id;
+
+  const auto addr = device.address().toString();
+  if (!addr.isEmpty() && addr != QStringLiteral("00:00:00:00:00:00"))
+    id.insert(QStringLiteral("address"), addr);
+
+  const auto name = device.name();
+  if (!name.isEmpty())
+    id.insert(QStringLiteral("name"), name);
+
+  return id;
+}
+
+/**
+ * @brief Tries to find a discovered BLE device matching a previously saved identifier.
+ *
+ * Searches the current device list by address (primary) and name (fallback). If not found,
+ * saves the identifier for deferred matching — when new devices are discovered via
+ * onDeviceDiscovered(), they are checked against this pending identifier. Also starts
+ * BLE discovery if it is not already running.
+ *
+ * The user can always override by selecting any device manually, regardless of match state.
+ */
+bool IO::Drivers::BluetoothLE::selectByIdentifier(const QJsonObject& id)
+{
+  if (id.isEmpty())
+    return false;
+
+  const auto savedAddr = id.value(QStringLiteral("address")).toString();
+  const auto savedName = id.value(QStringLiteral("name")).toString();
+
+  // Search currently discovered devices
+  int bestScore = 0;
+  int bestIndex = -1;
+
+  for (int i = 0; i < m_devices.count(); ++i) {
+    const auto& device = m_devices.at(i);
+    int score          = 0;
+
+    if (!savedAddr.isEmpty() && device.address().toString() == savedAddr)
+      score += 100;
+
+    if (!savedName.isEmpty() && device.name() == savedName)
+      score += 10;
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = i;
+    }
+  }
+
+  if (bestIndex >= 0) {
+    selectDevice(bestIndex + 1);
+    m_pendingIdentifier = {};
+    return true;
+  }
+
+  // Device not found yet — save for deferred matching and start discovery
+  m_pendingIdentifier = id;
+  if (!m_discoveryAgent || !m_discoveryAgent->isActive())
+    startDiscovery();
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

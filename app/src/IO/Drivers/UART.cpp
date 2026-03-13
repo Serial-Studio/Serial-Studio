@@ -21,6 +21,8 @@
 
 #include "IO/Drivers/UART.h"
 
+#include <QJsonObject>
+
 #include "IO/ConnectionManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
@@ -945,6 +947,113 @@ QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
 
   // Return list
   return ports;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Stable device identification
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns cross-platform hardware identifiers for the currently selected serial port.
+ *
+ * Uses QSerialPortInfo to extract VID, PID, serial number, port name, and description.
+ * These identifiers allow the same project file to find the correct serial port on any OS.
+ */
+QJsonObject IO::Drivers::UART::deviceIdentifier() const
+{
+  if (m_portIndex < 1)
+    return {};
+
+  const auto ports = validPorts();
+  const int idx    = m_portIndex - 1;
+  if (idx < 0 || idx >= ports.count())
+    return {};
+
+  const auto& info = ports.at(idx);
+  QJsonObject id;
+
+  if (info.hasVendorIdentifier())
+    id.insert(QStringLiteral("vid"),
+              QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper());
+
+  if (info.hasProductIdentifier())
+    id.insert(QStringLiteral("pid"),
+              QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper());
+
+  const auto serial = info.serialNumber();
+  if (!serial.isEmpty())
+    id.insert(QStringLiteral("serial"), serial);
+
+  id.insert(QStringLiteral("portName"), info.portName());
+
+  const auto desc = info.description();
+  if (!desc.isEmpty())
+    id.insert(QStringLiteral("description"), desc);
+
+  return id;
+}
+
+/**
+ * @brief Tries to find and select a serial port matching a previously saved identifier.
+ *
+ * Scores each available port by VID+PID+serial (best), VID+PID only, description match,
+ * then port name match (weakest). Selects the highest-scoring port. If no match is found,
+ * the current selection is left unchanged.
+ */
+bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
+{
+  if (id.isEmpty())
+    return false;
+
+  const auto ports     = validPorts();
+  const auto savedVid  = id.value(QStringLiteral("vid")).toString();
+  const auto savedPid  = id.value(QStringLiteral("pid")).toString();
+  const auto savedSer  = id.value(QStringLiteral("serial")).toString();
+  const auto savedName = id.value(QStringLiteral("portName")).toString();
+  const auto savedDesc = id.value(QStringLiteral("description")).toString();
+
+  int bestScore = 0;
+  int bestIndex = -1;
+
+  for (int i = 0; i < ports.count(); ++i) {
+    const auto& info = ports.at(i);
+    int score        = 0;
+
+    // VID + PID match
+    if (!savedVid.isEmpty() && info.hasVendorIdentifier()) {
+      const auto vid =
+        QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
+      const auto pid =
+        QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
+      if (vid == savedVid && pid == savedPid) {
+        score += 100;
+
+        // Serial number match on top of VID+PID
+        if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
+          score += 50;
+      }
+    }
+
+    // Description match (cross-platform fallback for non-USB serial ports)
+    if (!savedDesc.isEmpty() && info.description() == savedDesc)
+      score += 10;
+
+    // Port name match (weakest — differs per OS)
+    if (!savedName.isEmpty() && info.portName() == savedName)
+      score += 5;
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = i;
+    }
+  }
+
+  if (bestIndex >= 0) {
+    setPortIndex(static_cast<quint8>(bestIndex + 1));
+    return true;
+  }
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

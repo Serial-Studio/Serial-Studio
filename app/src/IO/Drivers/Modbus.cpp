@@ -22,6 +22,7 @@
 
 #include "IO/Drivers/Modbus.h"
 
+#include <QJsonObject>
 #include <QModbusDataUnit>
 #include <QModbusRtuSerialClient>
 #include <QModbusTcpClient>
@@ -1134,6 +1135,129 @@ void IO::Drivers::Modbus::refreshSerialPorts()
       Q_EMIT serialPortIndexChanged();
     }
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Stable device identification
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns cross-platform hardware identifiers for the currently selected serial port.
+ *
+ * Only active in RTU mode (protocolIndex == 0). For TCP mode, host/port strings are already
+ * cross-platform and stored via driverProperties().
+ */
+QJsonObject IO::Drivers::Modbus::deviceIdentifier() const
+{
+  if (m_protocolIndex != 0 || m_serialPortIndex < 1)
+    return {};
+
+  const auto ports = QSerialPortInfo::availablePorts();
+  QVector<QSerialPortInfo> filtered;
+  for (const auto& info : ports) {
+    if (!info.isNull()) {
+#ifdef Q_OS_MACOS
+      if (info.portName().toLower().startsWith("tty."))
+        continue;
+#endif
+      filtered.append(info);
+    }
+  }
+
+  const int idx = m_serialPortIndex - 1;
+  if (idx < 0 || idx >= filtered.count())
+    return {};
+
+  const auto& info = filtered.at(idx);
+  QJsonObject id;
+
+  if (info.hasVendorIdentifier())
+    id.insert(QStringLiteral("vid"),
+              QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper());
+
+  if (info.hasProductIdentifier())
+    id.insert(QStringLiteral("pid"),
+              QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper());
+
+  const auto serial = info.serialNumber();
+  if (!serial.isEmpty())
+    id.insert(QStringLiteral("serial"), serial);
+
+  id.insert(QStringLiteral("portName"), info.portName());
+
+  const auto desc = info.description();
+  if (!desc.isEmpty())
+    id.insert(QStringLiteral("description"), desc);
+
+  return id;
+}
+
+/**
+ * @brief Tries to find and select a serial port matching a previously saved identifier.
+ *
+ * Only active in RTU mode. Uses VID+PID+serial scoring (identical to UART).
+ */
+bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
+{
+  if (id.isEmpty() || m_protocolIndex != 0)
+    return false;
+
+  const auto ports = QSerialPortInfo::availablePorts();
+  QVector<QSerialPortInfo> filtered;
+  for (const auto& info : ports) {
+    if (!info.isNull()) {
+#ifdef Q_OS_MACOS
+      if (info.portName().toLower().startsWith("tty."))
+        continue;
+#endif
+      filtered.append(info);
+    }
+  }
+
+  const auto savedVid  = id.value(QStringLiteral("vid")).toString();
+  const auto savedPid  = id.value(QStringLiteral("pid")).toString();
+  const auto savedSer  = id.value(QStringLiteral("serial")).toString();
+  const auto savedName = id.value(QStringLiteral("portName")).toString();
+  const auto savedDesc = id.value(QStringLiteral("description")).toString();
+
+  int bestScore = 0;
+  int bestIndex = -1;
+
+  for (int i = 0; i < filtered.count(); ++i) {
+    const auto& info = filtered.at(i);
+    int score        = 0;
+
+    if (!savedVid.isEmpty() && info.hasVendorIdentifier()) {
+      const auto vid =
+        QString::number(info.vendorIdentifier(), 16).rightJustified(4, '0').toUpper();
+      const auto pid =
+        QString::number(info.productIdentifier(), 16).rightJustified(4, '0').toUpper();
+      if (vid == savedVid && pid == savedPid) {
+        score += 100;
+
+        if (!savedSer.isEmpty() && info.serialNumber() == savedSer)
+          score += 50;
+      }
+    }
+
+    if (!savedDesc.isEmpty() && info.description() == savedDesc)
+      score += 10;
+
+    if (!savedName.isEmpty() && info.portName() == savedName)
+      score += 5;
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = i;
+    }
+  }
+
+  if (bestIndex >= 0) {
+    setSerialPortIndex(static_cast<quint8>(bestIndex + 1));
+    return true;
+  }
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

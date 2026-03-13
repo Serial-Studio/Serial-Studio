@@ -156,9 +156,6 @@ bool IO::ConnectionManager::isConnected() const
  */
 bool IO::ConnectionManager::configurationOk() const
 {
-  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
-    return true;
-
   auto it = m_devices.find(0);
   if (it != m_devices.end() && it->second)
     return it->second->driver() && it->second->driver()->configurationOk();
@@ -267,10 +264,16 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
     if (!driver)
       return nullptr;
 
-    if (!src.connectionSettings.isEmpty())
+    if (!src.connectionSettings.isEmpty()) {
       for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd();
            ++it)
         driver->setDriverProperty(it.key(), it.value().toVariant());
+
+      // Try to match saved hardware identifiers to currently available devices
+      const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("__deviceId__"));
+      if (deviceIdVal.isObject())
+        driver->selectByIdentifier(deviceIdVal.toObject());
+    }
 
     auto* raw = driver.get();
     m_editingDrivers.emplace(deviceId, std::move(driver));
@@ -690,6 +693,20 @@ void IO::ConnectionManager::setupExternalConnections()
           &IO::ConnectionManager::syncUiDriverToLive,
           Qt::UniqueConnection);
 #endif
+
+  // Invalidate editing drivers when device lists change so that the
+  // ProjectEditor form picks up newly enumerated devices on next access
+  auto clearEditing = [this]() {
+    m_editingDrivers.clear();
+    Q_EMIT deviceListRefreshed();
+  };
+  connect(m_uartUi.get(), &IO::Drivers::UART::availablePortsChanged, this, clearEditing);
+  connect(m_bluetoothLEUi.get(), &IO::Drivers::BluetoothLE::devicesChanged, this, clearEditing);
+#ifdef BUILD_COMMERCIAL
+  connect(m_usbUi.get(), &IO::Drivers::USB::deviceListChanged, this, clearEditing);
+  connect(m_hidUi.get(), &IO::Drivers::HID::deviceListChanged, this, clearEditing);
+  connect(m_modbusUi.get(), &IO::Drivers::Modbus::availableSerialPortsChanged, this, clearEditing);
+#endif
 }
 
 /**
@@ -1015,6 +1032,11 @@ void IO::ConnectionManager::onUiDriverConfigurationChanged()
   for (const auto& prop : uiDriver->driverProperties())
     settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
 
+  // Include stable hardware identifiers for cross-platform matching
+  const auto deviceId = uiDriver->deviceIdentifier();
+  if (!deviceId.isEmpty())
+    settings.insert(QStringLiteral("__deviceId__"), deviceId);
+
   model.setSource0ConnectionSettings(settings);
   model.setSource0BusType(static_cast<int>(m_busType));
 
@@ -1078,10 +1100,16 @@ void IO::ConnectionManager::rebuildDevices()
     if (!driver)
       continue;
 
-    if (!src.connectionSettings.isEmpty())
+    if (!src.connectionSettings.isEmpty()) {
       for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd();
            ++it)
         driver->setDriverProperty(it.key(), it.value().toVariant());
+
+      // Try to match saved hardware identifiers to currently available devices
+      const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("__deviceId__"));
+      if (deviceIdVal.isObject())
+        driver->selectByIdentifier(deviceIdVal.toObject());
+    }
 
     auto* rawDriver         = driver.get();
     const bool thrFrameExtr = (src.sourceId == 0) ? m_thrFrameExtr : false;

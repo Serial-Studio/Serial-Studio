@@ -224,33 +224,26 @@ void Licensing::Trial::writeSettings()
  */
 void Licensing::Trial::fetchTrialState()
 {
-  // Stop if system is busy
   if (m_busy)
     return;
 
-  // Mark busy flag
   m_busy = true;
   Q_EMIT busyChanged();
 
-  // Generate timestamp and nonce
-  qint64 timestamp = QDateTime::currentSecsSinceEpoch();
-  QString nonce    = QUuid::createUuid().toString(QUuid::WithoutBraces);
+  const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+  const QString nonce    = QUuid::createUuid().toString(QUuid::WithoutBraces);
 
-  // Create JSON payload
   QJsonObject payload;
   payload["machine_id"] = MachineID::instance().appVerMachineId();
   payload["timestamp"]  = QString::number(timestamp);
   payload["nonce"]      = nonce;
 
-  // Convert JSON to string
-  auto payloadData = QJsonDocument(payload).toJson(QJsonDocument::Compact);
+  const auto payloadData = QJsonDocument(payload).toJson(QJsonDocument::Compact);
 
-  // Construct request
-  QUrl url(QStringLiteral("https://cloud.serial-studio.com/trial"));
+  const QUrl url(QStringLiteral("https://cloud.serial-studio.com/trial"));
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-  // Send a POST request to the activation server
   (void)m_manager.post(request, payloadData);
 }
 
@@ -274,11 +267,9 @@ void Licensing::Trial::fetchTrialState()
  */
 void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
-  // Unset busy flag
   m_busy = false;
   Q_EMIT busyChanged();
 
-  // Check for network error
   if (reply->error() != QNetworkReply::NoError) {
     Misc::Utilities::showMessageBox(QObject::tr("Network error"),
                                     reply->errorString(),
@@ -289,13 +280,11 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     return;
   }
 
-  // Read and parse JSON
   const QByteArray data = reply->readAll();
   reply->deleteLater();
 
-  // Attempt to parse JSON
   QJsonParseError parseError;
-  QJsonDocument document = QJsonDocument::fromJson(data, &parseError);
+  const QJsonDocument document = QJsonDocument::fromJson(data, &parseError);
   if (parseError.error != QJsonParseError::NoError || !document.isObject()) {
     Misc::Utilities::showMessageBox(
       QObject::tr("Invalid server response"),
@@ -306,18 +295,15 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     return;
   }
 
-  // Set default state
   m_trialEnabled     = false;
   m_deviceRegistered = false;
   m_trialExpiry      = QDateTime::currentDateTimeUtc();
 
-  // Parse keys
-  const auto object           = document.object();
+  const QJsonObject object    = document.object();
   const auto expiryVal        = object.value("expireAt");
   const auto enabledVal       = object.value("trialEnabled");
   const auto deviceRegistered = object.value("registered");
 
-  // Accept only valid and reasonable expiry timestamps
   if (expiryVal.isString() && enabledVal.isBool() && deviceRegistered.isBool()) {
     const QString expiryStr = expiryVal.toString();
     QDateTime expiry        = QDateTime::fromString(expiryStr, Qt::ISODate).toUTC();
@@ -332,7 +318,6 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     }
   }
 
-  // Unexpected response
   else {
     Misc::Utilities::showMessageBox(QObject::tr("Unexpected server response"),
                                     QObject::tr("The server response is missing required fields."),
@@ -340,7 +325,6 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
                                     QObject::tr("Trial Activation Error"));
   }
 
-  // Save updated state and emit signal
   writeSettings();
   Q_EMIT enabledChanged();
 }

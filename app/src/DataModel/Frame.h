@@ -253,8 +253,10 @@ static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
   obj.insert("frameStart", s.frameStart);
   obj.insert("frameEnd", s.frameEnd);
   obj.insert("checksum", s.checksumAlgorithm);
+  obj.insert("checksumAlgorithm", s.checksumAlgorithm);
   obj.insert("frameDetection", s.frameDetection);
   obj.insert("decoder", s.decoderMethod);
+  obj.insert("decoderMethod", s.decoderMethod);
   obj.insert("hexadecimalDelimiters", s.hexadecimalDelimiters);
   if (!s.connectionSettings.isEmpty())
     obj.insert(Keys::SourceConn, s.connectionSettings);

@@ -271,6 +271,8 @@ private:
   QList<SerialStudio::FrameDetection> m_frameDetectionMethodsValues;
   QStringList m_imgDetectionModes;
 
+  QMetaObject::Connection m_deviceListConn;
+
   QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;
   QMap<QString, QString> m_datasetWidgets;

@@ -29,7 +29,6 @@
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Translator.h"
-#include "Misc/Utilities.h"
 #include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -358,23 +357,20 @@ DataModel::ProjectEditor::ProjectEditor()
   // Rebuild the source model when the user changes the bus type from the Setup panel.
   // setBusType() calls setSource0BusType() (no sourcesChanged signal) then driverChanged(),
   // so without this connection the ProjectEditor form stays stale after a bus type switch.
-  connect(&IO::ConnectionManager::instance(),
-          &IO::ConnectionManager::driverChanged,
-          this,
-          [this] {
-            if (m_currentView != SourceView)
-              return;
+  connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::driverChanged, this, [this] {
+    if (m_currentView != SourceView)
+      return;
 
-            const auto& sources = DataModel::ProjectModel::instance().sources();
-            for (const auto& src : sources) {
-              if (src.sourceId == m_selectedSource.sourceId) {
-                m_selectedSource = src;
-                break;
-              }
-            }
+    const auto& sources = DataModel::ProjectModel::instance().sources();
+    for (const auto& src : sources) {
+      if (src.sourceId == m_selectedSource.sourceId) {
+        m_selectedSource = src;
+        break;
+      }
+    }
 
-            buildSourceModel(m_selectedSource);
-          });
+    buildSourceModel(m_selectedSource);
+  });
 
   buildTreeModel();
   buildProjectModel();
@@ -781,10 +777,7 @@ void DataModel::ProjectEditor::buildTreeModel()
 
   Q_EMIT treeModelChanged();
 
-  // Restore selection: find the new item that matches the previously selected one.
-  // Fall back to the root project item if nothing matches.
   QStandardItem* toSelect = nullptr;
-
   if (m_currentView == DatasetView) {
     const auto gid = m_selectedDataset.groupId;
     const auto did = m_selectedDataset.datasetId;
@@ -1243,6 +1236,18 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 
   connect(
     m_sourceModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onSourceItemChanged);
+
+  // Rebuild the source form when device lists change (USB/HID/BLE plugged in)
+  // so the ComboBox options stay current
+  if (m_deviceListConn)
+    disconnect(m_deviceListConn);
+
+  m_deviceListConn = connect(
+    &IO::ConnectionManager::instance(),
+    &IO::ConnectionManager::deviceListRefreshed,
+    this,
+    [this]() { buildSourceModel(m_selectedSource); },
+    Qt::QueuedConnection);
 
   Q_EMIT sourceModelChanged();
 }

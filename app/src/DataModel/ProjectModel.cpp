@@ -543,6 +543,11 @@ void DataModel::ProjectModel::captureSourceSettings(int sourceId)
   for (const auto& prop : driver->driverProperties())
     settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
 
+  // Save stable hardware identifiers for cross-platform device matching
+  const auto deviceId = driver->deviceIdentifier();
+  if (!deviceId.isEmpty())
+    settings.insert(QStringLiteral("__deviceId__"), deviceId);
+
   m_sources[sourceId].connectionSettings = settings;
   setModified(true);
 }
@@ -571,6 +576,11 @@ void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
   for (auto it = source.connectionSettings.constBegin(); it != source.connectionSettings.constEnd();
        ++it)
     driver->setDriverProperty(it.key(), it.value().toVariant());
+
+  // Try to match saved hardware identifiers to currently available devices
+  const auto deviceIdVal = source.connectionSettings.value(QStringLiteral("__deviceId__"));
+  if (deviceIdVal.isObject())
+    driver->selectByIdentifier(deviceIdVal.toObject());
 }
 
 /**
@@ -762,6 +772,9 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
     sourcesArray.append(DataModel::serialize(source));
 
   json.insert(Keys::Sources, sourcesArray);
+
+  if (!m_sources.empty())
+    json.insert("frameParser", m_sources[0].frameParserCode);
 
   if (!m_widgetSettings.isEmpty())
     json.insert(Keys::WidgetSettings, m_widgetSettings);

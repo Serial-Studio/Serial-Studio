@@ -167,40 +167,6 @@ Item {
     }
 
     //
-    // Output capture (stdout / stderr / both) — Launch mode only
-    //
-    Label {
-      opacity: enabled ? 1 : 0.5
-      text: qsTr("Capture") + ":"
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
-      enabled: !Cpp_IO_Manager.isConnected
-    } ComboBox {
-      id: captureCombo
-
-      Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
-      model: [qsTr("Standard Output (stdout)"),
-              qsTr("Standard Error (stderr)"),
-              qsTr("Stdout + Stderr (merged)")]
-      currentIndex: Cpp_IO_Process.outputCapture
-
-      onCurrentIndexChanged: {
-        if (enabled && currentIndex !== Cpp_IO_Process.outputCapture)
-          Cpp_IO_Process.outputCapture = currentIndex
-      }
-
-      Connections {
-        target: Cpp_IO_Process
-        function onOutputCaptureChanged() {
-          if (captureCombo.currentIndex !== Cpp_IO_Process.outputCapture)
-            captureCombo.currentIndex = Cpp_IO_Process.outputCapture
-        }
-      }
-    }
-
-    //
     // Arguments
     //
     Label {

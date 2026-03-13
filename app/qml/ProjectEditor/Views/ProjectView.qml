@@ -294,8 +294,8 @@ Widgets.Pane {
 
             Text {
               text: "−"
-              font.pixelSize: 16
               anchors.centerIn: parent
+              font: Cpp_Misc_CommonFonts.customUiFont(Cpp_Misc_CommonFonts.kScaleLarge)
               color: zoomOutArea.pressed
                      ? Cpp_ThemeManager.colors["highlighted_text"]
                      : Cpp_ThemeManager.colors["text"]
@@ -303,6 +303,7 @@ Widgets.Pane {
 
             MouseArea {
               id: zoomOutArea
+
               anchors.fill: parent
               hoverEnabled: true
               cursorShape: Qt.PointingHandCursor
@@ -321,9 +322,9 @@ Widgets.Pane {
                    : Cpp_ThemeManager.colors["groupbox_background"]
 
             Text {
-              font.pixelSize: 11
               anchors.centerIn: parent
               text: Math.round(diagram.zoom * 100) + "%"
+              font: Cpp_Misc_CommonFonts.customUiFont(Cpp_Misc_CommonFonts.kScaleSmall)
               color: resetArea.pressed
                      ? Cpp_ThemeManager.colors["highlighted_text"]
                      : Cpp_ThemeManager.colors["text"]
@@ -331,6 +332,7 @@ Widgets.Pane {
 
             MouseArea {
               id: resetArea
+
               anchors.fill: parent
               hoverEnabled: true
               cursorShape: Qt.PointingHandCursor
@@ -350,8 +352,8 @@ Widgets.Pane {
 
             Text {
               text: "+"
-              font.pixelSize: 16
               anchors.centerIn: parent
+              font: Cpp_Misc_CommonFonts.customUiFont(Cpp_Misc_CommonFonts.kScaleLarge)
               color: zoomInArea.pressed
                      ? Cpp_ThemeManager.colors["highlighted_text"]
                      : Cpp_ThemeManager.colors["text"]
@@ -360,8 +362,8 @@ Widgets.Pane {
             MouseArea {
               id: zoomInArea
 
-              hoverEnabled: true
               anchors.fill: parent
+              hoverEnabled: true
               cursorShape: Qt.PointingHandCursor
               onClicked: diagram.zoom = Math.min(diagram.maxZoom, diagram.zoom + 0.15)
             }
