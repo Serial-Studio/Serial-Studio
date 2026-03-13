@@ -191,6 +191,7 @@ Item {
         x2: colFP,          y2: midY + nodeH / 2,
         dashed: false
       })
+
     }
 
     // ── place group + dataset nodes ────────────────────────────────────────
@@ -462,7 +463,6 @@ Item {
           for (const a of root.arrows) {
             const x1 = a.x1 * z, y1 = a.y1 * z
             const x2 = a.x2 * z, y2 = a.y2 * z
-            const mx = (x1 + x2) / 2
 
             ctx.strokeStyle = Cpp_ThemeManager.colors["mid"]
             ctx.fillStyle   = Cpp_ThemeManager.colors["mid"]
@@ -476,14 +476,20 @@ Item {
               ctx.setLineDash([])
             }
 
+            // Arrowhead length
+            const hl  = 7 * z
+
+            // End the curve at the back of the arrowhead so the
+            // tip touches the target node cleanly.
+            const x2a = x2 - hl
+            const mx  = (x1 + x2a) / 2
+
             ctx.beginPath()
             ctx.moveTo(x1, y1)
-            ctx.bezierCurveTo(mx, y1, mx, y2, x2, y2)
+            ctx.bezierCurveTo(mx, y1, mx, y2, x2a, y2)
             ctx.stroke()
 
-            // Arrowhead — tangent at bezier endpoint is always horizontal
-            // (last control point shares y with endpoint), so arrow points right.
-            const hl  = 7 * z
+            // Arrowhead — tangent is always horizontal
             const sin = Math.sin(Math.PI / 6)
             ctx.setLineDash([])
             ctx.beginPath()
