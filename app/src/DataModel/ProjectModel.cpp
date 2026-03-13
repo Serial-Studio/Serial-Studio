@@ -851,6 +851,7 @@ void DataModel::ProjectModel::newJsonFile()
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
   Q_EMIT sourcesChanged();
+  Q_EMIT sourceStructureChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT frameDetectionChanged();
@@ -1220,6 +1221,7 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
   Q_EMIT sourcesChanged();
+  Q_EMIT sourceStructureChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT frameDetectionChanged();
