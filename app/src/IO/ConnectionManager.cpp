@@ -252,35 +252,46 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
 {
   const auto& sources = DataModel::ProjectModel::instance().sources();
 
-  auto edIt = m_editingDrivers.find(deviceId);
-  if (edIt != m_editingDrivers.end())
-    return edIt->second.get();
-
+  // Find the source to determine the expected bus type
+  const DataModel::Source* srcPtr = nullptr;
   for (const auto& src : sources) {
-    if (src.sourceId != deviceId)
-      continue;
-
-    auto driver = createDriver(static_cast<SerialStudio::BusType>(src.busType));
-    if (!driver)
-      return nullptr;
-
-    if (!src.connectionSettings.isEmpty()) {
-      for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd();
-           ++it)
-        driver->setDriverProperty(it.key(), it.value().toVariant());
-
-      // Try to match saved hardware identifiers to currently available devices
-      const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("__deviceId__"));
-      if (deviceIdVal.isObject())
-        driver->selectByIdentifier(deviceIdVal.toObject());
+    if (src.sourceId == deviceId) {
+      srcPtr = &src;
+      break;
     }
-
-    auto* raw = driver.get();
-    m_editingDrivers.emplace(deviceId, std::move(driver));
-    return raw;
   }
 
-  return nullptr;
+  if (!srcPtr)
+    return nullptr;
+
+  // Return the UI-config driver directly — it already has discovery data
+  // (BLE devices, serial ports, USB/HID device lists) and reacts to live
+  // state changes. Apply any saved project settings first.
+  const auto busType = static_cast<SerialStudio::BusType>(srcPtr->busType);
+  HAL_Driver* uiDrv  = uiDriverForBusType(busType);
+  if (!uiDrv)
+    return nullptr;
+
+  if (!srcPtr->connectionSettings.isEmpty()) {
+    for (auto it = srcPtr->connectionSettings.constBegin();
+         it != srcPtr->connectionSettings.constEnd();
+         ++it)
+      uiDrv->setDriverProperty(it.key(), it.value().toVariant());
+
+    const auto deviceIdVal = srcPtr->connectionSettings.value(QStringLiteral("__deviceId__"));
+    if (deviceIdVal.isObject())
+      uiDrv->selectByIdentifier(deviceIdVal.toObject());
+  }
+
+  // BLE requires explicit scanning — start discovery on the UI driver so the
+  // project editor's device combobox populates as devices are found.
+  if (busType == SerialStudio::BusType::BluetoothLE) {
+    auto* ble = qobject_cast<IO::Drivers::BluetoothLE*>(uiDrv);
+    if (ble && ble->deviceCount() == 0)
+      ble->startDiscovery();
+  }
+
+  return uiDrv;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -368,6 +379,39 @@ IO::Drivers::USB* IO::ConnectionManager::usb() const noexcept
 IO::HAL_Driver* IO::ConnectionManager::activeUiDriver() const noexcept
 {
   switch (m_busType) {
+    case SerialStudio::BusType::UART:
+      return m_uartUi.get();
+    case SerialStudio::BusType::Network:
+      return m_networkUi.get();
+    case SerialStudio::BusType::BluetoothLE:
+      return m_bluetoothLEUi.get();
+#ifdef BUILD_COMMERCIAL
+    case SerialStudio::BusType::Audio:
+      return m_audioUi.get();
+    case SerialStudio::BusType::ModBus:
+      return m_modbusUi.get();
+    case SerialStudio::BusType::CanBus:
+      return m_canBusUi.get();
+    case SerialStudio::BusType::RawUsb:
+      return m_usbUi.get();
+    case SerialStudio::BusType::HidDevice:
+      return m_hidUi.get();
+    case SerialStudio::BusType::Process:
+      return m_processUi.get();
+#endif
+    default:
+      return nullptr;
+  }
+}
+
+/**
+ * @brief Returns the UI-config driver for a given bus type (not necessarily the active one).
+ * @param type The bus type to look up.
+ * @return Raw pointer to the UI driver, or nullptr if unsupported.
+ */
+IO::HAL_Driver* IO::ConnectionManager::uiDriverForBusType(SerialStudio::BusType type) const noexcept
+{
+  switch (type) {
     case SerialStudio::BusType::UART:
       return m_uartUi.get();
     case SerialStudio::BusType::Network:
@@ -697,7 +741,6 @@ void IO::ConnectionManager::setupExternalConnections()
   // Invalidate editing drivers when device lists change so that the
   // ProjectEditor form picks up newly enumerated devices on next access
   auto clearEditing = [this]() {
-    m_editingDrivers.clear();
     Q_EMIT deviceListRefreshed();
   };
   connect(m_uartUi.get(), &IO::Drivers::UART::availablePortsChanged, this, clearEditing);
@@ -1085,9 +1128,6 @@ void IO::ConnectionManager::rebuildDevices()
 
     it = m_devices.erase(it);
   }
-
-  // Clear all editing drivers so they are recreated lazily with up-to-date bus types
-  m_editingDrivers.clear();
 
   // Create fresh DeviceManagers for all sources (or sources > 0 in non-ProjectFile mode).
   // Skip source 0 if we are not rebuilding it (either wrong mode or no saved settings).

@@ -790,7 +790,20 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   switch (key) {
     case Qt::Key_Return:
     case Qt::Key_Enter:
-      seq.append('\r');
+      switch (Console::Handler::instance().lineEnding()) {
+        case Console::Handler::LineEnding::NoLineEnding:
+          break;
+        case Console::Handler::LineEnding::NewLine:
+          seq.append('\n');
+          break;
+        case Console::Handler::LineEnding::CarriageReturn:
+          seq.append('\r');
+          break;
+        case Console::Handler::LineEnding::BothNewLineAndCarriageReturn:
+          seq.append('\r');
+          seq.append('\n');
+          break;
+      }
       break;
     case Qt::Key_Backspace:
       seq.append('\x7f');

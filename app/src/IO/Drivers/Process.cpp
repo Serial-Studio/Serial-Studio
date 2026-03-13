@@ -25,6 +25,7 @@
 #  include "IO/Drivers/Process.h"
 
 #  include <QDir>
+#  include <QFileDialog>
 #  include <QFileInfo>
 #  include <QStandardPaths>
 
@@ -381,6 +382,85 @@ void IO::Drivers::Process::setPipePath(const QString& path)
 }
 
 /**
+ * @brief Opens a file dialog to select the executable for Launch mode.
+ */
+void IO::Drivers::Process::browseExecutable()
+{
+  const auto start = m_executable.isEmpty()
+                     ? QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+                     : QFileInfo(m_executable).absolutePath();
+
+  auto* dialog = new QFileDialog(nullptr, tr("Select Executable"), start);
+
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      setExecutable(path);
+
+    dialog->deleteLater();
+  });
+
+  connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
+
+  dialog->open();
+}
+
+/**
+ * @brief Opens a folder dialog to select the working directory for Launch mode.
+ */
+void IO::Drivers::Process::browseWorkingDir()
+{
+  const auto start = m_workingDir.isEmpty()
+                     ? QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+                     : m_workingDir;
+
+  auto* dialog = new QFileDialog(nullptr, tr("Select Working Directory"), start);
+
+  dialog->setFileMode(QFileDialog::Directory);
+  dialog->setOption(QFileDialog::ShowDirsOnly, true);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      setWorkingDir(path);
+
+    dialog->deleteLater();
+  });
+
+  connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
+
+  dialog->open();
+}
+
+/**
+ * @brief Opens a file dialog to select the named pipe / FIFO path.
+ */
+void IO::Drivers::Process::browsePipePath()
+{
+  const auto start = m_pipePath.isEmpty()
+                     ? QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+                     : QFileInfo(m_pipePath).absolutePath();
+
+  auto* dialog = new QFileDialog(nullptr, tr("Select Named Pipe / FIFO"), start);
+
+  dialog->setFileMode(QFileDialog::ExistingFile);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    if (!path.isEmpty())
+      setPipePath(path);
+
+    dialog->deleteLater();
+  });
+
+  connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
+
+  dialog->open();
+}
+
+/**
  * @brief Enumerates running processes and updates the runningProcesses list.
  *
  * On Unix: runs `ps -eo pid,comm` and formats entries as "name [PID]".
@@ -462,14 +542,19 @@ void IO::Drivers::Process::onReadyRead()
 /**
  * @brief Handles QProcess termination.
  *
- * Shows an informational message box and requests disconnection via a queued
- * call so the UI is updated on the main thread.  The isConnected() guard
- * prevents a spurious dialog when doClose() already initiated the disconnect.
+ * Drains any remaining stdout, shows an informational message box, and
+ * requests disconnection via a queued call so the UI is updated on the main
+ * thread.  When doClose() initiates the disconnect it calls
+ * m_process->disconnect() first, so this slot will not fire in that case.
  */
 void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus status)
 {
-  if (!IO::ConnectionManager::instance().isConnected())
-    return;
+  // Drain any remaining stdout data before tearing down
+  if (m_process) {
+    const QByteArray remaining = m_process->readAllStandardOutput();
+    if (!remaining.isEmpty())
+      Q_EMIT dataReceived(makeByteArray(remaining));
+  }
 
   const QString reason = (status == QProcess::CrashExit) ? tr("The process crashed.")
                                                          : tr("Exit code: %1").arg(exitCode);
@@ -492,9 +577,6 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
 void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 {
   if (error == QProcess::FailedToStart)
-    return;
-
-  if (!IO::ConnectionManager::instance().isConnected())
     return;
 
   const QString detail = m_process ? m_process->errorString() : tr("Unknown error");

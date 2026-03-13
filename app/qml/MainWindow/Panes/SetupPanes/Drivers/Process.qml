@@ -24,7 +24,6 @@ import QtCore
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Qt.labs.platform as NativePlatform
 
 Item {
   id: root
@@ -48,35 +47,6 @@ Item {
         Cpp_IO_Process.pipePath = suggestion
       }
     }
-  }
-
-  //
-  // Native file dialog for picking the executable
-  //
-  NativePlatform.FileDialog {
-    id: executableDialog
-    title: qsTr("Select Executable")
-    fileMode: NativePlatform.FileDialog.OpenFile
-    onAccepted: Cpp_IO_Process.executable = executableDialog.file.toLocalFile()
-  }
-
-  //
-  // Native file/directory dialog for picking the working directory
-  //
-  NativePlatform.FolderDialog {
-    id: workingDirDialog
-    title: qsTr("Select Working Directory")
-    onAccepted: Cpp_IO_Process.workingDir = workingDirDialog.folder.toLocalFile()
-  }
-
-  //
-  // Native file dialog for picking the pipe path
-  //
-  NativePlatform.FileDialog {
-    id: pipePathDialog
-    title: qsTr("Select Named Pipe / FIFO")
-    fileMode: NativePlatform.FileDialog.OpenFile
-    onAccepted: Cpp_IO_Process.pipePath = pipePathDialog.file.toLocalFile()
   }
 
   GridLayout {
@@ -162,7 +132,7 @@ Item {
         text: qsTr("Browse")
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
-        onClicked: executableDialog.open()
+        onClicked: Cpp_IO_Process.browseExecutable()
       }
     }
 
@@ -238,7 +208,7 @@ Item {
         text: qsTr("Browse")
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
-        onClicked: workingDirDialog.open()
+        onClicked: Cpp_IO_Process.browseWorkingDir()
       }
     }
 
@@ -288,7 +258,7 @@ Item {
         text: qsTr("Browse")
         opacity: enabled ? 1 : 0.5
         enabled: !Cpp_IO_Manager.isConnected
-        onClicked: pipePathDialog.open()
+        onClicked: Cpp_IO_Process.browsePipePath()
       }
     }
 

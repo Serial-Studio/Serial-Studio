@@ -197,6 +197,7 @@ private slots:
 private:
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
+  [[nodiscard]] HAL_Driver* uiDriverForBusType(SerialStudio::BusType type) const noexcept;
   void wireDevice(DeviceManager* dm);
 
 private:
@@ -213,7 +214,6 @@ private:
   QSettings m_settings;
 
   std::unordered_map<int, DeviceManager*> m_devices;
-  std::unordered_map<int, std::unique_ptr<HAL_Driver>> m_editingDrivers;
 
   // UI-config driver instances (one per type; never used for live connections)
   std::unique_ptr<IO::Drivers::UART> m_uartUi;

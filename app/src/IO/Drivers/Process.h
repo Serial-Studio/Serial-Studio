@@ -24,6 +24,7 @@
 #ifdef BUILD_COMMERCIAL
 
 #  include <atomic>
+#  include <QFileDialog>
 #  include <QList>
 #  include <QObject>
 #  include <QProcess>
@@ -120,6 +121,9 @@ public slots:
   void setWorkingDir(const QString& dir);
   void setArguments(const QString& args);
   void setExecutable(const QString& path);
+  void browseExecutable();
+  void browseWorkingDir();
+  void browsePipePath();
   void refreshProcessList();
   void setDriverProperty(const QString& key, const QVariant& value) override;
 
