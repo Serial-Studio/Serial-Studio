@@ -555,7 +555,7 @@ void DataModel::ProjectModel::captureSourceSettings(int sourceId)
   // Save stable hardware identifiers for cross-platform device matching
   const auto deviceId = driver->deviceIdentifier();
   if (!deviceId.isEmpty())
-    settings.insert(QStringLiteral("__deviceId__"), deviceId);
+    settings.insert(QStringLiteral("deviceId"), deviceId);
 
   m_sources[sourceId].connectionSettings = settings;
   setModified(true);
@@ -587,7 +587,7 @@ void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
     driver->setDriverProperty(it.key(), it.value().toVariant());
 
   // Try to match saved hardware identifiers to currently available devices
-  const auto deviceIdVal = source.connectionSettings.value(QStringLiteral("__deviceId__"));
+  const auto deviceIdVal = source.connectionSettings.value(QStringLiteral("deviceId"));
   if (deviceIdVal.isObject())
     driver->selectByIdentifier(deviceIdVal.toObject());
 }
@@ -1098,11 +1098,10 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   const bool legacyFormat = !json.contains(Keys::Sources);
 
   if (m_sources.empty()) {
-    auto& cm = IO::ConnectionManager::instance();
-
     DataModel::Source defaultSource;
     defaultSource.sourceId              = 0;
     defaultSource.title                 = tr("Device A");
+    auto& cm = IO::ConnectionManager::instance();
     defaultSource.busType               = static_cast<int>(cm.busType());
     defaultSource.frameStart            = m_frameStartSequence;
     defaultSource.frameEnd              = m_frameEndSequence;
@@ -1113,45 +1112,17 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
     defaultSource.frameParserCode =
       legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
 
-    IO::HAL_Driver* uiDriver = nullptr;
-    switch (cm.busType()) {
-      case SerialStudio::BusType::UART:
-        uiDriver = cm.uart();
-        break;
-      case SerialStudio::BusType::Network:
-        uiDriver = cm.network();
-        break;
-      case SerialStudio::BusType::BluetoothLE:
-        uiDriver = cm.bluetoothLE();
-        break;
-#ifdef BUILD_COMMERCIAL
-      case SerialStudio::BusType::Audio:
-        uiDriver = cm.audio();
-        break;
-      case SerialStudio::BusType::ModBus:
-        uiDriver = cm.modbus();
-        break;
-      case SerialStudio::BusType::CanBus:
-        uiDriver = cm.canBus();
-        break;
-      case SerialStudio::BusType::RawUsb:
-        uiDriver = cm.usb();
-        break;
-      case SerialStudio::BusType::HidDevice:
-        uiDriver = cm.hid();
-        break;
-      case SerialStudio::BusType::Process:
-        uiDriver = cm.process();
-        break;
-#endif
-      default:
-        break;
-    }
-
+    // Capture the currently selected UI driver's settings so the migrated
+    // source matches whatever the user has configured in the setup panel.
+    IO::HAL_Driver* uiDriver = cm.uiDriverForBusType(cm.busType());
     if (uiDriver) {
       QJsonObject settings;
       for (const auto& prop : uiDriver->driverProperties())
         settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+
+      const auto deviceId = uiDriver->deviceIdentifier();
+      if (!deviceId.isEmpty())
+        settings.insert(QStringLiteral("deviceId"), deviceId);
 
       defaultSource.connectionSettings = settings;
     }

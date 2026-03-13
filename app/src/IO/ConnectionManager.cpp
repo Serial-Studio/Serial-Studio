@@ -278,7 +278,7 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
          ++it)
       uiDrv->setDriverProperty(it.key(), it.value().toVariant());
 
-    const auto deviceIdVal = srcPtr->connectionSettings.value(QStringLiteral("__deviceId__"));
+    const auto deviceIdVal = srcPtr->connectionSettings.value(QStringLiteral("deviceId"));
     if (deviceIdVal.isObject())
       uiDrv->selectByIdentifier(deviceIdVal.toObject());
   }
@@ -980,19 +980,16 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
     return;
 
   // Only sync when a real project file is loaded from disk.
-  // For unsaved/new projects (empty filePath) or sources with no saved connection
-  // settings, leave the current bus type and driver configuration untouched so that
-  // API-configured hardware (e.g. via io.driver.network.*) is not overwritten.
+  // For unsaved/new projects (empty filePath) leave the current bus type and
+  // driver configuration untouched so that API-configured hardware
+  // (e.g. via io.driver.network.*) is not overwritten.
   if (model.jsonFilePath().isEmpty())
     return;
 
-  const auto& src = srcs[0];
-  if (src.connectionSettings.isEmpty())
-    return;
+  const auto& src    = srcs[0];
+  const auto newType = static_cast<SerialStudio::BusType>(src.busType);
 
   m_syncingFromProject = true;
-
-  const auto newType = static_cast<SerialStudio::BusType>(src.busType);
 
   if (m_busType != newType) {
     m_busType = newType;
@@ -1000,46 +997,14 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
     Q_EMIT busTypeChanged();
   }
 
-  HAL_Driver* uiDriver = nullptr;
-  switch (newType) {
-    case SerialStudio::BusType::UART:
-      uiDriver = m_uartUi.get();
-      break;
-    case SerialStudio::BusType::Network:
-      uiDriver = m_networkUi.get();
-      break;
-    case SerialStudio::BusType::BluetoothLE:
-      uiDriver = m_bluetoothLEUi.get();
-      break;
-#ifdef BUILD_COMMERCIAL
-    case SerialStudio::BusType::Audio:
-      uiDriver = m_audioUi.get();
-      break;
-    case SerialStudio::BusType::ModBus:
-      uiDriver = m_modbusUi.get();
-      break;
-    case SerialStudio::BusType::CanBus:
-      uiDriver = m_canBusUi.get();
-      break;
-    case SerialStudio::BusType::RawUsb:
-      uiDriver = m_usbUi.get();
-      break;
-    case SerialStudio::BusType::HidDevice:
-      uiDriver = m_hidUi.get();
-      break;
-    case SerialStudio::BusType::Process:
-      uiDriver = m_processUi.get();
-      break;
-#endif
-    default:
-      break;
+  // Apply saved connection settings to the UI driver when available
+  HAL_Driver* uiDriver = uiDriverForBusType(newType);
+  if (uiDriver && !src.connectionSettings.isEmpty()) {
+    for (auto it = src.connectionSettings.constBegin();
+         it != src.connectionSettings.constEnd();
+         ++it)
+      uiDriver->setDriverProperty(it.key(), it.value().toVariant());
   }
-
-  if (!uiDriver)
-    return;
-
-  for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd(); ++it)
-    uiDriver->setDriverProperty(it.key(), it.value().toVariant());
 
   m_syncingFromProject = false;
   Q_EMIT driverChanged();
@@ -1078,7 +1043,7 @@ void IO::ConnectionManager::onUiDriverConfigurationChanged()
   // Include stable hardware identifiers for cross-platform matching
   const auto deviceId = uiDriver->deviceIdentifier();
   if (!deviceId.isEmpty())
-    settings.insert(QStringLiteral("__deviceId__"), deviceId);
+    settings.insert(QStringLiteral("deviceId"), deviceId);
 
   model.setSource0ConnectionSettings(settings);
   model.setSource0BusType(static_cast<int>(m_busType));
@@ -1146,7 +1111,7 @@ void IO::ConnectionManager::rebuildDevices()
         driver->setDriverProperty(it.key(), it.value().toVariant());
 
       // Try to match saved hardware identifiers to currently available devices
-      const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("__deviceId__"));
+      const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("deviceId"));
       if (deviceIdVal.isObject())
         driver->selectByIdentifier(deviceIdVal.toObject());
     }

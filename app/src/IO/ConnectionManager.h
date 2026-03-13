@@ -150,6 +150,7 @@ public:
   [[nodiscard]] HAL_Driver* driver(int deviceId = 0) const;
   [[nodiscard]] HAL_Driver* driverForEditing(int deviceId);
   [[nodiscard]] HAL_Driver* activeUiDriver() const noexcept;
+  [[nodiscard]] HAL_Driver* uiDriverForBusType(SerialStudio::BusType type) const noexcept;
 
   [[nodiscard]] IO::Drivers::UART* uart() const noexcept;
   [[nodiscard]] IO::Drivers::Network* network() const noexcept;
@@ -197,7 +198,6 @@ private slots:
 private:
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
-  [[nodiscard]] HAL_Driver* uiDriverForBusType(SerialStudio::BusType type) const noexcept;
   void wireDevice(DeviceManager* dm);
 
 private:
