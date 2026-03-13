@@ -19,11 +19,11 @@ from utils import DataGenerator, ChecksumType
 from utils.api_client import APIError
 
 _WS_KEY = "widgetSettings"
-_ACTIVE_GROUP_SUBKEY = "__activeGroup__"
+_ACTIVE_GROUP_SUBKEY = "activeGroup"
 
 
 def _layout_key(group_id: int) -> str:
-    return f"__layout__:{group_id}__"
+    return f"layout:{group_id}"
 
 
 # ---------------------------------------------------------------------------
@@ -58,11 +58,20 @@ def _multi_group_project(title="WL-Multi", n_groups=3) -> dict:
 
     return {
         "title": title,
-        "frameStart": "/*",
-        "frameEnd": "*/",
-        "frameDetection": 1,
-        "checksum": "",
-        "frameParser": DataGenerator.CSV_PARSER_TEMPLATE,
+        "sources": [
+            {
+                "sourceId": 0,
+                "title": "Device",
+                "busType": 0,
+                "frameStart": "/*",
+                "frameEnd": "*/",
+                "frameDetection": 1,
+                "checksum": "",
+                "decoder": 0,
+                "hexadecimalDelimiters": False,
+                "frameParserCode": DataGenerator.CSV_PARSER_TEMPLATE,
+            }
+        ],
         "groups": groups,
     }
 

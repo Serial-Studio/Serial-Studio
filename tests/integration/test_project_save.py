@@ -17,11 +17,11 @@ import pytest
 from utils import DataGenerator, ChecksumType
 
 _WS_KEY = "widgetSettings"
-_ACTIVE_GROUP_SUBKEY = "__activeGroup__"
+_ACTIVE_GROUP_SUBKEY = "activeGroup"
 
 
 def _layout_key(group_id: int) -> str:
-    return f"__layout__:{group_id}__"
+    return f"layout:{group_id}"
 
 
 _SAMPLE_WIDGET_SETTINGS = {
@@ -148,7 +148,7 @@ def test_layout_stored_inside_widget_settings(api_client, clean_state, tmp_path)
     dashboardLayout and activeGroupId are migrated into widgetSettings on open.
 
     Legacy top-level keys are folded into per-group layout keys of the form
-    "__layout__:<groupId>__" and the activeGroup sub-key.
+    "layout:<groupId>" and the activeGroup sub-key.
     """
     group_id = 42
     legacy_project = _base_project()
@@ -168,7 +168,7 @@ def test_layout_stored_inside_widget_settings(api_client, clean_state, tmp_path)
     ws = data[_WS_KEY]
     layout_key = _layout_key(group_id)
     assert layout_key in ws, f"{layout_key} must be inside widgetSettings"
-    assert _ACTIVE_GROUP_SUBKEY in ws, "__activeGroup__ sub-key must be inside widgetSettings"
+    assert _ACTIVE_GROUP_SUBKEY in ws, "activeGroup sub-key must be inside widgetSettings"
     assert ws[layout_key] == _SAMPLE_LAYOUT
     assert ws[_ACTIVE_GROUP_SUBKEY] == group_id
 
@@ -220,7 +220,7 @@ def test_layout_survives_connect_disconnect(
         "per-group layout key must survive disconnect"
     )
     assert saved_ws.get(_ACTIVE_GROUP_SUBKEY) == group_id, (
-        "__activeGroup__ sub-key must survive disconnect"
+        "activeGroup sub-key must survive disconnect"
     )
 
 

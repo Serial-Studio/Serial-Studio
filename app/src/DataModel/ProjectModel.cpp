@@ -783,9 +783,6 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
   json.insert(Keys::Sources, sourcesArray);
 
-  if (!m_sources.empty())
-    json.insert("frameParser", m_sources[0].frameParserCode);
-
   if (!m_widgetSettings.isEmpty())
     json.insert(Keys::WidgetSettings, m_widgetSettings);
 

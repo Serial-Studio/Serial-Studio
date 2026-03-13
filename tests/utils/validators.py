@@ -130,7 +130,6 @@ def validate_project_file(project_path: str) -> bool:
         except json.JSONDecodeError as e:
             raise AssertionError(f"Invalid JSON in project file: {e}")
 
-    assert "frameParser" in project, "Project missing frameParser"
     assert "groups" in project, "Project missing groups"
     assert isinstance(project["groups"], list), "Groups must be a list"
 

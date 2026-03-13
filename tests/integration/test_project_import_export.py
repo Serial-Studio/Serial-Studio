@@ -47,13 +47,13 @@ def test_project_export_json_returns_object(api_client, clean_state):
 
 @pytest.mark.project
 def test_project_export_json_has_required_fields(api_client, clean_state):
-    """Verify exported JSON includes frameParser and groups fields."""
+    """Verify exported JSON includes sources and groups fields."""
     _build_simple_project(api_client)
 
     result = api_client.command("project.exportJson")
     config = result["config"]
 
-    assert "frameParser" in config, "Exported project must have 'frameParser'"
+    assert "sources" in config, "Exported project must have 'sources'"
     assert "groups" in config, "Exported project must have 'groups'"
     assert isinstance(config["groups"], list), "'groups' must be a list"
 
