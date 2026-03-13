@@ -88,14 +88,15 @@ inline constexpr auto DashboardLayout = "dashboardLayout";
 inline constexpr auto ActiveGroupId   = "activeGroupId";
 inline constexpr auto WidgetSettings  = "widgetSettings";
 
-// Reserved sub-keys stored inside the widgetSettings object.
-// Prefixed with "__" to avoid collisions with numeric widget IDs.
-inline constexpr auto kActiveGroupSubKey = "__activeGroup__";
-inline constexpr auto kPointCountSubKey  = "__pointCount__";
+// Root-level project key for dashboard point count.
+inline constexpr auto PointCount = "pointCount";
+
+// Reserved sub-key stored inside the widgetSettings object.
+inline constexpr auto kActiveGroupSubKey = "activeGroup";
 
 inline QString layoutKey(int groupId)
 {
-  return QStringLiteral("__layout__:") + QString::number(groupId) + QStringLiteral("__");
+  return QStringLiteral("layout:") + QString::number(groupId);
 }
 }  // namespace Keys
 

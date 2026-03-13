@@ -1,6 +1,7 @@
 {
     "actions": [
     ],
+    "frameParser": "/**\n * Frame parser for the first device\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
     "groups": [
         {
             "datasets": [
@@ -346,13 +347,16 @@
         {
             "busType": 1,
             "checksum": "",
+            "checksumAlgorithm": "",
             "connection": {
                 "address": "127.0.0.1",
                 "socketTypeIndex": 1,
                 "udpLocalPort": 9001,
-                "udpRemotePort": 9001
+                "udpMulticast": false,
+                "udpRemotePort": 53
             },
             "decoder": 0,
+            "decoderMethod": 0,
             "frameDetection": 1,
             "frameEnd": "*/",
             "frameParserCode": "/**\n * Frame parser for the first device\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
@@ -364,13 +368,16 @@
         {
             "busType": 1,
             "checksum": "",
+            "checksumAlgorithm": "",
             "connection": {
                 "address": "127.0.0.1",
                 "socketTypeIndex": 1,
                 "udpLocalPort": 9002,
-                "udpRemotePort": 9002
+                "udpMulticast": false,
+                "udpRemotePort": 53
             },
             "decoder": 0,
+            "decoderMethod": 0,
             "frameDetection": 1,
             "frameEnd": "%>",
             "frameParserCode": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
@@ -380,9 +387,10 @@
             "title": "Indoor Station"
         }
     ],
+    "pointCount": 1000,
     "title": "Dual Weather Station",
     "widgetSettings": {
-        "__layout__:-1__": {
+        "layout:-1": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -394,7 +402,7 @@
                 ]
             }
         },
-        "__layout__:-2__": {
+        "layout:-2": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -409,20 +417,11 @@
                     7,
                     8,
                     9,
-                    10,
-                    12,
-                    16,
-                    17,
-                    13,
-                    14,
-                    18,
-                    15,
-                    19,
-                    20
+                    10
                 ]
             }
         },
-        "__layout__:0__": {
+        "layout:0": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -431,7 +430,7 @@
                 ]
             }
         },
-        "__layout__:1__": {
+        "layout:1": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -440,7 +439,7 @@
                 ]
             }
         },
-        "__layout__:2__": {
+        "layout:2": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -449,7 +448,7 @@
                 ]
             }
         },
-        "__layout__:3__": {
+        "layout:3": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -459,7 +458,7 @@
                 ]
             }
         },
-        "__layout__:4__": {
+        "layout:4": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -469,7 +468,7 @@
                 ]
             }
         },
-        "__layout__:5__": {
+        "layout:5": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [

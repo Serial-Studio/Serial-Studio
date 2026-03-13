@@ -2066,9 +2066,7 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("multiplot"), tr("Multiple Plot"));
   m_groupWidgets.insert(QStringLiteral("accelerometer"), tr("Accelerometer"));
   m_groupWidgets.insert(QStringLiteral("plot3d"), tr("3D Plot"));
-#ifdef BUILD_COMMERCIAL
   m_groupWidgets.insert(QStringLiteral("image"), tr("Image View"));
-#endif
   m_groupWidgets.insert(QLatin1String(""), tr("None"));
 
   m_datasetWidgets.clear();
@@ -2173,9 +2171,7 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
       {          "map",           SerialStudio::GPS},
       {     "datagrid",      SerialStudio::DataGrid},
       {       "plot3d",        SerialStudio::Plot3D},
-#ifdef BUILD_COMMERCIAL
       {        "image",     SerialStudio::ImageView},
-#endif
       {             "", SerialStudio::NoGroupWidget},
     };
 

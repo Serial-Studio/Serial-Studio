@@ -64,10 +64,14 @@ class ProjectModel : public QObject {
   Q_PROPERTY(int sourceCount
              READ sourceCount
              NOTIFY sourcesChanged)
+  Q_PROPERTY(int pointCount
+             READ pointCount
+             NOTIFY pointCountChanged)
   // clang-format on
 
 signals:
   void titleChanged();
+  void pointCountChanged();
   void jsonFileChanged();
   void modifiedChanged();
   void groupsChanged();
@@ -119,6 +123,7 @@ public:
 
   [[nodiscard]] bool containsCommercialFeatures() const;
 
+  [[nodiscard]] int pointCount() const noexcept;
   [[nodiscard]] int groupCount() const noexcept;
   [[nodiscard]] int datasetCount() const;
   [[nodiscard]] int sourceCount() const noexcept;
@@ -146,6 +151,7 @@ public slots:
   void openJsonFile(const QString& path);
 
   void setTitle(const QString& title);
+  void setPointCount(const int points);
   void clearJsonFilePath();
 
   void setFrameStartSequence(const QString& sequence);
@@ -212,6 +218,7 @@ private:
   SerialStudio::DecoderMethod m_frameDecoder;
   SerialStudio::FrameDetection m_frameDetection;
 
+  int m_pointCount;
   bool m_modified;
   QString m_filePath;
   bool m_suppressMessageBoxes;

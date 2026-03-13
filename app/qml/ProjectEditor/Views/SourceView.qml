@@ -71,12 +71,13 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
-      // Source actions panel
+      // Source actions panel (commercial builds only)
       //
       Rectangle {
         id: header
 
         z: 2
+        visible: Cpp_CommercialBuild
         Layout.fillWidth: true
         height: headerLayout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]

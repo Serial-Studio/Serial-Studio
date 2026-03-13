@@ -445,7 +445,7 @@ Widgets.Pane {
                 horizontalAlignment: Text.AlignHCenter
                 color: Cpp_ThemeManager.colors["text"]
                 font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
-                text: qsTr("This project streams data from %n independent device(s).", "", Cpp_JSON_ProjectModel.sourceCount)
+                text: qsTr("This project streams data from %1 independent devices.").arg(Cpp_JSON_ProjectModel.sourceCount)
               }
 
               Item {

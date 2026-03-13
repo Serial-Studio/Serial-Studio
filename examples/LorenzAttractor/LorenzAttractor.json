@@ -1,12 +1,7 @@
 {
     "actions": [
     ],
-    "checksum": "",
-    "decoder": 0,
-    "frameDetection": 0,
-    "frameEnd": "\\n",
     "frameParser": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
-    "frameStart": "",
     "groups": [
         {
             "datasets": [
@@ -176,6 +171,7 @@
         {
             "busType": 1,
             "checksum": "",
+            "checksumAlgorithm": "",
             "connection": {
                 "address": "127.0.0.1",
                 "socketTypeIndex": 1,
@@ -184,6 +180,7 @@
                 "udpRemotePort": 9000
             },
             "decoder": 0,
+            "decoderMethod": 0,
             "frameDetection": 0,
             "frameEnd": "\\n",
             "frameParserCode": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
@@ -234,6 +231,7 @@
                     1
                 ]
             }
-        }
+        },
+        "__pointCount__": 4000
     }
 }

@@ -1660,7 +1660,7 @@
         "9:3:11": {
             "showAreaUnderPlot": true
         },
-        "__layout__:-1__": {
+        "layout:-1": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1674,7 +1674,7 @@
                 ]
             }
         },
-        "__layout__:-2__": {
+        "layout:-2": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1695,7 +1695,7 @@
                 ]
             }
         },
-        "__layout__:0__": {
+        "layout:0": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1703,7 +1703,7 @@
                 ]
             }
         },
-        "__layout__:1__": {
+        "layout:1": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1711,7 +1711,7 @@
                 ]
             }
         },
-        "__layout__:2__": {
+        "layout:2": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1722,7 +1722,7 @@
                 ]
             }
         },
-        "__layout__:3__": {
+        "layout:3": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1731,7 +1731,7 @@
                 ]
             }
         },
-        "__layout__:4__": {
+        "layout:4": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1741,7 +1741,7 @@
                 ]
             }
         },
-        "__layout__:5__": {
+        "layout:5": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1749,7 +1749,7 @@
                 ]
             }
         },
-        "__layout__:6__": {
+        "layout:6": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
@@ -1757,7 +1757,7 @@
                 ]
             }
         },
-        "__layout__:7__": {
+        "layout:7": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [

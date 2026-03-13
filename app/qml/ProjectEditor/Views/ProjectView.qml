@@ -136,6 +136,36 @@ Widgets.Pane {
               }
             }
           }
+
+          Rectangle {
+            width: 1
+            height: 18
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          Label {
+            text: qsTr("Points:")
+            Layout.alignment: Qt.AlignVCenter
+          }
+
+          SpinBox {
+            id: pointsField
+
+            from: 1
+            to: 100000
+            editable: true
+            Layout.alignment: Qt.AlignVCenter
+            value: Cpp_JSON_ProjectModel.pointCount
+            onValueModified: Cpp_JSON_ProjectModel.setPointCount(value)
+
+            Connections {
+              target: Cpp_JSON_ProjectModel
+              function onPointCountChanged() {
+                pointsField.value = Cpp_JSON_ProjectModel.pointCount
+              }
+            }
+          }
         }
       }
 

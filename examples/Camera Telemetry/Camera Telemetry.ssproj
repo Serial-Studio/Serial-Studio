@@ -75,9 +75,10 @@
         }
     ],
     "hexadecimalDelimiters": true,
+    "pointCount": 0,
     "title": "Camera Telemetry",
     "widgetSettings": {
-        "__layout__:-1__": {
+        "layout:-1": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [

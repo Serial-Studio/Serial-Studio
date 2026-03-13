@@ -328,6 +328,7 @@ Rectangle {
       }
 
       Loader {
+        visible: active
         active: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignLeft
         sourceComponent: Component {
@@ -345,6 +346,7 @@ Rectangle {
       }
 
       Loader {
+        visible: active
         active: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignLeft
         sourceComponent: Component {
@@ -373,6 +375,7 @@ Rectangle {
       }
 
       Loader {
+        visible: active
         active: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignLeft
         sourceComponent: Component {
@@ -390,6 +393,7 @@ Rectangle {
       }
 
       Loader {
+        visible: active
         active: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignLeft
         sourceComponent: Component {
@@ -418,6 +422,7 @@ Rectangle {
       }
 
       Loader {
+        visible: active
         active: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignLeft
         sourceComponent: Component {
@@ -435,6 +440,7 @@ Rectangle {
       }
 
       Loader {
+        visible: active
         active: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignLeft
         sourceComponent: Component {

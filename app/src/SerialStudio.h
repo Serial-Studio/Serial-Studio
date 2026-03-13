@@ -161,9 +161,7 @@ public:
     MultiPlot,
     NoGroupWidget,
     Plot3D,
-#ifdef BUILD_COMMERCIAL
     ImageView,
-#endif
   };
   Q_ENUM(GroupWidget)
 

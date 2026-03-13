@@ -64,6 +64,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_hexadecimalDelimiters(false)
   , m_frameDecoder(SerialStudio::PlainText)
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
+  , m_pointCount(100)
   , m_modified(false)
   , m_filePath("")
   , m_suppressMessageBoxes(false)
@@ -286,6 +287,14 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
 bool DataModel::ProjectModel::containsCommercialFeatures() const
 {
   return SerialStudio::commercialCfg(m_groups);
+}
+
+/**
+ * @brief Returns the project's dashboard point count (0 = use global default).
+ */
+int DataModel::ProjectModel::pointCount() const noexcept
+{
+  return m_pointCount;
 }
 
 /**
@@ -753,6 +762,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   QJsonObject json;
 
   json.insert("title", m_title);
+  json.insert("pointCount", m_pointCount);
   json.insert("hexadecimalDelimiters", m_hexadecimalDelimiters);
 
   QJsonArray groupArray;
@@ -790,7 +800,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
  * @brief Connects external signals to this model.
  *
  * Wires Dashboard::pointsChanged so the new point count is persisted into the
- * project file's widgetSettings whenever the user changes it.
+ * project file whenever the user changes it.
  */
 void DataModel::ProjectModel::setupExternalConnections()
 {
@@ -800,7 +810,10 @@ void DataModel::ProjectModel::setupExternalConnections()
       return;
 
     const int points = UI::Dashboard::instance().points();
-    m_widgetSettings.insert(Keys::kPointCountSubKey, points);
+    if (m_pointCount == points)
+      return;
+
+    m_pointCount = points;
 
     QFile file(m_filePath);
     if (!file.open(QFile::WriteOnly))
@@ -808,6 +821,8 @@ void DataModel::ProjectModel::setupExternalConnections()
 
     file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
     file.close();
+
+    Q_EMIT pointCountChanged();
   });
 }
 
@@ -829,6 +844,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_frameStartSequence    = "$";
   m_hexadecimalDelimiters = false;
   m_title                 = tr("Untitled Project");
+  m_pointCount            = 100;
   m_frameDecoder          = SerialStudio::PlainText;
   m_frameDetection        = SerialStudio::EndDelimiterOnly;
   m_widgetSettings        = QJsonObject();
@@ -870,6 +886,20 @@ void DataModel::ProjectModel::setTitle(const QString& title)
     setModified(true);
     Q_EMIT titleChanged();
   }
+}
+
+/**
+ * @brief Sets the dashboard point count and syncs it to the Dashboard.
+ */
+void DataModel::ProjectModel::setPointCount(const int points)
+{
+  if (m_pointCount == points)
+    return;
+
+  m_pointCount = points;
+  UI::Dashboard::instance().setPoints(points);
+  setModified(true);
+  Q_EMIT pointCountChanged();
 }
 
 /**
@@ -1156,14 +1186,28 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
 
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
-  if (m_widgetSettings.contains(Keys::kPointCountSubKey)) {
-    const int points = m_widgetSettings.value(Keys::kPointCountSubKey).toInt();
-    if (points > 0)
-      UI::Dashboard::instance().setPoints(points);
+  // Read point count from root level (new format) or legacy widgetSettings key
+  m_pointCount = UI::Dashboard::instance().points();
+  if (json.contains(Keys::PointCount)) {
+    const int pts = json.value(Keys::PointCount).toInt();
+    if (pts > 0)
+      m_pointCount = pts;
+  } else if (m_widgetSettings.contains(QStringLiteral("__pointCount__"))) {
+    const int pts = m_widgetSettings.value(QStringLiteral("__pointCount__")).toInt();
+    if (pts > 0)
+      m_pointCount = pts;
+
+    m_widgetSettings.remove(QStringLiteral("__pointCount__"));
   }
 
-  for (const auto& key : m_widgetSettings.keys()) {
-    if (!key.startsWith(QStringLiteral("__layout__:")))
+  UI::Dashboard::instance().setPoints(m_pointCount);
+
+  // Migrate legacy "__layout__:N__" keys to "layout:N"
+  const auto keys = m_widgetSettings.keys();
+  for (const auto& key : keys) {
+    bool isOldFormat = key.startsWith(QStringLiteral("__layout__:"));
+    bool isNewFormat = key.startsWith(QStringLiteral("layout:"));
+    if (!isOldFormat && !isNewFormat)
       continue;
 
     auto entry = m_widgetSettings.value(key).toObject();
@@ -1172,7 +1216,21 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
 
     QJsonObject cleaned;
     cleaned[QStringLiteral("data")] = entry[QStringLiteral("data")];
-    m_widgetSettings.insert(key, cleaned);
+
+    if (isOldFormat) {
+      m_widgetSettings.remove(key);
+      auto id = key.mid(11);
+      id.chop(2);
+      m_widgetSettings.insert(QStringLiteral("layout:") + id, cleaned);
+    } else
+      m_widgetSettings.insert(key, cleaned);
+  }
+
+  // Migrate legacy "__activeGroup__" key to "activeGroup"
+  if (m_widgetSettings.contains(QStringLiteral("__activeGroup__"))) {
+    const auto val = m_widgetSettings.value(QStringLiteral("__activeGroup__"));
+    m_widgetSettings.remove(QStringLiteral("__activeGroup__"));
+    m_widgetSettings.insert(Keys::kActiveGroupSubKey, val);
   }
 
   if (json.contains(QStringLiteral("dashboardLayout"))) {
@@ -2063,10 +2121,8 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
     grp.datasets.push_back(z);
   }
 
-#ifdef BUILD_COMMERCIAL
   else if (widget == SerialStudio::ImageView)
     grp.widget = "image";
-#endif
 
   m_groups[group] = grp;
 
