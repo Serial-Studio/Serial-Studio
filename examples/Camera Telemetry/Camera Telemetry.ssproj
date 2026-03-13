@@ -1,12 +1,6 @@
 {
     "actions": [
     ],
-    "checksum": "",
-    "decoder": 0,
-    "frameDetection": 1,
-    "frameEnd": "FE ED",
-    "frameParser": "/**\n * Parses a CSV camera telemetry frame.\n *\n * Frame format (2 values, comma-separated):\n *   fps, frame_count\n *\n * @param frame  CSV string between frame delimiters\n * @return array of parsed values\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
-    "frameStart": "AB CD EF",
     "groups": [
         {
             "datasets": [
@@ -75,7 +69,30 @@
         }
     ],
     "hexadecimalDelimiters": true,
-    "pointCount": 0,
+    "pointCount": 1000,
+    "sources": [
+        {
+            "busType": 1,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9000,
+                "udpMulticast": false,
+                "udpRemotePort": 53
+            },
+            "decoder": 0,
+            "decoderMethod": 0,
+            "frameDetection": 1,
+            "frameEnd": "FE ED",
+            "frameParserCode": "/**\n * Parses a CSV camera telemetry frame.\n *\n * Frame format (2 values, comma-separated):\n *   fps, frame_count\n *\n * @param frame  CSV string between frame delimiters\n * @return array of parsed values\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
+            "frameStart": "AB CD EF",
+            "hexadecimalDelimiters": true,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
     "title": "Camera Telemetry",
     "widgetSettings": {
         "layout:-1": {

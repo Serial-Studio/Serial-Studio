@@ -273,6 +273,7 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
     return nullptr;
 
   if (!srcPtr->connectionSettings.isEmpty()) {
+    m_syncingFromProject = true;
     for (auto it = srcPtr->connectionSettings.constBegin();
          it != srcPtr->connectionSettings.constEnd();
          ++it)
@@ -281,6 +282,8 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
     const auto deviceIdVal = srcPtr->connectionSettings.value(QStringLiteral("deviceId"));
     if (deviceIdVal.isObject())
       uiDrv->selectByIdentifier(deviceIdVal.toObject());
+
+    m_syncingFromProject = false;
   }
 
   // BLE requires explicit scanning — start discovery on the UI driver so the
