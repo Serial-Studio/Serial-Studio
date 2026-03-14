@@ -43,9 +43,6 @@
             "checksumAlgorithm": "",
             "connection": {
                 "characteristicIndex": -1,
-                "deviceId": {
-                    "name": "Alex’s iPhone"
-                },
                 "deviceIndex": 9,
                 "serviceUuid": ""
             },

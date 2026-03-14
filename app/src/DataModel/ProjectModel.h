@@ -137,6 +137,7 @@ public:
   Q_INVOKABLE QVariantList actionsForDiagram() const;
   Q_INVOKABLE QJsonObject serializeToJson() const;
   Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
+  Q_INVOKABLE bool apiSaveJsonFile(const QString& path);
   Q_INVOKABLE QJsonObject widgetSettings(const QString& widgetId) const;
   Q_INVOKABLE void saveWidgetSetting(const QString& widgetId,
                                      const QString& key,
@@ -148,7 +149,7 @@ public slots:
 
   void newJsonFile();
   void openJsonFile();
-  void openJsonFile(const QString& path);
+  bool openJsonFile(const QString& path);
 
   void setTitle(const QString& title);
   void setPointCount(const int points);

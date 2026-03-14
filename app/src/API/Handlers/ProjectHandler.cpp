@@ -242,9 +242,17 @@ API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
   }
 
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
-  DataModel::ProjectModel::instance().openJsonFile(file_path);
-  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+  const bool ok = DataModel::ProjectModel::instance().openJsonFile(file_path);
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
+
+  if (!ok) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Failed to open project file (validation or I/O error)"));
+  }
+
+  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
 
   QJsonObject result;
   result[QStringLiteral("filePath")] = DataModel::ProjectModel::instance().jsonFilePath();
@@ -259,12 +267,24 @@ API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::fileSave(const QString& id,
                                                              const QJsonObject& params)
 {
-  const bool ask_path = params.contains(QStringLiteral("askPath"))
-                        ? params.value(QStringLiteral("askPath")).toBool()
-                        : false;
+  // When filePath is provided, save directly to that path (headless save-as)
+  const QString explicit_path = params.value(QStringLiteral("filePath")).toString();
 
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
-  const bool success = DataModel::ProjectModel::instance().saveJsonFile(ask_path);
+  bool success = false;
+  if (!explicit_path.isEmpty()) {
+    if (!API::isPathAllowed(explicit_path)) {
+      DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
+      return CommandResponse::makeError(
+        id, ErrorCode::InvalidParam, QStringLiteral("filePath is not allowed"));
+    }
+
+    success = DataModel::ProjectModel::instance().apiSaveJsonFile(explicit_path);
+  } else {
+    const bool ask_path = params.value(QStringLiteral("askPath")).toBool(false);
+    success             = DataModel::ProjectModel::instance().saveJsonFile(ask_path);
+  }
+
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
 
   if (!success) {
@@ -687,11 +707,20 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
 
   // Suppress messageboxes during API call
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(true);
-  DataModel::ProjectModel::instance().openJsonFile(tempPath);
+  const bool ok = DataModel::ProjectModel::instance().openJsonFile(tempPath);
   DataModel::ProjectModel::instance().setSuppressMessageBoxes(false);
 
-  // Clean up
+  // Clean up temp file
   QFile::remove(tempPath);
+
+  if (!ok) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Failed to load project from JSON (validation error)"));
+  }
+
+  // Clear file association so the in-memory project is not tied to the temp path
   DataModel::ProjectModel::instance().clearJsonFilePath();
 
   auto& project = DataModel::ProjectModel::instance();

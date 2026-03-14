@@ -85,6 +85,8 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
 
       if (e > s)
         out.append(QString::fromUtf8(raw + s, e - s));
+      else
+        out.append(QString());
 
       start = i + 1;
     }

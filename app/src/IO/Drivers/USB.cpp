@@ -118,26 +118,33 @@ IO::Drivers::USB::USB()
  *
  * Cancels any in-flight isochronous transfers so the event thread can drain,
  * then stops both threads gracefully before freeing libusb resources. Each
- * thread is given 500 ms to exit cleanly; terminate() is used only as a last
- * resort so QThread::~QThread() does not call qFatal on a live thread.
+ * thread is given 2 s to exit cleanly — the read loop and event loop both
+ * check their atomic flags every ~100 ms, so this is always sufficient.
  */
 IO::Drivers::USB::~USB()
 {
   m_running          = false;
   m_eventLoopRunning = false;
 
+  if (m_ctx && m_hotplugHandle) {
+    libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
+    m_hotplugHandle = 0;
+  }
+
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_cancel_transfer(t);
 
   if (m_readThread.isRunning()) {
-    if (!m_readThread.wait(500))
+    if (!m_readThread.wait(2000))
       m_readThread.terminate();
+
     m_readThread.wait();
   }
 
   if (m_eventThread.isRunning()) {
-    if (!m_eventThread.wait(500))
+    if (!m_eventThread.wait(2000))
       m_eventThread.terminate();
+
     m_eventThread.wait();
   }
 
@@ -153,12 +160,8 @@ IO::Drivers::USB::~USB()
     m_handle = nullptr;
   }
 
-  if (m_ctx) {
-    if (m_hotplugHandle)
-      libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
-
+  if (m_ctx)
     libusb_exit(m_ctx);
-  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,7 +285,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
  * The sequence is safe to call from any state (open or already closed):
  *   1. Set m_running to false so the read loop exits on its next iteration.
  *   2. Cancel any pending isochronous transfers so the event loop can drain.
- *   3. Wait up to one second for the read thread to finish.
+ *   3. Wait up to two seconds for the read thread to finish.
  *   4. Free the isochronous transfer pool.
  *   5. Release the claimed USB interface and close the device handle.
  *   6. Emit configurationChanged() so the toolbar updates.
@@ -294,8 +297,9 @@ void IO::Drivers::USB::close()
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_cancel_transfer(t);
 
-  if (m_readThread.isRunning() && !m_readThread.wait(500)) {
-    m_readThread.terminate();
+  if (m_readThread.isRunning()) {
+    if (!m_readThread.wait(2000))
+      m_readThread.terminate();
     m_readThread.wait();
   }
 
@@ -698,17 +702,25 @@ void IO::Drivers::USB::setupExternalConnections()
     m_running          = false;
     m_eventLoopRunning = false;
 
+    // Deregister the hotplug callback first — this wakes
+    // libusb_handle_events_timeout() out of its kqueue/poll so the event
+    // thread can see m_eventLoopRunning == false promptly.
+    if (m_ctx && m_hotplugHandle) {
+      libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
+      m_hotplugHandle = 0;
+    }
+
     for (auto* t : std::as_const(m_isoTransfers))
       libusb_cancel_transfer(t);
 
     if (m_readThread.isRunning()) {
-      if (!m_readThread.wait(500))
+      if (!m_readThread.wait(2000))
         m_readThread.terminate();
       m_readThread.wait();
     }
 
     if (m_eventThread.isRunning()) {
-      if (!m_eventThread.wait(500))
+      if (!m_eventThread.wait(2000))
         m_eventThread.terminate();
       m_eventThread.wait();
     }

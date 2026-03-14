@@ -136,6 +136,8 @@ private:
 
   QStringList m_deviceLabels;
   QList<QString> m_devicePaths;
+  QList<uint16_t> m_deviceUsagePages;
+  QList<uint16_t> m_deviceUsages;
 };
 
 }  // namespace Drivers

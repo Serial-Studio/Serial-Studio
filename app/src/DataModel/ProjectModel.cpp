@@ -762,6 +762,44 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 }
 
 /**
+ * @brief Saves the project to the given @p path without showing a dialog.
+ *
+ * Runs the same validation as apiSaveJsonFile(bool), then writes directly to
+ * @p path. Designed for headless / API automation where a file dialog is
+ * not available.
+ *
+ * @param path  Absolute destination path for the project file.
+ * @return true if the file was written successfully.
+ */
+bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
+{
+  if (path.isEmpty())
+    return false;
+
+  if (m_title.isEmpty()) {
+    qWarning() << "[ProjectModel] Project title cannot be empty";
+    return false;
+  }
+
+  if (groupCount() <= 0) {
+    qWarning() << "[ProjectModel] Project needs at least one group";
+    return false;
+  }
+
+  const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
+    return g.widget == QLatin1String("image");
+  });
+
+  if (datasetCount() <= 0 && !hasImageGroup) {
+    qWarning() << "[ProjectModel] Project needs at least one dataset";
+    return false;
+  }
+
+  m_filePath = path;
+  return finalizeProjectSave();
+}
+
+/**
  * @brief Serializes the complete project state to a QJsonObject.
  *
  * Used for both file saving and API export.
@@ -1037,15 +1075,16 @@ void DataModel::ProjectModel::openJsonFile()
  * after a successful load.
  *
  * @param path Absolute path to the .ssproj or .json project file.
+ * @return true if the project was loaded successfully, false on error.
  */
-void DataModel::ProjectModel::openJsonFile(const QString& path)
+bool DataModel::ProjectModel::openJsonFile(const QString& path)
 {
   if (path.isEmpty())
-    return;
+    return false;
 
   // Skip reload when the same file is already loaded
   if (m_filePath == path && !m_groups.empty())
-    return;
+    return true;
 
   QFile file(path);
   QJsonDocument document;
@@ -1058,7 +1097,7 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
         Misc::Utilities::showMessageBox(
           tr("JSON validation error"), result.errorMessage, QMessageBox::Critical);
 
-      return;
+      return false;
     }
 
     document = result.document;
@@ -1066,7 +1105,7 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   }
 
   if (document.isEmpty())
-    return;
+    return false;
 
   // During a silent reload, reset state without emitting signals so the
   // dashboard doesn't briefly flash empty while we repopulate from disk.
@@ -1264,7 +1303,7 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
         qWarning() << "[ProjectModel] Legacy frame parser function automatically migrated";
 
       saveJsonFile(false);
-      return;
+      return true;
     }
   }
 
@@ -1293,6 +1332,8 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
       f.close();
     }
   }
+
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------

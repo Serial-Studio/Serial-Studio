@@ -89,6 +89,25 @@ IO::ConnectionManager::ConnectionManager()
  */
 IO::ConnectionManager::~ConnectionManager()
 {
+  for (auto* drv : {static_cast<QObject*>(m_uartUi.get()),
+                    static_cast<QObject*>(m_networkUi.get()),
+                    static_cast<QObject*>(m_bluetoothLEUi.get())}) {
+    if (drv)
+      disconnect(drv, nullptr, this, nullptr);
+  }
+
+#ifdef BUILD_COMMERCIAL
+  for (auto* drv : {static_cast<QObject*>(m_audioUi.get()),
+                    static_cast<QObject*>(m_canBusUi.get()),
+                    static_cast<QObject*>(m_hidUi.get()),
+                    static_cast<QObject*>(m_modbusUi.get()),
+                    static_cast<QObject*>(m_processUi.get()),
+                    static_cast<QObject*>(m_usbUi.get())}) {
+    if (drv)
+      disconnect(drv, nullptr, this, nullptr);
+  }
+#endif
+
   disconnectAllDevices();
 }
 
