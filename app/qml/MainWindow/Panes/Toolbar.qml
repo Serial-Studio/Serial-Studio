@@ -201,10 +201,7 @@ Rectangle {
       icon.source: "qrc:/rcc/icons/toolbar/project-setup.svg"
       ToolTip.text: qsTr("Open the Project Editor to create or modify your JSON layout")
 
-      onClicked: {
-        Cpp_AppState.operationMode = SerialStudio.ProjectFile
-        app.showProjectEditor()
-      }
+      onClicked: app.showProjectEditor()
     }
 
     //

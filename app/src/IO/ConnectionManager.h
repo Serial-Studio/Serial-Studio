@@ -77,10 +77,6 @@ class ConnectionManager : public QObject {
              READ paused
              WRITE setPaused
              NOTIFY pausedChanged)
-  Q_PROPERTY(bool threadedFrameExtraction
-             READ threadedFrameExtraction
-             WRITE setThreadedFrameExtraction
-             NOTIFY threadedFrameExtractionChanged)
   Q_PROPERTY(SerialStudio::BusType busType
              READ busType
              WRITE setBusType
@@ -118,7 +114,6 @@ signals:
   void deviceListRefreshed();
   void finishSequenceChanged();
   void checksumAlgorithmChanged();
-  void threadedFrameExtractionChanged();
 
 private:
   explicit ConnectionManager();
@@ -137,7 +132,6 @@ public:
   [[nodiscard]] bool readWrite() const;
   [[nodiscard]] bool isConnected() const;
   [[nodiscard]] bool configurationOk() const;
-  [[nodiscard]] bool threadedFrameExtraction() const noexcept;
 
   [[nodiscard]] SerialStudio::BusType busType() const noexcept;
 
@@ -183,7 +177,6 @@ public slots:
   void setStartSequence(const QByteArray& sequence);
   void setFinishSequence(const QByteArray& sequence);
   void setChecksumAlgorithm(const QString& algorithm);
-  void setThreadedFrameExtraction(bool enabled);
   void setBusType(SerialStudio::BusType type);
   void setUiDriverProperty(const QString& key, const QVariant& value);
 
@@ -203,7 +196,6 @@ private:
 private:
   std::atomic<bool> m_paused;
   bool m_writeEnabled;
-  bool m_thrFrameExtr;
   bool m_syncingFromProject;
   SerialStudio::BusType m_busType;
 

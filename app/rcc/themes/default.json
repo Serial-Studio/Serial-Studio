@@ -169,14 +169,14 @@
     "device_colors":[
       { "top": "#dce8f5", "bottom": "#c8d9ed" },
       { "top": "#d5f0e8", "bottom": "#bfe4d8" },
-      { "top": "#fdebd5", "bottom": "#f7d8bb" },
+      { "top": "#d5e8d5", "bottom": "#bfd8bf" },
       { "top": "#e8d5f5", "bottom": "#d9beed" },
       { "top": "#fdf5d0", "bottom": "#f7ecb0" },
-      { "top": "#d5e8d5", "bottom": "#bfd8bf" },
-      { "top": "#f5dce8", "bottom": "#edbed4" },
       { "top": "#dce8e8", "bottom": "#bedede" },
-      { "top": "#f5ead5", "bottom": "#edd8b8" },
-      { "top": "#e8ddf5", "bottom": "#d4c4ed" }
+      { "top": "#dde8d0", "bottom": "#ccdcbc" },
+      { "top": "#e0ddf5", "bottom": "#d0c8ed" },
+      { "top": "#fdebd5", "bottom": "#f7d8bb" },
+      { "top": "#d5e0f0", "bottom": "#c0d2e8" }
     ]
   }
 }

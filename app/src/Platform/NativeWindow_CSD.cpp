@@ -253,7 +253,7 @@ void NativeWindow::onActiveChanged()
   else if (window->isActive())
     colorName = colors.value("toolbar_top").toString();
   else
-    colorName = colors.value("toolbar_top").toString();
+    colorName = colors.value("toolbar_bottom").toString();
 
   // Convert hex string to native Windows COLORREF
   const QColor color(colorName);

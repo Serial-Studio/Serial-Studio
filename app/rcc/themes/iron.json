@@ -167,16 +167,16 @@
     ],
 
     "device_colors":[
-      { "top": "#e8d5d5", "bottom": "#d8c0c0" },
-      { "top": "#d5e8e0", "bottom": "#c0d8cc" },
-      { "top": "#f0e0d0", "bottom": "#e4ccb8" },
       { "top": "#d5dff0", "bottom": "#c0cce4" },
-      { "top": "#f8f0d0", "bottom": "#ece0b0" },
-      { "top": "#d8ddf0", "bottom": "#c4cae4" },
+      { "top": "#d5e8e0", "bottom": "#c0d8cc" },
       { "top": "#dde8d5", "bottom": "#c8d8c0" },
       { "top": "#e8d5f0", "bottom": "#d8c0e4" },
-      { "top": "#f0e2d5", "bottom": "#e4cebb" },
-      { "top": "#ddd8f0", "bottom": "#c8c0e4" }
+      { "top": "#f8f0d0", "bottom": "#ece0b0" },
+      { "top": "#d8ddf0", "bottom": "#c4cae4" },
+      { "top": "#d8e8d0", "bottom": "#c4d8b8" },
+      { "top": "#ddd8f0", "bottom": "#c8c0e4" },
+      { "top": "#f0e0d0", "bottom": "#e4ccb8" },
+      { "top": "#d0e0e8", "bottom": "#b8d0d8" }
     ]
   }
 }

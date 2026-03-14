@@ -114,7 +114,8 @@ private:
   void dropEvent(QDropEvent* event) override;
 
 private:
-  int m_sourceId = 0;
+  int m_sourceId;
+  bool m_readingCode;
   QPixmap m_pixmap;
   QSyntaxStyle m_style;
   QCodeEditor m_widget;

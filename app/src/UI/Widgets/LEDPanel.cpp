@@ -117,25 +117,19 @@ void Widgets::LEDPanel::updateData()
     return;
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index)) {
-    // Get the LED group and update the LED states
     bool changed      = false;
     const auto& group = GET_GROUP(SerialStudio::DashboardLED, m_index);
     for (size_t i = 0; i < group.datasets.size(); ++i) {
-      // Get the dataset and its values
       const auto& dataset = group.datasets[i];
       const auto value    = dataset.numericValue;
+      const bool enabled  = (value >= dataset.ledHigh);
 
-      // Obtain the LED state
-      const bool enabled = (value >= dataset.ledHigh);
-
-      // Update the LED state
       if (m_states[i] != enabled) {
         changed     = true;
         m_states[i] = enabled;
       }
     }
 
-    // Redraw the widget
     if (changed)
       Q_EMIT updated();
   }

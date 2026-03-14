@@ -65,8 +65,17 @@ Item {
         enabled: !Cpp_IO_Manager.isConnected
         model: Cpp_IO_Bluetooth_LE.deviceNames
         onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_IO_Bluetooth_LE.currentDevice)
+          if (currentIndex !== Cpp_IO_Bluetooth_LE.deviceIndex + 1)
             Cpp_IO_Bluetooth_LE.selectDevice(currentIndex)
+        }
+
+        Connections {
+          target: Cpp_IO_Bluetooth_LE
+          function onDevicesChanged() {
+            var idx = Cpp_IO_Bluetooth_LE.deviceIndex + 1
+            if (idx > 0 && idx < _deviceCombo.count)
+              _deviceCombo.currentIndex = idx
+          }
         }
       }
 
@@ -106,6 +115,14 @@ Item {
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.serviceNames
         onCurrentIndexChanged: Cpp_IO_Bluetooth_LE.selectService(currentIndex)
+
+        Connections {
+          target: Cpp_IO_Bluetooth_LE
+          function onServicesChanged() {
+            if (serviceNames.count > 1)
+              serviceNames.currentIndex = 0
+          }
+        }
       }
     }
 

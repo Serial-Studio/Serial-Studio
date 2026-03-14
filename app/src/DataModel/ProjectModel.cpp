@@ -66,6 +66,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
   , m_pointCount(100)
   , m_modified(false)
+  , m_silentReload(false)
   , m_filePath("")
   , m_suppressMessageBoxes(false)
 {
@@ -649,8 +650,13 @@ bool DataModel::ProjectModel::askSave()
     qWarning() << "[ProjectModel] Discarding unsaved changes (API mode)";
     if (jsonFilePath().isEmpty())
       newJsonFile();
-    else
-      openJsonFile(jsonFilePath());
+    else {
+      const auto path = m_filePath;
+      m_silentReload  = true;
+      m_filePath.clear();
+      openJsonFile(path);
+      m_silentReload = false;
+    }
 
     return true;
   }
@@ -668,8 +674,13 @@ bool DataModel::ProjectModel::askSave()
   if (ret == QMessageBox::Discard) {
     if (jsonFilePath().isEmpty())
       newJsonFile();
-    else
-      openJsonFile(jsonFilePath());
+    else {
+      const auto path = m_filePath;
+      m_silentReload  = true;
+      m_filePath.clear();
+      openJsonFile(path);
+      m_silentReload = false;
+    }
 
     return true;
   }
@@ -864,11 +875,13 @@ void DataModel::ProjectModel::newJsonFile()
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
   Q_EMIT sourcesChanged();
-  Q_EMIT sourceStructureChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+
+  if (!m_silentReload)
+    Q_EMIT sourceStructureChanged();
 
   setModified(false);
 }
@@ -1030,6 +1043,10 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   if (path.isEmpty())
     return;
 
+  // Skip reload when the same file is already loaded
+  if (m_filePath == path && !m_groups.empty())
+    return;
+
   QFile file(path);
   QJsonDocument document;
   if (file.open(QFile::ReadOnly)) {
@@ -1051,7 +1068,15 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   if (document.isEmpty())
     return;
 
-  newJsonFile();
+  // During a silent reload, reset state without emitting signals so the
+  // dashboard doesn't briefly flash empty while we repopulate from disk.
+  if (m_silentReload) {
+    m_groups.clear();
+    m_actions.clear();
+    m_sources.clear();
+    m_widgetSettings = QJsonObject();
+  } else
+    newJsonFile();
 
   m_filePath = path;
 
@@ -1101,7 +1126,7 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
     DataModel::Source defaultSource;
     defaultSource.sourceId              = 0;
     defaultSource.title                 = tr("Device A");
-    auto& cm = IO::ConnectionManager::instance();
+    auto& cm                            = IO::ConnectionManager::instance();
     defaultSource.busType               = static_cast<int>(cm.busType());
     defaultSource.frameStart            = m_frameStartSequence;
     defaultSource.frameEnd              = m_frameEndSequence;
@@ -1112,8 +1137,7 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
     defaultSource.frameParserCode =
       legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
 
-    // Capture the currently selected UI driver's settings so the migrated
-    // source matches whatever the user has configured in the setup panel.
+    // Capture current UI driver settings so the migrated source matches the setup panel
     IO::HAL_Driver* uiDriver = cm.uiDriverForBusType(cm.busType());
     if (uiDriver) {
       QJsonObject settings;
@@ -1247,11 +1271,13 @@ void DataModel::ProjectModel::openJsonFile(const QString& path)
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
   Q_EMIT sourcesChanged();
-  Q_EMIT sourceStructureChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+
+  if (!m_silentReload)
+    Q_EMIT sourceStructureChanged();
 
   if (m_widgetSettings.contains(Keys::kActiveGroupSubKey))
     Q_EMIT activeGroupIdChanged();
@@ -2295,5 +2321,6 @@ bool DataModel::ProjectModel::finalizeProjectSave()
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);
   setModified(false);
   Q_EMIT jsonFileChanged();
+  Q_EMIT sourceStructureChanged();
   return true;
 }

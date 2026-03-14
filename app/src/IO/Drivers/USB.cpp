@@ -610,8 +610,7 @@ void IO::Drivers::USB::setTransferMode(const int mode)
   m_transferMode = requested;
   m_settings.setValue("USB/transferMode", mode);
 
-  // Clear cached endpoints — mode change means a different endpoint subset
-  // will be scanned on next open().
+  // Clear cached endpoints since the new mode scans different types
   clearEndpointLists();
   m_inEndpointIndex  = 0;
   m_outEndpointIndex = 0;

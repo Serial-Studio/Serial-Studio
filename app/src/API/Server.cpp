@@ -421,7 +421,7 @@ void API::Server::setEnabled(const bool enabled)
   } else if (enabled != effectiveEnabled)
     Q_EMIT enabledChanged();
 
-  m_settings.setValue("API/Enabled", enabled);
+  m_settings.setValue("API/Enabled", effectiveEnabled);
 }
 
 /**
@@ -736,8 +736,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
 
   auto& buffer = state.buffer;
 
-  // Handles the entire buffer when no newline delimiter is present.
-  // Returns true if the caller (while loop) should stop processing.
+  // Handle the entire buffer when no newline delimiter is present
   auto processNoNewlineBuffer = [&]() {
     const auto trimmed = buffer.trimmed();
 

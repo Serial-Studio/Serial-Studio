@@ -849,7 +849,7 @@ void MQTT::Client::onAuthenticationFinished(const QMqttAuthenticationProperties&
 {
   if (!p.reason().isEmpty()) {
     Misc::Utilities::showMessageBox(tr("MQTT Authentication Failed"),
-                                    tr("Authentication failed: %.").arg(p.reason()),
+                                    tr("Authentication failed: %1.").arg(p.reason()),
                                     QMessageBox::Warning);
   }
 }

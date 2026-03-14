@@ -424,11 +424,11 @@ void IO::FrameReader::readStartEndDelimitedFrames()
  */
 IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetype crcPosition)
 {
-  // Early stop if checksum is null
+  // No checksum configured, always valid
   if (m_checksumLength == 0)
     return ValidationStatus::FrameOk;
 
-  // Validate that we can read the checksum
+  // Not enough data to read checksum bytes yet
   const auto bufferSize = m_circularBuffer.size();
   if (bufferSize < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
@@ -446,6 +446,5 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
              << "\t- Frame:" << frame.left(kMaxLogBytes).toHex(' ')
              << (frame.size() > kMaxLogBytes ? "...(truncated)" : "");
 
-  // Return error
   return ValidationStatus::ChecksumError;
 }

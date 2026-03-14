@@ -696,18 +696,14 @@ void UI::WindowManager::selectBackgroundImage()
  */
 void UI::WindowManager::bringToFront(QQuickItem* item)
 {
-  // Validate pointer
   if (!item)
     return;
 
-  // Set window Z
+  // Promote window and keep manager Z above all windows
   m_windowZ[item] = ++m_zCounter;
   item->setZ(m_windowZ[item]);
-
-  // Window manager Z is always one step ahead
   setZ(m_zCounter + 2);
 
-  // Update UI
   Q_EMIT zCounterChanged();
   Q_EMIT zOrderChanged(item);
 }
@@ -734,22 +730,16 @@ void UI::WindowManager::setTaskbar(QQuickItem* taskbar)
  */
 void UI::WindowManager::registerWindow(const int id, QQuickItem* item)
 {
-  // Validate item
   if (!item)
     return;
 
-  // Register the window with the manager
+  // Track window and assign initial Z order
   m_windows[id] = item;
   m_windowOrder.append(id);
   m_windowZ[item] = ++m_zCounter;
-
-  // Ensure window Z is in sync
   item->setZ(m_windowZ[item]);
-
-  // Window manager Z is always one step ahead
   setZ(m_zCounter + 1);
 
-  // Update UI
   Q_EMIT zCounterChanged();
   Q_EMIT zOrderChanged(item);
 }
@@ -810,7 +800,7 @@ void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 
     for (auto* win : std::as_const(m_windows))
       if (win->state() == "maximized")
-        QMetaObject::invokeMethod(win, "restoreClicked", Qt::DirectConnection);
+        QMetaObject::invokeMethod(win, "restoreClicked");
 
     loadLayout();
   }
@@ -1106,38 +1096,32 @@ QQuickItem* UI::WindowManager::getWindow(const int x, const int y) const
  */
 void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
 {
-  // Obtain current mouse position and calculate XY differential
   const QPoint currentPos = event->pos();
   const QPoint delta      = currentPos - m_initialMousePos;
   int dragDistance        = delta.manhattanLength();
 
-  // No window has been clicked before, abort
+  // No focused window, pass through
   if (!m_focusedWindow) {
     QQuickItem::mouseMoveEvent(event);
     return;
   }
 
-  // Only execute geometry changes when it makes sense
+  // Skip geometry changes for non-normal windows
   if (m_focusedWindow->state() != "normal") {
     QQuickItem::mouseMoveEvent(event);
     return;
   }
 
-  // Drag the window & change it's position
+  // Drag window to new position
   if (m_dragWindow && dragDistance >= 20) {
-    // Obtain new X/Y position
-    int newX = m_initialGeometry.x() + delta.x();
-    int newY = m_initialGeometry.y() + delta.y();
-
-    // Obtain window size
-    int w = static_cast<int>(m_dragWindow->width());
-    int h = static_cast<int>(m_dragWindow->height());
-
-    // Obtain canvas dimensions
+    int newX          = m_initialGeometry.x() + delta.x();
+    int newY          = m_initialGeometry.y() + delta.y();
+    int w             = static_cast<int>(m_dragWindow->width());
+    int h             = static_cast<int>(m_dragWindow->height());
     const int canvasW = static_cast<int>(width());
     const int canvasH = static_cast<int>(height());
 
-    // Restore window size if needed
+    // Shrink near-fullscreen window back to implicit size
     if ((w >= canvasW - 20 || h >= canvasH - 20) && !autoLayoutEnabled()) {
       w = static_cast<int>(m_dragWindow->implicitWidth());
       h = static_cast<int>(m_dragWindow->implicitHeight());
@@ -1145,57 +1129,43 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
       m_dragWindow->setHeight(h);
     }
 
-    // Bound X/Y position
+    // Clamp and apply position
     newX = qBound(0, newX, canvasW - w);
     newY = qBound(0, newY, canvasH - h);
-
-    // Apply X/Y position
     m_dragWindow->setX(newX);
     m_dragWindow->setY(newY);
 
-    // On auto layout, display a snap indicator over the nearest window
-    // near the mouse position
+    // Show snap indicator for auto-layout reorder feedback
     if (autoLayoutEnabled()) {
-      // Detect the window under the cursor (excluding the window being dragged)
       int targetIndex = determineNewIndexFromMousePos(currentPos);
-
-      // Set target window pointer if index is valid
       if (targetIndex >= 0 && targetIndex < m_windowOrder.size())
         m_targetWindow = m_windows.value(m_windowOrder[targetIndex]);
 
-      // Resize the drag window if required, and display snap indicator
+      // Snap to target window if hovering over a different one
       if (m_targetWindow && m_targetWindow != m_dragWindow) {
-        // Resize drag window to fit target if smaller
         m_dragWindow->setWidth(qMin(w, static_cast<int>(m_targetWindow->width())));
         m_dragWindow->setHeight(qMin(h, static_cast<int>(m_targetWindow->height())));
-
-        // Set snap indicator geometry to target window geometry
         m_snapIndicator        = extractGeometry(m_targetWindow);
         m_snapIndicatorVisible = true;
         Q_EMIT snapIndicatorChanged();
-
-        // Accept the event and abort
         event->accept();
         return;
       }
 
-      // Something failed, hide the snap indicator and cancel the operation
+      // No valid target, hide snap indicator
       if (m_snapIndicatorVisible) {
         m_snapIndicatorVisible = false;
         Q_EMIT snapIndicatorChanged();
       }
     }
 
-    // No auto layout, show snap indicator on desktop edges
+    // Manual layout: edge snap indicators
     else {
-      // Set window rect
       const int top    = newY;
       const int left   = newX;
       const int right  = newX + w;
       const int bottom = newY + h;
-
-      // Initialize snapped flag
-      bool snapped = false;
+      bool snapped     = false;
 
       // Top-left corner
       if (left <= 0 && top <= 0) {
@@ -1239,25 +1209,22 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
         snapped         = true;
       }
 
-      // Display the snap indicator
       if (snapped) {
         m_snapIndicatorVisible = true;
         Q_EMIT snapIndicatorChanged();
       }
 
-      // Hide the snap indicator
       else if (m_snapIndicatorVisible) {
         m_snapIndicatorVisible = false;
         Q_EMIT snapIndicatorChanged();
       }
     }
 
-    // Accept the event and abort, we dont drag and resize at the same time
     event->accept();
     return;
   }
 
-  // Resize window...not as easy as one might initially think
+  // Resize window along the active edge
   if (m_resizeWindow) {
     QRect geometry = m_initialGeometry;
     const int minW = m_resizeWindow->implicitWidth();
@@ -1314,22 +1281,17 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
         break;
     }
 
-    // Store unclamped geometry for comparison
+    // Clamp geometry to canvas bounds
     const QRect unclamped = geometry;
-
-    // Clamp position so it doesn't leave canvas on the left/top
     geometry.setX(qMax(0, geometry.x()));
     geometry.setY(qMax(0, geometry.y()));
-
-    // Clamp width if overflowing to the right
     if (geometry.right() > int(width()) - 1)
       geometry.setWidth(int(width()) - geometry.x());
 
-    // Clamp height if overflowing to the bottom
     if (geometry.bottom() > int(height()) - 1)
       geometry.setHeight(int(height()) - geometry.y());
 
-    // Apply geometry
+    // Only apply if clamping did not alter the result
     if (geometry == unclamped) {
       m_resizeWindow->setX(geometry.x());
       m_resizeWindow->setY(geometry.y());
@@ -1341,7 +1303,6 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
     return;
   }
 
-  // Pass the event through
   QQuickItem::mouseMoveEvent(event);
 }
 
@@ -1359,7 +1320,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
  */
 void UI::WindowManager::mousePressEvent(QMouseEvent* event)
 {
-  // Reset window tracking parameters
+  // Reset tracking state
   m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
   m_resizeWindow    = nullptr;
@@ -1367,13 +1328,12 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
   m_resizeEdge      = ResizeEdge::None;
   m_initialMousePos = event->pos();
 
-  // Hide snapping rectangle
   if (m_snapIndicatorVisible) {
     m_snapIndicatorVisible = false;
     Q_EMIT snapIndicatorChanged();
   }
 
-  // Find the topmost window under the mouse
+  // Hit-test for topmost window
   m_focusedWindow = getWindow(m_initialMousePos.x(), m_initialMousePos.y());
   if (!m_focusedWindow) {
     if (m_taskbar)
@@ -1385,31 +1345,26 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     return;
   }
 
-  // Update focus
   if (m_taskbar)
     m_taskbar->setActiveWindow(m_focusedWindow);
 
-  // Check if we're clicking the title bar (top area)
+  // Determine if click is on the caption bar
   bool captionClick     = false;
   const int captionH    = m_focusedWindow->property("captionHeight").toInt();
   const int externcW    = m_focusedWindow->property("externControlWidth").toInt();
   const int buttonsW    = m_focusedWindow->property("windowControlsWidth").toInt();
   const auto mouseClick = m_focusedWindow->mapFromItem(this, m_initialMousePos);
   if (mouseClick.y() <= captionH) {
-    // User clicked on caption
     if (mouseClick.x() <= m_focusedWindow->width() - buttonsW && mouseClick.x() > externcW)
       captionClick = true;
-
-    // User clicked on caption buttons, let QML process events
     else {
       QQuickItem::mousePressEvent(event);
       return;
     }
   }
 
-  // Only allow resizing & moving window when it makes sense
+  // Start resize or drag for normal-state windows
   if (m_focusedWindow->state() == "normal") {
-    // Detect active resize edge & start resizing
     m_resizeEdge = detectResizeEdge(m_focusedWindow);
     if (m_resizeEdge != ResizeEdge::None && !autoLayoutEnabled()) {
       grabMouse();
@@ -1441,7 +1396,6 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
       return;
     }
 
-    // Check if we're clicking the title bar (top area)
     if (captionClick) {
       grabMouse();
       setCursor(Qt::ClosedHandCursor);
@@ -1451,7 +1405,6 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     }
   }
 
-  // No caption click, let window process mouse event
   if (!captionClick)
     QQuickItem::mousePressEvent(event);
 }
@@ -1488,7 +1441,7 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
       auto h = m_snapIndicator.height();
 
       if (x == 0 && y == 0 && w >= width() && h >= height())
-        QMetaObject::invokeMethod(m_dragWindow, "maximizeClicked", Qt::DirectConnection);
+        QMetaObject::invokeMethod(m_dragWindow, "maximizeClicked");
 
       else {
         m_dragWindow->setX(x);
@@ -1560,11 +1513,11 @@ void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent* event)
 
     // Restore the window
     if (state == "maximized")
-      QMetaObject::invokeMethod(m_focusedWindow, "restoreClicked", Qt::DirectConnection);
+      QMetaObject::invokeMethod(m_focusedWindow, "restoreClicked");
 
     // Maximize the window
     else if (state == "normal")
-      QMetaObject::invokeMethod(m_focusedWindow, "maximizeClicked", Qt::DirectConnection);
+      QMetaObject::invokeMethod(m_focusedWindow, "maximizeClicked");
 
     // Block further processing of the event
     event->accept();

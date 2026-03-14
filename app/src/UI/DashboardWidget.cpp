@@ -203,18 +203,16 @@ QQuickItem* UI::DashboardWidget::widgetModel() const
 void UI::DashboardWidget::setWidgetIndex(const int index)
 {
   if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0) {
-    // Update widget index
     m_index         = index;
     m_widgetType    = UI::Dashboard::instance().widgetType(index);
     m_relativeIndex = UI::Dashboard::instance().relativeIndex(index);
 
-    // Delete previous widget
+    // Delete previous widget before constructing replacement
     if (m_dbWidget) {
       m_dbWidget->deleteLater();
       m_dbWidget = nullptr;
     }
 
-    // Construct new widget
     switch (widgetType()) {
       case SerialStudio::DashboardDataGrid:
         m_dbWidget = new Widgets::DataGrid(relativeIndex(), this);
@@ -279,7 +277,6 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         break;
     }
 
-    // Configure widget
     if (m_dbWidget) {
       m_dbWidget->setParentItem(this);
       Q_EMIT widgetIndexChanged();

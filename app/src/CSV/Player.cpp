@@ -357,8 +357,8 @@ void CSV::Player::openFile(const QString& filePath)
         m_timestampCache.append(ts);
       }
 
-      m_startTimestampSeconds      = m_timestampCache[1];
       m_useHighPrecisionTimestamps = true;
+      m_startTimestampSeconds      = (m_timestampCache.size() > 1) ? m_timestampCache[1] : 0.0;
     } else if (getDateTime(1).isValid()) {
       m_useHighPrecisionTimestamps = false;
       m_timestampCache.clear();
@@ -789,7 +789,7 @@ void CSV::Player::convertColumnToDateTime(int columnIndex)
  */
 QDateTime CSV::Player::getDateTime(const int row)
 {
-  bool error;
+  bool error = false;
   auto value = getCellValue(row, 0, error);
 
   if (!error)

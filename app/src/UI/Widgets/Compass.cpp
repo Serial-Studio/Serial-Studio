@@ -81,18 +81,18 @@ void Widgets::Compass::updateData()
     const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
     const auto value    = dataset.numericValue;
     if (DSP::notEqual(value, m_value)) {
-      // Update values
+      // Clamp and format the compass value
       m_value = qMin(360.0, qMax(0.0, value));
       m_text  = FMT_VAL(m_value, dataset);
 
-      // Ensure that angle always has 3 characters to avoid jiggling
+      // Pad angle to 3 characters to avoid UI jiggling
       const int deg = qCeil(m_value);
       if (deg < 10)
         m_text.prepend(QStringLiteral("  "));
       else if (deg < 100)
         m_text.prepend(QStringLiteral(" "));
 
-      // Determine the direction based on the angle value
+      // Map angle to cardinal/intercardinal direction
       QString direction;
       if ((m_value >= 0 && m_value < 22.5) || (m_value >= 337.5 && m_value <= 360))
         direction = tr("N") + " ";
@@ -111,10 +111,8 @@ void Widgets::Compass::updateData()
       else if (m_value >= 292.5 && m_value < 337.5)
         direction = tr("NW");
 
-      // Append the direction to the text
+      // Append direction and notify UI
       m_text += " " + direction;
-
-      // Request a redraw of the item
       Q_EMIT updated();
     }
   }

@@ -214,8 +214,9 @@ API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& req
   if (method == MCP::Method::Ping)
     return handlePing(request);
 
-  auto& session = m_sessions[sessionId];
-  if (!session.initialized && method != MCP::Method::Initialize) {
+  // Reject requests for unknown/uninitialized sessions
+  auto it = m_sessions.find(sessionId);
+  if (it == m_sessions.end() || !it->initialized) {
     return MCP::MCPResponse::makeError(
       request.id,
       MCP::ErrorCode::InvalidRequest,

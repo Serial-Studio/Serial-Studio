@@ -33,7 +33,7 @@
  */
 IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_lookupActive(false)
 {
-  // Read settings
+  // Restore persisted settings
   // clang-format off
   auto socketType = m_settings.value("NetworkDriver/socketType", 0).toInt();
   auto remoteAddress = m_settings.value("NetworkDriver/address", "").toString();
@@ -43,7 +43,7 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
   auto udpRemotePort = m_settings.value("NetworkDriver/udpRemotePort", defaultUdpRemotePort()).toInt();
   // clang-format on
 
-  // Apply saved settings
+  // Apply restored settings
   setTcpPort(tcpPort);
   setUdpLocalPort(udpLocalPort);
   setUdpRemotePort(udpRemotePort);
@@ -51,7 +51,7 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
   setUdpMulticast(udpMulticastEnabled);
   setSocketType(static_cast<QAbstractSocket::SocketType>(socketType));
 
-  // Update connect button status when the configuration is changed
+  // Propagate configuration changes
   connect(
     this, &IO::Drivers::Network::addressChanged, this, &IO::Drivers::Network::configurationChanged);
   connect(this,
@@ -61,13 +61,13 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
   connect(
     this, &IO::Drivers::Network::portChanged, this, &IO::Drivers::Network::configurationChanged);
 
-  // Update open state when socket states change
+  // Update state when sockets change
   connect(
     &m_tcpSocket, &QUdpSocket::stateChanged, this, [=, this] { Q_EMIT configurationChanged(); });
   connect(
     &m_udpSocket, &QUdpSocket::stateChanged, this, [=, this] { Q_EMIT configurationChanged(); });
 
-  // Report socket errors
+  // Handle socket errors
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
   connect(&m_tcpSocket,
           SIGNAL(error(QAbstractSocket::SocketError)),
@@ -93,13 +93,13 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
  */
 void IO::Drivers::Network::close()
 {
-  // Disconnect signals/slots
+  // Disconnect data-ready signals
   if (socketType() == QAbstractSocket::TcpSocket)
     disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
   else if (socketType() == QAbstractSocket::UdpSocket)
     disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
 
-  // Abort network connections
+  // Abort and close both sockets
   m_tcpSocket.abort();
   m_udpSocket.abort();
   m_tcpSocket.close();
@@ -196,38 +196,34 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
  */
 bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
-  // Disconnect all sockets
+  // Close any existing connection
   close();
 
-  // Get host & port
+  // Resolve host address
   auto hostAddr = remoteAddress();
   if (hostAddr.isEmpty())
     hostAddr = defaultAddress();
 
-  // Init socket pointer
   QIODevice* socket = nullptr;
 
-  // TCP connection, assign socket pointer & connect to host
+  // TCP: connect to remote host
   if (socketType() == QAbstractSocket::TcpSocket) {
     socket = static_cast<QIODevice*>(&m_tcpSocket);
     m_tcpSocket.connectToHost(hostAddr, tcpPort());
   }
 
-  // UDP connection, assign socket pointer & bind to host
+  // UDP: bind to local port and optionally join multicast group
   else if (socketType() == QAbstractSocket::UdpSocket) {
-    // Bind the UDP socket
     m_udpSocket.bind(udpLocalPort(),
                      QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint);
 
-    // Join the multicast group (if required)
     if (udpMulticast())
       m_udpSocket.joinMulticastGroup(QHostAddress(QHostAddress(m_address).toIPv6Address()));
 
-    // Set socket pointer
     socket = static_cast<QIODevice*>(&m_udpSocket);
   }
 
-  // Open network socket
+  // Open the socket and connect readyRead
   if (socket) {
     if (socket->open(mode)) {
       connect(socket, &QIODevice::readyRead, this, &IO::Drivers::Network::onReadyRead);
@@ -235,7 +231,7 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
     }
   }
 
-  // Open failure, abort connection
+  // Failed to open, clean up
   close();
   return false;
 }
@@ -387,17 +383,17 @@ void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
  */
 void IO::Drivers::Network::setRemoteAddress(const QString& address)
 {
-  // Check if host name exists
+  // Perform DNS lookup if address is not a direct IP
   if (!address.isEmpty() && QHostAddress(address).isNull()) {
     m_hostExists = false;
     lookup(address);
   }
 
-  // Host is an IP address, host should exist
+  // Direct IP address, mark host as valid
   else
     m_hostExists = true;
 
-  // Change host
+  // Store and persist the address
   m_address = address;
   m_settings.setValue("NetworkDriver/address", address);
   Q_EMIT addressChanged();
@@ -460,7 +456,7 @@ void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
  */
 void IO::Drivers::Network::onReadyRead()
 {
-  // Check if we need to use UDP socket functions
+  // Read from UDP socket
   if (socketType() == QAbstractSocket::UdpSocket) {
     while (udpSocket()->hasPendingDatagrams()) {
       const qint64 size = udpSocket()->pendingDatagramSize();
@@ -470,7 +466,7 @@ void IO::Drivers::Network::onReadyRead()
     }
   }
 
-  // We are using the TCP socket...
+  // Read from TCP socket
   else if (socketType() == QAbstractSocket::TcpSocket)
     Q_EMIT dataReceived(makeByteArray(tcpSocket()->readAll()));
 }

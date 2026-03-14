@@ -92,26 +92,18 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   , m_plan(nullptr)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index)) {
-    // Get FFT dataset
+    // Initialize FFT parameters from dataset
     const auto& dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
+    m_size              = 1 << static_cast<int>(std::log2(qMax(8, dataset.fftSamples)));
+    m_samplingRate      = dataset.fftSamplingRate;
+    m_minX              = 0;
+    m_maxY              = 0;
+    m_minY              = -100;
+    m_maxX              = m_samplingRate / 2;
 
-    // Initialize FFT size, force power of two for better performance
-    m_size = 1 << static_cast<int>(std::log2(qMax(8, dataset.fftSamples)));
-
-    // Obtain sampling rate from dataset
-    m_samplingRate = dataset.fftSamplingRate;
-
-    // Set axis ranges
-    m_minX = 0;
-    m_maxY = 0;
-    m_minY = -100;
-    m_maxX = m_samplingRate / 2;
-
-    // Allocate FFT and sample arrays
+    // Allocate FFT buffers and build Blackman-Harris window
     m_samples.resize(m_size);
     m_fftOutput.resize(m_size);
-
-    // Create window function coefficients
     m_window.resize(m_size);
     const auto windowSize = static_cast<unsigned int>(m_size);
     for (unsigned int i = 0; i < windowSize; ++i)
@@ -124,17 +116,13 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
       return;
     }
 
-    // Obtain minimum and maximum values
+    // Configure input normalization from user-defined scale
     double minVal = dataset.fftMin;
     double maxVal = dataset.fftMax;
-
-    // Validate that values are finite
     if (std::isfinite(minVal) && std::isfinite(maxVal)) {
-      // Fix inverted limits
       if (maxVal < minVal)
         std::swap(minVal, maxVal);
 
-      // Accept only if the range is positive and non-zero
       if (maxVal - minVal > 0.0) {
         m_scaleIsValid = true;
         m_center       = (maxVal + minVal) * 0.5;

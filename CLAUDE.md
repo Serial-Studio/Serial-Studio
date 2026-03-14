@@ -99,6 +99,19 @@ Main thread   → FrameReader → FrameBuilder → Frame
 - `createDriver()` makes fresh instances for live connections (owned by `DeviceManager`).
 - QML context properties (`Cpp_IO_Serial`, `Cpp_IO_Network`, etc.) → UI-config instances.
 - `DeviceManager`: non-singleton, owns one `HAL_Driver` + `FrameReader` + `QThread`.
+- `configurationOk()` checks the **UI driver** (not the live driver). UI driver `configurationChanged` is forwarded to `ConnectionManager::configurationChanged`.
+- All drivers must emit `configurationChanged()` from their constructors (connect specific signals like `portIndexChanged` → `configurationChanged`).
+- Live drivers may lack enumerated device lists. UART/Modbus call `refreshSerialDevices()`/`refreshSerialPorts()` in `open()` if lists are empty.
+
+### BluetoothLE — Shared Static Discovery
+
+- Discovery state is **static** (`s_devices`, `s_deviceNames`, `s_discoveryAgent`, `s_localDevice`, `s_adapterAvailable`), shared across all `BluetoothLE` instances via `s_instances` list.
+- Each instance maintains its own connection state (`m_controller`, `m_service`, `m_characteristics`).
+- `startDiscovery()` is a no-op if already running. Device list is append-only (never cleared during rediscovery) — indices are stable.
+- `selectDevice(0)` is ignored when `m_deviceIndex >= 0` or `m_deviceConnected` (prevents QML combobox rebuild from resetting selection).
+- `selectService()` / `setCharacteristicIndex()`: if called on an instance without a controller/service, forwards to the instance that has one.
+- `onServiceDiscoveryFinished()` / `configureCharacteristics()`: propagate service/characteristic names to all other instances with the same `m_deviceIndex` so QML can display them.
+- `setDriverProperty()` sets `m_deviceIndex`/`m_selectedCharacteristic` directly (no placeholder compensation) since `driverProperties()` returns raw internal values.
 
 ### ProjectModel / ProjectEditor Split
 
@@ -131,6 +144,9 @@ Main thread   → FrameReader → FrameBuilder → Frame
 | Hardcoded bus type integers | `SerialStudio::BusType::UART` etc. |
 | `createDriver()` for UI config | `ConnectionManager::instance().uart()` etc. |
 | Force-rebuilding `buildSourceModel` on selection | Guard with `m_awaitingContextRebuild` |
+| Live driver with empty device list | Call `refreshSerialDevices()` etc. in `open()` if empty |
+| BLE `selectDevice(index)` with placeholder compensation on `setDriverProperty` | `setDriverProperty` sets raw value directly, `selectDevice` subtracts 1 |
+| Querying live driver for `configurationOk()` | Check the UI driver — live driver may not be synced yet |
 
 ## Code Style
 
@@ -218,10 +234,37 @@ Use 98-dash `//---` banners to separate concern groups. Reference: `BluetoothLE.
 
 ### Comments & Doxygen
 
-- Prefer self-documenting code. Zero comments inside function bodies when possible.
-- No inline end-of-line comments. Block comment above when truly needed, one line max.
+- Prefer self-documenting code. Comments explain intent ("why"/"what"), not mechanics.
+- **Function body comments**: one-line `//` section headers above each logical block, separated by blank lines. No multi-line `/* */` inside function bodies. No inline end-of-line comments. No comments inside brace blocks (e.g., `if (x) { // do thing }`).
 - **Doxygen mandatory**: class `@brief` in `.h` above `class`; every function in `.cpp`.
 - Tags: `@brief` (always), `@param` (non-trivial), `@return` (non-void). No `@author`/`@date`.
+
+```cpp
+// Good: section-header comments, one per logical block
+void ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
+{
+  // No items, abort
+  if (items.empty())
+    return;
+
+  // No device connected, abort
+  if (!IO::ConnectionManager::instance().isConnected())
+    return;
+
+  // No file open, create a new one
+  if (!isResourceOpen())
+    createFile();
+
+  // Write output to file
+  if (m_textStream.device())
+  {
+    for (const auto& dataPtr : items)
+      m_textStream << dataPtr->data;
+
+    m_textStream.flush();
+  }
+}
+```
 
 ### QML
 

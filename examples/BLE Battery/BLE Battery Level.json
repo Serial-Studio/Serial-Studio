@@ -1,18 +1,16 @@
 {
     "actions": [
     ],
-    "checksum": "",
-    "decoder": 3,
-    "frameDetection": 2,
-    "frameEnd": "\\n",
-    "frameParser": "/**\n * @brief Converts a byte-like iterable into an array of numbers.\n * \n * @param frame An iterable containing byte values (0–255).\n * @return Array of numeric byte values.\n */\nfunction parse(frame) {\n    return Array.from(frame);\n}",
-    "frameStart": "$",
     "groups": [
         {
             "datasets": [
                 {
-                    "alarm": 0,
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
                     "fft": false,
+                    "fftMax": 100,
+                    "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
@@ -20,13 +18,15 @@
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "max": 100,
-                    "min": 0,
                     "overviewDisplay": false,
+                    "plotMax": 100,
+                    "plotMin": 0,
                     "title": "Battery Level",
                     "units": "%",
                     "value": "--.--",
                     "widget": "gauge",
+                    "widgetMax": 100,
+                    "widgetMin": 0,
                     "xAxis": -1
                 }
             ],
@@ -35,7 +35,27 @@
         }
     ],
     "hexadecimalDelimiters": false,
-    "mapTilerApiKey": "",
-    "thunderforestApiKey": "",
+    "pointCount": 100,
+    "sources": [
+        {
+            "busType": 2,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "characteristicIndex": -1,
+                "deviceIndex": 12,
+                "serviceUuid": ""
+            },
+            "decoder": 3,
+            "decoderMethod": 3,
+            "frameDetection": 2,
+            "frameEnd": "\\n",
+            "frameParserCode": "/**\n * @brief Converts a byte-like iterable into an array of numbers.\n * \n * @param frame An iterable containing byte values (0–255).\n * @return Array of numeric byte values.\n */\nfunction parse(frame) {\n    return Array.from(frame);\n}",
+            "frameStart": "$",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
     "title": "BLE Battery Level"
 }

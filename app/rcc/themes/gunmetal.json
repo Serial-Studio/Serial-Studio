@@ -167,16 +167,16 @@
     ],
 
     "device_colors":[
-      { "top": "#3a2830", "bottom": "#2e1e26" },
-      { "top": "#1e3436", "bottom": "#16282a" },
-      { "top": "#3e2e1e", "bottom": "#322416" },
       { "top": "#22304a", "bottom": "#18263e" },
-      { "top": "#3a3618", "bottom": "#2e2c10" },
-      { "top": "#2c2840", "bottom": "#221e34" },
+      { "top": "#1e3436", "bottom": "#16282a" },
       { "top": "#28361a", "bottom": "#1e2c12" },
-      { "top": "#341e38", "bottom": "#28162e" },
-      { "top": "#363020", "bottom": "#2c2618" },
-      { "top": "#24204a", "bottom": "#1a183c" }
+      { "top": "#2c2840", "bottom": "#221e34" },
+      { "top": "#3a3618", "bottom": "#2e2c10" },
+      { "top": "#1e3838", "bottom": "#162c2c" },
+      { "top": "#303818", "bottom": "#262e10" },
+      { "top": "#24204a", "bottom": "#1a183c" },
+      { "top": "#3e2e1e", "bottom": "#322416" },
+      { "top": "#1e2c40", "bottom": "#162234" }
     ]
   }
 }

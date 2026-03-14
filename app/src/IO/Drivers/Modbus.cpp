@@ -59,16 +59,13 @@ IO::Drivers::Modbus::Modbus()
   , m_currentGroupIndex(0)
   , m_serialPortIndex(0)
 {
-  // Read basic settings
+  // Restore persisted settings
   m_slaveAddress  = m_settings.value("ModbusDriver/slaveAddress", 1).toUInt();
   m_protocolIndex = m_settings.value("ModbusDriver/protocolIndex", 1).toUInt();
   m_pollInterval  = m_settings.value("ModbusDriver/pollInterval", 100).toUInt();
 
-  // Read Modbus TCP settings
   m_port = m_settings.value("ModbusDriver/port", 5020).toUInt();
   m_host = m_settings.value("ModbusDriver/host", "127.0.0.1").toString();
-
-  // Read Modbus RTU settings
   // clang-format off
   m_baudRate = m_settings.value("ModbusDriver/baudRate", 9600).toInt();
   m_parityIndex = m_settings.value("ModbusDriver/parityIndex", 0).toUInt();
@@ -77,7 +74,7 @@ IO::Drivers::Modbus::Modbus()
   m_serialPortIndex = m_settings.value("ModbusDriver/serialPortIndex", 0).toUInt();
   // clang-format on
 
-  // Read register groups
+  // Restore register groups
   // clang-format off
   const int groupCount = m_settings.beginReadArray("ModbusDriver/registerGroups");
   for (int i = 0; i < groupCount; ++i)
@@ -93,10 +90,10 @@ IO::Drivers::Modbus::Modbus()
   m_settings.endArray();
   // clang-format on
 
-  // Configure poll timer callback function
+  // Connect poll timer
   connect(m_pollTimer, &QTimer::timeout, this, &IO::Drivers::Modbus::pollRegisters);
 
-  // Propagate all configuration-relevant changes to configurationChanged()
+  // Propagate configuration changes
   connect(this,
           &IO::Drivers::Modbus::protocolIndexChanged,
           this,
@@ -302,6 +299,10 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     return false;
 
   if (m_protocolIndex == 0) {
+    // Ensure the port list is populated (live drivers don't run the 1 Hz timer)
+    if (m_serialPortNames.isEmpty())
+      refreshSerialPorts();
+
     auto ports  = serialPortList();
     auto portId = serialPortIndex();
     if (portId < 1 || portId >= ports.count())

@@ -72,19 +72,19 @@ IO::Drivers::UART::UART()
   , m_lastSerialDeviceIndex(0)
   , m_portIndex(0)
 {
-  // Populate error list
+  // Initialize error descriptions
   populateErrors();
 
-  // Read saved baud rate value
+  // Restore saved baud rate
   m_baudRate = m_settings.value("IO_Serial_Baud_Rate", 9600).toInt();
 
-  // Get default indexes for port parameters
+  // Determine default parameter indexes
   int defParity   = parityList().indexOf(tr("None"));
   int defFlow     = flowControlList().indexOf(tr("None"));
   int defDataBits = dataBitsList().indexOf(QStringLiteral("8"));
   int defStopBits = stopBitsList().indexOf(QStringLiteral("1"));
 
-  // Read settings
+  // Restore persisted settings
   setDtrEnabled(m_settings.value("UartDriver/dtr", 1).toBool());
   setParity(m_settings.value("UartDriver/parity", defParity).toInt());
   setDataBits(m_settings.value("UartDriver/dataBits", defDataBits).toInt());
@@ -92,7 +92,7 @@ IO::Drivers::UART::UART()
   setAutoReconnect(m_settings.value("UartDriver/autoReconnect", 0).toBool());
   setFlowControl(m_settings.value("UartDriver/flowControl", defFlow).toInt());
 
-  // Propagate all configuration-relevant changes to configurationChanged()
+  // Propagate configuration changes
   connect(
     this, &IO::Drivers::UART::portIndexChanged, this, &IO::Drivers::UART::configurationChanged);
   connect(
@@ -109,7 +109,7 @@ IO::Drivers::UART::UART()
   connect(
     this, &IO::Drivers::UART::autoReconnectChanged, this, &IO::Drivers::UART::configurationChanged);
 
-  // Update error list when language is changed
+  // Retranslate error descriptions on language change
   connect(this, &IO::Drivers::UART::languageChanged, this, &IO::Drivers::UART::populateErrors);
 }
 
@@ -136,26 +136,23 @@ IO::Drivers::UART::~UART()
  */
 void IO::Drivers::UART::close()
 {
-  // Check if serial port pointer is valid
+  // Disconnect, close and delete the serial port
   if (port() != nullptr) {
-    // Disconnect signals/slots
     disconnect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
     disconnect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
 
-    // Send DTR off signal
     if (dtrEnabled())
       port()->setDataTerminalReady(false);
 
-    // Close & delete serial port handler
     port()->close();
     port()->deleteLater();
   }
 
-  // Reset pointer & device status
+  // Reset internal state
   m_port                  = nullptr;
   m_usingCustomSerialPort = false;
 
-  // Update user interface
+  // Notify the UI
   Q_EMIT portChanged();
   Q_EMIT availablePortsChanged();
 }
@@ -231,32 +228,35 @@ qint64 IO::Drivers::UART::write(const QByteArray& data)
  */
 bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
 {
-  // Ignore the first item of the list (Select Port)
+  // Ensure the device list is populated (live drivers don't run the 1 Hz timer)
+  if (m_deviceNames.isEmpty())
+    refreshSerialDevices();
+
+  // Skip the placeholder entry at index 0
   auto ports  = portList();
   auto portId = portIndex();
   if (portId >= 1 && portId < ports.count()) {
-    // Update port index variable & disconnect from current serial port
+    // Close previous connection and update index
     close();
     m_portIndex             = portId;
     m_lastSerialDeviceIndex = m_portIndex;
     Q_EMIT portIndexChanged();
 
-    // Get port name from device list
     const auto name = ports.at(portId);
 
-    // Create new serial port handler for native serial ports
+    // Create serial port handler for native ports
     if (m_deviceNames.contains(name)) {
       m_usingCustomSerialPort = false;
       m_port                  = new QSerialPort(validPorts().at(portId - 1));
     }
 
-    // Create a new serial port handler for user-specified serial ports
+    // Create serial port handler for custom device paths
     else if (m_customDevices.contains(name)) {
       m_usingCustomSerialPort = true;
       m_port                  = new QSerialPort(name);
     }
 
-    // Configure serial port
+    // Apply serial port parameters
     port()->setParity(parity());
     port()->setBaudRate(baudRate());
     port()->setDataBits(dataBits());
@@ -264,17 +264,15 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     port()->setFlowControl(flowControl());
     port()->setReadBufferSize(idealSerialBufferSize(baudRate()));
 
-    // Connect signals/slots
     connect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
 
-    // Open device
+    // Attempt to open the port
     if (port()->open(mode)) {
       connect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
       port()->setDataTerminalReady(dtrEnabled());
       return true;
     }
 
-    // Display error
     else {
       Misc::Utilities::showMessageBox(tr("Failed to connect to serial port device"),
                                       port()->errorString(),
@@ -282,7 +280,7 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     }
   }
 
-  // Disconnect serial port
+  // Invalid port index, clean up
   close();
   return false;
 }
@@ -519,13 +517,13 @@ QSerialPort::FlowControl IO::Drivers::UART::flowControl() const
  */
 void IO::Drivers::UART::setupExternalConnections()
 {
-  // Build serial devices list and refresh it every second
+  // Refresh serial device list every second
   connect(&Misc::TimerEvents::instance(),
           &Misc::TimerEvents::timeout1Hz,
           this,
           &IO::Drivers::UART::refreshSerialDevices);
 
-  // Update lists when language changes
+  // Retranslate on language change
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
@@ -577,18 +575,17 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
-  // Validate that the port index selected by the user is valid
+  // Clamp to valid range
   if (portIndex < portList().count())
     m_portIndex = portIndex;
   else
     m_portIndex = 0;
 
-  // Save settings
+  // Persist selection
   const auto name = portList().at(m_portIndex);
   if (!name.isEmpty() && m_portIndex > 0)
     m_settings.setValue("IO_Serial_SelectedDevice", name);
 
-  // Update user interface
   Q_EMIT portIndexChanged();
 }
 
@@ -627,14 +624,12 @@ void IO::Drivers::UART::registerDevice(const QString& device)
  */
 void IO::Drivers::UART::setParity(const quint8 parityIndex)
 {
-  // Argument verification
   Q_ASSERT(parityIndex < parityList().count());
 
-  // Update current index
   m_parityIndex = parityIndex;
   m_settings.setValue("UartDriver/parity", parityIndex);
 
-  // Set parity based on current index
+  // Map index to QSerialPort parity enum
   switch (parityIndex) {
     case 0:
       m_parity = QSerialPort::NoParity;
@@ -653,11 +648,10 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
       break;
   }
 
-  // Update serial port config.
+  // Apply to active port if connected
   if (port())
     port()->setParity(parity());
 
-  // Notify user interface
   Q_EMIT parityChanged();
 }
 
@@ -669,14 +663,12 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
  */
 void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
 {
-  // Argument verification
   Q_ASSERT(dataBitsIndex < dataBitsList().count());
 
-  // Update current index
   m_dataBitsIndex = dataBitsIndex;
   m_settings.setValue("UartDriver/dataBits", dataBitsIndex);
 
-  // Obtain data bits value from current index
+  // Map index to QSerialPort data bits enum
   switch (dataBitsIndex) {
     case 0:
       m_dataBits = QSerialPort::Data5;
@@ -692,11 +684,10 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
       break;
   }
 
-  // Update serial port configuration
+  // Apply to active port if connected
   if (port())
     port()->setDataBits(dataBits());
 
-  // Update user interface
   Q_EMIT dataBitsChanged();
 }
 
@@ -708,14 +699,12 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
  */
 void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
 {
-  // Argument verification
   Q_ASSERT(stopBitsIndex < stopBitsList().count());
 
-  // Update current index
   m_stopBitsIndex = stopBitsIndex;
   m_settings.setValue("UartDriver/stopBits", stopBitsIndex);
 
-  // Obtain stop bits value from current index
+  // Map index to QSerialPort stop bits enum
   switch (stopBitsIndex) {
     case 0:
       m_stopBits = QSerialPort::OneStop;
@@ -728,11 +717,10 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
       break;
   }
 
-  // Update serial port configuration
+  // Apply to active port if connected
   if (port())
     port()->setStopBits(stopBits());
 
-  // Update user interface
   Q_EMIT stopBitsChanged();
 }
 
@@ -754,14 +742,12 @@ void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
  */
 void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
 {
-  // Argument verification
   Q_ASSERT(flowControlIndex < flowControlList().count());
 
-  // Update current index
   m_flowControlIndex = flowControlIndex;
   m_settings.setValue("UartDriver/flowControl", flowControlIndex);
 
-  // Obtain flow control value from current index
+  // Map index to QSerialPort flow control enum
   switch (flowControlIndex) {
     case 0:
       m_flowControl = QSerialPort::NoFlowControl;
@@ -774,11 +760,10 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
       break;
   }
 
-  // Update serial port configuration
+  // Apply to active port if connected
   if (port())
     port()->setFlowControl(flowControl());
 
-  // Update user interface
   Q_EMIT flowControlChanged();
 }
 
@@ -788,14 +773,13 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
  */
 void IO::Drivers::UART::refreshSerialDevices()
 {
-  // Create device list, starting with dummy header
-  // (for a more friendly UI when no devices are attached)
+  // Build device list with placeholder header
   QStringList names;
   QStringList locations;
   locations.append("/dev/null");
   names.append(tr("Select Port"));
 
-  // Search for available ports and add them to the lsit
+  // Enumerate available ports
   auto validPortList = validPorts();
   for (const auto& info : std::as_const(validPortList)) {
     if (!info.isNull()) {
@@ -809,13 +793,12 @@ void IO::Drivers::UART::refreshSerialDevices()
     }
   }
 
-  // Update list only if necessary
+  // Only update if the list has changed
   if (m_deviceNames != names) {
-    // Update list
     m_deviceNames     = names;
     m_deviceLocations = locations;
 
-    // Update current port index
+    // Re-find the currently open port in the new list
     bool indexChanged = false;
     if (port()) {
       auto name = port()->portName();
@@ -829,7 +812,7 @@ void IO::Drivers::UART::refreshSerialDevices()
       }
     }
 
-    // Auto reconnect
+    // Attempt auto-reconnect if enabled
     if (ConnectionManager::instance().busType() == SerialStudio::BusType::UART) {
       if (autoReconnect() && m_lastSerialDeviceIndex > 0
           && m_lastSerialDeviceIndex < portList().count()) {
@@ -838,15 +821,14 @@ void IO::Drivers::UART::refreshSerialDevices()
       }
     }
 
-    // Update UI
     Q_EMIT availablePortsChanged();
 
-    // Update serial port index after the port list has been updated
+    // Notify index change after list update
     if (indexChanged)
       Q_EMIT portIndexChanged();
   }
 
-  // Select last device
+  // Restore last selected device from settings
   if (m_portIndex == 0) {
     const auto ports = portList();
     auto lastPort    = m_settings.value("IO_Serial_SelectedDevice", "").toString();
@@ -861,30 +843,27 @@ void IO::Drivers::UART::refreshSerialDevices()
  */
 void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 {
-  // Ensure that this function is only called once
+  // Serialize concurrent error callbacks
   QMutexLocker locker(&m_errorHandlerMutex);
 
-  // Ignore if port is not open (capture pointer once to avoid TOCTOU)
+  // Ignore if port is not open
   auto serialPort = port();
   if (serialPort && !serialPort->isOpen())
     return;
 
-  // No need to show error if device was disconnected from previous error
+  // Already disconnected from a prior error
   if (!ConnectionManager::instance().isConnected())
     return;
 
-  // Log error
   if (error != QSerialPort::NoError) {
-    // Ingore resource lock errors on virtual serial ports
+    // Ignore resource lock errors on virtual serial ports
     if (m_usingCustomSerialPort) {
       if (error == QSerialPort::UnsupportedOperationError || error == QSerialPort::ResourceError)
         return;
     }
 
-    // Disconnect the device
     ConnectionManager::instance().disconnectDevice();
 
-    // Display error
     if (!m_autoReconnect || error != QSerialPort::ResourceError)
       Misc::Utilities::showMessageBox(
         tr("Critical serial port error"), m_errorDescriptions[error], QMessageBox::Critical);
@@ -930,22 +909,18 @@ void IO::Drivers::UART::populateErrors()
  */
 QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
 {
-  // Search for available ports and add them to the list
   QVector<QSerialPortInfo> ports;
-  Q_FOREACH (QSerialPortInfo info, QSerialPortInfo::availablePorts()) {
+  for (const auto& info : QSerialPortInfo::availablePorts()) {
     if (!info.isNull()) {
-      // Only accept *.cu devices on macOS (remove *.tty)
-      // https://stackoverflow.com/a/37688347
+      // Filter out tty.* devices on macOS, only use cu.*
 #ifdef Q_OS_MACOS
       if (info.portName().toLower().startsWith("tty."))
         continue;
 #endif
-      // Append port to list
       ports.append(info);
     }
   }
 
-  // Return list
   return ports;
 }
 

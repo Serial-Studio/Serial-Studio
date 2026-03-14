@@ -24,7 +24,6 @@
 #include <memory>
 #include <QObject>
 #include <QPointer>
-#include <QThread>
 
 #include "IO/FrameConfig.h"
 #include "IO/FrameReader.h"
@@ -37,8 +36,8 @@ namespace IO {
  *        worker QThread.
  *
  * DeviceManager encapsulates the full lifecycle of a single device connection:
- * it owns the driver, configures and runs the FrameReader in an optional
- * worker thread, and emits frameReady() / rawDataReceived() for consumers.
+ * it owns the driver, configures and runs the FrameReader, and emits
+ * frameReady() / rawDataReceived() for consumers.
  *
  * Drivers must NEVER be singletons for connection purposes — each DeviceManager
  * holds an independent driver instance. Driver singletons (e.g. UART::instance())
@@ -58,8 +57,7 @@ public:
   explicit DeviceManager(int deviceId,
                          std::unique_ptr<HAL_Driver> driver,
                          const FrameConfig& config,
-                         bool threadedExtraction = false,
-                         QObject* parent         = nullptr);
+                         QObject* parent = nullptr);
   ~DeviceManager();
 
   [[nodiscard]] int deviceId() const noexcept;
@@ -85,10 +83,8 @@ private:
 
 private:
   int m_deviceId;
-  bool m_threadedExtraction;
   FrameConfig m_frameConfig;
   std::unique_ptr<HAL_Driver> m_driver;
-  QThread m_workerThread;
   QPointer<FrameReader> m_frameReader;
   QByteArray m_frameScratch;
 };

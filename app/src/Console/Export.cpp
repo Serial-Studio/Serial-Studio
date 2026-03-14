@@ -62,15 +62,19 @@ bool Console::ExportWorker::isResourceOpen() const
  */
 void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
 {
+  // No items, abort
   if (items.empty())
     return;
 
+  // No device connected, abort
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
+  // No file open, create a new one
   if (!isResourceOpen())
     createFile();
 
+  // Write output to file
   if (m_textStream.device()) {
     for (const auto& dataPtr : items)
       m_textStream << dataPtr->data;
@@ -96,31 +100,37 @@ void Console::ExportWorker::closeResources()
  */
 void Console::ExportWorker::createFile()
 {
-  if (SerialStudio::activated()) {
-    if (isResourceOpen())
-      closeResources();
+  // Serial Studio not activated, abort
+  if (!SerialStudio::activated())
+    return;
 
-    const auto dateTime = QDateTime::currentDateTime();
-    const auto fileName =
-      dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + QStringLiteral(".txt");
+  // Close previous file (if needed)
+  if (isResourceOpen())
+    closeResources();
 
-    QDir dir(Misc::WorkspaceManager::instance().path("Console"));
+  // Obtain file name
+  const auto dateTime = QDateTime::currentDateTime();
+  const auto fileName =
+    dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + QStringLiteral(".txt");
 
-    m_file.setFileName(dir.filePath(fileName));
-    if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text)) {
-      Misc::Utilities::showMessageBox(QObject::tr("Console Output File Error"),
-                                      QObject::tr("Cannot open file for writing!"),
-                                      QMessageBox::Critical);
-      closeResources();
-      return;
-    }
+  // Obtain directory where to write file
+  QDir dir(Misc::WorkspaceManager::instance().path("Console"));
 
-    m_textStream.setDevice(&m_file);
-    m_textStream.setGenerateByteOrderMark(true);
-    m_textStream.setEncoding(QStringConverter::Utf8);
-
-    Q_EMIT resourceOpenChanged();
+  // Try to open the file as write only
+  m_file.setFileName(dir.filePath(fileName));
+  if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text)) {
+    Misc::Utilities::showMessageBox(QObject::tr("Console Output File Error"),
+                                    QObject::tr("Cannot open file for writing!"),
+                                    QMessageBox::Critical);
+    closeResources();
+    return;
   }
+
+  // Configure the output stream
+  m_textStream.setDevice(&m_file);
+  m_textStream.setGenerateByteOrderMark(true);
+  m_textStream.setEncoding(QStringConverter::Utf8);
+  Q_EMIT resourceOpenChanged();
 }
 
 #endif
@@ -144,13 +154,17 @@ Console::Export::Export()
 #endif
 {
 #ifdef BUILD_COMMERCIAL
+  // Initialize the internal worker thread
   initializeWorker();
+
+  // Change open status when the worker updates its internal status
   connect(m_worker,
           &ExportWorker::resourceOpenChanged,
           this,
           &Export::onWorkerOpenChanged,
           Qt::QueuedConnection);
 
+  // Disable console export if user de-activates Serial Studio
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged,
           this,
@@ -249,6 +263,7 @@ void Console::Export::setupExternalConnections()
 void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
+  // Update export status only if activated
   if (SerialStudio::activated()) {
     if (!enabled && isOpen())
       closeFile();
@@ -258,18 +273,16 @@ void Console::Export::setExportEnabled(const bool enabled)
     Q_EMIT enabledChanged();
     return;
   }
+#endif
 
+  // Close file and disable export
   closeFile();
   setConsumerEnabled(false);
-  m_settings.setValue("ConsoleExport", false);
-  Q_EMIT enabledChanged();
-#else
-  closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
   m_settings.setValue("ConsoleExport", false);
   Q_EMIT enabledChanged();
-#endif
 
+  // If we reach here, either Serial Studio is not activated, or it is a GPLv3 build
   if (enabled)
     Misc::Utilities::showMessageBox(
       tr("Console Export is a Pro feature."),

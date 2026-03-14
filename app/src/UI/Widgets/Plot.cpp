@@ -301,9 +301,12 @@ void Widgets::Plot::updateRange()
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
     if (yD.xAxisId > 0) {
-      const auto& xD = UI::Dashboard::instance().datasets()[yD.xAxisId];
-      m_minX         = xD.pltMin;
-      m_maxX         = xD.pltMax;
+      const auto& datasets = UI::Dashboard::instance().datasets();
+      auto it              = datasets.find(yD.xAxisId);
+      if (it != datasets.end()) {
+        m_minX = it->pltMin;
+        m_maxX = it->pltMax;
+      }
     }
 
     else {
@@ -312,7 +315,6 @@ void Widgets::Plot::updateRange()
     }
   }
 
-  // Update the plot
   Q_EMIT rangeChanged();
 }
 
@@ -362,7 +364,6 @@ void Widgets::Plot::calculateAutoScaleRange()
     }
   }
 
-  // Update user interface
   if (xChanged || yChanged)
     Q_EMIT rangeChanged();
 }
@@ -468,6 +469,5 @@ bool Widgets::Plot::computeMinMaxValues(double& min,
     }
   }
 
-  // Return true if range changed, false otherwise
   return DSP::notEqual(prevMinY, min) || DSP::notEqual(prevMaxY, max);
 }

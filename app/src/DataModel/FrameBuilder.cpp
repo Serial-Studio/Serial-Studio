@@ -498,7 +498,10 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 #ifdef BUILD_COMMERCIAL
   const auto busType = IO::ConnectionManager::instance().busType();
   if (busType == SerialStudio::BusType::Audio) {
-    const auto* audioPtr  = IO::ConnectionManager::instance().audio();
+    const auto* audioPtr = IO::ConnectionManager::instance().audio();
+    if (!audioPtr)
+      return;
+
     const auto& audio     = *audioPtr;
     const auto format     = audio.config().capture.format;
     const auto sampleRate = audio.config().sampleRate;

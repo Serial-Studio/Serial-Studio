@@ -354,9 +354,7 @@ DataModel::ProjectEditor::ProjectEditor()
     }
   });
 
-  // Rebuild the source model when the user changes the bus type from the Setup panel.
-  // setBusType() calls setSource0BusType() (no sourcesChanged signal) then driverChanged(),
-  // so without this connection the ProjectEditor form stays stale after a bus type switch.
+  // Rebuild source model on bus type change so the form stays current
   connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::driverChanged, this, [this] {
     if (m_currentView != SourceView)
       return;
@@ -844,9 +842,7 @@ void DataModel::ProjectEditor::buildProjectModel()
   m_projectModel = new CustomModel(this);
   const auto& pm = DataModel::ProjectModel::instance();
 
-  // -----------------------------------------------------------------------
   // Project Information section
-  // -----------------------------------------------------------------------
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Project Information"), PlaceholderValue);
@@ -1127,9 +1123,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
     }
   }
 
-  // -------------------------------------------------------------------------
   // Frame Detection section
-  // -------------------------------------------------------------------------
   auto* fdHdr = new QStandardItem();
   fdHdr->setData(SectionHeader, WidgetType);
   fdHdr->setData(tr("Frame Detection"), PlaceholderValue);
@@ -1196,9 +1190,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
     m_sourceModel->appendRow(endSeqItem);
   }
 
-  // -------------------------------------------------------------------------
   // Payload Processing section
-  // -------------------------------------------------------------------------
   auto* ppHdr = new QStandardItem();
   ppHdr->setData(SectionHeader, WidgetType);
   ppHdr->setData(tr("Payload Processing & Validation"), PlaceholderValue);
@@ -1237,8 +1229,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   connect(
     m_sourceModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onSourceItemChanged);
 
-  // Rebuild the source form when device lists change (USB/HID/BLE plugged in)
-  // so the ComboBox options stay current
+  // Rebuild source form when device lists change so ComboBox options stay current
   if (m_deviceListConn)
     disconnect(m_deviceListConn);
 
@@ -1321,8 +1312,7 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
 
     DataModel::ProjectModel::instance().captureSourceSettings(m_selectedSource.sourceId);
 
-    // Switching the transport mode changes which properties are visible;
-    // rebuild the form so only the relevant fields are shown.
+    // Transport mode change affects which properties are visible, rebuild the form
     static const QStringList kModeKeys = {
       QStringLiteral("socketTypeIndex"),
       QStringLiteral("protocolIndex"),
@@ -2447,8 +2437,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
   const auto datasetId = m_selectedDataset.datasetId;
   const auto idInt     = static_cast<DatasetItem>(id.toInt());
 
-  // Title changes update the tree item in-place; index changes require a full rebuild
-  // (the frame index label shown next to the item reflects this).
+  // Title updates tree item in-place; index changes require a full rebuild
   if (idInt == kDatasetView_Title) {
     const auto newTitle = m_selectedDataset.title;
     pm.updateDataset(groupId, datasetId, m_selectedDataset, false);

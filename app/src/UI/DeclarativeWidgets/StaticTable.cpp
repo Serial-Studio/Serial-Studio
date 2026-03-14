@@ -37,20 +37,15 @@
  */
 StaticTable::StaticTable(QQuickItem* parent) : DeclarativeWidget(parent)
 {
-  // Set widget to render
   setWidget(&m_widget);
-
-  // Get fonts
   m_font       = m_widget.font();
   m_headerFont = m_widget.horizontalHeader()->font();
 
-  // Configure widget style
+  // Configure table appearance
   m_widget.setGridStyle(Qt::DashLine);
   m_widget.verticalHeader()->setVisible(false);
   m_widget.setSelectionMode(QAbstractItemView::NoSelection);
   m_widget.setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-  // Disable scrollbars
   m_widget.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_widget.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -61,7 +56,6 @@ StaticTable::StaticTable(QQuickItem* parent) : DeclarativeWidget(parent)
           &StaticTable::loadTheme,
           Qt::DirectConnection);
 
-  // Redraw UI
   loadTheme();
   redraw();
 }
@@ -129,12 +123,11 @@ void StaticTable::setHeaderFont(const QFont& font)
  */
 void StaticTable::setData(const QList<QStringList>& data)
 {
-  // Clear data
   m_data = data;
   m_widget.setRowCount(0);
   m_widget.setColumnCount(0);
 
-  // Import data into table
+  // Populate table from data model
   if (data.count() > 0) {
     m_widget.setColumnCount(data.first().count());
     m_widget.setHorizontalHeaderLabels(data.first());
@@ -159,21 +152,17 @@ void StaticTable::setData(const QList<QStringList>& data)
     }
   }
 
-  // Compute minimum width
+  // Calculate minimum content dimensions for QML scrolling
   int contentWidth = 0;
   for (int i = 0; i < m_widget.columnCount(); ++i)
     contentWidth += m_widget.columnWidth(i);
 
-  // Compute minimum height
   int contentHeight = m_widget.horizontalHeader()->height();
   for (int i = 0; i < m_widget.rowCount(); ++i)
     contentHeight += m_widget.rowHeight(i);
 
-  // Tell QML interface about content size
   setContentWidth(contentWidth);
   setContentHeight(contentHeight);
-
-  // Update user interface
   requestUpdate();
   redraw();
 }

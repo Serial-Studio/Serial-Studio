@@ -46,7 +46,10 @@
  * @param parent Optional QQuickItem parent.
  */
 DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent), m_testDialog(&DataModel::FrameParser::instance(), nullptr)
+  : QQuickPaintedItem(parent)
+  , m_sourceId(0)
+  , m_readingCode(false)
+  , m_testDialog(&DataModel::FrameParser::instance(), nullptr)
 {
   setMipmap(false);
   setAntialiasing(false);
@@ -314,10 +317,31 @@ void DataModel::JsCodeEditor::evaluate()
 /**
  * @brief Reloads the editor text from the current project model code.
  *
- * Also tells the FrameParser singleton to reload its JS engine state.
+ * If the editor has unsaved modifications the user is asked whether to save
+ * or discard them before the reload proceeds.
  */
 void DataModel::JsCodeEditor::readCode()
 {
+  // Guard against reentrancy (apply() → signal → readCode())
+  if (m_readingCode)
+    return;
+
+  m_readingCode = true;
+
+  // Prompt when there are unsaved changes
+  if (isModified()) {
+    const auto ret =
+      Misc::Utilities::showMessageBox(tr("Frame parser code has been modified!"),
+                                      tr("Do you want to save your changes before switching?"),
+                                      QMessageBox::Question,
+                                      qAppName(),
+                                      QMessageBox::Save | QMessageBox::Discard);
+
+    if (ret == QMessageBox::Save)
+      apply();
+  }
+
+  // Load code from the project model
   QString code;
 
   const auto& sources = DataModel::ProjectModel::instance().sources();
@@ -334,6 +358,8 @@ void DataModel::JsCodeEditor::readCode()
   m_widget.setPlainText(code);
   m_widget.document()->clearUndoRedoStacks();
   m_widget.document()->setModified(false);
+
+  m_readingCode = false;
 
   Q_EMIT modifiedChanged();
 }

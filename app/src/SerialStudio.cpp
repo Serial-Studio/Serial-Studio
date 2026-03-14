@@ -65,15 +65,11 @@ bool SerialStudio::activated()
 bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
 {
   for (const auto& group : std::as_const(g)) {
-    if (group.widget == QStringLiteral("plot3d")) {
+    if (group.widget == QStringLiteral("plot3d"))
       return true;
-      break;
-    }
 
-    if (group.widget == QStringLiteral("image")) {
+    if (group.widget == QStringLiteral("image"))
       return true;
-      break;
-    }
 
     for (const auto& dataset : std::as_const((group.datasets))) {
       if (dataset.xAxisId > 0) {
@@ -98,15 +94,11 @@ bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
 bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
 {
   for (const auto& group : std::as_const(g)) {
-    if (group.widget == QStringLiteral("plot3d")) {
+    if (group.widget == QStringLiteral("plot3d"))
       return true;
-      break;
-    }
 
-    if (group.widget == QStringLiteral("image")) {
+    if (group.widget == QStringLiteral("image"))
       return true;
-      break;
-    }
 
     for (const auto& dataset : std::as_const((group.datasets))) {
       if (dataset.xAxisId > 0) {
@@ -143,7 +135,6 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardImageView:
 #endif
       return true;
-      break;
     default:
       return false;
       break;
@@ -164,7 +155,6 @@ bool SerialStudio::isDatasetWidget(const DashboardWidget widget)
     case DashboardGauge:
     case DashboardCompass:
       return true;
-      break;
     default:
       return false;
       break;
@@ -580,25 +570,36 @@ QColor SerialStudio::getDeviceBottomColor(const int sourceId)
 /**
  * @brief Returns a saturated accent color for a given device index.
  *
- * Used for tree view source/frame-index badge text coloring. Draws from the
- * widget_colors palette and returns a fully opaque, readable color. Falls back
- * to transparent for sourceId <= 0.
+ * Used for tree view source/frame-index badge text coloring. Derives the hue
+ * from the device_colors palette and produces a readable, saturated text color
+ * appropriate for the current theme (darker on light themes, lighter on dark).
  *
  * @param sourceId 1-based device index (1 = first device).
  * @return QColor suitable for use as text or badge fill.
  */
 QColor SerialStudio::getDeviceColor(const int sourceId)
 {
+  // Validate source index
   if (sourceId <= 0)
     return QColor(Qt::transparent);
 
+  // Obtain colors from current theme
   static const auto* theme = &Misc::ThemeManager::instance();
-  const auto& colors       = theme->widgetColors();
-
+  const auto& colors       = theme->deviceColors();
   if (colors.isEmpty())
     return QColor(Qt::transparent);
 
-  return colors.at((sourceId - 1) % colors.count());
+  // Use the top gradient color's hue, then boost saturation/lightness for text
+  const auto& base = colors.at((sourceId - 1) % colors.count()).first;
+  const auto bg    = theme->getColor(QStringLiteral("base"));
+  const bool dark  = bg.isValid() && bg.lightnessF() < 0.5;
+
+  // Saturate and adjust lightness for readability as text
+  float h, s, l, a;
+  base.getHslF(&h, &s, &l, &a);
+  s = qBound(0.45f, s * 2.5f, 0.85f);
+  l = dark ? 0.65f : 0.38f;
+  return QColor::fromHslF(h, s, l, 1.0f);
 }
 
 /**

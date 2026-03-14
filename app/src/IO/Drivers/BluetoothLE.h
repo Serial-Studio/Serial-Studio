@@ -23,13 +23,15 @@
 
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QBluetoothLocalDevice>
+#include <QLowEnergyCharacteristic>
 #include <QLowEnergyController>
-#include <QObject>
+#include <QLowEnergyService>
 
 #include "IO/HAL_Driver.h"
 
 namespace IO {
 namespace Drivers {
+
 /**
  * @brief The BluetoothLE class
  * Serial Studio driver class to interact with Bluetooth Low Energy devices.
@@ -52,7 +54,7 @@ class BluetoothLE : public HAL_Driver {
   Q_PROPERTY(int deviceIndex
              READ deviceIndex
              WRITE selectDevice
-             NOTIFY devicesChanged)
+             NOTIFY deviceIndexChanged)
   Q_PROPERTY(bool isOpen
              READ isOpen
              NOTIFY deviceConnectedChanged)
@@ -80,6 +82,7 @@ signals:
 
 public:
   explicit BluetoothLE();
+  ~BluetoothLE() override;
 
   BluetoothLE(BluetoothLE&&)                 = delete;
   BluetoothLE(const BluetoothLE&)            = delete;
@@ -110,6 +113,8 @@ public:
   [[nodiscard]] QStringList serviceNames() const;
   [[nodiscard]] QStringList characteristicNames() const;
 
+  [[nodiscard]] QString selectedServiceUuid() const;
+
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;
   void startDiscovery();
@@ -120,34 +125,41 @@ public slots:
 private slots:
   void configureCharacteristics();
   void onServiceDiscoveryFinished();
-  void onDeviceDiscovered(const QBluetoothDeviceInfo& device);
   void onServiceError(QLowEnergyService::ServiceError serviceError);
-  void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
   void onServiceStateChanged(QLowEnergyService::ServiceState serviceState);
   void onCharacteristicChanged(const QLowEnergyCharacteristic& info, const QByteArray& value);
-  void onHostModeStateChanged(QBluetoothLocalDevice::HostMode state);
 
 private:
-  void initializeBluetoothAdapter();
+  static void initializeSharedState();
+  static void onDeviceDiscovered(const QBluetoothDeviceInfo& device);
+  static void onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error error);
+  static void onHostModeStateChanged(QBluetoothLocalDevice::HostMode state);
 
 private:
   int m_deviceIndex;
   bool m_deviceConnected;
-  bool m_adapterAvailable;
   int m_selectedCharacteristic;
+  int m_pendingServiceIndex;
+  int m_pendingCharacteristicIndex;
+  QString m_pendingServiceUuid;
   QJsonObject m_pendingIdentifier;
 
   QLowEnergyService* m_service;
   QLowEnergyController* m_controller;
-  QBluetoothLocalDevice* m_localDevice;
-  QBluetoothDeviceDiscoveryAgent* m_discoveryAgent;
 
-  QStringList m_deviceNames;
   QStringList m_serviceNames;
   QStringList m_characteristicNames;
 
-  QList<QBluetoothDeviceInfo> m_devices;
   QList<QLowEnergyCharacteristic> m_characteristics;
+
+private:
+  static bool s_initialized;
+  static bool s_adapterAvailable;
+  static QBluetoothLocalDevice* s_localDevice;
+  static QBluetoothDeviceDiscoveryAgent* s_discoveryAgent;
+  static QStringList s_deviceNames;
+  static QList<QBluetoothDeviceInfo> s_devices;
+  static QList<BluetoothLE*> s_instances;
 };
 }  // namespace Drivers
 }  // namespace IO

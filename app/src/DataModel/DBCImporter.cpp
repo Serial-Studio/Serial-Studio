@@ -186,9 +186,7 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
     return;
   }
 
-  // Sort messages by CAN ID to keep everything in sync.
-  // This ensures dataset indices match between the UI groups and the JavaScript
-  // parser.
+  // Sort messages by CAN ID so dataset indices match between UI groups and the JS parser
   std::sort(m_messages.begin(),
             m_messages.end(),
             [](const QCanMessageDescription& a, const QCanMessageDescription& b) {
@@ -671,10 +669,7 @@ QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescrip
   // clang-format off
   QString code;
 
-  // Qt's DBC parser has a quirk: it reports byte order backwards!
-  // When the DBC says @0 (Intel/little-endian), Qt says "BigEndian"
-  // When the DBC says @1 (Motorola/big-endian), Qt says "LittleEndian"
-  // So we flip Qt's answer to get the correct byte order for signal extraction.
+  // Qt's DBC parser reports byte order inverted, so we flip it here
   const auto isBigEndian = (signal.dataEndian() == QSysInfo::LittleEndian);
   const auto isSigned = (signal.dataFormat() == QtCanBus::DataFormat::SignedInteger);
   // clang-format on

@@ -38,7 +38,6 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem* parent)
   , m_contentHeight(0)
   , m_updateRequested(true)
 {
-  // Set QML flags
   setMipmap(false);
   setOpaquePainting(true);
   setAcceptTouchEvents(false);
@@ -46,22 +45,16 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem* parent)
   setFlag(ItemIsFocusScope, false);
   setFlag(ItemAcceptsInputMethod, false);
   setAcceptedMouseButtons(Qt::NoButton);
-
-  // Paint the widget
   requestUpdate();
   redraw();
 
-  // Resize widget when the item's size is changed
+  // Resize and redraw on geometry/visibility changes
   connect(this, &QQuickPaintedItem::widthChanged, this, &DeclarativeWidget::resizeWidget);
   connect(this, &QQuickPaintedItem::heightChanged, this, &DeclarativeWidget::resizeWidget);
-
-  // Redraw widget when visibility changes
   connect(this, &DeclarativeWidget::visibleChanged, [=, this]() {
     requestUpdate();
     redraw();
   });
-
-  // Redraw widget when widget changes
   connect(this, &DeclarativeWidget::widgetChanged, [=, this]() {
     requestUpdate();
     redraw();

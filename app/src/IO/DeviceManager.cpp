@@ -34,22 +34,16 @@
  * The FrameReader is created immediately and will be recreated each time
  * open() is called after a close().
  *
- * @param deviceId           Opaque identifier for this device (matches ProjectModel sourceId).
- * @param driver             Unique ownership of the HAL driver instance.
- * @param config             Initial FrameReader configuration.
- * @param threadedExtraction When true the FrameReader runs in m_workerThread.
- * @param parent             Optional QObject parent.
+ * @param deviceId Opaque identifier for this device (matches ProjectModel sourceId).
+ * @param driver   Unique ownership of the HAL driver instance.
+ * @param config   Initial FrameReader configuration.
+ * @param parent   Optional QObject parent.
  */
 IO::DeviceManager::DeviceManager(int deviceId,
                                  std::unique_ptr<HAL_Driver> driver,
                                  const FrameConfig& config,
-                                 bool threadedExtraction,
                                  QObject* parent)
-  : QObject(parent)
-  , m_deviceId(deviceId)
-  , m_threadedExtraction(threadedExtraction)
-  , m_frameConfig(config)
-  , m_driver(std::move(driver))
+  : QObject(parent), m_deviceId(deviceId), m_frameConfig(config), m_driver(std::move(driver))
 {
   m_frameScratch.reserve(4096);
 
@@ -60,7 +54,7 @@ IO::DeviceManager::DeviceManager(int deviceId,
 }
 
 /**
- * @brief Destructs the DeviceManager, closing the driver and stopping the worker thread.
+ * @brief Destructs the DeviceManager, closing the driver.
  */
 IO::DeviceManager::~DeviceManager()
 {
@@ -204,9 +198,9 @@ void IO::DeviceManager::onRawDataReceived(const IO::ByteArrayPtr& data)
 /**
  * @brief Creates and starts a new FrameReader configured with @p config.
  *
- * All setters are called before moveToThread() to satisfy the FrameReader's
- * immutability contract: configuration must be frozen before the reader
- * is handed to its worker thread.
+ * Uses AutoConnection so that Qt picks DirectConnection when sender and
+ * receiver share a thread (zero-copy) and QueuedConnection when they
+ * don't (e.g. HID/USB drivers that emit from their own read threads).
  *
  * @param config FrameReader parameters to apply.
  */
@@ -225,47 +219,23 @@ void IO::DeviceManager::startFrameReader(const FrameConfig& config)
   m_frameReader->setOperationMode(config.operationMode);
   m_frameReader->setFrameDetectionMode(config.frameDetection);
 
-  if (m_threadedExtraction)
-    m_frameReader->moveToThread(&m_workerThread);
+  connect(
+    m_driver.get(), &IO::HAL_Driver::dataReceived, m_frameReader, &IO::FrameReader::processData);
 
-  connect(m_driver.get(),
-          &IO::HAL_Driver::dataReceived,
-          m_frameReader,
-          &IO::FrameReader::processData,
-          Qt::QueuedConnection);
-
-  connect(m_frameReader,
-          &IO::FrameReader::readyRead,
-          this,
-          &IO::DeviceManager::onReadyRead,
-          Qt::QueuedConnection);
-
-  if (m_threadedExtraction && !m_workerThread.isRunning())
-    m_workerThread.start();
+  connect(m_frameReader, &IO::FrameReader::readyRead, this, &IO::DeviceManager::onReadyRead);
 }
 
 /**
- * @brief Stops and destroys the FrameReader and its worker thread.
+ * @brief Stops and destroys the FrameReader.
  */
 void IO::DeviceManager::killFrameReader()
 {
-  if (!m_frameReader.isNull()) {
-    if (m_driver)
-      disconnect(m_driver.get(), &IO::HAL_Driver::dataReceived, m_frameReader, nullptr);
+  if (m_frameReader.isNull())
+    return;
 
-    if (m_threadedExtraction && m_workerThread.isRunning()) {
-      QMetaObject::invokeMethod(m_frameReader, &QObject::deleteLater, Qt::BlockingQueuedConnection);
-      m_workerThread.quit();
-      m_workerThread.wait();
-      m_frameReader.clear();
-    } else {
-      m_frameReader->deleteLater();
-      m_frameReader.clear();
-    }
-  }
+  if (m_driver)
+    disconnect(m_driver.get(), &IO::HAL_Driver::dataReceived, m_frameReader, nullptr);
 
-  else if (m_workerThread.isRunning()) {
-    m_workerThread.quit();
-    m_workerThread.wait();
-  }
+  m_frameReader->deleteLater();
+  m_frameReader.clear();
 }

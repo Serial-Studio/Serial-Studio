@@ -37,10 +37,10 @@
  */
 IO::FileTransmission::FileTransmission()
 {
-  // Set stream object pointer to null
+  // Initialize stream pointer
   m_stream = nullptr;
 
-  // Send a line to the serial device periodically
+  // Configure periodic line transmission timer
   m_timer.setInterval(100);
   m_timer.setTimerType(Qt::PreciseTimer);
   connect(&m_timer, &QTimer::timeout, this, &FileTransmission::sendLine);
@@ -101,11 +101,11 @@ QString IO::FileTransmission::fileName() const
  */
 int IO::FileTransmission::transmissionProgress() const
 {
-  // No file open or invalid size -> progress set to 0%
+  // No file open or invalid size, report 0%
   if (!fileOpen() || m_file.size() <= 0 || !m_stream)
     return 0;
 
-  // Return progress as percentage
+  // Compute progress as percentage
   double txb = m_stream->pos();
   double len = m_file.size();
   return qMin(1.0, (txb / len)) * 100;
@@ -162,20 +162,20 @@ void IO::FileTransmission::openFile()
  */
 void IO::FileTransmission::closeFile()
 {
-  // Stop transmitting the file to the serial device
+  // Stop active transmission
   stopTransmission();
 
-  // Close current file
+  // Close the file handle
   if (m_file.isOpen())
     m_file.close();
 
-  // Reset text stream handler
+  // Delete the text stream
   if (m_stream) {
     delete m_stream;
     m_stream = nullptr;
   }
 
-  // Emit signals to update the UI
+  // Update the UI
   Q_EMIT fileChanged();
   Q_EMIT transmissionProgressChanged();
 }
@@ -203,13 +203,12 @@ void IO::FileTransmission::beginTransmission()
 {
   // Only allow transmission if serial device is open
   if (IO::ConnectionManager::instance().isConnected()) {
-    // If file has already been sent, reset text stream position
+    // Reset stream position if file was fully sent
     if (transmissionProgress() == 100) {
       m_stream->seek(0);
       Q_EMIT transmissionProgressChanged();
     }
 
-    // Start timer
     m_timer.start();
     Q_EMIT activeChanged();
   }
@@ -228,22 +227,22 @@ void IO::FileTransmission::beginTransmission()
  */
 void IO::FileTransmission::setupExternalConnections()
 {
-  // Stop transmission if device is disconnected
+  // Stop transmission on disconnect
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
           &FileTransmission::stopTransmission);
 
-  // Refresh UI when serial device connection status changes
+  // Refresh UI on connection state changes
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
           &FileTransmission::fileChanged);
 
-  // Close file before application quits
+  // Clean up on application quit
   connect(qApp, &QApplication::aboutToQuit, this, &FileTransmission::closeFile);
 
-  // Retranslate text automatically
+  // Retranslate on language change
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,

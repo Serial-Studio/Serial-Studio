@@ -217,7 +217,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
     m_process = new QProcess(this);
     m_process->setProcessChannelMode(QProcess::MergedChannels);
 
-    connect(m_process, &QProcess::readyRead, this, &Process::onReadyRead, Qt::DirectConnection);
+    connect(m_process, &QProcess::readyRead, this, &Process::onReadyRead);
     connect(m_process,
             QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this,
@@ -564,8 +564,7 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
     reason,
     QMessageBox::Warning);
 
-  QMetaObject::invokeMethod(
-    &IO::ConnectionManager::instance(), "disconnectDevice", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(&IO::ConnectionManager::instance(), "disconnectDevice");
 }
 
 /**
@@ -582,8 +581,7 @@ void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
   const QString detail = m_process ? m_process->errorString() : tr("Unknown error");
   Misc::Utilities::showMessageBox(tr("Process Error"), detail, QMessageBox::Warning);
 
-  QMetaObject::invokeMethod(
-    &IO::ConnectionManager::instance(), "disconnectDevice", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(&IO::ConnectionManager::instance(), "disconnectDevice");
 }
 
 /**
@@ -597,8 +595,7 @@ void IO::Drivers::Process::onPipeError()
   Misc::Utilities::showMessageBox(
     tr("Pipe Error"), tr("Could not open named pipe: %1").arg(m_pipePath), QMessageBox::Warning);
 
-  QMetaObject::invokeMethod(
-    &IO::ConnectionManager::instance(), "disconnectDevice", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(&IO::ConnectionManager::instance(), "disconnectDevice");
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -250,8 +250,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceAdd(const QString& id,
                                     QStringLiteral("Multiple data sources require a Pro license"));
 #else
   const int countBefore = DataModel::ProjectModel::instance().sourceCount();
-  QMetaObject::invokeMethod(
-    &DataModel::ProjectModel::instance(), "addSource", Qt::DirectConnection);
+  QMetaObject::invokeMethod(&DataModel::ProjectModel::instance(), "addSource");
 
   const int countAfter = DataModel::ProjectModel::instance().sourceCount();
   if (countAfter <= countBefore)

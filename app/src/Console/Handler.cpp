@@ -732,31 +732,34 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
   }
 
   QString processedString;
-  processedString.reserve(data.length() + timestamp.length());
+  processedString.reserve(data.length() + timestamp.length() * 4);
 
-  QStringList tokens;
-  QString currentToken;
-  for (int i = 0; i < data.length(); ++i)
-    if (data.at(i) == '\n') {
-      tokens.append(currentToken);
-      tokens.append(QStringLiteral("\n"));
-      currentToken.clear();
+  // Single-pass newline scan to avoid O(n^2) QStringList removal
+  int pos = 0;
+  while (pos < data.length()) {
+    const int nlPos = data.indexOf('\n', pos);
+    const int end   = (nlPos < 0) ? data.length() : nlPos;
+
+    // Process the segment before the newline (or remaining text)
+    if (end > pos) {
+      const auto segment = QStringView(data).mid(pos, end - pos);
+      if (m_isStartingLine && !segment.trimmed().isEmpty())
+        processedString.append(timestamp);
+
+      processedString.append(segment);
+      m_isStartingLine = false;
     }
 
-    else
-      currentToken += data.at(i);
+    // Append the newline itself
+    if (nlPos >= 0) {
+      if (m_isStartingLine)
+        processedString.append(timestamp);
 
-  if (!currentToken.isEmpty())
-    tokens.append(currentToken);
-
-  while (!tokens.isEmpty()) {
-    auto token = tokens.first();
-    if (m_isStartingLine && !token.simplified().isEmpty())
-      processedString.append(timestamp);
-
-    processedString.append(token);
-    m_isStartingLine = (token == QStringLiteral("\n"));
-    tokens.removeFirst();
+      processedString.append('\n');
+      m_isStartingLine = true;
+      pos              = nlPos + 1;
+    } else
+      pos = end;
   }
 
   m_textBuffer.append(processedString.toUtf8());
@@ -869,13 +872,10 @@ QString Console::Handler::dataToString(QByteArrayView data)
   switch (displayMode()) {
     case DisplayMode::DisplayPlainText:
       return plainTextStr(data);
-      break;
     case DisplayMode::DisplayHexadecimal:
       return hexadecimalStr(data);
-      break;
     default:
       return "";
-      break;
   }
 }
 
@@ -901,24 +901,42 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
   if (vt100Emulation())
     return utf8Data;
 
+  // Batch printable runs, replace non-printable chars with dots
   QString filteredData;
   filteredData.reserve(utf8Data.size());
 
-  for (int i = 0; i < utf8Data.size(); ++i) {
-    const QChar ch       = utf8Data[i];
-    const ushort unicode = ch.unicode();
+  int i = 0;
+  while (i < utf8Data.size()) {
+    // Scan a run of printable characters
+    const int runStart = i;
+    while (i < utf8Data.size()) {
+      const ushort unicode = utf8Data[i].unicode();
 
-    // clang-format off
-    bool printable = (unicode == '\r') ||
-                     (unicode == '\n') ||
-                     (unicode == '\t') ||
-                     (unicode == 0x1B) ||
-                     (unicode >= 0x20 && unicode < 0x7F) ||
-                     (unicode >= 0x80);
-    // clang-format on
+      // clang-format off
+      const bool printable = (unicode != '\0')
+                             && ((unicode >= 0x20 && unicode < 0x7F)
+                                 || (unicode >= 0x80)
+                                 || (unicode == '\r')
+                                 || (unicode == '\n')
+                                 || (unicode == '\t')
+                                 || (unicode == 0x1B));
+      // clang-format on
 
-    printable = printable && (unicode != '\0');
-    filteredData += printable ? ch : QChar('.');
+      if (!printable)
+        break;
+
+      ++i;
+    }
+
+    // Bulk-append printable run
+    if (i > runStart)
+      filteredData.append(QStringView(utf8Data).mid(runStart, i - runStart));
+
+    // Replace non-printable char with dot
+    if (i < utf8Data.size()) {
+      filteredData.append('.');
+      ++i;
+    }
   }
 
   return filteredData;

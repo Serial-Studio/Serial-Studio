@@ -292,8 +292,7 @@ Widgets::ImageView::ImageView(int index, QQuickItem* parent)
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::driverChanged,
           this,
-          &ImageView::reconfigureReader,
-          Qt::QueuedConnection);
+          &ImageView::reconfigureReader);
 
   reconfigureReader();
 }
@@ -481,11 +480,7 @@ void Widgets::ImageView::reconfigureReader()
     m_reader = new ImageFrameReader(this);
   }
 
-  connect(driver,
-          &IO::HAL_Driver::dataReceived,
-          m_reader,
-          &ImageFrameReader::processData,
-          Qt::QueuedConnection);
+  connect(driver, &IO::HAL_Driver::dataReceived, m_reader, &ImageFrameReader::processData);
 
   connect(
     m_reader, &ImageFrameReader::frameReady, this, &ImageView::onFrameReady, Qt::QueuedConnection);

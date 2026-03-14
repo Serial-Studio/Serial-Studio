@@ -94,7 +94,6 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
           this,
           &MultiPlot::onThemeChanged);
 
-  // Update the range
   calculateAutoScaleRange();
   updateRange();
 }
@@ -322,8 +321,8 @@ void Widgets::MultiPlot::updateData()
 
     // Populate data for each plot
     for (qsizetype i = 0; i < plotCount; ++i) {
-      // Skip if curve is not visible
-      if (!m_visibleCurves[i])
+      // Skip if curve is not visible or out of bounds
+      if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
         continue;
 
       // Update data
@@ -340,23 +339,17 @@ void Widgets::MultiPlot::updateData()
  */
 void Widgets::MultiPlot::updateRange()
 {
-  // Get the dashboard instance and check if the index is valid
   if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
-  // Get the multiplot data
+  // Reset data containers and update X-axis range
   const auto& data = UI::Dashboard::instance().multiplotData(m_index);
-
-  // Resize the container structure
   m_data.clear();
   m_data.squeeze();
   m_data.resize(data.y.size());
 
-  // Update X-axis range
   m_minX = 0;
   m_maxX = UI::Dashboard::instance().points();
-
-  // Update the plot
   Q_EMIT rangeChanged();
 }
 
@@ -386,7 +379,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     int index = 0;
     for (const auto& dataset : group.datasets) {
       ok &= DSP::notEqual(dataset.pltMin, dataset.pltMax);
-      if (ok && m_visibleCurves[index]) {
+      if (ok && index < m_visibleCurves.size() && m_visibleCurves[index]) {
         m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
         m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
       }
@@ -473,7 +466,6 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     }
   }
 
-  // Update user interface if required
   if (DSP::notEqual(prevMinY, m_minY) || DSP::notEqual(prevMaxY, m_maxY))
     Q_EMIT rangeChanged();
 }

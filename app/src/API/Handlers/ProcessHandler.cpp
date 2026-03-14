@@ -16,6 +16,7 @@
 #  include <QJsonArray>
 
 #  include "API/CommandRegistry.h"
+#  include "API/PathPolicy.h"
 #  include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -106,6 +107,12 @@ API::CommandResponse API::Handlers::ProcessHandler::setExecutable(const QString&
   }
 
   const QString path = params.value(QStringLiteral("executable")).toString();
+
+  // Validate path against API allowlist
+  if (!API::isPathAllowed(path))
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Path is not allowed: ") + path);
+
   IO::ConnectionManager::instance().process()->setExecutable(path);
 
   QJsonObject result;

@@ -298,24 +298,6 @@ Widgets.SmartDialog {
             }
           }
 
-          Label {
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_Manager.isConnected
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("Threaded Frame Extraction")
-          } Switch {
-            Layout.rightMargin: -8
-            opacity: enabled ? 1 : 0.5
-            Layout.alignment: Qt.AlignRight
-            enabled: !Cpp_IO_Manager.isConnected
-            checked: Cpp_IO_Manager.threadedFrameExtraction
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_IO_Manager.threadedFrameExtraction)
-                Cpp_IO_Manager.threadedFrameExtraction = checked
-            }
-          }
-
           Item { Layout.fillHeight: true }
           Item { Layout.fillHeight: true }
         }
@@ -854,7 +836,6 @@ Widgets.SmartDialog {
           Cpp_API_Server.externalConnections = false
           Cpp_Misc_ModuleManager.automaticUpdates = true
           Cpp_UI_Dashboard.terminalEnabled = false
-          Cpp_IO_Manager.threadedFrameExtraction = false
           Cpp_UI_Dashboard.autoHideToolbar = false
           Cpp_UI_Dashboard.showTaskbarButtons = false
           Cpp_Console_Handler.fontFamily = Cpp_Misc_CommonFonts.monoFont.family

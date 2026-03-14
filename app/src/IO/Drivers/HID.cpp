@@ -476,7 +476,7 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
     if (vid != savedVid || pid != savedPid)
       continue;
 
-    // Check serial if available
+    // Verify serial number if provided
     if (!savedSer.isEmpty()) {
       const QString serial = (dev->serial_number && dev->serial_number[0] != L'\0')
                              ? QString::fromWCharArray(dev->serial_number)
@@ -485,7 +485,7 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
         continue;
     }
 
-    // Found a match — find its index in m_devicePaths
+    // Found a match, look up its index
     const auto path = QString::fromUtf8(dev->path);
     const int idx   = m_devicePaths.indexOf(path);
     if (idx > 0) {

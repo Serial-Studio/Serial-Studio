@@ -44,11 +44,11 @@
  */
 static bool deviceListsDiffer(const QVector<ma_device_info>& a, const QVector<ma_device_info>& b)
 {
-  // Size of lists is different -> lists are different
+  // Different sizes means the lists differ
   if (a.size() != b.size())
     return true;
 
-  // Compare each item of the list to see if there is any difference
+  // Compare device IDs and names
   for (int i = 0; i < a.size(); ++i) {
     if (memcmp(&a[i].id, &b[i].id, sizeof(ma_device_id)) != 0)
       return true;
@@ -57,7 +57,6 @@ static bool deviceListsDiffer(const QVector<ma_device_info>& a, const QVector<ma
       return true;
   }
 
-  // Size is the same and IDs/names are the same -> lists are equal
   return false;
 }
 
@@ -85,24 +84,20 @@ static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* conte
                                                                const ma_device_info& info,
                                                                ma_device_type type)
 {
-  // Set default number of channels
-  const QSet<int> defaultChannels = {1, 2};
-
-  // Set default sample rates
+  const QSet<int> defaultChannels    = {1, 2};
   const QSet<int> defaultSampleRates = {
     8000, 11025, 16000, 22050, 44100, 48000, 88200, 96000, 176400, 192000, 352800, 384000};
 
-  // Set default formats
   const QSet<ma_format> defaultFormats = {
     ma_format_u8, ma_format_s16, ma_format_s24, ma_format_s32, ma_format_f32};
 
-  // Extract device info
+  // Query full device info from the backend
   ma_device_info fullInfo = {};
   auto r                  = ma_context_get_device_info(context, type, &info.id, &fullInfo);
   if (r != MA_SUCCESS)
     fullInfo = info;
 
-  // Extract native supported formats
+  // Parse native data formats
   QSet<int> sampleRates;
   QSet<ma_format> formats;
   QSet<int> channelCounts = {1};
@@ -125,26 +120,24 @@ static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* conte
       sampleRates.insert(static_cast<int>(f.sampleRate));
   }
 
-  // Fallback values
+  // Apply fallback defaults for empty sets
   if (formats.isEmpty())
     formats = defaultFormats;
   if (sampleRates.isEmpty())
     sampleRates = defaultSampleRates;
-  if (defaultChannels.isEmpty())
+  if (channelCounts.isEmpty())
     channelCounts = defaultChannels;
 
-  // Generate device capabilities structure
   IO::Drivers::Audio::AudioDeviceInfo caps;
   caps.supportedFormats       = formats.values();
   caps.supportedSampleRates   = sampleRates.values();
   caps.supportedChannelCounts = channelCounts.values();
 
-  // Final UI polish
+  // Sort for consistent UI display
   std::sort(caps.supportedFormats.begin(), caps.supportedFormats.end());
   std::sort(caps.supportedSampleRates.begin(), caps.supportedSampleRates.end());
   std::sort(caps.supportedChannelCounts.begin(), caps.supportedChannelCounts.end());
 
-  // Return result
   return caps;
 }
 
@@ -457,13 +450,13 @@ bool IO::Drivers::Audio::configurationOk() const noexcept
  */
 qint64 IO::Drivers::Audio::write(const QByteArray& data)
 {
-  // Check that we can actually write something
+  // Verify output is available
   if (!m_isOpen || m_config.playback.channels <= 0) {
     qWarning() << "Output device not available or misconfigured.";
     return 0;
   }
 
-  // Validate that the user sent a valid CSV-like frame
+  // Validate CSV channel count
   const int channels            = m_config.playback.channels;
   const ma_format format        = m_config.playback.format;
   const QList<QByteArray> parts = data.trimmed().split(',');
@@ -473,12 +466,11 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
     return 0;
   }
 
-  // Initialize a vector with outputs for each channel
+  // Convert each channel value to the appropriate sample format
   QVector<quint8> frame;
   for (int i = 0; i < channels; ++i) {
     bool ok = false;
 
-    // Convert to uint8_t
     if (format == ma_format_u8) {
       int value = parts[i].toInt(&ok);
       if (!ok) {
@@ -487,10 +479,8 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
       }
 
       frame.append(static_cast<quint8>(qBound(0, value, 255)));
-      break;
     }
 
-    // Convert to int16_t
     else if (format == ma_format_s16) {
       int value = parts[i].toInt(&ok);
       if (!ok) {
@@ -502,10 +492,8 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
       const quint8* bytes = reinterpret_cast<const quint8*>(&sample);
       frame.append(bytes[0]);
       frame.append(bytes[1]);
-      break;
     }
 
-    // Convert to 24-bit signed integer (S24LE, packed 3 bytes)
     else if (format == ma_format_s24) {
       int value = parts[i].toInt(&ok);
       if (!ok) {
@@ -517,10 +505,8 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
       frame.append(static_cast<quint8>(value & 0xFF));
       frame.append(static_cast<quint8>((value >> 8) & 0xFF));
       frame.append(static_cast<quint8>((value >> 16) & 0xFF));
-      break;
     }
 
-    // Convert to 32-bit signed integer
     else if (format == ma_format_s32) {
       qint32 value = parts[i].toInt(&ok);
       if (!ok) {
@@ -534,10 +520,8 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
       frame.append(bytes[1]);
       frame.append(bytes[2]);
       frame.append(bytes[3]);
-      break;
     }
 
-    // Convert to 32-bit float
     else if (format == ma_format_f32) {
       float value = parts[i].toFloat(&ok);
       if (!ok) {
@@ -549,22 +533,18 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
       const quint8* bytes = reinterpret_cast<const quint8*>(&value);
       for (size_t b = 0; b < sizeof(float); ++b)
         frame.append(bytes[b]);
-
-      break;
     }
 
-    // Unsupported format
     else {
       qWarning() << "Unsupported format:" << static_cast<int>(format);
       return 0;
     }
   }
 
-  // Write data to output queue
+  // Enqueue frame for playback
   QMutexLocker locker(&m_outputBufferLock);
   m_outputQueue.push_back(std::move(frame));
 
-  // Return the number of bytes that have been written
   return data.size();
 }
 

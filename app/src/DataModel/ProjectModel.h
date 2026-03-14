@@ -220,6 +220,7 @@ private:
 
   int m_pointCount;
   bool m_modified;
+  bool m_silentReload;
   QString m_filePath;
   bool m_suppressMessageBoxes;
 

@@ -194,8 +194,8 @@ API::CommandResponse API::Handlers::WindowHandler::setActiveGroup(const QString&
     return noSession(id);
 
   const int group_id = params.value(QStringLiteral("groupId")).toInt();
-  QMetaObject::invokeMethod(
-    taskbar, [taskbar, group_id]() { taskbar->setActiveGroupId(group_id); }, Qt::QueuedConnection);
+  QMetaObject::invokeMethod(taskbar,
+                            [taskbar, group_id]() { taskbar->setActiveGroupId(group_id); });
 
   QJsonObject result;
   result[QStringLiteral("groupId")] = group_id;
@@ -219,8 +219,7 @@ API::CommandResponse API::Handlers::WindowHandler::setActiveGroupIndex(const QSt
     return noSession(id);
 
   const int index = params.value(QStringLiteral("index")).toInt();
-  QMetaObject::invokeMethod(
-    taskbar, [taskbar, index]() { taskbar->setActiveGroupIndex(index); }, Qt::QueuedConnection);
+  QMetaObject::invokeMethod(taskbar, [taskbar, index]() { taskbar->setActiveGroupIndex(index); });
 
   QJsonObject result;
   result[QStringLiteral("index")] = index;
@@ -306,10 +305,8 @@ API::CommandResponse API::Handlers::WindowHandler::setWindowState(const QString&
   }
 
   const auto state = static_cast<UI::TaskbarModel::WindowState>(state_int);
-  QMetaObject::invokeMethod(
-    taskbar,
-    [taskbar, win_id, state]() { taskbar->setWindowState(win_id, state); },
-    Qt::QueuedConnection);
+  QMetaObject::invokeMethod(taskbar,
+                            [taskbar, win_id, state]() { taskbar->setWindowState(win_id, state); });
 
   QJsonObject result;
   result[QStringLiteral("id")]    = win_id;
@@ -338,8 +335,7 @@ API::CommandResponse API::Handlers::WindowHandler::setAutoLayout(const QString& 
     return noSession(id);
 
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
-  QMetaObject::invokeMethod(
-    wm, [wm, enabled]() { wm->setAutoLayoutEnabled(enabled); }, Qt::QueuedConnection);
+  QMetaObject::invokeMethod(wm, [wm, enabled]() { wm->setAutoLayoutEnabled(enabled); });
 
   QJsonObject result;
   result[QStringLiteral("enabled")] = enabled;
@@ -358,7 +354,7 @@ API::CommandResponse API::Handlers::WindowHandler::saveLayout(const QString& id,
   if (!taskbar)
     return noSession(id);
 
-  QMetaObject::invokeMethod(taskbar, [taskbar]() { taskbar->saveLayout(); }, Qt::QueuedConnection);
+  QMetaObject::invokeMethod(taskbar, [taskbar]() { taskbar->saveLayout(); });
 
   return CommandResponse::makeSuccess(id);
 }
@@ -375,7 +371,7 @@ API::CommandResponse API::Handlers::WindowHandler::loadLayout(const QString& id,
   if (!wm)
     return noSession(id);
 
-  QMetaObject::invokeMethod(wm, [wm]() { wm->loadLayout(); }, Qt::QueuedConnection);
+  QMetaObject::invokeMethod(wm, [wm]() { wm->loadLayout(); });
 
   return CommandResponse::makeSuccess(id);
 }
@@ -416,8 +412,7 @@ API::CommandResponse API::Handlers::WindowHandler::setLayout(const QString& id,
     return noSession(id);
 
   const QJsonObject layout = params.value(QStringLiteral("layout")).toObject();
-  QMetaObject::invokeMethod(
-    wm, [wm, layout]() { wm->restoreLayout(layout); }, Qt::QueuedConnection);
+  QMetaObject::invokeMethod(wm, [wm, layout]() { wm->restoreLayout(layout); });
 
   return CommandResponse::makeSuccess(id);
 }
@@ -468,9 +463,7 @@ API::CommandResponse API::Handlers::WindowHandler::setWidgetSetting(const QStrin
 
   auto* pm = &DataModel::ProjectModel::instance();
   QMetaObject::invokeMethod(
-    pm,
-    [pm, widget_id, key, value]() { pm->saveWidgetSetting(widget_id, key, value); },
-    Qt::QueuedConnection);
+    pm, [pm, widget_id, key, value]() { pm->saveWidgetSetting(widget_id, key, value); });
 
   QJsonObject result;
   result[QStringLiteral("widgetId")] = widget_id;
