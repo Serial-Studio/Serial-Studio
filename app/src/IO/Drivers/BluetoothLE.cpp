@@ -96,7 +96,8 @@ IO::Drivers::BluetoothLE::~BluetoothLE()
  */
 void IO::Drivers::BluetoothLE::close()
 {
-  m_deviceConnected = false;
+  const bool wasConnected = m_deviceConnected;
+  m_deviceConnected       = false;
 
   // Reset all service/characteristic state
   m_serviceNames.clear();
@@ -120,8 +121,24 @@ void IO::Drivers::BluetoothLE::close()
     m_controller = nullptr;
   }
 
+  // Clear service/characteristic lists on other instances with the same device
+  if (wasConnected) {
+    for (auto* inst : std::as_const(s_instances)) {
+      if (inst == this || inst->m_deviceIndex != m_deviceIndex)
+        continue;
+
+      inst->m_serviceNames.clear();
+      inst->m_characteristicNames.clear();
+      inst->m_selectedCharacteristic = -1;
+      Q_EMIT inst->servicesChanged();
+      Q_EMIT inst->characteristicsChanged();
+      Q_EMIT inst->characteristicIndexChanged();
+    }
+  }
+
   Q_EMIT servicesChanged();
   Q_EMIT characteristicsChanged();
+  Q_EMIT characteristicIndexChanged();
   Q_EMIT deviceConnectedChanged();
 }
 

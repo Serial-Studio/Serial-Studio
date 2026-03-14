@@ -1076,50 +1076,53 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
   busItem->setData(busTypes, ComboBoxData);
   m_sourceModel->appendRow(busItem);
 
-  auto* driverHdr = new QStandardItem();
-  driverHdr->setData(SectionHeader, WidgetType);
-  driverHdr->setData(tr("Connection Settings"), PlaceholderValue);
-  driverHdr->setData(busTypeIcon(source.busType), ParameterIcon);
-  m_sourceModel->appendRow(driverHdr);
+  // BLE connection is configured at runtime via the Setup panel, not the editor
+  if (source.busType != static_cast<int>(SerialStudio::BusType::BluetoothLE)) {
+    auto* driverHdr = new QStandardItem();
+    driverHdr->setData(SectionHeader, WidgetType);
+    driverHdr->setData(tr("Connection Settings"), PlaceholderValue);
+    driverHdr->setData(busTypeIcon(source.busType), ParameterIcon);
+    m_sourceModel->appendRow(driverHdr);
 
-  IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(source.sourceId);
-  if (driver) {
-    const auto props = driver->driverProperties();
-    for (const auto& prop : props) {
-      auto* item = new QStandardItem();
-      item->setEditable(true);
-      item->setData(true, Active);
-      item->setData(prop.key, ParameterKey);
-      item->setData(kSourceView_Property, ParameterType);
-      item->setData(prop.label, ParameterName);
+    IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(source.sourceId);
+    if (driver) {
+      const auto props = driver->driverProperties();
+      for (const auto& prop : props) {
+        auto* item = new QStandardItem();
+        item->setEditable(true);
+        item->setData(true, Active);
+        item->setData(prop.key, ParameterKey);
+        item->setData(kSourceView_Property, ParameterType);
+        item->setData(prop.label, ParameterName);
 
-      if (!prop.description.isEmpty())
-        item->setData(prop.description, ParameterDescription);
+        if (!prop.description.isEmpty())
+          item->setData(prop.description, ParameterDescription);
 
-      switch (prop.type) {
-        case IO::DriverProperty::Text:
-          item->setData(TextField, WidgetType);
-          break;
-        case IO::DriverProperty::HexText:
-          item->setData(HexTextField, WidgetType);
-          break;
-        case IO::DriverProperty::IntField:
-          item->setData(IntField, WidgetType);
-          break;
-        case IO::DriverProperty::FloatField:
-          item->setData(FloatField, WidgetType);
-          break;
-        case IO::DriverProperty::CheckBox:
-          item->setData(CheckBox, WidgetType);
-          break;
-        case IO::DriverProperty::ComboBox:
-          item->setData(ComboBox, WidgetType);
-          item->setData(prop.options, ComboBoxData);
-          break;
+        switch (prop.type) {
+          case IO::DriverProperty::Text:
+            item->setData(TextField, WidgetType);
+            break;
+          case IO::DriverProperty::HexText:
+            item->setData(HexTextField, WidgetType);
+            break;
+          case IO::DriverProperty::IntField:
+            item->setData(IntField, WidgetType);
+            break;
+          case IO::DriverProperty::FloatField:
+            item->setData(FloatField, WidgetType);
+            break;
+          case IO::DriverProperty::CheckBox:
+            item->setData(CheckBox, WidgetType);
+            break;
+          case IO::DriverProperty::ComboBox:
+            item->setData(ComboBox, WidgetType);
+            item->setData(prop.options, ComboBoxData);
+            break;
+        }
+
+        item->setData(prop.value, EditableValue);
+        m_sourceModel->appendRow(item);
       }
-
-      item->setData(prop.value, EditableValue);
-      m_sourceModel->appendRow(item);
     }
   }
 
