@@ -47,7 +47,7 @@ Misc::CommonFonts::CommonFonts()
 #endif
 
   // Add custom mono font
-  const auto path = QStringLiteral(":/rcc/fonts/JetBrainsMono-Regular.ttf");
+  const auto path = QStringLiteral(":/rcc/fonts/GeistMono.ttf");
   const auto id   = QFontDatabase::addApplicationFont(path);
   if (id != -1) {
     const auto families = QFontDatabase::applicationFontFamilies(id);
@@ -77,10 +77,18 @@ Misc::CommonFonts::CommonFonts()
     m_monoFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
 
   // Load widget font settings (default family is the monospace font on first run)
-  m_widgetFontFamily = m_settings.value("Widgets/FontFamily", m_monoFont.family()).toString();
-  m_widgetFontScale  = m_settings.value("Widgets/FontScale", kScaleNormal).toDouble();
+  m_widgetFontFamily = m_settings.value("CommonFonts/FontFamily", m_monoFont.family()).toString();
+  m_widgetFontScale  = m_settings.value("CommonFonts/FontScale", kScaleNormal).toDouble();
   m_widgetFontScale  = qBound(0.5, m_widgetFontScale, 3.0);
-  m_widgetFontIndex  = availableFonts().indexOf(m_widgetFontFamily);
+
+  // Validate saved font family exists; fall back to default mono font if not found
+  const auto fonts = availableFonts();
+  m_widgetFontIndex = fonts.indexOf(m_widgetFontFamily);
+  if (m_widgetFontIndex < 0)
+  {
+    m_widgetFontFamily = m_monoFont.family();
+    m_widgetFontIndex = fonts.indexOf(m_widgetFontFamily);
+  }
 }
 
 /**

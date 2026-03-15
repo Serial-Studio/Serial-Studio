@@ -29,7 +29,6 @@
 #include <QFontMetrics>
 
 #include "AppState.h"
-#include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
