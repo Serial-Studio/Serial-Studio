@@ -273,11 +273,12 @@ void Console::Export::setExportEnabled(const bool enabled)
     Q_EMIT enabledChanged();
     return;
   }
+
+  setConsumerEnabled(false);
 #endif
 
   // Close file and disable export
   closeFile();
-  setConsumerEnabled(false);
   m_exportEnabled.store(false, std::memory_order_relaxed);
   m_settings.setValue("ConsoleExport", false);
   Q_EMIT enabledChanged();
