@@ -23,6 +23,7 @@
 
 #include <QFile>
 #include <QObject>
+#include <QSet>
 #include <QTextStream>
 #include <QVector>
 
@@ -53,9 +54,13 @@ protected:
 private:
   QVector<QPair<int, QString>> createCsvFile(const DataModel::Frame& frame);
 
+public:
+  DataModel::Frame m_templateFrame;
+
 private:
   QFile m_csvFile;
   QTextStream m_textStream;
+  QSet<int> m_knownUniqueIds;
   QVector<QPair<int, QString>> m_indexHeaderPairs;
   DataModel::TimestampedFrame::SteadyTimePoint m_referenceTimestamp;
 };

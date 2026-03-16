@@ -23,6 +23,7 @@
 
 #include <atomic>
 #include <memory>
+#include <QMap>
 #include <QObject>
 #include <QSettings>
 #include <unordered_map>
@@ -161,6 +162,8 @@ public:
   Q_INVOKABLE qint64 writeData(const QByteArray& data);
   Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data);
   Q_INVOKABLE void processPayload(const QByteArray& payload);
+  void processMultiSourcePayload(const QByteArray& fullPayload,
+                                 const QMap<int, QByteArray>& sourcePayloads);
 
 public slots:
   void connectDevice();

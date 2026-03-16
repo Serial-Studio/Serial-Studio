@@ -36,7 +36,9 @@
 #  include <mdf/mdffactory.h>
 #  include <mdf/mdfwriter.h>
 
+#  include "AppState.h"
 #  include "CSV/Player.h"
+#  include "DataModel/FrameBuilder.h"
 #  include "IO/ConnectionManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "MDF4/Player.h"
@@ -57,7 +59,7 @@ MDF4::ExportWorker::ExportWorker(
   moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* queue,
   std::atomic<bool>* enabled,
   std::atomic<size_t>* queueSize)
-  : FrameConsumerWorker(queue, enabled, queueSize), m_fileOpen(false), m_masterTimeChannel(nullptr)
+  : FrameConsumerWorker(queue, enabled, queueSize), m_fileOpen(false)
 {}
 
 /**
@@ -125,8 +127,8 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
       if (group.datasets.size() != info.channels.size())
         continue;
 
-      if (m_masterTimeChannel)
-        m_masterTimeChannel->SetChannelValue(timestamp_s);
+      if (info.timeChannel)
+        info.timeChannel->SetChannelValue(timestamp_s);
 
       writeDatasets(group, info);
       m_writer->SaveSample(*info.channelGroup, static_cast<uint64_t>(timestamp_ns));
@@ -152,7 +154,7 @@ void MDF4::ExportWorker::closeResources()
     m_fileOpen = false;
     m_writer.reset();
     m_groupMap.clear();
-    m_masterTimeChannel = nullptr;
+    DataModel::clear_frame(m_templateFrame);
   }
 }
 
@@ -202,8 +204,25 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
 
     dataGroup->Description("Serial Studio Data");
 
-    bool firstGroup = true;
-    for (const auto& group : frame.groups) {
+    // Use full project frame (all sources) if cached, otherwise fall
+    // back to the first data frame (QuickPlot/JSON modes)
+    const bool usingTemplate = !m_templateFrame.groups.empty();
+    const auto& allGroups    = usingTemplate ? m_templateFrame.groups : frame.groups;
+
+    // Build (groupId, datasetId) → isNumeric lookup from the live frame
+    // so template groups get the correct data type when available
+    std::map<std::pair<int, int>, bool> numericLookup;
+    if (usingTemplate) {
+      for (const auto& g : frame.groups)
+        for (const auto& d : g.datasets)
+          numericLookup[{g.groupId, d.datasetId}] = d.isNumeric;
+    }
+
+    // Skip image groups entirely — they have no telemetry datasets
+    for (const auto& group : allGroups) {
+      if (group.widget == QLatin1String("image"))
+        continue;
+
       auto* channelGroup = dataGroup->CreateChannelGroup();
       if (!channelGroup)
         continue;
@@ -212,20 +231,18 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
 
       ChannelGroupInfo info;
       info.channelGroup = channelGroup;
+      info.timeChannel  = nullptr;
 
-      if (firstGroup) {
-        auto* timeChannel = channelGroup->CreateChannel();
-        if (!timeChannel)
-          continue;
-
+      // Each channel group gets its own master time channel so that
+      // multi-source recordings store per-group timestamps correctly
+      auto* timeChannel = channelGroup->CreateChannel();
+      if (timeChannel) {
         timeChannel->Name("Time");
         timeChannel->Unit("s");
         timeChannel->Type(mdf::ChannelType::Master);
         timeChannel->DataType(mdf::ChannelDataType::FloatLe);
         timeChannel->DataBytes(8);
-        m_masterTimeChannel = timeChannel;
-
-        firstGroup = false;
+        info.timeChannel = timeChannel;
       }
 
       for (const auto& dataset : group.datasets) {
@@ -237,7 +254,14 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
         channel->Unit(dataset.units.toStdString());
         channel->Type(mdf::ChannelType::FixedLength);
 
-        if (dataset.isNumeric) {
+        // For template groups, use live frame lookup or default to numeric
+        bool isNum = dataset.isNumeric;
+        if (usingTemplate) {
+          auto nit = numericLookup.find({group.groupId, dataset.datasetId});
+          isNum    = (nit != numericLookup.end()) ? nit->second : true;
+        }
+
+        if (isNum) {
           channel->DataType(mdf::ChannelDataType::FloatLe);
           channel->DataBytes(8);
         } else {
@@ -246,7 +270,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
         }
 
         info.channels.push_back(channel);
-        info.isNumeric.push_back(dataset.isNumeric);
+        info.isNumeric.push_back(isNum);
       }
 
       m_groupMap[group.groupId] = info;
@@ -376,10 +400,21 @@ void MDF4::Export::closeFile()
 void MDF4::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
-  connect(&IO::ConnectionManager::instance(),
-          &IO::ConnectionManager::connectedChanged,
-          this,
-          &Export::closeFile);
+  connect(
+    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
+      if (IO::ConnectionManager::instance().isConnected()) {
+        // Cache the full project frame (all sources) for file creation.
+        // Only meaningful in ProjectFile mode — QuickPlot/JSON builds
+        // the frame on the fly and FrameBuilder::frame() may be stale.
+        auto* worker = static_cast<ExportWorker*>(m_worker);
+        if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+          worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
+        else
+          DataModel::clear_frame(worker->m_templateFrame);
+      } else {
+        closeFile();
+      }
+    });
   connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
     if (IO::ConnectionManager::instance().paused())
       closeFile();

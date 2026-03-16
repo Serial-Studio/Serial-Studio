@@ -64,13 +64,17 @@ private:
 private:
   struct ChannelGroupInfo {
     mdf::IChannelGroup* channelGroup;
+    mdf::IChannel* timeChannel;
     std::vector<mdf::IChannel*> channels;
     std::vector<bool> isNumeric;
   };
 
+public:
+  DataModel::Frame m_templateFrame;
+
+private:
   bool m_fileOpen;
   QString m_filePath;
-  mdf::IChannel* m_masterTimeChannel;
   std::unique_ptr<mdf::MdfWriter> m_writer;
   std::map<int, ChannelGroupInfo> m_groupMap;
 

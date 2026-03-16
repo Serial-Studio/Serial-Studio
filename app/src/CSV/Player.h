@@ -25,6 +25,7 @@
 #include <QElapsedTimer>
 #include <QFile>
 #include <QKeyEvent>
+#include <QMap>
 #include <QObject>
 #include <QVector>
 
@@ -121,8 +122,13 @@ protected:
   bool handleKeyPress(QKeyEvent* keyEvent);
 
 private:
+  void buildMultiSourceMapping();
+  void injectFrame(const QByteArray& frame);
+
+private:
   int m_framePos;
   bool m_playing;
+  bool m_multiSource;
   QFile m_csvFile;
   QString m_timestamp;
   QList<QStringList> m_csvData;
@@ -132,5 +138,10 @@ private:
   double m_startTimestampSeconds;
   bool m_useHighPrecisionTimestamps;
   QVector<double> m_timestampCache;
+
+  // Multi-source playback mapping: column index → sourceId
+  QMap<int, int> m_columnToSource;
+  // Per-source column count for re-indexing
+  QMap<int, int> m_sourceColumnCount;
 };
 }  // namespace CSV

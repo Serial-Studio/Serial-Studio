@@ -27,7 +27,9 @@
 #include <QTimer>
 #include <QtMath>
 
+#include "AppState.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
@@ -43,6 +45,7 @@
 CSV::Player::Player()
   : m_framePos(0)
   , m_playing(false)
+  , m_multiSource(false)
   , m_timestamp("")
   , m_startTimestampSeconds(0.0)
   , m_useHighPrecisionTimestamps(false)
@@ -228,6 +231,9 @@ void CSV::Player::closeFile()
   m_timestampCache.clear();
   m_useHighPrecisionTimestamps = false;
   m_startTimestampSeconds      = 0.0;
+  m_multiSource                = false;
+  m_columnToSource.clear();
+  m_sourceColumnCount.clear();
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
@@ -513,7 +519,7 @@ void CSV::Player::updateData()
   if (!isPlaying())
     return;
 
-  IO::ConnectionManager::instance().processPayload(getFrame(framePosition()));
+  injectFrame(getFrame(framePosition()));
 
   if (framePosition() >= frameCount() - 1) {
     pause();
@@ -550,7 +556,7 @@ void CSV::Player::updateData()
     int processed               = 0;
     while (m_framePos < frameCount() - 1 && processed < kMaxBatchSize && msUntilNext <= 0) {
       ++m_framePos;
-      IO::ConnectionManager::instance().processPayload(getFrame(m_framePos));
+      injectFrame(getFrame(m_framePos));
       ++processed;
 
       if (m_useHighPrecisionTimestamps) {
@@ -614,7 +620,7 @@ void CSV::Player::processFrameBatch(int startFrame, int endFrame)
     return;
 
   for (int i = startFrame; i <= endFrame; ++i)
-    IO::ConnectionManager::instance().processPayload(getFrame(i));
+    injectFrame(getFrame(i));
 }
 
 /**
@@ -633,6 +639,16 @@ void CSV::Player::sendHeaderFrame()
   const auto& headerRow = m_csvData.first();
   if (headerRow.size() <= 1)
     return;
+
+  // In project mode with multiple sources, build multi-source mapping
+  // and skip QuickPlot header registration (project defines the structure)
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
+    const auto& sources = DataModel::ProjectModel::instance().sources();
+    if (sources.size() > 1) {
+      buildMultiSourceMapping();
+      return;
+    }
+  }
 
   QStringList headers;
   for (int i = 1; i < headerRow.size(); ++i)
@@ -943,6 +959,84 @@ const QString CSV::Player::getCellValue(const int row, const int column, bool& e
 
   error = true;
   return defaultValue;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Multi-source playback helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Builds a column-to-source mapping for multi-source CSV playback.
+ *
+ * Iterates all groups/datasets from the project sorted by uniqueId (matching
+ * the export column order) and maps each CSV column index to its sourceId.
+ */
+void CSV::Player::buildMultiSourceMapping()
+{
+  m_columnToSource.clear();
+  m_sourceColumnCount.clear();
+
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+
+  // Collect (uniqueId, sourceId) pairs for all datasets
+  QVector<QPair<int, int>> uidSourcePairs;
+  for (const auto& g : groups)
+    for (const auto& d : g.datasets)
+      uidSourcePairs.append(qMakePair(d.uniqueId, d.sourceId));
+
+  // Sort by uniqueId to match export column order
+  std::sort(uidSourcePairs.begin(), uidSourcePairs.end(), [](const auto& a, const auto& b) {
+    return a.first < b.first;
+  });
+
+  // Map column index (0-based, excluding timestamp) to sourceId
+  for (int col = 0; col < uidSourcePairs.size(); ++col) {
+    const int srcId       = uidSourcePairs[col].second;
+    m_columnToSource[col] = srcId;
+    m_sourceColumnCount[srcId]++;
+  }
+
+  m_multiSource = !m_columnToSource.isEmpty() && m_sourceColumnCount.size() > 1;
+}
+
+/**
+ * @brief Injects a CSV frame through the appropriate pipeline path.
+ *
+ * For single-source or non-project mode, delegates to processPayload().
+ * For multi-source project mode, splits the CSV row by source and calls
+ * processMultiSourcePayload().
+ *
+ * @param frame CSV-formatted byte array (without timestamp column).
+ */
+void CSV::Player::injectFrame(const QByteArray& frame)
+{
+  if (frame.isEmpty())
+    return;
+
+  // Single-source: use standard path
+  if (!m_multiSource) {
+    IO::ConnectionManager::instance().processPayload(frame);
+    return;
+  }
+
+  // Multi-source: split CSV columns by source
+  const auto fields = QString::fromUtf8(frame).trimmed().split(',');
+
+  QMap<int, QStringList> sourceFields;
+  for (int col = 0; col < fields.size(); ++col) {
+    auto it = m_columnToSource.find(col);
+    if (it == m_columnToSource.end())
+      continue;
+
+    sourceFields[it.value()].append(fields[col]);
+  }
+
+  // Build per-source payloads
+  QMap<int, QByteArray> sourcePayloads;
+  for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it)
+    sourcePayloads[it.key()] = it.value().join(',').toUtf8() + '\n';
+
+  IO::ConnectionManager::instance().processMultiSourcePayload(frame, sourcePayloads);
 }
 
 //--------------------------------------------------------------------------------------------------

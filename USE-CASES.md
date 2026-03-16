@@ -65,6 +65,20 @@ Real-world applications and success stories for Serial Studio across industries,
 
 ---
 
+### HID Gamepad Telemetry for Robotics
+**Problem:** A robotics team uses USB gamepads to control their robot and wants to log joystick inputs alongside the robot's sensor feedback.
+
+**Solution:** Serial Studio's HID driver reads gamepad axis and button data via hidapi:
+- Joystick X/Y axes displayed as plots
+- Button states shown as LED indicators
+- Robot IMU and motor feedback received over BLE in the same multi-device project
+- All data logged to CSV for post-match analysis
+
+**Hardware:** USB gamepad + ESP32 robot controller
+**Pro Feature Used:** HID driver, multi-device projects
+
+---
+
 ## Education and Research
 
 ### University Physics Lab: Pendulum Experiment
@@ -109,6 +123,20 @@ Real-world applications and success stories for Serial Studio across industries,
 **Hardware:** Arduino Uno + DHT22 + BMP180
 **Class Size:** 30 students (15 groups)
 **Learning Goals:** Sensors, serial communication, data presentation
+
+---
+
+### Process I/O: Simulation Dashboard
+**Problem:** A research team runs physics simulations that output CSV data to stdout. They want to visualize simulation results in real-time without writing custom GUI code.
+
+**Solution:** Serial Studio's Process driver launches the simulation executable and streams its stdout into the dashboard:
+- Simulation outputs comma-separated values (position, velocity, energy)
+- Real-time plots show simulation trajectories
+- Named pipe mode supports bidirectional communication for parameter sweeps
+- Data exported to CSV for comparison with experimental results
+
+**Hardware:** Any computer (no external devices needed)
+**Pro Feature Used:** Process I/O driver
 
 ---
 
@@ -256,6 +284,20 @@ Real-world applications and success stories for Serial Studio across industries,
 **Hardware:** Pixhawk + airspeed sensor + GPS + 900 MHz telemetry
 **Range:** 10 km line-of-sight
 **Endurance:** 2-hour flight validated with data logs
+
+---
+
+### Multi-Device Drone Telemetry
+**Problem:** A drone swarm or dual-drone system requires monitoring multiple aircraft simultaneously, each sending telemetry over different links.
+
+**Solution:** Serial Studio's multi-device project mode connects to each drone's data link independently:
+- Drone A over UART (900 MHz radio modem)
+- Drone B over UDP (Wi-Fi telemetry)
+- Each drone's GPS, attitude, and battery displayed side-by-side on the same dashboard
+- CSV/MDF4 export captures all drones' data in a single time-synchronized file
+
+**Hardware:** Two flight controllers + radio modems/Wi-Fi modules
+**Pro Feature Used:** Multi-device projects, MDF4 export
 
 ---
 
@@ -500,6 +542,20 @@ Real-world applications and success stories for Serial Studio across industries,
 **Hardware:** K-type thermocouple + MAX6675 + Arduino
 **Precision:** ±2°C accuracy across 0-250°C range
 **Compliance:** IPC-A-610 solder joint quality standards
+
+---
+
+### USB Instrument Data Acquisition
+**Problem:** A test bench has USB instruments (oscilloscopes, multimeters) that expose bulk endpoints but no serial port. Need to log measurements alongside serial sensor data.
+
+**Solution:** Serial Studio's Raw USB driver connects directly via libusb bulk transfers:
+- Read measurement data from USB instrument bulk endpoints
+- Combine with serial sensor data in a multi-device project
+- Real-time gauge and plot visualization
+- Automated export to MDF4 for post-analysis in ETAS INCA or Vector CANape
+
+**Hardware:** USB test instruments + serial sensors
+**Pro Feature Used:** Raw USB driver, multi-device projects, MDF4 export
 
 ---
 

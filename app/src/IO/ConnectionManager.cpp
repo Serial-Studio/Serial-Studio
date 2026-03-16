@@ -504,6 +504,40 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
 }
 
 /**
+ * @brief Injects per-source payloads for multi-source playback.
+ *
+ * Sends the full payload to console and API (for display), then routes
+ * each source's sub-payload through FrameBuilder's per-source path.
+ *
+ * @param fullPayload Complete CSV row for console/API display.
+ * @param sourcePayloads Map of sourceId → per-source CSV sub-row.
+ */
+void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayload,
+                                                      const QMap<int, QByteArray>& sourcePayloads)
+{
+  if (fullPayload.isEmpty())
+    return;
+
+  static auto& console      = Console::Handler::instance();
+  static auto& server       = API::Server::instance();
+  static auto& frameBuilder = DataModel::FrameBuilder::instance();
+
+  // Console and API get the full payload for display
+  const auto data = makeByteArray(fullPayload);
+  server.hotpathTxData(data);
+  console.hotpathRxData(data);
+
+  // Route each source's data through per-source frame building
+  for (auto it = sourcePayloads.constBegin(); it != sourcePayloads.constEnd(); ++it)
+    frameBuilder.hotpathRxSourceFrame(it.key(), it.value());
+
+#ifdef BUILD_COMMERCIAL
+  static auto& mqtt = MQTT::Client::instance();
+  mqtt.hotpathTxFrame(fullPayload);
+#endif
+}
+
+/**
  * @brief Writes @p data to device 0.
  * @param data Bytes to transmit.
  * @return Number of bytes written, or -1 on failure.

@@ -9,7 +9,7 @@
 
 **Serial Studio** is an open-source dashboard tool for embedded developers who are tired of staring at scrolling terminals. Describe your data format once in a **project file**, and it builds a live dashboard for you.
 
-It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network. **Raw USB** gives direct bulk/isochronous access to USB devices via libusb. **HID devices** (gamepads, custom USB HIDs, sensors) connect through hidapi. **Process I/O** lets any program that writes to stdout feed data into the dashboard.
+It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network. **Raw USB** gives direct bulk/isochronous access to USB devices via libusb. **HID devices** (gamepads, custom USB HIDs, sensors) connect through hidapi. **Process I/O** lets any program that writes to stdout feed data into the dashboard. **Multi-device projects** let you connect several devices at once—each with its own protocol—and monitor them all on a single dashboard.
 
 Once the data is in, Serial Studio can visualize it using several kinds of widgets, including **plots**, **gauges** and **tables**. Export to **CSV** or **MDF4** for further analysis, or load it back later to replay a session in the dashboard. **Actions** let you define buttons that send commands back to the device, with optional timers for polling or periodic control.
 
@@ -73,7 +73,7 @@ Make sure your system meets these requirements before running the AppImage.
 
 #### What It Can Do:
 - **No Coding Needed:** Build dashboards using a simple visual interface
-- **Many Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, Raw USB, HID devices, and Process I/O
+- **10+ Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, Raw USB, HID devices, and Process I/O
 - **15+ Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids, live image/camera feed (Pro)
 - **Save to CSV:** Automatically save all data for later analysis in Excel, Python, MATLAB, or R
 - **MDF4 Playback & Export:** Play and export MDF4/MF4 files for CAN Bus, LIN, FlexRay, and analog channels (Pro)
@@ -85,6 +85,7 @@ Make sure your system meets these requirements before running the AppImage.
 - **CAN Bus Support:** Import DBC files for automotive and industrial applications (Pro)
 - **MQTT for IoT:** Connect to MQTT brokers for distributed sensors (Pro)
 - **Image View:** Display live JPEG/PNG camera streams alongside telemetry on the same connection (Pro)
+- **Multi-Device Support:** Connect multiple devices simultaneously in a single project, each with its own protocol and frame settings (Pro)
 - **API Server (TCP port 7777):** Control Serial Studio programmatically with 182+ API commands (see [API Client example](./examples/API%20Test))
 - **AI Integration (MCP):** Connect AI models like Claude via Model Context Protocol for automated analysis and control (see [MCP Client](./examples/MCP%20Client))
 - **Dual Licensing:** Open-source GPL-3.0 core, proprietary Pro features (see [LICENSE.md](LICENSE.md))

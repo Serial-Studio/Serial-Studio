@@ -172,6 +172,9 @@ cmake --build . -j$(nproc)
 - **CAN Bus:** Automotive and industrial networks (Pro only)
 - **TCP/UDP sockets:** Network-connected devices
 - **Audio input:** Microphone, line-in (Pro only)
+- **Raw USB:** Bulk/isochronous transfers via libusb (Pro only)
+- **HID devices:** Gamepads, sensors, custom USB HIDs via hidapi (Pro only)
+- **Process I/O:** Stream stdout from any program or named pipe into the dashboard (Pro only)
 - **CSV files:** Replay previously recorded telemetry data
 - **MDF4/MF4 files:** Playback automotive measurement files (CAN Bus, LIN, FlexRay, analog) (Pro only)
 
@@ -186,6 +189,20 @@ cmake --build . -j$(nproc)
 5. Click **Connect**
 
 **Tip:** If you don't see your device, check drivers (FTDI, CH340, CP2102) and permissions (Linux: `dialout` group).
+
+---
+
+### Can I connect multiple devices at once?
+
+**Yes (Pro only).** Multi-device projects let you define multiple data sources in a single project file—each with its own protocol, connection settings, and frame detection. For example, you can simultaneously connect:
+
+- An Arduino over UART at 115200 baud
+- An ESP32 over Bluetooth LE
+- A PLC over Modbus TCP
+
+All devices feed into the same dashboard. Each source's data is routed to its own groups and widgets. Export (CSV/MDF4) captures all sources' data in a single file.
+
+To set this up, open the Project Editor and add sources under the "Sources" section. Each source defines a bus type, connection parameters, and frame parsing rules.
 
 ---
 
@@ -513,6 +530,10 @@ ARM64 AppImage requires Ubuntu 24.04+ (glibc 2.38+). Upgrade your OS or use Flat
 | FFT spectrum analyzer | ❌ | ✅ |
 | Advanced plotting | ❌ | ✅ |
 | Image View (camera/image stream) | ❌ | ✅ |
+| Raw USB (libusb) | ❌ | ✅ |
+| HID devices (hidapi) | ❌ | ✅ |
+| Process I/O | ❌ | ✅ |
+| Multi-device projects | ❌ | ✅ |
 | CSV export & playback | ✅ | ✅ |
 | MDF4 playback & export | ❌ | ✅ |
 | DBC file import (CAN) | ❌ | ✅ |

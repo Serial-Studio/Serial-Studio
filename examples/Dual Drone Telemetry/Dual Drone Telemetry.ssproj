@@ -5,9 +5,9 @@
         {
             "datasets": [
             ],
-            "imgDetectionMode": "autodetect",
-            "imgEndSequence": "",
-            "imgStartSequence": "",
+            "imgDetectionMode": "manual",
+            "imgEndSequence": "A1 FE ED 01",
+            "imgStartSequence": "A1 CA FE 01",
             "title": "Alpha Camera",
             "widget": "image"
         },
@@ -369,9 +369,9 @@
         {
             "datasets": [
             ],
-            "imgDetectionMode": "autodetect",
-            "imgEndSequence": "",
-            "imgStartSequence": "",
+            "imgDetectionMode": "manual",
+            "imgEndSequence": "B2 FE ED 02",
+            "imgStartSequence": "B2 CA FE 02",
             "sourceId": 1,
             "title": "Bravo Camera",
             "widget": "image"
@@ -750,7 +750,7 @@
             "widget": ""
         }
     ],
-    "hexadecimalDelimiters": true,
+    "hexadecimalDelimiters": false,
     "pointCount": 1000,
     "sources": [
         {
@@ -767,9 +767,9 @@
             "decoder": 0,
             "decoderMethod": 0,
             "frameDetection": 1,
-            "frameEnd": "FE ED",
+            "frameEnd": "A1 02 A1 02",
             "frameParserCode": "/**\n * Drone Alpha telemetry CSV parser.\n * Frame: lat,lon,heading,alt,airspeed,vspeed,roll,pitch,voltage,current,battery_pct\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
-            "frameStart": "AB CD EF",
+            "frameStart": "A1 01 A1 01",
             "hexadecimalDelimiters": true,
             "sourceId": 0,
             "title": "Drone Alpha"
@@ -788,9 +788,9 @@
             "decoder": 0,
             "decoderMethod": 0,
             "frameDetection": 1,
-            "frameEnd": "FE ED",
+            "frameEnd": "B2 04 B2 04",
             "frameParserCode": "/**\n * Drone Bravo telemetry CSV parser.\n * Frame: lat,lon,heading,alt,airspeed,vspeed,roll,pitch,voltage,current,battery_pct\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
-            "frameStart": "DE AD",
+            "frameStart": "B2 03 B2 03",
             "hexadecimalDelimiters": true,
             "sourceId": 1,
             "title": "Drone Bravo"

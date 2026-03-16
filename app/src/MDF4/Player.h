@@ -26,6 +26,7 @@
 #include <QByteArray>
 #include <QElapsedTimer>
 #include <QKeyEvent>
+#include <QMap>
 #include <QObject>
 #include <QString>
 #include <vector>
@@ -142,6 +143,8 @@ private slots:
 
 private:
   void sendHeaderFrame();
+  void buildMultiSourceMapping();
+  void injectFrame(const QByteArray& frame, int frameIndex = -1);
   QByteArray getFrame(const int index);
   QString formatTimestamp(double timestamp) const;
 
@@ -158,6 +161,7 @@ private:
 
   int m_framePos;
   bool m_playing;
+  bool m_multiSource;
   bool m_isSerialStudioFile;
   QString m_filePath;
   QString m_timestamp;
@@ -169,5 +173,10 @@ private:
   std::unique_ptr<mdf::MdfReader> m_reader;
   std::map<uint64_t, double> m_timestampCache;
   std::map<uint64_t, std::vector<double>> m_sampleCache;
+  std::map<uint64_t, std::vector<bool>> m_activeChannels;
+
+  // Multi-source playback mapping: channel index → sourceId
+  QMap<int, int> m_channelToSource;
+  QMap<int, int> m_sourceChannelCount;
 };
 }  // namespace MDF4

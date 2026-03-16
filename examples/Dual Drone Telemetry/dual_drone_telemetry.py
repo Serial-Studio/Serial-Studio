@@ -6,11 +6,13 @@ Simulates two drones transmitting flight telemetry and synthetic camera
 imagery over separate UDP connections:
 
   Drone Alpha (port 9001) — Circular patrol at 120 m altitude
-    Hex delimiters: AB CD EF … FE ED
+    CSV delimiters:   A1 01 A1 01 … A1 02 A1 02 (hex)
+    Image delimiters: A1 CA FE 01 … A1 FE ED 01
     11 CSV fields + JPEG camera frames
 
   Drone Bravo (port 9002) — Figure-8 survey at 200 m altitude
-    Hex delimiters: DE AD … FE ED
+    CSV delimiters:   B2 03 B2 03 … B2 04 B2 04 (hex)
+    Image delimiters: B2 CA FE 02 … B2 FE ED 02
     11 CSV fields + JPEG camera frames
 
 Each drone generates a unique procedural camera image every frame:
@@ -61,11 +63,22 @@ IMG_WIDTH = 320
 IMG_HEIGHT = 240
 JPEG_QUALITY = 70
 
-# Frame delimiters (hex)
-DELIM_ALPHA_START = b"\xab\xcd\xef"
-DELIM_ALPHA_END = b"\xfe\xed"
-DELIM_BRAVO_START = b"\xde\xad"
-DELIM_BRAVO_END = b"\xfe\xed"
+# Frame delimiters (hex) — telemetry CSV frames
+# Must NOT occur inside JPEG image data sent on the same UDP port.
+# Using FF D0 … sequences: FF D0-D7 are JPEG restart markers (RST0-RST7)
+# that only appear at specific intervals in progressive JPEGs.  Our images
+# are baseline, so these never appear.  Combined with a unique second pair
+# they form 4-byte sequences that are collision-free.
+DELIM_ALPHA_START = b"\xa1\x01\xa1\x01"
+DELIM_ALPHA_END = b"\xa1\x02\xa1\x02"
+DELIM_BRAVO_START = b"\xb2\x03\xb2\x03"
+DELIM_BRAVO_END = b"\xb2\x04\xb2\x04"
+
+# Image delimiters (hex) — wrap JPEG camera frames
+IMG_ALPHA_START = b"\xa1\xca\xfe\x01"
+IMG_ALPHA_END = b"\xa1\xfe\xed\x01"
+IMG_BRAVO_START = b"\xb2\xca\xfe\x02"
+IMG_BRAVO_END = b"\xb2\xfe\xed\x02"
 
 # Base GPS coordinates (somewhere over Nevada desert)
 BASE_LAT = 36.236
@@ -413,14 +426,14 @@ def run_alpha(host, fps, stop_event):
 
             data = drone.step(dt)
 
-            # Send JPEG image if opencv available
+            # Send JPEG image wrapped in image delimiters
             if HAS_CV2:
                 img = make_alpha_image(
                     drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
                 )
                 jpeg = encode_jpeg(img)
                 if jpeg:
-                    sender.send_raw(jpeg)
+                    sender.send_raw(IMG_ALPHA_START + jpeg + IMG_ALPHA_END)
 
             # Send CSV telemetry with hex delimiters
             csv = ",".join(
@@ -460,14 +473,14 @@ def run_bravo(host, fps, stop_event):
 
             data = drone.step(dt)
 
-            # Send JPEG image if opencv available
+            # Send JPEG image wrapped in image delimiters
             if HAS_CV2:
                 img = make_bravo_image(
                     drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
                 )
                 jpeg = encode_jpeg(img)
                 if jpeg:
-                    sender.send_raw(jpeg)
+                    sender.send_raw(IMG_BRAVO_START + jpeg + IMG_BRAVO_END)
 
             # Send CSV telemetry with hex delimiters
             csv = ",".join(

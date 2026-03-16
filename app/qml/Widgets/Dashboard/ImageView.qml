@@ -540,35 +540,26 @@ Item {
       // "Waiting for image…" placeholder
       //
       ColumnLayout {
-        spacing: 12
+        spacing: 8
         anchors.centerIn: parent
         visible: !model || model.frameCount === 0
 
         Image {
-          id: placeholderIcon
-
-          opacity: 0
+          opacity: 0.55
           layer.enabled: true
           sourceSize.width: 48
           sourceSize.height: 48
           Layout.alignment: Qt.AlignHCenter
           source: "qrc:/rcc/icons/dashboard-large/image.svg"
           layer.effect: MultiEffect { colorization: 1.0; colorizationColor: "white" }
-
-          SequentialAnimation on opacity {
-            running: true
-            loops: Animation.Infinite
-            NumberAnimation { to: 0.55; duration: 900; easing.type: Easing.InOutSine }
-            NumberAnimation { to: 0.20; duration: 900; easing.type: Easing.InOutSine }
-          }
         }
 
-        Text {
+        Label {
           opacity: 0.55
           color: "white"
-          text: qsTr("Waiting for image…")
+          text: qsTr("Waiting for Image...")
           Layout.alignment: Qt.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(1.2, true)
+          font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
         }
       }
 

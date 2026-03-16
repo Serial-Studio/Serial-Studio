@@ -36,7 +36,9 @@
 #include <QTimer>
 #include <QtMath>
 
+#include "AppState.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
@@ -53,17 +55,34 @@
  * This observer is attached to data groups during ReadData() operations.
  * It extracts channel values from incoming sample records and stores them
  * in a cache for efficient random-access playback.
+ *
+ * When a per-group master time channel is present, the observer reads the
+ * timestamp from each record and uses it (quantised to nanoseconds) as the
+ * cache key. This allows records from independent channel groups that share
+ * the same wall-clock time to be merged correctly — which is essential for
+ * multi-source MDF4 files where each source writes its own channel groups.
+ *
+ * When no per-group time channel is available, the raw sample index is
+ * used as the key (backward-compatible with old single-time-channel files).
  */
 class SampleCacheObserver : public mdf::ISampleObserver {
 public:
   SampleCacheObserver(const mdf::IDataGroup& dataGroup,
                       std::map<uint64_t, std::vector<double>>& cache,
+                      std::map<uint64_t, double>& timestampCache,
+                      std::map<uint64_t, std::vector<bool>>& activeChannels,
                       const std::vector<mdf::IChannel*>& allChannels,
-                      const std::vector<mdf::IChannel*>& groupChannels)
+                      const std::vector<mdf::IChannel*>& groupChannels,
+                      mdf::IChannel* groupTimeChannel,
+                      uint64_t recordId)
     : mdf::ISampleObserver(dataGroup)
     , m_cache(cache)
+    , m_timestampCache(timestampCache)
+    , m_activeChannels(activeChannels)
     , m_allChannels(allChannels)
     , m_groupChannels(groupChannels)
+    , m_groupTimeChannel(groupTimeChannel)
+    , m_recordId(recordId)
   {
     for (size_t i = 0; i < m_allChannels.size(); ++i) {
       for (auto* ch : m_groupChannels) {
@@ -77,10 +96,36 @@ public:
 
   bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
-    if (m_cache.find(sample) != m_cache.end())
+    // Only process records from our own channel group
+    if (record_id != m_recordId)
       return true;
 
-    std::vector<double> values(m_allChannels.size(), 0.0);
+    // Determine cache key: use timestamp (ns) if time channel is
+    // available, otherwise fall back to the raw sample index
+    uint64_t cacheKey = sample;
+    if (m_groupTimeChannel) {
+      double ts          = 0.0;
+      const bool success = GetEngValue(*m_groupTimeChannel, record_id, record, ts);
+      if (!success)
+        GetChannelValue(*m_groupTimeChannel, record_id, record, ts);
+
+      cacheKey                   = static_cast<uint64_t>(ts * 1'000'000'000.0);
+      m_timestampCache[cacheKey] = ts;
+    }
+
+    // Merge into existing entry so multi-group files accumulate all channels
+    auto cacheIt = m_cache.find(cacheKey);
+    if (cacheIt == m_cache.end())
+      cacheIt = m_cache.emplace(cacheKey, std::vector<double>(m_allChannels.size(), 0.0)).first;
+
+    // Track which channels have actual data (not just default zeros)
+    auto activeIt = m_activeChannels.find(cacheKey);
+    if (activeIt == m_activeChannels.end())
+      activeIt =
+        m_activeChannels.emplace(cacheKey, std::vector<bool>(m_allChannels.size(), false)).first;
+
+    auto& values = cacheIt->second;
+    auto& active = activeIt->second;
 
     for (auto* channel : m_groupChannels) {
       if (!channel)
@@ -100,38 +145,49 @@ public:
       }
 
       values[it->second] = value;
+      active[it->second] = true;
     }
 
-    m_cache[sample] = std::move(values);
     return true;
   }
 
 private:
   std::map<uint64_t, std::vector<double>>& m_cache;
+  std::map<uint64_t, double>& m_timestampCache;
+  std::map<uint64_t, std::vector<bool>>& m_activeChannels;
   const std::vector<mdf::IChannel*>& m_allChannels;
   const std::vector<mdf::IChannel*>& m_groupChannels;
+  mdf::IChannel* m_groupTimeChannel;
+  uint64_t m_recordId;
   std::map<mdf::IChannel*, size_t> m_channelIndexMap;
 };
 
 /**
- * @class TimestampCacheObserver
- * @brief Observer class that caches master time channel values
+ * @class LegacyTimestampObserver
+ * @brief Reads timestamp values from a single master time channel
  *
- * This observer extracts timestamp values from the master time channel
- * for Serial Studio-generated MDF4 files.
+ * Used for legacy Serial Studio MDF4 files that have only one master
+ * time channel in the first channel group. Populates the timestamp
+ * cache keyed by raw sample index so the frame index builder can
+ * resolve wall-clock times.
  */
-class TimestampCacheObserver : public mdf::ISampleObserver {
+class LegacyTimestampObserver : public mdf::ISampleObserver {
 public:
-  TimestampCacheObserver(const mdf::IDataGroup& dataGroup,
-                         std::map<uint64_t, double>& timestampCache,
-                         mdf::IChannel* masterTimeChannel)
+  LegacyTimestampObserver(const mdf::IDataGroup& dataGroup,
+                          std::map<uint64_t, double>& timestampCache,
+                          mdf::IChannel* masterTimeChannel,
+                          uint64_t recordId)
     : mdf::ISampleObserver(dataGroup)
     , m_timestampCache(timestampCache)
     , m_masterTimeChannel(masterTimeChannel)
+    , m_recordId(recordId)
   {}
 
   bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
+    if (record_id != m_recordId)
+      return true;
+
     if (!m_masterTimeChannel || m_timestampCache.find(sample) != m_timestampCache.end())
       return true;
 
@@ -152,6 +208,7 @@ public:
 private:
   std::map<uint64_t, double>& m_timestampCache;
   mdf::IChannel* m_masterTimeChannel;
+  uint64_t m_recordId;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -167,6 +224,7 @@ private:
 MDF4::Player::Player()
   : m_framePos(0)
   , m_playing(false)
+  , m_multiSource(false)
   , m_isSerialStudioFile(false)
   , m_timestamp("")
   , m_startTimestamp(0.0)
@@ -440,8 +498,12 @@ void MDF4::Player::closeFile()
   m_frameIndex.clear();
   m_sampleCache.clear();
   m_timestampCache.clear();
+  m_activeChannels.clear();
+  m_multiSource        = false;
   m_isSerialStudioFile = false;
   m_masterTimeChannel  = nullptr;
+  m_channelToSource.clear();
+  m_sourceChannelCount.clear();
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
@@ -651,6 +713,7 @@ void MDF4::Player::buildFrameIndex()
   m_channels.clear();
   m_sampleCache.clear();
   m_timestampCache.clear();
+  m_activeChannels.clear();
   m_masterTimeChannel = nullptr;
 
   if (!m_reader || !m_reader->IsOk())
@@ -668,39 +731,56 @@ void MDF4::Player::buildFrameIndex()
 
   std::vector<mdf::IChannel*> allChannels;
 
-  auto collectChannel = [this, &allChannels](mdf::IChannel* ch) {
-    if (!ch || std::find(allChannels.begin(), allChannels.end(), ch) != allChannels.end())
-      return;
-    if (m_isSerialStudioFile && ch->Type() == mdf::ChannelType::Master) {
-      m_masterTimeChannel = ch;
-      return;
-    }
-    allChannels.push_back(ch);
-  };
+  // Collect per-group time channels for Serial Studio files.
+  // New files have a Master channel in every channel group; old files
+  // have a single Master channel only in the first group.
+  std::map<mdf::IChannelGroup*, mdf::IChannel*> groupTimeChannels;
+  int masterChannelCount = 0;
 
   for (auto* dg : dataGroups) {
     if (!dg)
       continue;
 
-    auto channelGroups = dg->ChannelGroups();
-    if (channelGroups.empty())
-      continue;
-
-    for (auto* cg : channelGroups) {
+    for (auto* cg : dg->ChannelGroups()) {
       if (!cg)
         continue;
 
-      auto cgChannels = cg->Channels();
-      if (cgChannels.empty())
-        continue;
+      mdf::IChannel* groupMaster = nullptr;
+      for (auto* ch : cg->Channels()) {
+        if (!ch)
+          continue;
 
-      for (auto* ch : cgChannels)
-        collectChannel(ch);
+        if (m_isSerialStudioFile && ch->Type() == mdf::ChannelType::Master) {
+          groupMaster = ch;
+          ++masterChannelCount;
+          continue;
+        }
+
+        if (std::find(allChannels.begin(), allChannels.end(), ch) == allChannels.end())
+          allChannels.push_back(ch);
+      }
+
+      if (groupMaster)
+        groupTimeChannels[cg] = groupMaster;
     }
+  }
+
+  // If there is exactly one Master channel, keep the legacy single-
+  // channel path so that old MDF4 files still play correctly
+  const bool perGroupTime  = (masterChannelCount > 1);
+  uint64_t legacyTimeRecId = 0;
+  if (masterChannelCount == 1) {
+    auto it             = groupTimeChannels.begin();
+    m_masterTimeChannel = it->second;
+    legacyTimeRecId     = it->first->RecordId();
+    groupTimeChannels.clear();
   }
 
   m_channels = allChannels;
 
+  // Attach one observer per channel group, then call ReadData once
+  // per data group. This avoids reading the same data group multiple
+  // times (which would duplicate records across observers).
   for (auto* dg : dataGroups) {
     if (!dg)
       continue;
@@ -709,29 +789,76 @@ void MDF4::Player::buildFrameIndex()
     if (channelGroups.empty())
       continue;
 
+    // Build per-CG data-channel lists and time-channel pointers
+    struct CgInfo {
+      mdf::IChannelGroup* cg;
+      mdf::IChannel* timeCh;
+      std::vector<mdf::IChannel*> dataChs;
+    };
+
+    std::vector<CgInfo> cgInfos;
     for (auto* cg : channelGroups) {
       if (!cg)
         continue;
 
       auto cgChannels      = cg->Channels();
       uint64_t recordCount = cg->NofSamples();
-
       if (cgChannels.empty() || recordCount == 0)
         continue;
 
-      SampleCacheObserver observer(*dg, m_sampleCache, m_channels, cgChannels);
-      observer.AttachObserver();
+      CgInfo ci;
+      ci.cg     = cg;
+      ci.timeCh = nullptr;
 
-      if (m_isSerialStudioFile && m_masterTimeChannel) {
-        TimestampCacheObserver timeObserver(*dg, m_timestampCache, m_masterTimeChannel);
-        timeObserver.AttachObserver();
-        m_reader->ReadData(*dg);
-        timeObserver.DetachObserver();
-      } else {
-        m_reader->ReadData(*dg);
+      if (perGroupTime) {
+        auto tit = groupTimeChannels.find(cg);
+        if (tit != groupTimeChannels.end())
+          ci.timeCh = tit->second;
       }
 
-      observer.DetachObserver();
+      for (auto* ch : cgChannels)
+        if (ch && ch->Type() != mdf::ChannelType::Master)
+          ci.dataChs.push_back(ch);
+
+      cgInfos.push_back(std::move(ci));
+    }
+
+    // Create and attach all observers before reading
+    std::vector<std::unique_ptr<SampleCacheObserver>> observers;
+    observers.reserve(cgInfos.size());
+    for (auto& ci : cgInfos) {
+      auto obs = std::make_unique<SampleCacheObserver>(*dg,
+                                                       m_sampleCache,
+                                                       m_timestampCache,
+                                                       m_activeChannels,
+                                                       m_channels,
+                                                       ci.dataChs,
+                                                       ci.timeCh,
+                                                       ci.cg->RecordId());
+      obs->AttachObserver();
+      observers.push_back(std::move(obs));
+    }
+
+    m_reader->ReadData(*dg);
+
+    // Detach all observers
+    for (auto& obs : observers)
+      obs->DetachObserver();
+  }
+
+  // Legacy single-master-channel files: read timestamps in a
+  // separate pass keyed by raw sample index so that the frame index
+  // below can look up the correct wall-clock time
+  if (m_isSerialStudioFile && !perGroupTime && m_masterTimeChannel) {
+    for (auto* dg : dataGroups) {
+      if (!dg)
+        continue;
+
+      LegacyTimestampObserver tsObs(*dg, m_timestampCache, m_masterTimeChannel, legacyTimeRecId);
+      tsObs.AttachObserver();
+      m_reader->ReadData(*dg);
+      tsObs.DetachObserver();
+      break;
     }
   }
 
@@ -800,7 +927,7 @@ void MDF4::Player::sendFrame(int frameIndex)
   if (!isOpen() || frameIndex < 0 || frameIndex >= frameCount())
     return;
 
-  IO::ConnectionManager::instance().processPayload(getFrame(frameIndex));
+  injectFrame(getFrame(frameIndex), frameIndex);
 }
 
 /**
@@ -814,6 +941,16 @@ void MDF4::Player::sendHeaderFrame()
 {
   if (!isOpen() || m_channels.empty())
     return;
+
+  // In project mode with multiple sources, build multi-source mapping
+  // and skip QuickPlot header registration (project defines the structure)
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
+    const auto& sources = DataModel::ProjectModel::instance().sources();
+    if (sources.size() > 1) {
+      buildMultiSourceMapping();
+      return;
+    }
+  }
 
   QStringList headers;
   for (size_t i = 0; i < m_channels.size(); ++i) {
@@ -896,6 +1033,112 @@ QByteArray MDF4::Player::getFrame(const int index)
 
   frame.append('\n');
   return frame;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Multi-source playback helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Builds a channel-to-source mapping for multi-source MDF4 playback.
+ *
+ * Uses the project's group/dataset metadata sorted by uniqueId to map each
+ * channel index to its sourceId, matching the export column order.
+ */
+void MDF4::Player::buildMultiSourceMapping()
+{
+  m_channelToSource.clear();
+  m_sourceChannelCount.clear();
+
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+
+  // Collect (uniqueId, sourceId) pairs for all datasets
+  QVector<QPair<int, int>> uidSourcePairs;
+  for (const auto& g : groups)
+    for (const auto& d : g.datasets)
+      uidSourcePairs.append(qMakePair(d.uniqueId, d.sourceId));
+
+  // Sort by uniqueId to match export channel order
+  std::sort(uidSourcePairs.begin(), uidSourcePairs.end(), [](const auto& a, const auto& b) {
+    return a.first < b.first;
+  });
+
+  // Map channel index (0-based) to sourceId
+  for (int ch = 0; ch < uidSourcePairs.size(); ++ch) {
+    const int srcId       = uidSourcePairs[ch].second;
+    m_channelToSource[ch] = srcId;
+    m_sourceChannelCount[srcId]++;
+  }
+
+  m_multiSource = !m_channelToSource.isEmpty() && m_sourceChannelCount.size() > 1;
+}
+
+/**
+ * @brief Injects an MDF4 frame through the appropriate pipeline path.
+ *
+ * For single-source or non-project mode, delegates to processPayload().
+ * For multi-source project mode, splits the CSV row by source and calls
+ * processMultiSourcePayload(), only including sources that actually have
+ * channel data in this particular sample.
+ *
+ * @param frame CSV-formatted byte array with channel values.
+ * @param frameIndex Index into m_frameIndex (used to check active channels).
+ */
+void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
+{
+  if (frame.isEmpty())
+    return;
+
+  // Single-source: use standard path
+  if (!m_multiSource) {
+    IO::ConnectionManager::instance().processPayload(frame);
+    return;
+  }
+
+  // Look up which channels are active for this sample
+  const std::vector<bool>* active = nullptr;
+  if (frameIndex >= 0 && frameIndex < static_cast<int>(m_frameIndex.size())) {
+    auto ait = m_activeChannels.find(m_frameIndex[frameIndex].recordIndex);
+    if (ait != m_activeChannels.end())
+      active = &ait->second;
+  }
+
+  // Multi-source: split CSV columns by source, skipping inactive sources
+  const auto fields = QString::fromUtf8(frame).trimmed().split(',');
+
+  QMap<int, QStringList> sourceFields;
+  for (int ch = 0; ch < fields.size(); ++ch) {
+    auto it = m_channelToSource.find(ch);
+    if (it == m_channelToSource.end())
+      continue;
+
+    sourceFields[it.value()].append(fields[ch]);
+  }
+
+  // Only include sources that have at least one active channel
+  QMap<int, QByteArray> sourcePayloads;
+  for (auto it = sourceFields.constBegin(); it != sourceFields.constEnd(); ++it) {
+    if (active) {
+      bool hasData = false;
+      for (int ch = 0; ch < fields.size(); ++ch) {
+        auto cit = m_channelToSource.find(ch);
+        if (cit != m_channelToSource.end() && cit.value() == it.key()) {
+          if (ch < static_cast<int>(active->size()) && (*active)[ch]) {
+            hasData = true;
+            break;
+          }
+        }
+      }
+
+      if (!hasData)
+        continue;
+    }
+
+    sourcePayloads[it.key()] = it.value().join(',').toUtf8() + '\n';
+  }
+
+  if (!sourcePayloads.isEmpty())
+    IO::ConnectionManager::instance().processMultiSourcePayload(frame, sourcePayloads);
 }
 
 //--------------------------------------------------------------------------------------------------

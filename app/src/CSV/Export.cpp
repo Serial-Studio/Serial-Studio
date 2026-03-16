@@ -21,7 +21,9 @@
 
 #include "Export.h"
 
+#include "AppState.h"
 #include "CSV/Player.h"
+#include "DataModel/FrameBuilder.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Player.h"
 #include "Misc/WorkspaceManager.h"
@@ -58,8 +60,10 @@ void CSV::ExportWorker::closeResources()
     return;
 
   m_csvFile.close();
+  m_knownUniqueIds.clear();
   m_indexHeaderPairs.clear();
   m_textStream.setDevice(nullptr);
+  DataModel::clear_frame(m_templateFrame);
 }
 
 /**
@@ -76,7 +80,14 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
     return;
 
   if (!m_csvFile.isOpen()) {
-    m_indexHeaderPairs = createCsvFile((*items.begin())->data);
+    // Use cached template frame (all sources) if available so that all
+    // columns are registered upfront. Falls back to first data frame for
+    // QuickPlot/JSON modes.
+    if (!m_templateFrame.groups.empty())
+      m_indexHeaderPairs = createCsvFile(m_templateFrame);
+    else
+      m_indexHeaderPairs = createCsvFile((*items.begin())->data);
+
     if (m_indexHeaderPairs.isEmpty())
       return;
 
@@ -93,7 +104,7 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
     QMap<int, QString> fieldValues;
     for (const auto& g : i->data.groups)
       for (const auto& d : g.datasets)
-        fieldValues[d.index] = d.value.simplified();
+        fieldValues[d.uniqueId] = d.value.simplified();
 
     for (int j = 0; j < m_indexHeaderPairs.count(); ++j) {
       m_textStream << fieldValues.value(m_indexHeaderPairs[j].first, "");
@@ -141,22 +152,24 @@ QVector<QPair<int, QString>> CSV::ExportWorker::createCsvFile(const DataModel::F
   m_textStream.setEncoding(QStringConverter::Utf8);
 #endif
 
-  QSet<int> seenIndexes;
+  QSet<int> seenUniqueIds;
   QVector<QPair<int, QString>> pairs;
   for (const auto& g : frame.groups) {
     for (const auto& d : g.datasets) {
-      const int idx = d.index;
-      if (seenIndexes.contains(idx))
+      const int uid = d.uniqueId;
+      if (seenUniqueIds.contains(uid))
         continue;
 
-      seenIndexes.insert(idx);
+      seenUniqueIds.insert(uid);
       auto header = QString("%1/%2").arg(g.title, d.title).simplified();
-      pairs.append(qMakePair(idx, header));
+      pairs.append(qMakePair(uid, header));
     }
   }
 
   std::sort(
     pairs.begin(), pairs.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+
+  m_knownUniqueIds = seenUniqueIds;
 
   m_textStream << "RX Date/Time";
   for (const auto& pair : pairs)
@@ -278,10 +291,21 @@ void CSV::Export::onWorkerOpenChanged()
  */
 void CSV::Export::setupExternalConnections()
 {
-  connect(&IO::ConnectionManager::instance(),
-          &IO::ConnectionManager::connectedChanged,
-          this,
-          &Export::closeFile);
+  connect(
+    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
+      if (IO::ConnectionManager::instance().isConnected()) {
+        // Only cache the template in ProjectFile mode — QuickPlot/JSON
+        // builds the frame on the fly, so FrameBuilder::frame() may
+        // contain stale data from a previously loaded project.
+        auto* worker = static_cast<ExportWorker*>(m_worker);
+        if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+          worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
+        else
+          DataModel::clear_frame(worker->m_templateFrame);
+      } else {
+        closeFile();
+      }
+    });
   connect(&IO::ConnectionManager::instance(), &IO::ConnectionManager::pausedChanged, this, [this] {
     if (IO::ConnectionManager::instance().paused())
       closeFile();
