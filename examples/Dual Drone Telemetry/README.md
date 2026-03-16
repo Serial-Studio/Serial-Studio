@@ -10,23 +10,23 @@ Two simulated drones fly completely different flight profiles over the Nevada de
 
 | Drone | Port | Flight Pattern | Altitude | Camera Style |
 |-------|------|---------------|----------|-------------|
-| **Alpha** | 9001 | Circular patrol (~330 m radius) | 120 m | FLIR thermal infrared (white-hot palette) |
-| **Bravo** | 9002 | Figure-8 survey (~550 m radius) | 200 m | Night-vision (green phosphor NVG) |
+| **Alpha** | 9001 | Circular patrol (~330 m radius) | 120 m | Top-down terrain (green/brown palette) |
+| **Bravo** | 9002 | Figure-8 survey (~550 m radius) | 200 m | Thermal/IR (iron-bow palette) |
 
 ### Camera Feeds
 
-**Alpha FLIR** — grayscale thermal infrared view with heat signatures:
-- Procedural terrain with roads (cooler/darker) and buildings (warm rooftops)
-- Vehicle heat signatures and person-sized thermal blobs
-- Thermal scale bar, diamond reticle crosshair, and cyan HUD
-- Recording indicator, NFOV lens label, GPS overlay
+**Alpha Terrain** — top-down patrol camera view:
+- Procedural green/brown terrain with position-based parallax
+- Roads rendered as grid lines based on GPS position
+- Targeting reticle circle with crosshair lines and heading arrow
+- Green HUD overlay with altitude, heading, and GPS coordinates
 
-**Bravo NVG** — green phosphor night-vision view:
-- Terrain with fractional Brownian motion noise in green scale
-- Image intensifier grain/sparkle overlay
-- River, tree canopy, structures with window lights, vehicle headlights
-- Circular vignette (NVG tube edge effect)
-- Box bracket crosshair, amber HUD, rotating compass rose
+**Bravo Thermal** — synthetic thermal/infrared view:
+- Iron-bow color palette (black → purple → orange → yellow)
+- Moving thermal hot spots simulating heat signatures
+- Scanning line and grid overlay
+- Amber HUD overlay with FLIR label, altitude, and GPS coordinates
+- Simple crosshair at center
 
 ### Telemetry per drone (11 fields)
 
@@ -80,7 +80,7 @@ Each drone has six widget groups on the dashboard:
 
 | Widget | Type | Description |
 |--------|------|-------------|
-| Camera | Image View | Live FLIR (Alpha) or NVG (Bravo) camera feed |
+| Camera | Image View | Live terrain (Alpha) or thermal/IR (Bravo) camera feed |
 | Position | Map | GPS track on interactive map |
 | Heading | Compass | Compass heading indicator |
 | Attitude | Gyroscope | Roll, pitch, and yaw (heading) visualization |
