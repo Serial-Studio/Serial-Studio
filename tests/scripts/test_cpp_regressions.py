@@ -145,7 +145,8 @@ def test_window_manager_taskbar_access_is_guarded():
 def test_usb_close_forces_thread_stop_before_handle_close():
     text = _read("app/src/IO/Drivers/USB.cpp")
 
-    assert "if (m_readThread.isRunning() && !m_readThread.wait(500))" in text
+    assert "if (m_readThread.isRunning())" in text
+    assert "if (!m_readThread.wait(2000))" in text
     assert "m_readThread.terminate();" in text
 
 

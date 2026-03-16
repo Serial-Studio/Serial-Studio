@@ -11,8 +11,10 @@ Copyright (C) 2020-2025 Alex Spataru
 SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
 """
 
+import os
 import pytest
 import time
+import tempfile
 
 from utils.api_client import APIError
 
@@ -391,7 +393,7 @@ class TestProcessDriver:
         api_client.command("io.manager.setBusType", {"busType": 8})
         time.sleep(0.2)
 
-        test_path = "/usr/bin/python3"
+        test_path = os.path.join(tempfile.gettempdir(), "test-executable")
         result = api_client.command("io.driver.process.setExecutable",
                                     {"executable": test_path})
         assert result["executable"] == test_path
@@ -621,17 +623,20 @@ class TestProcessDriver:
         api_client.command("io.manager.setBusType", {"busType": 8})
         time.sleep(0.2)
 
+        tmp_dir = tempfile.gettempdir()
+        test_exec = os.path.join(tmp_dir, "test-executable")
+
         api_client.command("io.driver.process.setMode", {"mode": 0})
         api_client.command("io.driver.process.setExecutable",
-                           {"executable": "/usr/bin/python3"})
+                           {"executable": test_exec})
         api_client.command("io.driver.process.setArguments",
                            {"arguments": "-c \"import sys; sys.stdout.write('hello\\n')\""})
-        api_client.command("io.driver.process.setWorkingDir", {"workingDir": "/tmp"})
+        api_client.command("io.driver.process.setWorkingDir", {"workingDir": tmp_dir})
 
         config = api_client.command("io.driver.process.getConfiguration")
         assert config["mode"] == 0
-        assert config["executable"] == "/usr/bin/python3"
-        assert config["workingDir"] == "/tmp"
+        assert config["executable"] == test_exec
+        assert config["workingDir"] == tmp_dir
 
     @pytest.mark.integration
     def test_process_full_pipe_config_roundtrip(self, api_client, clean_state):
