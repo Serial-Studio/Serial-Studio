@@ -69,6 +69,14 @@ NativeWindow::NativeWindow(QObject* parent) : QObject(parent)
           &NativeWindow::onThemeChanged);
 }
 
+/**
+ * @brief No-op on non-macOS platforms.
+ */
+void NativeWindow::installMacOSQuitInterceptor()
+{
+  // Only implemented on macOS
+}
+
 //--------------------------------------------------------------------------------------------------
 // Window management
 //--------------------------------------------------------------------------------------------------

@@ -88,6 +88,9 @@ Widgets.SmartWindow {
   } Shortcut {
     sequences: [StandardKey.Save]
     onActivated: Cpp_JSON_ProjectModel.saveJsonFile()
+  } Shortcut {
+    sequences: [StandardKey.Quit]
+    onActivated: app.quitApplication()
   }
 
   //

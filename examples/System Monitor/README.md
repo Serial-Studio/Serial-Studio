@@ -1,12 +1,11 @@
 # System Monitor
 
-## Overview
-
 This example turns Serial Studio into a live system dashboard — like a minimal
 htop — by using the **Process I/O driver** (Pro) to launch a Python script and
 read its `stdout` directly as a telemetry stream.
 
-No network sockets, no serial cables, no external hardware required.
+![Screenshot](doc/screenshot.png)
+
 Serial Studio spawns `system-monitor.py` (or the platform launcher), and the
 script continuously writes metrics to `stdout` at ~30 Hz. Serial Studio parses
 each line as a frame and drives gauges, multiplots, bar graphs, and data grids
@@ -14,17 +13,6 @@ in real time.
 
 **Note:** The Process I/O driver requires a Serial Studio Pro license.
 Visit [serial-studio.com](https://serial-studio.com/) for details.
-
----
-
-## TODO
-
-- **Dynamic dashboard model via JS API** — the frame parser currently targets a
-  fixed index layout baked into the `.ssproj` file. A JS-based API that lets the
-  parser itself declare groups, datasets, and widget types at runtime would allow
-  the dashboard to adapt automatically to the machine (e.g. show only as many
-  CPU core curves as the host actually has, without needing a `MAX_CORES = 32`
-  sentinel approach). This requires a Serial Studio-side API extension.
 
 ---
 

@@ -44,6 +44,10 @@ constexpr int WEATHER_GIBS_MAX_ZOOM = 9;
 constexpr auto CLOUD_URL = "https://clouds.matteason.co.uk/images/4096x2048/clouds-alpha.png";
 // clang-format on
 
+QCache<QString, QImage> Widgets::GPS::s_tileCache;
+QHash<QString, QNetworkReply*> Widgets::GPS::s_pending;
+bool Widgets::GPS::s_cacheInitialized = false;
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
 //--------------------------------------------------------------------------------------------------
@@ -78,8 +82,11 @@ Widgets::GPS::GPS(const int index, QQuickItem* parent)
   setAcceptedMouseButtons(Qt::AllButtons);
   setFlags(QQuickPaintedItem::ItemHasContents);
 
-  // Configure cache
-  m_tileCache.setMaxCost(512);
+  // Configure shared tile cache (once across all instances)
+  if (!s_cacheInitialized) {
+    s_tileCache.setMaxCost(2048);
+    s_cacheInitialized = true;
+  }
 
   // Set user-friendly map names
   m_mapTypes << tr("Satellite Imagery") << tr("Satellite Imagery with Labels") << tr("Street Map")
@@ -460,7 +467,6 @@ void Widgets::GPS::setMapType(const int type)
     }
 
     m_mapType = mapId;
-    m_tileCache.clear();
     m_settings.setValue(QStringLiteral("gpsMapType"), mapId);
 
     if (mapId == 1)
@@ -660,11 +666,11 @@ void Widgets::GPS::updateData()
  */
 void Widgets::GPS::requestTileIfNeeded(const QString& url)
 {
-  if (m_tileCache.contains(url) || m_pending.contains(url))
+  if (s_tileCache.contains(url) || s_pending.contains(url))
     return;
 
   QNetworkReply* reply = m_network.get(QNetworkRequest(QUrl(url)));
-  m_pending[url]       = reply;
+  s_pending[url]       = reply;
   connect(reply, &QNetworkReply::finished, this, [=, this]() { onTileFetched(reply); });
 }
 
@@ -702,7 +708,7 @@ void Widgets::GPS::preloadNextZoomTiles(int tx, int ty, int baseZoom)
  * Only tiles within valid bounds (non-negative and less than 2^zoom) are
  * requested. Horizontal wrapping is handled during painting, not here.
  *
- * Downloaded tiles are tracked via m_pending to avoid duplicate requests.
+ * Downloaded tiles are tracked via s_pending to avoid duplicate requests.
  */
 void Widgets::GPS::updateTiles()
 {
@@ -772,9 +778,9 @@ void Widgets::GPS::precacheWorld()
   for (int tx = 0; tx < (1 << MIN_ZOOM); ++tx) {
     for (int ty = 0; ty < (1 << MIN_ZOOM); ++ty) {
       const QString url = tileUrl(tx, ty, MIN_ZOOM);
-      if (!m_tileCache.contains(url) && !m_pending.contains(url)) {
+      if (!s_tileCache.contains(url) && !s_pending.contains(url)) {
         QNetworkReply* reply = m_network.get(QNetworkRequest(QUrl(url)));
-        m_pending[url]       = reply;
+        s_pending[url]       = reply;
         connect(reply, &QNetworkReply::finished, this, [=, this]() { onTileFetched(reply); });
       }
     }
@@ -816,7 +822,7 @@ void Widgets::GPS::onTileFetched(QNetworkReply* reply)
   if (reply->error() == QNetworkReply::NoError) {
     QImage* image = new QImage();
     if (image->loadFromData(reply->readAll())) {
-      m_tileCache.insert(url, image);
+      s_tileCache.insert(url, image);
       update();
     }
 
@@ -825,7 +831,7 @@ void Widgets::GPS::onTileFetched(QNetworkReply* reply)
   }
 
   reply->deleteLater();
-  m_pending.remove(url);
+  s_pending.remove(url);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -860,10 +866,10 @@ bool Widgets::GPS::renderFallbackTile(
     const int wrappedParentTx = (parentTx % (1 << z) + (1 << z)) % (1 << z);
     const QString parentUrl   = tileUrl(wrappedParentTx, parentTy, z);
 
-    if (!m_tileCache.contains(parentUrl))
+    if (!s_tileCache.contains(parentUrl))
       continue;
 
-    auto* src = m_tileCache.object(parentUrl);
+    auto* src = s_tileCache.object(parentUrl);
     const QRect sourceRect((tx % tileScale) * (tileSize / tileScale),
                            (ty % tileScale) * (tileSize / tileScale),
                            tileSize / tileScale,
@@ -904,12 +910,12 @@ void Widgets::GPS::renderWeatherOverlay(
     return;
 
   const QString gibsUrl = nasaWeatherUrl(wrappedTx, ty, baseZoom);
-  if (!m_tileCache.contains(gibsUrl))
+  if (!s_tileCache.contains(gibsUrl))
     return;
 
   painter->save();
   painter->setCompositionMode(QPainter::CompositionMode_Screen);
-  painter->drawImage(targetRect, *m_tileCache.object(gibsUrl));
+  painter->drawImage(targetRect, *s_tileCache.object(gibsUrl));
   painter->restore();
 }
 
@@ -928,8 +934,8 @@ void Widgets::GPS::renderReferenceOverlay(
     return;
 
   const QString refUrl = referenceUrl(wrappedTx, ty, baseZoom);
-  if (m_tileCache.contains(refUrl))
-    painter->drawImage(targetRect, *m_tileCache.object(refUrl));
+  if (s_tileCache.contains(refUrl))
+    painter->drawImage(targetRect, *s_tileCache.object(refUrl));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1017,8 +1023,8 @@ void Widgets::GPS::paintMap(QPainter* painter, const QSize& view)
       const QRect targetRect(drawX, drawY, qRound(scaledTileSize), qRound(scaledTileSize));
 
       // Draw tile if it's already in cache (scaled for fractional zoom)
-      if (m_tileCache.contains(url))
-        painter->drawImage(targetRect, *m_tileCache.object(url));
+      if (s_tileCache.contains(url))
+        painter->drawImage(targetRect, *s_tileCache.object(url));
 
       // Tile not found: fallback to scaled lower-zoom tiles if possible
       else

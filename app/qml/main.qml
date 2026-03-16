@@ -37,6 +37,7 @@ Item {
   // Define application name
   //
   property bool dontNag: false
+  property bool quitting: false
   readonly property bool proVersion: Cpp_CommercialBuild ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
 
   Settings {
@@ -50,6 +51,32 @@ Item {
   function checkForUpdates() {
     Cpp_Updater.setNotifyOnFinish(Cpp_AppUpdaterUrl, true)
     Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
+  }
+
+  //
+  // Centralized quit handler — respects save dialogs before quitting
+  //
+  function quitApplication() {
+    if (app.quitting)
+      return
+
+    // Ask to save project (windows stay visible for the dialog)
+    if (!Cpp_JSON_ProjectModel.askSave())
+      return
+
+    // Hide windows, then quit after they disappear
+    app.quitting = true
+    mainWindow.visible = false
+    projectEditor.visible = false
+    quitTimer.restart()
+  }
+
+  Timer {
+    id: quitTimer
+
+    interval: 150
+    repeat: false
+    onTriggered: Cpp_Misc_ModuleManager.onQuit()
   }
 
   //
@@ -72,9 +99,13 @@ Item {
   MainWindow.MainWindow {
     id: mainWindow
     onClosing: (close) => {
-                 close.accepted = Cpp_JSON_ProjectModel.askSave()
-                 if (close.accepted)
-                 Qt.quit()
+                 if (app.quitting) {
+                   close.accepted = true
+                   return
+                 }
+
+                 close.accepted = false
+                 app.quitApplication()
                }
 
     Dialogs.Settings {

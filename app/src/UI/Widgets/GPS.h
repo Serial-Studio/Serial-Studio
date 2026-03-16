@@ -187,7 +187,9 @@ private:
   QList<int> m_weatherDays;
 
   QNetworkAccessManager m_network;
-  QCache<QString, QImage> m_tileCache;
-  QHash<QString, QNetworkReply*> m_pending;
+
+  static QCache<QString, QImage> s_tileCache;
+  static QHash<QString, QNetworkReply*> s_pending;
+  static bool s_cacheInitialized;
 };
 }  // namespace Widgets

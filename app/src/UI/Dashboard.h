@@ -184,7 +184,7 @@ private:
   void handleMissingDataset(const DataModel::Frame& frame);
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
-  void updateDataSeries();
+  void updateDataSeries(int sourceId = -1);
   void configureGpsSeries();
   void configureFftSeries();
   void configureLineSeries();

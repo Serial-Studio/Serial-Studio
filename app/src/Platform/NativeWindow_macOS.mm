@@ -25,6 +25,30 @@
 #include <QWindow>
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
+#import <objc/runtime.h>
+
+//--------------------------------------------------------------------------------------------------
+// macOS quit interceptor via method swizzling
+//--------------------------------------------------------------------------------------------------
+
+static NativeWindow *s_nativeWindowInstance = nullptr;
+
+static NSApplicationTerminateReply swizzled_applicationShouldTerminate(id self, SEL _cmd,
+                                                                       NSApplication *sender)
+{
+  (void)self;
+  (void)_cmd;
+  (void)sender;
+
+  if (s_nativeWindowInstance)
+    QMetaObject::invokeMethod(s_nativeWindowInstance, "quitRequested", Qt::QueuedConnection);
+
+  return NSTerminateCancel;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Constructor & singleton access functions
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Constructor for NativeWindow class.
@@ -38,6 +62,31 @@ NativeWindow::NativeWindow(QObject *parent)
 {
   connect(&Misc::ThemeManager::instance(), &Misc::ThemeManager::themeChanged,
           this, &NativeWindow::onThemeChanged);
+}
+
+/**
+ * @brief Installs a macOS quit interceptor that prevents NSApp terminate from
+ *        killing the process, emitting quitRequested() instead.
+ *
+ * Uses Objective-C runtime method swizzling to replace
+ * applicationShouldTerminate: on Qt's Cocoa app delegate.
+ */
+void NativeWindow::installMacOSQuitInterceptor()
+{
+  s_nativeWindowInstance = this;
+
+  // Get Qt's Cocoa app delegate class
+  id delegate = [NSApp delegate];
+  if (!delegate)
+    return;
+
+  Class delegateClass = [delegate class];
+  SEL selector = @selector(applicationShouldTerminate:);
+
+  // Replace the method implementation
+  class_replaceMethod(delegateClass, selector,
+                      (IMP)swizzled_applicationShouldTerminate,
+                      "i@:@");
 }
 
 /**

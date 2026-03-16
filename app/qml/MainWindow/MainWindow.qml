@@ -210,10 +210,7 @@ Widgets.SmartWindow {
     onActivated: app.showSettingsDialog()
   } Shortcut {
     sequences: [StandardKey.Quit]
-    onActivated: root.close()
-  } Shortcut {
-    sequences: [StandardKey.Close]
-    onActivated: root.close()
+    onActivated: app.quitApplication()
   } Shortcut {
     sequences: [StandardKey.Open]
     onActivated: Cpp_CSV_Player.openFile()

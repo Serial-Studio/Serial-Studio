@@ -192,14 +192,6 @@ Window {
   }
 
   //
-  // Quit shortcut
-  //
-  Shortcut {
-    sequences: [StandardKey.Quit]
-    onActivated: root.close()
-  }
-
-  //
   // Save settings
   //
   Settings {

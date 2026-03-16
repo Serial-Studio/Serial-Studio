@@ -227,6 +227,9 @@ void Misc::ModuleManager::onQuit()
   MDF4::Export::instance().closeFile();
   IO::ConnectionManager::instance().disconnectAllDevices();
   API::Server::instance().removeConnection();
+
+  // Terminate the application event loop
+  qApp->exit(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -473,6 +476,14 @@ void Misc::ModuleManager::initializeQmlInterface()
 
     // Load main.qml
     m_engine.load(QUrl("qrc:/serial-studio.com/gui/qml/main.qml"));
+
+    // Install macOS quit interceptor and wire it to QML
+    m_nativeWindow.installMacOSQuitInterceptor();
+    connect(&m_nativeWindow, &NativeWindow::quitRequested, this, [this]() {
+      auto roots = m_engine.rootObjects();
+      if (!roots.isEmpty())
+        QMetaObject::invokeMethod(roots.first(), "quitApplication");
+    });
   }
 
   // Try to contact activation server to validate license

@@ -1,12 +1,6 @@
 {
     "actions": [
     ],
-    "checksum": "",
-    "decoder": 0,
-    "frameDetection": 1,
-    "frameEnd": "\\n",
-    "frameParser": "/**\n * System Monitor Frame Parser\n *\n * Parses pipe-delimited KEY=value frames into a persistent value array.\n * Keys absent from a frame retain their previous value, so the static\n * header fields (OS, CPU model, etc.) remain populated after the first\n * frame even as live metric frames keep updating the rest.\n *\n * Index layout (0-based internal, 1-based in .ssproj):\n *   0-6   OS HOSTNAME CPU_MODEL CPU_CORES CPU_THREADS RAM_TOTAL DISK_TOTAL\n *   7     CPU_USAGE      12  SWAP_USED      17  CORE0\n *   8     RAM_USAGE      13  CPU_TEMP       18  CORE1 ... 48 CORE31\n *   9     RAM_USED       14  NET_SENT       49  PROC0\n *   10    DISK_USAGE     15  NET_RECV       50  PROC1 ... 58 PROC9\n *   11    DISK_USED      16  PROCESSES\n *\n * @param frame  Raw frame string (frameStart already stripped).\n * @returns Array of 59 persistent values.\n */\n\nvar _numItems = 59;\nvar _map = {\n  \"OS\": 0,\n  \"HOSTNAME\": 1,\n  \"CPU_MODEL\": 2,\n  \"CPU_CORES\": 3,\n  \"CPU_THREADS\": 4,\n  \"RAM_TOTAL\": 5,\n  \"DISK_TOTAL\": 6,\n  \"CPU_USAGE\": 7,\n  \"RAM_USAGE\": 8,\n  \"RAM_USED\": 9,\n  \"DISK_USAGE\": 10,\n  \"DISK_USED\": 11,\n  \"CPU_TEMP\": 12,\n  \"SWAP_USED\": 13,\n  \"NET_SENT\": 14,\n  \"NET_RECV\": 15,\n  \"PROCESSES\": 16,\n  \"CORE0\": 17,\n  \"CORE1\": 18,\n  \"CORE2\": 19,\n  \"CORE3\": 20,\n  \"CORE4\": 21,\n  \"CORE5\": 22,\n  \"CORE6\": 23,\n  \"CORE7\": 24,\n  \"CORE8\": 25,\n  \"CORE9\": 26,\n  \"CORE10\": 27,\n  \"CORE11\": 28,\n  \"CORE12\": 29,\n  \"CORE13\": 30,\n  \"CORE14\": 31,\n  \"CORE15\": 32,\n  \"CORE16\": 33,\n  \"CORE17\": 34,\n  \"CORE18\": 35,\n  \"CORE19\": 36,\n  \"CORE20\": 37,\n  \"CORE21\": 38,\n  \"CORE22\": 39,\n  \"CORE23\": 40,\n  \"CORE24\": 41,\n  \"CORE25\": 42,\n  \"CORE26\": 43,\n  \"CORE27\": 44,\n  \"CORE28\": 45,\n  \"CORE29\": 46,\n  \"CORE30\": 47,\n  \"CORE31\": 48,\n  \"PROC0\": 49,\n  \"PROC1\": 50,\n  \"PROC2\": 51,\n  \"PROC3\": 52,\n  \"PROC4\": 53,\n  \"PROC5\": 54,\n  \"PROC6\": 55,\n  \"PROC7\": 56,\n  \"PROC8\": 57,\n  \"PROC9\": 58\n};\n\nvar _vals = new Array(_numItems).fill('');\n\nfunction parse(frame) {\n  if (frame.length === 0)\n    return _vals;\n\n  var pairs = frame.split('|');\n  for (var i = 0; i < pairs.length; i++) {\n    var eq = pairs[i].indexOf('=');\n    if (eq < 0)\n      continue;\n      \n    var key = pairs[i].substring(0, eq).trim();\n    var val = pairs[i].substring(eq + 1).trim();\n    if (_map.hasOwnProperty(key))\n      _vals[_map[key]] = val;\n  }\n\n  return _vals;\n}",
-    "frameStart": "$",
     "groups": [
         {
             "datasets": [
@@ -1533,6 +1527,30 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "pointCount": 1000,
+    "sources": [
+        {
+            "busType": 8,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "arguments": "",
+                "executable": "/Users/alex/Documents/GitHub/Serial-Studio/examples/System Monitor/system-monitor.sh",
+                "mode": 0,
+                "pipePath": "/tmp/myapp.fifo",
+                "workingDir": "/tmp"
+            },
+            "decoder": 0,
+            "decoderMethod": 0,
+            "frameDetection": 1,
+            "frameEnd": "\\n",
+            "frameParserCode": "/**\n * System Monitor Frame Parser\n *\n * Parses pipe-delimited KEY=value frames into a persistent value array.\n * Keys absent from a frame retain their previous value, so the static\n * header fields (OS, CPU model, etc.) remain populated after the first\n * frame even as live metric frames keep updating the rest.\n *\n * Index layout (0-based internal, 1-based in .ssproj):\n *   0-6   OS HOSTNAME CPU_MODEL CPU_CORES CPU_THREADS RAM_TOTAL DISK_TOTAL\n *   7     CPU_USAGE      12  SWAP_USED      17  CORE0\n *   8     RAM_USAGE      13  CPU_TEMP       18  CORE1 ... 48 CORE31\n *   9     RAM_USED       14  NET_SENT       49  PROC0\n *   10    DISK_USAGE     15  NET_RECV       50  PROC1 ... 58 PROC9\n *   11    DISK_USED      16  PROCESSES\n *\n * @param frame  Raw frame string (frameStart already stripped).\n * @returns Array of 59 persistent values.\n */\n\nvar _numItems = 59;\nvar _map = {\n  \"OS\": 0,\n  \"HOSTNAME\": 1,\n  \"CPU_MODEL\": 2,\n  \"CPU_CORES\": 3,\n  \"CPU_THREADS\": 4,\n  \"RAM_TOTAL\": 5,\n  \"DISK_TOTAL\": 6,\n  \"CPU_USAGE\": 7,\n  \"RAM_USAGE\": 8,\n  \"RAM_USED\": 9,\n  \"DISK_USAGE\": 10,\n  \"DISK_USED\": 11,\n  \"CPU_TEMP\": 12,\n  \"SWAP_USED\": 13,\n  \"NET_SENT\": 14,\n  \"NET_RECV\": 15,\n  \"PROCESSES\": 16,\n  \"CORE0\": 17,\n  \"CORE1\": 18,\n  \"CORE2\": 19,\n  \"CORE3\": 20,\n  \"CORE4\": 21,\n  \"CORE5\": 22,\n  \"CORE6\": 23,\n  \"CORE7\": 24,\n  \"CORE8\": 25,\n  \"CORE9\": 26,\n  \"CORE10\": 27,\n  \"CORE11\": 28,\n  \"CORE12\": 29,\n  \"CORE13\": 30,\n  \"CORE14\": 31,\n  \"CORE15\": 32,\n  \"CORE16\": 33,\n  \"CORE17\": 34,\n  \"CORE18\": 35,\n  \"CORE19\": 36,\n  \"CORE20\": 37,\n  \"CORE21\": 38,\n  \"CORE22\": 39,\n  \"CORE23\": 40,\n  \"CORE24\": 41,\n  \"CORE25\": 42,\n  \"CORE26\": 43,\n  \"CORE27\": 44,\n  \"CORE28\": 45,\n  \"CORE29\": 46,\n  \"CORE30\": 47,\n  \"CORE31\": 48,\n  \"PROC0\": 49,\n  \"PROC1\": 50,\n  \"PROC2\": 51,\n  \"PROC3\": 52,\n  \"PROC4\": 53,\n  \"PROC5\": 54,\n  \"PROC6\": 55,\n  \"PROC7\": 56,\n  \"PROC8\": 57,\n  \"PROC9\": 58\n};\n\nvar _vals = new Array(_numItems).fill('');\n\nfunction parse(frame) {\n  if (frame.length === 0)\n    return _vals;\n\n  var pairs = frame.split('|');\n  for (var i = 0; i < pairs.length; i++) {\n    var eq = pairs[i].indexOf('=');\n    if (eq < 0)\n      continue;\n      \n    var key = pairs[i].substring(0, eq).trim();\n    var val = pairs[i].substring(eq + 1).trim();\n    if (_map.hasOwnProperty(key))\n      _vals[_map[key]] = val;\n  }\n\n  return _vals;\n}",
+            "frameStart": "$",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
     "title": "System Monitor",
     "widgetSettings": {
         "101": {
@@ -1576,6 +1594,9 @@
         "22": {
             "interpolate": true,
             "showAreaUnderPlot": true
+        },
+        "2:4:-1": {
+            "userShowLegends": true
         },
         "3": {
             "userShowLegends": false

@@ -41,26 +41,6 @@ Item {
   required property ImageViewModel model
 
   //
-  // Font size shared by all status labels
-  //
-  readonly property real fontSize: Math.max(9, Math.min(11, Math.min(root.width, root.height) / 28))
-
-  //
-  // Text color for status bar labels — white on dark backgrounds, black on light ones.
-  // Uses the WCAG relative luminance formula (sRGB).
-  //
-  readonly property color statusTextColor: {
-    const c = model ? model.primaryColor : "#000000"
-    const r = c.r <= 0.04045 ? c.r / 12.92 : Math.pow((c.r + 0.055) / 1.055, 2.4)
-    const g = c.g <= 0.04045 ? c.g / 12.92 : Math.pow((c.g + 0.055) / 1.055, 2.4)
-    const b = c.b <= 0.04045 ? c.b / 12.92 : Math.pow((c.b + 0.055) / 1.055, 2.4)
-    return (0.2126 * r + 0.7152 * g + 0.0722 * b) > 0.179 ? "#000000" : "#ffffff"
-  }
-
-  readonly property color statusShadowColor: statusTextColor === "#ffffff" ? Qt.rgba(0, 0, 0, 0.6)
-                                                                           : Qt.rgba(1, 1, 1, 0.6)
-
-  //
   // Toolbar visibility
   //
   property bool hasToolbar: true
@@ -549,7 +529,7 @@ Item {
 
             color: "white"
             anchors.centerIn: parent
-            font.pixelSize: root.fontSize
+            font.pixelSize: Math.max(9, Math.min(11, Math.min(root.width, root.height) / 28))
             text: root.cursorImgX + ", " + root.cursorImgY
             font.family: Cpp_Misc_CommonFonts.widgetFontFamily
           }
@@ -586,66 +566,12 @@ Item {
         Text {
           opacity: 0.55
           color: "white"
-          font.pixelSize: root.fontSize
           text: qsTr("Waiting for image…")
           Layout.alignment: Qt.AlignHCenter
-          font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+          font: Cpp_Misc_CommonFonts.customUiFont(1.2, true)
         }
       }
 
-      //
-      // Bottom status line
-      //
-      RowLayout {
-        spacing: 4
-        visible: model && model.frameCount > 0
-
-        anchors {
-          leftMargin: 10
-          rightMargin: 10
-          left: parent.left
-          right: parent.right
-          bottomMargin: 7
-          bottom: parent.bottom
-        }
-
-        Text {
-          id: savingLabel
-
-          opacity: 0.75
-          style: Text.Raised
-          color: root.statusTextColor
-          styleColor: root.statusShadowColor
-          visible: model && model.exportEnabled
-          font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85))
-
-          property int dotCount: 1
-          text: qsTr("Recording Images") + ".".repeat(dotCount)
-
-          Timer {
-            interval: 500
-            repeat: true
-            running: savingLabel.visible
-            onTriggered: savingLabel.dotCount = (savingLabel.dotCount % 3) + 1
-          }
-        }
-
-        Item { Layout.fillWidth: true }
-
-        Text {
-          opacity: 0.75
-          style: Text.Raised
-          color: root.statusTextColor
-          styleColor: root.statusShadowColor
-          font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.85))
-          text: {
-            var parts = []
-            if (model) parts.push(qsTr("Frame %1").arg(model.frameCount))
-            if (root.zoom !== 1.0) parts.push(Math.round(root.zoom * 100) + "%")
-            return parts.join("  ·  ")
-          }
-        }
-      }
     }
   }
 }

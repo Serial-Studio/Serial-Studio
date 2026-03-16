@@ -82,12 +82,11 @@ Misc::CommonFonts::CommonFonts()
   m_widgetFontScale  = qBound(0.5, m_widgetFontScale, 3.0);
 
   // Validate saved font family exists; fall back to default mono font if not found
-  const auto fonts = availableFonts();
+  const auto fonts  = availableFonts();
   m_widgetFontIndex = fonts.indexOf(m_widgetFontFamily);
-  if (m_widgetFontIndex < 0)
-  {
+  if (m_widgetFontIndex < 0) {
     m_widgetFontFamily = m_monoFont.family();
-    m_widgetFontIndex = fonts.indexOf(m_widgetFontFamily);
+    m_widgetFontIndex  = fonts.indexOf(m_widgetFontFamily);
   }
 }
 

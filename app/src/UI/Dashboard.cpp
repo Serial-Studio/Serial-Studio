@@ -1150,8 +1150,8 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
     }
   }
 
-  // Update plots & time-series widgets
-  updateDataSeries();
+  // Update plots & time-series widgets (only for this source)
+  updateDataSeries(frame.sourceId);
 }
 
 /**
@@ -1371,11 +1371,17 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
  * - Shifts in the latest sample from the dashboard dataset into the correct
  *   slot of the buffer.
  *
+ * When @p sourceId is non-negative, only widgets belonging to that source are
+ * updated; widgets from other sources are skipped. Pass -1 (default) to update
+ * all sources (used during initial configuration).
+ *
+ * @param sourceId Source to update, or -1 for all sources.
+ *
  * @warning GPS and 3D plots rely on structured dataset groups and expect the
  *          widgets to provide fields like [`lat`, `lon`, `alt`], or
  *          [`x`, `y`, `z`].
  */
-void UI::Dashboard::updateDataSeries()
+void UI::Dashboard::updateDataSeries(int sourceId)
 {
   // Cache widget counts
   const int gpsCount   = widgetCount(SerialStudio::DashboardGPS);
@@ -1403,10 +1409,16 @@ void UI::Dashboard::updateDataSeries()
   // Update GPS data
   for (int i = 0; i < gpsCount; ++i) {
     const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
-    auto& series      = m_gpsValues[i];
+    if (sourceId >= 0 && group.sourceId != sourceId)
+      continue;
 
-    double lat = -1, lon = -1, alt = -1;
+    auto& series = m_gpsValues[i];
+
+    double lat = std::nan(""), lon = std::nan(""), alt = std::nan("");
     for (const auto& dataset : group.datasets) {
+      if (!dataset.isNumeric)
+        continue;
+
       const QString& id = dataset.widget;
       if (id == "lat")
         lat = dataset.numericValue;
@@ -1427,6 +1439,9 @@ void UI::Dashboard::updateDataSeries()
       continue;
 
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
+    if (sourceId >= 0 && dataset.sourceId != sourceId)
+      continue;
+
     m_fftValues[i].push(dataset.numericValue);
   }
 
@@ -1434,12 +1449,14 @@ void UI::Dashboard::updateDataSeries()
   QSet<int> xAxesMoved;
   QSet<int> yAxesMoved;
   for (int i = 0; i < plotCount; ++i) {
-    // Stop if plot widget is not enabled
     if (!m_activePlots[i])
       continue;
 
-    // Shift Y-axis points
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    if (sourceId >= 0 && yDataset.sourceId != sourceId)
+      continue;
+
+    // Shift Y-axis points
     if (!yAxesMoved.contains(yDataset.index)) {
       yAxesMoved.insert(yDataset.index);
       m_yAxisData[yDataset.index].push(yDataset.numericValue);
@@ -1460,6 +1477,9 @@ void UI::Dashboard::updateDataSeries()
       continue;
 
     const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+    if (sourceId >= 0 && group.sourceId != sourceId)
+      continue;
+
     auto& multiSeries = m_multipltValues[i];
     for (size_t j = 0; j < group.datasets.size(); ++j)
       multiSeries.y[j].push(group.datasets[j].numericValue);
@@ -1468,10 +1488,13 @@ void UI::Dashboard::updateDataSeries()
   // Update 3D plots
 #ifdef BUILD_COMMERCIAL
   for (int i = 0; i < plot3DCount; ++i) {
+    const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
+    if (sourceId >= 0 && group.sourceId != sourceId)
+      continue;
+
     auto& plotData = m_plotData3D[i];
 
     QVector3D point;
-    const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
     for (const auto& dataset : group.datasets) {
       const QString& id = dataset.widget;
       if (id == "x" || id == "X")

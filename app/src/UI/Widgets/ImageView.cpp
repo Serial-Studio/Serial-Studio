@@ -273,6 +273,7 @@ Widgets::ImageView::ImageView(int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(index)
   , m_groupId(-1)
+  , m_sourceId(0)
   , m_frameCount(0)
   , m_imageWidth(0)
   , m_imageHeight(0)
@@ -284,6 +285,7 @@ Widgets::ImageView::ImageView(int index, QQuickItem* parent)
   if (VALIDATE_WIDGET(SerialStudio::DashboardImageView, m_index)) {
     const auto& group = GET_GROUP(SerialStudio::DashboardImageView, m_index);
     m_groupId         = group.groupId;
+    m_sourceId        = group.sourceId;
     m_groupTitle      = group.title;
   }
 
@@ -405,6 +407,10 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
   if (data.isEmpty())
     return;
 
+  // Respect dashboard pause state
+  if (IO::ConnectionManager::instance().paused())
+    return;
+
   m_imageFormat = detectFormat(data);
 
   QImage img = QImage::fromData(data);
@@ -458,7 +464,7 @@ void Widgets::ImageView::reconfigureReader()
     m_reader = nullptr;
   }
 
-  auto* driver = IO::ConnectionManager::instance().driver();
+  auto* driver = IO::ConnectionManager::instance().driver(m_sourceId);
   if (!driver)
     return;
 

@@ -189,6 +189,7 @@ private:
 
   int m_index;
   int m_groupId;
+  int m_sourceId;
   int m_frameCount;
   int m_imageWidth;
   int m_imageHeight;

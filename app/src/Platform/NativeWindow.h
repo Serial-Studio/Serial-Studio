@@ -43,9 +43,13 @@
 class NativeWindow : public QObject {
   Q_OBJECT
 
+signals:
+  void quitRequested();
+
 public:
   explicit NativeWindow(QObject* parent = nullptr);
 
+  void installMacOSQuitInterceptor();
   Q_INVOKABLE int titlebarHeight(QObject* window);
 
 public slots:

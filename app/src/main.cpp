@@ -107,6 +107,7 @@ int main(int argc, char** argv)
   QApplication::setOrganizationDomain(APP_SUPPORT_URL);
 
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+  QApplication::setAttribute(Qt::AA_DontUseNativeMenuWindows);
 
   const bool headless = argvHasFlag(argc, argv, "--headless");
   if (headless)

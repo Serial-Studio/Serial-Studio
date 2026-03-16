@@ -301,20 +301,21 @@ mixed binary + ASCII byte stream.
 ### 18. Dual Drone Telemetry
 **Difficulty:** 🟡 Intermediate | **Time:** ~10 minutes | **License:** Pro (Multi-source + Image View required)
 
-Simulates two drones — Alpha (circular patrol) and Bravo (figure-8 survey) — transmitting flight telemetry and synthetic camera imagery simultaneously over separate UDP connections. Demonstrates Serial Studio's **multi-source architecture** with Image View widgets, compass, plots, bars, and battery alarms on a single unified dashboard.
+Simulates two drones -- Alpha (circular patrol) and Bravo (figure-8 survey) -- transmitting flight telemetry and synthetic camera imagery simultaneously over separate UDP connections. Demonstrates Serial Studio's **multi-source architecture** with per-source Image View widgets, gyroscope, compass, plots, bars, and battery alarms on a single unified dashboard.
 
 **Contents:**
   - **dual_drone_telemetry.py**: Python simulator with two threaded drones sending telemetry + JPEG camera frames
   - **Dual Drone Telemetry.ssproj**: Serial Studio project file with multi-source configuration
-  - **README.md**: Setup guide and flight model documentation
+  - **README.md**: Setup guide, camera feed descriptions, and flight model documentation
 
 **Features:**
   - **Multi-Source Demo**: Two independent UDP streams (ports 9001 and 9002) with hexadecimal frame delimiters
-  - **Synthetic Camera Feeds**: Procedural terrain view (Alpha) and thermal/IR heat map (Bravo) via opencv
+  - **Synthetic Camera Feeds**: FLIR thermal infrared (Alpha) and green phosphor NVG night-vision (Bravo) via opencv
   - **22 Datasets**: GPS, heading, altitude, airspeed, vertical speed, roll, pitch, battery voltage/current/charge per drone
   - **Distinct Flight Profiles**: Circular patrol vs figure-8 survey with realistic banking and battery drain
+  - **Attitude Visualization**: Roll, pitch, and yaw displayed on gyroscope widgets per drone
   - **Battery Alarms**: Low-voltage and low-charge alerts configured at 21V / 20%
-  - **Multiple Widget Types**: Image View, compass, plots, bars, and overview displays
+  - **Multiple Widget Types**: Image View, gyroscope, compass, map, gauges, bars, and time plots
   - No hardware needed - software only (camera images require opencv-python)
 
 ## Getting Started
