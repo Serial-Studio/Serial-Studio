@@ -307,17 +307,24 @@ Rectangle {
     // Driver selection group
     //
     GridLayout {
+      id: driverGrid
+
       rows: 3
       rowSpacing: 4
       columnSpacing: 4
       Layout.alignment: Qt.AlignVCenter
       columns: Cpp_CommercialBuild ? 3 : 1
 
+      readonly property bool driverSelectionEnabled:
+        Cpp_AppState.operationMode !== SerialStudio.ProjectFile ||
+        Cpp_JSON_ProjectModel.sourceCount <= 1
+
       Widgets.ToolbarButton {
         iconSize: 16
         text: qsTr("UART")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
+        enabled: driverGrid.driverSelectionEnabled
         onClicked: Cpp_IO_Manager.busType = SerialStudio.UART
         icon.source: "qrc:/rcc/icons/devices/drivers/uart.svg"
         font: Cpp_IO_Manager.busType === SerialStudio.UART ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
@@ -334,6 +341,7 @@ Rectangle {
             text: qsTr("Audio")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
+            enabled: driverGrid.driverSelectionEnabled
             ToolTip.text: qsTr("Select audio input device (Pro)")
             onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
             icon.source: "qrc:/rcc/icons/devices/drivers/audio.svg"
@@ -352,6 +360,7 @@ Rectangle {
             text: qsTr("USB")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
+            enabled: driverGrid.driverSelectionEnabled
             ToolTip.text: qsTr("Select raw USB communication (Pro)")
             icon.source: "qrc:/rcc/icons/devices/drivers/usb.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
@@ -365,6 +374,7 @@ Rectangle {
         text: qsTr("Network")
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
+        enabled: driverGrid.driverSelectionEnabled
         ToolTip.text: qsTr("Select TCP/UDP network communication")
         icon.source: "qrc:/rcc/icons/devices/drivers/network.svg"
         onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
@@ -381,6 +391,7 @@ Rectangle {
             text: qsTr("Modbus")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
+            enabled: driverGrid.driverSelectionEnabled
             ToolTip.text: qsTr("Select MODBUS communication (Pro)")
             icon.source: "qrc:/rcc/icons/devices/drivers/modbus.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
@@ -399,6 +410,7 @@ Rectangle {
             text: qsTr("HID")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
+            enabled: driverGrid.driverSelectionEnabled
             ToolTip.text: qsTr("Select HID device communication (Pro)")
             icon.source: "qrc:/rcc/icons/devices/drivers/hid.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
@@ -412,6 +424,7 @@ Rectangle {
         horizontalLayout: true
         text: qsTr("Bluetooth")
         Layout.alignment: Qt.AlignLeft
+        enabled: driverGrid.driverSelectionEnabled
         ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
         icon.source: "qrc:/rcc/icons/devices/drivers/bluetooth.svg"
         onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
@@ -428,6 +441,7 @@ Rectangle {
             text: qsTr("CAN Bus")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
+            enabled: driverGrid.driverSelectionEnabled
             ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
             icon.source: "qrc:/rcc/icons/devices/drivers/canbus.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
@@ -446,6 +460,7 @@ Rectangle {
             text: qsTr("Process")
             horizontalLayout: true
             Layout.alignment: Qt.AlignLeft
+            enabled: driverGrid.driverSelectionEnabled
             ToolTip.text: qsTr("Select process pipe communication (Pro)")
             icon.source: "qrc:/rcc/icons/devices/drivers/process.svg"
             onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
