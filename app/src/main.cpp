@@ -20,7 +20,7 @@
  */
 
 // clang-format off
-#ifdef Q_OS_WIN
+#ifdef _WIN32
 #  include <windows.h>
 #  include <shlobj.h>
 #endif
