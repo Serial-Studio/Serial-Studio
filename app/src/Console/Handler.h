@@ -22,8 +22,11 @@
 #pragma once
 
 #include <QFont>
+#include <QList>
 #include <QObject>
 #include <QSettings>
+#include <QStringList>
+#include <unordered_map>
 
 #include "IO/CircularBuffer.h"
 #include "IO/HAL_Driver.h"
@@ -119,6 +122,16 @@ class Handler : public QObject {
   Q_PROPERTY(int defaultCharHeight
              READ defaultCharHeight
              CONSTANT)
+  Q_PROPERTY(int currentDeviceId
+             READ currentDeviceId
+             WRITE setCurrentDeviceId
+             NOTIFY currentDeviceIdChanged)
+  Q_PROPERTY(QStringList deviceNames
+             READ deviceNames
+             NOTIFY deviceNamesChanged)
+  Q_PROPERTY(bool multiDeviceMode
+             READ multiDeviceMode
+             NOTIFY deviceNamesChanged)
   // clang-format on
 
 signals:
@@ -140,6 +153,9 @@ signals:
   void checksumMethodChanged();
   void displayString(const QString& text);
   void cleared();
+  void currentDeviceIdChanged();
+  void deviceNamesChanged();
+  void deviceDataReady(int deviceId, const QString& text);
 
 private:
   explicit Handler();
@@ -199,6 +215,10 @@ public:
   [[nodiscard]] int defaultCharHeight() const;
   [[nodiscard]] qsizetype bufferLength() const;
 
+  [[nodiscard]] int currentDeviceId() const noexcept;
+  [[nodiscard]] bool multiDeviceMode() const noexcept;
+  [[nodiscard]] const QStringList& deviceNames() const noexcept;
+
   Q_INVOKABLE bool validateUserHex(const QString& text);
   Q_INVOKABLE QString formatUserHex(const QString& text);
 
@@ -221,19 +241,32 @@ public slots:
   void setDisplayMode(const Console::Handler::DisplayMode& mode);
   void append(const QString& str, const bool addTimestamp = false);
 
+  void setCurrentDeviceId(int deviceId);
+  Q_INVOKABLE void setCurrentDeviceIndex(int index);
+
   void displaySentData(QByteArrayView data);
+  void displaySentData(int deviceId, QByteArrayView data);
   void displayDebugData(const QString& data);
   void hotpathRxData(const IO::ByteArrayPtr& data);
+  void hotpathRxDeviceData(int deviceId, const IO::ByteArrayPtr& data);
 
 private slots:
   void updateFont();
+  void onDevicesChanged();
   void addToHistory(const QString& command);
 
 private:
+  struct DeviceConsoleState {
+    QString buffer;
+    bool isStartingLine = true;
+    bool lastCharWasCR  = false;
+  };
+
   bool hasImageWidget() const;
   QString dataToString(QByteArrayView data);
   QString plainTextStr(QByteArrayView data);
   QString hexadecimalStr(QByteArrayView data);
+  void appendToDevice(int deviceId, const QString& str, bool addTimestamp);
 
 private:
   DataMode m_dataMode;
@@ -250,6 +283,11 @@ private:
   bool m_ansiColors;
   bool m_isStartingLine;
   bool m_lastCharWasCR;
+
+  int m_currentDeviceId;
+  QList<int> m_deviceSourceIds;
+  QStringList m_deviceNames;
+  std::unordered_map<int, DeviceConsoleState> m_deviceState;
 
   QFont m_font;
   int m_fontSize;

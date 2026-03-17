@@ -100,6 +100,9 @@ class ConnectionManager : public QObject {
   Q_PROPERTY(QStringList availableBuses
              READ availableBuses
              NOTIFY busListChanged)
+  Q_PROPERTY(int connectedDeviceCount
+             READ connectedDeviceCount
+             NOTIFY connectedChanged)
   // clang-format on
 
 signals:
@@ -133,6 +136,7 @@ public:
   [[nodiscard]] bool readWrite() const;
   [[nodiscard]] bool isConnected() const;
   [[nodiscard]] bool configurationOk() const;
+  [[nodiscard]] int connectedDeviceCount() const;
 
   [[nodiscard]] SerialStudio::BusType busType() const noexcept;
 
@@ -208,7 +212,7 @@ private:
 
   QSettings m_settings;
 
-  std::unordered_map<int, DeviceManager*> m_devices;
+  std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
 
   // UI-config driver instances (one per type; never used for live connections)
   std::unique_ptr<IO::Drivers::UART> m_uartUi;

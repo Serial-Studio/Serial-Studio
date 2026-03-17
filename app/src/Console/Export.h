@@ -21,10 +21,12 @@
 
 #pragma once
 
+#include <memory>
 #include <QFile>
 #include <QObject>
 #include <QSettings>
 #include <QTextStream>
+#include <unordered_map>
 
 #include "DataModel/FrameConsumer.h"
 
@@ -34,11 +36,12 @@ namespace Console {
  * @brief Represents a single console data item for export
  */
 struct ExportData {
+  int deviceId = -1;
   QString data;
 
   ExportData() = default;
 
-  ExportData(QString&& d) : data(std::move(d)) {}
+  ExportData(int id, QString&& d) : deviceId(id), data(std::move(d)) {}
 
   ExportData(ExportData&&)                 = default;
   ExportData(const ExportData&)            = delete;
@@ -71,11 +74,15 @@ protected:
   void processItems(const std::vector<ExportDataPtr>& items) override;
 
 private:
-  void createFile();
+  struct DeviceExportState {
+    std::unique_ptr<QFile> file;
+    std::unique_ptr<QTextStream> stream;
+  };
+
+  void createFile(int deviceId);
 
 private:
-  QFile m_file;
-  QTextStream m_textStream;
+  std::unordered_map<int, DeviceExportState> m_deviceFiles;
 };
 #endif
 
@@ -147,7 +154,7 @@ public slots:
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
 
-  void registerData(QStringView data);
+  void registerData(int deviceId, QStringView data);
 
 protected:
 #ifdef BUILD_COMMERCIAL

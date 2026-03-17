@@ -6,6 +6,148 @@ The Project Editor lets you create and edit JSON project files that define how S
 
 A project file describes three things: the structure of your data (groups and datasets), how to detect and parse frames from the wire, and what actions (commands) the user can send back to the device. Serial Studio reads this file at connect time and builds the dashboard accordingly.
 
+## Project Hierarchy
+
+The following diagram shows the tree structure of a Serial Studio project file and how each element maps to the dashboard.
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" font-family="monospace" font-size="13">
+  <!-- Background -->
+  <rect width="720" height="520" fill="#f8f9fa" rx="8"/>
+
+  <!-- Project Root -->
+  <rect x="260" y="20" width="200" height="40" rx="6" fill="#2d3748" stroke="#1a202c" stroke-width="1.5"/>
+  <text x="360" y="45" text-anchor="middle" fill="#fff" font-weight="bold">Project Root</text>
+  <text x="480" y="45" fill="#718096" font-size="10">title, delimiters</text>
+
+  <!-- Lines from root to 3 children -->
+  <line x1="260" y1="60" x2="120" y2="100" stroke="#718096" stroke-width="1.5"/>
+  <line x1="360" y1="60" x2="360" y2="100" stroke="#718096" stroke-width="1.5"/>
+  <line x1="460" y1="60" x2="600" y2="100" stroke="#718096" stroke-width="1.5"/>
+
+  <!-- Groups -->
+  <rect x="40" y="100" width="160" height="40" rx="6" fill="#2b6cb0" stroke="#2c5282" stroke-width="1.5"/>
+  <text x="120" y="125" text-anchor="middle" fill="#fff" font-weight="bold">Groups</text>
+
+  <!-- Actions -->
+  <rect x="280" y="100" width="160" height="40" rx="6" fill="#d69e2e" stroke="#b7791f" stroke-width="1.5"/>
+  <text x="360" y="125" text-anchor="middle" fill="#fff" font-weight="bold">Actions</text>
+
+  <!-- Sources -->
+  <rect x="520" y="100" width="160" height="40" rx="6" fill="#9b2c2c" stroke="#822727" stroke-width="1.5"/>
+  <text x="600" y="125" text-anchor="middle" fill="#fff" font-weight="bold">Sources [Pro]</text>
+
+  <!-- Group children -->
+  <line x1="80" y1="140" x2="80" y2="180" stroke="#718096" stroke-width="1.5"/>
+  <line x1="160" y1="140" x2="160" y2="180" stroke="#718096" stroke-width="1.5"/>
+
+  <rect x="20" y="180" width="120" height="36" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="80" y="203" text-anchor="middle" fill="#2b6cb0" font-size="12">Group A</text>
+
+  <rect x="160" y="180" width="120" height="36" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="220" y="203" text-anchor="middle" fill="#2b6cb0" font-size="12">Group B</text>
+
+  <!-- Group A details -->
+  <line x1="40" y1="216" x2="40" y2="250" stroke="#718096" stroke-width="1"/>
+  <line x1="80" y1="216" x2="80" y2="250" stroke="#718096" stroke-width="1"/>
+  <line x1="120" y1="216" x2="120" y2="250" stroke="#718096" stroke-width="1"/>
+
+  <rect x="16" y="250" width="50" height="28" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="41" y="269" text-anchor="middle" fill="#2f855a" font-size="10">DS 1</text>
+  <rect x="72" y="250" width="50" height="28" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="97" y="269" text-anchor="middle" fill="#2f855a" font-size="10">DS 2</text>
+  <rect x="128" y="250" width="50" height="28" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="153" y="269" text-anchor="middle" fill="#2f855a" font-size="10">DS 3</text>
+
+  <!-- Group B details -->
+  <line x1="220" y1="216" x2="200" y2="250" stroke="#718096" stroke-width="1"/>
+  <line x1="220" y1="216" x2="240" y2="250" stroke="#718096" stroke-width="1"/>
+
+  <rect x="176" y="250" width="50" height="28" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="201" y="269" text-anchor="middle" fill="#2f855a" font-size="10">DS 4</text>
+  <rect x="232" y="250" width="50" height="28" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="257" y="269" text-anchor="middle" fill="#2f855a" font-size="10">DS 5</text>
+
+  <!-- Action children -->
+  <line x1="320" y1="140" x2="320" y2="180" stroke="#718096" stroke-width="1"/>
+  <line x1="400" y1="140" x2="400" y2="180" stroke="#718096" stroke-width="1"/>
+
+  <rect x="280" y="180" width="80" height="36" rx="4" fill="#fefcbf" stroke="#d69e2e" stroke-width="1"/>
+  <text x="320" y="203" text-anchor="middle" fill="#975a16" font-size="11">Reset</text>
+  <rect x="380" y="180" width="80" height="36" rx="4" fill="#fefcbf" stroke="#d69e2e" stroke-width="1"/>
+  <text x="420" y="203" text-anchor="middle" fill="#975a16" font-size="11">Calibrate</text>
+
+  <!-- Source children -->
+  <line x1="560" y1="140" x2="560" y2="180" stroke="#718096" stroke-width="1"/>
+  <line x1="640" y1="140" x2="640" y2="180" stroke="#718096" stroke-width="1"/>
+
+  <rect x="510" y="180" width="100" height="36" rx="4" fill="#fff5f5" stroke="#9b2c2c" stroke-width="1"/>
+  <text x="560" y="203" text-anchor="middle" fill="#9b2c2c" font-size="11">UART Src</text>
+  <rect x="630" y="180" width="60" height="36" rx="4" fill="#fff5f5" stroke="#9b2c2c" stroke-width="1"/>
+  <text x="660" y="203" text-anchor="middle" fill="#9b2c2c" font-size="11">UDP</text>
+
+  <!-- Frame Index Mapping section -->
+  <rect x="40" y="310" width="640" height="180" rx="6" fill="#fff" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="360" y="335" text-anchor="middle" fill="#2d3748" font-weight="bold">Frame Index Mapping</text>
+  <line x1="60" y1="345" x2="660" y2="345" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Device output -->
+  <text x="60" y="370" fill="#718096" font-size="12">Device sends:</text>
+  <rect x="190" y="355" width="80" height="24" rx="3" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="230" y="372" text-anchor="middle" fill="#2b6cb0" font-size="12">23.5</text>
+  <rect x="280" y="355" width="80" height="24" rx="3" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="320" y="372" text-anchor="middle" fill="#2b6cb0" font-size="12">1013</text>
+  <rect x="370" y="355" width="80" height="24" rx="3" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="410" y="372" text-anchor="middle" fill="#2b6cb0" font-size="12">45.2</text>
+  <rect x="460" y="355" width="80" height="24" rx="3" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="500" y="372" text-anchor="middle" fill="#2b6cb0" font-size="12">3.3</text>
+  <rect x="550" y="355" width="80" height="24" rx="3" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
+  <text x="590" y="372" text-anchor="middle" fill="#2b6cb0" font-size="12">98</text>
+
+  <!-- Array indices -->
+  <text x="60" y="400" fill="#718096" font-size="12">Array index:</text>
+  <text x="230" y="400" text-anchor="middle" fill="#718096" font-size="12">[0]</text>
+  <text x="320" y="400" text-anchor="middle" fill="#718096" font-size="12">[1]</text>
+  <text x="410" y="400" text-anchor="middle" fill="#718096" font-size="12">[2]</text>
+  <text x="500" y="400" text-anchor="middle" fill="#718096" font-size="12">[3]</text>
+  <text x="590" y="400" text-anchor="middle" fill="#718096" font-size="12">[4]</text>
+
+  <!-- Arrows down -->
+  <line x1="230" y1="406" x2="230" y2="426" stroke="#2f855a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="320" y1="406" x2="320" y2="426" stroke="#2f855a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="410" y1="406" x2="410" y2="426" stroke="#2f855a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="500" y1="406" x2="500" y2="426" stroke="#2f855a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="590" y1="406" x2="590" y2="426" stroke="#2f855a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Dataset labels -->
+  <text x="60" y="445" fill="#718096" font-size="12">Frame Index:</text>
+  <rect x="205" y="430" width="50" height="22" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="230" y="446" text-anchor="middle" fill="#2f855a" font-size="11">IDX 1</text>
+  <rect x="295" y="430" width="50" height="22" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="320" y="446" text-anchor="middle" fill="#2f855a" font-size="11">IDX 2</text>
+  <rect x="385" y="430" width="50" height="22" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="410" y="446" text-anchor="middle" fill="#2f855a" font-size="11">IDX 3</text>
+  <rect x="475" y="430" width="50" height="22" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="500" y="446" text-anchor="middle" fill="#2f855a" font-size="11">IDX 4</text>
+  <rect x="565" y="430" width="50" height="22" rx="3" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
+  <text x="590" y="446" text-anchor="middle" fill="#2f855a" font-size="11">IDX 5</text>
+
+  <!-- Dataset names -->
+  <text x="230" y="475" text-anchor="middle" fill="#2d3748" font-size="10">Temp</text>
+  <text x="320" y="475" text-anchor="middle" fill="#2d3748" font-size="10">Pressure</text>
+  <text x="410" y="475" text-anchor="middle" fill="#2d3748" font-size="10">Humidity</text>
+  <text x="500" y="475" text-anchor="middle" fill="#2d3748" font-size="10">Voltage</text>
+  <text x="590" y="475" text-anchor="middle" fill="#2d3748" font-size="10">Battery</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
+    </marker>
+  </defs>
+</svg>
+```
+
 ## Interface Layout
 
 The editor window is divided into three areas: a toolbar across the top, a tree view on the left, and a property panel on the right.

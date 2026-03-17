@@ -56,6 +56,7 @@ Console::Handler::Handler()
   , m_ansiColors(true)
   , m_isStartingLine(true)
   , m_lastCharWasCR(false)
+  , m_currentDeviceId(-1)
   , m_fontFamilyIndex(0)
   , m_textBuffer(10 * 1024)
 {
@@ -418,6 +419,15 @@ void Console::Handler::clear()
   m_textBuffer.clear();
   m_isStartingLine = true;
   m_lastCharWasCR  = false;
+
+  // Clear the current device's per-device state
+  auto it = m_deviceState.find(m_currentDeviceId);
+  if (it != m_deviceState.end()) {
+    it->second.buffer.clear();
+    it->second.isStartingLine = true;
+    it->second.lastCharWasCR  = false;
+  }
+
   Q_EMIT cleared();
 }
 
@@ -483,6 +493,18 @@ void Console::Handler::setupExternalConnections()
           &IO::ConnectionManager::connectedChanged,
           this,
           notifyTerminal);
+
+  // Rebuild device list when sources or connection state change
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::sourceStructureChanged,
+          this,
+          &Console::Handler::onDevicesChanged,
+          Qt::QueuedConnection);
+
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::connectedChanged,
+          this,
+          &Console::Handler::onDevicesChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -533,8 +555,12 @@ void Console::Handler::send(const QString& data)
       bin.append(checksum);
   }
 
-  if (!bin.isEmpty())
-    IO::ConnectionManager::instance().writeData(bin);
+  if (!bin.isEmpty()) {
+    if (m_currentDeviceId >= 0)
+      IO::ConnectionManager::instance().writeDataToDevice(m_currentDeviceId, bin);
+    else
+      IO::ConnectionManager::instance().writeData(bin);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -775,7 +801,7 @@ void Console::Handler::displayDebugData(const QString& data)
 }
 
 /**
- * Displays the given @a data in the console
+ * @brief Displays raw data from the playback path (no device routing).
  */
 void Console::Handler::hotpathRxData(const IO::ByteArrayPtr& data)
 {
@@ -786,19 +812,259 @@ void Console::Handler::hotpathRxData(const IO::ByteArrayPtr& data)
 }
 
 /**
- * Displays the given @a data in the console. @c QByteArray to ~@c QString
- * conversion is done by the @c dataToString() function, which displays incoming
- * data either in UTF-8 or in hexadecimal mode.
+ * @brief Routes incoming raw data to the per-device console buffer.
+ *
+ * Converts raw bytes to a display string, appends to the device's buffer,
+ * and if this device is currently selected, displays it live.
+ *
+ * @param deviceId Source device identifier.
+ * @param data     Raw incoming bytes.
+ */
+void Console::Handler::hotpathRxDeviceData(int deviceId, const IO::ByteArrayPtr& data)
+{
+  if (!data)
+    return;
+
+  const auto str = dataToString(*data);
+  if (str.isEmpty())
+    return;
+
+  // Store in per-device buffer
+  appendToDevice(deviceId, str, showTimestamp());
+
+  // Always emit for export
+  Q_EMIT deviceDataReady(deviceId, str);
+}
+
+/**
+ * @brief Echoes sent data to the console (legacy overload for device 0).
  */
 void Console::Handler::displaySentData(QByteArrayView data)
 {
   if (echo())
-    append(dataToString(data), showTimestamp());
+    displaySentData(m_currentDeviceId >= 0 ? m_currentDeviceId : -1, data);
+}
+
+/**
+ * @brief Echoes sent data to a specific device's console buffer.
+ * @param deviceId Target device.
+ * @param data     Bytes that were sent.
+ */
+void Console::Handler::displaySentData(int deviceId, QByteArrayView data)
+{
+  if (!echo())
+    return;
+
+  const auto str = dataToString(data);
+  appendToDevice(deviceId, str, showTimestamp());
+  Q_EMIT deviceDataReady(deviceId, str);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Multi-device console management
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the current device ID for the console.
+ */
+int Console::Handler::currentDeviceId() const noexcept
+{
+  return m_currentDeviceId;
+}
+
+/**
+ * @brief Returns true when more than one device is connected.
+ */
+bool Console::Handler::multiDeviceMode() const noexcept
+{
+  return m_deviceNames.size() > 1;
+}
+
+/**
+ * @brief Returns the list of connected device names for the QML combobox.
+ */
+const QStringList& Console::Handler::deviceNames() const noexcept
+{
+  return m_deviceNames;
+}
+
+/**
+ * @brief Switches the console view to the given @p deviceId.
+ *
+ * Guard-returns if unchanged. Clears the display, replays the selected
+ * device's buffer, and emits currentDeviceIdChanged().
+ */
+void Console::Handler::setCurrentDeviceId(int deviceId)
+{
+  if (m_currentDeviceId == deviceId)
+    return;
+
+  m_currentDeviceId = deviceId;
+
+  // Replay the selected device's buffer
+  m_textBuffer.clear();
+  m_isStartingLine = true;
+  m_lastCharWasCR  = false;
+  Q_EMIT cleared();
+
+  auto it = m_deviceState.find(m_currentDeviceId);
+  if (it != m_deviceState.end() && !it->second.buffer.isEmpty()) {
+    m_textBuffer.append(it->second.buffer.toUtf8());
+    Q_EMIT displayString(it->second.buffer);
+  }
+
+  Q_EMIT currentDeviceIdChanged();
+}
+
+/**
+ * @brief Maps a QML combobox index to a device source ID.
+ * @param index Combobox index.
+ */
+void Console::Handler::setCurrentDeviceIndex(int index)
+{
+  if (index >= 0 && index < m_deviceSourceIds.size())
+    setCurrentDeviceId(m_deviceSourceIds.at(index));
+}
+
+/**
+ * @brief Rebuilds the device name list from project sources and connection state.
+ *
+ * Called when sources change or connection state changes. Resets to device 0
+ * if the current device is no longer available.
+ */
+void Console::Handler::onDevicesChanged()
+{
+  const auto& mgr     = IO::ConnectionManager::instance();
+  const auto opMode   = AppState::instance().operationMode();
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+
+  QStringList names;
+  QList<int> ids;
+
+  // Multi-device mode: ProjectFile with multiple sources
+  if (opMode == SerialStudio::ProjectFile && sources.size() > 1) {
+    for (const auto& src : sources) {
+      const auto label = src.title.isEmpty() ? tr("Device %1").arg(src.sourceId) : src.title;
+      names.append(label);
+      ids.append(src.sourceId);
+    }
+  }
+
+  // Check if the list actually changed
+  if (names == m_deviceNames && ids == m_deviceSourceIds)
+    return;
+
+  m_deviceNames     = names;
+  m_deviceSourceIds = ids;
+
+  // If not connected, clear all device state
+  if (!mgr.isConnected()) {
+    m_deviceState.clear();
+    m_currentDeviceId = -1;
+    Q_EMIT deviceNamesChanged();
+    Q_EMIT currentDeviceIdChanged();
+    return;
+  }
+
+  // Reset to first device if current is gone
+  if (!ids.isEmpty() && !ids.contains(m_currentDeviceId))
+    setCurrentDeviceId(ids.first());
+  else if (ids.isEmpty())
+    m_currentDeviceId = -1;
+
+  Q_EMIT deviceNamesChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
 // Internal utilities
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Appends a string to the per-device buffer and optionally displays it.
+ *
+ * The display string is processed through the same timestamp/newline logic as
+ * append(), but state is tracked per-device. If the device is the currently
+ * selected one, the processed string is also shown live in the console.
+ *
+ * @param deviceId    Target device ID.
+ * @param str         The string to append.
+ * @param addTimestamp Whether to prepend timestamps.
+ */
+void Console::Handler::appendToDevice(int deviceId, const QString& str, bool addTimestamp)
+{
+  if (str.isEmpty())
+    return;
+
+  // Get or create per-device state
+  auto& state = m_deviceState[deviceId];
+
+  // Process the string through timestamp/newline logic
+  auto data = str;
+  if (state.lastCharWasCR && data.startsWith('\n'))
+    data.removeFirst();
+
+  state.lastCharWasCR = data.endsWith('\r');
+
+  data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
+  data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
+
+  QString timestamp;
+  if (addTimestamp) {
+    QDateTime dateTime    = QDateTime::currentDateTime();
+    const QString timeStr = dateTime.toString(QStringLiteral("HH:mm:ss.zzz -> "));
+
+    if (ansiColorsEnabled()) {
+      const QString ansiCyan  = QStringLiteral("\033[36m");
+      const QString ansiReset = QStringLiteral("\033[0m");
+      timestamp               = QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
+    } else {
+      timestamp = timeStr;
+    }
+  }
+
+  QString processedString;
+  processedString.reserve(data.length() + timestamp.length() * 4);
+
+  // Single-pass newline scan
+  int pos = 0;
+  while (pos < data.length()) {
+    const int nlPos = data.indexOf('\n', pos);
+    const int end   = (nlPos < 0) ? data.length() : nlPos;
+
+    if (end > pos) {
+      const auto segment = QStringView(data).mid(pos, end - pos);
+      if (state.isStartingLine && !segment.trimmed().isEmpty())
+        processedString.append(timestamp);
+
+      processedString.append(segment);
+      state.isStartingLine = false;
+    }
+
+    if (nlPos >= 0) {
+      if (state.isStartingLine)
+        processedString.append(timestamp);
+
+      processedString.append('\n');
+      state.isStartingLine = true;
+      pos                  = nlPos + 1;
+    } else
+      pos = end;
+  }
+
+  // Cap per-device buffer at 10 KB
+  static constexpr int kMaxDeviceBuffer = 10 * 1024;
+  state.buffer.append(processedString);
+  if (state.buffer.size() > kMaxDeviceBuffer) {
+    const int excess = state.buffer.size() - kMaxDeviceBuffer;
+    state.buffer.remove(0, excess);
+  }
+
+  // Display live if this is the active device (or single-device mode)
+  if (deviceId == m_currentDeviceId || m_currentDeviceId < 0) {
+    m_textBuffer.append(processedString.toUtf8());
+    Q_EMIT displayString(processedString);
+  }
+}
 
 bool Console::Handler::hasImageWidget() const
 {

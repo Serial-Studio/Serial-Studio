@@ -168,6 +168,19 @@ bool IO::ConnectionManager::isConnected() const
 }
 
 /**
+ * @brief Returns the number of currently open (connected) devices.
+ */
+int IO::ConnectionManager::connectedDeviceCount() const
+{
+  int count = 0;
+  for (const auto& [id, dm] : m_devices)
+    if (dm && dm->isOpen())
+      ++count;
+
+  return count;
+}
+
+/**
  * @brief Returns true when the active UI driver's configuration is valid.
  */
 bool IO::ConnectionManager::configurationOk() const
@@ -564,7 +577,7 @@ qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& 
     auto writtenData          = data;
     const qint64 boundedBytes = qMin<qint64>(bytes, writtenData.size());
     writtenData.chop(writtenData.length() - boundedBytes);
-    Console::Handler::instance().displaySentData(writtenData);
+    Console::Handler::instance().displaySentData(deviceId, writtenData);
   }
 
   return bytes;
@@ -980,18 +993,21 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
                 &IO::ConnectionManager::connectedChanged);
     }
 
-    auto* dm = new DeviceManager(0, std::move(driver), buildFrameConfig(0), this);
-    wireDevice(dm);
+    auto dm = std::make_unique<DeviceManager>(0, std::move(driver), buildFrameConfig(0), this);
+    wireDevice(dm.get());
 
+    // Disconnect old device signals before replacing
     auto existing = m_devices.find(0);
-    if (existing != m_devices.end())
-      delete existing->second;
+    if (existing != m_devices.end() && existing->second)
+      disconnect(existing->second.get(), nullptr, this, nullptr);
 
-    m_devices[0] = dm;
+    m_devices[0] = std::move(dm);
   } else {
     auto existing = m_devices.find(0);
     if (existing != m_devices.end()) {
-      delete existing->second;
+      if (existing->second)
+        disconnect(existing->second.get(), nullptr, this, nullptr);
+
       m_devices.erase(existing);
     }
   }
@@ -1152,10 +1168,10 @@ void IO::ConnectionManager::rebuildDevices()
       continue;
     }
 
-    if (it->second)
+    if (it->second) {
       it->second->close();
-
-    delete it->second;
+      disconnect(it->second.get(), nullptr, this, nullptr);
+    }
 
     it = m_devices.erase(it);
   }
@@ -1182,8 +1198,8 @@ void IO::ConnectionManager::rebuildDevices()
     }
 
     auto* rawDriver = driver.get();
-    auto* dm =
-      new DeviceManager(src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
+    auto dm         = std::make_unique<DeviceManager>(
+      src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
 
     if (src.sourceId == 0) {
       connect(rawDriver,
@@ -1192,8 +1208,8 @@ void IO::ConnectionManager::rebuildDevices()
               &IO::ConnectionManager::configurationChanged);
     }
 
-    wireDevice(dm);
-    m_devices[src.sourceId] = dm;
+    wireDevice(dm.get());
+    m_devices[src.sourceId] = std::move(dm);
   }
 
   if (opMode != SerialStudio::ProjectFile)
@@ -1247,8 +1263,6 @@ void IO::ConnectionManager::onFrameReady(int deviceId, const QByteArray& frame)
  */
 void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayPtr& data)
 {
-  (void)deviceId;
-
   if (m_paused)
     return;
 
@@ -1256,7 +1270,7 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
   static auto& server  = API::Server::instance();
 
   server.hotpathTxData(data);
-  console.hotpathRxData(data);
+  console.hotpathRxDeviceData(deviceId, data);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -2,6 +2,87 @@
 
 MQTT (Message Queuing Telemetry Transport) is a lightweight publish/subscribe messaging protocol designed for constrained devices and unreliable networks. Serial Studio Pro integrates an MQTT client that can subscribe to broker topics to receive telemetry or publish incoming frame data to a broker for consumption by other applications. This is a Pro feature.
 
+## MQTT Architecture
+
+The following diagram shows how Serial Studio integrates with an MQTT broker in both subscriber and publisher modes.
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" font-family="monospace" font-size="13">
+  <!-- Background -->
+  <rect width="720" height="480" fill="#f8f9fa" rx="8"/>
+
+  <!-- Broker (center) -->
+  <rect x="260" y="160" width="200" height="60" rx="8" fill="#2b6cb0" stroke="#2c5282" stroke-width="2"/>
+  <text x="360" y="185" text-anchor="middle" fill="#fff" font-weight="bold">MQTT Broker</text>
+  <text x="360" y="205" text-anchor="middle" fill="#bee3f8" font-size="11">Mosquitto / EMQX / AWS IoT</text>
+
+  <!-- Device / Publisher (left) -->
+  <rect x="40" y="30" width="180" height="50" rx="6" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
+  <text x="130" y="52" text-anchor="middle" fill="#fff" font-weight="bold">IoT Device</text>
+  <text x="130" y="68" text-anchor="middle" fill="#c6f6d5" font-size="11">ESP32, Arduino, etc.</text>
+
+  <!-- Arrow: Device → Broker -->
+  <line x1="220" y1="55" x2="260" y2="170" stroke="#2f855a" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="215" y="120" fill="#2f855a" font-size="10" font-weight="bold">PUBLISH</text>
+  <text x="215" y="133" fill="#718096" font-size="9">sensors/data</text>
+
+  <!-- Other subscribers (right top) -->
+  <rect x="520" y="30" width="160" height="50" rx="6" fill="#718096" stroke="#4a5568" stroke-width="1.5"/>
+  <text x="600" y="52" text-anchor="middle" fill="#fff" font-weight="bold">Other Clients</text>
+  <text x="600" y="68" text-anchor="middle" fill="#e2e8f0" font-size="11">Node-RED, Python...</text>
+
+  <!-- Arrow: Broker → Other subscribers -->
+  <line x1="460" y1="170" x2="540" y2="80" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Serial Studio Subscriber (right bottom) -->
+  <rect x="500" y="280" width="200" height="80" rx="6" fill="#6b46c1" stroke="#553c9a" stroke-width="1.5"/>
+  <text x="600" y="305" text-anchor="middle" fill="#fff" font-weight="bold">Serial Studio</text>
+  <text x="600" y="323" text-anchor="middle" fill="#e9d8fd" font-size="11">Subscriber Mode</text>
+  <text x="600" y="343" text-anchor="middle" fill="#e9d8fd" font-size="10">topic: sensors/#</text>
+
+  <!-- Arrow: Broker → Serial Studio Subscriber -->
+  <line x1="420" y1="220" x2="520" y2="290" stroke="#6b46c1" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="500" y="248" fill="#6b46c1" font-size="10" font-weight="bold">SUBSCRIBE</text>
+
+  <!-- Arrow: Serial Studio → Dashboard -->
+  <line x1="600" y1="360" x2="600" y2="400" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Dashboard -->
+  <rect x="520" y="400" width="160" height="36" rx="4" fill="#d69e2e" stroke="#b7791f" stroke-width="1.5"/>
+  <text x="600" y="423" text-anchor="middle" fill="#fff" font-weight="bold">Dashboard Widgets</text>
+
+  <!-- Serial Studio Publisher (left bottom) -->
+  <rect x="20" y="280" width="200" height="80" rx="6" fill="#9b2c2c" stroke="#822727" stroke-width="1.5"/>
+  <text x="120" y="305" text-anchor="middle" fill="#fff" font-weight="bold">Serial Studio</text>
+  <text x="120" y="323" text-anchor="middle" fill="#fed7d7" font-size="11">Publisher Mode</text>
+  <text x="120" y="343" text-anchor="middle" fill="#fed7d7" font-size="10">topic: device/data</text>
+
+  <!-- Arrow: Serial device → SS Publisher -->
+  <rect x="20" y="400" width="200" height="36" rx="4" fill="#2d3748" stroke="#1a202c" stroke-width="1.5"/>
+  <text x="120" y="423" text-anchor="middle" fill="#fff" font-size="12">Serial/Network Device</text>
+  <line x1="120" y1="400" x2="120" y2="360" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Arrow: SS Publisher → Broker -->
+  <line x1="180" y1="290" x2="270" y2="220" stroke="#9b2c2c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="195" y="265" fill="#9b2c2c" font-size="10" font-weight="bold">PUBLISH</text>
+
+  <!-- TLS indicator -->
+  <rect x="280" y="232" width="160" height="22" rx="3" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
+  <text x="360" y="247" text-anchor="middle" fill="#718096" font-size="10">TLS 1.2/1.3 (port 8883)</text>
+
+  <!-- Legend -->
+  <rect x="260" y="440" width="200" height="28" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
+  <text x="360" y="459" text-anchor="middle" fill="#718096" font-size="10">QoS 0: fire-and-forget  |  QoS 1: ack  |  QoS 2: exactly once</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
+    </marker>
+  </defs>
+</svg>
+```
+
 ---
 
 ## How MQTT Works

@@ -231,6 +231,18 @@ Item {
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
 
+      ComboBox {
+        id: deviceCombo
+
+        visible: Cpp_Console_Handler.multiDeviceMode
+        Layout.alignment: Qt.AlignVCenter
+        model: Cpp_Console_Handler.deviceNames
+        onCurrentIndexChanged: {
+          if (visible)
+            Cpp_Console_Handler.setCurrentDeviceIndex(currentIndex)
+        }
+      }
+
       TextField {
         id: send
 

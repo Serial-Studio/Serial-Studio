@@ -31,7 +31,9 @@
 #include "Misc/Utilities.h"
 
 #ifdef BUILD_COMMERCIAL
+#  include "AppState.h"
 #  include "Console/Handler.h"
+#  include "DataModel/ProjectModel.h"
 #  include "IO/ConnectionManager.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Misc/WorkspaceManager.h"
@@ -50,15 +52,19 @@
 Console::ExportWorker::~ExportWorker() = default;
 
 /**
- * @brief Returns true if file is open
+ * @brief Returns true if at least one device file is open
  */
 bool Console::ExportWorker::isResourceOpen() const
 {
-  return m_file.isOpen();
+  for (const auto& [id, state] : m_deviceFiles)
+    if (state.file && state.file->isOpen())
+      return true;
+
+  return false;
 }
 
 /**
- * @brief Processes a batch of console data items
+ * @brief Processes a batch of console data items, routing to per-device files.
  */
 void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
 {
@@ -70,66 +76,104 @@ void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
-  // No file open, create a new one
-  if (!isResourceOpen())
-    createFile();
+  // Route each item to its device file
+  for (const auto& dataPtr : items) {
+    const int devId = dataPtr->deviceId;
 
-  // Write output to file
-  if (m_textStream.device()) {
-    for (const auto& dataPtr : items)
-      m_textStream << dataPtr->data;
+    // Ensure file exists for this device
+    auto it = m_deviceFiles.find(devId);
+    if (it == m_deviceFiles.end() || !it->second.file || !it->second.file->isOpen())
+      createFile(devId);
 
-    m_textStream.flush();
+    it = m_deviceFiles.find(devId);
+    if (it != m_deviceFiles.end() && it->second.stream && it->second.stream->device()) {
+      *it->second.stream << dataPtr->data;
+      it->second.stream->flush();
+    }
   }
 }
 
 /**
- * @brief Closes the output file
+ * @brief Closes all per-device output files.
  */
 void Console::ExportWorker::closeResources()
 {
-  if (isResourceOpen()) {
-    m_file.close();
-    m_textStream.setDevice(nullptr);
-    Q_EMIT resourceOpenChanged();
+  bool wasOpen = isResourceOpen();
+  for (auto& [id, state] : m_deviceFiles) {
+    if (state.file && state.file->isOpen()) {
+      state.stream.reset();
+      state.file->close();
+    }
   }
+
+  m_deviceFiles.clear();
+
+  if (wasOpen)
+    Q_EMIT resourceOpenChanged();
 }
 
 /**
- * @brief Creates a new console log file
+ * @brief Creates a new console log file for the given device.
+ * @param deviceId Device to create a file for (-1 for single-device mode).
  */
-void Console::ExportWorker::createFile()
+void Console::ExportWorker::createFile(int deviceId)
 {
   // Serial Studio not activated, abort
   if (!SerialStudio::activated())
     return;
 
-  // Close previous file (if needed)
-  if (isResourceOpen())
-    closeResources();
+  // Close existing file for this device
+  auto it = m_deviceFiles.find(deviceId);
+  if (it != m_deviceFiles.end()) {
+    it->second.stream.reset();
+    if (it->second.file)
+      it->second.file->close();
 
-  // Obtain file name
+    m_deviceFiles.erase(it);
+  }
+
+  // Obtain file name with optional device suffix
   const auto dateTime = QDateTime::currentDateTime();
-  const auto fileName =
-    dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss")) + QStringLiteral(".txt");
+  auto fileName       = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"));
+  if (deviceId >= 0)
+    fileName += QStringLiteral("_device%1").arg(deviceId);
+
+  fileName += QStringLiteral(".txt");
+
+  // Derive project subdirectory name (same pattern as CSV/MDF4 export)
+  const auto opMode        = AppState::instance().operationMode();
+  const auto& projectTitle = DataModel::ProjectModel::instance().title();
+  QString subdirName;
+  if (opMode == SerialStudio::ProjectFile && !projectTitle.isEmpty())
+    subdirName = projectTitle;
+  else if (opMode == SerialStudio::QuickPlot)
+    subdirName = QStringLiteral("Quick Plot");
+  else
+    subdirName = QStringLiteral("Untitled");
 
   // Obtain directory where to write file
   QDir dir(Misc::WorkspaceManager::instance().path("Console"));
+  if (!dir.exists(subdirName))
+    dir.mkpath(subdirName);
 
-  // Try to open the file as write only
-  m_file.setFileName(dir.filePath(fileName));
-  if (!m_file.open(QIODeviceBase::WriteOnly | QIODevice::Text)) {
+  dir.cd(subdirName);
+
+  // Create per-device state
+  auto& state = m_deviceFiles[deviceId];
+  state.file  = std::make_unique<QFile>(dir.filePath(fileName));
+
+  if (!state.file->open(QIODeviceBase::WriteOnly | QIODevice::Text)) {
     Misc::Utilities::showMessageBox(QObject::tr("Console Output File Error"),
                                     QObject::tr("Cannot open file for writing!"),
                                     QMessageBox::Critical);
-    closeResources();
+    m_deviceFiles.erase(deviceId);
     return;
   }
 
   // Configure the output stream
-  m_textStream.setDevice(&m_file);
-  m_textStream.setGenerateByteOrderMark(true);
-  m_textStream.setEncoding(QStringConverter::Utf8);
+  state.stream = std::make_unique<QTextStream>(state.file.get());
+  state.stream->setGenerateByteOrderMark(true);
+  state.stream->setEncoding(QStringConverter::Utf8);
   Q_EMIT resourceOpenChanged();
 }
 
@@ -247,7 +291,7 @@ void Console::Export::setupExternalConnections()
 {
 #ifdef BUILD_COMMERCIAL
   connect(&Console::Handler::instance(),
-          &Console::Handler::displayString,
+          &Console::Handler::deviceDataReady,
           this,
           &Console::Export::registerData);
   connect(&IO::ConnectionManager::instance(),
@@ -291,14 +335,17 @@ void Console::Export::setExportEnabled(const bool enabled)
 }
 
 /**
- * Appends the given console data to the output buffer.
+ * @brief Appends console data from a specific device to the output buffer.
+ * @param deviceId Source device identifier.
+ * @param data     Console text to export.
  */
-void Console::Export::registerData(QStringView data)
+void Console::Export::registerData(int deviceId, QStringView data)
 {
 #ifdef BUILD_COMMERCIAL
   if (exportEnabled() && !data.isEmpty() && !SerialStudio::isAnyPlayerOpen())
-    enqueueData(std::make_shared<ExportData>(QString(data)));
+    enqueueData(std::make_shared<ExportData>(deviceId, QString(data)));
 #else
+  (void)deviceId;
   (void)data;
 #endif
 }

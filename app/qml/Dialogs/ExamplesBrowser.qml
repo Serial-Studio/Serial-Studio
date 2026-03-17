@@ -424,7 +424,8 @@ SmartDialog {
                       source: modelData.hasScreenshot
                               ? "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/examples/"
                                 + encodeURIComponent(modelData.id)
-                                + "/doc/screenshot.png"
+                                + "/doc/"
+                                + (modelData.screenshotFileName ? modelData.screenshotFileName : "screenshot.png")
                               : ""
                     }
 
