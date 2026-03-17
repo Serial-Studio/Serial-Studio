@@ -20,11 +20,11 @@
  */
 
 #include "Misc/Examples.h"
+#include "Misc/Utilities.h"
+#include "Misc/WorkspaceManager.h"
 
-#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
-#include <QFileDialog>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -50,7 +50,7 @@ static const QString kApiContentsBase =
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the Examples singleton and loads the bundled manifest.
+ * @brief Constructs the Examples singleton and fetches the manifest from GitHub.
  */
 Misc::Examples::Examples()
   : m_loading(false)
@@ -59,7 +59,7 @@ Misc::Examples::Examples()
   , m_pendingDownloads(0)
   , m_totalDownloads(0)
 {
-  loadManifest();
+  fetchManifest();
 }
 
 /**
@@ -209,17 +209,10 @@ void Misc::Examples::downloadExample()
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExamples.count())
     return;
 
-  // Ask user for a destination directory
+  // Build download path inside the workspace Examples folder
   const auto example = m_filteredExamples.at(m_selectedIndex).toMap();
-  const auto id      = example.value("id").toString();
-  const auto dir     = QFileDialog::getExistingDirectory(
-    nullptr,
-    tr("Select Download Directory"),
-    QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
-  if (dir.isEmpty())
-    return;
-
-  // Create subdirectory for the example
+  const auto id = example.value("id").toString();
+  const auto dir = Misc::WorkspaceManager::instance().path("Examples");
   m_downloadPath = dir + "/" + id;
   QDir().mkpath(m_downloadPath);
 
@@ -238,6 +231,30 @@ void Misc::Examples::downloadExample()
 //--------------------------------------------------------------------------------------------------
 // Network reply handlers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Handles the examples.json manifest fetch response.
+ */
+void Misc::Examples::onManifestReply()
+{
+  auto *reply = qobject_cast<QNetworkReply *>(sender());
+  if (!reply)
+    return;
+
+  reply->deleteLater();
+
+  // Parse the manifest
+  if (reply->error() == QNetworkReply::NoError)
+  {
+    const auto doc = QJsonDocument::fromJson(reply->readAll());
+    m_allExamples = doc.array();
+    applyFilter();
+  }
+
+  // Clear loading state
+  m_loading = false;
+  Q_EMIT loadingChanged();
+}
 
 /**
  * @brief Handles the README.md fetch response and caches it.
@@ -399,14 +416,19 @@ void Misc::Examples::onFileDownloadReply()
   m_loading = false;
   Q_EMIT loadingChanged();
 
-  // Auto-open the .ssproj file if one was downloaded
-  if (m_selectedIndex >= 0 && m_selectedIndex < m_filteredExamples.count()) {
-    const auto example      = m_filteredExamples.at(m_selectedIndex).toMap();
+  // Always reveal the download folder in the file manager
+  Misc::Utilities::revealFile(m_downloadPath);
+
+  // Load the project file & show the editor if one was downloaded
+  if (m_selectedIndex >= 0 && m_selectedIndex < m_filteredExamples.count())
+  {
+    const auto example = m_filteredExamples.at(m_selectedIndex).toMap();
     const auto project_file = example.value("projectFileName").toString();
-    if (!project_file.isEmpty()) {
+    if (!project_file.isEmpty())
+    {
       const auto path = m_downloadPath + "/" + project_file;
       if (QFile::exists(path))
-        QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+        Q_EMIT projectFileReady(path);
     }
   }
 }
@@ -416,17 +438,16 @@ void Misc::Examples::onFileDownloadReply()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads the bundled examples.json manifest from Qt resources.
+ * @brief Fetches the examples.json manifest from GitHub.
  */
-void Misc::Examples::loadManifest()
+void Misc::Examples::fetchManifest()
 {
-  QFile file(":/rcc/examples/examples.json");
-  if (!file.open(QIODevice::ReadOnly))
-    return;
+  m_loading = true;
+  Q_EMIT loadingChanged();
 
-  const auto doc = QJsonDocument::fromJson(file.readAll());
-  m_allExamples  = doc.array();
-  applyFilter();
+  const auto url = QUrl(kRawBase + "examples.json");
+  auto *reply = m_nam.get(QNetworkRequest(url));
+  connect(reply, &QNetworkReply::finished, this, &Examples::onManifestReply);
 }
 
 /**

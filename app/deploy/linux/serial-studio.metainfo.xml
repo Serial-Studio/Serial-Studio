@@ -64,5 +64,8 @@
 		  </description>
 		</release>
 	</releases>
+	<provides>
+		<mediatype>application/x-serial-studio-project</mediatype>
+	</provides>
 	<content_rating type="oars-1.1"/>
 </component>

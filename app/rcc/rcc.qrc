@@ -490,7 +490,6 @@
         <file>images/multi-device.svg</file>
         <file>icons/buttons/wrench.svg</file>
         <file>fonts/GeistMono.ttf</file>
-        <file>examples/examples.json</file>
         <file>icons/buttons/search.svg</file>
     </qresource>
 </RCC>

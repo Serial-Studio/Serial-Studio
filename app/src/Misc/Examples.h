@@ -79,6 +79,7 @@ signals:
   void downloadProgressChanged();
   void selectedScreenshotChanged();
   void filteredExamplesChanged();
+  void projectFileReady(const QString &path);
 
 private:
   explicit Examples();
@@ -106,13 +107,14 @@ public slots:
   void downloadExample();
 
 private slots:
+  void onManifestReply();
   void onReadmeReply();
   void onScreenshotReply();
   void onContentsReply();
   void onFileDownloadReply();
 
 private:
-  void loadManifest();
+  void fetchManifest();
   void applyFilter();
   void fetchReadme(const QString& id);
   void fetchScreenshot(const QString& id);

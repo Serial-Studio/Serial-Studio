@@ -46,6 +46,7 @@
 
 #ifdef Q_OS_WIN
 #  include <windows.h>
+#  include <shlobj.h>
 #endif
 
 #ifdef Q_OS_LINUX
@@ -54,6 +55,8 @@
 #  include <QFileInfo>
 #  include <QStandardPaths>
 #endif
+
+#include <QFileOpenEvent>
 
 #include <cstring>
 
@@ -81,8 +84,44 @@ static void configureCanbusInterface(const QCommandLineParser& parser,
 
 #ifdef Q_OS_WINDOWS
 static void attachToConsole();
+static void registerWindowsFileAssociation();
 static char** adjustArgumentsForFreeType(int& argc, char** argv);
 #endif
+
+//--------------------------------------------------------------------------------------------------
+// File-open event filter (macOS double-click / Linux xdg-open)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Event filter that intercepts QFileOpenEvent to open .ssproj files.
+ *
+ * On macOS, double-clicking a .ssproj file in Finder sends a QFileOpenEvent
+ * to the running (or launching) application. This filter catches it and loads
+ * the project.
+ */
+class FileOpenEventFilter : public QObject
+{
+public:
+  using QObject::QObject;
+
+protected:
+  bool eventFilter(QObject* obj, QEvent* event) override
+  {
+    if (event->type() == QEvent::FileOpen)
+    {
+      auto* fileEvent = static_cast<QFileOpenEvent*>(event);
+      const QString path = fileEvent->file();
+      if (path.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
+      {
+        DataModel::ProjectModel::instance().openJsonFile(path);
+        AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+        return true;
+      }
+    }
+
+    return QObject::eventFilter(obj, event);
+  }
+};
 
 //--------------------------------------------------------------------------------------------------
 // Entry-point function
@@ -122,6 +161,15 @@ int main(int argc, char** argv)
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
 
   QApplication app(argc, argv);
+
+  // Install event filter for file-open events (macOS Finder, Linux xdg-open)
+  FileOpenEventFilter fileOpenFilter;
+  app.installEventFilter(&fileOpenFilter);
+
+#ifdef Q_OS_WIN
+  // Register .ssproj file association in the Windows registry
+  registerWindowsFileAssociation();
+#endif
 
 #if !defined(Q_OS_MAC)
   QIcon appIcon(QStringLiteral(":/rcc/logo/icon.svg"));
@@ -844,6 +892,61 @@ static void configureCanbusInterface(const QCommandLineParser& parser,
 //--------------------------------------------------------------------------------------------------
 
 #ifdef Q_OS_WIN
+/**
+ * @brief Registers the .ssproj file extension with this application in the
+ *        Windows registry (per-user, HKCU).
+ *
+ * Creates a ProgID entry and associates the .ssproj extension with it so that
+ * double-clicking a .ssproj file in Explorer launches Serial Studio with the
+ * file path as the @c --project argument. This is a per-user registration that
+ * does not require administrator privileges.
+ */
+static void registerWindowsFileAssociation()
+{
+  // Build the ProgID and command line
+  const QString exePath = QCoreApplication::applicationFilePath()
+                            .replace('/', '\\');
+  const QString progId = QStringLiteral("SerialStudio.ssproj");
+  const QString openCmd = QStringLiteral("\"%1\" --project \"%2\"")
+                            .arg(exePath, QStringLiteral("%1"));
+
+  // Helper to write a registry key
+  auto writeKey = [](const QString& path, const QString& value) {
+    HKEY hKey = nullptr;
+    auto status = RegCreateKeyExW(
+      HKEY_CURRENT_USER,
+      reinterpret_cast<LPCWSTR>(path.utf16()),
+      0, nullptr, 0, KEY_WRITE, nullptr, &hKey, nullptr);
+
+    if (status == ERROR_SUCCESS)
+    {
+      RegSetValueExW(
+        hKey, nullptr, 0, REG_SZ,
+        reinterpret_cast<const BYTE*>(value.utf16()),
+        static_cast<DWORD>((value.size() + 1) * sizeof(wchar_t)));
+      RegCloseKey(hKey);
+    }
+  };
+
+  // Register ProgID with description
+  const QString progIdPath
+    = QStringLiteral("Software\\Classes\\%1").arg(progId);
+  writeKey(progIdPath, QStringLiteral("Serial Studio Project"));
+
+  // Register default icon (use the app icon)
+  writeKey(progIdPath + QStringLiteral("\\DefaultIcon"),
+           QStringLiteral("\"%1\",0").arg(exePath));
+
+  // Register open command
+  writeKey(progIdPath + QStringLiteral("\\shell\\open\\command"), openCmd);
+
+  // Associate .ssproj with our ProgID
+  writeKey(QStringLiteral("Software\\Classes\\.ssproj"), progId);
+
+  // Notify the shell that file associations have changed
+  SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
+}
+
 /**
  * @brief Attaches the application to the parent console and redirects output
  *        streams on Windows.

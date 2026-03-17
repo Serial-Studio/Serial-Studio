@@ -843,7 +843,7 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 if(WIN32)
-  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib)
+  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib Shell32.lib Advapi32.lib)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )
@@ -867,6 +867,10 @@ elseif(UNIX)
   install(
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/${PROJECT_EXECUTABLE}.desktop
     DESTINATION share/applications
+  )
+  install(
+    FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio-ssproj.xml
+    DESTINATION share/mime/packages
   )
 endif()
 

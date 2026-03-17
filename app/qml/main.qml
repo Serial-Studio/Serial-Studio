@@ -24,6 +24,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+import SerialStudio
 
 import "Widgets" as Widgets
 import "Dialogs" as Dialogs
@@ -91,6 +92,18 @@ Item {
     }
 
     app.showMainWindow()
+  }
+
+  //
+  // Open downloaded example project in the editor
+  //
+  Connections {
+    target: Cpp_Examples
+    function onProjectFileReady(path) {
+      Cpp_AppState.operationMode = SerialStudio.ProjectFile
+      Cpp_JSON_ProjectModel.openJsonFile(path)
+      app.showProjectEditor()
+    }
   }
 
   //
