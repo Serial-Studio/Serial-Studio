@@ -19,14 +19,31 @@
  * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
  */
 
+// clang-format off
+#ifdef Q_OS_WIN
+#  include <windows.h>
+#  include <shlobj.h>
+#endif
+// clang-format on
+
+#include <cstring>
+
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QFileOpenEvent>
 #include <QLoggingCategory>
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QSettings>
 #include <QStyleFactory>
 #include <QSysInfo>
+
+#ifdef Q_OS_LINUX
+#  include <QDir>
+#  include <QFile>
+#  include <QFileInfo>
+#  include <QStandardPaths>
+#endif
 
 #include "API/Server.h"
 #include "AppInfo.h"
@@ -43,23 +60,6 @@
 
 #  include "Licensing/LemonSqueezy.h"
 #endif
-
-// clang-format off
-#ifdef Q_OS_WIN
-#  include <windows.h>
-#  include <shlobj.h>
-#endif
-// clang-format on
-
-#ifdef Q_OS_LINUX
-#  include <QDir>
-#  include <QFile>
-#  include <QFileInfo>
-#  include <QStandardPaths>
-#endif
-
-#include <cstring>
-#include <QFileOpenEvent>
 
 //--------------------------------------------------------------------------------------------------
 // Declare utility functions
