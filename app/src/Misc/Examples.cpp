@@ -20,8 +20,6 @@
  */
 
 #include "Misc/Examples.h"
-#include "Misc/Utilities.h"
-#include "Misc/WorkspaceManager.h"
 
 #include <QDir>
 #include <QFile>
@@ -31,6 +29,9 @@
 #include <QNetworkReply>
 #include <QRegularExpression>
 #include <QStandardPaths>
+
+#include "Misc/Utilities.h"
+#include "Misc/WorkspaceManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // GitHub URL helpers
@@ -50,7 +51,7 @@ static const QString kApiContentsBase =
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the Examples singleton and fetches the manifest from GitHub.
+ * @brief Constructs the Examples singleton.
  */
 Misc::Examples::Examples()
   : m_loading(false)
@@ -58,9 +59,7 @@ Misc::Examples::Examples()
   , m_downloadProgress(0)
   , m_pendingDownloads(0)
   , m_totalDownloads(0)
-{
-  fetchManifest();
-}
+{}
 
 /**
  * @brief Returns the singleton instance of the Examples class.
@@ -211,9 +210,9 @@ void Misc::Examples::downloadExample()
 
   // Build download path inside the workspace Examples folder
   const auto example = m_filteredExamples.at(m_selectedIndex).toMap();
-  const auto id = example.value("id").toString();
-  const auto dir = Misc::WorkspaceManager::instance().path("Examples");
-  m_downloadPath = dir + "/" + id;
+  const auto id      = example.value("id").toString();
+  const auto dir     = Misc::WorkspaceManager::instance().path("Examples");
+  m_downloadPath     = dir + "/" + id;
   QDir().mkpath(m_downloadPath);
 
   // Start loading
@@ -237,17 +236,16 @@ void Misc::Examples::downloadExample()
  */
 void Misc::Examples::onManifestReply()
 {
-  auto *reply = qobject_cast<QNetworkReply *>(sender());
+  auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
 
   reply->deleteLater();
 
   // Parse the manifest
-  if (reply->error() == QNetworkReply::NoError)
-  {
+  if (reply->error() == QNetworkReply::NoError) {
     const auto doc = QJsonDocument::fromJson(reply->readAll());
-    m_allExamples = doc.array();
+    m_allExamples  = doc.array();
     applyFilter();
   }
 
@@ -420,12 +418,10 @@ void Misc::Examples::onFileDownloadReply()
   Misc::Utilities::revealFile(m_downloadPath);
 
   // Load the project file & show the editor if one was downloaded
-  if (m_selectedIndex >= 0 && m_selectedIndex < m_filteredExamples.count())
-  {
-    const auto example = m_filteredExamples.at(m_selectedIndex).toMap();
+  if (m_selectedIndex >= 0 && m_selectedIndex < m_filteredExamples.count()) {
+    const auto example      = m_filteredExamples.at(m_selectedIndex).toMap();
     const auto project_file = example.value("projectFileName").toString();
-    if (!project_file.isEmpty())
-    {
+    if (!project_file.isEmpty()) {
       const auto path = m_downloadPath + "/" + project_file;
       if (QFile::exists(path))
         Q_EMIT projectFileReady(path);
@@ -438,15 +434,19 @@ void Misc::Examples::onFileDownloadReply()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Fetches the examples.json manifest from GitHub.
+ * @brief Fetches the examples.json manifest from GitHub. No-op if already
+ *        loaded or currently loading.
  */
 void Misc::Examples::fetchManifest()
 {
+  if (m_loading || !m_allExamples.isEmpty())
+    return;
+
   m_loading = true;
   Q_EMIT loadingChanged();
 
   const auto url = QUrl(kRawBase + "examples.json");
-  auto *reply = m_nam.get(QNetworkRequest(url));
+  auto* reply    = m_nam.get(QNetworkRequest(url));
   connect(reply, &QNetworkReply::finished, this, &Examples::onManifestReply);
 }
 
@@ -458,7 +458,7 @@ void Misc::Examples::applyFilter()
 {
   m_filteredExamples.clear();
 
-  for (const auto& entry : m_allExamples) {
+  for (const auto& entry : std::as_const(m_allExamples)) {
     const auto obj = entry.toObject();
     if (!m_searchFilter.isEmpty()) {
       const auto title    = obj.value("title").toString();

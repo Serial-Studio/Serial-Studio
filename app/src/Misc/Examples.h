@@ -79,7 +79,7 @@ signals:
   void downloadProgressChanged();
   void selectedScreenshotChanged();
   void filteredExamplesChanged();
-  void projectFileReady(const QString &path);
+  void projectFileReady(const QString& path);
 
 private:
   explicit Examples();
@@ -102,6 +102,7 @@ public:
   [[nodiscard]] QVariantMap selectedExample() const;
 
 public slots:
+  void fetchManifest();
   void setSelectedIndex(int index);
   void setSearchFilter(const QString& filter);
   void downloadExample();
@@ -112,9 +113,6 @@ private slots:
   void onScreenshotReply();
   void onContentsReply();
   void onFileDownloadReply();
-
-private:
-  void fetchManifest();
   void applyFilter();
   void fetchReadme(const QString& id);
   void fetchScreenshot(const QString& id);

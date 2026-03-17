@@ -38,6 +38,14 @@ SmartDialog {
   property bool showDetail: Cpp_Examples.selectedIndex >= 0
 
   //
+  // Fetch manifest when dialog opens
+  //
+  onVisibleChanged: {
+    if (visible)
+      Cpp_Examples.fetchManifest()
+  }
+
+  //
   // Reset state on close
   //
   onClosing: {
@@ -58,7 +66,7 @@ SmartDialog {
       Layout.fillWidth: true
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
-      visible: !root.showDetail
+      visible: !root.showDetail && Cpp_Examples.count > 0
       implicitHeight: searchField.implicitHeight + 8
       color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: searchField.activeFocus ? Cpp_ThemeManager.colors["highlight"] :
@@ -227,10 +235,32 @@ SmartDialog {
       Layout.maximumHeight: 520
 
       //
+      // Busy indicator while fetching manifest
+      //
+      ColumnLayout {
+        spacing: 8
+        anchors.centerIn: parent
+        visible: Cpp_Examples.count === 0
+
+        BusyIndicator {
+          running: parent.visible
+          Layout.alignment: Qt.AlignHCenter
+        }
+
+        Label {
+          text: qsTr("Fetching examples...")
+          font: Cpp_Misc_CommonFonts.boldUiFont
+          color: Cpp_ThemeManager.colors["text"]
+          Layout.alignment: Qt.AlignHCenter
+        }
+      }
+
+      //
       // Page 0: Grid view
       //
       Item {
         id: gridPage
+        visible: Cpp_Examples.count > 0
 
         width: parent.width
         height: parent.height

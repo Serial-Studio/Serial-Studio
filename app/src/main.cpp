@@ -45,8 +45,8 @@
 #endif
 
 #ifdef Q_OS_WIN
-#  include <windows.h>
 #  include <shlobj.h>
+#  include <windows.h>
 #endif
 
 #ifdef Q_OS_LINUX
@@ -56,9 +56,8 @@
 #  include <QStandardPaths>
 #endif
 
-#include <QFileOpenEvent>
-
 #include <cstring>
+#include <QFileOpenEvent>
 
 //--------------------------------------------------------------------------------------------------
 // Declare utility functions
@@ -99,20 +98,17 @@ static char** adjustArgumentsForFreeType(int& argc, char** argv);
  * to the running (or launching) application. This filter catches it and loads
  * the project.
  */
-class FileOpenEventFilter : public QObject
-{
+class FileOpenEventFilter : public QObject {
 public:
   using QObject::QObject;
 
 protected:
   bool eventFilter(QObject* obj, QEvent* event) override
   {
-    if (event->type() == QEvent::FileOpen)
-    {
-      auto* fileEvent = static_cast<QFileOpenEvent*>(event);
+    if (event->type() == QEvent::FileOpen) {
+      auto* fileEvent    = static_cast<QFileOpenEvent*>(event);
       const QString path = fileEvent->file();
-      if (path.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
-      {
+      if (path.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive)) {
         DataModel::ProjectModel::instance().openJsonFile(path);
         AppState::instance().setOperationMode(SerialStudio::ProjectFile);
         return true;
@@ -904,38 +900,41 @@ static void configureCanbusInterface(const QCommandLineParser& parser,
 static void registerWindowsFileAssociation()
 {
   // Build the ProgID and command line
-  const QString exePath = QCoreApplication::applicationFilePath()
-                            .replace('/', '\\');
-  const QString progId = QStringLiteral("SerialStudio.ssproj");
-  const QString openCmd = QStringLiteral("\"%1\" --project \"%2\"")
-                            .arg(exePath, QStringLiteral("%1"));
+  const QString exePath = QCoreApplication::applicationFilePath().replace('/', '\\');
+  const QString progId  = QStringLiteral("SerialStudio.ssproj");
+  const QString openCmd =
+    QStringLiteral("\"%1\" --project \"%2\"").arg(exePath, QStringLiteral("%1"));
 
   // Helper to write a registry key
   auto writeKey = [](const QString& path, const QString& value) {
-    HKEY hKey = nullptr;
-    auto status = RegCreateKeyExW(
-      HKEY_CURRENT_USER,
-      reinterpret_cast<LPCWSTR>(path.utf16()),
-      0, nullptr, 0, KEY_WRITE, nullptr, &hKey, nullptr);
+    HKEY hKey   = nullptr;
+    auto status = RegCreateKeyExW(HKEY_CURRENT_USER,
+                                  reinterpret_cast<LPCWSTR>(path.utf16()),
+                                  0,
+                                  nullptr,
+                                  0,
+                                  KEY_WRITE,
+                                  nullptr,
+                                  &hKey,
+                                  nullptr);
 
-    if (status == ERROR_SUCCESS)
-    {
-      RegSetValueExW(
-        hKey, nullptr, 0, REG_SZ,
-        reinterpret_cast<const BYTE*>(value.utf16()),
-        static_cast<DWORD>((value.size() + 1) * sizeof(wchar_t)));
+    if (status == ERROR_SUCCESS) {
+      RegSetValueExW(hKey,
+                     nullptr,
+                     0,
+                     REG_SZ,
+                     reinterpret_cast<const BYTE*>(value.utf16()),
+                     static_cast<DWORD>((value.size() + 1) * sizeof(wchar_t)));
       RegCloseKey(hKey);
     }
   };
 
   // Register ProgID with description
-  const QString progIdPath
-    = QStringLiteral("Software\\Classes\\%1").arg(progId);
+  const QString progIdPath = QStringLiteral("Software\\Classes\\%1").arg(progId);
   writeKey(progIdPath, QStringLiteral("Serial Studio Project"));
 
   // Register default icon (use the app icon)
-  writeKey(progIdPath + QStringLiteral("\\DefaultIcon"),
-           QStringLiteral("\"%1\",0").arg(exePath));
+  writeKey(progIdPath + QStringLiteral("\\DefaultIcon"), QStringLiteral("\"%1\",0").arg(exePath));
 
   // Register open command
   writeKey(progIdPath + QStringLiteral("\\shell\\open\\command"), openCmd);
