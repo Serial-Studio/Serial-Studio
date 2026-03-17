@@ -2,13 +2,13 @@
 
 ## Overview
 
-Serial Studio supports three parsing modes that determine how incoming data is interpreted and displayed. The mode is selected in the Setup Panel on the right side of the main window. Each mode works with any data source -- Serial (UART), Bluetooth LE, Network (TCP/UDP), and all Pro sources (Audio, Modbus, CAN Bus, USB, HID, Process).
+Serial Studio supports three parsing modes that determine how incoming data is interpreted and displayed. The mode is selected in the Setup Panel on the right side of the main window. Each mode works with any data source — Serial (UART), Bluetooth LE, Network (TCP/UDP), and all Pro sources (Audio, Modbus, CAN Bus, USB, HID, Process).
 
 The three modes, in order of increasing complexity, are:
 
-1. **Quick Plot** -- automatic CSV plotting with zero configuration.
-2. **Device Sends JSON** -- the device transmits a self-describing JSON frame that defines both data and dashboard layout.
-3. **Project File** -- a JSON project file on the host defines the dashboard, while the device sends only raw values.
+1. **Quick Plot** — automatic CSV plotting with zero configuration.
+2. **Device Sends JSON** — the device transmits a self-describing JSON frame that defines both data and dashboard layout.
+3. **Project File** — a JSON project file on the host defines the dashboard, while the device sends only raw values.
 
 ---
 
@@ -97,9 +97,9 @@ Each group represents a panel on the dashboard containing one or more datasets.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| `title` | string | -- | Display name of the group. |
+| `title` | string | — | Display name of the group. |
 | `widget` | string | `""` | Group widget type. See table below. |
-| `datasets` | array | -- | Array of dataset objects belonging to this group. |
+| `datasets` | array | — | Array of dataset objects belonging to this group. |
 
 **Group widget values:**
 
@@ -120,8 +120,8 @@ Each dataset represents a single data channel within a group.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| `title` | string | -- | Human-readable channel name. |
-| `value` | string | -- | Current value as a string (even for numbers). |
+| `title` | string | — | Human-readable channel name. |
+| `value` | string | — | Current value as a string (even for numbers). |
 | `units` | string | `""` | Unit label (e.g., "degC", "%", "hPa"). |
 | `index` | int | 0 | Position index within the frame (used for mapping). |
 | `widget` | string | `""` | Dataset-level widget: `"bar"`, `"gauge"`, `"compass"`, or `""` for none. For special groups, use `"x"`, `"y"`, `"z"`, `"lat"`, `"lon"`, `"alt"`. |
@@ -147,9 +147,9 @@ Actions define buttons in the dashboard toolbar that send data back to the conne
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| `title` | string | -- | Button label. |
+| `title` | string | — | Button label. |
 | `icon` | string | `"Play Property"` | Icon name for the button. |
-| `txData` | string | -- | Data string to transmit when the button is pressed. |
+| `txData` | string | — | Data string to transmit when the button is pressed. |
 | `eol` | string | `""` | End-of-line sequence appended after `txData` (e.g., `"\r\n"`). |
 | `binary` | bool | false | If true, `txData` is interpreted as binary hex data. |
 
@@ -272,7 +272,7 @@ function parse(frame) {
 - **Multi-frame return:** return an array of arrays to emit multiple frames from a single parse call: `[[row1_val1, row1_val2], [row2_val1, row2_val2]]`.
 - **Mixed scalar/vector:** returning `[scalar, [vec1, vec2, vec3]]` auto-expands the inner array into separate dataset values.
 
-**Example -- parsing a semicolon-delimited protocol:**
+**Example — parsing a semicolon-delimited protocol:**
 
 ```javascript
 function parse(frame) {
@@ -280,7 +280,7 @@ function parse(frame) {
 }
 ```
 
-**Example -- parsing a fixed-size binary packet:**
+**Example — parsing a fixed-size binary packet:**
 
 ```javascript
 function parse(frame) {
@@ -348,6 +348,6 @@ Project File mode is the right choice for any application that needs custom widg
 
 If you are new to Serial Studio, start with **Quick Plot**. Connect your device, make sure it sends comma-separated numbers terminated by a newline, and click Connect. You will see data on screen within seconds.
 
-Once you need more control -- specific widget types, unit labels, alarm thresholds, or a polished dashboard layout -- move to **Project File** mode. Open the Project Editor, define your groups and datasets, and load the resulting `.ssproj` file.
+Once you need more control — specific widget types, unit labels, alarm thresholds, or a polished dashboard layout — move to **Project File** mode. Open the Project Editor, define your groups and datasets, and load the resulting `.ssproj` file.
 
 Use **Device Sends JSON** only when the device firmware is designed to emit its own dashboard definition, or when the dashboard structure must change dynamically based on device state.

@@ -176,8 +176,10 @@ void Misc::Examples::setSelectedIndex(int index)
     const auto example = m_filteredExamples.at(index).toMap();
     const auto id      = example.value("id").toString();
     fetchReadme(id);
-    if (example.value("hasScreenshot").toBool())
-      fetchScreenshot(id);
+    if (example.value("hasScreenshot").toBool()) {
+      const auto ssFile = example.value("screenshotFileName", "screenshot.png").toString();
+      fetchScreenshot(id, ssFile);
+    }
   }
 }
 
@@ -222,8 +224,9 @@ void Misc::Examples::downloadExample()
   Q_EMIT downloadProgressChanged();
 
   // Fetch the file listing from GitHub Contents API
-  const auto url = QUrl(kApiContentsBase + QUrl::toPercentEncoding(id));
-  auto* reply    = m_nam.get(QNetworkRequest(url));
+  auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
+  auto url     = QUrl::fromEncoded((kApiContentsBase + encoded).toUtf8());
+  auto* reply  = m_nam.get(QNetworkRequest(url));
   connect(reply, &QNetworkReply::finished, this, &Examples::onContentsReply);
 }
 
@@ -280,8 +283,8 @@ void Misc::Examples::onReadmeReply()
       }
     }
 
-    // Strip images before exposing to QML
-    m_selectedReadme = stripMarkdownImages(raw);
+    // Expose raw markdown to QML (WebView handles images)
+    m_selectedReadme = raw;
   } else
     m_selectedReadme = tr("Failed to load README: %1").arg(reply->errorString());
 
@@ -309,7 +312,11 @@ void Misc::Examples::onScreenshotReply()
       // Cache the screenshot
       const auto path = exampleCachePath(id) + "/doc";
       QDir().mkpath(path);
-      const auto file_path = path + "/screenshot.png";
+      auto name = reply->property("fileName").toString();
+      if (name.isEmpty())
+        name = QStringLiteral("screenshot.png");
+
+      const auto file_path = path + "/" + name;
       QFile file(file_path);
       if (file.open(QIODevice::WriteOnly)) {
         file.write(data);
@@ -492,7 +499,7 @@ void Misc::Examples::fetchReadme(const QString& id)
   if (QFile::exists(cached)) {
     QFile file(cached);
     if (file.open(QIODevice::ReadOnly)) {
-      m_selectedReadme = stripMarkdownImages(QString::fromUtf8(file.readAll()));
+      m_selectedReadme = QString::fromUtf8(file.readAll());
       Q_EMIT selectedReadmeChanged();
       return;
     }
@@ -502,7 +509,8 @@ void Misc::Examples::fetchReadme(const QString& id)
   m_loading = true;
   Q_EMIT loadingChanged();
 
-  const auto url = QUrl(kRawBase + QUrl::toPercentEncoding(id) + "/README.md");
+  auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
+  auto url     = QUrl::fromEncoded((kRawBase + encoded + "/README.md").toUtf8());
   QNetworkRequest request(url);
   auto* reply = m_nam.get(request);
   reply->setProperty("exampleId", id);
@@ -512,10 +520,10 @@ void Misc::Examples::fetchReadme(const QString& id)
 /**
  * @brief Fetches the screenshot for the given example from cache or GitHub.
  */
-void Misc::Examples::fetchScreenshot(const QString& id)
+void Misc::Examples::fetchScreenshot(const QString& id, const QString& fileName)
 {
   // Check cache first
-  const auto cached = exampleCachePath(id) + "/doc/screenshot.png";
+  const auto cached = exampleCachePath(id) + "/doc/" + fileName;
   if (QFile::exists(cached)) {
     m_selectedScreenshot = QUrl::fromLocalFile(cached);
     Q_EMIT selectedScreenshotChanged();
@@ -523,9 +531,11 @@ void Misc::Examples::fetchScreenshot(const QString& id)
   }
 
   // Fetch from GitHub
-  const auto url = QUrl(kRawBase + QUrl::toPercentEncoding(id) + "/doc/screenshot.png");
-  auto* reply    = m_nam.get(QNetworkRequest(url));
+  auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(id));
+  auto url     = QUrl::fromEncoded((kRawBase + encoded + "/doc/" + fileName).toUtf8());
+  auto* reply  = m_nam.get(QNetworkRequest(url));
   reply->setProperty("exampleId", id);
+  reply->setProperty("fileName", fileName);
   connect(reply, &QNetworkReply::finished, this, &Examples::onScreenshotReply);
 }
 

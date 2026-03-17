@@ -2,6 +2,8 @@
 
 This example shows how to use CAN bus with Serial Studio. It includes a car simulator that sends realistic vehicle data.
 
+![CAN Bus ECU Simulator](doc/screenshot.png)
+
 ## Quick Start (No Hardware Required!)
 
 ### 1. Start Serial Studio

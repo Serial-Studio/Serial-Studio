@@ -338,8 +338,8 @@ Widgets.Pane {
             iconSize: 24
             text: qsTr("Help")
             toolbarButton: false
-            onClicked: frameParser.help()
             Layout.alignment: Qt.AlignVCenter
+            onClicked: app.showHelpCenter("javascript-api")
             icon.source: "qrc:/rcc/icons/code-editor/help.svg"
             ToolTip.text: qsTr("Open help documentation for JavaScript data parsing")
           }

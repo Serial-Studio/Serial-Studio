@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Showdown.js for Markdown → HTML -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+
+  <!-- highlight.js for syntax highlighting -->
+  <link rel="stylesheet" id="hljs-theme"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <!-- KaTeX for math rendering -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+  <style>
+    /* ------------------------------------------------------------------ */
+    /* CSS custom properties — injected from Qt theme via setTheme()      */
+    /* ------------------------------------------------------------------ */
+    :root {
+      --text:        #232629;
+      --bg:          #ffffff;
+      --accent:      #3daee9;
+      --border:      #c2c2c2;
+      --base:        #f5f5f5;
+      --code-bg:     #f6f8fa;
+      --highlight:   #3daee9;
+      --hljs-theme:  github;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Reset & base                                                       */
+    /* ------------------------------------------------------------------ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+                   Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      padding: 24px 28px 40px;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Typography                                                         */
+    /* ------------------------------------------------------------------ */
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--text);
+      font-weight: 600;
+      line-height: 1.25;
+      margin-top: 24px;
+      margin-bottom: 16px;
+    }
+
+    h1 { font-size: 2em;   padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+    h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 1.25em; }
+    h4 { font-size: 1em; }
+
+    h1:first-child, h2:first-child { margin-top: 0; }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Links                                                              */
+    /* ------------------------------------------------------------------ */
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Lists                                                              */
+    /* ------------------------------------------------------------------ */
+    ul, ol {
+      padding-left: 2em;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    li + li {
+      margin-top: 0.25em;
+    }
+
+    li > p {
+      margin-top: 16px;
+    }
+
+    /* Task lists (checkboxes) */
+    ul.task-list {
+      list-style-type: none;
+      padding-left: 1.5em;
+    }
+
+    .task-list-item input[type="checkbox"] {
+      margin-right: 0.5em;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Code                                                               */
+    /* ------------------------------------------------------------------ */
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
+                   Courier, monospace;
+      font-size: 0.9em;
+    }
+
+    /* Inline code */
+    p code, li code, td code, h1 code, h2 code, h3 code, h4 code {
+      padding: 0.2em 0.4em;
+      background: var(--code-bg);
+      border-radius: 4px;
+      font-size: 85%;
+    }
+
+    /* Fenced code blocks */
+    pre {
+      position: relative;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      overflow-x: auto;
+      margin-top: 0;
+      margin-bottom: 16px;
+      line-height: 1.45;
+    }
+
+    /* Copy button */
+    pre .copy-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      padding: 3px 7px;
+      font-size: 12px;
+      font-family: inherit;
+      line-height: 1;
+      color: var(--text);
+      background: var(--base);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 1;
+    }
+
+    pre:hover .copy-btn {
+      opacity: 0.7;
+    }
+
+    pre .copy-btn:hover {
+      opacity: 1;
+    }
+
+    pre code {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      font-size: 0.9em;
+      white-space: pre;
+    }
+
+    /* Override highlight.js background to match theme */
+    pre code.hljs {
+      background: transparent !important;
+      padding: 0 !important;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Tables                                                             */
+    /* ------------------------------------------------------------------ */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin-top: 0;
+      margin-bottom: 16px;
+      overflow: auto;
+    }
+
+    th, td {
+      padding: 6px 13px;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 600;
+      background: var(--base);
+    }
+
+    tr:nth-child(even) {
+      background: var(--base);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Blockquotes                                                        */
+    /* ------------------------------------------------------------------ */
+    blockquote {
+      margin: 0 0 16px 0;
+      padding: 0 1em;
+      color: var(--text);
+      opacity: 0.75;
+      border-left: 0.25em solid var(--accent);
+    }
+
+    blockquote > :first-child { margin-top: 0; }
+    blockquote > :last-child  { margin-bottom: 0; }
+
+    /* ------------------------------------------------------------------ */
+    /* Horizontal rule                                                    */
+    /* ------------------------------------------------------------------ */
+    hr {
+      height: 0.25em;
+      padding: 0;
+      margin: 24px 0;
+      background-color: var(--border);
+      border: 0;
+      border-radius: 2px;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Images & SVG                                                       */
+    /* ------------------------------------------------------------------ */
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .svg-diagram {
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+
+    .svg-diagram svg {
+      background: transparent !important;
+    }
+
+    .svg-diagram svg > rect:first-child {
+      fill: transparent !important;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* KaTeX overrides                                                    */
+    /* ------------------------------------------------------------------ */
+    .katex-display {
+      margin: 1em 0;
+      overflow-x: auto;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Keyboard shortcuts (optional)                                      */
+    /* ------------------------------------------------------------------ */
+    kbd {
+      display: inline-block;
+      padding: 3px 5px;
+      font-family: inherit;
+      font-size: 0.85em;
+      line-height: 1;
+      color: var(--text);
+      background: var(--base);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      box-shadow: inset 0 -1px 0 var(--border);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Scrollbar (webkit)                                                 */
+    /* ------------------------------------------------------------------ */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* ------------------------------------------------------------------ */
+    /* Details/summary                                                    */
+    /* ------------------------------------------------------------------ */
+    details {
+      margin-bottom: 16px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+
+  <script>
+    // ----------------------------------------------------------------
+    // Showdown converter with GitHub-flavored options
+    // ----------------------------------------------------------------
+    var converter = new showdown.Converter({
+      tables:              true,
+      tasklists:           true,
+      strikethrough:       true,
+      ghCodeBlocks:        true,
+      ghCompatibleHeaderId: true,
+      simpleLineBreaks:    false,
+      openLinksInNewWindow: false,
+      emoji:               true,
+      underline:           false,
+      literalMidWordUnderscores: true,
+      parseImgDimensions:  true,
+      simplifiedAutoLink:  true,
+      headerLevelStart:    1,
+      smoothLivePreview:   true
+    });
+
+    // ----------------------------------------------------------------
+    // Render markdown into #content
+    // ----------------------------------------------------------------
+    function renderMarkdown(md) {
+      var el = document.getElementById('content');
+
+      // Strip markdown images — they are shown separately in the UI
+      md = md.replace(/!\[[^\]]*\]\([^)]*\)\s*\n?/g, '');
+
+      el.innerHTML = converter.makeHtml(md);
+
+      // Render ```svg fenced blocks as inline SVG instead of code
+      el.querySelectorAll('pre code.svg, pre code.language-svg').forEach(function(block) {
+        var svgSource = block.textContent;
+        var pre = block.parentElement;
+        var wrapper = document.createElement('div');
+        wrapper.className = 'svg-diagram';
+        wrapper.innerHTML = svgSource;
+        pre.parentElement.replaceChild(wrapper, pre);
+      });
+
+      // Syntax-highlight all remaining code blocks
+      el.querySelectorAll('pre code').forEach(function(block) {
+        hljs.highlightElement(block);
+      });
+
+      // Render KaTeX math ($$...$$ and $...$)
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(el, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$',  right: '$',  display: false },
+            { left: '\\[', right: '\\]', display: true },
+            { left: '\\(', right: '\\)', display: false }
+          ],
+          throwOnError: false
+        });
+      }
+
+      // Add copy buttons to code blocks
+      el.querySelectorAll('pre').forEach(function(pre) {
+        var btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', function() {
+          var code = pre.querySelector('code');
+          var text = code ? code.textContent : pre.textContent;
+          window.location.href = 'copy:' + encodeURIComponent(text);
+        });
+        pre.appendChild(btn);
+      });
+
+      // Scroll to top on new content
+      window.scrollTo(0, 0);
+    }
+
+    // ----------------------------------------------------------------
+    // Update theme colors from Qt
+    // ----------------------------------------------------------------
+    function setTheme(colors) {
+      var root = document.documentElement;
+      root.style.setProperty('--text',      colors.text      || '#232629');
+      root.style.setProperty('--bg',        colors.bg        || '#ffffff');
+      root.style.setProperty('--accent',    colors.accent    || '#3daee9');
+      root.style.setProperty('--border',    colors.border    || '#c2c2c2');
+      root.style.setProperty('--base',      colors.base      || '#f5f5f5');
+      root.style.setProperty('--code-bg',   colors.codeBg    || '#f6f8fa');
+      root.style.setProperty('--highlight', colors.highlight  || '#3daee9');
+
+      // Switch highlight.js theme (light/dark)
+      var hljsLink = document.getElementById('hljs-theme');
+      var theme = colors.isDark ? 'github-dark' : 'github';
+      hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/' + theme + '.min.css';
+
+      // Re-highlight code blocks with new theme
+      document.querySelectorAll('pre code').forEach(function(block) {
+        block.removeAttribute('data-highlighted');
+        hljs.highlightElement(block);
+      });
+    }
+
+    // ----------------------------------------------------------------
+    // Intercept link clicks — notify Qt via navigation
+    // ----------------------------------------------------------------
+    document.addEventListener('click', function(e) {
+      var anchor = e.target.closest('a');
+      if (!anchor) return;
+
+      var href = anchor.getAttribute('href');
+      if (!href) return;
+
+      // External links — let Qt handle via navigation request
+      if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) {
+        e.preventDefault();
+        window.location.href = 'ext:' + href;
+        return;
+      }
+
+      // Pure anchor links — scroll within the page
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        var target = document.getElementById(href.substring(1));
+        if (target)
+          target.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      // Internal page links — notify Qt
+      e.preventDefault();
+      window.location.href = 'nav:' + href;
+    });
+  </script>
+</body>
+</html>

@@ -24,6 +24,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Effects
+import QtWebEngine
 
 import "../Widgets"
 
@@ -41,6 +42,44 @@ SmartDialog {
   // Track fetch state
   //
   property bool fetchingData: Cpp_Examples.count === 0 && Cpp_Examples.searchFilter === ""
+
+  //
+  // Track whether the WebView HTML shell is ready to receive content
+  //
+  property bool readmeViewReady: false
+
+  //
+  // Push markdown content into the WebView via JS
+  //
+  function pushReadme() {
+    if (!readmeViewReady || !readmeView.visible)
+      return
+
+    var md = Cpp_Examples.selectedReadme
+    if (!md || md === "") {
+      if (Cpp_Examples.loading)
+        readmeView.runJavaScript("document.getElementById('content').innerHTML = '<p style=\"opacity:0.5\">Loading...</p>';")
+      else
+        readmeView.runJavaScript("document.getElementById('content').innerHTML = '<p style=\"opacity:0.5\">No README available.</p>';")
+      return
+    }
+
+    var escaped = md.replace(/\\/g, '\\\\')
+                    .replace(/`/g, '\\`')
+                    .replace(/\$/g, '\\$')
+    readmeView.runJavaScript("renderMarkdown(`" + escaped + "`);")
+  }
+
+  //
+  // Push theme colors into the WebView
+  //
+  function pushReadmeTheme() {
+    if (!readmeViewReady)
+      return
+
+    var json = Cpp_HelpCenter.themeColors
+    readmeView.runJavaScript("setTheme(" + json + ");")
+  }
 
   //
   // Fetch manifest when dialog opens
@@ -539,7 +578,7 @@ SmartDialog {
           anchors.fill: parent
 
           //
-          // README panel
+          // README panel (WebEngineView)
           //
           Item {
             Layout.fillWidth: true
@@ -553,50 +592,107 @@ SmartDialog {
               border.color: Cpp_ThemeManager.colors["groupbox_border"]
             }
 
-            ScrollView {
+            WebEngineView {
+              id: readmeView
+
               anchors.fill: parent
-              anchors.margins: 1
-              contentWidth: availableWidth
+              anchors.margins: 2
+              backgroundColor: "transparent"
+              url: "qrc:/rcc/markdown-viewer.html"
+              settings.localContentCanAccessRemoteUrls: true
 
-              TextArea {
-                id: readmeArea
+              onLoadingChanged: function(loadRequest) {
+                if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
+                  root.readmeViewReady = true
+                  root.pushReadmeTheme()
+                  root.pushReadme()
+                }
+              }
 
-                readOnly: true
-                textFormat: TextArea.MarkdownText
-                wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
+              onNavigationRequested: function(request) {
+                var url = request.url.toString()
+
+                // Allow initial page load from qrc
+                if (url.startsWith("qrc:"))
+                  return
+
+                // Copy code to clipboard
+                if (url.startsWith("copy:")) {
+                  request.reject()
+                  var text = decodeURIComponent(url.substring(5))
+                  Cpp_Misc_Utilities.copyText(text)
+                  exCopyToast.show()
+                  return
+                }
+
+                // Open all links externally
+                request.reject()
+                if (url.startsWith("ext:"))
+                  Qt.openUrlExternally(url.substring(4))
+                else if (url.startsWith("nav:"))
+                  Qt.openUrlExternally(url.substring(4))
+              }
+            }
+
+            //
+            // React to content changes
+            //
+            Connections {
+              target: Cpp_Examples
+              function onSelectedReadmeChanged() {
+                root.pushReadme()
+              }
+            }
+
+            //
+            // React to theme changes
+            //
+            Connections {
+              target: Cpp_HelpCenter
+              function onThemeColorsChanged() {
+                root.pushReadmeTheme()
+              }
+            }
+
+            //
+            // "Copied to Clipboard" toast notification
+            //
+            Rectangle {
+              id: exCopyToast
+
+              opacity: 0
+              radius: 4
+              anchors.bottom: parent.bottom
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.bottomMargin: 24
+              width: exCopyToastLabel.implicitWidth + 24
+              height: exCopyToastLabel.implicitHeight + 12
+              color: Cpp_ThemeManager.colors["highlight"]
+
+              function show() {
+                exCopyToast.opacity = 1
+                exCopyToastTimer.restart()
+              }
+
+              Label {
+                id: exCopyToastLabel
+
+                anchors.centerIn: parent
+                text: qsTr("Copied to Clipboard")
                 font: Cpp_Misc_CommonFonts.uiFont
-                onLinkActivated: (link) => Qt.openUrlExternally(link)
+                color: Cpp_ThemeManager.colors["highlighted_text"]
+              }
 
-                //
-                // Force full markdown re-parse by clearing first
-                //
-                Connections {
-                  target: Cpp_Examples
-                  function onSelectedReadmeChanged() {
-                    readmeArea.text = ""
-                    readmeReloadTimer.restart()
-                  }
-                }
+              Timer {
+                id: exCopyToastTimer
 
-                Timer {
-                  id: readmeReloadTimer
-                  interval: 1
-                  onTriggered: {
-                    readmeArea.text = Cpp_Examples.selectedReadme
-                      ? Cpp_Examples.selectedReadme
-                      : (Cpp_Examples.loading
-                         ? qsTr("Loading...")
-                         : qsTr("No README available."))
-                  }
-                }
+                interval: 1500
+                onTriggered: exCopyToast.opacity = 0
+              }
 
-                background: Rectangle {
-                  color: "transparent"
-                }
-
-                HoverHandler {
-                  acceptedButtons: Qt.NoButton
-                  cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
+              Behavior on opacity {
+                NumberAnimation {
+                  duration: 150
                 }
               }
             }

@@ -2,6 +2,8 @@
 
 A Python script that simulates a small RC plane flying a complete flight profile, generating realistic telemetry data for Serial Studio widgets.
 
+![RC Plane Telemetry Simulator](doc/screenshot.png)
+
 ## Purpose
 
 This example is designed to validate and demonstrate Serial Studio widgets using a realistic RC plane flight profile with multiple maneuver phases.

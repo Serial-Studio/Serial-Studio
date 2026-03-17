@@ -81,6 +81,7 @@ public:
 
 public slots:
   static void aboutQt();
+  static void copyText(const QString& text);
   static void revealFile(const QString& pathToReveal);
 };
 }  // namespace Misc

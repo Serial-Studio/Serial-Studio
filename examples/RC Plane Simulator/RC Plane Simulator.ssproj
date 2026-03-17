@@ -1,7 +1,6 @@
 {
     "actions": [
     ],
-    "frameParser": "/**\n * Splits a data frame into an array of elements using a comma separator.\n *\n * @param[in]  frame   A string containing the CSV data frame.\n * @return     An array of strings with the split elements.\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
     "groups": [
         {
             "datasets": [
@@ -416,6 +415,7 @@
         }
     ],
     "hexadecimalDelimiters": false,
+    "pointCount": 1000,
     "sources": [
         {
             "busType": 1,
@@ -439,5 +439,10 @@
             "title": "Device A"
         }
     ],
-    "title": "RC Plane Simulator"
+    "title": "RC Plane Simulator",
+    "widgetSettings": {
+        "3:1:-1": {
+            "displayMaxG": 16
+        }
+    }
 }

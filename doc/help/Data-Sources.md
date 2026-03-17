@@ -18,16 +18,16 @@ Communicates over physical or virtual serial ports. Suitable for Arduino, ESP32,
 
 | Parameter        | Options / Range                                    | Default   |
 |------------------|----------------------------------------------------|-----------|
-| COM Port         | Auto-detected list of available ports               | --        |
-| Baud Rate        | 110 -- 1,000,000+ (custom values accepted)          | 9600      |
+| COM Port         | Auto-detected list of available ports               | —        |
+| Baud Rate        | 110 — 1,000,000+ (custom values accepted)          | 9600      |
 | Data Bits        | 5, 6, 7, 8                                          | 8         |
 | Parity           | None, Even, Odd, Space, Mark                         | None      |
 | Stop Bits        | 1, 1.5, 2                                           | 1         |
 | Flow Control     | None, RTS/CTS (hardware), XON/XOFF (software)       | None      |
-| DTR Signal       | On / Off -- toggles Data Terminal Ready line          | Off       |
-| Auto Reconnect   | On / Off -- reconnects automatically on disconnect    | Off       |
+| DTR Signal       | On / Off — toggles Data Terminal Ready line          | Off       |
+| Auto Reconnect   | On / Off — reconnects automatically on disconnect    | Off       |
 
-**Platform notes:** Port names are platform-specific -- `COM3` on Windows, `/dev/ttyUSB0` or `/dev/ttyACM0` on Linux, `/dev/cu.usbserial-*` on macOS. Custom port paths can be registered manually.
+**Platform notes:** Port names are platform-specific — `COM3` on Windows, `/dev/ttyUSB0` or `/dev/ttyACM0` on Linux, `/dev/cu.usbserial-*` on macOS. Custom port paths can be registered manually.
 
 **Quick start:**
 
@@ -50,8 +50,8 @@ Communicates over TCP or UDP sockets. Use this for WiFi-enabled microcontrollers
 | Socket Type      | TCP                | UDP                              |
 | Remote Address   | IP or hostname     | IP or hostname                   |
 | Port             | TCP port (default: 23) | Remote port (default: 53)    |
-| Local Port       | --                 | Listening port (0 = auto-assign) |
-| Multicast        | --                 | On / Off                         |
+| Local Port       | —                 | Listening port (0 = auto-assign) |
+| Multicast        | —                 | On / Off                         |
 
 **Protocol differences:**
 
@@ -90,7 +90,7 @@ Connects to BLE peripherals using GATT service/characteristic subscriptions. Sui
 
 **Architecture notes:**
 
-- Device discovery state is shared across all BLE driver instances. The device list is append-only during scanning -- indices remain stable.
+- Device discovery state is shared across all BLE driver instances. The device list is append-only during scanning — indices remain stable.
 - Each driver instance maintains its own connection (controller, service, characteristic subscriptions).
 - Service and characteristic names discovered on one instance are propagated to all other instances targeting the same device.
 
@@ -142,13 +142,13 @@ Polls registers from Modbus-compatible PLCs, sensors, and industrial controllers
 | Parameter       | Range / Options                                |
 |-----------------|------------------------------------------------|
 | Protocol        | Modbus RTU, Modbus TCP                         |
-| Slave Address   | 1 -- 247                                       |
-| Poll Interval   | 50 -- 60,000 ms                                |
+| Slave Address   | 1 — 247                                       |
+| Poll Interval   | 50 — 60,000 ms                                |
 | Register Groups | Type + start address + count (multiple groups)  |
 
 **Register types:** Coil (read/write discrete), Discrete Input (read-only discrete), Holding Register (read/write 16-bit), Input Register (read-only 16-bit).
 
-**RTU-specific parameters:** Serial port, baud rate, data bits, parity, stop bits -- identical to the UART driver settings.
+**RTU-specific parameters:** Serial port, baud rate, data bits, parity, stop bits — identical to the UART driver settings.
 
 **TCP-specific parameters:** Host address, TCP port (default: 502).
 
@@ -178,8 +178,8 @@ Receives and transmits CAN frames through platform-specific CAN interface plugin
 |-----------------|---------------------------------------------------------|
 | Plugin          | SocketCAN, PEAK PCAN, Vector CAN, Systec, others       |
 | Interface       | can0, can1, PCAN_USBBUS1, etc. (plugin-dependent)      |
-| Bitrate         | 10K -- 1M (common: 125K, 250K, 500K, 1M)               |
-| CAN FD          | On / Off -- enables flexible data-rate frames (up to 64 bytes) |
+| Bitrate         | 10K — 1M (common: 125K, 250K, 500K, 1M)               |
+| CAN FD          | On / Off — enables flexible data-rate frames (up to 64 bytes) |
 
 **Platform support:**
 
@@ -208,7 +208,7 @@ Direct USB access via libusb, bypassing OS serial and HID abstraction layers. Pr
 
 | Parameter       | Options                                            |
 |-----------------|----------------------------------------------------|
-| Device          | Enumerated USB devices (VID:PID -- Product name)   |
+| Device          | Enumerated USB devices (VID:PID — Product name)   |
 | Transfer Mode   | Bulk Stream (default), Advanced Control, Isochronous |
 | IN Endpoint     | USB endpoint to read data from                      |
 | OUT Endpoint    | USB endpoint to write data to                       |
@@ -247,9 +247,9 @@ Connects to Human Interface Devices (gamepads, joysticks, custom HID sensors) us
 
 | Parameter   | Description                                        |
 |-------------|----------------------------------------------------|
-| Device      | Enumerated HID devices (VID:PID -- Product name)   |
-| Usage Page  | Read-only -- HID Usage Page reported by the device  |
-| Usage       | Read-only -- HID Usage reported by the device       |
+| Device      | Enumerated HID devices (VID:PID — Product name)   |
+| Usage Page  | Read-only — HID Usage Page reported by the device  |
+| Usage       | Read-only — HID Usage reported by the device       |
 
 **Enumeration:** The device list refreshes automatically every 2 seconds. The list includes a placeholder entry at index 0 ("Select Device").
 

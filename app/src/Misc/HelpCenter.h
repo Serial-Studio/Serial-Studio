@@ -34,6 +34,9 @@ namespace Misc {
  *
  * The HelpCenter class loads a manifest of help pages and allows users
  * to browse, search, and read documentation without leaving Serial Studio.
+ *
+ * Page content is delivered as raw markdown to QML, where a WebEngineView
+ * renders it via showdown.js + highlight.js + KaTeX.
  */
 class HelpCenter : public QObject {
   // clang-format off
@@ -61,6 +64,9 @@ class HelpCenter : public QObject {
   Q_PROPERTY(QVariantList pages
              READ pages
              NOTIFY pagesChanged)
+  Q_PROPERTY(QString themeColors
+             READ themeColors
+             NOTIFY themeColorsChanged)
   // clang-format on
 
 signals:
@@ -69,6 +75,7 @@ signals:
   void currentIndexChanged();
   void searchFilterChanged();
   void pageContentChanged();
+  void themeColorsChanged();
 
 private:
   explicit HelpCenter();
@@ -87,30 +94,33 @@ public:
   [[nodiscard]] const QString& pageContent() const noexcept;
   [[nodiscard]] QString pageTitle() const;
   [[nodiscard]] const QVariantList& pages() const noexcept;
+  [[nodiscard]] const QString& themeColors() const noexcept;
 
 public slots:
   void fetchManifest();
   void setCurrentIndex(int index);
   void setSearchFilter(const QString& filter);
+  Q_INVOKABLE void showPage(const QString& pageId);
   Q_INVOKABLE bool navigateToPage(const QString& link);
 
 private slots:
   void onManifestReply();
   void onPageReply();
   void onPreloadReply();
+  void onThemeChanged();
   void applyFilter();
   void fetchPage(int index);
   void preloadAllPages();
-
-  [[nodiscard]] static QString stripMarkdownImages(const QString& markdown);
 
 private:
   bool m_loading;
   int m_currentIndex;
   int m_pendingPreloads;
 
+  QString m_pendingPageId;
   QString m_searchFilter;
   QString m_pageContent;
+  QString m_themeColors;
 
   QJsonArray m_allPages;
   QVariantList m_filteredPages;

@@ -23,6 +23,7 @@
 
 #include <QAbstractButton>
 #include <QApplication>
+#include <QClipboard>
 #include <QDesktopServices>
 #include <QDir>
 #include <QFileInfo>
@@ -232,6 +233,14 @@ int Misc::Utilities::showMessageBox(const QString& text,
 void Misc::Utilities::aboutQt()
 {
   qApp->aboutQt();
+}
+
+/**
+ * @brief Copies the given @a text to the system clipboard.
+ */
+void Misc::Utilities::copyText(const QString& text)
+{
+  QGuiApplication::clipboard()->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------

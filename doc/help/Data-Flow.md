@@ -109,7 +109,7 @@ The following diagram shows the complete data flow from hardware device to rende
 
 Your device sends raw bytes over one of nine supported transports: UART, TCP/UDP, Bluetooth LE, Audio Input, Modbus RTU/TCP, CAN Bus, USB (libusb), HID (hidapi), or Process I/O.
 
-The selected driver receives bytes on a dedicated I/O thread managed by `DeviceManager`. No parsing happens here -- the driver's only job is raw byte transport. Each driver type handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on.
+The selected driver receives bytes on a dedicated I/O thread managed by `DeviceManager`. No parsing happens here — the driver's only job is raw byte transport. Each driver type handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on.
 
 Drivers are not singletons. `ConnectionManager` holds one UI-configuration instance per driver type (used by the QML interface), while `DeviceManager` creates a fresh live instance for each active connection.
 
@@ -173,7 +173,7 @@ In multi-device projects, each device (source) has its own frame reader. The fra
 
 ## Stage 5: Dashboard
 
-The dashboard receives a `const Frame&` -- a read-only reference. No copying. No heap allocation. This is the critical performance constraint that enables Serial Studio to sustain data rates of 256 KHz and above.
+The dashboard receives a `const Frame&` — a read-only reference. No copying. No heap allocation. This is the critical performance constraint that enables Serial Studio to sustain data rates of 256 KHz and above.
 
 The dashboard updates all active widgets with new values. The UI refresh rate is capped at 20 Hz for optimal performance. Time-series data (plots, FFT, GPS trajectory) is appended to fixed-capacity circular buffers that automatically discard the oldest samples.
 
@@ -219,7 +219,7 @@ Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` p
 
 ## Troubleshooting Data Flow
 
-**No data in console**: Check driver configuration -- correct port, baud rate, IP address, or BLE characteristic.
+**No data in console**: Check driver configuration — correct port, baud rate, IP address, or BLE characteristic.
 
 **Data in console but no dashboard**: Verify the operation mode. Check that frame delimiters match what your device actually sends. In Project File mode, confirm the JavaScript parser returns valid arrays.
 
@@ -237,10 +237,10 @@ Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` p
 
 ## See Also
 
-- [Getting Started](Getting-Started.md) -- First-time setup and Quick Plot tutorial
-- [Operation Modes](Operation-Modes.md) -- Quick Plot, Project File, and Device Sends JSON
-- [Project Editor](Project-Editor.md) -- Configure frame parsing and dashboard layout
-- [JavaScript API](JavaScript-API.md) -- Complete parser function reference
-- [Widget Reference](Widget-Reference.md) -- All 15+ widget types and their data requirements
-- [Communication Protocols](Communication-Protocols.md) -- Protocol comparison and setup
-- [Troubleshooting](Troubleshooting.md) -- Solutions to common problems
+- [Getting Started](Getting-Started.md) — First-time setup and Quick Plot tutorial
+- [Operation Modes](Operation-Modes.md) — Quick Plot, Project File, and Device Sends JSON
+- [Project Editor](Project-Editor.md) — Configure frame parsing and dashboard layout
+- [JavaScript API](JavaScript-API.md) — Complete parser function reference
+- [Widget Reference](Widget-Reference.md) — All 15+ widget types and their data requirements
+- [Communication Protocols](Communication-Protocols.md) — Protocol comparison and setup
+- [Troubleshooting](Troubleshooting.md) — Solutions to common problems

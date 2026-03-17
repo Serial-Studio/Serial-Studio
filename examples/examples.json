@@ -18,7 +18,7 @@
     "difficulty": "Intermediate",
     "hasProjectFile": false,
     "projectFileName": "",
-    "hasScreenshot": false,
+    "hasScreenshot": true,
     "requiresPro": true
   },
   {
@@ -51,7 +51,7 @@
     "difficulty": "Intermediate",
     "hasProjectFile": true,
     "projectFileName": "ecu_simulator.ssproj",
-    "hasScreenshot": false,
+    "hasScreenshot": true,
     "requiresPro": false
   },
   {
@@ -62,7 +62,7 @@
     "difficulty": "Intermediate",
     "hasProjectFile": false,
     "projectFileName": "",
-    "hasScreenshot": false,
+    "hasScreenshot": true,
     "requiresPro": false
   },
   {
@@ -84,7 +84,7 @@
     "difficulty": "Advanced",
     "hasProjectFile": true,
     "projectFileName": "EMWaveSimulator.ssproj",
-    "hasScreenshot": false,
+    "hasScreenshot": true,
     "requiresPro": false
   },
   {
@@ -117,7 +117,7 @@
     "difficulty": "Intermediate",
     "hasProjectFile": true,
     "projectFileName": "imu_batched.ssproj",
-    "hasScreenshot": false,
+    "hasScreenshot": true,
     "requiresPro": false
   },
   {
@@ -161,7 +161,8 @@
     "difficulty": "Advanced",
     "hasProjectFile": false,
     "projectFileName": "",
-    "hasScreenshot": false,
+    "hasScreenshot": true,
+    "screenshotFileName": "diagram.jpg",
     "requiresPro": false
   },
   {
@@ -216,7 +217,7 @@
     "difficulty": "Intermediate",
     "hasProjectFile": true,
     "projectFileName": "RC Plane Simulator.ssproj",
-    "hasScreenshot": false,
+    "hasScreenshot": true,
     "requiresPro": false
   },
   {

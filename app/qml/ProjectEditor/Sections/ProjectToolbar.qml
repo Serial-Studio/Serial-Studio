@@ -469,11 +469,11 @@ Rectangle {
     // Help
     //
     Widgets.ToolbarButton {
-      text: qsTr("Help")
+      text: qsTr("Help Center")
       Layout.alignment: Qt.AlignVCenter
+      onClicked: app.showHelpCenter("project-editor")
       icon.source: "qrc:/rcc/icons/project-editor/toolbar/help.svg"
-      ToolTip.text: qsTr("Open the online Project Editor documentation")
-      onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki/Project-Editor")
+      ToolTip.text: qsTr("Open the Project Editor documentation")
     }
 
 

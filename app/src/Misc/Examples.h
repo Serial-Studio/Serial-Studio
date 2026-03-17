@@ -115,7 +115,7 @@ private slots:
   void onFileDownloadReply();
   void applyFilter();
   void fetchReadme(const QString& id);
-  void fetchScreenshot(const QString& id);
+  void fetchScreenshot(const QString& id, const QString& fileName);
   void downloadNextFile();
 
   [[nodiscard]] QString cachePath() const;

@@ -228,7 +228,12 @@ Item {
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
   function showFileTransmission()  { fileTransmissionDialog.activate() }
   function showExamplesBrowser()   { examplesBrowser.activate() }
-  function showHelpCenter()        { helpCenter.activate() }
+  function showHelpCenter(pageId) {
+    if (pageId)
+      Cpp_HelpCenter.showPage(pageId)
+
+    helpCenter.activate()
+  }
 
   //
   // Dialog display functions (commercial)

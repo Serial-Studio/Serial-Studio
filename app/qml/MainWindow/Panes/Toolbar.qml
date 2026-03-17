@@ -514,12 +514,12 @@ Rectangle {
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("Help")
         horizontalLayout: true
+        text: qsTr("Help Center")
         Layout.alignment: Qt.AlignLeft
+        onClicked: app.showHelpCenter()
         icon.source: "qrc:/rcc/icons/toolbar/help.svg"
         ToolTip.text: qsTr("Browse documentation, FAQ, and wiki")
-        onClicked: app.showHelpCenter()
       }
 
       Widgets.ToolbarButton {

@@ -96,11 +96,11 @@ When you launch Serial Studio, the main window is organized into four areas:
 
 The toolbar spans the top of the window and contains:
 
-- **Project controls** -- Open, save, and edit project files. The wrench icon opens the Project Editor.
-- **I/O Interface selector** -- Choose between Serial Port, Network Socket, Bluetooth LE, and (in Pro) MQTT, Modbus, CAN Bus, Audio, USB, HID, or Process.
-- **Connect/Disconnect button** -- Starts or stops the data connection.
-- **Examples browser** -- Load example projects that ship with Serial Studio to see working configurations.
-- **CSV playback controls** -- Replay previously recorded sessions.
+- **Project controls** — Open, save, and edit project files. The wrench icon opens the Project Editor.
+- **I/O Interface selector** — Choose between Serial Port, Network Socket, Bluetooth LE, and (in Pro) MQTT, Modbus, CAN Bus, Audio, USB, HID, or Process.
+- **Connect/Disconnect button** — Starts or stops the data connection.
+- **Examples browser** — Load example projects that ship with Serial Studio to see working configurations.
+- **CSV playback controls** — Replay previously recorded sessions.
 
 ### 2. Console (center, default view)
 
@@ -114,16 +114,16 @@ Once Serial Studio successfully parses at least one valid frame, the view automa
 
 The Setup Panel is where you configure everything about your connection:
 
-- **Operation mode** -- Quick Plot, Project File, or Device Sends JSON.
-- **I/O Interface settings** -- Port, baud rate, IP address, etc., depending on the selected interface.
-- **Frame parsing options** -- Delimiters, data conversion, and other protocol settings.
-- **Export options** -- Enable CSV or MDF4 logging.
+- **Operation mode** — Quick Plot, Project File, or Device Sends JSON.
+- **I/O Interface settings** — Port, baud rate, IP address, etc., depending on the selected interface.
+- **Frame parsing options** — Delimiters, data conversion, and other protocol settings.
+- **Export options** — Enable CSV or MDF4 logging.
 
 You can collapse the Setup Panel by clicking its header to give the Dashboard more screen space.
 
 ---
 
-## Your First Connection -- Quick Plot Mode
+## Your First Connection — Quick Plot Mode
 
 This is the fastest way to see data on screen. We will use an Arduino as an example, but the same approach works with any device that sends comma-separated values over a serial port.
 
@@ -168,7 +168,7 @@ Click the **Connect** button in the toolbar. You will see:
 2. Within a moment, Serial Studio detects valid frames and switches to the **Dashboard** view.
 3. The Dashboard shows a **Data Grid** with your current values and a **MultiPlot** with one line per CSV field.
 
-That is all it takes. No project file, no JSON -- just connect and visualize.
+That is all it takes. No project file, no JSON — just connect and visualize.
 
 ### Step 4: Explore the dashboard
 
@@ -178,7 +178,7 @@ That is all it takes. No project file, no JSON -- just connect and visualize.
 
 ---
 
-## Your First Connection -- JSON Mode
+## Your First Connection — JSON Mode
 
 If your device can generate JSON, it can define its own dashboard layout. Serial Studio wraps JSON frames in delimiters so it can find them in the data stream.
 
@@ -203,7 +203,7 @@ This mode is ideal when you want the firmware to control the dashboard layout, f
 
 ---
 
-## Your First Connection -- Project File Mode
+## Your First Connection — Project File Mode
 
 Project File mode gives you full control over how Serial Studio interprets your data and what widgets appear on the dashboard. You create a `.json` project file using the built-in Project Editor, and Serial Studio uses it to parse incoming data and build the dashboard.
 
@@ -310,23 +310,23 @@ Now that you have made your first connection, here are the recommended paths for
 
 ### Learn the fundamentals
 
-- **[Operation Modes](Operation-Modes.md)** -- Detailed comparison of all three modes with examples.
-- **[Data Sources](Data-Sources.md)** -- Configure Serial, Network (TCP/UDP), Bluetooth LE, and Pro-edition drivers.
-- **[Communication Protocols](Communication-Protocols.md)** -- Compare all supported protocols and choose the right one for your project.
-- **[Data Flow](Data-Flow.md)** -- Understand how Serial Studio processes data from raw bytes to dashboard widgets.
+- **[Operation Modes](Operation-Modes.md)** — Detailed comparison of all three modes with examples.
+- **[Data Sources](Data-Sources.md)** — Configure Serial, Network (TCP/UDP), Bluetooth LE, and Pro-edition drivers.
+- **[Communication Protocols](Communication-Protocols.md)** — Compare all supported protocols and choose the right one for your project.
+- **[Data Flow](Data-Flow.md)** — Understand how Serial Studio processes data from raw bytes to dashboard widgets.
 
 ### Build custom dashboards
 
-- **[Project Editor](Project-Editor.md)** -- Create and edit project files with custom groups, datasets, and widget configurations.
-- **[Widget Reference](Widget-Reference.md)** -- Explore all 15+ widget types with configuration details and use-case guidance.
-- **[JavaScript API](JavaScript-API.md)** -- Write custom frame parsers for binary or non-standard data formats.
+- **[Project Editor](Project-Editor.md)** — Create and edit project files with custom groups, datasets, and widget configurations.
+- **[Widget Reference](Widget-Reference.md)** — Explore all 15+ widget types with configuration details and use-case guidance.
+- **[JavaScript API](JavaScript-API.md)** — Write custom frame parsers for binary or non-standard data formats.
 
 ### Advanced features
 
-- **[CSV Import and Export](CSV-Import-Export.md)** -- Record sessions and replay them later for analysis.
-- **[MQTT Integration](MQTT-Integration.md)** -- Subscribe to MQTT topics for IoT data visualization.
-- **[Protocol Setup Guides (Pro)](Protocol-Setup-Guides.md)** -- Step-by-step guides for Modbus, CAN Bus, Audio, USB, HID, and Process I/O.
-- **[API Reference](API-Reference.md)** -- Automate Serial Studio from external scripts or connect AI models via the MCP protocol on TCP port 7777.
+- **[CSV Import and Export](CSV-Import-Export.md)** — Record sessions and replay them later for analysis.
+- **[MQTT Integration](MQTT-Integration.md)** — Subscribe to MQTT topics for IoT data visualization.
+- **[Protocol Setup Guides (Pro)](Protocol-Setup-Guides.md)** — Step-by-step guides for Modbus, CAN Bus, Audio, USB, HID, and Process I/O.
+- **[API Reference](API-Reference.md)** — Automate Serial Studio from external scripts or connect AI models via the MCP protocol on TCP port 7777.
 
 ### Explore examples
 
@@ -334,6 +334,6 @@ Click **Examples** in the toolbar to browse working project files that ship with
 
 ### Get help
 
-- **[Troubleshooting](Troubleshooting.md)** -- Detailed solutions for common problems.
-- **[FAQ](FAQ.md)** -- Frequently asked questions.
-- **[GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions)** -- Ask questions and share your projects with the community.
+- **[Troubleshooting](Troubleshooting.md)** — Detailed solutions for common problems.
+- **[FAQ](FAQ.md)** — Frequently asked questions.
+- **[GitHub Discussions](https://github.com/Serial-Studio/Serial-Studio/discussions)** — Ask questions and share your projects with the community.

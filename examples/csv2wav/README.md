@@ -8,6 +8,8 @@ This tool requires no additional hardware. Just **Serial Studio**, a **microphon
 
 **Note:** Serial Studio’s audio features may require a paid license. Visit [serial-studio.com](https://serial-studio.com/) for more details.
 
+![Audio Pipeline Validator](doc/screenshot.png)
+
 ## **Audio Format**
 
 Serial Studio logs audio samples to CSV using the following structure:

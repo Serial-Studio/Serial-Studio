@@ -25,18 +25,18 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
-#include <QRegularExpression>
+
+#include "Misc/ThemeManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // GitHub URL helpers
 //--------------------------------------------------------------------------------------------------
 
 static const QString kGitHubBranch = QStringLiteral("master");
-static const QString kGitHubRepo = QStringLiteral("Serial-Studio/Serial-Studio");
+static const QString kGitHubRepo   = QStringLiteral("Serial-Studio/Serial-Studio");
 
-static const QString kBase
-    = QStringLiteral("https://raw.githubusercontent.com/%1/%2/doc/help/")
-          .arg(kGitHubRepo, kGitHubBranch);
+static const QString kBase = QStringLiteral("https://raw.githubusercontent.com/%1/%2/doc/help/")
+                               .arg(kGitHubRepo, kGitHubBranch);
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -45,11 +45,14 @@ static const QString kBase
 /**
  * @brief Constructs the HelpCenter singleton.
  */
-Misc::HelpCenter::HelpCenter()
-  : m_loading(false)
-  , m_currentIndex(-1)
-  , m_pendingPreloads(0)
+Misc::HelpCenter::HelpCenter() : m_loading(false), m_currentIndex(-1), m_pendingPreloads(0)
 {
+  // Build initial theme colors JSON and react to theme changes
+  onThemeChanged();
+  connect(&Misc::ThemeManager::instance(),
+          &Misc::ThemeManager::themeChanged,
+          this,
+          &HelpCenter::onThemeChanged);
 }
 
 /**
@@ -98,7 +101,7 @@ const QString& Misc::HelpCenter::searchFilter() const noexcept
 }
 
 /**
- * @brief Returns the markdown content for the selected page.
+ * @brief Returns the raw markdown content for the selected page.
  */
 const QString& Misc::HelpCenter::pageContent() const noexcept
 {
@@ -122,6 +125,14 @@ QString Misc::HelpCenter::pageTitle() const
 const QVariantList& Misc::HelpCenter::pages() const noexcept
 {
   return m_filteredPages;
+}
+
+/**
+ * @brief Returns a JSON string of theme colors for the WebEngineView.
+ */
+const QString& Misc::HelpCenter::themeColors() const noexcept
+{
+  return m_themeColors;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -168,7 +179,7 @@ void Misc::HelpCenter::setSearchFilter(const QString& filter)
 bool Misc::HelpCenter::navigateToPage(const QString& link)
 {
   // Normalize: strip fragment, strip .md extension, trim
-  auto normalized = link.trimmed();
+  auto normalized    = link.trimmed();
   const auto hashIdx = normalized.indexOf('#');
   if (hashIdx >= 0)
     normalized = normalized.left(hashIdx);
@@ -180,32 +191,53 @@ bool Misc::HelpCenter::navigateToPage(const QString& link)
     return false;
 
   // Search in filtered pages first, then all pages
-  for (int i = 0; i < m_filteredPages.count(); ++i)
-  {
-    const auto page = m_filteredPages.at(i).toMap();
-    const auto id = page.value("id").toString();
+  for (int i = 0; i < m_filteredPages.count(); ++i) {
+    const auto page  = m_filteredPages.at(i).toMap();
+    const auto id    = page.value("id").toString();
     const auto title = page.value("title").toString();
-    auto file = page.value("file").toString();
+    auto file        = page.value("file").toString();
     if (file.endsWith(".md", Qt::CaseInsensitive))
       file.chop(3);
 
     if (id.compare(normalized, Qt::CaseInsensitive) == 0
         || file.compare(normalized, Qt::CaseInsensitive) == 0
-        || title.compare(normalized, Qt::CaseInsensitive) == 0)
-    {
+        || title.compare(normalized, Qt::CaseInsensitive) == 0) {
       setCurrentIndex(i);
       return true;
     }
   }
 
   // If filter is active, clear it and try again in the full list
-  if (!m_searchFilter.isEmpty())
-  {
+  if (!m_searchFilter.isEmpty()) {
     setSearchFilter(QString());
     return navigateToPage(link);
   }
 
   return false;
+}
+
+/**
+ * @brief Opens the Help Center and navigates to the given @a pageId.
+ *        If the manifest has not been loaded yet, the page ID is stored
+ *        and navigation occurs after the manifest arrives.
+ */
+void Misc::HelpCenter::showPage(const QString& pageId)
+{
+  // Clear search filter so all pages are visible
+  if (!m_searchFilter.isEmpty())
+    setSearchFilter(QString());
+
+  // Manifest already loaded, navigate immediately
+  if (!m_allPages.isEmpty()) {
+    if (!pageId.isEmpty())
+      navigateToPage(pageId);
+
+    return;
+  }
+
+  // Store pending page and fetch manifest
+  m_pendingPageId = pageId;
+  fetchManifest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,14 +256,16 @@ void Misc::HelpCenter::onManifestReply()
   reply->deleteLater();
 
   // Parse the manifest
-  if (reply->error() == QNetworkReply::NoError)
-  {
+  if (reply->error() == QNetworkReply::NoError) {
     const auto doc = QJsonDocument::fromJson(reply->readAll());
-    m_allPages = doc.array();
+    m_allPages     = doc.array();
     applyFilter();
 
-    // Auto-select first page
-    if (!m_filteredPages.isEmpty())
+    // Navigate to pending page or auto-select first
+    if (!m_pendingPageId.isEmpty()) {
+      navigateToPage(m_pendingPageId);
+      m_pendingPageId.clear();
+    } else if (!m_filteredPages.isEmpty())
       setCurrentIndex(0);
 
     // Preload all page contents for full-text search
@@ -254,8 +288,7 @@ void Misc::HelpCenter::onPageReply()
 
   reply->deleteLater();
 
-  if (reply->error() == QNetworkReply::NoError)
-  {
+  if (reply->error() == QNetworkReply::NoError) {
     const auto raw = QString::fromUtf8(reply->readAll());
 
     // Store in memory
@@ -263,10 +296,9 @@ void Misc::HelpCenter::onPageReply()
     if (!id.isEmpty())
       m_pageContents.insert(id, raw);
 
-    // Strip images before exposing to QML
-    m_pageContent = stripMarkdownImages(raw);
-  }
-  else
+    // Expose raw markdown to QML
+    m_pageContent = raw;
+  } else
     m_pageContent = tr("Failed to load page: %1").arg(reply->errorString());
 
   // Reset loading flag
@@ -292,7 +324,7 @@ void Misc::HelpCenter::fetchManifest()
   Q_EMIT loadingChanged();
 
   const auto url = QUrl(kBase + "help.json");
-  auto* reply = m_nam.get(QNetworkRequest(url));
+  auto* reply    = m_nam.get(QNetworkRequest(url));
   connect(reply, &QNetworkReply::finished, this, &HelpCenter::onManifestReply);
 }
 
@@ -304,22 +336,19 @@ void Misc::HelpCenter::applyFilter()
 {
   m_filteredPages.clear();
 
-  for (const auto& entry : std::as_const(m_allPages))
-  {
+  for (const auto& entry : std::as_const(m_allPages)) {
     const auto obj = entry.toObject();
-    if (!m_searchFilter.isEmpty())
-    {
-      const auto id = obj.value("id").toString();
-      const auto title = obj.value("title").toString();
+    if (!m_searchFilter.isEmpty()) {
+      const auto id      = obj.value("id").toString();
+      const auto title   = obj.value("title").toString();
       const auto section = obj.value("section").toString();
 
       // Search in title and section
       bool matches = title.contains(m_searchFilter, Qt::CaseInsensitive)
-                     || section.contains(m_searchFilter, Qt::CaseInsensitive);
+                  || section.contains(m_searchFilter, Qt::CaseInsensitive);
 
       // Search in preloaded content
-      if (!matches)
-      {
+      if (!matches) {
         const auto it = m_pageContents.constFind(id);
         if (it != m_pageContents.constEnd())
           matches = it->contains(m_searchFilter, Qt::CaseInsensitive);
@@ -337,7 +366,7 @@ void Misc::HelpCenter::applyFilter()
 
 /**
  * @brief Fetches the content for the page at the given index. Uses preloaded
- *        content, disk cache, or network fetch (in that priority order).
+ *        content or network fetch.
  */
 void Misc::HelpCenter::fetchPage(int index)
 {
@@ -345,14 +374,13 @@ void Misc::HelpCenter::fetchPage(int index)
     return;
 
   const auto page = m_filteredPages.at(index).toMap();
-  const auto id = page.value("id").toString();
+  const auto id   = page.value("id").toString();
   const auto file = page.value("file").toString();
 
   // Check in-memory content first
   const auto it = m_pageContents.constFind(id);
-  if (it != m_pageContents.constEnd())
-  {
-    m_pageContent = stripMarkdownImages(*it);
+  if (it != m_pageContents.constEnd()) {
+    m_pageContent = *it;
     Q_EMIT pageContentChanged();
     return;
   }
@@ -361,9 +389,9 @@ void Misc::HelpCenter::fetchPage(int index)
   m_loading = true;
   Q_EMIT loadingChanged();
 
-  const auto url = QUrl(kBase + QUrl::toPercentEncoding(file));
-  QNetworkRequest request(url);
-  auto* reply = m_nam.get(request);
+  auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
+  auto url     = QUrl::fromEncoded((kBase + encoded).toUtf8());
+  auto* reply  = m_nam.get(QNetworkRequest(url));
   reply->setProperty("pageId", id);
   connect(reply, &QNetworkReply::finished, this, &HelpCenter::onPageReply);
 }
@@ -376,10 +404,9 @@ void Misc::HelpCenter::preloadAllPages()
 {
   m_pendingPreloads = 0;
 
-  for (const auto& entry : std::as_const(m_allPages))
-  {
-    const auto obj = entry.toObject();
-    const auto id = obj.value("id").toString();
+  for (const auto& entry : std::as_const(m_allPages)) {
+    const auto obj  = entry.toObject();
+    const auto id   = obj.value("id").toString();
     const auto file = obj.value("file").toString();
 
     // Already loaded
@@ -388,11 +415,11 @@ void Misc::HelpCenter::preloadAllPages()
 
     // Fetch from network
     ++m_pendingPreloads;
-    const auto url = QUrl(kBase + QUrl::toPercentEncoding(file));
-    auto* reply = m_nam.get(QNetworkRequest(url));
+    auto encoded = QString::fromUtf8(QUrl::toPercentEncoding(file));
+    auto url     = QUrl::fromEncoded((kBase + encoded).toUtf8());
+    auto* reply  = m_nam.get(QNetworkRequest(url));
     reply->setProperty("pageId", id);
-    connect(reply, &QNetworkReply::finished, this,
-            &HelpCenter::onPreloadReply);
+    connect(reply, &QNetworkReply::finished, this, &HelpCenter::onPreloadReply);
   }
 }
 
@@ -408,9 +435,8 @@ void Misc::HelpCenter::onPreloadReply()
 
   reply->deleteLater();
 
-  if (reply->error() == QNetworkReply::NoError)
-  {
-    const auto id = reply->property("pageId").toString();
+  if (reply->error() == QNetworkReply::NoError) {
+    const auto id  = reply->property("pageId").toString();
     const auto raw = QString::fromUtf8(reply->readAll());
     if (!id.isEmpty())
       m_pageContents.insert(id, raw);
@@ -422,15 +448,35 @@ void Misc::HelpCenter::onPreloadReply()
     applyFilter();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Theme integration
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Removes markdown image tags (![alt](url)) from the given text.
- *
- * Qt's TextArea.MarkdownText attempts to resolve image URLs relative to qrc,
- * which causes "Cannot read resource" warnings. We strip images to avoid this.
+ * @brief Rebuilds the theme colors JSON string from the current ThemeManager
+ *        colors and emits themeColorsChanged so the WebEngineView can update.
  */
-QString Misc::HelpCenter::stripMarkdownImages(const QString& markdown)
+void Misc::HelpCenter::onThemeChanged()
 {
-  static const QRegularExpression re(
-      QStringLiteral("!\\[[^\\]]*\\]\\([^)]*\\)\\s*\\n?"));
-  return QString(markdown).remove(re);
+  static const auto* t = &Misc::ThemeManager::instance();
+  const auto& colors   = t->colors();
+
+  // Determine if this is a dark theme by checking background luminance
+  const auto bgHex = colors.value(QStringLiteral("groupbox_background")).toString();
+  const QColor bgCol(bgHex);
+  const bool isDark = bgCol.isValid() && bgCol.lightnessF() < 0.5;
+
+  // Build JSON object with the colors the WebView needs
+  QJsonObject obj;
+  obj[QStringLiteral("text")]      = colors.value(QStringLiteral("text")).toString();
+  obj[QStringLiteral("bg")]        = colors.value(QStringLiteral("groupbox_background")).toString();
+  obj[QStringLiteral("accent")]    = colors.value(QStringLiteral("accent")).toString();
+  obj[QStringLiteral("border")]    = colors.value(QStringLiteral("groupbox_border")).toString();
+  obj[QStringLiteral("base")]      = colors.value(QStringLiteral("base")).toString();
+  obj[QStringLiteral("codeBg")]    = colors.value(QStringLiteral("base")).toString();
+  obj[QStringLiteral("highlight")] = colors.value(QStringLiteral("highlight")).toString();
+  obj[QStringLiteral("isDark")]    = isDark;
+
+  m_themeColors = QString::fromUtf8(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+  Q_EMIT themeColorsChanged();
 }

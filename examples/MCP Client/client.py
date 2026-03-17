@@ -27,6 +27,7 @@ class MCPClient:
         self.port = port
         self.sock = None
         self.request_id = 0
+        self._buffer = b""
 
     def connect(self):
         """Connect to Serial Studio API server"""
@@ -56,21 +57,41 @@ class MCPClient:
         message = json.dumps(request) + "\n"
         self.sock.sendall(message.encode("utf-8"))
 
-        response = self._read_response()
+        response = self._read_response(self.request_id)
         return response
 
-    def _read_response(self):
-        """Read newline-delimited JSON response"""
-        buffer = b""
-        while True:
+    def _read_line(self):
+        """Read one newline-delimited JSON line, preserving leftover data"""
+        while b"\n" not in self._buffer:
             chunk = self.sock.recv(4096)
             if not chunk:
                 raise ConnectionError("Connection closed by server")
+            self._buffer += chunk
 
-            buffer += chunk
-            if b"\n" in buffer:
-                line, buffer = buffer.split(b"\n", 1)
-                return json.loads(line.decode("utf-8"))
+        line, self._buffer = self._buffer.split(b"\n", 1)
+        return json.loads(line.decode("utf-8"))
+
+    def _read_response(self, request_id):
+        """Read lines until we get the JSON-RPC response matching request_id.
+
+        The server may send raw data events ({"data": "..."}) interleaved
+        with JSON-RPC responses. These are silently skipped.
+        """
+        while True:
+            msg = self._read_line()
+
+            # Skip raw data events from the server
+            if "data" in msg and "jsonrpc" not in msg:
+                continue
+
+            # Match by request id if present
+            if msg.get("id") == request_id:
+                return msg
+
+            # Accept any JSON-RPC response if id doesn't match
+            # (shouldn't happen in sequential usage, but be safe)
+            if "jsonrpc" in msg:
+                return msg
 
     def initialize(self):
         """Initialize MCP session"""

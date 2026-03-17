@@ -131,8 +131,8 @@ Serial Studio Pro can also export and replay MDF4 (Measurement Data Format versi
 
 ## See Also
 
-- [Getting Started](Getting-Started.md) -- Initial setup and first connection
-- [Operation Modes](Operation-Modes.md) -- Quick Plot vs. Project File mode
-- [Project Editor](Project-Editor.md) -- Define datasets and dashboard layout
-- [Data Flow](Data-Flow.md) -- How data moves through the pipeline
-- [Pro vs Free Features](Pro-vs-Free.md) -- MDF4 export is a Pro feature
+- [Getting Started](Getting-Started.md) — Initial setup and first connection
+- [Operation Modes](Operation-Modes.md) — Quick Plot vs. Project File mode
+- [Project Editor](Project-Editor.md) — Define datasets and dashboard layout
+- [Data Flow](Data-Flow.md) — How data moves through the pipeline
+- [Pro vs Free Features](Pro-vs-Free.md) — MDF4 export is a Pro feature

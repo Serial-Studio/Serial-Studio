@@ -22,6 +22,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtWebEngine
 
 import "../Widgets"
 
@@ -48,47 +49,39 @@ SmartDialog {
   }
 
   //
-  // Helper: handle link clicks — internal links navigate, external open browser
+  // Track whether the WebView HTML shell is ready to receive content
   //
-  function handleLink(link) {
-    // External links — open in browser
-    if (link.startsWith("http://") || link.startsWith("https://") || link.startsWith("mailto:")) {
-      Qt.openUrlExternally(link)
+  property bool webViewReady: false
+
+  //
+  // Push markdown content into the WebView via JS
+  //
+  function pushContent() {
+    if (!webViewReady || !contentView.visible)
+      return
+
+    var md = Cpp_HelpCenter.pageContent
+    if (md === "") {
+      contentView.runJavaScript("document.getElementById('content').innerHTML = '';")
       return
     }
 
-    // Qt resolves relative markdown links against qrc — strip the prefix
-    // e.g. "qrc:/serial-studio.com/gui/qml/Dialogs/Page-Name.md#anchor"
-    var resolved = link
-    if (resolved.startsWith("qrc:/") || resolved.startsWith("qrc://")) {
-      var lastSlash = resolved.lastIndexOf("/")
-      if (lastSlash >= 0)
-        resolved = resolved.substring(lastSlash + 1)
-    }
+    // Escape the markdown for safe JS string injection
+    var escaped = md.replace(/\\/g, '\\\\')
+                    .replace(/`/g, '\\`')
+                    .replace(/\$/g, '\\$')
+    contentView.runJavaScript("renderMarkdown(`" + escaped + "`);")
+  }
 
-    // Split into page and anchor parts
-    var hashIdx = resolved.indexOf("#")
-    var pagePart = hashIdx >= 0 ? resolved.substring(0, hashIdx) : resolved
-    var anchorPart = hashIdx >= 0 ? resolved.substring(hashIdx) : ""
-
-    // Pure anchor link — scroll within current page
-    if (pagePart === "" && anchorPart !== "") {
-      var anchor = anchorPart.substring(1).replace(/-/g, " ").replace(/--/g, " & ")
-      var pos = contentArea.text.toLowerCase().indexOf(anchor)
-      if (pos >= 0) {
-        contentArea.cursorPosition = pos
-        var rect = contentArea.positionToRectangle(pos)
-        contentScrollView.contentItem.contentY = Math.max(0, rect.y - 20)
-      }
-      return
-    }
-
-    // Internal page link — navigate via C++
-    if (pagePart !== "" && Cpp_HelpCenter.navigateToPage(pagePart))
+  //
+  // Push theme colors into the WebView
+  //
+  function pushTheme() {
+    if (!webViewReady)
       return
 
-    // Fallback — open externally
-    Qt.openUrlExternally(link)
+    var json = Cpp_HelpCenter.themeColors
+    contentView.runJavaScript("setTheme(" + json + ");")
   }
 
   //
@@ -251,7 +244,7 @@ SmartDialog {
       }
 
       //
-      // Right content area
+      // Right content area — WebEngineView
       //
       Item {
         Layout.fillWidth: true
@@ -287,50 +280,92 @@ SmartDialog {
         }
 
         //
-        // Markdown content
+        // WebEngineView for rendered markdown
         //
-        ScrollView {
-          id: contentScrollView
+        WebEngineView {
+          id: contentView
 
           anchors.fill: parent
-          anchors.margins: 1
-          contentWidth: availableWidth
+          anchors.margins: 2
           visible: Cpp_HelpCenter.pageContent !== ""
+          backgroundColor: "transparent"
+          url: "qrc:/rcc/markdown-viewer.html"
+          settings.localContentCanAccessRemoteUrls: true
 
-          TextArea {
-            id: contentArea
+          //
+          // WebView is ready once the HTML shell has loaded
+          //
+          onLoadingChanged: function(loadRequest) {
+            if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
+              root.webViewReady = true
+              root.pushTheme()
+              root.pushContent()
+            }
+          }
 
-            readOnly: true
-            textFormat: TextArea.MarkdownText
-            wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
-            font: Cpp_Misc_CommonFonts.uiFont
-            onLinkActivated: (link) => root.handleLink(link)
+          //
+          // Handle navigation requests from the page (link clicks)
+          //
+          onNavigationRequested: function(request) {
+            var url = request.url.toString()
 
-            //
-            // Force full markdown re-parse by clearing first
-            //
-            Connections {
-              target: Cpp_HelpCenter
-              function onPageContentChanged() {
-                contentArea.text = ""
-                reloadTimer.restart()
-              }
+            // Allow initial page load from qrc
+            if (url.startsWith("qrc:"))
+              return
+
+            // External link — open in browser
+            if (url.startsWith("ext:")) {
+              request.reject()
+              Qt.openUrlExternally(url.substring(4))
+              return
             }
 
-            Timer {
-              id: reloadTimer
-              interval: 1
-              onTriggered: contentArea.text = Cpp_HelpCenter.pageContent
+            // Copy code to clipboard
+            if (url.startsWith("copy:")) {
+              request.reject()
+              var text = decodeURIComponent(url.substring(5))
+              Cpp_Misc_Utilities.copyText(text)
+              copyToast.show()
+              return
             }
 
-            background: Rectangle {
-              color: "transparent"
+            // Internal page navigation
+            if (url.startsWith("nav:")) {
+              request.reject()
+              var link = url.substring(4)
+
+              // Decode percent-encoded characters
+              link = decodeURIComponent(link)
+
+              // Try internal navigation
+              if (!Cpp_HelpCenter.navigateToPage(link))
+                Qt.openUrlExternally(link)
+
+              return
             }
 
-            HoverHandler {
-              acceptedButtons: Qt.NoButton
-              cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
-            }
+            // Block all other navigations
+            request.reject()
+          }
+        }
+
+        //
+        // React to content changes from C++
+        //
+        Connections {
+          target: Cpp_HelpCenter
+          function onPageContentChanged() {
+            root.pushContent()
+          }
+        }
+
+        //
+        // React to theme changes from C++
+        //
+        Connections {
+          target: Cpp_HelpCenter
+          function onThemeColorsChanged() {
+            root.pushTheme()
           }
         }
 
@@ -343,6 +378,49 @@ SmartDialog {
           visible: !Cpp_HelpCenter.loading && Cpp_HelpCenter.pageContent === "" && Cpp_HelpCenter.currentIndex < 0
           color: Cpp_ThemeManager.colors["placeholder_text"]
           font: Cpp_Misc_CommonFonts.uiFont
+        }
+
+        //
+        // "Copied to Clipboard" toast notification
+        //
+        Rectangle {
+          id: copyToast
+
+          opacity: 0
+          radius: 4
+          anchors.bottom: parent.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.bottomMargin: 24
+          width: copyToastLabel.implicitWidth + 24
+          height: copyToastLabel.implicitHeight + 12
+          color: Cpp_ThemeManager.colors["highlight"]
+
+          function show() {
+            copyToast.opacity = 1
+            copyToastTimer.restart()
+          }
+
+          Label {
+            id: copyToastLabel
+
+            anchors.centerIn: parent
+            text: qsTr("Copied to Clipboard")
+            font: Cpp_Misc_CommonFonts.uiFont
+            color: Cpp_ThemeManager.colors["highlighted_text"]
+          }
+
+          Timer {
+            id: copyToastTimer
+
+            interval: 1500
+            onTriggered: copyToast.opacity = 0
+          }
+
+          Behavior on opacity {
+            NumberAnimation {
+              duration: 150
+            }
+          }
         }
       }
     }

@@ -63,7 +63,7 @@ Serial Studio provides 15+ widget types for real-time data visualization. Widget
 
 ### Terminal
 
-- Special widget -- always available when console is enabled
+- Special widget — always available when console is enabled
 - VT-100 emulation with ANSI color support
 - Shows raw text data stream
 - Configurable font and display settings
@@ -86,14 +86,14 @@ Serial Studio provides 15+ widget types for real-time data visualization. Widget
 - Widget key: `"image"`
 - Live JPEG/PNG/BMP/WebP image streaming from device
 - Auto-detect or manual frame delimiter configuration
-- Independent frame reader per widget -- image frames and CSV telemetry coexist in the same byte stream
+- Independent frame reader per widget — image frames and CSV telemetry coexist in the same byte stream
 - Export, zoom, and image filter toolbar controls
 - Best for: camera feeds, thermal imaging, visual inspection
 - Group-level configuration fields:
   - `imgDetectionMode`: `"autodetect"` (default, uses format magic bytes) or `"manual"` (user-defined delimiters)
   - `imgStartSequence`: hex start delimiter (manual mode only)
   - `imgEndSequence`: hex end delimiter (manual mode only)
-- No datasets required inside the group -- the widget reads raw image bytes directly from the transport stream
+- No datasets required inside the group — the widget reads raw image bytes directly from the transport stream
 - Pro license required
 
 ## Dataset Widgets
@@ -147,7 +147,7 @@ Serial Studio provides 15+ widget types for real-time data visualization. Widget
 
 | Widget | Type | Key | Min Datasets | Key Settings |
 |--------|------|-----|--------------|--------------|
-| Data Grid | Group | `datagrid` | 1+ | -- |
+| Data Grid | Group | `datagrid` | 1+ | — |
 | Multiple Plot | Group | `multiplot` | 1+ | `graph: true` on datasets |
 | GPS Map | Group | `map` | 2-3 | lat, lon, (alt) datasets |
 | Gyroscope | Group | `gyro` | 3 | yaw, pitch, roll |
@@ -155,11 +155,11 @@ Serial Studio provides 15+ widget types for real-time data visualization. Widget
 | LED Panel | Group | auto | 1+ | `led: true`, `ledHigh` |
 | 3D Plot | Group | `plot3d` | 3 | x, y, z coords [Pro] |
 | Image View | Group | `image` | 0 | binary stream [Pro] |
-| Plot | Dataset | auto | -- | `graph: true`, pltMin/Max |
-| FFT Plot | Dataset | auto | -- | `fft: true`, fftSamples, fftSamplingRate |
-| Bar | Dataset | `bar` | -- | wgtMin/Max, alarmLow/High |
-| Gauge | Dataset | `gauge` | -- | wgtMin/Max, alarmLow/High |
-| Compass | Dataset | `compass` | -- | value 0-360 |
+| Plot | Dataset | auto | — | `graph: true`, pltMin/Max |
+| FFT Plot | Dataset | auto | — | `fft: true`, fftSamples, fftSamplingRate |
+| Bar | Dataset | `bar` | — | wgtMin/Max, alarmLow/High |
+| Gauge | Dataset | `gauge` | — | wgtMin/Max, alarmLow/High |
+| Compass | Dataset | `compass` | — | value 0-360 |
 
 ## Dataset Fields Reference
 
@@ -168,8 +168,8 @@ Every dataset in a project file supports the following visualization-related fie
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `index` | int | 0 | Frame offset index (column position in CSV data) |
-| `title` | string | -- | Human-readable display name |
-| `units` | string | -- | Measurement units (e.g., "m/s", "degC") |
+| `title` | string | — | Human-readable display name |
+| `units` | string | — | Measurement units (e.g., "m/s", "degC") |
 | `widget` | string | `""` | Dataset widget type: `"bar"`, `"gauge"`, or `"compass"` |
 | `plt` (graph) | bool | false | Enable time-series plot |
 | `fft` | bool | false | Enable FFT spectrum plot |
@@ -219,6 +219,6 @@ Every dataset in a project file supports the following visualization-related fie
 
 ## See Also
 
-- [Project Editor](Project-Editor.md) -- How to configure widgets in your project
-- [Operation Modes](Operation-Modes.md) -- Dashboard modes and frame detection
-- [Data Flow](Data-Flow.md) -- How data reaches widgets from drivers through the pipeline
+- [Project Editor](Project-Editor.md) — How to configure widgets in your project
+- [Operation Modes](Operation-Modes.md) — Dashboard modes and frame detection
+- [Data Flow](Data-Flow.md) — How data reaches widgets from drivers through the pipeline

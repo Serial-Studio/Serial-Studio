@@ -19,13 +19,13 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 100,
+                    "plotMax": 120,
                     "plotMin": 0,
                     "title": "X (Propagation)",
                     "units": "",
                     "value": "--.--",
                     "widget": "",
-                    "widgetMax": 100,
+                    "widgetMax": 120,
                     "widgetMin": 0,
                     "xAxis": 2
                 },
@@ -100,13 +100,13 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 100,
+                    "plotMax": 120,
                     "plotMin": 0,
                     "title": "X (Propagation)",
                     "units": "",
                     "value": "--.--",
                     "widget": "x",
-                    "widgetMax": 100,
+                    "widgetMax": 120,
                     "widgetMin": 0,
                     "xAxis": 2
                 },
@@ -193,6 +193,8 @@
     "title": "EM Wave Simulator",
     "widgetSettings": {
         "6:1:-1": {
+            "anaglyphEnabled": false,
+            "interpolationEnabled": false,
             "orbitNavigation": true
         }
     }

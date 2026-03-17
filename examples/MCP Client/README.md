@@ -2,6 +2,8 @@
 
 This example demonstrates how to use the **Model Context Protocol (MCP)** with Serial Studio, enabling AI models like Claude to interact with telemetry data and control Serial Studio remotely.
 
+![Model Context Protocol Diagram](doc/diagram.jpg)
+
 ## Quick Start
 
 ### 1. Enable the API Server

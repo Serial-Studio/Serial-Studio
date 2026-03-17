@@ -70,15 +70,15 @@ For a detailed breakdown of features available under each license tier, see [Pro
 
 ## License Files
 
-- `LICENSE.md` -- Full Dual-License Agreement
-- `LICENSES/GPL-3.0-only.txt` -- GPLv3 License Text
-- `LICENSES/LicenseRef-SerialStudio-Commercial.txt` -- Commercial License Terms
+- `LICENSE.md` — Full Dual-License Agreement
+- `LICENSES/GPL-3.0-only.txt` — GPLv3 License Text
+- `LICENSES/LicenseRef-SerialStudio-Commercial.txt` — Commercial License Terms
 
 For commercial licensing or legal questions, contact alex@serial-studio.com.
 
 ## See Also
 
-- [Pro vs Free Features](Pro-vs-Free.md) -- Detailed feature comparison
-- [Earn a Pro License](Earn-Pro-License.md) -- Contribute for free access
-- [Support Serial Studio](Support-Serial-Studio.md) -- Other ways to help
-- [Buy Serial Studio Pro](https://store.serial-studio.com/) -- Purchase a Pro license
+- [Pro vs Free Features](Pro-vs-Free.md) — Detailed feature comparison
+- [Earn a Pro License](Earn-Pro-License.md) — Contribute for free access
+- [Support Serial Studio](Support-Serial-Studio.md) — Other ways to help
+- [Buy Serial Studio Pro](https://store.serial-studio.com/) — Purchase a Pro license

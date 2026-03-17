@@ -370,7 +370,7 @@ Each source runs in an isolated QJSEngine instance. Global variables in one sour
 
 1. The function **must** be named `parse` (case-sensitive).
 2. It must accept exactly **one parameter**.
-3. It must **return an array** -- not a string, object, number, or undefined.
+3. It must **return an array** — not a string, object, number, or undefined.
 4. Return an empty array `[]` for invalid or incomplete frames.
 5. **Synchronous only.** No `async`/`await`, no Promises, no `setTimeout`, no `setInterval`.
 6. **500 ms execution timeout** per parse call. If your function takes longer (e.g., infinite loop), the engine is interrupted and the frame is dropped.
@@ -436,7 +436,7 @@ Output appears in Serial Studio's console/terminal panel.
 
 ## See Also
 
-- [Data Flow](Data-Flow.md) -- how data moves from device through parsing to the dashboard
-- [Project Editor](Project-Editor.md) -- where you write and configure parser code
-- [Operation Modes](Operation-Modes.md) -- when Project File mode (and thus custom parsers) applies
-- [Troubleshooting](Troubleshooting.md) -- common parser issues and fixes
+- [Data Flow](Data-Flow.md) — how data moves from device through parsing to the dashboard
+- [Project Editor](Project-Editor.md) — where you write and configure parser code
+- [Operation Modes](Operation-Modes.md) — when Project File mode (and thus custom parsers) applies
+- [Troubleshooting](Troubleshooting.md) — common parser issues and fixes

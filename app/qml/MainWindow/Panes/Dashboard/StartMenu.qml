@@ -341,12 +341,12 @@ Popup {
 
     Widgets.MenuButton {
       expandable: false
-      text: qsTr("Help")
+      text: qsTr("Help Center")
       Layout.fillWidth: true
       icon.source: "qrc:/rcc/icons/start/help.svg"
       onClicked: {
         root.close()
-        Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+        app.showHelpCenter()
       }
     }
 

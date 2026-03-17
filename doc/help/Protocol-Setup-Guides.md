@@ -70,7 +70,7 @@ Serial Studio will resolve the hostname (if provided) and attempt a TCP connecti
 
 ### Troubleshooting
 
-- **No data received:** Verify the device is sending to your computer's IP and the correct local port. Check firewall rules -- UDP is often blocked by default. If using multicast, ensure both devices are on the same multicast-capable network segment.
+- **No data received:** Verify the device is sending to your computer's IP and the correct local port. Check firewall rules — UDP is often blocked by default. If using multicast, ensure both devices are on the same multicast-capable network segment.
 - **Data from wrong source:** UDP is connectionless. Any device sending to your bound port will be received. Use firewall rules or application-level filtering if needed.
 
 ---
@@ -273,7 +273,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 ### Steps
 
 1. In the **Setup Panel**, select **Raw USB** from the I/O Interface dropdown.
-2. Select the **Device** from the dropdown. Devices are listed as `VID:PID -- Product Name`.
+2. Select the **Device** from the dropdown. Devices are listed as `VID:PID — Product Name`.
 3. Select the **Transfer Mode**:
    - **Bulk Stream** (default): Standard synchronous bulk IN/OUT. Works for most devices.
    - **Advanced Control**: Bulk transfers plus vendor-specific control transfers. A confirmation dialog appears before enabling.
@@ -301,7 +301,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 1. In the **Setup Panel**, select **HID** from the I/O Interface dropdown.
 2. Wait for device enumeration. HID devices are re-enumerated every 2 seconds automatically.
-3. Select the **Device** from the dropdown. Devices are listed as `VID:PID -- Product Name`.
+3. Select the **Device** from the dropdown. Devices are listed as `VID:PID — Product Name`.
 4. Review the **Usage Page** and **Usage** fields to confirm the correct device function is selected.
 5. Click **Connect**.
 
@@ -312,7 +312,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 ---
 
-## Process I/O Setup -- Launch Mode (Pro)
+## Process I/O Setup — Launch Mode (Pro)
 
 **License:** Pro
 
@@ -337,7 +337,7 @@ Serial Studio spawns the process, reads its merged stdout and stderr, and feeds 
 
 ---
 
-## Process I/O Setup -- Named Pipe Mode (Pro)
+## Process I/O Setup — Named Pipe Mode (Pro)
 
 **License:** Pro
 
@@ -363,7 +363,7 @@ Serial Studio opens the named pipe for reading and streams data into the pipelin
 
 ## See Also
 
-- [Communication Protocols](Communication-Protocols.md) -- Protocol overviews and comparison
-- [MQTT Integration](MQTT-Integration.md) -- In-depth MQTT documentation
-- [Getting Started](Getting-Started.md) -- First-time setup tutorial
-- [Troubleshooting](Troubleshooting.md) -- General troubleshooting guide
+- [Communication Protocols](Communication-Protocols.md) — Protocol overviews and comparison
+- [MQTT Integration](MQTT-Integration.md) — In-depth MQTT documentation
+- [Getting Started](Getting-Started.md) — First-time setup tutorial
+- [Troubleshooting](Troubleshooting.md) — General troubleshooting guide

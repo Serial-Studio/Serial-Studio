@@ -2,6 +2,8 @@
 
 This example demonstrates Serial Studio's **multi-frame parsing** feature, which automatically expands batched sensor data into individual frames for smooth visualization.
 
+![IMU Batched Data Simulator](doc/screenshot.png)
+
 ## Use Case
 
 Many devices batch high-frequency sensor readings before transmission to reduce communication overhead. For example:

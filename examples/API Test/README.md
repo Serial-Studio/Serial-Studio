@@ -4,6 +4,8 @@
 
 A Python client for the Serial Studio API that allows external programs to control and configure Serial Studio through a TCP connection. Provides an interactive REPL, command-line interface, and automated testing capabilities.
 
+![Serial Studio API Client](doc/screenshot.png)
+
 ## What is this?
 
 The Serial Studio API exposes a TCP server on port 7777 (default) that allows external programs to:

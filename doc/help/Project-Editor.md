@@ -12,16 +12,16 @@ The editor window is divided into three areas: a toolbar across the top, a tree 
 
 ### Toolbar
 
-- **New Project** -- create a blank project.
-- **Open Project** -- load an existing `.json` or `.ssproj` file.
-- **Save Project** (Ctrl+S / Cmd+S) -- save the current project.
-- **Add Action** -- add a new action button.
-- **Add Data Grid** -- add a group with the Data Grid widget.
-- **Add Multiple Plots** -- add a group with the Multiple Plot widget.
-- **Add Accelerometer** -- add a group pre-configured for 3-axis acceleration.
-- **Add Gyroscope** -- add a group pre-configured for 3-axis rotation.
-- **Add Map** -- add a group for GPS data (latitude, longitude, altitude).
-- **Add Container** -- add a group with no group-level widget.
+- **New Project** — create a blank project.
+- **Open Project** — load an existing `.json` or `.ssproj` file.
+- **Save Project** (Ctrl+S / Cmd+S) — save the current project.
+- **Add Action** — add a new action button.
+- **Add Data Grid** — add a group with the Data Grid widget.
+- **Add Multiple Plots** — add a group with the Multiple Plot widget.
+- **Add Accelerometer** — add a group pre-configured for 3-axis acceleration.
+- **Add Gyroscope** — add a group pre-configured for 3-axis rotation.
+- **Add Map** — add a group for GPS data (latitude, longitude, altitude).
+- **Add Container** — add a group with no group-level widget.
 
 ### Tree View (Left Panel)
 
@@ -42,7 +42,7 @@ Project Root
     Source: "Main Device"
 ```
 
-The number in brackets is the dataset's frame index -- its position in the parsed data array. Click any item to edit its properties in the right panel.
+The number in brackets is the dataset's frame index — its position in the parsed data array. Click any item to edit its properties in the right panel.
 
 ### Property Panel (Right Panel)
 
@@ -61,19 +61,19 @@ Displays a form for the selected tree item. Every change takes effect immediatel
 
 When the project root is selected, the property panel shows frame detection settings. These apply globally in single-source projects, or per-source in multi-source projects.
 
-- **Frame Detection Method** -- how Serial Studio finds frame boundaries in the byte stream.
-  - *End Delimiter Only* -- frames end with a known sequence (e.g., `\n`). This is the most common choice.
-  - *Start and End Delimiter* -- frames are bounded by a start marker and an end marker (e.g., `/*` and `*/`).
-  - *Start Delimiter Only* -- frames begin with a header; the next header marks the end of the previous frame.
-  - *No Delimiters* -- raw data is fed directly to the JavaScript frame parser. Use this for fixed-size or length-prefixed protocols.
-- **Start Delimiter** / **End Delimiter** -- the actual delimiter strings.
-- **Hex Delimiters** -- check this if the delimiter strings are written in hexadecimal (e.g., `0A` for newline).
-- **Data Conversion** -- how the byte stream inside delimiters is decoded before parsing.
-  - *Plain Text (UTF-8)* -- default text mode.
-  - *Hexadecimal* -- each byte pair is interpreted as a hex value.
-  - *Base64* -- data is Base64-decoded first.
-  - *Binary Direct (Pro)* -- raw bytes are passed to the JS parser as a byte array.
-- **Checksum Algorithm** -- optional integrity check appended to each frame. Supported: CRC-8, CRC-16, CRC-32, CRC-CCITT, and others.
+- **Frame Detection Method** — how Serial Studio finds frame boundaries in the byte stream.
+  - *End Delimiter Only* — frames end with a known sequence (e.g., `\n`). This is the most common choice.
+  - *Start and End Delimiter* — frames are bounded by a start marker and an end marker (e.g., `/*` and `*/`).
+  - *Start Delimiter Only* — frames begin with a header; the next header marks the end of the previous frame.
+  - *No Delimiters* — raw data is fed directly to the JavaScript frame parser. Use this for fixed-size or length-prefixed protocols.
+- **Start Delimiter** / **End Delimiter** — the actual delimiter strings.
+- **Hex Delimiters** — check this if the delimiter strings are written in hexadecimal (e.g., `0A` for newline).
+- **Data Conversion** — how the byte stream inside delimiters is decoded before parsing.
+  - *Plain Text (UTF-8)* — default text mode.
+  - *Hexadecimal* — each byte pair is interpreted as a hex value.
+  - *Base64* — data is Base64-decoded first.
+  - *Binary Direct (Pro)* — raw bytes are passed to the JS parser as a byte array.
+- **Checksum Algorithm** — optional integrity check appended to each frame. Supported: CRC-8, CRC-16, CRC-32, CRC-CCITT, and others.
 
 ### Step 3: Add Groups
 
@@ -105,36 +105,36 @@ Datasets map to individual data fields in your device's output.
 
 **General**
 
-- **Title** -- display label (e.g., "Temperature").
-- **Units** -- measurement suffix (e.g., "deg C", "hPa", "%").
-- **Frame Index** -- 1-based position in the parsed data array. If your device sends `23.5,1013,45.2`, then Temperature = 1, Pressure = 2, Humidity = 3.
-- **Widget** -- per-dataset visualization: Bar, Gauge, Compass, or None.
+- **Title** — display label (e.g., "Temperature").
+- **Units** — measurement suffix (e.g., "deg C", "hPa", "%").
+- **Frame Index** — 1-based position in the parsed data array. If your device sends `23.5,1013,45.2`, then Temperature = 1, Pressure = 2, Humidity = 3.
+- **Widget** — per-dataset visualization: Bar, Gauge, Compass, or None.
 
 **Plotting**
 
-- **Graph** -- enable time-series plotting.
-- **Plot Min / Plot Max** -- Y-axis range. Leave both at 0 for auto-scale.
+- **Graph** — enable time-series plotting.
+- **Plot Min / Plot Max** — Y-axis range. Leave both at 0 for auto-scale.
 
 **FFT (Frequency Analysis)**
 
-- **FFT** -- enable frequency-domain analysis.
-- **FFT Samples** -- window size (64, 128, 256, 512, 1024, etc.).
-- **FFT Sampling Rate** -- in Hz; must match the actual data rate for correct frequency axis labeling.
-- **FFT Min / FFT Max** -- Y-axis range for the FFT plot.
+- **FFT** — enable frequency-domain analysis.
+- **FFT Samples** — window size (64, 128, 256, 512, 1024, etc.).
+- **FFT Sampling Rate** — in Hz; must match the actual data rate for correct frequency axis labeling.
+- **FFT Min / FFT Max** — Y-axis range for the FFT plot.
 
 **LED**
 
-- **LED** -- show this dataset in the LED panel.
-- **LED High** -- threshold above which the LED lights up.
+- **LED** — show this dataset in the LED panel.
+- **LED High** — threshold above which the LED lights up.
 
 **Alarm**
 
-- **Alarm** -- enable threshold-based alarms.
-- **Alarm Low / Alarm High** -- trigger thresholds.
+- **Alarm** — enable threshold-based alarms.
+- **Alarm Low / Alarm High** — trigger thresholds.
 
 **Widget Range**
 
-- **Widget Min / Widget Max** -- range for Bar and Gauge displays. Defaults to 0--100.
+- **Widget Min / Widget Max** — range for Bar and Gauge displays. Defaults to 0--100.
 
 ### Step 5: Add Actions (Optional)
 
@@ -143,12 +143,12 @@ Actions place buttons on the dashboard that send commands to the connected devic
 1. Click **Add Action** in the toolbar, or right-click "Actions" in the tree.
 2. Configure the action:
 
-- **Title** -- button label (e.g., "Reset Device").
-- **Icon** -- choose from the built-in icon set.
-- **TX Data** -- the string or bytes to transmit (e.g., `RST`).
-- **EOL** -- append a line ending: `\n`, `\r`, `\r\n`, or nothing.
-- **Binary** -- when checked, TX Data is interpreted as hexadecimal bytes rather than ASCII text.
-- **Auto-Execute on Connect** -- send the command automatically when the device connects.
+- **Title** — button label (e.g., "Reset Device").
+- **Icon** — choose from the built-in icon set.
+- **TX Data** — the string or bytes to transmit (e.g., `RST`).
+- **EOL** — append a line ending: `\n`, `\r`, `\r\n`, or nothing.
+- **Binary** — when checked, TX Data is interpreted as hexadecimal bytes rather than ASCII text.
+- **Auto-Execute on Connect** — send the command automatically when the device connects.
 - **Timer Mode**:
 
 | Mode | Behavior |
@@ -158,7 +158,7 @@ Actions place buttons on the dashboard that send commands to the connected devic
 | StartOnTrigger | Timer starts on first click; command repeats until stopped. |
 | ToggleOnTrigger | Each click toggles the repeating timer on or off. |
 
-- **Timer Interval** -- repeat interval in milliseconds (default: 100 ms).
+- **Timer Interval** — repeat interval in milliseconds (default: 100 ms).
 
 ### Step 6: Add Sources (Multi-Device Projects)
 
@@ -166,11 +166,11 @@ Sources define where data comes from. Single-device projects have one implicit s
 
 1. Right-click "Sources" in the tree and add a source.
 2. Configure:
-   - **Title** -- descriptive label (e.g., "Arduino Uno").
-   - **Bus Type** -- Serial Port, Network Socket, Bluetooth LE, or (Pro) Audio, Modbus, CAN Bus, USB, HID, Process.
-   - **Frame Detection / Delimiters** -- per-source overrides (same options as the project root).
-   - **Data Conversion / Checksum** -- per-source overrides.
-   - **Connection Settings** -- bus-specific parameters (COM port, baud rate, IP address, etc.) saved with the project.
+   - **Title** — descriptive label (e.g., "Arduino Uno").
+   - **Bus Type** — Serial Port, Network Socket, Bluetooth LE, or (Pro) Audio, Modbus, CAN Bus, USB, HID, Process.
+   - **Frame Detection / Delimiters** — per-source overrides (same options as the project root).
+   - **Data Conversion / Checksum** — per-source overrides.
+   - **Connection Settings** — bus-specific parameters (COM port, baud rate, IP address, etc.) saved with the project.
 
 Each source has its own **Frame Parser** tab for a per-source JavaScript parser.
 
@@ -196,10 +196,10 @@ function parse(frame) {
 
 - The function must be named `parse` and accept exactly one argument.
 - It must return an array. Each element maps to a dataset frame index (element 0 = index 1, element 1 = index 2, etc.).
-- Global variables declared outside `parse()` persist between calls -- useful for stateful protocols.
+- Global variables declared outside `parse()` persist between calls — useful for stateful protocols.
 - Use `console.log()` to print debug messages to the Serial Studio terminal.
 
-**Example -- binary protocol:**
+**Example — binary protocol:**
 
 ```javascript
 function parse(frame) {
@@ -273,7 +273,7 @@ When a project has multiple sources, each source represents a separate physical 
 **Symptom:** Widget appears but displays incorrectly.
 
 **Fix:**
-- Gauge and Bar need bounded numeric values -- set Widget Min/Max.
+- Gauge and Bar need bounded numeric values — set Widget Min/Max.
 - Accelerometer and Gyroscope groups need exactly 3 datasets.
 - GPS Map needs 2--3 datasets (latitude, longitude, optional altitude).
 - Compass expects a value in the 0--360 range.
@@ -290,13 +290,13 @@ When a project has multiple sources, each source represents a separate physical 
 - The tree shows frame indices next to dataset names for quick reference.
 - Test your configuration with the Console view before switching to the Dashboard.
 - Record a session to CSV, then use the CSV Player to iterate on your dashboard layout without hardware connected.
-- Use meaningful dataset titles and units -- they appear directly on dashboard widgets.
+- Use meaningful dataset titles and units — they appear directly on dashboard widgets.
 - Set appropriate Widget Min/Max for gauges and bars rather than relying on auto-scale.
 
 ## See Also
 
-- [Widget Reference](Widget-Reference.md) -- complete guide to all widget types.
-- [JavaScript API Reference](JavaScript-API.md) -- full parser function documentation.
-- [Data Flow](Data-Flow.md) -- how data moves through Serial Studio.
-- [Operation Modes](Operation-Modes.md) -- Project File, Device Sends JSON, and Quick Plot modes.
-- [Troubleshooting](Troubleshooting.md) -- solutions to common problems.
+- [Widget Reference](Widget-Reference.md) — complete guide to all widget types.
+- [JavaScript API Reference](JavaScript-API.md) — full parser function documentation.
+- [Data Flow](Data-Flow.md) — how data moves through Serial Studio.
+- [Operation Modes](Operation-Modes.md) — Project File, Device Sends JSON, and Quick Plot modes.
+- [Troubleshooting](Troubleshooting.md) — solutions to common problems.

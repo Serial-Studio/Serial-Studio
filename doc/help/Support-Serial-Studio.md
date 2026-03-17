@@ -2,7 +2,7 @@
 
 Serial Studio started as a passion project and has grown into a tool used by thousands of developers, engineers, educators, and makers worldwide. Despite that growth, it is still maintained by a single developer with no corporate funding or venture capital backing.
 
-Your support -- in any form -- directly funds development, testing on real hardware, documentation, and faster releases.
+Your support — in any form — directly funds development, testing on real hardware, documentation, and faster releases.
 
 ## Ways to Support the Project
 
@@ -42,10 +42,10 @@ Blog posts, tutorials, YouTube videos, and conference talks help spread the word
 
 ## Why It Matters
 
-Serial Studio is real software built during unpaid hours because it needs to exist. No marketing tricks, no tracking, no gimmicks -- just a tool built by someone who needs it too. Whether you are a student or a company, your support helps keep practical, privacy-respecting tools alive and improving.
+Serial Studio is real software built during unpaid hours because it needs to exist. No marketing tricks, no tracking, no gimmicks — just a tool built by someone who needs it too. Whether you are a student or a company, your support helps keep practical, privacy-respecting tools alive and improving.
 
 ## See Also
 
-- [License Agreement](License-Agreement.md) -- Dual-license details
-- [Earn a Pro License](Earn-Pro-License.md) -- Contribute for free access
-- [Buy Serial Studio Pro](https://store.serial-studio.com/) -- Purchase a Pro license
+- [License Agreement](License-Agreement.md) — Dual-license details
+- [Earn a Pro License](Earn-Pro-License.md) — Contribute for free access
+- [Buy Serial Studio Pro](https://store.serial-studio.com/) — Purchase a Pro license

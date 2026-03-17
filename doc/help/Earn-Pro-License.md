@@ -56,10 +56,10 @@ Contributions must be original, useful, and verifiable.
 
 ## Why This Program Exists
 
-Serial Studio is built and maintained by a single developer. Contributions of any kind -- visibility, hardware, translations, or code -- directly support the project's long-term sustainability. If you cannot pay, contribute. Help spread the word.
+Serial Studio is built and maintained by a single developer. Contributions of any kind — visibility, hardware, translations, or code — directly support the project's long-term sustainability. If you cannot pay, contribute. Help spread the word.
 
 ## See Also
 
-- [License Agreement](License-Agreement.md) -- Dual-license details
-- [Support Serial Studio](Support-Serial-Studio.md) -- Other ways to help
-- [Buy Serial Studio Pro](https://store.serial-studio.com/) -- Purchase a Pro license
+- [License Agreement](License-Agreement.md) — Dual-license details
+- [Support Serial Studio](Support-Serial-Studio.md) — Other ways to help
+- [Buy Serial Studio Pro](https://store.serial-studio.com/) — Purchase a Pro license

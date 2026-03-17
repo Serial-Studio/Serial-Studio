@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/rcc">
+        <file>markdown-viewer.html</file>
         <file>actions/Abscissa.svg</file>
         <file>actions/Accuracy.svg</file>
         <file>actions/Add properties.svg</file>

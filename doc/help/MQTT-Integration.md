@@ -41,9 +41,9 @@ Click the **MQTT** button in the toolbar. The MQTT Configuration Dialog opens wi
 
 Select the protocol version from the dropdown:
 
-- **MQTT 3.1** -- Legacy. Widest broker compatibility.
-- **MQTT 3.1.1** -- Recommended for most brokers. Clearer specification than 3.1.
-- **MQTT 5.0** -- Latest. Adds shared subscriptions, message expiry, reason codes, and extended authentication.
+- **MQTT 3.1** — Legacy. Widest broker compatibility.
+- **MQTT 3.1.1** — Recommended for most brokers. Clearer specification than 3.1.
+- **MQTT 5.0** — Latest. Adds shared subscriptions, message expiry, reason codes, and extended authentication.
 
 ### Mode Selection
 
@@ -58,13 +58,13 @@ Enter the topic in the **Topic Filter** field.
 
 **Subscriber examples:**
 
-- `sensors/temperature` -- Receive messages on this exact topic.
-- `sensors/+/temperature` -- Single-level wildcard. Matches `sensors/room1/temperature`, `sensors/room2/temperature`, etc.
-- `sensors/#` -- Multi-level wildcard. Matches everything under `sensors/`.
+- `sensors/temperature` — Receive messages on this exact topic.
+- `sensors/+/temperature` — Single-level wildcard. Matches `sensors/room1/temperature`, `sensors/room2/temperature`, etc.
+- `sensors/#` — Multi-level wildcard. Matches everything under `sensors/`.
 
 **Publisher examples:**
 
-- `mydevice/data` -- All frames are published to this single topic.
+- `mydevice/data` — All frames are published to this single topic.
 
 ### Connecting
 
@@ -74,7 +74,7 @@ After configuring the settings, click **Connect**. The button label changes to i
 
 ## Subscriber Mode
 
-In subscriber mode, Serial Studio subscribes to the configured topic filter as soon as the connection is established. Each message received from the broker is treated as a raw frame -- the same binary or text payload your device would send over serial or network.
+In subscriber mode, Serial Studio subscribes to the configured topic filter as soon as the connection is established. Each message received from the broker is treated as a raw frame — the same binary or text payload your device would send over serial or network.
 
 **Data format expectations:**
 
@@ -205,14 +205,14 @@ The QoS setting in Serial Studio applies to the will message. The subscription Q
 
 **Public test brokers (for development and testing only):**
 
-- `test.mosquitto.org` -- Port 1883 (plaintext), 8883 (TLS), 8080 (WebSocket)
-- `broker.hivemq.com` -- Port 1883 (plaintext)
+- `test.mosquitto.org` — Port 1883 (plaintext), 8883 (TLS), 8080 (WebSocket)
+- `broker.hivemq.com` — Port 1883 (plaintext)
 
 **Self-hosted:**
 
-- [Eclipse Mosquitto](https://mosquitto.org/) -- Lightweight, single-binary, easy to configure.
-- [EMQX](https://www.emqx.io/) -- Scalable, enterprise-grade, MQTT 5.0 support.
-- [VerneMQ](https://vernemq.com/) -- Distributed, fault-tolerant.
+- [Eclipse Mosquitto](https://mosquitto.org/) — Lightweight, single-binary, easy to configure.
+- [EMQX](https://www.emqx.io/) — Scalable, enterprise-grade, MQTT 5.0 support.
+- [VerneMQ](https://vernemq.com/) — Distributed, fault-tolerant.
 
 **Cloud services:**
 
@@ -225,8 +225,8 @@ The QoS setting in Serial Studio applies to the will message. The subscription Q
 
 ## See Also
 
-- [Communication Protocols](Communication-Protocols.md) -- Protocol overview and comparison
-- [Protocol Setup Guides](Protocol-Setup-Guides.md) -- Step-by-step MQTT setup
-- [Getting Started](Getting-Started.md) -- First-time setup tutorial
-- [Troubleshooting](Troubleshooting.md) -- General troubleshooting guide
-- [Pro vs Free Features](Pro-vs-Free.md) -- MQTT is a Pro feature
+- [Communication Protocols](Communication-Protocols.md) — Protocol overview and comparison
+- [Protocol Setup Guides](Protocol-Setup-Guides.md) — Step-by-step MQTT setup
+- [Getting Started](Getting-Started.md) — First-time setup tutorial
+- [Troubleshooting](Troubleshooting.md) — General troubleshooting guide
+- [Pro vs Free Features](Pro-vs-Free.md) — MQTT is a Pro feature

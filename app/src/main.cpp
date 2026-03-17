@@ -27,7 +27,6 @@
 // clang-format on
 
 #include <cstring>
-
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QFileOpenEvent>
@@ -44,6 +43,8 @@
 #  include <QFileInfo>
 #  include <QStandardPaths>
 #endif
+
+#include <QtWebEngineQuick>
 
 #include "API/Server.h"
 #include "AppInfo.h"
@@ -157,6 +158,7 @@ int main(int argc, char** argv)
 
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
+  QtWebEngineQuick::initialize();
 
   QApplication app(argc, argv);
 
