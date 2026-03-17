@@ -44,10 +44,12 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
+// clang-format off
 #ifdef Q_OS_WIN
-#  include <shlobj.h>
 #  include <windows.h>
+#  include <shlobj.h>
 #endif
+// clang-format on
 
 #ifdef Q_OS_LINUX
 #  include <QDir>
