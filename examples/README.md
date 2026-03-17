@@ -1,6 +1,6 @@
 # Serial Studio Examples
 
-This folder contains examples that show how to use Serial Studio with sensors, microcontrollers, and other programs. Each example includes source code, Serial Studio project files (`*.json` or `*.ssproj`), setup instructions, and screenshots.
+This folder contains examples that show how to use Serial Studio with sensors, microcontrollers, and other programs. Each example includes source code, Serial Studio project files (`*.ssproj`), setup instructions, and screenshots.
 
 **Legend:**
 - 🟢 **Beginner:** Simple setup, minimal hardware
@@ -16,7 +16,7 @@ Reads analog input data from an ADC and transmits it over serial in hexadecimal 
 
 **Contents:**
   - **HexadecimalADC.ino**: Arduino code for reading and transmitting ADC data
-  - **HexadecimalADC.json**: Serial Studio project file for hexadecimal visualization
+  - **HexadecimalADC.ssproj**: Serial Studio project file for hexadecimal visualization
   - **README.md**: Setup and usage instructions
   - **Screenshot**: Example view in Serial Studio
   
@@ -26,7 +26,7 @@ Reads analog input data from an ADC and transmits it over serial in hexadecimal 
 Reads signal quality data from an LTE modem and transmits it over Virtual Serial Port, MQTT, or UDP Socket.
 
 **Contents:**
-  - **lte.json**: Serial Studio project file for LTE signal quality visualization
+  - **LTE Modem.ssproj**: Serial Studio project file for LTE signal quality visualization
   - **lte_mqtt.py**: Python script for parsing data and sending over MQTT
   - **lte_serial.py**: Python script for parsing data and sending over Virtual Serial Port
   - **lte_udp.py**: Python script for parsing data and sending over UDP Socket
@@ -40,7 +40,7 @@ Simulates the Lorenz attractor (chaotic differential equations) and transmits x,
 
 **Contents:**
   - **LorenzAttractor.ino**: Arduino code for simulating and transmitting Lorenz data
-  - **LorenzAttractor.json**: Serial Studio project file with XY plot configuration
+  - **LorenzAttractor.ssproj**: Serial Studio project file with XY plot configuration
   - **README.md**: Comprehensive setup guide with mathematical background
   - **Screenshots**: Project setup and attractor visualization examples
 
@@ -51,7 +51,7 @@ Captures motion and orientation data from an MPU6050 accelerometer and gyroscope
 
 **Contents:**
   - **MPU6050.ino**: Arduino code for capturing and transmitting MPU6050 data
-  - **MPU6050.json**: Serial Studio project file for accelerometer, gyroscope, and temperature visualization
+  - **MPU6050.ssproj**: Serial Studio project file for accelerometer, gyroscope, and temperature visualization
   - **README.md**: Detailed setup instructions with wiring diagrams
   - **Screenshots**: Project setup and data visualization examples
 
@@ -72,7 +72,7 @@ Reads GPS data (latitude, longitude, altitude) from a GPS module and visualizes 
 
 **Contents:**
   - **TinyGPS.ino**: Arduino code for capturing and transmitting GPS data
-  - **TinyGPS.json**: Serial Studio project file with map widget configuration
+  - **TinyGPS.ssproj**: Serial Studio project file with map widget configuration
   - **README.md**: Comprehensive setup instructions for GPS module configuration
   - **Screenshots**: Map visualization and project setup examples
 

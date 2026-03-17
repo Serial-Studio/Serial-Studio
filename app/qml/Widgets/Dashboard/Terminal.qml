@@ -40,11 +40,15 @@ Item {
   property string widgetId
 
   //
-  // Super important to for shortcuts
+  // Super important for shortcuts & VT-100 keyboard input
   //
   onVisibleChanged: {
-    if (visible)
-      Qt.callLater(root.forceActiveFocus)
+    if (visible) {
+      if (root.vt100Interactive)
+        Qt.callLater(terminal.forceActiveFocus)
+      else
+        Qt.callLater(root.forceActiveFocus)
+    }
   }
 
   //
@@ -107,16 +111,22 @@ Item {
   }
 
   //
-  // Shortcuts
+  // When VT-100 emulation is active in read-write mode, disable clipboard
+  // shortcuts so that Ctrl+C / Ctrl+A reach keyPressEvent() as control
+  // codes (SIGINT, SOH).  Copy / Select All remain available via the
+  // right-click context menu.
   //
+  readonly property bool vt100Interactive: Cpp_Console_Handler.vt100Emulation
+                                           && Cpp_IO_Manager.readWrite
+
   Shortcut {
-    enabled: terminal.activeFocus
     onActivated: root.selectAll()
     sequences: [StandardKey.SelectAll]
+    enabled: terminal.activeFocus && !root.vt100Interactive
   } Shortcut {
     onActivated: root.copy()
     sequences: [StandardKey.Copy]
-    enabled: terminal.activeFocus
+    enabled: terminal.activeFocus && !root.vt100Interactive
   }
 
   //

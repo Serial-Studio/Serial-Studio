@@ -108,6 +108,22 @@ Item {
                  app.quitApplication()
                }
 
+    onVisibleChanged: {
+      if (!visible) {
+        settingsDialog.hide()
+        actionIconPicker.hide()
+        csvPlayer.hide()
+        mdf4Player.hide()
+        donateDialog.hide()
+        mqttConfiguration.hide()
+        aboutDialog.hide()
+        acknowledgementsDialog.hide()
+        fileTransmissionDialog.hide()
+        examplesBrowser.hide()
+        licenseDialog.hide()
+      }
+    }
+
     Dialogs.Settings {
       id: settingsDialog
     }
@@ -146,6 +162,11 @@ Item {
     DialogLoader {
       id: fileTransmissionDialog
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/FileTransmission.qml"
+    }
+
+    DialogLoader {
+      id: examplesBrowser
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExamplesBrowser.qml"
     }
   }
 
@@ -187,6 +208,7 @@ Item {
   function showProjectEditor()     { projectEditor.displayWindow() }
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
   function showFileTransmission()  { fileTransmissionDialog.activate() }
+  function showExamplesBrowser()   { examplesBrowser.activate() }
 
   //
   // Dialog display functions (commercial)

@@ -87,7 +87,7 @@ Item {
       right: parent.right
     }
 
-    ToolButton {
+    DashboardToolButton {
       id: _autoCenter
 
       onClicked: {
@@ -99,11 +99,11 @@ Item {
       }
       icon.width: 24
       icon.height: 24
-      icon.color: "transparent"
+      ToolTip.text: qsTr("Auto Center")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
     }
 
-    ToolButton {
+    DashboardToolButton {
       id: _plotTrajectory
 
       onClicked: {
@@ -115,7 +115,7 @@ Item {
       }
       icon.width: 24
       icon.height: 24
-      icon.color: "transparent"
+      ToolTip.text: qsTr("Plot Trajectory")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/poliline.svg"
     }
 
@@ -125,25 +125,25 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
+    DashboardToolButton {
       onClicked: {
         if (root.model)
           root.model.zoomLevel = root.model.zoomLevel + 1
       }
       icon.width: 24
       icon.height: 24
-      icon.color: "transparent"
+      ToolTip.text: qsTr("Zoom In")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-in.svg"
     }
 
-    ToolButton {
+    DashboardToolButton {
       onClicked: {
         if (root.model)
           root.model.zoomLevel = root.model.zoomLevel - 1
       }
       icon.width: 24
       icon.height: 24
-      icon.color: "transparent"
+      ToolTip.text: qsTr("Zoom Out")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-out.svg"
     }
 
@@ -153,7 +153,7 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
+    DashboardToolButton {
       id: _showWeather
 
       onClicked: {
@@ -167,11 +167,11 @@ Item {
       }
       icon.width: 24
       icon.height: 24
-      icon.color: "transparent"
+      ToolTip.text: qsTr("Show Weather")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/weather.svg"
     }
 
-    ToolButton {
+    DashboardToolButton {
       id: _showNasaWeather
 
       onClicked: {
@@ -185,7 +185,7 @@ Item {
       }
       icon.width: 24
       icon.height: 24
-      icon.color: "transparent"
+      ToolTip.text: qsTr("NASA Weather Overlay")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/nasa.svg"
     }
 

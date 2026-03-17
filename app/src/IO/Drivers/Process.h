@@ -137,6 +137,7 @@ private:
   void doClose();
   void pipeReadLoop();
 
+  static QStringList extraSearchPaths();
   static QString resolveExecutable(const QString& name);
 
 private:

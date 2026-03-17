@@ -43,6 +43,7 @@
 #include "MDF4/Export.h"
 #include "MDF4/Player.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/Examples.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
@@ -341,6 +342,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto ioBluetoothLE        = ioManager->bluetoothLE();
   auto ioFileTransmission   = &IO::FileTransmission::instance();
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
+  auto miscExamples         = &Misc::Examples::instance();
   auto frameParser          = &DataModel::FrameParser::instance();
 
   // Initialize commercial modules
@@ -434,6 +436,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);
   c->setContextProperty("Cpp_Misc_WorkspaceManager", miscWorkspaceManager);
+  c->setContextProperty("Cpp_Examples", miscExamples);
 
   // Register commercial C++ modules with QML
 #ifdef BUILD_COMMERCIAL

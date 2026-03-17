@@ -20,35 +20,31 @@
  */
 
 import QtQuick
+import QtQuick.Controls
 
-Loader {
+ToolButton {
   id: root
 
-  active: false
-  asynchronous: true
+  width: 24
+  height: 24
+  icon.width: 18
+  icon.height: 18
+  icon.color: "transparent"
 
-  property var dialog: null
-
-  function activate() {
-    if (!active)
-      active = true
-
-    else if (dialog) {
-      dialog.raise()
-      dialog.requestActivate()
-    }
+  ToolTip {
+    delay: 700
+    parent: root
+    text: root.ToolTip.text
+    x: _mouseArea.mouseX + 10
+    y: _mouseArea.mouseY + 10
+    visible: _mouseArea.containsMouse && root.ToolTip.text !== ""
   }
 
-  function hide() {
-    if (active && dialog)
-      dialog.hide()
-  }
+  MouseArea {
+    id: _mouseArea
 
-  onLoaded: {
-    root.dialog = item
-    dialog.show()
-    dialog.onClosing.connect(function() {
-      root.active = false;
-    })
+    hoverEnabled: true
+    anchors.fill: parent
+    acceptedButtons: Qt.NoButton
   }
 }

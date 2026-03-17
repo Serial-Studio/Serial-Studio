@@ -48,9 +48,9 @@ To visualize the data, Serial Studio needs to be properly configured to parse th
 
    Visit [Serial Studio's official website](https://serial-studio.github.io/) to download and install the software.
 
-2. **Open Serial Studio and Import `TinyGPS.json`**:
+2. **Open Serial Studio and Import `TinyGPS.ssproj`**:
 
-   Launch Serial Studio and load the `TinyGPS.json` file included in this project using the **Project Editor**. This file contains all necessary configurations for interpreting the data transmitted by the Arduino.
+   Launch Serial Studio and load the `TinyGPS.ssproj` file included in this project using the **Project Editor**. This file contains all necessary configurations for interpreting the data transmitted by the Arduino.
 
 #### To Create the Project from Scratch:
 

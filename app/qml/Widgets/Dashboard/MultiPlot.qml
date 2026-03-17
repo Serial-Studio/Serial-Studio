@@ -164,13 +164,9 @@ Item {
       right: parent.right
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
+    DashboardToolButton {
       checked: root.interpolate
-      icon.color: "transparent"
+      ToolTip.text: qsTr("Interpolate")
       onClicked: {
         root.interpolate = !root.interpolate
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolate", root.interpolate)
@@ -180,18 +176,14 @@ Item {
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         root.userShowLegends = !root.userShowLegends
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowLegends", root.userShowLegends)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: root.userShowLegends
+      ToolTip.text: qsTr("Show Legends")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/labels.svg"
     }
 
@@ -201,33 +193,25 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         root.userShowXLabel = !root.userShowXLabel
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowXLabel", root.userShowXLabel)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: root.userShowXLabel
+      ToolTip.text: qsTr("Show X Axis Label")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         root.userShowYLabel = !root.userShowYLabel
         root.updateWidgetOptions()
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "userShowYLabel", root.userShowYLabel)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: root.userShowYLabel
+      ToolTip.text: qsTr("Show Y Axis Label")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
     }
 
@@ -237,33 +221,23 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
       checked: plot.showCrosshairs
+      ToolTip.text: qsTr("Show Crosshair")
       onClicked: plot.showCrosshairs = !plot.showCrosshairs
       icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
+    DashboardToolButton {
       checked: !model.running
-      icon.color: "transparent"
+      ToolTip.text: model.running ? qsTr("Pause") : qsTr("Resume")
       icon.source: model.running?
                      "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/resume.svg"
       onClicked: model.running = !model.running
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         plot.xAxis.pan = 0
         plot.yAxis.pan = 0
@@ -274,20 +248,14 @@ Item {
         plot.yMin = Qt.binding(function() { return root.model.minY })
         plot.yMax = Qt.binding(function() { return root.model.maxY })
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       opacity: enabled ? 1 : 0.5
+      ToolTip.text: qsTr("Reset View")
       enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
       icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
+      ToolTip.text: qsTr("Axis Range Settings")
       icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
       onClicked: axisRangeDialog.openDialog(plot, root.model)
     }

@@ -104,16 +104,14 @@ Item {
       right: parent.right
     }
 
-    ToolButton {
+    DashboardToolButton {
       onClicked: {
         root.integrateValues = !root.integrateValues
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "integrateValues", root.integrateValues)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: root.integrateValues
       text: qsTr("Integrate Angles")
+      ToolTip.text: qsTr("Integrate Angles")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/integral.svg"
     }
 

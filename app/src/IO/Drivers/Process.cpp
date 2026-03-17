@@ -92,29 +92,28 @@ void IO::Drivers::Process::close()
 /**
  * @brief Non-virtual cleanup implementation shared by close() and ~Process().
  *
- * Launch mode: terminates the QProcess gracefully (SIGTERM / terminate()),
- * waits up to 2 s, then kills it forcefully if still running.
- *
- * NamedPipe mode: signals pipeReadLoop() to exit and joins m_pipeThread.
+ * Unconditionally cleans up resources for both Launch and NamedPipe modes
+ * so that switching modes between connections never leaks the previous
+ * mode's resources.
  */
 void IO::Drivers::Process::doClose()
 {
-  if (m_mode == Mode::Launch) {
-    if (m_process) {
-      m_process->disconnect();
-      m_process->terminate();
-      if (!m_process->waitForFinished(2000))
-        m_process->kill();
+  // Clean up Launch mode resources
+  if (m_process) {
+    m_process->disconnect();
+    m_process->terminate();
+    if (!m_process->waitForFinished(2000))
+      m_process->kill();
 
-      m_process->deleteLater();
-      m_process = nullptr;
-    }
-  } else {
-    m_pipeRunning = false;
-    if (m_pipeThread.isRunning()) {
-      m_pipeThread.quit();
-      m_pipeThread.wait();
-    }
+    m_process->deleteLater();
+    m_process = nullptr;
+  }
+
+  // Clean up NamedPipe mode resources
+  m_pipeRunning = false;
+  if (m_pipeThread.isRunning()) {
+    m_pipeThread.quit();
+    m_pipeThread.wait();
   }
 }
 
@@ -203,6 +202,8 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
 {
   (void)mode;
 
+  doClose();
+
   if (m_mode == Mode::Launch) {
     const QString resolved = resolveExecutable(m_executable);
     if (resolved.isEmpty()) {
@@ -216,6 +217,19 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
 
     m_process = new QProcess(this);
     m_process->setProcessChannelMode(QProcess::MergedChannels);
+
+    auto env                = QProcessEnvironment::systemEnvironment();
+    const QStringList extra = extraSearchPaths();
+    if (!extra.isEmpty()) {
+#  ifdef Q_OS_WIN
+      const QChar sep = QLatin1Char(';');
+#  else
+      const QChar sep = QLatin1Char(':');
+#  endif
+      const QString current = env.value(QStringLiteral("PATH"));
+      env.insert(QStringLiteral("PATH"), current + sep + extra.join(sep));
+      m_process->setProcessEnvironment(env);
+    }
 
     connect(m_process, &QProcess::readyRead, this, &Process::onReadyRead);
     connect(m_process,
@@ -349,6 +363,7 @@ void IO::Drivers::Process::setArguments(const QString& args)
     m_arguments = args;
     m_settings.setValue("ProcessDriver/arguments", args);
     Q_EMIT argumentsChanged();
+    Q_EMIT configurationChanged();
   }
 }
 
@@ -363,6 +378,7 @@ void IO::Drivers::Process::setWorkingDir(const QString& dir)
     m_workingDir = dir;
     m_settings.setValue("ProcessDriver/workingDir", dir);
     Q_EMIT workingDirChanged();
+    Q_EMIT configurationChanged();
   }
 }
 
@@ -730,7 +746,45 @@ void IO::Drivers::Process::pipeReadLoop()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Resolves a bare executable name against the system PATH.
+ * @brief Returns common executable directories not always present in PATH.
+ *
+ * Includes platform-specific locations such as Homebrew paths on macOS,
+ * snap/flatpak/local paths on Linux, and common Windows program directories.
+ */
+QStringList IO::Drivers::Process::extraSearchPaths()
+{
+  QStringList paths;
+
+#  ifdef Q_OS_MACOS
+  paths << QStringLiteral("/opt/homebrew/bin") << QStringLiteral("/opt/homebrew/sbin")
+        << QStringLiteral("/usr/local/bin") << QStringLiteral("/usr/local/sbin");
+#  elif defined(Q_OS_LINUX)
+  paths << QStringLiteral("/usr/local/bin") << QStringLiteral("/usr/local/sbin")
+        << QStringLiteral("/snap/bin") << QStringLiteral("/var/lib/flatpak/exports/bin");
+
+  const QString home = QDir::homePath();
+  if (!home.isEmpty()) {
+    paths << home + QStringLiteral("/.local/bin")
+          << home + QStringLiteral("/.local/share/flatpak/exports/bin");
+  }
+#  elif defined(Q_OS_WIN)
+  const QString localAppData = qEnvironmentVariable("LOCALAPPDATA");
+  const QString userProfile  = qEnvironmentVariable("USERPROFILE");
+  if (!localAppData.isEmpty())
+    paths << localAppData + QStringLiteral("\\Microsoft\\WindowsApps");
+
+  if (!userProfile.isEmpty()) {
+    paths << userProfile + QStringLiteral("\\scoop\\shims")
+          << userProfile + QStringLiteral("\\AppData\\Local\\Programs\\Python\\Python3\\Scripts");
+  }
+#  endif
+
+  return paths;
+}
+
+/**
+ * @brief Resolves a bare executable name against the system PATH and common
+ *        platform-specific directories.
  *
  * @return The full path, or an empty string when nothing is found.
  */
@@ -739,7 +793,13 @@ QString IO::Drivers::Process::resolveExecutable(const QString& name)
   if (QFileInfo::exists(name))
     return name;
 
-  return QStandardPaths::findExecutable(name);
+  // Try system PATH first
+  const QString found = QStandardPaths::findExecutable(name);
+  if (!found.isEmpty())
+    return found;
+
+  // Try platform-specific extra paths
+  return QStandardPaths::findExecutable(name, extraSearchPaths());
 }
 
 //--------------------------------------------------------------------------------------------------

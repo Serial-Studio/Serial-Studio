@@ -46,9 +46,9 @@ To visualize the data, Serial Studio needs to be configured to parse the incomin
 
    Visit [Serial Studio's official website](https://serial-studio.github.io/) to download and install the software.
 
-2. **Open Serial Studio and Import `MPU6050.json`**:
+2. **Open Serial Studio and Import `MPU6050.ssproj`**:
 
-   Launch Serial Studio and load the `MPU6050.json` file included in this project using the **Project Editor**. This file contains all necessary configurations for interpreting the data transmitted by the Arduino.
+   Launch Serial Studio and load the `MPU6050.ssproj` file included in this project using the **Project Editor**. This file contains all necessary configurations for interpreting the data transmitted by the Arduino.
 
 #### To Create the Project from Scratch:
 

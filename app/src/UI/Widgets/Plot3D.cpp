@@ -63,6 +63,8 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_dirtyData(true)
   , m_dirtyGrid(true)
   , m_dirtyCameraIndicator(true)
+  , m_targetWorldScale(1.0)
+  , m_centerInitialized(false)
 {
   // Read settings
   m_anaglyph           = m_settings.value("Plot3D_Anaglyph", false).toBool();
@@ -108,10 +110,10 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
           this,
           &Widgets::Plot3D::onThemeChanged);
 
-  // Set zoom automatically
-  connect(this, &Widgets::Plot3D::rangeChanged, this, [=, this] {
-    if (m_worldScale < idealWorldScale())
-      setWorldScale(idealWorldScale());
+  // Set initial zoom on first data arrival
+  connect(this, &Widgets::Plot3D::rangeChanged, this, [this] {
+    if (!m_centerInitialized)
+      m_targetWorldScale = idealWorldScale();
   });
 }
 
@@ -295,6 +297,10 @@ double Widgets::Plot3D::cameraOffsetZ() const
 
 /**
  * @brief Returns the ideal zoom level for the plot.
+ *
+ * Uses the largest single-axis extent so every axis fits within the visible
+ * grid (10 steps on each side). The grid step is snapped to a 1-2-5 sequence
+ * so axis labels stay clean.
  */
 double Widgets::Plot3D::idealWorldScale() const
 {
@@ -302,29 +308,24 @@ double Widgets::Plot3D::idealWorldScale() const
   const double dy = m_maxPoint.y() - m_minPoint.y();
   const double dz = m_maxPoint.z() - m_minPoint.z();
 
-  const double distance        = qMax(1e-9, std::sqrt(dx * dx + dy * dy + dz * dz));
-  const double targetWorldSize = distance * 2.0;
-  const double targetStep      = targetWorldSize / 10.0;
+  const double maxExtent = qMax(dz, qMax(dx, dy));
+  if (maxExtent < 1e-9)
+    return 1.0;
 
-  const double estimatedScale = 1.0 / targetStep;
-  const int base              = static_cast<int>(std::log(estimatedScale) / std::log(0.95));
+  const double targetStep = (maxExtent * 1.2) / 10.0;
+  const double exponent   = std::floor(std::log10(targetStep));
+  const double base       = std::pow(10.0, exponent);
+  double snappedStep;
+  if (targetStep <= base)
+    snappedStep = base;
+  else if (targetStep <= base * 2.0)
+    snappedStep = base * 2.0;
+  else if (targetStep <= base * 5.0)
+    snappedStep = base * 5.0;
+  else
+    snappedStep = base * 10.0;
 
-  const int minIndex = base - 20;
-  const int maxIndex = base + 20;
-
-  double scale = 1e-9;
-  for (int i = minIndex; i <= maxIndex; ++i) {
-    scale                          = std::pow(0.95, i);
-    const double step              = gridStep(scale);
-    const double totalVisibleWorld = 10.0 * step;
-
-    if (totalVisibleWorld >= targetWorldSize) {
-      scale = qBound(1e-9, scale, 1e9);
-      break;
-    }
-  }
-
-  return scale;
+  return qBound(1e-9, 1.0 / snappedStep, 1e9);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,7 +433,7 @@ const QSize& Widgets::Plot3D::widgetSize() const
  */
 void Widgets::Plot3D::setWorldScale(const double z)
 {
-  auto limited = qBound(idealWorldScale(), z, 10e9);
+  auto limited = qBound(1e-9, z, 1e9);
   if (m_worldScale != limited) {
     m_worldScale = limited;
     markDirty();
@@ -743,23 +744,35 @@ void Widgets::Plot3D::drawData()
   if (data.size() <= 0)
     return;
 
-  // Get min/max values
-  QVector3D min, max;
+  // Compute bounding box from current visible points only
+  QVector3D min = data.front();
+  QVector3D max = data.front();
   for (const auto& p : data) {
-    min.setX(qMin(m_minPoint.x(), p.x()));
-    min.setY(qMin(m_minPoint.y(), p.y()));
-    min.setZ(qMin(m_minPoint.z(), p.z()));
-    max.setX(qMax(m_maxPoint.x(), p.x()));
-    max.setY(qMax(m_maxPoint.y(), p.y()));
-    max.setZ(qMax(m_maxPoint.z(), p.z()));
+    min.setX(qMin(min.x(), p.x()));
+    min.setY(qMin(min.y(), p.y()));
+    min.setZ(qMin(min.z(), p.z()));
+    max.setX(qMax(max.x(), p.x()));
+    max.setY(qMax(max.y(), p.y()));
+    max.setZ(qMax(max.z(), p.z()));
   }
 
-  // Min/max values changed
+  // Update bounding box & target center
   if (m_minPoint != min || m_maxPoint != max) {
-    m_minPoint = min;
-    m_maxPoint = max;
+    m_minPoint     = min;
+    m_maxPoint     = max;
+    m_targetCenter = (min + max) * 0.5f;
     Q_EMIT rangeChanged();
   }
+
+  // Snap center & zoom on first data, then only smooth-track the center
+  if (!m_centerInitialized) {
+    m_centerPoint       = m_targetCenter;
+    m_worldScale        = m_targetWorldScale;
+    m_centerInitialized = true;
+  }
+
+  else
+    m_centerPoint += (m_targetCenter - m_centerPoint) * 0.08f;
 
   // Initialize camera matrix
   QMatrix4x4 matrix;
@@ -776,12 +789,14 @@ void Widgets::Plot3D::drawData()
     eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
     eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.first.scale(m_worldScale);
+    eyes.first.translate(-m_centerPoint);
 
     // Apply world transformations for second eye
     eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
     eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
     eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.second.scale(m_worldScale);
+    eyes.second.translate(-m_centerPoint);
 
     // Render data
     m_plotImg[0] = renderData(eyes.first, data);
@@ -795,6 +810,7 @@ void Widgets::Plot3D::drawData()
     matrix.rotate(m_cameraAngleY, 0, 1, 0);
     matrix.rotate(m_cameraAngleZ, 0, 0, 1);
     matrix.scale(m_worldScale);
+    matrix.translate(-m_centerPoint);
 
     // Render data
     m_plotImg[0] = renderData(matrix, data);
@@ -827,12 +843,14 @@ void Widgets::Plot3D::drawGrid()
     eyes.first.rotate(m_cameraAngleY, 0, 1, 0);
     eyes.first.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.first.scale(m_worldScale);
+    eyes.first.translate(-m_centerPoint);
 
     // Apply world transformations for second eye
     eyes.second.rotate(m_cameraAngleX, 1, 0, 0);
     eyes.second.rotate(m_cameraAngleY, 0, 1, 0);
     eyes.second.rotate(m_cameraAngleZ, 0, 0, 1);
     eyes.second.scale(m_worldScale);
+    eyes.second.translate(-m_centerPoint);
 
     // Render grid
     m_gridImg[0] = renderGrid(eyes.first);
@@ -846,6 +864,7 @@ void Widgets::Plot3D::drawGrid()
     matrix.rotate(m_cameraAngleY, 0, 1, 0);
     matrix.rotate(m_cameraAngleZ, 0, 0, 1);
     matrix.scale(m_worldScale);
+    matrix.translate(-m_centerPoint);
 
     // Render grid
     m_gridImg[0] = renderGrid(matrix);
@@ -1126,31 +1145,33 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
   QPainter painter(&img);
   painter.setRenderHint(QPainter::Antialiasing, true);
 
-  // Obtain grid interval
+  // Obtain grid interval and snap origin to nearest grid step
   const double numSteps = 10;
   const double step     = gridStep();
   const double l        = numSteps * step;
+  const float cx        = std::round(m_centerPoint.x() / step) * step;
+  const float cy        = std::round(m_centerPoint.y() / step) * step;
 
-  // Construct grid lines
+  // Construct grid lines centered on snapped data centroid
   QVector<QPair<QVector3D, QVector3D>> gridLines;
   for (int i = -numSteps; i <= numSteps; ++i) {
     if (i == 0)
       continue;
 
-    float y       = i * step;
-    float x       = i * step;
-    const auto x1 = QVector3D(x, l, 0);
-    const auto x2 = QVector3D(x, -l, 0);
-    const auto y1 = QVector3D(l, y, 0);
-    const auto y2 = QVector3D(-l, y, 0);
+    float x       = cx + i * step;
+    float y       = cy + i * step;
+    const auto x1 = QVector3D(x, cy + l, 0);
+    const auto x2 = QVector3D(x, cy - l, 0);
+    const auto y1 = QVector3D(cx + l, y, 0);
+    const auto y2 = QVector3D(cx - l, y, 0);
 
     gridLines.append({x1, x2});
     gridLines.append({y1, y2});
   }
 
-  // Construct axis lines
-  QPair<QVector3D, QVector3D> xAxis = {QVector3D(-l, 0, 0), QVector3D(l, 0, 0)};
-  QPair<QVector3D, QVector3D> yAxis = {QVector3D(0, -l, 0), QVector3D(0, l, 0)};
+  // Construct axis lines through snapped center
+  QPair<QVector3D, QVector3D> xAxis = {QVector3D(cx - l, cy, 0), QVector3D(cx + l, cy, 0)};
+  QPair<QVector3D, QVector3D> yAxis = {QVector3D(cx, cy - l, 0), QVector3D(cx, cy + l, 0)};
 
   // Render horizontal & vertical lines
   auto color = m_gridMinorColor;

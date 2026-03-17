@@ -25,7 +25,7 @@
 #
 # --- Use In Serial Studio ---
 # - Set input source to UDP on port 9000
-# - Load the hydrogen.json project from the examples.
+# - Load the Hydrogen.ssproj project from the examples.
 # - Plot combinations like:
 #     x vs y        → 2D orbital projection
 #     x vs psi²     → Electron probability across space

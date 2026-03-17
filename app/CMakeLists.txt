@@ -195,6 +195,7 @@ set(SOURCES
   src/Misc/ModuleManager.cpp
   src/Misc/TimerEvents.cpp
   src/Misc/WorkspaceManager.cpp
+  src/Misc/Examples.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
@@ -269,6 +270,7 @@ set(HEADERS
   src/Misc/TimerEvents.h
   src/Misc/Translator.h
   src/Misc/WorkspaceManager.h
+  src/Misc/Examples.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
@@ -356,6 +358,7 @@ set(QML_SOURCES
   qml/Dialogs/IconPicker.qml
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
+  qml/Dialogs/ExamplesBrowser.qml
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
   qml/MainWindow/Panes/Dashboard/DashboardLayout.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
@@ -385,6 +388,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/Accelerometer.qml
   qml/Widgets/Dashboard/Bar.qml
   qml/Widgets/Dashboard/Compass.qml
+  qml/Widgets/Dashboard/DashboardToolButton.qml
   qml/Widgets/Dashboard/DataGrid.qml
   qml/Widgets/Dashboard/FFTPlot.qml
   qml/Widgets/Dashboard/Gauge.qml

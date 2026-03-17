@@ -234,6 +234,10 @@ private:
 
   QVector3D m_minPoint;
   QVector3D m_maxPoint;
+  QVector3D m_centerPoint;
+  QVector3D m_targetCenter;
+  double m_targetWorldScale;
+  bool m_centerInitialized;
 
   QSize m_size;
   QSettings m_settings;

@@ -99,11 +99,11 @@ Item {
   Shortcut {
     enabled: windowRoot.focused
     sequences: [StandardKey.ZoomIn]
-    onActivated: model.worldScale += 0.1
+    onActivated: model.worldScale *= 1.2
   } Shortcut {
     enabled: windowRoot.focused
     sequences: [StandardKey.ZoomOut]
-    onActivated: model.worldScale -= 0.1
+    onActivated: model.worldScale /= 1.2
   }
 
   //
@@ -187,19 +187,15 @@ Item {
       right: parent.right
     }
 
-    ToolButton {
+    DashboardToolButton {
       id: _interpolate
 
-      width: 24
-      height: 24
       onClicked: {
         model.interpolationEnabled = !model.interpolationEnabled
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "interpolationEnabled", model.interpolationEnabled)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: model.interpolationEnabled
+      ToolTip.text: qsTr("Interpolate")
       icon.source: model.interpolationEnabled ?
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-on.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/interpolate-off.svg"
@@ -211,31 +207,23 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         model.orbitNavigation = true
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", true)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: model.orbitNavigation
+      ToolTip.text: qsTr("Orbit Navigation")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/orbit.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         model.orbitNavigation = false
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "orbitNavigation", false)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: !model.orbitNavigation
+      ToolTip.text: qsTr("Pan Navigation")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/pan.svg"
     }
 
@@ -245,42 +233,26 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
+      ToolTip.text: qsTr("Orthogonal View")
       onClicked: animateToView(300, 0, 225, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/orthogonal_view.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
+      ToolTip.text: qsTr("Top View")
       onClicked: animateToView(360, 0, 360, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/top_view.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
+      ToolTip.text: qsTr("Left View")
       onClicked: animateToView(270, 0, 270, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/left_view.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
+      ToolTip.text: qsTr("Front View")
       onClicked: animateToView(270, 0, 180, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/front_view.svg"
     }
@@ -291,34 +263,26 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         model.anaglyphEnabled = !model.anaglyphEnabled
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "anaglyphEnabled", model.anaglyphEnabled)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       checked: model.anaglyphEnabled
+      ToolTip.text: qsTr("Anaglyph 3D")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/anaglyph.svg"
     }
 
-    ToolButton {
+    DashboardToolButton {
       id: _anaglyph
 
-      width: 24
-      height: 24
       onClicked: {
         model.invertEyePositions = !model.invertEyePositions
         Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "invertEyePositions", model.invertEyePositions)
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       enabled: model.anaglyphEnabled
       checked: model.invertEyePositions
+      ToolTip.text: qsTr("Invert Eye Positions")
       opacity: model.anaglyphEnabled ? 1 : 0
       icon.source: "qrc:/rcc/icons/dashboard-buttons/invert.svg"
     }

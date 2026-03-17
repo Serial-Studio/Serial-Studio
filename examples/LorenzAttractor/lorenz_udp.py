@@ -19,7 +19,7 @@ Serial Studio Configuration:
 1. Open Serial Studio
 2. Select Network (UDP) as the data source
 3. Set port to 9000
-4. Load the LorenzAttractor.json project file
+4. Load the LorenzAttractor.ssproj project file
 5. Start receiving data
 
 Author: Alex Spataru

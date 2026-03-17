@@ -163,11 +163,9 @@ Item {
       right: parent.right
     }
 
-    ToolButton {
-      icon.width: 18
-      icon.height: 18
+    DashboardToolButton {
       text: qsTr("Settings")
-      icon.color: "transparent"
+      ToolTip.text: qsTr("Settings")
       onClicked: configDialog.openDialog(root.model)
       icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
     }

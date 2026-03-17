@@ -135,14 +135,10 @@ Item {
       right: parent.right
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
+    DashboardToolButton {
       opacity: enabled ? 1 : 0.5
-      icon.color: "transparent"
       checked: root.showAreaUnderPlot
+      ToolTip.text: qsTr("Show Area Under Plot")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/area.svg"
 
       onClicked: {
@@ -157,13 +153,9 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
       checked: root.userShowXLabel
+      ToolTip.text: qsTr("Show X Axis Label")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/x.svg"
 
       onClicked: {
@@ -173,13 +165,9 @@ Item {
       }
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
       checked: root.userShowYLabel
+      ToolTip.text: qsTr("Show Y Axis Label")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/y.svg"
 
       onClicked: {
@@ -195,33 +183,23 @@ Item {
       color: Cpp_ThemeManager.colors["widget_border"]
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
       checked: plot.showCrosshairs
+      ToolTip.text: qsTr("Show Crosshair")
       onClicked: plot.showCrosshairs = !plot.showCrosshairs
       icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
+    DashboardToolButton {
       checked: !model.running
-      icon.color: "transparent"
+      ToolTip.text: model.running ? qsTr("Pause") : qsTr("Resume")
       icon.source: model.running?
                      "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/resume.svg"
       onClicked: model.running = !model.running
     }
 
-    ToolButton {
-      width: 24
-      height: 24
+    DashboardToolButton {
       onClicked: {
         plot.xAxis.pan = 0
         plot.yAxis.pan = 0
@@ -232,20 +210,14 @@ Item {
         plot.yMin = Qt.binding(function() { return root.model.minY })
         plot.yMax = Qt.binding(function() { return root.model.maxY })
       }
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
       opacity: enabled ? 1 : 0.5
+      ToolTip.text: qsTr("Reset View")
       enabled: plot.xAxis.zoom !== 1 || plot.yAxis.zoom !== 1
       icon.source: "qrc:/rcc/icons/dashboard-buttons/return.svg"
     }
 
-    ToolButton {
-      width: 24
-      height: 24
-      icon.width: 18
-      icon.height: 18
-      icon.color: "transparent"
+    DashboardToolButton {
+      ToolTip.text: qsTr("Axis Range Settings")
       icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
       onClicked: axisRangeDialog.openDialog(plot, root.model)
     }

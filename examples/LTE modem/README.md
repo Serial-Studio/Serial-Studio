@@ -58,7 +58,7 @@ Python was used to receive, process and generate data frames.
 - Run **Serial Studio**
 - Select **DEVICE SETUP** &rarr; I/O Interface: Serial Port
 - Select **FRAME PARSING** &rarr; Parse via JSON Project File
-- Select **Project file** &rarr; `lte.json`
+- Select **Project file** &rarr; `LTE Modem.ssproj`
 - Manually enter **COM Port** &rarr; `/tmp/ttyV0` and press Enter
 - Select **Baud Rate** &rarr; 9600
 - Click **Connect** in upper right corner  
@@ -98,7 +98,7 @@ After get first frame of data **Serial Studio** will automatic open dashboard wi
 
 - Run **Serial Studio**
 - Select **FRAME PARSING** &rarr; Parse via JSON Project File
-- Select **Project file** &rarr; `lte.json`
+- Select **Project file** &rarr; `LTE Modem.ssproj`
 - Click **MQTT** in the top bar
 - Set **Host** &rarr; 127.0.0.1
 - Set **Port** &rarr; 1883
@@ -127,7 +127,7 @@ python lte_udp.py
 - Run **Serial Studio**
 - Select **DEVICE SETUP** &rarr; I/O Interface: Network Socket
 - Select **FRAME PARSING** &rarr; Parse via JSON Project File
-- Select **Project file** &rarr; `lte.json`
+- Select **Project file** &rarr; `LTE Modem.ssproj`
 - Select **Socket type** &rarr; UDP
 - Set **Remote address** &rarr; 127.0.0.1
 - Set **Local port** &rarr; 5005

@@ -1,0 +1,796 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020–2025 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ *
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ */
+
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Effects
+
+import "../Widgets"
+
+SmartDialog {
+  id: root
+
+  title: qsTr("Examples Browser")
+
+  //
+  // Track page transitions
+  //
+  property bool showDetail: Cpp_Examples.selectedIndex >= 0
+
+  //
+  // Reset state on close
+  //
+  onClosing: {
+    Cpp_Examples.selectedIndex = -1
+    Cpp_Examples.searchFilter = ""
+  }
+
+  contentItem: ColumnLayout {
+    spacing: 8
+    anchors.centerIn: parent
+
+    //
+    // Search bar (grid page only)
+    //
+    Rectangle {
+      radius: 2
+      border.width: 1
+      Layout.fillWidth: true
+      Layout.minimumWidth: 860
+      Layout.maximumWidth: 860
+      visible: !root.showDetail
+      implicitHeight: searchField.implicitHeight + 8
+      color: Cpp_ThemeManager.colors["groupbox_background"]
+      border.color: searchField.activeFocus ? Cpp_ThemeManager.colors["highlight"] :
+                                              Cpp_ThemeManager.colors["groupbox_border"]
+
+      TextField {
+        id: searchField
+
+        background: Item {}
+        anchors.fill: parent
+        anchors.leftMargin: 4
+        font: Cpp_Misc_CommonFonts.uiFont
+        rightPadding: searchIcon.width + 16
+        placeholderText: qsTr("Search in Examples...")
+        onTextChanged: Cpp_Examples.searchFilter = text
+
+        Button {
+          id: searchIcon
+
+          opacity: 0.8
+          icon.width: 12
+          icon.height: 12
+          background: Item {}
+          anchors.rightMargin: 4
+          anchors.right: parent.right
+          anchors.verticalCenter: parent.verticalCenter
+          icon.color: Cpp_ThemeManager.colors["button_text"]
+          icon.source: "qrc:/rcc/icons/buttons/search.svg"
+        }
+      }
+    }
+
+    //
+    // Flat toolbar (detail page only)
+    //
+    Rectangle {
+      radius: 2
+      border.width: 1
+      Layout.fillWidth: true
+      Layout.minimumWidth: 860
+      Layout.maximumWidth: 860
+      visible: root.showDetail
+      implicitHeight: toolbarRow.implicitHeight + 8
+      color: Cpp_ThemeManager.colors["groupbox_background"]
+      border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+      RowLayout {
+        id: toolbarRow
+
+        spacing: 4
+        anchors.fill: parent
+        anchors.margins: 4
+
+        ToolButton {
+          icon.width: 18
+          icon.height: 18
+          text: qsTr("Back")
+          background: Item {}
+          onClicked: Cpp_Examples.selectedIndex = -1
+          icon.color: Cpp_ThemeManager.colors["text"]
+          icon.source: "qrc:/rcc/icons/buttons/backward.svg"
+
+          HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+          }
+        }
+
+        Rectangle {
+          implicitWidth: 1
+          Layout.topMargin: 4
+          Layout.bottomMargin: 4
+          Layout.fillHeight: true
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        Item {
+          Layout.fillWidth: true
+        }
+
+        Label {
+          elide: Text.ElideRight
+          Layout.maximumWidth: 380
+          text: Cpp_Examples.selectedExample.title || ""
+          font: Cpp_Misc_CommonFonts.customUiFont(1.0, true)
+        }
+
+        Label {
+          color: "#f39c12"
+          text: qsTr("Pro")
+          font: Cpp_Misc_CommonFonts.boldUiFont
+          visible: Cpp_Examples.selectedExample.requiresPro || false
+        }
+
+        Item {
+          Layout.fillWidth: true
+        }
+
+        Rectangle {
+          implicitWidth: 1
+          Layout.topMargin: 4
+          Layout.bottomMargin: 4
+          Layout.fillHeight: true
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        ToolButton {
+          icon.width: 18
+          icon.height: 18
+          background: Item {}
+          text: qsTr("Download && Open")
+          enabled: !Cpp_Examples.loading
+          onClicked: Cpp_Examples.downloadExample()
+          icon.color: Cpp_ThemeManager.colors["text"]
+          icon.source: "qrc:/rcc/icons/buttons/open.svg"
+
+          HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+          }
+        }
+
+        ToolButton {
+          icon.width: 18
+          icon.height: 18
+          background: Item {}
+          text: qsTr("View on GitHub")
+          icon.color: Cpp_ThemeManager.colors["text"]
+          icon.source: "qrc:/rcc/icons/buttons/website.svg"
+          onClicked: {
+            var id = Cpp_Examples.selectedExample.id || ""
+            if (id !== "")
+              Qt.openUrlExternally(
+                    "https://github.com/Serial-Studio/Serial-Studio/tree/master/examples/"
+                    + encodeURIComponent(id))
+          }
+
+          HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+          }
+        }
+      }
+    }
+
+    //
+    // Download progress bar
+    //
+    ProgressBar {
+      to: 1
+      from: 0
+      Layout.fillWidth: true
+      value: Cpp_Examples.downloadProgress
+      visible: Cpp_Examples.loading && Cpp_Examples.downloadProgress > 0
+    }
+
+    //
+    // Page container with slide animation
+    //
+    Item {
+      id: pageContainer
+
+      clip: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      Layout.minimumWidth: 860
+      Layout.maximumWidth: 860
+      Layout.minimumHeight: 520
+      Layout.maximumHeight: 520
+
+      //
+      // Page 0: Grid view
+      //
+      Item {
+        id: gridPage
+
+        width: parent.width
+        height: parent.height
+        x: root.showDetail ? -width : 0
+
+        Behavior on x {
+          NumberAnimation {
+            duration: 300
+            easing.type: Easing.OutCubic
+          }
+        }
+
+        Rectangle {
+          radius: 2
+          border.width: 1
+          anchors.fill: parent
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        ScrollView {
+          anchors.fill: parent
+          anchors.margins: 8
+
+          GridView {
+            id: gridView
+
+            cellWidth: 210
+            cellHeight: 194
+            clip: true
+            model: Cpp_Examples.examples
+            anchors.topMargin: 0
+            anchors.leftMargin: 2
+
+            delegate: Rectangle {
+              id: card
+
+              width: 200
+              height: 186
+              radius: 6
+              color: cardMouse.containsMouse
+                       ? Cpp_ThemeManager.colors["highlight"]
+                       : Cpp_ThemeManager.colors["base"]
+              border.width: 1
+              border.color: cardMouse.containsMouse
+                              ? Cpp_ThemeManager.colors["accent"]
+                              : Cpp_ThemeManager.colors["mid"]
+
+              Behavior on color {
+                ColorAnimation { duration: 150 }
+              }
+
+              Behavior on border.color {
+                ColorAnimation { duration: 150 }
+              }
+
+              ColumnLayout {
+                spacing: 4
+                anchors.fill: parent
+                anchors.margins: 6
+
+                //
+                // Screenshot or gradient placeholder
+                //
+                Item {
+                  Layout.fillWidth: true
+                  Layout.fillHeight: true
+
+                  Rectangle {
+                    id: thumbRect
+
+                    anchors.fill: parent
+                    radius: 4
+                    clip: true
+                    color: "transparent"
+
+                    gradient: Gradient {
+                      orientation: Gradient.Horizontal
+                      GradientStop {
+                        position: 0
+                        color: {
+                          var p = [
+                            "#2c3e50", "#1a5276", "#1e8449", "#7d3c98",
+                            "#a04000", "#1b4f72", "#196f3d", "#6c3483",
+                            "#922b21", "#117a65", "#7e5109", "#2e4053",
+                            "#1f618d", "#239b56", "#884ea0", "#ba4a00",
+                            "#2471a3", "#28b463", "#a569bd", "#cb4335",
+                            "#148f77", "#b9770e", "#5b2c6f", "#d35400"
+                          ]
+                          return p[index % p.length]
+                        }
+                      }
+                      GradientStop {
+                        position: 1
+                        color: {
+                          var p = [
+                            "#1a252f", "#0e2f43", "#12522c", "#4a2460",
+                            "#612600", "#0f2d42", "#0e4124", "#3f1f4e",
+                            "#561914", "#0a493d", "#4b3006", "#1b2631",
+                            "#133a54", "#155d34", "#512e60", "#702a00",
+                            "#154360", "#186a3b", "#633974", "#7b281e",
+                            "#0c5647", "#6e4708", "#361842", "#7e3300"
+                          ]
+                          return p[index % p.length]
+                        }
+                      }
+                    }
+
+                    Image {
+                      id: thumbImg
+
+                      anchors.fill: parent
+                      fillMode: Image.PreserveAspectCrop
+                      asynchronous: true
+                      visible: status === Image.Ready
+                      source: modelData.hasScreenshot
+                                ? "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/examples/"
+                                  + encodeURIComponent(modelData.id)
+                                  + "/doc/screenshot.png"
+                                : ""
+                    }
+
+                    Label {
+                      anchors.centerIn: parent
+                      text: modelData.title.charAt(0)
+                      visible: !modelData.hasScreenshot
+                      opacity: 0.6
+                      color: "#ffffff"
+                      font: Cpp_Misc_CommonFonts.customMonoFont(2.5, true)
+                    }
+                  }
+
+                  //
+                  // Hover description overlay (slides up from bottom)
+                  //
+                  Item {
+                    id: hoverOverlay
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    height: parent.height
+                    clip: true
+
+                    Rectangle {
+                      id: overlayPanel
+
+                      width: parent.width
+                      height: parent.height
+                      radius: 4
+                      opacity: 0.9
+                      y: cardMouse.containsMouse ? 0 : parent.height
+                      color: Cpp_ThemeManager.colors["groupbox_background"]
+                      border.width: 1
+                      border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+                      Behavior on y {
+                        NumberAnimation {
+                          duration: 250
+                          easing.type: Easing.OutCubic
+                        }
+                      }
+
+                      ColumnLayout {
+                        spacing: 4
+                        anchors.fill: parent
+                        anchors.margins: 8
+
+                        Label {
+                          text: modelData.title
+                          Layout.fillWidth: true
+                          elide: Text.ElideRight
+                          color: Cpp_ThemeManager.colors["text"]
+                          font: Cpp_Misc_CommonFonts.boldUiFont
+                        }
+
+                        Rectangle {
+                          implicitHeight: 1
+                          Layout.fillWidth: true
+                          color: Cpp_ThemeManager.colors["groupbox_border"]
+                        }
+
+                        Label {
+                          text: modelData.description
+                          Layout.fillWidth: true
+                          Layout.fillHeight: true
+                          wrapMode: Text.WordWrap
+                          elide: Text.ElideRight
+                          maximumLineCount: 5
+                          color: Cpp_ThemeManager.colors["text"]
+                          font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+                        }
+                      }
+                    }
+                  }
+                }
+
+                //
+                // Title
+                //
+                Label {
+                  text: modelData.title
+                  elide: Text.ElideRight
+                  Layout.fillWidth: true
+                  font: Cpp_Misc_CommonFonts.boldUiFont
+                  color: cardMouse.containsMouse
+                           ? Cpp_ThemeManager.colors["highlighted_text"]
+                           : Cpp_ThemeManager.colors["text"]
+                }
+
+                //
+                // Category + difficulty
+                //
+                RowLayout {
+                  spacing: 4
+                  Layout.fillWidth: true
+
+                  Label {
+                    text: modelData.category
+                    font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+                    color: Cpp_ThemeManager.colors["placeholder_text"]
+                  }
+
+                  Item { Layout.fillWidth: true }
+
+                  Label {
+                    text: modelData.difficulty
+                    font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+                    color: modelData.difficulty === "Advanced"
+                             ? "#e74c3c"
+                             : modelData.difficulty === "Intermediate"
+                               ? "#f39c12"
+                               : "#2ecc71"
+                  }
+                }
+              }
+
+              MouseArea {
+                id: cardMouse
+
+                hoverEnabled: true
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Cpp_Examples.selectedIndex = index
+              }
+            }
+          }
+        }
+      }
+
+      //
+      // Page 1: Detail view
+      //
+      Item {
+        id: detailPage
+
+        width: parent.width
+        height: parent.height
+        x: root.showDetail ? 0 : width
+
+        Behavior on x {
+          NumberAnimation {
+            duration: 300
+            easing.type: Easing.OutCubic
+          }
+        }
+
+        RowLayout {
+          spacing: 8
+          anchors.fill: parent
+
+          //
+          // README panel
+          //
+          Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            Rectangle {
+              radius: 2
+              border.width: 1
+              anchors.fill: parent
+              color: Cpp_ThemeManager.colors["groupbox_background"]
+              border.color: Cpp_ThemeManager.colors["groupbox_border"]
+            }
+
+            ScrollView {
+              anchors.fill: parent
+              anchors.margins: 1
+
+              TextArea {
+                readOnly: true
+                textFormat: TextArea.MarkdownText
+                wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
+                font: Cpp_Misc_CommonFonts.uiFont
+                text: Cpp_Examples.selectedReadme
+                        ? Cpp_Examples.selectedReadme
+                        : (Cpp_Examples.loading
+                             ? qsTr("Loading...")
+                             : qsTr("No README available."))
+
+                background: Rectangle {
+                  color: "transparent"
+                }
+              }
+            }
+          }
+
+          //
+          // Sidebar
+          //
+          ColumnLayout {
+            spacing: 8
+            Layout.minimumWidth: 280
+            Layout.maximumWidth: 280
+            Layout.fillHeight: true
+
+            //
+            // Screenshot
+            //
+            Item {
+              Layout.fillWidth: true
+              Layout.minimumHeight: screenshotImage.status === Image.Ready
+                                      ? Math.min(screenshotImage.sourceSize.height * (268 / screenshotImage.sourceSize.width), 220)
+                                      : 160
+              Layout.maximumHeight: Layout.minimumHeight
+
+              Rectangle {
+                radius: 2
+                border.width: 1
+                anchors.fill: parent
+                color: Cpp_ThemeManager.colors["groupbox_background"]
+                border.color: Cpp_ThemeManager.colors["groupbox_border"]
+              }
+
+              Image {
+                id: screenshotImage
+
+                anchors.fill: parent
+                anchors.margins: 1
+                fillMode: Image.PreserveAspectFit
+                asynchronous: true
+                source: Cpp_Examples.selectedScreenshot || ""
+                visible: status === Image.Ready
+              }
+
+              Label {
+                anchors.centerIn: parent
+                text: qsTr("No screenshot available")
+                visible: !screenshotImage.visible
+                color: Cpp_ThemeManager.colors["placeholder_text"]
+                font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+              }
+
+              MouseArea {
+                anchors.fill: parent
+                enabled: screenshotImage.visible
+                cursorShape: screenshotImage.visible ? Qt.PointingHandCursor : Qt.ArrowCursor
+                onClicked: screenshotPopup.show()
+              }
+            }
+
+            //
+            // Details panel
+            //
+            Item {
+              Layout.fillWidth: true
+              Layout.fillHeight: true
+
+              Rectangle {
+                radius: 2
+                border.width: 1
+                anchors.fill: parent
+                color: Cpp_ThemeManager.colors["groupbox_background"]
+                border.color: Cpp_ThemeManager.colors["groupbox_border"]
+              }
+
+              ColumnLayout {
+                spacing: 4
+                anchors.fill: parent
+                anchors.margins: 8
+
+                Item {
+                  implicitHeight: 2
+                }
+
+                Label {
+                  text: qsTr("Details")
+                  font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+                  color: Cpp_ThemeManager.colors["pane_section_label"]
+                  Component.onCompleted: font.capitalization = Font.AllUppercase
+                }
+
+                Rectangle {
+                  implicitHeight: 1
+                  Layout.fillWidth: true
+                  color: Cpp_ThemeManager.colors["groupbox_border"]
+                }
+
+                Item {
+                  implicitHeight: 2
+                }
+
+                Label {
+                  Layout.fillWidth: true
+                  wrapMode: Text.WordWrap
+                  text: Cpp_Examples.selectedExample.description || ""
+                  font: Cpp_Misc_CommonFonts.uiFont
+                  color: Cpp_ThemeManager.colors["text"]
+                }
+
+                Item {
+                  implicitHeight: 4
+                }
+
+                Label {
+                  text: qsTr("Info")
+                  font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+                  color: Cpp_ThemeManager.colors["pane_section_label"]
+                  Component.onCompleted: font.capitalization = Font.AllUppercase
+                }
+
+                Rectangle {
+                  implicitHeight: 1
+                  Layout.fillWidth: true
+                  color: Cpp_ThemeManager.colors["groupbox_border"]
+                }
+
+                Item {
+                  implicitHeight: 2
+                }
+
+                GridLayout {
+                  columns: 2
+                  rowSpacing: 4
+                  columnSpacing: 8
+                  Layout.fillWidth: true
+
+                  Label {
+                    text: qsTr("Category:")
+                    font: Cpp_Misc_CommonFonts.boldUiFont
+                    color: Cpp_ThemeManager.colors["text"]
+                  }
+
+                  Label {
+                    text: Cpp_Examples.selectedExample.category || ""
+                    font: Cpp_Misc_CommonFonts.uiFont
+                    color: Cpp_ThemeManager.colors["text"]
+                    Layout.fillWidth: true
+                  }
+
+                  Label {
+                    text: qsTr("Difficulty:")
+                    font: Cpp_Misc_CommonFonts.boldUiFont
+                    color: Cpp_ThemeManager.colors["text"]
+                  }
+
+                  Label {
+                    font: Cpp_Misc_CommonFonts.uiFont
+                    text: Cpp_Examples.selectedExample.difficulty || ""
+                    Layout.fillWidth: true
+                    color: {
+                      var d = Cpp_Examples.selectedExample.difficulty || ""
+                      return d === "Advanced" ? "#e74c3c"
+                           : d === "Intermediate" ? "#f39c12"
+                           : "#2ecc71"
+                    }
+                  }
+
+                  Label {
+                    text: qsTr("Project:")
+                    font: Cpp_Misc_CommonFonts.boldUiFont
+                    color: Cpp_ThemeManager.colors["text"]
+                    visible: Cpp_Examples.selectedExample.hasProjectFile || false
+                  }
+
+                  Label {
+                    text: Cpp_Examples.selectedExample.projectFileName || ""
+                    font: Cpp_Misc_CommonFonts.uiFont
+                    color: Cpp_ThemeManager.colors["text"]
+                    elide: Text.ElideMiddle
+                    Layout.fillWidth: true
+                    visible: Cpp_Examples.selectedExample.hasProjectFile || false
+                  }
+                }
+
+                Item { Layout.fillHeight: true }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    //
+    // Bottom row: count + close
+    //
+    RowLayout {
+      spacing: 4
+      Layout.topMargin: 4
+      Layout.fillWidth: true
+
+      Label {
+        font: Cpp_Misc_CommonFonts.uiFont
+        text: qsTr("%1 examples").arg(Cpp_Examples.count)
+        color: Cpp_ThemeManager.colors["placeholder_text"]
+      }
+
+      Item {
+        Layout.fillWidth: true
+      }
+
+      Button {
+        icon.width: 18
+        icon.height: 18
+        text: qsTr("Close")
+        horizontalPadding: 8
+        onClicked: root.close()
+        Layout.alignment: Qt.AlignVCenter
+        icon.source: "qrc:/rcc/icons/buttons/close.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+      }
+    }
+  }
+
+  //
+  // Fullscreen screenshot popup window
+  //
+  Window {
+    id: screenshotPopup
+
+    visible: false
+    width: 800
+    height: 600
+    minimumWidth: 640
+    minimumHeight: 480
+    title: qsTr("Screenshot Preview")
+    color: Cpp_ThemeManager.colors["window"]
+    flags: Qt.Dialog | Qt.WindowCloseButtonHint
+
+    Rectangle {
+      radius: 2
+      border.width: 1
+      anchors.fill: parent
+      anchors.margins: 16
+      color: Cpp_ThemeManager.colors["groupbox_background"]
+      border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+      Image {
+        anchors.fill: parent
+        anchors.margins: 8
+        fillMode: Image.PreserveAspectFit
+        asynchronous: true
+        source: Cpp_Examples.selectedScreenshot || ""
+      }
+    }
+
+    Shortcut {
+      sequences: [StandardKey.Close, "Escape"]
+      onActivated: screenshotPopup.close()
+    }
+  }
+}

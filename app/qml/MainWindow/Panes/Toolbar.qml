@@ -508,8 +508,8 @@ Rectangle {
         horizontalLayout: true
         Layout.alignment: Qt.AlignLeft
         icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
-        ToolTip.text: qsTr("Browse example projects on GitHub")
-        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/tree/master/examples")
+        ToolTip.text: qsTr("Browse example projects")
+        onClicked: app.showExamplesBrowser()
       }
 
       Widgets.ToolbarButton {

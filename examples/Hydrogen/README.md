@@ -51,7 +51,7 @@ Where:
    `python3 hydrogen.py`
 
 2. In Serial Studio:
-   - Open the `hydrogen.json` project file.
+   - Open the `Hydrogen.ssproj` project file.
    - Set the input source to UDP, port `9000`.
    - Click **Connect**.
 
@@ -63,7 +63,7 @@ Where:
 ## **Files Included**
 
 - `hydrogen.py`: Python script for simulation and UDP streaming.
-- `hydrogen.json`: Serial Studio project file.
+- `Hydrogen.ssproj`: Serial Studio project file.
 - `README.md`: Project documentation.  
 - `doc/screenshot.png`: Screenshot of the visualization.
 

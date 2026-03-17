@@ -82,17 +82,14 @@ Item {
       right: parent.right
     }
 
-    ToolButton {
-      height: 24
-      icon.width: 18
-      icon.height: 18
+    DashboardToolButton {
       checked: !root.running
-      icon.color: "transparent"
       icon.source: root.running?
                      "qrc:/rcc/icons/dashboard-buttons/pause.svg" :
                      "qrc:/rcc/icons/dashboard-buttons/resume.svg"
       onClicked: root.running = !root.running
       text: root.running ? qsTr("Pause") : qsTr("Resume")
+      ToolTip.text: root.running ? qsTr("Pause") : qsTr("Resume")
     }
 
     Item {

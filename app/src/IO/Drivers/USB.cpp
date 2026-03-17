@@ -687,6 +687,7 @@ void IO::Drivers::USB::setIsoPacketSize(const int size)
   m_settings.setValue("USB/isoPacketSize", size);
 
   Q_EMIT isoPacketSizeChanged();
+  Q_EMIT configurationChanged();
 }
 
 /**

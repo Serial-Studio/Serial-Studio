@@ -1,7 +1,6 @@
 {
     "actions": [
     ],
-    "frameParser": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
     "groups": [
         {
             "datasets": [
@@ -10,8 +9,8 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "fft": false,
-                    "fftMax": 20,
-                    "fftMin": -20,
+                    "fftMax": 100,
+                    "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
@@ -20,14 +19,14 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 20,
-                    "plotMin": -20,
-                    "title": "X",
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "X (Propagation)",
                     "units": "",
                     "value": "--.--",
                     "widget": "",
-                    "widgetMax": 20,
-                    "widgetMin": -20,
+                    "widgetMax": 100,
+                    "widgetMin": 0,
                     "xAxis": 2
                 },
                 {
@@ -35,8 +34,8 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "fft": false,
-                    "fftMax": 30,
-                    "fftMin": -30,
+                    "fftMax": 15,
+                    "fftMin": -15,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
@@ -45,14 +44,14 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 30,
-                    "plotMin": -30,
-                    "title": "Y",
+                    "plotMax": 15,
+                    "plotMin": -15,
+                    "title": "E-field (Y axis)",
                     "units": "",
                     "value": "--.--",
                     "widget": "",
-                    "widgetMax": 30,
-                    "widgetMin": -30,
+                    "widgetMax": 15,
+                    "widgetMin": -15,
                     "xAxis": 3
                 },
                 {
@@ -60,8 +59,8 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "fft": false,
-                    "fftMax": 50,
-                    "fftMin": 0,
+                    "fftMax": 15,
+                    "fftMin": -15,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": true,
@@ -70,18 +69,18 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 50,
-                    "plotMin": 0,
-                    "title": "Z",
+                    "plotMax": 15,
+                    "plotMin": -15,
+                    "title": "B-field (Z axis)",
                     "units": "",
                     "value": "--.--",
                     "widget": "",
-                    "widgetMax": 50,
-                    "widgetMin": 0,
+                    "widgetMax": 15,
+                    "widgetMin": -15,
                     "xAxis": 1
                 }
             ],
-            "title": "2D Visualization",
+            "title": "Field Components",
             "widget": "multiplot"
         },
         {
@@ -91,8 +90,8 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "fft": false,
-                    "fftMax": 20,
-                    "fftMin": -20,
+                    "fftMax": 100,
+                    "fftMin": 0,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
@@ -101,14 +100,14 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 20,
-                    "plotMin": -20,
-                    "title": "X",
+                    "plotMax": 100,
+                    "plotMin": 0,
+                    "title": "X (Propagation)",
                     "units": "",
                     "value": "--.--",
                     "widget": "x",
-                    "widgetMax": 20,
-                    "widgetMin": -20,
+                    "widgetMax": 100,
+                    "widgetMin": 0,
                     "xAxis": 2
                 },
                 {
@@ -116,8 +115,8 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "fft": false,
-                    "fftMax": 30,
-                    "fftMin": -30,
+                    "fftMax": 15,
+                    "fftMin": -15,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
@@ -126,14 +125,14 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 30,
-                    "plotMin": -30,
-                    "title": "Y",
+                    "plotMax": 15,
+                    "plotMin": -15,
+                    "title": "E-field (Y axis)",
                     "units": "",
                     "value": "--.--",
                     "widget": "y",
-                    "widgetMax": 30,
-                    "widgetMin": -30,
+                    "widgetMax": 15,
+                    "widgetMin": -15,
                     "xAxis": 3
                 },
                 {
@@ -141,8 +140,8 @@
                     "alarmHigh": 0,
                     "alarmLow": 0,
                     "fft": false,
-                    "fftMax": 50,
-                    "fftMin": 0,
+                    "fftMax": 15,
+                    "fftMin": -15,
                     "fftSamples": 256,
                     "fftSamplingRate": 100,
                     "graph": false,
@@ -151,22 +150,23 @@
                     "ledHigh": 1,
                     "log": false,
                     "overviewDisplay": false,
-                    "plotMax": 50,
-                    "plotMin": 0,
-                    "title": "Z",
+                    "plotMax": 15,
+                    "plotMin": -15,
+                    "title": "B-field (Z axis)",
                     "units": "",
                     "value": "--.--",
                     "widget": "z",
-                    "widgetMax": 50,
-                    "widgetMin": 0,
+                    "widgetMax": 15,
+                    "widgetMin": -15,
                     "xAxis": 1
                 }
             ],
-            "title": "3D Visualization",
+            "title": "EM Wave — 3D",
             "widget": "plot3d"
         }
     ],
     "hexadecimalDelimiters": false,
+    "pointCount": 1000,
     "sources": [
         {
             "busType": 1,
@@ -182,56 +182,18 @@
             "decoder": 0,
             "decoderMethod": 0,
             "frameDetection": 0,
-            "frameEnd": "\\n",
+            "frameEnd": "\n",
             "frameParserCode": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
             "frameStart": "",
             "hexadecimalDelimiters": false,
             "sourceId": 0,
-            "title": "Device A"
+            "title": "EM Wave Source"
         }
     ],
-    "title": "Lorenz Attractor",
+    "title": "EM Wave Simulator",
     "widgetSettings": {
-        "__layout__:-1__": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    0,
-                    1
-                ]
-            }
-        },
-        "__layout__:-2__": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    0,
-                    2,
-                    3,
-                    4,
-                    1
-                ]
-            }
-        },
-        "__layout__:0__": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    0,
-                    2,
-                    3,
-                    4
-                ]
-            }
-        },
-        "__layout__:1__": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    1
-                ]
-            }
-        },
-        "__pointCount__": 4000
+        "6:1:-1": {
+            "orbitNavigation": true
+        }
     }
 }

@@ -108,7 +108,7 @@ void loop() {
 ### **1. Setting Up the Project**
 
 1. Open Serial Studio and click the **Project Editor**.
-2. Create a new project or import the provided `LorenzAttractor.json` file.
+2. Create a new project or import the provided `LorenzAttractor.ssproj` file.
 4. Add three datasets for $\(x\)$, $\(y\)$, and $\(z\)$, specifying their respective configurations:
    - Dataset $x$: Use $y$ as the X-axis source.
    - Dataset $y$: Use $z$ as the X-axis source.
@@ -148,7 +148,7 @@ For testing without Arduino hardware, a Python script (`lorenz_udp.py`) is provi
    - Select **Network** as the data source
    - Choose **UDP** protocol
    - Set port to **9000**
-   - Load the `LorenzAttractor.json` project file
+   - Load the `LorenzAttractor.ssproj` project file
    - Click **Connect**
 
 The script will continuously generate and send Lorenz attractor data to `127.0.0.1:9000`.

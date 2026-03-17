@@ -170,13 +170,9 @@ Item {
       Layout.leftMargin: 8
       visible: root.hasToolbar && model && model.frameCount > 0
 
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
+      DashboardToolButton {
         checked: model && model.exportEnabled
+        ToolTip.text: qsTr("Export Images")
         icon.source: "qrc:/rcc/icons/dashboard-buttons/archive.svg"
         onClicked: {
           if (model)
@@ -184,12 +180,8 @@ Item {
         }
       }
 
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
+      DashboardToolButton {
+        ToolTip.text: qsTr("Open Export Folder")
         icon.source: "qrc:/rcc/icons/dashboard-buttons/pictures-folder.svg"
         onClicked: {
           if (model)
@@ -204,12 +196,8 @@ Item {
         color: Cpp_ThemeManager.colors["widget_border"]
       }
 
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
+      DashboardToolButton {
+        ToolTip.text: qsTr("Zoom In")
         icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-in.svg"
         onClicked: {
           const oldZoom = root.zoom
@@ -221,12 +209,8 @@ Item {
         }
       }
 
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
+      DashboardToolButton {
+        ToolTip.text: qsTr("Zoom Out")
         icon.source: "qrc:/rcc/icons/dashboard-buttons/zoom-out.svg"
         onClicked: {
           const oldZoom = root.zoom
@@ -244,13 +228,9 @@ Item {
         color: Cpp_ThemeManager.colors["widget_border"]
       }
 
-      ToolButton {
-        width: 24
-        height: 24
-        icon.width: 18
-        icon.height: 18
-        icon.color: "transparent"
+      DashboardToolButton {
         checked: root.showCrosshair
+        ToolTip.text: qsTr("Show Crosshair")
         icon.source: "qrc:/rcc/icons/dashboard-buttons/crosshair.svg"
         onClicked: {
           root.showCrosshair = !root.showCrosshair

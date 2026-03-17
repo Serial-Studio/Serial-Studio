@@ -1,0 +1,236 @@
+{
+    "actions": [
+    ],
+    "groups": [
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 20,
+                    "fftMin": -20,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 20,
+                    "plotMin": -20,
+                    "title": "X",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 20,
+                    "widgetMin": -20,
+                    "xAxis": 2
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 30,
+                    "fftMin": -30,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 30,
+                    "plotMin": -30,
+                    "title": "Y",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 30,
+                    "widgetMin": -30,
+                    "xAxis": 3
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 50,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": true,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 50,
+                    "plotMin": 0,
+                    "title": "Z",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "",
+                    "widgetMax": 50,
+                    "widgetMin": 0,
+                    "xAxis": 1
+                }
+            ],
+            "title": "2D Visualization",
+            "widget": "multiplot"
+        },
+        {
+            "datasets": [
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 20,
+                    "fftMin": -20,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 1,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 20,
+                    "plotMin": -20,
+                    "title": "X",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "x",
+                    "widgetMax": 20,
+                    "widgetMin": -20,
+                    "xAxis": 2
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 30,
+                    "fftMin": -30,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 2,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 30,
+                    "plotMin": -30,
+                    "title": "Y",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "y",
+                    "widgetMax": 30,
+                    "widgetMin": -30,
+                    "xAxis": 3
+                },
+                {
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
+                    "fft": false,
+                    "fftMax": 50,
+                    "fftMin": 0,
+                    "fftSamples": 256,
+                    "fftSamplingRate": 100,
+                    "graph": false,
+                    "index": 3,
+                    "led": false,
+                    "ledHigh": 1,
+                    "log": false,
+                    "overviewDisplay": false,
+                    "plotMax": 50,
+                    "plotMin": 0,
+                    "title": "Z",
+                    "units": "",
+                    "value": "--.--",
+                    "widget": "z",
+                    "widgetMax": 50,
+                    "widgetMin": 0,
+                    "xAxis": 1
+                }
+            ],
+            "title": "3D Visualization",
+            "widget": "plot3d"
+        }
+    ],
+    "hexadecimalDelimiters": false,
+    "pointCount": 4000,
+    "sources": [
+        {
+            "busType": 1,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9000,
+                "udpMulticast": false,
+                "udpRemotePort": 9000
+            },
+            "decoder": 0,
+            "decoderMethod": 0,
+            "frameDetection": 0,
+            "frameEnd": "\\n",
+            "frameParserCode": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
+            "frameStart": "",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
+    "title": "Lorenz Attractor",
+    "widgetSettings": {
+        "layout:-1": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "layout:-2": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    2,
+                    3,
+                    4,
+                    1
+                ]
+            }
+        },
+        "layout:0": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    0,
+                    2,
+                    3,
+                    4
+                ]
+            }
+        },
+        "layout:1": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    1
+                ]
+            }
+        }
+    }
+}
