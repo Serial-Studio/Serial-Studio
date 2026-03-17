@@ -108,6 +108,9 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
+        <file>fonts/GeistMono-Bold.ttf</file>
+        <file>fonts/GeistMono-Medium.ttf</file>
+        <file>fonts/GeistMono-Regular.ttf</file>
         <file>icons/buttons/activate.svg</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>
@@ -137,10 +140,12 @@
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/save.svg</file>
+        <file>icons/buttons/search.svg</file>
         <file>icons/buttons/send.svg</file>
         <file>icons/buttons/test.svg</file>
         <file>icons/buttons/visible.svg</file>
         <file>icons/buttons/website.svg</file>
+        <file>icons/buttons/wrench.svg</file>
         <file>icons/code-editor/copy.svg</file>
         <file>icons/code-editor/cut.svg</file>
         <file>icons/code-editor/help.svg</file>
@@ -274,6 +279,10 @@
         <file>icons/project-editor/model/timer.svg</file>
         <file>icons/project-editor/model/tx-data.svg</file>
         <file>icons/project-editor/model/widget.svg</file>
+        <file>icons/project-editor/summary/action.svg</file>
+        <file>icons/project-editor/summary/dataset.svg</file>
+        <file>icons/project-editor/summary/device.svg</file>
+        <file>icons/project-editor/summary/group.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
         <file>icons/project-editor/toolbar/add-action.svg</file>
         <file>icons/project-editor/toolbar/add-bar.svg</file>
@@ -290,6 +299,7 @@
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
         <file>icons/project-editor/toolbar/add-plot.svg</file>
         <file>icons/project-editor/toolbar/add-plot3d.svg</file>
+        <file>icons/project-editor/toolbar/device.svg</file>
         <file>icons/project-editor/toolbar/help.svg</file>
         <file>icons/project-editor/toolbar/image.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
@@ -297,10 +307,6 @@
         <file>icons/project-editor/toolbar/Opened Folder Office M.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
-        <file>icons/project-editor/summary/action.svg</file>
-        <file>icons/project-editor/summary/dataset.svg</file>
-        <file>icons/project-editor/summary/device.svg</file>
-        <file>icons/project-editor/summary/group.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
@@ -367,6 +373,7 @@
         <file>images/drag-and-drop.svg</file>
         <file>images/driver.svg</file>
         <file>images/hammer.svg</file>
+        <file>images/multi-device.svg</file>
         <file>images/no-bluetooth.svg</file>
         <file>images/no-mic.svg</file>
         <file>images/no-usb.svg</file>
@@ -487,9 +494,6 @@
         <file>themes/midday.json</file>
         <file>themes/midnight.json</file>
         <file>themes/rust.json</file>
-        <file>images/multi-device.svg</file>
-        <file>icons/buttons/wrench.svg</file>
-        <file>fonts/GeistMono.ttf</file>
-        <file>icons/buttons/search.svg</file>
+        <file>images/no-results.svg</file>
     </qresource>
 </RCC>

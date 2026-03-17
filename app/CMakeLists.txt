@@ -196,6 +196,7 @@ set(SOURCES
   src/Misc/TimerEvents.cpp
   src/Misc/WorkspaceManager.cpp
   src/Misc/Examples.cpp
+  src/Misc/HelpCenter.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
@@ -271,6 +272,7 @@ set(HEADERS
   src/Misc/Translator.h
   src/Misc/WorkspaceManager.h
   src/Misc/Examples.h
+  src/Misc/HelpCenter.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
@@ -359,6 +361,7 @@ set(QML_SOURCES
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
   qml/Dialogs/ExamplesBrowser.qml
+  qml/Dialogs/HelpCenter.qml
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml
   qml/MainWindow/Panes/Dashboard/DashboardLayout.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
@@ -407,6 +410,7 @@ set(QML_SOURCES
   qml/Widgets/PaneSplitter.qml
   qml/Widgets/PlotWidget.qml
   qml/Widgets/ProNotice.qml
+  qml/Widgets/SearchField.qml
   qml/Widgets/SmartWindow.qml
   qml/Widgets/SmartDialog.qml
   qml/Widgets/SubMenuCombo.qml

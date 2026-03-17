@@ -514,12 +514,12 @@ Rectangle {
 
       Widgets.ToolbarButton {
         iconSize: 16
+        text: qsTr("Help")
         horizontalLayout: true
-        text: qsTr("Getting Started")
         Layout.alignment: Qt.AlignLeft
         icon.source: "qrc:/rcc/icons/toolbar/help.svg"
-        ToolTip.text: qsTr("Open the online documentation for help and guidance")
-        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/blob/master/DISCOVER.md")
+        ToolTip.text: qsTr("Browse documentation, FAQ, and wiki")
+        onClicked: app.showHelpCenter()
       }
 
       Widgets.ToolbarButton {

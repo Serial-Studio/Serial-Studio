@@ -133,6 +133,7 @@ Item {
         acknowledgementsDialog.hide()
         fileTransmissionDialog.hide()
         examplesBrowser.hide()
+        helpCenter.hide()
         licenseDialog.hide()
       }
     }
@@ -181,6 +182,11 @@ Item {
       id: examplesBrowser
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExamplesBrowser.qml"
     }
+
+    DialogLoader {
+      id: helpCenter
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/HelpCenter.qml"
+    }
   }
 
   //
@@ -222,6 +228,7 @@ Item {
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
   function showFileTransmission()  { fileTransmissionDialog.activate() }
   function showExamplesBrowser()   { examplesBrowser.activate() }
+  function showHelpCenter()        { helpCenter.activate() }
 
   //
   // Dialog display functions (commercial)

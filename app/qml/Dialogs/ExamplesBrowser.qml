@@ -38,6 +38,11 @@ SmartDialog {
   property bool showDetail: Cpp_Examples.selectedIndex >= 0
 
   //
+  // Track fetch state
+  //
+  property bool fetchingData: Cpp_Examples.count === 0 && Cpp_Examples.searchFilter === ""
+
+  //
   // Fetch manifest when dialog opens
   //
   onVisibleChanged: {
@@ -66,8 +71,8 @@ SmartDialog {
       Layout.fillWidth: true
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
-      visible: !root.showDetail && Cpp_Examples.count > 0
       implicitHeight: searchField.implicitHeight + 8
+      visible: !root.showDetail && !root.fetchingData
       color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: searchField.activeFocus ? Cpp_ThemeManager.colors["highlight"] :
                                               Cpp_ThemeManager.colors["groupbox_border"]
@@ -240,7 +245,7 @@ SmartDialog {
       ColumnLayout {
         spacing: 8
         anchors.centerIn: parent
-        visible: Cpp_Examples.count === 0
+        visible: root.fetchingData
 
         BusyIndicator {
           running: parent.visible
@@ -260,7 +265,7 @@ SmartDialog {
       //
       Item {
         id: gridPage
-        visible: Cpp_Examples.count > 0
+        visible: !root.fetchingData
 
         width: parent.width
         height: parent.height
@@ -302,12 +307,12 @@ SmartDialog {
               height: 186
               radius: 6
               color: cardMouse.containsMouse
-                       ? Cpp_ThemeManager.colors["highlight"]
-                       : Cpp_ThemeManager.colors["base"]
+                     ? Cpp_ThemeManager.colors["highlight"]
+                     : Cpp_ThemeManager.colors["base"]
               border.width: 1
               border.color: cardMouse.containsMouse
-                              ? Cpp_ThemeManager.colors["accent"]
-                              : Cpp_ThemeManager.colors["mid"]
+                            ? Cpp_ThemeManager.colors["accent"]
+                            : Cpp_ThemeManager.colors["mid"]
 
               Behavior on color {
                 ColorAnimation { duration: 150 }
@@ -343,13 +348,13 @@ SmartDialog {
                         position: 0
                         color: {
                           var p = [
-                            "#2c3e50", "#1a5276", "#1e8449", "#7d3c98",
-                            "#a04000", "#1b4f72", "#196f3d", "#6c3483",
-                            "#922b21", "#117a65", "#7e5109", "#2e4053",
-                            "#1f618d", "#239b56", "#884ea0", "#ba4a00",
-                            "#2471a3", "#28b463", "#a569bd", "#cb4335",
-                            "#148f77", "#b9770e", "#5b2c6f", "#d35400"
-                          ]
+                                "#2c3e50", "#1a5276", "#1e8449", "#7d3c98",
+                                "#a04000", "#1b4f72", "#196f3d", "#6c3483",
+                                "#922b21", "#117a65", "#7e5109", "#2e4053",
+                                "#1f618d", "#239b56", "#884ea0", "#ba4a00",
+                                "#2471a3", "#28b463", "#a569bd", "#cb4335",
+                                "#148f77", "#b9770e", "#5b2c6f", "#d35400"
+                              ]
                           return p[index % p.length]
                         }
                       }
@@ -357,13 +362,13 @@ SmartDialog {
                         position: 1
                         color: {
                           var p = [
-                            "#1a252f", "#0e2f43", "#12522c", "#4a2460",
-                            "#612600", "#0f2d42", "#0e4124", "#3f1f4e",
-                            "#561914", "#0a493d", "#4b3006", "#1b2631",
-                            "#133a54", "#155d34", "#512e60", "#702a00",
-                            "#154360", "#186a3b", "#633974", "#7b281e",
-                            "#0c5647", "#6e4708", "#361842", "#7e3300"
-                          ]
+                                "#1a252f", "#0e2f43", "#12522c", "#4a2460",
+                                "#612600", "#0f2d42", "#0e4124", "#3f1f4e",
+                                "#561914", "#0a493d", "#4b3006", "#1b2631",
+                                "#133a54", "#155d34", "#512e60", "#702a00",
+                                "#154360", "#186a3b", "#633974", "#7b281e",
+                                "#0c5647", "#6e4708", "#361842", "#7e3300"
+                              ]
                           return p[index % p.length]
                         }
                       }
@@ -372,15 +377,16 @@ SmartDialog {
                     Image {
                       id: thumbImg
 
+                      smooth: true
+                      asynchronous: true
                       anchors.fill: parent
                       fillMode: Image.PreserveAspectCrop
-                      asynchronous: true
                       visible: status === Image.Ready
                       source: modelData.hasScreenshot
-                                ? "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/examples/"
-                                  + encodeURIComponent(modelData.id)
-                                  + "/doc/screenshot.png"
-                                : ""
+                              ? "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/examples/"
+                                + encodeURIComponent(modelData.id)
+                                + "/doc/screenshot.png"
+                              : ""
                     }
 
                     Label {
@@ -467,8 +473,8 @@ SmartDialog {
                   Layout.fillWidth: true
                   font: Cpp_Misc_CommonFonts.boldUiFont
                   color: cardMouse.containsMouse
-                           ? Cpp_ThemeManager.colors["highlighted_text"]
-                           : Cpp_ThemeManager.colors["text"]
+                         ? Cpp_ThemeManager.colors["highlighted_text"]
+                         : Cpp_ThemeManager.colors["text"]
                 }
 
                 //
@@ -490,10 +496,10 @@ SmartDialog {
                     text: modelData.difficulty
                     font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
                     color: modelData.difficulty === "Advanced"
-                             ? "#e74c3c"
-                             : modelData.difficulty === "Intermediate"
-                               ? "#f39c12"
-                               : "#2ecc71"
+                           ? "#e74c3c"
+                           : modelData.difficulty === "Intermediate"
+                             ? "#f39c12"
+                             : "#2ecc71"
                   }
                 }
               }
@@ -550,20 +556,47 @@ SmartDialog {
             ScrollView {
               anchors.fill: parent
               anchors.margins: 1
+              contentWidth: availableWidth
 
               TextArea {
+                id: readmeArea
+
                 readOnly: true
                 textFormat: TextArea.MarkdownText
                 wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
                 font: Cpp_Misc_CommonFonts.uiFont
-                text: Cpp_Examples.selectedReadme
-                        ? Cpp_Examples.selectedReadme
-                        : (Cpp_Examples.loading
-                             ? qsTr("Loading...")
-                             : qsTr("No README available."))
+                onLinkActivated: (link) => Qt.openUrlExternally(link)
+
+                //
+                // Force full markdown re-parse by clearing first
+                //
+                Connections {
+                  target: Cpp_Examples
+                  function onSelectedReadmeChanged() {
+                    readmeArea.text = ""
+                    readmeReloadTimer.restart()
+                  }
+                }
+
+                Timer {
+                  id: readmeReloadTimer
+                  interval: 1
+                  onTriggered: {
+                    readmeArea.text = Cpp_Examples.selectedReadme
+                      ? Cpp_Examples.selectedReadme
+                      : (Cpp_Examples.loading
+                         ? qsTr("Loading...")
+                         : qsTr("No README available."))
+                  }
+                }
 
                 background: Rectangle {
                   color: "transparent"
+                }
+
+                HoverHandler {
+                  acceptedButtons: Qt.NoButton
+                  cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
                 }
               }
             }
@@ -584,8 +617,8 @@ SmartDialog {
             Item {
               Layout.fillWidth: true
               Layout.minimumHeight: screenshotImage.status === Image.Ready
-                                      ? Math.min(screenshotImage.sourceSize.height * (268 / screenshotImage.sourceSize.width), 220)
-                                      : 160
+                                    ? Math.min(screenshotImage.sourceSize.height * (268 / screenshotImage.sourceSize.width), 220)
+                                    : 160
               Layout.maximumHeight: Layout.minimumHeight
 
               Rectangle {
@@ -725,8 +758,8 @@ SmartDialog {
                     color: {
                       var d = Cpp_Examples.selectedExample.difficulty || ""
                       return d === "Advanced" ? "#e74c3c"
-                           : d === "Intermediate" ? "#f39c12"
-                           : "#2ecc71"
+                                              : d === "Intermediate" ? "#f39c12"
+                                                                     : "#2ecc71"
                     }
                   }
 
@@ -751,6 +784,40 @@ SmartDialog {
               }
             }
           }
+        }
+      }
+
+      //
+      // No search results state
+      //
+      ColumnLayout {
+        spacing: 8
+        anchors.centerIn: parent
+        visible: Cpp_Examples.count === 0 && searchField.text !== ""
+
+        Image {
+          sourceSize: Qt.size(96, 96)
+          Layout.alignment: Qt.AlignHCenter
+          source: "qrc:/rcc/images/no-results.svg"
+        }
+
+        Item {
+          implicitHeight: 4
+        }
+
+        Label {
+          text: qsTr("No Results Found")
+          Layout.alignment: Qt.AlignHCenter
+          color: Cpp_ThemeManager.colors["text"]
+          font: Cpp_Misc_CommonFonts.customUiFont(1.25, true)
+        }
+
+        Label {
+          opacity: 0.7
+          font: Cpp_Misc_CommonFonts.uiFont
+          Layout.alignment: Qt.AlignHCenter
+          color: Cpp_ThemeManager.colors["text"]
+          text: qsTr("Check the spelling or try a different search term.")
         }
       }
     }

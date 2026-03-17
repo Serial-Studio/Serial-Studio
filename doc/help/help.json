@@ -1,0 +1,21 @@
+[
+  { "id": "getting-started", "title": "Getting Started", "section": "Basics", "file": "Getting-Started.md" },
+  { "id": "operation-modes", "title": "Operation Modes", "section": "Basics", "file": "Operation-Modes.md" },
+  { "id": "data-sources", "title": "Data Sources", "section": "Basics", "file": "Data-Sources.md" },
+  { "id": "data-flow", "title": "Data Flow", "section": "Basics", "file": "Data-Flow.md" },
+  { "id": "project-editor", "title": "Project Editor", "section": "Configuration", "file": "Project-Editor.md" },
+  { "id": "widget-reference", "title": "Widget Reference", "section": "Configuration", "file": "Widget-Reference.md" },
+  { "id": "javascript-api", "title": "JavaScript API", "section": "Configuration", "file": "JavaScript-API.md" },
+  { "id": "communication-protocols", "title": "Communication Protocols", "section": "Connectivity", "file": "Communication-Protocols.md" },
+  { "id": "protocol-setup-guides", "title": "Protocol Setup Guides", "section": "Connectivity", "file": "Protocol-Setup-Guides.md" },
+  { "id": "mqtt-integration", "title": "MQTT Integration", "section": "Connectivity", "file": "MQTT-Integration.md" },
+  { "id": "csv-export", "title": "CSV Import & Export", "section": "Data Management", "file": "CSV-Import-Export.md" },
+  { "id": "api-reference", "title": "API Reference", "section": "Data Management", "file": "API-Reference.md" },
+  { "id": "faq", "title": "FAQ", "section": "Support", "file": "FAQ.md" },
+  { "id": "troubleshooting", "title": "Troubleshooting Guide", "section": "Support", "file": "Troubleshooting.md" },
+  { "id": "use-cases", "title": "Use Cases", "section": "Support", "file": "Use-Cases.md" },
+  { "id": "pro-vs-free", "title": "Pro vs Free Features", "section": "Licensing", "file": "Pro-vs-Free.md" },
+  { "id": "license-agreement", "title": "License Agreement", "section": "Licensing", "file": "License-Agreement.md" },
+  { "id": "earn-pro-license", "title": "Earn a Pro License", "section": "Licensing", "file": "Earn-Pro-License.md" },
+  { "id": "support-serial-studio", "title": "Support Serial Studio", "section": "Licensing", "file": "Support-Serial-Studio.md" }
+]

@@ -46,9 +46,12 @@ Misc::CommonFonts::CommonFonts()
   monoFont = QStringLiteral("Courier");
 #endif
 
-  // Add custom mono font
-  const auto path = QStringLiteral(":/rcc/fonts/GeistMono.ttf");
-  const auto id   = QFontDatabase::addApplicationFont(path);
+  // Register all Geist Mono variants
+  QFontDatabase::addApplicationFont(":/rcc/fonts/GeistMono-Bold.ttf");
+  QFontDatabase::addApplicationFont(":/rcc/fonts/GeistMono-Medium.ttf");
+
+  // Use the Regular variant as the default mono font
+  const auto id = QFontDatabase::addApplicationFont(":/rcc/fonts/GeistMono-Regular.ttf");
   if (id != -1) {
     const auto families = QFontDatabase::applicationFontFamilies(id);
     if (!families.isEmpty())
