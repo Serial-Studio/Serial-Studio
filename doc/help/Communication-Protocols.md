@@ -6,97 +6,42 @@ Serial Studio supports 10 communication protocols spanning wired serial links, w
 
 The following diagram maps all supported protocols by throughput range and license tier, helping you choose the right one for your project.
 
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" font-family="monospace" font-size="13">
-  <!-- Background -->
-  <rect width="720" height="560" fill="#f8f9fa" rx="8"/>
+```mermaid
+---
+title: Protocol Selection Guide
+---
+flowchart LR
+  subgraph Free["Free Protocols"]
+    UART["**Serial/UART**\n110 bps — 1 Mbps\nUSB / RS-232 / RS-485"]
+    TCPUDP["**TCP/UDP**\nNetwork speed\nEthernet / WiFi"]
+    BLE["**Bluetooth LE**\n~1 Mbps\nLow power wireless"]
+  end
 
-  <!-- Title -->
-  <text x="360" y="28" text-anchor="middle" fill="#2d3748" font-weight="bold" font-size="14">Protocol Selection Guide</text>
+  subgraph Pro["Pro Protocols"]
+    MQTT["**MQTT**\nIoT / Cloud"]
+    Modbus["**Modbus**\nRTU / TCP"]
+    CAN["**CAN Bus**\nUp to 8 Mbps (FD)"]
+    Audio["**Audio Input**\nUp to 48 kHz"]
+    USB["**Raw USB**\nUp to 480 Mbps"]
+    HID["**HID**\n~64 KB/s"]
+    Process["**Process I/O**\nScripts / Pipes"]
+  end
+```
 
-  <!-- Free protocols section -->
-  <rect x="40" y="48" width="310" height="200" rx="6" fill="#fff" stroke="#2f855a" stroke-width="1.5"/>
-  <text x="195" y="70" text-anchor="middle" fill="#2f855a" font-weight="bold">Free Protocols</text>
-  <line x1="55" y1="78" x2="335" y2="78" stroke="#c6f6d5" stroke-width="1"/>
-
-  <!-- Serial/UART -->
-  <rect x="60" y="90" width="130" height="60" rx="5" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="125" y="110" text-anchor="middle" fill="#2f855a" font-weight="bold" font-size="12">Serial/UART</text>
-  <text x="125" y="126" text-anchor="middle" fill="#718096" font-size="10">110 bps — 1 Mbps</text>
-  <text x="125" y="142" text-anchor="middle" fill="#718096" font-size="10">USB / RS-232 / RS-485</text>
-
-  <!-- TCP/UDP -->
-  <rect x="200" y="90" width="130" height="60" rx="5" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="265" y="110" text-anchor="middle" fill="#2f855a" font-weight="bold" font-size="12">TCP/UDP</text>
-  <text x="265" y="126" text-anchor="middle" fill="#718096" font-size="10">Network speed</text>
-  <text x="265" y="142" text-anchor="middle" fill="#718096" font-size="10">Ethernet / WiFi</text>
-
-  <!-- BLE -->
-  <rect x="60" y="160" width="130" height="60" rx="5" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="125" y="180" text-anchor="middle" fill="#2f855a" font-weight="bold" font-size="12">Bluetooth LE</text>
-  <text x="125" y="196" text-anchor="middle" fill="#718096" font-size="10">~1 Mbps</text>
-  <text x="125" y="212" text-anchor="middle" fill="#718096" font-size="10">Low power wireless</text>
-
-  <!-- Pro protocols section -->
-  <rect x="370" y="48" width="310" height="340" rx="6" fill="#fff" stroke="#6b46c1" stroke-width="1.5"/>
-  <text x="525" y="70" text-anchor="middle" fill="#6b46c1" font-weight="bold">Pro Protocols</text>
-  <line x1="385" y1="78" x2="665" y2="78" stroke="#e9d8fd" stroke-width="1"/>
-
-  <!-- MQTT -->
-  <rect x="390" y="90" width="130" height="50" rx="5" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="455" y="110" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">MQTT</text>
-  <text x="455" y="128" text-anchor="middle" fill="#718096" font-size="10">IoT / Cloud</text>
-
-  <!-- Modbus -->
-  <rect x="530" y="90" width="130" height="50" rx="5" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="595" y="110" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">Modbus</text>
-  <text x="595" y="128" text-anchor="middle" fill="#718096" font-size="10">RTU / TCP</text>
-
-  <!-- CAN Bus -->
-  <rect x="390" y="150" width="130" height="50" rx="5" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="455" y="170" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">CAN Bus</text>
-  <text x="455" y="188" text-anchor="middle" fill="#718096" font-size="10">Up to 8 Mbps (FD)</text>
-
-  <!-- Audio -->
-  <rect x="530" y="150" width="130" height="50" rx="5" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="595" y="170" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">Audio Input</text>
-  <text x="595" y="188" text-anchor="middle" fill="#718096" font-size="10">Up to 48 kHz</text>
-
-  <!-- Raw USB -->
-  <rect x="390" y="210" width="130" height="50" rx="5" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="455" y="230" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">Raw USB</text>
-  <text x="455" y="248" text-anchor="middle" fill="#718096" font-size="10">Up to 480 Mbps</text>
-
-  <!-- HID -->
-  <rect x="530" y="210" width="130" height="50" rx="5" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="595" y="230" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">HID</text>
-  <text x="595" y="248" text-anchor="middle" fill="#718096" font-size="10">~64 KB/s</text>
-
-  <!-- Process I/O -->
-  <rect x="460" y="270" width="130" height="50" rx="5" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="525" y="290" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">Process I/O</text>
-  <text x="525" y="308" text-anchor="middle" fill="#718096" font-size="10">Scripts / Pipes</text>
-
-  <!-- Decision tree -->
-  <rect x="40" y="400" width="640" height="140" rx="6" fill="#fff" stroke="#cbd5e0" stroke-width="1.5"/>
-  <text x="360" y="424" text-anchor="middle" fill="#2d3748" font-weight="bold">Which Protocol Should I Use?</text>
-  <line x1="60" y1="432" x2="660" y2="432" stroke="#e2e8f0" stroke-width="1"/>
-
-  <text x="70" y="452" fill="#2d3748" font-size="11">USB cable to microcontroller?</text>
-  <text x="480" y="452" fill="#2f855a" font-size="11" font-weight="bold">→ Serial/UART</text>
-
-  <text x="70" y="472" fill="#2d3748" font-size="11">WiFi / Ethernet device?</text>
-  <text x="480" y="472" fill="#2f855a" font-size="11" font-weight="bold">→ TCP/UDP</text>
-
-  <text x="70" y="492" fill="#2d3748" font-size="11">Battery-powered wireless sensor?</text>
-  <text x="480" y="492" fill="#2f855a" font-size="11" font-weight="bold">→ Bluetooth LE</text>
-
-  <text x="70" y="512" fill="#2d3748" font-size="11">Cloud IoT or remote broker?</text>
-  <text x="480" y="512" fill="#6b46c1" font-size="11" font-weight="bold">→ MQTT (Pro)</text>
-
-  <text x="70" y="532" fill="#2d3748" font-size="11">Vehicle CAN / Industrial PLC?</text>
-  <text x="480" y="532" fill="#6b46c1" font-size="11" font-weight="bold">→ CAN Bus / Modbus (Pro)</text>
-</svg>
+```mermaid
+---
+title: Which Protocol Should I Use?
+---
+flowchart TD
+  Q1{"USB cable to\nmicrocontroller?"} -->|Yes| A1["Serial/UART"]
+  Q1 -->|No| Q2{"WiFi / Ethernet\ndevice?"}
+  Q2 -->|Yes| A2["TCP/UDP"]
+  Q2 -->|No| Q3{"Battery-powered\nwireless sensor?"}
+  Q3 -->|Yes| A3["Bluetooth LE"]
+  Q3 -->|No| Q4{"Cloud IoT or\nremote broker?"}
+  Q4 -->|Yes| A4["MQTT (Pro)"]
+  Q4 -->|No| Q5{"Vehicle CAN /\nIndustrial PLC?"}
+  Q5 -->|Yes| A5["CAN Bus / Modbus (Pro)"]
 ```
 
 ## Protocol Summary

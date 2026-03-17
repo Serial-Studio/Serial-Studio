@@ -18,89 +18,44 @@ Whether you are reading temperature from an Arduino, monitoring a CAN Bus on a v
 
 The following diagram shows the steps from launching Serial Studio to seeing data on your dashboard.
 
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="monospace" font-size="13">
-  <!-- Background -->
-  <rect width="720" height="380" fill="#f8f9fa" rx="8"/>
+```mermaid
+flowchart LR
+    A["1. Launch\nSerial Studio"] --> B["2. Select Mode\nSetup Panel"]
+    B --> C["3. Configure\nPort / IP / BLE"]
+    C --> D["4. Connect\nClick button"]
+    D --> E["5. View\nDashboard"]
+```
 
-  <!-- Step 1: Launch -->
-  <rect x="20" y="30" width="120" height="60" rx="6" fill="#2d3748" stroke="#1a202c" stroke-width="1.5"/>
-  <text x="80" y="55" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">1. Launch</text>
-  <text x="80" y="75" text-anchor="middle" fill="#a0aec0" font-size="10">Serial Studio</text>
+**Choose Your Path:**
 
-  <line x1="140" y1="60" x2="170" y2="60" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
+```mermaid
+flowchart TD
+    subgraph QuickPlot ["Quick Plot"]
+        QP1["1. Set baud rate"]
+        QP2["2. Select port"]
+        QP3["3. Click Connect"]
+        QP4>"Device sends CSV\ne.g. 23.5,1013\n"]
+        QP5(["Zero config needed!"])
+        QP1 --> QP2 --> QP3 --> QP4 --> QP5
+    end
 
-  <!-- Step 2: Select Mode -->
-  <rect x="170" y="30" width="120" height="60" rx="6" fill="#2b6cb0" stroke="#2c5282" stroke-width="1.5"/>
-  <text x="230" y="55" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">2. Select Mode</text>
-  <text x="230" y="75" text-anchor="middle" fill="#bee3f8" font-size="10">Setup Panel</text>
+    subgraph JSONMode ["Device Sends JSON"]
+        JS1["1. Set JSON mode"]
+        JS2["2. Configure I/O"]
+        JS3["3. Click Connect"]
+        JS4>"Device sends\n/*{...JSON...}*/"]
+        JS5(["Device defines layout"])
+        JS1 --> JS2 --> JS3 --> JS4 --> JS5
+    end
 
-  <line x1="290" y1="60" x2="320" y2="60" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Step 3: Configure I/O -->
-  <rect x="320" y="30" width="120" height="60" rx="6" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
-  <text x="380" y="55" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">3. Configure</text>
-  <text x="380" y="75" text-anchor="middle" fill="#c6f6d5" font-size="10">Port / IP / BLE</text>
-
-  <line x1="440" y1="60" x2="470" y2="60" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Step 4: Connect -->
-  <rect x="470" y="30" width="120" height="60" rx="6" fill="#d69e2e" stroke="#b7791f" stroke-width="1.5"/>
-  <text x="530" y="55" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">4. Connect</text>
-  <text x="530" y="75" text-anchor="middle" fill="#fefcbf" font-size="10">Click button</text>
-
-  <line x1="590" y1="60" x2="620" y2="60" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Step 5: Dashboard -->
-  <rect x="620" y="30" width="80" height="60" rx="6" fill="#6b46c1" stroke="#553c9a" stroke-width="1.5"/>
-  <text x="660" y="55" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">5. View</text>
-  <text x="660" y="75" text-anchor="middle" fill="#e9d8fd" font-size="10">Dashboard</text>
-
-  <!-- Mode details below -->
-  <rect x="40" y="120" width="640" height="230" rx="6" fill="#fff" stroke="#cbd5e0" stroke-width="1.5"/>
-  <text x="360" y="145" text-anchor="middle" fill="#2d3748" font-weight="bold">Choose Your Path</text>
-  <line x1="60" y1="155" x2="660" y2="155" stroke="#e2e8f0" stroke-width="1"/>
-
-  <!-- Quick Plot path -->
-  <rect x="60" y="170" width="180" height="160" rx="5" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="150" y="192" text-anchor="middle" fill="#2f855a" font-weight="bold" font-size="12">Quick Plot</text>
-  <line x1="75" y1="200" x2="225" y2="200" stroke="#c6f6d5" stroke-width="1"/>
-  <text x="150" y="218" text-anchor="middle" fill="#2d3748" font-size="10">1. Set baud rate</text>
-  <text x="150" y="236" text-anchor="middle" fill="#2d3748" font-size="10">2. Select port</text>
-  <text x="150" y="254" text-anchor="middle" fill="#2d3748" font-size="10">3. Click Connect</text>
-  <text x="150" y="278" text-anchor="middle" fill="#718096" font-size="10">Device sends CSV</text>
-  <text x="150" y="294" text-anchor="middle" fill="#718096" font-size="10">e.g. 23.5,1013\n</text>
-  <text x="150" y="318" text-anchor="middle" fill="#2f855a" font-size="10" font-weight="bold">Zero config needed!</text>
-
-  <!-- JSON path -->
-  <rect x="270" y="170" width="180" height="160" rx="5" fill="#fefcbf" stroke="#d69e2e" stroke-width="1"/>
-  <text x="360" y="192" text-anchor="middle" fill="#975a16" font-weight="bold" font-size="12">Device Sends JSON</text>
-  <line x1="285" y1="200" x2="435" y2="200" stroke="#fefcbf" stroke-width="1"/>
-  <text x="360" y="218" text-anchor="middle" fill="#2d3748" font-size="10">1. Set JSON mode</text>
-  <text x="360" y="236" text-anchor="middle" fill="#2d3748" font-size="10">2. Configure I/O</text>
-  <text x="360" y="254" text-anchor="middle" fill="#2d3748" font-size="10">3. Click Connect</text>
-  <text x="360" y="278" text-anchor="middle" fill="#718096" font-size="10">Device sends</text>
-  <text x="360" y="294" text-anchor="middle" fill="#718096" font-size="10">/*{...JSON...}*/</text>
-  <text x="360" y="318" text-anchor="middle" fill="#975a16" font-size="10" font-weight="bold">Device defines layout</text>
-
-  <!-- Project File path -->
-  <rect x="480" y="170" width="180" height="160" rx="5" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
-  <text x="570" y="192" text-anchor="middle" fill="#2b6cb0" font-weight="bold" font-size="12">Project File</text>
-  <line x1="495" y1="200" x2="645" y2="200" stroke="#ebf8ff" stroke-width="1"/>
-  <text x="570" y="218" text-anchor="middle" fill="#2d3748" font-size="10">1. Open Project Editor</text>
-  <text x="570" y="236" text-anchor="middle" fill="#2d3748" font-size="10">2. Define groups/datasets</text>
-  <text x="570" y="254" text-anchor="middle" fill="#2d3748" font-size="10">3. Save .ssproj</text>
-  <text x="570" y="272" text-anchor="middle" fill="#2d3748" font-size="10">4. Load + Connect</text>
-  <text x="570" y="296" text-anchor="middle" fill="#718096" font-size="10">Full widget control</text>
-  <text x="570" y="318" text-anchor="middle" fill="#2b6cb0" font-size="10" font-weight="bold">Maximum flexibility</text>
-
-  <!-- Arrow marker -->
-  <defs>
-    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
-    </marker>
-  </defs>
-</svg>
+    subgraph ProjectFile ["Project File"]
+        PF1["1. Open Project Editor"]
+        PF2["2. Define groups/datasets"]
+        PF3["3. Save .ssproj"]
+        PF4["4. Load + Connect"]
+        PF5(["Full widget control\nMaximum flexibility"])
+        PF1 --> PF2 --> PF3 --> PF4 --> PF5
+    end
 ```
 
 ---

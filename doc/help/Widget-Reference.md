@@ -8,102 +8,47 @@ Serial Studio provides 15+ widget types for real-time data visualization. Widget
 
 The following diagram shows all widget types organized by category, with their configuration keys and dataset requirements.
 
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" font-family="monospace" font-size="13">
-  <!-- Background -->
-  <rect width="720" height="520" fill="#f8f9fa" rx="8"/>
+```mermaid
+flowchart TD
+    Root(["Dashboard Widgets"])
 
-  <!-- Root -->
-  <rect x="270" y="16" width="180" height="36" rx="6" fill="#2d3748" stroke="#1a202c" stroke-width="1.5"/>
-  <text x="360" y="40" text-anchor="middle" fill="#fff" font-weight="bold">Dashboard Widgets</text>
+    Root --> Group["Group Widgets\n(multi-dataset)"]
+    Root --> Dataset["Dataset Widgets\n(single)"]
 
-  <!-- Branch lines -->
-  <line x1="270" y1="52" x2="180" y2="80" stroke="#718096" stroke-width="1.5"/>
-  <line x1="450" y1="52" x2="540" y2="80" stroke="#718096" stroke-width="1.5"/>
+    Group --> DG["Data Grid\ndatagrid · 1+"]
+    Group --> MP["Multiple Plot\nmultiplot · 1+"]
+    Group --> GPS["GPS Map\nmap · 2-3 ds"]
+    Group --> Gyro["Gyroscope\ngyro · 3 ds"]
+    Group --> Accel["Accelerometer\naccelerometer · 3"]
+    Group --> LED["LED Panel\nauto · led:true"]
+    Group --> Plot3D["3D Plot &#91;Pro&#93;\nplot3d · 3 ds"]
+    Group --> Img["Image View &#91;Pro&#93;\nimage · 0 ds"]
 
-  <!-- Group Widgets header -->
-  <rect x="60" y="80" width="240" height="32" rx="5" fill="#2b6cb0" stroke="#2c5282" stroke-width="1.5"/>
-  <text x="180" y="101" text-anchor="middle" fill="#fff" font-weight="bold">Group Widgets (multi-dataset)</text>
+    Dataset --> Plot["Plot\ngraph:true"]
+    Dataset --> FFT["FFT Plot\nfft:true"]
+    Dataset --> Bar["Bar\nbar · min/max"]
+    Dataset --> Gauge["Gauge\ngauge · min/max"]
+    Dataset --> Compass["Compass\ncompass · 0-360"]
 
-  <!-- Dataset Widgets header -->
-  <rect x="420" y="80" width="240" height="32" rx="5" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
-  <text x="540" y="101" text-anchor="middle" fill="#fff" font-weight="bold">Dataset Widgets (single)</text>
+    Note["Temp/Pressure → Plot+Gauge | GPS → Map | IMU → Accel+Gyro\nAudio → FFT | Status → LED | Heading → Compass"]
 
-  <!-- Group widget items -->
-  <line x1="100" y1="112" x2="100" y2="440" stroke="#2b6cb0" stroke-width="1" stroke-dasharray="3,3"/>
-
-  <!-- Data Grid -->
-  <rect x="40" y="126" width="220" height="34" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
-  <text x="60" y="148" fill="#2b6cb0" font-weight="bold" font-size="11">Data Grid</text>
-  <text x="195" y="148" fill="#718096" font-size="10">"datagrid" · 1+</text>
-
-  <!-- MultiPlot -->
-  <rect x="40" y="168" width="220" height="34" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
-  <text x="60" y="190" fill="#2b6cb0" font-weight="bold" font-size="11">Multiple Plot</text>
-  <text x="195" y="190" fill="#718096" font-size="10">"multiplot" · 1+</text>
-
-  <!-- GPS Map -->
-  <rect x="40" y="210" width="220" height="34" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
-  <text x="60" y="232" fill="#2b6cb0" font-weight="bold" font-size="11">GPS Map</text>
-  <text x="195" y="232" fill="#718096" font-size="10">"map" · 2-3 ds</text>
-
-  <!-- Gyroscope -->
-  <rect x="40" y="252" width="220" height="34" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
-  <text x="60" y="274" fill="#2b6cb0" font-weight="bold" font-size="11">Gyroscope</text>
-  <text x="195" y="274" fill="#718096" font-size="10">"gyro" · 3 ds</text>
-
-  <!-- Accelerometer -->
-  <rect x="40" y="294" width="220" height="34" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
-  <text x="60" y="316" fill="#2b6cb0" font-weight="bold" font-size="11">Accelerometer</text>
-  <text x="195" y="316" fill="#718096" font-size="10">"accelerometer" · 3</text>
-
-  <!-- LED Panel -->
-  <rect x="40" y="336" width="220" height="34" rx="4" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1"/>
-  <text x="60" y="358" fill="#2b6cb0" font-weight="bold" font-size="11">LED Panel</text>
-  <text x="195" y="358" fill="#718096" font-size="10">auto · led:true</text>
-
-  <!-- 3D Plot -->
-  <rect x="40" y="378" width="220" height="34" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="60" y="400" fill="#6b46c1" font-weight="bold" font-size="11">3D Plot [Pro]</text>
-  <text x="195" y="400" fill="#718096" font-size="10">"plot3d" · 3 ds</text>
-
-  <!-- Image View -->
-  <rect x="40" y="420" width="220" height="34" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="60" y="442" fill="#6b46c1" font-weight="bold" font-size="11">Image View [Pro]</text>
-  <text x="195" y="442" fill="#718096" font-size="10">"image" · 0 ds</text>
-
-  <!-- Dataset widget items -->
-  <line x1="500" y1="112" x2="500" y2="300" stroke="#2f855a" stroke-width="1" stroke-dasharray="3,3"/>
-
-  <!-- Plot -->
-  <rect x="420" y="126" width="240" height="34" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="440" y="148" fill="#2f855a" font-weight="bold" font-size="11">Plot</text>
-  <text x="600" y="148" fill="#718096" font-size="10">graph:true</text>
-
-  <!-- FFT Plot -->
-  <rect x="420" y="168" width="240" height="34" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="440" y="190" fill="#2f855a" font-weight="bold" font-size="11">FFT Plot</text>
-  <text x="600" y="190" fill="#718096" font-size="10">fft:true</text>
-
-  <!-- Bar -->
-  <rect x="420" y="210" width="240" height="34" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="440" y="232" fill="#2f855a" font-weight="bold" font-size="11">Bar</text>
-  <text x="600" y="232" fill="#718096" font-size="10">"bar" · min/max</text>
-
-  <!-- Gauge -->
-  <rect x="420" y="252" width="240" height="34" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="440" y="274" fill="#2f855a" font-weight="bold" font-size="11">Gauge</text>
-  <text x="600" y="274" fill="#718096" font-size="10">"gauge" · min/max</text>
-
-  <!-- Compass -->
-  <rect x="420" y="294" width="240" height="34" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="440" y="316" fill="#2f855a" font-weight="bold" font-size="11">Compass</text>
-  <text x="600" y="316" fill="#718096" font-size="10">"compass" · 0-360</text>
-
-  <!-- Data type → widget guide -->
-  <rect x="40" y="470" width="640" height="36" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="360" y="493" text-anchor="middle" fill="#718096" font-size="10">Temp/Pressure → Plot+Gauge  |  GPS → Map  |  IMU → Accel+Gyro  |  Audio → FFT  |  Status → LED  |  Heading → Compass</text>
-</svg>
+    style Root fill:#2d3748,color:#fff,stroke:#1a202c
+    style Group fill:#2b6cb0,color:#fff,stroke:#2c5282
+    style Dataset fill:#2f855a,color:#fff,stroke:#276749
+    style DG fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
+    style MP fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
+    style GPS fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
+    style Gyro fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
+    style Accel fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
+    style LED fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
+    style Plot3D fill:#faf5ff,color:#6b46c1,stroke:#6b46c1
+    style Img fill:#faf5ff,color:#6b46c1,stroke:#6b46c1
+    style Plot fill:#e6fffa,color:#2f855a,stroke:#2f855a
+    style FFT fill:#e6fffa,color:#2f855a,stroke:#2f855a
+    style Bar fill:#e6fffa,color:#2f855a,stroke:#2f855a
+    style Gauge fill:#e6fffa,color:#2f855a,stroke:#2f855a
+    style Compass fill:#e6fffa,color:#2f855a,stroke:#2f855a
+    style Note fill:#edf2f7,color:#718096,stroke:#cbd5e0
 ```
 
 ## Group Widgets

@@ -12,137 +12,47 @@ The three modes, in order of increasing complexity, are:
 
 The following diagram compares the data flow through each operation mode side by side.
 
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 620" font-family="monospace" font-size="13">
-  <!-- Background -->
-  <rect width="720" height="620" fill="#f8f9fa" rx="8"/>
+```mermaid
+flowchart TD
+    subgraph QP["Quick Plot"]
+        QP1["23.5,1013,45.2\n\n(CSV + newline)"]
+        QP2["Line-Based (CR/LF)"]
+        QP3["split(',') (auto)"]
+        QP4["Auto: Grid + MultiPlot"]
+        QP1 --> QP2 --> QP3 --> QP4
+    end
 
-  <!-- Column headers -->
-  <text x="120" y="28" text-anchor="middle" fill="#2f855a" font-weight="bold">Quick Plot</text>
-  <text x="360" y="28" text-anchor="middle" fill="#d69e2e" font-weight="bold">Device Sends JSON</text>
-  <text x="600" y="28" text-anchor="middle" fill="#2b6cb0" font-weight="bold">Project File</text>
+    subgraph JSON["Device Sends JSON"]
+        JSON1["/*{...JSON...}*/\n\n(JSON + fixed delims)"]
+        JSON2["Fixed /* ... */"]
+        JSON3["JSON.parse() (auto)"]
+        JSON4["From JSON payload"]
+        JSON1 --> JSON2 --> JSON3 --> JSON4
+    end
 
-  <!-- Column dividers -->
-  <line x1="240" y1="10" x2="240" y2="540" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4"/>
-  <line x1="480" y1="10" x2="480" y2="540" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,4"/>
+    subgraph PF["Project File"]
+        PF1["raw bytes / CSV / binary\n\n(any format)"]
+        PF2["Configurable Delims"]
+        PF3["Decoder → JS parse()\n(or CSV fallback)"]
+        PF4["From .ssproj file"]
+        PF1 --> PF2 --> PF3 --> PF4
+    end
 
-  <!-- Row 1: Device Output -->
-  <rect x="30" y="44" width="180" height="48" rx="5" fill="#e6fffa" stroke="#2f855a" stroke-width="1.5"/>
-  <text x="120" y="65" text-anchor="middle" fill="#2f855a" font-size="11">23.5,1013,45.2\n</text>
-  <text x="120" y="82" text-anchor="middle" fill="#718096" font-size="10">CSV + newline</text>
-
-  <rect x="270" y="44" width="180" height="48" rx="5" fill="#fefcbf" stroke="#d69e2e" stroke-width="1.5"/>
-  <text x="360" y="65" text-anchor="middle" fill="#975a16" font-size="11">/*{...JSON...}*/</text>
-  <text x="360" y="82" text-anchor="middle" fill="#718096" font-size="10">JSON + fixed delims</text>
-
-  <rect x="510" y="44" width="180" height="48" rx="5" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1.5"/>
-  <text x="600" y="65" text-anchor="middle" fill="#2b6cb0" font-size="11">raw bytes / CSV / binary</text>
-  <text x="600" y="82" text-anchor="middle" fill="#718096" font-size="10">any format</text>
-
-  <!-- Arrows -->
-  <line x1="120" y1="92" x2="120" y2="124" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="360" y1="92" x2="360" y2="124" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="600" y1="92" x2="600" y2="124" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- Row 2: Frame Detection -->
-  <rect x="30" y="124" width="180" height="40" rx="5" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
-  <text x="120" y="149" text-anchor="middle" fill="#fff" font-size="11">Line-Based (CR/LF)</text>
-
-  <rect x="270" y="124" width="180" height="40" rx="5" fill="#d69e2e" stroke="#b7791f" stroke-width="1.5"/>
-  <text x="360" y="149" text-anchor="middle" fill="#fff" font-size="11">Fixed  /*  ...  */</text>
-
-  <rect x="510" y="124" width="180" height="40" rx="5" fill="#2b6cb0" stroke="#2c5282" stroke-width="1.5"/>
-  <text x="600" y="149" text-anchor="middle" fill="#fff" font-size="11">Configurable Delims</text>
-
-  <!-- Arrows -->
-  <line x1="120" y1="164" x2="120" y2="196" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="360" y1="164" x2="360" y2="196" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="600" y1="164" x2="600" y2="196" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- Row 3: Parsing -->
-  <rect x="30" y="196" width="180" height="40" rx="5" fill="#fff" stroke="#2f855a" stroke-width="1.5"/>
-  <text x="120" y="221" text-anchor="middle" fill="#2f855a" font-size="11">split(",")  (auto)</text>
-
-  <rect x="270" y="196" width="180" height="40" rx="5" fill="#fff" stroke="#d69e2e" stroke-width="1.5"/>
-  <text x="360" y="221" text-anchor="middle" fill="#975a16" font-size="11">JSON.parse()  (auto)</text>
-
-  <rect x="510" y="196" width="180" height="40" rx="5" fill="#fff" stroke="#2b6cb0" stroke-width="1.5"/>
-  <text x="600" y="215" text-anchor="middle" fill="#2b6cb0" font-size="11">Decoder → JS parse()</text>
-  <text x="600" y="230" text-anchor="middle" fill="#718096" font-size="10">(or CSV fallback)</text>
-
-  <!-- Arrows -->
-  <line x1="120" y1="236" x2="120" y2="268" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="360" y1="236" x2="360" y2="268" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="600" y1="236" x2="600" y2="268" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- Row 4: Dashboard Definition -->
-  <rect x="30" y="268" width="180" height="40" rx="5" fill="#fff" stroke="#2f855a" stroke-width="1.5"/>
-  <text x="120" y="293" text-anchor="middle" fill="#2f855a" font-size="11">Auto: Grid + MultiPlot</text>
-
-  <rect x="270" y="268" width="180" height="40" rx="5" fill="#fff" stroke="#d69e2e" stroke-width="1.5"/>
-  <text x="360" y="293" text-anchor="middle" fill="#975a16" font-size="11">From JSON payload</text>
-
-  <rect x="510" y="268" width="180" height="40" rx="5" fill="#fff" stroke="#2b6cb0" stroke-width="1.5"/>
-  <text x="600" y="293" text-anchor="middle" fill="#2b6cb0" font-size="11">From .ssproj file</text>
-
-  <!-- Arrows -->
-  <line x1="120" y1="308" x2="120" y2="340" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="360" y1="308" x2="360" y2="340" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-  <line x1="600" y1="308" x2="600" y2="340" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- Row 5: Dashboard (shared) -->
-  <rect x="100" y="340" width="520" height="40" rx="6" fill="#6b46c1" stroke="#553c9a" stroke-width="1.5"/>
-  <text x="360" y="365" text-anchor="middle" fill="#fff" font-weight="bold">Dashboard (Widgets, Plots, Gauges, Map, ...)</text>
-
-  <!-- Feature comparison table -->
-  <rect x="40" y="400" width="640" height="140" rx="6" fill="#fff" stroke="#cbd5e0" stroke-width="1.5"/>
-  <text x="360" y="424" text-anchor="middle" fill="#2d3748" font-weight="bold">Feature Comparison</text>
-  <line x1="60" y1="432" x2="660" y2="432" stroke="#e2e8f0" stroke-width="1"/>
-
-  <!-- Headers -->
-  <text x="200" y="452" fill="#718096" font-size="11" font-weight="bold">Feature</text>
-  <text x="380" y="452" text-anchor="middle" fill="#2f855a" font-size="11" font-weight="bold">QP</text>
-  <text x="480" y="452" text-anchor="middle" fill="#d69e2e" font-size="11" font-weight="bold">JSON</text>
-  <text x="580" y="452" text-anchor="middle" fill="#2b6cb0" font-size="11" font-weight="bold">Project</text>
-
-  <line x1="60" y1="458" x2="660" y2="458" stroke="#e2e8f0" stroke-width="1"/>
-
-  <text x="120" y="475" fill="#2d3748" font-size="11">JS Parser</text>
-  <text x="380" y="475" text-anchor="middle" fill="#9b2c2c" font-size="11">—</text>
-  <text x="480" y="475" text-anchor="middle" fill="#9b2c2c" font-size="11">—</text>
-  <text x="580" y="475" text-anchor="middle" fill="#2f855a" font-size="11">✓</text>
-
-  <text x="120" y="495" fill="#2d3748" font-size="11">Custom Widgets</text>
-  <text x="380" y="495" text-anchor="middle" fill="#9b2c2c" font-size="11">—</text>
-  <text x="480" y="495" text-anchor="middle" fill="#2f855a" font-size="11">✓</text>
-  <text x="580" y="495" text-anchor="middle" fill="#2f855a" font-size="11">✓</text>
-
-  <text x="120" y="515" fill="#2d3748" font-size="11">Multi-Source</text>
-  <text x="380" y="515" text-anchor="middle" fill="#9b2c2c" font-size="11">—</text>
-  <text x="480" y="515" text-anchor="middle" fill="#9b2c2c" font-size="11">—</text>
-  <text x="580" y="515" text-anchor="middle" fill="#2f855a" font-size="11">✓ Pro</text>
-
-  <text x="120" y="535" fill="#2d3748" font-size="11">Setup Effort</text>
-  <text x="380" y="535" text-anchor="middle" fill="#2d3748" font-size="11">None</text>
-  <text x="480" y="535" text-anchor="middle" fill="#2d3748" font-size="11">Firmware</text>
-  <text x="580" y="535" text-anchor="middle" fill="#2d3748" font-size="11">Editor</text>
-
-  <!-- Legend -->
-  <rect x="40" y="556" width="640" height="24" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="360" y="573" text-anchor="middle" fill="#718096" font-size="10">All modes work with any data source: Serial, TCP/UDP, BLE, and all Pro drivers</text>
-
-  <!-- Frame detection detail -->
-  <rect x="40" y="586" width="640" height="24" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="360" y="603" text-anchor="middle" fill="#718096" font-size="10">Frame Detection: End Only | Start+End | Start Only | No Delimiters (Project File mode only)</text>
-
-  <!-- Arrow marker -->
-  <defs>
-    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
-    </marker>
-  </defs>
-</svg>
+    QP4 --> Dashboard
+    JSON4 --> Dashboard
+    PF4 --> Dashboard["Dashboard (Widgets, Plots, Gauges, Map, ...)"]
 ```
+
+| Feature | Quick Plot | Device Sends JSON | Project File |
+|---------|:----------:|:-----------------:|:------------:|
+| JS Parser | -- | -- | Yes |
+| Custom Widgets | -- | Yes | Yes |
+| Multi-Source | -- | -- | Yes (Pro) |
+| Setup Effort | None | Firmware | Editor |
+
+> **Note:** All modes work with any data source: Serial, TCP/UDP, BLE, and all Pro drivers.
+>
+> **Frame Detection options (Project File mode only):** End Only | Start+End | Start Only | No Delimiters.
 
 ---
 

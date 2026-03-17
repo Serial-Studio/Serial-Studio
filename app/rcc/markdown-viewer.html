@@ -12,6 +12,9 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
+  <!-- Mermaid.js for diagrams -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.1/mermaid.min.js"></script>
+
   <!-- KaTeX for math rendering -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
@@ -243,7 +246,7 @@
     }
 
     /* ------------------------------------------------------------------ */
-    /* Images & SVG                                                       */
+    /* Images                                                             */
     /* ------------------------------------------------------------------ */
     img {
       max-width: 100%;
@@ -251,22 +254,18 @@
       border-radius: 4px;
     }
 
-    svg {
-      max-width: 100%;
-      height: auto;
-    }
-
-    .svg-diagram {
+    /* ------------------------------------------------------------------ */
+    /* Mermaid diagrams                                                    */
+    /* ------------------------------------------------------------------ */
+    .mermaid-diagram {
       margin-bottom: 16px;
       overflow-x: auto;
+      text-align: center;
     }
 
-    .svg-diagram svg {
-      background: transparent !important;
-    }
-
-    .svg-diagram svg > rect:first-child {
-      fill: transparent !important;
+    .mermaid-diagram svg {
+      max-width: 100%;
+      height: auto;
     }
 
     /* ------------------------------------------------------------------ */
@@ -334,6 +333,17 @@
     // ----------------------------------------------------------------
     // Showdown converter with GitHub-flavored options
     // ----------------------------------------------------------------
+    // ----------------------------------------------------------------
+    // Initialize Mermaid
+    // ----------------------------------------------------------------
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
+      flowchart: { useMaxWidth: true, htmlLabels: true },
+      securityLevel: 'loose'
+    });
+
     var converter = new showdown.Converter({
       tables:              true,
       tasklists:           true,
@@ -362,15 +372,23 @@
 
       el.innerHTML = converter.makeHtml(md);
 
-      // Render ```svg fenced blocks as inline SVG instead of code
-      el.querySelectorAll('pre code.svg, pre code.language-svg').forEach(function(block) {
-        var svgSource = block.textContent;
-        var pre = block.parentElement;
-        var wrapper = document.createElement('div');
-        wrapper.className = 'svg-diagram';
-        wrapper.innerHTML = svgSource;
-        pre.parentElement.replaceChild(wrapper, pre);
-      });
+      // Render ```mermaid fenced blocks as diagrams
+      var mermaidBlocks = el.querySelectorAll('pre code.mermaid, pre code.language-mermaid');
+      if (mermaidBlocks.length > 0) {
+        var pending = mermaidBlocks.length;
+        mermaidBlocks.forEach(function(block, idx) {
+          var source = block.textContent;
+          var pre = block.parentElement;
+          var wrapper = document.createElement('div');
+          wrapper.className = 'mermaid-diagram';
+          pre.parentElement.replaceChild(wrapper, pre);
+          mermaid.render('mermaid-' + idx, source).then(function(result) {
+            wrapper.innerHTML = result.svg;
+          }).catch(function() {
+            wrapper.textContent = source;
+          });
+        });
+      }
 
       // Syntax-highlight all remaining code blocks
       el.querySelectorAll('pre code').forEach(function(block) {
@@ -424,6 +442,15 @@
       var hljsLink = document.getElementById('hljs-theme');
       var theme = colors.isDark ? 'github-dark' : 'github';
       hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/' + theme + '.min.css';
+
+      // Switch Mermaid theme
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: colors.isDark ? 'dark' : 'default',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        securityLevel: 'loose'
+      });
 
       // Re-highlight code blocks with new theme
       document.querySelectorAll('pre code').forEach(function(block) {

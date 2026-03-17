@@ -8,103 +8,58 @@ All drivers share a common interface (`HAL_Driver`) that provides `open()`, `clo
 
 The following diagram shows the driver architecture and how each driver feeds into the data pipeline.
 
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" font-family="monospace" font-size="13">
-  <!-- Background -->
-  <rect width="720" height="520" fill="#f8f9fa" rx="8"/>
+```mermaid
+flowchart TD
+    HAL["<b>HAL_Driver Interface</b><br/><i>open() close() write() dataReceived()</i>"]
 
-  <!-- HAL_Driver interface -->
-  <rect x="220" y="14" width="280" height="44" rx="6" fill="#2d3748" stroke="#1a202c" stroke-width="1.5"/>
-  <text x="360" y="35" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">HAL_Driver Interface</text>
-  <text x="360" y="50" text-anchor="middle" fill="#a0aec0" font-size="10">open() close() write() dataReceived()</text>
+    subgraph Free["Free Drivers"]
+        UART["Serial / UART"]
+        NET["Network (TCP/UDP)"]
+        BLE["Bluetooth LE"]
+    end
 
-  <!-- Free drivers (left group) -->
-  <rect x="30" y="80" width="200" height="180" rx="6" fill="#fff" stroke="#2f855a" stroke-width="1.5"/>
-  <text x="130" y="100" text-anchor="middle" fill="#2f855a" font-weight="bold" font-size="12">Free Drivers</text>
-  <line x1="45" y1="108" x2="215" y2="108" stroke="#c6f6d5" stroke-width="1"/>
+    subgraph Pro["Pro Drivers"]
+        AUDIO["Audio Input"]
+        MODBUS["Modbus"]
+        CAN["CAN Bus"]
+        USB["Raw USB"]
+        HID["HID Device"]
+        PROC["Process I/O"]
+    end
 
-  <rect x="50" y="116" width="160" height="28" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="130" y="135" text-anchor="middle" fill="#2f855a" font-size="11">Serial / UART</text>
+    UART --> HAL
+    NET --> HAL
+    BLE --> HAL
+    AUDIO --> HAL
+    MODBUS --> HAL
+    CAN --> HAL
+    USB --> HAL
+    HID --> HAL
+    PROC --> HAL
 
-  <rect x="50" y="152" width="160" height="28" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="130" y="171" text-anchor="middle" fill="#2f855a" font-size="11">Network (TCP/UDP)</text>
+    HAL -- "raw bytes" --> DM["DeviceManager<br/>(I/O Thread)"]
+    DM --> CB["Circular Buffer<br/>(10 MB SPSC)"]
+    CB --> FR["Frame Reader<br/>(KMP Detection)"]
+    FR --> FB["Frame Builder"]
+    FB --> DASH["Dashboard"]
 
-  <rect x="50" y="188" width="160" height="28" rx="4" fill="#e6fffa" stroke="#2f855a" stroke-width="1"/>
-  <text x="130" y="207" text-anchor="middle" fill="#2f855a" font-size="11">Bluetooth LE</text>
+    subgraph Legend["Threading"]
+        L1["Driver --> I/O Thread"]
+        L2["Dashboard --> Main Thread"]
+    end
 
-  <!-- Lines from free → HAL -->
-  <line x1="130" y1="80" x2="300" y2="58" stroke="#2f855a" stroke-width="1" stroke-dasharray="3,3"/>
-
-  <!-- Pro drivers (right group) -->
-  <rect x="260" y="80" width="430" height="180" rx="6" fill="#fff" stroke="#6b46c1" stroke-width="1.5"/>
-  <text x="475" y="100" text-anchor="middle" fill="#6b46c1" font-weight="bold" font-size="12">Pro Drivers</text>
-  <line x1="275" y1="108" x2="675" y2="108" stroke="#e9d8fd" stroke-width="1"/>
-
-  <rect x="280" y="116" width="120" height="28" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="340" y="135" text-anchor="middle" fill="#6b46c1" font-size="11">Audio Input</text>
-
-  <rect x="410" y="116" width="120" height="28" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="470" y="135" text-anchor="middle" fill="#6b46c1" font-size="11">Modbus</text>
-
-  <rect x="540" y="116" width="120" height="28" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="600" y="135" text-anchor="middle" fill="#6b46c1" font-size="11">CAN Bus</text>
-
-  <rect x="280" y="152" width="120" height="28" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="340" y="171" text-anchor="middle" fill="#6b46c1" font-size="11">Raw USB</text>
-
-  <rect x="410" y="152" width="120" height="28" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="470" y="171" text-anchor="middle" fill="#6b46c1" font-size="11">HID Device</text>
-
-  <rect x="540" y="152" width="120" height="28" rx="4" fill="#faf5ff" stroke="#6b46c1" stroke-width="1"/>
-  <text x="600" y="171" text-anchor="middle" fill="#6b46c1" font-size="11">Process I/O</text>
-
-  <!-- ConnectionManager row -->
-  <text x="475" y="210" text-anchor="middle" fill="#718096" font-size="10">UI-config instances owned by ConnectionManager</text>
-  <text x="475" y="224" text-anchor="middle" fill="#718096" font-size="10">Live instances created by DeviceManager</text>
-
-  <!-- Lines from Pro → HAL -->
-  <line x1="475" y1="80" x2="420" y2="58" stroke="#6b46c1" stroke-width="1" stroke-dasharray="3,3"/>
-
-  <!-- Pipeline below -->
-  <line x1="360" y1="260" x2="360" y2="290" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-  <text x="375" y="280" fill="#718096" font-size="10">raw bytes</text>
-
-  <!-- DeviceManager -->
-  <rect x="220" y="290" width="280" height="36" rx="6" fill="#2b6cb0" stroke="#2c5282" stroke-width="1.5"/>
-  <text x="360" y="313" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">DeviceManager (I/O Thread)</text>
-
-  <line x1="360" y1="326" x2="360" y2="352" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Circular Buffer -->
-  <rect x="220" y="352" width="280" height="36" rx="6" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
-  <text x="360" y="375" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">Circular Buffer (10 MB SPSC)</text>
-
-  <line x1="360" y1="388" x2="360" y2="414" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Frame Reader -->
-  <rect x="220" y="414" width="280" height="36" rx="6" fill="#9b2c2c" stroke="#822727" stroke-width="1.5"/>
-  <text x="360" y="437" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">Frame Reader (KMP Detection)</text>
-
-  <line x1="360" y1="450" x2="360" y2="476" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Frame Builder + Dashboard -->
-  <rect x="220" y="476" width="280" height="30" rx="6" fill="#6b46c1" stroke="#553c9a" stroke-width="1.5"/>
-  <text x="360" y="496" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">Frame Builder → Dashboard</text>
-
-  <!-- Legend -->
-  <rect x="40" y="290" width="160" height="56" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="120" y="308" text-anchor="middle" fill="#2d3748" font-size="10" font-weight="bold">Threading</text>
-  <text x="120" y="323" text-anchor="middle" fill="#2b6cb0" font-size="10">Driver → I/O Thread</text>
-  <text x="120" y="338" text-anchor="middle" fill="#6b46c1" font-size="10">Dashboard → Main Thread</text>
-
-  <!-- Arrow marker -->
-  <defs>
-    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
-    </marker>
-  </defs>
-</svg>
+    style HAL fill:#2d3748,color:#fff,stroke:#1a202c
+    style Free fill:#e6fffa,stroke:#2f855a,color:#2f855a
+    style Pro fill:#faf5ff,stroke:#6b46c1,color:#6b46c1
+    style DM fill:#2b6cb0,color:#fff,stroke:#2c5282
+    style CB fill:#2f855a,color:#fff,stroke:#276749
+    style FR fill:#9b2c2c,color:#fff,stroke:#822727
+    style FB fill:#6b46c1,color:#fff,stroke:#553c9a
+    style DASH fill:#6b46c1,color:#fff,stroke:#553c9a
+    style Legend fill:#edf2f7,stroke:#cbd5e0
 ```
+
+> **Note:** UI-config instances are owned by `ConnectionManager`; live instances are created by `DeviceManager`.
 
 ---
 

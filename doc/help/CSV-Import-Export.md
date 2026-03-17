@@ -6,102 +6,31 @@ Serial Studio can export incoming telemetry data to CSV files during a live sess
 
 The following diagram shows how CSV export runs on a background thread during live data, and how CSV playback feeds recorded data back through the same pipeline.
 
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" font-family="monospace" font-size="13">
-  <!-- Background -->
-  <rect width="720" height="560" fill="#f8f9fa" rx="8"/>
+```mermaid
+---
+title: Live Export
+---
+flowchart TD
+    A[Connected Device] -->|raw bytes| B[Frame Builder]
+    B --> C[Dashboard\nMain Thread]
+    B -->|lock-free enqueue| D[Worker Thread\nCSV / MDF4 Pro / API :7777]
+    D --> E[CSV / MDF4 File]
+    E -.-|"Documents/Serial Studio/CSV/\n‹Project›/‹Year›/‹Month›/‹Day›/‹Time›.csv"| F[ ]
 
-  <!-- Title: EXPORT PATH -->
-  <text x="200" y="25" text-anchor="middle" fill="#2d3748" font-weight="bold" font-size="14">Live Export</text>
+    style F fill:none,stroke:none
+```
 
-  <!-- Device -->
-  <rect x="100" y="40" width="200" height="36" rx="6" fill="#2d3748" stroke="#1a202c" stroke-width="1.5"/>
-  <text x="200" y="63" text-anchor="middle" fill="#fff" font-weight="bold">Connected Device</text>
+> **Export:** 8192 queue capacity | 1024 frame flush threshold | 1 s timer | zero dashboard impact
 
-  <line x1="200" y1="76" x2="200" y2="106" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-  <text x="215" y="96" fill="#718096" font-size="10">raw bytes</text>
+```mermaid
+---
+title: CSV Playback
+---
+flowchart LR
+    A[CSV File] --> B[CSV Player] -->|timed| C[Frame Builder] --> D[Dashboard]
+    B -.-|"◀ Prev  │  ▶ Play/Pause  │  ▶▶ Next  │  Seek Bar"| E[Controls]
 
-  <!-- Frame Builder -->
-  <rect x="100" y="106" width="200" height="36" rx="6" fill="#2b6cb0" stroke="#2c5282" stroke-width="1.5"/>
-  <text x="200" y="129" text-anchor="middle" fill="#fff" font-weight="bold">Frame Builder</text>
-
-  <!-- Branch: Main thread to Dashboard -->
-  <line x1="200" y1="142" x2="200" y2="172" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <rect x="100" y="172" width="200" height="36" rx="6" fill="#6b46c1" stroke="#553c9a" stroke-width="1.5"/>
-  <text x="200" y="195" text-anchor="middle" fill="#fff" font-weight="bold">Dashboard (Main Thread)</text>
-
-  <!-- Branch: Export worker -->
-  <line x1="300" y1="124" x2="360" y2="124" stroke="#ed8936" stroke-width="1.5"/>
-  <line x1="360" y1="124" x2="360" y2="172" stroke="#ed8936" stroke-width="1.5" marker-end="url(#arr)"/>
-  <text x="335" y="152" fill="#ed8936" font-size="10">lock-free</text>
-  <text x="340" y="163" fill="#ed8936" font-size="10">enqueue</text>
-
-  <!-- Export Worker box -->
-  <rect x="310" y="172" width="100" height="100" rx="6" fill="#fff" stroke="#ed8936" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="360" y="192" text-anchor="middle" fill="#c05621" font-weight="bold" font-size="11">Worker</text>
-  <text x="360" y="210" text-anchor="middle" fill="#c05621" font-size="11">Thread</text>
-  <line x1="320" y1="218" x2="400" y2="218" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="360" y="238" text-anchor="middle" fill="#2d3748" font-size="10">CSV</text>
-  <text x="360" y="253" text-anchor="middle" fill="#2d3748" font-size="10">MDF4 [Pro]</text>
-  <text x="360" y="268" text-anchor="middle" fill="#2d3748" font-size="10">API :7777</text>
-
-  <!-- Arrow to disk -->
-  <line x1="360" y1="272" x2="360" y2="310" stroke="#718096" stroke-width="1.5" marker-end="url(#arr)"/>
-
-  <!-- Disk -->
-  <rect x="300" y="310" width="120" height="36" rx="6" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
-  <text x="360" y="333" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">CSV / MDF4 File</text>
-
-  <!-- File path -->
-  <rect x="60" y="240" width="220" height="48" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="170" y="258" text-anchor="middle" fill="#2d3748" font-size="10">Documents/Serial Studio/CSV/</text>
-  <text x="170" y="273" text-anchor="middle" fill="#718096" font-size="10">&lt;Project&gt;/&lt;Year&gt;/&lt;Month&gt;/&lt;Day&gt;/&lt;Time&gt;.csv</text>
-
-  <!-- Separator -->
-  <line x1="20" y1="376" x2="700" y2="376" stroke="#cbd5e0" stroke-width="1" stroke-dasharray="4,4"/>
-
-  <!-- Title: PLAYBACK PATH -->
-  <text x="360" y="400" text-anchor="middle" fill="#2d3748" font-weight="bold" font-size="14">CSV Playback</text>
-
-  <!-- CSV File -->
-  <rect x="60" y="420" width="120" height="36" rx="6" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
-  <text x="120" y="443" text-anchor="middle" fill="#fff" font-weight="bold" font-size="11">CSV File</text>
-
-  <line x1="180" y1="438" x2="230" y2="438" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- CSV Player -->
-  <rect x="230" y="420" width="140" height="36" rx="6" fill="#d69e2e" stroke="#b7791f" stroke-width="1.5"/>
-  <text x="300" y="443" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">CSV Player</text>
-
-  <line x1="370" y1="438" x2="420" y2="438" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-  <text x="395" y="428" fill="#718096" font-size="10">timed</text>
-
-  <!-- Frame Builder (playback) -->
-  <rect x="420" y="420" width="140" height="36" rx="6" fill="#2b6cb0" stroke="#2c5282" stroke-width="1.5"/>
-  <text x="490" y="443" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">Frame Builder</text>
-
-  <line x1="560" y1="438" x2="600" y2="438" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-
-  <!-- Dashboard (playback) -->
-  <rect x="600" y="420" width="100" height="36" rx="6" fill="#6b46c1" stroke="#553c9a" stroke-width="1.5"/>
-  <text x="650" y="443" text-anchor="middle" fill="#fff" font-weight="bold" font-size="12">Dashboard</text>
-
-  <!-- Player controls -->
-  <rect x="230" y="470" width="340" height="26" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="400" y="488" text-anchor="middle" fill="#718096" font-size="10">◀ Prev  |  ▶ Play/Pause  |  ▶▶ Next  |  ━━━━━━━ Seek Bar</text>
-
-  <!-- Legend -->
-  <rect x="40" y="515" width="640" height="28" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="360" y="534" text-anchor="middle" fill="#718096" font-size="10">Export: 8192 queue capacity  •  1024 frame flush threshold  •  1 s timer  •  zero dashboard impact</text>
-
-  <!-- Arrow marker -->
-  <defs>
-    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
-    </marker>
-  </defs>
-</svg>
+    style E fill:#edf2f7,stroke:#cbd5e0
 ```
 
 ---

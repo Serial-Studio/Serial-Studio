@@ -12,69 +12,37 @@ The parser runs inside a QJSEngine (ECMAScript 7 / ES2016 compliant) with consol
 
 The following diagram shows how raw device bytes are transformed into dashboard-ready values through the decoder and JavaScript parser stages.
 
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 580" font-family="monospace" font-size="13">
-  <!-- Background -->
-  <rect width="720" height="580" fill="#f8f9fa" rx="8"/>
+```mermaid
+flowchart TD
+    A["Raw Bytes from Device"]
+    A -- "delimiters stripped" --> B
 
-  <!-- Device -->
-  <rect x="240" y="20" width="240" height="40" rx="6" fill="#2d3748" stroke="#1a202c" stroke-width="1.5"/>
-  <text x="360" y="45" text-anchor="middle" fill="#fff" font-weight="bold">Raw Bytes from Device</text>
+    subgraph B["Decoder Method"]
+        B1["Plain Text (UTF-8) → &quot;23.5,1013,45.2&quot;"]
+        B2["Hexadecimal → &quot;03FF020035A0&quot;"]
+        B3["Base64 → &quot;Av8CADWg&quot;"]
+        B4["Binary Direct [Pro] → [3, 255, 2, 0, 53, 160]"]
+    end
 
-  <!-- Arrow 1 -->
-  <line x1="360" y1="60" x2="360" y2="96" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-  <text x="375" y="83" fill="#718096" font-size="11">delimiters stripped</text>
+    B -- "frame (string or array)" --> C["parse(frame) → JavaScript Engine"]
+    C -- "return value" --> D
 
-  <!-- Decoder box -->
-  <rect x="120" y="96" width="480" height="120" rx="6" fill="#fff" stroke="#2b6cb0" stroke-width="1.5"/>
-  <text x="360" y="118" text-anchor="middle" fill="#2b6cb0" font-weight="bold">Decoder Method</text>
-  <line x1="140" y1="126" x2="580" y2="126" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="160" y="148" fill="#2d3748" font-size="12">Plain Text (UTF-8)  →  "23.5,1013,45.2"</text>
-  <text x="160" y="168" fill="#2d3748" font-size="12">Hexadecimal         →  "03FF020035A0"</text>
-  <text x="160" y="188" fill="#2d3748" font-size="12">Base64              →  "Av8CADWg"</text>
-  <text x="160" y="208" fill="#2d3748" font-size="12">Binary Direct [Pro] →  [3, 255, 2, 0, 53, 160]</text>
+    subgraph D["Return Format"]
+        D1["Flat Array [v1, v2, v3] → 1 frame"]
+        D2["2D Array [[v1,v2],[v3,v4]] → N frames"]
+        D3["Mixed [scalar, [a,b,c]] → expanded"]
+    end
 
-  <!-- Arrow 2 -->
-  <line x1="360" y1="216" x2="360" y2="256" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-  <text x="375" y="241" fill="#718096" font-size="11">frame (string or array)</text>
+    D -- "array[0]→IDX 1, array[1]→IDX 2 ..." --> E["Dataset Index Mapping → Dashboard"]
 
-  <!-- parse() function -->
-  <rect x="200" y="256" width="320" height="44" rx="6" fill="#2f855a" stroke="#276749" stroke-width="1.5"/>
-  <text x="360" y="283" text-anchor="middle" fill="#fff" font-weight="bold">parse(frame) → JavaScript Engine</text>
-
-  <!-- Arrow 3 -->
-  <line x1="360" y1="300" x2="360" y2="340" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-  <text x="375" y="325" fill="#718096" font-size="11">return value</text>
-
-  <!-- Return format box -->
-  <rect x="120" y="340" width="480" height="110" rx="6" fill="#fff" stroke="#6b46c1" stroke-width="1.5"/>
-  <text x="360" y="362" text-anchor="middle" fill="#6b46c1" font-weight="bold">Return Format</text>
-  <line x1="140" y1="370" x2="580" y2="370" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="160" y="392" fill="#2d3748" font-size="12">Flat Array     [v1, v2, v3]           → 1 frame</text>
-  <text x="160" y="412" fill="#2d3748" font-size="12">2D Array       [[v1,v2],[v3,v4]]      → N frames</text>
-  <text x="160" y="432" fill="#2d3748" font-size="12">Mixed          [scalar, [a, b, c]]    → expanded</text>
-  <text x="160" y="444" fill="#718096" font-size="10">                 (scalars repeat, vectors expand)</text>
-
-  <!-- Arrow 4 -->
-  <line x1="360" y1="450" x2="360" y2="490" stroke="#718096" stroke-width="2" marker-end="url(#arr)"/>
-  <text x="375" y="475" fill="#718096" font-size="11">array[0]→IDX 1, array[1]→IDX 2 ...</text>
-
-  <!-- Dataset Mapping -->
-  <rect x="200" y="490" width="320" height="44" rx="6" fill="#9b2c2c" stroke="#822727" stroke-width="1.5"/>
-  <text x="360" y="517" text-anchor="middle" fill="#fff" font-weight="bold">Dataset Index Mapping → Dashboard</text>
-
-  <!-- Legend -->
-  <rect x="40" y="550" width="640" height="24" rx="4" fill="#edf2f7" stroke="#cbd5e0" stroke-width="1"/>
-  <text x="360" y="567" text-anchor="middle" fill="#718096" font-size="11">500 ms timeout per call  •  ECMAScript 7 (ES2016)  •  One engine per source</text>
-
-  <!-- Arrow marker -->
-  <defs>
-    <marker id="arr" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
-    </marker>
-  </defs>
-</svg>
+    style A fill:#2d3748,color:#fff,stroke:#1a202c
+    style C fill:#2f855a,color:#fff,stroke:#276749
+    style E fill:#9b2c2c,color:#fff,stroke:#822727
+    style B fill:#fff,stroke:#2b6cb0,color:#2b6cb0
+    style D fill:#fff,stroke:#6b46c1,color:#6b46c1
 ```
+
+> **Legend:** 500 ms timeout per call &bull; ECMAScript 7 (ES2016) &bull; One engine per source
 
 ---
 
