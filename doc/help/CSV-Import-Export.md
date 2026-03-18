@@ -7,30 +7,19 @@ Serial Studio can export incoming telemetry data to CSV files during a live sess
 The following diagram shows how CSV export runs on a background thread during live data, and how CSV playback feeds recorded data back through the same pipeline.
 
 ```mermaid
----
-title: Live Export
----
-flowchart TD
-    A[Connected Device] -->|raw bytes| B[Frame Builder]
-    B --> C[Dashboard\nMain Thread]
-    B -->|lock-free enqueue| D[Worker Thread\nCSV / MDF4 Pro / API :7777]
-    D --> E[CSV / MDF4 File]
-    E -.-|"Documents/Serial Studio/CSV/\n‹Project›/‹Year›/‹Month›/‹Day›/‹Time›.csv"| F[ ]
-
-    style F fill:none,stroke:none
+flowchart LR
+    A["Device"] --> B["Frame Builder"]
+    B --> C["Dashboard"]
+    B --> D["CSV / MDF4 File"]
 ```
 
 > **Export:** 8192 queue capacity | 1024 frame flush threshold | 1 s timer | zero dashboard impact
 
 ```mermaid
----
-title: CSV Playback
----
 flowchart LR
-    A[CSV File] --> B[CSV Player] -->|timed| C[Frame Builder] --> D[Dashboard]
-    B -.-|"◀ Prev  │  ▶ Play/Pause  │  ▶▶ Next  │  Seek Bar"| E[Controls]
-
-    style E fill:#edf2f7,stroke:#cbd5e0
+    A["CSV File"] --> B["CSV Player"]
+    B --> C["Frame Builder"]
+    C --> D["Dashboard"]
 ```
 
 ---

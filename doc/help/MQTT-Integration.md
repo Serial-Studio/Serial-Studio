@@ -7,22 +7,12 @@ MQTT (Message Queuing Telemetry Transport) is a lightweight publish/subscribe me
 The following diagram shows how Serial Studio integrates with an MQTT broker in both subscriber and publisher modes.
 
 ```mermaid
-flowchart TD
-    IoT["IoT Device\n(ESP32, Arduino)"] -- "PUBLISH\nsensors/data" --> Broker
-    Broker{"MQTT Broker\n(Mosquitto / EMQX / AWS IoT)\nTLS 1.2/1.3 (port 8883)"}
-    Broker -- "SUBSCRIBE" --> Other["Other Clients\n(Node-RED, Python)"]
-    Broker -- "SUBSCRIBE\ntopic: sensors/#" --> Subscriber([Serial Studio\nSubscriber Mode])
-    Subscriber --> Dashboard[/Dashboard Widgets/]
-    Device[[Serial/Network Device]] --> Publisher([Serial Studio\nPublisher Mode])
-    Publisher -- "PUBLISH\ntopic: device/data" --> Broker
-
-    style Broker fill:#2b6cb0,color:#fff
-    style IoT fill:#2f855a,color:#fff
-    style Other fill:#718096,color:#fff
-    style Subscriber fill:#6b46c1,color:#fff
-    style Dashboard fill:#d69e2e,color:#fff
-    style Device fill:#2d3748,color:#fff
-    style Publisher fill:#9b2c2c,color:#fff
+flowchart LR
+    IoT["IoT Device"] -- publish --> Broker["MQTT Broker"]
+    Broker -- subscribe --> SS["Serial Studio"]
+    SS --> Dash["Dashboard"]
+    Device["Serial Device"] --> SS2["Serial Studio"]
+    SS2 -- publish --> Broker
 ```
 
 ---

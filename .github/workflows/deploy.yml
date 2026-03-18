@@ -90,6 +90,8 @@ jobs:
           libzstd-dev \
           zlib1g-dev \
           libexpat1-dev \
+          libminizip-dev \
+          libopus-dev \
           rpm \
           libxcb1 \
           libxcb-cursor0 \
@@ -248,6 +250,8 @@ jobs:
           libzstd-dev \
           zlib1g-dev \
           libexpat1-dev \
+          libminizip-dev \
+          libopus-dev \
           rpm \
           libxcb1 \
           libxcb-cursor0 \

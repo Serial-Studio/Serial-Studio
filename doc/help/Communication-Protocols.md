@@ -7,41 +7,13 @@ Serial Studio supports 10 communication protocols spanning wired serial links, w
 The following diagram maps all supported protocols by throughput range and license tier, helping you choose the right one for your project.
 
 ```mermaid
----
-title: Protocol Selection Guide
----
-flowchart LR
-  subgraph Free["Free Protocols"]
-    UART["**Serial/UART**\n110 bps — 1 Mbps\nUSB / RS-232 / RS-485"]
-    TCPUDP["**TCP/UDP**\nNetwork speed\nEthernet / WiFi"]
-    BLE["**Bluetooth LE**\n~1 Mbps\nLow power wireless"]
-  end
-
-  subgraph Pro["Pro Protocols"]
-    MQTT["**MQTT**\nIoT / Cloud"]
-    Modbus["**Modbus**\nRTU / TCP"]
-    CAN["**CAN Bus**\nUp to 8 Mbps (FD)"]
-    Audio["**Audio Input**\nUp to 48 kHz"]
-    USB["**Raw USB**\nUp to 480 Mbps"]
-    HID["**HID**\n~64 KB/s"]
-    Process["**Process I/O**\nScripts / Pipes"]
-  end
-```
-
-```mermaid
----
-title: Which Protocol Should I Use?
----
 flowchart TD
-  Q1{"USB cable to\nmicrocontroller?"} -->|Yes| A1["Serial/UART"]
-  Q1 -->|No| Q2{"WiFi / Ethernet\ndevice?"}
-  Q2 -->|Yes| A2["TCP/UDP"]
-  Q2 -->|No| Q3{"Battery-powered\nwireless sensor?"}
-  Q3 -->|Yes| A3["Bluetooth LE"]
-  Q3 -->|No| Q4{"Cloud IoT or\nremote broker?"}
-  Q4 -->|Yes| A4["MQTT (Pro)"]
-  Q4 -->|No| Q5{"Vehicle CAN /\nIndustrial PLC?"}
-  Q5 -->|Yes| A5["CAN Bus / Modbus (Pro)"]
+    Q{"Connection type?"}
+    Q -->|USB cable| A1["Serial/UART"]
+    Q -->|WiFi / Ethernet| A2["TCP/UDP"]
+    Q -->|Wireless sensor| A3["Bluetooth LE"]
+    Q -->|Cloud / IoT| A4["MQTT · Pro"]
+    Q -->|Vehicle / PLC| A5["CAN · Modbus · Pro"]
 ```
 
 ## Protocol Summary

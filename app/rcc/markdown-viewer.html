@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Showdown.js for Markdown → HTML -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/showdown@latest/dist/showdown.min.js"></script>
 
   <!-- highlight.js for syntax highlighting -->
   <link rel="stylesheet" id="hljs-theme"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/github.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js"></script>
 
   <!-- Mermaid.js for diagrams -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.4.1/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@latest/dist/mermaid.min.js"></script>
 
   <!-- KaTeX for math rendering -->
   <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+        href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/contrib/auto-render.min.js"></script>
 
   <style>
     /* ------------------------------------------------------------------ */
@@ -441,7 +441,7 @@
       // Switch highlight.js theme (light/dark)
       var hljsLink = document.getElementById('hljs-theme');
       var theme = colors.isDark ? 'github-dark' : 'github';
-      hljsLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/' + theme + '.min.css';
+      hljsLink.href = 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/' + theme + '.min.css';
 
       // Switch Mermaid theme
       mermaid.initialize({

@@ -10,37 +10,12 @@ The following diagram shows the complete data flow from hardware device to rende
 
 ```mermaid
 flowchart TD
-    subgraph IO["I/O Thread"]
-        A["Device (Hardware)"] -->|raw bytes| B["Driver"]
-        B -->|raw bytes| C["Circular Buffer (10 MB, SPSC)"]
-        C -->|buffered bytes| D["Frame Reader (KMP Detection)"]
-    end
-
-    subgraph Main["Main Thread"]
-        D -->|complete frames| E["Frame Builder"]
-        E -->|"const Frame&"| G["Dashboard (Zero-Copy, 20 Hz)"]
-        G --> H["Widgets (Plot, Gauge, Map, ...)"]
-    end
-
-    E -->|"1 heap alloc"| F
-
-    subgraph Workers["Worker Threads"]
-        F["Export Path"]
-        F --- F1["CSV Export"]
-        F --- F2["MDF4 Export"]
-        F --- F3["API Server :7777"]
-    end
-
-    E -.-|"Quick Plot: CSV split on comma"| E
-    E -.-|"JSON Mode: parse JSON directly"| E
-    E -.-|"Project File: Decoder → JS parse() → values"| E
-    E -.-|"Output: Frame (groups + datasets with values)"| E
-
-    style IO fill:#e8f0fe,stroke:#2b6cb0,stroke-width:2px
-    style Main fill:#f3e8ff,stroke:#6b46c1,stroke-width:2px
-    style Workers fill:#fff7e6,stroke:#ed8936,stroke-width:2px,stroke-dasharray: 6 3
-
-    %% SPSC = Single-Producer Single-Consumer | KMP = Knuth-Morris-Pratt string search
+    A["Device"] -->|bytes| B["Driver"]
+    B --> C["Buffer · SPSC"]
+    C --> D["Frame Reader"]
+    D --> E["Frame Builder"]
+    E -->|"const Frame&"| F["Dashboard"]
+    E -->|export| G["CSV · MDF4 · API"]
 ```
 
 ## Stage 1: Device and Driver

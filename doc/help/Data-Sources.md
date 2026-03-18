@@ -10,53 +10,17 @@ The following diagram shows the driver architecture and how each driver feeds in
 
 ```mermaid
 flowchart TD
-    HAL["<b>HAL_Driver Interface</b><br/><i>open() close() write() dataReceived()</i>"]
-
-    subgraph Free["Free Drivers"]
-        UART["Serial / UART"]
-        NET["Network (TCP/UDP)"]
-        BLE["Bluetooth LE"]
+    subgraph Free["Free"]
+        F1["UART · TCP/UDP · BLE"]
     end
-
-    subgraph Pro["Pro Drivers"]
-        AUDIO["Audio Input"]
-        MODBUS["Modbus"]
-        CAN["CAN Bus"]
-        USB["Raw USB"]
-        HID["HID Device"]
-        PROC["Process I/O"]
+    subgraph Pro["Pro"]
+        P1["Audio · Modbus · CAN\nUSB · HID · Process"]
     end
-
-    UART --> HAL
-    NET --> HAL
-    BLE --> HAL
-    AUDIO --> HAL
-    MODBUS --> HAL
-    CAN --> HAL
-    USB --> HAL
-    HID --> HAL
-    PROC --> HAL
-
-    HAL -- "raw bytes" --> DM["DeviceManager<br/>(I/O Thread)"]
-    DM --> CB["Circular Buffer<br/>(10 MB SPSC)"]
-    CB --> FR["Frame Reader<br/>(KMP Detection)"]
-    FR --> FB["Frame Builder"]
+    F1 --> HAL["HAL_Driver"]
+    P1 --> HAL
+    HAL --> DM["DeviceManager"]
+    DM --> FB["Frame Builder"]
     FB --> DASH["Dashboard"]
-
-    subgraph Legend["Threading"]
-        L1["Driver --> I/O Thread"]
-        L2["Dashboard --> Main Thread"]
-    end
-
-    style HAL fill:#2d3748,color:#fff,stroke:#1a202c
-    style Free fill:#e6fffa,stroke:#2f855a,color:#2f855a
-    style Pro fill:#faf5ff,stroke:#6b46c1,color:#6b46c1
-    style DM fill:#2b6cb0,color:#fff,stroke:#2c5282
-    style CB fill:#2f855a,color:#fff,stroke:#276749
-    style FR fill:#9b2c2c,color:#fff,stroke:#822727
-    style FB fill:#6b46c1,color:#fff,stroke:#553c9a
-    style DASH fill:#6b46c1,color:#fff,stroke:#553c9a
-    style Legend fill:#edf2f7,stroke:#cbd5e0
 ```
 
 > **Note:** UI-config instances are owned by `ConnectionManager`; live instances are created by `DeviceManager`.

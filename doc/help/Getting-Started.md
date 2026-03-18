@@ -20,42 +20,10 @@ The following diagram shows the steps from launching Serial Studio to seeing dat
 
 ```mermaid
 flowchart LR
-    A["1. Launch\nSerial Studio"] --> B["2. Select Mode\nSetup Panel"]
-    B --> C["3. Configure\nPort / IP / BLE"]
-    C --> D["4. Connect\nClick button"]
-    D --> E["5. View\nDashboard"]
-```
-
-**Choose Your Path:**
-
-```mermaid
-flowchart TD
-    subgraph QuickPlot ["Quick Plot"]
-        QP1["1. Set baud rate"]
-        QP2["2. Select port"]
-        QP3["3. Click Connect"]
-        QP4>"Device sends CSV\ne.g. 23.5,1013\n"]
-        QP5(["Zero config needed!"])
-        QP1 --> QP2 --> QP3 --> QP4 --> QP5
-    end
-
-    subgraph JSONMode ["Device Sends JSON"]
-        JS1["1. Set JSON mode"]
-        JS2["2. Configure I/O"]
-        JS3["3. Click Connect"]
-        JS4>"Device sends\n/*{...JSON...}*/"]
-        JS5(["Device defines layout"])
-        JS1 --> JS2 --> JS3 --> JS4 --> JS5
-    end
-
-    subgraph ProjectFile ["Project File"]
-        PF1["1. Open Project Editor"]
-        PF2["2. Define groups/datasets"]
-        PF3["3. Save .ssproj"]
-        PF4["4. Load + Connect"]
-        PF5(["Full widget control\nMaximum flexibility"])
-        PF1 --> PF2 --> PF3 --> PF4 --> PF5
-    end
+    A["Launch"] --> B["Select Mode"]
+    B --> C["Configure"]
+    C --> D["Connect"]
+    D --> E["Dashboard"]
 ```
 
 ---

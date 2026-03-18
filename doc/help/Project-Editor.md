@@ -12,26 +12,13 @@ The following diagram shows the tree structure of a Serial Studio project file a
 
 ```mermaid
 flowchart TD
-    Root["Project Root\n(title, delimiters)"]
+    Root["Project Root"]
     Root --> Groups
     Root --> Actions
-    Root --> Sources["Sources [Pro]"]
-
-    Groups --> GA["Group A"]
-    Groups --> GB["Group B"]
-
-    GA --> DS1["DS 1"]
-    GA --> DS2["DS 2"]
-    GA --> DS3["DS 3"]
-
-    GB --> DS4["DS 4"]
-    GB --> DS5["DS 5"]
-
-    Actions --> Reset
-    Actions --> Calibrate
-
-    Sources --> UART["UART Src"]
-    Sources --> UDP
+    Root --> Sources["Sources · Pro"]
+    Groups --> G["Groups → Datasets"]
+    Actions --> A["Actions → Buttons"]
+    Sources --> S["Sources → Connections"]
 ```
 
 ### Frame Index Mapping
@@ -40,35 +27,8 @@ Each value in the incoming data frame is assigned a 1-based frame index that you
 
 ```mermaid
 flowchart LR
-    subgraph Device["Device sends"]
-        V1["23.5"]
-        V2["1013"]
-        V3["45.2"]
-        V4["3.3"]
-        V5["98"]
-    end
-
-    subgraph Index["Array index"]
-        I0["[0]"]
-        I1["[1]"]
-        I2["[2]"]
-        I3["[3]"]
-        I4["[4]"]
-    end
-
-    subgraph Frame["Frame Index"]
-        F1["IDX 1\nTemp"]
-        F2["IDX 2\nPressure"]
-        F3["IDX 3\nHumidity"]
-        F4["IDX 4\nVoltage"]
-        F5["IDX 5\nBattery"]
-    end
-
-    V1 --> I0 --> F1
-    V2 --> I1 --> F2
-    V3 --> I2 --> F3
-    V4 --> I3 --> F4
-    V5 --> I4 --> F5
+    A["23.5, 1013, 45.2"] --> B["parse()"]
+    B --> C["[0]→IDX 1\n[1]→IDX 2\n[2]→IDX 3"]
 ```
 
 ## Interface Layout

@@ -13,33 +13,11 @@ The parser runs inside a QJSEngine (ECMAScript 7 / ES2016 compliant) with consol
 The following diagram shows how raw device bytes are transformed into dashboard-ready values through the decoder and JavaScript parser stages.
 
 ```mermaid
-flowchart TD
-    A["Raw Bytes from Device"]
-    A -- "delimiters stripped" --> B
-
-    subgraph B["Decoder Method"]
-        B1["Plain Text (UTF-8) → &quot;23.5,1013,45.2&quot;"]
-        B2["Hexadecimal → &quot;03FF020035A0&quot;"]
-        B3["Base64 → &quot;Av8CADWg&quot;"]
-        B4["Binary Direct [Pro] → [3, 255, 2, 0, 53, 160]"]
-    end
-
-    B -- "frame (string or array)" --> C["parse(frame) → JavaScript Engine"]
-    C -- "return value" --> D
-
-    subgraph D["Return Format"]
-        D1["Flat Array [v1, v2, v3] → 1 frame"]
-        D2["2D Array [[v1,v2],[v3,v4]] → N frames"]
-        D3["Mixed [scalar, [a,b,c]] → expanded"]
-    end
-
-    D -- "array[0]→IDX 1, array[1]→IDX 2 ..." --> E["Dataset Index Mapping → Dashboard"]
-
-    style A fill:#2d3748,color:#fff,stroke:#1a202c
-    style C fill:#2f855a,color:#fff,stroke:#276749
-    style E fill:#9b2c2c,color:#fff,stroke:#822727
-    style B fill:#fff,stroke:#2b6cb0,color:#2b6cb0
-    style D fill:#fff,stroke:#6b46c1,color:#6b46c1
+flowchart LR
+    A["Raw Bytes"] --> B["Decoder"]
+    B --> C["parse(frame)"]
+    C --> D["Values Array"]
+    D --> E["Dashboard"]
 ```
 
 > **Legend:** 500 ms timeout per call &bull; ECMAScript 7 (ES2016) &bull; One engine per source

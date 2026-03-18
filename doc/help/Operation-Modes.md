@@ -13,34 +13,16 @@ The three modes, in order of increasing complexity, are:
 The following diagram compares the data flow through each operation mode side by side.
 
 ```mermaid
-flowchart TD
+flowchart LR
     subgraph QP["Quick Plot"]
-        QP1["23.5,1013,45.2\n\n(CSV + newline)"]
-        QP2["Line-Based (CR/LF)"]
-        QP3["split(',') (auto)"]
-        QP4["Auto: Grid + MultiPlot"]
-        QP1 --> QP2 --> QP3 --> QP4
+        Q1["CSV"] --> Q2["Auto Dashboard"]
     end
-
-    subgraph JSON["Device Sends JSON"]
-        JSON1["/*{...JSON...}*/\n\n(JSON + fixed delims)"]
-        JSON2["Fixed /* ... */"]
-        JSON3["JSON.parse() (auto)"]
-        JSON4["From JSON payload"]
-        JSON1 --> JSON2 --> JSON3 --> JSON4
+    subgraph JSON["JSON Mode"]
+        J1["JSON Frame"] --> J2["Device Layout"]
     end
-
     subgraph PF["Project File"]
-        PF1["raw bytes / CSV / binary\n\n(any format)"]
-        PF2["Configurable Delims"]
-        PF3["Decoder → JS parse()\n(or CSV fallback)"]
-        PF4["From .ssproj file"]
-        PF1 --> PF2 --> PF3 --> PF4
+        P1["Any Format"] --> P2["Custom Dashboard"]
     end
-
-    QP4 --> Dashboard
-    JSON4 --> Dashboard
-    PF4 --> Dashboard["Dashboard (Widgets, Plots, Gauges, Map, ...)"]
 ```
 
 | Feature | Quick Plot | Device Sends JSON | Project File |

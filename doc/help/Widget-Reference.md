@@ -11,44 +11,13 @@ The following diagram shows all widget types organized by category, with their c
 ```mermaid
 flowchart TD
     Root(["Dashboard Widgets"])
+    Root --> Group["Group Widgets"]
+    Root --> Dataset["Dataset Widgets"]
 
-    Root --> Group["Group Widgets\n(multi-dataset)"]
-    Root --> Dataset["Dataset Widgets\n(single)"]
+    Group --> G1["Data Grid · MultiPlot\nAccelerometer · Gyroscope"]
+    Group --> G2["GPS Map · LED Panel\n3D Plot · Image View"]
 
-    Group --> DG["Data Grid\ndatagrid · 1+"]
-    Group --> MP["Multiple Plot\nmultiplot · 1+"]
-    Group --> GPS["GPS Map\nmap · 2-3 ds"]
-    Group --> Gyro["Gyroscope\ngyro · 3 ds"]
-    Group --> Accel["Accelerometer\naccelerometer · 3"]
-    Group --> LED["LED Panel\nauto · led:true"]
-    Group --> Plot3D["3D Plot &#91;Pro&#93;\nplot3d · 3 ds"]
-    Group --> Img["Image View &#91;Pro&#93;\nimage · 0 ds"]
-
-    Dataset --> Plot["Plot\ngraph:true"]
-    Dataset --> FFT["FFT Plot\nfft:true"]
-    Dataset --> Bar["Bar\nbar · min/max"]
-    Dataset --> Gauge["Gauge\ngauge · min/max"]
-    Dataset --> Compass["Compass\ncompass · 0-360"]
-
-    Note["Temp/Pressure → Plot+Gauge | GPS → Map | IMU → Accel+Gyro\nAudio → FFT | Status → LED | Heading → Compass"]
-
-    style Root fill:#2d3748,color:#fff,stroke:#1a202c
-    style Group fill:#2b6cb0,color:#fff,stroke:#2c5282
-    style Dataset fill:#2f855a,color:#fff,stroke:#276749
-    style DG fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
-    style MP fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
-    style GPS fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
-    style Gyro fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
-    style Accel fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
-    style LED fill:#ebf8ff,color:#2b6cb0,stroke:#2b6cb0
-    style Plot3D fill:#faf5ff,color:#6b46c1,stroke:#6b46c1
-    style Img fill:#faf5ff,color:#6b46c1,stroke:#6b46c1
-    style Plot fill:#e6fffa,color:#2f855a,stroke:#2f855a
-    style FFT fill:#e6fffa,color:#2f855a,stroke:#2f855a
-    style Bar fill:#e6fffa,color:#2f855a,stroke:#2f855a
-    style Gauge fill:#e6fffa,color:#2f855a,stroke:#2f855a
-    style Compass fill:#e6fffa,color:#2f855a,stroke:#2f855a
-    style Note fill:#edf2f7,color:#718096,stroke:#cbd5e0
+    Dataset --> D1["Plot · FFT Plot\nBar · Gauge · Compass"]
 ```
 
 ## Group Widgets
