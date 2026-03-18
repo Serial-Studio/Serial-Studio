@@ -16,7 +16,7 @@ There you will find getting started guides, protocol setup instructions, widget 
 
 - **Download:** <https://github.com/Serial-Studio/Serial-Studio/releases/latest>
 - **Help Center:** <https://serial-studio.com/help>
-- **Examples:** [`/examples`](./examples) folder in this repository
+- **Examples:** <https://serial-studio.com/examples>
 - **Source Code:** <https://github.com/Serial-Studio/Serial-Studio>
 - **Community:** <https://github.com/Serial-Studio/Serial-Studio/discussions>
 - **Issues:** <https://github.com/Serial-Studio/Serial-Studio/issues>
