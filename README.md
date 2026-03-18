@@ -15,7 +15,7 @@ Once the data is in, Serial Studio can visualize it using several kinds of widge
 
 Serial Studio runs on **Windows**, **macOS**, and **Linux** (including **ARM64** for Raspberry Pi), making it a practical choice for robotics teams, IoT developers, makers, educators, and researchers who want to spend time on their hardware rather than on the tooling around it.
 
-📚 **New users?** Check out the [FAQ](FAQ.md), [use cases](USE-CASES.md), and [comparison with alternatives](COMPARISON.md).
+📚 **New users?** Check out the [help center](https://serial-studio.com/help) for FAQ, use cases, and comparison with alternatives.
 
 ![Software usage](doc/screenshot.png)
 
@@ -127,12 +127,10 @@ void loop() {
 ```
 Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 
-**First-time users:** See [FAQ](FAQ.md) for troubleshooting and common questions.
+**First-time users:** See the [help center](https://serial-studio.com/help) for troubleshooting and common questions.
 
 📚 **Learn More:**
-- [FAQ](FAQ.md) - Common questions and troubleshooting
-- [Use Cases](USE-CASES.md) - Real-world applications across industries
-- [Comparison](COMPARISON.md) - Serial Studio vs. alternatives (Arduino Plotter, MATLAB, Processing, etc.)
+- [Help Center](https://serial-studio.com/help) - FAQ, troubleshooting, use cases, and comparison with alternatives
 - [Examples](./examples) - Arduino/ESP32/Python code and project templates
 - [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) - Complete documentation
 
@@ -140,9 +138,7 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 
 ### Official Documentation
 - 📖 [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki) - Complete guides and tutorials
-- ❓ [FAQ](FAQ.md) - Frequently asked questions and troubleshooting
-- 🎯 [Use Cases](USE-CASES.md) - Real-world examples: robotics, IoT, drones, education, research
-- ⚖️ [Comparison](COMPARISON.md) - Serial Studio vs. Arduino Plotter, MATLAB, Processing, LabVIEW, Python
+- 📚 [Help Center](https://serial-studio.com/help) - FAQ, use cases, comparisons, troubleshooting, and more
 - 🤖 [AI Agent Guide](AGENTS.md) - For ChatGPT, Claude, and other AI assistants
 - 🔌 [API Reference](https://github.com/Serial-Studio/Serial-Studio/wiki/API-Reference) - Complete TCP API documentation and automation guide
 - 💡 [Examples](./examples) - Arduino, ESP32, Python code with sample projects
