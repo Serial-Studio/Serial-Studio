@@ -21,6 +21,7 @@
 
 #include "Misc/HelpCenter.h"
 
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -47,6 +48,11 @@ static const QString kBase = QStringLiteral("https://raw.githubusercontent.com/%
  */
 Misc::HelpCenter::HelpCenter() : m_loading(false), m_currentIndex(-1), m_pendingPreloads(0)
 {
+  // Load the markdown viewer HTML shell from resources
+  QFile html(QStringLiteral(":/rcc/markdown-viewer.html"));
+  if (html.open(QIODevice::ReadOnly))
+    m_viewerHtml = QString::fromUtf8(html.readAll());
+
   // Build initial theme colors JSON and react to theme changes
   onThemeChanged();
   connect(&Misc::ThemeManager::instance(),
@@ -128,11 +134,19 @@ const QVariantList& Misc::HelpCenter::pages() const noexcept
 }
 
 /**
- * @brief Returns a JSON string of theme colors for the WebEngineView.
+ * @brief Returns a JSON string of theme colors for the WebView.
  */
 const QString& Misc::HelpCenter::themeColors() const noexcept
 {
   return m_themeColors;
+}
+
+/**
+ * @brief Returns the markdown viewer HTML shell for use with WebView.loadHtml().
+ */
+const QString& Misc::HelpCenter::viewerHtml() const noexcept
+{
+  return m_viewerHtml;
 }
 
 //--------------------------------------------------------------------------------------------------

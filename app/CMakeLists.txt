@@ -110,7 +110,7 @@ set(QT_MODULES
   Core5Compat
   LinguistTools
   QuickControls2
-  WebEngineQuick
+  WebView
 )
 
 # Specify required libraries for FOSS version
@@ -127,7 +127,7 @@ set(QT_LIBS
   Qt6::SerialPort
   Qt6::Core5Compat
   Qt6::QuickControls2
-  Qt6::WebEngineQuick
+  Qt6::WebView
 )
 
 # Add required modules for Pro version if needed

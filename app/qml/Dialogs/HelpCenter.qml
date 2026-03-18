@@ -22,7 +22,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtWebEngine
+import QtWebView
 
 import "../Widgets"
 
@@ -282,21 +282,23 @@ SmartDialog {
         //
         // WebEngineView for rendered markdown
         //
-        WebEngineView {
+        WebView {
           id: contentView
 
           anchors.fill: parent
           anchors.margins: 2
           visible: Cpp_HelpCenter.pageContent !== ""
-          backgroundColor: "transparent"
-          url: "qrc:/rcc/markdown-viewer.html"
-          settings.localContentCanAccessRemoteUrls: true
+
+          //
+          // Load the HTML shell via loadHtml (WebView does not support qrc: URLs)
+          //
+          Component.onCompleted: contentView.loadHtml(Cpp_HelpCenter.viewerHtml)
 
           //
           // WebView is ready once the HTML shell has loaded
           //
           onLoadingChanged: function(loadRequest) {
-            if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
+            if (loadRequest.status === WebView.LoadSucceededStatus) {
               root.webViewReady = true
               root.pushTheme()
               root.pushContent()
@@ -305,47 +307,33 @@ SmartDialog {
 
           //
           // Handle navigation requests from the page (link clicks)
+          // Page signals Qt by setting document.title to action strings
           //
-          onNavigationRequested: function(request) {
-            var url = request.url.toString()
-
-            // Allow initial page load from qrc
-            if (url.startsWith("qrc:"))
-              return
+          onTitleChanged: {
+            var str = contentView.title
 
             // External link — open in browser
-            if (url.startsWith("ext:")) {
-              request.reject()
-              Qt.openUrlExternally(url.substring(4))
+            if (str.startsWith("ext:")) {
+              Qt.openUrlExternally(str.substring(4))
               return
             }
 
             // Copy code to clipboard
-            if (url.startsWith("copy:")) {
-              request.reject()
-              var text = decodeURIComponent(url.substring(5))
+            if (str.startsWith("copy:")) {
+              var text = decodeURIComponent(str.substring(5))
               Cpp_Misc_Utilities.copyText(text)
               copyToast.show()
               return
             }
 
             // Internal page navigation
-            if (url.startsWith("nav:")) {
-              request.reject()
-              var link = url.substring(4)
-
-              // Decode percent-encoded characters
-              link = decodeURIComponent(link)
-
-              // Try internal navigation
+            if (str.startsWith("nav:")) {
+              var link = decodeURIComponent(str.substring(4))
               if (!Cpp_HelpCenter.navigateToPage(link))
                 Qt.openUrlExternally(link)
 
               return
             }
-
-            // Block all other navigations
-            request.reject()
           }
         }
 

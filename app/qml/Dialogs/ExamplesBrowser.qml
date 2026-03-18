@@ -24,7 +24,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Effects
-import QtWebEngine
+import QtWebView
 
 import "../Widgets"
 
@@ -593,45 +593,44 @@ SmartDialog {
               border.color: Cpp_ThemeManager.colors["groupbox_border"]
             }
 
-            WebEngineView {
+            WebView {
               id: readmeView
 
               anchors.fill: parent
               anchors.margins: 2
-              backgroundColor: "transparent"
-              url: "qrc:/rcc/markdown-viewer.html"
-              settings.localContentCanAccessRemoteUrls: true
+
+              //
+              // Load the HTML shell via loadHtml (WebView does not support qrc: URLs)
+              //
+              Component.onCompleted: readmeView.loadHtml(Cpp_HelpCenter.viewerHtml)
 
               onLoadingChanged: function(loadRequest) {
-                if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
+                if (loadRequest.status === WebView.LoadSucceededStatus) {
                   root.readmeViewReady = true
                   root.pushReadmeTheme()
                   root.pushReadme()
                 }
               }
 
-              onNavigationRequested: function(request) {
-                var url = request.url.toString()
-
-                // Allow initial page load from qrc
-                if (url.startsWith("qrc:"))
-                  return
+              //
+              // Handle navigation requests via document.title changes
+              //
+              onTitleChanged: {
+                var str = readmeView.title
 
                 // Copy code to clipboard
-                if (url.startsWith("copy:")) {
-                  request.reject()
-                  var text = decodeURIComponent(url.substring(5))
+                if (str.startsWith("copy:")) {
+                  var text = decodeURIComponent(str.substring(5))
                   Cpp_Misc_Utilities.copyText(text)
                   exCopyToast.show()
                   return
                 }
 
                 // Open all links externally
-                request.reject()
-                if (url.startsWith("ext:"))
-                  Qt.openUrlExternally(url.substring(4))
-                else if (url.startsWith("nav:"))
-                  Qt.openUrlExternally(url.substring(4))
+                if (str.startsWith("ext:"))
+                  Qt.openUrlExternally(str.substring(4))
+                else if (str.startsWith("nav:"))
+                  Qt.openUrlExternally(str.substring(4))
               }
             }
 
