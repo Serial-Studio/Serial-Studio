@@ -316,8 +316,10 @@ Rectangle {
       columns: Cpp_CommercialBuild ? 3 : 1
 
       readonly property bool driverSelectionEnabled:
-        Cpp_AppState.operationMode !== SerialStudio.ProjectFile ||
-        Cpp_JSON_ProjectModel.sourceCount <= 1
+        !Cpp_IO_Manager.isConnected &&
+        !root.dashboardVisible &&
+        (Cpp_AppState.operationMode !== SerialStudio.ProjectFile ||
+         Cpp_JSON_ProjectModel.sourceCount <= 1)
 
       Widgets.ToolbarButton {
         iconSize: 16

@@ -10,7 +10,7 @@ Serial Studio is a cross-platform telemetry dashboard application for visualizin
 - **15+ widget types**: Plot, MultiPlot, FFT Plot, Bar, Gauge, Compass, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot, XY Plot, and Image View.
 - **Export**: Save sessions to CSV or MDF4 for offline analysis.
 - **Performance**: Built with Qt 6 and C++20, targeting 256 KHz+ data rates.
-- **Three operation modes**: Quick Plot for instant visualization, Device Sends JSON for self-describing devices, and Project File for full dashboard customization.
+- **Three operation modes**: Quick Plot for instant visualization, Project File for full dashboard customization, and Device Sends JSON for self-describing devices.
 
 Whether you are reading temperature from an Arduino, monitoring a CAN Bus on a vehicle, or building a ground station for a rocket, Serial Studio provides the visualization layer so you can focus on your hardware and firmware.
 
@@ -190,34 +190,9 @@ That is all it takes. No project file, no JSON — just connect and visualize.
 
 ---
 
-## Your First Connection — JSON Mode
-
-If your device can generate JSON, it can define its own dashboard layout. Serial Studio wraps JSON frames in delimiters so it can find them in the data stream.
-
-### What your device sends
-
-Your device must output JSON frames wrapped in `/*` and `*/` delimiters:
-
-```
-/*{"title":"Weather Station","groups":[{"title":"Environment","widget":"datagrid","datasets":[{"title":"Temperature","value":"23.5","units":"\u00b0C"},{"title":"Pressure","value":"1013","units":"hPa"},{"title":"Humidity","value":"45.2","units":"%"}]}]}*/
-```
-
-The JSON structure tells Serial Studio everything: how to name the dashboard, what groups to create, which widget to use for each group, and what datasets to display.
-
-### Steps
-
-1. In the **Setup Panel**, set the operation mode to **No Parsing (Device Sends JSON Data)**.
-2. Select your **I/O Interface** and configure the connection (port, baud rate, IP, etc.).
-3. Click **Connect**.
-4. Serial Studio extracts JSON frames between `/*` and `*/`, parses them, and builds the dashboard automatically.
-
-This mode is ideal when you want the firmware to control the dashboard layout, for example when different firmware versions expose different sensors.
-
----
-
 ## Your First Connection — Project File Mode
 
-Project File mode gives you full control over how Serial Studio interprets your data and what widgets appear on the dashboard. You create a `.json` project file using the built-in Project Editor, and Serial Studio uses it to parse incoming data and build the dashboard.
+Project File mode gives you full control over how Serial Studio interprets your data and what widgets appear on the dashboard. You create a `.json` project file using the built-in Project Editor, and Serial Studio uses it to parse incoming data and build the dashboard. This is the recommended mode for most real-world projects.
 
 ### Step 1: Open the Project Editor
 
@@ -248,6 +223,33 @@ Configure your I/O interface and click **Connect**. Serial Studio uses your proj
 
 ---
 
+## Your First Connection — JSON Mode
+
+> **Note:** This mode is not recommended for most projects. The JSON frame structure may change between Serial Studio versions, which can break firmware. Consider using **Project File** mode instead — it keeps the dashboard definition on the host and does not require transmitting large JSON payloads over the data link.
+
+If your device can generate JSON, it can define its own dashboard layout. Serial Studio wraps JSON frames in delimiters so it can find them in the data stream.
+
+### What your device sends
+
+Your device must output JSON frames wrapped in `/*` and `*/` delimiters:
+
+```
+/*{"title":"Weather Station","groups":[{"title":"Environment","widget":"datagrid","datasets":[{"title":"Temperature","value":"23.5","units":"°C"},{"title":"Pressure","value":"1013","units":"hPa"},{"title":"Humidity","value":"45.2","units":"%"}]}]}*/
+```
+
+The JSON structure tells Serial Studio everything: how to name the dashboard, what groups to create, which widget to use for each group, and what datasets to display.
+
+### Steps
+
+1. In the **Setup Panel**, set the operation mode to **No Parsing (Device Sends JSON Data)**.
+2. Select your **I/O Interface** and configure the connection (port, baud rate, IP, etc.).
+3. Click **Connect**.
+4. Serial Studio extracts JSON frames between `/*` and `*/`, parses them, and builds the dashboard automatically.
+
+This mode exists for cases where the firmware must control the dashboard layout at runtime, for example when the device switches between operating modes that expose different sensors.
+
+---
+
 ## Understanding Operation Modes
 
 Serial Studio provides three operation modes. Choosing the right one depends on how much control you need and how your device formats its output.
@@ -264,17 +266,6 @@ Serial Studio provides three operation modes. Choosing the right one depends on 
 
 Quick Plot treats each line as a frame and each comma-separated field as a dataset. It automatically creates one plot per field. This is the fastest way to get data on screen, but it offers no control over widget types, labels, or units.
 
-### Device Sends JSON
-
-| Aspect | Detail |
-|--------|--------|
-| Configuration needed | None (device defines everything) |
-| Data format | JSON wrapped in `/*` and `*/` |
-| Dashboard generated | From JSON structure |
-| Best for | Self-describing devices, dynamic dashboards |
-
-The device sends complete JSON frames that define groups, datasets, widget types, units, and actions. Serial Studio reads these frames and builds the dashboard accordingly. This is useful when the firmware knows best how to present its data, or when different firmware versions need different dashboard layouts without changing the project file.
-
 ### Project File
 
 | Aspect | Detail |
@@ -284,7 +275,18 @@ The device sends complete JSON frames that define groups, datasets, widget types
 | Dashboard generated | From project file |
 | Best for | Production telemetry, complex protocols, multi-sensor systems |
 
-This mode provides full control. You define frame delimiters, map data fields to datasets, choose widget types, set units and ranges, configure alarms, add FFT analysis, and write JavaScript parsers for binary protocols. Project File mode also supports multiple data sources for multi-device setups.
+This mode provides full control. You define frame delimiters, map data fields to datasets, choose widget types, set units and ranges, configure alarms, add FFT analysis, and write JavaScript parsers for binary protocols. Project File mode also supports multiple data sources for multi-device setups. This is the recommended mode for most real-world projects.
+
+### Device Sends JSON
+
+| Aspect | Detail |
+|--------|--------|
+| Configuration needed | None (device defines everything) |
+| Data format | JSON wrapped in `/*` and `*/` |
+| Dashboard generated | From JSON structure |
+| Best for | Devices that change dashboard layout at runtime |
+
+The device sends complete JSON frames that define groups, datasets, widget types, units, and actions. Serial Studio reads these frames and builds the dashboard accordingly. This mode is generally not recommended — it requires transmitting verbose JSON over the data link, and the JSON frame structure may change between Serial Studio versions. Use it only when the firmware must dynamically control its own dashboard layout.
 
 ---
 

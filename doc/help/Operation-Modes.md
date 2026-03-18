@@ -7,8 +7,8 @@ Serial Studio supports three parsing modes that determine how incoming data is i
 The three modes, in order of increasing complexity, are:
 
 1. **Quick Plot** — automatic CSV plotting with zero configuration.
-2. **Device Sends JSON** — the device transmits a self-describing JSON frame that defines both data and dashboard layout.
-3. **Project File** — a JSON project file on the host defines the dashboard, while the device sends only raw values.
+2. **Project File** — a JSON project file on the host defines the dashboard, while the device sends only raw values.
+3. **Device Sends JSON** — the device transmits a self-describing JSON frame that defines both data and dashboard layout.
 
 The following diagram compares the data flow through each operation mode side by side.
 
@@ -17,20 +17,20 @@ flowchart LR
     subgraph QP["Quick Plot"]
         Q1["CSV"] --> Q2["Auto Dashboard"]
     end
-    subgraph JSON["JSON Mode"]
-        J1["JSON Frame"] --> J2["Device Layout"]
-    end
     subgraph PF["Project File"]
         P1["Any Format"] --> P2["Custom Dashboard"]
     end
+    subgraph JSON["JSON Mode"]
+        J1["JSON Frame"] --> J2["Device Layout"]
+    end
 ```
 
-| Feature | Quick Plot | Device Sends JSON | Project File |
-|---------|:----------:|:-----------------:|:------------:|
-| JS Parser | -- | -- | Yes |
+| Feature | Quick Plot | Project File | Device Sends JSON |
+|---------|:----------:|:------------:|:-----------------:|
+| JS Parser | -- | Yes | -- |
 | Custom Widgets | -- | Yes | Yes |
-| Multi-Source | -- | -- | Yes (Pro) |
-| Setup Effort | None | Firmware | Editor |
+| Multi-Source | -- | Yes (Pro) | -- |
+| Setup Effort | None | Editor | Firmware |
 
 > **Note:** All modes work with any data source: Serial, TCP/UDP, BLE, and all Pro drivers.
 >
@@ -85,7 +85,114 @@ Quick Plot is the fastest way to visualize data. Use it when you want to verify 
 
 ---
 
+## Project File Mode
+
+### Selection
+
+Choose the "Parse via JSON Project File" radio button in the Setup Panel. Then load or create a project file using the Project Editor (wrench icon in the toolbar).
+
+### How It Works
+
+- **Frame detection:** configurable per source. Four detection methods are available.
+- **Data format:** configurable. Incoming bytes can be decoded as plain text (UTF-8), hexadecimal, Base64, or raw binary.
+- **Dashboard definition:** a `.ssproj` JSON file on the host defines all groups, datasets, widgets, alarms, FFT settings, and actions.
+- **Device data:** the device sends only raw values (CSV text, binary packets, etc.). Serial Studio maps each value to the corresponding dataset by index.
+- **JavaScript parser:** an optional `parse(frame)` function can transform arbitrary protocols into the array of values that Serial Studio expects.
+- **Multi-source:** a single project file can define multiple data sources, each with its own connection, frame detection, and decoder settings.
+
+This mode provides full access to every widget type and configuration option in Serial Studio. It is the most commonly used mode for real-world projects.
+
+### Frame Detection Methods
+
+Frame detection determines how Serial Studio identifies the boundaries of each data frame within a continuous byte stream. The method is configured per source in the Project Editor.
+
+| Method | Enum Value | Behavior |
+|--------|-----------|----------|
+| **End Delimiter Only** | 0 | A frame ends when the end delimiter is encountered. The most common choice for line-terminated CSV data (e.g., delimiter = `\n`). |
+| **Start and End Delimiter** | 1 | A frame begins at the start delimiter and ends at the end delimiter. Use this for protocols that wrap data in markers (e.g., `$DATA...;\n`). |
+| **No Delimiters** | 2 | All incoming data is passed directly to the JavaScript parser without any delimiter-based splitting. Use this for length-prefixed or fixed-size binary protocols where the parser itself determines frame boundaries. |
+| **Start Delimiter Only** | 3 | A frame begins at one occurrence of the start delimiter and ends when the next occurrence is found. The second occurrence becomes the start of the next frame. |
+
+Delimiters can be specified as plain text or as hexadecimal byte sequences (toggle the "Hexadecimal Delimiters" option in the Project Editor).
+
+### Decoder Methods
+
+The decoder determines how raw bytes are converted into a string before being passed to the JavaScript parser (or split as CSV).
+
+| Decoder | Enum Value | Description |
+|---------|-----------|-------------|
+| **Plain Text (UTF-8)** | 0 | Bytes are decoded as UTF-8 text. The most common choice for ASCII/CSV protocols. |
+| **Hexadecimal** | 1 | Each byte is converted to a two-character hex string. For example, bytes `0x03 0xFF 0x02` become `"03FF02"`. |
+| **Base64** | 2 | Bytes are encoded as a Base64 string. |
+| **Binary (Direct)** | 3 | Raw bytes are passed to the JavaScript parser as an array of integers (0--255). This is a Pro feature. |
+
+### JavaScript Frame Parser
+
+When the incoming data is not simple comma-separated text, you can write a JavaScript function to transform each frame into the array of values that Serial Studio expects.
+
+The function signature is:
+
+```javascript
+function parse(frame) {
+    // 'frame' is a string (for PlainText/Hex/Base64 decoders)
+    // or an array of integers (for the Binary decoder).
+    //
+    // Return a flat array of values:
+    return [value1, value2, value3];
+}
+```
+
+**Key behaviors:**
+
+- The returned array is mapped to datasets by index: element 0 goes to dataset index 1, element 1 goes to dataset index 2, and so on.
+- **Multi-frame return:** return an array of arrays to emit multiple frames from a single parse call: `[[row1_val1, row1_val2], [row2_val1, row2_val2]]`.
+- **Mixed scalar/vector:** returning `[scalar, [vec1, vec2, vec3]]` auto-expands the inner array into separate dataset values.
+
+**Example — parsing a semicolon-delimited protocol:**
+
+```javascript
+function parse(frame) {
+    return frame.split(";");
+}
+```
+
+**Example — parsing a fixed-size binary packet:**
+
+```javascript
+function parse(frame) {
+    // frame is an array of bytes (Binary decoder)
+    // Bytes 0-1: uint16 temperature (big-endian, x0.1)
+    // Bytes 2-3: uint16 pressure (big-endian)
+    var temp = ((frame[0] << 8) | frame[1]) * 0.1;
+    var pres = (frame[2] << 8) | frame[3];
+    return [temp, pres];
+}
+```
+
+### Multi-Source Support
+
+Project File mode supports multiple data sources within a single project. Each source is an independent entry with its own:
+
+- Source ID and title
+- Bus type (UART, Network, BLE, etc.)
+- Frame detection method and delimiters
+- Decoder method
+- JavaScript parser code
+- Connection settings
+
+This enables monitoring multiple devices simultaneously on a single dashboard. For example, a weather station project might define one UART source for a ground sensor array and one TCP source for a remote wind station, with both feeding into the same dashboard.
+
+Multi-source is a Pro feature. The free (GPL) edition is limited to a single source per project.
+
+### When to Use
+
+Project File mode is the right choice for any application that needs custom widgets, alarm thresholds, FFT analysis, per-channel configuration, multi-device monitoring, or a carefully designed dashboard layout. It is the most common mode for production telemetry systems, competition dashboards (CanSat, rocketry), and industrial monitoring.
+
+---
+
 ## Device Sends JSON Mode
+
+> **Note:** This mode is provided for specific use cases where the device must control its own dashboard layout at runtime. For most projects, **Project File** mode is the recommended approach — it is more flexible, does not require firmware changes, and is not affected by protocol changes between Serial Studio versions. The JSON frame structure used by this mode may change across versions, which can break firmware that was written for an older format.
 
 ### Selection
 
@@ -231,112 +338,7 @@ Actions define buttons in the dashboard toolbar that send data back to the conne
 
 ### When to Use
 
-Device Sends JSON is ideal when the firmware has enough memory and processing power to construct JSON strings, and when you want the device to fully control its own dashboard without maintaining a separate project file on the host. It is also useful for devices that change their dashboard structure at runtime (e.g., switching between operating modes).
-
----
-
-## Project File Mode
-
-### Selection
-
-Choose the "Parse via JSON Project File" radio button in the Setup Panel. Then load or create a project file using the Project Editor (wrench icon in the toolbar).
-
-### How It Works
-
-- **Frame detection:** configurable per source. Four detection methods are available.
-- **Data format:** configurable. Incoming bytes can be decoded as plain text (UTF-8), hexadecimal, Base64, or raw binary.
-- **Dashboard definition:** a `.ssproj` JSON file on the host defines all groups, datasets, widgets, alarms, FFT settings, and actions.
-- **Device data:** the device sends only raw values (CSV text, binary packets, etc.). Serial Studio maps each value to the corresponding dataset by index.
-- **JavaScript parser:** an optional `parse(frame)` function can transform arbitrary protocols into the array of values that Serial Studio expects.
-- **Multi-source:** a single project file can define multiple data sources, each with its own connection, frame detection, and decoder settings.
-
-This mode provides full access to every widget type and configuration option in Serial Studio.
-
-### Frame Detection Methods
-
-Frame detection determines how Serial Studio identifies the boundaries of each data frame within a continuous byte stream. The method is configured per source in the Project Editor.
-
-| Method | Enum Value | Behavior |
-|--------|-----------|----------|
-| **End Delimiter Only** | 0 | A frame ends when the end delimiter is encountered. The most common choice for line-terminated CSV data (e.g., delimiter = `\n`). |
-| **Start and End Delimiter** | 1 | A frame begins at the start delimiter and ends at the end delimiter. Use this for protocols that wrap data in markers (e.g., `$DATA...;\n`). |
-| **No Delimiters** | 2 | All incoming data is passed directly to the JavaScript parser without any delimiter-based splitting. Use this for length-prefixed or fixed-size binary protocols where the parser itself determines frame boundaries. |
-| **Start Delimiter Only** | 3 | A frame begins at one occurrence of the start delimiter and ends when the next occurrence is found. The second occurrence becomes the start of the next frame. |
-
-Delimiters can be specified as plain text or as hexadecimal byte sequences (toggle the "Hexadecimal Delimiters" option in the Project Editor).
-
-### Decoder Methods
-
-The decoder determines how raw bytes are converted into a string before being passed to the JavaScript parser (or split as CSV).
-
-| Decoder | Enum Value | Description |
-|---------|-----------|-------------|
-| **Plain Text (UTF-8)** | 0 | Bytes are decoded as UTF-8 text. The most common choice for ASCII/CSV protocols. |
-| **Hexadecimal** | 1 | Each byte is converted to a two-character hex string. For example, bytes `0x03 0xFF 0x02` become `"03FF02"`. |
-| **Base64** | 2 | Bytes are encoded as a Base64 string. |
-| **Binary (Direct)** | 3 | Raw bytes are passed to the JavaScript parser as an array of integers (0--255). This is a Pro feature. |
-
-### JavaScript Frame Parser
-
-When the incoming data is not simple comma-separated text, you can write a JavaScript function to transform each frame into the array of values that Serial Studio expects.
-
-The function signature is:
-
-```javascript
-function parse(frame) {
-    // 'frame' is a string (for PlainText/Hex/Base64 decoders)
-    // or an array of integers (for the Binary decoder).
-    //
-    // Return a flat array of values:
-    return [value1, value2, value3];
-}
-```
-
-**Key behaviors:**
-
-- The returned array is mapped to datasets by index: element 0 goes to dataset index 1, element 1 goes to dataset index 2, and so on.
-- **Multi-frame return:** return an array of arrays to emit multiple frames from a single parse call: `[[row1_val1, row1_val2], [row2_val1, row2_val2]]`.
-- **Mixed scalar/vector:** returning `[scalar, [vec1, vec2, vec3]]` auto-expands the inner array into separate dataset values.
-
-**Example — parsing a semicolon-delimited protocol:**
-
-```javascript
-function parse(frame) {
-    return frame.split(";");
-}
-```
-
-**Example — parsing a fixed-size binary packet:**
-
-```javascript
-function parse(frame) {
-    // frame is an array of bytes (Binary decoder)
-    // Bytes 0-1: uint16 temperature (big-endian, x0.1)
-    // Bytes 2-3: uint16 pressure (big-endian)
-    var temp = ((frame[0] << 8) | frame[1]) * 0.1;
-    var pres = (frame[2] << 8) | frame[3];
-    return [temp, pres];
-}
-```
-
-### Multi-Source Support
-
-Project File mode supports multiple data sources within a single project. Each source is an independent entry with its own:
-
-- Source ID and title
-- Bus type (UART, Network, BLE, etc.)
-- Frame detection method and delimiters
-- Decoder method
-- JavaScript parser code
-- Connection settings
-
-This enables monitoring multiple devices simultaneously on a single dashboard. For example, a weather station project might define one UART source for a ground sensor array and one TCP source for a remote wind station, with both feeding into the same dashboard.
-
-Multi-source is a Pro feature. The free (GPL) edition is limited to a single source per project.
-
-### When to Use
-
-Project File mode is the right choice for any application that needs custom widgets, alarm thresholds, FFT analysis, per-channel configuration, multi-device monitoring, or a carefully designed dashboard layout. It is the most common mode for production telemetry systems, competition dashboards (CanSat, rocketry), and industrial monitoring.
+Device Sends JSON is suited for cases where the firmware must control its own dashboard layout at runtime — for example, when a device switches between operating modes and needs different widgets for each mode. Keep in mind that transmitting large JSON payloads over a serial port adds significant overhead compared to sending raw values, and the JSON structure is tied to the specific Serial Studio version you are using.
 
 ---
 
@@ -345,28 +347,27 @@ Project File mode is the right choice for any application that needs custom widg
 | Scenario | Recommended Mode |
 |----------|-----------------|
 | Arduino or ESP32 sending CSV numbers for quick debugging | Quick Plot |
-| Device firmware generates self-describing JSON | Device Sends JSON |
+| Rapid prototyping or classroom demonstration | Quick Plot |
+| Need gauges, bars, compass, GPS map, FFT, or alarms | Project File |
 | Custom binary protocol with length-prefixed packets | Project File + Binary decoder + JS parser |
 | Multiple sensors on different ports in one dashboard | Project File (multi-source, Pro) |
-| Need gauges, bars, compass, GPS map, FFT, or alarms | Project File |
-| Rapid prototyping or classroom demonstration | Quick Plot |
-| Device changes its dashboard layout at runtime | Device Sends JSON |
 | Production telemetry system with saved configuration | Project File |
+| Device changes its dashboard layout at runtime | Device Sends JSON |
 
 ### Feature Comparison
 
-| Feature | Quick Plot | Device Sends JSON | Project File |
-|---------|-----------|-------------------|--------------|
-| Setup effort | None | Firmware must build JSON | Create project in editor |
-| Frame detection | Line-based (auto) | Fixed `/*` ... `*/` | Configurable per source |
-| CSV delimiter | Comma only | N/A (JSON) | Any (via JS parser) |
-| JavaScript parser | No | No | Yes |
-| Custom widgets | No (plots only) | Yes (device-defined) | Yes (project-defined) |
+| Feature | Quick Plot | Project File | Device Sends JSON |
+|---------|-----------|--------------|-------------------|
+| Setup effort | None | Create project in editor | Firmware must build JSON |
+| Frame detection | Line-based (auto) | Configurable per source | Fixed `/*` ... `*/` |
+| CSV delimiter | Comma only | Any (via JS parser) | N/A (JSON) |
+| JavaScript parser | No | Yes | No |
+| Custom widgets | No (plots only) | Yes (project-defined) | Yes (device-defined) |
 | Alarms and LED indicators | No | Yes | Yes |
 | FFT analysis | No | Yes | Yes |
-| Multi-source | No | No | Yes (Pro) |
-| Saved configuration | No | N/A | Yes (.ssproj file) |
-| Device data complexity | Minimal | Must generate JSON | Any format with JS parser |
+| Multi-source | No | Yes (Pro) | No |
+| Saved configuration | No | Yes (.ssproj file) | N/A |
+| Device data complexity | Minimal | Any format with JS parser | Must generate JSON |
 
 ---
 
@@ -374,6 +375,6 @@ Project File mode is the right choice for any application that needs custom widg
 
 If you are new to Serial Studio, start with **Quick Plot**. Connect your device, make sure it sends comma-separated numbers terminated by a newline, and click Connect. You will see data on screen within seconds.
 
-Once you need more control — specific widget types, unit labels, alarm thresholds, or a polished dashboard layout — move to **Project File** mode. Open the Project Editor, define your groups and datasets, and load the resulting `.ssproj` file.
+Once you need more control — specific widget types, unit labels, alarm thresholds, or a polished dashboard layout — move to **Project File** mode. Open the Project Editor, define your groups and datasets, and load the resulting `.ssproj` file. This is the recommended mode for most real-world projects.
 
-Use **Device Sends JSON** only when the device firmware is designed to emit its own dashboard definition, or when the dashboard structure must change dynamically based on device state.
+**Device Sends JSON** mode exists for niche cases where the device firmware needs to control the dashboard layout dynamically at runtime. It is generally not recommended: it requires transmitting verbose JSON over the data link, and the expected JSON structure may change between Serial Studio versions, which can break your firmware without warning. If you are unsure which mode to use, choose Project File.
