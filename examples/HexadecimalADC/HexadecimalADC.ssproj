@@ -5,6 +5,7 @@
             "binary": false,
             "eol": "\n",
             "icon": "Play Property",
+            "sourceId": 0,
             "timerIntervalMs": 5,
             "timerMode": 3,
             "title": "Data Polling",
@@ -15,6 +16,7 @@
             "binary": false,
             "eol": "\n",
             "icon": "Resistor",
+            "sourceId": 0,
             "timerIntervalMs": 100,
             "timerMode": 0,
             "title": "Enable Pull-Up Resistor",
@@ -25,23 +27,13 @@
             "binary": false,
             "eol": "\n",
             "icon": "Services",
+            "sourceId": 0,
             "timerIntervalMs": 100,
             "timerMode": 0,
             "title": "Disable Pull-Up Resistor",
             "txData": "disable-pull-up"
         }
     ],
-    "checksum": "CRC-16-CCITT",
-    "dashboardLayout": {
-        "autoLayout": true,
-        "windowOrder": [
-        ]
-    },
-    "decoder": 3,
-    "frameDetection": 3,
-    "frameEnd": "de c0",
-    "frameParser": "/**\n * This function parses a binary data frame (passed as a byte array) and converts\n * each byte into a decimal value scaled from 0 to 5 volts.\n *\n * @param[in]  frame  A JS array of byte values (0–255), passed from C++.\n * @return     Array of floats representing the scaled voltage values.\n */\nfunction parse(frame) {\n    let dataArray = [];\n\n    for (let i = 0; i < frame.length; ++i) {\n        let byte = frame[i];\n        dataArray.push(byte * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
-    "frameStart": "C0 DE",
     "groups": [
         {
             "datasets": [
@@ -357,5 +349,32 @@
         }
     ],
     "hexadecimalDelimiters": true,
+    "pointCount": 1000,
+    "sources": [
+        {
+            "busType": 0,
+            "checksum": "CRC-16-CCITT",
+            "checksumAlgorithm": "CRC-16-CCITT",
+            "connection": {
+                "autoReconnect": true,
+                "baudRate": 10,
+                "dataBitsIndex": 3,
+                "dtr": true,
+                "flowControlIndex": 0,
+                "parityIndex": 0,
+                "portIndex": 0,
+                "stopBitsIndex": 0
+            },
+            "decoder": 3,
+            "decoderMethod": 3,
+            "frameDetection": 3,
+            "frameEnd": "de c0",
+            "frameParserCode": "/**\n * This function parses a binary data frame (passed as a byte array) and converts\n * each byte into a decimal value scaled from 0 to 5 volts.\n *\n * @param[in]  frame  A JS array of byte values (0–255), passed from C++.\n * @return     Array of floats representing the scaled voltage values.\n */\nfunction parse(frame) {\n    let dataArray = [];\n\n    for (let i = 0; i < frame.length; ++i) {\n        let byte = frame[i];\n        dataArray.push(byte * 5.0 / 255);\n    }\n\n    return dataArray;\n}",
+            "frameStart": "C0 DE",
+            "hexadecimalDelimiters": true,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
     "title": "Hexadecimal ADC"
 }

@@ -73,12 +73,10 @@ Item {
   // Layout engine
   //
   // Column layout (left → right):
-  //   Col 0  Device cards  (one per source; always shown)
-  //   Col 1  Frame Parser  (one per source; always shown)
+  //   Col 0  Device cards   (one per source; always shown)
+  //   Col 1  Frame Parser / Action cards (FP per source; actions below)
   //   Col 2  Group cards   (one per group)
   //   Col 3  Dataset pills (stacked per group)
-  //   Col 4  Action pills  (one per action; all at same x; attached to
-  //                         the first source / frame-parser node)
   //
   // Each group occupies a "slot" of height:
   //   slotH = max(nodeH, dsCount*(chipH+vGap) - vGap)
@@ -88,8 +86,8 @@ Item {
   // The frame-parser card for a source is centred over the total slot
   // height of all groups belonging to that source.
   // The device card is centred over the frame-parser card (same y).
-  // Action pills hang below all other content, attached to the last
-  // frame-parser node's right side.
+  // Action cards sit below all groups in the frame-parser column,
+  // with dashed arrows pointing from each action to its target device.
   // ─────────────────────────────────────────────────────────────────────────
 
   function layoutDiagram(sources, groups, actions) {
@@ -98,10 +96,9 @@ Item {
 
     // ── column x positions ────────────────────────────────────────────────
     const colDev  = pad                               // device column
-    const colFP   = pad + nodeW + hGap                // frame-parser column
+    const colFP   = pad + nodeW + hGap                // frame-parser / action column
     const colGrp  = colFP  + nodeW + hGap            // group column
     const colChip = colGrp + nodeW + hGap            // dataset column
-    const colAct  = colChip + chipW + hGap           // action column
 
     // ── slot height helper ─────────────────────────────────────────────────
     function slotH(dsCount) {
@@ -271,16 +268,11 @@ Item {
         groupY[sid] = slotTop + sh + vGap
     }
 
-    // ── place action pills ─────────────────────────────────────────────────
-    // Hang actions below the main content, connected from the first
-    // frame-parser node with a dashed arrow (TX direction)
+    // ── place action cards ──────────────────────────────────────────────────
+    // Actions are placed at the frame-parser column, below all groups,
+    // with dashed arrows pointing from the action to the target device.
     if (actions.length > 0) {
-      // Find the topmost frame-parser node to anchor actions from
-      let anchorY = pad + nodeH / 2
-      if (srcList.length > 0)
-        anchorY = (fpNodeY[srcList[0].sourceId] || pad) + nodeH / 2
-
-      // Find the y start for action column: below all content so far
+      // Find the y start for actions: below all content so far
       let maxGroupY = pad
       for (const sid in groupY)
         maxGroupY = Math.max(maxGroupY, groupY[sid])
@@ -289,27 +281,31 @@ Item {
 
       for (let ai = 0; ai < actions.length; ++ai) {
         const act  = actions[ai]
+        const sid  = act.sourceId || 0
         const actY = actBlockTop + ai * (nodeH + vGap)
 
         newNodes.push({
           type:      "action",
-          sourceId:  0,
+          sourceId:  sid,
           groupId:   -1,
           datasetId: -1,
           actionId:  act.actionId,
-          x:         colAct,
+          x:         colFP,
           y:         actY,
-          w:         chipW,
+          w:         nodeW,
           h:         nodeH,
           label:     act.title || qsTr("Action"),
           icon:      act.icon  || "qrc:/rcc/icons/project-editor/treeview/action.svg",
           badge:     ""
         })
 
-        // Dashed arrow from dataset column area to action (TX)
+        // Dashed arrow from action to the target device (TX direction)
+        const devMidY = fpNodeY[sid] !== undefined
+          ? fpNodeY[sid] + nodeH / 2
+          : pad + nodeH / 2
         newArrows.push({
-          x1: colChip,       y1: anchorY,
-          x2: colAct,        y2: actY + nodeH / 2,
+          x1: colFP,          y1: actY + nodeH / 2,
+          x2: colDev + nodeW, y2: devMidY,
           dashed: true
         })
       }
@@ -526,7 +522,7 @@ Item {
           property bool hovered:   false
           property bool isDataset: modelData.type === "dataset"
           property bool isAction:  modelData.type === "action"
-          property bool isPill:    isDataset || isAction
+          property bool isPill:    isDataset
           property bool isSource:  modelData.type === "source"
           property bool isFP:      modelData.type === "frameparser"
 
@@ -534,54 +530,16 @@ Item {
           Rectangle {
             visible: nd.isPill
             anchors.fill: parent
-            radius: nd.isDataset ? height / 2 : 6 * root.zoom
+            radius: height / 2
             color: nd.hovered
               ? Cpp_ThemeManager.colors["highlight"]
               : Cpp_ThemeManager.colors["groupbox_background"]
             border.width: 1
-            border.color: nd.isAction
-              ? (nd.hovered
-                  ? Cpp_ThemeManager.colors["highlight"]
-                  : Cpp_ThemeManager.colors["highlight"] + "80")
-              : (nd.hovered
-                  ? Cpp_ThemeManager.colors["highlight"]
-                  : Cpp_ThemeManager.colors["groupbox_border"])
-
-            Row {
-              visible: nd.isAction
-              anchors {
-                left: parent.left
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-                leftMargin:  8 * root.zoom
-                rightMargin: 8 * root.zoom
-              }
-              spacing: 6 * root.zoom
-
-              Image {
-                width:  16 * root.zoom
-                height: 16 * root.zoom
-                anchors.verticalCenter: parent.verticalCenter
-                source: modelData.icon
-                sourceSize: Qt.size(16, 16)
-                smooth: true
-                opacity: 0.8
-              }
-
-              Text {
-                width: parent.width - 28 * root.zoom
-                elide: Text.ElideRight
-                anchors.verticalCenter: parent.verticalCenter
-                text: modelData.label
-                font.pixelSize: Math.max(8, 11 * root.zoom)
-                color: nd.hovered
-                  ? Cpp_ThemeManager.colors["highlighted_text"]
-                  : Cpp_ThemeManager.colors["text"]
-              }
-            }
+            border.color: nd.hovered
+              ? Cpp_ThemeManager.colors["highlight"]
+              : Cpp_ThemeManager.colors["groupbox_border"]
 
             Text {
-              visible: nd.isDataset
               anchors.centerIn: parent
               width: parent.width - 12
               elide: Text.ElideRight

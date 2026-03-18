@@ -4,6 +4,7 @@
   { "id": "data-sources", "title": "Data Sources", "section": "Basics", "file": "Data-Sources.md" },
   { "id": "data-flow", "title": "Data Flow", "section": "Basics", "file": "Data-Flow.md" },
   { "id": "project-editor", "title": "Project Editor", "section": "Configuration", "file": "Project-Editor.md" },
+  { "id": "actions", "title": "Actions", "section": "Configuration", "file": "Actions.md" },
   { "id": "widget-reference", "title": "Widget Reference", "section": "Configuration", "file": "Widget-Reference.md" },
   { "id": "javascript-api", "title": "JavaScript API", "section": "Configuration", "file": "JavaScript-API.md" },
   { "id": "communication-protocols", "title": "Communication Protocols", "section": "Connectivity", "file": "Communication-Protocols.md" },

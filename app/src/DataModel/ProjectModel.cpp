@@ -2330,9 +2330,10 @@ QVariantList DataModel::ProjectModel::actionsForDiagram() const
 
   for (const auto& act : m_actions) {
     QVariantMap map;
-    map[QStringLiteral("actionId")] = act.actionId;
+    map[QStringLiteral("actionId")]  = act.actionId;
+    map[QStringLiteral("sourceId")] = act.sourceId;
     map[QStringLiteral("title")]    = act.title;
-    map[QStringLiteral("icon")]     = act.icon;
+    map[QStringLiteral("icon")]     = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(act.icon);
     result.append(map);
   }
 

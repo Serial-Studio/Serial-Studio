@@ -121,6 +121,7 @@ enum class TimerMode {
  */
 struct alignas(8) Action {
   int actionId              = -1;               ///< Unique action ID
+  int sourceId              = 0;                ///< Target source/device ID
   int timerIntervalMs       = 100;              ///< Timer interval in ms
   TimerMode timerMode       = TimerMode::Off;   ///< Timer behavior mode
   bool binaryData           = false;            ///< If true, txData is binary
@@ -473,6 +474,7 @@ void read_io_settings(QByteArray& frameStart,
  * - `txData`: The data to transmit.
  * - `eol`: The end-of-line sequence (e.g., "\\r\\n").
  * - `binary`: Whether the data should be interpreted as binary.
+ * - `sourceId`: Target source/device ID for transmission.
  * - `timerIntervalMs`: Timer interval in milliseconds.
  * - `timerMode`: Integer value representing the timer mode enum.
  * - `autoExecuteOnConnect`: Whether to auto-execute this action on device
@@ -489,6 +491,7 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::TxData, a.txData);
   obj.insert(Keys::EOL, a.eolSequence);
   obj.insert(Keys::Binary, a.binaryData);
+  obj.insert(Keys::SourceId, a.sourceId);
   obj.insert(Keys::TimerInterval, a.timerIntervalMs);
   obj.insert(Keys::AutoExecute, a.autoExecuteOnConnect);
   obj.insert(Keys::TimerMode, static_cast<int>(a.timerMode));
@@ -673,6 +676,7 @@ void read_io_settings(QByteArray& frameStart,
  * - `txData`: Transmit data
  * - `eol`: End-of-line sequence
  * - `binary`: Binary mode flag
+ * - `sourceId`: Target source/device ID for transmission
  * - `icon`: Icon path or name
  * - `title`: Display name
  * - `timerIntervalMs`: Timer interval in milliseconds
@@ -691,6 +695,7 @@ void read_io_settings(QByteArray& frameStart,
   a.txData               = ss_jsr(obj, Keys::TxData, "").toString();
   a.eolSequence          = ss_jsr(obj, Keys::EOL, "").toString();
   a.binaryData           = ss_jsr(obj, Keys::Binary, false).toBool();
+  a.sourceId             = ss_jsr(obj, Keys::SourceId, 0).toInt();
   a.icon                 = ss_jsr(obj, Keys::Icon, "").toString().simplified();
   a.title                = ss_jsr(obj, Keys::Title, "").toString().simplified();
   a.timerIntervalMs      = ss_jsr(obj, Keys::TimerInterval, 100).toInt();

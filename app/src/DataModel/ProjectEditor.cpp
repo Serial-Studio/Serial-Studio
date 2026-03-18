@@ -73,6 +73,7 @@ typedef enum {
   kActionView_EOL,
   kActionView_Data,
   kActionView_Binary,
+  kActionView_SourceId,
   kActionView_AutoExecute,
   kActionView_TimerMode,
   kActionView_TimerInterval
@@ -1431,6 +1432,35 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
   iconItem->setData(tr("Icon displayed for this action in the dashboard"), ParameterDescription);
   m_actionModel->appendRow(iconItem);
 
+  // Target device (only shown when multiple sources exist)
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  if (sources.size() > 1) {
+    QStringList sourceLabels;
+    for (const auto& src : sources)
+      sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
+                                              : src.title);
+
+    int sourceIndex = 0;
+    for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
+      if (sources[i].sourceId == action.sourceId) {
+        sourceIndex = i;
+        break;
+      }
+    }
+
+    auto* sourceItem = new QStandardItem();
+    sourceItem->setEditable(true);
+    sourceItem->setData(true, Active);
+    sourceItem->setData(ComboBox, WidgetType);
+    sourceItem->setData(sourceLabels, ComboBoxData);
+    sourceItem->setData(sourceIndex, EditableValue);
+    sourceItem->setData(kActionView_SourceId, ParameterType);
+    sourceItem->setData(tr("Target Device"), ParameterName);
+    sourceItem->setData(tr("Select which connected device this action sends data to"),
+                        ParameterDescription);
+    m_actionModel->appendRow(sourceItem);
+  }
+
   // Data Payload
   hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
@@ -2252,6 +2282,13 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
       m_selectedAction.binaryData = value.toBool();
       buildActionModel(m_selectedAction);
       break;
+    case kActionView_SourceId: {
+      const auto& sources = DataModel::ProjectModel::instance().sources();
+      const int srcIdx    = value.toInt();
+      if (srcIdx >= 0 && srcIdx < static_cast<int>(sources.size()))
+        m_selectedAction.sourceId = sources[srcIdx].sourceId;
+      break;
+    }
     case kActionView_AutoExecute:
       m_selectedAction.autoExecuteOnConnect = value.toBool();
       break;
