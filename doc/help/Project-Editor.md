@@ -28,7 +28,7 @@ Each value in the incoming data frame is assigned a 1-based frame index that you
 ```mermaid
 flowchart LR
     A["23.5, 1013, 45.2"] --> B["parse()"]
-    B --> C["[0]→IDX 1\n[1]→IDX 2\n[2]→IDX 3"]
+    B --> C["[0]→IDX 1<br/>[1]→IDX 2<br/>[2]→IDX 3"]
 ```
 
 ## Interface Layout

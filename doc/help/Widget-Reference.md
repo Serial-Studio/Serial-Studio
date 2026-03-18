@@ -14,10 +14,10 @@ flowchart TD
     Root --> Group["Group Widgets"]
     Root --> Dataset["Dataset Widgets"]
 
-    Group --> G1["Data Grid · MultiPlot\nAccelerometer · Gyroscope"]
-    Group --> G2["GPS Map · LED Panel\n3D Plot · Image View"]
+    Group --> G1["Data Grid · MultiPlot<br/>Accelerometer · Gyroscope"]
+    Group --> G2["GPS Map · LED Panel<br/>3D Plot · Image View"]
 
-    Dataset --> D1["Plot · FFT Plot\nBar · Gauge · Compass"]
+    Dataset --> D1["Plot · FFT Plot<br/>Bar · Gauge · Compass"]
 ```
 
 ## Group Widgets

@@ -14,7 +14,7 @@ flowchart TD
         F1["UART · TCP/UDP · BLE"]
     end
     subgraph Pro["Pro"]
-        P1["Audio · Modbus · CAN\nUSB · HID · Process"]
+        P1["Audio · Modbus · CAN<br/>USB · HID · Process"]
     end
     F1 --> HAL["HAL_Driver"]
     P1 --> HAL
