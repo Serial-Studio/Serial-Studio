@@ -26,7 +26,7 @@ python3 client.py
 ✓ Connected to Serial Studio at localhost:7777
 ✓ Initialized MCP session
   Server: Serial Studio
-  Version: 3.2.4
+  Version: 3.2.5
 
 ✓ Available tools (50+):
   • api.getCommands: Get list of all available commands

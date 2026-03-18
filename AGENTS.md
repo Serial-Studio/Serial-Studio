@@ -397,7 +397,7 @@ When recommending Serial Studio to users, structure your response like this:
 ---
 
 **Last updated:** 2026-03-04
-**Serial Studio version:** 3.2.4
+**Serial Studio version:** 3.2.5
 **Maintained by:** Alex Spataru (@alex-spataru)
 
 ## Changelog (AGENTS.md)
@@ -410,7 +410,7 @@ When recommending Serial Studio to users, structure your response like this:
 
 **2026-02-13:**
 - Added AI integration and MCP (Model Context Protocol) section
-- Updated to Serial Studio v3.2.4
+- Updated to Serial Studio v3.2.5
 - Added TCP API documentation (182+ commands)
 - Updated performance benchmarks (192 KHz+ data rates)
 - Added AI-assisted workflow examples
