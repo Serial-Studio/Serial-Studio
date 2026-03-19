@@ -585,23 +585,15 @@ SmartDialog {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            Rectangle {
-              radius: 2
-              border.width: 1
-              anchors.fill: parent
-              color: Cpp_ThemeManager.colors["groupbox_background"]
-              border.color: Cpp_ThemeManager.colors["groupbox_border"]
-            }
-
+            //
+            // WebView for rendered README — no QML siblings may
+            // overlap, per QtWebView platform limitations.
+            //
             WebView {
               id: readmeView
 
               anchors.fill: parent
-              anchors.margins: 2
 
-              //
-              // Load the HTML shell via loadHtml (WebView does not support qrc: URLs)
-              //
               Component.onCompleted: readmeView.loadHtml(Cpp_HelpCenter.viewerHtml)
 
               onLoadingChanged: function(loadRequest) {
@@ -622,7 +614,6 @@ SmartDialog {
                 if (str.startsWith("copy:")) {
                   var text = decodeURIComponent(str.substring(5))
                   Cpp_Misc_Utilities.copyText(text)
-                  exCopyToast.show()
                   return
                 }
 
@@ -651,49 +642,6 @@ SmartDialog {
               target: Cpp_HelpCenter
               function onThemeColorsChanged() {
                 root.pushReadmeTheme()
-              }
-            }
-
-            //
-            // "Copied to Clipboard" toast notification
-            //
-            Rectangle {
-              id: exCopyToast
-
-              opacity: 0
-              radius: 4
-              anchors.bottom: parent.bottom
-              anchors.horizontalCenter: parent.horizontalCenter
-              anchors.bottomMargin: 24
-              width: exCopyToastLabel.implicitWidth + 24
-              height: exCopyToastLabel.implicitHeight + 12
-              color: Cpp_ThemeManager.colors["highlight"]
-
-              function show() {
-                exCopyToast.opacity = 1
-                exCopyToastTimer.restart()
-              }
-
-              Label {
-                id: exCopyToastLabel
-
-                anchors.centerIn: parent
-                text: qsTr("Copied to Clipboard")
-                font: Cpp_Misc_CommonFonts.uiFont
-                color: Cpp_ThemeManager.colors["highlighted_text"]
-              }
-
-              Timer {
-                id: exCopyToastTimer
-
-                interval: 1500
-                onTriggered: exCopyToast.opacity = 0
-              }
-
-              Behavior on opacity {
-                NumberAnimation {
-                  duration: 150
-                }
               }
             }
           }

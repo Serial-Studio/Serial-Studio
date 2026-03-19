@@ -244,49 +244,73 @@ SmartDialog {
       }
 
       //
-      // Right content area — WebView
+      // Right content area — WebView and status panels are never
+      // overlapped, because QtWebView does not support overlapping
+      // QML items on top of a WebView.
       //
       Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
+        //
+        // Whether to show the WebView or a status panel
+        //
+        property bool showWebView: Cpp_HelpCenter.pageContent !== ""
+
+        //
+        // Status panel (busy indicator / placeholder) — shown when
+        // there is no page content to display
+        //
         Rectangle {
           radius: 2
           border.width: 1
           anchors.fill: parent
+          visible: !parent.showWebView
           color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
 
-        //
-        // Busy indicator while loading
-        //
-        ColumnLayout {
-          spacing: 8
-          anchors.centerIn: parent
-          visible: Cpp_HelpCenter.loading && Cpp_HelpCenter.pageContent === ""
+          //
+          // Busy indicator while loading
+          //
+          ColumnLayout {
+            spacing: 8
+            anchors.centerIn: parent
+            visible: Cpp_HelpCenter.loading
 
-          BusyIndicator {
-            running: parent.visible
-            Layout.alignment: Qt.AlignHCenter
+            BusyIndicator {
+              running: parent.visible
+              Layout.alignment: Qt.AlignHCenter
+            }
+
+            Label {
+              text: qsTr("Loading...")
+              font: Cpp_Misc_CommonFonts.boldUiFont
+              color: Cpp_ThemeManager.colors["text"]
+              Layout.alignment: Qt.AlignHCenter
+            }
           }
 
+          //
+          // Placeholder when no page selected
+          //
           Label {
-            text: qsTr("Loading...")
-            font: Cpp_Misc_CommonFonts.boldUiFont
-            color: Cpp_ThemeManager.colors["text"]
-            Layout.alignment: Qt.AlignHCenter
+            anchors.centerIn: parent
+            text: qsTr("Select a page from the sidebar")
+            visible: !Cpp_HelpCenter.loading && Cpp_HelpCenter.currentIndex < 0
+            color: Cpp_ThemeManager.colors["placeholder_text"]
+            font: Cpp_Misc_CommonFonts.uiFont
           }
         }
 
         //
-        // WebView for rendered markdown
+        // WebView for rendered markdown — only visible when we
+        // have content, so it never overlaps the status panel
         //
         WebView {
           id: contentView
 
           anchors.fill: parent
-          anchors.margins: 2
+          visible: parent.showWebView
 
           //
           // Load the HTML shell once the WebView becomes visible.
@@ -330,7 +354,6 @@ SmartDialog {
             if (str.startsWith("copy:")) {
               var text = decodeURIComponent(str.substring(5))
               Cpp_Misc_Utilities.copyText(text)
-              copyToast.show()
               return
             }
 
@@ -365,59 +388,6 @@ SmartDialog {
           }
         }
 
-        //
-        // Placeholder when no page selected
-        //
-        Label {
-          anchors.centerIn: parent
-          text: qsTr("Select a page from the sidebar")
-          visible: !Cpp_HelpCenter.loading && Cpp_HelpCenter.pageContent === "" && Cpp_HelpCenter.currentIndex < 0
-          color: Cpp_ThemeManager.colors["placeholder_text"]
-          font: Cpp_Misc_CommonFonts.uiFont
-        }
-
-        //
-        // "Copied to Clipboard" toast notification
-        //
-        Rectangle {
-          id: copyToast
-
-          opacity: 0
-          radius: 4
-          anchors.bottom: parent.bottom
-          anchors.horizontalCenter: parent.horizontalCenter
-          anchors.bottomMargin: 24
-          width: copyToastLabel.implicitWidth + 24
-          height: copyToastLabel.implicitHeight + 12
-          color: Cpp_ThemeManager.colors["highlight"]
-
-          function show() {
-            copyToast.opacity = 1
-            copyToastTimer.restart()
-          }
-
-          Label {
-            id: copyToastLabel
-
-            anchors.centerIn: parent
-            text: qsTr("Copied to Clipboard")
-            font: Cpp_Misc_CommonFonts.uiFont
-            color: Cpp_ThemeManager.colors["highlighted_text"]
-          }
-
-          Timer {
-            id: copyToastTimer
-
-            interval: 1500
-            onTriggered: copyToast.opacity = 0
-          }
-
-          Behavior on opacity {
-            NumberAnimation {
-              duration: 150
-            }
-          }
-        }
       }
     }
 
