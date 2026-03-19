@@ -289,9 +289,18 @@ SmartDialog {
           anchors.margins: 2
 
           //
-          // Load the HTML shell via loadHtml (WebView does not support qrc: URLs)
+          // Load the HTML shell once the WebView becomes visible.
+          // On Windows, WebView2 fails to initialize when its parent
+          // is hidden (the RowLayout starts with visible: false while
+          // the manifest is being fetched).
           //
-          Component.onCompleted: contentView.loadHtml(Cpp_HelpCenter.viewerHtml)
+          property bool htmlLoaded: false
+          onVisibleChanged: {
+            if (visible && !htmlLoaded) {
+              htmlLoaded = true
+              contentView.loadHtml(Cpp_HelpCenter.viewerHtml)
+            }
+          }
 
           //
           // WebView is ready once the HTML shell has loaded
