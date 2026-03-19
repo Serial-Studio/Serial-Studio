@@ -57,7 +57,7 @@ SmartDialog {
   // Push markdown content into the WebView via JS
   //
   function pushContent() {
-    if (!webViewReady || !contentView.visible)
+    if (!webViewReady)
       return
 
     var md = Cpp_HelpCenter.pageContent
@@ -287,7 +287,6 @@ SmartDialog {
 
           anchors.fill: parent
           anchors.margins: 2
-          visible: Cpp_HelpCenter.pageContent !== ""
 
           //
           // Load the HTML shell via loadHtml (WebView does not support qrc: URLs)
