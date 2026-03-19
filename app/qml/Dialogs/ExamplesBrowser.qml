@@ -586,6 +586,42 @@ SmartDialog {
             Layout.fillHeight: true
 
             //
+            // Border drawn around the WebView using edge rectangles
+            // (cannot overlap the WebView per QtWebView limitations)
+            //
+            Rectangle {
+              anchors.top: parent.top
+              anchors.left: parent.left
+              anchors.right: parent.right
+              implicitHeight: 1
+              color: Cpp_ThemeManager.colors["groupbox_border"]
+            }
+
+            Rectangle {
+              anchors.bottom: parent.bottom
+              anchors.left: parent.left
+              anchors.right: parent.right
+              implicitHeight: 1
+              color: Cpp_ThemeManager.colors["groupbox_border"]
+            }
+
+            Rectangle {
+              anchors.top: parent.top
+              anchors.left: parent.left
+              anchors.bottom: parent.bottom
+              implicitWidth: 1
+              color: Cpp_ThemeManager.colors["groupbox_border"]
+            }
+
+            Rectangle {
+              anchors.top: parent.top
+              anchors.right: parent.right
+              anchors.bottom: parent.bottom
+              implicitWidth: 1
+              color: Cpp_ThemeManager.colors["groupbox_border"]
+            }
+
+            //
             // WebView for rendered README — no QML siblings may
             // overlap, per QtWebView platform limitations.
             //
@@ -593,6 +629,7 @@ SmartDialog {
               id: readmeView
 
               anchors.fill: parent
+              anchors.margins: 1
 
               Component.onCompleted: readmeView.loadHtml(Cpp_HelpCenter.viewerHtml)
 

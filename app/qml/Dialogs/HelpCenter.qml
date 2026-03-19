@@ -303,6 +303,46 @@ SmartDialog {
         }
 
         //
+        // Border drawn around the WebView using edge rectangles
+        // (cannot overlap the WebView per QtWebView limitations)
+        //
+        Rectangle {
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          visible: parent.showWebView
+          implicitHeight: 1
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        Rectangle {
+          anchors.bottom: parent.bottom
+          anchors.left: parent.left
+          anchors.right: parent.right
+          visible: parent.showWebView
+          implicitHeight: 1
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        Rectangle {
+          anchors.top: parent.top
+          anchors.left: parent.left
+          anchors.bottom: parent.bottom
+          visible: parent.showWebView
+          implicitWidth: 1
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        Rectangle {
+          anchors.top: parent.top
+          anchors.right: parent.right
+          anchors.bottom: parent.bottom
+          visible: parent.showWebView
+          implicitWidth: 1
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        //
         // WebView for rendered markdown — only visible when we
         // have content, so it never overlaps the status panel
         //
@@ -310,6 +350,7 @@ SmartDialog {
           id: contentView
 
           anchors.fill: parent
+          anchors.margins: 1
           visible: parent.showWebView
 
           //
