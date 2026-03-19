@@ -579,7 +579,7 @@ SmartDialog {
           anchors.fill: parent
 
           //
-          // README panel (WebEngineView)
+          // README panel
           //
           Item {
             Layout.fillWidth: true

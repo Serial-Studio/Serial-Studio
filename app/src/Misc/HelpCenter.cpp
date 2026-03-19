@@ -468,7 +468,7 @@ void Misc::HelpCenter::onPreloadReply()
 
 /**
  * @brief Rebuilds the theme colors JSON string from the current ThemeManager
- *        colors and emits themeColorsChanged so the WebEngineView can update.
+ *        colors and emits themeColorsChanged so the WebView can update.
  */
 void Misc::HelpCenter::onThemeChanged()
 {

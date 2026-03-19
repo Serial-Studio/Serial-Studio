@@ -197,16 +197,29 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+        export EXTRA_QT_MODULES="webengine"
 
         ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
 
-        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins"
+        QT_BASE="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64"
+        QT_PLUGINS_PATH="${QT_BASE}/plugins"
+
         mkdir -p AppDir/usr/plugins/canbus
         if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
         else
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
         fi
+
+        mkdir -p AppDir/usr/libexec
+        cp -f "${QT_BASE}/libexec/QtWebEngineProcess" AppDir/usr/libexec/ || echo "Warning: QtWebEngineProcess not found"
+
+        mkdir -p AppDir/usr/resources
+        cp -f "${QT_BASE}/resources/"*.pak AppDir/usr/resources/ 2>/dev/null || echo "Warning: WebEngine .pak files not found"
+        cp -f "${QT_BASE}/resources/icudtl.dat" AppDir/usr/resources/ 2>/dev/null || true
+
+        mkdir -p AppDir/usr/translations/qtwebengine_locales
+        cp -f "${QT_BASE}/translations/qtwebengine_locales/"*.pak AppDir/usr/translations/qtwebengine_locales/ 2>/dev/null || true
 
         ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
 
@@ -355,16 +368,29 @@ jobs:
         chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
+        export EXTRA_QT_MODULES="webengine"
 
         ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
 
-        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins"
+        QT_BASE="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64"
+        QT_PLUGINS_PATH="${QT_BASE}/plugins"
+
         mkdir -p AppDir/usr/plugins/canbus
         if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
         else
           echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
         fi
+
+        mkdir -p AppDir/usr/libexec
+        cp -f "${QT_BASE}/libexec/QtWebEngineProcess" AppDir/usr/libexec/ || echo "Warning: QtWebEngineProcess not found"
+
+        mkdir -p AppDir/usr/resources
+        cp -f "${QT_BASE}/resources/"*.pak AppDir/usr/resources/ 2>/dev/null || echo "Warning: WebEngine .pak files not found"
+        cp -f "${QT_BASE}/resources/icudtl.dat" AppDir/usr/resources/ 2>/dev/null || true
+
+        mkdir -p AppDir/usr/translations/qtwebengine_locales
+        cp -f "${QT_BASE}/translations/qtwebengine_locales/"*.pak AppDir/usr/translations/qtwebengine_locales/ 2>/dev/null || true
 
         ./linuxdeploy-aarch64.AppImage --appdir AppDir --output appimage
 

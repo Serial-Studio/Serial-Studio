@@ -280,7 +280,7 @@ SmartDialog {
         }
 
         //
-        // WebEngineView for rendered markdown
+        // WebView for rendered markdown
         //
         WebView {
           id: contentView
