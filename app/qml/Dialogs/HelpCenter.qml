@@ -244,7 +244,7 @@ SmartDialog {
       }
 
       //
-      // Right content area — WebEngineView
+      // Right content area — WebView
       //
       Item {
         Layout.fillWidth: true
