@@ -416,7 +416,7 @@
         btn.addEventListener('click', function() {
           var code = pre.querySelector('code');
           var text = code ? code.textContent : pre.textContent;
-          document.title = 'copy:' + encodeURIComponent(text);
+          window.location.href = 'copy:' + encodeURIComponent(text);
         });
         pre.appendChild(btn);
       });
@@ -460,7 +460,7 @@
     }
 
     // ----------------------------------------------------------------
-    // Intercept link clicks — notify Qt via document.title changes
+    // Intercept link clicks — notify Qt via navigation
     // ----------------------------------------------------------------
     document.addEventListener('click', function(e) {
       var anchor = e.target.closest('a');
@@ -469,10 +469,10 @@
       var href = anchor.getAttribute('href');
       if (!href) return;
 
-      // External links — signal Qt via title
+      // External links — let Qt handle via navigation request
       if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:')) {
         e.preventDefault();
-        document.title = 'ext:' + href;
+        window.location.href = 'ext:' + href;
         return;
       }
 
@@ -485,9 +485,9 @@
         return;
       }
 
-      // Internal page links — signal Qt via title
+      // Internal page links — notify Qt
       e.preventDefault();
-      document.title = 'nav:' + href;
+      window.location.href = 'nav:' + href;
     });
   </script>
 </body>

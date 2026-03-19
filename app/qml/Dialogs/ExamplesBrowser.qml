@@ -24,7 +24,7 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Effects
-import QtWebView
+import QtWebEngine
 
 import "../Widgets"
 
@@ -579,86 +579,59 @@ SmartDialog {
           anchors.fill: parent
 
           //
-          // README panel
+          // README panel (WebEngineView)
           //
           Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            //
-            // Border drawn around the WebView using edge rectangles
-            // (cannot overlap the WebView per QtWebView limitations)
-            //
             Rectangle {
-              anchors.top: parent.top
-              anchors.left: parent.left
-              anchors.right: parent.right
-              implicitHeight: 1
-              color: Cpp_ThemeManager.colors["groupbox_border"]
+              radius: 2
+              border.width: 1
+              anchors.fill: parent
+              color: Cpp_ThemeManager.colors["groupbox_background"]
+              border.color: Cpp_ThemeManager.colors["groupbox_border"]
             }
 
-            Rectangle {
-              anchors.bottom: parent.bottom
-              anchors.left: parent.left
-              anchors.right: parent.right
-              implicitHeight: 1
-              color: Cpp_ThemeManager.colors["groupbox_border"]
-            }
-
-            Rectangle {
-              anchors.top: parent.top
-              anchors.left: parent.left
-              anchors.bottom: parent.bottom
-              implicitWidth: 1
-              color: Cpp_ThemeManager.colors["groupbox_border"]
-            }
-
-            Rectangle {
-              anchors.top: parent.top
-              anchors.right: parent.right
-              anchors.bottom: parent.bottom
-              implicitWidth: 1
-              color: Cpp_ThemeManager.colors["groupbox_border"]
-            }
-
-            //
-            // WebView for rendered README — no QML siblings may
-            // overlap, per QtWebView platform limitations.
-            //
-            WebView {
+            WebEngineView {
               id: readmeView
 
               anchors.fill: parent
-              anchors.margins: 1
-
-              Component.onCompleted: readmeView.loadHtml(Cpp_HelpCenter.viewerHtml)
+              anchors.margins: 2
+              backgroundColor: "transparent"
+              url: "qrc:/rcc/markdown-viewer.html"
+              settings.localContentCanAccessRemoteUrls: true
 
               onLoadingChanged: function(loadRequest) {
-                if (loadRequest.status === WebView.LoadSucceededStatus) {
+                if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
                   root.readmeViewReady = true
                   root.pushReadmeTheme()
                   root.pushReadme()
                 }
               }
 
-              //
-              // Handle navigation requests via document.title changes
-              //
-              onTitleChanged: {
-                var str = readmeView.title
+              onNavigationRequested: function(request) {
+                var url = request.url.toString()
+
+                // Allow initial page load from qrc
+                if (url.startsWith("qrc:"))
+                  return
 
                 // Copy code to clipboard
-                if (str.startsWith("copy:")) {
-                  var text = decodeURIComponent(str.substring(5))
+                if (url.startsWith("copy:")) {
+                  request.reject()
+                  var text = decodeURIComponent(url.substring(5))
                   Cpp_Misc_Utilities.copyText(text)
+                  exCopyToast.show()
                   return
                 }
 
                 // Open all links externally
-                if (str.startsWith("ext:"))
-                  Qt.openUrlExternally(str.substring(4))
-                else if (str.startsWith("nav:"))
-                  Qt.openUrlExternally(str.substring(4))
+                request.reject()
+                if (url.startsWith("ext:"))
+                  Qt.openUrlExternally(url.substring(4))
+                else if (url.startsWith("nav:"))
+                  Qt.openUrlExternally(url.substring(4))
               }
             }
 
@@ -679,6 +652,49 @@ SmartDialog {
               target: Cpp_HelpCenter
               function onThemeColorsChanged() {
                 root.pushReadmeTheme()
+              }
+            }
+
+            //
+            // "Copied to Clipboard" toast notification
+            //
+            Rectangle {
+              id: exCopyToast
+
+              opacity: 0
+              radius: 4
+              anchors.bottom: parent.bottom
+              anchors.horizontalCenter: parent.horizontalCenter
+              anchors.bottomMargin: 24
+              width: exCopyToastLabel.implicitWidth + 24
+              height: exCopyToastLabel.implicitHeight + 12
+              color: Cpp_ThemeManager.colors["highlight"]
+
+              function show() {
+                exCopyToast.opacity = 1
+                exCopyToastTimer.restart()
+              }
+
+              Label {
+                id: exCopyToastLabel
+
+                anchors.centerIn: parent
+                text: qsTr("Copied to Clipboard")
+                font: Cpp_Misc_CommonFonts.uiFont
+                color: Cpp_ThemeManager.colors["highlighted_text"]
+              }
+
+              Timer {
+                id: exCopyToastTimer
+
+                interval: 1500
+                onTriggered: exCopyToast.opacity = 0
+              }
+
+              Behavior on opacity {
+                NumberAnimation {
+                  duration: 150
+                }
               }
             }
           }

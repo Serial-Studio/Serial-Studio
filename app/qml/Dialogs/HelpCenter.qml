@@ -22,7 +22,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtWebView
+import QtWebEngine
 
 import "../Widgets"
 
@@ -57,7 +57,7 @@ SmartDialog {
   // Push markdown content into the WebView via JS
   //
   function pushContent() {
-    if (!webViewReady)
+    if (!webViewReady || !contentView.visible)
       return
 
     var md = Cpp_HelpCenter.pageContent
@@ -244,134 +244,59 @@ SmartDialog {
       }
 
       //
-      // Right content area — WebView and status panels are never
-      // overlapped, because QtWebView does not support overlapping
-      // QML items on top of a WebView.
+      // Right content area — WebEngineView
       //
       Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        //
-        // Whether to show the WebView or a status panel
-        //
-        property bool showWebView: Cpp_HelpCenter.pageContent !== ""
-
-        //
-        // Status panel (busy indicator / placeholder) — shown when
-        // there is no page content to display
-        //
         Rectangle {
           radius: 2
           border.width: 1
           anchors.fill: parent
-          visible: !parent.showWebView
           color: Cpp_ThemeManager.colors["groupbox_background"]
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
 
-          //
-          // Busy indicator while loading
-          //
-          ColumnLayout {
-            spacing: 8
-            anchors.centerIn: parent
-            visible: Cpp_HelpCenter.loading
+        //
+        // Busy indicator while loading
+        //
+        ColumnLayout {
+          spacing: 8
+          anchors.centerIn: parent
+          visible: Cpp_HelpCenter.loading && Cpp_HelpCenter.pageContent === ""
 
-            BusyIndicator {
-              running: parent.visible
-              Layout.alignment: Qt.AlignHCenter
-            }
-
-            Label {
-              text: qsTr("Loading...")
-              font: Cpp_Misc_CommonFonts.boldUiFont
-              color: Cpp_ThemeManager.colors["text"]
-              Layout.alignment: Qt.AlignHCenter
-            }
+          BusyIndicator {
+            running: parent.visible
+            Layout.alignment: Qt.AlignHCenter
           }
 
-          //
-          // Placeholder when no page selected
-          //
           Label {
-            anchors.centerIn: parent
-            text: qsTr("Select a page from the sidebar")
-            visible: !Cpp_HelpCenter.loading && Cpp_HelpCenter.currentIndex < 0
-            color: Cpp_ThemeManager.colors["placeholder_text"]
-            font: Cpp_Misc_CommonFonts.uiFont
+            text: qsTr("Loading...")
+            font: Cpp_Misc_CommonFonts.boldUiFont
+            color: Cpp_ThemeManager.colors["text"]
+            Layout.alignment: Qt.AlignHCenter
           }
         }
 
         //
-        // Border drawn around the WebView using edge rectangles
-        // (cannot overlap the WebView per QtWebView limitations)
+        // WebEngineView for rendered markdown
         //
-        Rectangle {
-          anchors.top: parent.top
-          anchors.left: parent.left
-          anchors.right: parent.right
-          visible: parent.showWebView
-          implicitHeight: 1
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        Rectangle {
-          anchors.bottom: parent.bottom
-          anchors.left: parent.left
-          anchors.right: parent.right
-          visible: parent.showWebView
-          implicitHeight: 1
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        Rectangle {
-          anchors.top: parent.top
-          anchors.left: parent.left
-          anchors.bottom: parent.bottom
-          visible: parent.showWebView
-          implicitWidth: 1
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        Rectangle {
-          anchors.top: parent.top
-          anchors.right: parent.right
-          anchors.bottom: parent.bottom
-          visible: parent.showWebView
-          implicitWidth: 1
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        //
-        // WebView for rendered markdown — only visible when we
-        // have content, so it never overlaps the status panel
-        //
-        WebView {
+        WebEngineView {
           id: contentView
 
           anchors.fill: parent
-          anchors.margins: 1
-          visible: parent.showWebView
-
-          //
-          // Load the HTML shell once the WebView becomes visible.
-          // On Windows, WebView2 fails to initialize when its parent
-          // is hidden (the RowLayout starts with visible: false while
-          // the manifest is being fetched).
-          //
-          property bool htmlLoaded: false
-          onVisibleChanged: {
-            if (visible && !htmlLoaded) {
-              htmlLoaded = true
-              contentView.loadHtml(Cpp_HelpCenter.viewerHtml)
-            }
-          }
+          anchors.margins: 2
+          visible: Cpp_HelpCenter.pageContent !== ""
+          backgroundColor: "transparent"
+          url: "qrc:/rcc/markdown-viewer.html"
+          settings.localContentCanAccessRemoteUrls: true
 
           //
           // WebView is ready once the HTML shell has loaded
           //
           onLoadingChanged: function(loadRequest) {
-            if (loadRequest.status === WebView.LoadSucceededStatus) {
+            if (loadRequest.status === WebEngineView.LoadSucceededStatus) {
               root.webViewReady = true
               root.pushTheme()
               root.pushContent()
@@ -380,32 +305,47 @@ SmartDialog {
 
           //
           // Handle navigation requests from the page (link clicks)
-          // Page signals Qt by setting document.title to action strings
           //
-          onTitleChanged: {
-            var str = contentView.title
+          onNavigationRequested: function(request) {
+            var url = request.url.toString()
+
+            // Allow initial page load from qrc
+            if (url.startsWith("qrc:"))
+              return
 
             // External link — open in browser
-            if (str.startsWith("ext:")) {
-              Qt.openUrlExternally(str.substring(4))
+            if (url.startsWith("ext:")) {
+              request.reject()
+              Qt.openUrlExternally(url.substring(4))
               return
             }
 
             // Copy code to clipboard
-            if (str.startsWith("copy:")) {
-              var text = decodeURIComponent(str.substring(5))
+            if (url.startsWith("copy:")) {
+              request.reject()
+              var text = decodeURIComponent(url.substring(5))
               Cpp_Misc_Utilities.copyText(text)
+              copyToast.show()
               return
             }
 
             // Internal page navigation
-            if (str.startsWith("nav:")) {
-              var link = decodeURIComponent(str.substring(4))
+            if (url.startsWith("nav:")) {
+              request.reject()
+              var link = url.substring(4)
+
+              // Decode percent-encoded characters
+              link = decodeURIComponent(link)
+
+              // Try internal navigation
               if (!Cpp_HelpCenter.navigateToPage(link))
                 Qt.openUrlExternally(link)
 
               return
             }
+
+            // Block all other navigations
+            request.reject()
           }
         }
 
@@ -429,6 +369,59 @@ SmartDialog {
           }
         }
 
+        //
+        // Placeholder when no page selected
+        //
+        Label {
+          anchors.centerIn: parent
+          text: qsTr("Select a page from the sidebar")
+          visible: !Cpp_HelpCenter.loading && Cpp_HelpCenter.pageContent === "" && Cpp_HelpCenter.currentIndex < 0
+          color: Cpp_ThemeManager.colors["placeholder_text"]
+          font: Cpp_Misc_CommonFonts.uiFont
+        }
+
+        //
+        // "Copied to Clipboard" toast notification
+        //
+        Rectangle {
+          id: copyToast
+
+          opacity: 0
+          radius: 4
+          anchors.bottom: parent.bottom
+          anchors.horizontalCenter: parent.horizontalCenter
+          anchors.bottomMargin: 24
+          width: copyToastLabel.implicitWidth + 24
+          height: copyToastLabel.implicitHeight + 12
+          color: Cpp_ThemeManager.colors["highlight"]
+
+          function show() {
+            copyToast.opacity = 1
+            copyToastTimer.restart()
+          }
+
+          Label {
+            id: copyToastLabel
+
+            anchors.centerIn: parent
+            text: qsTr("Copied to Clipboard")
+            font: Cpp_Misc_CommonFonts.uiFont
+            color: Cpp_ThemeManager.colors["highlighted_text"]
+          }
+
+          Timer {
+            id: copyToastTimer
+
+            interval: 1500
+            onTriggered: copyToast.opacity = 0
+          }
+
+          Behavior on opacity {
+            NumberAnimation {
+              duration: 150
+            }
+          }
+        }
       }
     }
 

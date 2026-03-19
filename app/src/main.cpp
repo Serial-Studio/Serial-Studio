@@ -44,7 +44,7 @@
 #  include <QStandardPaths>
 #endif
 
-#include <QtWebView>
+#include <QtWebEngineQuick>
 
 #include "API/Server.h"
 #include "AppInfo.h"
@@ -158,7 +158,7 @@ int main(int argc, char** argv)
 
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
-  QtWebView::initialize();
+  QtWebEngineQuick::initialize();
 
   QApplication app(argc, argv);
 

@@ -35,7 +35,7 @@ namespace Misc {
  * The HelpCenter class loads a manifest of help pages and allows users
  * to browse, search, and read documentation without leaving Serial Studio.
  *
- * Page content is delivered as raw markdown to QML, where a WebView
+ * Page content is delivered as raw markdown to QML, where a WebEngineView
  * renders it via showdown.js + highlight.js + KaTeX.
  */
 class HelpCenter : public QObject {
@@ -67,9 +67,6 @@ class HelpCenter : public QObject {
   Q_PROPERTY(QString themeColors
              READ themeColors
              NOTIFY themeColorsChanged)
-  Q_PROPERTY(QString viewerHtml
-             READ viewerHtml
-             CONSTANT)
   // clang-format on
 
 signals:
@@ -98,7 +95,6 @@ public:
   [[nodiscard]] QString pageTitle() const;
   [[nodiscard]] const QVariantList& pages() const noexcept;
   [[nodiscard]] const QString& themeColors() const noexcept;
-  [[nodiscard]] const QString& viewerHtml() const noexcept;
 
 public slots:
   void fetchManifest();
@@ -121,7 +117,6 @@ private:
   int m_currentIndex;
   int m_pendingPreloads;
 
-  QString m_viewerHtml;
   QString m_pendingPageId;
   QString m_searchFilter;
   QString m_pageContent;
