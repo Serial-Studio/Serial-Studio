@@ -276,9 +276,11 @@ void IO::FrameReader::readEndDelimitedFrames()
  *
  * This method assumes that each frame begins with a fixed start pattern and
  * ends right before the next occurrence of that same pattern. The frame length
- * is inferred from the gap between two start delimiters.
+ * is inferred from the gap between two consecutive start delimiters.
  *
- * A checksum is expected at the end of each frame and is excluded from the
+ * Data is buffered until a second start delimiter arrives, ensuring that slow
+ * byte-by-byte streams do not produce truncated frames. A checksum, if
+ * configured, is expected at the end of each frame and is excluded from the
  * emitted data.
  */
 void IO::FrameReader::readStartDelimitedFrames()
@@ -288,25 +290,24 @@ void IO::FrameReader::readStartDelimitedFrames()
     if (startIndex == -1)
       break;
 
+    // Discard any bytes before the first start delimiter
+    if (startIndex > 0)
+      (void)m_circularBuffer.read(startIndex);
+
+    // Search for the next start delimiter after the current one
     int nextStartIndex = m_circularBuffer.findPatternKMP(
-      m_startSequence, m_startSequenceLps, startIndex + m_startSequence.size());
+      m_startSequence, m_startSequenceLps, m_startSequence.size());
 
-    qsizetype frameEndPos;
-    qsizetype frameStart = startIndex + m_startSequence.size();
+    // No second start delimiter found — wait for more data
+    if (nextStartIndex == -1)
+      break;
 
-    // No second start delimiter found...maybe the last frame in the stream
-    if (nextStartIndex == -1) {
-      frameEndPos = m_circularBuffer.size();
-      if ((frameEndPos - frameStart) < m_checksumLength)
-        break;
-    }
-
-    // Valid second start delimiter found, makes life easier for us
-    else
-      frameEndPos = nextStartIndex;
-
-    // Compute the frame length and validate it's sane
+    // Extract frame payload between the two start delimiters
+    qsizetype frameStart  = m_startSequence.size();
+    qsizetype frameEndPos = nextStartIndex;
     qsizetype frameLength = frameEndPos - frameStart;
+
+    // Empty frame, discard and advance to the next start delimiter
     if (frameLength <= 0) {
       (void)m_circularBuffer.read(frameEndPos);
       continue;

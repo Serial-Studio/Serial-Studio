@@ -31,7 +31,7 @@ Widgets.Pane {
 
   focus: true
   icon: Cpp_JSON_ProjectEditor.selectedIcon
-  title: Cpp_JSON_ProjectEditor.selectedText + (frameParser.isModified ? " (" + qsTr("modified") + ")" : "")
+  title: Cpp_JSON_ProjectEditor.selectedText
 
   onVisibleChanged: {
     if (visible) {
@@ -86,7 +86,7 @@ Widgets.Pane {
     sequences: [StandardKey.Paste]
   } Shortcut {
     enabled: frameParser.activeFocus
-    onActivated: frameParser.apply()
+    onActivated: Cpp_JSON_ProjectModel.saveJsonFile()
     sequences: [StandardKey.Save, StandardKey.SaveAs]
   }
 
@@ -211,25 +211,6 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/open.svg"
             ToolTip.text: qsTr("Import a JavaScript file for data parsing")
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 24
-            text: qsTr("Save")
-            toolbarButton: false
-            onClicked: frameParser.apply()
-            enabled: frameParser.isModified
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/code-editor/save.svg"
-            ToolTip.text: qsTr("Validate syntax and apply parsing changes")
-          }
-
-          Rectangle {
-            implicitWidth: 1
-            Layout.fillHeight: true
-            Layout.maximumHeight: 48
-            Layout.alignment: Qt.AlignVCenter
-            color: Cpp_ThemeManager.colors["groupbox_border"]
           }
 
           Widgets.ToolbarButton {

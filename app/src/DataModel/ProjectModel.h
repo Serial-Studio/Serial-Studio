@@ -189,13 +189,14 @@ public slots:
 
   void setModified(const bool modified);
   void setFrameParserCode(const QString& code);
+  void storeFrameParserCode(int sourceId, const QString& code);
   void setActiveGroupId(const int groupId);
   void setGroupLayout(const int groupId, const QJsonObject& layout);
   void setDecoderMethod(const SerialStudio::DecoderMethod method);
   void setHexadecimalDelimiters(const bool hexadecimal);
 
   void updateGroup(const int groupId, const DataModel::Group& group, const bool rebuildTree = true);
-  void updateAction(const int actionId, const DataModel::Action& action);
+  void updateAction(const int actionId, const DataModel::Action& action, const bool rebuildTree = true);
   void updateDataset(const int groupId,
                      const int datasetId,
                      const DataModel::Dataset& dataset,

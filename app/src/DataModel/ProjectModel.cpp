@@ -1451,13 +1451,18 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
 /**
  * @brief Replaces the action at @p actionId with @p action and emits actionsChanged.
  */
-void DataModel::ProjectModel::updateAction(const int actionId, const DataModel::Action& action)
+void DataModel::ProjectModel::updateAction(const int actionId,
+                                            const DataModel::Action& action,
+                                            const bool rebuildTree)
 {
   if (actionId < 0 || static_cast<size_t>(actionId) >= m_actions.size())
     return;
 
   m_actions[actionId] = action;
-  Q_EMIT actionsChanged();
+
+  if (rebuildTree)
+    Q_EMIT actionsChanged();
+
   setModified(true);
 }
 
@@ -2162,6 +2167,7 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
   m_groups[group] = grp;
 
   Q_EMIT groupsChanged();
+  setModified(true);
   return true;
 }
 
@@ -2197,6 +2203,30 @@ void DataModel::ProjectModel::setFrameParserCode(const QString& code)
   m_sources[0].frameParserCode = code;
   setModified(true);
   Q_EMIT frameParserCodeChanged();
+}
+
+/**
+ * @brief Stores frame parser code for the given source without emitting
+ *        signals or reloading the JS engine.
+ *
+ * Used by the JsCodeEditor on every keystroke so that the project model
+ * always has the latest code. The expensive FrameParser engine reload
+ * only happens when the user explicitly clicks Evaluate/Apply.
+ *
+ * @param sourceId The source to update.
+ * @param code     The new JavaScript source string.
+ */
+void DataModel::ProjectModel::storeFrameParserCode(int sourceId,
+                                                    const QString& code)
+{
+  if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
+    return;
+
+  if (m_sources[sourceId].frameParserCode == code)
+    return;
+
+  m_sources[sourceId].frameParserCode = code;
+  setModified(true);
 }
 
 /**

@@ -21,9 +21,9 @@
 
 #include "DataModel/JsCodeEditor.h"
 
-#include <algorithm>
 #include <QCoreApplication>
 #include <QDesktopServices>
+#include <QTextDocument>
 #include <QFile>
 #include <QFileDialog>
 #include <QInputDialog>
@@ -79,11 +79,11 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   connect(&m_widget, &QCodeEditor::textChanged, this, [this] { Q_EMIT modifiedChanged(); });
   connect(&m_widget, &QCodeEditor::textChanged, this, &DataModel::JsCodeEditor::textChanged);
 
-  // Bridge editor modified state to ProjectModel so the title bar stays updated
-  connect(this,
-          &DataModel::JsCodeEditor::modifiedChanged,
-          &ProjectModel::instance(),
-          &ProjectModel::modifiedChanged);
+  // Push code to the project model on every edit (guarded by m_readingCode)
+  connect(&m_widget, &QCodeEditor::textChanged, this, [this] {
+    if (!m_readingCode)
+      ProjectModel::instance().storeFrameParserCode(m_sourceId, text());
+  });
 
   // Keep display in sync when the project loads new parser code (global or per-source)
   connect(&DataModel::ProjectModel::instance(),
@@ -228,42 +228,14 @@ void DataModel::JsCodeEditor::paste()
 }
 
 /**
- * @brief Validates the current code and saves it to the project.
+ * @brief Validates the current code via the JS engine.
  *
- * On success, saves the project file if one is already open and the project
- * has groups and datasets.
+ * Code is already stored in ProjectModel on every keystroke, so this only
+ * runs syntax validation and reloads the FrameParser engine.
  */
 void DataModel::JsCodeEditor::apply()
 {
-  auto& model  = DataModel::ProjectModel::instance();
-  auto& parser = DataModel::FrameParser::instance();
-
-  if (!parser.loadScript(m_sourceId, text(), true))
-    return;
-
-  if (m_sourceId == 0)
-    model.setFrameParserCode(text());
-  else
-    model.updateSourceFrameParser(m_sourceId, text());
-
-  const bool prevModif = model.modified();
-  m_widget.document()->setModified(false);
-  m_widget.document()->clearUndoRedoStacks();
-  model.setModified(prevModif);
-
-  Q_EMIT modifiedChanged();
-
-  if (!model.jsonFilePath().isEmpty()) {
-    const bool hasImageGroup =
-      std::any_of(model.groups().begin(), model.groups().end(), [](const DataModel::Group& g) {
-        return g.widget == QLatin1String("image");
-      });
-
-    if (model.modified() && model.groupCount() > 0 && (model.datasetCount() > 0 || hasImageGroup)) {
-      model.saveJsonFile();
-      DataModel::ProjectEditor::instance().displayFrameParserView();
-    }
-  }
+  DataModel::FrameParser::instance().loadScript(m_sourceId, text(), true);
 }
 
 /**
@@ -271,16 +243,6 @@ void DataModel::JsCodeEditor::apply()
  */
 void DataModel::JsCodeEditor::import()
 {
-  if (isModified()) {
-    const auto ret = Misc::Utilities::showMessageBox(tr("The document has been modified!"),
-                                                     tr("Are you sure you want to continue?"),
-                                                     QMessageBox::Question,
-                                                     qAppName(),
-                                                     QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::No)
-      return;
-  }
-
   auto* dialog = new QFileDialog(
     nullptr, tr("Select Javascript file to import"), QDir::homePath(), QStringLiteral("*.js"));
   dialog->setFileMode(QFileDialog::ExistingFile);
@@ -317,36 +279,24 @@ void DataModel::JsCodeEditor::evaluate()
 /**
  * @brief Reloads the editor text from the current project model code.
  *
- * If the editor has unsaved modifications the user is asked whether to save
- * or discard them before the reload proceeds.
+ * Code is pushed to the model on every keystroke, so there is no need to
+ * prompt for unsaved changes — just load unconditionally.
  */
 void DataModel::JsCodeEditor::readCode()
 {
-  // Guard against reentrancy (apply() → signal → readCode())
+  // Guard against reentrancy
   if (m_readingCode)
     return;
 
   m_readingCode = true;
 
-  // Prompt when there are unsaved changes
-  if (isModified()) {
-    const auto ret =
-      Misc::Utilities::showMessageBox(tr("Frame parser code has been modified!"),
-                                      tr("Do you want to save your changes before switching?"),
-                                      QMessageBox::Question,
-                                      qAppName(),
-                                      QMessageBox::Save | QMessageBox::Discard);
-
-    if (ret == QMessageBox::Save)
-      apply();
-  }
-
   // Load code from the project model
   QString code;
-
   const auto& sources = DataModel::ProjectModel::instance().sources();
-  for (const auto& src : sources) {
-    if (src.sourceId == m_sourceId) {
+  for (const auto& src : sources)
+  {
+    if (src.sourceId == m_sourceId)
+    {
       code = src.frameParserCode;
       break;
     }
@@ -360,7 +310,6 @@ void DataModel::JsCodeEditor::readCode()
   m_widget.document()->setModified(false);
 
   m_readingCode = false;
-
   Q_EMIT modifiedChanged();
 }
 
@@ -378,17 +327,6 @@ void DataModel::JsCodeEditor::selectAll()
 void DataModel::JsCodeEditor::selectTemplate()
 {
   auto& parser = DataModel::FrameParser::instance();
-
-  if (isModified()) {
-    const auto ret =
-      Misc::Utilities::showMessageBox(tr("Loading a template will replace your current code."),
-                                      tr("Are you sure you want to continue?"),
-                                      QMessageBox::Question,
-                                      qAppName(),
-                                      QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::No)
-      return;
-  }
 
   bool ok;
   const auto name = QInputDialog::getItem(nullptr,
@@ -440,16 +378,6 @@ void DataModel::JsCodeEditor::testWithSampleData()
  */
 void DataModel::JsCodeEditor::reload(const bool guiTrigger)
 {
-  if (isModified()) {
-    const auto ret = Misc::Utilities::showMessageBox(tr("The document has been modified."),
-                                                     tr("Are you sure you want to continue?"),
-                                                     QMessageBox::Question,
-                                                     qAppName(),
-                                                     QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::No)
-      return;
-  }
-
   loadDefaultTemplate(guiTrigger);
 }
 

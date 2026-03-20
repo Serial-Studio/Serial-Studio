@@ -2303,10 +2303,28 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
       break;
   }
 
+  // Persist the change to the project model
   auto& pm            = DataModel::ProjectModel::instance();
   const auto actionId = m_selectedAction.actionId;
   pm.setSelectedAction(m_selectedAction);
-  pm.updateAction(actionId, m_selectedAction);
+  pm.updateAction(actionId, m_selectedAction, false);
+
+  // Update tree item text in-place for title changes
+  if (static_cast<ActionItem>(id.toInt()) == kActionView_Title) {
+    const auto newTitle = value.toString();
+    for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
+      if (it.value().actionId != actionId)
+        continue;
+
+      auto* treeItem = it.key();
+      treeItem->setText(newTitle);
+      treeItem->setData(newTitle, TreeViewText);
+      m_actionItems[treeItem].title = newTitle;
+      break;
+    }
+
+    Q_EMIT selectedTextChanged();
+  }
 }
 
 /**
