@@ -145,7 +145,10 @@ void DataModel::JsCodeEditor::setSourceId(const int sourceId)
 }
 
 /**
- * @brief Returns @c true when the editor document has unsaved changes.
+ * @brief Returns @c true when the editor document has been modified since the
+ *        last load. Code is auto-synced to ProjectModel on every keystroke,
+ *        so this reflects the QTextDocument edit state, not unsaved project
+ *        changes.
  */
 bool DataModel::JsCodeEditor::isModified() const noexcept
 {
@@ -235,7 +238,7 @@ void DataModel::JsCodeEditor::paste()
  */
 void DataModel::JsCodeEditor::apply()
 {
-  DataModel::FrameParser::instance().loadScript(m_sourceId, text(), true);
+  (void) DataModel::FrameParser::instance().loadScript(m_sourceId, text(), true);
 }
 
 /**
@@ -430,9 +433,10 @@ void DataModel::JsCodeEditor::resizeWidget()
   }
 }
 
-/**
- * @brief Paints the captured pixmap into the QML scene.
- */
+//--------------------------------------------------------------------------------------------------
+// Event processing
+//--------------------------------------------------------------------------------------------------
+
 void DataModel::JsCodeEditor::paint(QPainter* painter)
 {
   if (painter && isVisible())

@@ -102,14 +102,14 @@ Widgets.Pane {
       text: qsTr("Undo")
       opacity: enabled ? 1 : 0.5
       onClicked: frameParser.undo()
-      enabled: frameParser.isModified
+      enabled: frameParser.undoAvailable
     }
 
     MenuItem {
       text: qsTr("Redo")
       opacity: enabled ? 1 : 0.5
       onClicked: frameParser.redo()
-      enabled: frameParser.isModified
+      enabled: frameParser.redoAvailable
     }
 
     MenuSeparator {}

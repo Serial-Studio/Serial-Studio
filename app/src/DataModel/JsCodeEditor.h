@@ -87,9 +87,9 @@ public slots:
   void selectAll();
   void selectTemplate();
   void testWithSampleData();
+  void setSourceId(const int sourceId);
   void reload(const bool guiTrigger = false);
   void loadDefaultTemplate(const bool guiTrigger = false);
-  void setSourceId(const int sourceId);
 
 private slots:
   void onThemeChanged();
