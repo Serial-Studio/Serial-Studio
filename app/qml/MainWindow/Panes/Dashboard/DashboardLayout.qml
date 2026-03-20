@@ -156,8 +156,10 @@ Widgets.Pane {
     // User-selected background image
     //
     Image {
-      visible: source !== ""
+      mipmap: true
+      smooth: true
       anchors.fill: parent
+      visible: source !== ""
       source: _canvas.backgroundImage
       fillMode: Image.PreserveAspectCrop
     }

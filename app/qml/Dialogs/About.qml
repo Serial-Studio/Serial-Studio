@@ -59,6 +59,8 @@ SmartDialog {
           Layout.alignment: Qt.AlignVCenter
 
           Image {
+            mipmap: true
+            smooth: true
             sourceSize.width: 128
             anchors.centerIn: parent
             source: Qt.platform.os === "osx" ? "qrc:/rcc/logo/icon-macOS.png" :

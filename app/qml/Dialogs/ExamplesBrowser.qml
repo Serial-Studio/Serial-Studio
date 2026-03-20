@@ -421,6 +421,7 @@ SmartDialog {
                       id: thumbImg
 
                       smooth: true
+                      mipmap: true
                       asynchronous: true
                       anchors.fill: parent
                       fillMode: Image.PreserveAspectCrop
@@ -733,18 +734,20 @@ SmartDialog {
               Image {
                 id: screenshotImage
 
-                anchors.fill: parent
+                mipmap: true
+                smooth: true
                 anchors.margins: 1
-                fillMode: Image.PreserveAspectFit
                 asynchronous: true
-                source: Cpp_Examples.selectedScreenshot || ""
+                anchors.fill: parent
                 visible: status === Image.Ready
+                fillMode: Image.PreserveAspectFit
+                source: Cpp_Examples.selectedScreenshot || ""
               }
 
               Label {
                 anchors.centerIn: parent
-                text: qsTr("No screenshot available")
                 visible: !screenshotImage.visible
+                text: qsTr("No screenshot available")
                 color: Cpp_ThemeManager.colors["placeholder_text"]
                 font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
               }
@@ -978,10 +981,12 @@ SmartDialog {
       border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
       Image {
-        anchors.fill: parent
-        anchors.margins: 8
-        fillMode: Image.PreserveAspectFit
+        mipmap: true
+        smooth: true
         asynchronous: true
+        anchors.margins: 8
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectFit
         source: Cpp_Examples.selectedScreenshot || ""
       }
     }
