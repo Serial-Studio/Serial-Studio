@@ -34,6 +34,11 @@ SmartDialog {
   title: qsTr("Examples Browser")
 
   //
+  // Fixed toolbar height so the window size stays stable across page transitions
+  //
+  readonly property int toolbarHeight: 40
+
+  //
   // Track page transitions
   //
   property bool showDetail: Cpp_Examples.selectedIndex >= 0
@@ -110,7 +115,7 @@ SmartDialog {
       Layout.fillWidth: true
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
-      implicitHeight: searchField.implicitHeight + 8
+      implicitHeight: root.toolbarHeight
       visible: !root.showDetail && !root.fetchingData
       color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: searchField.activeFocus ? Cpp_ThemeManager.colors["highlight"] :
@@ -152,8 +157,8 @@ SmartDialog {
       Layout.fillWidth: true
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
+      implicitHeight: root.toolbarHeight
       visible: root.showDetail
-      implicitHeight: toolbarRow.implicitHeight + 8
       color: Cpp_ThemeManager.colors["groupbox_background"]
       border.color: Cpp_ThemeManager.colors["groupbox_border"]
 
@@ -276,7 +281,6 @@ SmartDialog {
       Layout.minimumWidth: 860
       Layout.maximumWidth: 860
       Layout.minimumHeight: 520
-      Layout.maximumHeight: 520
 
       //
       // Busy indicator while fetching manifest

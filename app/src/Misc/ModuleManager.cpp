@@ -112,12 +112,17 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   else
     message = msg;
 
-  // Filter out unfixable Windows warnings...I tried, Qt won
+  // Filter out noisy/unfixable Qt messages
+  if (type == QtInfoMsg) {
+    if (message.startsWith("OpenType support missing"))
+      return;
+  }
+
 #ifdef Q_OS_WIN
   if (type == QtWarningMsg) {
     if (message.startsWith("Qt was built without Direct3D 12 support"))
       return;
-    if (message.startsWith("setGeometry: Unable to set geometry"))
+    if (message.contains("setGeometry"))
       return;
   }
 #endif

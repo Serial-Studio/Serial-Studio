@@ -42,10 +42,10 @@ Window {
   //
   width: minimumWidth
   height: minimumHeight
-  minimumWidth: contentArea.implicitWidth + (contentPadding * 2)
-  maximumWidth: contentArea.implicitWidth + (contentPadding * 2)
-  minimumHeight: contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight
-  maximumHeight: contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight
+  minimumWidth: Math.max(200, contentArea.implicitWidth + (contentPadding * 2))
+  maximumWidth: Math.max(200, contentArea.implicitWidth + (contentPadding * 2))
+  minimumHeight: Math.max(100, contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight)
+  maximumHeight: Math.max(100, contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight)
 
   //
   // CSD-safety properties

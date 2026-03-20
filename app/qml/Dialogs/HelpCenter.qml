@@ -34,13 +34,13 @@ SmartDialog {
   //
   // Allow resizing and maximizing
   //
+  width: 920
+  height: 620
   minimumWidth: 720
   minimumHeight: 480
   maximumWidth: 10000
   maximumHeight: 10000
   Component.onCompleted: {
-    root.width = 920
-    root.height = 620
     root.flags = Qt.Dialog
                | Qt.CustomizeWindowHint
                | Qt.WindowTitleHint
