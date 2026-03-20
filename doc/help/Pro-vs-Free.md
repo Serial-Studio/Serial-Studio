@@ -380,12 +380,12 @@ function parse(frame) {
 
 ### Choose Free (GPLv3) if:
 
-✅ You're a student, educator, or hobbyist
-✅ Personal or educational projects
-✅ Open-source software development
-✅ You only need basic protocols (Serial, TCP/UDP, BLE)
-✅ Standard widgets meet your needs
-✅ Non-commercial use
+- ✅ You're a student, educator, or hobbyist
+- ✅ Personal or educational projects
+- ✅ Open-source software development
+- ✅ You only need basic protocols (Serial, TCP/UDP, BLE)
+- ✅ Standard widgets meet your needs
+- ✅ Non-commercial use
 
 **Perfect for:**
 - Arduino projects
@@ -398,15 +398,15 @@ function parse(frame) {
 
 ### Choose Pro if:
 
-✅ Commercial or business use
-✅ You need MQTT, Modbus, CAN Bus, or Audio Input
-✅ You need Raw USB (bulk/isochronous via libusb), HID Devices, or Process I/O
-✅ Industrial automation projects
-✅ Automotive diagnostics or telemetry
-✅ You need 3D/XY plots or live Image View (camera feeds)
-✅ You want MDF4 export/playback
-✅ You need Binary Direct mode for performance
-✅ You want email support
+- ✅ Commercial or business use
+- ✅ You need MQTT, Modbus, CAN Bus, or Audio Input
+- ✅ You need Raw USB (bulk/isochronous via libusb), HID Devices, or Process I/O
+- ✅ Industrial automation projects
+- ✅ Automotive diagnostics or telemetry
+- ✅ You need 3D/XY plots or live Image View (camera feeds)
+- ✅ You want MDF4 export/playback
+- ✅ You need Binary Direct mode for performance
+- ✅ You want email support
 
 **Perfect for:**
 - Professional engineers
