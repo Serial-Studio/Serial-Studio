@@ -92,7 +92,6 @@ jobs:
           libexpat1-dev \
           libminizip-dev \
           libopus-dev \
-          libtiff-dev \
           rpm \
           libxcb1 \
           libxcb-cursor0 \
@@ -199,9 +198,10 @@ jobs:
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
 
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
-
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins"
+        rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
+
+        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
         mkdir -p AppDir/usr/plugins/canbus
         if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
@@ -253,7 +253,6 @@ jobs:
           libexpat1-dev \
           libminizip-dev \
           libopus-dev \
-          libtiff-dev \
           rpm \
           libxcb1 \
           libxcb-cursor0 \
@@ -358,9 +357,10 @@ jobs:
 
         export QML_SOURCES_PATHS="${{env.QML_DIR}}"
 
-        ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
-
         QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins"
+        rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
+
+        ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt --output appimage
         mkdir -p AppDir/usr/plugins/canbus
         if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
           cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
