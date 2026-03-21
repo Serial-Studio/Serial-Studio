@@ -345,6 +345,7 @@ Item {
             origin.x: rollDial.width / 2
             origin.y: rollDial.height / 2
           }
+
           height: instrument.dialSize
           x: (instrument.width - width) / 2
           fillMode: Image.PreserveAspectFit

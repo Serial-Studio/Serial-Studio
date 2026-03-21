@@ -116,14 +116,11 @@ public:
    *
    * @param index Index relative to the logical front of the queue.
    * @return Reference to the element at the specified index.
-   * @throws std::out_of_range if index is invalid.
    */
   [[nodiscard]] const T& operator[](std::size_t index) const
   {
-    if (index >= m_size)
-      throw std::out_of_range("FixedQueue index out of bounds");
-
-    return m_data[wrappedIndex(index)];
+    Q_ASSERT(index < m_size);
+    return m_data[wrappedIndex(index < m_size ? index : 0)];
   }
 
   /**
@@ -131,14 +128,11 @@ public:
    *
    * @param index Index relative to the logical front of the queue.
    * @return Reference to the element at the specified index.
-   * @throws std::out_of_range if index is invalid.
    */
   [[nodiscard]] T& operator[](std::size_t index)
   {
-    if (index >= m_size)
-      throw std::out_of_range("FixedQueue index out of bounds");
-
-    return m_data[wrappedIndex(index)];
+    Q_ASSERT(index < m_size);
+    return m_data[wrappedIndex(index < m_size ? index : 0)];
   }
 
   /**
@@ -179,14 +173,11 @@ public:
    *
    * @param index Index relative to the logical front of the queue.
    * @return Reference to the element at the specified index.
-   * @throws std::out_of_range if index is invalid.
    */
   [[nodiscard]] const T& at(std::size_t index) const
   {
-    if (index >= m_capacity)
-      throw std::out_of_range("FixedQueue index out of bounds");
-
-    return m_data[wrappedIndex(index)];
+    Q_ASSERT(index < m_capacity);
+    return m_data[wrappedIndex(index < m_capacity ? index : 0)];
   }
 
   /**
@@ -195,13 +186,10 @@ public:
    * Equivalent to `std::queue::front()`.
    *
    * @return Reference to the oldest element in the buffer.
-   * @throws std::out_of_range if the queue is empty.
    */
   [[nodiscard]] const T& front() const
   {
-    if (m_size == 0)
-      throw std::out_of_range("FixedQueue::front() called on empty queue");
-
+    Q_ASSERT(m_size > 0);
     return m_data[m_start];
   }
 
@@ -211,14 +199,11 @@ public:
    * Equivalent to `std::queue::back()`.
    *
    * @return Reference to the most recently inserted element in the buffer.
-   * @throws std::out_of_range if the queue is empty.
    */
   [[nodiscard]] const T& back() const
   {
-    if (m_size == 0)
-      throw std::out_of_range("FixedQueue::back() called on empty queue");
-
-    return m_data[wrappedIndex(m_size - 1)];
+    Q_ASSERT(m_size > 0);
+    return m_data[wrappedIndex(m_size > 0 ? m_size - 1 : 0)];
   }
 
   /**

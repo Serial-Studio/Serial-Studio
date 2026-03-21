@@ -438,11 +438,18 @@ SmartDialog {
         icon.width: 18
         icon.height: 18
         horizontalPadding: 8
-        text: qsTr("View on GitHub")
+        text: qsTr("View Online")
         Layout.alignment: Qt.AlignVCenter
         icon.source: "qrc:/rcc/icons/buttons/website.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/wiki")
+        onClicked: {
+          var url = "https://serial-studio.com/help"
+          var pageId = Cpp_HelpCenter.pageId
+          if (pageId !== "")
+            url += "#" + pageId
+
+          Qt.openUrlExternally(url)
+        }
       }
 
       Item {

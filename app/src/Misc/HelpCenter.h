@@ -58,6 +58,9 @@ class HelpCenter : public QObject {
   Q_PROPERTY(QString pageContent
              READ pageContent
              NOTIFY pageContentChanged)
+  Q_PROPERTY(QString pageId
+             READ pageId
+             NOTIFY currentIndexChanged)
   Q_PROPERTY(QString pageTitle
              READ pageTitle
              NOTIFY currentIndexChanged)
@@ -87,21 +90,24 @@ private:
 public:
   static HelpCenter& instance();
 
-  [[nodiscard]] bool loading() const noexcept;
-  [[nodiscard]] int count() const noexcept;
-  [[nodiscard]] int currentIndex() const noexcept;
-  [[nodiscard]] const QString& searchFilter() const noexcept;
-  [[nodiscard]] const QString& pageContent() const noexcept;
+  [[nodiscard]] QString pageId() const;
   [[nodiscard]] QString pageTitle() const;
+
+  [[nodiscard]] int count() const noexcept;
+  [[nodiscard]] bool loading() const noexcept;
+  [[nodiscard]] int currentIndex() const noexcept;
+
   [[nodiscard]] const QVariantList& pages() const noexcept;
   [[nodiscard]] const QString& themeColors() const noexcept;
+  [[nodiscard]] const QString& pageContent() const noexcept;
+  [[nodiscard]] const QString& searchFilter() const noexcept;
 
 public slots:
   void fetchManifest();
   void setCurrentIndex(int index);
+  void showPage(const QString& pageId);
+  bool navigateToPage(const QString& link);
   void setSearchFilter(const QString& filter);
-  Q_INVOKABLE void showPage(const QString& pageId);
-  Q_INVOKABLE bool navigateToPage(const QString& link);
 
 private slots:
   void onManifestReply();

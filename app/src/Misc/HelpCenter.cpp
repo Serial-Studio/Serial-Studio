@@ -109,6 +109,17 @@ const QString& Misc::HelpCenter::pageContent() const noexcept
 }
 
 /**
+ * @brief Returns the ID of the currently selected page.
+ */
+QString Misc::HelpCenter::pageId() const
+{
+  if (m_currentIndex >= 0 && m_currentIndex < m_filteredPages.count())
+    return m_filteredPages.at(m_currentIndex).toMap().value("id").toString();
+
+  return {};
+}
+
+/**
  * @brief Returns the title of the currently selected page.
  */
 QString Misc::HelpCenter::pageTitle() const
@@ -184,9 +195,11 @@ bool Misc::HelpCenter::navigateToPage(const QString& link)
   if (hashIdx >= 0)
     normalized = normalized.left(hashIdx);
 
+  // Remove .md extension
   if (normalized.endsWith(".md", Qt::CaseInsensitive))
     normalized.chop(3);
 
+  // Skip if normalized page is empty
   if (normalized.isEmpty())
     return false;
 

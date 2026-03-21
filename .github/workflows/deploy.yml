@@ -48,10 +48,10 @@ env:
   UNIXNAME: "serial-studio-pro"
   QML_DIR: "../../app/qml"
   PUBLISHER: "Alex Spataru"
-  INSTALL_QT_MACOS: false
-  INSTALL_QT_WINDOWS: false
-  INSTALL_QT_LINUX_INTEL: false
-  INSTALL_QT_LINUX_ARM64: false
+  INSTALL_QT_MACOS: true
+  INSTALL_QT_WINDOWS: true
+  INSTALL_QT_LINUX_INTEL: true
+  INSTALL_QT_LINUX_ARM64: true
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
 
@@ -66,11 +66,11 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-linux:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: '🐧 Linux'
     steps:
     - name: '🧰 Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
@@ -118,7 +118,7 @@ jobs:
           libxkbcommon-x11-dev
 
     - name: '⚙️ Restore Qt Cache'
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v5
       if: env.INSTALL_QT_LINUX_INTEL == 'false'
       with:
         path: |
@@ -141,7 +141,7 @@ jobs:
 
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT_LINUX_INTEL == 'true'
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v5
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
@@ -216,7 +216,7 @@ jobs:
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
 
     - name: '📤 Upload artifact: AppImage'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
@@ -230,7 +230,7 @@ jobs:
     name: '🐧 Linux (arm64)'
     steps:
     - name: '🧰 Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
@@ -278,7 +278,7 @@ jobs:
           libxkbcommon-x11-dev
 
     - name: '⚙️ Restore Qt Cache'
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v5
       if: env.INSTALL_QT_LINUX_ARM64 == 'false'
       with:
         path: |
@@ -299,7 +299,7 @@ jobs:
         ./scripts/install-qt.sh
 
     - name: '⚙️ Save Qt Cache'
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v5
       if: env.INSTALL_QT_LINUX_ARM64 == 'true'
       with:
         path: |
@@ -374,7 +374,7 @@ jobs:
         mv *.AppImage ../../${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
 
     - name: '📤 Upload artifact: AppImage'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
@@ -388,7 +388,7 @@ jobs:
     name: '🍎 macOS'
     steps:
     - name: '🧰 Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
@@ -397,7 +397,7 @@ jobs:
         brew install expat
 
     - name: '⚙️ Restore Qt Cache'
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v5
       if: env.INSTALL_QT_MACOS == 'false'
       with:
         path: |
@@ -420,7 +420,7 @@ jobs:
 
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT_MACOS == 'true'
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v5
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
@@ -447,9 +447,9 @@ jobs:
         useLocalCache: true
 
     - name: '⚙️ Install Node'
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
-        node-version: 20
+        node-version: 22
 
     - name: '🚧 Configure with CMake'
       env:
@@ -479,7 +479,7 @@ jobs:
         cpack --verbose
 
     - name: '🪪 Import Certificates'
-      uses: alex-spataru/import-codesign-certs@v4
+      uses: apple-actions/import-codesign-certs@v6
       with:
         p12-file-base64: ${{secrets.APPLE_CERTIFICATES_P12}}
         p12-password: ${{secrets.APPLE_CERTIFICATES_P12_PASSWORD}}
@@ -528,7 +528,7 @@ jobs:
         xcrun stapler staple "$PRODUCT"
 
     - name: '📤 Upload artifact: DMG'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
@@ -543,12 +543,12 @@ jobs:
     steps:
     - run: git config --global core.autocrlf input
     - name: '🧰 Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
     - name: '⚙️ Restore Qt Cache'
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v5
       if: env.INSTALL_QT_WINDOWS == 'false'
       with:
         path: |
@@ -570,7 +570,7 @@ jobs:
 
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT_WINDOWS == 'true'
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v5
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
@@ -597,7 +597,7 @@ jobs:
         useLocalCache: true
 
     - name: '🛠 Setup MSVC Development Environment'
-      uses: TheMrMilchmann/setup-msvc-dev@v3
+      uses: TheMrMilchmann/setup-msvc-dev@v4
       with:
         arch: x64
 
@@ -626,7 +626,7 @@ jobs:
         cmake --build . --config Release -j 16
 
     - name: '⚙️ Add msbuild to PATH'
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
 
     - name: '⚙️ Install WiX'
       run: dotnet tool install --global wix
@@ -671,13 +671,13 @@ jobs:
         mv ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip ..
 
     - name: '📤 Upload artifact: MSI installer'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msi
 
     - name: '📤 Upload artifact: Portable ZIP'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable
        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip
@@ -700,7 +700,7 @@ jobs:
 
     steps:
       - name: '📥 Download artifacts'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: ./artifacts
           merge-multiple: true

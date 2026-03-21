@@ -126,14 +126,14 @@ IO::CircularBuffer<T, StorageType>::CircularBuffer(qsizetype capacity)
  * @param index The logical index of the element to access (0-based).
  *              Must be in the range [0, size()-1].
  * @return The element at the specified index.
- * @throws std::out_of_range If the index is out of bounds.
  */
 template<typename T, Concepts::ByteLike StorageType>
 StorageType& IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
 {
   const qsizetype current_size = size();
+  Q_ASSERT(index >= 0 && index < current_size);
   if (index < 0 || index >= current_size)
-    throw std::out_of_range("Index out of range");
+    return m_buffer[0];
 
   const qsizetype head           = m_head.load(std::memory_order_acquire);
   const qsizetype effectiveIndex = (head + index) % m_capacity;
@@ -270,14 +270,14 @@ qsizetype IO::CircularBuffer<T, StorageType>::freeSpace() const noexcept
  *
  * @param size The number of bytes to read.
  * @return Data read from the buffer.
- * @throws std::underflow_error if there is not enough data in the buffer.
  */
 template<typename T, Concepts::ByteLike StorageType>
 T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
 {
   const qsizetype current_size = this->size();
+  Q_ASSERT(size <= current_size);
   if (size > current_size) [[unlikely]]
-    throw std::underflow_error("Not enough data in buffer");
+    return T{};
 
   T result;
   result.resize(size);

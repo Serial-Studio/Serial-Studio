@@ -41,7 +41,7 @@ on:
 env:
   QT_VERSION_LINUX: 6.10.2
   UNIXNAME: "serial-studio-pro"
-  INSTALL_QT_LINUX_INTEL: false
+  INSTALL_QT_LINUX_INTEL: true
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
 
 #-------------------------------------------------------------------------------
@@ -55,11 +55,11 @@ jobs:
 #-------------------------------------------------------------------------------
 
   test-linux:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: '🧪 Tests (Linux)'
     steps:
     - name: '🧰 Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
@@ -105,7 +105,7 @@ jobs:
           npm
 
     - name: '⚙️ Restore Qt Cache'
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v5
       if: env.INSTALL_QT_LINUX_INTEL == 'false'
       with:
         path: |
@@ -128,7 +128,7 @@ jobs:
 
     - name: '⚙️ Save Qt Cache'
       if: env.INSTALL_QT_LINUX_INTEL == 'true'
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v5
       with:
         path: |
           ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
@@ -171,7 +171,7 @@ jobs:
       run: cmake --build build --config Release -j$(nproc)
 
     - name: '🐍 Set up Python'
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
         cache: 'pip'
@@ -233,7 +233,7 @@ jobs:
 
     - name: '📤 Upload test results'
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: pytest-results
         path: |
