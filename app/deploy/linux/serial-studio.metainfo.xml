@@ -13,7 +13,7 @@
 	<url type="bugtracker">https://github.com/Serial-Studio/Serial-Studio/issues</url>
 	<url type="help">https://serial-studio.com/help</url>
 	<url type="donation">https://github.com/sponsors/alex-spataru</url>
-	<url type="contribute">https://github.com/Serial-Studio/Serial-Studio//url>
+	<url type="contribute">https://github.com/Serial-Studio/Serial-Studio</url>
 	<url type="vcs-browser">https://github.com/Serial-Studio/Serial-Studio</url>
 	<description>
 		<p>Serial Studio lets you visualize real-time data from microcontrollers and connected devices. It's ideal for monitoring sensor output, debugging hardware, and analyzing telemetry from sources like serial ports, Bluetooth Low Energy (BLE), and TCP/UDP.</p>
