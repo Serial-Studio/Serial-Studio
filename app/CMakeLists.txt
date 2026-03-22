@@ -199,6 +199,7 @@ set(SOURCES
   src/Misc/WorkspaceManager.cpp
   src/Misc/Examples.cpp
   src/Misc/HelpCenter.cpp
+  src/Misc/IconEngine.cpp
   src/UI/DashboardWidget.cpp
   src/UI/Dashboard.cpp
   src/UI/Taskbar.cpp
@@ -275,6 +276,7 @@ set(HEADERS
   src/Misc/WorkspaceManager.h
   src/Misc/Examples.h
   src/Misc/HelpCenter.h
+  src/Misc/IconEngine.h
   src/UI/Dashboard.h
   src/UI/DashboardWidget.h
   src/UI/Taskbar.h
@@ -360,6 +362,7 @@ set(QML_SOURCES
   qml/Dialogs/Donate.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/IconPicker.qml
+  qml/Dialogs/OnlineIconPicker.qml
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
   qml/Dialogs/ExamplesBrowser.qml

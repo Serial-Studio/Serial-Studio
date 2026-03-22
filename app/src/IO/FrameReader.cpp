@@ -295,8 +295,8 @@ void IO::FrameReader::readStartDelimitedFrames()
       (void)m_circularBuffer.read(startIndex);
 
     // Search for the next start delimiter after the current one
-    int nextStartIndex = m_circularBuffer.findPatternKMP(
-      m_startSequence, m_startSequenceLps, m_startSequence.size());
+    int nextStartIndex =
+      m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps, m_startSequence.size());
 
     // No second start delimiter found — wait for more data
     if (nextStartIndex == -1)

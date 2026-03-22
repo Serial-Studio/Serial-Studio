@@ -42,6 +42,7 @@ inline constexpr auto Title         = "title";
 inline constexpr auto TxData        = "txData";
 inline constexpr auto Binary        = "binary";
 inline constexpr auto TimerMode     = "timerMode";
+inline constexpr auto RepeatCount   = "repeatCount";
 inline constexpr auto TimerInterval = "timerIntervalMs";
 inline constexpr auto AutoExecute   = "autoExecuteOnConnect";
 
@@ -110,10 +111,11 @@ namespace DataModel {
  * @brief Timer mode for an Action.
  */
 enum class TimerMode {
-  Off,             ///< No timer
-  AutoStart,       ///< Starts timer automatically (e.g. on connection)
-  StartOnTrigger,  ///< Starts timer when the action is triggered
-  ToggleOnTrigger  ///< Toggles timer state with each trigger
+  Off,              ///< No timer
+  AutoStart,        ///< Starts timer automatically (e.g. on connection)
+  StartOnTrigger,   ///< Starts timer when the action is triggered
+  ToggleOnTrigger,  ///< Toggles timer state with each trigger
+  RepeatNTimes      ///< Sends command N times with configured interval between each
 };
 
 /**
@@ -122,6 +124,7 @@ enum class TimerMode {
 struct alignas(8) Action {
   int actionId              = -1;               ///< Unique action ID
   int sourceId              = 0;                ///< Target source/device ID
+  int repeatCount           = 3;                ///< Times to send in RepeatNTimes mode
   int timerIntervalMs       = 100;              ///< Timer interval in ms
   TimerMode timerMode       = TimerMode::Off;   ///< Timer behavior mode
   bool binaryData           = false;            ///< If true, txData is binary
@@ -492,6 +495,7 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::EOL, a.eolSequence);
   obj.insert(Keys::Binary, a.binaryData);
   obj.insert(Keys::SourceId, a.sourceId);
+  obj.insert(Keys::RepeatCount, a.repeatCount);
   obj.insert(Keys::TimerInterval, a.timerIntervalMs);
   obj.insert(Keys::AutoExecute, a.autoExecuteOnConnect);
   obj.insert(Keys::TimerMode, static_cast<int>(a.timerMode));
@@ -698,11 +702,12 @@ void read_io_settings(QByteArray& frameStart,
   a.sourceId             = ss_jsr(obj, Keys::SourceId, 0).toInt();
   a.icon                 = ss_jsr(obj, Keys::Icon, "").toString().simplified();
   a.title                = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  a.repeatCount          = ss_jsr(obj, Keys::RepeatCount, 3).toInt();
   a.timerIntervalMs      = ss_jsr(obj, Keys::TimerInterval, 100).toInt();
   a.autoExecuteOnConnect = ss_jsr(obj, Keys::AutoExecute, false).toBool();
 
   const int mode = ss_jsr(obj, Keys::TimerMode, 0).toInt();
-  if (mode >= 0 && mode <= 3)
+  if (mode >= 0 && mode <= 4)
     a.timerMode = static_cast<TimerMode>(mode);
   else
     a.timerMode = TimerMode::Off;

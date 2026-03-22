@@ -208,12 +208,12 @@ public slots:
   void buildSourceModel(const DataModel::Source& source);
   void buildActionModel(const DataModel::Action& action);
   void buildDatasetModel(const DataModel::Dataset& dataset);
-  void displayFrameParserView();
+  void displayFrameParserView(int sourceId);
   void selectSource(int sourceId);
   void selectGroup(int groupId);
   void selectDataset(int groupId, int datasetId);
   void selectAction(int actionId);
-  void selectFrameParser();
+  void selectFrameParser(int sourceId);
   void setSelectedSourceFrameParserCode(const QString& code);
 
 private slots:

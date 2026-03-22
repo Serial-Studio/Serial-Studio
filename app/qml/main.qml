@@ -125,6 +125,7 @@ Item {
       if (!visible) {
         settingsDialog.hide()
         actionIconPicker.hide()
+        onlineIconPicker.hide()
         csvPlayer.hide()
         mdf4Player.hide()
         donateDialog.hide()
@@ -144,6 +145,14 @@ Item {
 
     Dialogs.IconPicker {
       id: actionIconPicker
+    }
+
+    Dialogs.OnlineIconPicker {
+      id: onlineIconPicker
+
+      onIconSelected: function(icon) {
+        actionIconPicker.iconSelected(icon)
+      }
     }
 
     Dialogs.CsvPlayer {

@@ -49,8 +49,8 @@ SmartDialog {
     Rectangle {
       radius: 2
       border.width: 1
-      implicitWidth: 320
-      implicitHeight: 480
+      implicitWidth: 480
+      implicitHeight: 520
       Layout.fillWidth: true
       Layout.fillHeight: true
       border.color: Cpp_ThemeManager.colors["groupbox_border"]
@@ -104,13 +104,31 @@ SmartDialog {
       spacing: 4
       Layout.fillWidth: true
 
+      Button {
+        icon.width: 14
+        icon.height: 14
+        horizontalPadding: 8
+        text: qsTr("Search Online...")
+        icon.source: "qrc:/rcc/icons/buttons/search.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
+        onClicked: {
+          onlineIconPicker.showNormal()
+          root.close()
+        }
+      }
+
       Item {
         Layout.fillWidth: true
       }
 
       Button {
-        text: qsTr("OK")
+        icon.width: 18
+        icon.height: 18
         highlighted: true
+        horizontalPadding: 8
+        text: qsTr("OK")
+        icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {
           root.iconSelected(root.selectedIcon)
           root.close()
@@ -118,7 +136,12 @@ SmartDialog {
       }
 
       Button {
+        icon.width: 18
+        icon.height: 18
+        horizontalPadding: 8
         text: qsTr("Cancel")
+        icon.source: "qrc:/rcc/icons/buttons/cancel.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: root.close()
       }
     }

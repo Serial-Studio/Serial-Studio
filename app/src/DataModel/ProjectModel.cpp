@@ -36,6 +36,7 @@
 #include "DataModel/FrameParser.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
+#include "Misc/IconEngine.h"
 #include "Misc/JsonValidator.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
@@ -1452,8 +1453,8 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
  * @brief Replaces the action at @p actionId with @p action and emits actionsChanged.
  */
 void DataModel::ProjectModel::updateAction(const int actionId,
-                                            const DataModel::Action& action,
-                                            const bool rebuildTree)
+                                           const DataModel::Action& action,
+                                           const bool rebuildTree)
 {
   if (actionId < 0 || static_cast<size_t>(actionId) >= m_actions.size())
     return;
@@ -1629,6 +1630,7 @@ void DataModel::ProjectModel::duplicateCurrentAction()
   action.icon                 = m_selectedAction.icon;
   action.txData               = m_selectedAction.txData;
   action.timerMode            = m_selectedAction.timerMode;
+  action.repeatCount          = m_selectedAction.repeatCount;
   action.eolSequence          = m_selectedAction.eolSequence;
   action.timerIntervalMs      = m_selectedAction.timerIntervalMs;
   action.title                = tr("%1 (Copy)").arg(m_selectedAction.title);
@@ -2216,8 +2218,7 @@ void DataModel::ProjectModel::setFrameParserCode(const QString& code)
  * @param sourceId The source to update.
  * @param code     The new JavaScript source string.
  */
-void DataModel::ProjectModel::storeFrameParserCode(int sourceId,
-                                                    const QString& code)
+void DataModel::ProjectModel::storeFrameParserCode(int sourceId, const QString& code)
 {
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
@@ -2360,10 +2361,10 @@ QVariantList DataModel::ProjectModel::actionsForDiagram() const
 
   for (const auto& act : m_actions) {
     QVariantMap map;
-    map[QStringLiteral("actionId")]  = act.actionId;
+    map[QStringLiteral("actionId")] = act.actionId;
     map[QStringLiteral("sourceId")] = act.sourceId;
     map[QStringLiteral("title")]    = act.title;
-    map[QStringLiteral("icon")]     = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(act.icon);
+    map[QStringLiteral("icon")]     = Misc::IconEngine::resolveActionIconSource(act.icon);
     result.append(map);
   }
 

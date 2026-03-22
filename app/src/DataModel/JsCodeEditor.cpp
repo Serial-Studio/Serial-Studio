@@ -23,13 +23,13 @@
 
 #include <QCoreApplication>
 #include <QDesktopServices>
-#include <QTextDocument>
 #include <QFile>
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QJavascriptHighlighter>
 #include <QLineNumberArea>
 #include <QMessageBox>
+#include <QTextDocument>
 #include <QUrl>
 
 #include "DataModel/FrameParser.h"
@@ -238,7 +238,7 @@ void DataModel::JsCodeEditor::paste()
  */
 void DataModel::JsCodeEditor::apply()
 {
-  (void) DataModel::FrameParser::instance().loadScript(m_sourceId, text(), true);
+  (void)DataModel::FrameParser::instance().loadScript(m_sourceId, text(), true);
 }
 
 /**
@@ -296,10 +296,8 @@ void DataModel::JsCodeEditor::readCode()
   // Load code from the project model
   QString code;
   const auto& sources = DataModel::ProjectModel::instance().sources();
-  for (const auto& src : sources)
-  {
-    if (src.sourceId == m_sourceId)
-    {
+  for (const auto& src : sources) {
+    if (src.sourceId == m_sourceId) {
       code = src.frameParserCode;
       break;
     }

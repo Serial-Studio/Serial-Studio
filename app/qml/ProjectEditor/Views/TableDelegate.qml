@@ -452,7 +452,9 @@ ColumnLayout {
             }
 
             TextField {
-              text: iconPickerLoader.editableValue
+              text: Cpp_Misc_IconEngine.isInlineSvg(iconPickerLoader.editableValue)
+                    ? qsTr("(Custom Icon)")
+                    : iconPickerLoader.editableValue
               enabled: iconPickerLoader.modelActive
               opacity: iconPickerLoader.modelActive ? 1 : 0.5
               placeholderText: iconPickerLoader.modelPlaceholder ?? ""
@@ -474,7 +476,8 @@ ColumnLayout {
               opacity: iconPickerLoader.modelActive ? 1 : 0.5
 
               onClicked: {
-                actionIconPicker.selectedIcon = iconPickerLoader.editableValue
+                actionIconPicker.selectedIcon = Cpp_Misc_IconEngine.isInlineSvg(
+                  iconPickerLoader.editableValue) ? "" : iconPickerLoader.editableValue
                 actionIconPicker.showNormal()
               }
               icon.width: 16

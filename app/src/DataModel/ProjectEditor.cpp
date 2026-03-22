@@ -76,7 +76,8 @@ typedef enum {
   kActionView_SourceId,
   kActionView_AutoExecute,
   kActionView_TimerMode,
-  kActionView_TimerInterval
+  kActionView_TimerInterval,
+  kActionView_RepeatCount
 } ActionItem;
 
 typedef enum {
@@ -626,14 +627,14 @@ DataModel::CustomModel* DataModel::ProjectEditor::datasetModel() const
  * The delay allows any pending tree rebuild to complete before the selection
  * is applied, ensuring the item exists in the model.
  */
-void DataModel::ProjectEditor::displayFrameParserView()
+void DataModel::ProjectEditor::displayFrameParserView(int sourceId)
 {
-  QTimer::singleShot(100, this, [this] {
+  QTimer::singleShot(100, this, [this, sourceId] {
     if (!m_selectionModel)
       return;
 
     for (auto it = m_sourceParserItems.begin(); it != m_sourceParserItems.end(); ++it) {
-      if (it.value().sourceId != 0)
+      if (it.value().sourceId != sourceId)
         continue;
 
       m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
@@ -1580,6 +1581,18 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
                          ParameterDescription);
   m_actionModel->appendRow(timerInterval);
 
+  auto* repeatCount = new QStandardItem();
+  repeatCount->setData(IntField, WidgetType);
+  repeatCount->setEditable(action.timerMode == DataModel::TimerMode::RepeatNTimes);
+  repeatCount->setData(tr("Repeat Count"), ParameterName);
+  repeatCount->setData(repeatCount->isEditable(), Active);
+  repeatCount->setData(action.repeatCount, EditableValue);
+  repeatCount->setData(kActionView_RepeatCount, ParameterType);
+  repeatCount->setData(tr("Repeat Count"), PlaceholderValue);
+  repeatCount->setData(tr("Number of times to send the command on each trigger"),
+                       ParameterDescription);
+  m_actionModel->appendRow(repeatCount);
+
   connect(
     m_actionModel, &CustomModel::itemChanged, this, &DataModel::ProjectEditor::onActionItemChanged);
 
@@ -2056,8 +2069,8 @@ void DataModel::ProjectEditor::generateComboBoxModels()
                << "1024" << "2048" << "4096" << "8192" << "16384";
 
   m_timerModes.clear();
-  m_timerModes << tr("Off") << tr("Auto Start") << tr("Start on Trigger")
-               << tr("Toggle on Trigger");
+  m_timerModes << tr("Off") << tr("Auto Start") << tr("Start on Trigger") << tr("Toggle on Trigger")
+               << tr("Repeat N Times");
 
   m_decoderOptions.clear();
   m_decoderOptions << tr("Plain Text (UTF8)") << tr("Hexadecimal") << tr("Base64")
@@ -2298,6 +2311,9 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
       break;
     case kActionView_TimerInterval:
       m_selectedAction.timerIntervalMs = value.toInt();
+      break;
+    case kActionView_RepeatCount:
+      m_selectedAction.repeatCount = qMax(1, value.toInt());
       break;
     default:
       break;
@@ -2656,9 +2672,9 @@ void DataModel::ProjectEditor::selectAction(int actionId)
 /**
  * @brief Selects the Frame Parser Code item in the tree.
  */
-void DataModel::ProjectEditor::selectFrameParser()
+void DataModel::ProjectEditor::selectFrameParser(int sourceId)
 {
-  displayFrameParserView();
+  displayFrameParserView(sourceId);
 }
 
 //--------------------------------------------------------------------------------------------------

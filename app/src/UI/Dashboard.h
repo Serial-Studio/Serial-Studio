@@ -224,6 +224,7 @@ private:
 #endif
 
   QMap<int, QTimer*> m_timers;
+  QMap<int, int> m_repeatCounters;
   QVector<DataModel::Action> m_actions;
   SerialStudio::WidgetMap m_widgetMap;
   QMap<int, DataModel::Dataset> m_datasets;

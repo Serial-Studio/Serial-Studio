@@ -26,6 +26,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Player.h"
+#include "Misc/IconEngine.h"
 #include "Misc/TimerEvents.h"
 #include "UI/WidgetRegistry.h"
 
@@ -385,7 +386,7 @@ QVariantList UI::Dashboard::actions() const
     m["id"]      = i;
     m["checked"] = false;
     m["text"]    = action.title;
-    m["icon"]    = QStringLiteral("qrc:/rcc/actions/%1.svg").arg(action.icon);
+    m["icon"]    = Misc::IconEngine::resolveActionIconSource(action.icon);
     if (action.timerMode == DataModel::TimerMode::ToggleOnTrigger) {
       if (m_timers.contains(i) && m_timers[i] && m_timers[i]->isActive())
         m["checked"] = true;
@@ -951,7 +952,45 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   // Obtain action data
   const auto& action = m_actions[index];
 
-  // Handle timer behavior
+  // Handle RepeatNTimes mode: on GUI trigger, start the repeat sequence
+  if (action.timerMode == DataModel::TimerMode::RepeatNTimes && guiTrigger) {
+    if (m_timers.contains(index) && m_timers[index]) {
+      m_repeatCounters[index] = qMax(1, action.repeatCount);
+      m_timers[index]->start();
+    }
+
+    // Send first occurrence immediately
+    if (!IO::ConnectionManager::instance().paused())
+      IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+
+    if (m_repeatCounters.contains(index))
+      m_repeatCounters[index]--;
+
+    Q_EMIT actionStatusChanged();
+    return;
+  }
+
+  // Handle RepeatNTimes mode: timer tick (not GUI trigger)
+  if (action.timerMode == DataModel::TimerMode::RepeatNTimes && !guiTrigger) {
+    if (!IO::ConnectionManager::instance().paused())
+      IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+
+    // Decrement counter, stop when done
+    if (m_repeatCounters.contains(index)) {
+      m_repeatCounters[index]--;
+      if (m_repeatCounters[index] <= 0) {
+        if (m_timers.contains(index) && m_timers[index])
+          m_timers[index]->stop();
+
+        m_repeatCounters.remove(index);
+      }
+    }
+
+    Q_EMIT actionStatusChanged();
+    return;
+  }
+
+  // Handle other timer behaviors
   if (m_timers.contains(index)) {
     auto* timer = m_timers[index];
     if (!timer)
@@ -1802,8 +1841,9 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
     }
   }
 
-  // Clear timer map
+  // Clear timer map and repeat counters
   m_timers.clear();
+  m_repeatCounters.clear();
 
   // Update actions
   for (const auto& action : frame.actions)
@@ -1827,8 +1867,18 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
       timer->setTimerType(Qt::PreciseTimer);
       connect(timer, &QTimer::timeout, this, [this, i]() { activateAction(i, false); });
 
-      if (action.timerMode == DataModel::TimerMode::AutoStart || action.autoExecuteOnConnect)
+      // Auto-start for RepeatNTimes: init counter and start
+      if (action.timerMode == DataModel::TimerMode::RepeatNTimes) {
+        if (action.autoExecuteOnConnect) {
+          m_repeatCounters[i] = qMax(1, action.repeatCount);
+          timer->start();
+        }
+      }
+
+      // Auto-start for other timer modes
+      else if (action.timerMode == DataModel::TimerMode::AutoStart || action.autoExecuteOnConnect) {
         timer->start();
+      }
 
       m_timers.insert(i, timer);
     }

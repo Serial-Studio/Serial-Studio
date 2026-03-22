@@ -45,6 +45,7 @@
 #include "Misc/CommonFonts.h"
 #include "Misc/Examples.h"
 #include "Misc/HelpCenter.h"
+#include "Misc/IconEngine.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
@@ -350,6 +351,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
   auto miscExamples         = &Misc::Examples::instance();
   auto miscHelpCenter       = &Misc::HelpCenter::instance();
+  auto miscIconEngine       = &Misc::IconEngine::instance();
   auto frameParser          = &DataModel::FrameParser::instance();
 
   // Initialize commercial modules
@@ -445,6 +447,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Misc_WorkspaceManager", miscWorkspaceManager);
   c->setContextProperty("Cpp_Examples", miscExamples);
   c->setContextProperty("Cpp_HelpCenter", miscHelpCenter);
+  c->setContextProperty("Cpp_Misc_IconEngine", miscIconEngine);
 
   // Register commercial C++ modules with QML
 #ifdef BUILD_COMMERCIAL
@@ -474,6 +477,9 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
 
   if (!m_headless) {
+    // Register image provider for inline SVG action icons
+    m_engine.addImageProvider(QStringLiteral("actionicon"), new Misc::ActionIconProvider());
+
     // Register image provider for Image View widget (pro only)
 #ifdef BUILD_COMMERCIAL
     auto* imgProvider = new UI::ImageProvider();

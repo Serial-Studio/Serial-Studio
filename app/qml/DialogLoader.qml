@@ -46,9 +46,10 @@ Loader {
 
   onLoaded: {
     root.dialog = item
-    dialog.show()
     dialog.onClosing.connect(function() {
       root.active = false;
     })
+
+    Qt.callLater(function() { dialog.show() })
   }
 }

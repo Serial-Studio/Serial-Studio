@@ -104,14 +104,15 @@ Widgets.Pane {
         Widgets.ToolbarButton {
           iconSize: 24
           onClicked: {
-            actionIconPicker.selectedIcon = Cpp_JSON_ProjectEditor.actionIcon
+            actionIconPicker.selectedIcon = Cpp_Misc_IconEngine.isInlineSvg(
+              Cpp_JSON_ProjectEditor.actionIcon) ? "" : Cpp_JSON_ProjectEditor.actionIcon
             actionIconPicker.showNormal()
           }
           toolbarButton: false
           text: qsTr("Change Icon")
           Layout.alignment: Qt.AlignVCenter
           ToolTip.text: qsTr("Change the icon used for this action")
-          icon.source: "qrc:/rcc/actions/" + Cpp_JSON_ProjectEditor.actionIcon + ".svg"
+          icon.source: Cpp_Misc_IconEngine.resolveActionIconSource(Cpp_JSON_ProjectEditor.actionIcon)
         }
 
         //

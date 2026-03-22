@@ -196,7 +196,9 @@ public slots:
   void setHexadecimalDelimiters(const bool hexadecimal);
 
   void updateGroup(const int groupId, const DataModel::Group& group, const bool rebuildTree = true);
-  void updateAction(const int actionId, const DataModel::Action& action, const bool rebuildTree = true);
+  void updateAction(const int actionId,
+                    const DataModel::Action& action,
+                    const bool rebuildTree = true);
   void updateDataset(const int groupId,
                      const int datasetId,
                      const DataModel::Dataset& dataset,

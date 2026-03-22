@@ -631,7 +631,7 @@ Item {
                   Cpp_JSON_ProjectEditor.selectSource(modelData.sourceId)
                   break
                 case "frameparser":
-                  Cpp_JSON_ProjectEditor.selectFrameParser()
+                  Cpp_JSON_ProjectEditor.selectFrameParser(modelData.sourceId)
                   break
                 case "group":
                   Cpp_JSON_ProjectEditor.selectGroup(modelData.groupId)
