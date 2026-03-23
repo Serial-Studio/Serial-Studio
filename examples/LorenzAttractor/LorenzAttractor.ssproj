@@ -81,7 +81,7 @@
                 }
             ],
             "title": "2D Visualization",
-            "widget": "multiplot"
+            "widget": "datagrid"
         },
         {
             "datasets": [
@@ -192,6 +192,10 @@
     ],
     "title": "Lorenz Attractor",
     "widgetSettings": {
+        "6:1:-1": {
+            "autoCenter": true,
+            "interpolationEnabled": true
+        },
         "layout:-1": {
             "data": {
                 "autoLayout": true,
