@@ -40,7 +40,7 @@
  * @param parent The parent QQuickItem (optional).
  */
 Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : QuickPaintedItemCompat(parent)
   , m_index(index)
   , m_minX(INT_MAX)
   , m_maxX(INT_MIN)
@@ -57,6 +57,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_cameraOffsetZ(-10)
   , m_eyeSeparation(0.069f)
   , m_anaglyph(false)
+  , m_autoCenter(false)
   , m_interpolate(true)
   , m_orbitNavigation(true)
   , m_invertEyePositions(false)
@@ -68,6 +69,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
 {
   // Read settings
   m_anaglyph           = m_settings.value("Plot3D_Anaglyph", false).toBool();
+  m_autoCenter         = m_settings.value("Plot3D_AutoCenter", false).toBool();
   m_interpolate        = m_settings.value("Plot3D_Interpolate", true).toBool();
   m_eyeSeparation      = m_settings.value("Plot3D_EyeSeparation", 0.069).toFloat();
   m_invertEyePositions = m_settings.value("Plot3D_InvertEyes", false).toBool();
@@ -110,10 +112,9 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
           this,
           &Widgets::Plot3D::onThemeChanged);
 
-  // Set initial zoom on first data arrival
+  // Keep target zoom in sync with data range
   connect(this, &Widgets::Plot3D::rangeChanged, this, [this] {
-    if (!m_centerInitialized)
-      m_targetWorldScale = idealWorldScale();
+    m_targetWorldScale = idealWorldScale();
   });
 }
 
@@ -310,9 +311,9 @@ double Widgets::Plot3D::idealWorldScale() const
 
   const double maxExtent = qMax(dz, qMax(dx, dy));
   if (maxExtent < 1e-9)
-    return 1.0;
+    return m_worldScale;
 
-  const double targetStep = (maxExtent * 1.2) / 10.0;
+  const double targetStep = (maxExtent * 1.2) / 6.0;
   const double exponent   = std::floor(std::log10(targetStep));
   const double base       = std::pow(10.0, exponent);
   double snappedStep;
@@ -388,6 +389,17 @@ bool Widgets::Plot3D::invertEyePositions() const
  * around the 3D plot. If disabled, the navigation mode switches to panning.
  *
  * @return true if orbit navigation is enabled; false if panning mode is active.
+ */
+/**
+ * @brief Returns whether auto-centering on incoming data is enabled.
+ */
+bool Widgets::Plot3D::autoCenter() const
+{
+  return m_autoCenter;
+}
+
+/**
+ * @brief Returns whether orbit navigation mode is active.
  */
 bool Widgets::Plot3D::orbitNavigation() const
 {
@@ -541,6 +553,31 @@ void Widgets::Plot3D::setCameraOffsetZ(const double offset)
  * the anaglyphEnabledChanged() signal to notify connected components.
  *
  * @param enabled True to enable anaglyph mode; false to disable it.
+ */
+/**
+ * @brief Enables or disables automatic centering on incoming data.
+ */
+void Widgets::Plot3D::setAutoCenter(const bool enabled)
+{
+  if (m_autoCenter != enabled)
+  {
+    m_autoCenter = enabled;
+    m_settings.setValue("Plot3D_AutoCenter", enabled);
+
+    // Reset center to origin when disabling
+    if (!enabled)
+    {
+      m_centerPoint  = QVector3D(0, 0, 0);
+      m_targetCenter = QVector3D(0, 0, 0);
+      markDirty();
+    }
+
+    Q_EMIT autoCenterChanged();
+  }
+}
+
+/**
+ * @brief Enables or disables anaglyph (stereo 3D) rendering.
  */
 void Widgets::Plot3D::setAnaglyphEnabled(const bool enabled)
 {
@@ -764,14 +801,15 @@ void Widgets::Plot3D::drawData()
     Q_EMIT rangeChanged();
   }
 
-  // Snap center & zoom on first data, then only smooth-track the center
-  if (!m_centerInitialized) {
+  // Snap center & zoom on first data; smooth-track only when auto-center is on
+  if (!m_centerInitialized)
+  {
     m_centerPoint       = m_targetCenter;
     m_worldScale        = m_targetWorldScale;
     m_centerInitialized = true;
   }
 
-  else
+  else if (m_autoCenter)
     m_centerPoint += (m_targetCenter - m_centerPoint) * 0.08f;
 
   // Initialize camera matrix

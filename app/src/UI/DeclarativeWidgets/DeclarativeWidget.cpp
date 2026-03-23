@@ -32,7 +32,7 @@
  * automatically resize the contained widget to the QML item's size.
  */
 DeclarativeWidget::DeclarativeWidget(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : QuickPaintedItemCompat(parent)
   , m_widget(nullptr)
   , m_contentWidth(0)
   , m_contentHeight(0)
@@ -49,8 +49,8 @@ DeclarativeWidget::DeclarativeWidget(QQuickItem* parent)
   redraw();
 
   // Resize and redraw on geometry/visibility changes
-  connect(this, &QQuickPaintedItem::widthChanged, this, &DeclarativeWidget::resizeWidget);
-  connect(this, &QQuickPaintedItem::heightChanged, this, &DeclarativeWidget::resizeWidget);
+  connect(this, &QuickPaintedItemCompat::widthChanged, this, &DeclarativeWidget::resizeWidget);
+  connect(this, &QuickPaintedItemCompat::heightChanged, this, &DeclarativeWidget::resizeWidget);
   connect(this, &DeclarativeWidget::visibleChanged, [=, this]() {
     requestUpdate();
     redraw();
@@ -126,7 +126,8 @@ void DeclarativeWidget::redraw(const QRect& rect)
     if (isVisible() && m_updateRequested) {
       m_updateRequested = false;
       m_image           = m_widget->grab().toImage();
-      QQuickPaintedItem::update(rect);
+      Q_UNUSED(rect)
+      update();
     }
   }
 }

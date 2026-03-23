@@ -78,7 +78,7 @@ constexpr int MAX_LINES = 1000;
  * accordingly.
  */
 Widgets::Terminal::Terminal(QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : QuickPaintedItemCompat(parent)
   , m_cWidth(0)
   , m_cHeight(0)
   , m_borderX(0)
@@ -735,7 +735,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
 {
   if (!vt100emulation() || !IO::ConnectionManager::instance().isConnected()
       || !IO::ConnectionManager::instance().readWrite()) {
-    QQuickPaintedItem::keyPressEvent(event);
+    QuickPaintedItemCompat::keyPressEvent(event);
     return;
   }
 
@@ -868,7 +868,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
     return;
   }
 
-  QQuickPaintedItem::keyPressEvent(event);
+  QuickPaintedItemCompat::keyPressEvent(event);
 }
 
 /**
@@ -876,7 +876,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
  */
 void Widgets::Terminal::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-  QQuickPaintedItem::geometryChange(newGeometry, oldGeometry);
+  QuickPaintedItemCompat::geometryChange(newGeometry, oldGeometry);
 
   if (newGeometry.size() != oldGeometry.size())
     Q_EMIT terminalSizeChanged();

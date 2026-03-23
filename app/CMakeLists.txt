@@ -151,6 +151,13 @@ find_package(
   ${QT_MODULES}
 )
 
+# Optional: Qt Canvas Painter (Qt >= 6.11, GPU-accelerated painting)
+find_package(Qt6 QUIET COMPONENTS CanvasPainter)
+if(Qt6CanvasPainter_FOUND)
+  list(APPEND QT_LIBS Qt6::CanvasPainter)
+  message(STATUS "Qt Canvas Painter found — GPU-accelerated widget painting enabled")
+endif()
+
 # Qt project setup & policies
 qt_standard_project_setup()
 qt_policy(SET QTP0001 NEW)
@@ -214,6 +221,7 @@ set(SOURCES
   src/UI/Widgets/FFTPlot.cpp
   src/UI/Widgets/Accelerometer.cpp
   src/UI/Widgets/DataGrid.cpp
+  src/UI/QuickPaintedItemCompat.cpp
   src/UI/Widgets/Terminal.cpp
   src/UI/Widgets/Gyroscope.cpp
   src/UI/Widgets/GPS.cpp
@@ -294,6 +302,7 @@ set(HEADERS
   src/UI/Widgets/LEDPanel.h
   src/UI/Widgets/Compass.h
   src/UI/Widgets/Terminal.h
+  src/UI/QuickPaintedItemCompat.h
   src/UI/DeclarativeWidgets/DeclarativeWidget.h
   src/UI/DeclarativeWidgets/StaticTable.h
   src/API/Server.h

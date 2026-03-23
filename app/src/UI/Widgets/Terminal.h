@@ -24,8 +24,9 @@
 #include <QColor>
 #include <QKeyEvent>
 #include <QPalette>
-#include <QQuickPaintedItem>
 #include <QTimer>
+
+#include "UI/QuickPaintedItemCompat.h"
 
 namespace Widgets {
 /**
@@ -54,7 +55,7 @@ struct CharColor {
  * This class is suitable for embedding a terminal interface in QML-based GUI
  * applications, with multiple customizable features exposed as properties.
  */
-class Terminal : public QQuickPaintedItem {
+class Terminal : public QuickPaintedItemCompat {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QFont font

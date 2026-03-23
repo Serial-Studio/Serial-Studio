@@ -71,6 +71,9 @@ Item {
       if (s["interpolationEnabled"] !== undefined)
         model.interpolationEnabled = s["interpolationEnabled"]
 
+      if (s["autoCenter"] !== undefined)
+        model.autoCenter = s["autoCenter"]
+
       if (s["orbitNavigation"] !== undefined)
         model.orbitNavigation = s["orbitNavigation"]
 
@@ -255,6 +258,22 @@ Item {
       ToolTip.text: qsTr("Front View")
       onClicked: animateToView(270, 0, 180, 0, 0)
       icon.source: "qrc:/rcc/icons/dashboard-buttons/front_view.svg"
+    }
+
+    Rectangle {
+      implicitWidth: 1
+      implicitHeight: 24
+      color: Cpp_ThemeManager.colors["widget_border"]
+    }
+
+    DashboardToolButton {
+      onClicked: {
+        model.autoCenter = !model.autoCenter
+        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "autoCenter", model.autoCenter)
+      }
+      checked: model.autoCenter
+      ToolTip.text: qsTr("Auto Center")
+      icon.source: "qrc:/rcc/icons/dashboard-buttons/center.svg"
     }
 
     Rectangle {

@@ -23,9 +23,10 @@
 
 #include <QMatrix4x4>
 #include <QPainter>
-#include <QQuickPaintedItem>
 #include <QSettings>
 #include <QVector3D>
+
+#include "UI/QuickPaintedItemCompat.h"
 
 #include "DSP.h"
 
@@ -42,7 +43,7 @@ namespace Widgets {
  * - anaglyphEnabled
  * - cameraAngleX, cameraAngleY, cameraAngleZ
  */
-class Plot3D : public QQuickPaintedItem {
+class Plot3D : public QuickPaintedItemCompat {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool anaglyphEnabled
@@ -96,11 +97,16 @@ class Plot3D : public QQuickPaintedItem {
              READ invertEyePositions
              WRITE setInvertEyePositions
              NOTIFY invertEyePositionsChanged)
+  Q_PROPERTY(bool autoCenter
+             READ autoCenter
+             WRITE setAutoCenter
+             NOTIFY autoCenterChanged)
   // clang-format on
 
 signals:
   void rangeChanged();
   void cameraChanged();
+  void autoCenterChanged();
   void eyeSeparationChanged();
   void anaglyphEnabledChanged();
   void orbitNavigationChanged();
@@ -126,6 +132,7 @@ public:
   [[nodiscard]] bool anaglyphEnabled() const;
   [[nodiscard]] bool invertEyePositions() const;
 
+  [[nodiscard]] bool autoCenter() const;
   [[nodiscard]] bool orbitNavigation() const;
   [[nodiscard]] bool interpolationEnabled() const;
 
@@ -139,6 +146,7 @@ public slots:
   void setCameraOffsetX(const double offset);
   void setCameraOffsetY(const double offset);
   void setCameraOffsetZ(const double offset);
+  void setAutoCenter(const bool enabled);
   void setAnaglyphEnabled(const bool enabled);
   void setOrbitNavigation(const bool enabled);
   void setEyeSeparation(const float separation);
@@ -201,6 +209,7 @@ private:
   float m_eyeSeparation;
 
   bool m_anaglyph;
+  bool m_autoCenter;
   bool m_interpolate;
   bool m_orbitNavigation;
   bool m_invertEyePositions;

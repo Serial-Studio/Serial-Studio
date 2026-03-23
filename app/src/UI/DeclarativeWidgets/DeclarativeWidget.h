@@ -22,9 +22,10 @@
 #pragma once
 
 #include <QPainter>
-#include <QQuickPaintedItem>
 #include <QTimer>
 #include <QWidget>
+
+#include "UI/QuickPaintedItemCompat.h"
 
 /**
  * @class DeclarativeWidget
@@ -39,7 +40,7 @@
  * rendering vs. GPU-accelerated rendering—which makes direct embedding
  * normally impossible. This class works around that by bridging the two.
  */
-class DeclarativeWidget : public QQuickPaintedItem {
+class DeclarativeWidget : public QuickPaintedItemCompat {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(QPalette palette

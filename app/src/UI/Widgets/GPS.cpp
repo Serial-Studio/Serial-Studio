@@ -62,7 +62,7 @@ bool Widgets::GPS::s_cacheInitialized = false;
  * @param parent Optional QML parent item.
  */
 Widgets::GPS::GPS(const int index, QQuickItem* parent)
-  : QQuickPaintedItem(parent)
+  : QuickPaintedItemCompat(parent)
   , m_zoom(MIN_ZOOM)
   , m_index(index)
   , m_mapType(0)
@@ -80,7 +80,7 @@ Widgets::GPS::GPS(const int index, QQuickItem* parent)
   setOpaquePainting(true);
   setAcceptHoverEvents(true);
   setAcceptedMouseButtons(Qt::AllButtons);
-  setFlags(QQuickPaintedItem::ItemHasContents);
+  setFlag(ItemHasContents, true);
 
   // Configure shared tile cache (once across all instances)
   if (!s_cacheInitialized) {
