@@ -40,9 +40,9 @@ on:
 
 env:
   VERSION: "3.2.6"
-  QT_VERSION_LINUX: 6.11
-  QT_VERSION_MACOS: 6.11
-  QT_VERSION_WINDOWS: 6.11
+  QT_VERSION_LINUX: 6.11.0
+  QT_VERSION_MACOS: 6.11.0
+  QT_VERSION_WINDOWS: 6.11.0
   EXECUTABLE: "Serial-Studio-Pro"
   APPLICATION: "Serial Studio Pro"
   UNIXNAME: "serial-studio-pro"

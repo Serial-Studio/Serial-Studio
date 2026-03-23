@@ -39,7 +39,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  QT_VERSION_LINUX: 6.11
+  QT_VERSION_LINUX: 6.11.0
   UNIXNAME: "serial-studio-pro"
   INSTALL_QT_LINUX_INTEL: true
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
