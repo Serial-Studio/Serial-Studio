@@ -63,7 +63,7 @@ private:
   Translator& operator=(const Translator&) = delete;
 
 public:
-  static Translator& instance();
+  [[nodiscard]] static Translator& instance();
 
   enum Language {
     English,

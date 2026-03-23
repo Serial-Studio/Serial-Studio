@@ -348,8 +348,8 @@ Item {
             elide: Text.ElideRight
             anchors.centerIn: parent
             color: Cpp_ThemeManager.colors["tooltip_text"]
-            text: formatValue(cursorTracker.cursorValue) + " " + model.units
             font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.7))
+            text: formatValue(cursorTracker.cursorValue) + " " + model.units
           }
         }
       }

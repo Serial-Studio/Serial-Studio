@@ -114,7 +114,7 @@ private:
   ~Player();
 
 public:
-  static Player& instance();
+  [[nodiscard]] static Player& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool isPlaying() const;

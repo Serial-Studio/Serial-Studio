@@ -68,19 +68,8 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
     &m_udpSocket, &QUdpSocket::stateChanged, this, [=, this] { Q_EMIT configurationChanged(); });
 
   // Handle socket errors
-#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-  connect(&m_tcpSocket,
-          SIGNAL(error(QAbstractSocket::SocketError)),
-          this,
-          SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
-  connect(&m_udpSocket,
-          SIGNAL(error(QAbstractSocket::SocketError)),
-          this,
-          SLOT(onErrorOccurred(QAbstractSocket::SocketError)));
-#else
   connect(&m_tcpSocket, &QTcpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
   connect(&m_udpSocket, &QUdpSocket::errorOccurred, this, &IO::Drivers::Network::onErrorOccurred);
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------

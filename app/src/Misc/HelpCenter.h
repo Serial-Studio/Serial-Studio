@@ -88,7 +88,7 @@ private:
   HelpCenter& operator=(const HelpCenter&) = delete;
 
 public:
-  static HelpCenter& instance();
+  [[nodiscard]] static HelpCenter& instance();
 
   [[nodiscard]] QString pageId() const;
   [[nodiscard]] QString pageTitle() const;

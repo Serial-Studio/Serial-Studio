@@ -79,7 +79,7 @@ private:
   TimerEvents& operator=(const TimerEvents&) = delete;
 
 public:
-  static TimerEvents& instance();
+  [[nodiscard]] static TimerEvents& instance();
 
   [[nodiscard]] int fps() const noexcept;
 

@@ -89,7 +89,7 @@ private:
   WidgetRegistry& operator=(const WidgetRegistry&) = delete;
 
 public:
-  static WidgetRegistry& instance();
+  [[nodiscard]] static WidgetRegistry& instance();
 
   // clang-format off
   [[nodiscard]] int widgetCount() const;

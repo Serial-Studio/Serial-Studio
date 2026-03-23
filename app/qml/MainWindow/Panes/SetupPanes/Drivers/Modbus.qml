@@ -44,8 +44,8 @@ Item {
     // Protocol selector
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Protocol") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
     } ComboBox {
       id: _protocolCombo
@@ -67,8 +67,8 @@ Item {
     // Serial Port (only for Modbus RTU)
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Serial Port") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
@@ -92,8 +92,8 @@ Item {
     // Baud Rate (only for Modbus RTU)
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Baud Rate") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
@@ -184,8 +184,8 @@ Item {
     // Parity (only for Modbus RTU)
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Parity") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
@@ -207,8 +207,8 @@ Item {
     // Data Bits (only for Modbus RTU)
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Data Bits") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
@@ -230,8 +230,8 @@ Item {
     // Stop Bits (only for Modbus RTU)
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Stop Bits") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
@@ -253,8 +253,8 @@ Item {
     // TCP Host (only for Modbus TCP)
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Host") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } TextField {
@@ -277,8 +277,8 @@ Item {
     // TCP Port (only for Modbus TCP)
     //
     Label {
-      opacity: enabled ? 1 : 0.5
       text: qsTr("Port") + ":"
+      opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } TextField {
@@ -372,17 +372,16 @@ Item {
       Label {
         id: _groupStatus
 
+        opacity: 0.5
         anchors.topMargin: 4
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: _groupButton.bottom
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85)
+        horizontalAlignment: Text.AlignHCenter
         text: Cpp_IO_Modbus.registerGroupCount > 0 ?
                 qsTr("%1 group(s) configured").arg(Cpp_IO_Modbus.registerGroupCount) :
                 qsTr("No groups configured")
-        opacity: 0.5
-        font.italic: true
-        font.pixelSize: 11
-        horizontalAlignment: Text.AlignHCenter
       }
     }
 

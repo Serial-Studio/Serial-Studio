@@ -93,7 +93,7 @@ private:
   FileTransmission& operator=(const FileTransmission&) = delete;
 
 public:
-  static FileTransmission& instance();
+  [[nodiscard]] static FileTransmission& instance();
 
   [[nodiscard]] bool active() const;
   [[nodiscard]] bool fileOpen() const;

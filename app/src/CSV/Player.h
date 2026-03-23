@@ -72,7 +72,7 @@ private:
   Player& operator=(const Player&) = delete;
 
 public:
-  static Player& instance();
+  [[nodiscard]] static Player& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] double progress() const;

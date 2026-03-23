@@ -398,22 +398,27 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
     const auto* channelData = chs.data();
     const int channelCount  = chs.size();
 
-    DataModel::Frame& srcFrame = m_sourceFrames[sourceId];
-    if (srcFrame.groups.empty()) {
-      srcFrame.sourceId                   = sourceId;
-      srcFrame.title                      = m_frame.title;
-      srcFrame.actions                    = m_frame.actions;
-      srcFrame.containsCommercialFeatures = m_frame.containsCommercialFeatures;
+    // Lazily initialize source frame on first encounter
+    if (!m_sourceFrames.contains(sourceId)) {
+      DataModel::Frame newFrame;
+      newFrame.sourceId                   = sourceId;
+      newFrame.title                      = m_frame.title;
+      newFrame.actions                    = m_frame.actions;
+      newFrame.containsCommercialFeatures = m_frame.containsCommercialFeatures;
       for (const auto& g : m_frame.groups)
         if (g.sourceId == sourceId)
-          srcFrame.groups.push_back(g);
+          newFrame.groups.push_back(g);
+
+      m_sourceFrames.insert(sourceId, std::move(newFrame));
     }
 
+    DataModel::Frame& srcFrame = m_sourceFrames[sourceId];
     for (auto& group : srcFrame.groups) {
       for (auto& dataset : group.datasets) {
         const int idx = dataset.index;
         if (idx <= 0 || idx > channelCount) [[unlikely]]
           continue;
+
         dataset.value        = channelData[idx - 1];
         dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
       }
@@ -423,6 +428,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
   for (const auto& channels : std::as_const(multiChannels)) {
     if (channels.isEmpty()) [[unlikely]]
       continue;
+
     applyChannelData(channels);
     hotpathTxFrame(m_sourceFrames[sourceId]);
   }
@@ -557,7 +563,8 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
       dataset.fftSamples      = fftSamples;
       dataset.fftSamplingRate = sampleRate;
 
-      if (m_quickPlotHasHeader && index - 1 < m_quickPlotChannelNames.size())
+      if (m_quickPlotHasHeader && index > 0
+          && index - 1 < m_quickPlotChannelNames.size())
         dataset.title = m_quickPlotChannelNames[index - 1];
       else
         dataset.title = tr("Channel %1").arg(index);
@@ -594,7 +601,8 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
     dataset.plt     = false;
     dataset.value   = channel;
 
-    if (m_quickPlotHasHeader && idx - 1 < m_quickPlotChannelNames.size())
+    if (m_quickPlotHasHeader && idx > 0
+        && idx - 1 < m_quickPlotChannelNames.size())
       dataset.title = m_quickPlotChannelNames[idx - 1];
     else
       dataset.title = tr("Channel %1").arg(idx);

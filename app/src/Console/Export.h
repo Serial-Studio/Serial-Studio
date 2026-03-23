@@ -144,7 +144,7 @@ private:
   ~Export();
 
 public:
-  static Export& instance();
+  [[nodiscard]] static Export& instance();
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;

@@ -63,7 +63,7 @@ private:
   IconEngine& operator=(const IconEngine&) = delete;
 
 public:
-  static IconEngine& instance();
+  [[nodiscard]] static IconEngine& instance();
 
   [[nodiscard]] bool busy() const noexcept;
   [[nodiscard]] const QStringList& iconNames() const noexcept;

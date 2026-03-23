@@ -53,7 +53,7 @@ public:
   /**
    * @brief Gets the singleton instance
    */
-  static CommandHandler& instance();
+  [[nodiscard]] static CommandHandler& instance();
 
   /**
    * @brief Check if data appears to be an API message

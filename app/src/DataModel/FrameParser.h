@@ -51,7 +51,7 @@ private:
   FrameParser& operator=(const FrameParser&) = delete;
 
 public:
-  static FrameParser& instance();
+  [[nodiscard]] static FrameParser& instance();
 
   [[nodiscard]] static QString defaultTemplateCode();
 

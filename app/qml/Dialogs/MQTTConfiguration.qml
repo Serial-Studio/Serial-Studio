@@ -510,16 +510,17 @@ Widgets.SmartDialog {
               }
             }
 
-            Label { text: qsTr("SSL Protocol") + ":"
+            Label {
               opacity: enabled ? 1 : 0.8
+              text: qsTr("SSL Protocol") + ":"
               enabled: Cpp_MQTT_Client.sslEnabled
             } ComboBox {
               id: _sslProtocol
 
               Layout.fillWidth: true
               opacity: enabled ? 1 : 0.8
-              enabled: Cpp_MQTT_Client.sslEnabled
               model: Cpp_MQTT_Client.sslProtocols
+              enabled: Cpp_MQTT_Client.sslEnabled
               currentIndex: Cpp_MQTT_Client.sslProtocol
               onCurrentIndexChanged: {
                 if (Cpp_MQTT_Client.sslProtocol !== currentIndex)
@@ -527,8 +528,9 @@ Widgets.SmartDialog {
               }
             }
 
-            Label { text: qsTr("Verify Depth") + ":"
+            Label {
               opacity: enabled ? 1 : 0.8
+              text: qsTr("Verify Depth") + ":"
               enabled: Cpp_MQTT_Client.sslEnabled
             } TextField {
               id: _verifyDepth
@@ -546,8 +548,8 @@ Widgets.SmartDialog {
             }
 
             Label {
-              text: qsTr("Verify Mode") + ":"
               opacity: enabled ? 1 : 0.8
+              text: qsTr("Verify Mode") + ":"
               enabled: Cpp_MQTT_Client.sslEnabled
             } ComboBox {
               id: _verifyMode
@@ -594,6 +596,7 @@ Widgets.SmartDialog {
           icon.width: 18
           icon.height: 18
           highlighted: true
+          opacity: enabled ? 1 : 0.8
           Layout.alignment: Qt.AlignVCenter
           checked: Cpp_MQTT_Client.isConnected
           onClicked: Cpp_MQTT_Client.toggleConnection()
@@ -601,8 +604,6 @@ Widgets.SmartDialog {
           text: Cpp_MQTT_Client.isConnected ? qsTr("Disconnect") : qsTr("Connect")
           icon.source: Cpp_MQTT_Client.isConnected ? "qrc:/rcc/icons/buttons/connected.svg" :
                                                      "qrc:/rcc/icons/buttons/disconnected.svg"
-
-          opacity: enabled ? 1 : 0.8
           enabled: app.proVersion ?
                      (Cpp_MQTT_Client.isSubscriber ? !Cpp_IO_Manager.isConnected : true) :
                      false

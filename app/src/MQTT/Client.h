@@ -179,7 +179,7 @@ private:
   Client& operator=(const Client&) = delete;
 
 public:
-  static Client& instance();
+  [[nodiscard]] static Client& instance();
 
   [[nodiscard]] quint8 mode() const;
   [[nodiscard]] bool isConnected() const;

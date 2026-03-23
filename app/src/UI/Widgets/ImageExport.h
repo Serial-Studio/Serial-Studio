@@ -126,7 +126,7 @@ private:
   ~ImageExport();
 
 public:
-  static ImageExport& instance();
+  [[nodiscard]] static ImageExport& instance();
 
   [[nodiscard]] bool exportEnabled() const;
   [[nodiscard]] Q_INVOKABLE QString imagesPath(const QString& groupTitle,

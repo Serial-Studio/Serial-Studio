@@ -119,7 +119,7 @@ private:
   ProjectEditor& operator=(const ProjectEditor&) = delete;
 
 public:
-  static ProjectEditor& instance();
+  [[nodiscard]] static ProjectEditor& instance();
 
   /**
    * @brief Enum representing the different views available in the project

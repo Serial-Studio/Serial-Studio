@@ -114,7 +114,7 @@ private:
   Dashboard& operator=(const Dashboard&) = delete;
 
 public:
-  static Dashboard& instance();
+  [[nodiscard]] static Dashboard& instance();
 
   [[nodiscard]] bool available() const;
   [[nodiscard]] bool showActionPanel() const noexcept;

@@ -38,7 +38,7 @@ class UISessionRegistry : public QObject {
   Q_OBJECT
 
 public:
-  static UISessionRegistry& instance();
+  [[nodiscard]] static UISessionRegistry& instance();
 
   void registerTaskbar(Taskbar* t);
   void unregisterTaskbar(Taskbar* t);

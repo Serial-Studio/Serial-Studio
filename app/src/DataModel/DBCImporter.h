@@ -87,7 +87,7 @@ private:
   DBCImporter& operator=(const DBCImporter&) = delete;
 
 public:
-  static DBCImporter& instance();
+  [[nodiscard]] static DBCImporter& instance();
 
   [[nodiscard]] int signalCount() const;
   [[nodiscard]] int messageCount() const;

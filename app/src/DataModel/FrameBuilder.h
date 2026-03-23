@@ -57,7 +57,7 @@ private:
   FrameBuilder& operator=(const FrameBuilder&) = delete;
 
 public:
-  static FrameBuilder& instance();
+  [[nodiscard]] static FrameBuilder& instance();
 
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
 

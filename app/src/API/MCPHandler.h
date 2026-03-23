@@ -71,7 +71,7 @@ public:
   /**
    * @brief Gets the singleton instance
    */
-  static MCPHandler& instance();
+  [[nodiscard]] static MCPHandler& instance();
 
   /**
    * @brief Check if data appears to be an MCP message

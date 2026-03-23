@@ -268,17 +268,17 @@ Window {
               anchors.rightMargin: 8
 
               Label {
-                font.bold: true
                 color: palette.text
                 text: qsTr("Process")
                 Layout.fillWidth: true
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
                 color: palette.text
                 text: qsTr("PID")
                 Layout.preferredWidth: 60
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
             }
           }

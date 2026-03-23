@@ -60,7 +60,7 @@ MQTT::Client::Client() : m_publisher(false), m_sslEnabled(false)
   // Set SSL and MQTT handlers into a known state
   m_client.setProtocolVersion(QMqttClient::MQTT_5_0);
   m_sslConfiguration.setProtocol(QSsl::SecureProtocols);
-  m_sslConfiguration.setPeerVerifyMode(QSslSocket::QueryPeer);
+  m_sslConfiguration.setPeerVerifyMode(QSslSocket::AutoVerifyPeer);
 
   // Configure signals/slots between QtMQTT and this module
   connect(&m_client, &QMqttClient::stateChanged, this, &MQTT::Client::onStateChanged);

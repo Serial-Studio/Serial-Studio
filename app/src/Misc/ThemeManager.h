@@ -130,7 +130,7 @@ private:
   ThemeManager& operator=(const ThemeManager&) = delete;
 
 public:
-  static ThemeManager& instance();
+  [[nodiscard]] static ThemeManager& instance();
 
   [[nodiscard]] int theme() const;
   [[nodiscard]] const QString& themeName() const;

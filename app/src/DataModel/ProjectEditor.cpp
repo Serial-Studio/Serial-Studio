@@ -21,6 +21,7 @@
 
 #include "DataModel/ProjectEditor.h"
 
+#include <memory>
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QTimer>
@@ -1292,15 +1293,13 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
     const int busType = item->data(EditableValue).toInt();
     DataModel::ProjectModel::instance().updateSourceBusType(m_selectedSource.sourceId, busType);
     m_selectedSource.busType = busType;
-    connect(
+    auto conn = std::make_shared<QMetaObject::Connection>();
+    *conn     = connect(
       &IO::ConnectionManager::instance(),
       &IO::ConnectionManager::contextsRebuilt,
       this,
-      [this] {
-        disconnect(&IO::ConnectionManager::instance(),
-                   &IO::ConnectionManager::contextsRebuilt,
-                   this,
-                   nullptr);
+      [this, conn] {
+        disconnect(*conn);
         buildSourceModel(m_selectedSource);
       },
       Qt::QueuedConnection);

@@ -185,8 +185,8 @@ Widgets.SmartDialog {
           }
 
           Label {
-            text: qsTr("Workspace Folder")
             opacity: enabled ? 1 : 0.5
+            text: qsTr("Workspace Folder")
             enabled: !Cpp_IO_Manager.isConnected
             color: Cpp_ThemeManager.colors["text"]
           } RowLayout {
@@ -423,8 +423,8 @@ Widgets.SmartDialog {
             text: qsTr("Font Size")
             color: Cpp_ThemeManager.colors["text"]
           } RowLayout {
-            Layout.fillWidth: true
             spacing: 4
+            Layout.fillWidth: true
 
             ComboBox {
               id: _widgetSizePreset

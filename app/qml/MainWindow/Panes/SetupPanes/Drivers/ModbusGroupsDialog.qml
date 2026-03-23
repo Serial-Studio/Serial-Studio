@@ -290,38 +290,38 @@ Window {
               anchors.rightMargin: 8
 
               Label {
-                font.bold: true
-                color: palette.text
                 text: qsTr("#")
+                color: palette.text
                 Layout.preferredWidth: 30
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
                 color: palette.text
                 text: qsTr("Type")
                 Layout.preferredWidth: 180
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
                 color: palette.text
                 text: qsTr("Start")
                 Layout.preferredWidth: 60
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
                 color: palette.text
                 text: qsTr("Count")
                 Layout.preferredWidth: 60
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
                 color: palette.text
                 text: qsTr("Action")
                 Layout.fillWidth: true
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
             }
           }

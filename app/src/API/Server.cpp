@@ -291,7 +291,7 @@ API::Server::Server()
 
   connect(&m_server, &QTcpServer::newConnection, this, &Server::acceptConnection);
 
-  API::CommandHandler::instance();
+  (void)API::CommandHandler::instance();
   setEnabled(m_settings.value("API/Enabled", false).toBool());
 }
 

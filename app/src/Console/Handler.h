@@ -185,7 +185,7 @@ public:
   };
   Q_ENUM(LineEnding)
 
-  static Handler& instance();
+  [[nodiscard]] static Handler& instance();
 
   [[nodiscard]] bool echo() const;
   [[nodiscard]] bool showTimestamp() const;

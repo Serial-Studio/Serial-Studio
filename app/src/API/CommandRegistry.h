@@ -73,7 +73,7 @@ public:
   /**
    * @brief Gets the singleton instance
    */
-  static CommandRegistry& instance();
+  [[nodiscard]] static CommandRegistry& instance();
 
   /**
    * @brief Register a new command

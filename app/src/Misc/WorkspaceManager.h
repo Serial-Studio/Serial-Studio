@@ -92,7 +92,7 @@ private:
   WorkspaceManager& operator=(const WorkspaceManager&) = delete;
 
 public:
-  static WorkspaceManager& instance();
+  [[nodiscard]] static WorkspaceManager& instance();
 
   [[nodiscard]] QString path() const noexcept;
   [[nodiscard]] QString shortPath() const;

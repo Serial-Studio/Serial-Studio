@@ -111,7 +111,7 @@ private:
   CommonFonts& operator=(const CommonFonts&) = delete;
 
 public:
-  static CommonFonts& instance();
+  [[nodiscard]] static CommonFonts& instance();
 
   [[nodiscard]] const QFont& uiFont() const;
   [[nodiscard]] const QFont& monoFont() const;

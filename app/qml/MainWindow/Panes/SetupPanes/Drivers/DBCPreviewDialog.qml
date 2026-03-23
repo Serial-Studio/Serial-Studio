@@ -214,31 +214,31 @@ Window {
 
               Label {
                 text: qsTr("#")
-                font.bold: true
                 color: palette.text
                 Layout.preferredWidth: 40
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
                 color: palette.text
                 Layout.fillWidth: true
                 Layout.minimumWidth: 150
                 text: qsTr("Message Name")
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
-                text: qsTr("CAN ID")
                 color: palette.text
+                text: qsTr("CAN ID")
                 Layout.preferredWidth: 80
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
               Label {
-                font.bold: true
                 color: palette.text
                 text: qsTr("Signals")
                 Layout.preferredWidth: 60
+                font: Cpp_Misc_CommonFonts.boldUiFont
               }
             }
           }

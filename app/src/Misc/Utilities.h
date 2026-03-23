@@ -62,7 +62,7 @@ class Utilities : public QObject {
   Q_OBJECT
 
 public:
-  static Utilities& instance();
+  [[nodiscard]] static Utilities& instance();
   static void rebootApplication();
   static QPixmap getHiDpiPixmap(const QString& path);
 

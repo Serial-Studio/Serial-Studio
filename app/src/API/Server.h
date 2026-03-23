@@ -145,7 +145,7 @@ private:
   ~Server();
 
 public:
-  static Server& instance();
+  [[nodiscard]] static Server& instance();
   [[nodiscard]] bool enabled() const noexcept;
   [[nodiscard]] int clientCount() const noexcept;
   [[nodiscard]] bool externalConnections() const noexcept;

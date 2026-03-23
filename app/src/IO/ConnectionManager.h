@@ -129,7 +129,7 @@ private:
   ~ConnectionManager();
 
 public:
-  static ConnectionManager& instance();
+  [[nodiscard]] static ConnectionManager& instance();
 
   [[nodiscard]] bool paused() const noexcept;
   [[nodiscard]] bool readOnly() const;

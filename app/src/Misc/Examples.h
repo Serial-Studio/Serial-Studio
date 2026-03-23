@@ -89,7 +89,7 @@ private:
   Examples& operator=(const Examples&) = delete;
 
 public:
-  static Examples& instance();
+  [[nodiscard]] static Examples& instance();
 
   [[nodiscard]] bool loading() const noexcept;
   [[nodiscard]] int count() const noexcept;

@@ -101,7 +101,7 @@ private:
   ProjectModel& operator=(const ProjectModel&) = delete;
 
 public:
-  static ProjectModel& instance();
+  [[nodiscard]] static ProjectModel& instance();
 
   [[nodiscard]] bool modified() const noexcept;
   [[nodiscard]] SerialStudio::DecoderMethod decoderMethod() const noexcept;

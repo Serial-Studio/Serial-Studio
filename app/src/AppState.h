@@ -64,7 +64,7 @@ private:
   AppState& operator=(const AppState&) = delete;
 
 public:
-  static AppState& instance();
+  [[nodiscard]] static AppState& instance();
 
   [[nodiscard]] QString projectFileName() const;
   [[nodiscard]] const QString& projectFilePath() const noexcept;
