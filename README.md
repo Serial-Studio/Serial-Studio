@@ -206,6 +206,7 @@ If Serial Studio is useful to you, consider supporting its development in one of
 
 - [**Donate via PayPal**](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE): Helps keep the project active and sustainable.
 - [**Purchase a Commercial License**](https://serial-studio.com): Required for commercial use of the official binary. Includes Pro features and priority support.
+- [**Become an Affiliate**](https://store.serial-studio.com/affiliates): Ideal for content creators who want to earn commission by referring new customers to Serial Studio.
 
 Commercial licenses directly fund continued development, bug fixes, and new features.
 

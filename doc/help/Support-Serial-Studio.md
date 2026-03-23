@@ -12,6 +12,14 @@ The most direct way to support Serial Studio. A Pro license unlocks advanced fea
 
 Visit: <https://store.serial-studio.com/>
 
+### Become an Affiliate
+
+If you create content for embedded developers, makers, educators, or hardware teams, you can also support the project by referring customers and earning commission on successful sales. This is a practical option for bloggers, YouTubers, newsletter authors, and community managers who already recommend tools to their audience.
+
+Affiliate applications are handled through Lemon Squeezy:
+
+Apply here: <https://store.serial-studio.com/affiliates>
+
 ### Star the Repository
 
 Help others discover the project by starring it on GitHub. It costs nothing and increases visibility in search results and trending lists.
@@ -48,4 +56,5 @@ Serial Studio is real software built during unpaid hours because it needs to exi
 
 - [License Agreement](License-Agreement.md) — Dual-license details
 - [Earn a Pro License](Earn-Pro-License.md) — Contribute for free access
+- [Become an Affiliate](Become-an-Affiliate.md) — Earn commission by referring customers
 - [Buy Serial Studio Pro](https://store.serial-studio.com/) — Purchase a Pro license

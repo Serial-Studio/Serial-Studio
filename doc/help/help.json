@@ -15,6 +15,7 @@
   { "id": "faq", "title": "FAQ", "section": "Support", "file": "FAQ.md" },
   { "id": "troubleshooting", "title": "Troubleshooting Guide", "section": "Support", "file": "Troubleshooting.md" },
   { "id": "use-cases", "title": "Use Cases", "section": "Support", "file": "Use-Cases.md" },
+  { "id": "become-an-affiliate", "title": "Become an Affiliate", "section": "Support", "file": "Become-an-Affiliate.md" },
   { "id": "pro-vs-free", "title": "Pro vs Free Features", "section": "Licensing", "file": "Pro-vs-Free.md" },
   { "id": "license-agreement", "title": "License Agreement", "section": "Licensing", "file": "License-Agreement.md" },
   { "id": "earn-pro-license", "title": "Earn a Pro License", "section": "Licensing", "file": "Earn-Pro-License.md" },
