@@ -1293,8 +1293,8 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
     const int busType = item->data(EditableValue).toInt();
     DataModel::ProjectModel::instance().updateSourceBusType(m_selectedSource.sourceId, busType);
     m_selectedSource.busType = busType;
-    auto conn = std::make_shared<QMetaObject::Connection>();
-    *conn     = connect(
+    auto conn                = std::make_shared<QMetaObject::Connection>();
+    *conn                    = connect(
       &IO::ConnectionManager::instance(),
       &IO::ConnectionManager::contextsRebuilt,
       this,

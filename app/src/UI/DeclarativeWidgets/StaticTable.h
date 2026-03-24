@@ -70,7 +70,7 @@ class StaticTable : public DeclarativeWidget {
              NOTIFY headerFontChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void fontChanged();
   void headerFontChanged();
 
@@ -81,12 +81,12 @@ public:
   [[nodiscard]] const QFont& headerFont() const;
   [[nodiscard]] const QList<QStringList>& data() const;
 
-public Q_SLOTS:
+public slots:
   void setFont(const QFont& font);
   void setHeaderFont(const QFont& font);
   void setData(const QList<QStringList>& data);
 
-private Q_SLOTS:
+private slots:
   void loadTheme();
 
 private:

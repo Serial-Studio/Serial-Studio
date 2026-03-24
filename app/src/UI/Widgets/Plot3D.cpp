@@ -63,6 +63,7 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   , m_invertEyePositions(false)
   , m_dirtyData(true)
   , m_dirtyGrid(true)
+  , m_dirtyBackground(true)
   , m_dirtyCameraIndicator(true)
   , m_targetWorldScale(1.0)
   , m_centerInitialized(false)
@@ -113,9 +114,8 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
           &Widgets::Plot3D::onThemeChanged);
 
   // Keep target zoom in sync with data range
-  connect(this, &Widgets::Plot3D::rangeChanged, this, [this] {
-    m_targetWorldScale = idealWorldScale();
-  });
+  connect(
+    this, &Widgets::Plot3D::rangeChanged, this, [this] { m_targetWorldScale = idealWorldScale(); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,11 +144,11 @@ void Widgets::Plot3D::paint(QPainter* painter)
   // Configure render hints
   painter->setBackground(m_outerBackgroundColor);
 
-  // Re-draw background (if required)
+  // Re-draw grid (if required)
   if (m_dirtyGrid)
     drawGrid();
 
-  // Re-draw foreground (if required)
+  // Re-draw data (if required)
   if (m_dirtyData)
     drawData();
 
@@ -201,21 +201,19 @@ void Widgets::Plot3D::paint(QPainter* painter)
     for (const auto* p : images)
       rightScene.drawImage(0, 0, p[1]);
 
-    // Build the anaglyph manually
+    // Build the anaglyph via scanLine() for direct pixel access
     QImage finalImage(widgetSize(), QImage::Format_RGB32);
     finalImage.setDevicePixelRatio(qApp->devicePixelRatio());
-    for (int y = 0; y < left.height(); ++y) {
-      for (int x = 0; x < left.width(); ++x) {
-        // Obtain pixels from both left and right image
-        const auto lRgb = left.pixel(x, y);
-        const auto rRgb = right.pixel(x, y);
+    const int h = left.height();
+    const int w = left.width();
+    for (int y = 0; y < h; ++y) {
+      const auto* lLine = reinterpret_cast<const QRgb*>(left.constScanLine(y));
+      const auto* rLine = reinterpret_cast<const QRgb*>(right.constScanLine(y));
+      auto* oLine       = reinterpret_cast<QRgb*>(finalImage.scanLine(y));
 
-        // Preserve red from left and cyan (green + blue) from right
-        const auto outR = qRed(lRgb);
-        const auto outG = qGreen(rRgb);
-        const auto outB = qBlue(rRgb);
-        finalImage.setPixel(x, y, qRgb(outR, outG, outB));
-      }
+      // Preserve red from left eye and cyan (green + blue) from right eye
+      for (int x = 0; x < w; ++x)
+        oLine[x] = qRgb(qRed(lLine[x]), qGreen(rLine[x]), qBlue(rLine[x]));
     }
 
     // Draw the final image
@@ -341,7 +339,7 @@ double Widgets::Plot3D::idealWorldScale() const
  */
 bool Widgets::Plot3D::dirty() const
 {
-  return m_dirtyGrid || m_dirtyData || m_dirtyCameraIndicator;
+  return m_dirtyGrid || m_dirtyData || m_dirtyBackground || m_dirtyCameraIndicator;
 }
 
 /**
@@ -448,7 +446,7 @@ void Widgets::Plot3D::setWorldScale(const double z)
   auto limited = qBound(1e-9, z, 1e9);
   if (m_worldScale != limited) {
     m_worldScale = limited;
-    markDirty();
+    markCameraDirty();
 
     Q_EMIT cameraChanged();
   }
@@ -464,7 +462,7 @@ void Widgets::Plot3D::setCameraAngleX(const double angle)
 {
   if (m_cameraAngleX != angle) {
     m_cameraAngleX = angle;
-    markDirty();
+    markCameraDirty();
 
     Q_EMIT cameraChanged();
   }
@@ -480,7 +478,7 @@ void Widgets::Plot3D::setCameraAngleY(const double angle)
 {
   if (m_cameraAngleY != angle) {
     m_cameraAngleY = angle;
-    markDirty();
+    markCameraDirty();
 
     Q_EMIT cameraChanged();
   }
@@ -496,7 +494,7 @@ void Widgets::Plot3D::setCameraAngleZ(const double angle)
 {
   if (m_cameraAngleZ != angle) {
     m_cameraAngleZ = angle;
-    markDirty();
+    markCameraDirty();
 
     Q_EMIT cameraChanged();
   }
@@ -510,7 +508,7 @@ void Widgets::Plot3D::setCameraOffsetX(const double offset)
 {
   if (m_cameraOffsetX != offset) {
     m_cameraOffsetX = offset;
-    markDirty();
+    markCameraDirty();
     Q_EMIT cameraChanged();
   }
 }
@@ -523,7 +521,7 @@ void Widgets::Plot3D::setCameraOffsetY(const double offset)
 {
   if (m_cameraOffsetY != offset) {
     m_cameraOffsetY = offset;
-    markDirty();
+    markCameraDirty();
     Q_EMIT cameraChanged();
   }
 }
@@ -536,7 +534,7 @@ void Widgets::Plot3D::setCameraOffsetZ(const double offset)
 {
   if (m_cameraOffsetZ != offset) {
     m_cameraOffsetZ = offset;
-    markDirty();
+    markCameraDirty();
     Q_EMIT cameraChanged();
   }
 }
@@ -559,14 +557,12 @@ void Widgets::Plot3D::setCameraOffsetZ(const double offset)
  */
 void Widgets::Plot3D::setAutoCenter(const bool enabled)
 {
-  if (m_autoCenter != enabled)
-  {
+  if (m_autoCenter != enabled) {
     m_autoCenter = enabled;
     m_settings.setValue("Plot3D_AutoCenter", enabled);
 
     // Reset center to origin when disabling
-    if (!enabled)
-    {
+    if (!enabled) {
       m_centerPoint  = QVector3D(0, 0, 0);
       m_targetCenter = QVector3D(0, 0, 0);
       markDirty();
@@ -625,7 +621,7 @@ void Widgets::Plot3D::setEyeSeparation(const float separation)
 {
   m_eyeSeparation = separation;
   m_settings.setValue("Plot3D_EyeSeparation", separation);
-  markDirty();
+  markCameraDirty();
 
   Q_EMIT eyeSeparationChanged();
 }
@@ -644,7 +640,7 @@ void Widgets::Plot3D::setInvertEyePositions(const bool enabled)
   if (m_invertEyePositions != enabled) {
     m_invertEyePositions = enabled;
     m_settings.setValue("Plot3D_InvertEyes", enabled);
-    markDirty();
+    markCameraDirty();
 
     Q_EMIT invertEyePositionsChanged();
   }
@@ -667,7 +663,8 @@ void Widgets::Plot3D::setInterpolationEnabled(const bool enabled)
   if (m_interpolate != enabled) {
     m_interpolate = enabled;
     m_settings.setValue("Plot3D_Interpolate", enabled);
-    markDirty();
+    m_dirtyData = true;
+    update();
 
     Q_EMIT interpolationEnabledChanged();
   }
@@ -753,6 +750,20 @@ void Widgets::Plot3D::markDirty()
 }
 
 /**
+ * @brief Marks projection-dependent layers dirty without touching the background.
+ *
+ * Use this for camera or zoom changes where the background fill does not need
+ * to be regenerated.
+ */
+void Widgets::Plot3D::markCameraDirty()
+{
+  m_dirtyGrid            = true;
+  m_dirtyData            = true;
+  m_dirtyCameraIndicator = true;
+  update();
+}
+
+/**
  * @brief Updates the internal size to match the current widget size in device
  * pixels.
  *
@@ -802,8 +813,7 @@ void Widgets::Plot3D::drawData()
   }
 
   // Snap center & zoom on first data; smooth-track only when auto-center is on
-  if (!m_centerInitialized)
-  {
+  if (!m_centerInitialized) {
     m_centerPoint       = m_targetCenter;
     m_worldScale        = m_targetWorldScale;
     m_centerInitialized = true;
@@ -1499,8 +1509,8 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent* event)
   // Accept event
   event->accept();
 
-  // Re-render everything
-  markDirty();
+  // Re-render projection-dependent layers
+  markCameraDirty();
   Q_EMIT cameraChanged();
 }
 

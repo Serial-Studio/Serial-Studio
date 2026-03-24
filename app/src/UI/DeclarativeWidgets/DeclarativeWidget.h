@@ -59,7 +59,8 @@ class DeclarativeWidget : public QuickPaintedItemCompat {
              NOTIFY geometryChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
+  void paletteChanged();
   void widgetChanged();
   void geometryChanged();
 
@@ -75,7 +76,7 @@ public:
   void redraw(const QRect& rect = QRect());
   void paint(QPainter* painter) override;
 
-public Q_SLOTS:
+public slots:
   void resizeWidget();
   void requestUpdate();
   void setWidget(QWidget* widget);

@@ -61,12 +61,11 @@
  * QQuickPaintedItem. The image-bridge renderer takes care of routing
  * the QPainter output through QCanvasPainter for GPU compositing.
  */
-class QuickPaintedItemCompat : public QCanvasPainterItem
-{
+class QuickPaintedItemCompat : public QCanvasPainterItem {
   Q_OBJECT
 
 public:
-  explicit QuickPaintedItemCompat(QQuickItem *parent = nullptr);
+  explicit QuickPaintedItemCompat(QQuickItem* parent = nullptr);
 
   /**
    * @brief Subclasses implement this to paint with QPainter.
@@ -74,46 +73,52 @@ public:
    * Called from the render thread via the image-bridge renderer.
    * The painter targets an offscreen QImage whose size matches the item.
    */
-  virtual void paint(QPainter *painter) = 0;
+  virtual void paint(QPainter* painter) = 0;
 
   // Stubs for QQuickPaintedItem API used by existing constructors
   void setMipmap(bool) {}
+
   void setOpaquePainting(bool) {}
+
   void setRenderTarget(int) {}
 
-  // QQuickPaintedItem::update(QRect) does not exist on QCanvasPainterItem;
-  // bring the base no-arg update() into scope and add a QRect overload.
-  using QQuickItem::update;
-  void update(const QRect &) { QQuickItem::update(); }
+  // Schedule a repaint and mark the item as needing a CPU re-render
+  void update()
+  {
+    m_needsRepaint = true;
+    QCanvasPainterItem::update();
+  }
+
+  void update(const QRect&) { update(); }
 
 protected:
-  [[nodiscard]] QCanvasPainterItemRenderer *createItemRenderer() const override;
+  [[nodiscard]] QCanvasPainterItemRenderer* createItemRenderer() const override;
 
 private:
   friend class QuickPaintedItemCompatRenderer;
+  bool m_needsRepaint = true;
 };
 
 /**
  * @class QuickPaintedItemCompatRenderer
  * @brief Renders QPainter output through QCanvasPainter via an offscreen image.
  */
-class QuickPaintedItemCompatRenderer : public QCanvasPainterItemRenderer
-{
+class QuickPaintedItemCompatRenderer : public QCanvasPainterItemRenderer {
 public:
   QuickPaintedItemCompatRenderer();
 
-  void synchronize(QCanvasPainterItem *item) override;
-  void initializeResources(QCanvasPainter *painter) override;
-  void paint(QCanvasPainter *painter) override;
+  void synchronize(QCanvasPainterItem* item) override;
+  void initializeResources(QCanvasPainter* painter) override;
+  void paint(QCanvasPainter* painter) override;
 
 private:
-  QuickPaintedItemCompat *m_item;
+  bool m_bufferDirty;
+  QuickPaintedItemCompat* m_item;
   QImage m_buffer;
   QCanvasImage m_canvasImage;
-  QSize m_lastSize;
 };
 
-#else // Qt < 6.11
+#else  // Qt < 6.11
 
 #  include <QQuickPaintedItem>
 
@@ -122,4 +127,4 @@ private:
  */
 using QuickPaintedItemCompat = QQuickPaintedItem;
 
-#endif // SS_HAS_CANVAS_PAINTER
+#endif  // SS_HAS_CANVAS_PAINTER

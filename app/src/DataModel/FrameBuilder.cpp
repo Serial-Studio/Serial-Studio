@@ -563,8 +563,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
       dataset.fftSamples      = fftSamples;
       dataset.fftSamplingRate = sampleRate;
 
-      if (m_quickPlotHasHeader && index > 0
-          && index - 1 < m_quickPlotChannelNames.size())
+      if (m_quickPlotHasHeader && index > 0 && index - 1 < m_quickPlotChannelNames.size())
         dataset.title = m_quickPlotChannelNames[index - 1];
       else
         dataset.title = tr("Channel %1").arg(index);
@@ -601,8 +600,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
     dataset.plt     = false;
     dataset.value   = channel;
 
-    if (m_quickPlotHasHeader && idx > 0
-        && idx - 1 < m_quickPlotChannelNames.size())
+    if (m_quickPlotHasHeader && idx > 0 && idx - 1 < m_quickPlotChannelNames.size())
       dataset.title = m_quickPlotChannelNames[idx - 1];
     else
       dataset.title = tr("Channel %1").arg(idx);

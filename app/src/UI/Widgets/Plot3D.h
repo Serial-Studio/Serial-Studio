@@ -26,9 +26,8 @@
 #include <QSettings>
 #include <QVector3D>
 
-#include "UI/QuickPaintedItemCompat.h"
-
 #include "DSP.h"
+#include "UI/QuickPaintedItemCompat.h"
 
 namespace Widgets {
 /**
@@ -159,6 +158,7 @@ private slots:
 
 private:
   void markDirty();
+  void markCameraDirty();
   void updateSize();
 
   void drawData();
