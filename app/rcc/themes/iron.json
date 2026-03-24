@@ -28,9 +28,9 @@
 
     "pane_background":"#F7F7F7",
     "pane_section_label":"#1A1A1A",
-    "pane_caption_bg_top":"#D4D4D4",
+    "pane_caption_bg_top":"#D1D1D1",
     "pane_caption_border":"#B0B0B0",
-    "pane_caption_bg_bottom":"#D9D9D9",
+    "pane_caption_bg_bottom":"#DADADA",
     "pane_caption_foreground":"#1A1A1A",
 
     "setup_border":"#B0B0B0",
@@ -87,16 +87,16 @@
 
     "window_border":"#B0B0B0",
     "window_toolbar_background":"#E0E0E0",
-    "window_caption_active_top":"#E6E6E6",
+    "window_caption_active_top":"#EAEAEA",
     "window_caption_active_text":"#1A1A1A",
     "window_caption_inactive_top":"#E0E0E0",
     "window_caption_inactive_text":"#6E6E6E",
     "window_caption_active_bottom":"#E0E0E0",
     "window_caption_inactive_bottom":"#E0E0E0",
 
-    "taskbar_top":"#E8E8E8",
+    "taskbar_top":"#EAEAEA",
     "taskbar_text":"#1A1A1A",
-    "taskbar_bottom":"#E2E2E2",
+    "taskbar_bottom":"#DEDEDE",
     "taskbar_border":"#B0B0B0",
     "taskbar_separator":"#B0B0B0",
     "taskbar_highlight":"#C74343",
@@ -123,8 +123,8 @@
     "table_fg_header":"#1A1A1A",
     "table_separator":"#B0B0B0",
     "table_border_header":"#B0B0B0",
-    "table_bg_header_top":"#E8E8E8",
-    "table_bg_header_bottom":"#E2E2E2",
+    "table_bg_header_top":"#EAEAEA",
+    "table_bg_header_bottom":"#DEDEDE",
     "table_separator_header":"#B0B0B0",
 
     "polar_indicator":"#C62828",
