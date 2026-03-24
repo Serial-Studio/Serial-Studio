@@ -1217,9 +1217,11 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
     gridLines.append({y1, y2});
   }
 
-  // Construct axis lines through snapped center
-  QPair<QVector3D, QVector3D> xAxis = {QVector3D(cx - l, cy, 0), QVector3D(cx + l, cy, 0)};
-  QPair<QVector3D, QVector3D> yAxis = {QVector3D(cx, cy - l, 0), QVector3D(cx, cy + l, 0)};
+  // Construct axis lines through true center (not snapped)
+  const float ax = m_centerPoint.x();
+  const float ay = m_centerPoint.y();
+  QPair<QVector3D, QVector3D> xAxis = {QVector3D(ax - l, ay, 0), QVector3D(ax + l, ay, 0)};
+  QPair<QVector3D, QVector3D> yAxis = {QVector3D(ax, ay - l, 0), QVector3D(ax, ay + l, 0)};
 
   // Render horizontal & vertical lines
   auto color = m_gridMinorColor;

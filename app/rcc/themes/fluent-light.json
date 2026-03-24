@@ -28,7 +28,7 @@
 
     "pane_background": "#F9F9F9",
     "pane_section_label": "#1F1F1F",
-    "pane_caption_bg_top": "#ECECEC",
+    "pane_caption_bg_top": "#EEEEEE",
     "pane_caption_border": "#D1D1D1",
     "pane_caption_bg_bottom": "#F0F0F0",
     "pane_caption_foreground": "#1F1F1F",
@@ -91,32 +91,32 @@
 
     "window_border":"#B8B8B8",
     "window_toolbar_background":"#F3F3F3",
-    "window_caption_active_top":"#F9F9F9",
+    "window_caption_active_top":"#F6F6F6",
     "window_caption_active_text":"#1F1F1F",
     "window_caption_inactive_top":"#F3F3F3",
     "window_caption_inactive_text":"#8A8A8A",
     "window_caption_active_bottom":"#F3F3F3",
     "window_caption_inactive_bottom":"#F3F3F3",
 
-    "taskbar_top":"#F9F9F9",
+    "taskbar_top":"#F4F4F4",
     "taskbar_text":"#1F1F1F",
-    "taskbar_bottom":"#E6E6E6",
+    "taskbar_bottom":"#ECECEC",
     "taskbar_border":"#B8B8B8",
     "taskbar_separator":"#B8B8B8",
     "taskbar_highlight":"#0078D4",
     "taskbar_indicator_active":"#1F1F1F",
     "taskbar_indicator_inactive":"#8A8A8A",
-    "taskbar_checked_button_top":"#E6E6E6",
+    "taskbar_checked_button_top":"#EAEAEA",
     "taskbar_checked_button_border":"#8A8A8A",
-    "taskbar_checked_button_bottom":"#F0F0F0",
+    "taskbar_checked_button_bottom":"#EEEEEE",
 
     "start_menu_text":"#1F1F1F",
     "start_menu_border":"#B8B8B8",
     "start_menu_highlight":"#0078D4",
     "start_menu_background":"#FFFFFF",
-    "start_menu_gradient_top":"#F3F3F3",
+    "start_menu_gradient_top":"#EEEEEE",
     "start_menu_version_text":"#4F4F4F",
-    "start_menu_gradient_bottom":"#D1D1D1",
+    "start_menu_gradient_bottom":"#E0E0E0",
     "start_menu_highlighted_text":"#FFFFFF",
 
     "snap_indicator_border":"#0078D4",
@@ -127,8 +127,8 @@
     "table_fg_header":"#1F1F1F",
     "table_separator":"#D1D1D1",
     "table_border_header":"#D1D1D1",
-    "table_bg_header_top":"#F9F9F9",
-    "table_bg_header_bottom":"#E6E6E6",
+    "table_bg_header_top":"#F4F4F4",
+    "table_bg_header_bottom":"#ECECEC",
     "table_separator_header":"#D1D1D1",
 
     "polar_indicator":"#C42B1C",
@@ -171,16 +171,16 @@
     ],
 
     "device_colors":[
-      { "top": "#ddeaf8", "bottom": "#ccdcf2" },
-      { "top": "#d5f0eb", "bottom": "#c0e4dc" },
-      { "top": "#d5eadc", "bottom": "#c0dcca" },
-      { "top": "#ead5f8", "bottom": "#dcc0f2" },
-      { "top": "#fef8d5", "bottom": "#f8ecb0" },
-      { "top": "#d5eef8", "bottom": "#c0e4f2" },
-      { "top": "#ddeeda", "bottom": "#c8e0c6" },
-      { "top": "#e0d5f8", "bottom": "#d0c0f2" },
-      { "top": "#feecd5", "bottom": "#f8dcc0" },
-      { "top": "#d5e2f8", "bottom": "#c0d4f2" }
+      { "top": "#dae6f4", "bottom": "#d0def0" },
+      { "top": "#d2ece8", "bottom": "#c8e6de" },
+      { "top": "#d2e6d8", "bottom": "#c8e0ce" },
+      { "top": "#e6d2f4", "bottom": "#dec8f0" },
+      { "top": "#faf4d5", "bottom": "#f5eec0" },
+      { "top": "#d2eaf4", "bottom": "#c8e4f0" },
+      { "top": "#daeada", "bottom": "#d0e4ce" },
+      { "top": "#dcd2f4", "bottom": "#d4c8f0" },
+      { "top": "#fae8d5", "bottom": "#f4e0c8" },
+      { "top": "#d2def4", "bottom": "#c8d6f0" }
     ]
   }
 }

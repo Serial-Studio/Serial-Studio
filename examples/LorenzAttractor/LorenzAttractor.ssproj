@@ -193,7 +193,7 @@
     "title": "Lorenz Attractor",
     "widgetSettings": {
         "6:1:-1": {
-            "autoCenter": true,
+            "autoCenter": false,
             "interpolationEnabled": true
         },
         "layout:-1": {

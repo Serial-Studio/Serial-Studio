@@ -128,7 +128,8 @@ Misc::ThemeManager::ThemeManager() : m_theme(0)
       QStringLiteral("fluent-light"),
       QStringLiteral("fluent-dark"),
       QStringLiteral("aether-light"),
-      QStringLiteral("aether-dark")
+      QStringLiteral("aether-dark"),
+      QStringLiteral("classic")
   };
   // clang-format on
 

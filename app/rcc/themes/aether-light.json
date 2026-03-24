@@ -88,24 +88,24 @@
 
     "window_border":"#d0d7de",
     "window_toolbar_background":"#f6f8fa",
-    "window_caption_active_top":"#ffffff",
+    "window_caption_active_top":"#fafbfc",
     "window_caption_active_text":"#57606a",
     "window_caption_inactive_top":"#f6f8fa",
     "window_caption_inactive_text":"#57606a",
     "window_caption_active_bottom":"#f6f8fa",
     "window_caption_inactive_bottom":"#f6f8fa",
 
-    "taskbar_top":"#f6f8fa",
+    "taskbar_top":"#f0f2f4",
     "taskbar_text":"#24292f",
-    "taskbar_bottom":"#d0d7de",
+    "taskbar_bottom":"#e0e4e8",
     "taskbar_border":"#afb8c1",
     "taskbar_separator":"#afb8c1",
     "taskbar_highlight":"#afb8c1",
     "taskbar_indicator_active":"#24292f",
     "taskbar_indicator_inactive":"#afb8c1",
-    "taskbar_checked_button_top":"#ffffff",
+    "taskbar_checked_button_top":"#f6f8fa",
     "taskbar_checked_button_border":"#afb8c1",
-    "taskbar_checked_button_bottom":"#ebeff2",
+    "taskbar_checked_button_bottom":"#eef1f4",
 
     "start_menu_text":"#24292f",
     "start_menu_border":"#d0d7de",
@@ -168,16 +168,16 @@
     ],
 
     "device_colors":[
-      { "top": "#daeafc", "bottom": "#c6dcfa" },
-      { "top": "#d5f0dc", "bottom": "#bce4c8" },
-      { "top": "#d5f5e0", "bottom": "#bceacc" },
-      { "top": "#ecdafc", "bottom": "#e0c8fa" },
-      { "top": "#fef8d5", "bottom": "#faf0ba" },
-      { "top": "#daf4fc", "bottom": "#c6ecfa" },
-      { "top": "#ddf0d5", "bottom": "#c8e4bc" },
-      { "top": "#e0dafc", "bottom": "#d0c8fa" },
-      { "top": "#fde8d5", "bottom": "#fad4ba" },
-      { "top": "#d5e4fc", "bottom": "#bcd4fa" }
+      { "top": "#d8e6f8", "bottom": "#cee0f4" },
+      { "top": "#d2ecda", "bottom": "#c8e6d0" },
+      { "top": "#d2f0dc", "bottom": "#c8ead2" },
+      { "top": "#e8d8f8", "bottom": "#e0d0f4" },
+      { "top": "#faf4d5", "bottom": "#f6eec4" },
+      { "top": "#d8f0f8", "bottom": "#ceeaf4" },
+      { "top": "#daecda", "bottom": "#d0e6ce" },
+      { "top": "#dcd8f8", "bottom": "#d4d0f4" },
+      { "top": "#fae4d5", "bottom": "#f6dcc8" },
+      { "top": "#d2e0f8", "bottom": "#c8daf4" }
     ]
   }
 }
