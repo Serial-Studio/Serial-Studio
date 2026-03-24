@@ -100,7 +100,7 @@
     "taskbar_bottom":"#1A2028",
     "taskbar_border":"#444c56",
     "taskbar_separator":"#444c56",
-    "taskbar_highlight":"#444c56",
+    "taskbar_highlight":"#1f6feb",
     "taskbar_indicator_active":"#ffffff",
     "taskbar_indicator_inactive":"#484f58",
     "taskbar_checked_button_top":"#101620",
