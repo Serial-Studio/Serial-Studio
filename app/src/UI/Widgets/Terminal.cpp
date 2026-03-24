@@ -1202,7 +1202,7 @@ void Widgets::Terminal::setAnsiColors(const bool enabled)
   m_ansiColors = enabled;
 
   if (enabled) {
-    m_currentColor = m_palette.color(QPalette::Text);
+    m_currentColor = QColor();
     m_colorData.reserve(MAX_LINES);
   }
 
@@ -1541,7 +1541,7 @@ void Widgets::Terminal::initBuffer()
   // Pre-allocate color memory only when ANSI mode is active
   if (ansiColors()) {
     m_colorData.reserve(MAX_LINES);
-    m_currentColor = m_palette.color(QPalette::Text);
+    m_currentColor = QColor();
   }
 }
 
@@ -2008,15 +2008,19 @@ void Widgets::Terminal::applyAnsiColor(const QList<int>& codes)
   for (int i = 0; i < codes.size(); ++i) {
     const int code = codes[i];
 
-    // Reset to default colors
+    // Reset to default colors (invalid QColor = use theme default at render)
     if (code == 0) {
-      m_currentColor   = m_palette.color(QPalette::Text);
+      m_currentColor   = QColor();
       m_currentBgColor = QColor();
     }
 
     // Bold/bright - make current color lighter
-    else if (code == 1)
+    else if (code == 1) {
+      if (!m_currentColor.isValid())
+        m_currentColor = m_palette.color(QPalette::Text);
+
       m_currentColor = m_currentColor.lighter(130);
+    }
 
     // Standard foreground colors (30-37)
     else if (code >= 30 && code <= 37)
@@ -2274,14 +2278,13 @@ void Widgets::Terminal::replaceData(int x, int y, const QChar& byte)
     QList<CharColor>& colorLine = m_colorData[y];
 
     if (x > line.size()) {
-      const int padCount        = x - line.size();
-      const QColor defaultColor = m_palette.color(QPalette::Text);
+      const int padCount = x - line.size();
       for (int i = 0; i < padCount; ++i)
-        colorLine.append(CharColor(defaultColor));
+        colorLine.append(CharColor());
     }
 
     while (colorLine.size() < line.size())
-      colorLine.append(CharColor(m_palette.color(QPalette::Text)));
+      colorLine.append(CharColor());
 
     const CharColor charColor(m_currentColor, m_currentBgColor);
     if (x >= 0 && x < colorLine.size())
