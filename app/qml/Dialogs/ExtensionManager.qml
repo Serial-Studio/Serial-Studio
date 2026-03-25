@@ -439,25 +439,101 @@ SmartDialog {
           border.color: Cpp_ThemeManager.colors["groupbox_border"]
         }
 
-        ScrollView {
+        Flickable {
           anchors.fill: parent
           anchors.margins: 8
+          contentHeight: gridColumn.implicitHeight
+          clip: true
+          boundsBehavior: Flickable.StopAtBounds
+          flickableDirection: Flickable.VerticalFlick
 
-          GridView {
-            id: gridView
+          Column {
+            id: gridColumn
 
-            cellWidth: 210
-            cellHeight: 194
-            clip: true
-            model: Cpp_ExtensionManager.extensions
-            anchors.topMargin: 0
-            anchors.leftMargin: 2
+            width: parent.width
+            spacing: 4
 
-            delegate: Rectangle {
-              id: card
+            Repeater {
+              id: sectionRepeater
 
-              width: 200
-              height: 186
+              model: {
+                // Build ordered list of unique types from extensions
+                var types = []
+                var seen = {}
+                var exts = Cpp_ExtensionManager.extensions
+                for (var i = 0; i < exts.length; ++i) {
+                  var t = exts[i].type || ""
+                  if (t !== "" && !seen[t]) {
+                    seen[t] = true
+                    types.push(t)
+                  }
+                }
+                return types
+              }
+
+              delegate: Column {
+                width: gridColumn.width
+                spacing: 4
+
+                required property string modelData
+                required property int index
+
+                //
+                // Section header
+                //
+                Item {
+                  width: parent.width
+                  height: 28
+                  visible: Cpp_ExtensionManager.filterType === ""
+                           || Cpp_ExtensionManager.filterType === "All"
+
+                  RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 4
+                    anchors.rightMargin: 4
+                    spacing: 8
+
+                    Label {
+                      text: Cpp_ExtensionManager.friendlyTypeName(modelData)
+                      color: Cpp_ThemeManager.colors["pane_section_label"]
+                      font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
+                      Component.onCompleted: font.capitalization = Font.AllUppercase
+                    }
+
+                    Rectangle {
+                      Layout.fillWidth: true
+                      implicitHeight: 1
+                      color: Cpp_ThemeManager.colors["groupbox_border"]
+                    }
+                  }
+                }
+
+                //
+                // Cards grid for this type
+                //
+                Flow {
+                  width: parent.width
+                  spacing: 10
+
+                  Repeater {
+                    model: {
+                      var items = []
+                      var exts = Cpp_ExtensionManager.extensions
+                      for (var i = 0; i < exts.length; ++i) {
+                        if ((exts[i].type || "") === modelData) {
+                          var item = exts[i]
+                          item._flatIndex = i
+                          items.push(item)
+                        }
+                      }
+                      return items
+                    }
+
+                    delegate: Rectangle {
+                      id: card
+
+                      width: 200
+                      height: 186
               radius: 6
               color: cardMouse.containsMouse ? Cpp_ThemeManager.colors["highlight"]
                                              : Cpp_ThemeManager.colors["base"]
@@ -606,6 +682,65 @@ SmartDialog {
                       }
                     }
                   }
+
+                  //
+                  // Hover description overlay (slides up)
+                  //
+                  Item {
+                    anchors.fill: parent
+                    anchors.bottom: parent.bottom
+                    height: parent.height
+                    clip: true
+
+                    Rectangle {
+                      width: parent.width
+                      height: parent.height
+                      radius: 4
+                      opacity: 0.92
+                      y: cardMouse.containsMouse ? 0 : parent.height
+                      color: Cpp_ThemeManager.colors["groupbox_background"]
+                      border.width: 1
+                      border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+                      Behavior on y {
+                        NumberAnimation {
+                          duration: 250
+                          easing.type: Easing.OutCubic
+                        }
+                      }
+
+                      ColumnLayout {
+                        spacing: 4
+                        anchors.fill: parent
+                        anchors.margins: 8
+
+                        Label {
+                          text: modelData.title || ""
+                          Layout.fillWidth: true
+                          elide: Text.ElideRight
+                          color: Cpp_ThemeManager.colors["text"]
+                          font: Cpp_Misc_CommonFonts.boldUiFont
+                        }
+
+                        Rectangle {
+                          implicitHeight: 1
+                          Layout.fillWidth: true
+                          color: Cpp_ThemeManager.colors["groupbox_border"]
+                        }
+
+                        Label {
+                          text: modelData.description || ""
+                          Layout.fillWidth: true
+                          Layout.fillHeight: true
+                          wrapMode: Text.WordWrap
+                          elide: Text.ElideRight
+                          maximumLineCount: 5
+                          color: Cpp_ThemeManager.colors["text"]
+                          font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+                        }
+                      }
+                    }
+                  }
                 }
 
                 //
@@ -652,7 +787,14 @@ SmartDialog {
                 hoverEnabled: true
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-                onClicked: Cpp_ExtensionManager.setSelectedIndex(index)
+                onClicked: Cpp_ExtensionManager.setSelectedIndex(modelData._flatIndex)
+              }
+            }
+          }
+        }
+
+        Item { implicitHeight: 6 }
+
               }
             }
           }

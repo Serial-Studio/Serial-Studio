@@ -944,6 +944,21 @@ void Misc::ExtensionManager::applyFilter()
     m_filteredExtensions.append(map);
   }
 
+  // Sort by type: plugins first, then themes, parsers, templates
+  static const QMap<QString, int> typeOrder = {
+    {QStringLiteral("plugin"), 0},
+    {QStringLiteral("theme"), 1},
+    {QStringLiteral("frame-parser"), 2},
+    {QStringLiteral("project-template"), 3},
+  };
+
+  std::stable_sort(m_filteredExtensions.begin(), m_filteredExtensions.end(),
+                   [](const QVariant& a, const QVariant& b) {
+                     const auto ta = a.toMap().value("type").toString();
+                     const auto tb = b.toMap().value("type").toString();
+                     return typeOrder.value(ta, 99) < typeOrder.value(tb, 99);
+                   });
+
   // Try to preserve current selection by matching extension ID
   const auto previousAddon = selectedExtension();
   const auto previousId    = previousAddon.value("id").toString();
