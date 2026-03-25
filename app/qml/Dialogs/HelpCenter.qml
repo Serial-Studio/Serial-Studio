@@ -106,7 +106,7 @@ SmartDialog {
   //
   property bool fetchingData: Cpp_HelpCenter.count === 0 && Cpp_HelpCenter.searchFilter === ""
 
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     spacing: 8
 
     //

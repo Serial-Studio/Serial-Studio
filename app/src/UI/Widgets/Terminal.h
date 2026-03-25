@@ -72,9 +72,9 @@ class Terminal : public QuickPaintedItemCompat {
              READ autoscroll
              WRITE setAutoscroll
              NOTIFY autoscrollChanged)
-  Q_PROPERTY(QPalette palette
-             READ palette
-             WRITE setPalette
+  Q_PROPERTY(QPalette colorPalette
+             READ colorPalette
+             WRITE setColorPalette
              NOTIFY colorPaletteChanged)
   Q_PROPERTY(bool copyAvailable
              READ copyAvailable
@@ -137,7 +137,7 @@ public:
   [[nodiscard]] int charHeight() const;
 
   [[nodiscard]] const QFont& font() const;
-  [[nodiscard]] const QPalette& palette() const;
+  [[nodiscard]] const QPalette& colorPalette() const;
 
   [[nodiscard]] bool autoscroll() const;
   [[nodiscard]] bool ansiColors() const;
@@ -163,7 +163,7 @@ public slots:
   void setFont(const QFont& font);
   void setAutoscroll(const bool enabled);
   void setScrollOffsetY(const int offset);
-  void setPalette(const QPalette& palette);
+  void setColorPalette(const QPalette& palette);
   void setAnsiColors(const bool enabled);
   void setVt100Emulation(const bool enabled);
 

@@ -23,6 +23,7 @@
 
 #include <QJsonObject>
 #include <QObject>
+#include <QTimer>
 #include <QVariantList>
 
 #include "DataModel/Frame.h"
@@ -142,7 +143,7 @@ public:
   Q_INVOKABLE void saveWidgetSetting(const QString& widgetId,
                                      const QString& key,
                                      const QVariant& value);
-  Q_INVOKABLE QJsonObject pluginState(const QString& pluginId) const;
+  Q_INVOKABLE [[nodiscard]] QJsonObject pluginState(const QString& pluginId) const;
   Q_INVOKABLE void savePluginState(const QString& pluginId, const QJsonObject& state);
 
 public slots:
@@ -239,5 +240,6 @@ private:
   DataModel::Dataset m_selectedDataset;
 
   QJsonObject m_widgetSettings;
+  QTimer m_pluginSaveTimer;
 };
 }  // namespace DataModel

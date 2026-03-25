@@ -71,6 +71,19 @@ DataModel::ProjectModel::ProjectModel()
   , m_filePath("")
   , m_suppressMessageBoxes(false)
 {
+  // Debounce timer for plugin state saves (plugins may save frequently)
+  m_pluginSaveTimer.setSingleShot(true);
+  m_pluginSaveTimer.setInterval(1000);
+  connect(&m_pluginSaveTimer, &QTimer::timeout, this, [this]() {
+    QFile file(m_filePath);
+    if (!file.open(QFile::WriteOnly))
+      return;
+
+    const auto json = serializeToJson();
+    file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
+    file.close();
+  });
+
   newJsonFile();
 }
 
@@ -315,15 +328,9 @@ void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJs
   if (m_widgetSettings.value(key).toObject() == state)
     return;
 
+  // Update in-memory state immediately, debounce disk write
   m_widgetSettings.insert(key, state);
-
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly))
-    return;
-
-  const auto json = serializeToJson();
-  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
-  file.close();
+  m_pluginSaveTimer.start();
 }
 
 /**

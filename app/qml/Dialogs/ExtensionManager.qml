@@ -75,7 +75,7 @@ SmartDialog {
     }
   }
 
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     spacing: 8
     anchors.centerIn: parent
 

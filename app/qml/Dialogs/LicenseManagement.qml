@@ -40,7 +40,7 @@ SmartDialog {
   //
   // Window controls
   //
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     id: column
     spacing: 12
     anchors.centerIn: parent

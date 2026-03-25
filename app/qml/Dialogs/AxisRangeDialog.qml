@@ -110,7 +110,7 @@ Widgets.SmartDialog {
     updateFields()
   }
 
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     spacing: 4
 
     Label {

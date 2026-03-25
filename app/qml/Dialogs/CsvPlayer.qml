@@ -58,7 +58,7 @@ SmartDialog {
   //
   // Window controls
   //
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     id: column
 
     spacing: 4

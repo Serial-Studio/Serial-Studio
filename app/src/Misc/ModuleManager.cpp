@@ -418,9 +418,9 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Restore last project after all modules are wired so all signals fire correctly
   appState->restoreLastProject();
 
-  // Refresh extensions and restore previously-running plugins
+  // Refresh extensions and restore previously-running plugins after catalog loads
   miscExtensionManager->refreshRepositories();
-  QTimer::singleShot(2000, miscExtensionManager, &Misc::ExtensionManager::restoreRunningPlugins);
+  miscExtensionManager->restoreRunningPlugins();
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);

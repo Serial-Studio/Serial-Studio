@@ -180,6 +180,7 @@ private:
   [[nodiscard]] QString themesPath() const;
   [[nodiscard]] QString installedManifestPath() const;
   [[nodiscard]] QString currentPlatformKey() const;
+  [[nodiscard]] bool isPathSafe(const QString& filePath, const QString& baseDir) const;
   [[nodiscard]] QJsonObject resolvePlatform(const QJsonObject& meta) const;
   [[nodiscard]] QUrl resolveFileUrl(const QString& repoBaseUrl, const QString& relativePath) const;
 
@@ -205,6 +206,7 @@ private:
   QJsonObject m_installedExtensions;
   QString m_currentInstallId;
   QString m_currentInstallRepoBase;
+  QVariantMap m_currentInstallMeta;
   QList<QPair<QString, QUrl>> m_downloadQueue;
   QStringList m_autoUpdateQueue;
 

@@ -56,7 +56,7 @@ Widgets.SmartDialog {
       maxGField.text = accelModel.maxG.toFixed(1)
   }
 
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     spacing: 4
 
     Label {

@@ -531,6 +531,13 @@ void Misc::ExtensionManager::installExtension()
   if (id.isEmpty() || files.isEmpty())
     return;
 
+  // Reject IDs or types containing path traversal components
+  if (id.contains("..") || id.contains('/') || id.contains('\\'))
+    return;
+
+  if (type.contains("..") || type.contains('/') || type.contains('\\'))
+    return;
+
   // Determine install path based on extension type
   const auto installDir = extensionsPath() + "/" + type + "/" + id;
   QDir().mkpath(installDir);
@@ -539,8 +546,13 @@ void Misc::ExtensionManager::installExtension()
   if (isLocal) {
     for (const auto& f : files) {
       const auto localName = f.toString();
-      const auto src       = base + localName;
       const auto dst       = installDir + "/" + localName;
+
+      // Validate destination stays within install directory
+      if (!isPathSafe(dst, installDir))
+        continue;
+
+      const auto src = base + localName;
       QDir().mkpath(QFileInfo(dst).absolutePath());
       QFile::copy(src, dst);
     }
@@ -566,9 +578,10 @@ void Misc::ExtensionManager::installExtension()
     m_downloadQueue.append({localName, url});
   }
 
-  // Start downloading
+  // Save metadata snapshot so async callbacks don't depend on selection
   m_currentInstallId       = id;
   m_currentInstallRepoBase = base;
+  m_currentInstallMeta     = addon;
   m_loading                = true;
   m_downloadProgress       = 0;
   m_totalDownloads         = m_downloadQueue.count();
@@ -794,15 +807,14 @@ void Misc::ExtensionManager::onFileDownloadReply()
     return;
   }
 
-  // All downloads complete — register the installed addon
-  const auto addon = selectedExtension();
+  // All downloads complete — register using saved metadata snapshot
   QJsonObject info;
-  info.insert("version", addon.value("version").toString());
-  info.insert("type", addon.value("type").toString());
+  info.insert("version", m_currentInstallMeta.value("version").toString());
+  info.insert("type", m_currentInstallMeta.value("type").toString());
   info.insert("repoBase", m_currentInstallRepoBase);
 
   QJsonArray fileList;
-  for (const auto& f : addon.value("files").toList())
+  for (const auto& f : m_currentInstallMeta.value("files").toList())
     fileList.append(f.toString());
 
   info.insert("files", fileList);
@@ -1242,6 +1254,13 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     return;
   }
 
+  // Validate entry point stays within plugin directory
+  if (!isPathSafe(entryPath, pluginDir)) {
+    m_pluginOutput[id] += QStringLiteral("[Error] Invalid entry point path\n");
+    Q_EMIT pluginOutputChanged(id);
+    return;
+  }
+
   // Build environment with common tool paths
   auto env  = QProcessEnvironment::systemEnvironment();
   auto path = env.value("PATH");
@@ -1426,8 +1445,24 @@ void Misc::ExtensionManager::stopAllPlugins()
   const auto ids = m_plugins.keys();
   m_settings.setValue("RunningPlugins", QStringList(ids));
 
-  for (const auto& id : ids)
-    stopPlugin(id);
+  // Inline stop logic to avoid O(n*m) applyFilter() calls from stopPlugin()
+  for (const auto& id : ids) {
+    auto* process = m_plugins.value(id);
+    if (!process)
+      continue;
+
+    process->disconnect(this);
+    process->terminate();
+    if (!process->waitForFinished(3000))
+      process->kill();
+
+    delete process;
+  }
+
+  m_plugins.clear();
+  m_runningPlugins.clear();
+  Q_EMIT runningPluginsChanged();
+  applyFilter();
 }
 
 /**
@@ -1438,6 +1473,18 @@ void Misc::ExtensionManager::stopAllPlugins()
  */
 void Misc::ExtensionManager::restoreRunningPlugins()
 {
+  // Wait for catalog to finish loading before restoring
+  if (m_loading) {
+    connect(
+      this, &ExtensionManager::loadingChanged, this,
+      [this]() {
+        if (!m_loading)
+          restoreRunningPlugins();
+      },
+      Qt::SingleShotConnection);
+    return;
+  }
+
   const auto ids = m_settings.value("RunningPlugins").toStringList();
   for (const auto& id : ids)
     if (isInstalled(id) && !isPluginRunning(id))
@@ -1560,11 +1607,14 @@ void Misc::ExtensionManager::saveInstalledManifest()
 void Misc::ExtensionManager::writeExtensionFile(QNetworkReply* reply)
 {
   const auto localName  = reply->property("localName").toString();
-  const auto addon      = selectedExtension();
-  const auto type       = addon.value("type").toString();
+  const auto type       = m_currentInstallMeta.value("type").toString();
   const auto installDir = extensionsPath() + "/" + type + "/" + m_currentInstallId;
+  const auto filePath   = installDir + "/" + localName;
 
-  const auto filePath = installDir + "/" + localName;
+  // Validate destination stays within install directory
+  if (!isPathSafe(filePath, installDir))
+    return;
+
   QDir().mkpath(QFileInfo(filePath).absolutePath());
 
   QFile file(filePath);
@@ -1572,6 +1622,22 @@ void Misc::ExtensionManager::writeExtensionFile(QNetworkReply* reply)
     file.write(reply->readAll());
     file.close();
   }
+}
+
+/**
+ * @brief Validates that a resolved file path stays within the expected base directory.
+ *
+ * Prevents path traversal attacks (e.g. "../../etc/passwd") from manifest data.
+ *
+ * @param filePath The resolved absolute path to validate.
+ * @param baseDir  The directory the path must stay within.
+ * @return True if the path is safe, false if it escapes baseDir.
+ */
+bool Misc::ExtensionManager::isPathSafe(const QString& filePath, const QString& baseDir) const
+{
+  const auto canonical = QFileInfo(filePath).absoluteFilePath();
+  const auto base      = QFileInfo(baseDir).absoluteFilePath();
+  return canonical.startsWith(base + "/") || canonical == base;
 }
 
 /**

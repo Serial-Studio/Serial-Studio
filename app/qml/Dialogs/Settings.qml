@@ -36,7 +36,7 @@ Widgets.SmartDialog {
   //
   // Window controls
   //
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     id: layout
 
     spacing: 12

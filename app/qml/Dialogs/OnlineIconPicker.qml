@@ -70,7 +70,7 @@ SmartDialog {
   //
   // Window controls
   //
-  contentItem: ColumnLayout {
+  dialogContent: ColumnLayout {
     spacing: 4
 
     //

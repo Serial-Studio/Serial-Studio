@@ -33,7 +33,7 @@ Window {
   property bool staysOnTop: false
   property bool nativeWindow: true
   property int contentPadding: 16
-  property alias contentItem: contentArea.contentItem
+  property alias dialogContent: contentArea.contentItem
   property color titleColor: Cpp_ThemeManager.colors["text"]
   property color backgroundColor: Cpp_ThemeManager.colors["window"]
 

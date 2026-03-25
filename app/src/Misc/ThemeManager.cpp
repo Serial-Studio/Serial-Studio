@@ -175,6 +175,8 @@ Misc::ThemeManager::ThemeManager() : m_theme(0)
     themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
     if (themeIndex < 0 || themeIndex >= m_availableThemes.count())
       themeIndex = 0;
+
+    m_settings.remove("ApplicationTheme");
   }
 
   setTheme(themeIndex);
@@ -640,27 +642,33 @@ void Misc::ThemeManager::loadUserThemes()
  */
 void Misc::ThemeManager::onExtensionInstalled(const QString& id)
 {
-  Q_UNUSED(id)
   const auto previousUserThemes = m_userThemeNames;
 
   m_availableThemes.removeAll(QStringLiteral("System"));
   loadUserThemes();
   m_availableThemes.append(QStringLiteral("System"));
 
-  // Find newly added theme and switch to it
-  for (const auto& name : std::as_const(m_userThemeNames)) {
-    if (!previousUserThemes.contains(name)) {
-      const int idx = m_availableThemes.indexOf(name);
-      if (idx >= 0) {
-        setTheme(idx);
-        updateLocalizedThemeNames();
-        Q_EMIT languageChanged();
-        return;
+  // Only auto-switch to the newly installed theme if it's a theme extension
+  const auto& ext = Misc::ExtensionManager::instance();
+  const auto info = ext.selectedExtension();
+  const bool isTheme = id.isEmpty()
+                    || info.value("type").toString() == QStringLiteral("theme");
+
+  if (isTheme) {
+    for (const auto& name : std::as_const(m_userThemeNames)) {
+      if (!previousUserThemes.contains(name)) {
+        const int idx = m_availableThemes.indexOf(name);
+        if (idx >= 0) {
+          setTheme(idx);
+          updateLocalizedThemeNames();
+          Q_EMIT languageChanged();
+          return;
+        }
       }
     }
   }
 
-  // No new theme, just preserve current selection
+  // Preserve current selection index
   const int idx = m_availableThemes.indexOf(m_themeName);
   if (idx >= 0)
     m_theme = idx;

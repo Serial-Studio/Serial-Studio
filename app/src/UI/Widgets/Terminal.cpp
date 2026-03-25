@@ -563,7 +563,7 @@ const QFont& Widgets::Terminal::font() const
  *
  * @return The QPalette object representing the terminal's color palette.
  */
-const QPalette& Widgets::Terminal::palette() const
+const QPalette& Widgets::Terminal::colorPalette() const
 {
   return m_palette;
 }
@@ -1161,7 +1161,7 @@ void Widgets::Terminal::setScrollOffsetY(const int offset)
  * Updates the terminal's color palette and emits the colorPaletteChanged()
  * signal to indicate that the palette has been updated.
  */
-void Widgets::Terminal::setPalette(const QPalette& palette)
+void Widgets::Terminal::setColorPalette(const QPalette& palette)
 {
   m_palette = palette;
   Q_EMIT colorPaletteChanged();
