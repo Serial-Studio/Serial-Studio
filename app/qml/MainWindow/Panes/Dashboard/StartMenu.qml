@@ -174,9 +174,11 @@ Popup {
         // Open the popup
         _groups.popup.open()
 
-        // Close actions menu
+        // Close other menus
         if (_actions.popup)
           _actions.popup.close()
+        if (_plugins.popup)
+          _plugins.popup.close()
       }
 
       onClicked: _groups.showMenu()
@@ -215,15 +217,59 @@ Popup {
         // Open the popup
         _actions.popup.open()
 
-        // Close group menu
+        // Close other menus
         if (_groups.popup)
           _groups.popup.close()
+        if (_plugins.popup)
+          _plugins.popup.close()
       }
 
       onClicked: _actions.showMenu()
       onContainsMouseChanged: {
         if (containsMouse)
           _actions.showMenu()
+      }
+    }
+
+    Widgets.MenuButton {
+      id: _plugins
+
+      expandable: true
+      text: qsTr("Plugins")
+      Layout.fillWidth: true
+      visible: Cpp_ExtensionManager.installedPlugins.length > 0
+      icon.source: "qrc:/rcc/icons/toolbar/extensions.svg"
+
+      property var popup: null
+      function showMenu() {
+        if (_plugins.popup === null) {
+          _plugins.popup = _subMenuComponent.createObject(root)
+          _plugins.popup.textRole = "title"
+          _plugins.popup.valueRole = "id"
+          _plugins.popup.iconRole = "icon"
+          popup.valueSelected.connect((value) => {
+                                        Cpp_ExtensionManager.launchPlugin(value)
+                                        root.close()
+                                      })
+        }
+
+        _plugins.popup.model = Cpp_ExtensionManager.installedPlugins
+        _plugins.popup.maximumHeight = root.height
+        _plugins.popup.x = root.x + root.width - 1
+        _plugins.popup.y = _plugins.y + _layout.y + root.y + 4
+        _plugins.popup.placeholderText = qsTr("No Plugins Installed")
+        _plugins.popup.open()
+
+        if (_groups.popup)
+          _groups.popup.close()
+        if (_actions.popup)
+          _actions.popup.close()
+      }
+
+      onClicked: _plugins.showMenu()
+      onContainsMouseChanged: {
+        if (containsMouse)
+          _plugins.showMenu()
       }
     }
 

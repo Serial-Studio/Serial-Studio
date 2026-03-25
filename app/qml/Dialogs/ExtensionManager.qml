@@ -171,6 +171,7 @@ SmartDialog {
           icon.height: 18
           background: Item {}
           text: qsTr("Repos")
+          visible: Cpp_CommercialBuild
           icon.color: Cpp_ThemeManager.colors["text"]
           icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
           onClicked: root.showRepos = true
@@ -255,6 +256,7 @@ SmartDialog {
           background: Item {}
           text: qsTr("Install")
           enabled: !Cpp_ExtensionManager.loading
+                   && (Cpp_ExtensionManager.selectedExtension.platformAvailable !== false)
           icon.color: Cpp_ThemeManager.colors["text"]
           icon.source: "qrc:/rcc/icons/buttons/download.svg"
           onClicked: Cpp_ExtensionManager.installExtension()
@@ -582,6 +584,23 @@ SmartDialog {
                         id: installedLabel
                         anchors.centerIn: parent
                         text: modelData.updateAvailable ? qsTr("Update") : qsTr("Installed")
+                        font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
+                        color: "#ffffff"
+                      }
+                    }
+
+                    Rectangle {
+                      visible: modelData.platformAvailable === false
+                               && !(modelData.installed || false)
+                      width: unavailLabel.implicitWidth + 8
+                      height: unavailLabel.implicitHeight + 4
+                      radius: 3
+                      color: Cpp_ThemeManager.colors["placeholder_text"]
+
+                      Label {
+                        id: unavailLabel
+                        anchors.centerIn: parent
+                        text: qsTr("Unavailable")
                         font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
                         color: "#ffffff"
                       }

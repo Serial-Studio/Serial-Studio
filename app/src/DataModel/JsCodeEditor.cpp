@@ -398,8 +398,12 @@ void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
 void DataModel::JsCodeEditor::onThemeChanged()
 {
   static const auto* t = &Misc::ThemeManager::instance();
-  const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
-  const auto path      = QStringLiteral(":/rcc/themes/code-editor/%1.xml").arg(name);
+  const auto name = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
+
+  // User-installed themes store the absolute path; built-in themes use a short key
+  const auto path = name.startsWith('/')
+                    ? name
+                    : QStringLiteral(":/rcc/themes/code-editor/%1.xml").arg(name);
 
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {

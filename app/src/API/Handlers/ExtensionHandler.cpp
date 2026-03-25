@@ -57,6 +57,11 @@ void API::Handlers::ExtensionHandler::registerCommands()
     QStringLiteral("Uninstall an extension by selecting it (params: addonIndex)"),
     &uninstallExtension);
 
+  registry.registerCommand(QStringLiteral("extensions.refresh"),
+                           QStringLiteral("Refresh extension catalogs from all repositories"),
+                           &refreshRepositories);
+
+#ifdef BUILD_COMMERCIAL
   registry.registerCommand(QStringLiteral("extensions.listRepositories"),
                            QStringLiteral("List configured addon repository URLs"),
                            &listRepositories);
@@ -68,10 +73,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
   registry.registerCommand(QStringLiteral("extensions.removeRepository"),
                            QStringLiteral("Remove a repository by index (params: index)"),
                            &removeRepository);
-
-  registry.registerCommand(QStringLiteral("extensions.refresh"),
-                           QStringLiteral("Refresh extension catalogs from all repositories"),
-                           &refreshRepositories);
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

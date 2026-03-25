@@ -31,6 +31,7 @@
 #include <QNetworkReply>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
+#include <QTimer>
 
 #include "API/Server.h"
 #include "Misc/Utilities.h"
@@ -183,6 +184,14 @@ QVariantMap Misc::ExtensionManager::selectedExtension() const
 bool Misc::ExtensionManager::isLocalRepo(const QString& url) const
 {
   return url.startsWith('/') || url.startsWith("file://");
+}
+
+/**
+ * @brief Returns the current platform key (e.g. "darwin/arm64") for QML display.
+ */
+QString Misc::ExtensionManager::platformKey() const
+{
+  return currentPlatformKey();
 }
 
 /**
@@ -495,9 +504,28 @@ void Misc::ExtensionManager::installExtension()
   const auto addon   = m_filteredExtensions.at(m_selectedIndex).toMap();
   const auto id      = addon.value("id").toString();
   const auto type    = addon.value("type").toString();
-  const auto files   = addon.value("files").toList();
   const auto base    = addon.value("_repoBase").toString();
   const auto isLocal = addon.value("_isLocal").toBool();
+
+  // Collect base files + platform-specific files
+  auto files = addon.value("files").toList();
+  const auto platforms = addon.value("platforms").toMap();
+  if (!platforms.isEmpty()) {
+    const auto key = currentPlatformKey();
+    const auto os  = key.left(key.indexOf('/'));
+    QVariantMap override;
+    if (platforms.contains(key))
+      override = platforms.value(key).toMap();
+    else if (platforms.contains(os + "/*"))
+      override = platforms.value(os + "/*").toMap();
+    else if (platforms.contains("*"))
+      override = platforms.value("*").toMap();
+
+    const auto platFiles = override.value("files").toList();
+    for (const auto& f : platFiles)
+      if (!files.contains(f))
+        files.append(f);
+  }
 
   if (id.isEmpty() || files.isEmpty())
     return;
@@ -506,7 +534,7 @@ void Misc::ExtensionManager::installExtension()
   const auto installDir = extensionsPath() + "/" + type + "/" + id;
   QDir().mkpath(installDir);
 
-  // Local repos: copy files directly (paths are relative to addon.json)
+  // Local repos: copy files directly (paths are relative to info.json)
   if (isLocal) {
     for (const auto& f : files) {
       const auto localName = f.toString();
@@ -529,7 +557,7 @@ void Misc::ExtensionManager::installExtension()
     return;
   }
 
-  // Remote repos: build download queue (paths relative to addon.json)
+  // Remote repos: build download queue (paths relative to info.json)
   m_downloadQueue.clear();
   for (const auto& f : files) {
     const auto localName = f.toString();
@@ -574,6 +602,66 @@ void Misc::ExtensionManager::uninstallExtension()
 
   Q_EMIT extensionUninstalled(id);
   applyFilter();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Auto-update
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Checks installed extensions against the catalog and auto-updates
+ *        any that have a newer version available.
+ *
+ * Builds a queue of extension IDs that need updating, then processes them
+ * one at a time by selecting each in the filtered list and calling
+ * installExtension(). For remote installs (async), the next update is
+ * triggered after extensionInstalled fires.
+ */
+void Misc::ExtensionManager::autoUpdateExtensions()
+{
+  // Don't start if already loading/installing
+  if (m_loading)
+    return;
+
+  // Build update queue on first call
+  if (m_autoUpdateQueue.isEmpty()) {
+    const auto ids = m_installedExtensions.keys();
+    for (const auto& id : ids)
+      if (hasUpdate(id))
+        m_autoUpdateQueue.append(id);
+  }
+
+  if (m_autoUpdateQueue.isEmpty())
+    return;
+
+  // Process next update
+  const auto id = m_autoUpdateQueue.takeFirst();
+
+  // Find the extension in the filtered list
+  bool found = false;
+  for (int i = 0; i < m_filteredExtensions.count(); ++i) {
+    if (m_filteredExtensions.at(i).toMap().value("id").toString() != id)
+      continue;
+
+    m_selectedIndex = i;
+    Q_EMIT selectedIndexChanged();
+    installExtension();
+    found = true;
+    break;
+  }
+
+  // Schedule next update (after current install completes or immediately)
+  if (!m_autoUpdateQueue.isEmpty()) {
+    if (found && m_loading) {
+      // Remote install in progress — wait for completion
+      connect(this, &ExtensionManager::extensionInstalled, this,
+              &ExtensionManager::autoUpdateExtensions,
+              Qt::SingleShotConnection);
+    } else {
+      // Local install completed synchronously, or extension not found
+      QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
+    }
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -623,11 +711,12 @@ void Misc::ExtensionManager::onManifestReply()
     m_loading = false;
     Q_EMIT loadingChanged();
     applyFilter();
+    QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
   }
 }
 
 /**
- * @brief Handles an extension metadata (addon.json) fetch response.
+ * @brief Handles an extension metadata (info.json) fetch response.
  *
  * Resolves file paths relative to the extension.json location and appends
  * the extension to the catalog.
@@ -653,6 +742,7 @@ void Misc::ExtensionManager::onExtensionMetaReply()
     m_loading = false;
     Q_EMIT loadingChanged();
     applyFilter();
+    QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
   }
 }
 
@@ -783,6 +873,20 @@ void Misc::ExtensionManager::applyFilter()
     map.insert("updateAvailable", hasUpdate(id));
     map.insert("installedVersion", installedVersion(id));
     map.insert("pluginRunning", isPluginRunning(id));
+
+    // Check platform compatibility for plugins with platform overrides
+    const auto plats = obj.value("platforms").toObject();
+    if (!plats.isEmpty()) {
+      const auto key = currentPlatformKey();
+      const auto os  = key.left(key.indexOf('/'));
+      const bool compatible = plats.contains(key)
+                           || plats.contains(os + "/*")
+                           || plats.contains("*");
+      map.insert("platformAvailable", compatible);
+    } else {
+      map.insert("platformAvailable", true);
+    }
+
     m_filteredExtensions.append(map);
   }
 
@@ -803,7 +907,7 @@ void Misc::ExtensionManager::applyFilter()
       if (type != m_filterType)
         continue;
 
-    // Build a minimal entry from installed metadata + addon.json on disk
+    // Build a minimal entry from installed metadata + info.json on disk
     QVariantMap map;
     map.insert("id", id);
     map.insert("type", type);
@@ -813,8 +917,8 @@ void Misc::ExtensionManager::applyFilter()
     map.insert("installedVersion", info.value("version").toString());
     map.insert("pluginRunning", isPluginRunning(id));
 
-    // Try to read title/description from the installed addon.json
-    const auto addonJsonPath = extensionsPath() + "/" + type + "/" + id + "/addon.json";
+    // Try to read title/description from the installed info.json
+    const auto addonJsonPath = extensionsPath() + "/" + type + "/" + id + "/info.json";
     QFile addonFile(addonJsonPath);
     if (addonFile.open(QIODevice::ReadOnly)) {
       const auto addonObj = QJsonDocument::fromJson(addonFile.readAll()).object();
@@ -856,6 +960,40 @@ void Misc::ExtensionManager::applyFilter()
 
   Q_EMIT selectedIndexChanged();
   Q_EMIT filteredExtensionsChanged();
+
+  // Rebuild installed plugins list for start menu / toolbar
+  QVariantList plugins;
+  const auto pluginIds = m_installedExtensions.keys();
+  for (const auto& iid : pluginIds) {
+    const auto info = m_installedExtensions.value(iid).toObject();
+    if (info.value("type").toString() != QStringLiteral("plugin"))
+      continue;
+
+    // Read metadata from installed info.json for title and icon
+    const auto pluginDir = extensionsPath() + "/plugin/" + iid;
+    QVariantMap entry;
+    entry.insert("id", iid);
+    entry.insert("running", isPluginRunning(iid));
+
+    QFile metaFile(pluginDir + "/info.json");
+    if (metaFile.open(QIODevice::ReadOnly)) {
+      const auto meta = QJsonDocument::fromJson(metaFile.readAll()).object();
+      entry.insert("title", meta.value("title").toString(iid));
+
+      const auto icon = meta.value("icon").toString();
+      if (!icon.isEmpty())
+        entry.insert("icon", QStringLiteral("file://") + pluginDir + "/" + icon);
+    } else {
+      entry.insert("title", iid);
+    }
+
+    plugins.append(entry);
+  }
+
+  if (plugins != m_installedPlugins) {
+    m_installedPlugins = plugins;
+    Q_EMIT installedPluginsChanged();
+  }
 }
 
 /**
@@ -882,6 +1020,75 @@ QString Misc::ExtensionManager::installedManifestPath() const
   return extensionsPath() + "/installed.json";
 }
 
+/**
+ * @brief Returns the platform key for the current OS and CPU architecture.
+ *
+ * Format is "os/arch" where os is one of "darwin", "windows", "linux"
+ * and arch is one of "arm64", "x86_64".
+ */
+QString Misc::ExtensionManager::currentPlatformKey() const
+{
+#if defined(Q_OS_MACOS)
+  const auto os = QStringLiteral("darwin");
+#elif defined(Q_OS_WIN)
+  const auto os = QStringLiteral("windows");
+#else
+  const auto os = QStringLiteral("linux");
+#endif
+
+  const auto arch = QSysInfo::currentCpuArchitecture();
+  auto normalized = arch;
+  if (arch == QStringLiteral("arm64") || arch == QStringLiteral("aarch64"))
+    normalized = QStringLiteral("arm64");
+  else if (arch == QStringLiteral("x86_64") || arch == QStringLiteral("amd64"))
+    normalized = QStringLiteral("x86_64");
+
+  return os + "/" + normalized;
+}
+
+/**
+ * @brief Resolves platform-specific overrides from a plugin's metadata.
+ *
+ * If the metadata contains a "platforms" object, the function looks for the
+ * current platform key (e.g. "darwin/arm64"), then falls back to a wildcard
+ * key (e.g. "darwin/\*"), and finally returns the top-level fields.
+ *
+ * The returned object always contains "entry", "runtime", "terminal", and
+ * "files" keys — merging the platform override on top of the base metadata.
+ *
+ * @param meta The parsed info.json content.
+ * @return Resolved metadata object with platform-appropriate values.
+ */
+QJsonObject Misc::ExtensionManager::resolvePlatform(const QJsonObject& meta) const
+{
+  auto result = meta;
+
+  const auto platforms = meta.value("platforms").toObject();
+  if (platforms.isEmpty())
+    return result;
+
+  const auto key = currentPlatformKey();
+  const auto os  = key.left(key.indexOf('/'));
+
+  // Try exact match first, then wildcard
+  QJsonObject override;
+  if (platforms.contains(key))
+    override = platforms.value(key).toObject();
+  else if (platforms.contains(os + "/*"))
+    override = platforms.value(os + "/*").toObject();
+  else if (platforms.contains("*"))
+    override = platforms.value("*").toObject();
+
+  if (override.isEmpty())
+    return result;
+
+  // Merge platform overrides on top of base fields
+  for (auto it = override.begin(); it != override.end(); ++it)
+    result.insert(it.key(), it.value());
+
+  return result;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Plugin management
 //--------------------------------------------------------------------------------------------------
@@ -892,6 +1099,14 @@ QString Misc::ExtensionManager::installedManifestPath() const
 const QVariantList& Misc::ExtensionManager::runningPlugins() const noexcept
 {
   return m_runningPlugins;
+}
+
+/**
+ * @brief Returns the list of installed plugins with id, title, icon, and running state.
+ */
+const QVariantList& Misc::ExtensionManager::installedPlugins() const noexcept
+{
+  return m_installedPlugins;
 }
 
 /**
@@ -981,23 +1196,23 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     return;
   }
 
-  // Find the entry point from addon.json
+  // Find the entry point from info.json
   const auto pluginDir = extensionsPath() + "/plugin/" + id;
-  QFile metaFile(pluginDir + "/addon.json");
+  QFile metaFile(pluginDir + "/info.json");
   if (!metaFile.open(QIODevice::ReadOnly)) {
-    m_pluginOutput[id] += QStringLiteral("[Error] Cannot read %1/addon.json\n").arg(pluginDir);
+    m_pluginOutput[id] += QStringLiteral("[Error] Cannot read %1/info.json\n").arg(pluginDir);
     Q_EMIT pluginOutputChanged(id);
     return;
   }
 
   const auto metaDoc  = QJsonDocument::fromJson(metaFile.readAll());
-  const auto meta     = metaDoc.object();
-  const auto entry    = meta.value("entry").toString();
-  const auto runtime  = meta.value("runtime").toString("python3");
-  const auto terminal = meta.value("terminal").toBool(false);
+  const auto resolved = resolvePlatform(metaDoc.object());
+  const auto entry    = resolved.value("entry").toString();
+  const auto runtime  = resolved.value("runtime").toString("python3");
+  const auto terminal = resolved.value("terminal").toBool(false);
 
   if (entry.isEmpty()) {
-    m_pluginOutput[id] += QStringLiteral("[Error] No 'entry' field in addon.json\n");
+    m_pluginOutput[id] += QStringLiteral("[Error] No 'entry' field in info.json\n");
     Q_EMIT pluginOutputChanged(id);
     return;
   }
@@ -1025,6 +1240,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
       path = p + ":" + path;
 #endif
   env.insert("PATH", path);
+  env.insert("TK_SILENCE_DEPRECATION", "1");
 
   // Launch the plugin process
   auto* process = new QProcess(this);
@@ -1033,8 +1249,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
   if (terminal)
     process->setProcessChannelMode(QProcess::ForwardedChannels);
-  else
+  else {
     process->setProcessChannelMode(QProcess::MergedChannels);
+    process->setStandardInputFile(QProcess::nullDevice());
+  }
 
   // Capture output for the log view
   const auto pluginId = id;
@@ -1064,12 +1282,24 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     Q_EMIT pluginOutputChanged(pluginId);
   });
 
+  // Native executables need execute permission on Unix
+  const bool isNative = runtime.isEmpty();
+#ifndef Q_OS_WIN
+  if (isNative)
+    QFile::setPermissions(entryPath, QFile::permissions(entryPath)
+                                       | QFileDevice::ExeUser
+                                       | QFileDevice::ExeGroup);
+#endif
+
   // Launch via system terminal or directly
   if (terminal) {
 #ifdef Q_OS_MACOS
     process->start("open", {"-a", "Terminal", entryPath});
 #elif defined(Q_OS_WIN)
-    process->start("cmd.exe", {"/c", "start", "cmd.exe", "/k", runtime, entryPath});
+    if (isNative)
+      process->start("cmd.exe", {"/c", "start", "cmd.exe", "/k", entryPath});
+    else
+      process->start("cmd.exe", {"/c", "start", "cmd.exe", "/k", runtime, entryPath});
 #else
     const QStringList terms = {
       "x-terminal-emulator", "gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
@@ -1078,16 +1308,27 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
       if (QStandardPaths::findExecutable(term).isEmpty())
         continue;
 
-      process->start(term, {"--", runtime, entryPath});
+      if (isNative)
+        process->start(term, {"--", entryPath});
+      else
+        process->start(term, {"--", runtime, entryPath});
+
       launched = true;
       break;
     }
 
-    if (!launched)
-      process->start(runtime, {entryPath});
+    if (!launched) {
+      if (isNative)
+        process->start(entryPath);
+      else
+        process->start(runtime, {entryPath});
+    }
 #endif
   } else {
-    process->start(runtime, {entryPath});
+    if (isNative)
+      process->start(entryPath);
+    else
+      process->start(runtime, {entryPath});
   }
 
   if (!process->waitForStarted(3000)) {
@@ -1107,7 +1348,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
   QVariantMap entry_map;
   entry_map.insert("id", id);
-  entry_map.insert("title", meta.value("title").toString(id));
+  entry_map.insert("title", resolved.value("title").toString(id));
   m_runningPlugins.append(entry_map);
   Q_EMIT runningPluginsChanged();
   applyFilter();
@@ -1228,7 +1469,6 @@ void Misc::ExtensionManager::loadLocalManifest(const QString& repoPath)
   const auto repoDir = QFileInfo(path).absolutePath() + "/";
 
   for (const auto& entry : addons) {
-    // Support both string paths (new) and inline objects (legacy)
     if (entry.isString()) {
       const auto metaPath  = repoDir + entry.toString();
       const auto addonBase = QFileInfo(metaPath).absolutePath() + "/";

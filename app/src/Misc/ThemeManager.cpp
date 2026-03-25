@@ -120,20 +120,12 @@ static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& col
  */
 Misc::ThemeManager::ThemeManager() : m_theme(0)
 {
-  // Set theme files
+  // Set built-in theme files (others available as extensions)
   // clang-format off
   const QStringList themes = {
       QStringLiteral("default"),
-      QStringLiteral("iron"),
-      QStringLiteral("rust"),
-      QStringLiteral("gunmetal"),
-      QStringLiteral("midday"),
-      QStringLiteral("midnight"),
       QStringLiteral("fluent-light"),
       QStringLiteral("fluent-dark"),
-      QStringLiteral("aether-light"),
-      QStringLiteral("aether-dark"),
-      QStringLiteral("classic")
   };
   // clang-format on
 

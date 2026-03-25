@@ -87,6 +87,9 @@ class ExtensionManager : public QObject {
   Q_PROPERTY(float downloadProgress
              READ downloadProgress
              NOTIFY downloadProgressChanged)
+  Q_PROPERTY(QVariantList installedPlugins
+             READ installedPlugins
+             NOTIFY installedPluginsChanged)
   // clang-format on
 
 signals:
@@ -94,6 +97,7 @@ signals:
   void searchFilterChanged();
   void filterCategoryChanged();
   void filterTypeChanged();
+  void installedPluginsChanged();
   void selectedIndexChanged();
   void filteredExtensionsChanged();
   void repositoriesChanged();
@@ -134,7 +138,9 @@ public:
   Q_INVOKABLE [[nodiscard]] QString friendlyTypeName(const QString& type) const;
   Q_INVOKABLE [[nodiscard]] bool isPluginRunning(const QString& id) const;
   Q_INVOKABLE [[nodiscard]] QString pluginOutput(const QString& id) const;
+  Q_INVOKABLE [[nodiscard]] QString platformKey() const;
   [[nodiscard]] const QVariantList& runningPlugins() const noexcept;
+  [[nodiscard]] const QVariantList& installedPlugins() const noexcept;
 
 public slots:
   void refreshRepositories();
@@ -155,6 +161,7 @@ public slots:
   void stopAllPlugins();
 
 private slots:
+  void autoUpdateExtensions();
   void onManifestReply();
   void onFileDownloadReply();
   void onExtensionMetaReply();
@@ -171,6 +178,8 @@ private:
   [[nodiscard]] QString extensionsPath() const;
   [[nodiscard]] QString themesPath() const;
   [[nodiscard]] QString installedManifestPath() const;
+  [[nodiscard]] QString currentPlatformKey() const;
+  [[nodiscard]] QJsonObject resolvePlatform(const QJsonObject& meta) const;
   [[nodiscard]] QUrl resolveFileUrl(const QString& repoBaseUrl, const QString& relativePath) const;
 
 private:
@@ -196,10 +205,12 @@ private:
   QString m_currentInstallId;
   QString m_currentInstallRepoBase;
   QList<QPair<QString, QUrl>> m_downloadQueue;
+  QStringList m_autoUpdateQueue;
 
   QMap<QString, QProcess*> m_plugins;
   QMap<QString, QString> m_pluginOutput;
   QVariantList m_runningPlugins;
+  QVariantList m_installedPlugins;
   QNetworkAccessManager m_nam;
 };
 }  // namespace Misc
