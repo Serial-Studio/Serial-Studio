@@ -24,6 +24,7 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
+#include "DataModel/ProjectModel.h"
 #include "Misc/ExtensionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -60,6 +61,16 @@ void API::Handlers::ExtensionHandler::registerCommands()
   registry.registerCommand(QStringLiteral("extensions.refresh"),
                            QStringLiteral("Refresh extension catalogs from all repositories"),
                            &refreshRepositories);
+
+  registry.registerCommand(
+    QStringLiteral("extensions.saveState"),
+    QStringLiteral("Save plugin state to the project file (params: pluginId, state)"),
+    &savePluginState);
+
+  registry.registerCommand(
+    QStringLiteral("extensions.loadState"),
+    QStringLiteral("Load plugin state from the project file (params: pluginId)"),
+    &loadPluginState);
 
 #ifdef BUILD_COMMERCIAL
   registry.registerCommand(QStringLiteral("extensions.listRepositories"),
@@ -226,5 +237,51 @@ API::CommandResponse API::Handlers::ExtensionHandler::refreshRepositories(const 
   return CommandResponse::makeSuccess(id,
                                       QJsonObject{
                                         {"status", "refreshing"}
+  });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Plugin state persistence
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Saves a plugin's state to the current project file.
+ *
+ * The state is stored under "__plugin__:<pluginId>" in the project's
+ * widgetSettings section, persisted to disk alongside layout data.
+ */
+API::CommandResponse API::Handlers::ExtensionHandler::savePluginState(const QString& id,
+                                                                      const QJsonObject& params)
+{
+  const auto pluginId = params.value("pluginId").toString();
+  if (pluginId.isEmpty())
+    return CommandResponse::makeError(
+      id, QStringLiteral("INVALID_PARAMS"), "Missing pluginId parameter");
+
+  const auto state = params.value("state").toObject();
+  DataModel::ProjectModel::instance().savePluginState(pluginId, state);
+  return CommandResponse::makeSuccess(id,
+                                      QJsonObject{
+                                        {"status", "saved"}
+  });
+}
+
+/**
+ * @brief Loads a plugin's state from the current project file.
+ *
+ * Returns the saved state object, or an empty object if no state was saved.
+ */
+API::CommandResponse API::Handlers::ExtensionHandler::loadPluginState(const QString& id,
+                                                                      const QJsonObject& params)
+{
+  const auto pluginId = params.value("pluginId").toString();
+  if (pluginId.isEmpty())
+    return CommandResponse::makeError(
+      id, QStringLiteral("INVALID_PARAMS"), "Missing pluginId parameter");
+
+  const auto state = DataModel::ProjectModel::instance().pluginState(pluginId);
+  return CommandResponse::makeSuccess(id,
+                                      QJsonObject{
+                                        {"state", state}
   });
 }

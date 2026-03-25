@@ -180,6 +180,25 @@ void API::ServerWorker::writeRawData(const IO::ByteArrayPtr& data)
 }
 
 /**
+ * @brief Broadcasts a lifecycle event JSON object to all connected API clients.
+ *
+ * Events are sent as {"event": "eventName", ...} messages, allowing plugins
+ * to react to connection state changes and save/restore their state.
+ */
+void API::ServerWorker::broadcastEvent(const QJsonObject& event)
+{
+  if (m_sockets.isEmpty())
+    return;
+
+  const QJsonDocument document(event);
+  const auto json = document.toJson(QJsonDocument::Compact) + "\n";
+
+  for (auto* socket : std::as_const(m_sockets))
+    if (socket && socket->isWritable())
+      socket->write(json);
+}
+
+/**
  * @brief Handles incoming data from a socket (worker thread)
  */
 void API::ServerWorker::onSocketReadyRead()
@@ -510,6 +529,27 @@ void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
   if (enabled())
     enqueueData(frame);
+}
+
+/**
+ * @brief Broadcasts a lifecycle event to all connected API clients.
+ *
+ * Sends {"event": "eventName"} to all clients so plugins can react
+ * to connection/disconnection/project changes and save/restore state.
+ *
+ * @param eventName Event name (e.g. "connected", "disconnected").
+ */
+void API::Server::broadcastLifecycleEvent(const QString& eventName)
+{
+  if (!enabled())
+    return;
+
+  QJsonObject event;
+  event.insert(QStringLiteral("event"), eventName);
+
+  auto* worker = static_cast<ServerWorker*>(m_worker);
+  QMetaObject::invokeMethod(
+    worker, "broadcastEvent", Qt::QueuedConnection, Q_ARG(QJsonObject, event));
 }
 
 /**

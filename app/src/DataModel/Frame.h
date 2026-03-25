@@ -180,7 +180,7 @@ struct alignas(8) Dataset {
   double pltMin        = 0;      ///< Minimum value (for plots)
   double pltMax        = 0;      ///< Maximum value (for plots)
   double wgtMin        = 0;      ///< Minimum value (for widgets)
-  double wgtMax        = 100;    ///< Maximum value (for widgets)
+  double wgtMax        = 0;      ///< Maximum value (for widgets)
   double ledHigh       = 80;     ///< LED activation threshold
   double alarmLow      = 20;     ///< Low alarm threshold
   double alarmHigh     = 80;     ///< High alarm threshold

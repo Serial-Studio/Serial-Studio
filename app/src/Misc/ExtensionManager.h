@@ -159,6 +159,7 @@ public slots:
   void stopPlugin(const QString& id);
   void stopSelectedPlugin();
   void stopAllPlugins();
+  void restoreRunningPlugins();
 
 private slots:
   void autoUpdateExtensions();

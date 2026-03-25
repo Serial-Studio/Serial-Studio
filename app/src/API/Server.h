@@ -68,6 +68,7 @@ public slots:
   void addSocket(QTcpSocket* socket);
   void removeSocket(QTcpSocket* socket);
   void writeRawData(const IO::ByteArrayPtr& data);
+  void broadcastEvent(const QJsonObject& event);
   void writeToSocket(QTcpSocket* socket, const QByteArray& data);
   void disconnectSocket(QTcpSocket* socket);
 
@@ -156,6 +157,7 @@ public slots:
   void setExternalConnections(const bool enabled);
   void hotpathTxData(const IO::ByteArrayPtr& data);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
+  void broadcastLifecycleEvent(const QString& eventName);
 
 protected:
   DataModel::FrameConsumerWorkerBase* createWorker() override;

@@ -509,7 +509,7 @@ void Misc::ExtensionManager::installExtension()
   const auto isLocal = addon.value("_isLocal").toBool();
 
   // Collect base files + platform-specific files
-  auto files = addon.value("files").toList();
+  auto files           = addon.value("files").toList();
   const auto platforms = addon.value("platforms").toMap();
   if (!platforms.isEmpty()) {
     const auto key = currentPlatformKey();
@@ -655,7 +655,9 @@ void Misc::ExtensionManager::autoUpdateExtensions()
   if (!m_autoUpdateQueue.isEmpty()) {
     if (found && m_loading) {
       // Remote install in progress — wait for completion
-      connect(this, &ExtensionManager::extensionInstalled, this,
+      connect(this,
+              &ExtensionManager::extensionInstalled,
+              this,
               &ExtensionManager::autoUpdateExtensions,
               Qt::SingleShotConnection);
     } else {
@@ -880,9 +882,8 @@ void Misc::ExtensionManager::applyFilter()
     if (!plats.isEmpty()) {
       const auto key = currentPlatformKey();
       const auto os  = key.left(key.indexOf('/'));
-      const bool compatible = plats.contains(key)
-                           || plats.contains(os + "/*")
-                           || plats.contains("*");
+      const bool compatible =
+        plats.contains(key) || plats.contains(os + "/*") || plats.contains("*");
       map.insert("platformAvailable", compatible);
     } else {
       map.insert("platformAvailable", true);
@@ -947,13 +948,14 @@ void Misc::ExtensionManager::applyFilter()
 
   // Sort by type: plugins first, then themes, parsers, templates
   static const QMap<QString, int> typeOrder = {
-    {QStringLiteral("plugin"), 0},
-    {QStringLiteral("theme"), 1},
-    {QStringLiteral("frame-parser"), 2},
+    {          QStringLiteral("plugin"), 0},
+    {           QStringLiteral("theme"), 1},
+    {    QStringLiteral("frame-parser"), 2},
     {QStringLiteral("project-template"), 3},
   };
 
-  std::stable_sort(m_filteredExtensions.begin(), m_filteredExtensions.end(),
+  std::stable_sort(m_filteredExtensions.begin(),
+                   m_filteredExtensions.end(),
                    [](const QVariant& a, const QVariant& b) {
                      const auto ta = a.toMap().value("type").toString();
                      const auto tb = b.toMap().value("type").toString();
@@ -1302,9 +1304,8 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   const bool isNative = runtime.isEmpty();
 #ifndef Q_OS_WIN
   if (isNative)
-    QFile::setPermissions(entryPath, QFile::permissions(entryPath)
-                                       | QFileDevice::ExeUser
-                                       | QFileDevice::ExeGroup);
+    QFile::setPermissions(
+      entryPath, QFile::permissions(entryPath) | QFileDevice::ExeUser | QFileDevice::ExeGroup);
 #endif
 
   // Launch via system terminal or directly
@@ -1415,12 +1416,32 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
 
 /**
  * @brief Stops all running plugins. Called on application shutdown.
+ *
+ * Saves the list of running plugin IDs to QSettings so they can be
+ * restored on the next launch.
  */
 void Misc::ExtensionManager::stopAllPlugins()
 {
+  // Save running plugin IDs before stopping
   const auto ids = m_plugins.keys();
+  m_settings.setValue("RunningPlugins", QStringList(ids));
+
   for (const auto& id : ids)
     stopPlugin(id);
+}
+
+/**
+ * @brief Restores plugins that were running in the previous session.
+ *
+ * Reads the saved plugin ID list from QSettings and launches each one.
+ * Called after the extension catalog is loaded and plugins are installed.
+ */
+void Misc::ExtensionManager::restoreRunningPlugins()
+{
+  const auto ids = m_settings.value("RunningPlugins").toStringList();
+  for (const auto& id : ids)
+    if (isInstalled(id) && !isPluginRunning(id))
+      launchPlugin(id);
 }
 
 /**

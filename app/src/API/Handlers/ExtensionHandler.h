@@ -46,6 +46,8 @@ private:
   static CommandResponse addRepository(const QString& id, const QJsonObject& params);
   static CommandResponse removeRepository(const QString& id, const QJsonObject& params);
   static CommandResponse refreshRepositories(const QString& id, const QJsonObject& params);
+  static CommandResponse savePluginState(const QString& id, const QJsonObject& params);
+  static CommandResponse loadPluginState(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace API::Handlers

@@ -283,6 +283,50 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
 }
 
 /**
+ * @brief Returns the persisted state object for a plugin.
+ *
+ * Plugin states are stored under "__plugin__:<pluginId>" keys
+ * in the widgetSettings section of the project file.
+ *
+ * @param pluginId The extension ID (e.g. "digital-indicator").
+ * @return State QJsonObject, or empty if none saved.
+ */
+QJsonObject DataModel::ProjectModel::pluginState(const QString& pluginId) const
+{
+  return m_widgetSettings.value(QStringLiteral("__plugin__:") + pluginId).toObject();
+}
+
+/**
+ * @brief Persists a plugin's entire state to the project file.
+ *
+ * Saves the state object under "__plugin__:<pluginId>" in the
+ * widgetSettings section. The project file is written to disk
+ * immediately.
+ *
+ * @param pluginId The extension ID.
+ * @param state    JSON object containing the plugin's state.
+ */
+void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
+{
+  if (m_filePath.isEmpty())
+    return;
+
+  const auto key = QStringLiteral("__plugin__:") + pluginId;
+  if (m_widgetSettings.value(key).toObject() == state)
+    return;
+
+  m_widgetSettings.insert(key, state);
+
+  QFile file(m_filePath);
+  if (!file.open(QFile::WriteOnly))
+    return;
+
+  const auto json = serializeToJson();
+  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
+  file.close();
+}
+
+/**
  * Returns @c true if the project uses features that require a commercial
  * license (e.g. the 3D plot widget).
  */

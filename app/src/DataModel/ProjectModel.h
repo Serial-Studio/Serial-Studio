@@ -142,6 +142,8 @@ public:
   Q_INVOKABLE void saveWidgetSetting(const QString& widgetId,
                                      const QString& key,
                                      const QVariant& value);
+  Q_INVOKABLE QJsonObject pluginState(const QString& pluginId) const;
+  Q_INVOKABLE void savePluginState(const QString& pluginId, const QJsonObject& state);
 
 public slots:
   void setupExternalConnections();

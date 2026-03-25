@@ -405,8 +405,22 @@ void Misc::ModuleManager::initializeQmlInterface()
           miscThemeManager,
           &Misc::ThemeManager::onExtensionUninstalled);
 
+  // Broadcast lifecycle events to API clients so plugins can save/restore state
+  connect(ioManager,
+          &IO::ConnectionManager::connectedChanged,
+          pluginsBridge,
+          [pluginsBridge, ioManager]() {
+            pluginsBridge->broadcastLifecycleEvent(ioManager->isConnected()
+                                                     ? QStringLiteral("connected")
+                                                     : QStringLiteral("disconnected"));
+          });
+
   // Restore last project after all modules are wired so all signals fire correctly
   appState->restoreLastProject();
+
+  // Refresh extensions and restore previously-running plugins
+  miscExtensionManager->refreshRepositories();
+  QTimer::singleShot(2000, miscExtensionManager, &Misc::ExtensionManager::restoreRunningPlugins);
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);

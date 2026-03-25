@@ -202,6 +202,21 @@ https://raw.githubusercontent.com/your-org/extensions/main/manifest.json
 
 **Any web server**: Host files on HTTP(S). Relative paths in `files` resolve against the `info.json` URL.
 
+## Plugin State Persistence
+
+Plugin state (open windows, settings, configurations) is saved in the project file alongside widget layout data. This means different projects can have different plugin setups — a project monitoring temperature might have gauge windows configured differently than one monitoring audio.
+
+State is saved automatically:
+- When the device disconnects
+- When the plugin is closed
+- When Serial Studio exits
+
+State is restored automatically:
+- When the plugin starts (from saved project data)
+- When a new device connects (project may have changed)
+
+Plugins that were running when Serial Studio closed are automatically relaunched on the next startup.
+
 ## API Access
 
 The Extension Manager is accessible via the [MCP/API](nav:api-reference) on TCP port 7777:
@@ -212,10 +227,23 @@ The Extension Manager is accessible via the [MCP/API](nav:api-reference) on TCP 
 | `extensions.getInfo` | Get details for a specific extension (`extensionId`). |
 | `extensions.install` | Install an extension by index (`addonIndex`). |
 | `extensions.uninstall` | Uninstall an extension by index (`addonIndex`). |
-| `extensions.listRepositories` | List configured repository URLs. |
-| `extensions.addRepository` | Add a repository URL (`url`). |
-| `extensions.removeRepository` | Remove a repository by index (`index`). |
 | `extensions.refresh` | Refresh catalogs from all repositories. |
+| `extensions.saveState` | Save plugin state to the project (`pluginId`, `state`). |
+| `extensions.loadState` | Load plugin state from the project (`pluginId`). |
+| `extensions.listRepositories` | List repository URLs (Pro only). |
+| `extensions.addRepository` | Add a repository URL (Pro only). |
+| `extensions.removeRepository` | Remove a repository by index (Pro only). |
+
+### Lifecycle Events
+
+The API server broadcasts events to all connected clients:
+
+| Event | When |
+|-------|------|
+| `{"event": "connected"}` | Device connected |
+| `{"event": "disconnected"}` | Device disconnected |
+
+Plugins should listen for these to save/restore their state at the appropriate times.
 
 ## Installed Extension Location
 
