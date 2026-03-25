@@ -498,5 +498,8 @@
         <file>themes/rust.json</file>
         <file>themes/classic.json</file>
         <file>images/no-results.svg</file>
+        <file>icons/toolbar/extensions.svg</file>
+        <file>icons/toolbar/console.svg</file>
+        <file>icons/buttons/download.svg</file>
     </qresource>
 </RCC>

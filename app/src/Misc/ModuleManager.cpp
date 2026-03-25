@@ -44,6 +44,7 @@
 #include "MDF4/Player.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/Examples.h"
+#include "Misc/ExtensionManager.h"
 #include "Misc/HelpCenter.h"
 #include "Misc/IconEngine.h"
 #include "Misc/ThemeManager.h"
@@ -228,6 +229,7 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
  */
 void Misc::ModuleManager::onQuit()
 {
+  Misc::ExtensionManager::instance().stopAllPlugins();
   Misc::TimerEvents::instance().stopTimers();
 
   CSV::Export::instance().closeFile();
@@ -351,6 +353,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto miscWorkspaceManager = &Misc::WorkspaceManager::instance();
   auto miscExamples         = &Misc::Examples::instance();
   auto miscHelpCenter       = &Misc::HelpCenter::instance();
+  auto miscExtensionManager = &Misc::ExtensionManager::instance();
   auto miscIconEngine       = &Misc::IconEngine::instance();
   auto frameParser          = &DataModel::FrameParser::instance();
 
@@ -391,6 +394,16 @@ void Misc::ModuleManager::initializeQmlInterface()
   frameBuilder->setupExternalConnections();
   consoleExport->setupExternalConnections();
   consoleHandler->setupExternalConnections();
+
+  // Wire addon manager signals to theme manager for hot-reloading user themes
+  connect(miscExtensionManager,
+          &Misc::ExtensionManager::extensionInstalled,
+          miscThemeManager,
+          &Misc::ThemeManager::onExtensionInstalled);
+  connect(miscExtensionManager,
+          &Misc::ExtensionManager::extensionUninstalled,
+          miscThemeManager,
+          &Misc::ThemeManager::onExtensionUninstalled);
 
   // Restore last project after all modules are wired so all signals fire correctly
   appState->restoreLastProject();
@@ -447,6 +460,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Misc_WorkspaceManager", miscWorkspaceManager);
   c->setContextProperty("Cpp_Examples", miscExamples);
   c->setContextProperty("Cpp_HelpCenter", miscHelpCenter);
+  c->setContextProperty("Cpp_ExtensionManager", miscExtensionManager);
   c->setContextProperty("Cpp_Misc_IconEngine", miscIconEngine);
 
   // Register commercial C++ modules with QML

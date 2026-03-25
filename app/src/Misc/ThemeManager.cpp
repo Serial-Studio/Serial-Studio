@@ -22,13 +22,17 @@
 #include "ThemeManager.h"
 
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QPalette>
 #include <QStyleHints>
 
+#include "Misc/ExtensionManager.h"
 #include "Misc/Translator.h"
+#include "Misc/WorkspaceManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Utility functions
@@ -163,13 +167,22 @@ Misc::ThemeManager::ThemeManager() : m_theme(0)
     m_availableThemes.append("Fallback");
   }
 
+  // Load user-installed themes from addons directory
+  loadUserThemes();
+
   // Append "System" theme as last option
   m_availableThemes.append(QStringLiteral("System"));
 
-  int themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
-  if (themeIndex < 0 || themeIndex >= m_availableThemes.count()) {
-    qWarning() << "Invalid theme index" << themeIndex << ", using 0";
-    themeIndex = 0;
+  // Restore theme by name, with legacy index-based migration
+  int themeIndex       = 0;
+  const auto savedName = m_settings.value("ApplicationThemeName").toString();
+  if (!savedName.isEmpty()) {
+    const int idx = m_availableThemes.indexOf(savedName);
+    themeIndex    = (idx >= 0) ? idx : 0;
+  } else {
+    themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
+    if (themeIndex < 0 || themeIndex >= m_availableThemes.count())
+      themeIndex = 0;
   }
 
   setTheme(themeIndex);
@@ -314,10 +327,10 @@ void Misc::ThemeManager::setTheme(const int index)
   if (index < 0 || index >= m_availableThemes.count())
     filteredIndex = 0;
 
-  // Update the theme name
+  // Update the theme name (persist by name for stability across addon changes)
   m_theme     = filteredIndex;
   m_themeName = m_availableThemes.at(filteredIndex);
-  m_settings.setValue("ApplicationTheme", filteredIndex);
+  m_settings.setValue("ApplicationThemeName", m_themeName);
 
   // Load theme (dark/light) automagically
   if (m_themeName == QStringLiteral("System")) {
@@ -558,4 +571,133 @@ bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
   }
 
   return QObject::eventFilter(watched, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+// User addon theme support
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Scans the user addons directory for installed theme JSON files.
+ *
+ * Valid themes are appended to the available themes list after built-in
+ * themes but before the "System" entry. Each theme JSON must have a
+ * "title" and "colors" object to be considered valid.
+ *
+ * For user themes, the code-editor-theme parameter is rewritten to an
+ * absolute path so the editor can load the XML from disk.
+ */
+void Misc::ThemeManager::loadUserThemes()
+{
+  // Remove previously loaded user themes
+  for (const auto& name : std::as_const(m_userThemeNames)) {
+    m_themes.remove(name);
+    m_availableThemes.removeAll(name);
+  }
+
+  m_userThemeNames.clear();
+
+  // Scan addons themes directory
+  const auto themesDir = Misc::WorkspaceManager::instance().path("Extensions/theme");
+  QDir dir(themesDir);
+  if (!dir.exists())
+    return;
+
+  const auto subdirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+  for (const auto& subdir : subdirs) {
+    const auto subdirPath = themesDir + "/" + subdir;
+    QDir addonDir(subdirPath);
+    const auto jsonFiles = addonDir.entryList({"*.json"}, QDir::Files);
+    for (const auto& jsonFile : jsonFiles) {
+      QFile file(subdirPath + "/" + jsonFile);
+      if (!file.open(QFile::ReadOnly))
+        continue;
+
+      QJsonParseError parseError;
+      const auto doc = QJsonDocument::fromJson(file.readAll(), &parseError);
+      if (parseError.error != QJsonParseError::NoError || doc.isNull())
+        continue;
+
+      auto obj         = doc.object();
+      const auto title = obj.value("title").toString();
+      if (title.isEmpty() || !obj.contains("colors"))
+        continue;
+
+      if (m_themes.contains(title))
+        continue;
+
+      auto params          = obj.value("parameters").toObject();
+      const auto editorKey = params.value("code-editor-theme").toString();
+      if (!editorKey.isEmpty()) {
+        const auto xmlPath = subdirPath + "/code-editor/" + editorKey + ".xml";
+        if (QFile::exists(xmlPath))
+          params.insert("code-editor-theme", xmlPath);
+
+        obj.insert("parameters", params);
+      }
+
+      m_themes.insert(title, obj);
+      m_availableThemes.append(title);
+      m_userThemeNames.append(title);
+    }
+  }
+}
+
+/**
+ * @brief Reloads user themes when a new addon is installed.
+ */
+void Misc::ThemeManager::onExtensionInstalled(const QString& id)
+{
+  Q_UNUSED(id)
+  const auto previousUserThemes = m_userThemeNames;
+
+  m_availableThemes.removeAll(QStringLiteral("System"));
+  loadUserThemes();
+  m_availableThemes.append(QStringLiteral("System"));
+
+  // Find newly added theme and switch to it
+  for (const auto& name : std::as_const(m_userThemeNames)) {
+    if (!previousUserThemes.contains(name)) {
+      const int idx = m_availableThemes.indexOf(name);
+      if (idx >= 0) {
+        setTheme(idx);
+        updateLocalizedThemeNames();
+        Q_EMIT languageChanged();
+        return;
+      }
+    }
+  }
+
+  // No new theme, just preserve current selection
+  const int idx = m_availableThemes.indexOf(m_themeName);
+  if (idx >= 0)
+    m_theme = idx;
+
+  updateLocalizedThemeNames();
+  Q_EMIT languageChanged();
+}
+
+/**
+ * @brief Reloads user themes when an addon is uninstalled.
+ *
+ * Falls back to Default if the current theme was uninstalled.
+ */
+void Misc::ThemeManager::onExtensionUninstalled(const QString& id)
+{
+  Q_UNUSED(id)
+  const auto currentName = m_themeName;
+
+  m_availableThemes.removeAll(QStringLiteral("System"));
+  loadUserThemes();
+  m_availableThemes.append(QStringLiteral("System"));
+
+  const int idx = m_availableThemes.indexOf(currentName);
+  if (idx >= 0)
+    m_theme = idx;
+  else
+    setTheme(0);
+
+  // Update localized names
+  updateLocalizedThemeNames();
+  Q_EMIT languageChanged();
 }

@@ -204,6 +204,7 @@ set(SOURCES
   src/Misc/ModuleManager.cpp
   src/Misc/TimerEvents.cpp
   src/Misc/WorkspaceManager.cpp
+  src/Misc/ExtensionManager.cpp
   src/Misc/Examples.cpp
   src/Misc/HelpCenter.cpp
   src/Misc/IconEngine.cpp
@@ -241,6 +242,7 @@ set(SOURCES
   src/API/Handlers/ProjectHandler.cpp
   src/API/Handlers/ConsoleHandler.cpp
   src/API/Handlers/CSVPlayerHandler.cpp
+  src/API/Handlers/ExtensionHandler.cpp
   src/API/Handlers/DashboardHandler.cpp
   src/API/Handlers/WindowHandler.cpp
   src/API/Handlers/SourceHandler.cpp
@@ -282,6 +284,7 @@ set(HEADERS
   src/Misc/TimerEvents.h
   src/Misc/Translator.h
   src/Misc/WorkspaceManager.h
+  src/Misc/ExtensionManager.h
   src/Misc/Examples.h
   src/Misc/HelpCenter.h
   src/Misc/IconEngine.h
@@ -320,6 +323,7 @@ set(HEADERS
   src/API/Handlers/ProjectHandler.h
   src/API/Handlers/ConsoleHandler.h
   src/API/Handlers/CSVPlayerHandler.h
+  src/API/Handlers/ExtensionHandler.h
   src/API/Handlers/DashboardHandler.h
   src/API/Handlers/WindowHandler.h
   src/API/Handlers/SourceHandler.h
@@ -374,6 +378,7 @@ set(QML_SOURCES
   qml/Dialogs/OnlineIconPicker.qml
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
+  qml/Dialogs/ExtensionManager.qml
   qml/Dialogs/ExamplesBrowser.qml
   qml/Dialogs/HelpCenter.qml
   qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml

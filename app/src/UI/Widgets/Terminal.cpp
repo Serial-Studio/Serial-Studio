@@ -1250,8 +1250,13 @@ void Widgets::Terminal::onThemeChanged()
   m_palette.setColor(QPalette::Highlight, theme->getColor("console_highlight"));
   setFillColor(m_palette.color(QPalette::Base));
   updateAnsiColorPalette();
-  update();
   // clang-format on
+
+  // Reset current color so new unformatted text uses the new theme
+  if (ansiColors())
+    m_currentColor = QColor();
+
+  update();
 }
 
 //--------------------------------------------------------------------------------------------------

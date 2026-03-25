@@ -27,6 +27,7 @@
 #include "API/Handlers/CSVExportHandler.h"
 #include "API/Handlers/CSVPlayerHandler.h"
 #include "API/Handlers/DashboardHandler.h"
+#include "API/Handlers/ExtensionHandler.h"
 #include "API/Handlers/IOManagerHandler.h"
 #include "API/Handlers/NetworkHandler.h"
 #include "API/Handlers/ProjectHandler.h"
@@ -243,6 +244,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::DashboardHandler::registerCommands();
   Handlers::WindowHandler::registerCommands();
   Handlers::SourceHandler::registerCommands();
+  Handlers::ExtensionHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();

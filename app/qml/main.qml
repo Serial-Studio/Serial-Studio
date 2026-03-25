@@ -134,6 +134,7 @@ Item {
         acknowledgementsDialog.hide()
         fileTransmissionDialog.hide()
         examplesBrowser.hide()
+        extensionManager.hide()
         helpCenter.hide()
         licenseDialog.hide()
       }
@@ -193,6 +194,11 @@ Item {
     }
 
     DialogLoader {
+      id: extensionManager
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExtensionManager.qml"
+    }
+
+    DialogLoader {
       id: helpCenter
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/HelpCenter.qml"
     }
@@ -237,6 +243,7 @@ Item {
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
   function showFileTransmission()  { fileTransmissionDialog.activate() }
   function showExamplesBrowser()   { examplesBrowser.activate() }
+  function showExtensionManager()  { extensionManager.activate() }
   function showHelpCenter(pageId) {
     if (pageId)
       Cpp_HelpCenter.showPage(pageId)

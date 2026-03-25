@@ -257,9 +257,19 @@ Rectangle {
       implicitWidth: 1
       Layout.fillHeight: true
       Layout.maximumHeight: 64
-      visible: Cpp_CommercialBuild
       Layout.alignment: Qt.AlignVCenter
       color: Cpp_ThemeManager.colors["toolbar_separator"]
+    }
+
+    //
+    // Extensions button
+    //
+    Widgets.ToolbarButton {
+      text: qsTr("Extensions")
+      Layout.alignment: Qt.AlignLeft
+      onClicked: app.showExtensionManager()
+      ToolTip.text: qsTr("Browse and install extensions")
+      icon.source: "qrc:/rcc/icons/toolbar/extensions.svg"
     }
 
     //
@@ -304,171 +314,49 @@ Rectangle {
     }
 
     //
-    // Driver selection group
+    // Resource buttons
     //
     GridLayout {
-      id: driverGrid
-
       rows: 3
+      columns: 1
       rowSpacing: 4
       columnSpacing: 4
       Layout.alignment: Qt.AlignVCenter
-      columns: Cpp_CommercialBuild ? 3 : 1
-
-      readonly property bool driverSelectionEnabled:
-        !Cpp_IO_Manager.isConnected &&
-        !root.dashboardVisible &&
-        (Cpp_AppState.operationMode !== SerialStudio.ProjectFile ||
-         Cpp_JSON_ProjectModel.sourceCount <= 1)
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("UART")
+        checkable: true
         horizontalLayout: true
+        text: qsTr("CSV Export")
         Layout.alignment: Qt.AlignLeft
-        enabled: driverGrid.driverSelectionEnabled
-        onClicked: Cpp_IO_Manager.busType = SerialStudio.UART
-        icon.source: "qrc:/rcc/icons/devices/drivers/uart.svg"
-        font: Cpp_IO_Manager.busType === SerialStudio.UART ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-        ToolTip.text: qsTr("Select Serial port (UART) communication")
-      }
-
-      Loader {
-        visible: active
-        active: Cpp_CommercialBuild
-        Layout.alignment: Qt.AlignLeft
-        sourceComponent: Component {
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("Audio")
-            horizontalLayout: true
-            Layout.alignment: Qt.AlignLeft
-            enabled: driverGrid.driverSelectionEnabled
-            ToolTip.text: qsTr("Select audio input device (Pro)")
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.Audio
-            icon.source: "qrc:/rcc/icons/devices/drivers/audio.svg"
-            font: Cpp_IO_Manager.busType === SerialStudio.Audio ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-          }
-        }
-      }
-
-      Loader {
-        visible: active
-        active: Cpp_CommercialBuild
-        Layout.alignment: Qt.AlignLeft
-        sourceComponent: Component {
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("USB")
-            horizontalLayout: true
-            Layout.alignment: Qt.AlignLeft
-            enabled: driverGrid.driverSelectionEnabled
-            ToolTip.text: qsTr("Select raw USB communication (Pro)")
-            icon.source: "qrc:/rcc/icons/devices/drivers/usb.svg"
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
-            font: Cpp_IO_Manager.busType === SerialStudio.RawUsb ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-          }
-        }
+        checked: Cpp_CSV_Export.exportEnabled
+        icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
+        onClicked: Cpp_CSV_Export.exportEnabled = !Cpp_CSV_Export.exportEnabled
+        ToolTip.text: qsTr("Toggle automatic CSV logging of incoming data frames")
       }
 
       Widgets.ToolbarButton {
         iconSize: 16
-        text: qsTr("Network")
+        checkable: true
         horizontalLayout: true
+        text: qsTr("MDF4 Export")
         Layout.alignment: Qt.AlignLeft
-        enabled: driverGrid.driverSelectionEnabled
-        ToolTip.text: qsTr("Select TCP/UDP network communication")
-        icon.source: "qrc:/rcc/icons/devices/drivers/network.svg"
-        onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
-        font: Cpp_IO_Manager.busType === SerialStudio.Network ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-      }
-
-      Loader {
-        visible: active
-        active: Cpp_CommercialBuild
-        Layout.alignment: Qt.AlignLeft
-        sourceComponent: Component {
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("Modbus")
-            horizontalLayout: true
-            Layout.alignment: Qt.AlignLeft
-            enabled: driverGrid.driverSelectionEnabled
-            ToolTip.text: qsTr("Select MODBUS communication (Pro)")
-            icon.source: "qrc:/rcc/icons/devices/drivers/modbus.svg"
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.ModBus
-            font: Cpp_IO_Manager.busType === SerialStudio.ModBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-          }
-        }
-      }
-
-      Loader {
-        visible: active
-        active: Cpp_CommercialBuild
-        Layout.alignment: Qt.AlignLeft
-        sourceComponent: Component {
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("HID")
-            horizontalLayout: true
-            Layout.alignment: Qt.AlignLeft
-            enabled: driverGrid.driverSelectionEnabled
-            ToolTip.text: qsTr("Select HID device communication (Pro)")
-            icon.source: "qrc:/rcc/icons/devices/drivers/hid.svg"
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
-            font: Cpp_IO_Manager.busType === SerialStudio.HidDevice ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-          }
-        }
+        checked: Cpp_MDF4_Export.exportEnabled
+        icon.source: "qrc:/rcc/icons/toolbar/mf4.svg"
+        onClicked: Cpp_MDF4_Export.exportEnabled = !Cpp_MDF4_Export.exportEnabled
+        ToolTip.text: qsTr("Toggle automatic MDF4 logging of incoming data frames (Pro)")
       }
 
       Widgets.ToolbarButton {
         iconSize: 16
+        checkable: true
         horizontalLayout: true
-        text: qsTr("Bluetooth")
+        text: qsTr("Console Export")
         Layout.alignment: Qt.AlignLeft
-        enabled: driverGrid.driverSelectionEnabled
-        ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
-        icon.source: "qrc:/rcc/icons/devices/drivers/bluetooth.svg"
-        onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
-        font: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-      }
-
-      Loader {
-        visible: active
-        active: Cpp_CommercialBuild
-        Layout.alignment: Qt.AlignLeft
-        sourceComponent: Component {
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("CAN Bus")
-            horizontalLayout: true
-            Layout.alignment: Qt.AlignLeft
-            enabled: driverGrid.driverSelectionEnabled
-            ToolTip.text: qsTr("Select CAN Bus communication (Pro)")
-            icon.source: "qrc:/rcc/icons/devices/drivers/canbus.svg"
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.CanBus
-            font: Cpp_IO_Manager.busType === SerialStudio.CanBus ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-          }
-        }
-      }
-
-      Loader {
-        visible: active
-        active: Cpp_CommercialBuild
-        Layout.alignment: Qt.AlignLeft
-        sourceComponent: Component {
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("Process")
-            horizontalLayout: true
-            Layout.alignment: Qt.AlignLeft
-            enabled: driverGrid.driverSelectionEnabled
-            ToolTip.text: qsTr("Select process pipe communication (Pro)")
-            icon.source: "qrc:/rcc/icons/devices/drivers/process.svg"
-            onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
-            font: Cpp_IO_Manager.busType === SerialStudio.Process ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
-          }
-        }
+        checked: Cpp_Console_Export.exportEnabled
+        icon.source: "qrc:/rcc/icons/toolbar/console.svg"
+        onClicked: Cpp_Console_Export.exportEnabled = !Cpp_Console_Export.exportEnabled
+        ToolTip.text: qsTr("Toggle automatic plain-text logging of console output")
       }
     }
 

@@ -1218,8 +1218,8 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
   }
 
   // Construct axis lines through true center (not snapped)
-  const float ax = m_centerPoint.x();
-  const float ay = m_centerPoint.y();
+  const float ax                    = m_centerPoint.x();
+  const float ay                    = m_centerPoint.y();
   QPair<QVector3D, QVector3D> xAxis = {QVector3D(ax - l, ay, 0), QVector3D(ax + l, ay, 0)};
   QPair<QVector3D, QVector3D> yAxis = {QVector3D(ax, ay - l, 0), QVector3D(ax, ay + l, 0)};
 

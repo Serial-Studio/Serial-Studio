@@ -69,6 +69,9 @@ Item {
                     Math.max(16, _label.implicitHeight) * 3 + 16
   Layout.minimumWidth: implicitWidth
   Layout.maximumWidth: maxButtonWidth
+  Layout.fillHeight: horizontalLayout
+  Layout.topMargin: horizontalLayout ? -1 : 0
+  Layout.bottomMargin: horizontalLayout ? -1 : 0
 
   //
   // Enabled/disabled opacity effect
@@ -85,10 +88,10 @@ Item {
     radius: 3
     border.width: 1
     anchors.fill: parent
+    visible: root.toolbarButton
     opacity: (root.checked || _mouseArea.pressed)
              ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
              : 0.0
-    visible: root.toolbarButton && !root.horizontalLayout
     color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
     Behavior on opacity { NumberAnimation {} }

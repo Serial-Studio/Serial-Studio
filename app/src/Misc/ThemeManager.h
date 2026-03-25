@@ -146,8 +146,11 @@ public:
 
 public slots:
   void setTheme(int index);
+  void onExtensionInstalled(const QString& id);
+  void onExtensionUninstalled(const QString& id);
 
 private slots:
+  void loadUserThemes();
   void loadSystemTheme();
   void updateLocalizedThemeNames();
 
@@ -164,6 +167,7 @@ private:
 
   QStringList m_availableThemes;
   QStringList m_availableThemeNames;
+  QStringList m_userThemeNames;
   QMap<QString, QJsonObject> m_themes;
 
   QVector<QColor> m_widgetColors;
