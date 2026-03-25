@@ -97,12 +97,29 @@ Popup {
     delegate: Item {
       required property var modelData
 
-      height: 24
+      readonly property bool isSeparator: modelData[root.valueRole] === "__separator__"
+
+      height: isSeparator ? 9 : 24
       width: root.width - 16
 
+      //
+      // Separator line
+      //
+      Rectangle {
+        visible: isSeparator
+        opacity: 0.5
+        implicitHeight: 1
+        width: parent.width
+        anchors.verticalCenter: parent.verticalCenter
+        color: Cpp_ThemeManager.colors["start_menu_text"]
+      }
+
+      //
+      // Hover highlight
+      //
       Rectangle {
         anchors.fill: parent
-        visible: _mouseArea.containsMouse
+        visible: !isSeparator && _mouseArea.containsMouse
         color: Cpp_ThemeManager.colors["start_menu_highlight"]
       }
 
@@ -110,6 +127,7 @@ Popup {
         id: _layout
 
         spacing: 0
+        visible: !isSeparator
         anchors.fill: parent
 
         Component.onCompleted: {
@@ -160,6 +178,7 @@ Popup {
         id: _mouseArea
 
         hoverEnabled: true
+        enabled: !isSeparator
         anchors.fill: parent
         onClicked: {
           root.currentValue = modelData[root.valueRole]

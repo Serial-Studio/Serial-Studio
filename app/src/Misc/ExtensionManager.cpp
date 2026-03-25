@@ -70,8 +70,9 @@ Misc::ExtensionManager::ExtensionManager()
   else
     m_repositories = saved;
 
-  // Load installed extension tracking
+  // Load installed extension tracking and rebuild plugin list
   loadInstalledManifest();
+  applyFilter();
 }
 
 /**

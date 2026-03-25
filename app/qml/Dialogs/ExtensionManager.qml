@@ -63,14 +63,16 @@ SmartDialog {
   }
 
   onVisibleChanged: {
-    if (visible)
+    if (visible) {
       Cpp_ExtensionManager.refreshRepositories()
-  }
+    }
 
-  onClosing: {
-    Cpp_ExtensionManager.setSelectedIndex(-1)
-    Cpp_ExtensionManager.setSearchFilter("")
-    root.showRepos = false
+    else {
+      Cpp_ExtensionManager.setSelectedIndex(-1)
+      Cpp_ExtensionManager.setSearchFilter("")
+      Cpp_ExtensionManager.setFilterType("")
+      root.showRepos = false
+    }
   }
 
   contentItem: ColumnLayout {
@@ -135,6 +137,22 @@ SmartDialog {
           model: Cpp_ExtensionManager.extensionTypes()
           displayText: Cpp_ExtensionManager.friendlyTypeName(currentText)
           onCurrentTextChanged: Cpp_ExtensionManager.setFilterType(currentText)
+
+          Connections {
+            target: Cpp_ExtensionManager
+            function onFilterTypeChanged() {
+              var ft = Cpp_ExtensionManager.filterType
+              var types = Cpp_ExtensionManager.extensionTypes()
+              for (var i = 0; i < types.length; ++i) {
+                if (types[i] === ft || (ft === "" && types[i] === "All")) {
+                  typeFilter.currentIndex = i
+                  return
+                }
+              }
+
+              typeFilter.currentIndex = 0
+            }
+          }
 
           delegate: ItemDelegate {
             width: typeFilter.width

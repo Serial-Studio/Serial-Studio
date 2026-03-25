@@ -37,6 +37,7 @@ Popup {
   width: _layout.implicitWidth + gradientWidth + 32
   height: Math.max(gradientHeight, _layout.implicitHeight + 16)
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+  onOpened: Cpp_ExtensionManager.installedPluginsChanged()
 
   //
   // Required data inputs
@@ -248,12 +249,32 @@ Popup {
           _plugins.popup.valueRole = "id"
           _plugins.popup.iconRole = "icon"
           popup.valueSelected.connect((value) => {
-                                        Cpp_ExtensionManager.launchPlugin(value)
+                                        if (value === "__manage_plugins__") {
+                                          Cpp_ExtensionManager.setFilterType("plugin")
+                                          app.showExtensionManager()
+                                        } else {
+                                          Cpp_ExtensionManager.launchPlugin(value)
+                                        }
+
                                         root.close()
                                       })
         }
 
-        _plugins.popup.model = Cpp_ExtensionManager.installedPlugins
+        // Build model: plugins + separator + "Manage Plugins..."
+        var items = []
+        var plugins = Cpp_ExtensionManager.installedPlugins
+        for (var i = 0; i < plugins.length; ++i)
+          items.push(plugins[i])
+
+        if (plugins.length > 0)
+          items.push({"id": "__separator__", "title": "", "icon": ""})
+        items.push({
+                     "id": "__manage_plugins__",
+                     "title": qsTr("Manage Plugins..."),
+                     "icon": "qrc:/rcc/icons/toolbar/extensions.svg"
+                   })
+
+        _plugins.popup.model = items
         _plugins.popup.maximumHeight = root.height
         _plugins.popup.x = root.x + root.width - 1
         _plugins.popup.y = _plugins.y + _layout.y + root.y + 4
