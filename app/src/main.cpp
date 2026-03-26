@@ -49,7 +49,6 @@
 #include "API/Server.h"
 #include "AppInfo.h"
 #include "AppState.h"
-#include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/ModuleManager.h"

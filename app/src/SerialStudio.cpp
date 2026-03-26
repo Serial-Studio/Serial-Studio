@@ -488,6 +488,21 @@ SerialStudio::DatasetWidget SerialStudio::datasetWidgetFromId(const QString& id)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Checks if any playback players (CSV or MDF4) are currently open.
+ *
+ * This function provides a centralized check to determine if any file players
+ * are active, which is used to prevent data export during playback mode.
+ *
+ * @return true if any player (CSV or MDF4) has an open file; false otherwise.
+ */
+bool SerialStudio::isAnyPlayerOpen()
+{
+  static auto& csvPlayer  = CSV::Player::instance();
+  static auto& mdf4Player = MDF4::Player::instance();
+  return csvPlayer.isOpen() || mdf4Player.isOpen();
+}
+
+/**
  * @brief Retrieves the appropriate color for a dataset based on its index.
  *
  * This function accesses the theme's color array to obtain a color that
@@ -602,20 +617,9 @@ QColor SerialStudio::getDeviceColor(const int sourceId)
   return QColor::fromHslF(h, s, l, 1.0f);
 }
 
-/**
- * @brief Checks if any playback players (CSV or MDF4) are currently open.
- *
- * This function provides a centralized check to determine if any file players
- * are active, which is used to prevent data export during playback mode.
- *
- * @return true if any player (CSV or MDF4) has an open file; false otherwise.
- */
-bool SerialStudio::isAnyPlayerOpen()
-{
-  static auto& csvPlayer  = CSV::Player::instance();
-  static auto& mdf4Player = MDF4::Player::instance();
-  return csvPlayer.isOpen() || mdf4Player.isOpen();
-}
+//--------------------------------------------------------------------------------------------------
+// String processing
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Converts a hex-encoded string into a UTF-8 decoded string with visible

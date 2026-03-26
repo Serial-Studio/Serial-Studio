@@ -132,21 +132,20 @@ public:
   [[nodiscard]] const std::vector<Action>& actions() const noexcept;
   [[nodiscard]] const std::vector<Source>& sources() const noexcept;
 
-  Q_INVOKABLE bool askSave();
-  Q_INVOKABLE QVariantList sourcesForDiagram() const;
-  Q_INVOKABLE QVariantList groupsForDiagram() const;
-  Q_INVOKABLE QVariantList actionsForDiagram() const;
-  Q_INVOKABLE QJsonObject serializeToJson() const;
-  Q_INVOKABLE bool saveJsonFile(const bool askPath = false);
-  Q_INVOKABLE bool apiSaveJsonFile(const QString& path);
-  Q_INVOKABLE QJsonObject widgetSettings(const QString& widgetId) const;
-  Q_INVOKABLE void saveWidgetSetting(const QString& widgetId,
-                                     const QString& key,
-                                     const QVariant& value);
+  Q_INVOKABLE [[nodiscard]] bool askSave();
+  Q_INVOKABLE [[nodiscard]] QVariantList sourcesForDiagram() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList groupsForDiagram() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList actionsForDiagram() const;
+  Q_INVOKABLE [[nodiscard]] QJsonObject serializeToJson() const;
+  Q_INVOKABLE [[nodiscard]] bool saveJsonFile(const bool askPath = false);
+  Q_INVOKABLE [[nodiscard]] bool apiSaveJsonFile(const QString& path);
+  Q_INVOKABLE [[nodiscard]] QJsonObject widgetSettings(const QString& widgetId) const;
   Q_INVOKABLE [[nodiscard]] QJsonObject pluginState(const QString& pluginId) const;
-  Q_INVOKABLE void savePluginState(const QString& pluginId, const QJsonObject& state);
 
 public slots:
+  void savePluginState(const QString& pluginId, const QJsonObject& state);
+  void saveWidgetSetting(const QString& widgetId, const QString& key, const QVariant& value);
+
   void setupExternalConnections();
   void setSuppressMessageBoxes(const bool suppress);
 

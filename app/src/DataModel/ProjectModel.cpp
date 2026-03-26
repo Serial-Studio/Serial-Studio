@@ -251,54 +251,9 @@ QJsonObject DataModel::ProjectModel::widgetSettings(const QString& widgetId) con
 }
 
 /**
- * @brief Persists a single key/value setting for a widget to the project file.
- *
- * No-op when the operation mode is not ProjectFile, when no file path is set,
- * or when no I/O connection or MQTT subscription is active.
- *
- * @param widgetId  Decimal string of the WidgetID.
- * @param key       Setting key (e.g. "interpolate").
- * @param value     Value to persist.
- */
-void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
-                                                const QString& key,
-                                                const QVariant& value)
-{
-  const auto opMode = AppState::instance().operationMode();
-  if (opMode != SerialStudio::ProjectFile || m_filePath.isEmpty())
-    return;
-
-  const bool ioConnected = IO::ConnectionManager::instance().isConnected();
-#ifdef BUILD_COMMERCIAL
-  const bool mqttSubscribed =
-    MQTT::Client::instance().isConnected() && MQTT::Client::instance().isSubscriber();
-#else
-  const bool mqttSubscribed = false;
-#endif
-  if (!ioConnected && !mqttSubscribed)
-    return;
-
-  auto obj            = m_widgetSettings.value(widgetId).toObject();
-  const auto newValue = QJsonValue::fromVariant(value);
-  if (obj.value(key) == newValue)
-    return;
-
-  obj.insert(key, newValue);
-  m_widgetSettings.insert(widgetId, obj);
-
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly))
-    return;
-
-  const auto json = serializeToJson();
-  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
-  file.close();
-}
-
-/**
  * @brief Returns the persisted state object for a plugin.
  *
- * Plugin states are stored under "__plugin__:<pluginId>" keys
+ * Plugin states are stored under "plugin:<pluginId>" keys
  * in the widgetSettings section of the project file.
  *
  * @param pluginId The extension ID (e.g. "digital-indicator").
@@ -306,31 +261,7 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
  */
 QJsonObject DataModel::ProjectModel::pluginState(const QString& pluginId) const
 {
-  return m_widgetSettings.value(QStringLiteral("__plugin__:") + pluginId).toObject();
-}
-
-/**
- * @brief Persists a plugin's entire state to the project file.
- *
- * Saves the state object under "__plugin__:<pluginId>" in the
- * widgetSettings section. The project file is written to disk
- * immediately.
- *
- * @param pluginId The extension ID.
- * @param state    JSON object containing the plugin's state.
- */
-void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
-{
-  if (m_filePath.isEmpty())
-    return;
-
-  const auto key = QStringLiteral("__plugin__:") + pluginId;
-  if (m_widgetSettings.value(key).toObject() == state)
-    return;
-
-  // Update in-memory state immediately, debounce disk write
-  m_widgetSettings.insert(key, state);
-  m_pluginSaveTimer.start();
+  return m_widgetSettings.value(QStringLiteral("plugin:") + pluginId).toObject();
 }
 
 /**
@@ -400,6 +331,75 @@ const std::vector<DataModel::Source>& DataModel::ProjectModel::sources() const n
 int DataModel::ProjectModel::sourceCount() const noexcept
 {
   return static_cast<int>(m_sources.size());
+}
+
+/**
+ * @brief Persists a single key/value setting for a widget to the project file.
+ *
+ * No-op when the operation mode is not ProjectFile, when no file path is set,
+ * or when no I/O connection or MQTT subscription is active.
+ *
+ * @param widgetId  Decimal string of the WidgetID.
+ * @param key       Setting key (e.g. "interpolate").
+ * @param value     Value to persist.
+ */
+void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
+                                                const QString& key,
+                                                const QVariant& value)
+{
+  const auto opMode = AppState::instance().operationMode();
+  if (opMode != SerialStudio::ProjectFile || m_filePath.isEmpty())
+    return;
+
+  const bool ioConnected = IO::ConnectionManager::instance().isConnected();
+#ifdef BUILD_COMMERCIAL
+  const bool mqttSubscribed =
+    MQTT::Client::instance().isConnected() && MQTT::Client::instance().isSubscriber();
+#else
+  const bool mqttSubscribed = false;
+#endif
+  if (!ioConnected && !mqttSubscribed)
+    return;
+
+  auto obj            = m_widgetSettings.value(widgetId).toObject();
+  const auto newValue = QJsonValue::fromVariant(value);
+  if (obj.value(key) == newValue)
+    return;
+
+  obj.insert(key, newValue);
+  m_widgetSettings.insert(widgetId, obj);
+
+  QFile file(m_filePath);
+  if (!file.open(QFile::WriteOnly))
+    return;
+
+  const auto json = serializeToJson();
+  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
+  file.close();
+}
+
+/**
+ * @brief Persists a plugin's entire state to the project file.
+ *
+ * Saves the state object under "plugin:<pluginId>" in the
+ * widgetSettings section. The project file is written to disk
+ * immediately.
+ *
+ * @param pluginId The extension ID.
+ * @param state    JSON object containing the plugin's state.
+ */
+void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
+{
+  if (m_filePath.isEmpty())
+    return;
+
+  const auto key = QStringLiteral("plugin:") + pluginId;
+  if (m_widgetSettings.value(key).toObject() == state)
+    return;
+
+  // Update in-memory state immediately, debounce disk write
+  m_widgetSettings.insert(key, state);
+  m_pluginSaveTimer.start();
 }
 
 /**
@@ -1309,13 +1309,6 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       m_widgetSettings.insert(key, cleaned);
   }
 
-  // Migrate legacy "__activeGroup__" key to "activeGroup"
-  if (m_widgetSettings.contains(QStringLiteral("__activeGroup__"))) {
-    const auto val = m_widgetSettings.value(QStringLiteral("__activeGroup__"));
-    m_widgetSettings.remove(QStringLiteral("__activeGroup__"));
-    m_widgetSettings.insert(Keys::kActiveGroupSubKey, val);
-  }
-
   if (json.contains(QStringLiteral("dashboardLayout"))) {
     const int legacy_group_id = json.value(QStringLiteral("activeGroupId")).toInt(-1);
     const auto layout         = json.value(QStringLiteral("dashboardLayout")).toObject();
@@ -1354,7 +1347,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       else
         qWarning() << "[ProjectModel] Legacy frame parser function automatically migrated";
 
-      saveJsonFile(false);
+      (void)saveJsonFile(false);
       return true;
     }
   }

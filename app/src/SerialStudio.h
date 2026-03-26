@@ -251,45 +251,45 @@ public:
   //
   // Commercial-related functions
   //
-  [[nodiscard]] static bool activated();
-  [[nodiscard]] static bool commercialCfg(const QVector<DataModel::Group>& g);
-  [[nodiscard]] static bool commercialCfg(const std::vector<DataModel::Group>& g);
+  Q_INVOKABLE [[nodiscard]] static bool activated();
+  Q_INVOKABLE [[nodiscard]] static bool commercialCfg(const QVector<DataModel::Group>& g);
+  Q_INVOKABLE [[nodiscard]] static bool commercialCfg(const std::vector<DataModel::Group>& g);
 
   //
   // Dashboard logic
   //
   // clang-format off
-  [[nodiscard]] static bool isGroupWidget(const DashboardWidget widget);
-  [[nodiscard]] static bool isDatasetWidget(const DashboardWidget widget);
-  [[nodiscard]] static QString dashboardWidgetTitle(const DashboardWidget w);
-  [[nodiscard]] static DashboardWidget getDashboardWidget(const DataModel::Group& group);
-  [[nodiscard]] static QList<DashboardWidget> getDashboardWidgets(const DataModel::Dataset& dataset);
-  Q_INVOKABLE static QString dashboardWidgetIcon(const DashboardWidget w, const bool large = false);
+  Q_INVOKABLE [[nodiscard]] static bool isGroupWidget(const SerialStudio::DashboardWidget widget);
+  Q_INVOKABLE [[nodiscard]] static bool isDatasetWidget(const SerialStudio::DashboardWidget widget);
+  Q_INVOKABLE [[nodiscard]] static QString dashboardWidgetTitle(const SerialStudio::DashboardWidget w);
+  Q_INVOKABLE [[nodiscard]] static SerialStudio::DashboardWidget getDashboardWidget(const DataModel::Group& group);
+  Q_INVOKABLE [[nodiscard]] static QList<SerialStudio::DashboardWidget> getDashboardWidgets(const DataModel::Dataset& dataset);
+  Q_INVOKABLE [[nodiscard]] static QString dashboardWidgetIcon(const SerialStudio::DashboardWidget w, const bool large = false);
   // clang-format on
 
   //
   // Parsing & project model logic
   //
-  [[nodiscard]] static QString groupWidgetId(const GroupWidget widget);
-  [[nodiscard]] static GroupWidget groupWidgetFromId(const QString& id);
-  [[nodiscard]] static QString datasetWidgetId(const DatasetWidget widget);
-  [[nodiscard]] static DatasetWidget datasetWidgetFromId(const QString& id);
+  Q_INVOKABLE [[nodiscard]] static QString groupWidgetId(const SerialStudio::GroupWidget widget);
+  Q_INVOKABLE [[nodiscard]] static SerialStudio::GroupWidget groupWidgetFromId(const QString& id);
+  Q_INVOKABLE [[nodiscard]] static QString datasetWidgetId(const SerialStudio::DatasetWidget widget);
+  Q_INVOKABLE [[nodiscard]] static SerialStudio::DatasetWidget datasetWidgetFromId(const QString& id);
 
   //
   // Utility functions
   //
-  [[nodiscard]] static QColor getDatasetColor(const int index);
+  Q_INVOKABLE [[nodiscard]] static bool isAnyPlayerOpen();
+  Q_INVOKABLE [[nodiscard]] static QColor getDatasetColor(const int index);
   Q_INVOKABLE [[nodiscard]] static QColor getDeviceColor(const int sourceId);
   Q_INVOKABLE [[nodiscard]] static QColor getDeviceTopColor(const int sourceId);
   Q_INVOKABLE [[nodiscard]] static QColor getDeviceBottomColor(const int sourceId);
-  [[nodiscard]] static bool isAnyPlayerOpen();
 
   //
   // String processing
   //
-  [[nodiscard]] static QString hexToString(const QString& hex);
-  [[nodiscard]] static QString stringToHex(const QString& str);
-  [[nodiscard]] static QByteArray hexToBytes(const QString& data);
-  [[nodiscard]] static QString resolveEscapeSequences(const QString& str);
-  [[nodiscard]] static QString escapeControlCharacters(const QString& str);
+  Q_INVOKABLE [[nodiscard]] static QString hexToString(const QString& hex);
+  Q_INVOKABLE [[nodiscard]] static QString stringToHex(const QString& str);
+  Q_INVOKABLE [[nodiscard]] static QByteArray hexToBytes(const QString& data);
+  Q_INVOKABLE [[nodiscard]] static QString resolveEscapeSequences(const QString& str);
+  Q_INVOKABLE [[nodiscard]] static QString escapeControlCharacters(const QString& str);
 };

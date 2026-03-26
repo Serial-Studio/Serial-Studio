@@ -649,10 +649,9 @@ void Misc::ThemeManager::onExtensionInstalled(const QString& id)
   m_availableThemes.append(QStringLiteral("System"));
 
   // Only auto-switch to the newly installed theme if it's a theme extension
-  const auto& ext = Misc::ExtensionManager::instance();
-  const auto info = ext.selectedExtension();
-  const bool isTheme = id.isEmpty()
-                    || info.value("type").toString() == QStringLiteral("theme");
+  const auto& ext    = Misc::ExtensionManager::instance();
+  const auto info    = ext.selectedExtension();
+  const bool isTheme = id.isEmpty() || info.value("type").toString() == QStringLiteral("theme");
 
   if (isTheme) {
     for (const auto& name : std::as_const(m_userThemeNames)) {

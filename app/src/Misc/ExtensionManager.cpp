@@ -1476,7 +1476,9 @@ void Misc::ExtensionManager::restoreRunningPlugins()
   // Wait for catalog to finish loading before restoring
   if (m_loading) {
     connect(
-      this, &ExtensionManager::loadingChanged, this,
+      this,
+      &ExtensionManager::loadingChanged,
+      this,
       [this]() {
         if (!m_loading)
           restoreRunningPlugins();
