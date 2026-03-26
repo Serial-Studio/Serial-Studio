@@ -904,6 +904,38 @@ elseif(UNIX)
 endif()
 
 #---------------------------------------------------------------------------------------------------
+# Commercial binary hardening — symbol stripping and visibility
+#---------------------------------------------------------------------------------------------------
+#
+# In Release builds of the commercial edition, strip non-essential symbols from the final binary.
+# Also sets default symbol visibility to hidden so only Qt MOC-required exports remain in the
+# dynamic symbol table.
+#---------------------------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL AND CMAKE_BUILD_TYPE STREQUAL "Release")
+  set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN ON
+  )
+
+  if(APPLE)
+    add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+      COMMAND ${CMAKE_STRIP} -x "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+      COMMENT "Stripping local symbols from commercial binary (macOS)"
+    )
+  elseif(UNIX)
+    add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+      COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+      COMMENT "Stripping unneeded symbols from commercial binary (Linux)"
+    )
+  elseif(WIN32)
+    target_link_options(${PROJECT_EXECUTABLE} PRIVATE
+      $<$<CXX_COMPILER_ID:MSVC>:/DEBUG:NONE>
+    )
+  endif()
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # Qt automatic deployment (macdeployqt, windeployqt, linuxdeploy)
 #---------------------------------------------------------------------------------------------------
 #

@@ -1512,7 +1512,9 @@ void UI::Dashboard::updateDataSeries(int sourceId)
 #ifdef BUILD_COMMERCIAL
     const auto& tk = Licensing::CommercialToken::current();
     auto xAxisId =
-      (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Trial) ? yDataset.xAxisId : 0;
+      (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial)
+        ? yDataset.xAxisId
+        : 0;
 #else
     auto xAxisId = 0;
 #endif
@@ -1660,7 +1662,7 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
 {
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
-  if (!tk.isValid() || tk.featureTier() < Licensing::FeatureTier::Trial)
+  if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Trial)
     return;
 #else
   Q_UNUSED(dataset);
@@ -1731,7 +1733,7 @@ void UI::Dashboard::configureLineSeries()
     // Add X-axis data & generate a line series with X/Y data
 #ifdef BUILD_COMMERCIAL
     const auto& tk2 = Licensing::CommercialToken::current();
-    if (m_datasets.contains(yDataset.xAxisId) && tk2.isValid()
+    if (m_datasets.contains(yDataset.xAxisId) && tk2.isValid() && SS_LICENSE_GUARD()
         && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
 #else
     if (false) {

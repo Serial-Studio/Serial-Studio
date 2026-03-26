@@ -359,7 +359,7 @@ void Widgets::Plot::calculateAutoScaleRange()
   // Obtain range scale for X-axis
 #ifdef BUILD_COMMERCIAL
   const auto& tk2 = Licensing::CommercialToken::current();
-  if (tk2.isValid() && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
+  if (tk2.isValid() && SS_LICENSE_GUARD() && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
 #else
   if (false) {
 #endif

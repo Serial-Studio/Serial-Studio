@@ -297,8 +297,6 @@ if(BUILD_COMMERCIAL)
     add_compile_definitions(COMMERCIAL_BUILD_SALT=${COMMERCIAL_BUILD_SALT}ULL)
 
     message(STATUS "License validation succeeded, building with commercial features")
-
-    # Generate per-build license guard functions
     include(${CMAKE_SOURCE_DIR}/cmake/GenLicenseGuards.cmake)
 endif()
 

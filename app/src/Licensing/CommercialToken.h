@@ -55,6 +55,16 @@
 
 #include <QString>
 
+// clang-format off
+#if defined(__GNUC__) || defined(__clang__)
+#  define SS_HIDDEN_NOINLINE __attribute__((visibility("hidden"), noinline))
+#elif defined(_MSC_VER)
+#  define SS_HIDDEN_NOINLINE __declspec(noinline)
+#else
+#  define SS_HIDDEN_NOINLINE
+#endif
+// clang-format on
+
 //--------------------------------------------------------------------------------------------------
 // SS_LICENSE_GUARD — per-call-site license integrity check
 //--------------------------------------------------------------------------------------------------
@@ -135,7 +145,7 @@ public:
   static void setCurrent(const CommercialToken& token);
   static void clearCurrent();
 
-  [[nodiscard]] bool isValid() const;
+  [[nodiscard]] SS_HIDDEN_NOINLINE bool isValid() const;
   [[nodiscard]] FeatureTier featureTier() const noexcept;
   [[nodiscard]] int graceDaysRemaining() const noexcept;
   [[nodiscard]] const QString& variantName() const noexcept;
@@ -148,7 +158,8 @@ public:
   void seal();
 
 private:
-  [[nodiscard]] quint64 computeHmac() const;
+  [[nodiscard]] SS_HIDDEN_NOINLINE quint64 computeHmac() const;
+  [[nodiscard]] SS_HIDDEN_NOINLINE static quint64 deobfuscateSalt();
 
 private:
   FeatureTier m_tier;

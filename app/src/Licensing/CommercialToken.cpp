@@ -25,6 +25,31 @@
 #include <QCryptographicHash>
 
 //--------------------------------------------------------------------------------------------------
+// Obfuscated salt storage
+//--------------------------------------------------------------------------------------------------
+// The salt is split into 4 XOR-masked 16-bit fragments stored in volatile
+// globals. This prevents the compiler from emitting the salt as a single
+// 64-bit immediate (mov/movk sequence), forcing an attacker to trace through
+// the reassembly logic to extract it. The masks are derived at build time
+// from the salt itself so they differ per build.
+//--------------------------------------------------------------------------------------------------
+
+// Derive per-build masks from the salt itself so they change every build.
+// The multiplications and shifts produce pseudo-random 16-bit masks that
+// have no obvious relationship to the original salt value.
+// clang-format off
+static constexpr quint16 kMask0 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT * 0x9E3779B97F4A7C15ULL) >> 48) & 0xFFFFu);
+static constexpr quint16 kMask1 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT * 0x517CC1B727220A95ULL) >> 48) & 0xFFFFu);
+static constexpr quint16 kMask2 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT * 0x6C62272E07BB0142ULL) >> 48) & 0xFFFFu);
+static constexpr quint16 kMask3 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT * 0x84A2F5B831C3C338ULL) >> 48) & 0xFFFFu);
+
+static volatile quint16 s_sf0 = static_cast<quint16>((COMMERCIAL_BUILD_SALT         & 0xFFFFULL) ^ kMask0);
+static volatile quint16 s_sf1 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT >> 16)  & 0xFFFFULL) ^ kMask1);
+static volatile quint16 s_sf2 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT >> 32)  & 0xFFFFULL) ^ kMask2);
+static volatile quint16 s_sf3 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT >> 48)  & 0xFFFFULL) ^ kMask3);
+// clang-format on
+
+//--------------------------------------------------------------------------------------------------
 // Singleton token storage
 //--------------------------------------------------------------------------------------------------
 
@@ -193,23 +218,51 @@ void Licensing::CommercialToken::seal()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Salt deobfuscation
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reassembles the build salt from XOR-masked volatile fragments.
+ *
+ * The salt is never stored or loaded as a single 64-bit immediate. Instead
+ * it is split into four 16-bit pieces, each XOR-masked with a build-specific
+ * constant, and stored in volatile globals. This function reads and unmasks
+ * them at runtime, preventing the compiler from constant-folding the value
+ * into a recognizable mov/movk sequence.
+ *
+ * @return The original COMMERCIAL_BUILD_SALT value.
+ */
+quint64 Licensing::CommercialToken::deobfuscateSalt()
+{
+  // Read volatile fragments and unmask with build-derived keys
+  const quint64 p0 = static_cast<quint64>(static_cast<quint16>(s_sf0 ^ kMask0));
+  const quint64 p1 = static_cast<quint64>(static_cast<quint16>(s_sf1 ^ kMask1));
+  const quint64 p2 = static_cast<quint64>(static_cast<quint16>(s_sf2 ^ kMask2));
+  const quint64 p3 = static_cast<quint64>(static_cast<quint16>(s_sf3 ^ kMask3));
+  return p0 | (p1 << 16) | (p2 << 32) | (p3 << 48);
+}
+
+//--------------------------------------------------------------------------------------------------
 // HMAC computation
 //--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Computes a keyed hash from the token fields and build salt.
  *
- * The salt is a compile-time constant that only exists in binaries built
- * after successful CMake-time license validation.  Without it, the
- * static_assert in the header prevents compilation entirely.
+ * The salt is reassembled at runtime from obfuscated volatile fragments,
+ * so it never appears as a single immediate in the binary. Without a
+ * valid salt the static_assert in the header prevents compilation.
  *
  * @return 64-bit truncated HMAC.
  */
 quint64 Licensing::CommercialToken::computeHmac() const
 {
+  // Reassemble salt from obfuscated fragments
+  const auto salt = deobfuscateSalt();
+
   // Mix build salt with token data
   QByteArray message;
-  message.append(QByteArray::number(static_cast<quint64>(COMMERCIAL_BUILD_SALT)));
+  message.append(QByteArray::number(salt));
   message.append(m_variantName.toUtf8());
   message.append(m_instanceName.toUtf8());
   message.append(QByteArray::number(static_cast<quint8>(m_tier)));

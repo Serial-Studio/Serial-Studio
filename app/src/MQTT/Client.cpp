@@ -79,7 +79,8 @@ MQTT::Client::Client() : m_publisher(false), m_sslEnabled(false)
           &Licensing::LemonSqueezy::activatedChanged,
           this,
           [=, this] {
-            if (isConnected() && !Licensing::CommercialToken::current().isValid())
+            if (isConnected()
+                && (!Licensing::CommercialToken::current().isValid() || !SS_LICENSE_GUARD()))
               closeConnection();
           });
 

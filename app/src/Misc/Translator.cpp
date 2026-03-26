@@ -209,7 +209,7 @@ QString Misc::Translator::welcomeConsoleText() const
 #ifdef BUILD_COMMERCIAL
   QString path   = ":/rcc/messages/trial/Welcome_" + lang + ".txt";
   const auto& tk = Licensing::CommercialToken::current();
-  if (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Pro)
+  if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Pro)
     path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";
 #else
   QString path = ":/rcc/messages/gpl3/Welcome_" + lang + ".txt";

@@ -215,7 +215,8 @@ Console::Export::Export()
           &Licensing::LemonSqueezy::activatedChanged,
           this,
           [=, this] {
-            if (exportEnabled() && !Licensing::CommercialToken::current().isValid())
+            if (exportEnabled()
+                && (!Licensing::CommercialToken::current().isValid() || !SS_LICENSE_GUARD()))
               setExportEnabled(false);
           });
 #endif
