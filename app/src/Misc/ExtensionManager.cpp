@@ -30,6 +30,7 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 #include <QProcessEnvironment>
+#include <QDesktopServices>
 #include <QStandardPaths>
 #include <QTimer>
 
@@ -1259,6 +1260,46 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     m_pluginOutput[id] += QStringLiteral("[Error] Invalid entry point path\n");
     Q_EMIT pluginOutputChanged(id);
     return;
+  }
+
+  // Check plugin dependencies
+  const auto deps = resolved.value("dependencies").toArray();
+  for (const auto &dep : deps)
+  {
+    const auto obj = dep.toObject();
+    const auto name = obj.value("name").toString();
+    const auto exes = obj.value("executables").toArray();
+    const auto url = obj.value("url").toString();
+
+    // Look for any of the listed executables
+    bool found = false;
+    for (const auto &exe : exes)
+    {
+      if (!QStandardPaths::findExecutable(exe.toString()).isEmpty())
+      {
+        found = true;
+        break;
+      }
+    }
+
+    // Prompt user to download the missing dependency
+    if (!found)
+    {
+      const auto result = Misc::Utilities::showMessageBox(
+          tr("Missing Dependency"),
+          tr("This plugin requires \"%1\" but it was not found on your system.\n\n"
+             "Would you like to open the download page?")
+              .arg(name),
+          QMessageBox::Warning, QString(),
+          QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes);
+
+      if (result == QMessageBox::Yes && !url.isEmpty())
+        QDesktopServices::openUrl(QUrl(url));
+
+      m_pluginOutput[id] += QStringLiteral("[Error] Missing dependency: %1\n").arg(name);
+      Q_EMIT pluginOutputChanged(id);
+      return;
+    }
   }
 
   // Build environment with common tool paths
