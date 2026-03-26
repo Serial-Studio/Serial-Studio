@@ -150,12 +150,10 @@ Item {
       Connections {
         target: Cpp_ThemeManager
         function onThemeChanged() {
-          if (_extWindow.visible) {
-            Cpp_NativeWindow.removeWindow(_extWindow)
+          if (_extWindow.visible)
             Cpp_NativeWindow.addWindow(
               _extWindow,
               Cpp_ThemeManager.colors["dashboard_background"])
-          }
         }
       }
 

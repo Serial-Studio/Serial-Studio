@@ -148,11 +148,11 @@ void NativeWindow::addWindow(QObject* window, const QString& color)
     if (isWindows11())
       Q_EMIT w->activeChanged();
 
-    // Windows 10 / Linux: Update CSD decorator theme
+    // Windows 10 / Linux: Update CSD decorator color and theme
     else {
       auto* decorator = s_decorators.value(w, nullptr);
       if (decorator)
-        decorator->updateTheme();
+        decorator->setColor(color);
     }
 
     return;
@@ -180,7 +180,10 @@ void NativeWindow::addWindow(QObject* window, const QString& color)
     auto* decorator = new CSD::Window(w, color, this);
     s_decorators.insert(w, decorator);
     connect(w, &QObject::destroyed, this, [this, w]() {
+      auto* dec = s_decorators.value(w, nullptr);
       s_decorators.remove(w);
+      delete dec;
+
       auto index = m_windows.indexOf(w);
       if (index != -1 && index >= 0) {
         m_windows.removeAt(index);

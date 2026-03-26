@@ -29,6 +29,7 @@
 #include <QJsonDocument>
 #include <QPalette>
 #include <QStyleHints>
+#include <QTimer>
 
 #include "Misc/ExtensionManager.h"
 #include "Misc/Translator.h"
@@ -365,22 +366,23 @@ void Misc::ThemeManager::setTheme(const int index)
   m_palette.setColor(QPalette::PlaceholderText, getColor("placeholder_text"));
   m_palette.setColor(QPalette::HighlightedText, getColor("highlighted_text"));
 
-  // Notify QML bindings synchronously before setPalette()/setColorScheme()
-  // trigger Qt's internal re-evaluation of palette-dependent bindings
+  // Notify QML bindings synchronously
   Q_EMIT themeChanged();
 
-  // Apply palette and color scheme hint (may fire ApplicationPaletteChange,
-  // blocked by m_applyingTheme guard in eventFilter)
-  qApp->setPalette(m_palette);
-
+  // Defer palette/color-scheme application to next event-loop iteration
+  // so deleteLater() cleanup completes before ApplicationPaletteChange
+  // events are delivered to QWindows
+  const auto palette = m_palette;
   const auto bg = getColor(QStringLiteral("base"));
   const auto fg = getColor(QStringLiteral("text"));
-  if (fg.lightness() > bg.lightness())
-    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-  else
-    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
-
-  m_applyingTheme = false;
+  QTimer::singleShot(0, this, [this, palette, bg, fg]() {
+    qApp->setPalette(palette);
+    if (fg.lightness() > bg.lightness())
+      qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+    else
+      qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
+    m_applyingTheme = false;
+  });
 }
 
 //--------------------------------------------------------------------------------------------------

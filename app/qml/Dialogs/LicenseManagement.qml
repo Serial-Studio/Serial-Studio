@@ -34,7 +34,6 @@ SmartDialog {
   // Window options
   //
   title: qsTr("Licensing")
-  nativeWindow: false
   minimumWidth: 520 + (contentPadding * 2)
 
   //

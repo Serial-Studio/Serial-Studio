@@ -93,7 +93,6 @@ Window {
       if (!root.nativeWindow)
         return
 
-      Cpp_NativeWindow.removeWindow(root)
       if (root.visible)
         Cpp_NativeWindow.addWindow(root, root.backgroundColor)
     }
