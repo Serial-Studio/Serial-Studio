@@ -38,20 +38,18 @@ Window {
   property color backgroundColor: Cpp_ThemeManager.colors["window"]
 
   //
-  // Window sizing
-  //
-  width: minimumWidth
-  height: minimumHeight
-  minimumWidth: Math.max(200, contentArea.implicitWidth + (contentPadding * 2))
-  maximumWidth: Math.max(200, contentArea.implicitWidth + (contentPadding * 2))
-  minimumHeight: Math.max(100, contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight)
-  maximumHeight: Math.max(100, contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight)
-
-  //
-  // CSD-safety properties
+  // Size hints for CSD (read from C++ via QWindow::property)
   //
   property int preferredWidth: contentArea.implicitWidth + (contentPadding * 2)
   property int preferredHeight: contentArea.implicitHeight + (contentPadding * 1.50) + titlebarHeight
+
+  //
+  // Window sizing
+  //
+  width: preferredWidth
+  height: preferredHeight
+  minimumWidth: preferredWidth
+  minimumHeight: preferredHeight
 
   //
   // Configure window flags
