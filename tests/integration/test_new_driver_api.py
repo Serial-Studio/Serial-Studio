@@ -394,12 +394,16 @@ class TestProcessDriver:
         time.sleep(0.2)
 
         test_path = os.path.join(tempfile.gettempdir(), "test-executable")
-        result = api_client.command("io.driver.process.setExecutable",
-                                    {"executable": test_path})
-        assert result["executable"] == test_path
+        open(test_path, "w").close()
+        try:
+            result = api_client.command("io.driver.process.setExecutable",
+                                        {"executable": test_path})
+            assert result["executable"] == test_path
 
-        config = api_client.command("io.driver.process.getConfiguration")
-        assert config["executable"] == test_path
+            config = api_client.command("io.driver.process.getConfiguration")
+            assert config["executable"] == test_path
+        finally:
+            os.unlink(test_path)
 
     @pytest.mark.integration
     def test_process_set_executable_missing_param(self, api_client, clean_state):
@@ -625,18 +629,21 @@ class TestProcessDriver:
 
         tmp_dir = tempfile.gettempdir()
         test_exec = os.path.join(tmp_dir, "test-executable")
+        open(test_exec, "w").close()
+        try:
+            api_client.command("io.driver.process.setMode", {"mode": 0})
+            api_client.command("io.driver.process.setExecutable",
+                               {"executable": test_exec})
+            api_client.command("io.driver.process.setArguments",
+                               {"arguments": "-c \"import sys; sys.stdout.write('hello\\n')\""})
+            api_client.command("io.driver.process.setWorkingDir", {"workingDir": tmp_dir})
 
-        api_client.command("io.driver.process.setMode", {"mode": 0})
-        api_client.command("io.driver.process.setExecutable",
-                           {"executable": test_exec})
-        api_client.command("io.driver.process.setArguments",
-                           {"arguments": "-c \"import sys; sys.stdout.write('hello\\n')\""})
-        api_client.command("io.driver.process.setWorkingDir", {"workingDir": tmp_dir})
-
-        config = api_client.command("io.driver.process.getConfiguration")
-        assert config["mode"] == 0
-        assert config["executable"] == test_exec
-        assert config["workingDir"] == tmp_dir
+            config = api_client.command("io.driver.process.getConfiguration")
+            assert config["mode"] == 0
+            assert config["executable"] == test_exec
+            assert config["workingDir"] == tmp_dir
+        finally:
+            os.unlink(test_exec)
 
     @pytest.mark.integration
     def test_process_full_pipe_config_roundtrip(self, api_client, clean_state):

@@ -96,9 +96,10 @@ class MCPClient:
         assert self._sock, "Not connected"
         self._sock.sendall((json.dumps(obj, separators=(",", ":")) + "\n").encode())
 
-    def _recv(self) -> dict:
+    def _recv(self, deadline: Optional[float] = None) -> dict:
         assert self._sock, "Not connected"
-        deadline = time.time() + self.timeout
+        if deadline is None:
+            deadline = time.time() + self.timeout
         while True:
             pos = self._buf.find(b"\n")
             if pos != -1:
@@ -121,11 +122,14 @@ class MCPClient:
         """Send a JSON-RPC request and return the result (raises MCPError on error)."""
         req_id = self._next_id()
         self._send({"jsonrpc": "2.0", "id": req_id, "method": method, "params": params or {}})
-        response = self._recv()
-        if "error" in response:
-            err = response["error"]
-            raise MCPError(err.get("code", -1), err.get("message", ""), err.get("data"))
-        return response.get("result")
+        deadline = time.time() + self.timeout
+        while True:
+            response = self._recv(deadline)
+            if response.get("id") == req_id:
+                if "error" in response:
+                    err = response["error"]
+                    raise MCPError(err.get("code", -1), err.get("message", ""), err.get("data"))
+                return response.get("result")
 
     def notify(self, method: str, params: Optional[dict] = None) -> None:
         """Send a JSON-RPC notification (no response expected)."""

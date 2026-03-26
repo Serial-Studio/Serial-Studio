@@ -143,13 +143,14 @@ def test_sustained_processing_vs_rendering(api_client, device_simulator, clean_s
 
     elapsed = time.time() - start_time
 
-    # Verify still connected
-    assert api_client.is_connected()
+    # Verify still connected (use extended timeout to drain queued data broadcasts)
+    conn_status = api_client.command("io.manager.getStatus", timeout=30)
+    assert conn_status.get("isConnected", False)
 
     api_client.disconnect_device()
 
     avg_data_rate = frames_sent / elapsed
-    status = api_client.get_dashboard_status()
+    status = api_client.command("dashboard.getStatus", timeout=15)
 
     print(
         f"\nSustained test results:"
