@@ -118,7 +118,7 @@ static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& col
  * It installs an event filter to listen for system-wide palette changes,
  * responding to changes by updating the application theme accordingly.
  */
-Misc::ThemeManager::ThemeManager() : m_theme(0)
+Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false)
 {
   // Set built-in theme files (others available as extensions)
   // clang-format off
@@ -332,6 +332,9 @@ void Misc::ThemeManager::setTheme(const int index)
     return;
   }
 
+  // Guard against re-entrant calls from ApplicationPaletteChange events
+  m_applyingTheme = true;
+
   // Load actual theme data
   auto data      = m_themes.value(m_themeName);
   m_colors       = jsonObjectToVariantMap(data.value("colors").toObject());
@@ -361,22 +364,23 @@ void Misc::ThemeManager::setTheme(const int index)
   m_palette.setColor(QPalette::AlternateBase, getColor("alternate_base"));
   m_palette.setColor(QPalette::PlaceholderText, getColor("placeholder_text"));
   m_palette.setColor(QPalette::HighlightedText, getColor("highlighted_text"));
+
+  // Notify QML bindings synchronously before setPalette()/setColorScheme()
+  // trigger Qt's internal re-evaluation of palette-dependent bindings
+  Q_EMIT themeChanged();
+
+  // Apply palette and color scheme hint (may fire ApplicationPaletteChange,
+  // blocked by m_applyingTheme guard in eventFilter)
   qApp->setPalette(m_palette);
 
-  // Hint Qt about the effective color scheme and update user interface
-  QMetaObject::invokeMethod(
-    this,
-    [this]() {
-      const auto bg = getColor(QStringLiteral("base"));
-      const auto fg = getColor(QStringLiteral("text"));
-      if (fg.lightness() > bg.lightness())
-        qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-      else
-        qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
+  const auto bg = getColor(QStringLiteral("base"));
+  const auto fg = getColor(QStringLiteral("text"));
+  if (fg.lightness() > bg.lightness())
+    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+  else
+    qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
 
-      Q_EMIT themeChanged();
-    },
-    Qt::QueuedConnection);
+  m_applyingTheme = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -403,6 +407,10 @@ void Misc::ThemeManager::setTheme(const int index)
  */
 void Misc::ThemeManager::loadSystemTheme()
 {
+  // Guard against re-entrant calls from ApplicationPaletteChange events
+  // triggered by setPalette()/setColorScheme() below
+  m_applyingTheme = true;
+
   // Get system color scheme
   qApp->setPalette(QPalette());
   qApp->styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
@@ -428,8 +436,10 @@ void Misc::ThemeManager::loadSystemTheme()
   m_deviceColors = extractDeviceColors(data.value("colors").toObject());
   m_parameters   = jsonObjectToVariantMap(data.value("parameters").toObject());
 
-  // Update user interface
-  QMetaObject::invokeMethod(this, [this]() { Q_EMIT themeChanged(); }, Qt::QueuedConnection);
+  // Notify QML bindings synchronously
+  Q_EMIT themeChanged();
+
+  m_applyingTheme = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -559,7 +569,8 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
 bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
 {
   if (event->type() == QEvent::ApplicationPaletteChange
-      && m_themeName == QStringLiteral("System")) {
+      && m_themeName == QStringLiteral("System")
+      && !m_applyingTheme) {
     loadSystemTheme();
     return true;
   }

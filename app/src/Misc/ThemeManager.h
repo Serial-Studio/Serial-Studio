@@ -170,6 +170,7 @@ private:
   QStringList m_userThemeNames;
   QMap<QString, QJsonObject> m_themes;
 
+  bool m_applyingTheme;
   QVector<QColor> m_widgetColors;
   QVector<QPair<QColor, QColor>> m_deviceColors;
 };
