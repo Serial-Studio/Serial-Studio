@@ -109,17 +109,19 @@ foreach(_i RANGE 0 23)
   return r == static_cast<qint64>(${_mod_expected})\;"
     )
   elseif(_style EQUAL 2)
-    # Style 2: Bit rotation check (use 64-bit in both CMake and C++ to match)
+    # Style 2: Bit rotation check (use 30-bit space to stay within CMake's
+    # signed 64-bit math and avoid overflow on left shifts)
     math(EXPR _rot "${_i} % 15 + 1")
-    math(EXPR _rot_inv "63 - ${_rot}")
-    math(EXPR _rot_right "${_salt_trunc} >> ${_rot}")
-    math(EXPR _rot_left "${_salt_trunc} << ${_rot_inv}")
+    math(EXPR _rot_inv "30 - ${_rot}")
+    math(EXPR _salt30 "${_salt_trunc} % 1073741824")
+    math(EXPR _rot_right "${_salt30} >> ${_rot}")
+    math(EXPR _rot_left "${_salt30} << ${_rot_inv}")
     math(EXPR _rot_val "${_rot_right} ^ ${_rot_left}")
     if(_rot_val LESS 0)
       math(EXPR _rot_val "${_rot_val} * -1")
     endif()
     set(_body
-"  const qint64 s = static_cast<qint64>(runtimeSalt() % 2147483647LL)\;
+"  const qint64 s = static_cast<qint64>(runtimeSalt() % 2147483647LL) % 1073741824LL\;
   const qint64 r = (s >> ${_rot}) ^ (s << ${_rot_inv})\;
   const qint64 v = r < 0 ? -r : r\;
   return v == static_cast<qint64>(${_rot_val}LL)\;"
