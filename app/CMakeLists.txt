@@ -469,6 +469,7 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
+    src/Licensing/CommercialToken.h
     src/ThirdParty/miniaudio.h
   )
   set(SOURCES
@@ -496,6 +497,7 @@ if(BUILD_COMMERCIAL)
     src/UI/ImageProvider.cpp
     src/DataModel/DBCImporter.cpp
     src/Licensing/Trial.cpp
+    src/Licensing/CommercialToken.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp

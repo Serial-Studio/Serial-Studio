@@ -24,6 +24,10 @@
 #include "DSP.h"
 #include "UI/Dashboard.h"
 
+#ifdef BUILD_COMMERCIAL
+#  include "Licensing/CommercialToken.h"
+#endif
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & initialization
 //--------------------------------------------------------------------------------------------------
@@ -50,7 +54,13 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
     m_minY = qMin(yDataset.pltMin, yDataset.pltMax);
     m_maxY = qMax(yDataset.pltMin, yDataset.pltMax);
 
-    const auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
+#ifdef BUILD_COMMERCIAL
+    const auto& tk = Licensing::CommercialToken::current();
+    const auto xAxisId =
+      (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Trial) ? yDataset.xAxisId : 0;
+#else
+    const auto xAxisId = 0;
+#endif
     if (UI::Dashboard::instance().datasets().contains(xAxisId)) {
       m_monotonicData      = false;
       const auto& xDataset = UI::Dashboard::instance().datasets()[xAxisId];
@@ -345,7 +355,12 @@ void Widgets::Plot::calculateAutoScaleRange()
   yChanged = computeMinMaxValues(m_minY, m_maxY, dy, true, [](const QPointF& p) { return p.y(); });
 
   // Obtain range scale for X-axis
-  if (SerialStudio::activated()) {
+#ifdef BUILD_COMMERCIAL
+  const auto& tk2 = Licensing::CommercialToken::current();
+  if (tk2.isValid() && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
+#else
+  if (false) {
+#endif
     if (UI::Dashboard::instance().datasets().contains(dy.xAxisId)) {
       const auto& dx = UI::Dashboard::instance().datasets()[dy.xAxisId];
       xChanged =

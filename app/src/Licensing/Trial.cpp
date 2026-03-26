@@ -29,9 +29,24 @@
 #include <QUrl>
 #include <QUrlQuery>
 
+#include "CommercialToken.h"
 #include "LemonSqueezy.h"
 #include "MachineID.h"
 #include "Misc/Utilities.h"
+
+/**
+ * @brief Builds and installs a commercial token for an active trial.
+ */
+static void installTrialToken(int daysRemaining)
+{
+  Licensing::CommercialToken token;
+  token.setVariantName(QStringLiteral("Trial"));
+  token.setInstanceName(Licensing::MachineID::instance().machineId());
+  token.setGraceDaysRemaining(daysRemaining);
+  token.setFeatureTier(Licensing::FeatureTier::Trial);
+  token.seal();
+  Licensing::CommercialToken::setCurrent(token);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -189,6 +204,10 @@ void Licensing::Trial::readSettings()
   m_deviceRegistered = registeredStored;
   m_trialEnabled     = enabledStored && notExpired && registeredStored;
 
+  // Install a capability token from cached trial data
+  if (trialEnabled())
+    installTrialToken(daysRemaining());
+
   if (trialAvailable() && m_deviceRegistered)
     fetchTrialState();
 }
@@ -324,6 +343,12 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
                                     QMessageBox::Warning,
                                     QObject::tr("Trial Activation Error"));
   }
+
+  // Install or clear the capability token based on trial state
+  if (trialEnabled())
+    installTrialToken(daysRemaining());
+  else
+    Licensing::CommercialToken::clearCurrent();
 
   writeSettings();
   Q_EMIT enabledChanged();

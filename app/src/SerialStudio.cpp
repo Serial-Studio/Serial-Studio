@@ -26,6 +26,7 @@
 #include "Misc/ThemeManager.h"
 
 #ifdef BUILD_COMMERCIAL
+#  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #endif
@@ -46,8 +47,7 @@
 bool SerialStudio::activated()
 {
 #ifdef BUILD_COMMERCIAL
-  return Licensing::LemonSqueezy::instance().isActivated()
-      || Licensing::Trial::instance().trialEnabled();
+  return Licensing::CommercialToken::current().isValid();
 #else
   return false;
 #endif

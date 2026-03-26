@@ -35,6 +35,7 @@
 #  include "Console/Handler.h"
 #  include "DataModel/ProjectModel.h"
 #  include "IO/ConnectionManager.h"
+#  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Misc/WorkspaceManager.h"
 #  include "SerialStudio.h"
@@ -118,8 +119,8 @@ void Console::ExportWorker::closeResources()
  */
 void Console::ExportWorker::createFile(int deviceId)
 {
-  // Serial Studio not activated, abort
-  if (!SerialStudio::activated())
+  const auto& token = Licensing::CommercialToken::current();
+  if (!token.isValid() || token.featureTier() == Licensing::FeatureTier::None)
     return;
 
   // Close existing file for this device
@@ -213,7 +214,7 @@ Console::Export::Export()
           &Licensing::LemonSqueezy::activatedChanged,
           this,
           [=, this] {
-            if (exportEnabled() && !SerialStudio::activated())
+            if (exportEnabled() && !Licensing::CommercialToken::current().isValid())
               setExportEnabled(false);
           });
 #endif
@@ -308,7 +309,8 @@ void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
   // Update export status only if activated
-  if (SerialStudio::activated()) {
+  const auto& tk = Licensing::CommercialToken::current();
+  if (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Trial) {
     if (!enabled && isOpen())
       closeFile();
 

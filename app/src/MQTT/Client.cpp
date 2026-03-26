@@ -26,6 +26,7 @@
 #include <QInputDialog>
 
 #include "IO/ConnectionManager.h"
+#include "Licensing/CommercialToken.h"
 #include "Licensing/LemonSqueezy.h"
 #include "Misc/Utilities.h"
 
@@ -78,7 +79,7 @@ MQTT::Client::Client() : m_publisher(false), m_sslEnabled(false)
           &Licensing::LemonSqueezy::activatedChanged,
           this,
           [=, this] {
-            if (isConnected() && !SerialStudio::activated())
+            if (isConnected() && !Licensing::CommercialToken::current().isValid())
               closeConnection();
           });
 
@@ -394,8 +395,9 @@ void MQTT::Client::openConnection()
   if (isConnected())
     return;
 
-  // Stop if Serial Studio is not activated
-  if (!SerialStudio::activated()) {
+  const auto& token = Licensing::CommercialToken::current();
+  if (!token.isValid() || token.featureTier() == Licensing::FeatureTier::None
+      || token.variantName().isEmpty()) {
     Misc::Utilities::showMessageBox(
       tr("MQTT Feature Requires a Commercial License"),
       tr("Connecting to MQTT brokers is only available with a valid Serial Studio commercial "
@@ -733,7 +735,9 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
  */
 void MQTT::Client::hotpathTxFrame(const QByteArray& data)
 {
-  if (isConnected() && isPublisher() && m_topicName.isValid() && SerialStudio::activated())
+  const auto& token = Licensing::CommercialToken::current();
+  if (isConnected() && isPublisher() && m_topicName.isValid() && token.isValid()
+      && token.featureTier() >= Licensing::FeatureTier::Trial)
     m_client.publish(m_topicName, data);
 }
 
@@ -920,8 +924,8 @@ void MQTT::Client::onAuthenticationRequested(const QMqttAuthenticationProperties
  */
 void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopicName& topic)
 {
-  // Stop if Serial Studio is not activated
-  if (!SerialStudio::activated())
+  const auto& token = Licensing::CommercialToken::current();
+  if (!token.isValid() || token.featureTier() == Licensing::FeatureTier::None)
     return;
 
   // Only process if data is not empty

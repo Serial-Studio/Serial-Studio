@@ -25,7 +25,7 @@
 #include <QFile>
 
 #ifdef BUILD_COMMERCIAL
-#  include "Licensing/LemonSqueezy.h"
+#  include "Licensing/CommercialToken.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -207,8 +207,9 @@ QString Misc::Translator::welcomeConsoleText() const
   // Define fallback text & default message path
   QString text = QObject::tr("Failed to load welcome text :(");
 #ifdef BUILD_COMMERCIAL
-  QString path = ":/rcc/messages/trial/Welcome_" + lang + ".txt";
-  if (Licensing::LemonSqueezy::instance().isActivated())
+  QString path   = ":/rcc/messages/trial/Welcome_" + lang + ".txt";
+  const auto& tk = Licensing::CommercialToken::current();
+  if (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Pro)
     path = ":/rcc/messages/pro/Welcome_" + lang + ".txt";
 #else
   QString path = ":/rcc/messages/gpl3/Welcome_" + lang + ".txt";

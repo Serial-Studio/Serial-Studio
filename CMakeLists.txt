@@ -290,6 +290,12 @@ if(BUILD_COMMERCIAL)
             "Response: ${LS_RESPONSE}")
     endif()
 
+    string(RANDOM LENGTH 18 ALPHABET "123456789" _SALT_FIRST)
+    string(SUBSTRING "${_SALT_FIRST}" 0 1 _SALT_FIRST)
+    string(RANDOM LENGTH 17 ALPHABET "0123456789" _SALT_REST)
+    set(COMMERCIAL_BUILD_SALT "${_SALT_FIRST}${_SALT_REST}" CACHE INTERNAL "")
+    add_compile_definitions(COMMERCIAL_BUILD_SALT=${COMMERCIAL_BUILD_SALT}ULL)
+
     message(STATUS "License validation succeeded, building with commercial features")
 endif()
 

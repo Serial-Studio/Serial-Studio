@@ -40,6 +40,7 @@
 #  include "CSV/Player.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "IO/ConnectionManager.h"
+#  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "MDF4/Player.h"
 #  include "Misc/WorkspaceManager.h"
@@ -166,7 +167,8 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   if (isResourceOpen())
     closeResources();
 
-  if (!SerialStudio::activated())
+  const auto& token = Licensing::CommercialToken::current();
+  if (!token.isValid() || token.featureTier() == Licensing::FeatureTier::None)
     return;
 
   const auto dateTime = QDateTime::currentDateTime();
@@ -321,7 +323,7 @@ MDF4::Export::Export()
           &Licensing::LemonSqueezy::activatedChanged,
           this,
           [=, this] {
-            if (exportEnabled() && !SerialStudio::activated())
+            if (exportEnabled() && !Licensing::CommercialToken::current().isValid())
               setExportEnabled(false);
           });
 #endif
@@ -428,7 +430,8 @@ void MDF4::Export::setupExternalConnections()
 void MDF4::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
-  if (SerialStudio::activated()) {
+  const auto& tk = Licensing::CommercialToken::current();
+  if (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Trial) {
     if (!enabled && isOpen())
       closeFile();
 

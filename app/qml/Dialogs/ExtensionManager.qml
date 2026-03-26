@@ -1065,7 +1065,7 @@ SmartDialog {
             Item {
               Layout.fillWidth: true
               Layout.fillHeight: true
-              visible: (Cpp_ExtensionManager.selectedExtension.type || "") === "plugin"
+              opacity: (Cpp_ExtensionManager.selectedExtension.type || "") === "plugin" ? 1 : 0
 
               Rectangle {
                 radius: 2

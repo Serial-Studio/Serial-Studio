@@ -33,6 +33,10 @@
 #include "Misc/Utilities.h"
 #include "UI/Dashboard.h"
 
+#ifdef BUILD_COMMERCIAL
+#  include "Licensing/CommercialToken.h"
+#endif
+
 //--------------------------------------------------------------------------------------------------
 // Global parameters
 //--------------------------------------------------------------------------------------------------
@@ -458,7 +462,13 @@ void Widgets::GPS::setMapType(const int type)
 {
   auto mapId = qBound(0, type, m_mapTypes.count() - 1);
   if (m_mapType != mapId) {
-    if (!SerialStudio::activated() && mapId > 0) {
+#ifdef BUILD_COMMERCIAL
+    const auto& tk     = Licensing::CommercialToken::current();
+    const bool proMaps = tk.isValid() && tk.featureTier() != Licensing::FeatureTier::None;
+#else
+    const bool proMaps = false;
+#endif
+    if (!proMaps && mapId > 0) {
       mapId = 0;
       Misc::Utilities::showMessageBox(
         tr("Additional map layers are available only for Pro users."),

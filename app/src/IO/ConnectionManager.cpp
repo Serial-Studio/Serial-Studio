@@ -41,6 +41,7 @@
 #  include "IO/Drivers/Modbus.h"
 #  include "IO/Drivers/Process.h"
 #  include "IO/Drivers/USB.h"
+#  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #  include "Misc/Utilities.h"
@@ -605,7 +606,7 @@ void IO::ConnectionManager::connectDevice()
 {
 #ifdef BUILD_COMMERCIAL
   if (Licensing::Trial::instance().trialExpired()
-      && !Licensing::LemonSqueezy::instance().isActivated()) {
+      && !Licensing::CommercialToken::current().isValid()) {
     disconnectDevice();
     Misc::Utilities::showMessageBox(
       tr("Your trial period has ended."),
@@ -1022,7 +1023,7 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
     model.setSource0BusType(static_cast<int>(type));
 
     if (!model.jsonFilePath().isEmpty())
-      model.saveJsonFile(false);
+      (void)model.saveJsonFile(false);
   }
 }
 
@@ -1132,7 +1133,7 @@ void IO::ConnectionManager::onUiDriverConfigurationChanged()
   model.setSource0BusType(static_cast<int>(m_busType));
 
   if (!model.jsonFilePath().isEmpty())
-    model.saveJsonFile(false);
+    (void)model.saveJsonFile(false);
 }
 
 /**

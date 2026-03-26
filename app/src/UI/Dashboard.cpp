@@ -31,6 +31,7 @@
 #include "UI/WidgetRegistry.h"
 
 #ifdef BUILD_COMMERCIAL
+#  include "Licensing/CommercialToken.h"
 #  include "MQTT/Client.h"
 #endif
 
@@ -1243,8 +1244,13 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
  */
 void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
-  // Check if we can use pro features
-  const bool pro = SerialStudio::activated();
+#ifdef BUILD_COMMERCIAL
+  const auto& token = Licensing::CommercialToken::current();
+  const bool pro    = token.isValid() && token.featureTier() >= Licensing::FeatureTier::Trial
+                && !token.variantName().isEmpty();
+#else
+  const bool pro = false;
+#endif
 
   // Preserve per-source structure cache across the widget reset so that
   // subsequent frames from other sources can still build the combined frame.
@@ -1502,7 +1508,13 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     }
 
     // Shift X-axis points
-    auto xAxisId = SerialStudio::activated() ? yDataset.xAxisId : 0;
+#ifdef BUILD_COMMERCIAL
+    const auto& tk = Licensing::CommercialToken::current();
+    auto xAxisId =
+      (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Trial) ? yDataset.xAxisId : 0;
+#else
+    auto xAxisId = 0;
+#endif
     if (m_datasets.contains(xAxisId) && !xAxesMoved.contains(xAxisId)) {
       xAxesMoved.insert(xAxisId);
       const auto& xDataset = m_datasets[xAxisId];
@@ -1645,8 +1657,14 @@ void UI::Dashboard::configureFftSeries()
  */
 void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
 {
-  if (!SerialStudio::activated())
+#ifdef BUILD_COMMERCIAL
+  const auto& tk = Licensing::CommercialToken::current();
+  if (!tk.isValid() || tk.featureTier() < Licensing::FeatureTier::Trial)
     return;
+#else
+  Q_UNUSED(dataset);
+  return;
+#endif
 
   const int xSource = dataset.xAxisId;
   if (m_xAxisData.contains(xSource))
@@ -1710,7 +1728,13 @@ void UI::Dashboard::configureLineSeries()
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
     // Add X-axis data & generate a line series with X/Y data
-    if (m_datasets.contains(yDataset.xAxisId) && SerialStudio::activated()) {
+#ifdef BUILD_COMMERCIAL
+    const auto& tk2 = Licensing::CommercialToken::current();
+    if (m_datasets.contains(yDataset.xAxisId) && tk2.isValid()
+        && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
+#else
+    if (false) {
+#endif
       const auto& xDataset = m_datasets[yDataset.xAxisId];
       DSP::LineSeries series;
       series.x = &m_xAxisData[xDataset.index];

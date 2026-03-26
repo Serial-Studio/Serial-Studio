@@ -26,6 +26,7 @@
 #include <QNetworkReply>
 
 #include "AppInfo.h"
+#include "Licensing/CommercialToken.h"
 #include "Licensing/MachineID.h"
 #include "Misc/Utilities.h"
 
@@ -35,6 +36,25 @@
 
 static constexpr quint64 STORE_ID = 170454;
 static constexpr quint64 PRDCT_ID = 496241;
+
+/**
+ * @brief Derives a feature tier from the Lemon Squeezy variant name.
+ *
+ * The variant name typically has the form "Pro - Monthly", "Enterprise -
+ * Yearly", etc.  We match the leading word to a tier level.
+ */
+static Licensing::FeatureTier tierFromVariant(const QString& variant)
+{
+  const auto lower = variant.toLower();
+
+  if (lower.startsWith("enterprise"))
+    return Licensing::FeatureTier::Enterprise;
+
+  if (lower.startsWith("pro") || !lower.isEmpty())
+    return Licensing::FeatureTier::Pro;
+
+  return Licensing::FeatureTier::None;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access functions
@@ -472,6 +492,7 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
   m_appName        = APP_NAME;
   m_activationDate = QDateTime();
   m_licensingData  = QJsonObject();
+  CommercialToken::clearCurrent();
   qApp->setApplicationDisplayName(appName());
 
   if (clearLicense) {
@@ -669,6 +690,15 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
   // Default to APP_NAME otherwise
   else
     m_appName = APP_NAME;
+
+  // Build and install the commercial capability token
+  CommercialToken token;
+  token.setVariantName(variantName);
+  token.setInstanceName(instanceName);
+  token.setGraceDaysRemaining(cachedResponse ? m_gracePeriod : 30);
+  token.setFeatureTier(tierFromVariant(variantName));
+  token.seal();
+  CommercialToken::setCurrent(token);
 
   // Update user interface
   m_busy = false;
