@@ -195,6 +195,10 @@ qt_policy(SET QTP0004 NEW)
 
 include_directories(src)
 
+if(BUILD_COMMERCIAL AND LICENSE_GUARDS_INCLUDE_DIR)
+  include_directories(${LICENSE_GUARDS_INCLUDE_DIR})
+endif()
+
 # Specify required sources for FOSS version
 set(SOURCES
   src/Misc/ThemeManager.cpp

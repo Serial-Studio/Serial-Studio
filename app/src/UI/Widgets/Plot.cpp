@@ -57,7 +57,9 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
 #ifdef BUILD_COMMERCIAL
     const auto& tk = Licensing::CommercialToken::current();
     const auto xAxisId =
-      (tk.isValid() && tk.featureTier() >= Licensing::FeatureTier::Trial) ? yDataset.xAxisId : 0;
+      (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial)
+        ? yDataset.xAxisId
+        : 0;
 #else
     const auto xAxisId = 0;
 #endif

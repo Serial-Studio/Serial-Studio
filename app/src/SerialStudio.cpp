@@ -47,7 +47,7 @@
 bool SerialStudio::activated()
 {
 #ifdef BUILD_COMMERCIAL
-  return Licensing::CommercialToken::current().isValid();
+  return Licensing::CommercialToken::current().isValid() && SS_LICENSE_GUARD();
 #else
   return false;
 #endif

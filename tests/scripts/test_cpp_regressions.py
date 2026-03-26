@@ -170,3 +170,148 @@ def test_project_editor_bounds_checks_combo_indices():
         "if (sampleIdx < 0 || sampleIdx >= m_fftSamples.size())",
     ]:
         assert expected in text
+
+
+# ---------------------------------------------------------------------------
+# License guard regression tests
+#
+# Verify that SS_LICENSE_GUARD() is present at every critical commercial
+# feature gate. If someone (or an LLM) removes a guard, these tests catch
+# it before the build ships.
+# ---------------------------------------------------------------------------
+
+
+def test_license_guard_macro_defined_in_commercial_token_header():
+    """CommercialToken.h must define SS_LICENSE_GUARD and include the generated header."""
+    text = _read("app/src/Licensing/CommercialToken.h")
+
+    assert '#  include "LicenseGuards.generated.h"' in text
+    assert "#  define SS_LICENSE_GUARD()" in text
+    assert "Licensing::Guards::runGuard(__LINE__)" in text
+
+
+def test_license_guard_present_in_serial_studio_activated():
+    """SerialStudio::activated() must include SS_LICENSE_GUARD()."""
+    text = _read("app/src/SerialStudio.cpp")
+
+    assert re.search(
+        r"return.*isValid\(\)\s*&&\s*SS_LICENSE_GUARD\(\)",
+        text,
+    ), "SS_LICENSE_GUARD() missing from SerialStudio::activated()"
+
+
+def test_license_guard_present_in_mqtt_connect():
+    """MQTT::Client::openConnection() must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/MQTT/Client.cpp")
+
+    assert "SS_LICENSE_GUARD()" in text
+    assert re.search(
+        r"token\.isValid\(\)\s*\|\|\s*!SS_LICENSE_GUARD\(\)",
+        text,
+    ), "SS_LICENSE_GUARD() missing from MQTT openConnection guard"
+
+
+def test_license_guard_present_in_mqtt_hotpath():
+    """MQTT::Client::hotpathTxFrame() must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/MQTT/Client.cpp")
+
+    assert re.search(
+        r"token\.isValid\(\)\s*\n?\s*&&\s*SS_LICENSE_GUARD\(\)\s*&&\s*token\.featureTier\(\)",
+        text,
+    ), "SS_LICENSE_GUARD() missing from MQTT hotpathTxFrame"
+
+
+def test_license_guard_present_in_mdf4_export():
+    """MDF4::ExportWorker::createFile() must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/MDF4/Export.cpp")
+
+    assert text.count("SS_LICENSE_GUARD()") >= 2, \
+        "SS_LICENSE_GUARD() should appear in both createFile and setExportEnabled in MDF4::Export"
+
+
+def test_license_guard_present_in_console_export():
+    """Console::ExportWorker::createFile() must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/Console/Export.cpp")
+
+    assert text.count("SS_LICENSE_GUARD()") >= 2, \
+        "SS_LICENSE_GUARD() should appear in both createFile and setExportEnabled in Console::Export"
+
+
+def test_license_guard_present_in_connection_manager():
+    """IO::ConnectionManager::connectDevice() must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/IO/ConnectionManager.cpp")
+
+    assert "SS_LICENSE_GUARD()" in text
+
+
+def test_license_guard_present_in_dashboard():
+    """UI::Dashboard::reconfigureDashboard() must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/UI/Dashboard.cpp")
+
+    assert re.search(
+        r"token\.isValid\(\)\s*&&\s*SS_LICENSE_GUARD\(\)",
+        text,
+    ), "SS_LICENSE_GUARD() missing from Dashboard pro detection"
+
+
+def test_license_guard_present_in_gps():
+    """Widgets::GPS::setMapType() must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/UI/Widgets/GPS.cpp")
+
+    assert re.search(
+        r"tk\.isValid\(\)\s*&&\s*SS_LICENSE_GUARD\(\)",
+        text,
+    ), "SS_LICENSE_GUARD() missing from GPS map type guard"
+
+
+def test_license_guard_present_in_plot():
+    """Widgets::Plot custom X-axis must check SS_LICENSE_GUARD()."""
+    text = _read("app/src/UI/Widgets/Plot.cpp")
+
+    assert re.search(
+        r"tk\.isValid\(\)\s*&&\s*SS_LICENSE_GUARD\(\)",
+        text,
+    ), "SS_LICENSE_GUARD() missing from Plot custom X-axis guard"
+
+
+def test_license_guard_cmake_generator_exists():
+    """The CMake guard generator script must exist and be included."""
+    cmake_script = _read("cmake/GenLicenseGuards.cmake")
+    root_cmake = _read("CMakeLists.txt")
+
+    assert "GenLicenseGuards.cmake" in root_cmake
+    assert "_LG_COUNT" in cmake_script
+    assert "runGuard" in cmake_script
+    assert "guardTable" in cmake_script
+
+
+def test_license_guard_cmake_generates_all_styles():
+    """The CMake generator must produce all 6 check styles."""
+    text = _read("cmake/GenLicenseGuards.cmake")
+
+    for style_marker in [
+        "Style 0: XOR check",
+        "Style 1: Modular arithmetic",
+        "Style 2: Bit rotation check",
+        "Style 3: Additive hash",
+        "Style 4: Multi-byte extraction",
+        "Style 5: Polynomial check",
+    ]:
+        assert style_marker in text, f"Missing guard style: {style_marker}"
+
+
+def test_license_guard_minimum_count():
+    """The generator must produce at least 20 guard functions."""
+    text = _read("cmake/GenLicenseGuards.cmake")
+
+    match = re.search(r'set\(_LG_COUNT\s+(\d+)\)', text)
+    assert match, "_LG_COUNT not found in GenLicenseGuards.cmake"
+    assert int(match.group(1)) >= 20, \
+        f"Guard count too low: {match.group(1)} (minimum 20)"
+
+
+def test_license_guard_build_dir_is_gitignored():
+    """The generated header must be in .gitignore."""
+    text = _read(".gitignore")
+
+    assert "LicenseGuards.generated.h" in text

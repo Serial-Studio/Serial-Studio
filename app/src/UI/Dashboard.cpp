@@ -1246,7 +1246,8 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
 #ifdef BUILD_COMMERCIAL
   const auto& token = Licensing::CommercialToken::current();
-  const bool pro    = token.isValid() && token.featureTier() >= Licensing::FeatureTier::Trial
+  const bool pro    = token.isValid() && SS_LICENSE_GUARD()
+                && token.featureTier() >= Licensing::FeatureTier::Trial
                 && !token.variantName().isEmpty();
 #else
   const bool pro = false;

@@ -56,6 +56,26 @@
 #include <QString>
 
 //--------------------------------------------------------------------------------------------------
+// SS_LICENSE_GUARD — per-call-site license integrity check
+//--------------------------------------------------------------------------------------------------
+// Each call site dispatches to a different generated guard function based on
+// __LINE__. The guard functions are regenerated on every build with randomized
+// names and check logic, so no static patch survives across releases.
+//
+// Usage: place SS_LICENSE_GUARD() at the top of any commercial feature gate.
+// It evaluates to true when the build salt is legitimate.
+//--------------------------------------------------------------------------------------------------
+
+// clang-format off
+#ifdef BUILD_COMMERCIAL
+#  include "LicenseGuards.generated.h"
+#  define SS_LICENSE_GUARD() (Licensing::Guards::runGuard(__LINE__))
+#else
+#  define SS_LICENSE_GUARD() (false)
+#endif
+// clang-format on
+
+//--------------------------------------------------------------------------------------------------
 // Compile-time salt — only defined when CMake has validated the license.
 // Without this, the build fails at the static_assert below.
 //--------------------------------------------------------------------------------------------------

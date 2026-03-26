@@ -27,9 +27,12 @@ __pycache__/
 *.so
 
 # Build outputs
-/build*/        
-*/build*/      
-cmake-build-*/ 
+/build*/
+*/build*/
+cmake-build-*/
+
+# Generated license guards (regenerated per build)
+LicenseGuards.generated.h
 
 # Binary builds
 udp_function_generator

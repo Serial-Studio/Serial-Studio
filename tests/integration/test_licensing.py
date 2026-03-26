@@ -53,6 +53,49 @@ def require_licensing(api_client):
 # Smoke / status tests
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Build integrity — license guard validation
+# ---------------------------------------------------------------------------
+
+@pytest.mark.integration
+def test_all_license_guards_pass(api_client):
+    """Every generated license guard must pass in the running binary.
+
+    This catches builds where the salt was faked or the guard generator
+    produced incorrect expected values. If any guard fails, the binary
+    is broken and must not ship.
+    """
+    result = api_client.command("licensing.guardStatus")
+
+    assert isinstance(result.get("total"), int)
+    assert isinstance(result.get("passed"), int)
+    assert isinstance(result.get("failed"), int)
+    assert isinstance(result.get("allOk"), bool)
+
+    assert result["total"] >= 20, \
+        f"Expected at least 20 guards, got {result['total']}"
+    assert result["allOk"] is True, \
+        f"{result['failed']}/{result['total']} license guards failed: indices {result.get('failures')}"
+    assert result["passed"] == result["total"], \
+        f"Only {result['passed']}/{result['total']} guards passed"
+
+
+@pytest.mark.integration
+def test_license_guard_status_shape(api_client):
+    """licensing.guardStatus returns the expected diagnostic fields."""
+    result = api_client.command("licensing.guardStatus")
+
+    for field in ("total", "passed", "failed", "allOk"):
+        assert field in result, f"Missing field: {field}"
+
+    assert isinstance(result["failures"], list)
+    assert result["passed"] + result["failed"] == result["total"]
+
+
+# ---------------------------------------------------------------------------
+# Smoke / status tests
+# ---------------------------------------------------------------------------
+
 @pytest.mark.integration
 def test_licensing_get_status_shape(api_client):
     """licensing.getStatus returns the expected fields without crashing."""

@@ -40,6 +40,7 @@ namespace Handlers {
  * - licensing.getStatus        - Query current activation status (read-only)
  * - licensing.trial.getStatus  - Query current trial status (read-only)
  * - licensing.trial.enable     - Start a trial period
+ * - licensing.guardStatus      - Run all build-time license guards (diagnostic)
  */
 class LicensingHandler {
 public:
@@ -51,6 +52,7 @@ private:
   static CommandResponse deactivate(const QString& id, const QJsonObject& params);
   static CommandResponse validate(const QString& id, const QJsonObject& params);
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
+  static CommandResponse guardStatus(const QString& id, const QJsonObject& params);
   static CommandResponse trialGetStatus(const QString& id, const QJsonObject& params);
   static CommandResponse trialEnable(const QString& id, const QJsonObject& params);
 };

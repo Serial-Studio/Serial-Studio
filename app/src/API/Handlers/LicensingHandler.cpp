@@ -25,6 +25,7 @@
 #  include "API/Handlers/LicensingHandler.h"
 
 #  include "API/CommandRegistry.h"
+#  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 
@@ -67,6 +68,10 @@ void API::Handlers::LicensingHandler::registerCommands()
   registry.registerCommand(QStringLiteral("licensing.getStatus"),
                            QStringLiteral("Get current license activation status"),
                            &getStatus);
+
+  registry.registerCommand(QStringLiteral("licensing.guardStatus"),
+                           QStringLiteral("Run all build-time license guards and report results"),
+                           &guardStatus);
 
   registry.registerCommand(QStringLiteral("licensing.trial.getStatus"),
                            QStringLiteral("Get current trial status"),
@@ -165,6 +170,42 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
   result[QStringLiteral("customerEmail")] = ls.customerEmail();
   result[QStringLiteral("seatLimit")]     = ls.seatLimit();
   result[QStringLiteral("seatUsage")]     = ls.seatUsage();
+
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Runs every generated license guard and reports individual pass/fail.
+ *
+ * This is a diagnostic command for CI: it proves the built binary has a
+ * consistent salt embedded in all guard functions. If any guard fails, the
+ * build is broken and must not ship.
+ */
+API::CommandResponse API::Handlers::LicensingHandler::guardStatus(const QString& id,
+                                                                  const QJsonObject&)
+{
+  const auto& table = Licensing::Guards::guardTable();
+  const int count   = static_cast<int>(table.size());
+
+  int passed = 0;
+  int failed = 0;
+  QJsonArray failures;
+
+  for (int i = 0; i < count; ++i) {
+    if (table[static_cast<unsigned>(i)]())
+      ++passed;
+    else {
+      ++failed;
+      failures.append(i);
+    }
+  }
+
+  QJsonObject result;
+  result[QStringLiteral("total")]    = count;
+  result[QStringLiteral("passed")]   = passed;
+  result[QStringLiteral("failed")]   = failed;
+  result[QStringLiteral("failures")] = failures;
+  result[QStringLiteral("allOk")]    = (failed == 0);
 
   return CommandResponse::makeSuccess(id, result);
 }

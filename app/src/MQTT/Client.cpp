@@ -396,7 +396,7 @@ void MQTT::Client::openConnection()
     return;
 
   const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || token.featureTier() == Licensing::FeatureTier::None
+  if (!token.isValid() || !SS_LICENSE_GUARD() || token.featureTier() == Licensing::FeatureTier::None
       || token.variantName().isEmpty()) {
     Misc::Utilities::showMessageBox(
       tr("MQTT Feature Requires a Commercial License"),
@@ -737,7 +737,7 @@ void MQTT::Client::hotpathTxFrame(const QByteArray& data)
 {
   const auto& token = Licensing::CommercialToken::current();
   if (isConnected() && isPublisher() && m_topicName.isValid() && token.isValid()
-      && token.featureTier() >= Licensing::FeatureTier::Trial)
+      && SS_LICENSE_GUARD() && token.featureTier() >= Licensing::FeatureTier::Trial)
     m_client.publish(m_topicName, data);
 }
 
@@ -925,7 +925,8 @@ void MQTT::Client::onAuthenticationRequested(const QMqttAuthenticationProperties
 void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopicName& topic)
 {
   const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || token.featureTier() == Licensing::FeatureTier::None)
+  if (!token.isValid() || !SS_LICENSE_GUARD()
+      || token.featureTier() == Licensing::FeatureTier::None)
     return;
 
   // Only process if data is not empty

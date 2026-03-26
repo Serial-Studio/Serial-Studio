@@ -605,8 +605,9 @@ void IO::ConnectionManager::toggleConnection()
 void IO::ConnectionManager::connectDevice()
 {
 #ifdef BUILD_COMMERCIAL
-  if (Licensing::Trial::instance().trialExpired()
-      && !Licensing::CommercialToken::current().isValid()) {
+  if ((Licensing::Trial::instance().trialExpired()
+       && !Licensing::CommercialToken::current().isValid())
+      || !SS_LICENSE_GUARD()) {
     disconnectDevice();
     Misc::Utilities::showMessageBox(
       tr("Your trial period has ended."),

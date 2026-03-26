@@ -373,8 +373,8 @@ void Misc::ThemeManager::setTheme(const int index)
   // so deleteLater() cleanup completes before ApplicationPaletteChange
   // events are delivered to QWindows
   const auto palette = m_palette;
-  const auto bg = getColor(QStringLiteral("base"));
-  const auto fg = getColor(QStringLiteral("text"));
+  const auto bg      = getColor(QStringLiteral("base"));
+  const auto fg      = getColor(QStringLiteral("text"));
   QTimer::singleShot(0, this, [this, palette, bg, fg]() {
     qApp->setPalette(palette);
     if (fg.lightness() > bg.lightness())
@@ -570,8 +570,7 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
 
 bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
 {
-  if (event->type() == QEvent::ApplicationPaletteChange
-      && m_themeName == QStringLiteral("System")
+  if (event->type() == QEvent::ApplicationPaletteChange && m_themeName == QStringLiteral("System")
       && !m_applyingTheme) {
     loadSystemTheme();
     return true;
