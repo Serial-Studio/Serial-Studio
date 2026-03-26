@@ -87,6 +87,7 @@ Widgets.Pane {
         id: titleBar
 
         implicitHeight: 48
+        Layout.topMargin: -1
         Layout.fillWidth: true
         color: Cpp_ThemeManager.colors["groupbox_background"]
 
