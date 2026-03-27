@@ -34,9 +34,6 @@
 // from the salt itself so they differ per build.
 //--------------------------------------------------------------------------------------------------
 
-// Derive per-build masks from the salt itself so they change every build.
-// The multiplications and shifts produce pseudo-random 16-bit masks that
-// have no obvious relationship to the original salt value.
 // clang-format off
 static constexpr quint16 kMask0 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT * 0x9E3779B97F4A7C15ULL) >> 48) & 0xFFFFu);
 static constexpr quint16 kMask1 = static_cast<quint16>(((COMMERCIAL_BUILD_SALT * 0x517CC1B727220A95ULL) >> 48) & 0xFFFFu);
@@ -234,7 +231,6 @@ void Licensing::CommercialToken::seal()
  */
 quint64 Licensing::CommercialToken::deobfuscateSalt()
 {
-  // Read volatile fragments and unmask with build-derived keys
   const quint64 p0 = static_cast<quint64>(static_cast<quint16>(s_sf0 ^ kMask0));
   const quint64 p1 = static_cast<quint64>(static_cast<quint16>(s_sf1 ^ kMask1));
   const quint64 p2 = static_cast<quint64>(static_cast<quint16>(s_sf2 ^ kMask2));

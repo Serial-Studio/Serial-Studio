@@ -545,7 +545,7 @@ void Misc::ExtensionManager::installExtension()
 
   // Local repos: copy files directly (paths are relative to info.json)
   if (isLocal) {
-    for (const auto& f : files) {
+    for (const auto& f : std::as_const(files)) {
       const auto localName = f.toString();
       const auto dst       = installDir + "/" + localName;
 

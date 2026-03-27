@@ -132,12 +132,14 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false)
 
   // Load theme files
   for (const auto& theme : std::as_const(themes)) {
+    // Try to read theme file
     QFile file(QStringLiteral(":/rcc/themes/%1.json").arg(theme));
     if (!file.open(QFile::ReadOnly)) {
       qWarning() << "Failed to open theme resource:" << theme;
       continue;
     }
 
+    // Try to parse JSON data
     QJsonParseError parseError;
     const auto document = QJsonDocument::fromJson(file.readAll(), &parseError);
     if (parseError.error != QJsonParseError::NoError || document.isNull()) {
@@ -145,16 +147,19 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false)
       continue;
     }
 
+    // Obtain theme title
     const auto title = document.object().value("title").toString();
     if (title.isEmpty()) {
       qWarning() << "Theme" << theme << "has no title, skipping";
       continue;
     }
 
+    // Insert theme data
     m_themes.insert(title, document.object());
     m_availableThemes.append(title);
   }
 
+  // Add fallback theme if required
   if (m_availableThemes.isEmpty()) {
     qCritical() << "No themes loaded! Adding fallback";
     m_availableThemes.append("Fallback");
@@ -180,6 +185,7 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false)
     m_settings.remove("ApplicationTheme");
   }
 
+  // Load theme
   setTheme(themeIndex);
 
   // Load localized theme names

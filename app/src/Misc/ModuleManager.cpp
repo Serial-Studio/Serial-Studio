@@ -107,6 +107,22 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   if (msg.isEmpty())
     return;
 
+  // Filter out noisy/unfixable Qt info messages
+  if (type == QtInfoMsg) {
+    if (msg.startsWith("OpenType support missing"))
+      return;
+  }
+
+  // Filter out noisy/unfixable Qt warning messages
+  else if (type == QtWarningMsg) {
+    if (msg.startsWith("Qt was built without Direct3D 12 support"))
+      return;
+    else if (msg.contains("setGeometry"))
+      return;
+    else if (msg.startsWith("The following paths where searched for Qt WebEngine locales"))
+      return;
+  }
+
   // Add function to string
   QString message;
   if (context.function)
@@ -114,29 +130,17 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
   else
     message = msg;
 
-  // Filter out noisy/unfixable Qt messages
-  if (type == QtInfoMsg) {
-    if (message.startsWith("OpenType support missing"))
-      return;
-  }
-
-#ifdef Q_OS_WIN
-  if (type == QtWarningMsg) {
-    if (message.startsWith("Qt was built without Direct3D 12 support"))
-      return;
-    if (message.contains("setGeometry"))
-      return;
-  }
-#endif
-
+  // Get console output
   const bool useAnsiColors = Console::Handler::instance().ansiColorsEnabled();
   const QString output     = Widgets::Terminal::formatDebugMessage(type, message, useAnsiColors);
   if (output.isEmpty())
     return;
 
+  // Print to stdio
   std::cout << Widgets::Terminal::formatDebugMessage(type, message, false).toStdString()
             << std::endl;
 
+  // Print to console
   Console::Handler::instance().displayDebugData(output + "\n");
 }
 
