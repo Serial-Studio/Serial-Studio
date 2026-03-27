@@ -39,16 +39,37 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
+  QJsonObject setEnabledSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "boolean");
+    prop.insert("description", "Whether to enable MDF4 export");
+    props.insert("enabled", prop);
+    setEnabledSchema.insert("type", "object");
+    setEnabledSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("enabled");
+    setEnabledSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mdf4.export.setEnabled"),
-                           QStringLiteral("Enable or disable MDF4 export (params: enabled)"),
-                           &setEnabled);
+                           QStringLiteral("Enable or disable MDF4 export"),
+                           setEnabledSchema, &setEnabled);
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.export.close"), QStringLiteral("Close the current MDF4 file"), &close);
+  QJsonObject closeSchema;
+  closeSchema.insert("type", "object");
+  closeSchema.insert("properties", QJsonObject());
+  registry.registerCommand(QStringLiteral("mdf4.export.close"),
+                           QStringLiteral("Close the current MDF4 file"),
+                           closeSchema, &close);
 
   // Query commands
-  registry.registerCommand(
-    QStringLiteral("mdf4.export.getStatus"), QStringLiteral("Get MDF4 export status"), &getStatus);
+  QJsonObject getStatusSchema;
+  getStatusSchema.insert("type", "object");
+  getStatusSchema.insert("properties", QJsonObject());
+  registry.registerCommand(QStringLiteral("mdf4.export.getStatus"),
+                           QStringLiteral("Get MDF4 export status"),
+                           getStatusSchema, &getStatus);
 }
 
 //--------------------------------------------------------------------------------------------------

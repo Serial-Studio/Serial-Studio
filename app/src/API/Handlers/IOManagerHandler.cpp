@@ -37,12 +37,19 @@ void API::Handlers::IOManagerHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
+  // Empty schema for parameterless commands
+  QJsonObject emptySchema;
+  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
+
   registry.registerCommand(QStringLiteral("io.manager.connect"),
                            QStringLiteral("Connect to the currently configured device"),
+                           emptySchema,
                            &connect);
 
   registry.registerCommand(QStringLiteral("io.manager.disconnect"),
                            QStringLiteral("Disconnect from the current device"),
+                           emptySchema,
                            &disconnect);
 
   {
@@ -101,10 +108,12 @@ void API::Handlers::IOManagerHandler::registerCommands()
 
   registry.registerCommand(QStringLiteral("io.manager.getStatus"),
                            QStringLiteral("Get current connection status and configuration"),
+                           emptySchema,
                            &getStatus);
 
   registry.registerCommand(QStringLiteral("io.manager.getAvailableBuses"),
                            QStringLiteral("Get list of available bus types"),
+                           emptySchema,
                            &getAvailableBuses);
 }
 

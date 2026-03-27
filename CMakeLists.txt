@@ -67,11 +67,12 @@ find_package(
 # Debugging:
 #   DEBUG_SANITIZER=OFF (default) - AddressSanitizer + UBSan for debug builds
 #
-# Dependencies:
-#   USE_SYSTEM_ZLIB=OFF (default)  - Use system zlib (required for Flathub)
-#   USE_SYSTEM_EXPAT=OFF (default) - Use system expat (required for Flathub)
+# Networking:
+#   ENABLE_GRPC=ON (default) - Enable gRPC server on port 8888
 #
-# Note: USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT auto-enables ENABLE_HARDENING
+# Dependencies (zlib, expat, OpenSSL, KissFFT, libusb, hidapi, gRPC, protobuf)
+# are provided by vcpkg in manifest mode. vcpkg is auto-bootstrapped when
+# ENABLE_GRPC=ON or when CMAKE_TOOLCHAIN_FILE is not already set.
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -81,8 +82,7 @@ option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"  OFF)
 option(ENABLE_HARDENING        "Enable security hardening flags"       OFF)
 option(ENABLE_PGO              "Enable Profile-Guided Optimization"    OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
-option(USE_SYSTEM_ZLIB         "Use system-provided zlib"              OFF)
-option(USE_SYSTEM_EXPAT        "Use system-provided expat"             OFF)
+option(ENABLE_GRPC             "Enable gRPC server support"            OFF)
 
 #---------------------------------------------------------------------------------------------------
 # Commercial build credentials
@@ -418,7 +418,7 @@ endif()
 #   Intel: Same as GCC/Clang with additional Intel-specific opts
 #
 # Sandboxed builds (Flathub):
-#   - Detects USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT
+#   - Detects FLATPAK_BUILD environment
 #   - Disables LTO (causes issues in sandboxed environments)
 #   - Auto-enables ENABLE_HARDENING for security compliance
 #
@@ -429,10 +429,10 @@ endif()
 
 if(PRODUCTION_OPTIMIZATION)
    # Detect sandboxed build environments (Flathub) and enable hardening
-   if(USE_SYSTEM_ZLIB OR USE_SYSTEM_EXPAT)
+   if(DEFINED ENV{FLATPAK_ID} OR FLATPAK_BUILD)
       set(DISABLE_LTO ON)
       set(ENABLE_HARDENING ON CACHE BOOL "Auto-enabled hardening for sandboxed builds" FORCE)
-      message(STATUS "Sandboxed build detected (USE_SYSTEM_ZLIB or USE_SYSTEM_EXPAT), disabling LTO and enabling hardening")
+      message(STATUS "Sandboxed build detected, disabling LTO and enabling hardening")
    else()
       set(DISABLE_LTO OFF)
    endif()
@@ -862,7 +862,7 @@ endif()
 #   -Wformat-security           - Warn about unsafe format strings
 #
 # Auto-enabled when:
-#   - USE_SYSTEM_ZLIB=ON or USE_SYSTEM_EXPAT=ON (Flathub builds)
+#   - Sandboxed/Flatpak build detected
 #   - Manually set via -DENABLE_HARDENING=ON
 #
 # Note: Some flags require optimization (-O1 or higher) to be effective
@@ -951,6 +951,104 @@ if(ENABLE_HARDENING)
       endif()
    endif()
 endif()
+
+#---------------------------------------------------------------------------------------------------
+# vcpkg auto-bootstrap
+#---------------------------------------------------------------------------------------------------
+#
+# vcpkg provides all third-party C/C++ dependencies (zlib, expat, OpenSSL,
+# KissFFT, libusb, hidapi, gRPC, protobuf) as static libraries isolated from
+# system/homebrew packages. This avoids header conflicts and simplifies
+# cross-platform distribution.
+#
+# vcpkg is cloned to build/_vcpkg on first configure. Subsequent builds reuse
+# the cached packages. The toolchain file must be set before project() so
+# find_package() can discover vcpkg-installed packages.
+#
+# Custom static triplets in vcpkg-triplets/ ensure all dependencies are
+# statically linked.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  # Check for system-installed vcpkg first, then fall back to local clone
+  find_program(_VCPKG_EXE vcpkg HINTS ENV VCPKG_ROOT "$ENV{HOME}/.vcpkg" "$ENV{HOME}/vcpkg")
+  if(_VCPKG_EXE)
+    get_filename_component(VCPKG_ROOT "${_VCPKG_EXE}" DIRECTORY)
+    message(STATUS "Using system vcpkg: ${VCPKG_ROOT}")
+  else()
+    set(VCPKG_ROOT "${CMAKE_BINARY_DIR}/_vcpkg")
+
+    # Validate clone — remove stale/broken checkouts
+    if(EXISTS "${VCPKG_ROOT}" AND NOT EXISTS "${VCPKG_ROOT}/scripts/vcpkg-tool-metadata.txt")
+      message(STATUS "Removing broken vcpkg clone...")
+      file(REMOVE_RECURSE "${VCPKG_ROOT}")
+    endif()
+
+    if(NOT EXISTS "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+      message(STATUS "Cloning vcpkg into ${VCPKG_ROOT}...")
+      execute_process(
+        COMMAND git clone https://github.com/microsoft/vcpkg.git "${VCPKG_ROOT}"
+        RESULT_VARIABLE _vcpkg_clone_result
+      )
+      if(NOT _vcpkg_clone_result EQUAL 0)
+        message(FATAL_ERROR "Failed to clone vcpkg. Install it manually: https://vcpkg.io")
+      endif()
+    endif()
+
+    if(NOT EXISTS "${VCPKG_ROOT}/vcpkg" AND NOT EXISTS "${VCPKG_ROOT}/vcpkg.exe")
+      message(STATUS "Bootstrapping vcpkg...")
+      if(WIN32)
+        execute_process(
+          COMMAND "${VCPKG_ROOT}/bootstrap-vcpkg.bat" -disableMetrics
+          RESULT_VARIABLE _vcpkg_bs_result
+        )
+      else()
+        execute_process(
+          COMMAND "${VCPKG_ROOT}/bootstrap-vcpkg.sh" -disableMetrics
+          RESULT_VARIABLE _vcpkg_bs_result
+        )
+      endif()
+      if(NOT _vcpkg_bs_result EQUAL 0)
+        message(FATAL_ERROR "Failed to bootstrap vcpkg. Install it manually: https://vcpkg.io")
+      endif()
+    endif()
+
+    message(STATUS "Using local vcpkg: ${VCPKG_ROOT}")
+  endif()
+
+  set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+    CACHE STRING "vcpkg toolchain" FORCE)
+  set(VCPKG_OVERLAY_TRIPLETS "${CMAKE_SOURCE_DIR}/vcpkg-triplets"
+    CACHE STRING "vcpkg triplet overlays" FORCE)
+  set(VCPKG_MANIFEST_DIR "${CMAKE_SOURCE_DIR}"
+    CACHE STRING "vcpkg manifest directory" FORCE)
+
+  # Detect host architecture for triplet selection
+  if(APPLE)
+    execute_process(COMMAND uname -m OUTPUT_VARIABLE _HOST_ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  else()
+    set(_HOST_ARCH "${CMAKE_HOST_SYSTEM_PROCESSOR}")
+  endif()
+
+  # Select static triplet per platform
+  if(NOT DEFINED VCPKG_TARGET_TRIPLET)
+    if(APPLE)
+      if(_HOST_ARCH STREQUAL "arm64")
+        set(VCPKG_TARGET_TRIPLET "arm64-osx-static" CACHE STRING "" FORCE)
+      else()
+        set(VCPKG_TARGET_TRIPLET "x64-osx-static" CACHE STRING "" FORCE)
+      endif()
+    elseif(WIN32)
+      set(VCPKG_TARGET_TRIPLET "x64-windows-static" CACHE STRING "" FORCE)
+    else()
+      set(VCPKG_TARGET_TRIPLET "x64-linux-static" CACHE STRING "" FORCE)
+    endif()
+  endif()
+
+  message(STATUS "vcpkg triplet: ${VCPKG_TARGET_TRIPLET}")
+endif()
+
 
 #---------------------------------------------------------------------------------------------------
 # Subdirectory build order

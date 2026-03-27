@@ -21,6 +21,8 @@
 
 #include "API/Handlers/DashboardHandler.h"
 
+#include <QJsonArray>
+
 #include "API/CommandRegistry.h"
 #include "AppState.h"
 #include "DataModel/Frame.h"
@@ -39,40 +41,93 @@ void API::Handlers::DashboardHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
+  // Empty schema for parameter-less commands
+  QJsonObject emptySchema;
+  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
+
+  // Schema for setOperationMode
+  QJsonObject modeProps;
+  QJsonObject modeProp;
+  modeProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
+  modeProp.insert(
+    QStringLiteral("description"),
+    QStringLiteral("Operation mode: 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot"));
+  modeProps.insert(QStringLiteral("mode"), modeProp);
+
+  QJsonObject setModeSchema;
+  setModeSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  setModeSchema.insert(QStringLiteral("properties"), modeProps);
+  setModeSchema.insert(QStringLiteral("required"), QJsonArray{QStringLiteral("mode")});
+
   registry.registerCommand(
     QStringLiteral("dashboard.setOperationMode"),
     QStringLiteral(
       "Set the operation mode (params: mode - 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)"),
+    setModeSchema,
     &setOperationMode);
 
   registry.registerCommand(QStringLiteral("dashboard.getOperationMode"),
                            QStringLiteral("Get the current operation mode"),
+                           emptySchema,
                            &getOperationMode);
+
+  // Schema for setFPS
+  QJsonObject fpsProps;
+  QJsonObject fpsProp;
+  fpsProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
+  fpsProp.insert(QStringLiteral("description"),
+                 QStringLiteral("Visualization refresh rate in Hz (1-240)"));
+  fpsProps.insert(QStringLiteral("fps"), fpsProp);
+
+  QJsonObject setFpsSchema;
+  setFpsSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  setFpsSchema.insert(QStringLiteral("properties"), fpsProps);
+  setFpsSchema.insert(QStringLiteral("required"), QJsonArray{QStringLiteral("fps")});
 
   registry.registerCommand(
     QStringLiteral("dashboard.setFPS"),
     QStringLiteral("Set the visualization refresh rate (params: fps - 1-240 Hz)"),
+    setFpsSchema,
     &setFPS);
 
   registry.registerCommand(QStringLiteral("dashboard.getFPS"),
                            QStringLiteral("Get the current visualization refresh rate"),
+                           emptySchema,
                            &getFPS);
+
+  // Schema for setPoints
+  QJsonObject pointsProps;
+  QJsonObject pointsProp;
+  pointsProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
+  pointsProp.insert(QStringLiteral("description"),
+                    QStringLiteral("Number of data points per plot (1-100000)"));
+  pointsProps.insert(QStringLiteral("points"), pointsProp);
+
+  QJsonObject setPointsSchema;
+  setPointsSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  setPointsSchema.insert(QStringLiteral("properties"), pointsProps);
+  setPointsSchema.insert(QStringLiteral("required"), QJsonArray{QStringLiteral("points")});
 
   registry.registerCommand(
     QStringLiteral("dashboard.setPoints"),
     QStringLiteral("Set the number of data points per plot (params: points)"),
+    setPointsSchema,
     &setPoints);
 
   registry.registerCommand(QStringLiteral("dashboard.getPoints"),
                            QStringLiteral("Get the current number of data points per plot"),
+                           emptySchema,
                            &getPoints);
 
   registry.registerCommand(QStringLiteral("dashboard.getStatus"),
                            QStringLiteral("Get all dashboard configuration settings"),
+                           emptySchema,
                            &getStatus);
 
   registry.registerCommand(QStringLiteral("dashboard.getData"),
                            QStringLiteral("Get dashboard widget counts and latest frame data"),
+                           emptySchema,
                            &getData);
 }
 

@@ -1,0 +1,125 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020-2025 Alex Spataru
+ *
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ *
+ * gRPC service definition for Serial Studio API.
+ * Uses google.protobuf.Struct for dynamic command parameters, mirroring
+ * the existing TCP/JSON API on port 7777.
+ */
+
+syntax = "proto3";
+
+package serialstudio;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/empty.proto";
+
+//--------------------------------------------------------------------------------------------------
+// Service definition
+//--------------------------------------------------------------------------------------------------
+
+service SerialStudioAPI {
+  // Execute a single registered command by name
+  rpc ExecuteCommand(CommandRequest) returns (CommandResponse);
+
+  // Execute multiple commands in a single batch
+  rpc ExecuteBatch(BatchRequest) returns (BatchResponse);
+
+  // Stream real-time parsed frames in batches (server-streaming)
+  rpc StreamFrames(StreamRequest) returns (stream FrameBatch);
+
+  // Stream raw data from the connected device in batches (server-streaming)
+  rpc StreamRawData(StreamRequest) returns (stream RawBatch);
+
+  // Send raw data to the connected device
+  rpc WriteRawData(RawDataRequest) returns (CommandResponse);
+
+  // List all available API commands with their schemas
+  rpc ListCommands(google.protobuf.Empty) returns (CommandList);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Command execution messages
+//--------------------------------------------------------------------------------------------------
+
+message CommandRequest {
+  string id = 1;
+  string command = 2;
+  google.protobuf.Struct params = 3;
+}
+
+message CommandResponse {
+  string id = 1;
+  bool success = 2;
+  google.protobuf.Value result = 3;
+  ErrorInfo error = 4;
+}
+
+message ErrorInfo {
+  string code = 1;
+  string message = 2;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Batch execution messages
+//--------------------------------------------------------------------------------------------------
+
+message BatchRequest {
+  string id = 1;
+  repeated CommandRequest commands = 2;
+}
+
+message BatchResponse {
+  string id = 1;
+  bool success = 2;
+  repeated CommandResponse results = 3;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Streaming messages
+//--------------------------------------------------------------------------------------------------
+
+message StreamRequest {
+  // Reserved for future filter criteria
+}
+
+message FrameData {
+  int64 timestamp_ms = 1;
+  google.protobuf.Struct frame = 2;
+}
+
+message FrameBatch {
+  repeated FrameData frames = 1;
+}
+
+message RawData {
+  bytes data = 1;
+  int64 timestamp_ms = 2;
+}
+
+message RawBatch {
+  repeated RawData packets = 1;
+}
+
+message RawDataRequest {
+  string id = 1;
+  bytes data = 2;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Command discovery messages
+//--------------------------------------------------------------------------------------------------
+
+message CommandInfo {
+  string name = 1;
+  string description = 2;
+  google.protobuf.Struct input_schema = 3;
+}
+
+message CommandList {
+  repeated CommandInfo commands = 1;
+}

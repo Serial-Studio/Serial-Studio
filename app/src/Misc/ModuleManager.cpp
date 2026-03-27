@@ -81,6 +81,10 @@
 #  include "UI/Widgets/Plot3D.h"
 #endif
 
+#ifdef ENABLE_GRPC
+#  include "API/GRPC/GRPCServer.h"
+#endif
+
 //--------------------------------------------------------------------------------------------------
 // Message handler
 //--------------------------------------------------------------------------------------------------
@@ -242,6 +246,10 @@ void Misc::ModuleManager::onQuit()
   IO::ConnectionManager::instance().disconnectAllDevices();
   API::Server::instance().removeConnection();
 
+#ifdef ENABLE_GRPC
+  API::GRPC::GRPCServer::instance().setEnabled(false);
+#endif
+
   // Terminate the application event loop
   qApp->exit(0);
 }
@@ -376,6 +384,14 @@ void Misc::ModuleManager::initializeQmlInterface()
   const bool qtCommercialAvailable = false;
 #endif
 
+  // Initialize gRPC server (optional)
+#ifdef ENABLE_GRPC
+  auto grpcServer = &API::GRPC::GRPCServer::instance();
+  const bool grpcAvailable = true;
+#else
+  const bool grpcAvailable = false;
+#endif
+
   // Initialize third-party modules (not needed in headless mode)
   QSimpleUpdater* updater = m_headless ? nullptr : QSimpleUpdater::getInstance();
 
@@ -506,7 +522,12 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_AppOrganization", APP_DEVELOPER);
   c->setContextProperty("Cpp_UpdaterEnabled", autoUpdaterEnabled());
   c->setContextProperty("Cpp_CommercialBuild", qtCommercialAvailable);
+  c->setContextProperty("Cpp_GrpcAvailable", grpcAvailable);
   c->setContextProperty("Cpp_AppOrganizationDomain", APP_SUPPORT_URL);
+
+#ifdef ENABLE_GRPC
+  c->setContextProperty("Cpp_GRPC_Server", grpcServer);
+#endif
 
   if (!m_headless) {
     // Register image provider for inline SVG action icons

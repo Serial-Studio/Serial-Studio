@@ -297,5 +297,7 @@ private:
 
   QStringList m_historyItems;
   IO::CircularBuffer<QByteArray, char> m_textBuffer;
+
+  QString m_pendingDisplay;
 };
 }  // namespace Console

@@ -167,17 +167,26 @@ jobs:
       with:
         useLocalCache: true
 
+    - name: '⚙️ Export vcpkg cache variables'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
     - name: '🚧 Configure with CMake'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
       run: |
         mkdir build
         cd build
         cmake ../ \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
+          -DENABLE_GRPC=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
@@ -326,17 +335,26 @@ jobs:
       with:
         useLocalCache: true
 
+    - name: '⚙️ Export vcpkg cache variables'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
     - name: '🚧 Configure with CMake'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
       run: |
         mkdir build
         cd build
         cmake ../ \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
+          -DENABLE_GRPC=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
@@ -396,7 +414,7 @@ jobs:
 
     - name: '⚙️ Install dependencies'
       run: |
-        brew install expat
+        brew install autoconf autoconf-archive automake libtool
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
@@ -453,17 +471,26 @@ jobs:
       with:
         node-version: 22
 
+    - name: '⚙️ Export vcpkg cache variables'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
     - name: '🚧 Configure with CMake'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
       run: |
         mkdir build
         cd build
         cmake ../ \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
+          -DENABLE_GRPC=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
@@ -603,11 +630,19 @@ jobs:
       with:
         arch: x64
 
+    - name: '⚙️ Export vcpkg cache variables'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
     - name: '🚧 Configure with CMake'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
+        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
       run: |
         mkdir build
         cd build
@@ -618,6 +653,7 @@ jobs:
           -DVCPKG_TARGET_TRIPLET=x64-windows-static `
           -DPRODUCTION_OPTIMIZATION=ON `
           -DENABLE_HARDENING=ON `
+          -DENABLE_GRPC=ON `
           -DCMAKE_BUILD_TYPE=Release `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF

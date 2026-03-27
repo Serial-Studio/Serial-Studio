@@ -454,6 +454,95 @@ status = client1.send("io.manager.getStatus")
 
 ---
 
+## gRPC Server
+
+### Overview
+
+Serial Studio also exposes the entire API via **gRPC** on **port 8888**. The gRPC server starts automatically when the API server is enabled and provides:
+
+- **High-performance frame streaming** — Binary protobuf encoding is ~5-10x smaller and faster than JSON
+- **Typed service definition** — Full `.proto` file for code generation in any language
+- **Server-streaming RPCs** — Real-time frame and raw data push with zero polling
+- **Cross-language support** — Python, C++, Go, Java, Rust, Node.js, C#, and more
+
+### Service Definition
+
+The gRPC API is defined in `serialstudio.proto` (exportable from **Preferences → Export Protobuf File**):
+
+```protobuf
+service SerialStudioAPI {
+  rpc ExecuteCommand(CommandRequest) returns (CommandResponse);
+  rpc ExecuteBatch(BatchRequest) returns (BatchResponse);
+  rpc StreamFrames(StreamRequest) returns (stream FrameData);
+  rpc StreamRawData(StreamRequest) returns (stream RawData);
+  rpc WriteRawData(RawDataRequest) returns (CommandResponse);
+  rpc ListCommands(google.protobuf.Empty) returns (CommandList);
+}
+```
+
+### Quick Start (Python)
+
+```bash
+pip install grpcio grpcio-tools
+```
+
+```python
+import grpc
+import serialstudio_pb2 as pb
+import serialstudio_pb2_grpc as rpc
+
+channel = grpc.insecure_channel('localhost:8888')
+stub = rpc.SerialStudioAPIStub(channel)
+
+# Execute a command
+resp = stub.ExecuteCommand(pb.CommandRequest(
+    id="1", command="io.manager.getStatus"))
+print(resp.result)
+
+# Stream frames in real-time
+for frame in stub.StreamFrames(pb.StreamRequest()):
+    print(frame.frame)  # protobuf Struct → dict
+```
+
+### Quick Start (grpcurl)
+
+```bash
+# List available commands
+grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/ListCommands
+
+# Execute a command
+grpcurl -plaintext -d '{"command":"io.manager.getStatus","id":"1"}' \
+  localhost:8888 serialstudio.SerialStudioAPI/ExecuteCommand
+
+# Stream frames (Ctrl+C to stop)
+grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/StreamFrames
+```
+
+### Generating Client Stubs
+
+Export the `.proto` file from **Preferences → Export Protobuf File**, then generate stubs for your language:
+
+```bash
+# Python
+python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. serialstudio.proto
+
+# C++
+protoc -I. --cpp_out=. --grpc_out=. --plugin=protoc-gen-grpc=grpc_cpp_plugin serialstudio.proto
+
+# Go
+protoc -I. --go_out=. --go-grpc_out=. serialstudio.proto
+```
+
+### External Connections
+
+The gRPC server follows the same **Allow External API Connections** setting as the TCP server. When enabled, it binds to `0.0.0.0:8888` (all interfaces). When disabled (default), it binds to `127.0.0.1:8888` (localhost only).
+
+### Plugins and gRPC
+
+Plugins can use gRPC for high-performance frame streaming by setting `"grpc": true` in their `info.json`. See the [Extensions](nav:extensions) documentation for details.
+
+---
+
 ## Protocol Specification
 
 ### Message Format

@@ -30,37 +30,127 @@ void API::Handlers::ProcessHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  registry.registerCommand(QStringLiteral("io.driver.process.setMode"),
-                           QStringLiteral("Set driver mode (params: mode - 0=Launch, 1=NamedPipe)"),
-                           &setMode);
+  // setMode schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Driver mode (0=Launch, 1=NamedPipe)");
+    props.insert("mode", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("mode");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.process.setMode"),
+      QStringLiteral("Set driver mode (params: mode - 0=Launch, 1=NamedPipe)"),
+      schema,
+      &setMode);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.process.setExecutable"),
-    QStringLiteral("Set executable path for Launch mode (params: executable)"),
-    &setExecutable);
+  // setExecutable schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "Absolute path to the executable");
+    props.insert("executable", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("executable");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.process.setExecutable"),
+      QStringLiteral("Set executable path for Launch mode (params: executable)"),
+      schema,
+      &setExecutable);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.process.setArguments"),
-    QStringLiteral("Set command-line arguments for Launch mode (params: arguments)"),
-    &setArguments);
+  // setArguments schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "Shell-style argument string");
+    props.insert("arguments", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("arguments");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.process.setArguments"),
+      QStringLiteral("Set command-line arguments for Launch mode (params: arguments)"),
+      schema,
+      &setArguments);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.process.setWorkingDir"),
-    QStringLiteral("Set working directory for Launch mode (params: workingDir)"),
-    &setWorkingDir);
+  // setWorkingDir schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "Absolute path to the working directory");
+    props.insert("workingDir", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("workingDir");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.process.setWorkingDir"),
+      QStringLiteral("Set working directory for Launch mode (params: workingDir)"),
+      schema,
+      &setWorkingDir);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.process.setPipePath"),
-    QStringLiteral("Set named pipe / FIFO path for NamedPipe mode (params: pipePath)"),
-    &setPipePath);
+  // setPipePath schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "Named pipe or FIFO path");
+    props.insert("pipePath", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("pipePath");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.process.setPipePath"),
+      QStringLiteral("Set named pipe / FIFO path for NamedPipe mode (params: pipePath)"),
+      schema,
+      &setPipePath);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.process.getRunningProcesses"),
-                           QStringLiteral("Refresh and return the list of running processes"),
-                           &getRunningProcesses);
+  // getRunningProcesses schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("io.driver.process.getRunningProcesses"),
+                             QStringLiteral("Refresh and return the list of running processes"),
+                             emptySchema,
+                             &getRunningProcesses);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.process.getConfiguration"),
-                           QStringLiteral("Get complete Process driver configuration"),
-                           &getConfiguration);
+  // getConfiguration schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("io.driver.process.getConfiguration"),
+                             QStringLiteral("Get complete Process driver configuration"),
+                             emptySchema,
+                             &getConfiguration);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

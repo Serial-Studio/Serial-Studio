@@ -55,12 +55,21 @@ void API::Handlers::CSVExportHandler::registerCommands()
                              &setEnabled);
   }
 
-  registry.registerCommand(
-    QStringLiteral("csv.export.close"), QStringLiteral("Close the current CSV file"), &close);
+  // Empty schema for parameterless commands
+  QJsonObject emptySchema;
+  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
+
+  registry.registerCommand(QStringLiteral("csv.export.close"),
+                           QStringLiteral("Close the current CSV file"),
+                           emptySchema,
+                           &close);
 
   // Query commands
-  registry.registerCommand(
-    QStringLiteral("csv.export.getStatus"), QStringLiteral("Get CSV export status"), &getStatus);
+  registry.registerCommand(QStringLiteral("csv.export.getStatus"),
+                           QStringLiteral("Get CSV export status"),
+                           emptySchema,
+                           &getStatus);
 }
 
 //--------------------------------------------------------------------------------------------------

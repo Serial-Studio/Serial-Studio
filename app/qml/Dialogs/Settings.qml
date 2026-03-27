@@ -22,11 +22,26 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 import "../Widgets" as Widgets
 
 Widgets.SmartDialog {
   id: root
+
+  //
+  // Proto file export dialog
+  //
+  FileDialog {
+    id: _protoFileDialog
+
+    fileMode: FileDialog.SaveFile
+    nameFilters: ["Protocol Buffers (*.proto)"]
+    onAccepted: {
+      if (Cpp_GrpcAvailable && Cpp_GRPC_Server)
+        Cpp_GRPC_Server.exportProto(selectedFile.toString().replace("file://", ""))
+    }
+  }
 
   //
   // Window options
@@ -249,6 +264,22 @@ Widgets.SmartDialog {
           }
 
           Label {
+            text: qsTr("Auto-Hide Toolbar")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: _autoHideToolbar
+
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_UI_Dashboard.autoHideToolbar
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_UI_Dashboard.autoHideToolbar)
+                Cpp_UI_Dashboard.autoHideToolbar = checked
+            }
+          }
+
+          Label {
             color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Enable API Server (Port 7777)")
           } Switch {
@@ -283,19 +314,18 @@ Widgets.SmartDialog {
           }
 
           Label {
-            text: qsTr("Auto-Hide Toolbar")
+            visible: Cpp_GrpcAvailable
+            opacity: enabled ? 1 : 0.5
+            enabled: _apiServer.checked
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
-            id: _autoHideToolbar
-
-            Layout.rightMargin: -8
+            text: qsTr("Export Protobuf File")
+          } Button {
+            visible: Cpp_GrpcAvailable
+            opacity: enabled ? 1 : 0.5
+            enabled: _apiServer.checked
             Layout.alignment: Qt.AlignRight
-            checked: Cpp_UI_Dashboard.autoHideToolbar
-            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-            onCheckedChanged: {
-              if (checked !== Cpp_UI_Dashboard.autoHideToolbar)
-                Cpp_UI_Dashboard.autoHideToolbar = checked
-            }
+            text: qsTr("Export...")
+            onClicked: _protoFileDialog.open()
           }
 
           Item { Layout.fillHeight: true }

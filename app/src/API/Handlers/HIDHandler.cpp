@@ -29,17 +29,46 @@ void API::Handlers::HIDHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  registry.registerCommand(QStringLiteral("io.driver.hid.setDeviceIndex"),
-                           QStringLiteral("Select HID device by index (params: deviceIndex)"),
-                           &setDeviceIndex);
+  // setDeviceIndex schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "HID device index (0 = placeholder)");
+    props.insert("deviceIndex", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("deviceIndex");
+    schema.insert("required", req);
+    registry.registerCommand(QStringLiteral("io.driver.hid.setDeviceIndex"),
+                             QStringLiteral("Select HID device by index (params: deviceIndex)"),
+                             schema,
+                             &setDeviceIndex);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.hid.getDeviceList"),
-                           QStringLiteral("List available HID devices"),
-                           &getDeviceList);
+  // getDeviceList schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("io.driver.hid.getDeviceList"),
+                             QStringLiteral("List available HID devices"),
+                             emptySchema,
+                             &getDeviceList);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.hid.getConfiguration"),
-                           QStringLiteral("Get complete HID driver configuration"),
-                           &getConfiguration);
+  // getConfiguration schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("io.driver.hid.getConfiguration"),
+                             QStringLiteral("Get complete HID driver configuration"),
+                             emptySchema,
+                             &getConfiguration);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

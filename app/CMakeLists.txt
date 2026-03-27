@@ -165,6 +165,25 @@ qt_policy(SET QTP0002 NEW)
 qt_policy(SET QTP0004 NEW)
 
 #---------------------------------------------------------------------------------------------------
+# vcpkg-provided dependencies
+#---------------------------------------------------------------------------------------------------
+#
+# These packages are installed by vcpkg (manifest mode) and found via
+# find_package(). vcpkg's toolchain file ensures these resolve from the
+# vcpkg install tree, completely isolated from system/homebrew packages.
+#
+#---------------------------------------------------------------------------------------------------
+
+find_package(ZLIB REQUIRED)
+find_package(expat CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(kissfft CONFIG REQUIRED)
+
+if(BUILD_COMMERCIAL)
+  find_package(hidapi CONFIG REQUIRED)
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # Source file organization
 #---------------------------------------------------------------------------------------------------
 #
@@ -526,6 +545,78 @@ if(BUILD_COMMERCIAL)
 endif()
 
 #---------------------------------------------------------------------------------------------------
+# gRPC server support (optional)
+#---------------------------------------------------------------------------------------------------
+#
+# When ENABLE_GRPC=ON:
+#   - Finds gRPC and Protobuf packages
+#   - Compiles the static .proto file into C++ stubs
+#   - Adds the gRPC server, proto generator, and conversion utilities
+#   - Links gRPC and Protobuf libraries
+#   - Defines ENABLE_GRPC preprocessor macro
+#
+# The gRPC server mirrors the existing TCP/JSON API on port 8888, using
+# google.protobuf.Struct for dynamic command parameters.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(ENABLE_GRPC)
+  find_package(gRPC CONFIG REQUIRED)
+
+  # Locate the gRPC C++ plugin for protoc
+  get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
+
+  # The runtime .proto uses generic Struct-based messages (same for GPL and Pro).
+  # The typed per-command protos in doc/grpc/ are exported at runtime via Settings.
+  set(PROTO_FILE "${CMAKE_SOURCE_DIR}/doc/grpc/serialstudio.proto")
+  set(PROTO_OUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/proto")
+  file(MAKE_DIRECTORY ${PROTO_OUT_DIR})
+
+  set(PROTO_GENERATED_SRCS
+    "${PROTO_OUT_DIR}/serialstudio.pb.cc"
+    "${PROTO_OUT_DIR}/serialstudio.grpc.pb.cc"
+  )
+  set(PROTO_GENERATED_HDRS
+    "${PROTO_OUT_DIR}/serialstudio.pb.h"
+    "${PROTO_OUT_DIR}/serialstudio.grpc.pb.h"
+  )
+
+  # Get protobuf include dir from the imported target
+  get_target_property(PROTOBUF_INCLUDE_DIR protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES)
+
+  add_custom_command(
+    OUTPUT ${PROTO_GENERATED_SRCS} ${PROTO_GENERATED_HDRS}
+    COMMAND protobuf::protoc
+    ARGS
+      --proto_path "${CMAKE_SOURCE_DIR}/doc/grpc/"
+      --proto_path "${PROTOBUF_INCLUDE_DIR}"
+      --cpp_out "${PROTO_OUT_DIR}"
+      --grpc_out "${PROTO_OUT_DIR}"
+      --plugin=protoc-gen-grpc="${GRPC_CPP_PLUGIN}"
+      "${PROTO_FILE}"
+    DEPENDS "${PROTO_FILE}"
+    COMMENT "Generating gRPC C++ stubs from ${PROTO_FILE}"
+  )
+
+  include_directories(${PROTO_OUT_DIR})
+
+  set(SOURCES
+    ${SOURCES}
+    src/API/GRPC/GRPCServer.cpp
+    src/API/GRPC/ProtoGenerator.cpp
+    src/API/GRPC/ConversionUtils.cpp
+    ${PROTO_GENERATED_SRCS}
+  )
+  set(HEADERS
+    ${HEADERS}
+    src/API/GRPC/GRPCServer.h
+    src/API/GRPC/ProtoGenerator.h
+    src/API/GRPC/ConversionUtils.h
+    ${PROTO_GENERATED_HDRS}
+  )
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # Platform-specific source files and resources
 #---------------------------------------------------------------------------------------------------
 #
@@ -646,17 +737,16 @@ qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.q
 #
 # Linked libraries:
 #   Qt modules: Core, Gui, Widgets, Qml, Quick, Graphs, SerialPort, etc.
-#   Third-party:
+#   vcpkg (static):
 #     - kissfft: Fast Fourier Transform (FFT plot calculations)
+#     - OpenSSL: Cryptography, SSL/TLS (for MQTT, secure connections)
+#     - libusb, hidapi: USB/HID device drivers (Pro only)
+#     - gRPC, protobuf: gRPC server (when ENABLE_GRPC=ON)
+#   Bundled:
 #     - QCodeEditor: Syntax highlighting for DataModel/JavaScript editor
 #     - QSimpleUpdater: Auto-update framework (checks for new versions)
 #     - mdf: MDF4/MF4 file format parser (Pro: replay CAN/LIN data)
-#     - OpenSSL: Cryptography, SSL/TLS (for MQTT, secure connections)
-#
-# target_link_openssl():
-#   - Custom CMake function to link OpenSSL static libraries
-#   - Platform-specific: libssl.a, libcrypto.a (or .lib on Windows)
-#   - Ensures secure communications and license validation work
+#     - QuaZip: ZIP archive support (Pro only)
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -677,22 +767,26 @@ target_link_libraries(
 
   ${QT_LIBS}
 
-  kissfft
+  kissfft::kissfft-float
+  OpenSSL::SSL
+  OpenSSL::Crypto
   QCodeEditor
   QSimpleUpdater
   mdf
-)
-
-target_link_openssl(
-  ${PROJECT_EXECUTABLE}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../lib/OpenSSL
 )
 
 if(BUILD_COMMERCIAL)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC usb-1.0)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC hidapi::hidapi)
   target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC QuaZip::QuaZip)
+endif()
 
+if(ENABLE_GRPC)
+  target_link_libraries(${PROJECT_EXECUTABLE} PUBLIC
+    gRPC::grpc++
+    protobuf::libprotobuf
+  )
+  target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE ENABLE_GRPC)
 endif()
 
 #---------------------------------------------------------------------------------------------------

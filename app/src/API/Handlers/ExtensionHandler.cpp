@@ -38,52 +38,149 @@ void API::Handlers::ExtensionHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
+  // Empty schema for parameterless commands
+  QJsonObject emptySchema;
+  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
+
   registry.registerCommand(
     QStringLiteral("extensions.list"),
     QStringLiteral("List all available extensions from configured repositories"),
+    emptySchema,
     &listAddons);
 
-  registry.registerCommand(
-    QStringLiteral("extensions.getInfo"),
-    QStringLiteral("Get detailed info for a specific extension (params: extensionId)"),
-    &getAddonInfo);
+  {
+    QJsonObject props;
+    props[QStringLiteral("extensionId")] = QJsonObject{
+      {       QStringLiteral("type"),                        QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Unique identifier of the extension")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("extensionId")};
+    registry.registerCommand(
+      QStringLiteral("extensions.getInfo"),
+      QStringLiteral("Get detailed info for a specific extension (params: extensionId)"),
+      schema,
+      &getAddonInfo);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("extensions.install"),
-    QStringLiteral("Install an extension by selecting it (params: addonIndex)"),
-    &installExtension);
+  {
+    QJsonObject props;
+    props[QStringLiteral("addonIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                                      QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Index of the extension in the addon list")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("addonIndex")};
+    registry.registerCommand(
+      QStringLiteral("extensions.install"),
+      QStringLiteral("Install an extension by selecting it (params: addonIndex)"),
+      schema,
+      &installExtension);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("extensions.uninstall"),
-    QStringLiteral("Uninstall an extension by selecting it (params: addonIndex)"),
-    &uninstallExtension);
+  {
+    QJsonObject props;
+    props[QStringLiteral("addonIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                                      QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Index of the extension in the addon list")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("addonIndex")};
+    registry.registerCommand(
+      QStringLiteral("extensions.uninstall"),
+      QStringLiteral("Uninstall an extension by selecting it (params: addonIndex)"),
+      schema,
+      &uninstallExtension);
+  }
 
   registry.registerCommand(QStringLiteral("extensions.refresh"),
                            QStringLiteral("Refresh extension catalogs from all repositories"),
+                           emptySchema,
                            &refreshRepositories);
 
-  registry.registerCommand(
-    QStringLiteral("extensions.saveState"),
-    QStringLiteral("Save plugin state to the project file (params: pluginId, state)"),
-    &savePluginState);
+  {
+    QJsonObject props;
+    props[QStringLiteral("pluginId")] = QJsonObject{
+      {       QStringLiteral("type"),                              QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Unique identifier of the plugin")}
+    };
+    props[QStringLiteral("state")] = QJsonObject{
+      {       QStringLiteral("type"),                                  QStringLiteral("object")},
+      {QStringLiteral("description"), QStringLiteral("Plugin state object to persist")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]
+      = QJsonArray{QStringLiteral("pluginId"), QStringLiteral("state")};
+    registry.registerCommand(
+      QStringLiteral("extensions.saveState"),
+      QStringLiteral("Save plugin state to the project file (params: pluginId, state)"),
+      schema,
+      &savePluginState);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("extensions.loadState"),
-    QStringLiteral("Load plugin state from the project file (params: pluginId)"),
-    &loadPluginState);
+  {
+    QJsonObject props;
+    props[QStringLiteral("pluginId")] = QJsonObject{
+      {       QStringLiteral("type"),                              QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Unique identifier of the plugin")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("pluginId")};
+    registry.registerCommand(
+      QStringLiteral("extensions.loadState"),
+      QStringLiteral("Load plugin state from the project file (params: pluginId)"),
+      schema,
+      &loadPluginState);
+  }
 
 #ifdef BUILD_COMMERCIAL
   registry.registerCommand(QStringLiteral("extensions.listRepositories"),
                            QStringLiteral("List configured addon repository URLs"),
+                           emptySchema,
                            &listRepositories);
 
-  registry.registerCommand(QStringLiteral("extensions.addRepository"),
-                           QStringLiteral("Add a new addon repository URL (params: url)"),
-                           &addRepository);
+  {
+    QJsonObject props;
+    props[QStringLiteral("url")] = QJsonObject{
+      {       QStringLiteral("type"),                            QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("URL of the addon repository")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("url")};
+    registry.registerCommand(QStringLiteral("extensions.addRepository"),
+                             QStringLiteral("Add a new addon repository URL (params: url)"),
+                             schema,
+                             &addRepository);
+  }
 
-  registry.registerCommand(QStringLiteral("extensions.removeRepository"),
-                           QStringLiteral("Remove a repository by index (params: index)"),
-                           &removeRepository);
+  {
+    QJsonObject props;
+    props[QStringLiteral("index")] = QJsonObject{
+      {       QStringLiteral("type"),                                         QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Index of the repository to remove")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("index")};
+    registry.registerCommand(QStringLiteral("extensions.removeRepository"),
+                             QStringLiteral("Remove a repository by index (params: index)"),
+                             schema,
+                             &removeRepository);
+  }
 #endif
 }
 

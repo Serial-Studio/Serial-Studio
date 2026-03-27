@@ -169,6 +169,7 @@ private slots:
   void onReadmeReply();
   void downloadNextFile();
   void applyFilter();
+  void rebuildInstalledPlugins();
   void onPluginFinished(const QString& id);
   void loadLocalManifest(const QString& repoPath);
   void loadInstalledManifest();
@@ -212,6 +213,7 @@ private:
 
   QMap<QString, QProcess*> m_plugins;
   QMap<QString, QString> m_pluginOutput;
+  QMap<QString, QVariantMap> m_pluginMetadataCache;
   QVariantList m_runningPlugins;
   QVariantList m_installedPlugins;
   QNetworkAccessManager m_nam;

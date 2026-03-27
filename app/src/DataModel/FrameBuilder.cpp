@@ -39,6 +39,10 @@
 #  include "Licensing/LemonSqueezy.h"
 #endif
 
+#ifdef ENABLE_GRPC
+#  include "API/GRPC/GRPCServer.h"
+#endif
+
 /**
  * @brief Parse comma-separated values from data.
  *
@@ -122,6 +126,13 @@ DataModel::FrameBuilder::FrameBuilder()
           &API::Server::enabledChanged,
           this,
           &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
+
+#ifdef ENABLE_GRPC
+  connect(&API::GRPC::GRPCServer::instance(),
+          &API::GRPC::GRPCServer::enabledChanged,
+          this,
+          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
+#endif
 
   updateTimestampedFramesEnabled();
 }
@@ -651,6 +662,11 @@ void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
   m_timestampedFramesEnabled = CSV::Export::instance().exportEnabled()
                             || MDF4::Export::instance().exportEnabled()
                             || API::Server::instance().enabled();
+
+#ifdef ENABLE_GRPC
+  m_timestampedFramesEnabled = m_timestampedFramesEnabled
+                            || API::GRPC::GRPCServer::instance().enabled();
+#endif
 }
 
 /**
@@ -672,5 +688,10 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
     csvExport.hotpathTxFrame(timestampedFrame);
     mdf4Export.hotpathTxFrame(timestampedFrame);
     pluginsServer.hotpathTxFrame(timestampedFrame);
+
+#ifdef ENABLE_GRPC
+    static auto& grpcServer = API::GRPC::GRPCServer::instance();
+    grpcServer.hotpathTxFrame(timestampedFrame);
+#endif
   }
 }

@@ -48,61 +48,199 @@ void API::Handlers::WindowHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
+  // Empty schema for parameterless commands
+  QJsonObject emptySchema;
+  emptySchema.insert("type", "object");
+  emptySchema.insert("properties", QJsonObject());
+
+  // Schema for setActiveGroup: groupId (integer)
+  QJsonObject setActiveGroupSchema;
+  {
+    QJsonObject props;
+    QJsonObject groupIdProp;
+    groupIdProp.insert("type", "integer");
+    groupIdProp.insert("description", "The group ID to activate");
+    props.insert("groupId", groupIdProp);
+    setActiveGroupSchema.insert("type", "object");
+    setActiveGroupSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("groupId");
+    setActiveGroupSchema.insert("required", req);
+  }
+
+  // Schema for setActiveGroupIndex: index (integer)
+  QJsonObject setActiveGroupIndexSchema;
+  {
+    QJsonObject props;
+    QJsonObject indexProp;
+    indexProp.insert("type", "integer");
+    indexProp.insert("description", "The group index to activate");
+    props.insert("index", indexProp);
+    setActiveGroupIndexSchema.insert("type", "object");
+    setActiveGroupIndexSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("index");
+    setActiveGroupIndexSchema.insert("required", req);
+  }
+
+  // Schema for setWindowState: id (integer), state (integer)
+  QJsonObject setWindowStateSchema;
+  {
+    QJsonObject props;
+    QJsonObject idProp;
+    idProp.insert("type", "integer");
+    idProp.insert("description", "The window ID");
+    props.insert("id", idProp);
+    QJsonObject stateProp;
+    stateProp.insert("type", "integer");
+    stateProp.insert("description", "Window state: 0=normal, 1=minimized, 2=closed");
+    props.insert("state", stateProp);
+    setWindowStateSchema.insert("type", "object");
+    setWindowStateSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("id");
+    req.append("state");
+    setWindowStateSchema.insert("required", req);
+  }
+
+  // Schema for setAutoLayout: enabled (boolean)
+  QJsonObject setAutoLayoutSchema;
+  {
+    QJsonObject props;
+    QJsonObject enabledProp;
+    enabledProp.insert("type", "boolean");
+    enabledProp.insert("description", "Whether to enable auto layout");
+    props.insert("enabled", enabledProp);
+    setAutoLayoutSchema.insert("type", "object");
+    setAutoLayoutSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("enabled");
+    setAutoLayoutSchema.insert("required", req);
+  }
+
+  // Schema for setLayout: layout (object)
+  QJsonObject setLayoutSchema;
+  {
+    QJsonObject props;
+    QJsonObject layoutProp;
+    layoutProp.insert("type", "object");
+    layoutProp.insert("description", "The layout object to apply");
+    props.insert("layout", layoutProp);
+    setLayoutSchema.insert("type", "object");
+    setLayoutSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("layout");
+    setLayoutSchema.insert("required", req);
+  }
+
+  // Schema for getWidgetSettings: widgetId (string)
+  QJsonObject getWidgetSettingsSchema;
+  {
+    QJsonObject props;
+    QJsonObject widgetIdProp;
+    widgetIdProp.insert("type", "string");
+    widgetIdProp.insert("description", "The widget identifier");
+    props.insert("widgetId", widgetIdProp);
+    getWidgetSettingsSchema.insert("type", "object");
+    getWidgetSettingsSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("widgetId");
+    getWidgetSettingsSchema.insert("required", req);
+  }
+
+  // Schema for setWidgetSetting: widgetId (string), key (string), value (any)
+  QJsonObject setWidgetSettingSchema;
+  {
+    QJsonObject props;
+    QJsonObject widgetIdProp;
+    widgetIdProp.insert("type", "string");
+    widgetIdProp.insert("description", "The widget identifier");
+    props.insert("widgetId", widgetIdProp);
+    QJsonObject keyProp;
+    keyProp.insert("type", "string");
+    keyProp.insert("description", "The setting key");
+    props.insert("key", keyProp);
+    QJsonObject valueProp;
+    valueProp.insert("description", "The setting value");
+    props.insert("value", valueProp);
+    setWidgetSettingSchema.insert("type", "object");
+    setWidgetSettingSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("widgetId");
+    req.append("key");
+    req.append("value");
+    setWidgetSettingSchema.insert("required", req);
+  }
+
+  // Register commands
   registry.registerCommand(
     QStringLiteral("ui.window.getStatus"),
     QStringLiteral("Get dashboard window status: activeGroupId, groupCount, autoLayoutEnabled"),
+    emptySchema,
     &getStatus);
 
   registry.registerCommand(QStringLiteral("ui.window.getGroups"),
                            QStringLiteral("Get list of groups as [{id, text, icon}]"),
+                           emptySchema,
                            &getGroups);
 
   registry.registerCommand(QStringLiteral("ui.window.setActiveGroup"),
                            QStringLiteral("Set active group by ID (params: groupId int)"),
+                           setActiveGroupSchema,
                            &setActiveGroup);
 
   registry.registerCommand(QStringLiteral("ui.window.setActiveGroupIndex"),
                            QStringLiteral("Set active group by index (params: index int)"),
+                           setActiveGroupIndexSchema,
                            &setActiveGroupIndex);
 
   registry.registerCommand(
     QStringLiteral("ui.window.getWindowStates"),
     QStringLiteral("Get window states array [{id, state}] for current group"),
+    emptySchema,
     &getWindowStates);
 
   registry.registerCommand(
     QStringLiteral("ui.window.setWindowState"),
     QStringLiteral("Set window state (params: id int, state int: 0=normal,1=minimized,2=closed)"),
+    setWindowStateSchema,
     &setWindowState);
 
   registry.registerCommand(QStringLiteral("ui.window.setAutoLayout"),
                            QStringLiteral("Enable or disable auto layout (params: enabled bool)"),
+                           setAutoLayoutSchema,
                            &setAutoLayout);
 
   registry.registerCommand(QStringLiteral("ui.window.saveLayout"),
                            QStringLiteral("Save current window layout to project"),
+                           emptySchema,
                            &saveLayout);
 
   registry.registerCommand(QStringLiteral("ui.window.loadLayout"),
                            QStringLiteral("Load window layout from project"),
+                           emptySchema,
                            &loadLayout);
 
   registry.registerCommand(QStringLiteral("ui.window.getLayout"),
                            QStringLiteral("Get serialized layout JSON from WindowManager"),
+                           emptySchema,
                            &getLayout);
 
   registry.registerCommand(
     QStringLiteral("ui.window.setLayout"),
     QStringLiteral("Apply a layout to WindowManager (params: layout object)"),
+    setLayoutSchema,
     &setLayout);
 
   registry.registerCommand(QStringLiteral("ui.window.getWidgetSettings"),
                            QStringLiteral("Get saved widget settings (params: widgetId string)"),
+                           getWidgetSettingsSchema,
                            &getWidgetSettings);
 
   registry.registerCommand(
     QStringLiteral("ui.window.setWidgetSetting"),
     QStringLiteral("Set a widget setting (params: widgetId string, key string, value any)"),
+    setWidgetSettingSchema,
     &setWidgetSetting);
 }
 

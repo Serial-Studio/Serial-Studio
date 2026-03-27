@@ -74,6 +74,7 @@ Misc::ExtensionManager::ExtensionManager()
   // Load installed extension tracking and rebuild plugin list
   loadInstalledManifest();
   applyFilter();
+  rebuildInstalledPlugins();
 }
 
 /**
@@ -397,6 +398,7 @@ void Misc::ExtensionManager::refreshRepositories()
     }
   } else {
     applyFilter();
+    rebuildInstalledPlugins();
   }
 }
 
@@ -567,7 +569,9 @@ void Misc::ExtensionManager::installExtension()
     saveInstalledManifest();
 
     Q_EMIT extensionInstalled(id);
+    m_pluginMetadataCache.remove(id);
     applyFilter();
+    rebuildInstalledPlugins();
     return;
   }
 
@@ -613,10 +617,12 @@ void Misc::ExtensionManager::uninstallExtension()
   QDir(installDir).removeRecursively();
 
   m_installedExtensions.remove(id);
+  m_pluginMetadataCache.remove(id);
   saveInstalledManifest();
 
   Q_EMIT extensionUninstalled(id);
   applyFilter();
+  rebuildInstalledPlugins();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -728,6 +734,7 @@ void Misc::ExtensionManager::onManifestReply()
     m_loading = false;
     Q_EMIT loadingChanged();
     applyFilter();
+    rebuildInstalledPlugins();
     QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
   }
 }
@@ -759,6 +766,7 @@ void Misc::ExtensionManager::onExtensionMetaReply()
     m_loading = false;
     Q_EMIT loadingChanged();
     applyFilter();
+    rebuildInstalledPlugins();
     QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
   }
 }
@@ -826,7 +834,9 @@ void Misc::ExtensionManager::onFileDownloadReply()
   m_loading = false;
   Q_EMIT loadingChanged();
   Q_EMIT extensionInstalled(m_currentInstallId);
+  m_pluginMetadataCache.remove(m_currentInstallId);
   applyFilter();
+  rebuildInstalledPlugins();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -991,37 +1001,73 @@ void Misc::ExtensionManager::applyFilter()
 
   Q_EMIT selectedIndexChanged();
   Q_EMIT filteredExtensionsChanged();
+}
 
-  // Rebuild installed plugins list for start menu / toolbar
+/**
+ * @brief Rebuilds the installed plugins list for the start menu / toolbar.
+ *
+ * Uses a metadata cache to avoid re-reading info.json from disk on every call.
+ * Only emits installedPluginsChanged() if the list actually changed.
+ */
+void Misc::ExtensionManager::rebuildInstalledPlugins()
+{
   QVariantList plugins;
   const auto pluginIds = m_installedExtensions.keys();
-  for (const auto& iid : pluginIds) {
+  for (const auto& iid : pluginIds)
+  {
     const auto info = m_installedExtensions.value(iid).toObject();
     if (info.value("type").toString() != QStringLiteral("plugin"))
       continue;
 
-    // Read metadata from installed info.json for title and icon
-    const auto pluginDir = extensionsPath() + "/plugin/" + iid;
+    // Check metadata cache before reading from disk
     QVariantMap entry;
     entry.insert("id", iid);
     entry.insert("running", isPluginRunning(iid));
 
-    QFile metaFile(pluginDir + "/info.json");
-    if (metaFile.open(QIODevice::ReadOnly)) {
-      const auto meta = QJsonDocument::fromJson(metaFile.readAll()).object();
-      entry.insert("title", meta.value("title").toString(iid));
-
-      const auto icon = meta.value("icon").toString();
+    auto cacheIt = m_pluginMetadataCache.find(iid);
+    if (cacheIt != m_pluginMetadataCache.end())
+    {
+      entry.insert("title", cacheIt->value("title"));
+      const auto icon = cacheIt->value("icon").toString();
       if (!icon.isEmpty())
-        entry.insert("icon", QStringLiteral("file://") + pluginDir + "/" + icon);
-    } else {
-      entry.insert("title", iid);
+        entry.insert("icon", icon);
+    }
+    else
+    {
+      const auto pluginDir = extensionsPath() + "/plugin/" + iid;
+      QVariantMap cached;
+
+      QFile metaFile(pluginDir + "/info.json");
+      if (metaFile.open(QIODevice::ReadOnly))
+      {
+        const auto meta = QJsonDocument::fromJson(metaFile.readAll()).object();
+        const auto title = meta.value("title").toString(iid);
+        entry.insert("title", title);
+        cached.insert("title", title);
+
+        const auto icon = meta.value("icon").toString();
+        if (!icon.isEmpty())
+        {
+          const auto iconUrl =
+            QStringLiteral("file://") + pluginDir + "/" + icon;
+          entry.insert("icon", iconUrl);
+          cached.insert("icon", iconUrl);
+        }
+      }
+      else
+      {
+        entry.insert("title", iid);
+        cached.insert("title", iid);
+      }
+
+      m_pluginMetadataCache.insert(iid, cached);
     }
 
     plugins.append(entry);
   }
 
-  if (plugins != m_installedPlugins) {
+  if (plugins != m_installedPlugins)
+  {
     m_installedPlugins = plugins;
     Q_EMIT installedPluginsChanged();
   }
@@ -1198,26 +1244,6 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     return;
   }
 
-  // Check if API server is enabled, prompt user to enable it
-  if (!API::Server::instance().enabled()) {
-    const auto result = Misc::Utilities::showMessageBox(
-      tr("API Server Required"),
-      tr("Plugins need the API server to communicate with Serial Studio. "
-         "Would you like to enable it now?"),
-      QMessageBox::Question,
-      QString(),
-      QMessageBox::Yes | QMessageBox::No,
-      QMessageBox::Yes);
-
-    if (result == QMessageBox::Yes)
-      API::Server::instance().setEnabled(true);
-    else {
-      m_pluginOutput[id] += QStringLiteral("[Cancelled] API Server not enabled.\n");
-      Q_EMIT pluginOutputChanged(id);
-      return;
-    }
-  }
-
   // Read plugin metadata
   const auto info = m_installedExtensions.value(id).toObject();
   const auto type = info.value("type").toString();
@@ -1241,6 +1267,43 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   const auto entry    = resolved.value("entry").toString();
   const auto runtime  = resolved.value("runtime").toString("python3");
   const auto terminal = resolved.value("terminal").toBool(false);
+  const auto usesGrpc = resolved.value("grpc").toBool(false);
+
+  // Check gRPC build support for plugins that require it
+#ifndef ENABLE_GRPC
+  if (usesGrpc)
+  {
+    m_pluginOutput[id] += QStringLiteral(
+      "[Error] Plugin requires gRPC but this build does not include gRPC support.\n");
+    Q_EMIT pluginOutputChanged(id);
+    return;
+  }
+#endif
+
+  // Enable the API server if not already running (gRPC follows automatically)
+  if (!API::Server::instance().enabled())
+  {
+    const auto msg = usesGrpc
+      ? tr("This plugin uses gRPC for high-performance data streaming. "
+           "The API server needs to be enabled.\n\n"
+           "Would you like to enable it now?")
+      : tr("Plugins need the API server to communicate with Serial Studio. "
+           "Would you like to enable it now?");
+
+    const auto result = Misc::Utilities::showMessageBox(
+      tr("API Server Required"), msg,
+      QMessageBox::Question, QString(),
+      QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+    if (result == QMessageBox::Yes)
+      API::Server::instance().setEnabled(true);
+    else
+    {
+      m_pluginOutput[id] += QStringLiteral("[Cancelled] API Server not enabled.\n");
+      Q_EMIT pluginOutputChanged(id);
+      return;
+    }
+  }
 
   if (entry.isEmpty()) {
     m_pluginOutput[id] += QStringLiteral("[Error] No 'entry' field in info.json\n");
@@ -1271,6 +1334,14 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     const auto exes = obj.value("executables").toArray();
     const auto url = obj.value("url").toString();
 
+    // Skip pip-managed dependencies — handled by run.sh/run.cmd venv
+    if (obj.contains("pip"))
+      continue;
+
+    // Skip dependencies with no executables to check
+    if (exes.isEmpty())
+      continue;
+
     // Look for any of the listed executables
     bool found = false;
     for (const auto &exe : exes)
@@ -1286,17 +1357,18 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     if (!found)
     {
       const auto result = Misc::Utilities::showMessageBox(
-          tr("Missing Dependency"),
-          tr("This plugin requires \"%1\" but it was not found on your system.\n\n"
-             "Would you like to open the download page?")
-              .arg(name),
-          QMessageBox::Warning, QString(),
-          QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes);
+        tr("Missing Dependency"),
+        tr("This plugin requires \"%1\" but it was not found on your "
+           "system.\n\nWould you like to open the download page?")
+          .arg(name),
+        QMessageBox::Warning, QString(),
+        QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes);
 
       if (result == QMessageBox::Yes && !url.isEmpty())
         QDesktopServices::openUrl(QUrl(url));
 
-      m_pluginOutput[id] += QStringLiteral("[Error] Missing dependency: %1\n").arg(name);
+      m_pluginOutput[id] +=
+        QStringLiteral("[Error] Missing dependency: %1\n").arg(name);
       Q_EMIT pluginOutputChanged(id);
       return;
     }
@@ -1429,6 +1501,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   m_runningPlugins.append(entry_map);
   Q_EMIT runningPluginsChanged();
   applyFilter();
+  rebuildInstalledPlugins();
 }
 
 /**
@@ -1472,6 +1545,7 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
 
   Q_EMIT runningPluginsChanged();
   applyFilter();
+  rebuildInstalledPlugins();
 }
 
 /**
@@ -1504,6 +1578,7 @@ void Misc::ExtensionManager::stopAllPlugins()
   m_runningPlugins.clear();
   Q_EMIT runningPluginsChanged();
   applyFilter();
+  rebuildInstalledPlugins();
 }
 
 /**
@@ -1564,6 +1639,7 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
 
   Q_EMIT runningPluginsChanged();
   applyFilter();
+  rebuildInstalledPlugins();
 }
 
 //--------------------------------------------------------------------------------------------------

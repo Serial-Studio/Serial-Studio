@@ -235,6 +235,10 @@
                     1
                 ]
             }
+        },
+        "plugin:custom-gauge": {
+            "gauges": [
+            ]
         }
     }
 }

@@ -26,6 +26,9 @@ __pycache__/
 *$py.class
 *.so
 
+# vcpkg
+/vcpkg_installed/
+
 # Build outputs
 /build*/
 */build*/

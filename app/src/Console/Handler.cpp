@@ -33,6 +33,7 @@
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
 
@@ -85,6 +86,16 @@ Console::Handler::Handler()
 
   m_ansiColorsEnabled = m_vt100Emulation && m_ansiColors;
   m_fontFamilyIndex   = availableFonts().indexOf(m_fontFamily);
+
+  connect(&Misc::TimerEvents::instance(),
+          &Misc::TimerEvents::uiTimeout,
+          this, [this]() {
+    if (!m_pendingDisplay.isEmpty())
+    {
+      Q_EMIT displayString(m_pendingDisplay);
+      m_pendingDisplay.clear();
+    }
+  });
 
   updateFont();
 }
@@ -789,7 +800,8 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
 
   m_textBuffer.append(processedString.toUtf8());
 
-  Q_EMIT displayString(processedString);
+  // Buffer for throttled display (flushed by m_displayFlushTimer)
+  m_pendingDisplay.append(processedString);
 }
 
 /**
@@ -1059,10 +1071,10 @@ void Console::Handler::appendToDevice(int deviceId, const QString& str, bool add
     state.buffer.remove(0, excess);
   }
 
-  // Display live if this is the active device (or single-device mode)
+  // Buffer for throttled display if this is the active device
   if (deviceId == m_currentDeviceId || m_currentDeviceId < 0) {
     m_textBuffer.append(processedString.toUtf8());
-    Q_EMIT displayString(processedString);
+    m_pendingDisplay.append(processedString);
   }
 }
 

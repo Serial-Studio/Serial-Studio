@@ -48,6 +48,10 @@
 #  include "MQTT/Client.h"
 #endif
 
+#ifdef ENABLE_GRPC
+#  include "API/GRPC/GRPCServer.h"
+#endif
+
 //--------------------------------------------------------------------------------------------------
 // Constructor, destructor & singleton access
 //--------------------------------------------------------------------------------------------------
@@ -515,6 +519,11 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
   static auto& mqtt = MQTT::Client::instance();
   mqtt.hotpathTxFrame(payload);
 #endif
+
+#ifdef ENABLE_GRPC
+  static auto& grpcServer = API::GRPC::GRPCServer::instance();
+  grpcServer.hotpathTxData(data);
+#endif
 }
 
 /**
@@ -548,6 +557,11 @@ void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayl
 #ifdef BUILD_COMMERCIAL
   static auto& mqtt = MQTT::Client::instance();
   mqtt.hotpathTxFrame(fullPayload);
+#endif
+
+#ifdef ENABLE_GRPC
+  static auto& grpcServer = API::GRPC::GRPCServer::instance();
+  grpcServer.hotpathTxData(data);
 #endif
 }
 
@@ -1273,6 +1287,11 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
 
   server.hotpathTxData(data);
   console.hotpathRxDeviceData(deviceId, data);
+
+#ifdef ENABLE_GRPC
+  static auto& grpcServer = API::GRPC::GRPCServer::instance();
+  grpcServer.hotpathTxData(data);
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------

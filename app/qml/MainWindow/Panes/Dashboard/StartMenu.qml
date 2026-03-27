@@ -37,7 +37,6 @@ Popup {
   width: _layout.implicitWidth + gradientWidth + 32
   height: Math.max(gradientHeight, _layout.implicitHeight + 16)
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
-  onOpened: Cpp_ExtensionManager.installedPluginsChanged()
 
   //
   // Required data inputs

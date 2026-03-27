@@ -53,33 +53,84 @@ void API::Handlers::LicensingHandler::registerCommands()
                              &setLicense);
   }
 
-  registry.registerCommand(QStringLiteral("licensing.activate"),
-                           QStringLiteral("Activate the stored license key against the server"),
-                           &activate);
+  // activate schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("licensing.activate"),
+                             QStringLiteral("Activate the stored license key against the server"),
+                             emptySchema,
+                             &activate);
+  }
 
-  registry.registerCommand(QStringLiteral("licensing.deactivate"),
-                           QStringLiteral("Deactivate the license on this machine, freeing a seat"),
-                           &deactivate);
+  // deactivate schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(
+      QStringLiteral("licensing.deactivate"),
+      QStringLiteral("Deactivate the license on this machine, freeing a seat"),
+      emptySchema,
+      &deactivate);
+  }
 
-  registry.registerCommand(QStringLiteral("licensing.validate"),
-                           QStringLiteral("Re-validate the current license with the server"),
-                           &validate);
+  // validate schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("licensing.validate"),
+                             QStringLiteral("Re-validate the current license with the server"),
+                             emptySchema,
+                             &validate);
+  }
 
-  registry.registerCommand(QStringLiteral("licensing.getStatus"),
-                           QStringLiteral("Get current license activation status"),
-                           &getStatus);
+  // getStatus schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("licensing.getStatus"),
+                             QStringLiteral("Get current license activation status"),
+                             emptySchema,
+                             &getStatus);
+  }
 
-  registry.registerCommand(QStringLiteral("licensing.guardStatus"),
-                           QStringLiteral("Run all build-time license guards and report results"),
-                           &guardStatus);
+  // guardStatus schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(
+      QStringLiteral("licensing.guardStatus"),
+      QStringLiteral("Run all build-time license guards and report results"),
+      emptySchema,
+      &guardStatus);
+  }
 
-  registry.registerCommand(QStringLiteral("licensing.trial.getStatus"),
-                           QStringLiteral("Get current trial status"),
-                           &trialGetStatus);
+  // trialGetStatus schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("licensing.trial.getStatus"),
+                             QStringLiteral("Get current trial status"),
+                             emptySchema,
+                             &trialGetStatus);
+  }
 
-  registry.registerCommand(QStringLiteral("licensing.trial.enable"),
-                           QStringLiteral("Start the trial period for this machine"),
-                           &trialEnable);
+  // trialEnable schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("licensing.trial.enable"),
+                             QStringLiteral("Start the trial period for this machine"),
+                             emptySchema,
+                             &trialEnable);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

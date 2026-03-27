@@ -39,120 +39,374 @@ void API::Handlers::MQTTHandler::registerCommands()
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
+  QJsonObject setModeSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Mode index (0=Publisher, 1=Subscriber)");
+    props.insert("modeIndex", prop);
+    setModeSchema.insert("type", "object");
+    setModeSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("modeIndex");
+    setModeSchema.insert("required", req);
+  }
   registry.registerCommand(
     QStringLiteral("mqtt.setMode"),
     QStringLiteral("Set MQTT mode (params: modeIndex - 0=Publisher, 1=Subscriber)"),
-    &setMode);
+    setModeSchema, &setMode);
 
+  QJsonObject setHostnameSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "MQTT broker hostname");
+    props.insert("hostname", prop);
+    setHostnameSchema.insert("type", "object");
+    setHostnameSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("hostname");
+    setHostnameSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setHostname"),
                            QStringLiteral("Set MQTT broker hostname (params: hostname)"),
-                           &setHostname);
+                           setHostnameSchema, &setHostname);
 
+  QJsonObject setPortSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "MQTT broker port number (1-65535)");
+    props.insert("port", prop);
+    setPortSchema.insert("type", "object");
+    setPortSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("port");
+    setPortSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setPort"),
                            QStringLiteral("Set MQTT broker port (params: port)"),
-                           &setPort);
+                           setPortSchema, &setPort);
 
+  QJsonObject setClientIdSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "MQTT client identifier");
+    props.insert("clientId", prop);
+    setClientIdSchema.insert("type", "object");
+    setClientIdSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("clientId");
+    setClientIdSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setClientId"),
                            QStringLiteral("Set MQTT client ID (params: clientId)"),
-                           &setClientId);
+                           setClientIdSchema, &setClientId);
 
+  QJsonObject setUsernameSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "MQTT authentication username");
+    props.insert("username", prop);
+    setUsernameSchema.insert("type", "object");
+    setUsernameSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("username");
+    setUsernameSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setUsername"),
                            QStringLiteral("Set MQTT username (params: username)"),
-                           &setUsername);
+                           setUsernameSchema, &setUsername);
 
+  QJsonObject setPasswordSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "MQTT authentication password");
+    props.insert("password", prop);
+    setPasswordSchema.insert("type", "object");
+    setPasswordSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("password");
+    setPasswordSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setPassword"),
                            QStringLiteral("Set MQTT password (params: password)"),
-                           &setPassword);
+                           setPasswordSchema, &setPassword);
 
+  QJsonObject setTopicSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "MQTT topic filter string");
+    props.insert("topic", prop);
+    setTopicSchema.insert("type", "object");
+    setTopicSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("topic");
+    setTopicSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setTopic"),
                            QStringLiteral("Set MQTT topic filter (params: topic)"),
-                           &setTopic);
+                           setTopicSchema, &setTopic);
 
+  QJsonObject setCleanSessionSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "boolean");
+    prop.insert("description", "Enable or disable clean session");
+    props.insert("enabled", prop);
+    setCleanSessionSchema.insert("type", "object");
+    setCleanSessionSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("enabled");
+    setCleanSessionSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setCleanSession"),
                            QStringLiteral("Set clean session flag (params: enabled)"),
-                           &setCleanSession);
+                           setCleanSessionSchema, &setCleanSession);
 
+  QJsonObject setMqttVersionSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "MQTT protocol version index");
+    props.insert("versionIndex", prop);
+    setMqttVersionSchema.insert("type", "object");
+    setMqttVersionSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("versionIndex");
+    setMqttVersionSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setMqttVersion"),
                            QStringLiteral("Set MQTT protocol version (params: versionIndex)"),
-                           &setMqttVersion);
+                           setMqttVersionSchema, &setMqttVersion);
 
+  QJsonObject setKeepAliveSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Keep-alive interval in seconds (non-negative)");
+    props.insert("seconds", prop);
+    setKeepAliveSchema.insert("type", "object");
+    setKeepAliveSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("seconds");
+    setKeepAliveSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setKeepAlive"),
                            QStringLiteral("Set keep-alive interval in seconds (params: seconds)"),
-                           &setKeepAlive);
+                           setKeepAliveSchema, &setKeepAlive);
 
+  QJsonObject setAutoKeepAliveSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "boolean");
+    prop.insert("description", "Enable or disable automatic keep-alive");
+    props.insert("enabled", prop);
+    setAutoKeepAliveSchema.insert("type", "object");
+    setAutoKeepAliveSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("enabled");
+    setAutoKeepAliveSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setAutoKeepAlive"),
                            QStringLiteral("Set auto keep-alive (params: enabled)"),
-                           &setAutoKeepAlive);
+                           setAutoKeepAliveSchema, &setAutoKeepAlive);
 
+  QJsonObject setWillQoSSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Will message QoS level (0, 1, or 2)");
+    props.insert("qos", prop);
+    setWillQoSSchema.insert("type", "object");
+    setWillQoSSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("qos");
+    setWillQoSSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setWillQoS"),
                            QStringLiteral("Set will message QoS (params: qos - 0, 1, or 2)"),
-                           &setWillQoS);
+                           setWillQoSSchema, &setWillQoS);
 
+  QJsonObject setWillRetainSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "boolean");
+    prop.insert("description", "Enable or disable will message retain");
+    props.insert("enabled", prop);
+    setWillRetainSchema.insert("type", "object");
+    setWillRetainSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("enabled");
+    setWillRetainSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setWillRetain"),
                            QStringLiteral("Set will message retain flag (params: enabled)"),
-                           &setWillRetain);
+                           setWillRetainSchema, &setWillRetain);
 
+  QJsonObject setWillTopicSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "Will message topic string");
+    props.insert("topic", prop);
+    setWillTopicSchema.insert("type", "object");
+    setWillTopicSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("topic");
+    setWillTopicSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setWillTopic"),
                            QStringLiteral("Set will message topic (params: topic)"),
-                           &setWillTopic);
+                           setWillTopicSchema, &setWillTopic);
 
+  QJsonObject setWillMessageSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "Will message payload string");
+    props.insert("message", prop);
+    setWillMessageSchema.insert("type", "object");
+    setWillMessageSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("message");
+    setWillMessageSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setWillMessage"),
                            QStringLiteral("Set will message payload (params: message)"),
-                           &setWillMessage);
+                           setWillMessageSchema, &setWillMessage);
 
+  QJsonObject setSslEnabledSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "boolean");
+    prop.insert("description", "Enable or disable SSL");
+    props.insert("enabled", prop);
+    setSslEnabledSchema.insert("type", "object");
+    setSslEnabledSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("enabled");
+    setSslEnabledSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setSslEnabled"),
                            QStringLiteral("Enable/disable SSL (params: enabled)"),
-                           &setSslEnabled);
+                           setSslEnabledSchema, &setSslEnabled);
 
+  QJsonObject setSslProtocolSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "SSL protocol index");
+    props.insert("protocolIndex", prop);
+    setSslProtocolSchema.insert("type", "object");
+    setSslProtocolSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("protocolIndex");
+    setSslProtocolSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setSslProtocol"),
                            QStringLiteral("Set SSL protocol (params: protocolIndex)"),
-                           &setSslProtocol);
+                           setSslProtocolSchema, &setSslProtocol);
 
+  QJsonObject setPeerVerifyModeSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Peer verification mode index");
+    props.insert("modeIndex", prop);
+    setPeerVerifyModeSchema.insert("type", "object");
+    setPeerVerifyModeSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("modeIndex");
+    setPeerVerifyModeSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setPeerVerifyMode"),
                            QStringLiteral("Set peer verification mode (params: modeIndex)"),
-                           &setPeerVerifyMode);
+                           setPeerVerifyModeSchema, &setPeerVerifyMode);
 
+  QJsonObject setPeerVerifyDepthSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Peer verification depth (non-negative)");
+    props.insert("depth", prop);
+    setPeerVerifyDepthSchema.insert("type", "object");
+    setPeerVerifyDepthSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("depth");
+    setPeerVerifyDepthSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mqtt.setPeerVerifyDepth"),
                            QStringLiteral("Set peer verification depth (params: depth)"),
-                           &setPeerVerifyDepth);
+                           setPeerVerifyDepthSchema, &setPeerVerifyDepth);
+
+  QJsonObject emptySchema;
+  emptySchema.insert("type", "object");
+  emptySchema.insert("properties", QJsonObject());
 
   registry.registerCommand(
-    QStringLiteral("mqtt.connect"), QStringLiteral("Open MQTT connection"), &connect);
+    QStringLiteral("mqtt.connect"), QStringLiteral("Open MQTT connection"),
+    emptySchema, &connect);
 
   registry.registerCommand(
-    QStringLiteral("mqtt.disconnect"), QStringLiteral("Close MQTT connection"), &disconnect);
+    QStringLiteral("mqtt.disconnect"), QStringLiteral("Close MQTT connection"),
+    emptySchema, &disconnect);
 
   registry.registerCommand(QStringLiteral("mqtt.toggleConnection"),
                            QStringLiteral("Toggle MQTT connection state"),
-                           &toggleConnection);
+                           emptySchema, &toggleConnection);
 
   registry.registerCommand(QStringLiteral("mqtt.regenerateClientId"),
                            QStringLiteral("Generate new random client ID"),
-                           &regenerateClientId);
+                           emptySchema, &regenerateClientId);
 
   // Query commands
   registry.registerCommand(QStringLiteral("mqtt.getConfiguration"),
                            QStringLiteral("Get current MQTT configuration"),
-                           &getConfiguration);
+                           emptySchema, &getConfiguration);
 
   registry.registerCommand(QStringLiteral("mqtt.getConnectionStatus"),
                            QStringLiteral("Get MQTT connection status"),
-                           &getConnectionStatus);
+                           emptySchema, &getConnectionStatus);
 
   registry.registerCommand(
-    QStringLiteral("mqtt.getModes"), QStringLiteral("Get available MQTT modes"), &getModes);
+    QStringLiteral("mqtt.getModes"), QStringLiteral("Get available MQTT modes"),
+    emptySchema, &getModes);
 
   registry.registerCommand(QStringLiteral("mqtt.getMqttVersions"),
                            QStringLiteral("Get available MQTT versions"),
-                           &getMqttVersions);
+                           emptySchema, &getMqttVersions);
 
   registry.registerCommand(QStringLiteral("mqtt.getSslProtocols"),
                            QStringLiteral("Get available SSL protocols"),
-                           &getSslProtocols);
+                           emptySchema, &getSslProtocols);
 
   registry.registerCommand(QStringLiteral("mqtt.getPeerVerifyModes"),
                            QStringLiteral("Get available peer verify modes"),
-                           &getPeerVerifyModes);
+                           emptySchema, &getPeerVerifyModes);
 }
 
 //--------------------------------------------------------------------------------------------------

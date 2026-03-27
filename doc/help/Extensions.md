@@ -43,7 +43,10 @@ When a newer version is available, the card shows an **Update** badge. Click the
 
 ## Plugins
 
-Plugins are external processes that connect to Serial Studio's [MCP/API](nav:api-reference) server on TCP port 7777. They can read live frame data, compute statistics, display custom visualizations, and more.
+Plugins are external processes that connect to Serial Studio to receive live data, compute statistics, display custom visualizations, and more. Plugins can connect via:
+
+- **gRPC** (port 8888) — High-performance binary streaming. Recommended for plugins that process real-time frame data. Set `"grpc": true` in `info.json`.
+- **TCP/JSON** (port 7777) — Legacy JSON-based protocol. See the [API Reference](nav:api-reference) for details.
 
 ### Running a Plugin
 
@@ -56,6 +59,7 @@ Plugins are external processes that connect to Serial Studio's [MCP/API](nav:api
 
 - The API server must be enabled (Serial Studio will prompt you if it's not).
 - Python plugins require Python 3.6+ installed on your system.
+- Plugins that use gRPC require the `grpcio` Python package (auto-installed on first run).
 - All running plugins are automatically stopped when Serial Studio exits.
 
 ### Platform Support
@@ -149,7 +153,7 @@ Each extension has an `info.json` with metadata:
 
 #### Plugin info.json
 
-Plugins add `entry`, `runtime`, and optionally `platforms`:
+Plugins add `entry`, `runtime`, and optionally `platforms` and `grpc`:
 
 ```json
 {
@@ -159,7 +163,14 @@ Plugins add `entry`, `runtime`, and optionally `platforms`:
   "entry": "plugin.py",
   "runtime": "python3",
   "terminal": false,
-  "files": ["info.json", "plugin.py"],
+  "grpc": true,
+  "files": [
+    "info.json",
+    "plugin.py",
+    "grpc_client.py",
+    "serialstudio_pb2.py",
+    "serialstudio_pb2_grpc.py"
+  ],
   "platforms": {
     "darwin/*":  { "entry": "run.sh",  "runtime": "", "files": ["run.sh"] },
     "linux/*":   { "entry": "run.sh",  "runtime": "", "files": ["run.sh"] },
@@ -170,7 +181,9 @@ Plugins add `entry`, `runtime`, and optionally `platforms`:
 
 - `runtime: ""` means the entry is a native executable (no interpreter).
 - `terminal: true` opens the plugin in a system terminal window.
+- `grpc: true` indicates the plugin uses gRPC for data streaming (port 8888). Serial Studio will ensure the gRPC server is running before launching the plugin.
 - Platform-specific `files` are merged with base `files` during installation.
+- The `run.sh`/`run.cmd` scripts should auto-install `grpcio` via pip if not present (using a local venv).
 
 #### Field Reference
 
@@ -189,6 +202,7 @@ Plugins add `entry`, `runtime`, and optionally `platforms`:
 | `entry` | Plugins | Script or binary entry point. |
 | `runtime` | Plugins | Interpreter command (e.g., `"python3"`). Empty for native binaries. |
 | `terminal` | Plugins | `true` to launch in a system terminal window. |
+| `grpc` | Plugins | `true` if the plugin uses gRPC streaming (port 8888) instead of TCP/JSON. |
 | `platforms` | Plugins | Per-platform overrides for `entry`, `runtime`, and `files`. |
 
 ### Hosting
@@ -219,7 +233,7 @@ Plugins that were running when Serial Studio closed are automatically relaunched
 
 ## API Access
 
-The Extension Manager is accessible via the [MCP/API](nav:api-reference) on TCP port 7777:
+The Extension Manager is accessible via the [API](nav:api-reference) on TCP port 7777 or gRPC port 8888:
 
 | Command | Description |
 |---------|-------------|

@@ -39,42 +39,98 @@ void API::Handlers::CANBusHandler::registerCommands()
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
+  QJsonObject setPluginIndexSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Index of the CAN plugin to select");
+    props.insert("pluginIndex", prop);
+    setPluginIndexSchema.insert("type", "object");
+    setPluginIndexSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("pluginIndex");
+    setPluginIndexSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setPluginIndex"),
                            QStringLiteral("Select CAN plugin by index (params: pluginIndex)"),
-                           &setPluginIndex);
+                           setPluginIndexSchema, &setPluginIndex);
 
+  QJsonObject setInterfaceIndexSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Index of the CAN interface to select");
+    props.insert("interfaceIndex", prop);
+    setInterfaceIndexSchema.insert("type", "object");
+    setInterfaceIndexSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("interfaceIndex");
+    setInterfaceIndexSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setInterfaceIndex"),
                            QStringLiteral("Select CAN interface by index (params: interfaceIndex)"),
-                           &setInterfaceIndex);
+                           setInterfaceIndexSchema, &setInterfaceIndex);
 
+  QJsonObject setBitrateSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "CAN bitrate in bits per second");
+    props.insert("bitrate", prop);
+    setBitrateSchema.insert("type", "object");
+    setBitrateSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("bitrate");
+    setBitrateSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setBitrate"),
                            QStringLiteral("Set CAN bitrate (params: bitrate)"),
-                           &setBitrate);
+                           setBitrateSchema, &setBitrate);
 
+  QJsonObject setCanFDSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "boolean");
+    prop.insert("description", "Enable or disable CAN FD");
+    props.insert("enabled", prop);
+    setCanFDSchema.insert("type", "object");
+    setCanFDSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("enabled");
+    setCanFDSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setCanFD"),
                            QStringLiteral("Enable/disable CAN FD (params: enabled)"),
-                           &setCanFD);
+                           setCanFDSchema, &setCanFD);
 
   // Query commands
+  QJsonObject emptySchema;
+  emptySchema.insert("type", "object");
+  emptySchema.insert("properties", QJsonObject());
+
   registry.registerCommand(QStringLiteral("io.driver.canbus.getConfiguration"),
                            QStringLiteral("Get current CAN bus configuration"),
-                           &getConfiguration);
+                           emptySchema, &getConfiguration);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getPluginList"),
                            QStringLiteral("Get list of available CAN plugins"),
-                           &getPluginList);
+                           emptySchema, &getPluginList);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getInterfaceList"),
                            QStringLiteral("Get list of available CAN interfaces"),
-                           &getInterfaceList);
+                           emptySchema, &getInterfaceList);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getBitrateList"),
                            QStringLiteral("Get list of supported bitrates"),
-                           &getBitrateList);
+                           emptySchema, &getBitrateList);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getInterfaceError"),
                            QStringLiteral("Get interface error message if any"),
-                           &getInterfaceError);
+                           emptySchema, &getInterfaceError);
 }
 
 //--------------------------------------------------------------------------------------------------

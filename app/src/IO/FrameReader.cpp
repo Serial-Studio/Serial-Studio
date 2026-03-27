@@ -41,7 +41,7 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_checksumLength(0)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
-  , m_circularBuffer(1024 * 1024 * 10)
+  , m_circularBuffer(256 * 1024)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));

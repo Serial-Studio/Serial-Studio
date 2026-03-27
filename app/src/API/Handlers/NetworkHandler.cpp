@@ -138,18 +138,42 @@ void API::Handlers::NetworkHandler::registerCommands()
                              &setUdpMulticast);
   }
 
-  registry.registerCommand(QStringLiteral("io.driver.network.lookup"),
-                           QStringLiteral("Perform DNS lookup (params: host)"),
-                           &lookup);
+  {
+    QJsonObject props;
+    props[QStringLiteral("host")] = QJsonObject{
+      {       QStringLiteral("type"),                                 QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Hostname or IP address to look up")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("host")};
+    registry.registerCommand(QStringLiteral("io.driver.network.lookup"),
+                             QStringLiteral("Perform DNS lookup (params: host)"),
+                             schema,
+                             &lookup);
+  }
 
   // Query commands
-  registry.registerCommand(QStringLiteral("io.driver.network.getConfiguration"),
-                           QStringLiteral("Get current network configuration"),
-                           &getConfiguration);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(QStringLiteral("io.driver.network.getConfiguration"),
+                             QStringLiteral("Get current network configuration"),
+                             emptySchema,
+                             &getConfiguration);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.network.getSocketTypes"),
-                           QStringLiteral("Get available socket types"),
-                           &getSocketTypes);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(QStringLiteral("io.driver.network.getSocketTypes"),
+                             QStringLiteral("Get available socket types"),
+                             emptySchema,
+                             &getSocketTypes);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

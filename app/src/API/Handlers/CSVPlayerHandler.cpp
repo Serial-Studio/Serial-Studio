@@ -21,6 +21,8 @@
 
 #include "API/Handlers/CSVPlayerHandler.h"
 
+#include <QJsonArray>
+
 #include "API/CommandRegistry.h"
 #include "API/PathPolicy.h"
 #include "CSV/Player.h"
@@ -36,34 +38,92 @@ void API::Handlers::CSVPlayerHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
+  // Empty schema for parameterless commands
+  QJsonObject emptySchema;
+  emptySchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  emptySchema.insert(QStringLiteral("properties"), QJsonObject());
+
+  // Schema for csv.player.open
+  QJsonObject openFilePathProp;
+  openFilePathProp.insert(QStringLiteral("type"), QStringLiteral("string"));
+  openFilePathProp.insert(QStringLiteral("description"),
+                          QStringLiteral("Path to the CSV file to open"));
+
+  QJsonObject openProps;
+  openProps.insert(QStringLiteral("filePath"), openFilePathProp);
+
+  QJsonArray openRequired;
+  openRequired.append(QStringLiteral("filePath"));
+
+  QJsonObject openSchema;
+  openSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  openSchema.insert(QStringLiteral("properties"), openProps);
+  openSchema.insert(QStringLiteral("required"), openRequired);
+
+  // Schema for csv.player.setProgress
+  QJsonObject progressProp;
+  progressProp.insert(QStringLiteral("type"), QStringLiteral("number"));
+  progressProp.insert(QStringLiteral("description"),
+                      QStringLiteral("Playback position from 0.0 to 1.0"));
+  progressProp.insert(QStringLiteral("minimum"), 0.0);
+  progressProp.insert(QStringLiteral("maximum"), 1.0);
+
+  QJsonObject progressProps;
+  progressProps.insert(QStringLiteral("progress"), progressProp);
+
+  QJsonArray progressRequired;
+  progressRequired.append(QStringLiteral("progress"));
+
+  QJsonObject progressSchema;
+  progressSchema.insert(QStringLiteral("type"), QStringLiteral("object"));
+  progressSchema.insert(QStringLiteral("properties"), progressProps);
+  progressSchema.insert(QStringLiteral("required"), progressRequired);
+
+  // Register commands
   registry.registerCommand(
-    QStringLiteral("csv.player.open"), QStringLiteral("Open CSV file (params: filePath)"), &open);
+    QStringLiteral("csv.player.open"),
+    QStringLiteral("Open CSV file (params: filePath)"),
+    openSchema, &open);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.close"), QStringLiteral("Close CSV file"), &close);
+    QStringLiteral("csv.player.close"),
+    QStringLiteral("Close CSV file"),
+    emptySchema, &close);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.play"), QStringLiteral("Start playback"), &play);
+    QStringLiteral("csv.player.play"),
+    QStringLiteral("Start playback"),
+    emptySchema, &play);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.pause"), QStringLiteral("Pause playback"), &pause);
+    QStringLiteral("csv.player.pause"),
+    QStringLiteral("Pause playback"),
+    emptySchema, &pause);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.toggle"), QStringLiteral("Toggle play/pause"), &toggle);
+    QStringLiteral("csv.player.toggle"),
+    QStringLiteral("Toggle play/pause"),
+    emptySchema, &toggle);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.nextFrame"), QStringLiteral("Advance to next frame"), &nextFrame);
-
-  registry.registerCommand(QStringLiteral("csv.player.previousFrame"),
-                           QStringLiteral("Go to previous frame"),
-                           &previousFrame);
-
-  registry.registerCommand(QStringLiteral("csv.player.setProgress"),
-                           QStringLiteral("Seek to position (params: progress: 0.0-1.0)"),
-                           &setProgress);
+    QStringLiteral("csv.player.nextFrame"),
+    QStringLiteral("Advance to next frame"),
+    emptySchema, &nextFrame);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.getStatus"), QStringLiteral("Get player status"), &getStatus);
+    QStringLiteral("csv.player.previousFrame"),
+    QStringLiteral("Go to previous frame"),
+    emptySchema, &previousFrame);
+
+  registry.registerCommand(
+    QStringLiteral("csv.player.setProgress"),
+    QStringLiteral("Seek to position (params: progress: 0.0-1.0)"),
+    progressSchema, &setProgress);
+
+  registry.registerCommand(
+    QStringLiteral("csv.player.getStatus"),
+    QStringLiteral("Get player status"),
+    emptySchema, &getStatus);
 }
 
 //--------------------------------------------------------------------------------------------------

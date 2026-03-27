@@ -21,6 +21,8 @@
 
 #include "API/Handlers/BluetoothLEHandler.h"
 
+#include <QJsonArray>
+
 #include "API/CommandRegistry.h"
 #include "IO/ConnectionManager.h"
 
@@ -36,45 +38,120 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
-  registry.registerCommand(QStringLiteral("io.driver.ble.startDiscovery"),
-                           QStringLiteral("Start scanning for Bluetooth LE devices"),
-                           &startDiscovery);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(QStringLiteral("io.driver.ble.startDiscovery"),
+                             QStringLiteral("Start scanning for Bluetooth LE devices"),
+                             emptySchema,
+                             &startDiscovery);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.ble.selectDevice"),
-                           QStringLiteral("Select BLE device by index (params: deviceIndex)"),
-                           &selectDevice);
+  {
+    QJsonObject props;
+    props[QStringLiteral("deviceIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                          QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Index of the BLE device to select")},
+      {    QStringLiteral("minimum"),                                                   0}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("deviceIndex")};
+    registry.registerCommand(QStringLiteral("io.driver.ble.selectDevice"),
+                             QStringLiteral("Select BLE device by index (params: deviceIndex)"),
+                             schema,
+                             &selectDevice);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.ble.selectService"),
-                           QStringLiteral("Select BLE service by index (params: serviceIndex)"),
-                           &selectService);
+  {
+    QJsonObject props;
+    props[QStringLiteral("serviceIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                           QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Index of the BLE service to select")},
+      {    QStringLiteral("minimum"),                                                    0}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("serviceIndex")};
+    registry.registerCommand(QStringLiteral("io.driver.ble.selectService"),
+                             QStringLiteral("Select BLE service by index (params: serviceIndex)"),
+                             schema,
+                             &selectService);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.ble.setCharacteristicIndex"),
-    QStringLiteral("Select BLE characteristic by index (params: characteristicIndex)"),
-    &setCharacteristicIndex);
+  {
+    QJsonObject props;
+    props[QStringLiteral("characteristicIndex")] = QJsonObject{
+      {       QStringLiteral("type"),                                    QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Index of the BLE characteristic to select")},
+      {    QStringLiteral("minimum"),                                                            0}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("characteristicIndex")};
+    registry.registerCommand(
+      QStringLiteral("io.driver.ble.setCharacteristicIndex"),
+      QStringLiteral("Select BLE characteristic by index (params: characteristicIndex)"),
+      schema,
+      &setCharacteristicIndex);
+  }
 
   // Query commands
-  registry.registerCommand(QStringLiteral("io.driver.ble.getDeviceList"),
-                           QStringLiteral("Get list of discovered Bluetooth LE devices"),
-                           &getDeviceList);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(QStringLiteral("io.driver.ble.getDeviceList"),
+                             QStringLiteral("Get list of discovered Bluetooth LE devices"),
+                             emptySchema,
+                             &getDeviceList);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.ble.getServiceList"),
-                           QStringLiteral("Get list of services for the selected BLE device"),
-                           &getServiceList);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(QStringLiteral("io.driver.ble.getServiceList"),
+                             QStringLiteral("Get list of services for the selected BLE device"),
+                             emptySchema,
+                             &getServiceList);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.ble.getCharacteristicList"),
-    QStringLiteral("Get list of characteristics for the selected BLE service"),
-    &getCharacteristicList);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(
+      QStringLiteral("io.driver.ble.getCharacteristicList"),
+      QStringLiteral("Get list of characteristics for the selected BLE service"),
+      emptySchema,
+      &getCharacteristicList);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.ble.getConfiguration"),
-                           QStringLiteral("Get current Bluetooth LE configuration"),
-                           &getConfiguration);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(QStringLiteral("io.driver.ble.getConfiguration"),
+                             QStringLiteral("Get current Bluetooth LE configuration"),
+                             emptySchema,
+                             &getConfiguration);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.ble.getStatus"),
-    QStringLiteral("Get Bluetooth adapter availability and connection status"),
-    &getStatus);
+  {
+    QJsonObject emptySchema;
+    emptySchema[QStringLiteral("type")]       = QStringLiteral("object");
+    emptySchema[QStringLiteral("properties")] = QJsonObject();
+    registry.registerCommand(
+      QStringLiteral("io.driver.ble.getStatus"),
+      QStringLiteral("Get Bluetooth adapter availability and connection status"),
+      emptySchema,
+      &getStatus);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -29,36 +29,125 @@ void API::Handlers::USBHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  registry.registerCommand(QStringLiteral("io.driver.usb.setDeviceIndex"),
-                           QStringLiteral("Select USB device by index (params: deviceIndex)"),
-                           &setDeviceIndex);
+  // setDeviceIndex schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "USB device index (0 = placeholder)");
+    props.insert("deviceIndex", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("deviceIndex");
+    schema.insert("required", req);
+    registry.registerCommand(QStringLiteral("io.driver.usb.setDeviceIndex"),
+                             QStringLiteral("Select USB device by index (params: deviceIndex)"),
+                             schema,
+                             &setDeviceIndex);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.usb.setTransferMode"),
-    QStringLiteral("Set transfer mode (params: mode - 0=Bulk, 1=Advanced, 2=Isochronous)"),
-    &setTransferMode);
+  // setTransferMode schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "Transfer mode (0=Bulk, 1=Advanced, 2=Isochronous)");
+    props.insert("mode", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("mode");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.usb.setTransferMode"),
+      QStringLiteral("Set transfer mode (params: mode - 0=Bulk, 1=Advanced, 2=Isochronous)"),
+      schema,
+      &setTransferMode);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.usb.setInEndpointIndex"),
-    QStringLiteral("Select IN endpoint after connection (params: endpointIndex)"),
-    &setInEndpointIndex);
+  // setInEndpointIndex schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "IN endpoint index");
+    props.insert("endpointIndex", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("endpointIndex");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.usb.setInEndpointIndex"),
+      QStringLiteral("Select IN endpoint after connection (params: endpointIndex)"),
+      schema,
+      &setInEndpointIndex);
+  }
 
-  registry.registerCommand(
-    QStringLiteral("io.driver.usb.setOutEndpointIndex"),
-    QStringLiteral("Select OUT endpoint after connection (params: endpointIndex)"),
-    &setOutEndpointIndex);
+  // setOutEndpointIndex schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "OUT endpoint index");
+    props.insert("endpointIndex", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("endpointIndex");
+    schema.insert("required", req);
+    registry.registerCommand(
+      QStringLiteral("io.driver.usb.setOutEndpointIndex"),
+      QStringLiteral("Select OUT endpoint after connection (params: endpointIndex)"),
+      schema,
+      &setOutEndpointIndex);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.usb.setIsoPacketSize"),
-                           QStringLiteral("Set ISO transfer packet size in bytes (params: size)"),
-                           &setIsoPacketSize);
+  // setIsoPacketSize schema
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "integer");
+    prop.insert("description", "ISO transfer packet size in bytes (1-49152)");
+    props.insert("size", prop);
+    QJsonObject schema;
+    schema.insert("type", "object");
+    schema.insert("properties", props);
+    QJsonArray req;
+    req.append("size");
+    schema.insert("required", req);
+    registry.registerCommand(QStringLiteral("io.driver.usb.setIsoPacketSize"),
+                             QStringLiteral("Set ISO transfer packet size in bytes (params: size)"),
+                             schema,
+                             &setIsoPacketSize);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.usb.getDeviceList"),
-                           QStringLiteral("List available USB devices"),
-                           &getDeviceList);
+  // getDeviceList schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("io.driver.usb.getDeviceList"),
+                             QStringLiteral("List available USB devices"),
+                             emptySchema,
+                             &getDeviceList);
+  }
 
-  registry.registerCommand(QStringLiteral("io.driver.usb.getConfiguration"),
-                           QStringLiteral("Get complete USB driver configuration"),
-                           &getConfiguration);
+  // getConfiguration schema (no params)
+  {
+    QJsonObject emptySchema;
+    emptySchema.insert("type", "object");
+    emptySchema.insert("properties", QJsonObject());
+    registry.registerCommand(QStringLiteral("io.driver.usb.getConfiguration"),
+                             QStringLiteral("Get complete USB driver configuration"),
+                             emptySchema,
+                             &getConfiguration);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,34 +28,80 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.player.open"), QStringLiteral("Open MDF4 file (params: filePath)"), &open);
+  // Open command
+  QJsonObject openSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "string");
+    prop.insert("description", "Path to the MDF4 file to open");
+    props.insert("filePath", prop);
+    openSchema.insert("type", "object");
+    openSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("filePath");
+    openSchema.insert("required", req);
+  }
+  registry.registerCommand(QStringLiteral("mdf4.player.open"),
+                           QStringLiteral("Open MDF4 file"),
+                           openSchema, &open);
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.player.close"), QStringLiteral("Close MDF4 file"), &close);
+  // No-param commands
+  QJsonObject emptySchema;
+  emptySchema.insert("type", "object");
+  emptySchema.insert("properties", QJsonObject());
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.player.play"), QStringLiteral("Start playback"), &play);
+  registry.registerCommand(QStringLiteral("mdf4.player.close"),
+                           QStringLiteral("Close MDF4 file"),
+                           emptySchema, &close);
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.player.pause"), QStringLiteral("Pause playback"), &pause);
+  registry.registerCommand(QStringLiteral("mdf4.player.play"),
+                           QStringLiteral("Start playback"),
+                           emptySchema, &play);
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.player.toggle"), QStringLiteral("Toggle play/pause"), &toggle);
+  registry.registerCommand(QStringLiteral("mdf4.player.pause"),
+                           QStringLiteral("Pause playback"),
+                           emptySchema, &pause);
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.player.nextFrame"), QStringLiteral("Advance to next frame"), &nextFrame);
+  registry.registerCommand(QStringLiteral("mdf4.player.toggle"),
+                           QStringLiteral("Toggle play/pause"),
+                           emptySchema, &toggle);
+
+  registry.registerCommand(QStringLiteral("mdf4.player.nextFrame"),
+                           QStringLiteral("Advance to next frame"),
+                           emptySchema, &nextFrame);
 
   registry.registerCommand(QStringLiteral("mdf4.player.previousFrame"),
                            QStringLiteral("Go to previous frame"),
-                           &previousFrame);
+                           emptySchema, &previousFrame);
 
+  // SetProgress command
+  QJsonObject setProgressSchema;
+  {
+    QJsonObject props;
+    QJsonObject prop;
+    prop.insert("type", "number");
+    prop.insert("description", "Playback position from 0.0 to 1.0");
+    prop.insert("minimum", 0.0);
+    prop.insert("maximum", 1.0);
+    props.insert("progress", prop);
+    setProgressSchema.insert("type", "object");
+    setProgressSchema.insert("properties", props);
+    QJsonArray req;
+    req.append("progress");
+    setProgressSchema.insert("required", req);
+  }
   registry.registerCommand(QStringLiteral("mdf4.player.setProgress"),
-                           QStringLiteral("Seek to position (params: progress: 0.0-1.0)"),
-                           &setProgress);
+                           QStringLiteral("Seek to position"),
+                           setProgressSchema, &setProgress);
 
-  registry.registerCommand(
-    QStringLiteral("mdf4.player.getStatus"), QStringLiteral("Get player status"), &getStatus);
+  // GetStatus query
+  QJsonObject getStatusSchema;
+  getStatusSchema.insert("type", "object");
+  getStatusSchema.insert("properties", QJsonObject());
+  registry.registerCommand(QStringLiteral("mdf4.player.getStatus"),
+                           QStringLiteral("Get player status"),
+                           getStatusSchema, &getStatus);
 }
 
 //--------------------------------------------------------------------------------------------------
