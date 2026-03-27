@@ -119,7 +119,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
       return;
     else if (msg.contains("setGeometry"))
       return;
-    else if (msg.startsWith("The following paths where searched for Qt WebEngine locales"))
+    else if (msg.contains("The following paths were searched for Qt WebEngine locales"))
       return;
   }
 
