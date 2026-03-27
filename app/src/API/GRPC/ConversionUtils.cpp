@@ -9,7 +9,7 @@
 
 #ifdef ENABLE_GRPC
 
-#include "API/GRPC/ConversionUtils.h"
+#  include "API/GRPC/ConversionUtils.h"
 
 //--------------------------------------------------------------------------------------------------
 // QJsonObject -> google.protobuf.Struct
@@ -21,8 +21,7 @@
  * Iterates over all keys in the JSON object and converts each value
  * recursively using toProtoValue().
  */
-google::protobuf::Struct
-API::GRPC::ConversionUtils::toProtoStruct(const QJsonObject& json)
+google::protobuf::Struct API::GRPC::ConversionUtils::toProtoStruct(const QJsonObject& json)
 {
   google::protobuf::Struct result;
   auto* fields = result.mutable_fields();
@@ -44,13 +43,11 @@ API::GRPC::ConversionUtils::toProtoStruct(const QJsonObject& json)
  * - Array -> list_value
  * - Object -> struct_value
  */
-google::protobuf::Value
-API::GRPC::ConversionUtils::toProtoValue(const QJsonValue& json)
+google::protobuf::Value API::GRPC::ConversionUtils::toProtoValue(const QJsonValue& json)
 {
   google::protobuf::Value result;
 
-  switch (json.type())
-  {
+  switch (json.type()) {
     case QJsonValue::Null:
     case QJsonValue::Undefined:
       result.set_null_value(google::protobuf::NULL_VALUE);
@@ -69,7 +66,7 @@ API::GRPC::ConversionUtils::toProtoValue(const QJsonValue& json)
       break;
 
     case QJsonValue::Array: {
-      auto* list = result.mutable_list_value();
+      auto* list     = result.mutable_list_value();
       const auto arr = json.toArray();
       for (const auto& elem : arr)
         *list->add_values() = toProtoValue(elem);
@@ -94,8 +91,7 @@ API::GRPC::ConversionUtils::toProtoValue(const QJsonValue& json)
  * Iterates over all fields in the Struct and converts each value
  * recursively using toQJsonValue().
  */
-QJsonObject
-API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::Struct& proto)
+QJsonObject API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::Struct& proto)
 {
   QJsonObject result;
 
@@ -110,11 +106,9 @@ API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::Struct& proto)
  *
  * Maps protobuf value kinds to their Qt JSON equivalents.
  */
-QJsonValue
-API::GRPC::ConversionUtils::toQJsonValue(const google::protobuf::Value& proto)
+QJsonValue API::GRPC::ConversionUtils::toQJsonValue(const google::protobuf::Value& proto)
 {
-  switch (proto.kind_case())
-  {
+  switch (proto.kind_case()) {
     case google::protobuf::Value::kNullValue:
       return QJsonValue(QJsonValue::Null);
 
@@ -151,8 +145,7 @@ namespace {
 /**
  * @brief Sets a string field on a protobuf Struct.
  */
-inline void setString(google::protobuf::Struct& s,
-                      const char* key, const QString& val)
+inline void setString(google::protobuf::Struct& s, const char* key, const QString& val)
 {
   (*s.mutable_fields())[key].set_string_value(val.toStdString());
 }
@@ -160,13 +153,12 @@ inline void setString(google::protobuf::Struct& s,
 /**
  * @brief Sets a double field on a protobuf Struct.
  */
-inline void setNumber(google::protobuf::Struct& s,
-                      const char* key, double val)
+inline void setNumber(google::protobuf::Struct& s, const char* key, double val)
 {
   (*s.mutable_fields())[key].set_number_value(val);
 }
 
-} // namespace
+}  // namespace
 
 /**
  * @brief Converts a Frame directly to a protobuf Struct.
@@ -175,8 +167,8 @@ inline void setNumber(google::protobuf::Struct& s,
  * the C++ Frame/Group/Dataset structs to protobuf Struct fields. Only the
  * fields needed by streaming clients are included.
  */
-google::protobuf::Struct
-API::GRPC::ConversionUtils::frameToProtoStruct(const DataModel::Frame& frame)
+google::protobuf::Struct API::GRPC::ConversionUtils::frameToProtoStruct(
+  const DataModel::Frame& frame)
 {
   google::protobuf::Struct result;
   setString(result, "title", frame.title);
@@ -184,18 +176,15 @@ API::GRPC::ConversionUtils::frameToProtoStruct(const DataModel::Frame& frame)
   // Groups array
   auto* groups_list = (*result.mutable_fields())["groups"].mutable_list_value();
 
-  for (const auto& group : frame.groups)
-  {
+  for (const auto& group : frame.groups) {
     auto* group_val = groups_list->add_values()->mutable_struct_value();
     setString(*group_val, "title", group.title);
     setString(*group_val, "widget", group.widget);
 
     // Datasets array
-    auto* ds_list =
-      (*group_val->mutable_fields())["datasets"].mutable_list_value();
+    auto* ds_list = (*group_val->mutable_fields())["datasets"].mutable_list_value();
 
-    for (const auto& ds : group.datasets)
-    {
+    for (const auto& ds : group.datasets) {
       auto* ds_val = ds_list->add_values()->mutable_struct_value();
       setString(*ds_val, "title", ds.title);
       setString(*ds_val, "value", ds.value);
@@ -211,4 +200,4 @@ API::GRPC::ConversionUtils::frameToProtoStruct(const DataModel::Frame& frame)
   return result;
 }
 
-#endif // ENABLE_GRPC
+#endif  // ENABLE_GRPC

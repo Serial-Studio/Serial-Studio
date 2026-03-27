@@ -50,9 +50,8 @@ void API::Handlers::DashboardHandler::registerCommands()
   QJsonObject modeProps;
   QJsonObject modeProp;
   modeProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
-  modeProp.insert(
-    QStringLiteral("description"),
-    QStringLiteral("Operation mode: 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot"));
+  modeProp.insert(QStringLiteral("description"),
+                  QStringLiteral("Operation mode: 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot"));
   modeProps.insert(QStringLiteral("mode"), modeProp);
 
   QJsonObject setModeSchema;

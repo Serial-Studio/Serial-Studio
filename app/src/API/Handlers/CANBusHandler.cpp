@@ -54,7 +54,8 @@ void API::Handlers::CANBusHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setPluginIndex"),
                            QStringLiteral("Select CAN plugin by index (params: pluginIndex)"),
-                           setPluginIndexSchema, &setPluginIndex);
+                           setPluginIndexSchema,
+                           &setPluginIndex);
 
   QJsonObject setInterfaceIndexSchema;
   {
@@ -71,7 +72,8 @@ void API::Handlers::CANBusHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setInterfaceIndex"),
                            QStringLiteral("Select CAN interface by index (params: interfaceIndex)"),
-                           setInterfaceIndexSchema, &setInterfaceIndex);
+                           setInterfaceIndexSchema,
+                           &setInterfaceIndex);
 
   QJsonObject setBitrateSchema;
   {
@@ -88,7 +90,8 @@ void API::Handlers::CANBusHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setBitrate"),
                            QStringLiteral("Set CAN bitrate (params: bitrate)"),
-                           setBitrateSchema, &setBitrate);
+                           setBitrateSchema,
+                           &setBitrate);
 
   QJsonObject setCanFDSchema;
   {
@@ -105,7 +108,8 @@ void API::Handlers::CANBusHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("io.driver.canbus.setCanFD"),
                            QStringLiteral("Enable/disable CAN FD (params: enabled)"),
-                           setCanFDSchema, &setCanFD);
+                           setCanFDSchema,
+                           &setCanFD);
 
   // Query commands
   QJsonObject emptySchema;
@@ -114,23 +118,28 @@ void API::Handlers::CANBusHandler::registerCommands()
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getConfiguration"),
                            QStringLiteral("Get current CAN bus configuration"),
-                           emptySchema, &getConfiguration);
+                           emptySchema,
+                           &getConfiguration);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getPluginList"),
                            QStringLiteral("Get list of available CAN plugins"),
-                           emptySchema, &getPluginList);
+                           emptySchema,
+                           &getPluginList);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getInterfaceList"),
                            QStringLiteral("Get list of available CAN interfaces"),
-                           emptySchema, &getInterfaceList);
+                           emptySchema,
+                           &getInterfaceList);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getBitrateList"),
                            QStringLiteral("Get list of supported bitrates"),
-                           emptySchema, &getBitrateList);
+                           emptySchema,
+                           &getBitrateList);
 
   registry.registerCommand(QStringLiteral("io.driver.canbus.getInterfaceError"),
                            QStringLiteral("Get interface error message if any"),
-                           emptySchema, &getInterfaceError);
+                           emptySchema,
+                           &getInterfaceError);
 }
 
 //--------------------------------------------------------------------------------------------------

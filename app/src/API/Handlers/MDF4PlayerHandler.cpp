@@ -42,38 +42,37 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
     req.append("filePath");
     openSchema.insert("required", req);
   }
-  registry.registerCommand(QStringLiteral("mdf4.player.open"),
-                           QStringLiteral("Open MDF4 file"),
-                           openSchema, &open);
+  registry.registerCommand(
+    QStringLiteral("mdf4.player.open"), QStringLiteral("Open MDF4 file"), openSchema, &open);
 
   // No-param commands
   QJsonObject emptySchema;
   emptySchema.insert("type", "object");
   emptySchema.insert("properties", QJsonObject());
 
-  registry.registerCommand(QStringLiteral("mdf4.player.close"),
-                           QStringLiteral("Close MDF4 file"),
-                           emptySchema, &close);
+  registry.registerCommand(
+    QStringLiteral("mdf4.player.close"), QStringLiteral("Close MDF4 file"), emptySchema, &close);
 
-  registry.registerCommand(QStringLiteral("mdf4.player.play"),
-                           QStringLiteral("Start playback"),
-                           emptySchema, &play);
+  registry.registerCommand(
+    QStringLiteral("mdf4.player.play"), QStringLiteral("Start playback"), emptySchema, &play);
 
-  registry.registerCommand(QStringLiteral("mdf4.player.pause"),
-                           QStringLiteral("Pause playback"),
-                           emptySchema, &pause);
+  registry.registerCommand(
+    QStringLiteral("mdf4.player.pause"), QStringLiteral("Pause playback"), emptySchema, &pause);
 
   registry.registerCommand(QStringLiteral("mdf4.player.toggle"),
                            QStringLiteral("Toggle play/pause"),
-                           emptySchema, &toggle);
+                           emptySchema,
+                           &toggle);
 
   registry.registerCommand(QStringLiteral("mdf4.player.nextFrame"),
                            QStringLiteral("Advance to next frame"),
-                           emptySchema, &nextFrame);
+                           emptySchema,
+                           &nextFrame);
 
   registry.registerCommand(QStringLiteral("mdf4.player.previousFrame"),
                            QStringLiteral("Go to previous frame"),
-                           emptySchema, &previousFrame);
+                           emptySchema,
+                           &previousFrame);
 
   // SetProgress command
   QJsonObject setProgressSchema;
@@ -93,7 +92,8 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mdf4.player.setProgress"),
                            QStringLiteral("Seek to position"),
-                           setProgressSchema, &setProgress);
+                           setProgressSchema,
+                           &setProgress);
 
   // GetStatus query
   QJsonObject getStatusSchema;
@@ -101,7 +101,8 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
   getStatusSchema.insert("properties", QJsonObject());
   registry.registerCommand(QStringLiteral("mdf4.player.getStatus"),
                            QStringLiteral("Get player status"),
-                           getStatusSchema, &getStatus);
+                           getStatusSchema,
+                           &getStatus);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,6 +21,7 @@
 
 #include "Misc/ExtensionManager.h"
 
+#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
@@ -30,7 +31,6 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 #include <QProcessEnvironment>
-#include <QDesktopServices>
 #include <QStandardPaths>
 #include <QTimer>
 
@@ -1013,8 +1013,7 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
 {
   QVariantList plugins;
   const auto pluginIds = m_installedExtensions.keys();
-  for (const auto& iid : pluginIds)
-  {
+  for (const auto& iid : pluginIds) {
     const auto info = m_installedExtensions.value(iid).toObject();
     if (info.value("type").toString() != QStringLiteral("plugin"))
       continue;
@@ -1025,37 +1024,29 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
     entry.insert("running", isPluginRunning(iid));
 
     auto cacheIt = m_pluginMetadataCache.find(iid);
-    if (cacheIt != m_pluginMetadataCache.end())
-    {
+    if (cacheIt != m_pluginMetadataCache.end()) {
       entry.insert("title", cacheIt->value("title"));
       const auto icon = cacheIt->value("icon").toString();
       if (!icon.isEmpty())
         entry.insert("icon", icon);
-    }
-    else
-    {
+    } else {
       const auto pluginDir = extensionsPath() + "/plugin/" + iid;
       QVariantMap cached;
 
       QFile metaFile(pluginDir + "/info.json");
-      if (metaFile.open(QIODevice::ReadOnly))
-      {
-        const auto meta = QJsonDocument::fromJson(metaFile.readAll()).object();
+      if (metaFile.open(QIODevice::ReadOnly)) {
+        const auto meta  = QJsonDocument::fromJson(metaFile.readAll()).object();
         const auto title = meta.value("title").toString(iid);
         entry.insert("title", title);
         cached.insert("title", title);
 
         const auto icon = meta.value("icon").toString();
-        if (!icon.isEmpty())
-        {
-          const auto iconUrl =
-            QStringLiteral("file://") + pluginDir + "/" + icon;
+        if (!icon.isEmpty()) {
+          const auto iconUrl = QStringLiteral("file://") + pluginDir + "/" + icon;
           entry.insert("icon", iconUrl);
           cached.insert("icon", iconUrl);
         }
-      }
-      else
-      {
+      } else {
         entry.insert("title", iid);
         cached.insert("title", iid);
       }
@@ -1066,8 +1057,7 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
     plugins.append(entry);
   }
 
-  if (plugins != m_installedPlugins)
-  {
+  if (plugins != m_installedPlugins) {
     m_installedPlugins = plugins;
     Q_EMIT installedPluginsChanged();
   }
@@ -1271,8 +1261,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
   // Check gRPC build support for plugins that require it
 #ifndef ENABLE_GRPC
-  if (usesGrpc)
-  {
+  if (usesGrpc) {
     m_pluginOutput[id] += QStringLiteral(
       "[Error] Plugin requires gRPC but this build does not include gRPC support.\n");
     Q_EMIT pluginOutputChanged(id);
@@ -1281,24 +1270,23 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 #endif
 
   // Enable the API server if not already running (gRPC follows automatically)
-  if (!API::Server::instance().enabled())
-  {
-    const auto msg = usesGrpc
-      ? tr("This plugin uses gRPC for high-performance data streaming. "
-           "The API server needs to be enabled.\n\n"
-           "Would you like to enable it now?")
-      : tr("Plugins need the API server to communicate with Serial Studio. "
-           "Would you like to enable it now?");
+  if (!API::Server::instance().enabled()) {
+    const auto msg = usesGrpc ? tr("This plugin uses gRPC for high-performance data streaming. "
+                                   "The API server needs to be enabled.\n\n"
+                                   "Would you like to enable it now?")
+                              : tr("Plugins need the API server to communicate with Serial Studio. "
+                                   "Would you like to enable it now?");
 
-    const auto result = Misc::Utilities::showMessageBox(
-      tr("API Server Required"), msg,
-      QMessageBox::Question, QString(),
-      QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    const auto result = Misc::Utilities::showMessageBox(tr("API Server Required"),
+                                                        msg,
+                                                        QMessageBox::Question,
+                                                        QString(),
+                                                        QMessageBox::Yes | QMessageBox::No,
+                                                        QMessageBox::Yes);
 
     if (result == QMessageBox::Yes)
       API::Server::instance().setEnabled(true);
-    else
-    {
+    else {
       m_pluginOutput[id] += QStringLiteral("[Cancelled] API Server not enabled.\n");
       Q_EMIT pluginOutputChanged(id);
       return;
@@ -1327,12 +1315,11 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
   // Check plugin dependencies
   const auto deps = resolved.value("dependencies").toArray();
-  for (const auto &dep : deps)
-  {
-    const auto obj = dep.toObject();
+  for (const auto& dep : deps) {
+    const auto obj  = dep.toObject();
     const auto name = obj.value("name").toString();
     const auto exes = obj.value("executables").toArray();
-    const auto url = obj.value("url").toString();
+    const auto url  = obj.value("url").toString();
 
     // Skip pip-managed dependencies — handled by run.sh/run.cmd venv
     if (obj.contains("pip"))
@@ -1344,31 +1331,29 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
     // Look for any of the listed executables
     bool found = false;
-    for (const auto &exe : exes)
-    {
-      if (!QStandardPaths::findExecutable(exe.toString()).isEmpty())
-      {
+    for (const auto& exe : exes) {
+      if (!QStandardPaths::findExecutable(exe.toString()).isEmpty()) {
         found = true;
         break;
       }
     }
 
     // Prompt user to download the missing dependency
-    if (!found)
-    {
+    if (!found) {
       const auto result = Misc::Utilities::showMessageBox(
         tr("Missing Dependency"),
         tr("This plugin requires \"%1\" but it was not found on your "
            "system.\n\nWould you like to open the download page?")
           .arg(name),
-        QMessageBox::Warning, QString(),
-        QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Yes);
+        QMessageBox::Warning,
+        QString(),
+        QMessageBox::Yes | QMessageBox::Cancel,
+        QMessageBox::Yes);
 
       if (result == QMessageBox::Yes && !url.isEmpty())
         QDesktopServices::openUrl(QUrl(url));
 
-      m_pluginOutput[id] +=
-        QStringLiteral("[Error] Missing dependency: %1\n").arg(name);
+      m_pluginOutput[id] += QStringLiteral("[Error] Missing dependency: %1\n").arg(name);
       Q_EMIT pluginOutputChanged(id);
       return;
     }

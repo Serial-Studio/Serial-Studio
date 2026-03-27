@@ -94,14 +94,13 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("filePath")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("string")},
+      {       QStringLiteral("type"),QStringLiteral("string")                                     },
       {QStringLiteral("description"),
        QStringLiteral("Absolute path to save to (headless save-as)")}
     };
     props[QStringLiteral("askPath")] = QJsonObject{
-      {       QStringLiteral("type"),      QStringLiteral("boolean")},
-      {QStringLiteral("description"),
-       QStringLiteral("Show native save dialog (default false)")}
+      {       QStringLiteral("type"),                                 QStringLiteral("boolean")},
+      {QStringLiteral("description"), QStringLiteral("Show native save dialog (default false)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -115,9 +114,8 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("config")] = QJsonObject{
-      {       QStringLiteral("type"),          QStringLiteral("object")},
-      {QStringLiteral("description"),
-       QStringLiteral("Project configuration JSON object")}
+      {       QStringLiteral("type"),                            QStringLiteral("object")},
+      {QStringLiteral("description"), QStringLiteral("Project configuration JSON object")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -137,19 +135,18 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("title")] = QJsonObject{
-      {       QStringLiteral("type"),        QStringLiteral("string")},
+      {       QStringLiteral("type"),      QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Group title")}
     };
     props[QStringLiteral("widgetType")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Widget type index (0-6)")}
+      {       QStringLiteral("type"),                 QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Widget type index (0-6)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]
-      = QJsonArray{QStringLiteral("title"), QStringLiteral("widgetType")};
+    schema[QStringLiteral("required")] =
+      QJsonArray{QStringLiteral("title"), QStringLiteral("widgetType")};
     registry.registerCommand(QStringLiteral("project.group.add"),
                              QStringLiteral("Add group (params: title, widgetType)"),
                              schema,
@@ -169,9 +166,8 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("options")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Dataset option bit flags (0-63)")}
+      {       QStringLiteral("type"),                         QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Dataset option bit flags (0-63)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -196,31 +192,26 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("option")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Dataset option flag to toggle")}
+      {       QStringLiteral("type"),                       QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Dataset option flag to toggle")}
     };
     props[QStringLiteral("enabled")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("boolean")},
-      {QStringLiteral("description"),
-       QStringLiteral("Whether to enable or disable the option")}
+      {       QStringLiteral("type"),                                 QStringLiteral("boolean")},
+      {QStringLiteral("description"), QStringLiteral("Whether to enable or disable the option")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]
-      = QJsonArray{QStringLiteral("option"), QStringLiteral("enabled")};
-    registry.registerCommand(
-      QStringLiteral("project.dataset.setOption"),
-      QStringLiteral("Toggle dataset option (params: option, enabled)"),
-      schema,
-      &datasetSetOption);
+    schema[QStringLiteral("required")] =
+      QJsonArray{QStringLiteral("option"), QStringLiteral("enabled")};
+    registry.registerCommand(QStringLiteral("project.dataset.setOption"),
+                             QStringLiteral("Toggle dataset option (params: option, enabled)"),
+                             schema,
+                             &datasetSetOption);
   }
 
-  registry.registerCommand(QStringLiteral("project.action.add"),
-                           QStringLiteral("Add action"),
-                           emptySchema,
-                           &actionAdd);
+  registry.registerCommand(
+    QStringLiteral("project.action.add"), QStringLiteral("Add action"), emptySchema, &actionAdd);
 
   registry.registerCommand(QStringLiteral("project.action.delete"),
                            QStringLiteral("Delete current action"),
@@ -235,14 +226,12 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("code")] = QJsonObject{
-      {       QStringLiteral("type"),               QStringLiteral("string")},
-      {QStringLiteral("description"),
-       QStringLiteral("Frame parser JavaScript code")}
+      {       QStringLiteral("type"),                       QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Frame parser JavaScript code")}
     };
     props[QStringLiteral("sourceId")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Source index (default 0)")}
+      {       QStringLiteral("type"),                  QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -262,9 +251,8 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("sourceId")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Source index (default 0)")}
+      {       QStringLiteral("type"),                  QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -278,43 +266,36 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("sourceId")] = QJsonObject{
-      {       QStringLiteral("type"),         QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Source index (default 0)")}
+      {       QStringLiteral("type"),                  QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
     };
     props[QStringLiteral("startSequence")] = QJsonObject{
-      {       QStringLiteral("type"),            QStringLiteral("string")},
-      {QStringLiteral("description"),
-       QStringLiteral("Frame start delimiter")}
+      {       QStringLiteral("type"),                QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Frame start delimiter")}
     };
     props[QStringLiteral("endSequence")] = QJsonObject{
-      {       QStringLiteral("type"),          QStringLiteral("string")},
-      {QStringLiteral("description"),
-       QStringLiteral("Frame end delimiter")}
+      {       QStringLiteral("type"),              QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Frame end delimiter")}
     };
     props[QStringLiteral("checksumAlgorithm")] = QJsonObject{
-      {       QStringLiteral("type"),                QStringLiteral("string")},
-      {QStringLiteral("description"),
-       QStringLiteral("Checksum algorithm name")}
+      {       QStringLiteral("type"),                  QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Checksum algorithm name")}
     };
     props[QStringLiteral("frameDetection")] = QJsonObject{
-      {       QStringLiteral("type"),             QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Frame detection mode (0-3)")}
+      {       QStringLiteral("type"),                    QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Frame detection mode (0-3)")}
     };
     props[QStringLiteral("operationMode")] = QJsonObject{
-      {       QStringLiteral("type"),            QStringLiteral("integer")},
-      {QStringLiteral("description"),
-       QStringLiteral("Operation mode (0-2)")}
+      {       QStringLiteral("type"),              QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Operation mode (0-2)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
     registry.registerCommand(
       QStringLiteral("project.frameParser.configure"),
-      QStringLiteral(
-        "Configure frame parser settings (params: startSequence, endSequence, "
-        "checksumAlgorithm, frameDetection, operationMode)"),
+      QStringLiteral("Configure frame parser settings (params: startSequence, endSequence, "
+                     "checksumAlgorithm, frameDetection, operationMode)"),
       schema,
       &frameParserConfigure);
   }

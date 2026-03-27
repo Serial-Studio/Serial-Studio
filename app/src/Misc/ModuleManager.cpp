@@ -386,7 +386,7 @@ void Misc::ModuleManager::initializeQmlInterface()
 
   // Initialize gRPC server (optional)
 #ifdef ENABLE_GRPC
-  auto grpcServer = &API::GRPC::GRPCServer::instance();
+  auto grpcServer          = &API::GRPC::GRPCServer::instance();
   const bool grpcAvailable = true;
 #else
   const bool grpcAvailable = false;

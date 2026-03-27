@@ -52,7 +52,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("extensionId")] = QJsonObject{
-      {       QStringLiteral("type"),                        QStringLiteral("string")},
+      {       QStringLiteral("type"),                             QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Unique identifier of the extension")}
     };
     QJsonObject schema;
@@ -69,7 +69,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("addonIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                                      QStringLiteral("integer")},
+      {       QStringLiteral("type"),                                  QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Index of the extension in the addon list")}
     };
     QJsonObject schema;
@@ -86,7 +86,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("addonIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                                      QStringLiteral("integer")},
+      {       QStringLiteral("type"),                                  QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Index of the extension in the addon list")}
     };
     QJsonObject schema;
@@ -108,18 +108,18 @@ void API::Handlers::ExtensionHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("pluginId")] = QJsonObject{
-      {       QStringLiteral("type"),                              QStringLiteral("string")},
+      {       QStringLiteral("type"),                          QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Unique identifier of the plugin")}
     };
     props[QStringLiteral("state")] = QJsonObject{
-      {       QStringLiteral("type"),                                  QStringLiteral("object")},
+      {       QStringLiteral("type"),                         QStringLiteral("object")},
       {QStringLiteral("description"), QStringLiteral("Plugin state object to persist")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]
-      = QJsonArray{QStringLiteral("pluginId"), QStringLiteral("state")};
+    schema[QStringLiteral("required")] =
+      QJsonArray{QStringLiteral("pluginId"), QStringLiteral("state")};
     registry.registerCommand(
       QStringLiteral("extensions.saveState"),
       QStringLiteral("Save plugin state to the project file (params: pluginId, state)"),
@@ -130,7 +130,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("pluginId")] = QJsonObject{
-      {       QStringLiteral("type"),                              QStringLiteral("string")},
+      {       QStringLiteral("type"),                          QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Unique identifier of the plugin")}
     };
     QJsonObject schema;
@@ -153,7 +153,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("url")] = QJsonObject{
-      {       QStringLiteral("type"),                            QStringLiteral("string")},
+      {       QStringLiteral("type"),                      QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("URL of the addon repository")}
     };
     QJsonObject schema;
@@ -169,7 +169,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("index")] = QJsonObject{
-      {       QStringLiteral("type"),                                         QStringLiteral("integer")},
+      {       QStringLiteral("type"),                           QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Index of the repository to remove")}
     };
     QJsonObject schema;

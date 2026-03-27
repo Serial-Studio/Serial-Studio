@@ -11,13 +11,12 @@
 
 #ifdef ENABLE_GRPC
 
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonValue>
+#  include <google/protobuf/struct.pb.h>
+#  include <QJsonArray>
+#  include <QJsonObject>
+#  include <QJsonValue>
 
-#include <google/protobuf/struct.pb.h>
-
-#include "DataModel/Frame.h"
+#  include "DataModel/Frame.h"
 
 namespace API {
 namespace GRPC {
@@ -34,8 +33,7 @@ namespace ConversionUtils {
  * throughput on the hotpath. Only includes the fields that plugins
  * and streaming clients need.
  */
-[[nodiscard]] google::protobuf::Struct frameToProtoStruct(
-  const DataModel::Frame& frame);
+[[nodiscard]] google::protobuf::Struct frameToProtoStruct(const DataModel::Frame& frame);
 
 /**
  * @brief Converts a QJsonObject to a google.protobuf.Struct.
@@ -57,8 +55,8 @@ namespace ConversionUtils {
  */
 [[nodiscard]] QJsonValue toQJsonValue(const google::protobuf::Value& proto);
 
-} // namespace ConversionUtils
-} // namespace GRPC
-} // namespace API
+}  // namespace ConversionUtils
+}  // namespace GRPC
+}  // namespace API
 
-#endif // ENABLE_GRPC
+#endif  // ENABLE_GRPC

@@ -55,7 +55,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("mqtt.setMode"),
     QStringLiteral("Set MQTT mode (params: modeIndex - 0=Publisher, 1=Subscriber)"),
-    setModeSchema, &setMode);
+    setModeSchema,
+    &setMode);
 
   QJsonObject setHostnameSchema;
   {
@@ -72,7 +73,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setHostname"),
                            QStringLiteral("Set MQTT broker hostname (params: hostname)"),
-                           setHostnameSchema, &setHostname);
+                           setHostnameSchema,
+                           &setHostname);
 
   QJsonObject setPortSchema;
   {
@@ -89,7 +91,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setPort"),
                            QStringLiteral("Set MQTT broker port (params: port)"),
-                           setPortSchema, &setPort);
+                           setPortSchema,
+                           &setPort);
 
   QJsonObject setClientIdSchema;
   {
@@ -106,7 +109,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setClientId"),
                            QStringLiteral("Set MQTT client ID (params: clientId)"),
-                           setClientIdSchema, &setClientId);
+                           setClientIdSchema,
+                           &setClientId);
 
   QJsonObject setUsernameSchema;
   {
@@ -123,7 +127,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setUsername"),
                            QStringLiteral("Set MQTT username (params: username)"),
-                           setUsernameSchema, &setUsername);
+                           setUsernameSchema,
+                           &setUsername);
 
   QJsonObject setPasswordSchema;
   {
@@ -140,7 +145,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setPassword"),
                            QStringLiteral("Set MQTT password (params: password)"),
-                           setPasswordSchema, &setPassword);
+                           setPasswordSchema,
+                           &setPassword);
 
   QJsonObject setTopicSchema;
   {
@@ -157,7 +163,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setTopic"),
                            QStringLiteral("Set MQTT topic filter (params: topic)"),
-                           setTopicSchema, &setTopic);
+                           setTopicSchema,
+                           &setTopic);
 
   QJsonObject setCleanSessionSchema;
   {
@@ -174,7 +181,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setCleanSession"),
                            QStringLiteral("Set clean session flag (params: enabled)"),
-                           setCleanSessionSchema, &setCleanSession);
+                           setCleanSessionSchema,
+                           &setCleanSession);
 
   QJsonObject setMqttVersionSchema;
   {
@@ -191,7 +199,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setMqttVersion"),
                            QStringLiteral("Set MQTT protocol version (params: versionIndex)"),
-                           setMqttVersionSchema, &setMqttVersion);
+                           setMqttVersionSchema,
+                           &setMqttVersion);
 
   QJsonObject setKeepAliveSchema;
   {
@@ -208,7 +217,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setKeepAlive"),
                            QStringLiteral("Set keep-alive interval in seconds (params: seconds)"),
-                           setKeepAliveSchema, &setKeepAlive);
+                           setKeepAliveSchema,
+                           &setKeepAlive);
 
   QJsonObject setAutoKeepAliveSchema;
   {
@@ -225,7 +235,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setAutoKeepAlive"),
                            QStringLiteral("Set auto keep-alive (params: enabled)"),
-                           setAutoKeepAliveSchema, &setAutoKeepAlive);
+                           setAutoKeepAliveSchema,
+                           &setAutoKeepAlive);
 
   QJsonObject setWillQoSSchema;
   {
@@ -242,7 +253,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setWillQoS"),
                            QStringLiteral("Set will message QoS (params: qos - 0, 1, or 2)"),
-                           setWillQoSSchema, &setWillQoS);
+                           setWillQoSSchema,
+                           &setWillQoS);
 
   QJsonObject setWillRetainSchema;
   {
@@ -259,7 +271,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setWillRetain"),
                            QStringLiteral("Set will message retain flag (params: enabled)"),
-                           setWillRetainSchema, &setWillRetain);
+                           setWillRetainSchema,
+                           &setWillRetain);
 
   QJsonObject setWillTopicSchema;
   {
@@ -276,7 +289,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setWillTopic"),
                            QStringLiteral("Set will message topic (params: topic)"),
-                           setWillTopicSchema, &setWillTopic);
+                           setWillTopicSchema,
+                           &setWillTopic);
 
   QJsonObject setWillMessageSchema;
   {
@@ -293,7 +307,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setWillMessage"),
                            QStringLiteral("Set will message payload (params: message)"),
-                           setWillMessageSchema, &setWillMessage);
+                           setWillMessageSchema,
+                           &setWillMessage);
 
   QJsonObject setSslEnabledSchema;
   {
@@ -310,7 +325,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setSslEnabled"),
                            QStringLiteral("Enable/disable SSL (params: enabled)"),
-                           setSslEnabledSchema, &setSslEnabled);
+                           setSslEnabledSchema,
+                           &setSslEnabled);
 
   QJsonObject setSslProtocolSchema;
   {
@@ -327,7 +343,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setSslProtocol"),
                            QStringLiteral("Set SSL protocol (params: protocolIndex)"),
-                           setSslProtocolSchema, &setSslProtocol);
+                           setSslProtocolSchema,
+                           &setSslProtocol);
 
   QJsonObject setPeerVerifyModeSchema;
   {
@@ -344,7 +361,8 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setPeerVerifyMode"),
                            QStringLiteral("Set peer verification mode (params: modeIndex)"),
-                           setPeerVerifyModeSchema, &setPeerVerifyMode);
+                           setPeerVerifyModeSchema,
+                           &setPeerVerifyMode);
 
   QJsonObject setPeerVerifyDepthSchema;
   {
@@ -361,52 +379,61 @@ void API::Handlers::MQTTHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mqtt.setPeerVerifyDepth"),
                            QStringLiteral("Set peer verification depth (params: depth)"),
-                           setPeerVerifyDepthSchema, &setPeerVerifyDepth);
+                           setPeerVerifyDepthSchema,
+                           &setPeerVerifyDepth);
 
   QJsonObject emptySchema;
   emptySchema.insert("type", "object");
   emptySchema.insert("properties", QJsonObject());
 
   registry.registerCommand(
-    QStringLiteral("mqtt.connect"), QStringLiteral("Open MQTT connection"),
-    emptySchema, &connect);
+    QStringLiteral("mqtt.connect"), QStringLiteral("Open MQTT connection"), emptySchema, &connect);
 
-  registry.registerCommand(
-    QStringLiteral("mqtt.disconnect"), QStringLiteral("Close MQTT connection"),
-    emptySchema, &disconnect);
+  registry.registerCommand(QStringLiteral("mqtt.disconnect"),
+                           QStringLiteral("Close MQTT connection"),
+                           emptySchema,
+                           &disconnect);
 
   registry.registerCommand(QStringLiteral("mqtt.toggleConnection"),
                            QStringLiteral("Toggle MQTT connection state"),
-                           emptySchema, &toggleConnection);
+                           emptySchema,
+                           &toggleConnection);
 
   registry.registerCommand(QStringLiteral("mqtt.regenerateClientId"),
                            QStringLiteral("Generate new random client ID"),
-                           emptySchema, &regenerateClientId);
+                           emptySchema,
+                           &regenerateClientId);
 
   // Query commands
   registry.registerCommand(QStringLiteral("mqtt.getConfiguration"),
                            QStringLiteral("Get current MQTT configuration"),
-                           emptySchema, &getConfiguration);
+                           emptySchema,
+                           &getConfiguration);
 
   registry.registerCommand(QStringLiteral("mqtt.getConnectionStatus"),
                            QStringLiteral("Get MQTT connection status"),
-                           emptySchema, &getConnectionStatus);
+                           emptySchema,
+                           &getConnectionStatus);
 
-  registry.registerCommand(
-    QStringLiteral("mqtt.getModes"), QStringLiteral("Get available MQTT modes"),
-    emptySchema, &getModes);
+  registry.registerCommand(QStringLiteral("mqtt.getModes"),
+                           QStringLiteral("Get available MQTT modes"),
+                           emptySchema,
+                           &getModes);
 
   registry.registerCommand(QStringLiteral("mqtt.getMqttVersions"),
                            QStringLiteral("Get available MQTT versions"),
-                           emptySchema, &getMqttVersions);
+                           emptySchema,
+                           &getMqttVersions);
 
   registry.registerCommand(QStringLiteral("mqtt.getSslProtocols"),
                            QStringLiteral("Get available SSL protocols"),
-                           emptySchema, &getSslProtocols);
+                           emptySchema,
+                           &getSslProtocols);
 
   registry.registerCommand(QStringLiteral("mqtt.getPeerVerifyModes"),
                            QStringLiteral("Get available peer verify modes"),
-                           emptySchema, &getPeerVerifyModes);
+                           emptySchema,
+                           &getPeerVerifyModes);
 }
 
 //--------------------------------------------------------------------------------------------------

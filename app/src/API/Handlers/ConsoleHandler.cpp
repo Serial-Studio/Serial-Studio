@@ -107,8 +107,7 @@ void API::Handlers::ConsoleHandler::registerCommands()
     QJsonObject props;
     QJsonObject endingIndexProp;
     endingIndexProp.insert("type", "integer");
-    endingIndexProp.insert("description",
-                           "Line ending: 0=None, 1=LF, 2=CR, 3=CRLF");
+    endingIndexProp.insert("description", "Line ending: 0=None, 1=LF, 2=CR, 3=CRLF");
     props.insert("endingIndex", endingIndexProp);
     lineEndingSchema.insert("type", "object");
     lineEndingSchema.insert("properties", props);
@@ -175,10 +174,8 @@ void API::Handlers::ConsoleHandler::registerCommands()
                            checksumMethodSchema,
                            &setChecksumMethod);
 
-  registry.registerCommand(QStringLiteral("console.clear"),
-                           QStringLiteral("Clear console"),
-                           emptySchema,
-                           &clear);
+  registry.registerCommand(
+    QStringLiteral("console.clear"), QStringLiteral("Clear console"), emptySchema, &clear);
 
   QJsonObject sendSchema;
   {
@@ -193,10 +190,8 @@ void API::Handlers::ConsoleHandler::registerCommands()
     req.append("data");
     sendSchema.insert("required", req);
   }
-  registry.registerCommand(QStringLiteral("console.send"),
-                           QStringLiteral("Send data to device"),
-                           sendSchema,
-                           &send);
+  registry.registerCommand(
+    QStringLiteral("console.send"), QStringLiteral("Send data to device"), sendSchema, &send);
 
   registry.registerCommand(QStringLiteral("console.export.setEnabled"),
                            QStringLiteral("Enable/disable console export"),

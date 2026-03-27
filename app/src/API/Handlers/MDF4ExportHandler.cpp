@@ -54,14 +54,16 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
   }
   registry.registerCommand(QStringLiteral("mdf4.export.setEnabled"),
                            QStringLiteral("Enable or disable MDF4 export"),
-                           setEnabledSchema, &setEnabled);
+                           setEnabledSchema,
+                           &setEnabled);
 
   QJsonObject closeSchema;
   closeSchema.insert("type", "object");
   closeSchema.insert("properties", QJsonObject());
   registry.registerCommand(QStringLiteral("mdf4.export.close"),
                            QStringLiteral("Close the current MDF4 file"),
-                           closeSchema, &close);
+                           closeSchema,
+                           &close);
 
   // Query commands
   QJsonObject getStatusSchema;
@@ -69,7 +71,8 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
   getStatusSchema.insert("properties", QJsonObject());
   registry.registerCommand(QStringLiteral("mdf4.export.getStatus"),
                            QStringLiteral("Get MDF4 export status"),
-                           getStatusSchema, &getStatus);
+                           getStatusSchema,
+                           &getStatus);
 }
 
 //--------------------------------------------------------------------------------------------------

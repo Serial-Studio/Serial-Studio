@@ -9,12 +9,13 @@
 
 #ifdef ENABLE_GRPC
 
-#include "API/GRPC/ProtoGenerator.h"
-#include "API/CommandRegistry.h"
+#  include "API/GRPC/ProtoGenerator.h"
 
-#include <QFile>
-#include <QJsonArray>
-#include <QTextStream>
+#  include <QFile>
+#  include <QJsonArray>
+#  include <QTextStream>
+
+#  include "API/CommandRegistry.h"
 
 //--------------------------------------------------------------------------------------------------
 // Public methods
@@ -92,9 +93,8 @@ QString API::GRPC::ProtoGenerator::generateProto()
   QStringList rpc_lines;
   QStringList message_defs;
 
-  for (auto it = commands.begin(); it != commands.end(); ++it)
-  {
-    const auto& def = it.value();
+  for (auto it = commands.begin(); it != commands.end(); ++it) {
+    const auto& def     = it.value();
     const auto msg_name = sanitizeName(def.name) + "Request";
 
     // Build request message from JSON Schema
@@ -103,21 +103,16 @@ QString API::GRPC::ProtoGenerator::generateProto()
     msg_out << "message " << msg_name << " {\n"
             << "  string id = 1;\n";
 
-    if (!def.inputSchema.isEmpty())
-    {
-      const auto props =
-        def.inputSchema.value("properties").toObject();
-      int field_num = 2;
+    if (!def.inputSchema.isEmpty()) {
+      const auto props = def.inputSchema.value("properties").toObject();
+      int field_num    = 2;
 
-      for (auto pit = props.begin(); pit != props.end(); ++pit)
-      {
+      for (auto pit = props.begin(); pit != props.end(); ++pit) {
         const auto field_schema = pit.value().toObject();
-        const auto field_type =
-          jsonTypeToProtoType(field_schema.value("type").toString());
-        const auto field_name = pit.key();
+        const auto field_type   = jsonTypeToProtoType(field_schema.value("type").toString());
+        const auto field_name   = pit.key();
 
-        msg_out << "  " << field_type << " " << field_name << " = "
-                << field_num++ << ";\n";
+        msg_out << "  " << field_type << " " << field_name << " = " << field_num++ << ";\n";
       }
     }
 
@@ -126,9 +121,8 @@ QString API::GRPC::ProtoGenerator::generateProto()
 
     // RPC line
     const auto rpc_name = sanitizeName(def.name);
-    rpc_lines.append(
-      QStringLiteral("  // %1\n  rpc %2(%3) returns (CommandResponse);")
-        .arg(def.description, rpc_name, msg_name));
+    rpc_lines.append(QStringLiteral("  // %1\n  rpc %2(%3) returns (CommandResponse);")
+                       .arg(def.description, rpc_name, msg_name));
   }
 
   // Write all request messages
@@ -205,21 +199,16 @@ QString API::GRPC::ProtoGenerator::sanitizeName(const QString& name)
   QString result;
   bool capitalize = true;
 
-  for (const auto& ch : name)
-  {
-    if (ch == '.' || ch == '_' || ch == '-')
-    {
+  for (const auto& ch : name) {
+    if (ch == '.' || ch == '_' || ch == '-') {
       capitalize = true;
       continue;
     }
 
-    if (capitalize)
-    {
+    if (capitalize) {
       result += ch.toUpper();
       capitalize = false;
-    }
-    else
-    {
+    } else {
       result += ch;
     }
   }
@@ -227,4 +216,4 @@ QString API::GRPC::ProtoGenerator::sanitizeName(const QString& name)
   return result;
 }
 
-#endif // ENABLE_GRPC
+#endif  // ENABLE_GRPC

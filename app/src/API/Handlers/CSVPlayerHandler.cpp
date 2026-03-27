@@ -80,50 +80,42 @@ void API::Handlers::CSVPlayerHandler::registerCommands()
   progressSchema.insert(QStringLiteral("required"), progressRequired);
 
   // Register commands
-  registry.registerCommand(
-    QStringLiteral("csv.player.open"),
-    QStringLiteral("Open CSV file (params: filePath)"),
-    openSchema, &open);
+  registry.registerCommand(QStringLiteral("csv.player.open"),
+                           QStringLiteral("Open CSV file (params: filePath)"),
+                           openSchema,
+                           &open);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.close"),
-    QStringLiteral("Close CSV file"),
-    emptySchema, &close);
+    QStringLiteral("csv.player.close"), QStringLiteral("Close CSV file"), emptySchema, &close);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.play"),
-    QStringLiteral("Start playback"),
-    emptySchema, &play);
+    QStringLiteral("csv.player.play"), QStringLiteral("Start playback"), emptySchema, &play);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.pause"),
-    QStringLiteral("Pause playback"),
-    emptySchema, &pause);
+    QStringLiteral("csv.player.pause"), QStringLiteral("Pause playback"), emptySchema, &pause);
 
   registry.registerCommand(
-    QStringLiteral("csv.player.toggle"),
-    QStringLiteral("Toggle play/pause"),
-    emptySchema, &toggle);
+    QStringLiteral("csv.player.toggle"), QStringLiteral("Toggle play/pause"), emptySchema, &toggle);
 
-  registry.registerCommand(
-    QStringLiteral("csv.player.nextFrame"),
-    QStringLiteral("Advance to next frame"),
-    emptySchema, &nextFrame);
+  registry.registerCommand(QStringLiteral("csv.player.nextFrame"),
+                           QStringLiteral("Advance to next frame"),
+                           emptySchema,
+                           &nextFrame);
 
-  registry.registerCommand(
-    QStringLiteral("csv.player.previousFrame"),
-    QStringLiteral("Go to previous frame"),
-    emptySchema, &previousFrame);
+  registry.registerCommand(QStringLiteral("csv.player.previousFrame"),
+                           QStringLiteral("Go to previous frame"),
+                           emptySchema,
+                           &previousFrame);
 
-  registry.registerCommand(
-    QStringLiteral("csv.player.setProgress"),
-    QStringLiteral("Seek to position (params: progress: 0.0-1.0)"),
-    progressSchema, &setProgress);
+  registry.registerCommand(QStringLiteral("csv.player.setProgress"),
+                           QStringLiteral("Seek to position (params: progress: 0.0-1.0)"),
+                           progressSchema,
+                           &setProgress);
 
-  registry.registerCommand(
-    QStringLiteral("csv.player.getStatus"),
-    QStringLiteral("Get player status"),
-    emptySchema, &getStatus);
+  registry.registerCommand(QStringLiteral("csv.player.getStatus"),
+                           QStringLiteral("Get player status"),
+                           emptySchema,
+                           &getStatus);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -664,8 +664,8 @@ void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
                             || API::Server::instance().enabled();
 
 #ifdef ENABLE_GRPC
-  m_timestampedFramesEnabled = m_timestampedFramesEnabled
-                            || API::GRPC::GRPCServer::instance().enabled();
+  m_timestampedFramesEnabled =
+    m_timestampedFramesEnabled || API::GRPC::GRPCServer::instance().enabled();
 #endif
 }
 

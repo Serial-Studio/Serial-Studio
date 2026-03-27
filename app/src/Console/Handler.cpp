@@ -87,11 +87,8 @@ Console::Handler::Handler()
   m_ansiColorsEnabled = m_vt100Emulation && m_ansiColors;
   m_fontFamilyIndex   = availableFonts().indexOf(m_fontFamily);
 
-  connect(&Misc::TimerEvents::instance(),
-          &Misc::TimerEvents::uiTimeout,
-          this, [this]() {
-    if (!m_pendingDisplay.isEmpty())
-    {
+  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this, [this]() {
+    if (!m_pendingDisplay.isEmpty()) {
       Q_EMIT displayString(m_pendingDisplay);
       m_pendingDisplay.clear();
     }

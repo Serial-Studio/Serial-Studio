@@ -141,7 +141,7 @@ void API::Handlers::NetworkHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("host")] = QJsonObject{
-      {       QStringLiteral("type"),                                 QStringLiteral("string")},
+      {       QStringLiteral("type"),                            QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Hostname or IP address to look up")}
     };
     QJsonObject schema;

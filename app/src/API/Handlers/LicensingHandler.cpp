@@ -103,11 +103,10 @@ void API::Handlers::LicensingHandler::registerCommands()
     QJsonObject emptySchema;
     emptySchema.insert("type", "object");
     emptySchema.insert("properties", QJsonObject());
-    registry.registerCommand(
-      QStringLiteral("licensing.guardStatus"),
-      QStringLiteral("Run all build-time license guards and report results"),
-      emptySchema,
-      &guardStatus);
+    registry.registerCommand(QStringLiteral("licensing.guardStatus"),
+                             QStringLiteral("Run all build-time license guards and report results"),
+                             emptySchema,
+                             &guardStatus);
   }
 
   // trialGetStatus schema (no params)

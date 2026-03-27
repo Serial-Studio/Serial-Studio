@@ -51,7 +51,7 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("deviceIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                          QStringLiteral("integer")},
+      {       QStringLiteral("type"),                           QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Index of the BLE device to select")},
       {    QStringLiteral("minimum"),                                                   0}
     };
@@ -68,7 +68,7 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("serviceIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                           QStringLiteral("integer")},
+      {       QStringLiteral("type"),                            QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Index of the BLE service to select")},
       {    QStringLiteral("minimum"),                                                    0}
     };
@@ -85,9 +85,9 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("characteristicIndex")] = QJsonObject{
-      {       QStringLiteral("type"),                                    QStringLiteral("integer")},
+      {       QStringLiteral("type"),                                   QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Index of the BLE characteristic to select")},
-      {    QStringLiteral("minimum"),                                                            0}
+      {    QStringLiteral("minimum"),                                                           0}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");

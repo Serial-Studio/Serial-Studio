@@ -11,26 +11,23 @@
 
 #ifdef ENABLE_GRPC
 
-#include <atomic>
-#include <memory>
-#include <mutex>
-#include <vector>
+#  include <atomic>
+#  include <grpcpp/grpcpp.h>
+#  include <memory>
+#  include <mutex>
+#  include <QObject>
+#  include <thread>
+#  include <vector>
 
-#include <thread>
-
-#include <QObject>
-
-#include <grpcpp/grpcpp.h>
-
-#include "DataModel/Frame.h"
-#include "IO/HAL_Driver.h"
-#include "ThirdParty/readerwriterqueue.h"
-#include "serialstudio.grpc.pb.h"
+#  include "DataModel/Frame.h"
+#  include "IO/HAL_Driver.h"
+#  include "serialstudio.grpc.pb.h"
+#  include "ThirdParty/readerwriterqueue.h"
 
 /**
  * Default gRPC port for the Serial Studio API.
  */
-#define API_GRPC_PORT 8888
+#  define API_GRPC_PORT 8888
 
 class SerialStudioServiceImpl;
 
@@ -43,20 +40,18 @@ namespace GRPC {
  * Each streaming client gets one of these. The gRPC thread writes frames
  * to the writer, and the main thread enqueues frames via the atomic queue.
  */
-struct FrameStreamContext
-{
+struct FrameStreamContext {
   grpc::ServerWriter<serialstudio::FrameBatch>* writer = nullptr;
-  grpc::ServerContext* context = nullptr;
+  grpc::ServerContext* context                         = nullptr;
   std::atomic<bool> cancelled{false};
 };
 
 /**
  * @brief Context for an active StreamRawData call.
  */
-struct RawStreamContext
-{
+struct RawStreamContext {
   grpc::ServerWriter<serialstudio::RawBatch>* writer = nullptr;
-  grpc::ServerContext* context = nullptr;
+  grpc::ServerContext* context                       = nullptr;
   std::atomic<bool> cancelled{false};
 };
 
@@ -75,8 +70,7 @@ struct RawStreamContext
  * thread pushes frames to active stream contexts, which the gRPC
  * threads then write to their respective clients.
  */
-class GRPCServer : public QObject
-{
+class GRPCServer : public QObject {
   // clang-format off
   Q_OBJECT
   Q_PROPERTY(bool enabled
@@ -148,7 +142,7 @@ private:
   std::vector<std::shared_ptr<RawStreamContext>> m_rawStreams;
 };
 
-} // namespace GRPC
-} // namespace API
+}  // namespace GRPC
+}  // namespace API
 
-#endif // ENABLE_GRPC
+#endif  // ENABLE_GRPC

@@ -11,8 +11,8 @@
 
 #ifdef ENABLE_GRPC
 
-#include <QJsonObject>
-#include <QString>
+#  include <QJsonObject>
+#  include <QString>
 
 namespace API {
 namespace GRPC {
@@ -28,8 +28,7 @@ namespace GRPC {
  * external clients that want strongly-typed gRPC stubs. The actual gRPC
  * server always uses the generic Struct-based approach.
  */
-class ProtoGenerator
-{
+class ProtoGenerator {
 public:
   /**
    * @brief Generates a complete .proto file as a string.
@@ -43,13 +42,12 @@ public:
   static bool exportToFile(const QString& filePath);
 
 private:
-  [[nodiscard]] static QString jsonSchemaToProtoFields(
-    const QJsonObject& schema, int& fieldNumber);
+  [[nodiscard]] static QString jsonSchemaToProtoFields(const QJsonObject& schema, int& fieldNumber);
   [[nodiscard]] static QString jsonTypeToProtoType(const QString& jsonType);
   [[nodiscard]] static QString sanitizeName(const QString& name);
 };
 
-} // namespace GRPC
-} // namespace API
+}  // namespace GRPC
+}  // namespace API
 
-#endif // ENABLE_GRPC
+#endif  // ENABLE_GRPC
