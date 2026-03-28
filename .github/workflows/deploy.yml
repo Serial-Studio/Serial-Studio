@@ -763,6 +763,9 @@ jobs:
           -g CMakeDeps -g CMakeToolchain `
           -s build_type=Release `
           -s compiler.cppstd=20 `
+          -s compiler.version=193 `
+          -s:b compiler.cppstd=20 `
+          -s:b compiler.version=193 `
           --output-folder="${{github.workspace}}/conan-deps" `
           --build=missing
 
