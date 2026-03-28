@@ -655,6 +655,7 @@ jobs:
           -DENABLE_HARDENING=ON `
           -DENABLE_GRPC=ON `
           -DCMAKE_BUILD_TYPE=Release `
+          -DCMAKE_CONFIGURATION_TYPES=Release `
           -DBUILD_COMMERCIAL=ON `
           -DBUILD_GPL3=OFF
 
