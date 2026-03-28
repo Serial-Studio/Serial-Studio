@@ -402,7 +402,15 @@ jobs:
       run: |
         brew install autoconf autoconf-archive automake libtool
 
+    - name: '⚙️ Restore universal gRPC cache'
+      id: grpc-cache
+      uses: actions/cache@v5
+      with:
+        path: ${{github.workspace}}/grpc-universal
+        key: grpc-universal-macOS-${{hashFiles('scripts/build-universal-grpc.sh')}}
+
     - name: '⚙️ Build universal gRPC'
+      if: steps.grpc-cache.outputs.cache-hit != 'true'
       run: |
         chmod +x ./scripts/build-universal-grpc.sh
         ./scripts/build-universal-grpc.sh "${GITHUB_WORKSPACE}/grpc-universal"
