@@ -135,26 +135,26 @@ class Handler : public QObject {
   // clang-format on
 
 signals:
+  void cleared();
   void echoChanged();
   void fontChanged();
   void fontSizeChanged();
   void dataModeChanged();
   void languageChanged();
+  void ansiColorsChanged();
   void lineEndingChanged();
   void fontFamilyChanged();
   void displayModeChanged();
   void historyItemChanged();
+  void deviceNamesChanged();
   void textDocumentChanged();
   void showTimestampChanged();
-  void ansiColorsEnabledChanged();
-  void vt100EmulationChanged();
-  void ansiColorsChanged();
-  void imageWidgetActiveChanged();
   void checksumMethodChanged();
-  void displayString(const QString& text);
-  void cleared();
+  void vt100EmulationChanged();
   void currentDeviceIdChanged();
-  void deviceNamesChanged();
+  void ansiColorsEnabledChanged();
+  void imageWidgetActiveChanged();
+  void displayString(const QString& text);
   void deviceDataReady(int deviceId, const QString& text);
 
 private:

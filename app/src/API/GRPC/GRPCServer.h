@@ -85,11 +85,11 @@ class GRPCServer : public QObject {
              NOTIFY clientCountChanged)
   // clang-format on
 
+  friend class ::SerialStudioServiceImpl;
+
 signals:
   void enabledChanged();
   void clientCountChanged();
-
-  friend class ::SerialStudioServiceImpl;
 
 private:
   explicit GRPCServer();

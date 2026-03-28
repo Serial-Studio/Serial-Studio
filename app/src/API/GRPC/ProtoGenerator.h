@@ -11,7 +11,6 @@
 
 #ifdef ENABLE_GRPC
 
-#  include <QJsonObject>
 #  include <QString>
 
 namespace API {
@@ -39,10 +38,9 @@ public:
    * @brief Exports the generated .proto to a file.
    * @return true on success.
    */
-  static bool exportToFile(const QString& filePath);
+  [[nodiscard]] static bool exportToFile(const QString& filePath);
 
 private:
-  [[nodiscard]] static QString jsonSchemaToProtoFields(const QJsonObject& schema, int& fieldNumber);
   [[nodiscard]] static QString jsonTypeToProtoType(const QString& jsonType);
   [[nodiscard]] static QString sanitizeName(const QString& name);
 };
