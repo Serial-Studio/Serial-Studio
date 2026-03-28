@@ -26,8 +26,8 @@ __pycache__/
 *$py.class
 *.so
 
-# vcpkg
-/vcpkg_installed/
+# CMake
+CMakeUserPresets.json
 
 # Build outputs
 /build*/

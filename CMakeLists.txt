@@ -22,119 +22,6 @@
 cmake_minimum_required(VERSION 3.20)
 
 #---------------------------------------------------------------------------------------------------
-# vcpkg auto-bootstrap (must run before project() so the toolchain is active)
-#---------------------------------------------------------------------------------------------------
-#
-# vcpkg provides all third-party C/C++ dependencies (zlib, expat, OpenSSL,
-# KissFFT, libusb, hidapi, gRPC, protobuf) as static libraries isolated from
-# system/homebrew packages. This avoids header conflicts and simplifies
-# cross-platform distribution.
-#
-# vcpkg is cloned to build/_vcpkg on first configure. Subsequent builds reuse
-# the cached packages. The toolchain file must be set before project() so
-# find_package() can discover vcpkg-installed packages.
-#
-# Custom static triplets in vcpkg-triplets/ ensure all dependencies are
-# statically linked.
-#
-#---------------------------------------------------------------------------------------------------
-
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  # Try well-known environment variables first (GitHub runners set
-  # VCPKG_INSTALLATION_ROOT; local installs often set VCPKG_ROOT).
-  # Only accept a candidate if scripts/buildsystems/vcpkg.cmake exists.
-  set(_VCPKG_CANDIDATE_ROOTS
-    "$ENV{VCPKG_INSTALLATION_ROOT}"
-    "$ENV{VCPKG_ROOT}"
-  )
-
-  set(_VCPKG_FOUND FALSE)
-  foreach(_candidate IN LISTS _VCPKG_CANDIDATE_ROOTS)
-    if(_candidate AND EXISTS "${_candidate}/scripts/buildsystems/vcpkg.cmake")
-      set(VCPKG_ROOT "${_candidate}")
-      set(_VCPKG_FOUND TRUE)
-      break()
-    endif()
-  endforeach()
-
-  if(_VCPKG_FOUND)
-    message(STATUS "Using system vcpkg: ${VCPKG_ROOT}")
-  else()
-    set(VCPKG_ROOT "${CMAKE_BINARY_DIR}/_vcpkg")
-
-    # Validate clone — remove stale/broken checkouts
-    if(EXISTS "${VCPKG_ROOT}" AND NOT EXISTS "${VCPKG_ROOT}/scripts/vcpkg-tool-metadata.txt")
-      message(STATUS "Removing broken vcpkg clone...")
-      file(REMOVE_RECURSE "${VCPKG_ROOT}")
-    endif()
-
-    if(NOT EXISTS "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-      message(STATUS "Cloning vcpkg into ${VCPKG_ROOT}...")
-      execute_process(
-        COMMAND git clone https://github.com/microsoft/vcpkg.git "${VCPKG_ROOT}"
-        RESULT_VARIABLE _vcpkg_clone_result
-      )
-      if(NOT _vcpkg_clone_result EQUAL 0)
-        message(FATAL_ERROR "Failed to clone vcpkg. Install it manually: https://vcpkg.io")
-      endif()
-    endif()
-
-    if(NOT EXISTS "${VCPKG_ROOT}/vcpkg" AND NOT EXISTS "${VCPKG_ROOT}/vcpkg.exe")
-      message(STATUS "Bootstrapping vcpkg...")
-      if(WIN32)
-        execute_process(
-          COMMAND "${VCPKG_ROOT}/bootstrap-vcpkg.bat" -disableMetrics
-          RESULT_VARIABLE _vcpkg_bs_result
-        )
-      else()
-        execute_process(
-          COMMAND "${VCPKG_ROOT}/bootstrap-vcpkg.sh" -disableMetrics
-          RESULT_VARIABLE _vcpkg_bs_result
-        )
-      endif()
-      if(NOT _vcpkg_bs_result EQUAL 0)
-        message(FATAL_ERROR "Failed to bootstrap vcpkg. Install it manually: https://vcpkg.io")
-      endif()
-    endif()
-
-    message(STATUS "Using local vcpkg: ${VCPKG_ROOT}")
-  endif()
-
-  set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-    CACHE STRING "vcpkg toolchain" FORCE)
-  set(VCPKG_OVERLAY_TRIPLETS "${CMAKE_SOURCE_DIR}/vcpkg-triplets"
-    CACHE STRING "vcpkg triplet overlays" FORCE)
-  set(VCPKG_MANIFEST_DIR "${CMAKE_SOURCE_DIR}"
-    CACHE STRING "vcpkg manifest directory" FORCE)
-
-  # Detect host architecture for triplet selection
-  if(APPLE)
-    execute_process(COMMAND uname -m OUTPUT_VARIABLE _HOST_ARCH OUTPUT_STRIP_TRAILING_WHITESPACE)
-  else()
-    set(_HOST_ARCH "${CMAKE_HOST_SYSTEM_PROCESSOR}")
-  endif()
-
-  # Select static triplet per platform
-  if(NOT DEFINED VCPKG_TARGET_TRIPLET)
-    if(APPLE)
-      if(_HOST_ARCH STREQUAL "arm64")
-        set(VCPKG_TARGET_TRIPLET "arm64-osx-static" CACHE STRING "" FORCE)
-      else()
-        set(VCPKG_TARGET_TRIPLET "x64-osx-static" CACHE STRING "" FORCE)
-      endif()
-    elseif(WIN32)
-      set(VCPKG_TARGET_TRIPLET "x64-windows-static" CACHE STRING "" FORCE)
-    elseif(_HOST_ARCH STREQUAL "aarch64" OR _HOST_ARCH STREQUAL "arm64")
-      set(VCPKG_TARGET_TRIPLET "arm64-linux-static" CACHE STRING "" FORCE)
-    else()
-      set(VCPKG_TARGET_TRIPLET "x64-linux-static" CACHE STRING "" FORCE)
-    endif()
-  endif()
-
-  message(STATUS "vcpkg triplet: ${VCPKG_TARGET_TRIPLET}")
-endif()
-
-#---------------------------------------------------------------------------------------------------
 # Project definition and C++ standard
 #---------------------------------------------------------------------------------------------------
 #
@@ -183,9 +70,9 @@ find_package(
 # Networking:
 #   ENABLE_GRPC=ON (default) - Enable gRPC server on port 8888
 #
-# Dependencies (zlib, expat, OpenSSL, KissFFT, libusb, hidapi, gRPC, protobuf)
-# are provided by vcpkg in manifest mode. vcpkg is auto-bootstrapped when
-# ENABLE_GRPC=ON or when CMAKE_TOOLCHAIN_FILE is not already set.
+# Dependencies (zlib, expat, OpenSSL, KissFFT, libusb, hidapi) are vendored
+# in lib/ or fetched via FetchContent. gRPC/protobuf are found via
+# find_package when ENABLE_GRPC=ON (install via system package manager).
 #
 #---------------------------------------------------------------------------------------------------
 

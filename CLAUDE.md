@@ -23,7 +23,7 @@ cmake -B build -DDEBUG_SANITIZER=ON -DCMAKE_BUILD_TYPE=Debug
 cmake --build build -j$(nproc)
 ```
 
-Key flags: `ENABLE_HARDENING`, `ENABLE_PGO`, `USE_SYSTEM_ZLIB`, `USE_SYSTEM_EXPAT`.
+Key flags: `ENABLE_HARDENING`, `ENABLE_PGO`, `ENABLE_GRPC`, `USE_SYSTEM_ZLIB`, `USE_SYSTEM_EXPAT`.
 
 ## Project Overview
 

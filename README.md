@@ -184,14 +184,14 @@ sudo apt install libgl1-mesa-dev build-essential
 
 ### Build Instructions
 
-Once Qt is installed, you can compile the project by opening `CMakeLists.txt` in your preferred IDE or using the terminal:
+All C/C++ dependencies (zlib, expat, OpenSSL, KissFFT, etc.) are vendored in `lib/` or fetched automatically via CMake's FetchContent. No package manager is required.
 
 ```bash
-mkdir build
-cd build
-cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
-cmake --build . -j$(nproc)
+cmake -B build -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j$(nproc)
 ```
+
+You can also open `CMakeLists.txt` directly in Qt Creator or any CMake-aware IDE — no additional setup required.
 
 By default, the build system produces a fully GPLv3-compliant version of Serial Studio.
 This version includes most core features but excludes commercial modules such as MQTT, 3D visualization, XY plotting, and other advanced tools that depend on proprietary Qt components.

@@ -102,7 +102,10 @@ jobs:
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev \
           nodejs \
-          npm
+          npm \
+          libgrpc++-dev \
+          libprotobuf-dev \
+          protobuf-compiler-grpc
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
@@ -154,25 +157,19 @@ jobs:
       with:
         useLocalCache: true
 
-    - name: '⚙️ Export vcpkg cache variables'
-      uses: actions/github-script@v7
-      with:
-        script: |
-          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-
     - name: '🚧 Configure with CMake'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
-        VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
       run: |
         cmake -B build \
           -DCMAKE_BUILD_TYPE=Release \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
+          -DUSE_SYSTEM_ZLIB=ON \
+          -DUSE_SYSTEM_EXPAT=ON \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 

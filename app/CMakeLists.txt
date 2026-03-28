@@ -165,25 +165,6 @@ qt_policy(SET QTP0002 NEW)
 qt_policy(SET QTP0004 NEW)
 
 #---------------------------------------------------------------------------------------------------
-# vcpkg-provided dependencies
-#---------------------------------------------------------------------------------------------------
-#
-# These packages are installed by vcpkg (manifest mode) and found via
-# find_package(). vcpkg's toolchain file ensures these resolve from the
-# vcpkg install tree, completely isolated from system/homebrew packages.
-#
-#---------------------------------------------------------------------------------------------------
-
-find_package(ZLIB REQUIRED)
-find_package(expat CONFIG REQUIRED)
-find_package(OpenSSL REQUIRED)
-find_package(kissfft CONFIG REQUIRED)
-
-if(BUILD_COMMERCIAL)
-  find_package(hidapi CONFIG REQUIRED)
-endif()
-
-#---------------------------------------------------------------------------------------------------
 # Source file organization
 #---------------------------------------------------------------------------------------------------
 #
@@ -737,7 +718,7 @@ qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.q
 #
 # Linked libraries:
 #   Qt modules: Core, Gui, Widgets, Qml, Quick, Graphs, SerialPort, etc.
-#   vcpkg (static):
+#   Vendored (static):
 #     - kissfft: Fast Fourier Transform (FFT plot calculations)
 #     - OpenSSL: Cryptography, SSL/TLS (for MQTT, secure connections)
 #     - libusb, hidapi: USB/HID device drivers (Pro only)
@@ -767,12 +748,15 @@ target_link_libraries(
 
   ${QT_LIBS}
 
-  kissfft::kissfft-float
-  OpenSSL::SSL
-  OpenSSL::Crypto
+  kissfft
   QCodeEditor
   QSimpleUpdater
   mdf
+)
+
+target_link_openssl(
+  ${PROJECT_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/../lib/OpenSSL
 )
 
 if(BUILD_COMMERCIAL)

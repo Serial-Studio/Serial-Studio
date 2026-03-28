@@ -41,6 +41,43 @@ set(CMAKE_MODULE_LINKER_FLAGS "")
 set(CMAKE_STATIC_LINKER_FLAGS "")
 
 #---------------------------------------------------------------------------------------------------
+# FetchContent module setup
+#---------------------------------------------------------------------------------------------------
+#
+# Configures CMake's FetchContent module for downloading dependencies:
+#
+# FetchContent:
+#   - Modern CMake module for downloading external projects at configure time
+#   - Replaces ExternalProject (which downloads at build time)
+#   - Allows dependencies to be configured with parent project's settings
+#
+# FETCHCONTENT_QUIET=ON:
+#   - Suppresses verbose output during downloads
+#   - Cleaner CMake configuration output
+#
+# CMAKE_FIND_LIBRARY_SUFFIXES (UNIX only):
+#   - Prioritizes static libraries (.a) over shared libraries (.so, .dylib)
+#   - Ensures dependencies are statically linked (no runtime .so dependencies)
+#   - Simplifies deployment (fewer files to distribute)
+#
+# Why FetchContent instead of system packages?
+#   - Ensures consistent versions across all platforms
+#   - Avoids version conflicts with system libraries
+#   - Simplifies build process (no manual dependency installation)
+#   - Better for sandboxed environments (Flathub, snap, AppImage)
+#
+# Note: USE_SYSTEM_ZLIB and USE_SYSTEM_EXPAT override FetchContent for
+# those libraries when building in sandboxed environments
+#
+#---------------------------------------------------------------------------------------------------
+
+include(FetchContent)
+set(FETCHCONTENT_QUIET ON)
+if(UNIX)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES ".a" ${CMAKE_FIND_LIBRARY_SUFFIXES})
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # Third-party library compilation flags
 #---------------------------------------------------------------------------------------------------
 #
@@ -53,14 +90,29 @@ set(CMAKE_STATIC_LINKER_FLAGS "")
 #
 # MSVC (Visual Studio):
 #   /w              - Disable all compiler warnings
+#                     (third-party code may not be warning-clean)
 #   /Zc:inline      - Remove unreferenced inline functions
+#                     (reduces object file bloat)
 #   /Gy             - Enable function-level linking (COMDAT folding)
+#                     (allows linker to remove unused functions)
 #
 # GCC/Clang:
 #   -w                          - Disable all warnings
 #   -fvisibility=hidden         - Hide all symbols by default
+#                                 (only export explicitly marked symbols)
 #   -fvisibility-inlines-hidden - Hide C++ inline functions
+#                                 (prevents inline function bloat in symbol table)
 #   -fstack-protector-strong    - Stack canary protection (when ENABLE_HARDENING=ON)
+#                                 Applied to third-party libs for defense-in-depth
+#
+# Benefits of hidden visibility:
+#   - Smaller binary size (fewer exported symbols)
+#   - Faster linking (less symbol resolution)
+#   - Prevents symbol conflicts between libraries
+#   - Better optimization (compiler can inline/devirtualize)
+#
+# These flags are applied to: KissFFT, QCodeEditor, QSimpleUpdater, mdflib,
+# ZLIB, and EXPAT (when not using system libraries)
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -89,27 +141,229 @@ else()
 endif()
 
 #---------------------------------------------------------------------------------------------------
-# Internal third-party libraries (bundled, not available via vcpkg)
+# ZLIB compression library
 #---------------------------------------------------------------------------------------------------
 #
-# These libraries are bundled locally because they have no vcpkg port or
-# depend on the project's specific Qt installation:
+# ZLIB is required for:
+#   - MDF4 file decompression (compressed data blocks)
+#   - PNG image handling in Qt
+#   - HTTP compression (gzip) for network operations
 #
-# QCodeEditor (lib/QCodeEditor/):
-#   - Syntax-highlighted code editor widget
-#   - Requires: Qt6::Core, Qt6::Widgets, Qt6::Gui
+# Two acquisition modes:
 #
-# QSimpleUpdater (lib/QSimpleUpdater/):
-#   - Auto-update framework for Qt applications
-#   - Requires: Qt6::Core, Qt6::Gui, Qt6::Network, Qt6::Widgets
+# 1. System library (USE_SYSTEM_ZLIB=ON):
+#    - Uses zlib provided by the OS package manager
+#    - Required for Flathub builds (sandboxed environment)
+#    - Typically /usr/lib/x86_64-linux-gnu/libz.so on Linux
+#    - Install: sudo apt install zlib1g-dev (Debian/Ubuntu)
+#              brew install zlib (macOS)
+#              vcpkg install zlib (Windows)
 #
-# mdflib (lib/mdflib/):
-#   - MDF4/MF4 file format parser (ASAM Measurement Data Format)
-#   - Requires: ZLIB::ZLIB, expat::expat (provided by vcpkg)
-#   - No vcpkg port available
+# 2. FetchContent download (USE_SYSTEM_ZLIB=OFF, default):
+#    - Downloads ZLIB 1.3.1 from GitHub (madler/zlib)
+#    - Builds as static library (zlibstatic)
+#    - Embedded in final executable (no runtime dependency)
+#    - Better version control and consistency
+#
+# Configuration:
+#   BUILD_SHARED_LIBS=OFF   - Build static library only
+#   ZLIB_BUILD_EXAMPLES=OFF - Don't build example programs
+#   SKIP_INSTALL_ALL=ON     - Don't install to system (local build only)
+#
+# Alias target:
+#   - Creates ZLIB::ZLIB alias for both system and FetchContent builds
+#   - Allows uniform linking: target_link_libraries(target ZLIB::ZLIB)
 #
 #---------------------------------------------------------------------------------------------------
 
+if(USE_SYSTEM_ZLIB)
+  message(STATUS "Using system-provided ZLIB")
+  find_package(ZLIB REQUIRED)
+
+  if(NOT TARGET ZLIB::ZLIB)
+    message(FATAL_ERROR "System ZLIB not found. Install zlib development package or set USE_SYSTEM_ZLIB=OFF")
+  endif()
+
+  message(STATUS "System ZLIB found: ${ZLIB_VERSION_STRING}")
+else()
+  message(STATUS "Fetching ZLIB 1.3.1 from GitHub...")
+
+  FetchContent_Declare(
+    zlib
+    GIT_REPOSITORY https://github.com/madler/zlib.git
+    GIT_TAG        v1.3.1
+    GIT_SHALLOW    TRUE
+    GIT_PROGRESS   FALSE
+  )
+
+  set(BUILD_SHARED_LIBS   OFF CACHE INTERNAL "Build static libraries" FORCE)
+  set(ZLIB_BUILD_EXAMPLES OFF CACHE BOOL     "Build zlib examples"    FORCE)
+  set(SKIP_INSTALL_ALL    ON  CACHE BOOL     "Skip zlib installation" FORCE)
+
+  FetchContent_MakeAvailable(zlib)
+
+  target_compile_options(zlibstatic PRIVATE ${LIB_FLAGS})
+  if(NOT MSVC AND LIB_LINK_FLAGS)
+    target_link_options(zlibstatic PRIVATE ${LIB_LINK_FLAGS})
+  endif()
+
+  if(NOT TARGET ZLIB::ZLIB)
+    add_library(ZLIB::ZLIB ALIAS zlibstatic)
+  endif()
+
+  set(ZLIB_FOUND          TRUE                                    CACHE INTERNAL "ZLIB found via FetchContent")
+  set(ZLIB_INCLUDE_DIR    "${zlib_SOURCE_DIR}"                    CACHE INTERNAL "ZLIB include directory")
+  set(ZLIB_INCLUDE_DIRS   "${zlib_SOURCE_DIR};${zlib_BINARY_DIR}" CACHE INTERNAL "ZLIB include directories")
+  set(ZLIB_LIBRARY        "zlibstatic"                            CACHE INTERNAL "ZLIB library target")
+  set(ZLIB_LIBRARIES      "zlibstatic"                            CACHE INTERNAL "ZLIB libraries")
+  set(ZLIB_VERSION_STRING "1.3.1"                                 CACHE INTERNAL "ZLIB version")
+
+  message(STATUS "ZLIB 1.3.1 fetched and configured")
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# EXPAT XML parser library
+#---------------------------------------------------------------------------------------------------
+#
+# EXPAT is required for:
+#   - MDF4 file parsing (XML metadata in MDF4 files)
+#   - XML-based configuration files
+#   - SVG rendering (Qt SVG uses EXPAT internally)
+#
+# Two acquisition modes:
+#
+# 1. System library (USE_SYSTEM_EXPAT=ON):
+#    - Uses expat provided by the OS package manager
+#    - Required for Flathub builds (sandboxed environment)
+#    - Typically /usr/lib/x86_64-linux-gnu/libexpat.so on Linux
+#    - Install: sudo apt install libexpat1-dev (Debian/Ubuntu)
+#              brew install expat (macOS)
+#              vcpkg install expat (Windows)
+#
+# 2. FetchContent download (USE_SYSTEM_EXPAT=OFF, default):
+#    - Downloads EXPAT 2.6.4 from GitHub (libexpat/libexpat)
+#    - Builds as static library
+#    - Embedded in final executable (no runtime dependency)
+#    - Better version control and consistency
+#
+# Configuration:
+#   EXPAT_SHARED_LIBS=OFF     - Build static library only
+#   EXPAT_BUILD_DOCS=OFF      - Don't build documentation
+#   EXPAT_BUILD_EXAMPLES=OFF  - Don't build example programs
+#   EXPAT_BUILD_TESTS=OFF     - Don't build unit tests
+#   EXPAT_BUILD_TOOLS=OFF     - Don't build xmlwf tool
+#   EXPAT_BUILD_FUZZERS=OFF   - Don't build fuzzing targets
+#   EXPAT_BUILD_PKGCONFIG=OFF - Don't generate pkg-config file
+#   EXPAT_ENABLE_INSTALL=OFF  - Don't install to system (local build only)
+#
+# Source subdirectory:
+#   SOURCE_SUBDIR expat - EXPAT's CMakeLists.txt is in expat/ subdirectory
+#
+# Alias target:
+#   - Creates expat::expat alias for both system and FetchContent builds
+#   - Handles EXPAT::EXPAT → expat::expat alias for system packages
+#   - Allows uniform linking: target_link_libraries(target expat::expat)
+#
+#---------------------------------------------------------------------------------------------------
+
+if(USE_SYSTEM_EXPAT)
+  message(STATUS "Using system-provided EXPAT")
+  find_package(EXPAT REQUIRED)
+
+  if(NOT TARGET expat::expat)
+    if(TARGET EXPAT::EXPAT)
+      add_library(expat::expat ALIAS EXPAT::EXPAT)
+    else()
+      message(FATAL_ERROR "System EXPAT not found. Install expat development package or set USE_SYSTEM_EXPAT=OFF")
+    endif()
+  endif()
+
+  message(STATUS "System EXPAT found: ${EXPAT_VERSION_STRING}")
+else()
+  message(STATUS "Fetching EXPAT 2.6.4 from GitHub...")
+
+  FetchContent_Declare(
+    expat
+    GIT_REPOSITORY https://github.com/libexpat/libexpat.git
+    GIT_TAG        R_2_6_4
+    GIT_SHALLOW    TRUE
+    GIT_PROGRESS   FALSE
+    SOURCE_SUBDIR  expat
+  )
+
+  set(EXPAT_SHARED_LIBS     OFF CACHE BOOL "Build shared libraries"  FORCE)
+  set(EXPAT_BUILD_DOCS      OFF CACHE BOOL "Build documentation"     FORCE)
+  set(EXPAT_BUILD_EXAMPLES  OFF CACHE BOOL "Build examples"          FORCE)
+  set(EXPAT_BUILD_TESTS     OFF CACHE BOOL "Build tests"             FORCE)
+  set(EXPAT_BUILD_TOOLS     OFF CACHE BOOL "Build tools"             FORCE)
+  set(EXPAT_BUILD_FUZZERS   OFF CACHE BOOL "Build fuzzers"           FORCE)
+  set(EXPAT_BUILD_PKGCONFIG OFF CACHE BOOL "Build pkg-config file"   FORCE)
+  set(EXPAT_ENABLE_INSTALL  OFF CACHE BOOL "Skip expat installation" FORCE)
+
+  FetchContent_MakeAvailable(expat)
+
+  target_compile_options(expat PRIVATE ${LIB_FLAGS})
+  if(NOT MSVC AND LIB_LINK_FLAGS)
+    target_link_options(expat PRIVATE ${LIB_LINK_FLAGS})
+  endif()
+
+  if(TARGET expat AND NOT TARGET expat::expat)
+    add_library(expat::expat ALIAS expat)
+    set(EXPAT_FOUND TRUE CACHE INTERNAL "EXPAT found via FetchContent")
+    set(EXPAT_INCLUDE_DIRS "${expat_SOURCE_DIR}/expat/lib" CACHE INTERNAL "EXPAT include directories")
+    set(EXPAT_LIBRARIES expat CACHE INTERNAL "EXPAT libraries")
+  endif()
+
+  message(STATUS "EXPAT 2.6.4 fetched and configured")
+endif()
+
+#---------------------------------------------------------------------------------------------------
+# Internal third-party libraries
+#---------------------------------------------------------------------------------------------------
+#
+# Builds local third-party libraries from lib/ subdirectories:
+#
+# OpenSSL (lib/OpenSSL/):
+#   - Precompiled static OpenSSL libraries for Windows, macOS, Linux
+#   - Provides: libssl.a, libcrypto.a (or .lib on Windows)
+#   - Used for: HTTPS, SSL/TLS, license validation, MQTT encryption
+#   - Platform-specific builds for each architecture
+#
+# KissFFT (lib/KissFFT/):
+#   - Fast Fourier Transform library for FFT plot widget
+#   - C implementation, header-only with minimal compile-time config
+#   - Used for: Real-time spectrum analysis, audio visualization
+#   - Optimized with SSE/NEON SIMD instructions when available
+#
+# QCodeEditor (lib/QCodeEditor/):
+#   - Syntax-highlighted code editor widget
+#   - Supports: JSON, JavaScript, Python syntax highlighting
+#   - Used for: JSON project editor, JavaScript frame parser editor
+#   - Based on Qt's QPlainTextEdit with custom syntax highlighter
+#
+# QSimpleUpdater (lib/QSimpleUpdater/):
+#   - Auto-update framework for Qt applications
+#   - Checks for updates from JSON appcast file
+#   - Used for: Automatic update notifications
+#   - Downloads update info from PROJECT_APPCAST URL
+#
+# mdflib (lib/mdflib/):
+#   - MDF4/MF4 file format parser (ASAM Measurement Data Format)
+#   - Supports: CAN, LIN, FlexRay, analog channels
+#   - Used for: Replay automotive data logs (Pro feature)
+#   - Requires: ZLIB (decompression), EXPAT (XML metadata parsing)
+#
+# Build order:
+#   OpenSSL → (no dependencies)
+#   KissFFT → (no dependencies)
+#   QCodeEditor → Qt6::Widgets, Qt6::Gui
+#   QSimpleUpdater → Qt6::Network
+#   mdflib → ZLIB::ZLIB, expat::expat
+#
+#---------------------------------------------------------------------------------------------------
+
+add_subdirectory(OpenSSL)
+add_subdirectory(KissFFT)
 add_subdirectory(QCodeEditor)
 add_subdirectory(QSimpleUpdater)
 add_subdirectory(mdflib)
@@ -118,17 +372,20 @@ add_subdirectory(mdflib)
 # libusb (Pro edition only)
 #---------------------------------------------------------------------------------------------------
 #
-# libusb provides cross-platform access to USB devices via bulk/control
-# transfers. Fetched via FetchContent because the vcpkg port requires
-# autotools which adds unnecessary build complexity.
+# libusb provides cross-platform access to USB devices via bulk/control transfers.
+# It is only included in BUILD_COMMERCIAL builds — the GPL binary contains no USB code.
 #
-# CMake target: usb-1.0
+# Acquisition: FetchContent downloads libusb 1.0.29 from GitHub at configure time.
+# libusb ships no CMakeLists.txt, so the libusb-cmake wrapper assembles the target.
+#
+# Platform source sets:
+#   Windows : windows_winusb.c + WinUSB / SetupAPI system libraries
+#   macOS   : darwin_usb.c + IOKit / CoreFoundation frameworks
+#   Linux   : linux_usbfs.c + linux_netlink.c (udev-less netlink hotplug)
+#
 #---------------------------------------------------------------------------------------------------
 
 if(BUILD_COMMERCIAL)
-  include(FetchContent)
-  set(FETCHCONTENT_QUIET ON)
-
   message(STATUS "Fetching libusb-cmake (libusb 1.0.29) from GitHub...")
 
   set(LIBUSB_BUILD_SHARED_LIBS        OFF CACHE BOOL "" FORCE)
@@ -151,17 +408,55 @@ if(BUILD_COMMERCIAL)
 endif()
 
 #---------------------------------------------------------------------------------------------------
+# hidapi (Pro edition only)
+#---------------------------------------------------------------------------------------------------
+#
+# hidapi provides cross-platform HID device access using native OS APIs:
+#   Windows : WinAPI (hid.dll)
+#   macOS   : IOHIDManager (IOKit)
+#   Linux   : hidraw kernel interface (no libusb; avoids symbol conflicts
+#             with the usb-1.0 Raw USB driver already in the build)
+#
+# Acquisition: bundled local copy in lib/hidapi (hidapi 0.14.0), static build,
+#              no tests/examples. cmake_minimum_required bumped to 3.5 to satisfy
+#              modern CMake's compatibility requirement.
+# CMake target exposed: hidapi::hidapi
+#---------------------------------------------------------------------------------------------------
+
+if(BUILD_COMMERCIAL)
+  message(STATUS "Configuring hidapi 0.14.0 (bundled)...")
+
+  set(HIDAPI_BUILD_HIDTEST   OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_WITH_TESTS      OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_INSTALL_TARGETS OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_PRINT_VERSION   OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_WITH_LIBUSB     OFF CACHE BOOL "" FORCE)
+  set(HIDAPI_WITH_HIDRAW     ON  CACHE BOOL "" FORCE)
+  set(BUILD_SHARED_LIBS      OFF CACHE BOOL "" FORCE)
+
+  add_subdirectory(hidapi)
+  if(APPLE)
+    set(HIDAPI_CONCRETE_TARGET hidapi_darwin)
+  elseif(WIN32)
+    set(HIDAPI_CONCRETE_TARGET hidapi_winapi)
+  else()
+    set(HIDAPI_CONCRETE_TARGET hidapi_hidraw)
+  endif()
+
+  message(STATUS "hidapi 0.14.0 configured")
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # QuaZip (Pro edition only)
 #---------------------------------------------------------------------------------------------------
 #
-# QuaZip provides ZIP archive creation/reading built on top of minizip.
+# QuaZip provides ZIP archive creation/reading built on top of zlib's minizip.
 # Used in commercial builds to zip exported image sessions on disconnect.
 #
-# Kept bundled because the vcpkg port depends on qtbase, which would
-# conflict with the project's commercial Qt installation.
+# License: LGPL-2.1 — shipped as a static library; the LGPL-2.1 notice is
+#          reproduced in Acknowledgements.txt as required.
 #
-# License: LGPL-2.1
-# CMake target: QuaZip::QuaZip
+# CMake target exposed: QuaZip::QuaZip
 #---------------------------------------------------------------------------------------------------
 
 if(BUILD_COMMERCIAL)
@@ -182,7 +477,41 @@ endif()
 # Apply third-party library flags
 #---------------------------------------------------------------------------------------------------
 #
-# Applies warning suppression and visibility flags to internal libraries.
+# Applies warning suppression and visibility flags to internal libraries:
+#
+# Why apply flags after add_subdirectory?
+#   - Libraries define their own targets in their CMakeLists.txt
+#   - We need to modify target properties after they exist
+#   - This ensures our flags override any library defaults
+#
+# Applied flags (from LIB_FLAGS and LIB_LINK_FLAGS):
+#   Static targets  — Compile: -w, -fvisibility=hidden / Link: -fvisibility=hidden
+#   Shared targets  — Compile: -w only (-fvisibility=hidden is deliberately omitted;
+#                     applying it to a shared library hides all exported symbols and
+#                     causes undefined-symbol errors in the final executable)
+#
+# Target checks (if(TARGET ...)):
+#   - Verifies target exists before modifying it
+#   - Prevents errors if library subdirectory is missing
+#   - Allows conditional library builds
+#
+# Libraries configured:
+#   kissfft        - FFT library (static)
+#   QCodeEditor    - Syntax highlighting editor (static, Qt-based)
+#   QSimpleUpdater - Auto-update framework (static, Qt-based)
+#   mdf            - MDF4 file parser (static, requires ZLIB, EXPAT)
+#   usb-1.0        - Raw USB driver (static, commercial builds only)
+#   hidapi         - HID device driver (static, commercial builds only)
+#
+# Not applied to:
+#   OpenSSL - Uses precompiled binaries (no compilation flags needed)
+#   ZLIB    - Flags applied during FetchContent configuration
+#   EXPAT   - Flags applied during FetchContent configuration
+#
+# Effect:
+#   - Cleaner build output (no third-party warnings)
+#   - Smaller binaries (hidden symbols on static targets)
+#   - Faster linking (fewer exported symbols)
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -209,12 +538,14 @@ function(configure_third_party_lib TARGET_NAME)
   endif()
 endfunction()
 
+configure_third_party_lib(kissfft)
 configure_third_party_lib(QCodeEditor)
 configure_third_party_lib(QSimpleUpdater)
 configure_third_party_lib(mdf)
 
 if(BUILD_COMMERCIAL)
   configure_third_party_lib(usb-1.0)
+  configure_third_party_lib(${HIDAPI_CONCRETE_TARGET})
   configure_third_party_lib(QuaZip)
 endif()
 
