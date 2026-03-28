@@ -354,7 +354,7 @@ void API::GRPC::GRPCServer::hotpathTxData(const IO::ByteArrayPtr& data)
  */
 void API::GRPC::GRPCServer::exportProto(const QString& filePath)
 {
-  ProtoGenerator::exportToFile(filePath);
+  (void)ProtoGenerator::exportToFile(filePath);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -37,6 +37,7 @@
 #include "API/Server.h"
 #include "Misc/Utilities.h"
 #include "Misc/WorkspaceManager.h"
+#include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
 // Default repository URL
@@ -63,6 +64,7 @@ Misc::ExtensionManager::ExtensionManager()
   , m_totalDownloads(0)
   , m_pendingManifests(0)
   , m_pendingExtensionMetas(0)
+  , m_dashboardWasAvailable(false)
 {
   // Load repository list from settings, default to community repo
   const auto saved = m_settings.value("ExtensionRepositories").toStringList();
@@ -1222,6 +1224,9 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (id.isEmpty())
     return;
 
+  // Clear user-closed flag so the plugin can auto-restore in future sessions
+  m_userClosedPlugins.remove(id);
+
   if (isPluginRunning(id)) {
     m_pluginOutput[id] += QStringLiteral("[Already running]\n");
     Q_EMIT pluginOutputChanged(id);
@@ -1498,6 +1503,11 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
   if (it == m_plugins.end())
     return;
 
+  // Track plugins the user closes while the dashboard is active so we don't
+  // relaunch them automatically when the dashboard is shown again
+  if (UI::Dashboard::instance().available())
+    m_userClosedPlugins.insert(id);
+
   auto* process = it.value();
   m_pluginOutput[id] += QStringLiteral("[Stopping...]\n");
   Q_EMIT pluginOutputChanged(id);
@@ -1569,8 +1579,9 @@ void Misc::ExtensionManager::stopAllPlugins()
 /**
  * @brief Restores plugins that were running in the previous session.
  *
- * Reads the saved plugin ID list from QSettings and launches each one.
- * Called after the extension catalog is loaded and plugins are installed.
+ * Reads the saved plugin ID list from QSettings and launches each one,
+ * skipping any plugins that the user manually closed during the current
+ * dashboard session.
  */
 void Misc::ExtensionManager::restoreRunningPlugins()
 {
@@ -1590,8 +1601,31 @@ void Misc::ExtensionManager::restoreRunningPlugins()
 
   const auto ids = m_settings.value("RunningPlugins").toStringList();
   for (const auto& id : ids)
-    if (isInstalled(id) && !isPluginRunning(id))
+    if (isInstalled(id) && !isPluginRunning(id) && !m_userClosedPlugins.contains(id))
       launchPlugin(id);
+}
+
+/**
+ * @brief Reacts to dashboard availability changes.
+ *
+ * When the dashboard becomes available, restores previously-running plugins.
+ * When the dashboard hides, stops all running plugins (saving their IDs for
+ * later restore). User-closed plugins are tracked separately so they are not
+ * relaunched automatically.
+ */
+void Misc::ExtensionManager::onDashboardAvailableChanged()
+{
+  const bool available = UI::Dashboard::instance().available();
+
+  // Dashboard just became visible — restore plugins
+  if (available && !m_dashboardWasAvailable)
+    restoreRunningPlugins();
+
+  // Dashboard just became hidden — save & stop plugins
+  else if (!available && m_dashboardWasAvailable)
+    stopAllPlugins();
+
+  m_dashboardWasAvailable = available;
 }
 
 /**
@@ -1602,6 +1636,10 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
   auto it = m_plugins.find(id);
   if (it == m_plugins.end())
     return;
+
+  // Track as user-closed so it won't auto-relaunch on next dashboard show
+  if (UI::Dashboard::instance().available())
+    m_userClosedPlugins.insert(id);
 
   auto* process        = it.value();
   const auto remaining = QString::fromUtf8(process->readAll());

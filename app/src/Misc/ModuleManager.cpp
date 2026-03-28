@@ -438,9 +438,12 @@ void Misc::ModuleManager::initializeQmlInterface()
   // Restore last project after all modules are wired so all signals fire correctly
   appState->restoreLastProject();
 
-  // Refresh extensions and restore previously-running plugins after catalog loads
+  // Refresh extensions; plugins auto-launch/stop with the dashboard
   miscExtensionManager->refreshRepositories();
-  miscExtensionManager->restoreRunningPlugins();
+  connect(uiDashboard,
+          &UI::Dashboard::widgetCountChanged,
+          miscExtensionManager,
+          &Misc::ExtensionManager::onDashboardAvailableChanged);
 
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);

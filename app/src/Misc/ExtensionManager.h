@@ -27,6 +27,7 @@
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QProcess>
+#include <QSet>
 #include <QSettings>
 #include <QUrl>
 #include <QVariantList>
@@ -160,6 +161,7 @@ public slots:
   void stopSelectedPlugin();
   void stopAllPlugins();
   void restoreRunningPlugins();
+  void onDashboardAvailableChanged();
 
 private slots:
   void autoUpdateExtensions();
@@ -211,6 +213,8 @@ private:
   QList<QPair<QString, QUrl>> m_downloadQueue;
   QStringList m_autoUpdateQueue;
 
+  bool m_dashboardWasAvailable;
+  QSet<QString> m_userClosedPlugins;
   QMap<QString, QProcess*> m_plugins;
   QMap<QString, QString> m_pluginOutput;
   QMap<QString, QVariantMap> m_pluginMetadataCache;
