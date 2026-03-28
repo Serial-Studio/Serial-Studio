@@ -611,7 +611,15 @@ jobs:
       with:
         arch: x64
 
+    - name: '⚙️ Restore vcpkg cache'
+      id: vcpkg-cache
+      uses: actions/cache@v5
+      with:
+        path: ${{env.VCPKG_INSTALLATION_ROOT}}/installed
+        key: vcpkg-grpc-x64-windows-${{hashFiles('.github/workflows/deploy.yml')}}
+
     - name: '⚙️ Install gRPC (vcpkg)'
+      if: steps.vcpkg-cache.outputs.cache-hit != 'true'
       run: vcpkg install grpc:x64-windows protobuf:x64-windows
 
     - name: '🚧 Configure with CMake'
