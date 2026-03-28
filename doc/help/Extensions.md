@@ -45,8 +45,8 @@ When a newer version is available, the card shows an **Update** badge. Click the
 
 Plugins are external processes that connect to Serial Studio to receive live data, compute statistics, display custom visualizations, and more. Plugins can connect via:
 
-- **gRPC** (port 8888) — High-performance binary streaming. Recommended for plugins that process real-time frame data. Set `"grpc": true` in `info.json`.
-- **TCP/JSON** (port 7777) — Legacy JSON-based protocol. See the [API Reference](nav:api-reference) for details.
+- **gRPC** (port 8888) — High-performance binary streaming. Recommended for real-time frame data. See the [gRPC Server](nav:grpc-server) documentation.
+- **TCP/JSON** (port 7777) — JSON-based protocol. See the [API Reference](nav:api-reference) for details.
 
 ### Running a Plugin
 
@@ -72,6 +72,8 @@ Platform keys use the format `os/arch` or `os/*` (for universal builds):
 - **Windows**: `windows/*`, `windows/x86_64`
 
 If a plugin is not available for your platform, the Install button is disabled and an **Unavailable** badge is shown.
+
+> **Developing your own plugin?** See the [Plugin Development](nav:plugin-development) guide for the full `info.json` reference, code examples, state persistence, and distribution instructions.
 
 ## Repositories
 
@@ -153,37 +155,7 @@ Each extension has an `info.json` with metadata:
 
 #### Plugin info.json
 
-Plugins add `entry`, `runtime`, and optionally `platforms` and `grpc`:
-
-```json
-{
-  "id": "my-plugin",
-  "type": "plugin",
-  "title": "My Plugin",
-  "entry": "plugin.py",
-  "runtime": "python3",
-  "terminal": false,
-  "grpc": true,
-  "files": [
-    "info.json",
-    "plugin.py",
-    "grpc_client.py",
-    "serialstudio_pb2.py",
-    "serialstudio_pb2_grpc.py"
-  ],
-  "platforms": {
-    "darwin/*":  { "entry": "run.sh",  "runtime": "", "files": ["run.sh"] },
-    "linux/*":   { "entry": "run.sh",  "runtime": "", "files": ["run.sh"] },
-    "windows/*": { "entry": "run.cmd", "runtime": "", "files": ["run.cmd"] }
-  }
-}
-```
-
-- `runtime: ""` means the entry is a native executable (no interpreter).
-- `terminal: true` opens the plugin in a system terminal window.
-- `grpc: true` indicates the plugin uses gRPC for data streaming (port 8888). Serial Studio will ensure the gRPC server is running before launching the plugin.
-- Platform-specific `files` are merged with base `files` during installation.
-- The `run.sh`/`run.cmd` scripts should auto-install `grpcio` via pip if not present (using a local venv).
+Plugins add `entry`, `runtime`, and optionally `platforms` and `grpc` fields. See the [Plugin Development](nav:plugin-development) guide for the complete reference and examples.
 
 #### Field Reference
 
@@ -218,22 +190,15 @@ https://raw.githubusercontent.com/your-org/extensions/main/manifest.json
 
 ## Plugin State Persistence
 
-Plugin state (open windows, settings, configurations) is saved in the project file alongside widget layout data. This means different projects can have different plugin setups — a project monitoring temperature might have gauge windows configured differently than one monitoring audio.
+Plugin state (open windows, settings, configurations) is saved in the project file alongside widget layout data. This means different projects can have different plugin setups.
 
-State is saved automatically:
-- When the device disconnects
-- When the plugin is closed
-- When Serial Studio exits
+State is saved automatically when the device disconnects, the plugin is stopped, or Serial Studio exits. State is restored when the plugin starts or a new device connects. Plugins that were running when Serial Studio closed are automatically relaunched on the next startup.
 
-State is restored automatically:
-- When the plugin starts (from saved project data)
-- When a new device connects (project may have changed)
-
-Plugins that were running when Serial Studio closed are automatically relaunched on the next startup.
+For details on using the state persistence API from code, see the [Plugin Development](nav:plugin-development) guide.
 
 ## API Access
 
-The Extension Manager is accessible via the [API](nav:api-reference) on TCP port 7777 or gRPC port 8888:
+The Extension Manager is accessible via the [API](nav:api-reference) on TCP port 7777 or [gRPC](nav:grpc-server) port 8888:
 
 | Command | Description |
 |---------|-------------|
@@ -247,17 +212,6 @@ The Extension Manager is accessible via the [API](nav:api-reference) on TCP port
 | `extensions.listRepositories` | List repository URLs (Pro only). |
 | `extensions.addRepository` | Add a repository URL (Pro only). |
 | `extensions.removeRepository` | Remove a repository by index (Pro only). |
-
-### Lifecycle Events
-
-The API server broadcasts events to all connected clients:
-
-| Event | When |
-|-------|------|
-| `{"event": "connected"}` | Device connected |
-| `{"event": "disconnected"}` | Device disconnected |
-
-Plugins should listen for these to save/restore their state at the appropriate times.
 
 ## Installed Extension Location
 
