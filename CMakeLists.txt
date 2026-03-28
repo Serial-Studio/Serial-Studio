@@ -40,10 +40,24 @@ cmake_minimum_required(VERSION 3.20)
 #---------------------------------------------------------------------------------------------------
 
 if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  # Check for system-installed vcpkg first, then fall back to local clone
-  find_program(_VCPKG_EXE vcpkg HINTS ENV VCPKG_ROOT "$ENV{HOME}/.vcpkg" "$ENV{HOME}/vcpkg")
-  if(_VCPKG_EXE)
-    get_filename_component(VCPKG_ROOT "${_VCPKG_EXE}" DIRECTORY)
+  # Try well-known environment variables first (GitHub runners set
+  # VCPKG_INSTALLATION_ROOT; local installs often set VCPKG_ROOT).
+  # Only accept a candidate if scripts/buildsystems/vcpkg.cmake exists.
+  set(_VCPKG_CANDIDATE_ROOTS
+    "$ENV{VCPKG_INSTALLATION_ROOT}"
+    "$ENV{VCPKG_ROOT}"
+  )
+
+  set(_VCPKG_FOUND FALSE)
+  foreach(_candidate IN LISTS _VCPKG_CANDIDATE_ROOTS)
+    if(_candidate AND EXISTS "${_candidate}/scripts/buildsystems/vcpkg.cmake")
+      set(VCPKG_ROOT "${_candidate}")
+      set(_VCPKG_FOUND TRUE)
+      break()
+    endif()
+  endforeach()
+
+  if(_VCPKG_FOUND)
     message(STATUS "Using system vcpkg: ${VCPKG_ROOT}")
   else()
     set(VCPKG_ROOT "${CMAKE_BINARY_DIR}/_vcpkg")
