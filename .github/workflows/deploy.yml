@@ -540,7 +540,7 @@ jobs:
 #-------------------------------------------------------------------------------
 
   build-macos-intel:
-    runs-on: macos-15-large
+    runs-on: macos-latest
     name: '🍎 macOS (x86_64)'
     steps:
     - name: '🧰 Checkout'
@@ -548,18 +548,22 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: '⚙️ Install dependencies'
+    - name: '⚙️ Install x86_64 Homebrew and dependencies'
       run: |
-        brew install grpc protobuf
+        if [ ! -f /usr/local/bin/brew ]; then
+          arch -x86_64 /bin/bash -c \
+            "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+        arch -x86_64 /usr/local/bin/brew install grpc protobuf
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
       if: env.INSTALL_QT_MACOS == 'false'
       with:
         path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64-intel
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-intel
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64
 
     - name: '⚙️ Install Qt'
       shell: bash
@@ -569,7 +573,7 @@ jobs:
         QT_ARCH: x64
         QT_USERNAME: ${{secrets.QT_USERNAME}}
         QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64-intel
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
       run: |
         chmod +x ./scripts/install-qt.sh
         ./scripts/install-qt.sh
@@ -579,15 +583,15 @@ jobs:
       uses: actions/cache/save@v5
       with:
         path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64-intel
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
           ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64-intel
+        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64
 
     - name: '⚙️ Add Qt to PATH'
       shell: bash
       env:
         QT_VERSION: ${{env.QT_VERSION_MACOS}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64-intel
+        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
       run: |
         export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
         export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
@@ -613,12 +617,15 @@ jobs:
         SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
+        X86_PREFIX=$(arch -x86_64 /usr/local/bin/brew --prefix)
         cmake -B build \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+          -DCMAKE_OSX_ARCHITECTURES=x86_64 \
+          -DCMAKE_PREFIX_PATH="${X86_PREFIX};${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
