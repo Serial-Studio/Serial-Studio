@@ -400,7 +400,12 @@ jobs:
 
     - name: '⚙️ Install dependencies'
       run: |
-        brew install autoconf autoconf-archive automake libtool grpc protobuf
+        brew install autoconf autoconf-archive automake libtool
+
+    - name: '⚙️ Build universal gRPC'
+      run: |
+        chmod +x ./scripts/build-universal-grpc.sh
+        ./scripts/build-universal-grpc.sh "${GITHUB_WORKSPACE}/grpc-universal"
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
@@ -470,6 +475,8 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
           -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DCMAKE_PREFIX_PATH="${GITHUB_WORKSPACE}/grpc-universal;${CMAKE_PREFIX_PATH}" \
+          -DOPENSSL_ROOT_DIR="${GITHUB_WORKSPACE}/grpc-universal" \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
