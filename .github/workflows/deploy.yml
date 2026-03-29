@@ -116,9 +116,15 @@ jobs:
           libxkbcommon-dev \
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev \
-          libgrpc++-dev \
-          libprotobuf-dev \
-          protobuf-compiler-grpc
+    - name: '⚙️ Download prebuilt gRPC'
+      run: |
+        gh release download v1.78.1 \
+          -R alex-spataru/gRPC-Builds \
+          -p "grpc-1.78.1-linux-x86_64.tar.gz"
+        mkdir -p ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-1.78.1-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
@@ -183,6 +189,7 @@ jobs:
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
@@ -279,9 +286,15 @@ jobs:
           libxkbcommon-dev \
           libxkbcommon-x11-0 \
           libxkbcommon-x11-dev \
-          libgrpc++-dev \
-          libprotobuf-dev \
-          protobuf-compiler-grpc
+    - name: '⚙️ Download prebuilt gRPC'
+      run: |
+        gh release download v1.78.1 \
+          -R alex-spataru/gRPC-Builds \
+          -p "grpc-1.78.1-linux-aarch64.tar.gz"
+        mkdir -p ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-1.78.1-linux-aarch64.tar.gz -C ${{github.workspace}}/grpc-prefix
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
@@ -344,6 +357,7 @@ jobs:
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
           -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
@@ -391,16 +405,22 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
-    name: '🍎 macOS (arm64)'
+    name: '🍎 macOS (universal)'
     steps:
     - name: '🧰 Checkout'
       uses: actions/checkout@v5
       with:
         submodules: 'recursive'
 
-    - name: '⚙️ Install dependencies'
+    - name: '⚙️ Download prebuilt gRPC (universal)'
       run: |
-        brew install grpc protobuf
+        gh release download v1.78.1 \
+          -R alex-spataru/gRPC-Builds \
+          -p "grpc-1.78.1-macos-universal.tar.gz"
+        mkdir -p ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-1.78.1-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
@@ -469,6 +489,8 @@ jobs:
           -DENABLE_GRPC=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+          -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+          -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
@@ -504,12 +526,12 @@ jobs:
         npm install --global create-dmg
         rm LICENSE.md
         create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg"
+        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
 
     - name: '📋 Notarize'
       shell: bash
       env:
-        PRODUCT_PATH: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
+        PRODUCT_PATH: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
         APPLE_ID: ${{secrets.APPLE_NOTARIZATION_USERNAME}}
         APP_PASSWORD: ${{secrets.APPLE_NOTARIZATION_PASSWORD}}
         TEAM_ID: ${{secrets.APPLE_NOTARIZATION_TEAMID}}
@@ -525,172 +547,15 @@ jobs:
     - name: '📌 Staple'
       shell: bash
       run: |
-        PRODUCT="${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg"
+        PRODUCT="${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg"
         echo "Stapling $PRODUCT..."
         xcrun stapler staple "$PRODUCT"
 
     - name: '📤 Upload artifact: DMG'
       uses: actions/upload-artifact@v5
       with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-arm64.dmg
-
-#-------------------------------------------------------------------------------
-# macOS build (x86_64)
-#-------------------------------------------------------------------------------
-
-  build-macos-intel:
-    runs-on: macos-latest
-    name: '🍎 macOS (x86_64)'
-    steps:
-    - name: '🧰 Checkout'
-      uses: actions/checkout@v5
-      with:
-        submodules: 'recursive'
-
-    - name: '⚙️ Install x86_64 Homebrew and dependencies'
-      run: |
-        if [ ! -f /usr/local/bin/brew ]; then
-          arch -x86_64 /bin/bash -c \
-            "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        fi
-        arch -x86_64 /usr/local/bin/brew install grpc protobuf
-
-    - name: '⚙️ Restore Qt Cache'
-      uses: actions/cache/restore@v5
-      if: env.INSTALL_QT_MACOS == 'false'
-      with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64
-
-    - name: '⚙️ Install Qt'
-      shell: bash
-      if: env.INSTALL_QT_MACOS == 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_MACOS}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    - name: '⚙️ Save Qt Cache'
-      if: env.INSTALL_QT_MACOS == 'true'
-      uses: actions/cache/save@v5
-      with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ${{env.USERPROFILE}}/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x64
-
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_MACOS}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
-
-    - name: '⚙️ Install CMake'
-      uses: lukka/get-cmake@latest
-      with:
-        useLocalCache: true
-
-    - name: '⚙️ Install Node'
-      uses: actions/setup-node@v6
-      with:
-        node-version: 22
-
-    - name: '🚧 Configure with CMake'
-      env:
-        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
-        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
-        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
-      run: |
-        X86_PREFIX=$(arch -x86_64 /usr/local/bin/brew --prefix)
-        cmake -B build \
-          -DPRODUCTION_OPTIMIZATION=ON \
-          -DENABLE_HARDENING=ON \
-          -DENABLE_GRPC=ON \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
-          -DCMAKE_OSX_ARCHITECTURES=x86_64 \
-          -DCMAKE_PREFIX_PATH="${X86_PREFIX};${CMAKE_PREFIX_PATH}" \
-          -DBUILD_COMMERCIAL=ON \
-          -DBUILD_GPL3=OFF
-
-    - name: '🚧 Build application'
-      run: cmake --build build --config Release -j 16
-
-    - name: '📦 Package application'
-      run: |
-        cd build
-        cpack --verbose
-
-    - name: '🪪 Import Certificates'
-      uses: apple-actions/import-codesign-certs@v6
-      with:
-        p12-file-base64: ${{secrets.APPLE_CERTIFICATES_P12}}
-        p12-password: ${{secrets.APPLE_CERTIFICATES_P12_PASSWORD}}
-
-    - name: '💿 Mount DMG and copy application'
-      run: |
-        VOLUME=$(yes | hdiutil attach ./build/*.dmg -nobrowse | grep "Volumes" | awk '{print $3}')
-        cp -a "$VOLUME/${{env.EXECUTABLE}}.app" "${{env.APPLICATION}}.app"
-        hdiutil detach "$VOLUME"
-
-    - name: '✍🏻 Sign Application with Entitlements'
-      run: |
-        codesign --force --deep --options runtime \
-          --entitlements "${GITHUB_WORKSPACE}/app/deploy/macOS/Serial-Studio.entitlements" \
-          --sign "${{secrets.APPLE_APPID_TEAM_ID}}" \
-          "${{env.APPLICATION}}.app"
-
-    - name: '💽 Create nice DMG'
-      run: |
-        npm install --global create-dmg
-        rm LICENSE.md
-        create-dmg "${{env.APPLICATION}}.app" --dmg-title="${{env.APPLICATION}}"
-        mv "${{env.APPLICATION}} ${{env.VERSION}}.dmg" "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x64.dmg"
-
-    - name: '📋 Notarize'
-      shell: bash
-      env:
-        PRODUCT_PATH: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x64.dmg
-        APPLE_ID: ${{secrets.APPLE_NOTARIZATION_USERNAME}}
-        APP_PASSWORD: ${{secrets.APPLE_NOTARIZATION_PASSWORD}}
-        TEAM_ID: ${{secrets.APPLE_NOTARIZATION_TEAMID}}
-      run: |
-        echo "Submitting $PRODUCT_PATH for notarization..."
-        xcrun notarytool submit "$PRODUCT_PATH" \
-          --apple-id "$APPLE_ID" \
-          --password "$APP_PASSWORD" \
-          --team-id "$TEAM_ID" \
-          --wait \
-          --output-format json
-
-    - name: '📌 Staple'
-      shell: bash
-      run: |
-        PRODUCT="${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x64.dmg"
-        echo "Stapling $PRODUCT..."
-        xcrun stapler staple "$PRODUCT"
-
-    - name: '📤 Upload artifact: DMG'
-      uses: actions/upload-artifact@v5
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x64.dmg
-        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS-x64.dmg
+        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
+        path: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
 
 #-------------------------------------------------------------------------------
 # Windows build (MSVC 2022 x86_64)
@@ -760,21 +625,15 @@ jobs:
       with:
         arch: x64
 
-    - name: '⚙️ Install Conan'
-      run: pip install conan
-
-    - name: '⚙️ Install gRPC (Conan)'
+    - name: '⚙️ Download prebuilt gRPC'
       run: |
-        conan profile detect --force
-        conan install --requires="grpc/1.78.1" `
-          -g CMakeDeps -g CMakeToolchain `
-          -s build_type=Release `
-          -s compiler.cppstd=20 `
-          -s compiler.version=193 `
-          -s:b compiler.cppstd=20 `
-          -s:b compiler.version=193 `
-          --output-folder="${{github.workspace}}/conan-deps" `
-          --build=missing
+        gh release download v1.78.1 `
+          -R alex-spataru/gRPC-Builds `
+          -p "grpc-1.78.1-windows-x86_64.zip"
+        mkdir "${{github.workspace}}\grpc-prefix"
+        7z x grpc-1.78.1-windows-x86_64.zip -o"${{github.workspace}}\grpc-prefix"
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '🚧 Configure with CMake'
       env:
@@ -785,7 +644,7 @@ jobs:
         cmake -B build `
           -DCMAKE_CXX_COMPILER=cl `
           -DCMAKE_C_COMPILER=cl `
-          -DCMAKE_TOOLCHAIN_FILE="${{github.workspace}}/conan-deps/conan_toolchain.cmake" `
+          -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix" `
           -DPRODUCTION_OPTIMIZATION=ON `
           -DENABLE_HARDENING=ON `
           -DENABLE_GRPC=ON `
@@ -862,7 +721,6 @@ jobs:
     name: '🗂 Create release and upload artifacts'
     needs:
       - build-macos
-      - build-macos-intel
       - build-linux
       - build-windows
       - build-linux-arm64

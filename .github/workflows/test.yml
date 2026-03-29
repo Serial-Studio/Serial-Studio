@@ -103,9 +103,15 @@ jobs:
           libxkbcommon-x11-dev \
           nodejs \
           npm \
-          libgrpc++-dev \
-          libprotobuf-dev \
-          protobuf-compiler-grpc
+    - name: '⚙️ Download prebuilt gRPC'
+      run: |
+        gh release download v1.78.1 \
+          -R alex-spataru/gRPC-Builds \
+          -p "grpc-1.78.1-linux-x86_64.tar.gz"
+        mkdir -p ${{github.workspace}}/grpc-prefix
+        tar -xzf grpc-1.78.1-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: '⚙️ Restore Qt Cache'
       uses: actions/cache/restore@v5
@@ -170,6 +176,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON \
+          -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix;${CMAKE_PREFIX_PATH}" \
           -DBUILD_COMMERCIAL=ON \
           -DBUILD_GPL3=OFF
 
