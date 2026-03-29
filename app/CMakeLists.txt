@@ -779,6 +779,7 @@ if(ENABLE_GRPC)
     target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE
       WIN32_LEAN_AND_MEAN
       NOMINMAX
+      _WINSOCKAPI_
     )
   endif()
 endif()
