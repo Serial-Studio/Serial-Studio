@@ -1001,7 +1001,7 @@ endif()
 # dynamic symbol table.
 #---------------------------------------------------------------------------------------------------
 
-if(BUILD_COMMERCIAL AND CMAKE_BUILD_TYPE STREQUAL "Release")
+if(BUILD_COMMERCIAL AND PRODUCTION_OPTIMIZATION)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN ON

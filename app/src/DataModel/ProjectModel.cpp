@@ -347,18 +347,7 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
                                                 const QVariant& value)
 {
-  const auto opMode = AppState::instance().operationMode();
-  if (opMode != SerialStudio::ProjectFile || m_filePath.isEmpty())
-    return;
-
-  const bool ioConnected = IO::ConnectionManager::instance().isConnected();
-#ifdef BUILD_COMMERCIAL
-  const bool mqttSubscribed =
-    MQTT::Client::instance().isConnected() && MQTT::Client::instance().isSubscriber();
-#else
-  const bool mqttSubscribed = false;
-#endif
-  if (!ioConnected && !mqttSubscribed)
+  if (m_filePath.isEmpty())
     return;
 
   auto obj            = m_widgetSettings.value(widgetId).toObject();
@@ -2294,6 +2283,15 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
     m_widgetSettings.insert(Keys::kActiveGroupSubKey, groupId);
   else
     m_widgetSettings.remove(Keys::kActiveGroupSubKey);
+
+  // Silent disk write — no signals, no reload
+  if (!m_filePath.isEmpty()) {
+    QFile file(m_filePath);
+    if (file.open(QFile::WriteOnly)) {
+      file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+      file.close();
+    }
+  }
 
   Q_EMIT activeGroupIdChanged();
 }

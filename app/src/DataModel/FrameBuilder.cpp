@@ -292,6 +292,30 @@ void DataModel::FrameBuilder::onConnectedChanged()
     if (action.autoExecuteOnConnect)
       IO::ConnectionManager::instance().writeData(get_tx_bytes(action));
 
+  // Pre-build per-source frames so the dashboard configures all widgets
+  // immediately instead of waiting for each source to send its first data
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  if (sources.size() > 1) {
+    for (const auto& src : sources) {
+      DataModel::Frame srcFrame;
+      srcFrame.sourceId                   = src.sourceId;
+      srcFrame.title                      = m_frame.title;
+      srcFrame.actions                    = m_frame.actions;
+      srcFrame.containsCommercialFeatures = m_frame.containsCommercialFeatures;
+      for (const auto& g : m_frame.groups)
+        if (g.sourceId == src.sourceId)
+          srcFrame.groups.push_back(g);
+
+      if (!srcFrame.groups.empty()) {
+        m_sourceFrames.insert(src.sourceId, srcFrame);
+        hotpathTxFrame(srcFrame);
+      }
+    }
+
+    return;
+  }
+
+  // Single-source image-only projects also need upfront configuration
   const bool allImageGroups =
     !m_frame.groups.empty()
     && std::all_of(m_frame.groups.begin(), m_frame.groups.end(), [](const DataModel::Group& g) {

@@ -555,6 +555,11 @@ const DataModel::Frame& UI::Dashboard::processedFrame()
  */
 const DSP::AxisData& UI::Dashboard::fftData(const int index) const
 {
+  if (index < 0 || index >= m_fftValues.size()) [[unlikely]] {
+    static const DSP::AxisData kEmpty;
+    return kEmpty;
+  }
+
   return m_fftValues[index];
 }
 
@@ -566,6 +571,11 @@ const DSP::AxisData& UI::Dashboard::fftData(const int index) const
  */
 const DSP::GpsSeries& UI::Dashboard::gpsSeries(const int index) const
 {
+  if (index < 0 || index >= m_gpsValues.size()) [[unlikely]] {
+    static const DSP::GpsSeries kEmpty;
+    return kEmpty;
+  }
+
   return m_gpsValues[index];
 }
 
@@ -577,6 +587,11 @@ const DSP::GpsSeries& UI::Dashboard::gpsSeries(const int index) const
  */
 const DSP::LineSeries& UI::Dashboard::plotData(const int index) const
 {
+  if (index < 0 || index >= m_pltValues.size()) [[unlikely]] {
+    static const DSP::LineSeries kEmpty{};
+    return kEmpty;
+  }
+
   return m_pltValues[index];
 }
 
@@ -588,6 +603,11 @@ const DSP::LineSeries& UI::Dashboard::plotData(const int index) const
  */
 const DSP::MultiLineSeries& UI::Dashboard::multiplotData(const int index) const
 {
+  if (index < 0 || index >= m_multipltValues.size()) [[unlikely]] {
+    static const DSP::MultiLineSeries kEmpty{};
+    return kEmpty;
+  }
+
   return m_multipltValues[index];
 }
 
@@ -600,6 +620,11 @@ const DSP::MultiLineSeries& UI::Dashboard::multiplotData(const int index) const
  */
 const DSP::LineSeries3D& UI::Dashboard::plotData3D(const int index) const
 {
+  if (index < 0 || index >= m_plotData3D.size()) [[unlikely]] {
+    static const DSP::LineSeries3D kEmpty;
+    return kEmpty;
+  }
+
   return m_plotData3D[index];
 }
 #endif

@@ -416,6 +416,12 @@ void UI::Taskbar::setActiveGroupId(int groupId)
 {
   saveLayout();
 
+  // Persist active group so it survives save/load cycles
+  // Skip during model rebuilds (disconnect/reset) to avoid overwriting the
+  // user's saved selection
+  if (!m_rebuildInProgress)
+    DataModel::ProjectModel::instance().setActiveGroupId(groupId);
+
   // Reset models and window state
   m_windowIDs.clear();
   m_taskbarButtons->clear();
