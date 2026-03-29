@@ -542,6 +542,10 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 if(ENABLE_GRPC)
+  find_package(absl CONFIG REQUIRED)
+  find_package(utf8_range CONFIG QUIET)
+  find_package(re2 CONFIG REQUIRED)
+  find_package(Protobuf CONFIG REQUIRED)
   find_package(gRPC CONFIG REQUIRED)
 
   # Locate the gRPC C++ plugin for protoc
