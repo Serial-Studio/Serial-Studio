@@ -565,6 +565,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
       dataset.fft             = true;
       dataset.plt             = true;
       dataset.groupId         = 0;
+      dataset.datasetId       = index - 1;
       dataset.index           = index;
       dataset.value           = channel;
       dataset.pltMax          = maxValue;
@@ -606,10 +607,11 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
   datasets.reserve(channels.count());
   for (const auto& channel : std::as_const(channels)) {
     DataModel::Dataset dataset;
-    dataset.groupId = 0;
-    dataset.index   = idx;
-    dataset.plt     = false;
-    dataset.value   = channel;
+    dataset.groupId   = 0;
+    dataset.datasetId = idx - 1;
+    dataset.index     = idx;
+    dataset.plt       = false;
+    dataset.value     = channel;
 
     if (m_quickPlotHasHeader && idx > 0 && idx - 1 < m_quickPlotChannelNames.size())
       dataset.title = m_quickPlotChannelNames[idx - 1];

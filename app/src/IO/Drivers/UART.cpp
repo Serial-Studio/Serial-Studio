@@ -575,6 +575,10 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
+  // Ensure device list is populated so the clamp range is correct
+  if (m_deviceNames.isEmpty())
+    refreshSerialDevices();
+
   // Clamp to valid range
   if (portIndex < portList().count())
     m_portIndex = portIndex;
@@ -979,6 +983,10 @@ bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
 {
   if (id.isEmpty())
     return false;
+
+  // Ensure device list is populated so setPortIndex() can clamp correctly
+  if (m_deviceNames.isEmpty())
+    refreshSerialDevices();
 
   const auto ports     = validPorts();
   const auto savedVid  = id.value(QStringLiteral("vid")).toString();

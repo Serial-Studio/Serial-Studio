@@ -1055,6 +1055,17 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
  */
 void IO::ConnectionManager::syncUiDriverToLive()
 {
+  if (m_syncingFromProject)
+    return;
+
+  // In multi-source mode each live driver has its own settings from the
+  // project file.  Blindly copying the shared UI driver into device 0 would
+  // overwrite source 0's correct port with whatever source the editor last
+  // loaded into the UI driver.
+  const auto& srcs = DataModel::ProjectModel::instance().sources();
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile && srcs.size() > 1)
+    return;
+
   HAL_Driver* uiDriver = activeUiDriver();
   if (!uiDriver)
     return;

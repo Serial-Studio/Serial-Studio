@@ -65,7 +65,6 @@ typedef enum {
   kDatasetView_FFT_SamplingRate,
   kDatasetView_xAxis,
   kDatasetView_Overview,
-  kDatasetView_Source
 } DatasetItem;
 
 typedef enum {
@@ -751,7 +750,7 @@ void DataModel::ProjectEditor::buildTreeModel()
       datasetItem->setData(dIcon, TreeViewIcon);
       datasetItem->setData(dataset.title, TreeViewText);
       datasetItem->setData(dataset.index, TreeViewFrameIndex);
-      datasetItem->setData(group.sourceId, TreeViewSourceId);
+      datasetItem->setData(dataset.sourceId, TreeViewSourceId);
       datasetItem->setData(QString(), TreeViewSourceName);
       groupItem->appendRow(datasetItem);
       m_datasetItems.insert(datasetItem, dataset);
@@ -907,10 +906,9 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
   m_groupModel->appendRow(titleItem);
 
   const auto& sources    = DataModel::ProjectModel::instance().sources();
-  const bool isImageGrp  = group.widget == QLatin1String("image");
   const bool multiSource = sources.size() > 1;
 
-  if (isImageGrp && multiSource) {
+  if (multiSource) {
     QStringList sourceLabels;
     for (const auto& src : sources)
       sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
@@ -1663,34 +1661,6 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
                      ParameterDescription);
   model->appendRow(titleItem);
 
-  const auto& sources = DataModel::ProjectModel::instance().sources();
-  if (sources.size() > 1) {
-    QStringList sourceLabels;
-    for (const auto& src : sources)
-      sourceLabels.append(src.title.isEmpty() ? tr("Device %1").arg(QChar('A' + src.sourceId))
-                                              : src.title);
-
-    int sourceIndex = 0;
-    for (int i = 0; i < static_cast<int>(sources.size()); ++i) {
-      if (sources[i].sourceId == dataset.sourceId) {
-        sourceIndex = i;
-        break;
-      }
-    }
-
-    auto* srcItem = new QStandardItem();
-    srcItem->setEditable(true);
-    srcItem->setData(true, Active);
-    srcItem->setData(ComboBox, WidgetType);
-    srcItem->setData(sourceLabels, ComboBoxData);
-    srcItem->setData(sourceIndex, EditableValue);
-    srcItem->setData(kDatasetView_Source, ParameterType);
-    srcItem->setData(tr("Input Device"), ParameterName);
-    srcItem->setData(tr("Select which connected device provides this dataset's values"),
-                     ParameterDescription);
-    model->appendRow(srcItem);
-  }
-
   const auto& pm = DataModel::ProjectModel::instance();
 
   auto* indexItem = new QStandardItem();
@@ -2189,7 +2159,10 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
     const int srcIdx    = value.toInt();
     if (srcIdx >= 0 && srcIdx < static_cast<int>(sources.size())) {
       m_selectedGroup.sourceId = sources[srcIdx].sourceId;
-      pm.updateGroup(groupId, m_selectedGroup, false);
+      for (auto& ds : m_selectedGroup.datasets)
+        ds.sourceId = m_selectedGroup.sourceId;
+
+      pm.updateGroup(groupId, m_selectedGroup, true);
     }
   } else if (id == kGroupView_Widget) {
     const auto keys     = m_groupWidgets.keys();
@@ -2493,14 +2466,6 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     case kDatasetView_FFT_SamplingRate:
       m_selectedDataset.fftSamplingRate = value.toInt();
       break;
-    case kDatasetView_Source: {
-      const auto& sources = DataModel::ProjectModel::instance().sources();
-      const int srcIdx    = value.toInt();
-      if (srcIdx >= 0 && srcIdx < static_cast<int>(sources.size()))
-        m_selectedDataset.sourceId = sources[srcIdx].sourceId;
-
-      break;
-    }
     default:
       break;
   }
@@ -2528,7 +2493,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
 
     Q_EMIT selectedTextChanged();
   } else {
-    const bool rebuildTree = (idInt == kDatasetView_Index || idInt == kDatasetView_Source);
+    const bool rebuildTree = (idInt == kDatasetView_Index);
     pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
   }
 

@@ -587,8 +587,12 @@ void DataModel::ProjectModel::updateSourceFrameParser(int sourceId, const QStrin
  *        Source::connectionSettings.
  *
  * Calls driverProperties() on the live driver to get the current values and
- * serialises them to JSON. The driver is retrieved via SourceManager so this
- * works for both source 0 (singleton) and secondary sources (owned instances).
+ * serialises them to JSON.
+ *
+ * Uses uiDriverForBusType() instead of driverForEditing() because the caller
+ * has already put the shared UI driver into the desired state via
+ * setDriverProperty(). Calling driverForEditing() would re-apply the old
+ * saved connectionSettings and overwrite the edit that was just made.
  *
  * @param sourceId The source whose connectionSettings should be updated.
  */
@@ -597,7 +601,8 @@ void DataModel::ProjectModel::captureSourceSettings(int sourceId)
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
-  IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(sourceId);
+  const auto busType     = static_cast<SerialStudio::BusType>(m_sources[sourceId].busType);
+  IO::HAL_Driver* driver = IO::ConnectionManager::instance().uiDriverForBusType(busType);
   if (!driver)
     return;
 
