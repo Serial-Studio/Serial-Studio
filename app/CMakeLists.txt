@@ -775,6 +775,12 @@ if(ENABLE_GRPC)
     protobuf::libprotobuf
   )
   target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE ENABLE_GRPC)
+  if(WIN32)
+    target_compile_definitions(${PROJECT_EXECUTABLE} PRIVATE
+      WIN32_LEAN_AND_MEAN
+      NOMINMAX
+    )
+  endif()
 endif()
 
 #---------------------------------------------------------------------------------------------------
