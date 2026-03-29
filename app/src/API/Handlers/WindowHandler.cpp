@@ -148,7 +148,7 @@ void API::Handlers::WindowHandler::registerCommands()
     getWidgetSettingsSchema.insert("required", req);
   }
 
-  // Schema for setWidgetSetting: widgetId (string), key (string), value (any)
+  // Schema for setWidgetSetting: widgetId (string), key (string), settingValue (any)
   QJsonObject setWidgetSettingSchema;
   {
     QJsonObject props;
@@ -160,15 +160,15 @@ void API::Handlers::WindowHandler::registerCommands()
     keyProp.insert("type", "string");
     keyProp.insert("description", "The setting key");
     props.insert("key", keyProp);
-    QJsonObject valueProp;
-    valueProp.insert("description", "The setting value");
-    props.insert("value", valueProp);
+    QJsonObject settingValueProp;
+    settingValueProp.insert("description", "The setting value");
+    props.insert("settingValue", settingValueProp);
     setWidgetSettingSchema.insert("type", "object");
     setWidgetSettingSchema.insert("properties", props);
     QJsonArray req;
     req.append("widgetId");
     req.append("key");
-    req.append("value");
+    req.append("settingValue");
     setWidgetSettingSchema.insert("required", req);
   }
 
@@ -588,16 +588,16 @@ API::CommandResponse API::Handlers::WindowHandler::setWidgetSetting(const QStrin
                                                                     const QJsonObject& params)
 {
   if (!params.contains(QStringLiteral("widgetId")) || !params.contains(QStringLiteral("key"))
-      || !params.contains(QStringLiteral("value"))) {
+      || !params.contains(QStringLiteral("settingValue"))) {
     return CommandResponse::makeError(
       id,
       ErrorCode::MissingParam,
-      QStringLiteral("Missing required parameters: widgetId, key, value"));
+      QStringLiteral("Missing required parameters: widgetId, key, settingValue"));
   }
 
   const QString widget_id = params.value(QStringLiteral("widgetId")).toString();
   const QString key       = params.value(QStringLiteral("key")).toString();
-  const QVariant value    = params.value(QStringLiteral("value")).toVariant();
+  const QVariant value    = params.value(QStringLiteral("settingValue")).toVariant();
 
   auto* pm = &DataModel::ProjectModel::instance();
   QMetaObject::invokeMethod(
