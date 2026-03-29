@@ -24,6 +24,10 @@
 
 #  include "IO/Drivers/USB.h"
 
+#  ifdef Q_OS_WIN
+#    include <winsock2.h>
+#  endif
+
 #  include <QApplication>
 #  include <QJsonObject>
 #  include <QMessageBox>
