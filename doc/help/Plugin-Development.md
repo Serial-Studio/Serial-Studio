@@ -21,7 +21,7 @@
 
 Plugins are external programs that connect to Serial Studio's API to receive live data, compute statistics, display custom visualizations, or automate workflows. They run as separate processes alongside Serial Studio and communicate over the network.
 
-Plugins can be written in any language — Python, C++, Go, Rust, Node.js, etc. — and are distributed through the [Extension Manager](nav:extensions).
+Plugins can be written in any language — Python, C++, Go, Rust, Node.js, etc. — and are distributed through the [Extension Manager](Extensions.md).
 
 ### What Plugins Can Do
 
@@ -35,9 +35,10 @@ Plugins can be written in any language — Python, C++, Go, Rust, Node.js, etc. 
 
 ## How Plugins Work
 
-```
-Serial Studio ──── gRPC (port 8888) ────→ Plugin process
-               or  TCP/JSON (port 7777)
+```mermaid
+flowchart LR
+    A[Serial Studio] -->|gRPC port 8888| B[Plugin process]
+    A -->|TCP/JSON port 7777| B
 ```
 
 1. The user installs the plugin via the Extension Manager.
@@ -139,7 +140,7 @@ if __name__ == "__main__":
     main()
 ```
 
-Generate `serialstudio_pb2.py` and `serialstudio_pb2_grpc.py` from the `.proto` file (see the [gRPC Server](nav:grpc-server) guide).
+Generate `serialstudio_pb2.py` and `serialstudio_pb2_grpc.py` from the `.proto` file (see the [gRPC Server](gRPC-Server.md) guide).
 
 ---
 
@@ -284,7 +285,7 @@ for frame in stub.StreamFrames(pb.StreamRequest()):
     process(frame.frame)
 ```
 
-See the [gRPC Server](nav:grpc-server) documentation for the full service definition and stub generation instructions.
+See the [gRPC Server](gRPC-Server.md) documentation for the full service definition and stub generation instructions.
 
 ### Option 2: TCP/JSON (Simpler Setup)
 
@@ -307,7 +308,7 @@ sock.sendall(msg.encode())
 response = json.loads(sock.recv(4096).decode())
 ```
 
-See the [API Reference](nav:api-reference) for the complete command list and protocol specification.
+See the [API Reference](API-Reference.md) for the complete command list and protocol specification.
 
 ---
 

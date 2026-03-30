@@ -23,7 +23,7 @@ Serial Studio exposes its entire API via **gRPC** on **port 8888**. The gRPC ser
 - **Server-streaming RPCs** — Real-time frame and raw data push with zero polling.
 - **Cross-language support** — Python, C++, Go, Java, Rust, Node.js, C#, and more.
 
-The gRPC server shares the same command set as the [TCP/JSON API](nav:api-reference). Any command available on port 7777 can be executed via gRPC on port 8888.
+The gRPC server shares the same command set as the [TCP/JSON API](API-Reference.md). Any command available on port 7777 can be executed via gRPC on port 8888.
 
 ---
 
@@ -199,4 +199,4 @@ Enable external connections in **Preferences → Miscellaneous → Allow Externa
 - Environments without gRPC tooling.
 - MCP (Model Context Protocol) integration with AI assistants.
 
-See the [API Reference](nav:api-reference) for the complete command list (shared by both protocols).
+See the [API Reference](API-Reference.md) for the complete command list (shared by both protocols).

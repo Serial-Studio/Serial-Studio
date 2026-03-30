@@ -113,7 +113,7 @@ Complete comparison of features available in the free (GPLv3) version versus Ser
 - Smart home integration
 - Cloud data logging
 
-**Learn more:** [MQTT Integration](MQTT-Integration.md) | [Protocol Setup Guide](Protocol-Setup-Guides.md#mqtt-integration-pro)
+**Learn more:** [MQTT Integration](MQTT-Integration.md) | [Protocol Setup Guide](Protocol-Setup-Guides.md#mqtt-setup-pro)
 
 ---
 
@@ -133,7 +133,7 @@ Complete comparison of features available in the free (GPLv3) version versus Ser
 - HVAC system monitoring
 - Industrial equipment diagnostics
 
-**Learn more:** [Protocol Setup Guide](Protocol-Setup-Guides.md#modbus-setup-pro)
+**Learn more:** [Protocol Setup Guide](Protocol-Setup-Guides.md#modbus-rtu-setup-pro)
 
 ---
 
@@ -229,7 +229,7 @@ function parse(frame) {
 
 **Requirements:** Requires OpenGL-capable graphics
 
-**Learn more:** [Widget Reference - 3D Plot](Widget-Reference.md#3d-plot-group-pro)
+**Learn more:** [Widget Reference - 3D Plot](Widget-Reference.md#3d-plot-pro)
 
 ---
 
@@ -249,7 +249,7 @@ function parse(frame) {
 - Signal correlation analysis
 - Pressure-volume diagrams
 
-**Learn more:** [Widget Reference - XY Plot](Widget-Reference.md#xy-plot-group-pro)
+**Learn more:** [Widget Reference - 3D Plot](Widget-Reference.md#3d-plot-pro)
 
 ---
 
@@ -268,7 +268,7 @@ function parse(frame) {
 - High-speed logic analyzers or oscilloscopes with raw USB access
 - Industrial sensors with USB bulk transfer interfaces
 
-**Learn more:** [Data Sources - Raw USB](Data-Sources.md#raw-usb-configuration-pro)
+**Learn more:** [Data Sources - Raw USB](Data-Sources.md#raw-usb)
 
 ---
 
@@ -286,7 +286,7 @@ function parse(frame) {
 - Custom USB HID firmware (Arduino HID library, STM32 USB HID)
 - Sensors and measurement devices with HID USB class
 
-**Learn more:** [Data Sources - HID Devices](Data-Sources.md#hid-devices-configuration-pro)
+**Learn more:** [Data Sources - HID Devices](Data-Sources.md#hid-device)
 
 ---
 
@@ -304,7 +304,7 @@ function parse(frame) {
 - Physics simulations outputting telemetry to stdout
 - Named pipe bridges from long-running data acquisition software
 
-**Learn more:** [Data Sources - Process I/O](Data-Sources.md#process-io-configuration-pro)
+**Learn more:** [Data Sources - Process I/O](Data-Sources.md#process-io)
 
 ---
 
@@ -328,7 +328,7 @@ function parse(frame) {
 - UAV video downlink with flight data on the same dashboard
 - Camera Telemetry example (Python JPEG stream over UDP)
 
-**Learn more:** [Widget Reference - Image View](Widget-Reference.md#image-view-group-pro) | [Camera Telemetry Example](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples/Camera%20Telemetry)
+**Learn more:** [Widget Reference - Image View](Widget-Reference.md#image-view-pro) | [Camera Telemetry Example](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples/Camera%20Telemetry)
 
 ---
 

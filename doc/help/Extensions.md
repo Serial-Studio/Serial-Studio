@@ -45,8 +45,8 @@ When a newer version is available, the card shows an **Update** badge. Click the
 
 Plugins are external processes that connect to Serial Studio to receive live data, compute statistics, display custom visualizations, and more. Plugins can connect via:
 
-- **gRPC** (port 8888) — High-performance binary streaming. Recommended for real-time frame data. See the [gRPC Server](nav:grpc-server) documentation.
-- **TCP/JSON** (port 7777) — JSON-based protocol. See the [API Reference](nav:api-reference) for details.
+- **gRPC** (port 8888) — High-performance binary streaming. Recommended for real-time frame data. See the [gRPC Server](gRPC-Server.md) documentation.
+- **TCP/JSON** (port 7777) — JSON-based protocol. See the [API Reference](API-Reference.md) for details.
 
 ### Running a Plugin
 
@@ -73,7 +73,7 @@ Platform keys use the format `os/arch` or `os/*` (for universal builds):
 
 If a plugin is not available for your platform, the Install button is disabled and an **Unavailable** badge is shown.
 
-> **Developing your own plugin?** See the [Plugin Development](nav:plugin-development) guide for the full `info.json` reference, code examples, state persistence, and distribution instructions.
+> **Developing your own plugin?** See the [Plugin Development](Plugin-Development.md) guide for the full `info.json` reference, code examples, state persistence, and distribution instructions.
 
 ## Repositories
 
@@ -155,7 +155,7 @@ Each extension has an `info.json` with metadata:
 
 #### Plugin info.json
 
-Plugins add `entry`, `runtime`, and optionally `platforms` and `grpc` fields. See the [Plugin Development](nav:plugin-development) guide for the complete reference and examples.
+Plugins add `entry`, `runtime`, and optionally `platforms` and `grpc` fields. See the [Plugin Development](Plugin-Development.md) guide for the complete reference and examples.
 
 #### Field Reference
 
@@ -194,11 +194,11 @@ Plugin state (open windows, settings, configurations) is saved in the project fi
 
 State is saved automatically when the device disconnects, the plugin is stopped, or Serial Studio exits. State is restored when the plugin starts or a new device connects. Plugins that were running when Serial Studio closed are automatically relaunched on the next startup.
 
-For details on using the state persistence API from code, see the [Plugin Development](nav:plugin-development) guide.
+For details on using the state persistence API from code, see the [Plugin Development](Plugin-Development.md) guide.
 
 ## API Access
 
-The Extension Manager is accessible via the [API](nav:api-reference) on TCP port 7777 or [gRPC](nav:grpc-server) port 8888:
+The Extension Manager is accessible via the [API](API-Reference.md) on TCP port 7777 or [gRPC](gRPC-Server.md) port 8888:
 
 | Command | Description |
 |---------|-------------|

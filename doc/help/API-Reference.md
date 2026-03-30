@@ -406,20 +406,17 @@ echo "Data saved to CSV file"
 
 ### Message Flow
 
-```
-Client                          Serial Studio API Server
-  |                                       |
-  |-- Connect to 127.0.0.1:7777 --------->|
-  |                                       |
-  |-- Send JSON command + \n ------------>|
-  |                                       |
-  |                                    Process
-  |                                       |
-  |<----- JSON response + \n -------------|
-  |                                       |
-  |-- (keep connection open for more)---->|
-  |                                       |
-  |-- Close connection ------------------>|
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server as Serial Studio API Server
+
+    Client->>Server: Connect to 127.0.0.1:7777
+    Client->>Server: Send JSON command + \n
+    Note right of Server: Process
+    Server->>Client: JSON response + \n
+    Client->>Server: (keep connection open for more)
+    Client->>Server: Close connection
 ```
 
 ### Connection Lifecycle
@@ -454,7 +451,7 @@ status = client1.send("io.manager.getStatus")
 
 ---
 
-> **gRPC**: The entire API is also available via gRPC on port 8888, with high-performance binary streaming. See the [gRPC Server](nav:grpc-server) documentation.
+> **gRPC**: The entire API is also available via gRPC on port 8888, with high-performance binary streaming. See the [gRPC Server](gRPC-Server.md) documentation.
 
 ---
 
