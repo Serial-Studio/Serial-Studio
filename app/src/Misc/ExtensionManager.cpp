@@ -489,11 +489,23 @@ void Misc::ExtensionManager::resetRepositories()
  */
 void Misc::ExtensionManager::browseLocalRepo()
 {
-  const auto path = QFileDialog::getExistingDirectory(
-    nullptr, tr("Select Extension Repository Folder"), QDir::homePath());
+  auto *dialog = new QFileDialog(nullptr, tr("Select Extension Repository Folder"),
+                                 QDir::homePath());
 
-  if (!path.isEmpty())
-    addRepository(path);
+  dialog->setFileMode(QFileDialog::Directory);
+  dialog->setOption(QFileDialog::ShowDirsOnly, true);
+  dialog->setOption(QFileDialog::DontUseNativeDialog);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString &path) {
+    dialog->deleteLater();
+
+    if (!path.isEmpty())
+      addRepository(path);
+  });
+
+  connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
+
+  dialog->open();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1253,9 +1265,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     m_pluginOutput[id] += QStringLiteral("[Error] Plugin is not installed\n");
     Q_EMIT pluginOutputChanged(id);
     Misc::Utilities::showMessageBox(
-      tr("Plugin Error"),
-      tr("Plugin \"%1\" is not installed.").arg(id),
-      QMessageBox::Critical);
+      tr("Plugin Error"), tr("Plugin \"%1\" is not installed.").arg(id), QMessageBox::Critical);
     return;
   }
 
@@ -1300,8 +1310,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     Q_EMIT pluginOutputChanged(id);
     Misc::Utilities::showMessageBox(
       tr("Plugin Error"),
-      tr("Plugin \"%1\" requires gRPC but this build does not include gRPC support.")
-        .arg(id),
+      tr("Plugin \"%1\" requires gRPC but this build does not include gRPC support.").arg(id),
       QMessageBox::Critical);
     return;
   }
@@ -1334,10 +1343,9 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (entry.isEmpty()) {
     m_pluginOutput[id] += QStringLiteral("[Error] No 'entry' field in info.json\n");
     Q_EMIT pluginOutputChanged(id);
-    Misc::Utilities::showMessageBox(
-      tr("Plugin Error"),
-      tr("Plugin \"%1\" has no 'entry' field in info.json.").arg(id),
-      QMessageBox::Critical);
+    Misc::Utilities::showMessageBox(tr("Plugin Error"),
+                                    tr("Plugin \"%1\" has no 'entry' field in info.json.").arg(id),
+                                    QMessageBox::Critical);
     return;
   }
 
@@ -1346,9 +1354,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     m_pluginOutput[id] += QStringLiteral("[Error] Entry point not found: %1\n").arg(entryPath);
     Q_EMIT pluginOutputChanged(id);
     Misc::Utilities::showMessageBox(
-      tr("Plugin Error"),
-      tr("Entry point not found:\n%1").arg(entryPath),
-      QMessageBox::Critical);
+      tr("Plugin Error"), tr("Entry point not found:\n%1").arg(entryPath), QMessageBox::Critical);
     return;
   }
 
@@ -1356,10 +1362,9 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (!isPathSafe(entryPath, pluginDir)) {
     m_pluginOutput[id] += QStringLiteral("[Error] Invalid entry point path\n");
     Q_EMIT pluginOutputChanged(id);
-    Misc::Utilities::showMessageBox(
-      tr("Plugin Error"),
-      tr("Plugin \"%1\" has an invalid entry point path.").arg(id),
-      QMessageBox::Critical);
+    Misc::Utilities::showMessageBox(tr("Plugin Error"),
+                                    tr("Plugin \"%1\" has an invalid entry point path.").arg(id),
+                                    QMessageBox::Critical);
     return;
   }
 
@@ -1373,8 +1378,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     const auto url  = obj.value("url").toString();
 
     // Skip pip-managed dependencies — handled by run.sh/run.cmd venv
-    if (obj.contains("pip"))
-    {
+    if (obj.contains("pip")) {
       hasPipDeps = true;
       continue;
     }
@@ -1534,10 +1538,9 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     QStringLiteral("[Started] PID ") + QString::number(process->processId()) + mode + "\n";
 
   // Notify user about first-run setup when pip dependencies need installation
-  if (hasPipDeps && !QDir(pluginDir + "/venv").exists())
-  {
-    m_pluginOutput[id] += QStringLiteral(
-      "[Setup] Installing required packages — this may take a moment...\n");
+  if (hasPipDeps && !QDir(pluginDir + "/venv").exists()) {
+    m_pluginOutput[id] +=
+      QStringLiteral("[Setup] Installing required packages — this may take a moment...\n");
   }
 
   Q_EMIT pluginOutputChanged(id);

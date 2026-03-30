@@ -54,27 +54,32 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../qml/Dialogs/About.qml" line="40"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="40"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="88"/>
+        <location filename="../../qml/Dialogs/About.qml" line="89"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="89"/>
         <source>Version %1</source>
         <translation>Versie %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="98"/>
+        <location filename="../../qml/Dialogs/About.qml" line="99"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="99"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="104"/>
+        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="105"/>
         <source>All Rights Reserved</source>
         <translation>Alle Rechten Voorbehouden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="119"/>
+        <location filename="../../qml/Dialogs/About.qml" line="120"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="120"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -83,57 +88,68 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
 %1 wordt verspreid in de hoop dat het nuttig zal zijn, maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete garantie van VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General Public License voor meer details.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="138"/>
+        <location filename="../../qml/Dialogs/About.qml" line="139"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="139"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Deze configuratie is gelicenseerd voor commercieel en propriëtair gebruik. Het mag worden gebruikt in gesloten bron en commerciële toepassingen, onderhevig aan de voorwaarden van de commerciële licentie.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="152"/>
+        <location filename="../../qml/Dialogs/About.qml" line="153"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="153"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Deze configuratie is alleen voor persoonlijk en evaluatiedoeleinden. Commercieel gebruik is verboden tenzij een geldige commerciële licentie is geactiveerd.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="166"/>
+        <location filename="../../qml/Dialogs/About.qml" line="167"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="167"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Deze software wordt 'zoals het is' geleverd zonder enige garantie, expliciet of impliciet, inclusief maar niet beperkt tot de garanties van verkoopbaarheid of geschiktheid voor een bepaald doel. In geen geval zal de auteur aansprakelijk zijn voor enige schade voortkomend uit het gebruik van deze software.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="187"/>
+        <location filename="../../qml/Dialogs/About.qml" line="188"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="188"/>
         <source>Manage License</source>
         <translation>Beheer Licentie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="197"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="197"/>
         <source>Donate</source>
         <translation>Doneer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="206"/>
+        <location filename="../../qml/Dialogs/About.qml" line="207"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="207"/>
         <source>Check for Updates</source>
         <translation>Controleer op Updates</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="215"/>
+        <location filename="../../qml/Dialogs/About.qml" line="216"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="216"/>
         <source>License Agreement</source>
         <translation>Licentieovereenkomst</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="224"/>
+        <location filename="../../qml/Dialogs/About.qml" line="225"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="225"/>
         <source>Report Bug</source>
         <translation>Bug Melden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="233"/>
+        <location filename="../../qml/Dialogs/About.qml" line="234"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="234"/>
         <source>Acknowledgements</source>
         <translation>Erkenningen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="242"/>
+        <location filename="../../qml/Dialogs/About.qml" line="243"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="243"/>
         <source>Website</source>
         <translation>Website</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="257"/>
+        <location filename="../../qml/Dialogs/About.qml" line="258"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/About.qml" line="258"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -143,21 +159,26 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="167"/>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="168"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="167"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="168"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="225"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="225"/>
         <source>G-FORCE</source>
         <translation>G-KRACHT</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="258"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="258"/>
         <source>PITCH ↕</source>
         <translation>HOOGTE ↕</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="290"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Accelerometer.qml" line="290"/>
         <source>ROLL ↔</source>
         <translation>ROLL ↔</translation>
     </message>
@@ -166,41 +187,49 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>AccelerometerConfigDialog</name>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="34"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="34"/>
         <source>Accelerometer Configuration</source>
         <translation>Versnellingsmeterconfiguratie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="69"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="69"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Stel het weergavebereik en de invoereenheden van de versnellingsmeter in.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
         <source>Display Range</source>
         <translation>Weergavebereik</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
         <source>Max G:</source>
         <translation>Max G:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="114"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="114"/>
         <source>Enter max G value</source>
         <translation>Voer maximale G-waarde in</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="128"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="128"/>
         <source>Input Configuration</source>
         <translation>Invoerconfiguratie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="150"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="150"/>
         <source>Input already in G</source>
         <translation>Invoer al in G</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="180"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AccelerometerConfigDialog.qml" line="180"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -208,17 +237,20 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
 <context>
     <name>Acknowledgements</name>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="35"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="35"/>
         <source>Acknowledgements</source>
         <translation>Erkenningen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="69"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="70"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="70"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="83"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="84"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Acknowledgements.qml" line="84"/>
         <source>About Qt...</source>
         <translation>Over Qt...</translation>
     </message>
@@ -227,31 +259,37 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>ActionView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="112"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="112"/>
         <source>Change Icon</source>
         <translation>Pictogram Wijzigen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="114"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="114"/>
         <source>Change the icon used for this action</source>
         <translation>Wijzig het pictogram dat voor deze actie wordt gebruikt</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="131"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="131"/>
         <source>Duplicate</source>
         <translation>Dupliceren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="134"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="134"/>
         <source>Duplicate this action with all its settings</source>
         <translation>Dupliceer deze actie met al zijn instellingen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="144"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="144"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ActionView.qml" line="146"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ActionView.qml" line="146"/>
         <source>Delete this action from the project</source>
         <translation>Verwijder deze actie uit het project</translation>
     </message>
@@ -407,38 +445,47 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>Audio</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="70"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="70"/>
         <source>No Microphone Detected</source>
         <translation>Geen Microfoon Gedetecteerd</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="79"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="79"/>
         <source>Connect a mic or check your settings</source>
         <translation>Sluit een microfoon aan of controleer uw instellingen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="104"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="104"/>
         <source>Input Device</source>
         <translation>Invoerapparaat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="126"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="126"/>
         <source>Sample Rate</source>
         <translation>Samplefrequentie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="148"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="226"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="148"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="226"/>
         <source>Sample Format</source>
         <translation>Sampleformaat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="170"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="248"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="170"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="248"/>
         <source>Channels</source>
         <translation>Kanalen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="204"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="204"/>
         <source>Output Device</source>
         <translation>Uitvoerapparaat</translation>
     </message>
@@ -447,55 +494,69 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>AxisRangeDialog</name>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="40"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="40"/>
         <source>Axis Range Configuration</source>
         <translation>Asbereikconfiguratie</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="123"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="123"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Configureer het zichtbare bereik voor de plotassen. Waarden worden in realtime bijgewerkt terwijl u typt.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="131"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="131"/>
         <source>X Axis</source>
         <translation>X-as</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="154"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="225"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="154"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="225"/>
         <source>Minimum:</source>
         <translation>Minimum:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="166"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="166"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="237"/>
         <source>Enter min value</source>
         <translation>Voer minwaarde in</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="175"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="246"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="175"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="246"/>
         <source>Maximum:</source>
         <translation>Maximum:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="187"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="187"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="258"/>
         <source>Enter max value</source>
         <translation>Voer maxwaarde in</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="202"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="202"/>
         <source>Y Axis</source>
         <translation>Y-as</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="279"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="279"/>
         <source>Reset</source>
         <translation>Reset</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="292"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/AxisRangeDialog.qml" line="292"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -504,41 +565,49 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>BluetoothLE</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="52"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="52"/>
         <source>Device</source>
         <translation>Apparaat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="106"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="106"/>
         <source>Service</source>
         <translation>Dienst</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="142"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="142"/>
         <source>Characteristic</source>
         <translation>Kenmerk</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="200"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="200"/>
         <source>Scanning....</source>
         <translation>Scannen....</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="236"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="236"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>Geen Bluetooth-adapter Gedetecteerd</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="247"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="247"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>Sluit een Bluetooth-adapter aan of controleer uw systeeminstellingen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="274"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="274"/>
         <source>This OS is not Supported Yet.</source>
         <translation>Dit besturingssysteem wordt nog niet ondersteund.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="285"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="285"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>We zullen Serial Studio bijwerken om met dit besturingssysteem te werken zodra Qt het officieel ondersteunt.</translation>
     </message>
@@ -547,46 +616,55 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>CANBus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="55"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="55"/>
         <source>No CAN Drivers Found</source>
         <translation>Geen CAN-stuurprogramma's Gevonden</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="68"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="68"/>
         <source>Install CAN hardware drivers for your system</source>
         <translation>Installeer CAN-hardwarestuurprogramma's voor uw systeem</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="95"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="95"/>
         <source>CAN Driver</source>
         <translation>CAN-stuurprogramma</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="140"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="140"/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="172"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="172"/>
         <source>Bitrate</source>
         <translation>Bitrate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="244"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="244"/>
         <source>Flexible Data-Rate</source>
         <translation>Flexibele Data-snelheid</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="276"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="276"/>
         <source>DBC Database</source>
         <translation>DBC-database</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="280"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="280"/>
         <source>Import DBC File...</source>
         <translation>Importeer DBC-bestand...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="313"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="313"/>
         <source>No CAN Interfaces Found</source>
         <translation>Geen CAN-interfaces Gevonden</translation>
     </message>
@@ -703,6 +781,7 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>Console</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Console.qml" line="32"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Console.qml" line="32"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
@@ -777,6 +856,7 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>CsvPlayer</name>
     <message>
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="34"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/CsvPlayer.qml" line="34"/>
         <source>CSV Player</source>
         <translation>CSV-speler</translation>
     </message>
@@ -785,61 +865,73 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>DBCPreviewDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="40"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="40"/>
         <source>DBC File Preview</source>
         <translation>DBC-bestand Voorbeeld</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="166"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="166"/>
         <source>DBC File: %1</source>
         <translation>DBC-bestand: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="174"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="174"/>
         <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
         <translation>Bekijk de CAN-berichten en signalen die in een nieuw Serial Studio-project worden geïmporteerd.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="182"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="182"/>
         <source>Messages</source>
         <translation>Berichten</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="216"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="216"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="226"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="226"/>
         <source>Message Name</source>
         <translation>Berichtnaam</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="232"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="232"/>
         <source>CAN ID</source>
         <translation>CAN-ID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="239"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="239"/>
         <source>Signals</source>
         <translation>Signalen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="320"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="320"/>
         <source>No messages found in DBC file.</source>
         <translation>Geen berichten gevonden in DBC-bestand.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="338"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="338"/>
         <source>Total: %1 messages, %2 signals</source>
         <translation>Totaal: %1 berichten, %2 signalen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="347"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="347"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="361"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="361"/>
         <source>Create Project</source>
         <translation>Project Maken</translation>
     </message>
@@ -864,6 +956,7 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="114"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard.qml" line="114"/>
         <source>Dashboard %1</source>
         <translation>Dashboard %1</translation>
     </message>
@@ -872,26 +965,31 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>DashboardCanvas</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="55"/>
         <source>Set Wallpaper...</source>
         <translation>Achtergrond Instellen...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="61"/>
         <source>Clear Wallpaper</source>
         <translation>Achtergrond Wissen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="71"/>
         <source>Tile Windows</source>
         <translation>Vensters Betegelen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="90"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="90"/>
         <source>Pro features detected in this project.</source>
         <translation>Pro-functies gedetecteerd in dit project.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="92"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="92"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
         <translation>Vervangende widgets zijn actief. Koop een licentie voor volledige functionaliteit.</translation>
     </message>
@@ -900,21 +998,25 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <name>DashboardLayout</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="35"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="35"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="128"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="128"/>
         <source>API Server Active (%1)</source>
         <translation>API-server actief (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
         <source>API Server Ready</source>
         <translation>API-server gereed</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="130"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="130"/>
         <source>API Server Off</source>
         <translation>API-server uit</translation>
     </message>
@@ -924,12 +1026,16 @@ Schakel dit alleen in op vertrouwde netwerken. Onbetrouwbare clients kunnen live
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="92"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="92"/>
         <source>Pause</source>
         <translation>Pauze</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="92"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="91"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/DataGrid.qml" line="92"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
@@ -3159,91 +3265,109 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>DatasetView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="83"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="83"/>
         <source>Pro features detected in this project.</source>
         <translation>Pro-functies gedetecteerd in dit project.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="85"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="85"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Vervangende widgets worden gebruikt. Koop een licentie om volledige functionaliteit te ontgrendelen.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="124"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="124"/>
         <source>Plot</source>
         <translation>Grafiek</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="128"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="128"/>
         <source>Toggle 2D plot visualization for this dataset</source>
         <translation>Schakel 2D-grafiekvisualisatie voor deze dataset in/uit</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="143"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="143"/>
         <source>FFT Plot</source>
         <translation>FFT-Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="146"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="146"/>
         <source>Toggle FFT plot to visualize frequency content</source>
         <translation>Schakel FFT-plot in om frequentie-inhoud te visualiseren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="161"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="161"/>
         <source>Bar/Level</source>
         <translation>Balk/Niveau</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="165"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="165"/>
         <source>Toggle bar/level indicator for this dataset</source>
         <translation>Schakel balk/niveau-indicator voor deze dataset in</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="179"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="179"/>
         <source>Gauge</source>
         <translation>Meter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="183"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="183"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>Schakel meterwidget in voor analoge weergave</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="199"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="199"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="202"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="202"/>
         <source>Toggle compass widget for directional data</source>
         <translation>Schakel kompaswidget in voor richtingsgegevens</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="217"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="217"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="221"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="221"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Schakel LED-indicator in voor binaire of drempelwaarden</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="238"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="238"/>
         <source>Duplicate</source>
         <translation>Dupliceren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="243"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="243"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Dupliceer deze dataset met dezelfde configuratie</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="251"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="251"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="254"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/DatasetView.qml" line="254"/>
         <source>Delete this dataset from the group</source>
         <translation>Verwijder deze dataset uit de groep</translation>
     </message>
@@ -3252,36 +3376,43 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>Donate</name>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
         <translation>Ondersteun Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="96"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="96"/>
         <source>Support the development of %1!</source>
         <translation>Ondersteun de ontwikkeling van %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="107"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="107"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio is gratis en open-source software ondersteund door vrijwilligers. Overweeg te doneren of een Pro-licentie te verkrijgen om de ontwikkelingsinspanningen te ondersteunen :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="120"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="120"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>U kunt dit project ook ondersteunen door het te delen, bugs te melden en nieuwe functies voor te stellen!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="136"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="136"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="150"/>
         <source>Donate</source>
         <translation>Doneren</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="168"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Donate.qml" line="168"/>
         <source>Get Serial Studio Pro</source>
         <translation>Verkrijg Serial Studio Pro</translation>
     </message>
@@ -3290,12 +3421,14 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>Downloader</name>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="109"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="139"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="110"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="344"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="136"/>
         <source>Downloading updates</source>
         <translation>Updates downloaden</translation>
     </message>
@@ -3357,6 +3490,7 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="134"/>
         <source>Updater</source>
         <translation>Updater</translation>
     </message>
@@ -3439,103 +3573,123 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
         <translation>1 seconde</translation>
     </message>
     <message>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="137"/>
         <source>Time remaining: 0 minutes</source>
-        <translation type="vanished">Resterende tijd: 0 minuten</translation>
+        <translation>Resterende tijd: 0 minuten</translation>
     </message>
     <message>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/lib/QSimpleUpdater/QSimpleUpdater_autogen/include/ui_Downloader.h" line="138"/>
         <source>Open</source>
-        <translation type="vanished">Openen</translation>
+        <translation>Openen</translation>
     </message>
 </context>
 <context>
     <name>ExamplesBrowser</name>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="34"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="34"/>
         <source>Examples Browser</source>
         <translation>Voorbeeldenbrowser</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="132"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="132"/>
         <source>Search in Examples...</source>
         <translation>Zoeken in Voorbeelden...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="175"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="175"/>
         <source>Back</source>
         <translation>Terug</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="207"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="207"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="228"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="228"/>
         <source>Download &amp;&amp; Open</source>
         <translation>Downloaden &amp;&amp; Openen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="243"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="243"/>
         <source>View on GitHub</source>
         <translation>Bekijk op GitHub</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="299"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="299"/>
         <source>Fetching examples...</source>
         <translation>Voorbeelden ophalen...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="687"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="687"/>
         <source>Copied to Clipboard</source>
         <translation>Gekopieerd naar klembord</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="750"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="750"/>
         <source>No screenshot available</source>
         <translation>Geen screenshot beschikbaar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="782"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="782"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="811"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="811"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="834"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="834"/>
         <source>Category:</source>
         <translation>Categorie:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="847"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="847"/>
         <source>Difficulty:</source>
         <translation>Moeilijkheidsgraad:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="865"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="865"/>
         <source>Project:</source>
         <translation>Project:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="907"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="907"/>
         <source>No Results Found</source>
         <translation>Geen resultaten gevonden</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="918"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="918"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Controleer de spelling of probeer een andere zoekterm.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="933"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="933"/>
         <source>%1 examples</source>
         <translation>%1 voorbeelden</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="944"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExamplesBrowser.qml" line="944"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -3556,186 +3710,223 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>ExtensionManager</name>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="32"/>
         <source>Extension Manager</source>
         <translation>Extensiebeheer</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="120"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="120"/>
         <source>Search extensions...</source>
         <translation>Zoek extensies...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="177"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="177"/>
         <source>Refresh</source>
         <translation>Vernieuwen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="191"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="191"/>
         <source>Repos</source>
         <translation>Repos</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="222"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="222"/>
         <source>Repository Settings</source>
         <translation>Repository-instellingen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="234"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="234"/>
         <source>Back</source>
         <translation>Terug</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="275"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="275"/>
         <source>Install</source>
         <translation>Installeren</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="292"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="292"/>
         <source>Uninstall</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="319"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="319"/>
         <source>Run</source>
         <translation>Uitvoeren</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="343"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="343"/>
         <source>Stop</source>
         <translation>Stoppen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="377"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="377"/>
         <source>Reset</source>
         <translation>Resetten</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="427"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="427"/>
         <source>Fetching extensions...</source>
         <translation>Extensies ophalen...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="661"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="661"/>
         <source>Running</source>
         <translation>Actief</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="680"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="680"/>
         <source>Update</source>
         <translation>Bijwerken</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="680"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="680"/>
         <source>Installed</source>
         <translation>Geïnstalleerd</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="697"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="697"/>
         <source>Unavailable</source>
         <translation>Niet Beschikbaar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="937"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="937"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="958"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="958"/>
         <source>Type:</source>
         <translation>Type:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="971"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="971"/>
         <source>Author:</source>
         <translation>Auteur:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="983"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="983"/>
         <source>Version:</source>
         <translation>Versie:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="995"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="995"/>
         <source>License:</source>
         <translation>Licentie:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1056"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1056"/>
         <source>No preview</source>
         <translation>Geen voorbeeld</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1084"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1084"/>
         <source>  PLUGIN OUTPUT</source>
         <translation>PLUGIN OUTPUT</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1114"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1114"/>
         <source>No output yet. Run the plugin to see its log here.</source>
         <translation>Nog geen output. Voer de plugin uit om hier het logboek te zien.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1149"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1149"/>
         <source>No preview available</source>
         <translation>Geen voorbeeld beschikbaar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1193"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1193"/>
         <source>Repositories</source>
         <translation>Repositories</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1206"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1206"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
         <translation>Voeg URL's toe aan externe repositories of lokale map paden.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1243"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1243"/>
         <source>LOCAL</source>
         <translation>LOKAAL</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1300"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1300"/>
         <source>URL or local path...</source>
         <translation>URL of lokaal pad...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1308"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1308"/>
         <source>Add</source>
         <translation>Toevoegen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1331"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1331"/>
         <source>Browse...</source>
         <translation>Bladeren...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1368"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1368"/>
         <source>No Results Found</source>
         <translation>Geen Resultaten Gevonden</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1379"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1379"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Controleer de spelling of probeer een andere zoekterm.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1403"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1403"/>
         <source>No Extensions Available</source>
         <translation>Geen Extensies Beschikbaar</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1414"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1414"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>Voeg een repository-URL of lokaal pad toe in de Repos-instellingen en vernieuw daarna.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1429"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1429"/>
         <source>%1 extensions</source>
         <translation>%1 extensies</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1440"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/ExtensionManager.qml" line="1440"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -3744,51 +3935,61 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>FFTPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="141"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="141"/>
         <source>Show Area Under Plot</source>
         <translation>Toon Gebied Onder Plot</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="158"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="158"/>
         <source>Show X Axis Label</source>
         <translation>Toon X-as Label</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="170"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="170"/>
         <source>Show Y Axis Label</source>
         <translation>Toon Y-as Label</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="188"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="188"/>
         <source>Show Crosshair</source>
         <translation>Toon Kruisdraad</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="195"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="195"/>
         <source>Pause</source>
         <translation>Pauze</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="195"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="195"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="214"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="214"/>
         <source>Reset View</source>
         <translation>Beeld Herstellen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="220"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="220"/>
         <source>Axis Range Settings</source>
         <translation>Asbereik Instellingen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="249"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="249"/>
         <source>Magnitude (dB)</source>
         <translation>Amplitude (dB)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="250"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/FFTPlot.qml" line="250"/>
         <source>Frequency (Hz)</source>
         <translation>Frequentie (Hz)</translation>
     </message>
@@ -3797,6 +3998,7 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>FileDropArea</name>
     <message>
         <location filename="../../qml/Widgets/FileDropArea.qml" line="122"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/FileDropArea.qml" line="122"/>
         <source>Drop Projects and CSV files here</source>
         <translation>Sleep Projecten en CSV-bestanden hierheen</translation>
     </message>
@@ -3804,52 +4006,122 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="36"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="33"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="33"/>
         <source>File Transmission</source>
         <translation>Bestandsoverdracht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="90"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="94"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="94"/>
+        <source>Transfer Protocol:</source>
+        <translation>Overdrachtsprotocol:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="126"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="126"/>
         <source>File Selection:</source>
         <translation>Bestandsselectie:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="108"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="144"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="144"/>
         <source>Select File...</source>
         <translation>Selecteer Bestand...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="161"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="161"/>
         <source>Transmission Interval:</source>
         <translation>Overdrachtsinterval:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="149"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="187"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="261"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="187"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="261"/>
         <source>msecs</source>
         <translation>msec</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="178"/>
-        <source>Progress: %1</source>
-        <translation>Vooruitgang: %1</translation>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="197"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="197"/>
+        <source>Block Size:</source>
+        <translation>Blokgrootte:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="194"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="224"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="224"/>
+        <source>bytes</source>
+        <translation>bytes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="234"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="234"/>
+        <source>Timeout:</source>
+        <translation>Time-out:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="271"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="271"/>
+        <source>Max Retries:</source>
+        <translation>Max. pogingen:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="328"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="328"/>
+        <source>Progress: %1%</source>
+        <translation>Voortgang: %1%</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="361"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="361"/>
+        <source>%1 / %2 bytes</source>
+        <translation>%1 / %2 bytes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="369"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="369"/>
+        <source>Errors: %1</source>
+        <translation>Fouten: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="448"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="448"/>
+        <source>Activity Log</source>
+        <translation>Activiteitenlogboek</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="453"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="453"/>
+        <source>Clear</source>
+        <translation>Wissen</translation>
+    </message>
+    <message>
+        <source>Progress: %1</source>
+        <translation type="vanished">Vooruitgang: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="407"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="407"/>
         <source>Pause Transmission</source>
         <translation>Pauzeer Overdracht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="408"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="408"/>
         <source>Resume Transmission</source>
         <translation>Hervat Overdracht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="411"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="411"/>
         <source>Stop Transmission</source>
         <translation>Stop Overdracht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="197"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="412"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/FileTransmission.qml" line="412"/>
         <source>Begin Transmission</source>
         <translation>Begin Overdracht</translation>
     </message>
@@ -3858,26 +4130,31 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>FlowDiagram</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="162"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="162"/>
         <source>Frame Parser</source>
         <translation>Frame Parser</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="167"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="167"/>
         <source>Device %1</source>
         <translation>Apparaat %1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="215"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="215"/>
         <source>Group</source>
         <translation>Groep</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="297"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="297"/>
         <source>Action</source>
         <translation>Actie</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="671"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FlowDiagram.qml" line="671"/>
         <source>No groups defined yet</source>
         <translation>Nog geen groepen gedefinieerd</translation>
     </message>
@@ -3891,55 +4168,70 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="94"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="225"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="94"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="225"/>
         <source>Undo</source>
         <translation>Ongedaan maken</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="101"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="239"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="101"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="239"/>
         <source>Redo</source>
         <translation>Opnieuw doen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="110"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="264"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="110"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="264"/>
         <source>Cut</source>
         <translation>Knippen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="115"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="277"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="115"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="277"/>
         <source>Copy</source>
         <translation>Kopiëren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="120"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="290"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="120"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="290"/>
         <source>Paste</source>
         <translation>Plakken</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="127"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="127"/>
         <source>Select All</source>
         <translation>Alles Selecteren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="199"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="199"/>
         <source>Reset</source>
         <translation>Herstellen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="204"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="204"/>
         <source>Reset to the default parsing script</source>
         <translation>Herstel naar het standaard parseerscript</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="212"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="212"/>
         <source>Open</source>
         <translation>Openen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="217"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="217"/>
         <source>Import a JavaScript file for data parsing</source>
         <translation>Importeer een JavaScript-bestand voor data parsing</translation>
     </message>
@@ -3953,51 +4245,61 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="230"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="230"/>
         <source>Undo the last code edit</source>
         <translation>Maak de laatste codebewerking ongedaan</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="245"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="245"/>
         <source>Redo the previously undone edit</source>
         <translation>Herstel de eerder ongedaan gemaakte bewerking</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
         <source>Cut selected code to clipboard</source>
         <translation>Knip geselecteerde code naar klembord</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="282"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="282"/>
         <source>Copy selected code to clipboard</source>
         <translation>Kopieer geselecteerde code naar klembord</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="294"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="294"/>
         <source>Paste code from clipboard</source>
         <translation>Plak code van klembord</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
         <source>Open help documentation for JavaScript data parsing</source>
         <translation>Open helpdocumentatie voor JavaScript-gegevensanalyse</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="365"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="365"/>
         <source>Select Template...</source>
         <translation>Selecteer Sjabloon...</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="381"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="381"/>
         <source>Test With Sample Data</source>
         <translation>Test met Voorbeeldgegevens</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="391"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/FrameParserView.qml" line="391"/>
         <source>Evaluate</source>
         <translation>Evalueer</translation>
     </message>
@@ -4006,36 +4308,43 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>GPS</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="102"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="102"/>
         <source>Auto Center</source>
         <translation>Automatisch Centreren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="118"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="118"/>
         <source>Plot Trajectory</source>
         <translation>Traject Plotten</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="135"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="135"/>
         <source>Zoom In</source>
         <translation>Inzoomen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="146"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="146"/>
         <source>Zoom Out</source>
         <translation>Uitzoomen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="170"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="170"/>
         <source>Show Weather</source>
         <translation>Weer Weergeven</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="188"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="188"/>
         <source>NASA Weather Overlay</source>
         <translation>NASA Weeroverlay</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="220"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/GPS.qml" line="220"/>
         <source>Base Map: %1</source>
         <translation>Basiskaart: %1</translation>
     </message>
@@ -4044,101 +4353,121 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>GroupView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
         <translation>Pro-functies gedetecteerd in dit project.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Vervangende widgets worden gebruikt. Koop een licentie om volledige functionaliteit te ontgrendelen.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="118"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="118"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="121"/>
         <source>Add a generic dataset to the current group</source>
         <translation>Voeg een generieke dataset toe aan de huidige groep</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="131"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="131"/>
         <source>Plot</source>
         <translation>Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="135"/>
         <source>Add a 2D plot to visualize numeric data</source>
         <translation>Voeg een 2D-plot toe om numerieke gegevens te visualiseren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="146"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="146"/>
         <source>FFT Plot</source>
         <translation>FFT-Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="151"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="151"/>
         <source>Add an FFT plot for frequency domain visualization</source>
         <translation>Voeg een FFT-plot toe voor visualisatie in het frequentiedomein</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="160"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="160"/>
         <source>Bar/Level</source>
         <translation>Balk/Niveau</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="164"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="164"/>
         <source>Add a bar or level indicator for scaled values</source>
         <translation>Voeg een balk of niveau-indicator toe voor geschaalde waarden</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="173"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="173"/>
         <source>Gauge</source>
         <translation>Meter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="178"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="178"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>Voeg een meterwidget toe voor analoge visualisatie</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="188"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="188"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="192"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="192"/>
         <source>Add a compass to display directional or angular data</source>
         <translation>Voeg een kompas toe om richtings- of hoekgegevens weer te geven</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="201"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="201"/>
         <source>LED</source>
         <translation>LED</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="206"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="206"/>
         <source>Add an LED indicator for binary status signals</source>
         <translation>Voeg een LED-indicator toe voor binaire status signalen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="223"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="223"/>
         <source>Duplicate</source>
         <translation>Dupliceren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="226"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="226"/>
         <source>Duplicate the current group and its contents</source>
         <translation>Dupliceer de huidige groep en de inhoud ervan</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="236"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="236"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="240"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/GroupView.qml" line="240"/>
         <source>Delete the current group and all contained datasets</source>
         <translation>Verwijder de huidige groep en alle bijbehorende datasets</translation>
     </message>
@@ -4148,21 +4477,26 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="113"/>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="114"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="113"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="114"/>
         <source>Integrate Angles</source>
         <translation>Integreer Hoeken</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="427"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="427"/>
         <source>ROLL ↔</source>
         <translation>ROLL ↔</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="455"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="455"/>
         <source>YAW ↻</source>
         <translation>YAW ↻</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="483"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Gyroscope.qml" line="483"/>
         <source>PITCH ↕</source>
         <translation>PITCH ↕</translation>
     </message>
@@ -4195,26 +4529,31 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>HID</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="48"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="48"/>
         <source>HID Device</source>
         <translation>HID-apparaat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="78"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="78"/>
         <source>Usage Page</source>
         <translation>Gebruikerspagina</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="94"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="94"/>
         <source>Usage</source>
         <translation>Gebruik</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="135"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="135"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>Verbind gamepads, joysticks, stuurwielen, vluchtcontrollers en andere USB-apparaten van de HID-klasse.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="143"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="143"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>HID-gebruikerstabellen (USB.org)</translation>
     </message>
@@ -4223,36 +4562,43 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     <name>HelpCenter</name>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
         <translation>Helpcentrum</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="129"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="129"/>
         <source>Fetching help pages...</source>
         <translation>Help-pagina's ophalen...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="163"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="163"/>
         <source>Search...</source>
         <translation>Zoeken...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="275"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="275"/>
         <source>Loading...</source>
         <translation>Laden...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="377"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="377"/>
         <source>Select a page from the sidebar</source>
         <translation>Selecteer een pagina uit de zijbalk</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="407"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="407"/>
         <source>Copied to Clipboard</source>
         <translation>Gekopieerd naar Klembord</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="441"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="441"/>
         <source>View Online</source>
         <translation>Online Bekijken</translation>
     </message>
@@ -4262,11 +4608,13 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="461"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="461"/>
         <source>%1 pages</source>
         <translation>%1 pagina's</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="472"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/HelpCenter.qml" line="472"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -4274,57 +4622,57 @@ Voorbeeld (HEX):  48 65 6C 6C 6F</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="238"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="239"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="239"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="240"/>
         <source>Network Socket</source>
         <translation>Netwerksocket</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="241"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="243"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="244"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="245"/>
         <source>CAN Bus</source>
         <translation>CAN-bus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="246"/>
         <source>USB Device</source>
         <translation>USB-apparaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="246"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="247"/>
         <source>HID Device</source>
         <translation>HID-apparaat</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="247"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="248"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="627"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="628"/>
         <source>Your trial period has ended.</source>
         <translation>Uw proefperiode is afgelopen.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="628"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="629"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Om Serial Studio te blijven gebruiken, activeer alstublieft uw licentie.</translation>
     </message>
@@ -5337,14 +5685,106 @@ Het apparaat heeft mogelijk geen data-eindpunten in zijn actieve configuratie, o
 <context>
     <name>IO::FileTransmission</name>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="94"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="208"/>
         <source>No file selected...</source>
         <translation>Geen bestand geselecteerd...</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission.cpp" line="132"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="243"/>
+        <source>Plain Text</source>
+        <translation>Platte tekst</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="244"/>
+        <source>Raw Binary</source>
+        <translation>Ruwe binaire</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="245"/>
+        <source>XMODEM</source>
+        <translation>XMODEM</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="246"/>
+        <source>XMODEM-1K</source>
+        <translation>XMODEM-1K</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="247"/>
+        <source>YMODEM</source>
+        <translation>YMODEM</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="248"/>
+        <source>ZMODEM</source>
+        <translation>ZMODEM</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="261"/>
         <source>Select file to transmit</source>
         <translation>Selecteer bestand om te verzenden</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="287"/>
+        <source>File selected: %1 (%2 bytes)</source>
+        <translation>Bestand geselecteerd: %1 (%2 bytes)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="290"/>
+        <source>Error opening file: %1</source>
+        <translation>Fout bij openen van bestand: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="383"/>
+        <source>Starting %1 transfer...</source>
+        <translation>Starten van %1 overdracht...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="605"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="625"/>
+        <source>Transmission complete</source>
+        <translation>Overdracht voltooid</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="607"/>
+        <source>Plain text transmission complete</source>
+        <translation>Tekstoverdracht voltooid</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="627"/>
+        <source>Raw binary transmission complete (%1 bytes)</source>
+        <translation>Ruwe binaire overdracht voltooid (%1 bytes)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="651"/>
+        <source>Transfer complete</source>
+        <translation>Overdracht voltooid</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="652"/>
+        <source>Transfer completed successfully (%1 bytes)</source>
+        <translation>Overdracht succesvol voltooid (%1 bytes)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="654"/>
+        <location filename="../../src/IO/FileTransmission.cpp" line="655"/>
+        <source>Transfer failed: %1</source>
+        <translation>Overdracht mislukt: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="739"/>
+        <source>%1 B/s</source>
+        <translation>%1 B/s</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="741"/>
+        <source>%1 KB/s</source>
+        <translation>%1 KB/s</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission.cpp" line="743"/>
+        <source>%1 MB/s</source>
+        <translation>%1 MB/s</translation>
     </message>
 </context>
 <context>
@@ -5407,24 +5847,286 @@ Het apparaat heeft mogelijk geen data-eindpunten in zijn actieve configuratie, o
     </message>
 </context>
 <context>
+    <name>IO::Protocols::XMODEM</name>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="81"/>
+        <source>Cannot open file: %1</source>
+        <translation>Kan bestand niet openen: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="92"/>
+        <source>Waiting for receiver...</source>
+        <translation>Wachten op ontvanger...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="109"/>
+        <source>Transfer cancelled</source>
+        <translation>Overdracht geannuleerd</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="110"/>
+        <source>Transfer cancelled by user</source>
+        <translation>Overdracht geannuleerd door gebruiker</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="128"/>
+        <source>Receiver ready (CRC mode), sending data...</source>
+        <translation>Ontvanger klaar (CRC-modus), gegevens verzenden...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="152"/>
+        <source>Too many retries, transfer aborted</source>
+        <translation>Te veel pogingen, overdracht afgebroken</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="153"/>
+        <source>Maximum retries exceeded</source>
+        <translation>Maximum aantal pogingen overschreden</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="157"/>
+        <source>NAK received, retrying block %1 (%2/%3)</source>
+        <translation>NAK ontvangen, opnieuw proberen blok %1 (%2/%3)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="170"/>
+        <source>Transfer cancelled by receiver</source>
+        <translation>Overdracht geannuleerd door ontvanger</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="171"/>
+        <source>Receiver cancelled the transfer</source>
+        <translation>Ontvanger annuleerde de overdracht</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="180"/>
+        <source>Transfer complete</source>
+        <translation>Overdracht voltooid</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="274"/>
+        <source>Sending block %1 (%2 bytes)</source>
+        <translation>Blok %1 verzenden (%2 bytes)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="288"/>
+        <source>Sending EOT...</source>
+        <translation>Verzenden EOT...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="324"/>
+        <source>Transfer timed out</source>
+        <translation>Overdracht verlopen</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="325"/>
+        <source>Timeout: no response from receiver</source>
+        <translation>Time-out: geen reactie van ontvanger</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="329"/>
+        <source>Timeout, retrying (%1/%2)...</source>
+        <translation>Time-out, opnieuw proberen (%1/%2)...</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Protocols::YMODEM</name>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="66"/>
+        <source>Cannot open file: %1</source>
+        <translation>Kan bestand niet openen: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="79"/>
+        <source>Waiting for receiver...</source>
+        <translation>Wachten op ontvanger...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="113"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="168"/>
+        <source>Transfer cancelled by receiver</source>
+        <translation>Overdracht geannuleerd door ontvanger</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="114"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="169"/>
+        <source>Receiver cancelled the transfer</source>
+        <translation>Ontvanger annuleerde de overdracht</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="138"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="281"/>
+        <source>Sending first EOT...</source>
+        <translation>Eerste EOT verzenden...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="152"/>
+        <source>Too many retries, transfer aborted</source>
+        <translation>Te veel pogingen, overdracht afgebroken</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="153"/>
+        <source>Maximum retries exceeded</source>
+        <translation>Maximum aantal pogingen overschreden</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="158"/>
+        <source>NAK received, retrying block %1</source>
+        <translation>NAK ontvangen, opnieuw proberen blok %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="179"/>
+        <source>Sending second EOT...</source>
+        <translation>Tweede EOT verzenden...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="212"/>
+        <source>Transfer complete</source>
+        <translation>Overdracht voltooid</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="250"/>
+        <source>Sending file header: %1 (%2 bytes)</source>
+        <translation>Bestandshoofd verzenden: %1 (%2 bytes)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="265"/>
+        <source>Sending end-of-batch marker...</source>
+        <translation>Einde-van-batch-markering verzenden...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="298"/>
+        <source>Sending block %1 (%2/%3 bytes)</source>
+        <translation>Blok %1 verzenden (%2/%3 bytes)</translation>
+    </message>
+</context>
+<context>
+    <name>IO::Protocols::ZMODEM</name>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="84"/>
+        <source>Cannot open file: %1</source>
+        <translation>Kan bestand niet openen: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="119"/>
+        <source>Transfer cancelled</source>
+        <translation>Overdracht geannuleerd</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="120"/>
+        <source>Transfer cancelled by user</source>
+        <translation>Overdracht geannuleerd door gebruiker</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="366"/>
+        <source>Sending ZRQINIT, waiting for receiver...</source>
+        <translation>ZRQINIT verzenden, wachten op ontvanger...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="394"/>
+        <source>Sending file info: %1 (%2 bytes)</source>
+        <translation>Bestandsinformatie verzenden: %1 (%2 bytes)</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="439"/>
+        <source>File data sent, waiting for confirmation...</source>
+        <translation>Bestandsgegevens verzonden, wachten op bevestiging...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="450"/>
+        <source>Sending ZFIN...</source>
+        <translation>ZFIN verzenden...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="485"/>
+        <source>Receiver ready, sending file info...</source>
+        <translation>Ontvanger gereed, bestandsinformatie verzenden...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="497"/>
+        <source>Receiver requests data from offset %1</source>
+        <translation>Ontvanger vraagt gegevens vanaf offset %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="507"/>
+        <source>Receiver skipped the file</source>
+        <translation>Ontvanger heeft het bestand overgeslagen</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="519"/>
+        <source>Too many errors, transfer aborted</source>
+        <translation>Te veel fouten, overdracht afgebroken</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="520"/>
+        <source>Maximum retries exceeded</source>
+        <translation>Maximum aantal pogingen overschreden</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="525"/>
+        <source>NAK received, retrying (%1/%2)...</source>
+        <translation>NAK ontvangen, opnieuw proberen (%1/%2)...</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="545"/>
+        <source>Transfer complete</source>
+        <translation>Overdracht voltooid</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="555"/>
+        <source>Transfer cancelled by receiver</source>
+        <translation>Overdracht geannuleerd door ontvanger</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="556"/>
+        <source>Receiver cancelled the transfer</source>
+        <translation>Ontvanger annuleerde de overdracht</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="564"/>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="565"/>
+        <source>Receiver reported a file error</source>
+        <translation>Ontvanger meldde een bestandfout</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="785"/>
+        <source>Transfer timed out</source>
+        <translation>Overdracht verlopen</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="786"/>
+        <source>Timeout: no response from receiver</source>
+        <translation>Time-out: geen reactie van ontvanger</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="790"/>
+        <source>Timeout, retrying (%1/%2)...</source>
+        <translation>Time-out, opnieuw proberen (%1/%2)...</translation>
+    </message>
+</context>
+<context>
     <name>IconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
         <translation>Selecteer Pictogram</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="111"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="111"/>
         <source>Search Online...</source>
         <translation>Online Zoeken...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="129"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="129"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="142"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/IconPicker.qml" line="142"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -5433,71 +6135,85 @@ Het apparaat heeft mogelijk geen data-eindpunten in zijn actieve configuratie, o
     <name>ImageView</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="67"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="67"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="68"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="68"/>
         <source>Grayscale</source>
         <translation>Grijstinten</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="69"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="69"/>
         <source>High Contrast</source>
         <translation>Hoog Contrast</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="70"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="70"/>
         <source>Vivid</source>
         <translation>Levendig</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="71"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="71"/>
         <source>Night Vision</source>
         <translation>Nachtzicht</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="72"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="72"/>
         <source>Infrared</source>
         <translation>Infrarood</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="73"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="73"/>
         <source>Deep Blue</source>
         <translation>Diep Blauw</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="74"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="74"/>
         <source>Amber</source>
         <translation>Amber</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="175"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="175"/>
         <source>Export Images</source>
         <translation>Afbeeldingen Exporteren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="184"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="184"/>
         <source>Open Export Folder</source>
         <translation>Exporteermap Openen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="200"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="200"/>
         <source>Zoom In</source>
         <translation>Inzoomen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="213"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="213"/>
         <source>Zoom Out</source>
         <translation>Uitzoomen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="233"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="233"/>
         <source>Show Crosshair</source>
         <translation>Kruisdraad Weergeven</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="540"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/ImageView.qml" line="540"/>
         <source>Waiting for Image...</source>
         <translation>Wachten op Afbeelding...</translation>
     </message>
@@ -5521,118 +6237,144 @@ Het apparaat heeft mogelijk geen data-eindpunten in zijn actieve configuratie, o
 <context>
     <name>LicenseManagement</name>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="36"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="37"/>
         <source>Licensing</source>
         <translation>Licentiebeheer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="76"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="77"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="77"/>
         <source>Please wait...</source>
         <translation>Even geduld a.u.b. ...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="117"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="118"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="118"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Activeer Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="123"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="124"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="124"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Plak hieronder uw licentiesleutel om Pro-functies zoals MQTT, 3D-plotten en meer te ontgrendelen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="130"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="131"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="131"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>Uw licentie omvat 5 apparaatactiveringen.
 Plannen omvatten Maandelijkse, Jaarlijkse en Levenslange opties.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="142"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="143"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="143"/>
         <source>Paste your license key here…</source>
         <translation>Plak hier uw licentiesleutel...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="161"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="321"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="369"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="162"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="322"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="370"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="162"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="322"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="370"/>
         <source>Copy</source>
         <translation>Kopiëren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="167"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="168"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="168"/>
         <source>Paste</source>
         <translation>Plakken</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="173"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="327"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="375"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="174"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="328"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="376"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="174"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="328"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="376"/>
         <source>Select All</source>
         <translation>Alles Selecteren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="224"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="225"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="225"/>
         <source>Product</source>
         <translation>Product</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="231"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="232"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="232"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="243"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="243"/>
         <source>Licensee</source>
         <translation>Licentiehouder</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="261"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="262"/>
         <source>Licensee E-Mail</source>
         <translation>Licentiehouder E-Mail</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="278"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="279"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="279"/>
         <source>Device Usage</source>
         <translation>Apparaatgebruik</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="287"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="287"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 apparaten in gebruik (Onbeperkt plan)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="287"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="288"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="288"/>
         <source>%1 of %2 devices used</source>
         <translation>%1 van %2 apparaten gebruikt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="297"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="298"/>
         <source>Device ID</source>
         <translation>Apparaat-ID</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="343"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="344"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="344"/>
         <source>License Key</source>
         <translation>Licentiesleutel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="399"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="400"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="400"/>
         <source>Customer Portal</source>
         <translation>Klantenportaal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="413"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="414"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="414"/>
         <source>Buy License</source>
         <translation>Licentie Kopen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="423"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="424"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="424"/>
         <source>Activate</source>
         <translation>Activeren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="436"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="437"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/LicenseManagement.qml" line="437"/>
         <source>Deactivate</source>
         <translation>Deactiveren</translation>
     </message>
@@ -6141,167 +6883,200 @@ Geef de benodigde inloggegevens op.</translation>
 <context>
     <name>MQTTConfiguration</name>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="36"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="37"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="37"/>
         <source>MQTT Setup</source>
         <translation>MQTT-instellingen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="98"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="98"/>
         <source>MQTT is a Pro Feature</source>
         <translation>MQTT is een Pro-functie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="98"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="99"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="99"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
         <translation>Activeer je licentie of bezoek de winkel om MQTT-ondersteuning te ontgrendelen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="111"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="112"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="112"/>
         <source>General</source>
         <translation>Algemeen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="117"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="118"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="118"/>
         <source>Authentication</source>
         <translation>Authenticatie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="123"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="124"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="124"/>
         <source>MQTT Options</source>
         <translation>MQTT-opties</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="129"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="130"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="130"/>
         <source>SSL Properties</source>
         <translation>SSL-eigenschappen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="185"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="186"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="186"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="198"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="199"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="199"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="215"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="216"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="216"/>
         <source>Client ID</source>
         <translation>Client-ID</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="228"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="229"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="229"/>
         <source>Keep Alive (s)</source>
         <translation>Houd Levend (s)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="242"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="243"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="243"/>
         <source>Clean Session</source>
         <translation>Schone Sessie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="292"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="293"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="293"/>
         <source>Username</source>
         <translation>Gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="298"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="299"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="299"/>
         <source>MQTT Username</source>
         <translation>MQTT-gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="305"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="306"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="306"/>
         <source>Password</source>
         <translation>Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="316"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="317"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="317"/>
         <source>MQTT Password</source>
         <translation>MQTT-wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="373"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="374"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="374"/>
         <source>Version</source>
         <translation>Versie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="386"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="387"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="387"/>
         <source>Mode</source>
         <translation>Modus</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="399"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="400"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="400"/>
         <source>Topic</source>
         <translation>Onderwerp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="405"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="406"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="406"/>
         <source>e.g. sensors/temperature or home/+/status</source>
         <translation>b.v. sensoren/temperatuur of huis/+/status</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="412"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="413"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="413"/>
         <source>Will Retain</source>
         <translation>Zal Behouden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="424"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="425"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="425"/>
         <source>Will QoS</source>
         <translation>Zal QoS</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="437"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="438"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="438"/>
         <source>Will Topic</source>
         <translation>Zal Onderwerp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="443"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="444"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="444"/>
         <source>e.g. device/alerts/offline</source>
         <translation>b.v. apparaat/waarschuwingen/offline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="450"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="451"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="451"/>
         <source>Will Message</source>
         <translation>Zal Bericht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="456"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="457"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="457"/>
         <source>e.g. Device unexpectedly disconnected</source>
         <translation>b.v. Apparaat onverwacht losgekoppeld</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="501"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="502"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="502"/>
         <source>Enable SSL</source>
         <translation>SSL Inschakelen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="515"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="516"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="516"/>
         <source>SSL Protocol</source>
         <translation>SSL-protocol</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="533"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="534"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="534"/>
         <source>Verify Depth</source>
         <translation>Verificatiediepte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="552"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="553"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="553"/>
         <source>Verify Mode</source>
         <translation>Verificatiemodus</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="584"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="585"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="585"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="604"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="605"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="605"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="604"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="605"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/MQTTConfiguration.qml" line="605"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
@@ -6310,16 +7085,19 @@ Geef de benodigde inloggegevens op.</translation>
     <name>MainWindow</name>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="89"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="89"/>
         <source>Device Defined Project</source>
         <translation>Apparaatgedefinieerd Project</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="92"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="92"/>
         <source>Quick Plot Mode</source>
         <translation>Snelle Grafiekmodus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="98"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/MainWindow.qml" line="98"/>
         <source>Empty Project</source>
         <translation>Leeg Project</translation>
     </message>
@@ -6353,6 +7131,7 @@ Geef de benodigde inloggegevens op.</translation>
     <name>Mdf4Player</name>
     <message>
         <location filename="../../qml/Dialogs/Mdf4Player.qml" line="23"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Mdf4Player.qml" line="23"/>
         <source>MDF4 Player</source>
         <translation>MDF4-speler</translation>
     </message>
@@ -6414,39 +7193,39 @@ Geef de benodigde inloggegevens op.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1256"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1269"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1282"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1302"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1338"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1349"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1360"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1267"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1280"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1300"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1334"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1345"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1353"/>
         <source>Plugin Error</source>
         <translation>Plug-infout</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1257"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1256"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>Plug-in "%1" is niet geïnstalleerd.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1270"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1268"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>Extensie "%1" is geen plug-in (type: %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1283"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1281"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>Kan plug-in metadata bestand niet lezen:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1303"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1301"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>Plug-in "%1" vereist gRPC maar deze build bevat geen gRPC-ondersteuning.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1312"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1309"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -6455,34 +7234,34 @@ Would you like to enable it now?</source>
 Wilt u deze nu inschakelen?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1318"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1315"/>
         <source>API Server Required</source>
         <translation>API-server Vereist</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1339"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1335"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>Plug-in "%1" heeft geen 'entry' veld in info.json.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1350"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1345"/>
         <source>Entry point not found:
 %1</source>
         <translation>Ingangspunt niet gevonden:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1354"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>Plug-in "%1" heeft een ongeldig ingangspad.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1398"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1390"/>
         <source>Missing Dependency</source>
         <translation>Ontbrekende Afhankelijkheid</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1399"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1391"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -6491,7 +7270,7 @@ Would you like to open the download page?</source>
 Wilt u de downloadpagina openen?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1315"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1312"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>Plugins hebben de API-server nodig om met Serial Studio te communiceren. Wilt u deze nu inschakelen?</translation>
     </message>
@@ -6640,86 +7419,103 @@ Wilt u de downloadpagina openen?</translation>
     <name>Modbus</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="47"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="47"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="70"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="70"/>
         <source>Serial Port</source>
         <translation>Seriële Poort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="95"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="95"/>
         <source>Baud Rate</source>
         <translation>Baudrate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="187"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="187"/>
         <source>Parity</source>
         <translation>Pariteit</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="210"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="210"/>
         <source>Data Bits</source>
         <translation>Databits</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="233"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="233"/>
         <source>Stop Bits</source>
         <translation>Stopbits</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="256"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="256"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="265"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="265"/>
         <source>IP Address</source>
         <translation>IP-adres</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="280"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="280"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="289"/>
         <source>TCP Port</source>
         <translation>TCP-poort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="317"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="317"/>
         <source>Slave Address</source>
         <translation>Slave-adres</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="322"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="322"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="337"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="337"/>
         <source>Poll Interval (ms)</source>
         <translation>Poll Interval (ms)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="342"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="342"/>
         <source>Polling interval</source>
         <translation>Polling-interval</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="369"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="369"/>
         <source>Configure Register Groups...</source>
         <translation>Configureer Registergroepen...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="383"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="383"/>
         <source>%1 group(s) configured</source>
         <translation>%1 groep(en) geconfigureerd</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="384"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="384"/>
         <source>No groups configured</source>
         <translation>Geen groepen geconfigureerd</translation>
     </message>
@@ -6728,86 +7524,103 @@ Wilt u de downloadpagina openen?</translation>
     <name>ModbusGroupsDialog</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="41"/>
         <source>Modbus Register Groups</source>
         <translation>Modbus Registergroepen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="163"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="163"/>
         <source>Configure multiple register groups to poll different register types in sequence.</source>
         <translation>Configureer meerdere registergroepen om verschillende registertypen opeenvolgend te pollen.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="171"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="171"/>
         <source>Add New Group</source>
         <translation>Nieuwe Groep Toevoegen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="195"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="195"/>
         <source>Register Type:</source>
         <translation>Registertype:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="207"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="207"/>
         <source>Start Address:</source>
         <translation>Startadres:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="214"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="214"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="220"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="220"/>
         <source>Register Count:</source>
         <translation>Registertelling:</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="231"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="231"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="236"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="236"/>
         <source>Add Group</source>
         <translation>Groep Toevoegen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="259"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="259"/>
         <source>Configured Groups</source>
         <translation>Geconfigureerde Groepen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="293"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="293"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="301"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="301"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="308"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="308"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="315"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="315"/>
         <source>Count</source>
         <translation>Telling</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="322"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="322"/>
         <source>Action</source>
         <translation>Actie</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="397"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="397"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="409"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="409"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Geen groepen geconfigureerd.
@@ -6815,16 +7628,19 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="427"/>
         <source>Total groups: %1</source>
         <translation>Totale groepen: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="431"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="431"/>
         <source>Clear All</source>
         <translation>Alles Wissen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="437"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="437"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -6833,51 +7649,61 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>MultiPlot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="169"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="169"/>
         <source>Interpolate</source>
         <translation>Interpoleer</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="186"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="186"/>
         <source>Show Legends</source>
         <translation>Toon Legendes</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="203"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="203"/>
         <source>Show X Axis Label</source>
         <translation>Toon X-as Label</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="214"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="214"/>
         <source>Show Y Axis Label</source>
         <translation>Toon Y-as Label</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="226"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="226"/>
         <source>Show Crosshair</source>
         <translation>Toon Kruisdraad</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="233"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="233"/>
         <source>Pause</source>
         <translation>Pauze</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="233"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="233"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="252"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="252"/>
         <source>Reset View</source>
         <translation>Reset Weergave</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="258"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="258"/>
         <source>Axis Range Settings</source>
         <translation>Instellingen Assenbereik</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="291"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/MultiPlot.qml" line="291"/>
         <source>Samples</source>
         <translation>Monsters</translation>
     </message>
@@ -6886,32 +7712,39 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>Network</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="75"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="75"/>
         <source>Socket Type</source>
         <translation>Sockettype</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="96"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="96"/>
         <source>Local Port</source>
         <translation>Lokale Poort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="103"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="103"/>
         <source>Type 0 for automatic port</source>
         <translation>Typ 0 voor automatische poort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="129"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="129"/>
         <source>Remote Address</source>
         <translation>Extern Adres</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="153"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="186"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="153"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="186"/>
         <source>Remote Port</source>
         <translation>Externe Poort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="216"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="216"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
     </message>
@@ -6920,36 +7753,43 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>OnlineIconPicker</name>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="41"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="41"/>
         <source>Search Online Icons</source>
         <translation>Zoek Online Pictogrammen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="65"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="65"/>
         <source>Download failed: %1</source>
         <translation>Download mislukt: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="88"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="88"/>
         <source>Search icons (e.g. temperature, arrow, play)...</source>
         <translation>Zoek pictogrammen (bijv. temperatuur, pijl, afspelen)...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="102"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="102"/>
         <source>Search</source>
         <translation>Zoeken</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="141"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="141"/>
         <source>Search for icons above to get started</source>
         <translation>Zoek hierboven naar pictogrammen om te beginnen</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="244"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="244"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="257"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/OnlineIconPicker.qml" line="257"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -6958,46 +7798,55 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>Plot</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="162"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="162"/>
         <source>Interpolate</source>
         <translation>Interpoleren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="176"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="176"/>
         <source>Show Area Under Plot</source>
         <translation>Toon Gebied Onder Grafiek</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="193"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="193"/>
         <source>Show X Axis Label</source>
         <translation>Toon X-as Label</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="204"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="204"/>
         <source>Show Y Axis Label</source>
         <translation>Toon Y-as Label</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="216"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="216"/>
         <source>Show Crosshair</source>
         <translation>Toon Kruisdraad</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="223"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="223"/>
         <source>Pause</source>
         <translation>Pauzeren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="223"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="223"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="242"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="242"/>
         <source>Reset View</source>
         <translation>Beeld Herstellen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="248"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot.qml" line="248"/>
         <source>Axis Range Settings</source>
         <translation>Instellingen Assenbereik</translation>
     </message>
@@ -7006,51 +7855,61 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>Plot3D</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="201"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="201"/>
         <source>Interpolate</source>
         <translation>Interpoleren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="219"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="219"/>
         <source>Orbit Navigation</source>
         <translation>Orbitnavigatie</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="229"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="229"/>
         <source>Pan Navigation</source>
         <translation>Pannavigatie</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="240"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="240"/>
         <source>Orthogonal View</source>
         <translation>Orthogonale Weergave</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="246"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="246"/>
         <source>Top View</source>
         <translation>Bovenaanzicht</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="252"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="252"/>
         <source>Left View</source>
         <translation>Linker Weergave</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="258"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="258"/>
         <source>Front View</source>
         <translation>Vooraanzicht</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="275"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="275"/>
         <source>Auto Center</source>
         <translation>Automatisch Centreren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="291"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="291"/>
         <source>Anaglyph 3D</source>
         <translation>Anaglyph 3D</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="304"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Plot3D.qml" line="304"/>
         <source>Invert Eye Positions</source>
         <translation>Oogposities Omkeren</translation>
     </message>
@@ -7059,16 +7918,19 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>PlotWidget</name>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1106"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1106"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — Sleep om te verplaatsen, rechtsklik om te wissen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1108"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1108"/>
         <source>Click to place cursor</source>
         <translation>Klik om cursor te plaatsen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1110"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/PlotWidget.qml" line="1110"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Klik om tweede cursor te plaatsen — Sleep om te verplaatsen</translation>
     </message>
@@ -7092,16 +7954,19 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>ProNotice</name>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="121"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="121"/>
         <source>Visit Website</source>
         <translation>Bezoek Website</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="132"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="132"/>
         <source>Buy License</source>
         <translation>Koop Licentie</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="148"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/ProNotice.qml" line="148"/>
         <source>Activate</source>
         <translation>Activeer</translation>
     </message>
@@ -7122,26 +7987,31 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="66"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="66"/>
         <source>Mode</source>
         <translation>Modus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="74"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="74"/>
         <source>Launch Process</source>
         <translation>Proces Starten</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="74"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="74"/>
         <source>Named Pipe</source>
         <translation>Genaamde Pijp</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="100"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="100"/>
         <source>Executable</source>
         <translation>Uitvoerbaar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="115"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="115"/>
         <source>/path/to/executable</source>
         <translation>/pad/naar/uitvoerbaar</translation>
     </message>
@@ -7149,6 +8019,9 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="132"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="208"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="258"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="132"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="208"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="258"/>
         <source>Browse</source>
         <translation>Bladeren</translation>
     </message>
@@ -7170,41 +8043,49 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="144"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="144"/>
         <source>Arguments</source>
         <translation>Argumenten</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="154"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="154"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 waarde1 --arg2 waarde2</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="176"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="176"/>
         <source>Working Dir</source>
         <translation>Werkmap</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="191"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="191"/>
         <source>(optional) /working/directory</source>
         <translation>(optioneel) /werkmap</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="224"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="224"/>
         <source>Pipe Path</source>
         <translation>Pijp Pad</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
         <source>Pick Running Process…</source>
         <translation>Kies Actief Proces…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="312"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="312"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>Start een kinderproces en vang zijn stdout op, of verbind met een benoemde pijp geschreven door een bestaand proces.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="320"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="320"/>
         <source>Learn about named pipes</source>
         <translation>Leer over benoemde pijpen</translation>
     </message>
@@ -7213,51 +8094,61 @@ Voeg hierboven groepen toe om meerdere registertypes te peilen.</translation>
     <name>ProcessPicker</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="51"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="51"/>
         <source>Select Running Process</source>
         <translation>Selecteer Actief Proces</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="202"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="202"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
         <translation>Selecteer een actief proces om een suggestie voor een benoemde-pijp pad te verkrijgen.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="208"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="208"/>
         <source>Filter Processes</source>
         <translation>Filter Processen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="222"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="222"/>
         <source>Type to filter by name…</source>
         <translation>Typ om op naam te filteren…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
         <source>Refresh</source>
         <translation>Verversen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="234"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="234"/>
         <source>Running Processes</source>
         <translation>Actieve Processen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="272"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="272"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="279"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="279"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="367"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="367"/>
         <source>No processes match the filter.</source>
         <translation>Geen processen voldoen aan het filter.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="368"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="368"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>Geen actieve processen gevonden.
@@ -7265,16 +8156,19 @@ Klik op Verversen om de lijst bij te werken.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="384"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="384"/>
         <source>%1 process(es)</source>
         <translation>%1 proces(sen)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="388"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="388"/>
         <source>Select</source>
         <translation>Selecteer</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="394"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="394"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -7283,6 +8177,7 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>ProjectEditor</name>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="49"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/ProjectEditor.qml" line="49"/>
         <source>modified</source>
         <translation>gewijzigd</translation>
     </message>
@@ -7291,6 +8186,7 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>ProjectStructure</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="32"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectStructure.qml" line="32"/>
         <source>Project Structure</source>
         <translation>Projectstructuur</translation>
     </message>
@@ -7303,245 +8199,297 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>ProjectToolbar</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="153"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="153"/>
         <source>New</source>
         <translation>Nieuw</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="156"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="156"/>
         <source>Create a new JSON project</source>
         <translation>Maak een nieuw JSON-project</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="172"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="172"/>
         <source>Open</source>
         <translation>Open</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="176"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="176"/>
         <source>Open an existing JSON project</source>
         <translation>Open een bestaand JSON-project</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="182"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="182"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="186"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="186"/>
         <source>Save the current project</source>
         <translation>Sla het huidige project op</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="193"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="193"/>
         <source>Save As</source>
         <translation>Opslaan Als</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="197"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="197"/>
         <source>Save the current project under a new name</source>
         <translation>Sla het huidige project op onder een nieuwe naam</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="217"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="217"/>
         <source>Add Device</source>
         <translation>Apparaat Toevoegen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="221"/>
         <source>Add a new data source (device) to the project</source>
         <translation>Voeg een nieuwe gegevensbron (apparaat) toe aan het project</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="241"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="241"/>
         <source>Action</source>
         <translation>Actie</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="244"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="244"/>
         <source>Add a new action to the project</source>
         <translation>Voeg een nieuwe actie toe aan het project</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="263"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="265"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="265"/>
         <source>Add a generic dataset</source>
         <translation>Voeg een generieke dataset toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="281"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="281"/>
         <source>Plot</source>
         <translation>Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="286"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="286"/>
         <source>Add a 2D plot dataset</source>
         <translation>Voeg een 2D-plotdataset toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="292"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="292"/>
         <source>FFT Plot</source>
         <translation>FFT-Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="297"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="297"/>
         <source>Add a Fast Fourier Transform plot</source>
         <translation>Voeg een Fast Fourier Transform-plot toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="303"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="303"/>
         <source>Gauge</source>
         <translation>Meter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="308"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="308"/>
         <source>Add a gauge widget for numeric data</source>
         <translation>Voeg een meterwidget toe voor numerieke gegevens</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="314"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="314"/>
         <source>Level Indicator</source>
         <translation>Niveau-indicator</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="319"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="319"/>
         <source>Add a vertical bar level indicator</source>
         <translation>Voeg een verticale balkniveau-indicator toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="325"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="325"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="330"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="330"/>
         <source>Add a compass widget for directional data</source>
         <translation>Voeg een kompaswidget toe voor richtingsgegevens</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="336"/>
         <source>LED Indicator</source>
         <translation>LED-indicator</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
         <source>Add an LED-style status indicator</source>
         <translation>Voeg een LED-stijl statusindicator toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="362"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="362"/>
         <source>Group</source>
         <translation>Groep</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="364"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="364"/>
         <source>Add a dataset container group</source>
         <translation>Voeg een gegevenssetcontainergroep toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="366"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="366"/>
         <source>Dataset Container</source>
         <translation>Dataset Container</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="373"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="373"/>
         <source>Image</source>
         <translation>Afbeelding</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
         <source>Add an image/video stream viewer</source>
         <translation>Voeg een afbeelding/video stream viewer toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="377"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="377"/>
         <source>Image View</source>
         <translation>Afbeelding Weergave</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="391"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="391"/>
         <source>Table</source>
         <translation>Tabel</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="396"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="396"/>
         <source>Add a data table view</source>
         <translation>Voeg een datatabelweergave toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Data Grid</source>
         <translation>Datagrid</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="402"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="402"/>
         <source>Multi-Plot</source>
         <translation>Multi-Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="407"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="407"/>
         <source>Add a 2D plot with multiple signals</source>
         <translation>Voeg een 2D-plot met meerdere signalen toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="409"/>
         <source>Multiple Plot</source>
         <translation>Meerdere Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="413"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="420"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="413"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="420"/>
         <source>3D Plot</source>
         <translation>3D-Plot</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="418"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="418"/>
         <source>Add a 3D plot visualization</source>
         <translation>Voeg een 3D-plotvisualisatie toe</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="424"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="431"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="424"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="431"/>
         <source>Accelerometer</source>
         <translation>Versnellingsmeter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="429"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="429"/>
         <source>Add a group for 3-axis accelerometer data</source>
         <translation>Voeg een groep toe voor 3-assige versnellingsmetergegevens</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="441"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="441"/>
         <source>Gyroscope</source>
         <translation>Gyroscoop</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="442"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="442"/>
         <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
         <translation>Voeg een groep toe voor 3-assige gyroscoopgegevens (hoeksnelheden worden automatisch in oriëntatie geïntegreerd)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="446"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="453"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="446"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="453"/>
         <source>GPS Map</source>
         <translation>GPS-kaart</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
         <source>Add a map widget for GPS data</source>
         <translation>Voeg een kaartwidget toe voor GPS-gegevens</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="472"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="472"/>
         <source>Help Center</source>
         <translation>Helpcentrum</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="476"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Sections/ProjectToolbar.qml" line="476"/>
         <source>Open the Project Editor documentation</source>
         <translation>Open de Project Editor-documentatie</translation>
     </message>
@@ -7558,66 +8506,79 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>ProjectView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
         <translation>Pro-functies gedetecteerd in dit project.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="83"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="83"/>
         <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
         <translation>Vervangende widgets worden gebruikt. Koop een licentie om volledige functionaliteit te ontgrendelen.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="118"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="118"/>
         <source>Project Title:</source>
         <translation>Projecttitel:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="129"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="129"/>
         <source>Untitled Project</source>
         <translation>Naamloos Project</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="149"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="149"/>
         <source>Points:</source>
         <translation>Punten:</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="209"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="209"/>
         <source>Source</source>
         <translation>Bron</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="210"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="210"/>
         <source>Sources</source>
         <translation>Bronnen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="215"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="215"/>
         <source>Group</source>
         <translation>Groep</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="216"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="216"/>
         <source>Groups</source>
         <translation>Groepen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="221"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="221"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="222"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="222"/>
         <source>Datasets</source>
         <translation>Datasets</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="227"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="227"/>
         <source>Action</source>
         <translation>Actie</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="228"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/ProjectView.qml" line="228"/>
         <source>Actions</source>
         <translation>Acties</translation>
     </message>
@@ -7812,27 +8773,32 @@ Klik op Verversen om de lijst bij te werken.</translation>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="49"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="50"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="50"/>
         <source>Preferences</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="70"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="71"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="71"/>
         <source>General</source>
         <translation>Algemeen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="153"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="154"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="154"/>
         <source>Language</source>
         <translation>Taal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="169"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="170"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="170"/>
         <source>Theme</source>
         <translation>Thema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="204"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="205"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="205"/>
         <source>Workspace Folder</source>
         <translation>Werkmapmap</translation>
     </message>
@@ -7845,37 +8811,44 @@ Klik op Verversen om de lijst bij te werken.</translation>
         <translation type="vanished">TCP-Plugins Inschakelen (Poort 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="284"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="285"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="285"/>
         <source>Enable API Server (Port 7777)</source>
         <translation>API-server Inschakelen (Poort 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="234"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="235"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="235"/>
         <source>Automatically Check for Updates</source>
         <translation>Automatisch Controleren op Updates</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="76"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="77"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="77"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="369"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="370"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="370"/>
         <source>Data Plotting</source>
         <translation>Gegevensplotten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="384"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="385"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="385"/>
         <source>Point Count</source>
         <translation>Puntenaantal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="401"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="402"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="402"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>UI Verversingssnelheid (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="525"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="526"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="526"/>
         <source>Show Actions Panel</source>
         <translation>Toon Actiepaneel</translation>
     </message>
@@ -7884,7 +8857,8 @@ Klik op Verversen om de lijst bij te werken.</translation>
         <translation type="vanished">Werkbalk automatisch verbergen op dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="541"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="542"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="542"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Altijd Taakbalkknoppen Tonen</translation>
     </message>
@@ -7893,32 +8867,38 @@ Klik op Verversen om de lijst bij te werken.</translation>
         <translation type="vanished">Gebruik Aparte Thread voor Frame Extractie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="82"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="83"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="83"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="138"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="139"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="139"/>
         <source>Appearance</source>
         <translation>Uiterlijk</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="188"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="189"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="189"/>
         <source>Files &amp; Updates</source>
         <translation>Bestanden &amp; Updates</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="252"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="253"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="253"/>
         <source>Advanced</source>
         <translation>Geavanceerd</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="303"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="303"/>
         <source>Allow External API Connections</source>
         <translation>Toestaan Externe API-verbindingen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="267"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="268"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="268"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Werkbalk Automatisch Verbergen</translation>
     </message>
@@ -7943,139 +8923,168 @@ Klik op Verversen om de lijst bij te werken.</translation>
         <translation type="vanished">Widget Lettergrootte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="464"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="464"/>
         <source>Small</source>
         <translation>Klein</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="464"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="464"/>
         <source>Normal</source>
         <translation>Normaal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="464"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="464"/>
         <source>Large</source>
         <translation>Groot</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="464"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="464"/>
         <source>Extra Large</source>
         <translation>Extra Groot</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="463"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="464"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="464"/>
         <source>Custom</source>
         <translation>Aangepast</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="510"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="511"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="511"/>
         <source>Layout</source>
         <translation>Indeling</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="636"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="637"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="637"/>
         <source>Display</source>
         <translation>Weergave</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="651"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="652"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="652"/>
         <source>Display Mode</source>
         <translation>Weergavemodus</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="438"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="664"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="439"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="665"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="439"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="665"/>
         <source>Font Family</source>
         <translation>Lettertypefamilie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="321"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="322"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="322"/>
         <source>Export Protobuf File</source>
         <translation>Exporteer Protobuf-bestand</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="327"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="328"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="328"/>
         <source>Export...</source>
         <translation>Exporteren...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="423"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="424"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="424"/>
         <source>Dashboard Font</source>
         <translation>Dashboard-lettertype</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="453"/>
-        <location filename="../../qml/Dialogs/Settings.qml" line="679"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="454"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="680"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="454"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="680"/>
         <source>Font Size</source>
         <translation>Lettergrootte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="564"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="565"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="565"/>
         <source>Image Export</source>
         <translation>Afbeelding Exporteren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="582"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="583"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="583"/>
         <source>Save Images by Default</source>
         <translation>Standaard Afbeeldingen Opslaan</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="696"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="697"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="697"/>
         <source>Show Timestamps</source>
         <translation>Toon Timestamps</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="715"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="716"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="716"/>
         <source>Data Transmission</source>
         <translation>Gegevensoverdracht</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="730"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="731"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="731"/>
         <source>Line Ending</source>
         <translation>Regelaftes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="743"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="744"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="744"/>
         <source>Input Mode</source>
         <translation>Invoermodus</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="756"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="757"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="757"/>
         <source>Checksum</source>
         <translation>Controlegetal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="769"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="770"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="770"/>
         <source>Echo Sent Data</source>
         <translation>Echo Verzonden Gegevens</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="788"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="789"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="789"/>
         <source>Escape Codes</source>
         <translation>Escape Codes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="803"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="804"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="804"/>
         <source>VT100 Emulation</source>
         <translation>VT100-Emulatie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="822"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="823"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="823"/>
         <source>ANSI Colors</source>
         <translation>ANSI-Kleuren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="856"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="857"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="857"/>
         <source>Reset</source>
         <translation>Herstellen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="894"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="895"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="895"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="905"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="906"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Settings.qml" line="906"/>
         <source>Apply</source>
         <translation>Toepassen</translation>
     </message>
@@ -8085,96 +9094,116 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="35"/>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="356"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="35"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="356"/>
         <source>Device Setup</source>
         <translation>Apparaatinstelling</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="145"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="145"/>
         <source>API Server Active (%1)</source>
         <translation>API-server Actief (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="146"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="146"/>
         <source>API Server Ready</source>
         <translation>API-server Gereed</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="147"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="147"/>
         <source>API Server Off</source>
         <translation>API-server Uit</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="207"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="207"/>
         <source>Frame Parsing</source>
         <translation>Frame Parsing</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="215"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="215"/>
         <source>No Parsing (Device Sends JSON Data)</source>
         <translation>Geen Parsing (Apparaat Verzendt JSON Gegevens)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="226"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="226"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Snelle Plot (Komma Gescheiden Waarden)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="237"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="237"/>
         <source>Parse via JSON Project File</source>
         <translation>Parse via JSON Projectbestand</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="255"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="255"/>
         <source>Change Project File (%1)</source>
         <translation>Wijzig Projectbestand (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="256"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="256"/>
         <source>Select Project File</source>
         <translation>Selecteer Projectbestand</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="271"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="271"/>
         <source>Data Export</source>
         <translation>Gegevens Exporteren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="284"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="284"/>
         <source>Create CSV File</source>
         <translation>Maak CSV-bestand Aan</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="301"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="301"/>
         <source>Create MDF4 File</source>
         <translation>Maak MDF4-bestand</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="319"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="319"/>
         <source>Export Console Data</source>
         <translation>Exporteer Console Data</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="366"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="366"/>
         <source>I/O Interface: %1</source>
         <translation>I/O-interface: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="428"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="428"/>
         <source>Multi-Device Project</source>
         <translation>Multi-Device Project</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="441"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="441"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Dit project streamt gegevens van %1 onafhankelijke apparaten.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="454"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="454"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under the Sources tab.</source>
         <translation>Elk apparaat heeft zijn eigen verbindingsinstellingen. Configureer ze in de Projecteditor onder het tabblad Bronnen.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="475"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Setup.qml" line="475"/>
         <source>Open Project Editor</source>
         <translation>Open Projecteditor</translation>
     </message>
@@ -8188,55 +9217,70 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="102"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="218"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="102"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="218"/>
         <source>Undo</source>
         <translation>Ongedaan maken</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="109"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="229"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="109"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="229"/>
         <source>Redo</source>
         <translation>Opnieuw doen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="118"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="248"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="118"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="248"/>
         <source>Cut</source>
         <translation>Knippen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="123"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="258"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="123"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="258"/>
         <source>Copy</source>
         <translation>Kopiëren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="128"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="268"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="128"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="268"/>
         <source>Paste</source>
         <translation>Plakken</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="135"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="135"/>
         <source>Select All</source>
         <translation>Alles selecteren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="198"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="198"/>
         <source>Reset</source>
         <translation>Reset</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="203"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="203"/>
         <source>Reset to the default parsing script</source>
         <translation>Herstel naar het standaard parsingsscript</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="208"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="208"/>
         <source>Open</source>
         <translation>Openen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="213"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="213"/>
         <source>Import a JavaScript file for data parsing</source>
         <translation>Importeer een JavaScript-bestand voor gegevensparsing</translation>
     </message>
@@ -8250,51 +9294,61 @@ Klik op Verversen om de lijst bij te werken.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="223"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="223"/>
         <source>Undo the last code edit</source>
         <translation>Maak de laatste codebewerking ongedaan</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="235"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="235"/>
         <source>Redo the previously undone edit</source>
         <translation>Herstel de eerder ongedaan gemaakte bewerking</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
         <source>Cut selected code to clipboard</source>
         <translation>Knip geselecteerde code naar klembord</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="263"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="263"/>
         <source>Copy selected code to clipboard</source>
         <translation>Kopieer geselecteerde code naar klembord</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
         <source>Paste code from clipboard</source>
         <translation>Plak code van klembord</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="286"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="286"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="291"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="291"/>
         <source>Open help documentation for JavaScript data parsing</source>
         <translation>Open helpdocumentatie voor JavaScript-gegevensparsering</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="331"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="331"/>
         <source>Select Template...</source>
         <translation>Selecteer Sjabloon...</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="347"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="347"/>
         <source>Test With Sample Data</source>
         <translation>Test Met Voorbeeldgegevens</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="357"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceFrameParserView.qml" line="357"/>
         <source>Evaluate</source>
         <translation>Evalueren</translation>
     </message>
@@ -8303,26 +9357,31 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>SourceView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="107"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="107"/>
         <source>Duplicate</source>
         <translation>Dupliceren</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="110"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="110"/>
         <source>Create a copy of this data source</source>
         <translation>Maak een kopie van deze gegevensbron</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="121"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="121"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="126"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="126"/>
         <source>Remove this data source</source>
         <translation>Verwijder deze gegevensbron</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="127"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/SourceView.qml" line="127"/>
         <source>The primary data source cannot be removed</source>
         <translation>De primaire gegevensbron kan niet worden verwijderd</translation>
     </message>
@@ -8331,81 +9390,97 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>StartMenu</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="151"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="151"/>
         <source>Workspaces</source>
         <translation>Werkruimtes</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="172"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="172"/>
         <source>No Groups Available</source>
         <translation>Geen Groepen Beschikbaar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="195"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="195"/>
         <source>Actions</source>
         <translation>Acties</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="215"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="215"/>
         <source>No Actions Available</source>
         <translation>Geen Acties Beschikbaar</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="238"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="272"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="272"/>
         <source>Manage Plugins...</source>
         <translation>Beheer Plugins...</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="280"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="280"/>
         <source>No Plugins Installed</source>
         <translation>Geen Plugins Geïnstalleerd</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="309"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="309"/>
         <source>Auto Layout</source>
         <translation>Automatische Indeling</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="321"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="321"/>
         <source>Full Screen</source>
         <translation>Volledig Scherm</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="331"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="331"/>
         <source>Add External Window</source>
         <translation>Extern venster toevoegen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="349"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="349"/>
         <source>CSV Logging</source>
         <translation>CSV-logboek</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="358"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="358"/>
         <source>MDF4 Logging</source>
         <translation>MDF4 Logging</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="367"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="367"/>
         <source>Console Logging</source>
         <translation>Console Logging</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="386"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="386"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="400"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="400"/>
         <source>Preferences</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="410"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="410"/>
         <source>Help Center</source>
         <translation>Helpcentrum</translation>
     </message>
@@ -8415,21 +9490,25 @@ Klik op Verversen om de lijst bij te werken.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="435"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="435"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="462"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="462"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="463"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="463"/>
         <source>Pause</source>
         <translation>Pauzeren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="470"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="470"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>
@@ -8438,6 +9517,7 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>SubMenuCombo</name>
     <message>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="80"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/SubMenuCombo.qml" line="80"/>
         <source>No Data Available</source>
         <translation>Geen Gegevens Beschikbaar</translation>
     </message>
@@ -8446,26 +9526,31 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>TableDelegate</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="124"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="124"/>
         <source>Parameter</source>
         <translation>Parameter</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="144"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="144"/>
         <source>Value</source>
         <translation>Waarde</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="456"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="456"/>
         <source>(Custom Icon)</source>
         <translation>(Aangepast Pictogram)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="657"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="657"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="657"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/ProjectEditor/Views/TableDelegate.qml" line="657"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -8474,6 +9559,7 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>Taskbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="91"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="91"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
@@ -8482,46 +9568,55 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>Terminal</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="143"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="143"/>
         <source>Copy</source>
         <translation>Kopiëren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="151"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="151"/>
         <source>Select all</source>
         <translation>Alles selecteren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="157"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="157"/>
         <source>Clear</source>
         <translation>Wissen</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="256"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="256"/>
         <source>Send Data to Device</source>
         <translation>Gegevens naar apparaat verzenden</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="422"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="422"/>
         <source>Show Timestamp</source>
         <translation>Toon Tijdstempel</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="430"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="430"/>
         <source>Echo</source>
         <translation>Echo</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="447"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="447"/>
         <source>Emulate VT-100</source>
         <translation>Emuleer VT-100</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="460"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="460"/>
         <source>ANSI Colors</source>
         <translation>ANSI-kleuren</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="484"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Widgets/Dashboard/Terminal.qml" line="484"/>
         <source>Display: %1</source>
         <translation>Weergave: %1</translation>
     </message>
@@ -8530,101 +9625,121 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>Toolbar</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="199"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="199"/>
         <source>Project Editor</source>
         <translation>Projecteditor</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="202"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="202"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Open de Projecteditor om uw JSON-indeling te maken of te wijzigen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="220"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="220"/>
         <source>Open Project</source>
         <translation>Open Project</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="222"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="222"/>
         <source>Open an existing JSON project</source>
         <translation>Open een bestaand JSON-project</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="232"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="232"/>
         <source>Open CSV</source>
         <translation>Open CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="237"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Speel een CSV-bestand af alsof het live sensorgegevens zijn</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="243"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="243"/>
         <source>Open MDF4</source>
         <translation>Open MDF4</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="249"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="249"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Speel een MDF4-bestand af alsof het live sensorgegevens zijn (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="268"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="268"/>
         <source>Extensions</source>
         <translation>Extensies</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="271"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="271"/>
         <source>Browse and install extensions</source>
         <translation>Bladeren en extensies installeren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="282"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="282"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="289"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="289"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>Configureer MQTT-verbinding (publiceren of abonneren)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="309"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="309"/>
         <source>Preferences</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="312"/>
         <source>Open application settings and preferences</source>
         <translation>Open applicatie-instellingen en voorkeuren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="330"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="330"/>
         <source>CSV Export</source>
         <translation>CSV-export</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="335"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="335"/>
         <source>Toggle automatic CSV logging of incoming data frames</source>
         <translation>Automatisch CSV-loggen van inkomende datakaders in-/uitschakelen</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="342"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="342"/>
         <source>MDF4 Export</source>
         <translation>MDF4-export</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="347"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="347"/>
         <source>Toggle automatic MDF4 logging of incoming data frames (Pro)</source>
         <translation>Automatisch MDF4-loggen van inkomende datakaders in-/uitschakelen (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="354"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="354"/>
         <source>Console Export</source>
         <translation>Console Exporteren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="359"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="359"/>
         <source>Toggle automatic plain-text logging of console output</source>
         <translation>Automatisch loggen van console-uitvoer in platte tekst in-/uitschakelen</translation>
     </message>
@@ -8666,16 +9781,19 @@ Klik op Verversen om de lijst bij te werken.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="401"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="401"/>
         <source>Browse example projects</source>
         <translation>Blader door voorbeeldprojecten</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="408"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="408"/>
         <source>Help Center</source>
         <translation>Helpcentrum</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="412"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Blader door documentatie, FAQ en wiki</translation>
     </message>
@@ -8729,16 +9847,19 @@ Klik op Verversen om de lijst bij te werken.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="378"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="378"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>Show application info and license details</source>
         <translation>Toon applicatie-informatie en licentiegegevens</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="397"/>
         <source>Examples</source>
         <translation>Voorbeelden</translation>
     </message>
@@ -8756,37 +9877,45 @@ Klik op Verversen om de lijst bij te werken.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="418"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="418"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI Wiki &amp; Chat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="421"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="421"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Bekijk gedetailleerde documentatie en stel vragen op DeepWiki</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="438"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="438"/>
         <source>Activate</source>
         <translation>Activeren</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="442"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="442"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Beheer licentie en activeer Serial Studio Pro</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="457"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="479"/>
         <source>Disconnect</source>
         <translation>Verbinding verbreken</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="457"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="457"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/Toolbar.qml" line="459"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Verbinden of verbreken van apparaat of MQTT-broker</translation>
     </message>
@@ -8799,41 +9928,49 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>UART</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="66"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="66"/>
         <source>COM Port</source>
         <translation>COM-poort</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="95"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="95"/>
         <source>Baud Rate</source>
         <translation>Baudrate</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="177"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="177"/>
         <source>Data Bits</source>
         <translation>Databits</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="194"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="194"/>
         <source>Parity</source>
         <translation>Pariteit</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="211"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="211"/>
         <source>Stop Bits</source>
         <translation>Stopbits</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="228"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="228"/>
         <source>Flow Control</source>
         <translation>Stroomregeling</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="256"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="256"/>
         <source>Auto Reconnect</source>
         <translation>Automatisch Opnieuw Verbinden</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="274"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="274"/>
         <source>Send DTR Signal</source>
         <translation>DTR-signaal Verzenden</translation>
     </message>
@@ -8895,71 +10032,85 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>USB</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="48"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="48"/>
         <source>USB Device</source>
         <translation>USB-apparaat</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="78"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="78"/>
         <source>Transfer Mode</source>
         <translation>Overdrachtsmodus</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="87"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="87"/>
         <source>Bulk Stream</source>
         <translation>Bulkstroom</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="88"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="88"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>Geavanceerd (Bulk + Control)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
         <source>Isochronous</source>
         <translation>Isochronisch</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="141"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="141"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>Verbind met USB-apparaten via bulk-, controle- of isochronische overdrachten. Geschikt voor dataloggers, aangepaste firmware-apparaten en USB-instrumenten.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="150"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="150"/>
         <source>USB specifications (USB.org)</source>
         <translation>USB-specificaties (USB.org)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="167"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="167"/>
         <source>IN Endpoint</source>
         <translation>IN Eindpunt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="203"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="203"/>
         <source>OUT Endpoint</source>
         <translation>OUT Eindpunt</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="239"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="239"/>
         <source>Max Packet Size</source>
         <translation>Max Pakketgrootte</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="300"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="300"/>
         <source>Control Transfers Enabled</source>
         <translation>Controleoverdrachten Ingeschakeld</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="308"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="308"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>Het verzenden van onjuiste controleverzoeken kan aangesloten hardware laten crashen of beschadigen. Gebruik met voorzichtigheid.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="315"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="315"/>
         <source>Learn about USB control transfers</source>
         <translation>Leer over USB-controleoverdrachten</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="349"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="349"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>Pakketgrootte moet overeenkomen met de maximale overdrachtsgrootte gerapporteerd door het eindpunt. Typische waarden: 192 B (FS audio), 1024 B (HS).</translation>
     </message>
@@ -8996,63 +10147,77 @@ Klik op Verversen om de lijst bij te werken.</translation>
     <name>Welcome</name>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="174"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="174"/>
         <source>Welcome to %1!</source>
         <translation>Welkom bij %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="185"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="185"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
         <translation>Serial Studio is een krachtig real-time visualisatiehulpmiddel, gemaakt voor ingenieurs, studenten en makers.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="196"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="196"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
         <translation>U kunt een volledig functionele proefperiode van 14 dagen starten, activeren met uw licentiesleutel, of de GPLv3-broncode zelf downloaden en compileren.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="206"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="385"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="206"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="385"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
         <translation>Het kopen van Pro ondersteunt de auteur direct en helpt toekomstige ontwikkeling te financieren.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="214"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="393"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="214"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="393"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
         <translation>Het zelf bouwen van de GPLv3-versie helpt de gemeenschap te groeien en stimuleert technische bijdragen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="235"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="235"/>
         <source>Please wait...</source>
         <translation>Even geduld alstublieft...</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="269"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="269"/>
         <source>%1 days remaining in your trial.</source>
         <translation>%1 dagen resterend in uw proefperiode.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="279"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="279"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
         <translation>U gebruikt momenteel de volledig uitgeruste proefversie van %1 Pro. Het is geldig voor 14 dagen persoonlijk, niet-commercieel gebruik.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="290"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="290"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
         <translation>Upgrade naar een betaald plan om Serial Studio Pro te blijven gebruiken.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="298"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="298"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
         <translation>Of compile de GPLv3-broncode om het gratis te gebruiken.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="306"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="306"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
         <translation>Om beschikbare abonnementsplannen te zien, klik op "Nu upgraden" hieronder.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="326"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="326"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
         <translation>Val me niet lastig over de proefperiode.
@@ -9060,46 +10225,55 @@ Ik begrijp dat ik na afloop een licentie moet kopen of de GPLv3-versie moet bouw
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="355"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="355"/>
         <source>Your %1 trial has expired.</source>
         <translation>Uw %1-proefperiode is verlopen.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="365"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="365"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
         <translation>Uw proefperiode is afgelopen. Om %1 met alle Pro-functies te blijven gebruiken, upgrade naar een betaald plan.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="376"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="376"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
         <translation>Als u dat liever heeft, kunt u ook de open-source versie onder de GPLv3-licentie compileren.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="404"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="404"/>
         <source>Thank you for trying %1!</source>
         <translation>Bedankt voor het proberen van %1!</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="448"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="448"/>
         <source>Upgrade Now</source>
         <translation>Nu Upgraden</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="460"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="460"/>
         <source>Activate</source>
         <translation>Activeren</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Open in Limited Mode</source>
         <translation>Open in Beperkte Modus</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Continue</source>
         <translation>Doorgaan</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
+        <location filename="../../../build/Qt_6_11_0_for_macOS-Release/app/gui/qml/Dialogs/Welcome.qml" line="479"/>
         <source>Start Trial</source>
         <translation>Start Proefversie</translation>
     </message>

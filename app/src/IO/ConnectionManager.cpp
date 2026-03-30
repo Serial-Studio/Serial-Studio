@@ -32,6 +32,7 @@
 #include "IO/Drivers/BluetoothLE.h"
 #include "IO/Drivers/Network.h"
 #include "IO/Drivers/UART.h"
+#include "IO/FileTransmission.h"
 #include "Misc/Translator.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -1295,9 +1296,14 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
 
   static auto& console = Console::Handler::instance();
   static auto& server  = API::Server::instance();
+  static auto& fileTx  = IO::FileTransmission::instance();
 
   server.hotpathTxData(data);
   console.hotpathRxDeviceData(deviceId, data);
+
+  // Route incoming data to file transfer protocols
+  if (fileTx.active()) [[unlikely]]
+    fileTx.onRawDataReceived(*data);
 
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();

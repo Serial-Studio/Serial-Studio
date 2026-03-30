@@ -15,9 +15,6 @@
 BasedOnStyle:                          LLVM
 Language:                              Cpp
 Standard:                              c++20
-# RemoveBracesLLVM forces single-statement bodies to omit braces
-# This makes deeply nested code visually painful, encouraging early returns
-RemoveBracesLLVM:                      true
 
 # Column & Indentation
 # 100 column limit: With 2-space indent and max 3 nesting levels,
@@ -38,6 +35,7 @@ IndentWrappedFunctionNames:            false
 LambdaBodyIndentation:                 Signature
 
 # Braces (K&R with function braces on new line)
+RemoveBracesLLVM:                      true
 BreakBeforeBraces:                     Custom
 BraceWrapping:
   AfterCaseLabel:                      false

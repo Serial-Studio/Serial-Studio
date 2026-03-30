@@ -30,7 +30,6 @@ import "../Widgets"
 
 SmartDialog {
   id: root
-
   title: qsTr("Examples Browser")
 
   //

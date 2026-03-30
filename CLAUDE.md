@@ -36,7 +36,8 @@ Data sources: UART, TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HI
 ```
 app/src/
 ├── IO/          ConnectionManager, DeviceManager, CircularBuffer, FrameReader, FrameConfig
-│   └── Drivers/ UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, Process, USB
+│   ├── Drivers/ UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, Process, USB
+│   └── FileTransmission/ Protocol base, XMODEM, YMODEM, ZMODEM, CRC utilities
 ├── DataModel/   FrameBuilder, Frame, FrameConsumer, FrameParser, ProjectModel, ProjectEditor
 ├── UI/          Dashboard + widget types
 ├── API/         TCP server port 7777 (MCP + legacy JSON-RPC)
@@ -129,6 +130,16 @@ Main thread   → FrameReader → FrameBuilder → Frame
 - GPL: `openJsonFile()` truncates `m_sources` to 1; `addSource()` gated by `BUILD_COMMERCIAL`.
 - Bus type change: `m_awaitingContextRebuild` flag → one-shot `contextsRebuilt` → `buildSourceModel`.
 - Source JSON keys: `title`, `sourceId`, `busType`, `frameStart`, `frameEnd`, `frameDetection`, `decoder`, `hexadecimalDelimiters`, `frameParserCode`, `connection`.
+
+### File Transmission — Protocol Architecture
+
+- `IO::FileTransmission` (singleton, `Cpp_IO_FileTransmission`): controller that owns protocol instances and manages plain text / raw binary modes.
+- `IO::Protocols::Protocol`: abstract base class with `startTransfer()`, `cancelTransfer()`, `processInput()`, signals `writeRequested()`, `progressChanged()`, `statusMessage()`, `finished()`.
+- `IO::Protocols::XMODEM`: 128/1024-byte blocks, CRC-16, ACK/NAK/CAN. YMODEM inherits from XMODEM.
+- `IO::Protocols::YMODEM`: adds block 0 (filename + size), dual-EOT, end-of-batch signaling.
+- `IO::Protocols::ZMODEM`: streaming with ZDLE escaping, hex/binary-32 headers, CRC-32, ZRPOS crash recovery.
+- Incoming device data is routed from `ConnectionManager::onRawDataReceived()` → `FileTransmission::onRawDataReceived()` (guarded by `active()` + `[[unlikely]]`).
+- Protocols emit `writeRequested(QByteArray)` → controller calls `ConnectionManager::writeData()`.
 
 ### Common Mistakes — Silent Breakage
 

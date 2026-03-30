@@ -1,0 +1,79 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020–2025 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSE_COMMERCIAL.md in the project root.
+ *
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ */
+
+#pragma once
+
+#include "IO/FileTransmission/XMODEM.h"
+
+namespace IO {
+namespace Protocols {
+
+/**
+ * @brief YMODEM (batch) file transfer protocol implementation.
+ *
+ * YMODEM extends XMODEM-1K with:
+ * - Block 0 containing filename and file size
+ * - 1024-byte data blocks with CRC-16
+ * - End-of-batch signaling via empty block 0
+ *
+ * Protocol flow:
+ *   Receiver sends 'C' → Sender sends block 0 (filename + size)
+ *   → Receiver ACKs + sends 'C' → Sender sends data blocks (1K)
+ *   → EOT → Receiver NAKs → EOT → Receiver ACKs
+ *   → Receiver sends 'C' → Sender sends empty block 0 (end of batch)
+ *   → Receiver ACKs → Done
+ */
+class YMODEM : public XMODEM {
+  Q_OBJECT
+
+public:
+  explicit YMODEM(QObject* parent = nullptr);
+
+  [[nodiscard]] QString protocolName() const override;
+
+  void startTransfer(const QString& filePath) override;
+  void processInput(const QByteArray& data) override;
+
+private:
+  enum class YState {
+    Idle,
+    WaitingForInitialC,
+    WaitingForBlock0Ack,
+    WaitingForDataC,
+    SendingData,
+    WaitingForDataAck,
+    WaitingForFirstEOTResponse,
+    WaitingForSecondEOTAck,
+    WaitingForEndBatchC,
+    WaitingForEndBatchAck,
+    Done
+  };
+
+  void sendBlock0();
+  void sendEndOfBatch();
+  void sendDataBlock();
+
+  YState m_yState;
+  QString m_filePath;
+};
+
+}  // namespace Protocols
+}  // namespace IO

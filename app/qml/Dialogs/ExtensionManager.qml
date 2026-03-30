@@ -28,7 +28,6 @@ import "../Widgets"
 
 SmartDialog {
   id: root
-
   title: qsTr("Extension Manager")
 
   readonly property int toolbarHeight: 40

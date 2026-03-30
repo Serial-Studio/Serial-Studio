@@ -260,6 +260,9 @@ set(SOURCES
   src/IO/ConnectionManager.cpp
   src/Console/Export.cpp
   src/IO/FileTransmission.cpp
+  src/IO/FileTransmission/XMODEM.cpp
+  src/IO/FileTransmission/YMODEM.cpp
+  src/IO/FileTransmission/ZMODEM.cpp
   src/IO/FrameReader.cpp
   src/DataModel/FrameParser.cpp
   src/DataModel/JsCodeEditor.cpp
@@ -345,6 +348,11 @@ set(HEADERS
   src/IO/Checksum.h
   src/IO/CircularBuffer.h
   src/IO/FileTransmission.h
+  src/IO/FileTransmission/CRC.h
+  src/IO/FileTransmission/Protocol.h
+  src/IO/FileTransmission/XMODEM.h
+  src/IO/FileTransmission/YMODEM.h
+  src/IO/FileTransmission/ZMODEM.h
   src/IO/FrameReader.h
   src/DataModel/FrameParser.h
   src/DataModel/JsCodeEditor.h

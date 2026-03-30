@@ -414,6 +414,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   frameBuilder->setupExternalConnections();
   consoleExport->setupExternalConnections();
   consoleHandler->setupExternalConnections();
+  ioFileTransmission->setupExternalConnections();
 
   // Wire addon manager signals to theme manager for hot-reloading user themes
   connect(miscExtensionManager,

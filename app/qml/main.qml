@@ -168,6 +168,10 @@ Item {
       id: donateDialog
     }
 
+    Dialogs.FileTransmission {
+      id: fileTransmissionDialog
+    }
+
     DialogLoader {
       id: mqttConfiguration
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/MQTTConfiguration.qml"
@@ -181,11 +185,6 @@ Item {
     DialogLoader {
       id: acknowledgementsDialog
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/Acknowledgements.qml"
-    }
-
-    DialogLoader {
-      id: fileTransmissionDialog
-      source: "qrc:/serial-studio.com/gui/qml/Dialogs/FileTransmission.qml"
     }
 
     DialogLoader {
@@ -241,7 +240,7 @@ Item {
   function showSettingsDialog()    { settingsDialog.showNormal() }
   function showProjectEditor()     { projectEditor.displayWindow() }
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
-  function showFileTransmission()  { fileTransmissionDialog.activate() }
+  function showFileTransmission()  { fileTransmissionDialog.showNormal() }
   function showExamplesBrowser()   { examplesBrowser.activate() }
   function showExtensionManager()  { extensionManager.activate() }
   function showHelpCenter(pageId) {

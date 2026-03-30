@@ -29,10 +29,6 @@ import "../Widgets"
 
 SmartDialog {
   id: root
-
-  //
-  // Window options
-  //
   title: qsTr("File Transmission")
 
   //
@@ -57,10 +53,14 @@ SmartDialog {
   Core.Settings {
     category: "FileTransmission"
     property alias interval: _interval.value
+    property alias transferMode: _modeCombo.currentIndex
+    property alias blockSize: _blockSize.value
+    property alias timeout: _timeout.value
+    property alias maxRetries: _retries.value
   }
 
   //
-  // Window controls
+  // Dialog layout
   //
   dialogContent: ColumnLayout {
     id: column
@@ -68,142 +68,421 @@ SmartDialog {
     spacing: 4
     anchors.centerIn: parent
 
-      GroupBox {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+    //
+    // File & protocol selection group
+    //
+    GroupBox {
+      Layout.fillWidth: true
+      Layout.minimumWidth: 420
 
-        background: Rectangle {
-          radius: 2
-          border.width: 1
-          color: Cpp_ThemeManager.colors["groupbox_background"]
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+      background: Rectangle {
+        radius: 2
+        border.width: 1
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
+
+      ColumnLayout {
+        spacing: 2
+        anchors.fill: parent
+
+        //
+        // Transfer mode selector
+        //
+        Label {
+          text: qsTr("Transfer Protocol:")
+          opacity: enabled ? 1 : 0.5
+          enabled: !Cpp_IO_FileTransmission.active
+        } RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          enabled: !Cpp_IO_FileTransmission.active
+
+          ComboBox {
+            id: _modeCombo
+            Layout.fillWidth: true
+            model: Cpp_IO_FileTransmission.transferModes
+            currentIndex: Cpp_IO_FileTransmission.transferMode
+            onCurrentIndexChanged: {
+              if (currentIndex !== Cpp_IO_FileTransmission.transferMode)
+                Cpp_IO_FileTransmission.transferMode = currentIndex
+            }
+          }
         }
 
-        ColumnLayout {
-          spacing: 2
-          anchors.fill: parent
+        //
+        // Spacer
+        //
+        Item {
+          implicitHeight: 4
+        }
 
-          //
-          // File selection
-          //
+        //
+        // File selection
+        //
+        Label {
+          text: qsTr("File Selection:")
+          opacity: enabled ? 1 : 0.5
+          enabled: !Cpp_IO_FileTransmission.active
+        } RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          enabled: !Cpp_IO_FileTransmission.active
+
+          TextField {
+            enabled: false
+            Layout.fillWidth: true
+            Layout.minimumWidth: 256
+            Layout.alignment: Qt.AlignVCenter
+            text: Cpp_IO_FileTransmission.fileName
+          }
+
+          Button {
+            text: qsTr("Select File...")
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: Cpp_IO_FileTransmission.openFile()
+          }
+        }
+
+        //
+        // Spacer
+        //
+        Item {
+          implicitHeight: 4
+        }
+
+        //
+        // Interval (plain text / raw binary modes)
+        //
+        Label {
+          text: qsTr("Transmission Interval:")
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex <= 1
+          enabled: !Cpp_IO_FileTransmission.active
+        } RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex <= 1
+          enabled: !Cpp_IO_FileTransmission.active
+
+          SpinBox {
+            id: _interval
+            from: 0
+            to: 10000
+            editable: true
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            value: Cpp_IO_FileTransmission.lineTransmissionInterval
+            onValueChanged: {
+              if (value !== Cpp_IO_FileTransmission.lineTransmissionInterval)
+                Cpp_IO_FileTransmission.lineTransmissionInterval = value
+            }
+          }
+
           Label {
-            text: qsTr("File Selection:")
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_FileTransmission.active
-          } RowLayout {
-            spacing: 4
+            text: qsTr("msecs")
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["text"]
+          }
+        }
+
+        //
+        // Block size (raw binary / ZMODEM)
+        //
+        Label {
+          text: qsTr("Block Size:")
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex === 1 || _modeCombo.currentIndex === 5
+          enabled: !Cpp_IO_FileTransmission.active
+        } RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex === 1 || _modeCombo.currentIndex === 5
+          enabled: !Cpp_IO_FileTransmission.active
+
+          SpinBox {
+            id: _blockSize
+            from: 64
+            to: 8192
+            stepSize: 64
+            editable: true
             Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_FileTransmission.active
-
-            TextField {
-              enabled: false
-              Layout.fillWidth: true
-              Layout.minimumWidth: 256
-              Layout.alignment: Qt.AlignVCenter
-              text: Cpp_IO_FileTransmission.fileName
-            }
-
-            Button {
-              text: qsTr("Select File...")
-              Layout.alignment: Qt.AlignVCenter
-              onClicked: Cpp_IO_FileTransmission.openFile()
+            Layout.alignment: Qt.AlignVCenter
+            value: Cpp_IO_FileTransmission.blockSize
+            onValueChanged: {
+              if (value !== Cpp_IO_FileTransmission.blockSize)
+                Cpp_IO_FileTransmission.blockSize = value
             }
           }
 
-          //
-          // Spacer
-          //
-          Item {
-            implicitHeight: 4
-          }
-
-          //
-          // Interval selection
-          //
           Label {
-            text: qsTr("Transmission Interval:")
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_FileTransmission.active
-          } RowLayout {
-            spacing: 4
+            text: qsTr("bytes")
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["text"]
+          }
+        }
+
+        //
+        // Timeout (protocol modes only)
+        //
+        Label {
+          text: qsTr("Timeout:")
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex >= 2
+          enabled: !Cpp_IO_FileTransmission.active
+        } RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex >= 2
+          enabled: !Cpp_IO_FileTransmission.active
+
+          SpinBox {
+            id: _timeout
+            from: 1000
+            to: 60000
+            stepSize: 1000
+            editable: true
             Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            enabled: !Cpp_IO_FileTransmission.active
-
-            SpinBox {
-              id: _interval
-              from: 0
-              to: 10000
-              editable: true
-              Layout.fillWidth: true
-              Layout.alignment: Qt.AlignVCenter
-              value: Cpp_IO_FileTransmission.lineTransmissionInterval
-              onValueChanged: {
-                if (value !== Cpp_IO_FileTransmission.lineTransmissionInterval)
-                  Cpp_IO_FileTransmission.lineTransmissionInterval = value
-              }
-            }
-
-            Label {
-              text: qsTr("msecs")
-              Layout.alignment: Qt.AlignVCenter
-              color: Cpp_ThemeManager.colors["text"]
+            Layout.alignment: Qt.AlignVCenter
+            value: Cpp_IO_FileTransmission.protocolTimeout
+            onValueChanged: {
+              if (value !== Cpp_IO_FileTransmission.protocolTimeout)
+                Cpp_IO_FileTransmission.protocolTimeout = value
             }
           }
 
-          //
-          // Spacer
-          //
-          Item {
-            implicitHeight: 4
+          Label {
+            text: qsTr("msecs")
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["text"]
           }
+        }
 
-          //
-          // Progress + Start/Stop button
-          //
-          RowLayout {
-            spacing: 4
+        //
+        // Max retries (protocol modes only)
+        //
+        Label {
+          text: qsTr("Max Retries:")
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex >= 2
+          enabled: !Cpp_IO_FileTransmission.active
+        } RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+          opacity: enabled ? 1 : 0.5
+          visible: _modeCombo.currentIndex >= 2
+          enabled: !Cpp_IO_FileTransmission.active
+
+          SpinBox {
+            id: _retries
+            from: 1
+            to: 100
+            editable: true
             Layout.fillWidth: true
-            opacity: enabled ? 1 : 0.5
-            enabled: Cpp_IO_FileTransmission.fileOpen
-            Behavior on opacity {NumberAnimation{}}
-
-            ColumnLayout {
-              spacing: 4
-              Layout.fillWidth: true
-              Layout.alignment: Qt.AlignVCenter
-
-              Label {
-                text: qsTr("Progress: %1").arg(Cpp_IO_FileTransmission.transmissionProgress) + "%"
-              }
-
-              ProgressBar {
-                from: 0
-                to: 100
-                Layout.fillWidth: true
-                value: Cpp_IO_FileTransmission.transmissionProgress
-              }
-            }
-
-            Button {
-              Layout.alignment: Qt.AlignBottom
-              checked: Cpp_IO_FileTransmission.active
-              text: (Cpp_IO_FileTransmission.transmissionProgress > 0 &&
-                     Cpp_IO_FileTransmission.transmissionProgress < 100) ?
-                      (Cpp_IO_FileTransmission.active ? qsTr("Pause Transmission") :
-                                                        qsTr("Resume Transmission")) :
-                      (Cpp_IO_FileTransmission.active ? qsTr("Stop Transmission") :
-                                                        qsTr("Begin Transmission"))
-              onClicked: {
-                if (Cpp_IO_FileTransmission.active)
-                  Cpp_IO_FileTransmission.stopTransmission()
-                else
-                  Cpp_IO_FileTransmission.beginTransmission()
-              }
+            Layout.alignment: Qt.AlignVCenter
+            value: Cpp_IO_FileTransmission.maxRetries
+            onValueChanged: {
+              if (value !== Cpp_IO_FileTransmission.maxRetries)
+                Cpp_IO_FileTransmission.maxRetries = value
             }
           }
         }
       }
     }
+
+    //
+    // Progress & status group
+    //
+    GroupBox {
+      Layout.fillWidth: true
+
+      background: Rectangle {
+        radius: 2
+        border.width: 1
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
+
+      ColumnLayout {
+        spacing: 4
+        anchors.fill: parent
+
+        //
+        // Status row: progress + speed + errors
+        //
+        RowLayout {
+          spacing: 8
+          Layout.fillWidth: true
+
+          ColumnLayout {
+            spacing: 2
+            Layout.fillWidth: true
+
+            Label {
+              text: qsTr("Progress: %1%").arg(Cpp_IO_FileTransmission.transmissionProgress)
+            }
+
+            ProgressBar {
+              from: 0
+              to: 100
+              Layout.fillWidth: true
+              value: Cpp_IO_FileTransmission.transmissionProgress
+            }
+          }
+        }
+
+        //
+        // Transfer details row
+        //
+        RowLayout {
+          spacing: 16
+          Layout.fillWidth: true
+
+          Label {
+            visible: text.length > 0
+            text: Cpp_IO_FileTransmission.transferSpeed
+            color: Cpp_ThemeManager.colors["text"]
+            opacity: 0.8
+          }
+
+          Label {
+            text: {
+              var sent = Cpp_IO_FileTransmission.bytesSent
+              var total = Cpp_IO_FileTransmission.bytesTotal
+              if (total <= 0)
+                return ""
+
+              return qsTr("%1 / %2 bytes").arg(sent).arg(total)
+            }
+            color: Cpp_ThemeManager.colors["text"]
+            opacity: 0.8
+          }
+
+          Label {
+            visible: Cpp_IO_FileTransmission.errorCount > 0
+            text: qsTr("Errors: %1").arg(Cpp_IO_FileTransmission.errorCount)
+            color: Cpp_ThemeManager.colors["alarm"]
+          }
+
+          Item {
+            Layout.fillWidth: true
+          }
+        }
+
+        //
+        // Status text
+        //
+        Label {
+          Layout.fillWidth: true
+          text: Cpp_IO_FileTransmission.statusText
+          opacity: 0.7
+          elide: Text.ElideRight
+          visible: text.length > 0
+          color: Cpp_ThemeManager.colors["text"]
+        }
+
+        //
+        // Start / stop button
+        //
+        RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+
+          Button {
+            Layout.fillWidth: true
+            enabled: Cpp_IO_FileTransmission.fileOpen
+            opacity: enabled ? 1 : 0.5
+            Behavior on opacity {NumberAnimation{}}
+            checked: Cpp_IO_FileTransmission.active
+            text: {
+              var progress = Cpp_IO_FileTransmission.transmissionProgress
+              if (progress > 0 && progress < 100)
+                return Cpp_IO_FileTransmission.active ?
+                      qsTr("Pause Transmission") :
+                      qsTr("Resume Transmission")
+
+              return Cpp_IO_FileTransmission.active ?
+                    qsTr("Stop Transmission") :
+                    qsTr("Begin Transmission")
+            }
+            onClicked: {
+              if (Cpp_IO_FileTransmission.active)
+                Cpp_IO_FileTransmission.stopTransmission()
+              else
+                Cpp_IO_FileTransmission.beginTransmission()
+            }
+          }
+        }
+      }
+    }
+
+    //
+    // Activity log group
+    //
+    GroupBox {
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+
+      background: Rectangle {
+        radius: 2
+        border.width: 1
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
+
+      ColumnLayout {
+        spacing: 4
+        anchors.fill: parent
+
+        RowLayout {
+          spacing: 4
+          Layout.fillWidth: true
+
+          Label {
+            text: qsTr("Activity Log")
+            Layout.fillWidth: true
+          }
+
+          Button {
+            text: qsTr("Clear")
+            onClicked: Cpp_IO_FileTransmission.clearLog()
+          }
+        }
+
+        ScrollView {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          Layout.minimumHeight: 120
+          Layout.preferredHeight: 150
+
+          TextArea {
+            id: _logArea
+
+            readOnly: true
+            wrapMode: Text.Wrap
+            font: Cpp_Misc_CommonFonts.monoFont
+            color: Cpp_ThemeManager.colors["text"]
+            text: Cpp_IO_FileTransmission.logEntries.join("\n")
+
+            background: Rectangle {
+              color: Cpp_ThemeManager.colors["base"]
+              border.width: 1
+              border.color: Cpp_ThemeManager.colors["mid"]
+              radius: 2
+            }
+
+            // Auto-scroll to bottom
+            onTextChanged: {
+              _logArea.cursorPosition = _logArea.length
+            }
+          }
+        }
+      }
+    }
+  }
 }
