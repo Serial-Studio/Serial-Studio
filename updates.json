@@ -2,23 +2,23 @@
    "updates":{
       "windows":{
          "open-url":"",
-         "latest-version":"3.2.6",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.2.6/Serial-Studio-Pro-3.2.6-Windows.msi",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.6",
+         "latest-version":"3.2.7",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.2.7/Serial-Studio-Pro-3.2.7-Windows.msi",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.7",
          "mandatory":false
       },
       "osx":{
          "open-url":"",
-         "latest-version":"3.2.6",
-         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.2.6/Serial-Studio-Pro-3.2.6-macOS.dmg",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.6",
+         "latest-version":"3.2.7",
+         "download-url":"https://github.com/Serial-Studio/Serial-Studio/releases/download/v3.2.7/Serial-Studio-Pro-3.2.7-macOS.dmg",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.7",
          "mandatory":false
       },
       "linux":{
          "download-url":"",
-         "latest-version":"3.2.6",
-         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.6",
-         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.6",
+         "latest-version":"3.2.7",
+         "open-url":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.7",
+         "changelog":"https://github.com/Serial-Studio/Serial-Studio/releases/tag/v3.2.7",
          "mandatory":false
       }
    }
