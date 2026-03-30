@@ -173,11 +173,32 @@ cd "$SCRIPT_DIR"
 
 # Create venv and install deps if needed
 if [ ! -d "venv" ]; then
+    echo "Setting up virtual environment..."
     python3 -m venv venv
+    echo "Installing required packages (this may take a moment)..."
     ./venv/bin/pip install -r requirements.txt
+    echo "Setup complete."
 fi
 
 ./venv/bin/python plugin.py
+```
+
+Example `run.cmd`:
+```batch
+@echo off
+setlocal
+set "SCRIPT_DIR=%~dp0"
+cd /d "%SCRIPT_DIR%"
+
+if not exist "venv" (
+    echo Setting up virtual environment...
+    python -m venv venv
+    echo Installing required packages (this may take a moment)...
+    venv\Scripts\pip install -r requirements.txt
+    echo Setup complete.
+)
+
+venv\Scripts\python plugin.py
 ```
 
 When using launcher scripts, set `"runtime": ""` in `info.json` (the script itself is the executable).

@@ -752,12 +752,6 @@ SmartDialog {
                 font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
               }
 
-              MouseArea {
-                anchors.fill: parent
-                enabled: screenshotImage.visible
-                cursorShape: screenshotImage.visible ? Qt.PointingHandCursor : Qt.ArrowCursor
-                onClicked: screenshotPopup.show()
-              }
             }
 
             //
@@ -954,46 +948,6 @@ SmartDialog {
         icon.source: "qrc:/rcc/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
       }
-    }
-  }
-
-  //
-  // Fullscreen screenshot popup window
-  //
-  Window {
-    id: screenshotPopup
-
-    visible: false
-    width: 800
-    height: 600
-    minimumWidth: 640
-    minimumHeight: 480
-    title: qsTr("Screenshot Preview")
-    color: Cpp_ThemeManager.colors["window"]
-    flags: Qt.Dialog | Qt.WindowCloseButtonHint
-
-    Rectangle {
-      radius: 2
-      border.width: 1
-      anchors.fill: parent
-      anchors.margins: 16
-      color: Cpp_ThemeManager.colors["groupbox_background"]
-      border.color: Cpp_ThemeManager.colors["groupbox_border"]
-
-      Image {
-        mipmap: true
-        smooth: true
-        asynchronous: true
-        anchors.margins: 8
-        anchors.fill: parent
-        fillMode: Image.PreserveAspectFit
-        source: Cpp_Examples.selectedScreenshot || ""
-      }
-    }
-
-    Shortcut {
-      sequences: [StandardKey.Close, "Escape"]
-      onActivated: screenshotPopup.close()
     }
   }
 }

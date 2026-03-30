@@ -42,7 +42,7 @@ Item {
   //
   // Window flags
   //
-  readonly property bool hasToolbar: root.width >= toolbar.implicitWidth
+  readonly property bool hasToolbar: root.width >= toolbar.implicitWidth && root.height >= 220
   readonly property int toolbarHeight: windowRoot.objectName === "ExternalWindow" ? 47 : 48
 
   //

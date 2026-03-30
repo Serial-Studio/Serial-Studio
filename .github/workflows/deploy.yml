@@ -39,7 +39,7 @@ on:
 #-------------------------------------------------------------------------------
 
 env:
-  VERSION: "3.2.6"
+  VERSION: "3.2.7"
   QT_VERSION_LINUX: 6.11.0
   QT_VERSION_MACOS: 6.11.0
   QT_VERSION_WINDOWS: 6.11.0

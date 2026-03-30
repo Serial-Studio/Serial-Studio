@@ -1364,6 +1364,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   }
 
   // Check plugin dependencies
+  bool hasPipDeps = false;
   const auto deps = resolved.value("dependencies").toArray();
   for (const auto& dep : deps) {
     const auto obj  = dep.toObject();
@@ -1373,7 +1374,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
     // Skip pip-managed dependencies — handled by run.sh/run.cmd venv
     if (obj.contains("pip"))
+    {
+      hasPipDeps = true;
       continue;
+    }
 
     // Skip dependencies with no executables to check
     if (exes.isEmpty())
@@ -1528,6 +1532,14 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   const auto mode = terminal ? QStringLiteral(" (terminal)") : QString();
   m_pluginOutput[id] +=
     QStringLiteral("[Started] PID ") + QString::number(process->processId()) + mode + "\n";
+
+  // Notify user about first-run setup when pip dependencies need installation
+  if (hasPipDeps && !QDir(pluginDir + "/venv").exists())
+  {
+    m_pluginOutput[id] += QStringLiteral(
+      "[Setup] Installing required packages — this may take a moment...\n");
+  }
+
   Q_EMIT pluginOutputChanged(id);
 
   m_plugins.insert(id, process);
