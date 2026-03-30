@@ -211,7 +211,9 @@ void Misc::IconEngine::onSearchFinished(QNetworkReply* reply)
       if (parts.size() == 2) {
         m_iconPreviews.append(
           QStringLiteral("https://api.iconify.design/%1/%2.svg").arg(parts[0], parts[1]));
-      } else {
+      }
+
+      else {
         m_iconPreviews.append(QString());
       }
     }

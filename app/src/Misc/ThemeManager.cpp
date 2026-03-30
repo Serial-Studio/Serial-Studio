@@ -177,7 +177,9 @@ Misc::ThemeManager::ThemeManager() : m_theme(0), m_applyingTheme(false)
   if (!savedName.isEmpty()) {
     const int idx = m_availableThemes.indexOf(savedName);
     themeIndex    = (idx >= 0) ? idx : 0;
-  } else {
+  }
+
+  else {
     themeIndex = m_settings.value("ApplicationTheme", 0).toInt();
     if (themeIndex < 0 || themeIndex >= m_availableThemes.count())
       themeIndex = 0;

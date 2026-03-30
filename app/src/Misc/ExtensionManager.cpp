@@ -306,7 +306,9 @@ void Misc::ExtensionManager::setSelectedIndex(int index)
         m_selectedReadme = QString::fromUtf8(file.readAll());
         Q_EMIT selectedReadmeChanged();
       }
-    } else if (!base.isEmpty()) {
+    }
+
+    else if (!base.isEmpty()) {
       auto* reply = m_nam.get(QNetworkRequest(QUrl(base + "README.md")));
       connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onReadmeReply);
     }
@@ -398,7 +400,9 @@ void Misc::ExtensionManager::refreshRepositories()
       reply->setProperty("repoUrl", repoUrl);
       connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onManifestReply);
     }
-  } else {
+  }
+
+  else {
     applyFilter();
     rebuildInstalledPlugins();
   }
@@ -682,7 +686,9 @@ void Misc::ExtensionManager::autoUpdateExtensions()
               this,
               &ExtensionManager::autoUpdateExtensions,
               Qt::SingleShotConnection);
-    } else {
+    }
+
+    else {
       // Local install completed synchronously, or extension not found
       QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions);
     }
@@ -723,7 +729,9 @@ void Misc::ExtensionManager::onManifestReply()
         auto* metaReply = m_nam.get(QNetworkRequest(QUrl(metaUrl)));
         metaReply->setProperty("addonBase", addonBase);
         connect(metaReply, &QNetworkReply::finished, this, &ExtensionManager::onExtensionMetaReply);
-      } else if (entry.isObject()) {
+      }
+
+      else if (entry.isObject()) {
         auto obj = entry.toObject();
         obj.insert("_repoBase", baseUrl);
         m_allExtensions.append(obj);
@@ -910,7 +918,9 @@ void Misc::ExtensionManager::applyFilter()
       const bool compatible =
         plats.contains(key) || plats.contains(os + "/*") || plats.contains("*");
       map.insert("platformAvailable", compatible);
-    } else {
+    }
+
+    else {
       map.insert("platformAvailable", true);
     }
 
@@ -954,7 +964,9 @@ void Misc::ExtensionManager::applyFilter()
       map.insert("author", addonObj.value("author").toString());
       map.insert("license", addonObj.value("license").toString());
       map.insert("category", addonObj.value("category").toString());
-    } else {
+    }
+
+    else {
       map.insert("title", id);
       map.insert("description", tr("Installed (repository no longer available)"));
       map.insert("author", QString());
@@ -1031,7 +1043,9 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
       const auto icon = cacheIt->value("icon").toString();
       if (!icon.isEmpty())
         entry.insert("icon", icon);
-    } else {
+    }
+
+    else {
       const auto pluginDir = extensionsPath() + "/plugin/" + iid;
       QVariantMap cached;
 
@@ -1048,7 +1062,9 @@ void Misc::ExtensionManager::rebuildInstalledPlugins()
           entry.insert("icon", iconUrl);
           cached.insert("icon", iconUrl);
         }
-      } else {
+      }
+
+      else {
         entry.insert("title", iid);
         cached.insert("title", iid);
       }
@@ -1236,6 +1252,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (!isInstalled(id)) {
     m_pluginOutput[id] += QStringLiteral("[Error] Plugin is not installed\n");
     Q_EMIT pluginOutputChanged(id);
+    Misc::Utilities::showMessageBox(
+      tr("Plugin Error"),
+      tr("Plugin \"%1\" is not installed.").arg(id),
+      QMessageBox::Critical);
     return;
   }
 
@@ -1245,6 +1265,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (type != QStringLiteral("plugin")) {
     m_pluginOutput[id] += QStringLiteral("[Error] Not a plugin (type: %1)\n").arg(type);
     Q_EMIT pluginOutputChanged(id);
+    Misc::Utilities::showMessageBox(
+      tr("Plugin Error"),
+      tr("Extension \"%1\" is not a plugin (type: %2).").arg(id, type),
+      QMessageBox::Critical);
     return;
   }
 
@@ -1254,6 +1278,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (!metaFile.open(QIODevice::ReadOnly)) {
     m_pluginOutput[id] += QStringLiteral("[Error] Cannot read %1/info.json\n").arg(pluginDir);
     Q_EMIT pluginOutputChanged(id);
+    Misc::Utilities::showMessageBox(
+      tr("Plugin Error"),
+      tr("Cannot read plugin metadata file:\n%1/info.json").arg(pluginDir),
+      QMessageBox::Critical);
     return;
   }
 
@@ -1270,6 +1298,11 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
     m_pluginOutput[id] += QStringLiteral(
       "[Error] Plugin requires gRPC but this build does not include gRPC support.\n");
     Q_EMIT pluginOutputChanged(id);
+    Misc::Utilities::showMessageBox(
+      tr("Plugin Error"),
+      tr("Plugin \"%1\" requires gRPC but this build does not include gRPC support.")
+        .arg(id),
+      QMessageBox::Critical);
     return;
   }
 #endif
@@ -1301,6 +1334,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (entry.isEmpty()) {
     m_pluginOutput[id] += QStringLiteral("[Error] No 'entry' field in info.json\n");
     Q_EMIT pluginOutputChanged(id);
+    Misc::Utilities::showMessageBox(
+      tr("Plugin Error"),
+      tr("Plugin \"%1\" has no 'entry' field in info.json.").arg(id),
+      QMessageBox::Critical);
     return;
   }
 
@@ -1308,6 +1345,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (!QFile::exists(entryPath)) {
     m_pluginOutput[id] += QStringLiteral("[Error] Entry point not found: %1\n").arg(entryPath);
     Q_EMIT pluginOutputChanged(id);
+    Misc::Utilities::showMessageBox(
+      tr("Plugin Error"),
+      tr("Entry point not found:\n%1").arg(entryPath),
+      QMessageBox::Critical);
     return;
   }
 
@@ -1315,6 +1356,10 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
   if (!isPathSafe(entryPath, pluginDir)) {
     m_pluginOutput[id] += QStringLiteral("[Error] Invalid entry point path\n");
     Q_EMIT pluginOutputChanged(id);
+    Misc::Utilities::showMessageBox(
+      tr("Plugin Error"),
+      tr("Plugin \"%1\" has an invalid entry point path.").arg(id),
+      QMessageBox::Critical);
     return;
   }
 
@@ -1463,7 +1508,9 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
         process->start(runtime, {entryPath});
     }
 #endif
-  } else {
+  }
+
+  else {
     if (isNative)
       process->start(entryPath);
     else
@@ -1707,7 +1754,9 @@ void Misc::ExtensionManager::loadLocalManifest(const QString& repoPath)
       obj.insert("_repoBase", addonBase);
       obj.insert("_isLocal", true);
       m_allExtensions.append(obj);
-    } else if (entry.isObject()) {
+    }
+
+    else if (entry.isObject()) {
       auto obj = entry.toObject();
       obj.insert("_repoBase", repoDir);
       obj.insert("_isLocal", true);

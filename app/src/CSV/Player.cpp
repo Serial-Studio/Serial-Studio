@@ -365,10 +365,14 @@ void CSV::Player::openFile(const QString& filePath)
 
       m_useHighPrecisionTimestamps = true;
       m_startTimestampSeconds      = (m_timestampCache.size() > 1) ? m_timestampCache[1] : 0.0;
-    } else if (getDateTime(1).isValid()) {
+    }
+
+    else if (getDateTime(1).isValid()) {
       m_useHighPrecisionTimestamps = false;
       m_timestampCache.clear();
-    } else {
+    }
+
+    else {
       m_useHighPrecisionTimestamps = false;
       m_timestampCache.clear();
 
@@ -564,7 +568,9 @@ void CSV::Player::updateData()
           const double target = m_startTimestampSeconds + (m_elapsedTimer.elapsed() / 1000.0);
           const double next   = m_timestampCache[m_framePos + 1];
           msUntilNext         = qMax(0LL, static_cast<qint64>((next - target) * 1000.0));
-        } else {
+        }
+
+        else {
           pause();
           return;
         }

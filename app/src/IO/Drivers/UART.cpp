@@ -274,7 +274,7 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
     }
 
     else {
-      Misc::Utilities::showMessageBox(tr("Failed to connect to serial port device"),
+      Misc::Utilities::showMessageBox(tr("Failed to connect to serial port \"%1\"").arg(name),
                                       port()->errorString(),
                                       QMessageBox::Critical);
     }
@@ -868,9 +868,12 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 
     ConnectionManager::instance().disconnectDevice();
 
-    if (!m_autoReconnect || error != QSerialPort::ResourceError)
-      Misc::Utilities::showMessageBox(
-        tr("Critical serial port error"), m_errorDescriptions[error], QMessageBox::Critical);
+    if (!m_autoReconnect || error != QSerialPort::ResourceError) {
+      const auto name = serialPort ? serialPort->portName() : tr("Unknown");
+      Misc::Utilities::showMessageBox(tr("Critical error on serial port \"%1\"").arg(name),
+                                      m_errorDescriptions.value(error, tr("Unknown error")),
+                                      QMessageBox::Critical);
+    }
   }
 }
 

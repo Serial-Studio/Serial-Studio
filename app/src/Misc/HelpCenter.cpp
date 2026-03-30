@@ -278,7 +278,9 @@ void Misc::HelpCenter::onManifestReply()
     if (!m_pendingPageId.isEmpty()) {
       navigateToPage(m_pendingPageId);
       m_pendingPageId.clear();
-    } else if (!m_filteredPages.isEmpty())
+    }
+
+    else if (!m_filteredPages.isEmpty())
       setCurrentIndex(0);
 
     // Preload all page contents for full-text search
@@ -311,7 +313,9 @@ void Misc::HelpCenter::onPageReply()
 
     // Expose raw markdown to QML
     m_pageContent = raw;
-  } else
+  }
+
+  else
     m_pageContent = tr("Failed to load page: %1").arg(reply->errorString());
 
   // Reset loading flag

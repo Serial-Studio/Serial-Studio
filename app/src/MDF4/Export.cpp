@@ -267,7 +267,9 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
         if (isNum) {
           channel->DataType(mdf::ChannelDataType::FloatLe);
           channel->DataBytes(8);
-        } else {
+        }
+
+        else {
           channel->DataType(mdf::ChannelDataType::StringAscii);
           channel->DataBytes(256);
         }
@@ -415,7 +417,9 @@ void MDF4::Export::setupExternalConnections()
           worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
         else
           DataModel::clear_frame(worker->m_templateFrame);
-      } else {
+      }
+
+      else {
         closeFile();
       }
     });

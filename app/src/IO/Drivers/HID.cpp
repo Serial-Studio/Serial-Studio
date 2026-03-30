@@ -284,6 +284,14 @@ QString IO::Drivers::HID::usage() const
 void IO::Drivers::HID::setDeviceIndex(const int index)
 {
   if (m_deviceIndex != index) {
+    // Ensure device list is populated so the index is meaningful
+    if (m_devicePaths.isEmpty())
+      enumerateDevices();
+
+    // Clamp to valid range (index 0 is placeholder, ≥1 are real devices)
+    if (index > 0 && index >= m_devicePaths.size())
+      return;
+
     m_deviceIndex = index;
     m_settings.setValue("HID/deviceIndex", index);
 
@@ -499,6 +507,10 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
 {
   if (id.isEmpty())
     return false;
+
+  // Ensure device list is populated so we can match against it
+  if (m_devicePaths.isEmpty())
+    enumerateDevices();
 
   const auto savedVid = id.value(QStringLiteral("vid")).toString();
   const auto savedPid = id.value(QStringLiteral("pid")).toString();

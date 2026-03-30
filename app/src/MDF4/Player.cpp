@@ -672,7 +672,9 @@ void MDF4::Player::updateData()
 
       if (isPlaying())
         QTimer::singleShot(1, Qt::PreciseTimer, this, &MDF4::Player::updateData);
-    } else {
+    }
+
+    else {
       qint64 delayMs = qMax(0LL, static_cast<qint64>((nextTime - targetTime) * 1000.0));
 
       QTimer::singleShot(delayMs, Qt::PreciseTimer, this, [this]() {
@@ -878,7 +880,9 @@ void MDF4::Player::buildFrameIndex()
           frameIdx.timestamp = timeIt->second;
         else
           frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
-      } else {
+      }
+
+      else {
         frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
       }
 
@@ -1023,7 +1027,9 @@ QByteArray MDF4::Player::getFrame(const int index)
       if (i < values.size() - 1)
         frame.append(',');
     }
-  } else {
+  }
+
+  else {
     for (size_t i = 0; i < m_channels.size(); ++i) {
       frame.append("0");
       if (i < m_channels.size() - 1)

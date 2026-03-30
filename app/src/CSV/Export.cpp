@@ -302,7 +302,9 @@ void CSV::Export::setupExternalConnections()
           worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
         else
           DataModel::clear_frame(worker->m_templateFrame);
-      } else {
+      }
+
+      else {
         closeFile();
       }
     });

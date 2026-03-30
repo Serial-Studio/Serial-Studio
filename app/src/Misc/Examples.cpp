@@ -285,7 +285,9 @@ void Misc::Examples::onReadmeReply()
 
     // Expose raw markdown to QML (WebView handles images)
     m_selectedReadme = raw;
-  } else
+  }
+
+  else
     m_selectedReadme = tr("Failed to load README: %1").arg(reply->errorString());
 
   // Reset loading flag

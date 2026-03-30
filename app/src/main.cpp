@@ -390,7 +390,9 @@ int main(int argc, char** argv)
         if (portOk && remotePort > 0) {
           IO::ConnectionManager::instance().network()->setRemoteAddress(parts[0]);
           IO::ConnectionManager::instance().network()->setUdpRemotePort(remotePort);
-        } else
+        }
+
+        else
           qWarning() << "Invalid UDP remote port:" << parts[1];
       };
 

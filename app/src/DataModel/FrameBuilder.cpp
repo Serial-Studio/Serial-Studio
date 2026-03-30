@@ -447,7 +447,11 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
       m_sourceFrames.insert(sourceId, std::move(newFrame));
     }
 
-    DataModel::Frame& srcFrame = m_sourceFrames[sourceId];
+    auto it = m_sourceFrames.find(sourceId);
+    if (it == m_sourceFrames.end()) [[unlikely]]
+      return;
+
+    DataModel::Frame& srcFrame = it.value();
     for (auto& group : srcFrame.groups) {
       for (auto& dataset : group.datasets) {
         const int idx = dataset.index;
@@ -465,7 +469,10 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
       continue;
 
     applyChannelData(channels);
-    hotpathTxFrame(m_sourceFrames[sourceId]);
+
+    auto txIt = m_sourceFrames.find(sourceId);
+    if (txIt != m_sourceFrames.end()) [[likely]]
+      hotpathTxFrame(txIt.value());
   }
 }
 

@@ -298,6 +298,9 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
   if (!configurationOk())
     return false;
 
+  // Track the target device/host for error messages
+  QString connectionTarget;
+
   if (m_protocolIndex == 0) {
     // Ensure the port list is populated (live drivers don't run the 1 Hz timer)
     if (m_serialPortNames.isEmpty())
@@ -309,11 +312,11 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
       return false;
 
     if (portId >= m_serialPortLocations.count()) {
-      Misc::Utilities::showMessageBox(
-        tr("Invalid Serial Port"),
-        tr(
-          "The selected serial port is no longer available. Please refresh the port list and try again."),
-        QMessageBox::Critical);
+      Misc::Utilities::showMessageBox(tr("Invalid Serial Port"),
+                                      tr("The selected serial port \"%1\" is no longer available. "
+                                         "Please refresh the port list and try again.")
+                                        .arg(ports.value(portId)),
+                                      QMessageBox::Critical);
       return false;
     }
 
@@ -352,6 +355,8 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     m_device->setConnectionParameter(QModbusDevice::SerialParityParameter, parity);
     m_device->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, dataBits);
     m_device->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, stopBits);
+
+    connectionTarget = ports.value(portId);
   }
 
   else if (m_protocolIndex == 1) {
@@ -359,6 +364,8 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     tcp_device->setConnectionParameter(QModbusDevice::NetworkAddressParameter, m_host);
     tcp_device->setConnectionParameter(QModbusDevice::NetworkPortParameter, m_port);
     m_device = tcp_device;
+
+    connectionTarget = QStringLiteral("%1:%2").arg(m_host).arg(m_port);
   }
 
   if (!m_device) {
@@ -387,11 +394,12 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     QString error = m_device->errorString();
     m_device->deleteLater();
     m_device = nullptr;
+
     Misc::Utilities::showMessageBox(
       tr("Modbus Connection Failed"),
-      error.isEmpty()
-        ? tr("Unable to connect to the Modbus device. Please check your connection settings.")
-        : error,
+      error.isEmpty() ? tr("Unable to connect to \"%1\". Please check your connection settings.")
+                          .arg(connectionTarget)
+                      : tr("\"%1\": %2").arg(connectionTarget, error),
       QMessageBox::Critical);
     return false;
   }
@@ -747,6 +755,10 @@ void IO::Drivers::Modbus::setBaudRate(const qint32 rate)
  */
 void IO::Drivers::Modbus::setSerialPortIndex(const quint8 index)
 {
+  // Ensure port list is populated so the clamp range is correct
+  if (m_serialPortNames.isEmpty())
+    refreshSerialPorts();
+
   if (index < m_serialPortNames.count()) {
     m_serialPortIndex = index;
     m_settings.setValue("ModbusDriver/serialPortIndex", index);
@@ -1202,6 +1214,10 @@ bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
 {
   if (id.isEmpty() || m_protocolIndex != 0)
     return false;
+
+  // Ensure port list is populated so setSerialPortIndex() can clamp correctly
+  if (m_serialPortNames.isEmpty())
+    refreshSerialPorts();
 
   const auto ports = QSerialPortInfo::availablePorts();
   QVector<QSerialPortInfo> filtered;

@@ -214,12 +214,13 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  libusb_device* dev = m_devicePtrs.at(m_deviceIndex - 1);
-  const int openRc   = libusb_open(dev, &m_handle);
+  libusb_device* dev     = m_devicePtrs.at(m_deviceIndex - 1);
+  const auto deviceLabel = m_deviceLabels.value(m_deviceIndex - 1, tr("Unknown Device"));
+  const int openRc       = libusb_open(dev, &m_handle);
   if (openRc < 0) {
     m_handle = nullptr;
     Misc::Utilities::showMessageBox(
-      tr("USB Device Error"),
+      tr("Failed to open \"%1\"").arg(deviceLabel),
       tr("Could not open the USB device: %1.\n\n"
          "On Linux, ensure you have read/write permission on the device node "
          "(add a udev rule or run as root). "
@@ -558,6 +559,14 @@ int IO::Drivers::USB::isoPacketSize() const
 void IO::Drivers::USB::setDeviceIndex(const int index)
 {
   if (m_deviceIndex == index)
+    return;
+
+  // Ensure device list is populated so the index is meaningful
+  if (m_devicePtrs.isEmpty())
+    enumerateDevices();
+
+  // Clamp to valid range (index 0 is placeholder, ≥1 are real devices)
+  if (index > 0 && (index - 1) >= m_devicePtrs.size())
     return;
 
   m_deviceIndex      = index;
@@ -1354,6 +1363,10 @@ bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
 {
   if (id.isEmpty() || !m_ctx)
     return false;
+
+  // Ensure device list is populated so we can match against it
+  if (m_devicePtrs.isEmpty())
+    enumerateDevices();
 
   const auto savedVid = id.value(QStringLiteral("vid")).toString();
   const auto savedPid = id.value(QStringLiteral("pid")).toString();

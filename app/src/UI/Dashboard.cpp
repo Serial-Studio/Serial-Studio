@@ -1176,9 +1176,8 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 
   reconfigureDashboard(frame);
 
-  m_updateRetryInProgress          = true;
-  const DataModel::Frame frameCopy = frame;
-  updateDashboardData(frameCopy);
+  m_updateRetryInProgress = true;
+  updateDashboardData(frame);
   m_updateRetryInProgress = false;
 }
 

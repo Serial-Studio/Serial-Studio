@@ -759,7 +759,9 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
       const QString ansiCyan  = QStringLiteral("\033[36m");
       const QString ansiReset = QStringLiteral("\033[0m");
       timestamp               = QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
-    } else {
+    }
+
+    else {
       timestamp = timeStr;
     }
   }
@@ -791,7 +793,9 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
       processedString.append('\n');
       m_isStartingLine = true;
       pos              = nlPos + 1;
-    } else
+    }
+
+    else
       pos = end;
   }
 
@@ -1026,7 +1030,9 @@ void Console::Handler::appendToDevice(int deviceId, const QString& str, bool add
       const QString ansiCyan  = QStringLiteral("\033[36m");
       const QString ansiReset = QStringLiteral("\033[0m");
       timestamp               = QStringLiteral("%1%2%3").arg(ansiCyan, timeStr, ansiReset);
-    } else {
+    }
+
+    else {
       timestamp = timeStr;
     }
   }
@@ -1056,7 +1062,9 @@ void Console::Handler::appendToDevice(int deviceId, const QString& str, bool add
       processedString.append('\n');
       state.isStartingLine = true;
       pos                  = nlPos + 1;
-    } else
+    }
+
+    else
       pos = end;
   }
 
