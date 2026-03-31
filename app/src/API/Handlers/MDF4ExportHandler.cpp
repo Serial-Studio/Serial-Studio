@@ -20,12 +20,10 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/MDF4ExportHandler.h"
 
-#  include "API/Handlers/MDF4ExportHandler.h"
-
-#  include "API/CommandRegistry.h"
-#  include "MDF4/Export.h"
+#include "API/CommandRegistry.h"
+#include "MDF4/Export.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -134,5 +132,3 @@ API::CommandResponse API::Handlers::MDF4ExportHandler::getStatus(const QString& 
 
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

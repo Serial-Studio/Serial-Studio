@@ -86,7 +86,8 @@ typedef enum {
   kGroupView_Source,
   kGroupView_ImgMode,
   kGroupView_ImgStart,
-  kGroupView_ImgEnd
+  kGroupView_ImgEnd,
+  kGroupView_Columns
 } GroupItem;
 
 typedef enum {
@@ -101,6 +102,18 @@ typedef enum {
   kSourceView_FrameDecoder,
   kSourceView_ChecksumFunction
 } SourceItem;
+
+typedef enum {
+  kOutputWidget_Title,
+  kOutputWidget_Icon,
+  kOutputWidget_MonoIcon,
+  kOutputWidget_Type,
+  kOutputWidget_MinValue,
+  kOutputWidget_MaxValue,
+  kOutputWidget_StepSize,
+  kOutputWidget_InitialValue,
+  kOutputWidget_TransmitFunction
+} OutputWidgetItem;
 
 // clang-format on
 
@@ -145,6 +158,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_actionModel(nullptr)
   , m_projectModel(nullptr)
   , m_datasetModel(nullptr)
+  , m_outputWidgetModel(nullptr)
 {
   generateComboBoxModels();
 
@@ -281,6 +295,44 @@ DataModel::ProjectEditor::ProjectEditor()
     &DataModel::ProjectModel::actionDeleted,
     this,
     [this] {
+      if (m_selectionModel) {
+        auto index = m_treeModel->index(0, 0);
+        m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+      }
+    },
+    Qt::QueuedConnection);
+
+  connect(
+    &pm,
+    &DataModel::ProjectModel::outputWidgetAdded,
+    this,
+    [this](int groupId, int widgetId) {
+      if (!m_selectionModel)
+        return;
+
+      for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
+        if (it.value().groupId != groupId || it.value().widgetId != widgetId)
+          continue;
+
+        m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+        break;
+      }
+    },
+    Qt::QueuedConnection);
+
+  connect(
+    &pm,
+    &DataModel::ProjectModel::outputWidgetDeleted,
+    this,
+    [this](int groupId) {
+      for (auto it = m_groupItems.begin(); it != m_groupItems.end(); ++it) {
+        if (it.value().groupId != groupId)
+          continue;
+
+        m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+        return;
+      }
+
       if (m_selectionModel) {
         auto index = m_treeModel->index(0, 0);
         m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
@@ -427,6 +479,14 @@ QString DataModel::ProjectEditor::selectedIcon() const
 const QString DataModel::ProjectEditor::actionIcon() const
 {
   return m_selectedAction.icon;
+}
+
+/**
+ * @brief Returns the icon identifier of the currently selected output widget.
+ */
+const QString DataModel::ProjectEditor::outputWidgetIcon() const
+{
+  return m_selectedOutputWidget.icon;
 }
 
 /**
@@ -617,6 +677,41 @@ DataModel::CustomModel* DataModel::ProjectEditor::datasetModel() const
   return m_datasetModel;
 }
 
+/**
+ * @brief Returns the type enum value of the currently selected output widget.
+ */
+int DataModel::ProjectEditor::outputWidgetType() const noexcept
+{
+  return static_cast<int>(m_selectedOutputWidget.type);
+}
+
+/**
+ * @brief Returns true when the selected group is an OutputPanel.
+ */
+bool DataModel::ProjectEditor::currentGroupIsOutputPanel() const
+{
+  if (m_currentView == GroupView || m_currentView == OutputWidgetView)
+    return m_selectedGroup.groupType == DataModel::GroupType::Output;
+
+  return false;
+}
+
+/**
+ * @brief Returns the form model for the currently selected output widget.
+ */
+DataModel::CustomModel* DataModel::ProjectEditor::outputWidgetModel() const
+{
+  return m_outputWidgetModel;
+}
+
+/**
+ * @brief Returns a const ref to the currently selected output widget.
+ */
+const DataModel::OutputWidget& DataModel::ProjectEditor::selectedOutputWidget() const noexcept
+{
+  return m_selectedOutputWidget;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Public slots
 //--------------------------------------------------------------------------------------------------
@@ -665,6 +760,7 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_sourceItems.clear();
   m_actionItems.clear();
   m_datasetItems.clear();
+  m_outputWidgetItems.clear();
   m_sourceParserItems.clear();
 
   QHash<QString, bool> expandedStates;
@@ -731,8 +827,8 @@ void DataModel::ProjectEditor::buildTreeModel()
 
   for (const auto& group : groups) {
     auto* groupItem = new QStandardItem(group.title);
-    auto widget     = SerialStudio::getDashboardWidget(group);
-    auto icon       = SerialStudio::dashboardWidgetIcon(widget, false);
+
+    auto icon = SerialStudio::dashboardWidgetIcon(SerialStudio::getDashboardWidget(group), false);
 
     groupItem->setData(icon, TreeViewIcon);
     groupItem->setData(-1, TreeViewFrameIndex);
@@ -754,6 +850,43 @@ void DataModel::ProjectEditor::buildTreeModel()
       datasetItem->setData(QString(), TreeViewSourceName);
       groupItem->appendRow(datasetItem);
       m_datasetItems.insert(datasetItem, dataset);
+    }
+
+    for (const auto& ow : group.outputWidgets) {
+      auto* owItem = new QStandardItem(ow.title);
+
+      QString owIcon;
+      switch (ow.type) {
+        case DataModel::OutputWidgetType::Button:
+          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-button.svg");
+          break;
+        case DataModel::OutputWidgetType::Slider:
+          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-slider.svg");
+          break;
+        case DataModel::OutputWidgetType::Toggle:
+          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-toggle.svg");
+          break;
+        case DataModel::OutputWidgetType::TextField:
+          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-textfield.svg");
+          break;
+        case DataModel::OutputWidgetType::Knob:
+          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-knob.svg");
+          break;
+        case DataModel::OutputWidgetType::RampGenerator:
+          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-ramp.svg");
+          break;
+        default:
+          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-widget.svg");
+          break;
+      }
+
+      owItem->setData(owIcon, TreeViewIcon);
+      owItem->setData(ow.title, TreeViewText);
+      owItem->setData(-2, TreeViewFrameIndex);
+      owItem->setData(ow.sourceId, TreeViewSourceId);
+      owItem->setData(QString(), TreeViewSourceName);
+      groupItem->appendRow(owItem);
+      m_outputWidgetItems.insert(owItem, ow);
     }
 
     restoreExpandedStateMap(groupItem, expandedStates, root->text() + "/" + group.title);
@@ -807,6 +940,15 @@ void DataModel::ProjectEditor::buildTreeModel()
     const auto sid = m_selectedSource.sourceId;
     for (auto it = m_sourceItems.begin(); it != m_sourceItems.end(); ++it) {
       if (it.value().sourceId == sid) {
+        toSelect = it.key();
+        break;
+      }
+    }
+  } else if (m_currentView == OutputWidgetView) {
+    const auto gid = m_selectedOutputWidget.groupId;
+    const auto wid = m_selectedOutputWidget.widgetId;
+    for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
+      if (it.value().groupId == gid && it.value().widgetId == wid) {
         toSelect = it.key();
         break;
       }
@@ -935,29 +1077,33 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     m_groupModel->appendRow(sourceItem);
   }
 
-  int index  = 0;
-  bool found = false;
-  for (auto it = m_groupWidgets.begin(); it != m_groupWidgets.end(); ++it, ++index) {
-    if (it.key() == group.widget) {
-      found = true;
-      break;
+  // Composite widget selector (hidden for output groups — they have no
+  // visualization widget, only output controls)
+  if (group.groupType != DataModel::GroupType::Output) {
+    int index  = 0;
+    bool found = false;
+    for (auto it = m_groupWidgets.begin(); it != m_groupWidgets.end(); ++it, ++index) {
+      if (it.key() == group.widget) {
+        found = true;
+        break;
+      }
     }
+
+    if (!found)
+      index = 0;
+
+    auto* widgetItem = new QStandardItem();
+    widgetItem->setEditable(true);
+    widgetItem->setData(true, Active);
+    widgetItem->setData(ComboBox, WidgetType);
+    widgetItem->setData(m_groupWidgets.values(), ComboBoxData);
+    widgetItem->setData(index, EditableValue);
+    widgetItem->setData(kGroupView_Widget, ParameterType);
+    widgetItem->setData(tr("Composite Widget"), ParameterName);
+    widgetItem->setData(tr("Select how this group of datasets should be visualized (optional)"),
+                        ParameterDescription);
+    m_groupModel->appendRow(widgetItem);
   }
-
-  if (!found)
-    index = 0;
-
-  auto* widgetItem = new QStandardItem();
-  widgetItem->setEditable(true);
-  widgetItem->setData(true, Active);
-  widgetItem->setData(ComboBox, WidgetType);
-  widgetItem->setData(m_groupWidgets.values(), ComboBoxData);
-  widgetItem->setData(index, EditableValue);
-  widgetItem->setData(kGroupView_Widget, ParameterType);
-  widgetItem->setData(tr("Composite Widget"), ParameterName);
-  widgetItem->setData(tr("Select how this group of datasets should be visualized (optional)"),
-                      ParameterDescription);
-  m_groupModel->appendRow(widgetItem);
 
   // Image View configuration fields (pro only, shown when widget == "image")
 #ifdef BUILD_COMMERCIAL
@@ -2062,6 +2208,10 @@ void DataModel::ProjectEditor::generateComboBoxModels()
 #ifdef BUILD_COMMERCIAL
   m_imgDetectionModes.clear();
   m_imgDetectionModes << tr("Auto-detect") << tr("Manual Delimiters");
+
+  m_outputWidgetTypes.clear();
+  m_outputWidgetTypes << tr("Button") << tr("Slider") << tr("Toggle") << tr("Text Field")
+                      << tr("Knob") << tr("Ramp Generator");
 #endif
 
   m_groupWidgets.clear();
@@ -2556,6 +2706,11 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
     DataModel::ProjectModel::instance().setSelectedAction(action);
     setCurrentView(ActionView);
     buildActionModel(action);
+  } else if (m_outputWidgetItems.contains(item)) {
+    const auto ow = m_outputWidgetItems.value(item);
+    DataModel::ProjectModel::instance().setSelectedOutputWidget(ow);
+    setCurrentView(OutputWidgetView);
+    buildOutputWidgetModel(ow);
   } else if (m_rootItems.contains(item)) {
     setCurrentView(ProjectView);
     buildProjectModel();
@@ -2639,6 +2794,211 @@ void DataModel::ProjectEditor::selectAction(int actionId)
 void DataModel::ProjectEditor::selectFrameParser(int sourceId)
 {
   displayFrameParserView(sourceId);
+}
+
+/**
+ * @brief Programmatically selects an output widget in the tree.
+ */
+void DataModel::ProjectEditor::selectOutputWidget(int groupId, int widgetId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
+    if (it.value().groupId == groupId && it.value().widgetId == widgetId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Output widget form model
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Builds the form model for editing an output widget's properties.
+ *
+ * Creates form rows for title, type, value range, labels, and the JavaScript
+ * transmit function. Connects itemChanged to onOutputWidgetItemChanged.
+ */
+void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
+{
+  m_selectedOutputWidget = widget;
+
+  if (m_outputWidgetModel) {
+    disconnect(m_outputWidgetModel);
+    m_outputWidgetModel->deleteLater();
+  }
+
+  m_outputWidgetModel = new CustomModel(this);
+
+  // General information section
+  auto* hdr = new QStandardItem();
+  hdr->setData(true, Active);
+  hdr->setData(SectionHeader, WidgetType);
+  hdr->setData(tr("General Information"), PlaceholderValue);
+  hdr->setData("qrc:/rcc/icons/project-editor/model/output-widget.svg", ParameterIcon);
+  m_outputWidgetModel->appendRow(hdr);
+
+  // Label
+  auto* titleItem = new QStandardItem();
+  titleItem->setEditable(true);
+  titleItem->setData(true, Active);
+  titleItem->setData(TextField, WidgetType);
+  titleItem->setData(widget.title, EditableValue);
+  titleItem->setData(kOutputWidget_Title, ParameterType);
+  titleItem->setData(tr("Label"), ParameterName);
+  titleItem->setData(tr("Display label"), PlaceholderValue);
+  m_outputWidgetModel->appendRow(titleItem);
+
+  // Icon (for Button type)
+  if (widget.type == DataModel::OutputWidgetType::Button) {
+    auto* iconItem = new QStandardItem();
+    iconItem->setEditable(true);
+    iconItem->setData(true, Active);
+    iconItem->setData(IconPicker, WidgetType);
+    iconItem->setData(widget.icon, EditableValue);
+    iconItem->setData(kOutputWidget_Icon, ParameterType);
+    iconItem->setData(tr("Button Icon"), ParameterName);
+    m_outputWidgetModel->appendRow(iconItem);
+
+    // Mono icon checkbox
+    auto* monoItem = new QStandardItem();
+    monoItem->setEditable(true);
+    monoItem->setData(true, Active);
+    monoItem->setData(CheckBox, WidgetType);
+    monoItem->setData(widget.monoIcon, EditableValue);
+    monoItem->setData(kOutputWidget_MonoIcon, ParameterType);
+    monoItem->setData(tr("Colorize Icon"), ParameterName);
+    monoItem->setData(tr("Tint the icon with the button color"), ParameterDescription);
+    m_outputWidgetModel->appendRow(monoItem);
+  }
+
+  // Initial value
+  auto* initItem = new QStandardItem();
+  initItem->setEditable(true);
+  initItem->setData(true, Active);
+  initItem->setData(FloatField, WidgetType);
+  initItem->setData(widget.initialValue, EditableValue);
+  initItem->setData(kOutputWidget_InitialValue, ParameterType);
+  initItem->setData(tr("Initial Value"), ParameterName);
+  m_outputWidgetModel->appendRow(initItem);
+
+  // Value range section (for sliders/knobs)
+  const bool isNumeric = widget.type == DataModel::OutputWidgetType::Slider
+                      || widget.type == DataModel::OutputWidgetType::Knob;
+
+  if (isNumeric) {
+    auto* rangeHdr = new QStandardItem();
+    rangeHdr->setData(true, Active);
+    rangeHdr->setData(SectionHeader, WidgetType);
+    rangeHdr->setData(tr("Value Range"), PlaceholderValue);
+    rangeHdr->setData("qrc:/rcc/icons/project-editor/model/output-range.svg", ParameterIcon);
+    m_outputWidgetModel->appendRow(rangeHdr);
+
+    // Min value
+    auto* minItem = new QStandardItem();
+    minItem->setEditable(true);
+    minItem->setData(true, Active);
+    minItem->setData(FloatField, WidgetType);
+    minItem->setData(widget.minValue, EditableValue);
+    minItem->setData(kOutputWidget_MinValue, ParameterType);
+    minItem->setData(tr("Minimum Value"), ParameterName);
+    m_outputWidgetModel->appendRow(minItem);
+
+    // Max value
+    auto* maxItem = new QStandardItem();
+    maxItem->setEditable(true);
+    maxItem->setData(true, Active);
+    maxItem->setData(FloatField, WidgetType);
+    maxItem->setData(widget.maxValue, EditableValue);
+    maxItem->setData(kOutputWidget_MaxValue, ParameterType);
+    maxItem->setData(tr("Maximum Value"), ParameterName);
+    m_outputWidgetModel->appendRow(maxItem);
+
+    // Step size
+    auto* stepItem = new QStandardItem();
+    stepItem->setEditable(true);
+    stepItem->setData(true, Active);
+    stepItem->setData(FloatField, WidgetType);
+    stepItem->setData(widget.stepSize, EditableValue);
+    stepItem->setData(kOutputWidget_StepSize, ParameterType);
+    stepItem->setData(tr("Step Size"), ParameterName);
+    m_outputWidgetModel->appendRow(stepItem);
+  }
+
+  connect(m_outputWidgetModel,
+          &CustomModel::itemChanged,
+          this,
+          &DataModel::ProjectEditor::onOutputWidgetItemChanged);
+
+  Q_EMIT outputWidgetModelChanged();
+}
+
+/**
+ * @brief Handles changes to output widget form fields.
+ */
+void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
+{
+  if (!item)
+    return;
+
+  const auto id    = item->data(ParameterType);
+  const auto value = item->data(EditableValue);
+
+  switch (static_cast<OutputWidgetItem>(id.toInt())) {
+    case kOutputWidget_Title:
+      m_selectedOutputWidget.title = value.toString();
+      break;
+    case kOutputWidget_Icon:
+      m_selectedOutputWidget.icon = value.toString();
+      break;
+    case kOutputWidget_MonoIcon:
+      m_selectedOutputWidget.monoIcon = value.toBool();
+      break;
+    case kOutputWidget_Type: {
+      const auto newType = static_cast<DataModel::OutputWidgetType>(value.toInt());
+      if (m_selectedOutputWidget.type != newType) {
+        m_selectedOutputWidget.type = newType;
+        buildOutputWidgetModel(m_selectedOutputWidget);
+      }
+      break;
+    }
+    case kOutputWidget_MinValue:
+      m_selectedOutputWidget.minValue = value.toDouble();
+      break;
+    case kOutputWidget_MaxValue:
+      m_selectedOutputWidget.maxValue = value.toDouble();
+      break;
+    case kOutputWidget_StepSize:
+      m_selectedOutputWidget.stepSize = value.toDouble();
+      break;
+    case kOutputWidget_InitialValue:
+      m_selectedOutputWidget.initialValue = value.toDouble();
+      break;
+    case kOutputWidget_TransmitFunction:
+      m_selectedOutputWidget.transmitFunction = value.toString();
+      break;
+  }
+
+  // Update the tree item title
+  if (static_cast<OutputWidgetItem>(id.toInt()) == kOutputWidget_Title) {
+    const auto newTitle = value.toString();
+    for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
+      if (it.value().groupId == m_selectedOutputWidget.groupId
+          && it.value().widgetId == m_selectedOutputWidget.widgetId) {
+        it.key()->setData(newTitle, TreeViewText);
+        m_outputWidgetItems[it.key()].title = newTitle;
+        Q_EMIT selectedTextChanged();
+        break;
+      }
+    }
+  }
+
+  // Persist to ProjectModel
+  DataModel::ProjectModel::instance().updateOutputWidget(
+    m_selectedOutputWidget.groupId, m_selectedOutputWidget.widgetId, m_selectedOutputWidget, false);
 }
 
 //--------------------------------------------------------------------------------------------------

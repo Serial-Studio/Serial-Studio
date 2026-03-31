@@ -21,20 +21,19 @@
  */
 
 #pragma once
-#ifdef BUILD_COMMERCIAL
 
-#  include <hidapi.h>
+#include <hidapi.h>
 
-#  include <atomic>
-#  include <QList>
-#  include <QObject>
-#  include <QSettings>
-#  include <QString>
-#  include <QStringList>
-#  include <QThread>
-#  include <QTimer>
+#include <atomic>
+#include <QList>
+#include <QObject>
+#include <QSettings>
+#include <QString>
+#include <QStringList>
+#include <QThread>
+#include <QTimer>
 
-#  include "IO/HAL_Driver.h"
+#include "IO/HAL_Driver.h"
 
 namespace IO {
 namespace Drivers {
@@ -142,5 +141,3 @@ private:
 
 }  // namespace Drivers
 }  // namespace IO
-
-#endif  // BUILD_COMMERCIAL

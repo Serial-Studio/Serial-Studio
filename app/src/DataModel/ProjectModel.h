@@ -93,6 +93,8 @@ signals:
   void actionDeleted();
   void sourceAdded(int sourceId);
   void sourceDeleted();
+  void outputWidgetAdded(int groupId, int widgetId);
+  void outputWidgetDeleted(int groupId);
 
 private:
   explicit ProjectModel();
@@ -209,6 +211,18 @@ public slots:
   void setSelectedGroup(const DataModel::Group& group);
   void setSelectedAction(const DataModel::Action& action);
   void setSelectedDataset(const DataModel::Dataset& dataset);
+  void setSelectedOutputWidget(const DataModel::OutputWidget& widget);
+
+  Q_INVOKABLE void addOutputControl(const SerialStudio::OutputWidgetType type);
+  Q_INVOKABLE void addOutputPanel();
+  Q_INVOKABLE void setOutputWidgetType(int type);
+  Q_INVOKABLE void setOutputWidgetIcon(const QString& icon);
+  void deleteCurrentOutputWidget();
+  void duplicateCurrentOutputWidget();
+  void updateOutputWidget(int groupId,
+                          int widgetId,
+                          const DataModel::OutputWidget& widget,
+                          bool rebuildTree = false);
 
 private:
   int nextDatasetIndex();
@@ -237,6 +251,7 @@ private:
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;
   DataModel::Dataset m_selectedDataset;
+  DataModel::OutputWidget m_selectedOutputWidget;
 
   QJsonObject m_widgetSettings;
   QTimer m_pluginSaveTimer;

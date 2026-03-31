@@ -56,6 +56,9 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(QAbstractItemModel* sourceModel
              READ sourceModel
              NOTIFY sourceModelChanged)
+  Q_PROPERTY(QAbstractItemModel* outputWidgetModel
+             READ outputWidgetModel
+             NOTIFY outputWidgetModelChanged)
   Q_PROPERTY(int selectedSourceId
              READ selectedSourceId
              NOTIFY sourceModelChanged)
@@ -86,6 +89,15 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(bool currentDatasetIsEditable
              READ currentDatasetIsEditable
              NOTIFY editableOptionsChanged)
+  Q_PROPERTY(bool currentGroupIsOutputPanel
+             READ currentGroupIsOutputPanel
+             NOTIFY editableOptionsChanged)
+  Q_PROPERTY(int outputWidgetType
+             READ outputWidgetType
+             NOTIFY outputWidgetModelChanged)
+  Q_PROPERTY(QString outputWidgetIcon
+             READ outputWidgetIcon
+             NOTIFY outputWidgetModelChanged)
   Q_PROPERTY(QString actionIcon
              READ actionIcon
              NOTIFY actionModelChanged)
@@ -110,6 +122,7 @@ signals:
   void datasetModelChanged();
   void datasetOptionsChanged();
   void editableOptionsChanged();
+  void outputWidgetModelChanged();
 
 private:
   explicit ProjectEditor();
@@ -132,7 +145,8 @@ public:
     FrameParserView,
     ActionView,
     SourceView,
-    SourceFrameParserView
+    SourceFrameParserView,
+    OutputWidgetView
   };
   Q_ENUM(CurrentView)
 
@@ -184,9 +198,12 @@ public:
   [[nodiscard]] QString selectedText() const;
   [[nodiscard]] QString selectedIcon() const;
   [[nodiscard]] const QString actionIcon() const;
+  [[nodiscard]] const QString outputWidgetIcon() const;
   [[nodiscard]] const QStringList& availableActionIcons() const;
   [[nodiscard]] bool currentGroupIsEditable() const;
   [[nodiscard]] bool currentDatasetIsEditable() const;
+  [[nodiscard]] bool currentGroupIsOutputPanel() const;
+  [[nodiscard]] int outputWidgetType() const noexcept;
   [[nodiscard]] quint8 datasetOptions() const;
 
   [[nodiscard]] int selectedSourceId() const noexcept;
@@ -200,6 +217,8 @@ public:
   [[nodiscard]] CustomModel* actionModel() const;
   [[nodiscard]] CustomModel* projectModel() const;
   [[nodiscard]] CustomModel* datasetModel() const;
+  [[nodiscard]] CustomModel* outputWidgetModel() const;
+  [[nodiscard]] const DataModel::OutputWidget& selectedOutputWidget() const noexcept;
 
 public slots:
   void buildTreeModel();
@@ -208,11 +227,13 @@ public slots:
   void buildSourceModel(const DataModel::Source& source);
   void buildActionModel(const DataModel::Action& action);
   void buildDatasetModel(const DataModel::Dataset& dataset);
+  void buildOutputWidgetModel(const DataModel::OutputWidget& widget);
   void displayFrameParserView(int sourceId);
   void selectSource(int sourceId);
   void selectGroup(int groupId);
   void selectDataset(int groupId, int datasetId);
   void selectAction(int actionId);
+  void selectOutputWidget(int groupId, int widgetId);
   void selectFrameParser(int sourceId);
   void setSelectedSourceFrameParserCode(const QString& code);
 
@@ -223,6 +244,7 @@ private slots:
   void onActionItemChanged(QStandardItem* item);
   void onProjectItemChanged(QStandardItem* item);
   void onDatasetItemChanged(QStandardItem* item);
+  void onOutputWidgetItemChanged(QStandardItem* item);
   void setCurrentView(const DataModel::ProjectEditor::CurrentView view);
   void onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
@@ -247,12 +269,14 @@ private:
   QMap<QStandardItem*, DataModel::Source> m_sourceItems;
   QMap<QStandardItem*, DataModel::Action> m_actionItems;
   QMap<QStandardItem*, DataModel::Dataset> m_datasetItems;
+  QMap<QStandardItem*, DataModel::OutputWidget> m_outputWidgetItems;
   QMap<QStandardItem*, DataModel::Source> m_sourceParserItems;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;
   DataModel::Source m_selectedSource;
   DataModel::Dataset m_selectedDataset;
+  DataModel::OutputWidget m_selectedOutputWidget;
 
   CustomModel* m_treeModel;
   QItemSelectionModel* m_selectionModel;
@@ -262,6 +286,7 @@ private:
   CustomModel* m_actionModel;
   CustomModel* m_projectModel;
   CustomModel* m_datasetModel;
+  CustomModel* m_outputWidgetModel;
 
   QStringList m_fftSamples;
   QStringList m_timerModes;
@@ -270,6 +295,7 @@ private:
   QStringList m_frameDetectionMethods;
   QList<SerialStudio::FrameDetection> m_frameDetectionMethodsValues;
   QStringList m_imgDetectionModes;
+  QStringList m_outputWidgetTypes;
 
   QMetaObject::Connection m_deviceListConn;
 

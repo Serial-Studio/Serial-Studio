@@ -21,25 +21,23 @@
  */
 
 #pragma once
-#ifdef BUILD_COMMERCIAL
 
 // Prevent windows.h (pulled in by libusb) from defining min/max macros
-#  if defined(_WIN32) && !defined(NOMINMAX)
-#    define NOMINMAX
-#  endif
+#if defined(_WIN32) && !defined(NOMINMAX)
+#  define NOMINMAX
+#endif
 
-#  include <libusb.h>
+#include <libusb.h>
 
-#  include <atomic>
-#  include <new>
-#  include <QList>
-#  include <QObject>
-#  include <QSettings>
-#  include <QString>
-#  include <QStringList>
-#  include <QThread>
+#include <atomic>
+#include <QList>
+#include <QObject>
+#include <QSettings>
+#include <QString>
+#include <QStringList>
+#include <QThread>
 
-#  include "IO/HAL_Driver.h"
+#include "IO/HAL_Driver.h"
 
 namespace IO {
 namespace Drivers {
@@ -246,5 +244,3 @@ private:
 
 }  // namespace Drivers
 }  // namespace IO
-
-#endif  // BUILD_COMMERCIAL

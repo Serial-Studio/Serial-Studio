@@ -21,19 +21,18 @@
  */
 
 #pragma once
-#ifdef BUILD_COMMERCIAL
 
-#  include <atomic>
-#  include <QFileDialog>
-#  include <QList>
-#  include <QObject>
-#  include <QProcess>
-#  include <QSettings>
-#  include <QString>
-#  include <QStringList>
-#  include <QThread>
+#include <atomic>
+#include <QFileDialog>
+#include <QList>
+#include <QObject>
+#include <QProcess>
+#include <QSettings>
+#include <QString>
+#include <QStringList>
+#include <QThread>
 
-#  include "IO/HAL_Driver.h"
+#include "IO/HAL_Driver.h"
 
 namespace IO {
 namespace Drivers {
@@ -157,5 +156,3 @@ private:
 
 }  // namespace Drivers
 }  // namespace IO
-
-#endif  // BUILD_COMMERCIAL

@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/rcc">
-        <file>markdown-viewer.html</file>
         <file>actions/Abscissa.svg</file>
         <file>actions/Accuracy.svg</file>
         <file>actions/Add properties.svg</file>
@@ -126,6 +125,7 @@
         <file>icons/buttons/connected.svg</file>
         <file>icons/buttons/deactivate.svg</file>
         <file>icons/buttons/disconnected.svg</file>
+        <file>icons/buttons/download.svg</file>
         <file>icons/buttons/expand.svg</file>
         <file>icons/buttons/forward.svg</file>
         <file>icons/buttons/info.svg</file>
@@ -219,6 +219,7 @@
         <file>icons/dashboard-small/image.svg</file>
         <file>icons/dashboard-small/led.svg</file>
         <file>icons/dashboard-small/multiplot.svg</file>
+        <file>icons/dashboard-small/output-panel.svg</file>
         <file>icons/dashboard-small/plot.svg</file>
         <file>icons/dashboard-small/plot3d.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
@@ -255,6 +256,12 @@
         <file>icons/project-editor/actions/add-fft.svg</file>
         <file>icons/project-editor/actions/add-gauge.svg</file>
         <file>icons/project-editor/actions/add-led.svg</file>
+        <file>icons/project-editor/actions/add-output-button.svg</file>
+        <file>icons/project-editor/actions/add-output-knob.svg</file>
+        <file>icons/project-editor/actions/add-output-ramp.svg</file>
+        <file>icons/project-editor/actions/add-output-slider.svg</file>
+        <file>icons/project-editor/actions/add-output-textfield.svg</file>
+        <file>icons/project-editor/actions/add-output-toggle.svg</file>
         <file>icons/project-editor/actions/add-plot.svg</file>
         <file>icons/project-editor/actions/bar.svg</file>
         <file>icons/project-editor/actions/change-group.svg</file>
@@ -264,6 +271,13 @@
         <file>icons/project-editor/actions/fft.svg</file>
         <file>icons/project-editor/actions/gauge.svg</file>
         <file>icons/project-editor/actions/led.svg</file>
+        <file>icons/project-editor/actions/output-button.svg</file>
+        <file>icons/project-editor/actions/output-knob.svg</file>
+        <file>icons/project-editor/actions/output-panel.svg</file>
+        <file>icons/project-editor/actions/output-ramp.svg</file>
+        <file>icons/project-editor/actions/output-slider.svg</file>
+        <file>icons/project-editor/actions/output-textfield.svg</file>
+        <file>icons/project-editor/actions/output-toggle.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
         <file>icons/project-editor/model/action-behavior.svg</file>
         <file>icons/project-editor/model/action.svg</file>
@@ -275,6 +289,9 @@
         <file>icons/project-editor/model/group.svg</file>
         <file>icons/project-editor/model/image.svg</file>
         <file>icons/project-editor/model/led.svg</file>
+        <file>icons/project-editor/model/output-panel.svg</file>
+        <file>icons/project-editor/model/output-range.svg</file>
+        <file>icons/project-editor/model/output-widget.svg</file>
         <file>icons/project-editor/model/plot.svg</file>
         <file>icons/project-editor/model/project.svg</file>
         <file>icons/project-editor/model/timer.svg</file>
@@ -298,6 +315,12 @@
         <file>icons/project-editor/toolbar/add-gyroscope.svg</file>
         <file>icons/project-editor/toolbar/add-led.svg</file>
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
+        <file>icons/project-editor/toolbar/add-output-button.svg</file>
+        <file>icons/project-editor/toolbar/add-output-knob.svg</file>
+        <file>icons/project-editor/toolbar/add-output-ramp.svg</file>
+        <file>icons/project-editor/toolbar/add-output-slider.svg</file>
+        <file>icons/project-editor/toolbar/add-output-textfield.svg</file>
+        <file>icons/project-editor/toolbar/add-output-toggle.svg</file>
         <file>icons/project-editor/toolbar/add-plot.svg</file>
         <file>icons/project-editor/toolbar/add-plot3d.svg</file>
         <file>icons/project-editor/toolbar/device.svg</file>
@@ -322,6 +345,13 @@
         <file>icons/project-editor/treeview/image.svg</file>
         <file>icons/project-editor/treeview/indicator.svg</file>
         <file>icons/project-editor/treeview/multiplot.svg</file>
+        <file>icons/project-editor/treeview/output-button.svg</file>
+        <file>icons/project-editor/treeview/output-knob.svg</file>
+        <file>icons/project-editor/treeview/output-panel.svg</file>
+        <file>icons/project-editor/treeview/output-ramp.svg</file>
+        <file>icons/project-editor/treeview/output-slider.svg</file>
+        <file>icons/project-editor/treeview/output-textfield.svg</file>
+        <file>icons/project-editor/treeview/output-toggle.svg</file>
         <file>icons/project-editor/treeview/plot3d.svg</file>
         <file>icons/project-editor/treeview/project-setup.svg</file>
         <file>icons/project-editor/treeview/project-title.svg</file>
@@ -355,11 +385,13 @@
         <file>icons/toolbar/about.svg</file>
         <file>icons/toolbar/activate.svg</file>
         <file>icons/toolbar/connect.svg</file>
+        <file>icons/toolbar/console.svg</file>
         <file>icons/toolbar/csv.svg</file>
         <file>icons/toolbar/deepwiki.svg</file>
         <file>icons/toolbar/device-setup.svg</file>
         <file>icons/toolbar/disconnect.svg</file>
         <file>icons/toolbar/examples.svg</file>
+        <file>icons/toolbar/extensions.svg</file>
         <file>icons/toolbar/help.svg</file>
         <file>icons/toolbar/mf4.svg</file>
         <file>icons/toolbar/mqtt-publisher.svg</file>
@@ -377,6 +409,7 @@
         <file>images/multi-device.svg</file>
         <file>images/no-bluetooth.svg</file>
         <file>images/no-mic.svg</file>
+        <file>images/no-results.svg</file>
         <file>images/no-usb.svg</file>
         <file>images/spinner.svg</file>
         <file>images/usb.svg</file>
@@ -447,6 +480,20 @@
         <file>messages/trial/Welcome_UK.txt</file>
         <file>messages/trial/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
+        <file>scripts/output/default_template.js</file>
+        <file>scripts/output/at_command.js</file>
+        <file>scripts/output/binary_packet.js</file>
+        <file>scripts/output/gcode_command.js</file>
+        <file>scripts/output/grbl_command.js</file>
+        <file>scripts/output/json_command.js</file>
+        <file>scripts/output/modbus_write.js</file>
+        <file>scripts/output/nmea_sentence.js</file>
+        <file>scripts/output/pid_setpoint.js</file>
+        <file>scripts/output/pwm_control.js</file>
+        <file>scripts/output/relay_toggle.js</file>
+        <file>scripts/output/scpi_command.js</file>
+        <file>scripts/output/simple_command.js</file>
+        <file>scripts/output/slcan_command.js</file>
         <file>scripts/at_commands.js</file>
         <file>scripts/base64_encoded.js</file>
         <file>scripts/batched_sensor_data.js</file>
@@ -481,9 +528,8 @@
         <file>themes/default.json</file>
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
-        <file>images/no-results.svg</file>
-        <file>icons/toolbar/extensions.svg</file>
-        <file>icons/toolbar/console.svg</file>
-        <file>icons/buttons/download.svg</file>
+        <file>markdown-viewer.html</file>
+        <file>icons/project-editor/toolbar/add-output-panel.svg</file>
+        <file>icons/dashboard-large/output-panel.svg</file>
     </qresource>
 </RCC>

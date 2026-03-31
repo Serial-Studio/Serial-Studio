@@ -20,17 +20,15 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "UI/Widgets/ImageView.h"
 
-#  include "UI/Widgets/ImageView.h"
+#include <QImage>
 
-#  include <QImage>
-
-#  include "IO/ConnectionManager.h"
-#  include "SerialStudio.h"
-#  include "UI/Dashboard.h"
-#  include "UI/ImageProvider.h"
-#  include "UI/Widgets/ImageExport.h"
+#include "IO/ConnectionManager.h"
+#include "SerialStudio.h"
+#include "UI/Dashboard.h"
+#include "UI/ImageProvider.h"
+#include "UI/Widgets/ImageExport.h"
 
 //--------------------------------------------------------------------------------------------------
 // ImageFrameReader
@@ -516,5 +514,3 @@ QString Widgets::ImageView::detectFormat(const QByteArray& data)
 
   return QStringLiteral("Unknown");
 }
-
-#endif  // BUILD_COMMERCIAL

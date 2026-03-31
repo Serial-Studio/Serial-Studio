@@ -9,14 +9,12 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/USBHandler.h"
 
-#  include "API/Handlers/USBHandler.h"
+#include <QJsonArray>
 
-#  include <QJsonArray>
-
-#  include "API/CommandRegistry.h"
-#  include "IO/ConnectionManager.h"
+#include "API/CommandRegistry.h"
+#include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -357,5 +355,3 @@ API::CommandResponse API::Handlers::USBHandler::getConfiguration(const QString& 
   result[QStringLiteral("outEndpoints")]     = out_endpoints;
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

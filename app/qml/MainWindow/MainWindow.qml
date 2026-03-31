@@ -81,6 +81,23 @@ Widgets.SmartWindow {
   function showSetup()     { toolbar.setupClicked() }
   function showConsole()   { stack.pop()            }
 
+  function showDashboardNow() {
+    if (stack.currentItem !== dashboard) {
+      stack.push(dashboard)
+      dashboard.loadLayout()
+
+      if (CLI_START_FULLSCREEN)
+        mainWindow.toolbarVisible = false
+    }
+  }
+
+  Timer {
+    id: dashboardDelayTimer
+    interval: 270
+    repeat: false
+    onTriggered: root.showDashboardNow()
+  }
+
   //
   // Obtain document title
   //
@@ -171,15 +188,12 @@ Widgets.SmartWindow {
         return
 
       if (Cpp_UI_Dashboard.available) {
-        setup.hide()
         root.firstValidFrame = true
-
-        if (stack.currentItem !== dashboard) {
-          stack.push(dashboard)
-          dashboard.loadLayout()
-
-          if (CLI_START_FULLSCREEN)
-            mainWindow.toolbarVisible = false
+        if (setup.visible) {
+          setup.hide()
+          dashboardDelayTimer.start()
+        } else {
+          root.showDashboardNow()
         }
       }
 

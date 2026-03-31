@@ -489,14 +489,14 @@ void Misc::ExtensionManager::resetRepositories()
  */
 void Misc::ExtensionManager::browseLocalRepo()
 {
-  auto *dialog = new QFileDialog(nullptr, tr("Select Extension Repository Folder"),
-                                 QDir::homePath());
+  auto* dialog =
+    new QFileDialog(nullptr, tr("Select Extension Repository Folder"), QDir::homePath());
 
   dialog->setFileMode(QFileDialog::Directory);
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
   dialog->setOption(QFileDialog::DontUseNativeDialog);
 
-  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString &path) {
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     dialog->deleteLater();
 
     if (!path.isEmpty())

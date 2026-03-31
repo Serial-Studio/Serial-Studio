@@ -9,14 +9,12 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/AudioHandler.h"
 
-#  include "API/Handlers/AudioHandler.h"
+#include <QJsonArray>
 
-#  include <QJsonArray>
-
-#  include "API/CommandRegistry.h"
-#  include "IO/ConnectionManager.h"
+#include "API/CommandRegistry.h"
+#include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -588,5 +586,3 @@ API::CommandResponse API::Handlers::AudioHandler::getConfiguration(const QString
 
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

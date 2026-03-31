@@ -397,12 +397,13 @@ void MQTT::Client::openConnection()
     return;
 
   const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || !SS_LICENSE_GUARD() || token.featureTier() == Licensing::FeatureTier::None
-      || token.variantName().isEmpty()) {
+  if (!token.isValid() || !SS_LICENSE_GUARD()
+      || token.featureTier() < Licensing::FeatureTier::Hobbyist || token.variantName().isEmpty()) {
     Misc::Utilities::showMessageBox(
       tr("MQTT Feature Requires a Commercial License"),
       tr("Connecting to MQTT brokers is only available with a valid Serial Studio commercial "
-         "license.\n\nTo unlock this feature, please activate your license or visit the store."),
+         "license (Hobbyist tier or above).\n\nTo unlock this feature, please activate your "
+         "license or visit the store."),
       QMessageBox::Warning);
     return;
   }
@@ -738,7 +739,7 @@ void MQTT::Client::hotpathTxFrame(const QByteArray& data)
 {
   const auto& token = Licensing::CommercialToken::current();
   if (isConnected() && isPublisher() && m_topicName.isValid() && token.isValid()
-      && SS_LICENSE_GUARD() && token.featureTier() >= Licensing::FeatureTier::Trial)
+      && SS_LICENSE_GUARD() && token.featureTier() >= Licensing::FeatureTier::Hobbyist)
     m_client.publish(m_topicName, data);
 }
 
@@ -927,7 +928,7 @@ void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopic
 {
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
-      || token.featureTier() == Licensing::FeatureTier::None)
+      || token.featureTier() < Licensing::FeatureTier::Hobbyist)
     return;
 
   // Only process if data is not empty

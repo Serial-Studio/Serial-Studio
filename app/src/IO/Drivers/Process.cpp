@@ -20,30 +20,28 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "IO/Drivers/Process.h"
 
-#  include "IO/Drivers/Process.h"
+#include <QDir>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QStandardPaths>
 
-#  include <QDir>
-#  include <QFileDialog>
-#  include <QFileInfo>
-#  include <QStandardPaths>
+#include "IO/ConnectionManager.h"
+#include "Misc/Utilities.h"
 
-#  include "IO/ConnectionManager.h"
-#  include "Misc/Utilities.h"
-
-#  ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
 // clang-format off
-#    include <windows.h>
-#    include <tlhelp32.h>
+#  include <windows.h>
+#  include <tlhelp32.h>
 // clang-format on
-#  else
-#    include <fcntl.h>
-#    include <poll.h>
-#    include <unistd.h>
+#else
+#  include <fcntl.h>
+#  include <poll.h>
+#  include <unistd.h>
 
-#    include <sys/stat.h>
-#  endif
+#  include <sys/stat.h>
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -221,11 +219,11 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
     auto env                = QProcessEnvironment::systemEnvironment();
     const QStringList extra = extraSearchPaths();
     if (!extra.isEmpty()) {
-#  ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
       const QChar sep = QLatin1Char(';');
-#  else
+#else
       const QChar sep = QLatin1Char(':');
-#  endif
+#endif
       const QString current = env.value(QStringLiteral("PATH"));
       env.insert(QStringLiteral("PATH"), current + sep + extra.join(sep));
       m_process->setProcessEnvironment(env);
@@ -489,7 +487,7 @@ void IO::Drivers::Process::refreshProcessList()
 {
   QStringList list;
 
-#  ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
   HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
   if (snap != INVALID_HANDLE_VALUE) {
     PROCESSENTRY32W entry;
@@ -504,7 +502,7 @@ void IO::Drivers::Process::refreshProcessList()
 
     CloseHandle(snap);
   }
-#  else
+#else
   QProcess ps;
   ps.start("ps", QStringList{"-eo", "pid,comm"});
   ps.waitForFinished(3000);
@@ -526,7 +524,7 @@ void IO::Drivers::Process::refreshProcessList()
     if (!pid.isEmpty() && !name.isEmpty())
       list.append(name + " [" + pid + "]");
   }
-#  endif
+#endif
 
   list.sort(Qt::CaseInsensitive);
 
@@ -633,7 +631,7 @@ void IO::Drivers::Process::onPipeError()
  */
 void IO::Drivers::Process::pipeReadLoop()
 {
-#  ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
   const QString dosPath = QDir::toNativeSeparators(m_pipePath);
   HANDLE hPipe          = CreateNamedPipeW(reinterpret_cast<LPCWSTR>(dosPath.utf16()),
                                   PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED,
@@ -689,7 +687,7 @@ void IO::Drivers::Process::pipeReadLoop()
   }
 
   CloseHandle(hPipe);
-#  else
+#else
   const QByteArray pathBytes = m_pipePath.toLocal8Bit();
   struct stat st{};
   const bool exists = (::stat(pathBytes.constData(), &st) == 0);
@@ -738,7 +736,7 @@ void IO::Drivers::Process::pipeReadLoop()
   }
 
   ::close(fd);
-#  endif
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -755,10 +753,10 @@ QStringList IO::Drivers::Process::extraSearchPaths()
 {
   QStringList paths;
 
-#  ifdef Q_OS_MACOS
+#ifdef Q_OS_MACOS
   paths << QStringLiteral("/opt/homebrew/bin") << QStringLiteral("/opt/homebrew/sbin")
         << QStringLiteral("/usr/local/bin") << QStringLiteral("/usr/local/sbin");
-#  elif defined(Q_OS_LINUX)
+#elif defined(Q_OS_LINUX)
   paths << QStringLiteral("/usr/local/bin") << QStringLiteral("/usr/local/sbin")
         << QStringLiteral("/snap/bin") << QStringLiteral("/var/lib/flatpak/exports/bin");
 
@@ -767,7 +765,7 @@ QStringList IO::Drivers::Process::extraSearchPaths()
     paths << home + QStringLiteral("/.local/bin")
           << home + QStringLiteral("/.local/share/flatpak/exports/bin");
   }
-#  elif defined(Q_OS_WIN)
+#elif defined(Q_OS_WIN)
   const QString localAppData = qEnvironmentVariable("LOCALAPPDATA");
   const QString userProfile  = qEnvironmentVariable("USERPROFILE");
   if (!localAppData.isEmpty())
@@ -777,7 +775,7 @@ QStringList IO::Drivers::Process::extraSearchPaths()
     paths << userProfile + QStringLiteral("\\scoop\\shims")
           << userProfile + QStringLiteral("\\AppData\\Local\\Programs\\Python\\Python3\\Scripts");
   }
-#  endif
+#endif
 
   return paths;
 }
@@ -876,5 +874,3 @@ void IO::Drivers::Process::setDriverProperty(const QString& key, const QVariant&
   else if (key == QLatin1String("pipePath"))
     setPipePath(value.toString());
 }
-
-#endif  // BUILD_COMMERCIAL

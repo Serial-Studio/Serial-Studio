@@ -168,8 +168,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
     closeResources();
 
   const auto& token = Licensing::CommercialToken::current();
-  if (!token.isValid() || !SS_LICENSE_GUARD()
-      || token.featureTier() == Licensing::FeatureTier::None)
+  if (!token.isValid() || !SS_LICENSE_GUARD() || token.featureTier() < Licensing::FeatureTier::Pro)
     return;
 
   const auto dateTime = QDateTime::currentDateTime();
@@ -437,7 +436,7 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
-  if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial) {
+  if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Pro) {
     if (!enabled && isOpen())
       closeFile();
 

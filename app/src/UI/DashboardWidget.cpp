@@ -38,6 +38,7 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "UI/Widgets/ImageView.h"
+#  include "UI/Widgets/Output/Panel.h"
 #  include "UI/Widgets/Plot3D.h"
 #endif
 
@@ -270,6 +271,11 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
       case SerialStudio::DashboardImageView:
         m_dbWidget = new Widgets::ImageView(relativeIndex(), this);
         m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/ImageView.qml";
+        break;
+      case SerialStudio::DashboardOutputPanel:
+        m_dbWidget = new Widgets::Output::Panel(relativeIndex(), this);
+        m_qmlPath =
+          "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml";
         break;
 #endif
 

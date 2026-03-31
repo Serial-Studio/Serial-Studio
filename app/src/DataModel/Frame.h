@@ -77,9 +77,23 @@ inline constexpr auto Overview        = "overviewDisplay";
 inline constexpr auto AlarmEnabled    = "alarmEnabled";
 inline constexpr auto FFTSamplingRate = "fftSamplingRate";
 
-inline constexpr auto Groups   = "groups";
-inline constexpr auto Actions  = "actions";
-inline constexpr auto Datasets = "datasets";
+inline constexpr auto Groups        = "groups";
+inline constexpr auto Actions       = "actions";
+inline constexpr auto Datasets      = "datasets";
+inline constexpr auto OutputWidgets = "outputWidgets";
+
+inline constexpr auto OutputType         = "outputType";
+inline constexpr auto OutputMinValue     = "outputMin";
+inline constexpr auto OutputMaxValue     = "outputMax";
+inline constexpr auto OutputStepSize     = "outputStep";
+inline constexpr auto OutputInitialValue = "initialValue";
+inline constexpr auto OutputOnLabel      = "onLabel";
+inline constexpr auto OutputOffLabel     = "offLabel";
+inline constexpr auto OutputMonoIcon     = "monoIcon";
+inline constexpr auto OutputColumns      = "outputColumns";
+inline constexpr auto TransmitFunction   = "transmitFunction";
+
+inline constexpr auto GroupType = "groupType";
 
 inline constexpr auto ImgMode  = "imgDetectionMode";
 inline constexpr auto ImgStart = "imgStartSequence";
@@ -102,6 +116,35 @@ inline QString layoutKey(int groupId)
 }  // namespace Keys
 
 namespace DataModel {
+
+//--------------------------------------------------------------------------------------------------
+// Utility functions for data deserialization
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reads a value from a QJsonObject based on a key, returning a default
+ *        value if the key does not exist.
+ *
+ * This function checks if the given key exists in the provided QJsonObject.
+ * If the key is found, it returns the associated value. Otherwise, it returns
+ * the specified default value.
+ *
+ * @param object The QJsonObject to read the data from.
+ * @param key The key to look for in the QJsonObject.
+ * @param defaultValue The value to return if the key is not found in JSON.
+ *
+ * @return The value associated with the key, or the defaultValue if the key is
+ *         not present.
+ */
+[[nodiscard]] inline QVariant ss_jsr(const QJsonObject& object,
+                                     const QString& key,
+                                     const QVariant& defaultValue)
+{
+  if (object.contains(key))
+    return object.value(key);
+
+  return defaultValue;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Action structure
@@ -152,6 +195,95 @@ static_assert(sizeof(Action) % alignof(Action) == 0, "Unaligned Action struct");
 QByteArray get_tx_bytes(const Action& action);
 
 //--------------------------------------------------------------------------------------------------
+// OutputWidget structure
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Type of interactive output widget for bidirectional communication.
+ */
+enum class OutputWidgetType : quint8 {
+  Button,
+  Slider,
+  Toggle,
+  TextField,
+  Knob,
+  RampGenerator,
+};
+
+/**
+ * @brief Represents an interactive output widget that sends data to the device.
+ *
+ * Each output widget contains a JavaScript `transmit(value)` function that
+ * converts the widget’s current value into bytes to send over the connection.
+ * This allows users to format output data for any protocol or requirement.
+ */
+struct alignas(8) OutputWidget {
+  int widgetId          = -1;
+  int groupId           = -1;
+  int sourceId          = 0;
+  OutputWidgetType type = OutputWidgetType::Button;
+  bool monoIcon         = false;
+  double minValue       = 0;
+  double maxValue       = 100;
+  double stepSize       = 1;
+  double initialValue   = 0;
+  QString icon;
+  QString title;
+  QString transmitFunction;
+};
+
+static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned OutputWidget struct");
+
+/**
+ * @brief Serializes an OutputWidget to a QJsonObject.
+ * @param w The OutputWidget to serialize.
+ * @return QJsonObject representing the OutputWidget.
+ */
+[[nodiscard]] inline QJsonObject serialize(const OutputWidget& w)
+{
+  QJsonObject obj;
+  obj.insert(Keys::Icon, w.icon);
+  obj.insert(Keys::Title, w.title);
+  obj.insert(Keys::SourceId, w.sourceId);
+  obj.insert(Keys::OutputType, static_cast<int>(w.type));
+  obj.insert(Keys::OutputMinValue, w.minValue);
+  obj.insert(Keys::OutputMaxValue, w.maxValue);
+  obj.insert(Keys::OutputStepSize, w.stepSize);
+  obj.insert(Keys::OutputInitialValue, w.initialValue);
+  if (w.monoIcon)
+    obj.insert(Keys::OutputMonoIcon, true);
+  obj.insert(Keys::TransmitFunction, w.transmitFunction);
+  return obj;
+}
+
+/**
+ * @brief Deserializes an OutputWidget from a QJsonObject.
+ * @param w Output OutputWidget object to populate.
+ * @param obj JSON object to read from.
+ * @return true if valid and successfully parsed, false otherwise.
+ */
+[[nodiscard]] inline bool read(OutputWidget& w, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  w.icon             = ss_jsr(obj, Keys::Icon, "").toString().simplified();
+  w.title            = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  w.sourceId         = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  w.type             = static_cast<OutputWidgetType>(qBound(0,
+                                                ss_jsr(obj, Keys::OutputType, 0).toInt(),
+                                                static_cast<int>(OutputWidgetType::RampGenerator)));
+  w.minValue         = ss_jsr(obj, Keys::OutputMinValue, 0).toDouble();
+  w.maxValue         = ss_jsr(obj, Keys::OutputMaxValue, 100).toDouble();
+  w.stepSize         = ss_jsr(obj, Keys::OutputStepSize, 1).toDouble();
+  w.initialValue     = ss_jsr(obj, Keys::OutputInitialValue, 0).toDouble();
+  w.monoIcon         = ss_jsr(obj, Keys::OutputMonoIcon, false).toBool();
+  w.transmitFunction = obj.value(Keys::TransmitFunction).toString();
+
+  return !w.title.isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
 // Dataset structure
 //--------------------------------------------------------------------------------------------------
 
@@ -198,20 +330,32 @@ static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Distinguishes input (visualization) groups from output (control) groups.
+ *
+ * Legacy projects that lack this field default to Input, preserving backward
+ * compatibility.
+ */
+enum class GroupType : quint8 {
+  Input  = 0,  ///< Visualization group (datasets, plots, etc.)
+  Output = 1,  ///< Control group (output widgets only)
+};
+
+/**
  * @brief Represents a collection of datasets that are related (e.g., for a
  * specific sensor).
  */
 struct alignas(8) Group {
-  int groupId  = -1;              ///< Unique group identifier
-  int sourceId = 0;               ///< Source this group reads from (0 = default)
-  QString title;                  ///< Group display name
-  QString widget;                 ///< Group widget type
-  std::vector<Dataset> datasets;  ///< Datasets contained in this group
-
-  // Image View configuration (only used when widget == "image")
-  QString imgDetectionMode;  ///< "autodetect" | "manual" (default: "autodetect")
-  QString imgStartSequence;  ///< Hex start delimiter (manual mode only)
-  QString imgEndSequence;    ///< Hex end delimiter (manual mode only)
+  int groupId         = -1;                 ///< Unique group identifier
+  int sourceId        = 0;                  ///< Source this group reads from (0 = default)
+  int columns         = 2;                  ///< Number of columns for output panel grid layout
+  GroupType groupType = GroupType::Input;   ///< Input (visualization) or Output (controls)
+  QString title;                            ///< Group display name
+  QString widget;                           ///< Group widget type
+  std::vector<Dataset> datasets;            ///< Datasets contained in this group
+  std::vector<OutputWidget> outputWidgets;  ///< Interactive output widgets
+  QString imgDetectionMode;                 ///< "autodetect" | "manual" (default: "autodetect")
+  QString imgStartSequence;                 ///< Hex start delimiter (manual mode only)
+  QString imgEndSequence;                   ///< Hex end delimiter (manual mode only)
 };
 
 static_assert(sizeof(Group) % alignof(Group) == 0, "Unaligned Group struct");
@@ -573,6 +717,12 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Title, g.title.simplified());
   obj.insert(Keys::Widget, g.widget.simplified());
 
+  if (g.groupType != GroupType::Input)
+    obj.insert(Keys::GroupType, static_cast<int>(g.groupType));
+
+  if (g.columns != 2)
+    obj.insert(Keys::OutputColumns, g.columns);
+
   if (g.sourceId != 0)
     obj.insert(Keys::SourceId, g.sourceId);
 
@@ -580,6 +730,14 @@ void read_io_settings(QByteArray& frameStart,
     obj.insert(Keys::ImgMode, g.imgDetectionMode);
     obj.insert(Keys::ImgStart, g.imgStartSequence);
     obj.insert(Keys::ImgEnd, g.imgEndSequence);
+  }
+
+  if (!g.outputWidgets.empty()) {
+    QJsonArray owArray;
+    for (const auto& ow : g.outputWidgets)
+      owArray.append(serialize(ow));
+
+    obj.insert(Keys::OutputWidgets, owArray);
   }
 
   return obj;
@@ -601,10 +759,11 @@ void read_io_settings(QByteArray& frameStart,
 [[nodiscard]] inline QJsonObject serialize(const Frame& f)
 {
   QJsonArray groupArray;
+  QJsonArray actionArray;
+
   for (const auto& group : f.groups)
     groupArray.append(serialize(group));
 
-  QJsonArray actionArray;
   for (const auto& action : f.actions)
     actionArray.append(serialize(action));
 
@@ -613,35 +772,6 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Groups, groupArray);
   obj.insert(Keys::Actions, actionArray);
   return obj;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Utility functions for data deserialization
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Reads a value from a QJsonObject based on a key, returning a default
- *        value if the key does not exist.
- *
- * This function checks if the given key exists in the provided QJsonObject.
- * If the key is found, it returns the associated value. Otherwise, it returns
- * the specified default value.
- *
- * @param object The QJsonObject to read the data from.
- * @param key The key to look for in the QJsonObject.
- * @param defaultValue The value to return if the key is not found in JSON.
- *
- * @return The value associated with the key, or the defaultValue if the key is
- *         not present.
- */
-[[nodiscard]] inline QVariant ss_jsr(const QJsonObject& object,
-                                     const QString& key,
-                                     const QVariant& defaultValue)
-{
-  if (object.contains(key))
-    return object.value(key);
-
-  return defaultValue;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -836,13 +966,20 @@ void read_io_settings(QByteArray& frameStart,
   const auto title  = ss_jsr(obj, Keys::Title, "").toString().simplified();
   const auto widget = ss_jsr(obj, Keys::Widget, "").toString().simplified();
 
-  // Image groups have no telemetry datasets; allow them with an empty array.
-  const bool isImageGroup = (widget == QLatin1String("image"));
+  // Read group type (defaults to Input for legacy projects)
+  const auto gtVal     = ss_jsr(obj, Keys::GroupType, 0).toInt();
+  const auto groupType = static_cast<GroupType>(qBound(0, gtVal, 1));
 
-  if (!title.isEmpty() && (!array.isEmpty() || isImageGroup)) {
-    g.title    = title;
-    g.widget   = widget;
-    g.sourceId = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  // Image and output groups may have no telemetry datasets
+  const bool isImageGroup  = (widget == QLatin1String("image"));
+  const bool isOutputGroup = (groupType == GroupType::Output);
+
+  if (!title.isEmpty() && (!array.isEmpty() || isImageGroup || isOutputGroup)) {
+    g.title     = title;
+    g.widget    = widget;
+    g.groupType = groupType;
+    g.columns   = qBound(1, ss_jsr(obj, Keys::OutputColumns, 2).toInt(), 10);
+    g.sourceId  = ss_jsr(obj, Keys::SourceId, 0).toInt();
 
     if (isImageGroup) {
       g.imgDetectionMode = ss_jsr(obj, Keys::ImgMode, "autodetect").toString();
@@ -869,6 +1006,22 @@ void read_io_settings(QByteArray& frameStart,
 
         else
           break;
+      }
+    }
+
+    // Parse output widgets (optional, does not affect ok status)
+    const auto owArray = obj.value(Keys::OutputWidgets).toArray();
+    if (!owArray.isEmpty()) {
+      g.outputWidgets.clear();
+      g.outputWidgets.reserve(owArray.count());
+
+      for (qsizetype i = 0; i < owArray.count(); ++i) {
+        OutputWidget ow;
+        if (read(ow, owArray[i].toObject())) {
+          ow.widgetId = static_cast<int>(i);
+          ow.groupId  = g.groupId;
+          g.outputWidgets.push_back(ow);
+        }
       }
     }
 

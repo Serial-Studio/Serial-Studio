@@ -748,6 +748,113 @@
             "sourceId": 1,
             "title": "Bravo Power",
             "widget": ""
+        },
+        {
+            "datasets": [
+            ],
+            "groupType": 1,
+            "outputWidgets": [
+                {
+                    "icon": "",
+                    "initialValue": 50,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 1,
+                    "sourceId": 0,
+                    "title": "Throttle",
+                    "transmitFunction": "function transmit(value) {\n  return \"THR \" + Math.round(value) + \"\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 0,
+                    "outputMax": 180,
+                    "outputMin": -180,
+                    "outputStep": 1,
+                    "outputType": 4,
+                    "sourceId": 0,
+                    "title": "Heading",
+                    "transmitFunction": "function transmit(value) {\n  return \"HDG \" + Math.round(value) + \"\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 1,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 2,
+                    "sourceId": 0,
+                    "title": "Camera",
+                    "transmitFunction": "function transmit(value) {\n  return value ? \"CAM ON\\r\\n\" : \"CAM OFF\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 0,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 0,
+                    "sourceId": 0,
+                    "title": "Return to Home",
+                    "transmitFunction": "function transmit(value) {\n  return \"RTH\\r\\n\";\n}"
+                }
+            ],
+            "title": "Alpha Controls",
+            "widget": ""
+        },
+        {
+            "datasets": [
+            ],
+            "groupType": 1,
+            "outputWidgets": [
+                {
+                    "icon": "",
+                    "initialValue": 50,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 1,
+                    "sourceId": 1,
+                    "title": "Throttle",
+                    "transmitFunction": "function transmit(value) {\n  return \"THR \" + Math.round(value) + \"\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 0,
+                    "outputMax": 180,
+                    "outputMin": -180,
+                    "outputStep": 1,
+                    "outputType": 4,
+                    "sourceId": 1,
+                    "title": "Heading",
+                    "transmitFunction": "function transmit(value) {\n  return \"HDG \" + Math.round(value) + \"\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 1,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 2,
+                    "sourceId": 1,
+                    "title": "Camera",
+                    "transmitFunction": "function transmit(value) {\n  return value ? \"CAM ON\\r\\n\" : \"CAM OFF\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 0,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 0,
+                    "sourceId": 1,
+                    "title": "Return to Home",
+                    "transmitFunction": "function transmit(value) {\n  return \"RTH\\r\\n\";\n}"
+                }
+            ],
+            "sourceId": 1,
+            "title": "Bravo Controls",
+            "widget": ""
         }
     ],
     "hexadecimalDelimiters": false,
@@ -759,10 +866,8 @@
             "checksumAlgorithm": "",
             "connection": {
                 "address": "127.0.0.1",
-                "socketTypeIndex": 1,
-                "udpLocalPort": 9001,
-                "udpMulticast": false,
-                "udpRemotePort": 53
+                "socketTypeIndex": 0,
+                "tcpPort": 9001
             },
             "decoder": 0,
             "decoderMethod": 0,
@@ -780,10 +885,8 @@
             "checksumAlgorithm": "",
             "connection": {
                 "address": "127.0.0.1",
-                "socketTypeIndex": 1,
-                "udpLocalPort": 9002,
-                "udpMulticast": false,
-                "udpRemotePort": 53
+                "socketTypeIndex": 0,
+                "tcpPort": 9002
             },
             "decoder": 0,
             "decoderMethod": 0,
@@ -798,6 +901,12 @@
     ],
     "title": "Dual Drone Telemetry",
     "widgetSettings": {
+        "4:3:-1": {
+            "integrateValues": false
+        },
+        "4:9:-1": {
+            "integrateValues": false
+        },
         "5:1:-1": {
             "autoCenter": true
         },
@@ -805,6 +914,157 @@
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
+                    3,
+                    2,
+                    4,
+                    6,
+                    8,
+                    7,
+                    5,
+                    9
+                ]
+            }
+        },
+        "layout:-2": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    6,
+                    4,
+                    10,
+                    34,
+                    2,
+                    0,
+                    11,
+                    12,
+                    13,
+                    22,
+                    28,
+                    29,
+                    14,
+                    15,
+                    23,
+                    24,
+                    30,
+                    8,
+                    7,
+                    5,
+                    16,
+                    35,
+                    3,
+                    1,
+                    17,
+                    18,
+                    19,
+                    25,
+                    31,
+                    32,
+                    20,
+                    21,
+                    26,
+                    27,
+                    33,
+                    9
+                ]
+            }
+        },
+        "layout:0": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    6
+                ]
+            }
+        },
+        "layout:1": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    4,
+                    10
+                ]
+            }
+        },
+        "layout:12": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    8
+                ]
+            }
+        },
+        "layout:13": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    9
+                ]
+            }
+        },
+        "layout:2": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    34
+                ]
+            }
+        },
+        "layout:3": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    2,
+                    0
+                ]
+            }
+        },
+        "layout:4": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    11,
+                    12,
+                    13,
+                    22,
+                    28,
+                    29
+                ]
+            }
+        },
+        "layout:5": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    14,
+                    15,
+                    23,
+                    24,
+                    30
+                ]
+            }
+        },
+        "layout:6": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    7
+                ]
+            }
+        },
+        "layout:7": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    5,
+                    16
+                ]
+            }
+        },
+        "layout:8": {
+            "data": {
+                "autoLayout": true,
+                "windowOrder": [
+                    35
                 ]
             }
         }

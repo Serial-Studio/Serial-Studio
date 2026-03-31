@@ -20,12 +20,10 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/ModbusHandler.h"
 
-#  include "API/Handlers/ModbusHandler.h"
-
-#  include "API/CommandRegistry.h"
-#  include "IO/ConnectionManager.h"
+#include "API/CommandRegistry.h"
+#include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -977,5 +975,3 @@ API::CommandResponse API::Handlers::ModbusHandler::getRegisterGroups(const QStri
   result[QStringLiteral("groupCount")]     = groupCount;
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

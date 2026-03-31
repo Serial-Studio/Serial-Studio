@@ -21,13 +21,12 @@
 
 import QtCore
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
 
-RowLayout {
+SplitView {
   id: root
 
-  spacing: 0
+  orientation: Qt.Horizontal
 
   //
   // Public API
@@ -39,23 +38,36 @@ RowLayout {
   property Component rightPanel: null
 
   //
-  // Internals
+  // 1px handle matching the app theme
   //
-  property int userWidth: 0
-  readonly property int effectiveLeftWidth: {
-    const w = userWidth > 0 ? Math.max(minLeftWidth, userWidth) : minLeftWidth
-    if (root.width <= 0)
-      return w
-    return Math.min(w, root.width - minRightWidth - 1)
+  handle: Rectangle {
+    implicitWidth: 1
+    color: Cpp_ThemeManager.colors["setup_border"]
+
+    Rectangle {
+      height: 32
+      color: Cpp_ThemeManager.colors["pane_caption_border"]
+      anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+      }
+    }
   }
 
   //
   // Persist user-chosen width
   //
   Settings {
+    id: settings
     category: root.settingsKey !== "" ? root.settingsKey : "PaneSplitter"
-    property alias panelWidth: root.userWidth
+    property alias panelWidth: leftLoader.preferredWidth
   }
+
+  //
+  // Internal: track preferred width for persistence
+  //
+  property int _defaultLeftWidth: root.minLeftWidth
 
   //
   // Left pane
@@ -63,53 +75,17 @@ RowLayout {
   Loader {
     id: leftLoader
 
-    Layout.fillHeight: true
+    property int preferredWidth: root._defaultLeftWidth
+
+    SplitView.fillHeight: true
+    SplitView.minimumWidth: root.minLeftWidth
+    SplitView.preferredWidth: preferredWidth
+
     sourceComponent: root.leftPanel
-    Layout.preferredWidth: root.effectiveLeftWidth
-    Layout.maximumWidth: Math.max(root.minLeftWidth, root.width - root.minRightWidth - 1)
-  }
 
-  //
-  // Draggable separator
-  //
-  Rectangle {
-    z: 2
-    implicitWidth: 1
-    Layout.fillHeight: true
-    color: Cpp_ThemeManager.colors["setup_border"]
-
-    Rectangle {
-      width: 1
-      height: 32
-      anchors.top: parent.top
-      anchors.left: parent.left
-      color: Cpp_ThemeManager.colors["pane_caption_border"]
-    }
-
-    MouseArea {
-      width: 8
-      height: parent.height
-      anchors.leftMargin: -4
-      anchors.left: parent.left
-      cursorShape: Qt.SizeHorCursor
-
-      property int _startX: 0
-      property int _startWidth: 0
-
-      onPressed: (mouse) => {
-        _startX = mouse.x
-        _startWidth = leftLoader.width
-      }
-
-      onPositionChanged: (mouse) => {
-        if (!pressed)
-          return
-
-        const maxW = root.width - root.minRightWidth - 1
-        const newW = Math.max(root.minLeftWidth,
-                              Math.min(_startWidth + (mouse.x - _startX), maxW))
-        root.userWidth = newW
-      }
+    onWidthChanged: {
+      if (root.width > 0)
+        preferredWidth = width
     }
   }
 
@@ -119,8 +95,10 @@ RowLayout {
   Loader {
     id: rightLoader
 
-    Layout.fillWidth: true
-    Layout.fillHeight: true
+    SplitView.fillWidth: true
+    SplitView.fillHeight: true
+    SplitView.minimumWidth: root.minRightWidth
+
     sourceComponent: root.rightPanel
   }
 }

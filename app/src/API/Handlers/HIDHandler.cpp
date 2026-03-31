@@ -9,14 +9,12 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/HIDHandler.h"
 
-#  include "API/Handlers/HIDHandler.h"
+#include <QJsonArray>
 
-#  include <QJsonArray>
-
-#  include "API/CommandRegistry.h"
-#  include "IO/ConnectionManager.h"
+#include "API/CommandRegistry.h"
+#include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -147,5 +145,3 @@ API::CommandResponse API::Handlers::HIDHandler::getConfiguration(const QString& 
   result[QStringLiteral("usage")]       = hid->usage();
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

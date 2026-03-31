@@ -20,12 +20,10 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/CANBusHandler.h"
 
-#  include "API/Handlers/CANBusHandler.h"
-
-#  include "API/CommandRegistry.h"
-#  include "IO/ConnectionManager.h"
+#include "API/CommandRegistry.h"
+#include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -389,5 +387,3 @@ API::CommandResponse API::Handlers::CANBusHandler::getInterfaceError(const QStri
 
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

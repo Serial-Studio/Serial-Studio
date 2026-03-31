@@ -223,6 +223,33 @@ void API::Handlers::ProjectHandler::registerCommands()
                            emptySchema,
                            &actionDuplicate);
 
+  // Output widget management
+  {
+    QJsonObject props;
+    props[QStringLiteral("groupId")] = QJsonObject{
+      {       QStringLiteral("type"),                              QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Group ID to add the output widget to")}
+    };
+    QJsonObject owSchema;
+    owSchema[QStringLiteral("type")]       = QStringLiteral("object");
+    owSchema[QStringLiteral("properties")] = props;
+    owSchema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("groupId")};
+    registry.registerCommand(QStringLiteral("project.outputWidget.add"),
+                             QStringLiteral("Add output widget to a group"),
+                             owSchema,
+                             &outputWidgetAdd);
+  }
+
+  registry.registerCommand(QStringLiteral("project.outputWidget.delete"),
+                           QStringLiteral("Delete current output widget"),
+                           emptySchema,
+                           &outputWidgetDelete);
+
+  registry.registerCommand(QStringLiteral("project.outputWidget.duplicate"),
+                           QStringLiteral("Duplicate current output widget"),
+                           emptySchema,
+                           &outputWidgetDuplicate);
+
   {
     QJsonObject props;
     props[QStringLiteral("code")] = QJsonObject{
@@ -681,6 +708,59 @@ API::CommandResponse API::Handlers::ProjectHandler::actionDuplicate(const QStrin
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentAction();
+
+  QJsonObject result;
+  result[QStringLiteral("duplicated")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Output widget commands
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Add an output control to the project.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::outputWidgetAdd(const QString& id,
+                                                                    const QJsonObject& params)
+{
+  const int type = params.value(QStringLiteral("type")).toInt(0);
+
+  DataModel::ProjectModel::instance().addOutputControl(static_cast<SerialStudio::OutputWidgetType>(
+    qBound(0, type, static_cast<int>(SerialStudio::OutputRampGenerator))));
+
+  QJsonObject result;
+  result[QStringLiteral("added")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Delete the currently selected output widget.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDelete(const QString& id,
+                                                                       const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  auto& project = DataModel::ProjectModel::instance();
+  project.setSuppressMessageBoxes(true);
+  project.deleteCurrentOutputWidget();
+  project.setSuppressMessageBoxes(false);
+
+  QJsonObject result;
+  result[QStringLiteral("deleted")] = true;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Duplicate the currently selected output widget.
+ */
+API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDuplicate(const QString& id,
+                                                                          const QJsonObject& params)
+{
+  Q_UNUSED(params)
+
+  DataModel::ProjectModel::instance().duplicateCurrentOutputWidget();
 
   QJsonObject result;
   result[QStringLiteral("duplicated")] = true;

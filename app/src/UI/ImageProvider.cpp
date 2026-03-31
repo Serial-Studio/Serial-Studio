@@ -20,9 +20,7 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
-
-#  include "UI/ImageProvider.h"
+#include "UI/ImageProvider.h"
 
 static UI::ImageProvider* s_globalProvider = nullptr;
 
@@ -71,5 +69,3 @@ void UI::ImageProvider::setImage(const QString& id, const QImage& image)
   QWriteLocker locker(&m_lock);
   m_images.insert(id, image);
 }
-
-#endif  // BUILD_COMMERCIAL

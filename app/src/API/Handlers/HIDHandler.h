@@ -11,9 +11,7 @@
 
 #pragma once
 
-#ifdef BUILD_COMMERCIAL
-
-#  include "API/CommandProtocol.h"
+#include "API/CommandProtocol.h"
 
 namespace API {
 namespace Handlers {
@@ -43,5 +41,3 @@ private:
 
 }  // namespace Handlers
 }  // namespace API
-
-#endif  // BUILD_COMMERCIAL

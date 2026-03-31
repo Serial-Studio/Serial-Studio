@@ -20,16 +20,14 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "IO/Drivers/HID.h"
 
-#  include "IO/Drivers/HID.h"
+#include <QJsonObject>
+#include <QMetaObject>
+#include <QSet>
+#include <QTimer>
 
-#  include <QJsonObject>
-#  include <QMetaObject>
-#  include <QSet>
-#  include <QTimer>
-
-#  include "Misc/Utilities.h"
+#include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -187,10 +185,10 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
     const QString detail =
       (err && err[0] != L'\0') ? QString::fromWCharArray(err) : tr("Unknown error");
     QString info = detail;
-#  ifdef Q_OS_LINUX
+#ifdef Q_OS_LINUX
     info += tr("\n\nCheck that your user is in the 'plugdev' group "
                "or that a udev rule grants access to this device.");
-#  endif
+#endif
     Misc::Utilities::showMessageBox(
       tr("Failed to open \"%1\"").arg(m_deviceLabels.value(m_deviceIndex)),
       info,
@@ -608,5 +606,3 @@ void IO::Drivers::HID::readLoop()
     }
   }
 }
-
-#endif  // BUILD_COMMERCIAL

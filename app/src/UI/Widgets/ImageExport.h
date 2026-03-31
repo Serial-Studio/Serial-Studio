@@ -22,18 +22,16 @@
 
 #pragma once
 
-#ifdef BUILD_COMMERCIAL
+#include <atomic>
+#include <cstdint>
+#include <QByteArray>
+#include <QDir>
+#include <QHash>
+#include <QObject>
+#include <QSettings>
+#include <QString>
 
-#  include <atomic>
-#  include <cstdint>
-#  include <QByteArray>
-#  include <QDir>
-#  include <QHash>
-#  include <QObject>
-#  include <QSettings>
-#  include <QString>
-
-#  include "DataModel/FrameConsumer.h"
+#include "DataModel/FrameConsumer.h"
 
 namespace Widgets {
 
@@ -152,5 +150,3 @@ private:
 };
 
 }  // namespace Widgets
-
-#endif  // BUILD_COMMERCIAL

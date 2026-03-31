@@ -268,8 +268,15 @@ Widgets.Pane {
 
           opacity: current ? 1.0 : 0.85
           font: Cpp_Misc_CommonFonts.monoFont
-          visible: depth > 1 && model.treeViewFrameIndex >= 0
-          text: "[" + String.fromCharCode(65 + model.treeViewSourceId) + "-" + model.treeViewFrameIndex + "]"
+          visible: depth > 1 && (model.treeViewFrameIndex >= 0
+                                 || model.treeViewFrameIndex === -2)
+          text: {
+            var letter = String.fromCharCode(65 + model.treeViewSourceId)
+            if (model.treeViewFrameIndex === -2)
+              return "[" + letter + "]"
+
+            return "[" + letter + "-" + model.treeViewFrameIndex + "]"
+          }
           Layout.alignment: Qt.AlignVCenter
           color: {
             if (current)

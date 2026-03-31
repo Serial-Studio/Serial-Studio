@@ -22,12 +22,10 @@
 
 #pragma once
 
-#ifdef BUILD_COMMERCIAL
-
-#  include <QHash>
-#  include <QImage>
-#  include <QQuickImageProvider>
-#  include <QReadWriteLock>
+#include <QHash>
+#include <QImage>
+#include <QQuickImageProvider>
+#include <QReadWriteLock>
 
 namespace UI {
 
@@ -74,5 +72,3 @@ private:
 };
 
 }  // namespace UI
-
-#endif  // BUILD_COMMERCIAL

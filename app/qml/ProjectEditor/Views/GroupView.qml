@@ -110,101 +110,159 @@ Widgets.Pane {
           }
 
           //
-          // Add generic dataset
+          // Dataset add buttons (hidden for output groups)
           //
           Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("Dataset")
             Layout.alignment: Qt.AlignVCenter
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             ToolTip.text: qsTr("Add a generic dataset to the current group")
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
           }
 
-          //
-          // Add plot
-          //
           Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Plot")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             ToolTip.text: qsTr("Add a 2D plot to visualize numeric data")
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
           }
 
-          //
-          // Add FFT plot
-          //
           Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("FFT Plot")
             Layout.alignment: Qt.AlignVCenter
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
             ToolTip.text: qsTr("Add an FFT plot for frequency domain visualization")
           }
 
-          //
-          // Add bar
-          //
           Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("Bar/Level")
             Layout.alignment: Qt.AlignVCenter
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
             ToolTip.text: qsTr("Add a bar or level indicator for scaled values")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
           }
 
-          //
-          // Add gauge
-          //
           Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("Gauge")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
             ToolTip.text: qsTr("Add a gauge widget for analog-style visualization")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
           }
 
-          //
-          // Add compass
-          //
           Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
             text: qsTr("Compass")
             Layout.alignment: Qt.AlignVCenter
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
             ToolTip.text: qsTr("Add a compass to display directional or angular data")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
           }
 
-          //
-          // Add LED
-          //
           Widgets.ToolbarButton {
             iconSize: 24
             text: qsTr("LED")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
             ToolTip.text: qsTr("Add an LED indicator for binary status signals")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
+          }
+
+          //
+          // Output widget add buttons (only visible for output groups)
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Button")
+            Layout.alignment: Qt.AlignVCenter
+            visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputButton)
+            ToolTip.text: qsTr("Add a button that sends a command on click")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-button.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Slider")
+            Layout.alignment: Qt.AlignVCenter
+            visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputSlider)
+            ToolTip.text: qsTr("Add a slider for sending scaled numeric values")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-slider.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Toggle")
+            Layout.alignment: Qt.AlignVCenter
+            visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputToggle)
+            ToolTip.text: qsTr("Add a toggle switch for on/off commands")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-toggle.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Text Field")
+            Layout.alignment: Qt.AlignVCenter
+            visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputTextField)
+            ToolTip.text: qsTr("Add a text field for typing and sending commands")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-textfield.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Knob")
+            Layout.alignment: Qt.AlignVCenter
+            visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputKnob)
+            ToolTip.text: qsTr("Add a rotary knob for setpoint control")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-knob.svg"
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Ramp")
+            Layout.alignment: Qt.AlignVCenter
+            visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
+            onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputRampGenerator)
+            ToolTip.text: qsTr("Add a ramp generator for timed value sweeps")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-ramp.svg"
           }
 
           //

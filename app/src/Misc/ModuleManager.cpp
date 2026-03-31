@@ -36,6 +36,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameParser.h"
 #include "DataModel/JsCodeEditor.h"
+#include "DataModel/OutputCodeEditor.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
@@ -306,6 +307,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<DataModel::JsCodeEditor>("SerialStudio", 1, 0, "JsCodeEditor");
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
   qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
+  qmlRegisterType<DataModel::OutputCodeEditor>("SerialStudio", 1, 0, "OutputCodeEditor");
 
   // Register generic dashboard widget
   qmlRegisterType<UI::DashboardWidget>("SerialStudio", 1, 0, "DashboardWidget");

@@ -20,12 +20,10 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/MQTTHandler.h"
 
-#  include "API/Handlers/MQTTHandler.h"
-
-#  include "API/CommandRegistry.h"
-#  include "MQTT/Client.h"
+#include "API/CommandRegistry.h"
+#include "MQTT/Client.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -1158,5 +1156,3 @@ API::CommandResponse API::Handlers::MQTTHandler::getPeerVerifyModes(const QStrin
   result[QStringLiteral("currentModeIndex")] = MQTT::Client::instance().peerVerifyMode();
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

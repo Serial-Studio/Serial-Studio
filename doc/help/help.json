@@ -6,6 +6,7 @@
   { "id": "project-editor", "title": "Project Editor", "section": "Configuration", "file": "Project-Editor.md" },
   { "id": "actions", "title": "Actions", "section": "Configuration", "file": "Actions.md" },
   { "id": "widget-reference", "title": "Widget Reference", "section": "Configuration", "file": "Widget-Reference.md" },
+  { "id": "output-controls", "title": "Output Controls", "section": "Configuration", "file": "Output-Controls.md" },
   { "id": "javascript-api", "title": "JavaScript API", "section": "Configuration", "file": "JavaScript-API.md" },
   { "id": "extensions", "title": "Extensions", "section": "Configuration", "file": "Extensions.md" },
   { "id": "communication-protocols", "title": "Communication Protocols", "section": "Connectivity", "file": "Communication-Protocols.md" },

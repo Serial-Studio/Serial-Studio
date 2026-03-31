@@ -9,13 +9,11 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/MDF4PlayerHandler.h"
 
-#  include "API/Handlers/MDF4PlayerHandler.h"
-
-#  include "API/CommandRegistry.h"
-#  include "API/PathPolicy.h"
-#  include "MDF4/Player.h"
+#include "API/CommandRegistry.h"
+#include "API/PathPolicy.h"
+#include "MDF4/Player.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -281,5 +279,3 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::getStatus(const QString& 
 
   return CommandResponse::makeSuccess(id, result);
 }
-
-#endif  // BUILD_COMMERCIAL

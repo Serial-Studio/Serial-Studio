@@ -22,12 +22,10 @@
 
 #pragma once
 
-#ifdef BUILD_COMMERCIAL
+#include <QColor>
+#include <QQuickItem>
 
-#  include <QColor>
-#  include <QQuickItem>
-
-#  include "IO/HAL_Driver.h"
+#include "IO/HAL_Driver.h"
 
 namespace Widgets {
 
@@ -202,5 +200,3 @@ private:
 };
 
 }  // namespace Widgets
-
-#endif  // BUILD_COMMERCIAL

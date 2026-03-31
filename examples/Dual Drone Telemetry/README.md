@@ -6,7 +6,7 @@ Multi-source drone telemetry simulator demonstrating Serial Studio's ability to 
 
 ## Overview
 
-Two simulated drones fly completely different flight profiles over the Nevada desert, each transmitting telemetry and synthetic camera imagery on separate UDP ports:
+Two simulated drones fly completely different flight profiles over the Nevada desert, each transmitting telemetry and synthetic camera imagery over separate TCP connections:
 
 | Drone | Port | Flight Pattern | Altitude | Camera Style |
 |-------|------|---------------|----------|-------------|
@@ -28,6 +28,19 @@ Two simulated drones fly completely different flight profiles over the Nevada de
 - Amber HUD overlay with FLIR label, altitude, and GPS coordinates
 - Simple crosshair at center
 
+### Output Controls
+
+Each drone has an output control panel on the dashboard with four interactive widgets that send commands back to the simulator:
+
+| Control | Widget Type | Range | Command Sent |
+|---------|------------|-------|-------------|
+| **Throttle** | Slider | 0-100% | `THR <value>\r\n` |
+| **Heading** | Knob | -180° to +180° | `HDG <value>\r\n` |
+| **Camera** | Toggle | ON/OFF | `CAM ON\r\n` or `CAM OFF\r\n` |
+| **Return to Home** | Button | — | `RTH\r\n` |
+
+**Throttle** scales the drone's airspeed — 50% is normal cruise, 0% is idle, 100% is full speed. **Heading** applies a rotational offset to the flight path. **Camera** enables or disables the synthetic JPEG feed (telemetry keeps streaming). **RTH** is a placeholder for return-to-home logic.
+
 ### Telemetry per drone (11 fields)
 
 | Field | Units | Description |
@@ -46,14 +59,15 @@ Two simulated drones fly completely different flight profiles over the Nevada de
 
 ## Quick Start
 
-1. Open `Dual Drone Telemetry.ssproj` in Serial Studio
-2. Connect both UDP sources (ports 9001 and 9002)
-3. Run the simulator:
+1. Run the simulator (starts two TCP servers on ports 9001 and 9002):
 
 ```bash
 pip install opencv-python numpy   # for camera imagery
 python3 dual_drone_telemetry.py
 ```
+
+2. Open `Dual Drone Telemetry.ssproj` in Serial Studio
+3. Connect both TCP sources — each will connect to the simulator's TCP server
 
 The simulator works without opencv -- you just won't get camera images.
 
@@ -62,7 +76,7 @@ The simulator works without opencv -- you just won't get camera images.
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--fps` | 10 | Update rate in Hz (telemetry + camera) |
-| `--host` | 127.0.0.1 | UDP destination host |
+| `--host` | 127.0.0.1 | TCP listen address |
 
 ## Protocol Details
 
@@ -73,6 +87,19 @@ Both drones use hexadecimal frame delimiters with JPEG images interleaved in the
 
 Each cycle sends a raw JPEG frame first, then a delimited CSV telemetry frame.
 The Image View widget auto-detects JPEG frames by scanning for `FF D8 FF` magic bytes, independent of the CSV telemetry path.
+
+## Command Protocol
+
+Serial Studio sends commands back to the simulator over the same TCP connection. Each command is a text line terminated by `\r\n`:
+
+| Command | Arguments | Effect |
+|---------|-----------|--------|
+| `THR` | `0`-`100` | Set throttle (scales airspeed; 50 = normal cruise) |
+| `HDG` | `-180`-`180` | Apply heading offset in degrees |
+| `CAM` | `ON` or `OFF` | Enable/disable camera image transmission |
+| `RTH` | — | Trigger return-to-home (placeholder) |
+
+Commands are parsed on each simulation tick. Multiple commands can arrive per tick and are applied in order.
 
 ## Dashboard Widgets
 
@@ -86,6 +113,7 @@ Each drone has six widget groups on the dashboard:
 | Attitude | Gyroscope | Roll, pitch, and yaw (heading) visualization |
 | Flight | Gauges + Bars | Airspeed, altitude, and vertical speed |
 | Power | Gauges + Bars | Battery voltage, current draw, and charge level |
+| Controls | Output Panel | Throttle, heading, camera toggle, and RTH per drone |
 
 ## Flight Models
 
@@ -106,7 +134,7 @@ Both drones have low-battery alarms configured at 20% charge and 21V.
 
 - Python 3.6+
 - `opencv-python` and `numpy` (optional, for camera imagery)
-- Serial Studio Pro (multi-source + Image View features)
+- Serial Studio Pro (multi-source + Image View + Output Controls features)
 
 <!--
   SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial

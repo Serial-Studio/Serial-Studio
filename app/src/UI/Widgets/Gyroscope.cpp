@@ -49,7 +49,7 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem* parent)
   , m_filteredYawRate(0)
   , m_filteredRollRate(0)
   , m_filteredPitchRate(0)
-  , m_integrateValues(true)
+  , m_integrateValues(false)
   , m_rateFilterInitialized(false)
   , m_displayFilterInitialized(false)
 {

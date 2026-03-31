@@ -266,6 +266,7 @@ set(SOURCES
   src/IO/FrameReader.cpp
   src/DataModel/FrameParser.cpp
   src/DataModel/JsCodeEditor.cpp
+  src/DataModel/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
   src/DataModel/ProjectEditor.cpp
   src/DataModel/FrameBuilder.cpp
@@ -356,6 +357,7 @@ set(HEADERS
   src/IO/FrameReader.h
   src/DataModel/FrameParser.h
   src/DataModel/JsCodeEditor.h
+  src/DataModel/OutputCodeEditor.h
   src/DataModel/ProjectModel.h
   src/DataModel/ProjectEditor.h
   src/DataModel/Frame.h
@@ -410,6 +412,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Sections/ProjectStructure.qml
   qml/ProjectEditor/Sections/ProjectToolbar.qml
   qml/ProjectEditor/Views/ActionView.qml
+  qml/ProjectEditor/Views/OutputWidgetView.qml
   qml/ProjectEditor/Views/DatasetView.qml
   qml/ProjectEditor/Views/FlowDiagram.qml
   qml/ProjectEditor/Views/FrameParserView.qml
@@ -439,6 +442,9 @@ set(QML_SOURCES
   qml/Widgets/MiniWindow.qml
   qml/Widgets/Pane.qml
   qml/Widgets/PaneSplitter.qml
+  qml/Widgets/RibbonToolbar.qml
+  qml/Widgets/RibbonSection.qml
+  qml/Widgets/RibbonSpacer.qml
   qml/Widgets/PlotWidget.qml
   qml/Widgets/ProNotice.qml
   qml/Widgets/SearchField.qml
@@ -483,6 +489,13 @@ if(BUILD_COMMERCIAL)
     src/Licensing/LemonSqueezy.h
     src/Licensing/CommercialToken.h
     src/ThirdParty/miniaudio.h
+    src/UI/Widgets/Output/Base.h
+    src/UI/Widgets/Output/Button.h
+    src/UI/Widgets/Output/Slider.h
+    src/UI/Widgets/Output/Toggle.h
+    src/UI/Widgets/Output/TextField.h
+    src/UI/Widgets/Output/Panel.h
+    src/UI/Widgets/Output/PanelLayout.h
   )
   set(SOURCES
     ${SOURCES}
@@ -514,6 +527,13 @@ if(BUILD_COMMERCIAL)
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
     src/Licensing/LemonSqueezy.cpp
+    src/UI/Widgets/Output/Base.cpp
+    src/UI/Widgets/Output/Button.cpp
+    src/UI/Widgets/Output/Slider.cpp
+    src/UI/Widgets/Output/Toggle.cpp
+    src/UI/Widgets/Output/TextField.cpp
+    src/UI/Widgets/Output/Panel.cpp
+    src/UI/Widgets/Output/PanelLayout.cpp
   )
   set(QML_SOURCES
     ${QML_SOURCES}
@@ -530,6 +550,11 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
     qml/Widgets/Dashboard/Plot3D.qml
     qml/Widgets/Dashboard/ImageView.qml
+    qml/Widgets/Dashboard/Output/DashboardButton.qml
+    qml/Widgets/Dashboard/Output/DashboardSlider.qml
+    qml/Widgets/Dashboard/Output/DashboardToggle.qml
+    qml/Widgets/Dashboard/Output/DashboardTextField.qml
+    qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml
   )
 endif()
 

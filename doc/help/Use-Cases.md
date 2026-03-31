@@ -288,7 +288,7 @@ Real-world applications and success stories for Serial Studio across industries,
 ---
 
 ### Multi-Device Drone Telemetry
-**Problem:** A drone swarm or dual-drone system requires monitoring multiple aircraft simultaneously, each sending telemetry over different links.
+**Problem:** A drone swarm or dual-drone system requires monitoring multiple aircraft simultaneously, each sending telemetry over different links — and the operator needs to send steering commands and toggle cameras from the same dashboard.
 
 **Solution:** Serial Studio's multi-device project mode connects to each drone's data link independently:
 - Drone A over UART (900 MHz radio modem)
@@ -296,8 +296,15 @@ Real-world applications and success stories for Serial Studio across industries,
 - Each drone's GPS, attitude, and battery displayed side-by-side on the same dashboard
 - CSV/MDF4 export captures all drones' data in a single time-synchronized file
 
+[Output controls](Output-Controls.md) add interactive command panels per drone:
+- **Throttle slider** (0-100%) with transmit function: `"THR " + value + "\r\n"`
+- **Yaw knob** (-180° to +180°) for heading adjustment
+- **Camera toggle** (ON/OFF) to start/stop recording on each aircraft
+- **RTH button** (Return to Home) for emergency recall
+- Each control's **Target Device** is set to its respective drone, so a single dashboard commands both aircraft independently
+
 **Hardware:** Two flight controllers + radio modems/Wi-Fi modules
-**Pro Feature Used:** Multi-device projects, MDF4 export
+**Pro Feature Used:** Multi-device projects, output controls, MDF4 export
 
 ---
 

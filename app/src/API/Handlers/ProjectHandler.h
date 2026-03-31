@@ -98,6 +98,11 @@ private:
   static CommandResponse actionDelete(const QString& id, const QJsonObject& params);
   static CommandResponse actionDuplicate(const QString& id, const QJsonObject& params);
 
+  // Output widget management
+  static CommandResponse outputWidgetAdd(const QString& id, const QJsonObject& params);
+  static CommandResponse outputWidgetDelete(const QString& id, const QJsonObject& params);
+  static CommandResponse outputWidgetDuplicate(const QString& id, const QJsonObject& params);
+
   // Frame parser
   static CommandResponse parserSetCode(const QString& id, const QJsonObject& params);
   static CommandResponse parserGetCode(const QString& id, const QJsonObject& params);

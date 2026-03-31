@@ -50,7 +50,13 @@ static Licensing::FeatureTier tierFromVariant(const QString& variant)
   if (lower.startsWith("enterprise"))
     return Licensing::FeatureTier::Enterprise;
 
-  if (lower.startsWith("pro") || !lower.isEmpty())
+  if (lower.startsWith("pro") || lower.startsWith("team"))
+    return Licensing::FeatureTier::Pro;
+
+  if (lower.startsWith("hobbyist"))
+    return Licensing::FeatureTier::Hobbyist;
+
+  if (!lower.isEmpty())
     return Licensing::FeatureTier::Pro;
 
   return Licensing::FeatureTier::None;

@@ -104,16 +104,21 @@ namespace Licensing {
 /**
  * @brief Feature tier levels derived from the license variant.
  *
- * Pro features use this to decide capabilities (e.g., max MQTT
- * subscriptions, export formats, etc.).  The tier is derived from
- * the Lemon Squeezy variant name at validation time, not from a
- * simple boolean.
+ * Tiers are strictly hierarchical — higher tiers include all features
+ * of lower tiers.  Feature gates use >= comparisons:
+ *   - >= Hobbyist: MQTT, Audio, FFT, XY plots, console export
+ *   - >= Pro:      CAN Bus, Modbus, MDF4, 3D, ImageView, output widgets
+ *   - Trial:       same as Pro (14-day full access)
+ *
+ * The tier is derived from the Lemon Squeezy variant name at
+ * validation time, not from a simple boolean.
  */
 enum class FeatureTier : quint8 {
   None       = 0,
-  Trial      = 1,
-  Pro        = 2,
-  Enterprise = 3,
+  Hobbyist   = 1,
+  Trial      = 2,
+  Pro        = 3,
+  Enterprise = 4,
 };
 
 /**

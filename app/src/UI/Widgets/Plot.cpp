@@ -57,7 +57,7 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
 #ifdef BUILD_COMMERCIAL
     const auto& tk = Licensing::CommercialToken::current();
     const auto xAxisId =
-      (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial)
+      (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist)
         ? yDataset.xAxisId
         : 0;
 #else
@@ -359,7 +359,8 @@ void Widgets::Plot::calculateAutoScaleRange()
   // Obtain range scale for X-axis
 #ifdef BUILD_COMMERCIAL
   const auto& tk2 = Licensing::CommercialToken::current();
-  if (tk2.isValid() && SS_LICENSE_GUARD() && tk2.featureTier() >= Licensing::FeatureTier::Trial) {
+  if (tk2.isValid() && SS_LICENSE_GUARD()
+      && tk2.featureTier() >= Licensing::FeatureTier::Hobbyist) {
 #else
   if (false) {
 #endif

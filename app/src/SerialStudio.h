@@ -177,6 +177,30 @@ public:
   Q_ENUM(DatasetWidget)
 
   /**
+   * @brief Distinguishes input (visualization) groups from output (control)
+   *        groups.  Mirrors DataModel::GroupType for QML access.
+   */
+  enum GroupType {
+    GroupInput  = 0,
+    GroupOutput = 1,
+  };
+  Q_ENUM(GroupType)
+
+  /**
+   * @brief Enum representing interactive output widget types for bidirectional
+   *        communication.
+   */
+  enum OutputWidgetType {
+    OutputButton,
+    OutputSlider,
+    OutputToggle,
+    OutputTextField,
+    OutputKnob,
+    OutputRampGenerator,
+  };
+  Q_ENUM(OutputWidgetType)
+
+  /**
    * @brief Enum representing the different widget types available for the
    *        dashboard.
    *
@@ -199,6 +223,7 @@ public:
     DashboardNoWidget,
 #ifdef BUILD_COMMERCIAL
     DashboardImageView,
+    DashboardOutputPanel,
 #endif
   };
   Q_ENUM(DashboardWidget)

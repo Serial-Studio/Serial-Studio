@@ -22,6 +22,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import SerialStudio
+
 Item {
   id: root
 
@@ -119,10 +121,20 @@ Item {
     for (const src of srcList)
       srcTotalH[src.sourceId] = 0
 
+    const vizGroupsPre = groups.filter(function(g) { return g.groupType !== SerialStudio.GroupOutput })
+    const showPillsPre = vizGroupsPre.length <= 1
+
     for (const grp of groups) {
       const sid = grp.sourceId || 0
       if (srcTotalH[sid] === undefined) srcTotalH[sid] = 0
-      srcTotalH[sid] += slotH(grp.datasets.length) + vGap
+
+      let pillCount = 0
+      if (grp.groupType === SerialStudio.GroupOutput)
+        pillCount = (grp.outputWidgets || []).length
+      else if (showPillsPre || grp.widget === "" || grp.widget === "datagrid")
+        pillCount = (grp.datasets || []).length
+
+      srcTotalH[sid] += slotH(pillCount) + vGap
     }
 
     // remove trailing vGap; ensure minimum nodeH
@@ -191,12 +203,41 @@ Item {
 
     }
 
-    // ── place group + dataset nodes ────────────────────────────────────────
+    // ── count visualization groups (for deciding whether to show pills) ───
+    const vizGroups = groups.filter(function(g) { return g.groupType !== SerialStudio.GroupOutput })
+    const vizCount  = vizGroups.length
+    const showVizPills = vizCount <= 1
+
+    // ── place group + dataset/output nodes ─────────────────────────────────
     for (const grp of groups) {
-      const sid    = grp.sourceId || 0
-      const dsList = grp.datasets
-      const dsN    = dsList.length
-      const sh     = slotH(dsN)
+      const sid       = grp.sourceId || 0
+      const isOutput  = grp.groupType === SerialStudio.GroupOutput
+      const dsList    = grp.datasets || []
+
+      // Build pills list: datasets for viz groups, output widget names for output groups
+      const pills = []
+      if (isOutput) {
+        const owList = grp.outputWidgets || []
+        for (let oi = 0; oi < owList.length; ++oi) {
+          pills.push({
+            label: owList[oi].title || qsTr("Control"),
+            icon:  outputWidgetIcon(owList[oi].type),
+            id:    oi
+          })
+        }
+      } else if (showVizPills || grp.widget === "" || grp.widget === "datagrid") {
+        for (let di = 0; di < dsList.length; ++di) {
+          const ds = dsList[di]
+          pills.push({
+            label: ds.units ? (ds.title + " [" + ds.units + "]") : ds.title,
+            icon:  datasetIcon(),
+            id:    ds.datasetId
+          })
+        }
+      }
+
+      const pillCount = pills.length
+      const sh = slotH(pillCount)
 
       const slotTop = groupY[sid] !== undefined ? groupY[sid] : pad
       const cardY   = slotTop + (sh - nodeH) / 2
@@ -213,7 +254,7 @@ Item {
         w:         nodeW,
         h:         nodeH,
         label:     grp.title || qsTr("Group"),
-        icon:      groupIcon(grp.widget),
+        icon:      groupIcon(grp),
         badge:     ""
       })
 
@@ -227,34 +268,32 @@ Item {
         dashed: false
       })
 
-      // Dataset pills
-      if (dsN > 0) {
-        const blockH   = dsN * chipH + (dsN - 1) * vGap
+      // Pills (datasets or output widgets)
+      if (pillCount > 0) {
+        const blockH   = pillCount * chipH + (pillCount - 1) * vGap
         const blockTop = slotTop + (sh - blockH) / 2
 
-        for (let di = 0; di < dsN; ++di) {
-          const ds    = dsList[di]
-          const label = ds.units
-            ? (ds.title + " [" + ds.units + "]")
-            : ds.title
-          const chipY = blockTop + di * (chipH + vGap)
+        for (let pi = 0; pi < pillCount; ++pi) {
+          const pill  = pills[pi]
+          const chipY = blockTop + pi * (chipH + vGap)
 
           newNodes.push({
-            type:      "dataset",
+            type:      isOutput ? "output" : "dataset",
             sourceId:  sid,
             groupId:   grp.groupId,
-            datasetId: ds.datasetId,
+            datasetId: isOutput ? -1 : pill.id,
+            widgetId:  isOutput ? pill.id : -1,
             actionId:  -1,
             x:         colChip,
             y:         chipY,
             w:         chipW,
             h:         chipH,
-            label:     label,
-            icon:      "",
+            label:     pill.label,
+            icon:      pill.icon || "",
             badge:     ""
           })
 
-          // Arrow: group → dataset pill
+          // Arrow: group → pill
           newArrows.push({
             x1: colGrp + nodeW, y1: cardY + nodeH / 2,
             x2: colChip,        y2: chipY + chipH / 2,
@@ -346,9 +385,14 @@ Item {
     }
   }
 
-  function groupIcon(widget) {
+  function groupIcon(grp) {
     const base = "qrc:/rcc/icons/project-editor/treeview/"
-    switch ((widget || "").toLowerCase()) {
+
+    // Output groups use the output-panel icon
+    if (grp.groupType === SerialStudio.GroupOutput)
+      return "qrc:/rcc/icons/dashboard-small/output-panel.svg"
+
+    switch ((grp.widget || "").toLowerCase()) {
       case "multiplot":      return base + "multiplot.svg"
       case "accelerometer":  return base + "accelerometer.svg"
       case "gyroscope":      return base + "gyroscope.svg"
@@ -357,6 +401,23 @@ Item {
       case "plot3d":         return base + "plot3d.svg"
       case "datagrid":       return base + "datagrid.svg"
       default:               return base + "group.svg"
+    }
+  }
+
+  function datasetIcon() {
+    return "qrc:/rcc/icons/project-editor/treeview/dataset.svg"
+  }
+
+  function outputWidgetIcon(type) {
+    const base = "qrc:/rcc/icons/project-editor/treeview/"
+    switch (type) {
+      case SerialStudio.OutputButton:        return base + "output-button.svg"
+      case SerialStudio.OutputSlider:        return base + "output-slider.svg"
+      case SerialStudio.OutputToggle:        return base + "output-toggle.svg"
+      case SerialStudio.OutputTextField:     return base + "output-textfield.svg"
+      case SerialStudio.OutputKnob:          return base + "output-knob.svg"
+      case SerialStudio.OutputRampGenerator: return base + "output-ramp.svg"
+      default:                               return base + "output-button.svg"
     }
   }
 
@@ -521,12 +582,13 @@ Item {
 
           property bool hovered:   false
           property bool isDataset: modelData.type === "dataset"
+          property bool isOutput:  modelData.type === "output"
           property bool isAction:  modelData.type === "action"
-          property bool isPill:    isDataset
+          property bool isPill:    isDataset || isOutput
           property bool isSource:  modelData.type === "source"
           property bool isFP:      modelData.type === "frameparser"
 
-          // ── Pill (dataset / action) ──────────────────────────────────
+          // ── Pill (dataset / output widget) ───────────────────────────
           Rectangle {
             visible: nd.isPill
             anchors.fill: parent
@@ -539,16 +601,31 @@ Item {
               ? Cpp_ThemeManager.colors["highlight"]
               : Cpp_ThemeManager.colors["groupbox_border"]
 
-            Text {
+            Row {
               anchors.centerIn: parent
               width: parent.width - 12
-              elide: Text.ElideRight
-              horizontalAlignment: Text.AlignHCenter
-              text: modelData.label
-              font.pixelSize: Math.max(8, 11 * root.zoom)
-              color: nd.hovered
-                ? Cpp_ThemeManager.colors["highlighted_text"]
-                : Cpp_ThemeManager.colors["text"]
+              spacing: 4 * root.zoom
+
+              Image {
+                visible: (modelData.icon || "") !== ""
+                width: 12 * root.zoom
+                height: 12 * root.zoom
+                anchors.verticalCenter: parent.verticalCenter
+                source: modelData.icon || ""
+                sourceSize: Qt.size(12, 12)
+                smooth: true
+              }
+
+              Text {
+                width: parent.width - (modelData.icon ? 16 * root.zoom : 0)
+                elide: Text.ElideRight
+                anchors.verticalCenter: parent.verticalCenter
+                text: modelData.label
+                font.pixelSize: Math.max(8, 11 * root.zoom)
+                color: nd.hovered
+                  ? Cpp_ThemeManager.colors["highlighted_text"]
+                  : Cpp_ThemeManager.colors["text"]
+              }
             }
           }
 
@@ -638,6 +715,9 @@ Item {
                   break
                 case "dataset":
                   Cpp_JSON_ProjectEditor.selectDataset(modelData.groupId, modelData.datasetId)
+                  break
+                case "output":
+                  Cpp_JSON_ProjectEditor.selectOutputWidget(modelData.groupId, modelData.widgetId)
                   break
                 case "action":
                   Cpp_JSON_ProjectEditor.selectAction(modelData.actionId)

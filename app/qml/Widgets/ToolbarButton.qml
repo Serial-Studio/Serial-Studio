@@ -170,15 +170,16 @@ Item {
         id: _label
 
         elide: Qt.ElideRight
-        color: root.toolbarButton
-               ? Cpp_ThemeManager.colors["toolbar_text"]
-               : Cpp_ThemeManager.colors["button_text"]
         Layout.fillWidth: horizontalLayout
         Layout.row: horizontalLayout ? 0 : 1
         Layout.column: horizontalLayout ? 1 : 0
         Layout.alignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignCenter
         horizontalAlignment: horizontalLayout ? Qt.AlignLeft : Qt.AlignHCenter
         Layout.maximumWidth: root.maxButtonWidth - (horizontalLayout ? root.iconSize + 4 : 0)
+
+        color: root.toolbarButton
+               ? Cpp_ThemeManager.colors["toolbar_text"]
+               : Cpp_ThemeManager.colors["button_text"]
       }
     }
   }

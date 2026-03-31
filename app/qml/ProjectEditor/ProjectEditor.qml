@@ -133,6 +133,7 @@ Widgets.SmartWindow {
       Sections.ProjectToolbar {
         z: 2
         Layout.fillWidth: true
+        Layout.minimumWidth: 860
       }
 
       //
@@ -203,6 +204,14 @@ Widgets.SmartWindow {
             Views.SourceFrameParserView {
               anchors.fill: parent
               visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.SourceFrameParserView
+            }
+
+            //
+            // Output widget view
+            //
+            Views.OutputWidgetView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.OutputWidgetView
             }
           }
         }

@@ -3,7 +3,7 @@
 Dual Drone Telemetry Simulator for Serial Studio
 
 Simulates two drones transmitting flight telemetry and synthetic camera
-imagery over separate UDP connections:
+imagery over separate TCP connections:
 
   Drone Alpha (port 9001) — Circular patrol at 120 m altitude
     CSV delimiters:   A1 01 A1 01 … A1 02 A1 02 (hex)
@@ -21,13 +21,20 @@ Each drone generates a unique procedural camera image every frame:
   Bravo — synthetic thermal/infrared style view in purple/orange tones
           with a scanning grid overlay (simulating a survey camera).
 
-Open "Dual Drone Telemetry.ssproj" in Serial Studio and connect both
-UDP sources before running this script.
+Output Controls (requires Serial Studio Pro):
+  Both drones respond to commands sent back over the same TCP link:
+    THR <0-100>    Set throttle percentage (affects airspeed)
+    HDG <-180-180> Apply heading offset in degrees
+    CAM ON|OFF     Enable/disable camera image transmission
+    RTH            Trigger return-to-home (placeholder)
+
+Run this script first (it starts two TCP servers), then open
+"Dual Drone Telemetry.ssproj" in Serial Studio and connect both sources.
 
 Usage:
   python3 dual_drone_telemetry.py
   python3 dual_drone_telemetry.py --fps 15
-  python3 dual_drone_telemetry.py --host 192.168.1.100
+  python3 dual_drone_telemetry.py --host 0.0.0.0
 
 Dependencies:
   pip install opencv-python numpy
@@ -243,9 +250,26 @@ def make_bravo_image(t, lat, lon, heading, alt):
     return img
 
 
-def make_fallback_image(label, t):
-    """Simple colored rectangle when opencv is not available — never sent."""
-    return None
+def make_camera_off_image(label):
+    """Static 'camera disabled' placeholder image."""
+    img = np.zeros((IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
+    img[:] = (30, 30, 30)
+
+    # Draw a camera-off icon: circle with diagonal line
+    cx, cy = IMG_WIDTH // 2, IMG_HEIGHT // 2
+    cv2.circle(img, (cx, cy - 20), 30, (80, 80, 80), 2)
+    cv2.line(img, (cx - 22, cy + 2), (cx + 22, cy - 42), (80, 80, 80), 2)
+
+    # Label
+    text = f"{label} CAMERA OFF"
+    ts = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+    cv2.putText(
+        img, text,
+        (cx - ts[0] // 2, cy + 30),
+        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (100, 100, 100), 1,
+    )
+
+    return img
 
 
 # ---------------------------------------------------------------------------
@@ -254,52 +278,73 @@ def make_fallback_image(label, t):
 
 
 class DroneAlpha:
-    """Circular patrol flight profile at 120 m."""
+    """Circular patrol flight profile at 120 m.
+
+    The base flight path is a circle, but throttle and heading commands
+    modify the actual speed and course.  Position is integrated from
+    heading + airspeed each tick so controls visibly steer the drone.
+    """
+
+    # Degrees-per-metre (approximate, Nevada latitude)
+    _DEG_PER_M_LAT = 1.0 / 111_320.0
+    _DEG_PER_M_LON = 1.0 / (111_320.0 * math.cos(math.radians(BASE_LAT)))
 
     def __init__(self):
         self._t = 0.0
         self._battery_pct = 100.0
-        self._radius = 0.003  # ~330 m GPS radius
         self._alt_base = 120.0
+        self._lat = BASE_LAT
+        self._lon = BASE_LON
+        self._heading = 90.0
+        self._prev_alt = self._alt_base
 
-    def step(self, dt):
+    def step(self, dt, cmds=None):
         self._t += dt
         t = self._t
 
-        # Circular patrol — completes one orbit every ~40 seconds
-        angle = t * 0.157  # ~2*pi/40
-        lat = BASE_LAT + self._radius * math.cos(angle)
-        lon = BASE_LON + self._radius * math.sin(angle)
+        # Base circular turn rate: ~9 deg/s → full circle in ~40 s
+        base_turn_rate = 9.0
+        base_airspeed = 15.0
 
-        # Heading follows the tangent of the circle
-        heading = (math.degrees(angle) + 90) % 360
+        # Throttle scales airspeed (50% = normal cruise)
+        throttle_frac = cmds.throttle / 50.0 if cmds else 1.0
+        airspeed = base_airspeed * throttle_frac + noise(0.3)
+        airspeed = clamp(airspeed, 0, 40)
+
+        # Heading: base circular turn + user offset drives actual heading
+        heading_offset = cmds.heading_offset if cmds else 0.0
+        self._heading += (base_turn_rate + heading_offset * 0.15) * dt
+        self._heading %= 360.0
+        heading = self._heading
+
+        # Roll proportional to turn rate (heading_offset adds bank)
+        turn_rate = base_turn_rate + heading_offset * 0.15
+        roll = clamp(turn_rate * 1.3 + noise(0.5), -45, 45)
+
+        # Integrate position from heading + airspeed
+        hdg_rad = math.radians(heading)
+        self._lat += math.cos(hdg_rad) * airspeed * dt * self._DEG_PER_M_LAT
+        self._lon += math.sin(hdg_rad) * airspeed * dt * self._DEG_PER_M_LON
 
         # Altitude: gentle oscillation
         alt = self._alt_base + 8 * math.sin(t * 0.3) + noise(0.5)
         alt = clamp(alt, 80, 160)
+        vspeed = (alt - self._prev_alt) / dt
+        self._prev_alt = alt
 
-        # Airspeed: mostly constant cruise with turbulence
-        airspeed = 15.0 + 2.0 * math.sin(t * 0.5) + noise(0.3)
-        airspeed = clamp(airspeed, 10, 25)
+        # Pitch: nose down in fast flight, up when slow
+        pitch = clamp(-2.0 + (1.0 - throttle_frac) * 4.0 + noise(0.3), -15, 15)
 
-        # Vertical speed from altitude derivative
-        vspeed = 8 * 0.3 * math.cos(t * 0.3) + noise(0.1)
-
-        # Roll: banked turn (constant mild bank for circular flight)
-        roll = 12.0 + 3.0 * math.sin(t * 0.8) + noise(0.5)
-
-        # Pitch: nose slightly down in cruise
-        pitch = -2.0 + 1.5 * math.sin(t * 0.4) + noise(0.3)
-
-        # Battery: slow linear drain ~0.15%/sec
-        self._battery_pct = clamp(self._battery_pct - dt * 0.15, 0, 100)
+        # Battery: drain scales with throttle
+        drain = 0.15 * (0.5 + throttle_frac * 0.5)
+        self._battery_pct = clamp(self._battery_pct - dt * drain, 0, 100)
         voltage = 21.0 + (self._battery_pct / 100.0) * 4.2 + noise(0.05)
-        current = 12.0 + abs(roll) * 0.3 + noise(0.5)
+        current = 8.0 + airspeed * 0.8 + abs(roll) * 0.2 + noise(0.5)
 
         return {
-            "lat": round(lat, 6),
-            "lon": round(lon, 6),
-            "heading": round(heading % 360, 2),
+            "lat": round(self._lat, 6),
+            "lon": round(self._lon, 6),
+            "heading": round(heading, 2),
             "alt": round(alt, 2),
             "airspeed": round(airspeed, 2),
             "vspeed": round(vspeed, 2),
@@ -312,59 +357,75 @@ class DroneAlpha:
 
 
 class DroneBravo:
-    """Figure-8 survey flight profile at 200 m."""
+    """Figure-8 survey flight profile at 200 m.
+
+    Same integrated-position model as Alpha but with a figure-8 base
+    turn pattern (alternating left/right turns).
+    """
+
+    _DEG_PER_M_LAT = 1.0 / 111_320.0
+    _DEG_PER_M_LON = 1.0 / (111_320.0 * math.cos(math.radians(BASE_LAT)))
 
     def __init__(self):
         self._t = 0.0
-        self._battery_pct = 95.0  # starts slightly used
+        self._battery_pct = 95.0
         self._alt_base = 200.0
+        self._lat = BASE_LAT + 0.008
+        self._lon = BASE_LON + 0.008
+        self._heading = 0.0
+        self._prev_alt = self._alt_base
 
-    def step(self, dt):
+    def step(self, dt, cmds=None):
         self._t += dt
         t = self._t
 
-        # Figure-8 (lemniscate of Bernoulli) — completes in ~60 seconds
-        omega = t * 0.105  # ~2*pi/60
-        scale = 0.005  # ~550 m GPS radius
-        lat = BASE_LAT + 0.008 + scale * math.sin(omega)
-        lon = BASE_LON + 0.008 + scale * math.sin(omega) * math.cos(omega)
+        # Figure-8 base turn: sinusoidal turn rate → alternating circles
+        base_turn_rate = 12.0 * math.sin(t * 0.105)
+        base_airspeed = 22.0
 
-        # Heading from velocity direction
-        dlat = scale * math.cos(omega) * 0.105
-        dlon = scale * (math.cos(omega) * math.cos(omega) - math.sin(omega) * math.sin(omega)) * 0.105
-        heading = math.degrees(math.atan2(dlon, dlat)) % 360
+        # Throttle scales airspeed
+        throttle_frac = cmds.throttle / 50.0 if cmds else 1.0
+        airspeed = base_airspeed * throttle_frac + noise(0.4)
+        airspeed = clamp(airspeed, 0, 50)
 
-        # Altitude: higher base, periodic variation
+        # Heading: base figure-8 turn + user offset
+        heading_offset = cmds.heading_offset if cmds else 0.0
+        self._heading += (base_turn_rate + heading_offset * 0.15) * dt
+        self._heading %= 360.0
+        heading = self._heading
+
+        # Roll from turn rate
+        turn_rate = base_turn_rate + heading_offset * 0.15
+        roll = clamp(turn_rate * 1.6 + noise(1.0), -45, 45)
+
+        # Integrate position
+        hdg_rad = math.radians(heading)
+        self._lat += math.cos(hdg_rad) * airspeed * dt * self._DEG_PER_M_LAT
+        self._lon += math.sin(hdg_rad) * airspeed * dt * self._DEG_PER_M_LON
+
+        # Altitude
         alt = self._alt_base + 15 * math.sin(t * 0.2) + noise(0.8)
         alt = clamp(alt, 150, 250)
-
-        # Airspeed: faster survey speed
-        airspeed = 22.0 + 4.0 * math.sin(t * 0.35) + noise(0.4)
-        airspeed = clamp(airspeed, 15, 35)
-
-        # Vertical speed
-        vspeed = 15 * 0.2 * math.cos(t * 0.2) + noise(0.15)
-
-        # Roll: aggressive banking for figure-8 turns
-        roll = 20.0 * math.sin(omega) + noise(1.0)
-        roll = clamp(roll, -40, 40)
+        vspeed = (alt - self._prev_alt) / dt
+        self._prev_alt = alt
 
         # Pitch
-        pitch = -3.0 + 2.0 * math.sin(t * 0.6) + noise(0.4)
+        pitch = clamp(-3.0 + (1.0 - throttle_frac) * 5.0 + noise(0.4), -20, 20)
 
-        # Battery: slightly faster drain due to higher speed
-        self._battery_pct = clamp(self._battery_pct - dt * 0.18, 0, 100)
+        # Battery
+        drain = 0.18 * (0.5 + throttle_frac * 0.5)
+        self._battery_pct = clamp(self._battery_pct - dt * drain, 0, 100)
         voltage = 21.0 + (self._battery_pct / 100.0) * 4.2 + noise(0.05)
-        current = 16.0 + abs(roll) * 0.2 + noise(0.6)
+        current = 10.0 + airspeed * 0.6 + abs(roll) * 0.2 + noise(0.6)
 
         return {
-            "lat": round(lat, 6),
-            "lon": round(lon, 6),
-            "heading": round(heading % 360, 2),
+            "lat": round(self._lat, 6),
+            "lon": round(self._lon, 6),
+            "heading": round(heading, 2),
             "alt": round(alt, 2),
             "airspeed": round(airspeed, 2),
             "vspeed": round(vspeed, 2),
-            "roll": round(clamp(roll, -40, 40), 2),
+            "roll": round(clamp(roll, -45, 45), 2),
             "pitch": round(clamp(pitch, -20, 20), 2),
             "voltage": round(clamp(voltage, 18, 25.2), 2),
             "current": round(clamp(current, 5, 35), 2),
@@ -377,18 +438,90 @@ class DroneBravo:
 # ---------------------------------------------------------------------------
 
 
-class UDPSender:
-    def __init__(self, host, port):
-        self.addr = (host, port)
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.chunk_size = 8192
+class CommandState:
+    """Mutable state driven by output-control commands from Serial Studio."""
+
+    def __init__(self):
+        self.throttle = 50.0      # 0-100 %
+        self.heading_offset = 0.0 # -180 to +180 deg
+        self.camera_on = True
+        self.rth = False
+
+    def parse(self, raw: bytes):
+        """Parse one or more newline-delimited commands."""
+        for line in raw.decode("utf-8", errors="ignore").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+
+            parts = line.split(None, 1)
+            cmd = parts[0].upper()
+            arg = parts[1] if len(parts) > 1 else ""
+
+            if cmd == "THR":
+                self.throttle = clamp(float(arg), 0, 100)
+            elif cmd == "HDG":
+                self.heading_offset = clamp(float(arg), -180, 180)
+            elif cmd == "CAM":
+                self.camera_on = arg.strip().upper() == "ON"
+            elif cmd == "RTH":
+                self.rth = True
+
+
+class TCPServer:
+    """TCP server that accepts one client and provides send/recv."""
+
+    def __init__(self, host, port, label):
+        self.label = label
+        self.client = None
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.server.bind((host, port))
+        self.server.listen(1)
+        self.server.settimeout(0.5)
+        print(f"[{label}] TCP server listening on {host}:{port}")
+
+    def wait_for_client(self, stop_event):
+        """Block until a client connects or stop_event is set."""
+        print(f"[{self.label}] Waiting for Serial Studio to connect...")
+        while not stop_event.is_set():
+            try:
+                self.client, addr = self.server.accept()
+                self.client.setblocking(False)
+                print(f"[{self.label}] Client connected from {addr[0]}:{addr[1]}")
+                return True
+            except socket.timeout:
+                continue
+        return False
 
     def send_raw(self, data: bytes):
-        for offset in range(0, len(data), self.chunk_size):
-            self.sock.sendto(data[offset : offset + self.chunk_size], self.addr)
+        if not self.client:
+            return
+        try:
+            self.client.sendall(data)
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            self.client = None
+
+    def recv(self):
+        """Non-blocking receive. Returns bytes or None."""
+        if not self.client:
+            return None
+        try:
+            data = self.client.recv(4096)
+            if not data:
+                self.client = None
+                return None
+            return data
+        except BlockingIOError:
+            return None
+        except (ConnectionResetError, OSError):
+            self.client = None
+            return None
 
     def close(self):
-        self.sock.close()
+        if self.client:
+            self.client.close()
+        self.server.close()
 
 
 # ---------------------------------------------------------------------------
@@ -415,96 +548,160 @@ def encode_jpeg(frame_bgr):
 
 def run_alpha(host, fps, stop_event):
     dt = 1.0 / fps
-    sender = UDPSender(host, PORT_ALPHA)
-    drone = DroneAlpha()
-
-    print(f"[Alpha] Sending to {host}:{PORT_ALPHA} at {fps} Hz")
+    server = TCPServer(host, PORT_ALPHA, "Alpha")
 
     try:
         while not stop_event.is_set():
-            t_start = time.monotonic()
+            # Wait for Serial Studio to connect
+            if not server.wait_for_client(stop_event):
+                break
 
-            data = drone.step(dt)
+            # Fresh state for each connection
+            drone = DroneAlpha()
+            cmds = CommandState()
+            print(f"[Alpha] Streaming at {fps} Hz")
 
-            # Send JPEG image wrapped in image delimiters
-            if HAS_CV2:
-                img = make_alpha_image(
-                    drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
+            while not stop_event.is_set() and server.client:
+                t_start = time.monotonic()
+
+                # Process incoming commands
+                while True:
+                    raw = server.recv()
+                    if raw is None:
+                        break
+                    cmds.parse(raw)
+
+                # Client disconnected during recv
+                if not server.client:
+                    break
+
+                data = drone.step(dt, cmds)
+
+                # Send JPEG image wrapped in image delimiters
+                if HAS_CV2:
+                    if cmds.camera_on:
+                        img = make_alpha_image(
+                            drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
+                        )
+                    else:
+                        img = make_camera_off_image("ALPHA")
+
+                    jpeg = encode_jpeg(img)
+                    if jpeg:
+                        server.send_raw(IMG_ALPHA_START + jpeg + IMG_ALPHA_END)
+
+                # Send CSV telemetry with hex delimiters
+                csv = ",".join(
+                    str(data[k])
+                    for k in [
+                        "lat", "lon", "heading", "alt", "airspeed",
+                        "vspeed", "roll", "pitch", "voltage", "current",
+                        "battery_pct",
+                    ]
                 )
-                jpeg = encode_jpeg(img)
-                if jpeg:
-                    sender.send_raw(IMG_ALPHA_START + jpeg + IMG_ALPHA_END)
+                frame = DELIM_ALPHA_START + csv.encode() + DELIM_ALPHA_END
+                server.send_raw(frame)
 
-            # Send CSV telemetry with hex delimiters
-            csv = ",".join(
-                str(data[k])
-                for k in [
-                    "lat", "lon", "heading", "alt", "airspeed",
-                    "vspeed", "roll", "pitch", "voltage", "current",
-                    "battery_pct",
-                ]
-            )
-            frame = DELIM_ALPHA_START + csv.encode() + DELIM_ALPHA_END
-            sender.send_raw(frame)
+                with _display_lock:
+                    _display["alpha"] = (
+                        f"lat={data['lat']:.4f} alt={data['alt']:.0f}m "
+                        f"hdg={data['heading']:.0f} bat={data['battery_pct']:.0f}% "
+                        f"thr={cmds.throttle:.0f}% cam={'on' if cmds.camera_on else 'off'}"
+                    )
 
+                _refresh_display()
+
+                elapsed = time.monotonic() - t_start
+                sleep_time = dt - elapsed
+                if sleep_time > 0:
+                    time.sleep(sleep_time)
+
+            # Client disconnected — reset display and wait for reconnect
+            print(f"\n[Alpha] Client disconnected, waiting for reconnect...")
             with _display_lock:
-                _display["alpha"] = f"lat={data['lat']:.4f} alt={data['alt']:.0f}m hdg={data['heading']:.0f} bat={data['battery_pct']:.0f}%"
-
+                _display["alpha"] = "disconnected"
             _refresh_display()
-
-            elapsed = time.monotonic() - t_start
-            sleep_time = dt - elapsed
-            if sleep_time > 0:
-                time.sleep(sleep_time)
     finally:
-        sender.close()
+        server.close()
 
 
 def run_bravo(host, fps, stop_event):
     dt = 1.0 / fps
-    sender = UDPSender(host, PORT_BRAVO)
-    drone = DroneBravo()
-
-    print(f"[Bravo] Sending to {host}:{PORT_BRAVO} at {fps} Hz")
+    server = TCPServer(host, PORT_BRAVO, "Bravo")
 
     try:
         while not stop_event.is_set():
-            t_start = time.monotonic()
+            # Wait for Serial Studio to connect
+            if not server.wait_for_client(stop_event):
+                break
 
-            data = drone.step(dt)
+            # Fresh state for each connection
+            drone = DroneBravo()
+            cmds = CommandState()
+            print(f"[Bravo] Streaming at {fps} Hz")
 
-            # Send JPEG image wrapped in image delimiters
-            if HAS_CV2:
-                img = make_bravo_image(
-                    drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
+            while not stop_event.is_set() and server.client:
+                t_start = time.monotonic()
+
+                # Process incoming commands
+                while True:
+                    raw = server.recv()
+                    if raw is None:
+                        break
+                    cmds.parse(raw)
+
+                # Client disconnected during recv
+                if not server.client:
+                    break
+
+                data = drone.step(dt, cmds)
+
+                # Send JPEG image wrapped in image delimiters
+                if HAS_CV2:
+                    if cmds.camera_on:
+                        img = make_bravo_image(
+                            drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
+                        )
+                    else:
+                        img = make_camera_off_image("BRAVO")
+
+                    jpeg = encode_jpeg(img)
+                    if jpeg:
+                        server.send_raw(IMG_BRAVO_START + jpeg + IMG_BRAVO_END)
+
+                # Send CSV telemetry with hex delimiters
+                csv = ",".join(
+                    str(data[k])
+                    for k in [
+                        "lat", "lon", "heading", "alt", "airspeed",
+                        "vspeed", "roll", "pitch", "voltage", "current",
+                        "battery_pct",
+                    ]
                 )
-                jpeg = encode_jpeg(img)
-                if jpeg:
-                    sender.send_raw(IMG_BRAVO_START + jpeg + IMG_BRAVO_END)
+                frame = DELIM_BRAVO_START + csv.encode() + DELIM_BRAVO_END
+                server.send_raw(frame)
 
-            # Send CSV telemetry with hex delimiters
-            csv = ",".join(
-                str(data[k])
-                for k in [
-                    "lat", "lon", "heading", "alt", "airspeed",
-                    "vspeed", "roll", "pitch", "voltage", "current",
-                    "battery_pct",
-                ]
-            )
-            frame = DELIM_BRAVO_START + csv.encode() + DELIM_BRAVO_END
-            sender.send_raw(frame)
+                with _display_lock:
+                    _display["bravo"] = (
+                        f"lat={data['lat']:.4f} alt={data['alt']:.0f}m "
+                        f"hdg={data['heading']:.0f} bat={data['battery_pct']:.0f}% "
+                        f"thr={cmds.throttle:.0f}% cam={'on' if cmds.camera_on else 'off'}"
+                    )
 
+                _refresh_display()
+
+                elapsed = time.monotonic() - t_start
+                sleep_time = dt - elapsed
+                if sleep_time > 0:
+                    time.sleep(sleep_time)
+
+            # Client disconnected — reset display and wait for reconnect
+            print(f"\n[Bravo] Client disconnected, waiting for reconnect...")
             with _display_lock:
-                _display["bravo"] = f"lat={data['lat']:.4f} alt={data['alt']:.0f}m hdg={data['heading']:.0f} bat={data['battery_pct']:.0f}%"
-
+                _display["bravo"] = "disconnected"
             _refresh_display()
-
-            elapsed = time.monotonic() - t_start
-            sleep_time = dt - elapsed
-            if sleep_time > 0:
-                time.sleep(sleep_time)
     finally:
-        sender.close()
+        server.close()
 
 
 # ---------------------------------------------------------------------------
@@ -529,7 +726,7 @@ def main():
         "--host",
         default=DEFAULT_HOST,
         metavar="HOST",
-        help=f"UDP destination host (default: {DEFAULT_HOST})",
+        help=f"TCP listen address (default: {DEFAULT_HOST})",
     )
     args = parser.parse_args()
 

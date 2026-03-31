@@ -243,6 +243,18 @@ QVariantList UI::Taskbar::groupModel() const
     model.append(main);
   }
 
+  // Create per-source overview groups (when multiple sources exist)
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  if (sources.size() > 1) {
+    for (const auto& source : sources) {
+      QVariantMap entry;
+      entry["id"]   = -100 - source.sourceId;
+      entry["text"] = source.title;
+      entry["icon"] = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
+      model.append(entry);
+    }
+  }
+
   // Append frame groups
   for (int i = 0; i < m_fullModel->rowCount(); ++i) {
     const QStandardItem* groupItem = m_fullModel->item(i);
@@ -445,6 +457,17 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     }
   }
 
+  // Build source-ID lookup when filtering by source
+  const bool sourceOverview = (groupId <= -100);
+  const int filterSourceId  = sourceOverview ? -(groupId + 100) : -1;
+  QSet<int> sourceGroupIds;
+  if (sourceOverview) {
+    const auto& frame = UI::Dashboard::instance().rawFrame();
+    for (const auto& g : frame.groups)
+      if (g.sourceId == filterSourceId)
+        sourceGroupIds.insert(g.groupId);
+  }
+
   // Populate taskbar with matching group widgets
   for (int i = 0; i < fullModel()->rowCount(); ++i) {
     auto groupItem = fullModel()->item(i);
@@ -459,6 +482,12 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     // Filter by group ID when viewing a specific group
     if (groupId > -1) {
       if (groupItem->data(TaskbarModel::GroupIdRole).toInt() != groupId)
+        continue;
+    }
+
+    // Filter by source ID when viewing a per-source overview
+    if (sourceOverview) {
+      if (!sourceGroupIds.contains(groupItem->data(TaskbarModel::GroupIdRole).toInt()))
         continue;
     }
 
@@ -477,7 +506,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
       auto name     = child->data(TaskbarModel::WidgetNameRole).toString();
       auto overview = child->data(TaskbarModel::OverviewRole).toBool();
 
-      if (groupId > -1) {
+      if (groupId > -1 || sourceOverview) {
         setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
         m_taskbarButtons->appendRow(child);
       }

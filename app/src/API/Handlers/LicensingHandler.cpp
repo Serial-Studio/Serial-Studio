@@ -20,14 +20,12 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "API/Handlers/LicensingHandler.h"
 
-#  include "API/Handlers/LicensingHandler.h"
-
-#  include "API/CommandRegistry.h"
-#  include "Licensing/CommercialToken.h"
-#  include "Licensing/LemonSqueezy.h"
-#  include "Licensing/Trial.h"
+#include "API/CommandRegistry.h"
+#include "Licensing/CommercialToken.h"
+#include "Licensing/LemonSqueezy.h"
+#include "Licensing/Trial.h"
 
 //--------------------------------------------------------------------------------------------------
 // Command registration
@@ -206,20 +204,43 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
                                                                 const QJsonObject&)
 {
   const auto& ls = Licensing::LemonSqueezy::instance();
+  const auto& tk = Licensing::CommercialToken::current();
+
+  // Map feature tier to human-readable name
+  QString tierName;
+  switch (tk.featureTier()) {
+    case Licensing::FeatureTier::Hobbyist:
+      tierName = QStringLiteral("Hobbyist");
+      break;
+    case Licensing::FeatureTier::Trial:
+      tierName = QStringLiteral("Trial");
+      break;
+    case Licensing::FeatureTier::Pro:
+      tierName = QStringLiteral("Pro");
+      break;
+    case Licensing::FeatureTier::Enterprise:
+      tierName = QStringLiteral("Enterprise");
+      break;
+    default:
+      tierName = QStringLiteral("None");
+      break;
+  }
 
   QJsonObject result;
-  result[QStringLiteral("busy")]          = ls.busy();
-  result[QStringLiteral("isActivated")]   = ls.isActivated();
-  result[QStringLiteral("canActivate")]   = ls.canActivate();
-  result[QStringLiteral("appName")]       = ls.appName();
-  result[QStringLiteral("license")]       = ls.license();
-  result[QStringLiteral("instanceId")]    = ls.instanceId();
-  result[QStringLiteral("variantName")]   = ls.variantName();
-  result[QStringLiteral("instanceName")]  = ls.instanceName();
-  result[QStringLiteral("customerName")]  = ls.customerName();
-  result[QStringLiteral("customerEmail")] = ls.customerEmail();
-  result[QStringLiteral("seatLimit")]     = ls.seatLimit();
-  result[QStringLiteral("seatUsage")]     = ls.seatUsage();
+  result[QStringLiteral("busy")]             = ls.busy();
+  result[QStringLiteral("isActivated")]      = ls.isActivated();
+  result[QStringLiteral("canActivate")]      = ls.canActivate();
+  result[QStringLiteral("appName")]          = ls.appName();
+  result[QStringLiteral("license")]          = ls.license();
+  result[QStringLiteral("instanceId")]       = ls.instanceId();
+  result[QStringLiteral("variantName")]      = ls.variantName();
+  result[QStringLiteral("instanceName")]     = ls.instanceName();
+  result[QStringLiteral("customerName")]     = ls.customerName();
+  result[QStringLiteral("customerEmail")]    = ls.customerEmail();
+  result[QStringLiteral("seatLimit")]        = ls.seatLimit();
+  result[QStringLiteral("seatUsage")]        = ls.seatUsage();
+  result[QStringLiteral("featureTier")]      = tierName;
+  result[QStringLiteral("featureTierValue")] = static_cast<int>(tk.featureTier());
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -296,5 +317,3 @@ API::CommandResponse API::Handlers::LicensingHandler::trialEnable(const QString&
   trial.enableTrial();
   return CommandResponse::makeSuccess(id, {});
 }
-
-#endif  // BUILD_COMMERCIAL

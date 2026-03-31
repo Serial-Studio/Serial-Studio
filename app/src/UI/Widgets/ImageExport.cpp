@@ -20,18 +20,16 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "UI/Widgets/ImageExport.h"
 
-#  include "UI/Widgets/ImageExport.h"
+#include <JlCompress.h>
 
-#  include <JlCompress.h>
+#include <QDateTime>
+#include <QFile>
 
-#  include <QDateTime>
-#  include <QFile>
-
-#  include "IO/ConnectionManager.h"
-#  include "Misc/WorkspaceManager.h"
-#  include "SerialStudio.h"
+#include "IO/ConnectionManager.h"
+#include "Misc/WorkspaceManager.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // ImageExportWorker
@@ -311,5 +309,3 @@ void Widgets::ImageExport::enqueueImage(const QByteArray& data,
   ImageExportItem item{data, format, groupId, groupTitle, projectTitle};
   enqueueData(item);
 }
-
-#endif  // BUILD_COMMERCIAL

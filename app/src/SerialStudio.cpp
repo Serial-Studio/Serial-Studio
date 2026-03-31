@@ -133,6 +133,7 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
     case DashboardTerminal:
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
+    case DashboardOutputPanel:
 #endif
       return true;
     default:
@@ -215,6 +216,9 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
     case DashboardImageView:
       return iconPath + "image.svg";
       break;
+    case DashboardOutputPanel:
+      return iconPath + "output-panel.svg";
+      break;
 #endif
     case DashboardNoWidget:
       return iconPath + "group.svg";
@@ -295,6 +299,11 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
  */
 SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::Group& group)
 {
+#ifdef BUILD_COMMERCIAL
+  if (group.groupType == DataModel::GroupType::Output)
+    return DashboardOutputPanel;
+#endif
+
   const auto& widget = group.widget;
 
   if (widget == "accelerometer")

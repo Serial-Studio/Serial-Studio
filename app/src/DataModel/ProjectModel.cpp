@@ -34,6 +34,7 @@
 #include "AppInfo.h"
 #include "AppState.h"
 #include "DataModel/FrameParser.h"
+#include "DataModel/OutputCodeEditor.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/IconEngine.h"
@@ -1681,6 +1682,243 @@ void DataModel::ProjectModel::duplicateCurrentAction()
   setModified(true);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Output widget CRUD
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Stores the given output widget as the current selection.
+ */
+void DataModel::ProjectModel::setSelectedOutputWidget(const DataModel::OutputWidget& widget)
+{
+  m_selectedOutputWidget = widget;
+}
+
+/**
+ * @brief Changes the type of the currently selected output widget.
+ */
+void DataModel::ProjectModel::setOutputWidgetType(int type)
+{
+  const auto gid = m_selectedOutputWidget.groupId;
+  const auto wid = m_selectedOutputWidget.widgetId;
+
+  if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
+    return;
+
+  auto& widgets = m_groups[gid].outputWidgets;
+  if (wid < 0 || static_cast<size_t>(wid) >= widgets.size())
+    return;
+
+  const auto newType = static_cast<DataModel::OutputWidgetType>(
+    qBound(0, type, static_cast<int>(DataModel::OutputWidgetType::RampGenerator)));
+
+  if (widgets[wid].type == newType)
+    return;
+
+  widgets[wid].type           = newType;
+  m_selectedOutputWidget.type = newType;
+
+  Q_EMIT groupsChanged();
+  Q_EMIT outputWidgetAdded(gid, wid);
+  setModified(true);
+}
+
+/**
+ * @brief Sets the icon of the currently selected output widget.
+ */
+void DataModel::ProjectModel::setOutputWidgetIcon(const QString& icon)
+{
+  const auto gid = m_selectedOutputWidget.groupId;
+  const auto wid = m_selectedOutputWidget.widgetId;
+
+  if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
+    return;
+
+  auto& widgets = m_groups[gid].outputWidgets;
+  if (wid < 0 || static_cast<size_t>(wid) >= widgets.size())
+    return;
+
+  widgets[wid].icon           = icon;
+  m_selectedOutputWidget.icon = icon;
+
+  Q_EMIT groupDataChanged();
+  Q_EMIT outputWidgetAdded(gid, wid);
+  setModified(true);
+}
+
+/**
+ * @brief Creates a new output group with a default button control.
+ */
+void DataModel::ProjectModel::addOutputPanel()
+{
+  const auto saved = m_selectedGroup;
+  m_selectedGroup  = DataModel::Group();
+  addOutputControl(SerialStudio::OutputButton);
+  m_selectedGroup = saved;
+}
+
+/**
+ * @brief Adds an output control to the project, just like addDataset().
+ *
+ * If the selected group is an output group, adds to it. Otherwise
+ * creates a new output group automatically.
+ */
+void DataModel::ProjectModel::addOutputControl(const SerialStudio::OutputWidgetType type)
+{
+  // Use selected group if it's an output group, otherwise create a new one
+  int groupId    = -1;
+  const auto sel = m_selectedGroup.groupId;
+  if (sel >= 0 && static_cast<size_t>(sel) < m_groups.size()
+      && m_groups[sel].groupType == DataModel::GroupType::Output)
+    groupId = sel;
+
+  // Create new group if needed
+  if (groupId < 0) {
+    addGroup(tr("Output Controls"), SerialStudio::NoGroupWidget);
+    auto& group     = m_groups.back();
+    group.groupType = DataModel::GroupType::Output;
+    groupId         = group.groupId;
+  }
+
+  auto& group = m_groups[groupId];
+
+  // Default title based on type
+  QString title;
+  switch (type) {
+    case SerialStudio::OutputButton:
+      title = tr("New Button");
+      break;
+    case SerialStudio::OutputSlider:
+      title = tr("New Slider");
+      break;
+    case SerialStudio::OutputToggle:
+      title = tr("New Toggle");
+      break;
+    case SerialStudio::OutputTextField:
+      title = tr("New Text Field");
+      break;
+    case SerialStudio::OutputKnob:
+      title = tr("New Knob");
+      break;
+    case SerialStudio::OutputRampGenerator:
+      title = tr("New Ramp Generator");
+      break;
+  }
+
+  DataModel::OutputWidget ow;
+  ow.widgetId         = static_cast<int>(group.outputWidgets.size());
+  ow.groupId          = groupId;
+  ow.sourceId         = group.sourceId;
+  ow.title            = title;
+  ow.type             = static_cast<DataModel::OutputWidgetType>(type);
+  ow.transmitFunction = DataModel::OutputCodeEditor::defaultTemplate();
+
+  group.outputWidgets.push_back(ow);
+
+  Q_EMIT groupsChanged();
+  Q_EMIT outputWidgetAdded(groupId, ow.widgetId);
+  setModified(true);
+}
+
+/**
+ * @brief Deletes the currently selected output widget after confirmation.
+ */
+void DataModel::ProjectModel::deleteCurrentOutputWidget()
+{
+  if (!m_suppressMessageBoxes) {
+    const auto ret = Misc::Utilities::showMessageBox(
+      tr("Do you want to delete output widget \"%1\"?").arg(m_selectedOutputWidget.title),
+      tr("This action cannot be undone. Do you wish to proceed?"),
+      QMessageBox::Question,
+      APP_NAME,
+      QMessageBox::Yes | QMessageBox::No);
+
+    if (ret != QMessageBox::Yes)
+      return;
+  }
+
+  const auto gid = m_selectedOutputWidget.groupId;
+  const auto wid = m_selectedOutputWidget.widgetId;
+
+  if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
+    return;
+
+  auto& widgets = m_groups[gid].outputWidgets;
+  if (wid < 0 || static_cast<size_t>(wid) >= widgets.size())
+    return;
+
+  widgets.erase(widgets.begin() + wid);
+
+  // If group is now empty, delete the group too
+  if (widgets.empty()) {
+    m_groups.erase(m_groups.begin() + gid);
+
+    // Renumber group IDs
+    for (int i = 0; i < static_cast<int>(m_groups.size()); ++i)
+      m_groups[i].groupId = i;
+
+    Q_EMIT groupsChanged();
+    Q_EMIT groupDeleted();
+    setModified(true);
+    return;
+  }
+
+  // Renumber widget IDs
+  for (int i = 0; i < static_cast<int>(widgets.size()); ++i)
+    widgets[i].widgetId = i;
+
+  Q_EMIT groupsChanged();
+  Q_EMIT outputWidgetDeleted(gid);
+  setModified(true);
+}
+
+/**
+ * @brief Duplicates the currently selected output widget.
+ */
+void DataModel::ProjectModel::duplicateCurrentOutputWidget()
+{
+  const auto gid = m_selectedOutputWidget.groupId;
+  if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
+    return;
+
+  auto& widgets = m_groups[gid].outputWidgets;
+
+  DataModel::OutputWidget ow = m_selectedOutputWidget;
+  ow.widgetId                = static_cast<int>(widgets.size());
+  ow.title                   = tr("%1 (Copy)").arg(ow.title);
+
+  widgets.push_back(ow);
+
+  Q_EMIT groupsChanged();
+  Q_EMIT outputWidgetAdded(gid, ow.widgetId);
+  setModified(true);
+}
+
+/**
+ * @brief Updates an output widget in place.
+ */
+void DataModel::ProjectModel::updateOutputWidget(int groupId,
+                                                 int widgetId,
+                                                 const DataModel::OutputWidget& widget,
+                                                 bool rebuildTree)
+{
+  if (groupId < 0 || static_cast<size_t>(groupId) >= m_groups.size())
+    return;
+
+  auto& widgets = m_groups[groupId].outputWidgets;
+  if (widgetId < 0 || static_cast<size_t>(widgetId) >= widgets.size())
+    return;
+
+  widgets[widgetId] = widget;
+
+  if (rebuildTree)
+    Q_EMIT groupsChanged();
+  else
+    Q_EMIT groupDataChanged();
+
+  setModified(true);
+}
+
 /**
  * @brief Appends a copy of the currently selected dataset to its parent group.
  */
@@ -1713,8 +1951,11 @@ void DataModel::ProjectModel::duplicateCurrentDataset()
  */
 void DataModel::ProjectModel::ensureValidGroup()
 {
-  const auto isValidGroup = [](const QString& widgetId) -> bool {
-    switch (SerialStudio::groupWidgetFromId(widgetId)) {
+  const auto isValidGroup = [](const DataModel::Group& g) -> bool {
+    if (g.groupType == DataModel::GroupType::Output)
+      return false;
+
+    switch (SerialStudio::groupWidgetFromId(g.widget)) {
       case SerialStudio::MultiPlot:
       case SerialStudio::DataGrid:
       case SerialStudio::NoGroupWidget:
@@ -1727,13 +1968,13 @@ void DataModel::ProjectModel::ensureValidGroup()
   const auto selId      = m_selectedGroup.groupId;
   const bool selInRange = selId >= 0 && static_cast<size_t>(selId) < m_groups.size();
 
-  if (selInRange && isValidGroup(m_groups[selId].widget)) {
+  if (selInRange && isValidGroup(m_groups[selId])) {
     m_selectedGroup = m_groups[selId];
     return;
   }
 
   for (const auto& group : std::as_const(m_groups)) {
-    if (!isValidGroup(group.widget))
+    if (!isValidGroup(group))
       continue;
 
     m_selectedGroup = group;
@@ -2386,11 +2627,22 @@ QVariantList DataModel::ProjectModel::groupsForDiagram() const
     }
 
     QVariantMap map;
-    map[QStringLiteral("groupId")]  = grp.groupId;
-    map[QStringLiteral("sourceId")] = grp.sourceId;
-    map[QStringLiteral("title")]    = grp.title;
-    map[QStringLiteral("widget")]   = grp.widget;
-    map[QStringLiteral("datasets")] = datasets;
+    map[QStringLiteral("groupId")] = grp.groupId;
+    QVariantList outputWidgets;
+    outputWidgets.reserve(static_cast<qsizetype>(grp.outputWidgets.size()));
+    for (const auto& ow : grp.outputWidgets) {
+      QVariantMap owMap;
+      owMap[QStringLiteral("title")] = ow.title;
+      owMap[QStringLiteral("type")]  = static_cast<int>(ow.type);
+      outputWidgets.append(owMap);
+    }
+
+    map[QStringLiteral("sourceId")]      = grp.sourceId;
+    map[QStringLiteral("title")]         = grp.title;
+    map[QStringLiteral("widget")]        = grp.widget;
+    map[QStringLiteral("groupType")]     = static_cast<int>(grp.groupType);
+    map[QStringLiteral("datasets")]      = datasets;
+    map[QStringLiteral("outputWidgets")] = outputWidgets;
     result.append(map);
   }
 

@@ -20,21 +20,19 @@
  * SPDX-License-Identifier: LicenseRef-SerialStudio-Commercial
  */
 
-#ifdef BUILD_COMMERCIAL
+#include "IO/Drivers/USB.h"
 
-#  include "IO/Drivers/USB.h"
+#ifdef Q_OS_WIN
+#  include <winsock2.h>
+#endif
 
-#  ifdef Q_OS_WIN
-#    include <winsock2.h>
-#  endif
+#include <QApplication>
+#include <QJsonObject>
+#include <QMessageBox>
+#include <QMetaObject>
+#include <QTimer>
 
-#  include <QApplication>
-#  include <QJsonObject>
-#  include <QMessageBox>
-#  include <QMetaObject>
-#  include <QTimer>
-
-#  include "Misc/Utilities.h"
+#include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -230,9 +228,9 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-#  ifdef __linux__
+#ifdef __linux__
   libusb_set_auto_detach_kernel_driver(m_handle, 1);
-#  endif
+#endif
 
   buildEndpointLists();
   Q_EMIT endpointListChanged();
@@ -1488,5 +1486,3 @@ void IO::Drivers::USB::setDriverProperty(const QString& key, const QVariant& val
   else if (key == QLatin1String("isoPacketSize"))
     setIsoPacketSize(value.toInt());
 }
-
-#endif  // BUILD_COMMERCIAL
