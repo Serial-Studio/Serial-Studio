@@ -51,6 +51,7 @@ PanelLayout::SizeClass PanelLayout::classify(OWT type)
  */
 QSizeF PanelLayout::minSize(OWT type)
 {
+  // Initialize font metrics
   static const auto& fonts = Misc::CommonFonts::instance();
   const QFontMetricsF fm(fonts.uiFont());
   const QFontMetricsF fmMono(fonts.monoFont());
@@ -71,34 +72,21 @@ QSizeF PanelLayout::minSize(OWT type)
   const qreal valueH  = std::ceil(monoH);
 
   // Layout constants (must match QML anchors.margins and spacing)
-  const qreal m = 8;  // cell inner margin (top + bottom = 2*m)
-  const qreal s = 4;  // spacing between items in ColumnLayout
-
+  const qreal m = 8;
+  const qreal s = 4;
   switch (type) {
     case OWT::Button:
-      // [margin] button [margin]
       return {charW * 14 + 2 * m, 2 * m + btnH};
-
     case OWT::Slider:
-      // [m] label [s] slider [s] rangeRow [s] value [m]
       return {charW * 20 + 2 * m, 2 * m + labelH + s + sliderH + s + rangeH + s + valueH};
-
     case OWT::Toggle:
-      // [m] label [s] switch [m]
       return {charW * 12 + 2 * m, 2 * m + labelH + s + switchH};
-
     case OWT::TextField:
-      // [m] label [s] inputRow [m]
       return {charW * 24 + 2 * m, 2 * m + labelH + s + qMax(inputH, btnH)};
-
     case OWT::Knob:
-      // [m] label [s] dial(square) [s] value [m]
       return {charW * 16 + 2 * m, 2 * m + labelH + s + charW * 10 + s + valueH};
-
     case OWT::RampGenerator:
-      // [m] label [s] progBar [s] valueRow [s] buttonRow [m]
       return {charW * 24 + 2 * m, 2 * m + labelH + s + progH + s + qMax(rangeH, valueH) + s + btnH};
-
     default:
       return {charW * 14 + 2 * m, 2 * m + btnH};
   }
@@ -120,7 +108,6 @@ QVector<PanelLayout::Column> PanelLayout::buildColumns(const QVector<Item>& item
                                                        qreal height,
                                                        qreal gap)
 {
-  // Separate tall and small items (preserving order)
   QVector<int> tall_idx;
   QVector<int> small_idx;
   for (int i = 0; i < n; ++i)
@@ -129,7 +116,6 @@ QVector<PanelLayout::Column> PanelLayout::buildColumns(const QVector<Item>& item
     else
       small_idx.append(i);
 
-  // How many small items fit in one stack column?
   qreal small_avg_h = 0;
   for (int i : small_idx)
     small_avg_h += items[i].mh;
@@ -142,11 +128,9 @@ QVector<PanelLayout::Column> PanelLayout::buildColumns(const QVector<Item>& item
   const int small_per_stack =
     qMax(1, static_cast<int>(std::floor((height + gap) / (small_avg_h + gap))));
 
-  // Build columns preserving original widget order
   QVector<Column> columns;
   int si = 0;
   int ti = 0;
-
   while (si < small_idx.size() || ti < tall_idx.size()) {
     int next_small = si < small_idx.size() ? small_idx[si] : n;
     int next_tall  = ti < tall_idx.size() ? tall_idx[ti] : n;
@@ -198,7 +182,6 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
                             qreal width,
                             qreal gap)
 {
-  // Width distribution
   const int row_col_count = col_end - col_start;
   qreal row_min_w         = 0;
   for (int c = col_start; c < col_end; ++c)
@@ -208,7 +191,6 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
   const qreal avail_w   = width - row_gap_w;
   const qreal scale     = (row_min_w > 0) ? avail_w / row_min_w : 1.0;
 
-  // Place each column
   qreal x = 0;
   for (int c = col_start; c < col_end; ++c) {
     const auto& col   = columns[c];
@@ -217,7 +199,6 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
     const qreal gap_h = (n_items - 1) * gap;
     const qreal avail = row_h - gap_h;
 
-    // Heights proportional to min-heights
     qreal y = 0;
     for (int i = 0; i < n_items; ++i) {
       int idx = col.itemIndices[i];
@@ -231,7 +212,6 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
       y += itemH + gap;
     }
 
-    // Last column absorbs remaining width
     if (c == col_end - 1) {
       qreal final_w = width - x;
       for (int i = 0; i < n_items; ++i)
@@ -258,7 +238,6 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
   if (n == 0 || width <= 0 || height <= 0)
     return {};
 
-  // Classify and get min sizes
   QVector<Item> items;
   items.reserve(n);
   for (int i = 0; i < n; ++i) {
@@ -267,10 +246,8 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
     items.append({i, sc, widgets[i].type, ms.width(), ms.height()});
   }
 
-  // Build columns from items
   auto columns = buildColumns(items, n, height, gap);
 
-  // Determine how many columns fit per row
   const int num_cols = columns.size();
   qreal total_min_w  = 0;
   for (const auto& col : columns)
@@ -293,21 +270,17 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
     cols_per_row = qMax(1, cols_per_row);
   }
 
-  // Lay out in rows of columns
   QVector<Rect> result(n);
   int col_idx = 0;
   qreal row_y = 0;
   while (col_idx < num_cols) {
-    int row_end = qMin(col_idx + cols_per_row, num_cols);
-
-    // Row height from tallest column
     qreal row_min_h = 0;
+    int row_end     = qMin(col_idx + cols_per_row, num_cols);
     for (int c = col_idx; c < row_end; ++c) {
       qreal h   = columns[c].totalMinH + (columns[c].itemIndices.size() - 1) * gap;
       row_min_h = qMax(row_min_h, h);
     }
 
-    // Last row stretches to fill remaining space
     qreal row_h = row_min_h;
     if (col_idx + cols_per_row >= num_cols)
       row_h = qMax(row_min_h, height - row_y);

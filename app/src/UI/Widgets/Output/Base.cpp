@@ -34,8 +34,6 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_hasFn(false)
 {
   m_rateLimiter.start();
-
-  // Compile the transmit function
   if (!config.transmitFunction.isEmpty()) {
     const auto wrapped =
       QStringLiteral("(function() { %1; return transmit; })()").arg(config.transmitFunction);
@@ -144,18 +142,14 @@ bool Widgets::Output::Base::hasTransmitFunction() const noexcept
  */
 void Widgets::Output::Base::sendValue(const QVariant& value)
 {
-  // Rate limiting
   if (m_rateLimiter.elapsed() < kMinSendIntervalMs)
     return;
 
   m_rateLimiter.restart();
-
-  // License check
   const auto& tk = Licensing::CommercialToken::current();
   if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Pro)
     return;
 
-  // Evaluate and send
   const auto data = evaluateTransmitFunction(value);
   if (!data.isEmpty())
     IO::ConnectionManager::instance().writeDataToDevice(m_sourceId, data);
