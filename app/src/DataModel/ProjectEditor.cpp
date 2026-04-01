@@ -2875,15 +2875,17 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
     m_outputWidgetModel->appendRow(monoItem);
   }
 
-  // Initial value
-  auto* initItem = new QStandardItem();
-  initItem->setEditable(true);
-  initItem->setData(true, Active);
-  initItem->setData(FloatField, WidgetType);
-  initItem->setData(widget.initialValue, EditableValue);
-  initItem->setData(kOutputWidget_InitialValue, ParameterType);
-  initItem->setData(tr("Initial Value"), ParameterName);
-  m_outputWidgetModel->appendRow(initItem);
+  // Initial value (not applicable for buttons)
+  if (widget.type != DataModel::OutputWidgetType::Button) {
+    auto* initItem = new QStandardItem();
+    initItem->setEditable(true);
+    initItem->setData(true, Active);
+    initItem->setData(FloatField, WidgetType);
+    initItem->setData(widget.initialValue, EditableValue);
+    initItem->setData(kOutputWidget_InitialValue, ParameterType);
+    initItem->setData(tr("Initial Value"), ParameterName);
+    m_outputWidgetModel->appendRow(initItem);
+  }
 
   // Value range section (for sliders/knobs)
   const bool isNumeric = widget.type == DataModel::OutputWidgetType::Slider

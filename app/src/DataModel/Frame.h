@@ -689,9 +689,6 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::AlarmLow, qMin(d.alarmLow, d.alarmHigh));
   obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
 
-  if (d.sourceId != 0)
-    obj.insert(Keys::DatasetSourceId, d.sourceId);
-
   return obj;
 }
 

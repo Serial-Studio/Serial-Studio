@@ -65,18 +65,18 @@ bool SerialStudio::activated()
 bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
 {
   for (const auto& group : std::as_const(g)) {
+    if (group.groupType == DataModel::GroupType::Output)
+      return true;
+
     if (group.widget == QStringLiteral("plot3d"))
       return true;
 
     if (group.widget == QStringLiteral("image"))
       return true;
 
-    for (const auto& dataset : std::as_const((group.datasets))) {
-      if (dataset.xAxisId > 0) {
+    for (const auto& dataset : std::as_const((group.datasets)))
+      if (dataset.xAxisId > 0)
         return true;
-        break;
-      }
-    }
   }
 
   return false;
@@ -94,18 +94,18 @@ bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
 bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
 {
   for (const auto& group : std::as_const(g)) {
+    if (group.groupType == DataModel::GroupType::Output)
+      return true;
+
     if (group.widget == QStringLiteral("plot3d"))
       return true;
 
     if (group.widget == QStringLiteral("image"))
       return true;
 
-    for (const auto& dataset : std::as_const((group.datasets))) {
-      if (dataset.xAxisId > 0) {
+    for (const auto& dataset : std::as_const((group.datasets)))
+      if (dataset.xAxisId > 0)
         return true;
-        break;
-      }
-    }
   }
 
   return false;
@@ -299,9 +299,13 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
  */
 SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::Group& group)
 {
+  // Output control panels are a Pro-only feature
 #ifdef BUILD_COMMERCIAL
   if (group.groupType == DataModel::GroupType::Output)
     return DashboardOutputPanel;
+#else
+  if (group.groupType == DataModel::GroupType::Output)
+    return DashboardNoWidget;
 #endif
 
   const auto& widget = group.widget;

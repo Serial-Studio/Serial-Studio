@@ -987,7 +987,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
     // Send first occurrence immediately
     if (!IO::ConnectionManager::instance().paused())
-      IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+      (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
     if (m_repeatCounters.contains(index))
       m_repeatCounters[index]--;
@@ -999,7 +999,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   // Handle RepeatNTimes mode: timer tick (not GUI trigger)
   if (action.timerMode == DataModel::TimerMode::RepeatNTimes && !guiTrigger) {
     if (!IO::ConnectionManager::instance().paused())
-      IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+      (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
     // Decrement counter, stop when done
     if (m_repeatCounters.contains(index)) {
@@ -1037,7 +1037,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 
   // Send data payload
   if (!IO::ConnectionManager::instance().paused())
-    IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
+    (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
   // Update action model
   Q_EMIT actionStatusChanged();

@@ -197,7 +197,9 @@ class TestFrameBuilderSourceFrames:
     def test_quickplot_frame_parsing(self, api_client, device_simulator, clean_state):
         """QuickPlot mode should parse CSV frames without phantom source entries."""
         api_client.set_operation_mode("quickplot")
+        time.sleep(0.5)  # Let queued rebuildDevices settle before configuring
         api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+        time.sleep(0.3)  # Let queued setBusType restoration settle
         api_client.connect_device()
         assert device_simulator.wait_for_connection(timeout=5.0)
 
@@ -227,7 +229,9 @@ class TestDashboardDataIntegrity:
     def test_dashboard_groups_valid_after_connect(self, api_client, device_simulator, clean_state):
         """After connecting and sending data, all dashboard groups should be valid."""
         api_client.set_operation_mode("quickplot")
+        time.sleep(0.5)  # Let queued rebuildDevices settle before configuring
         api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+        time.sleep(0.3)  # Let queued setBusType restoration settle
         api_client.connect_device()
         assert device_simulator.wait_for_connection(timeout=5.0)
 

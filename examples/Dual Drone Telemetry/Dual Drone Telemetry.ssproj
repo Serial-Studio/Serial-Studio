@@ -1,10 +1,8 @@
 {
-    "actions": [
-    ],
+    "actions": [],
     "groups": [
         {
-            "datasets": [
-            ],
+            "datasets": [],
             "imgDetectionMode": "manual",
             "imgEndSequence": "A1 FE ED 01",
             "imgStartSequence": "A1 CA FE 01",
@@ -367,8 +365,7 @@
             "widget": ""
         },
         {
-            "datasets": [
-            ],
+            "datasets": [],
             "imgDetectionMode": "manual",
             "imgEndSequence": "B2 FE ED 02",
             "imgStartSequence": "B2 CA FE 02",
@@ -382,7 +379,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -408,7 +404,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -434,7 +429,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -467,7 +461,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -500,7 +493,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -526,7 +518,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -552,7 +543,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -585,7 +575,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -611,7 +600,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -637,7 +625,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -670,7 +657,6 @@
                     "alarmEnabled": true,
                     "alarmHigh": 21,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -696,7 +682,6 @@
                     "alarmEnabled": false,
                     "alarmHigh": 0,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -722,7 +707,6 @@
                     "alarmEnabled": true,
                     "alarmHigh": 20,
                     "alarmLow": 0,
-                    "datasetSourceId": 1,
                     "fft": false,
                     "fftMax": 100,
                     "fftMin": 0,
@@ -750,8 +734,7 @@
             "widget": ""
         },
         {
-            "datasets": [
-            ],
+            "datasets": [],
             "groupType": 1,
             "outputWidgets": [
                 {
@@ -803,8 +786,7 @@
             "widget": ""
         },
         {
-            "datasets": [
-            ],
+            "datasets": [],
             "groupType": 1,
             "outputWidgets": [
                 {

@@ -550,7 +550,7 @@ API::CommandResponse API::Handlers::WindowHandler::setLayout(const QString& id,
     return noSession(id);
 
   const QJsonObject layout = params.value(QStringLiteral("layout")).toObject();
-  QMetaObject::invokeMethod(wm, [wm, layout]() { wm->restoreLayout(layout); });
+  QMetaObject::invokeMethod(wm, [wm, layout]() { (void)wm->restoreLayout(layout); });
 
   return CommandResponse::makeSuccess(id);
 }

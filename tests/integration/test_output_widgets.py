@@ -223,9 +223,9 @@ def test_output_widget_survives_round_trip(api_client, clean_state):
     time.sleep(0.3)
 
     # Get the project back and verify the output widget is still there
-    result = api_client.command("project.getJson")
-    if "json" in result:
-        project_json = result["json"]
+    result = api_client.command("project.exportJson")
+    if "config" in result:
+        project_json = result["config"]
         if isinstance(project_json, str):
             project_json = json.loads(project_json)
 

@@ -438,6 +438,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
 
   if (isSingleSourceSource0) {
     IO::ConnectionManager::instance().setUiDriverProperty(key, val);
+    DataModel::ProjectModel::instance().captureSourceSettings(0);
     return CommandResponse::makeSuccess(id);
   }
 

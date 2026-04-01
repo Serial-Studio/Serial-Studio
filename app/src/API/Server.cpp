@@ -850,7 +850,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
       return;
     }
 
-    IO::ConnectionManager::instance().writeData(buffer);
+    (void)IO::ConnectionManager::instance().writeData(buffer);
     buffer.clear();
   };
 
@@ -884,7 +884,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
         continue;
       }
 
-      IO::ConnectionManager::instance().writeData(line);
+      (void)IO::ConnectionManager::instance().writeData(line);
       continue;
     }
 

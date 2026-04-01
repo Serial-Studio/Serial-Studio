@@ -63,9 +63,9 @@ QSizeF PanelLayout::minSize(OWT type)
 
   // Widget element heights
   const qreal labelH  = std::ceil(fontH * 0.75) + 1 + 2;
-  const qreal btnH    = qMax(fontH + 12, 32.0);
+  const qreal btnH    = qMax(fontH + 8, 28.0);
   const qreal inputH  = qMax(monoH + 10, 28.0);
-  const qreal switchH = 28.0;
+  const qreal switchH = 24.0;
   const qreal sliderH = 24.0;
   const qreal progH   = 16.0;
   const qreal rangeH  = std::ceil(fontH * 0.7);
@@ -84,7 +84,7 @@ QSizeF PanelLayout::minSize(OWT type)
     case OWT::TextField:
       return {charW * 24 + 2 * m, 2 * m + labelH + s + qMax(inputH, btnH)};
     case OWT::Knob:
-      return {charW * 16 + 2 * m, 2 * m + labelH + s + charW * 10 + s + valueH};
+      return {charW * 18 + 2 * m, 2 * m + labelH + s + charW * 12 + s + valueH};
     case OWT::RampGenerator:
       return {charW * 24 + 2 * m, 2 * m + labelH + s + progH + s + qMax(rangeH, valueH) + s + btnH};
     default:

@@ -746,7 +746,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   // Ctrl+letter → control code
   if ((mods & Qt::ControlModifier) && key >= Qt::Key_A && key <= Qt::Key_Z) {
     seq.append(char(key - Qt::Key_A + 1));
-    IO::ConnectionManager::instance().writeData(seq);
+    (void)IO::ConnectionManager::instance().writeData(seq);
     event->accept();
     return;
   }
@@ -754,7 +754,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   // Ctrl+[ → ESC
   if ((mods & Qt::ControlModifier) && key == Qt::Key_BracketLeft) {
     seq.append('\x1b');
-    IO::ConnectionManager::instance().writeData(seq);
+    (void)IO::ConnectionManager::instance().writeData(seq);
     event->accept();
     return;
   }
@@ -863,7 +863,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
   }
 
   if (!seq.isEmpty()) {
-    IO::ConnectionManager::instance().writeData(seq);
+    (void)IO::ConnectionManager::instance().writeData(seq);
     event->accept();
     return;
   }

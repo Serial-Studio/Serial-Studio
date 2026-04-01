@@ -565,9 +565,9 @@ void Console::Handler::send(const QString& data)
 
   if (!bin.isEmpty()) {
     if (m_currentDeviceId >= 0)
-      IO::ConnectionManager::instance().writeDataToDevice(m_currentDeviceId, bin);
+      (void)IO::ConnectionManager::instance().writeDataToDevice(m_currentDeviceId, bin);
     else
-      IO::ConnectionManager::instance().writeData(bin);
+      (void)IO::ConnectionManager::instance().writeData(bin);
   }
 }
 

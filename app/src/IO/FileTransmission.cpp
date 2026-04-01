@@ -596,7 +596,7 @@ void IO::FileTransmission::sendLine()
         line.append("\n");
 
       auto data = line.toUtf8();
-      IO::ConnectionManager::instance().writeData(data);
+      (void)IO::ConnectionManager::instance().writeData(data);
       m_bytesSent = m_stream->pos();
       Q_EMIT progressChanged();
     }
@@ -630,7 +630,7 @@ void IO::FileTransmission::sendRawBlock()
 
   QByteArray block = m_file.read(m_blockSize);
   if (!block.isEmpty()) {
-    IO::ConnectionManager::instance().writeData(block);
+    (void)IO::ConnectionManager::instance().writeData(block);
     m_bytesSent += block.size();
     Q_EMIT progressChanged();
   }
@@ -691,7 +691,7 @@ void IO::FileTransmission::onProtocolStatus(const QString& message)
  */
 void IO::FileTransmission::onProtocolWriteRequested(const QByteArray& data)
 {
-  IO::ConnectionManager::instance().writeData(data);
+  (void)IO::ConnectionManager::instance().writeData(data);
 }
 
 /**

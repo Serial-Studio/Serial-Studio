@@ -290,7 +290,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   const auto& actions = m_frame.actions;
   for (const auto& action : actions)
     if (action.autoExecuteOnConnect)
-      IO::ConnectionManager::instance().writeData(get_tx_bytes(action));
+      (void)IO::ConnectionManager::instance().writeData(get_tx_bytes(action));
 
   // Pre-build per-source frames so the dashboard configures all widgets
   // immediately instead of waiting for each source to send its first data
