@@ -158,6 +158,10 @@ Main thread   → FrameReader → FrameBuilder → Frame
 | Live driver with empty device list | Call `refreshSerialDevices()` etc. in `open()` if empty |
 | BLE `selectDevice(index)` with placeholder compensation on `setDriverProperty` | `setDriverProperty` sets raw value directly, `selectDevice` subtracts 1 |
 | Querying live driver for `configurationOk()` | Check the UI driver — live driver may not be synced yet |
+| Setter without guard return | Always `if (m_foo == foo) return;` before assigning + emitting |
+| `Q_INVOKABLE void foo()` | Move to `public slots:` — `Q_INVOKABLE` is for non-void returns only |
+| `int m_foo = 0;` in header | Initialize in constructor member init list, not in-class |
+| `Q_SIGNALS:` / `public Q_SLOTS:` | Use `signals:` / `public slots:` (lowercase, no `Q_` prefix) |
 
 ## Code Style
 
@@ -222,10 +226,12 @@ private:                         ← member variables (separate block)
 ```
 
 Key rules:
-- `[[nodiscard]]` on every non-void return.
+- `[[nodiscard]]` on every non-void return, including `Q_INVOKABLE` getters.
+- **Never `Q_INVOKABLE void`** — use `public slots:` instead. `Q_INVOKABLE` is only for non-void returns.
 - Christmas-tree ordering (shortest→longest) within each block.
 - `noexcept` on trivial const getters that only read members.
 - Non-singleton: constructor in `public:`, deleted operators right after.
+- **No in-header member initialization** (e.g., `int m_foo = 0;`). Initialize in the constructor member init list.
 
 ### Source File (.cpp) Layout
 
@@ -240,13 +246,14 @@ Use 98-dash `//---` banners to separate concern groups. Reference: `BluetoothLE.
 ### Signals & Connections
 
 - Always `Q_EMIT`, never bare `emit`.
+- Always `signals:`, `public slots:`, `private slots:` — never `Q_SIGNALS:`, `public Q_SLOTS:`, etc.
 - Short `connect()` on one line; long form: one argument per line.
 - Never use `SIGNAL()`/`SLOT()` macros.
 
 ### Comments & Doxygen
 
 - Prefer self-documenting code. Comments explain intent ("why"/"what"), not mechanics.
-- **Function body comments**: one-line `//` section headers above each logical block, separated by blank lines. No multi-line `/* */` inside function bodies. No inline end-of-line comments. No comments inside brace blocks (e.g., `if (x) { // do thing }`).
+- **Function body comments**: one-line `//` section headers above each logical block, separated by blank lines. No multi-line `/* */` inside function bodies. No inline end-of-line comments. No comments inside brace blocks (e.g., `if (x) { // do thing }`). **Skip body comments** for trivial functions (getters, 1–3 line bodies) where the Doxygen is sufficient.
 - **Doxygen mandatory**: class `@brief` in `.h` above `class`; every function in `.cpp`.
 - Tags: `@brief` (always), `@param` (non-trivial), `@return` (non-void). No `@author`/`@date`.
 
@@ -280,7 +287,7 @@ void ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
 ### QML
 
 - **Christmas-tree property order** (shortest→longest). `id` first, blank line after.
-- **Typography**: always `font: Cpp_Misc_CommonFonts.uiFont` etc. Never individual `font.*` sub-properties.
+- **Typography**: always `font: Cpp_Misc_CommonFonts.uiFont` etc. Never individual `font.*` sub-properties **except** in dashboard widgets that compute dynamic pixel sizes (e.g., zoom-dependent `font.pixelSize` + `font.family`). Use `font:` helpers wherever the size is static.
 - **Reactive bindings**: expose as `Q_PROPERTY` + `NOTIFY`. No comma-expression hacks.
 - **Enum access**: `SerialStudio.BusType`, `ProjectModel.SomeEnum`, `ProjectEditor.SomeEnum`.
 
