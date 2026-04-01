@@ -167,7 +167,11 @@ Main thread   → FrameReader → FrameBuilder → Frame
 
 ### Formatting
 
-100-column limit, 2-space indent, Allman braces, pointer binds to name. Run `clang-format`.
+100-column limit, 2-space indent. Pointer/reference bind to type (`int* ptr`, `const Foo& ref`).
+Braces: function bodies on new line, control statements on same line (`AfterFunction: true`,
+`AfterControlStatement: Never`). `RemoveBracesLLVM` strips braces from single-statement bodies.
+`BinPackArguments`/`BinPackParameters` are `false` — one per line when they don't fit.
+Run `clang-format`.
 
 ### Naming
 
@@ -176,9 +180,11 @@ Main thread   → FrameReader → FrameBuilder → Frame
 | Classes | `CamelCase` | `FrameReader` |
 | Functions | `camelCase` | `hotpathRxFrame` |
 | Locals / params | `lower_case` | `frame_data` |
+| Static variables | `lower_case` | `s_devices` |
 | Private members | `m_camelCase` | `m_deviceIndex` |
 | Public/protected members | `lower_case` | `sourceId` |
-| Constants | `kCamelCase` | `kMaxBufferSize` |
+| Constants / constexpr | `kCamelCase` | `kMaxBufferSize` |
+| Enums / enum constants | `CamelCase` | `BusType`, `UART` |
 | Macros | `UPPER_CASE` | `BUILD_COMMERCIAL` |
 
 ### Control Flow
@@ -193,7 +199,7 @@ Main thread   → FrameReader → FrameBuilder → Frame
 if (!frame.isValid())
   return;
 
-for (const auto &g : frame.groups())
+for (const auto& g : frame.groups())
 {
   if (!g.isEnabled())
     continue;

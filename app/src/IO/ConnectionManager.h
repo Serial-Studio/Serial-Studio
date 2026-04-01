@@ -172,8 +172,6 @@ public:
   // Data transmission and payload injection
   [[nodiscard]] Q_INVOKABLE qint64 writeData(const QByteArray& data);
   [[nodiscard]] Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data);
-  void processMultiSourcePayload(const QByteArray& fullPayload,
-                                 const QMap<int, QByteArray>& sourcePayloads);
 
 public slots:
   // Connection lifecycle
@@ -199,23 +197,23 @@ public slots:
   void setUiDriverProperty(const QString& key, const QVariant& value);
   void processPayload(const QByteArray& payload);
 
+  // Data processing
+  void processMultiSourcePayload(const QByteArray& fullPayload,
+                                 const QMap<int, QByteArray>& sourcePayloads);
+
 private slots:
-  void rebuildDevices();                  ///< Recreates DeviceManagers from project sources
-  void syncUiDriverToLive();              ///< Copies UI driver properties → live driver (device 0)
-  void syncUiDriverFromSource0();         ///< Copies source[0] settings → UI driver (project load)
-  void onUiDriverConfigurationChanged();  ///< Saves UI driver state → source[0].connectionSettings
+  void rebuildDevices();
+  void syncUiDriverToLive();
+  void syncUiDriverFromSource0();
+  void wireDevice(DeviceManager* dm);
+  void onUiDriverConfigurationChanged();
   void onFrameReady(int deviceId, const QByteArray& frame);
   void onRawDataReceived(int deviceId, const IO::ByteArrayPtr& data);
 
 private:
-  // Builds FrameConfig from project settings or global delimiters
+  [[nodiscard]] bool projectConfigurationOk() const;
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
-
-  // Creates a fresh driver instance (never a singleton) for live connections
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
-
-  // Connects DeviceManager signals (frameReady, rawDataReceived) to routing slots
-  void wireDevice(DeviceManager* dm);
 
 private:
   // State flags

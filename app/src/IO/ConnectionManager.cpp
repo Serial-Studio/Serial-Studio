@@ -1159,6 +1159,25 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
 }
 
 /**
+ * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots.
+ * @param dm The DeviceManager to wire up.
+ */
+void IO::ConnectionManager::wireDevice(DeviceManager* dm)
+{
+  connect(dm,
+          &IO::DeviceManager::frameReady,
+          this,
+          &IO::ConnectionManager::onFrameReady,
+          Qt::QueuedConnection);
+
+  connect(dm,
+          &IO::DeviceManager::rawDataReceived,
+          this,
+          &IO::ConnectionManager::onRawDataReceived,
+          Qt::QueuedConnection);
+}
+
+/**
  * @brief Captures current UI-config driver settings back to source[0].
  *
  * Called whenever a UI-config driver emits configurationChanged() in single-source ProjectFile
@@ -1516,23 +1535,4 @@ std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
     default:
       return nullptr;
   }
-}
-
-/**
- * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots.
- * @param dm The DeviceManager to wire up.
- */
-void IO::ConnectionManager::wireDevice(DeviceManager* dm)
-{
-  connect(dm,
-          &IO::DeviceManager::frameReady,
-          this,
-          &IO::ConnectionManager::onFrameReady,
-          Qt::QueuedConnection);
-
-  connect(dm,
-          &IO::DeviceManager::rawDataReceived,
-          this,
-          &IO::ConnectionManager::onRawDataReceived,
-          Qt::QueuedConnection);
 }
