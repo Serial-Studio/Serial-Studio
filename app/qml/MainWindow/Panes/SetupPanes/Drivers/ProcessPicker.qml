@@ -319,7 +319,7 @@ Window {
                   color: processList.currentIndex === index
                          ? palette.highlightedText
                          : palette.text
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
 
                   // Show only the name part before " ["
                   text: {
@@ -336,7 +336,7 @@ Window {
                          ? palette.highlightedText
                          : palette.text
                   opacity: 0.7
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
 
                   // Show only the PID part inside "[ ]"
                   text: {

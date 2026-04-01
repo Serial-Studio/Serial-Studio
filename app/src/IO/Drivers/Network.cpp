@@ -342,6 +342,9 @@ void IO::Drivers::Network::setUdpSocket()
  */
 void IO::Drivers::Network::setTcpPort(const quint16 port)
 {
+  if (m_tcpPort == port)
+    return;
+
   m_tcpPort = port;
   m_settings.setValue("NetworkDriver/tcpPort", port);
   Q_EMIT portChanged();
@@ -352,6 +355,9 @@ void IO::Drivers::Network::setTcpPort(const quint16 port)
  */
 void IO::Drivers::Network::setUdpLocalPort(const quint16 port)
 {
+  if (m_udpLocalPort == port)
+    return;
+
   m_udpLocalPort = port;
   m_settings.setValue("NetworkDriver/udpLocalPort", port);
   Q_EMIT portChanged();
@@ -362,6 +368,9 @@ void IO::Drivers::Network::setUdpLocalPort(const quint16 port)
  */
 void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
 {
+  if (m_udpRemotePort == port)
+    return;
+
   m_udpRemotePort = port;
   m_settings.setValue("NetworkDriver/udpRemotePort", port);
   Q_EMIT portChanged();
@@ -403,6 +412,9 @@ void IO::Drivers::Network::lookup(const QString& host)
  */
 void IO::Drivers::Network::setUdpMulticast(const bool enabled)
 {
+  if (m_udpMulticast == enabled)
+    return;
+
   m_udpMulticast = enabled;
   m_settings.setValue("NetworkDriver/udpMulticastEnabled", enabled);
   Q_EMIT udpMulticastChanged();
@@ -435,6 +447,9 @@ void IO::Drivers::Network::setSocketTypeIndex(const int index)
  */
 void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
 {
+  if (m_socketType == type)
+    return;
+
   m_socketType = type;
   m_settings.setValue("NetworkDriver/socketType", static_cast<int>(type));
   Q_EMIT socketTypeChanged();

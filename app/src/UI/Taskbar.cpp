@@ -71,6 +71,7 @@ UI::TaskbarModel::TaskbarModel(QObject* parent) : QStandardItemModel(parent) {}
  */
 QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
 {
+  // Map custom roles to QML-visible property names
   QHash<int, QByteArray> names;
 
 #define BAL(x) QByteArrayLiteral(x)
@@ -101,29 +102,38 @@ QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
  */
 UI::Taskbar::Taskbar(QQuickItem* parent)
   : QQuickItem(parent)
+  , m_activeGroupId(-1)
+  , m_rebuildInProgress(false)
+  , m_batchUpdateInProgress(false)
   , m_activeWindow(nullptr)
   , m_windowManager(nullptr)
   , m_fullModel(new TaskbarModel(this))
   , m_taskbarButtons(new TaskbarModel(this))
 {
+  // Register TaskbarModel as a QML-accessible type
   qmlRegisterUncreatableType<UI::TaskbarModel>(
     "SerialStudio.UI", 1, 0, "TaskbarModel", "TaskbarModel is exposed by Taskbar singleton");
 
+  // Connect to widget registry lifecycle signals
   connectToRegistry();
 
+  // Rebuild model when dashboard layout changes
   connect(&UI::Dashboard::instance(), &UI::Dashboard::dataReset, this, &UI::Taskbar::rebuildModel);
   connect(&UI::Dashboard::instance(),
           &UI::Dashboard::widgetCountChanged,
           this,
           &UI::Taskbar::rebuildModel);
 
+  // Sync active group selection with the project model
   auto* pm = &DataModel::ProjectModel::instance();
   connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this, [this, pm] {
     setActiveGroupId(pm->activeGroupId());
   });
 
+  // Persist layout before application exits
   connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
 
+  // Perform initial model build and register with the session
   rebuildModel();
 
   UISessionRegistry::instance().registerTaskbar(this);
@@ -179,6 +189,7 @@ int UI::Taskbar::activeGroupId() const
  */
 int UI::Taskbar::activeGroupIndex() const
 {
+  // Search the group model for a matching group ID
   int index        = 0;
   const auto model = groupModel();
   for (auto it = model.begin(); it != model.end(); ++it) {
@@ -370,6 +381,7 @@ QQuickItem* UI::Taskbar::windowData(const int id) const
  */
 UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
 {
+  // Look up the window's ID and retrieve its state from the model
   if (window) {
     const int id = m_windowIDs.value(window, -1);
     if (id > -1) {
@@ -381,6 +393,7 @@ UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
     }
   }
 
+  // Default to closed if window is unregistered or not found
   return TaskbarModel::WindowClosed;
 }
 
@@ -389,20 +402,25 @@ UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
  */
 void UI::Taskbar::saveLayout()
 {
+  // Abort if no window manager, no windows, or invalid group
   if (!m_windowManager || m_windowIDs.isEmpty() || m_activeGroupId < -2)
     return;
 
+  // Only persist layout in project file mode
   const auto opMode = AppState::instance().operationMode();
   if (opMode != SerialStudio::ProjectFile)
     return;
 
+  // No project file loaded, nothing to save to
   auto* model = &DataModel::ProjectModel::instance();
   if (model->jsonFilePath().isEmpty())
     return;
 
+  // Wait until all windows are registered before saving
   if (m_taskbarButtons && m_windowIDs.count() < m_taskbarButtons->rowCount())
     return;
 
+  // Serialize and persist the current layout
   model->saveWidgetSetting(
     Keys::layoutKey(m_activeGroupId), QStringLiteral("data"), m_windowManager->serializeLayout());
 }
@@ -646,6 +664,7 @@ void UI::Taskbar::setActiveWindow(QQuickItem* window)
  */
 void UI::Taskbar::unregisterWindow(QQuickItem* window)
 {
+  // Remove the window's association and clean up connections
   if (m_windowIDs.contains(window)) {
     disconnect(window);
     m_windowIDs.remove(window);
@@ -665,9 +684,11 @@ void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
   if (!manager)
     return;
 
+  // Store the manager and establish bidirectional link
   m_windowManager = manager;
   m_windowManager->setTaskbar(this);
 
+  // Persist layout whenever a window geometry changes
   connect(m_windowManager, &UI::WindowManager::geometryChanged, this, [this](QQuickItem* item) {
     if (item != nullptr)
       saveLayout();
@@ -690,12 +711,14 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
   if (!window)
     return;
 
+  // Associate window with its internal ID
   m_windowIDs.insert(window, id);
   if (m_windowManager)
     m_windowManager->registerWindow(id, window);
 
   Q_EMIT registeredWindowsChanged();
 
+  // Forward window state changes to the taskbar
   connect(window, &QQuickItem::stateChanged, this, [=, this] { Q_EMIT statesChanged(); });
 
   // Restore saved layout once all windows are registered
@@ -722,13 +745,16 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
  */
 void UI::Taskbar::setWindowState(const int id, const UI::TaskbarModel::WindowState state)
 {
+  // Find the corresponding model item
   QStandardItem* item = findItemByWindowId(id);
   if (!item)
     return;
 
+  // Apply the new state and notify the UI
   item->setData(state, UI::TaskbarModel::WindowStateRole);
   Q_EMIT windowStatesChanged();
 
+  // Trigger a layout refresh when all windows are registered
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager)
     m_windowManager->triggerLayoutUpdate();
 }
@@ -986,6 +1012,7 @@ void UI::Taskbar::rebuildModel()
  */
 QStandardItem* UI::Taskbar::findItemByWindowId(int windowId, QStandardItem* parentItem) const
 {
+  // Traverse items at this level of the tree
   int count = parentItem ? parentItem->rowCount() : fullModel()->rowCount();
   for (int i = 0; i < count; ++i) {
     QStandardItem* item = parentItem ? parentItem->child(i) : fullModel()->item(i);
@@ -1019,6 +1046,7 @@ QStandardItem* UI::Taskbar::findItemByWindowId(int windowId, QStandardItem* pare
 QStandardItem* UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
                                                QStandardItem* parentItem) const
 {
+  // Resolve widget ID to window ID, then delegate to window ID search
   if (!m_widgetIdToWindowId.contains(widgetId))
     return nullptr;
 
@@ -1034,6 +1062,7 @@ QStandardItem* UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
  */
 QStandardItem* UI::Taskbar::findGroupItemByGroupId(int groupId) const
 {
+  // Scan top-level items for a matching group ID
   for (int i = 0; i < fullModel()->rowCount(); ++i) {
     QStandardItem* item = fullModel()->item(i);
     if (item && item->data(TaskbarModel::GroupIdRole).toInt() == groupId)
@@ -1051,6 +1080,7 @@ QStandardItem* UI::Taskbar::findGroupItemByGroupId(int groupId) const
  */
 QStandardItem* UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo& info)
 {
+  // Populate a new item with widget metadata and default state
   auto* item = new QStandardItem();
   auto icon  = SerialStudio::dashboardWidgetIcon(info.type, true);
 

@@ -93,7 +93,7 @@ public:
   [[nodiscard]] int messageCount() const;
   [[nodiscard]] QString dbcFileName() const;
 
-  Q_INVOKABLE QString messageInfo(int index) const;
+  [[nodiscard]] Q_INVOKABLE QString messageInfo(int index) const;
 
 public slots:
   void importDBC();

@@ -96,7 +96,7 @@ protected:
 
 private:
   friend class QuickPaintedItemCompatRenderer;
-  bool m_needsRepaint = true;
+  bool m_needsRepaint;
 };
 
 /**

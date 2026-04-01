@@ -100,7 +100,8 @@ public:
   [[nodiscard]] double maxG() const;
   [[nodiscard]] bool inputInG() const;
 
-  Q_INVOKABLE void resetPeakG();
+public slots:
+  void resetPeakG();
 
 private slots:
   void updateData();

@@ -213,7 +213,7 @@ public:
   [[nodiscard]] QStringList registerTypeList() const;
   [[nodiscard]] int registerGroupCount() const;
 
-  Q_INVOKABLE QString registerGroupInfo(const int index) const;
+  [[nodiscard]] Q_INVOKABLE QString registerGroupInfo(const int index) const;
 
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;

@@ -55,6 +55,7 @@
  */
 IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr)
 {
+  // Restore persisted settings
   const int saved = m_settings.value("ProcessDriver/mode", 0).toInt();
   m_mode          = (saved == static_cast<int>(Mode::NamedPipe)) ? Mode::NamedPipe : Mode::Launch;
 
@@ -63,6 +64,7 @@ IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr)
   m_workingDir = m_settings.value("ProcessDriver/workingDir", QString()).toString();
   m_pipePath   = m_settings.value("ProcessDriver/pipePath", QString()).toString();
 
+  // Connect pipe thread to read loop
   connect(&m_pipeThread, &QThread::started, this, &Process::pipeReadLoop, Qt::DirectConnection);
 }
 
@@ -200,9 +202,12 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
 {
   (void)mode;
 
+  // Close any previous connection
   doClose();
 
+  // Launch mode: spawn process
   if (m_mode == Mode::Launch) {
+    // Resolve executable path
     const QString resolved = resolveExecutable(m_executable);
     if (resolved.isEmpty()) {
       Misc::Utilities::showMessageBox(tr("Failed to start process"),
@@ -211,6 +216,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
       return false;
     }
 
+    // Configure process with arguments and environment
     const QStringList args = QProcess::splitCommand(m_arguments);
 
     m_process = new QProcess(this);
@@ -229,6 +235,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
       m_process->setProcessEnvironment(env);
     }
 
+    // Connect process signals
     connect(m_process, &QProcess::readyRead, this, &Process::onReadyRead);
     connect(m_process,
             QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
@@ -236,6 +243,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
             &Process::onProcessFinished);
     connect(m_process, &QProcess::errorOccurred, this, &Process::onProcessError);
 
+    // Set working directory and start the process
     if (!m_workingDir.isEmpty())
       m_process->setWorkingDirectory(m_workingDir);
 
@@ -253,6 +261,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
     return true;
   }
 
+  // NamedPipe mode: start read thread
   m_pipeRunning = true;
   m_pipeThread.start();
   return true;

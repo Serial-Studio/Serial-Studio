@@ -50,7 +50,7 @@ public:
   explicit NativeWindow(QObject* parent = nullptr);
 
   void installMacOSQuitInterceptor();
-  Q_INVOKABLE int titlebarHeight(QObject* window);
+  [[nodiscard]] Q_INVOKABLE int titlebarHeight(QObject* window);
 
 public slots:
   void removeWindow(QObject* window);

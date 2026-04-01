@@ -69,7 +69,7 @@ private:
   void displayOutput(const QString& input, const QStringList& output);
 
 private:
-  int m_sourceId = 0;
+  int m_sourceId;
   QLabel* m_inputTitle;
   QLabel* m_outputTitle;
   FrameParser* m_parser;

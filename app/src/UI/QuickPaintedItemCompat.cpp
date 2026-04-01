@@ -32,7 +32,8 @@
 /**
  * @brief Constructs the compatibility item with GPU-accelerated compositing.
  */
-QuickPaintedItemCompat::QuickPaintedItemCompat(QQuickItem* parent) : QCanvasPainterItem(parent)
+QuickPaintedItemCompat::QuickPaintedItemCompat(QQuickItem* parent)
+  : QCanvasPainterItem(parent), m_needsRepaint(true)
 {
   setFlag(ItemHasContents, true);
   setFillColor(Qt::transparent);

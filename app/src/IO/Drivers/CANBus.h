@@ -154,7 +154,7 @@ public:
   [[nodiscard]] QStringList bitrateList() const;
   [[nodiscard]] QString interfaceError() const;
 
-  Q_INVOKABLE QString pluginDisplayName(const QString& plugin) const;
+  [[nodiscard]] Q_INVOKABLE QString pluginDisplayName(const QString& plugin) const;
 
 public slots:
   void setDriverProperty(const QString& key, const QVariant& value) override;

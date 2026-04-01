@@ -354,7 +354,7 @@ Window {
                 Label {
                   Layout.preferredWidth: 30
                   text: (index + 1).toString()
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
                 }
 
                 Label {
@@ -370,7 +370,7 @@ Window {
 
                 Label {
                   Layout.preferredWidth: 60
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
                   text: {
                     const info = Cpp_IO_Modbus.registerGroupInfo(index)
                     const match = info.match(/@\s*(\d+)/)
@@ -380,7 +380,7 @@ Window {
 
                 Label {
                   Layout.preferredWidth: 60
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
                   text: {
                     const info = Cpp_IO_Modbus.registerGroupInfo(index)
                     const match = info.match(/count:\s*(\d+)/)

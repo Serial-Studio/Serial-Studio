@@ -94,12 +94,13 @@ const QStringList& Misc::IconEngine::iconPreviews() const noexcept
  */
 QString Misc::IconEngine::resolveActionIconSource(const QString& icon)
 {
+  // Strip the data URI prefix and pass raw base64 to the image provider
   if (isInlineSvg(icon)) {
-    // Strip the data URI prefix and pass raw base64 to the image provider
     const auto base64 = icon.mid(QStringLiteral("data:image/svg+xml;base64,").length());
     return QStringLiteral("image://actionicon/%1").arg(base64);
   }
 
+  // Fall back to bundled icon from resources
   return QStringLiteral("qrc:/rcc/actions/%1.svg").arg(icon);
 }
 
@@ -151,6 +152,7 @@ void Misc::IconEngine::searchIcons(const QString& query)
  */
 void Misc::IconEngine::downloadIcon(int index)
 {
+  // Validate index
   if (index < 0 || index >= m_iconNames.size())
     return;
 
@@ -158,7 +160,7 @@ void Misc::IconEngine::downloadIcon(int index)
   m_busy = true;
   Q_EMIT busyChanged();
 
-  // Build the SVG download URL from the icon name (e.g. "mdi:home")
+  // Split the icon name into prefix and name (e.g. "mdi:home")
   const auto& name = m_iconNames.at(index);
   const auto parts = name.split(QStringLiteral(":"));
   if (parts.size() != 2) {
@@ -168,7 +170,7 @@ void Misc::IconEngine::downloadIcon(int index)
     return;
   }
 
-  // Iconify SVG endpoint: https://api.iconify.design/{prefix}/{name}.svg
+  // Build the SVG download URL and send request
   const auto urlStr =
     QStringLiteral("https://api.iconify.design/%1/%2.svg").arg(parts[0], parts[1]);
 
@@ -190,9 +192,11 @@ void Misc::IconEngine::onSearchFinished(QNetworkReply* reply)
 {
   reply->deleteLater();
 
+  // Clear previous results
   m_iconNames.clear();
   m_iconPreviews.clear();
 
+  // Parse the JSON response and extract icon identifiers
   if (reply->error() == QNetworkReply::NoError) {
     const auto data  = reply->readAll();
     const auto doc   = QJsonDocument::fromJson(data);
@@ -206,19 +210,17 @@ void Misc::IconEngine::onSearchFinished(QNetworkReply* reply)
 
       m_iconNames.append(name);
 
-      // Preview URL: Iconify serves colored SVGs directly
       const auto parts = name.split(QStringLiteral(":"));
       if (parts.size() == 2) {
         m_iconPreviews.append(
           QStringLiteral("https://api.iconify.design/%1/%2.svg").arg(parts[0], parts[1]));
-      }
-
-      else {
+      } else {
         m_iconPreviews.append(QString());
       }
     }
   }
 
+  // Update busy state and notify listeners
   m_busy = false;
   Q_EMIT busyChanged();
   Q_EMIT searchResultsChanged();
@@ -233,21 +235,24 @@ void Misc::IconEngine::onDownloadFinished(QNetworkReply* reply)
 {
   reply->deleteLater();
 
+  // Clear busy state
   m_busy = false;
   Q_EMIT busyChanged();
 
+  // Abort on network error
   if (reply->error() != QNetworkReply::NoError) {
     Q_EMIT iconDownloadFailed(reply->errorString());
     return;
   }
 
-  // Read the SVG data and encode as base64 data URI
+  // Read the SVG payload
   const auto svgData = reply->readAll();
   if (svgData.isEmpty()) {
     Q_EMIT iconDownloadFailed(tr("Empty SVG data received"));
     return;
   }
 
+  // Encode as base64 data URI and emit result
   const auto base64 = svgData.toBase64();
   const auto dataUri =
     QStringLiteral("data:image/svg+xml;base64,%1").arg(QString::fromLatin1(base64));
@@ -282,7 +287,7 @@ QImage Misc::ActionIconProvider::requestImage(const QString& id,
     return {};
   }
 
-  // Render SVG to QImage
+  // Initialize the SVG renderer
   QSvgRenderer renderer(svgData);
   if (!renderer.isValid()) {
     if (size)
@@ -295,6 +300,7 @@ QImage Misc::ActionIconProvider::requestImage(const QString& id,
   const int w = requestedSize.width() > 0 ? requestedSize.width() : 64;
   const int h = requestedSize.height() > 0 ? requestedSize.height() : 64;
 
+  // Paint the SVG onto a transparent image
   QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
   image.fill(Qt::transparent);
 
@@ -302,6 +308,7 @@ QImage Misc::ActionIconProvider::requestImage(const QString& id,
   renderer.render(&painter);
   painter.end();
 
+  // Report the actual size back to the caller
   if (size)
     *size = image.size();
 

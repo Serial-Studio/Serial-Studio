@@ -41,7 +41,7 @@ class Panel : public QQuickItem {
              NOTIFY geometryChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void geometryChanged();
 
 public:
@@ -52,7 +52,8 @@ public:
   [[nodiscard]] QVariantList models() const;
   [[nodiscard]] QVariantList geometry() const;
 
-  Q_INVOKABLE void updateLayout(qreal width, qreal height);
+public slots:
+  void updateLayout(qreal width, qreal height);
 
 private:
   QVariantList m_widgets;

@@ -83,7 +83,7 @@ Item {
       Layout.fillWidth: true
       text: Cpp_IO_HID.usagePage
       visible: Cpp_IO_Manager.isConnected
-      font.family: Cpp_Misc_CommonFonts.monoFont.family
+      font: Cpp_Misc_CommonFonts.monoFont
     }
 
     //
@@ -99,7 +99,7 @@ Item {
       Layout.fillWidth: true
       text: Cpp_IO_HID.usage
       visible: Cpp_IO_Manager.isConnected
-      font.family: Cpp_Misc_CommonFonts.monoFont.family
+      font: Cpp_Misc_CommonFonts.monoFont
     }
 
     //

@@ -28,7 +28,8 @@ class Button : public Base {
 public:
   explicit Button(const DataModel::OutputWidget& config, QQuickItem* parent = nullptr);
 
-  Q_INVOKABLE void click();
+public slots:
+  void click();
 };
 
 }  // namespace Output

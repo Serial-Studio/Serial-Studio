@@ -592,6 +592,9 @@ QStringList IO::Drivers::Modbus::registerTypeList() const
  */
 void IO::Drivers::Modbus::setHost(const QString& host)
 {
+  if (m_host == host)
+    return;
+
   m_host = host;
   m_settings.setValue("ModbusDriver/host", host);
   Q_EMIT hostChanged();
@@ -602,6 +605,9 @@ void IO::Drivers::Modbus::setHost(const QString& host)
  */
 void IO::Drivers::Modbus::setPort(const quint16 port)
 {
+  if (m_port == port)
+    return;
+
   m_port = port;
   m_settings.setValue("ModbusDriver/port", port);
   Q_EMIT portChanged();
@@ -624,6 +630,9 @@ void IO::Drivers::Modbus::setProtocolIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setSlaveAddress(const quint8 address)
 {
+  if (m_slaveAddress == address)
+    return;
+
   m_slaveAddress = address;
   m_settings.setValue("ModbusDriver/slaveAddress", address);
   Q_EMIT slaveAddressChanged();
@@ -634,6 +643,9 @@ void IO::Drivers::Modbus::setSlaveAddress(const quint8 address)
  */
 void IO::Drivers::Modbus::setPollInterval(const quint16 interval)
 {
+  if (m_pollInterval == interval)
+    return;
+
   m_pollInterval = interval;
   m_settings.setValue("ModbusDriver/pollInterval", interval);
 

@@ -31,7 +31,7 @@ class Toggle : public Base {
              NOTIFY checkedChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void checkedChanged();
 
 public:
@@ -39,7 +39,7 @@ public:
 
   [[nodiscard]] bool isChecked() const noexcept;
 
-public Q_SLOTS:
+public slots:
   void setChecked(bool checked);
 
 private:

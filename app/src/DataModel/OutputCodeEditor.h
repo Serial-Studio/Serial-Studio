@@ -41,7 +41,7 @@ class OutputCodeEditor : public QQuickPaintedItem {
              NOTIFY textChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void textChanged();
   void modifiedChanged();
 
@@ -53,7 +53,7 @@ public:
   [[nodiscard]] bool redoAvailable() const noexcept;
   [[nodiscard]] QString text() const;
 
-public Q_SLOTS:
+public slots:
   void cut();
   void undo();
   void redo();
@@ -65,7 +65,7 @@ public Q_SLOTS:
   void selectTemplate();
   void reload(bool guiTrigger = false);
 
-private Q_SLOTS:
+private slots:
   void onThemeChanged();
   void renderWidget();
   void resizeWidget();

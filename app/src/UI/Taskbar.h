@@ -161,8 +161,8 @@ public:
 
   [[nodiscard]] bool hasMaximizedWindow() const;
 
-  Q_INVOKABLE QQuickItem* windowData(const int id) const;
-  Q_INVOKABLE TaskbarModel::WindowState windowState(QQuickItem* window) const;
+  [[nodiscard]] Q_INVOKABLE QQuickItem* windowData(const int id) const;
+  [[nodiscard]] Q_INVOKABLE TaskbarModel::WindowState windowState(QQuickItem* window) const;
 
 public slots:
   void saveLayout();
@@ -193,9 +193,9 @@ private:
   QStandardItem* findGroupItemByGroupId(int groupId) const;
   QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
 
-  int m_activeGroupId          = -1;
-  bool m_rebuildInProgress     = false;
-  bool m_batchUpdateInProgress = false;
+  int m_activeGroupId;
+  bool m_rebuildInProgress;
+  bool m_batchUpdateInProgress;
 
   QQuickItem* m_activeWindow;
   UI::WindowManager* m_windowManager;

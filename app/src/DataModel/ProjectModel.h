@@ -213,10 +213,10 @@ public slots:
   void setSelectedDataset(const DataModel::Dataset& dataset);
   void setSelectedOutputWidget(const DataModel::OutputWidget& widget);
 
-  Q_INVOKABLE void addOutputControl(const SerialStudio::OutputWidgetType type);
-  Q_INVOKABLE void addOutputPanel();
-  Q_INVOKABLE void setOutputWidgetType(int type);
-  Q_INVOKABLE void setOutputWidgetIcon(const QString& icon);
+  void addOutputControl(const SerialStudio::OutputWidgetType type);
+  void addOutputPanel();
+  void setOutputWidgetType(int type);
+  void setOutputWidgetIcon(const QString& icon);
   void deleteCurrentOutputWidget();
   void duplicateCurrentOutputWidget();
   void updateOutputWidget(int groupId,

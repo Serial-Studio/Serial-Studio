@@ -219,8 +219,8 @@ public:
   [[nodiscard]] bool multiDeviceMode() const noexcept;
   [[nodiscard]] const QStringList& deviceNames() const noexcept;
 
-  Q_INVOKABLE bool validateUserHex(const QString& text);
-  Q_INVOKABLE QString formatUserHex(const QString& text);
+  [[nodiscard]] Q_INVOKABLE bool validateUserHex(const QString& text);
+  [[nodiscard]] Q_INVOKABLE QString formatUserHex(const QString& text);
 
 public slots:
   void clear();
@@ -242,7 +242,7 @@ public slots:
   void append(const QString& str, const bool addTimestamp = false);
 
   void setCurrentDeviceId(int deviceId);
-  Q_INVOKABLE void setCurrentDeviceIndex(int index);
+  void setCurrentDeviceIndex(int index);
 
   void displaySentData(QByteArrayView data);
   void displaySentData(int deviceId, QByteArrayView data);

@@ -129,11 +129,11 @@ public:
   [[nodiscard]] int actionCount() const;
   [[nodiscard]] int totalWidgetCount() const noexcept;
 
-  Q_INVOKABLE bool frameValid() const;
-  Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
-  Q_INVOKABLE QString formatValue(double val, double min, double max) const;
-  Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex) const;
-  Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
+  [[nodiscard]] Q_INVOKABLE bool frameValid() const;
+  [[nodiscard]] Q_INVOKABLE int relativeIndex(const int widgetIndex) const;
+  [[nodiscard]] Q_INVOKABLE QString formatValue(double val, double min, double max) const;
+  [[nodiscard]] Q_INVOKABLE SerialStudio::DashboardWidget widgetType(const int widgetIndex) const;
+  [[nodiscard]] Q_INVOKABLE int widgetCount(const SerialStudio::DashboardWidget widget) const;
 
   [[nodiscard]] const QString& title() const;
   [[nodiscard]] QVariantList actions() const;

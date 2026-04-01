@@ -31,7 +31,7 @@ class Slider : public Base {
              NOTIFY currentValueChanged)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void currentValueChanged();
 
 public:
@@ -39,7 +39,7 @@ public:
 
   [[nodiscard]] double currentValue() const noexcept;
 
-public Q_SLOTS:
+public slots:
   void setCurrentValue(double value);
 
 private:

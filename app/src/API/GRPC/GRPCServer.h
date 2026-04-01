@@ -112,7 +112,7 @@ public slots:
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
   void hotpathTxData(const IO::ByteArrayPtr& data);
 
-  Q_INVOKABLE void exportProto(const QString& filePath);
+  void exportProto(const QString& filePath);
 
 private slots:
   void onExternalConnectionsChanged();

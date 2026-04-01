@@ -61,7 +61,7 @@ class Base : public QQuickItem {
              CONSTANT)
   // clang-format on
 
-Q_SIGNALS:
+signals:
   void transmitError(const QString& error);
 
 public:
@@ -78,7 +78,8 @@ public:
   [[nodiscard]] const QString& offLabel() const noexcept;
   [[nodiscard]] bool hasTransmitFunction() const noexcept;
 
-  Q_INVOKABLE void sendValue(const QVariant& value);
+public slots:
+  void sendValue(const QVariant& value);
 
 protected:
   [[nodiscard]] QByteArray evaluateTransmitFunction(const QVariant& value);

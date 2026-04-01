@@ -108,9 +108,9 @@ public:
   [[nodiscard]] bool snapIndicatorVisible() const;
   [[nodiscard]] const QRect& snapIndicator() const;
 
-  Q_INVOKABLE int zOrder(QQuickItem* item) const;
-  Q_INVOKABLE QJsonObject serializeLayout() const;
-  Q_INVOKABLE bool restoreLayout(const QJsonObject& layout);
+  [[nodiscard]] Q_INVOKABLE int zOrder(QQuickItem* item) const;
+  [[nodiscard]] Q_INVOKABLE QJsonObject serializeLayout() const;
+  [[nodiscard]] Q_INVOKABLE bool restoreLayout(const QJsonObject& layout);
 
   enum class ResizeEdge {
     None,

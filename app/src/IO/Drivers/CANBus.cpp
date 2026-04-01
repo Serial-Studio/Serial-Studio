@@ -461,6 +461,9 @@ QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
  */
 void IO::Drivers::CANBus::setCanFD(const bool enabled)
 {
+  if (m_canFD == enabled)
+    return;
+
   m_canFD = enabled;
   m_settings.setValue("CanBusDriver/canFD", enabled);
   Q_EMIT canFDChanged();
@@ -471,6 +474,9 @@ void IO::Drivers::CANBus::setCanFD(const bool enabled)
  */
 void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
 {
+  if (m_bitrate == bitrate)
+    return;
+
   m_bitrate = bitrate;
   m_settings.setValue("CanBusDriver/bitrate", bitrate);
   Q_EMIT bitrateChanged();

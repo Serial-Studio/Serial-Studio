@@ -170,9 +170,8 @@ public:
 #endif
 
   // Data transmission and payload injection
-  Q_INVOKABLE qint64 writeData(const QByteArray& data);
-  Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data);
-  Q_INVOKABLE void processPayload(const QByteArray& payload);
+  [[nodiscard]] Q_INVOKABLE qint64 writeData(const QByteArray& data);
+  [[nodiscard]] Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data);
   void processMultiSourcePayload(const QByteArray& fullPayload,
                                  const QMap<int, QByteArray>& sourcePayloads);
 
@@ -198,6 +197,7 @@ public slots:
   void setChecksumAlgorithm(const QString& algorithm);
   void setBusType(SerialStudio::BusType type);
   void setUiDriverProperty(const QString& key, const QVariant& value);
+  void processPayload(const QByteArray& payload);
 
 private slots:
   void rebuildDevices();                  ///< Recreates DeviceManagers from project sources

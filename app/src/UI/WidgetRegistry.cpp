@@ -72,9 +72,11 @@ void UI::WidgetRegistry::beginBatchUpdate()
  */
 void UI::WidgetRegistry::endBatchUpdate()
 {
+  // Decrement nesting depth
   if (m_batchDepth > 0)
     --m_batchDepth;
 
+  // Emit completion signal when outermost batch finishes with changes
   if (m_batchDepth == 0 && m_batchHadChanges) {
     m_batchHadChanges = false;
     Q_EMIT batchUpdateCompleted();
@@ -112,6 +114,7 @@ UI::WidgetID UI::WidgetRegistry::createWidget(SerialStudio::DashboardWidget type
                                               int datasetIndex,
                                               bool isGroupWidget)
 {
+  // Populate widget metadata with a unique ID
   WidgetInfo info;
   info.id            = m_nextId++;
   info.type          = type;
@@ -120,12 +123,15 @@ UI::WidgetID UI::WidgetRegistry::createWidget(SerialStudio::DashboardWidget type
   info.datasetIndex  = datasetIndex;
   info.isGroupWidget = isGroupWidget;
 
+  // Register the widget in the ordered list and lookup map
   m_widgetOrder.append(info.id);
   m_widgets.insert(info.id, info);
 
+  // Mark batch as dirty if inside a batch operation
   if (m_batchDepth > 0)
     m_batchHadChanges = true;
 
+  // Notify subscribers about the new widget
   Q_EMIT widgetCreated(info.id, info);
 
   return info.id;
@@ -167,6 +173,7 @@ QVector<UI::WidgetID> UI::WidgetRegistry::allWidgetIds() const
  */
 QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByType(SerialStudio::DashboardWidget type) const
 {
+  // Collect IDs matching the requested type in creation order
   QVector<WidgetID> result;
   for (const auto& id : m_widgetOrder)
     if (m_widgets.value(id).type == type)
@@ -182,6 +189,7 @@ QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByType(SerialStudio::Dashboar
  */
 QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByGroup(int groupId) const
 {
+  // Collect IDs belonging to the specified group in creation order
   QVector<WidgetID> result;
   for (const auto& id : m_widgetOrder)
     if (m_widgets.value(id).groupId == groupId)
@@ -199,6 +207,7 @@ QVector<UI::WidgetID> UI::WidgetRegistry::widgetIdsByGroup(int groupId) const
 UI::WidgetID UI::WidgetRegistry::widgetIdByTypeAndIndex(SerialStudio::DashboardWidget type,
                                                         int relativeIndex) const
 {
+  // Look up all widgets of this type and return the one at relativeIndex
   auto ids = widgetIdsByType(type);
   if (relativeIndex >= 0 && relativeIndex < ids.size())
     return ids[relativeIndex];
@@ -222,6 +231,7 @@ int UI::WidgetRegistry::widgetCount() const
  */
 void UI::WidgetRegistry::clear()
 {
+  // Destroy all widgets in reverse creation order
   auto idsToDestroy = m_widgetOrder;
   std::reverse(idsToDestroy.begin(), idsToDestroy.end());
 
@@ -230,6 +240,7 @@ void UI::WidgetRegistry::clear()
     m_widgets.remove(id);
   }
 
+  // Reset the ordered list and notify subscribers
   m_widgetOrder.clear();
 
   Q_EMIT registryCleared();
@@ -246,14 +257,18 @@ void UI::WidgetRegistry::clear()
  */
 void UI::WidgetRegistry::destroyWidget(UI::WidgetID id)
 {
+  // Widget not found, nothing to do
   if (!m_widgets.contains(id))
     return;
 
+  // Notify subscribers before removal
   Q_EMIT widgetDestroyed(id);
 
+  // Remove from both the lookup map and ordered list
   m_widgets.remove(id);
   m_widgetOrder.removeOne(id);
 
+  // Mark batch as dirty if inside a batch operation
   if (m_batchDepth > 0)
     m_batchHadChanges = true;
 }
@@ -270,11 +285,13 @@ void UI::WidgetRegistry::updateWidget(UI::WidgetID id,
                                       const QString& icon,
                                       const QVariant& userData)
 {
+  // Widget not found, nothing to do
   if (!m_widgets.contains(id))
     return;
 
   WidgetInfo& info = m_widgets[id];
 
+  // Apply non-empty fields and track whether anything changed
   bool changed = false;
 
   if (!title.isEmpty() && info.title != title) {
@@ -292,6 +309,7 @@ void UI::WidgetRegistry::updateWidget(UI::WidgetID id,
     changed       = true;
   }
 
+  // Notify subscribers only when metadata actually changed
   if (changed)
     Q_EMIT widgetUpdated(id, info);
 

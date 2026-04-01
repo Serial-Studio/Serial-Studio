@@ -42,7 +42,7 @@
  * @param parent Parent widget
  */
 DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWidget* parent)
-  : QDialog(parent), m_parser(parser)
+  : QDialog(parent), m_sourceId(0), m_parser(parser)
 {
   // Set window geometry and title
   resize(640, 480);

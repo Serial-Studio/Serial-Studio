@@ -28,7 +28,8 @@ class TextField : public Base {
 public:
   explicit TextField(const DataModel::OutputWidget& config, QQuickItem* parent = nullptr);
 
-  Q_INVOKABLE void sendText(const QString& text);
+public slots:
+  void sendText(const QString& text);
 };
 
 }  // namespace Output

@@ -69,8 +69,8 @@ public:
   [[nodiscard]] const QStringList& iconNames() const noexcept;
   [[nodiscard]] const QStringList& iconPreviews() const noexcept;
 
-  Q_INVOKABLE static QString resolveActionIconSource(const QString& icon);
-  Q_INVOKABLE static bool isInlineSvg(const QString& icon);
+  [[nodiscard]] Q_INVOKABLE static QString resolveActionIconSource(const QString& icon);
+  [[nodiscard]] Q_INVOKABLE static bool isInlineSvg(const QString& icon);
 
 public slots:
   void searchIcons(const QString& query);

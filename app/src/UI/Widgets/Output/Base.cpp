@@ -142,14 +142,17 @@ bool Widgets::Output::Base::hasTransmitFunction() const noexcept
  */
 void Widgets::Output::Base::sendValue(const QVariant& value)
 {
+  // Enforce rate limit
   if (m_rateLimiter.elapsed() < kMinSendIntervalMs)
     return;
 
+  // Validate license tier
   m_rateLimiter.restart();
   const auto& tk = Licensing::CommercialToken::current();
   if (!tk.isValid() || !SS_LICENSE_GUARD() || tk.featureTier() < Licensing::FeatureTier::Pro)
     return;
 
+  // Evaluate JS function and transmit result
   const auto data = evaluateTransmitFunction(value);
   if (!data.isEmpty())
     IO::ConnectionManager::instance().writeDataToDevice(m_sourceId, data);
@@ -164,17 +167,21 @@ void Widgets::Output::Base::sendValue(const QVariant& value)
  */
 QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value)
 {
+  // No transmit function compiled
   if (!m_hasFn)
     return {};
 
+  // Invoke the JS function with the widget value
   auto jsValue = m_jsEngine.toScriptValue(value);
   auto result  = m_transmitFn.call(QJSValueList{jsValue});
 
+  // Handle JS execution errors
   if (result.isError()) {
     Q_EMIT transmitError(result.toString());
     return {};
   }
 
+  // Convert result to byte array
   if (result.isString())
     return result.toString().toUtf8();
 

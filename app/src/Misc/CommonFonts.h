@@ -122,9 +122,9 @@ public:
   [[nodiscard]] int widgetFontRevision() const;
   [[nodiscard]] int widgetFontIndex() const;
 
-  Q_INVOKABLE QFont customUiFont(double fraction = 1, bool bold = false);
-  Q_INVOKABLE QFont customMonoFont(double fraction = 1, bool bold = false);
-  Q_INVOKABLE QFont widgetFont(double fraction = 1, bool bold = false) const;
+  [[nodiscard]] Q_INVOKABLE QFont customUiFont(double fraction = 1, bool bold = false);
+  [[nodiscard]] Q_INVOKABLE QFont customMonoFont(double fraction = 1, bool bold = false);
+  [[nodiscard]] Q_INVOKABLE QFont widgetFont(double fraction = 1, bool bold = false) const;
 
   void setWidgetFontScale(double scale);
   void setWidgetFontFamily(const QString& family);
@@ -136,7 +136,7 @@ private:
   QFont m_boldUiFont;
   QString m_widgetFontFamily;
   double m_widgetFontScale;
-  int m_widgetFontIndex    = 0;
-  int m_widgetFontRevision = 0;
+  int m_widgetFontIndex;
+  int m_widgetFontRevision;
 };
 }  // namespace Misc

@@ -272,7 +272,7 @@ Window {
                   color: palette.text
                   Layout.preferredWidth: 40
                   text: (index + 1).toString()
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
                 }
 
                 Label {
@@ -290,7 +290,7 @@ Window {
                 Label {
                   color: palette.text
                   Layout.preferredWidth: 80
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
                   text: {
                     const info = Cpp_JSON_DBCImporter.messageInfo(index)
                     const match = info.match(/@\s*(0x[0-9A-F]+)/)
@@ -301,7 +301,7 @@ Window {
                 Label {
                   color: palette.text
                   Layout.preferredWidth: 60
-                  font.family: Cpp_Misc_CommonFonts.monoFont.family
+                  font: Cpp_Misc_CommonFonts.monoFont
                   text: {
                     const info = Cpp_JSON_DBCImporter.messageInfo(index)
                     const match = info.match(/\((\d+)\s+signals?\)/)

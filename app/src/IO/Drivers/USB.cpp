@@ -80,17 +80,21 @@ IO::Drivers::USB::USB()
   , m_activeInEp(0)
   , m_activeOutEp(0)
 {
+  // Initialize libusb context
   if (libusb_init(&m_ctx) < 0)
     m_ctx = nullptr;
 
+  // Restore persisted settings
   m_deviceIndex      = m_settings.value("USB/deviceIndex", 0).toInt();
   m_inEndpointIndex  = m_settings.value("USB/inEndpointIndex", 0).toInt();
   m_outEndpointIndex = m_settings.value("USB/outEndpointIndex", 0).toInt();
   m_isoPacketSize    = m_settings.value("USB/isoPacketSize", kDefaultIsoPacketSize).toInt();
   m_transferMode     = static_cast<TransferMode>(m_settings.value("USB/transferMode", 0).toInt());
 
+  // Run initial device enumeration
   enumerateDevices();
 
+  // Register hotplug callback or fall back to polling timer
   if (m_ctx && libusb_has_capability(LIBUSB_CAP_HAS_HOTPLUG)) {
     libusb_hotplug_register_callback(
       m_ctx,
@@ -110,6 +114,7 @@ IO::Drivers::USB::USB()
     timer->start();
   }
 
+  // Start the event thread for hotplug and transfer completion
   m_eventLoopRunning = true;
   connect(&m_eventThread, &QThread::started, this, &USB::eventLoop, Qt::DirectConnection);
   m_eventThread.start();
@@ -196,6 +201,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
 {
   Q_UNUSED(mode)
 
+  // Validate USB subsystem initialized
   if (!m_ctx) {
     Misc::Utilities::showMessageBox(tr("USB Error"),
                                     tr("Failed to initialize the USB subsystem. "
@@ -204,6 +210,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  // Validate device selection
   if (m_deviceIndex <= 0 || (m_deviceIndex - 1) >= m_devicePtrs.size()) {
     Misc::Utilities::showMessageBox(
       tr("USB Error"),
@@ -212,6 +219,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  // Open device handle
   libusb_device* dev     = m_devicePtrs.at(m_deviceIndex - 1);
   const auto deviceLabel = m_deviceLabels.value(m_deviceIndex - 1, tr("Unknown Device"));
   const int openRc       = libusb_open(dev, &m_handle);
@@ -232,11 +240,13 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   libusb_set_auto_detach_kernel_driver(m_handle, 1);
 #endif
 
+  // Scan endpoints and populate comboboxes
   buildEndpointLists();
   Q_EMIT endpointListChanged();
   Q_EMIT inEndpointIndexChanged();
   Q_EMIT outEndpointIndexChanged();
 
+  // Validate IN endpoint is available
   if (m_inEndpointIndex <= 0 || (m_inEndpointIndex - 1) >= m_inEndpoints.size()) {
     libusb_close(m_handle);
     m_handle = nullptr;
@@ -245,6 +255,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  // Get active endpoint addresses
   const EndpointInfo& inEp = m_inEndpoints.at(m_inEndpointIndex - 1);
   m_activeInEp             = inEp.address;
 
@@ -253,6 +264,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   else
     m_activeOutEp = 0;
 
+  // Claim USB interface
   if (!claimInterface(inEp.interfaceNumber)) {
     libusb_close(m_handle);
     m_handle = nullptr;
@@ -266,6 +278,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  // Start read loop based on transfer mode
   m_running = true;
 
   if (m_transferMode == TransferMode::Isochronous) {
@@ -295,31 +308,38 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
  */
 void IO::Drivers::USB::close()
 {
+  // Stop read loop
   m_running = false;
 
+  // Cancel pending isochronous transfers
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_cancel_transfer(t);
 
+  // Wait for read thread to finish
   if (m_readThread.isRunning()) {
     if (!m_readThread.wait(2000))
       m_readThread.terminate();
     m_readThread.wait();
   }
 
+  // Free isochronous transfer pool
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_free_transfer(t);
 
   m_isoTransfers.clear();
 
+  // Disconnect thread signals
   disconnect(&m_readThread, &QThread::started, this, &USB::readLoop);
   disconnect(&m_readThread, &QThread::started, this, &USB::isoReadLoop);
 
+  // Release interface and close device
   if (m_handle) {
     releaseInterface();
     libusb_close(m_handle);
     m_handle = nullptr;
   }
 
+  // Clear endpoint addresses
   m_activeInEp  = 0;
   m_activeOutEp = 0;
 

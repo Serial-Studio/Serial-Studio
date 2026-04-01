@@ -32,7 +32,7 @@
  * @brief Constructs the CommonFonts object, registering common fonts and
  *        initializing member variables.
  */
-Misc::CommonFonts::CommonFonts()
+Misc::CommonFonts::CommonFonts() : m_widgetFontIndex(0), m_widgetFontRevision(0)
 {
   // Set fallback mono font to system font
   QString monoFont;

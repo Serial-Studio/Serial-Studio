@@ -560,6 +560,9 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
  */
 void IO::Drivers::UART::setDtrEnabled(const bool enabled)
 {
+  if (m_dtrEnabled == enabled)
+    return;
+
   m_dtrEnabled = enabled;
   m_settings.setValue("UartDriver/dtr", enabled);
 
@@ -733,6 +736,9 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
  */
 void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
 {
+  if (m_autoReconnect == autoreconnect)
+    return;
+
   m_autoReconnect = autoreconnect;
   m_settings.setValue("UartDriver/autoReconnect", autoreconnect);
   Q_EMIT autoReconnectChanged();

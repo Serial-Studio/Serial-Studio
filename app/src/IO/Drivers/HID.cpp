@@ -51,15 +51,19 @@ constexpr int kEnumIntervalMs = 2000;
 IO::Drivers::HID::HID()
   : m_handle(nullptr), m_deviceInfoList(nullptr), m_running(false), m_deviceIndex(0)
 {
+  // Initialize hidapi and restore device selection
   hid_init();
   m_deviceIndex = m_settings.value("HID/deviceIndex", 0).toInt();
 
+  // Run initial device enumeration
   enumerateDevices();
 
+  // Setup periodic enumeration timer for hotplug detection
   m_enumTimer.setInterval(kEnumIntervalMs);
   connect(&m_enumTimer, &QTimer::timeout, this, &HID::enumerateDevices);
   m_enumTimer.start();
 
+  // Start read loop when thread starts
   connect(&m_readThread, &QThread::started, this, &HID::readLoop, Qt::DirectConnection);
 }
 
@@ -72,6 +76,7 @@ IO::Drivers::HID::HID()
  */
 void IO::Drivers::HID::cleanupDevice()
 {
+  // Stop the read thread
   m_running = false;
 
   if (m_readThread.isRunning()) {
@@ -79,11 +84,13 @@ void IO::Drivers::HID::cleanupDevice()
     m_readThread.wait();
   }
 
+  // Close device handle
   if (m_handle) {
     hid_close(m_handle);
     m_handle = nullptr;
   }
 
+  // Clear usage info
   m_usagePage.clear();
   m_usage.clear();
 }
@@ -335,9 +342,11 @@ void IO::Drivers::HID::onReadError()
  */
 void IO::Drivers::HID::enumerateDevices()
 {
+  // Free previous enumeration and get fresh device list
   hid_free_enumeration(m_deviceInfoList);
   m_deviceInfoList = hid_enumerate(0x0000, 0x0000);
 
+  // Build unique device entries by VID:PID:serial key
   struct Entry {
     QString label;
     QString path;
@@ -391,10 +400,12 @@ void IO::Drivers::HID::enumerateDevices()
     entries.append({label, QString::fromUtf8(dev->path), dev->usage_page, dev->usage});
   }
 
+  // Sort entries alphabetically by label
   std::sort(entries.begin(), entries.end(), [](const Entry& a, const Entry& b) {
     return a.label < b.label;
   });
 
+  // Build new lists with "Select Device" placeholder at index 0
   QStringList newLabels;
   QList<QString> newPaths;
   QList<uint16_t> newUsagePages;
@@ -411,6 +422,7 @@ void IO::Drivers::HID::enumerateDevices()
     newUsages.append(e.usage);
   }
 
+  // Early exit if list is unchanged
   if (newLabels == m_deviceLabels)
     return;
 
