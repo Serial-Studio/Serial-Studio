@@ -51,6 +51,7 @@
  */
 static QVariantMap jsonObjectToVariantMap(const QJsonObject& obj)
 {
+  // Convert all key-value pairs to a QVariantMap
   QVariantMap map;
   for (auto it = obj.constBegin(); it != obj.constEnd(); ++it)
     map.insert(it.key(), it.value().toVariant());
@@ -70,6 +71,7 @@ static QVariantMap jsonObjectToVariantMap(const QJsonObject& obj)
  */
 static QVector<QColor> extractWidgetColors(const QJsonObject& colorsObject)
 {
+  // Read the widget_colors array and convert each entry to QColor
   QVector<QColor> result;
   const QJsonArray array = colorsObject.value("widget_colors").toArray();
   result.reserve(array.size());
@@ -91,6 +93,7 @@ static QVector<QColor> extractWidgetColors(const QJsonObject& colorsObject)
  */
 static QVector<QPair<QColor, QColor>> extractDeviceColors(const QJsonObject& colorsObject)
 {
+  // Read the device_colors array and extract top/bottom gradient pairs
   QVector<QPair<QColor, QColor>> result;
   const QJsonArray array = colorsObject.value("device_colors").toArray();
   result.reserve(array.size());
@@ -325,7 +328,7 @@ QColor Misc::ThemeManager::getColor(const QString& name) const
  */
 void Misc::ThemeManager::setTheme(const int index)
 {
-  // Validate index
+  // Clamp index to valid range
   int filteredIndex = index;
   if (index < 0 || index >= m_availableThemes.count())
     filteredIndex = 0;
@@ -478,6 +481,7 @@ void Misc::ThemeManager::loadSystemTheme()
  */
 void Misc::ThemeManager::updateLocalizedThemeNames()
 {
+  // Rebuild theme names list using current UI language
   m_availableThemeNames.clear();
   const auto lang = Translator::instance().language();
 
@@ -578,6 +582,7 @@ void Misc::ThemeManager::updateLocalizedThemeNames()
 
 bool Misc::ThemeManager::eventFilter(QObject* watched, QEvent* event)
 {
+  // Reload theme when the system palette changes and "System" is selected
   if (event->type() == QEvent::ApplicationPaletteChange && m_themeName == QStringLiteral("System")
       && !m_applyingTheme) {
     loadSystemTheme();

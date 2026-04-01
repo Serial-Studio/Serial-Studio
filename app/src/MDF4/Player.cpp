@@ -337,11 +337,11 @@ const QString& MDF4::Player::timestamp() const
  */
 void MDF4::Player::play()
 {
-  // Stop if no file is open
+  // Abort if no file is loaded
   if (!isOpen())
     return;
 
-  // Reset to 0 if frame position is at end
+  // Reset to beginning if at the end of the file
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
@@ -420,6 +420,7 @@ void MDF4::Player::openFile()
  */
 void MDF4::Player::openFile(const QString& filePath)
 {
+  // Prompt the user to disconnect before opening a file
   if (IO::ConnectionManager::instance().isConnected()) {
     int response = Misc::Utilities::showMessageBox(
       tr("Disconnect from device?"),
@@ -487,9 +488,11 @@ void MDF4::Player::openFile(const QString& filePath)
  */
 void MDF4::Player::closeFile()
 {
+  // Nothing to close if no file is open
   if (!isOpen())
     return;
 
+  // Release all cached data and reset state
   m_framePos = 0;
   m_reader.reset();
   m_filePath.clear();
@@ -582,12 +585,14 @@ void MDF4::Player::previousFrame()
  */
 void MDF4::Player::setProgress(const double progress)
 {
+  // Validate state before seeking
   if (!isOpen())
     return;
 
   if (isPlaying())
     pause();
 
+  // Compute and apply the new frame position
   int newFramePos = qBound(0, static_cast<int>(progress * frameCount()), frameCount() - 1);
 
   if (newFramePos != m_framePos) {
@@ -711,6 +716,7 @@ void MDF4::Player::updateData()
  */
 void MDF4::Player::buildFrameIndex()
 {
+  // Reset all cached data before rebuilding
   m_frameIndex.clear();
   m_channels.clear();
   m_sampleCache.clear();
@@ -985,6 +991,7 @@ void MDF4::Player::sendHeaderFrame()
  */
 QString MDF4::Player::formatTimestamp(double timestamp) const
 {
+  // Decompose seconds into hours, minutes, and fractional seconds
   int hours      = static_cast<int>(timestamp / 3600.0);
   int minutes    = static_cast<int>((timestamp - hours * 3600.0) / 60.0);
   double seconds = timestamp - hours * 3600.0 - minutes * 60.0;
@@ -1012,9 +1019,11 @@ QString MDF4::Player::formatTimestamp(double timestamp) const
  */
 QByteArray MDF4::Player::getFrame(const int index)
 {
+  // Validate index before extracting frame data
   if (!isOpen() || index < 0 || index >= frameCount())
     return QByteArray();
 
+  // Build CSV row from the sample cache
   const auto& frameIdx = m_frameIndex[index];
   QByteArray frame;
 
@@ -1053,9 +1062,11 @@ QByteArray MDF4::Player::getFrame(const int index)
  */
 void MDF4::Player::buildMultiSourceMapping()
 {
+  // Reset mapping state
   m_channelToSource.clear();
   m_sourceChannelCount.clear();
 
+  // Collect dataset-to-source pairs from the project model
   const auto& groups = DataModel::ProjectModel::instance().groups();
 
   // Collect (uniqueId, sourceId) pairs for all datasets
@@ -1092,6 +1103,7 @@ void MDF4::Player::buildMultiSourceMapping()
  */
 void MDF4::Player::injectFrame(const QByteArray& frame, int frameIndex)
 {
+  // Ignore empty frames
   if (frame.isEmpty())
     return;
 

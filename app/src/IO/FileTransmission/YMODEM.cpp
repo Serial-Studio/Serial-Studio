@@ -88,6 +88,7 @@ void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
  */
 void IO::Protocols::YMODEM::processInput(const QByteArray& data)
 {
+  // Process each byte through the YMODEM state machine
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
 
@@ -229,6 +230,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
  */
 void IO::Protocols::YMODEM::sendBlock0()
 {
+  // Extract file metadata
   QFileInfo info(m_filePath);
 
   // Build block 0 payload: filename\0filesize\0
@@ -258,6 +260,7 @@ void IO::Protocols::YMODEM::sendBlock0()
  */
 void IO::Protocols::YMODEM::sendEndOfBatch()
 {
+  // Build and send an empty block 0 to signal end of batch
   QByteArray payload(128, '\0');
   QByteArray packet = buildBlock(payload, 0);
 
@@ -273,6 +276,7 @@ void IO::Protocols::YMODEM::sendEndOfBatch()
  */
 void IO::Protocols::YMODEM::sendDataBlock()
 {
+  // Read the next 1K block, send EOT if file is exhausted
   QByteArray data = m_file.read(1024);
   if (data.isEmpty()) {
     // File fully read, send EOT

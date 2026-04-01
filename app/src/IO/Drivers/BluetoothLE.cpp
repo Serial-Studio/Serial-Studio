@@ -96,6 +96,7 @@ IO::Drivers::BluetoothLE::~BluetoothLE()
  */
 void IO::Drivers::BluetoothLE::close()
 {
+  // Save connection state and mark as disconnected
   const bool wasConnected = m_deviceConnected;
   m_deviceConnected       = false;
 
@@ -179,6 +180,7 @@ bool IO::Drivers::BluetoothLE::configurationOk() const noexcept
  */
 qint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
 {
+  // Write to the selected BLE characteristic if valid
   if (m_service && m_selectedCharacteristic >= 0
       && m_selectedCharacteristic < m_characteristics.count()) {
     const auto& characteristic = m_characteristics.at(m_selectedCharacteristic);
@@ -205,6 +207,7 @@ qint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
  */
 bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
 {
+  // Validate OS and device index
   (void)mode;
 
   // Unsupported OS, abort
@@ -311,6 +314,7 @@ int IO::Drivers::BluetoothLE::deviceIndex() const
  */
 int IO::Drivers::BluetoothLE::characteristicIndex() const
 {
+  // Return this instance's selection or fall back to the live driver
   if (m_selectedCharacteristic >= 0)
     return m_selectedCharacteristic + 1;
 
@@ -432,6 +436,7 @@ void IO::Drivers::BluetoothLE::startDiscovery()
  */
 void IO::Drivers::BluetoothLE::selectDevice(const int index)
 {
+  // Validate OS support and guard against combobox rebuild resets
   if (!operatingSystemSupported())
     return;
 
@@ -454,6 +459,7 @@ void IO::Drivers::BluetoothLE::selectDevice(const int index)
  */
 void IO::Drivers::BluetoothLE::selectService(const int index)
 {
+  // Validate OS and delegate to the owning instance if needed
   if (!operatingSystemSupported())
     return;
 
@@ -525,6 +531,7 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
  */
 void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
 {
+  // Validate OS and delegate to the owning instance if needed
   if (!operatingSystemSupported())
     return;
 
@@ -703,6 +710,7 @@ void IO::Drivers::BluetoothLE::onServiceStateChanged(QLowEnergyService::ServiceS
 void IO::Drivers::BluetoothLE::onCharacteristicChanged(const QLowEnergyCharacteristic& info,
                                                        const QByteArray& value)
 {
+  // Forward data if no specific characteristic is selected or it matches
   if (m_selectedCharacteristic == -1) {
     Q_EMIT dataReceived(makeByteArray(value));
     return;
@@ -751,7 +759,7 @@ void IO::Drivers::BluetoothLE::initializeSharedState()
  */
 void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& device)
 {
-  // Only register BLE-capable devices with valid names
+  // Filter and deduplicate discovered BLE devices
   if (!(device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration))
     return;
 
@@ -797,6 +805,7 @@ void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& de
  */
 void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::Error e)
 {
+  // Map the error code to a user-facing message
   QString message;
   switch (e) {
     case QBluetoothDeviceDiscoveryAgent::InvalidBluetoothAdapterError:
@@ -824,6 +833,7 @@ void IO::Drivers::BluetoothLE::onDiscoveryError(QBluetoothDeviceDiscoveryAgent::
  */
 void IO::Drivers::BluetoothLE::onHostModeStateChanged(QBluetoothLocalDevice::HostMode state)
 {
+  // Track adapter availability changes and notify instances
   bool wasAvailable  = s_adapterAvailable;
   s_adapterAvailable = (state != QBluetoothLocalDevice::HostPoweredOff);
 
@@ -858,6 +868,7 @@ void IO::Drivers::BluetoothLE::onHostModeStateChanged(QBluetoothLocalDevice::Hos
  */
 QJsonObject IO::Drivers::BluetoothLE::deviceIdentifier() const
 {
+  // Validate device index and extract BLE address/name
   if (m_deviceIndex < 0 || m_deviceIndex >= s_devices.count())
     return {};
 
@@ -880,6 +891,7 @@ QJsonObject IO::Drivers::BluetoothLE::deviceIdentifier() const
  */
 bool IO::Drivers::BluetoothLE::selectByIdentifier(const QJsonObject& id)
 {
+  // Search shared device list for a matching BLE address or name
   if (id.isEmpty())
     return false;
 
@@ -929,6 +941,7 @@ bool IO::Drivers::BluetoothLE::selectByIdentifier(const QJsonObject& id)
  */
 QList<IO::DriverProperty> IO::Drivers::BluetoothLE::driverProperties() const
 {
+  // Build property descriptors for device, service, and characteristic
   QList<IO::DriverProperty> props;
 
   IO::DriverProperty dev;
@@ -977,6 +990,7 @@ QList<IO::DriverProperty> IO::Drivers::BluetoothLE::driverProperties() const
  */
 void IO::Drivers::BluetoothLE::setDriverProperty(const QString& key, const QVariant& value)
 {
+  // Dispatch property change by key
   if (key == QLatin1String("deviceIndex")) {
     m_deviceIndex = value.toInt();
     Q_EMIT deviceIndexChanged();

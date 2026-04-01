@@ -34,6 +34,7 @@
  */
 void API::Handlers::ConsoleHandler::registerCommands()
 {
+  // Obtain registry and build command schemas
   auto& registry = CommandRegistry::instance();
 
   // Schema for boolean "enabled" parameter
@@ -225,6 +226,7 @@ void API::Handlers::ConsoleHandler::registerCommands()
 API::CommandResponse API::Handlers::ConsoleHandler::setEcho(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -245,6 +247,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setEcho(const QString& id,
 API::CommandResponse API::Handlers::ConsoleHandler::setShowTimestamp(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -265,6 +268,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setShowTimestamp(const QStri
 API::CommandResponse API::Handlers::ConsoleHandler::setDisplayMode(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("modeIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: modeIndex"));
@@ -295,6 +299,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setDisplayMode(const QString
 API::CommandResponse API::Handlers::ConsoleHandler::setDataMode(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("modeIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: modeIndex"));
@@ -325,6 +330,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setDataMode(const QString& i
 API::CommandResponse API::Handlers::ConsoleHandler::setLineEnding(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("endingIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: endingIndex"));
@@ -370,6 +376,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setLineEnding(const QString&
 API::CommandResponse API::Handlers::ConsoleHandler::setFontFamily(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("fontFamily"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: fontFamily"));
@@ -395,6 +402,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setFontFamily(const QString&
 API::CommandResponse API::Handlers::ConsoleHandler::setFontSize(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("fontSize"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: fontSize"));
@@ -420,6 +428,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setFontSize(const QString& i
 API::CommandResponse API::Handlers::ConsoleHandler::setChecksumMethod(const QString& id,
                                                                       const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("methodIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: methodIndex"));
@@ -451,6 +460,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::setChecksumMethod(const QStr
 API::CommandResponse API::Handlers::ConsoleHandler::clear(const QString& id,
                                                           const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   Console::Handler::instance().clear();
@@ -467,6 +477,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::clear(const QString& id,
 API::CommandResponse API::Handlers::ConsoleHandler::send(const QString& id,
                                                          const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("data"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: data"));
@@ -491,6 +502,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::send(const QString& id,
 API::CommandResponse API::Handlers::ConsoleHandler::getConfiguration(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& console = Console::Handler::instance();
@@ -515,6 +527,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::getConfiguration(const QStri
 API::CommandResponse API::Handlers::ConsoleHandler::exportSetEnabled(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -534,6 +547,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::exportSetEnabled(const QStri
 API::CommandResponse API::Handlers::ConsoleHandler::exportClose(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   Console::Export::instance().closeFile();
@@ -549,6 +563,7 @@ API::CommandResponse API::Handlers::ConsoleHandler::exportClose(const QString& i
 API::CommandResponse API::Handlers::ConsoleHandler::exportGetStatus(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& exporter = Console::Export::instance();

@@ -497,6 +497,7 @@ const QString DataModel::ProjectEditor::outputWidgetIcon() const
  */
 const QStringList& DataModel::ProjectEditor::availableActionIcons() const
 {
+  // Scan and cache action icon names from embedded resources
   static QStringList icons;
 
   if (icons.isEmpty()) {
@@ -520,6 +521,7 @@ const QStringList& DataModel::ProjectEditor::availableActionIcons() const
  */
 bool DataModel::ProjectEditor::currentGroupIsEditable() const
 {
+  // Fixed-layout widgets (Accelerometer, GPS, etc.) are not editable
   if (m_currentView == GroupView) {
     const auto& widget = m_selectedGroup.widget;
     if (widget != "" && widget != "multiplot" && widget != "datagrid")
@@ -537,6 +539,7 @@ bool DataModel::ProjectEditor::currentGroupIsEditable() const
  */
 bool DataModel::ProjectEditor::currentDatasetIsEditable() const
 {
+  // Check the parent group's widget type for editability
   if (m_currentView == DatasetView) {
     const auto& groups = DataModel::ProjectModel::instance().groups();
     const auto groupId = m_selectedDataset.groupId;
@@ -558,6 +561,7 @@ bool DataModel::ProjectEditor::currentDatasetIsEditable() const
  */
 quint8 DataModel::ProjectEditor::datasetOptions() const
 {
+  // Build the option bitmask from the selected dataset's flags
   quint8 option = SerialStudio::DatasetGeneric;
 
   if (m_selectedDataset.plt)
@@ -755,6 +759,7 @@ void DataModel::ProjectEditor::displayFrameParserView(int sourceId)
  */
 void DataModel::ProjectEditor::buildTreeModel()
 {
+  // Clear all item maps for the fresh rebuild
   m_rootItems.clear();
   m_groupItems.clear();
   m_sourceItems.clear();
@@ -978,6 +983,7 @@ void DataModel::ProjectEditor::buildTreeModel()
  */
 void DataModel::ProjectEditor::buildProjectModel()
 {
+  // Dispose of the previous model and create a fresh one
   if (m_projectModel) {
     disconnect(m_projectModel);
     m_projectModel->deleteLater();
@@ -1022,6 +1028,7 @@ void DataModel::ProjectEditor::buildProjectModel()
  */
 void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
 {
+  // Dispose of the previous model and create a fresh one
   if (m_groupModel) {
     disconnect(m_groupModel);
     m_groupModel->deleteLater();
@@ -1174,6 +1181,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
  */
 void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 {
+  // Dispose of the previous model and create a fresh one
   if (m_sourceModel) {
     disconnect(m_sourceModel);
     m_sourceModel->deleteLater();
@@ -1405,6 +1413,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
  */
 void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
 {
+  // Validate item and read the parameter type
   if (!item)
     return;
 
@@ -1539,6 +1548,7 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
  */
 void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
 {
+  // Dispose of the previous model and create a fresh one
   if (m_actionModel) {
     disconnect(m_actionModel);
     m_actionModel->deleteLater();
@@ -1754,6 +1764,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
  */
 void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& dataset)
 {
+  // Dispose of the previous model and create a fresh one
   if (m_datasetModel) {
     disconnect(m_datasetModel);
     m_datasetModel->deleteLater();
@@ -1789,6 +1800,7 @@ void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& datas
 void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
                                                  const DataModel::Dataset& dataset)
 {
+  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("General Information"), PlaceholderValue);
@@ -1840,6 +1852,7 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
  */
 void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
+  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("Plot Settings"), PlaceholderValue);
@@ -1927,6 +1940,7 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
  */
 void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
+  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("FFT Configuration"), PlaceholderValue);
@@ -2003,6 +2017,7 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
 void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
                                                 const DataModel::Dataset& dataset)
 {
+  // Determine editability and build widget type selector
   const bool showWidget = currentDatasetIsEditable();
 
   auto* hdr = new QStandardItem();
@@ -2080,6 +2095,7 @@ void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
 void DataModel::ProjectEditor::addAlarmSection(CustomModel* model,
                                                const DataModel::Dataset& dataset)
 {
+  // Determine editability based on widget type
   const bool showWidget   = currentDatasetIsEditable();
   const bool rangeEnabled = showWidget && (dataset.widget == "bar" || dataset.widget == "gauge");
 
@@ -2133,6 +2149,7 @@ void DataModel::ProjectEditor::addAlarmSection(CustomModel* model,
  */
 void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
+  // Section header
   auto* hdr = new QStandardItem();
   hdr->setData(SectionHeader, WidgetType);
   hdr->setData(tr("LED Display Settings"), PlaceholderValue);
@@ -2179,6 +2196,7 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel
  */
 void DataModel::ProjectEditor::generateComboBoxModels()
 {
+  // FFT window sizes
   m_fftSamples.clear();
   m_fftSamples << "8" << "16" << "32" << "64" << "128" << "256" << "512"
                << "1024" << "2048" << "4096" << "8192" << "16384";
@@ -2276,6 +2294,7 @@ void DataModel::ProjectEditor::setCurrentView(const DataModel::ProjectEditor::Cu
  */
 void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
 {
+  // Validate item and extract the changed parameter
   if (!item)
     return;
 
@@ -2383,6 +2402,7 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
  */
 void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
 {
+  // Validate item and lazy-initialize EOL key list
   if (!item)
     return;
 
@@ -2477,6 +2497,7 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
  */
 void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
 {
+  // Validate item and dispatch the change
   if (!item)
     return;
 
@@ -2508,6 +2529,7 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
  */
 void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
 {
+  // Validate item and lazy-initialize key lists
   if (!item)
     return;
 
@@ -2669,6 +2691,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
 void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& current,
                                                          const QModelIndex& previous)
 {
+  // Identify the selected item and switch to the appropriate view
   (void)previous;
 
   if (!m_treeModel || !current.isValid())
@@ -2824,6 +2847,7 @@ void DataModel::ProjectEditor::selectOutputWidget(int groupId, int widgetId)
  */
 void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
 {
+  // Store selection and dispose of the previous model
   m_selectedOutputWidget = widget;
 
   if (m_outputWidgetModel) {
@@ -2943,6 +2967,7 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
  */
 void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
 {
+  // Validate item and dispatch the change by parameter type
   if (!item)
     return;
 

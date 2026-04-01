@@ -236,6 +236,7 @@ bool IO::Drivers::Modbus::configurationOk() const noexcept
  */
 qint64 IO::Drivers::Modbus::write(const QByteArray& data)
 {
+  // Parse register address and value from the input and send a write request
   if (!isWritable() || data.length() < 4)
     return 0;
 
@@ -291,6 +292,7 @@ qint64 IO::Drivers::Modbus::write(const QByteArray& data)
  */
 bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
 {
+  // Create and connect a Modbus RTU or TCP client
   Q_UNUSED(mode)
 
   close();
@@ -664,6 +666,7 @@ void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
                                            const quint16 start,
                                            const quint16 count)
 {
+  // Validate and append a new register group, avoiding duplicates
   if (count > 0 && count <= 125) {
     for (const auto& group : std::as_const(m_registerGroups))
       if (group.registerType == type && group.startAddress == start && group.count == count)

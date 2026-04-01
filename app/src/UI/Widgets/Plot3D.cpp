@@ -303,6 +303,7 @@ double Widgets::Plot3D::cameraOffsetZ() const
  */
 double Widgets::Plot3D::idealWorldScale() const
 {
+  // Compute the zoom scale from the largest axis extent and a 1-2-5 snap
   const double dx = m_maxPoint.x() - m_minPoint.x();
   const double dy = m_maxPoint.y() - m_minPoint.y();
   const double dz = m_maxPoint.z() - m_minPoint.z();
@@ -557,6 +558,7 @@ void Widgets::Plot3D::setCameraOffsetZ(const double offset)
  */
 void Widgets::Plot3D::setAutoCenter(const bool enabled)
 {
+  // Toggle auto-centering and reset to origin when disabling
   if (m_autoCenter != enabled) {
     m_autoCenter = enabled;
     m_settings.setValue("Plot3D_AutoCenter", enabled);
@@ -619,6 +621,7 @@ void Widgets::Plot3D::setOrbitNavigation(const bool enabled)
  */
 void Widgets::Plot3D::setEyeSeparation(const float separation)
 {
+  // Persist the new separation value and trigger a re-render
   m_eyeSeparation = separation;
   m_settings.setValue("Plot3D_EyeSeparation", separation);
   markCameraDirty();

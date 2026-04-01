@@ -39,6 +39,7 @@
  */
 static void installTrialToken(int daysRemaining)
 {
+  // Build and install a capability token for the trial period
   Licensing::CommercialToken token;
   token.setVariantName(QStringLiteral("Trial"));
   token.setInstanceName(Licensing::MachineID::instance().machineId());
@@ -182,6 +183,7 @@ void Licensing::Trial::enableTrial()
  */
 void Licensing::Trial::readSettings()
 {
+  // Reset trial state before reading from persistent storage
   m_trialEnabled = false;
   m_trialExpiry  = QDateTime::currentDateTimeUtc();
 
@@ -220,6 +222,7 @@ void Licensing::Trial::readSettings()
  */
 void Licensing::Trial::writeSettings()
 {
+  // Encrypt and persist trial state to settings
   QString enaStr = m_trialEnabled ? "true" : "false";
   QString regStr = m_deviceRegistered ? "true" : "false";
   QString expStr = m_trialExpiry.toString(Qt::ISODate);
@@ -243,9 +246,11 @@ void Licensing::Trial::writeSettings()
  */
 void Licensing::Trial::fetchTrialState()
 {
+  // Avoid duplicate requests
   if (m_busy)
     return;
 
+  // Set busy state and build signed payload
   m_busy = true;
   Q_EMIT busyChanged();
 
@@ -286,6 +291,7 @@ void Licensing::Trial::fetchTrialState()
  */
 void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
+  // Clear busy state and validate the reply
   m_busy = false;
   Q_EMIT busyChanged();
 

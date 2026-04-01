@@ -245,6 +245,7 @@ bool MQTT::Client::autoKeepAlive() const
  */
 quint8 MQTT::Client::mqttVersion() const
 {
+  // Find the index matching the current protocol version
   quint8 index = 0;
   for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i) {
     if (i.value() == m_client.protocolVersion())
@@ -261,6 +262,7 @@ quint8 MQTT::Client::mqttVersion() const
  */
 const QStringList& MQTT::Client::mqttVersions() const
 {
+  // Build the version names list on first call
   static QStringList list;
   if (list.isEmpty())
     for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i)
@@ -282,6 +284,7 @@ bool MQTT::Client::sslEnabled() const
  */
 quint8 MQTT::Client::sslProtocol() const
 {
+  // Find the index matching the current SSL protocol
   quint8 index = 0;
   for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i) {
     if (i.value() == m_sslConfiguration.protocol())
@@ -306,6 +309,7 @@ int MQTT::Client::peerVerifyDepth() const
  */
 quint8 MQTT::Client::peerVerifyMode() const
 {
+  // Find the index matching the current peer verify mode
   quint8 index = 0;
   for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i) {
     if (i.value() == m_sslConfiguration.peerVerifyMode())
@@ -322,6 +326,7 @@ quint8 MQTT::Client::peerVerifyMode() const
  */
 const QStringList& MQTT::Client::caCertificates() const
 {
+  // Build the CA certificate options list on first call
   static QStringList list;
   if (list.isEmpty()) {
     list.append(tr("Use System Database"));
@@ -336,6 +341,7 @@ const QStringList& MQTT::Client::caCertificates() const
  */
 const QStringList& MQTT::Client::modes() const
 {
+  // Build the client mode names list on first call
   static QStringList list;
   if (list.isEmpty()) {
     list.append(tr("MQTT Subscriber"));
@@ -350,6 +356,7 @@ const QStringList& MQTT::Client::modes() const
  */
 const QStringList& MQTT::Client::sslProtocols() const
 {
+  // Build the SSL protocol names list on first call
   static QStringList list;
   if (list.isEmpty())
     for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i)
@@ -363,6 +370,7 @@ const QStringList& MQTT::Client::sslProtocols() const
  */
 const QStringList& MQTT::Client::peerVerifyModes() const
 {
+  // Build the peer verify mode names list on first call
   static QStringList list;
   if (list.isEmpty())
     for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i)
@@ -493,6 +501,7 @@ void MQTT::Client::toggleConnection()
  */
 void MQTT::Client::regenerateClientId()
 {
+  // Generate a random 16-character alphanumeric client ID
   QString clientId;
   constexpr int length  = 16;
   const QString charset = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -640,6 +649,7 @@ void MQTT::Client::setAutoKeepAlive(const bool keepAlive)
  */
 void MQTT::Client::setMqttVersion(const quint8 version)
 {
+  // Find and apply the protocol version at the given index
   quint8 index = 0;
   for (auto i = m_mqttVersions.begin(); i != m_mqttVersions.end(); ++i) {
     if (index == version) {
@@ -657,6 +667,7 @@ void MQTT::Client::setMqttVersion(const quint8 version)
  */
 void MQTT::Client::addCaCertificates()
 {
+  // Show a directory picker for PEM certificate files
   auto* dialog =
     new QFileDialog(nullptr,
                     tr("Select PEM Certificates Directory"),
@@ -699,6 +710,7 @@ void MQTT::Client::setPeerVerifyDepth(const int depth)
  */
 void MQTT::Client::setSslProtocol(const quint8 protocol)
 {
+  // Find and apply the SSL protocol at the given index
   quint8 index = 0;
   for (auto i = m_sslProtocols.begin(); i != m_sslProtocols.end(); ++i) {
     if (index == protocol) {
@@ -716,6 +728,7 @@ void MQTT::Client::setSslProtocol(const quint8 protocol)
  */
 void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
 {
+  // Find and apply the peer verify mode at the given index
   quint8 index = 0;
   for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i) {
     if (index == verifyMode) {
@@ -737,6 +750,7 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
  */
 void MQTT::Client::hotpathTxFrame(const QByteArray& data)
 {
+  // Publish only when connected, in publisher mode, and licensed
   const auto& token = Licensing::CommercialToken::current();
   if (isConnected() && isPublisher() && m_topicName.isValid() && token.isValid()
       && SS_LICENSE_GUARD() && token.featureTier() >= Licensing::FeatureTier::Hobbyist)
@@ -778,6 +792,7 @@ void MQTT::Client::onStateChanged(QMqttClient::ClientState state)
  */
 void MQTT::Client::onErrorChanged(QMqttClient::ClientError error)
 {
+  // Map error codes to user-friendly messages
   QString title;
   QString message;
   switch (error) {
@@ -926,6 +941,7 @@ void MQTT::Client::onAuthenticationRequested(const QMqttAuthenticationProperties
  */
 void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopicName& topic)
 {
+  // Validate license before processing received data
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
       || token.featureTier() < Licensing::FeatureTier::Hobbyist)

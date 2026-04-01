@@ -94,6 +94,7 @@ void Misc::TimerEvents::stopTimers()
  */
 void Misc::TimerEvents::timerEvent(QTimerEvent* event)
 {
+  // Dispatch the event to the matching timer signal
   if (event->timerId() == m_timer1Hz.timerId())
     Q_EMIT timeout1Hz();
 
@@ -118,6 +119,7 @@ void Misc::TimerEvents::timerEvent(QTimerEvent* event)
  */
 void Misc::TimerEvents::startTimers()
 {
+  // Start UI timer at configured frequency and fixed-rate timers
   m_uiTimer.start(1000 / m_uiTimerHz, Qt::PreciseTimer, this);
 
   m_timer1Hz.start(1000, Qt::PreciseTimer, this);
@@ -136,6 +138,7 @@ void Misc::TimerEvents::startTimers()
  */
 void Misc::TimerEvents::setFPS(int hz)
 {
+  // Clamp the value and update if changed
   hz = qBound(1, hz, 240);
 
   if (m_uiTimerHz != hz) {

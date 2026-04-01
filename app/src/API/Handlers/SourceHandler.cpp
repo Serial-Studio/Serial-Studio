@@ -40,6 +40,7 @@
  */
 void API::Handlers::SourceHandler::registerCommands()
 {
+  // Obtain registry and register all source commands
   auto& registry = CommandRegistry::instance();
 
   registry.registerCommand(QStringLiteral("project.source.list"),
@@ -211,6 +212,7 @@ void API::Handlers::SourceHandler::registerCommands()
 API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Retrieve current state
   (void)params;
 
   const auto& sources = DataModel::ProjectModel::instance().sources();
@@ -242,6 +244,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
 API::CommandResponse API::Handlers::SourceHandler::sourceAdd(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Retrieve current state
   (void)params;
 
 #ifndef BUILD_COMMERCIAL
@@ -269,6 +272,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceAdd(const QString& id,
 API::CommandResponse API::Handlers::SourceHandler::sourceDelete(const QString& id,
                                                                 const QJsonObject& params)
 {
+// Check license requirements
 #ifndef BUILD_COMMERCIAL
   (void)params;
   return CommandResponse::makeError(id,
@@ -301,6 +305,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceDelete(const QString& i
 API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& id,
                                                                 const QJsonObject& params)
 {
+// Check license requirements
 #ifndef BUILD_COMMERCIAL
   (void)params;
   return CommandResponse::makeError(id,
@@ -364,6 +369,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
 API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("settings")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and settings are required"));
@@ -411,6 +417,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString
 API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("key")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and key are required"));
@@ -459,6 +466,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
 API::CommandResponse API::Handlers::SourceHandler::sourceGetConfiguration(const QString& id,
                                                                           const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("sourceId")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
@@ -482,6 +490,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceGetConfiguration(const 
 API::CommandResponse API::Handlers::SourceHandler::sourceSetFrameParserCode(
   const QString& id, const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("sourceId")) || !params.contains(QStringLiteral("code")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId and code are required"));
@@ -511,6 +520,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetFrameParserCode(
 API::CommandResponse API::Handlers::SourceHandler::sourceGetFrameParserCode(
   const QString& id, const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("sourceId")))
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));

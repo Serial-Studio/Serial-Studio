@@ -37,6 +37,7 @@
  */
 Misc::Translator::Translator()
 {
+  // Load saved language preference or fall back to system language
   const auto sysLang  = static_cast<int>(systemLanguage());
   const auto language = m_settings.value("language", sysLang).toInt();
   setLanguage(static_cast<Language>(language));
@@ -70,6 +71,7 @@ Misc::Translator::Language Misc::Translator::language() const
  */
 Misc::Translator::Language Misc::Translator::systemLanguage() const
 {
+  // Map system locale to internal language enum
   Language lang;
   switch (QLocale::system().language()) {
     case QLocale::English:
@@ -143,6 +145,7 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
  */
 QString Misc::Translator::welcomeConsoleText() const
 {
+  // Determine language code for the welcome text file
   QString lang;
   switch (language()) {
     case English:
@@ -231,6 +234,7 @@ QString Misc::Translator::welcomeConsoleText() const
  */
 QString Misc::Translator::acknowledgementsText() const
 {
+  // Read acknowledgements text from bundled resources
   QString text = "";
   QFile file(QStringLiteral(":/rcc/messages/Acknowledgements.txt"));
   if (file.open(QFile::ReadOnly)) {
@@ -250,6 +254,7 @@ QString Misc::Translator::acknowledgementsText() const
  */
 QStringList& Misc::Translator::availableLanguages()
 {
+  // Build the list of available translations on first call
   static QStringList list;
   if (list.isEmpty()) {
     list.append(QStringLiteral("English"));
@@ -284,6 +289,7 @@ QStringList& Misc::Translator::availableLanguages()
  */
 void Misc::Translator::setLanguage(const Language language)
 {
+  // Map language enum to locale name and QLocale
   QString langName;
   QLocale locale;
   switch (language) {
@@ -381,6 +387,7 @@ void Misc::Translator::setLanguage(const Language language)
  */
 void Misc::Translator::setLanguage(const QLocale& locale, const QString& language)
 {
+  // Load the translation file and install it
   qApp->removeTranslator(&m_translator);
   const auto qmPath = QStringLiteral(":/qm/%1.qm").arg(language);
   if (m_translator.load(locale, qmPath)) {

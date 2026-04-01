@@ -67,6 +67,7 @@
  */
 void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveHint)
 {
+  // Pre-allocate output list and iterate through comma-separated fields
   out.clear();
   if (reserveHint > 0)
     out.reserve(reserveHint);
@@ -187,6 +188,7 @@ void DataModel::FrameBuilder::setupExternalConnections()
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
+  // Copy in-memory project data directly into the frame
   const auto& pm = DataModel::ProjectModel::instance();
 
   clear_frame(m_frame);
@@ -211,6 +213,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
  */
 void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& headers)
 {
+  // Store explicit channel names or clear them
   if (!headers.isEmpty()) {
     m_quickPlotHasHeader    = true;
     m_quickPlotChannelNames = headers;
@@ -258,6 +261,7 @@ void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray& data)
  */
 void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArray& data)
 {
+  // Delegate to single-source path when not in project mode
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
     hotpathRxFrame(data);
     return;
@@ -275,6 +279,7 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArra
  */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
+  // Reset quick-plot state and handle disconnect
   m_quickPlotChannels = -1;
 
   if (!IO::ConnectionManager::instance().isConnected()) {
@@ -337,6 +342,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
  */
 void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
 {
+  // Decode data through the JS parser or CSV fallback
   QList<QStringList> multiChannels;
 
   if (!SerialStudio::isAnyPlayerOpen()) [[likely]] {
@@ -394,6 +400,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
  */
 void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& data)
 {
+  // Decode data through the source-specific JS parser
   QList<QStringList> multiChannels;
 
   if (!SerialStudio::isAnyPlayerOpen()) [[likely]] {
@@ -483,6 +490,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
  */
 void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
 {
+  // Parse CSV values and detect header row on first frame
   auto& channels        = m_channelScratch;
   const int reserveHint = (m_quickPlotChannels > 0) ? m_quickPlotChannels : 64;
   parseCsvValues(data, channels, reserveHint);
@@ -692,6 +700,7 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
  */
 void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
 {
+  // Check if any export consumer requires timestamped frames
   m_timestampedFramesEnabled = CSV::Export::instance().exportEnabled()
                             || MDF4::Export::instance().exportEnabled()
                             || API::Server::instance().enabled();
@@ -709,6 +718,7 @@ void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
  */
 void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
 {
+  // Distribute frame to dashboard and export consumers
   static auto& csvExport     = CSV::Export::instance();
   static auto& mdf4Export    = MDF4::Export::instance();
   static auto& dashboard     = UI::Dashboard::instance();

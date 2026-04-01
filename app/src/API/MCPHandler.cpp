@@ -70,6 +70,7 @@ bool API::MCPHandler::isMCPMessage(const QByteArray& data) const
  */
 QByteArray API::MCPHandler::processMessage(const QByteArray& data, const QString& sessionId)
 {
+  // Parse incoming JSON data
   constexpr int kMaxBatchSize = 256;
 
   QJsonParseError error;
@@ -206,6 +207,7 @@ void API::MCPHandler::onFrameReceived(const DataModel::Frame& frame)
 API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& request,
                                                       const QString& sessionId)
 {
+  // Route to the appropriate handler based on method
   const auto& method = request.method;
 
   if (method == MCP::Method::Initialize)
@@ -261,6 +263,7 @@ API::MCP::MCPResponse API::MCPHandler::processRequest(const MCP::MCPRequest& req
 API::MCP::MCPResponse API::MCPHandler::handleInitialize(const MCP::MCPRequest& request,
                                                         const QString& sessionId)
 {
+  // Store client info and mark session as initialized
   auto& session = m_sessions[sessionId];
 
   const auto clientInfo = request.params.value(QStringLiteral("clientInfo")).toObject();
@@ -300,6 +303,7 @@ API::MCP::MCPResponse API::MCPHandler::handlePing(const MCP::MCPRequest& request
  */
 API::MCP::MCPResponse API::MCPHandler::handleToolsList(const MCP::MCPRequest& request)
 {
+  // Build JSON array from registry tools
   const auto tools = generateToolsFromRegistry();
 
   QJsonArray toolsArray;
@@ -318,6 +322,7 @@ API::MCP::MCPResponse API::MCPHandler::handleToolsList(const MCP::MCPRequest& re
 API::MCP::MCPResponse API::MCPHandler::handleToolsCall(const MCP::MCPRequest& request,
                                                        const QString& sessionId)
 {
+  // Extract and validate tool name
   Q_UNUSED(sessionId);
 
   const auto name      = request.params.value(QStringLiteral("name")).toString();
@@ -378,6 +383,7 @@ API::MCP::MCPResponse API::MCPHandler::handleToolsCall(const MCP::MCPRequest& re
  */
 API::MCP::MCPResponse API::MCPHandler::handleResourcesList(const MCP::MCPRequest& request)
 {
+  // Build JSON array from available resources
   const auto resources = generateResources();
 
   QJsonArray resourcesArray;
@@ -395,6 +401,7 @@ API::MCP::MCPResponse API::MCPHandler::handleResourcesList(const MCP::MCPRequest
  */
 API::MCP::MCPResponse API::MCPHandler::handleResourcesRead(const MCP::MCPRequest& request)
 {
+  // Validate and resolve the resource URI
   const auto uri = request.params.value(QStringLiteral("uri")).toString();
 
   if (uri.isEmpty()) {
@@ -437,6 +444,7 @@ API::MCP::MCPResponse API::MCPHandler::handleResourcesRead(const MCP::MCPRequest
 API::MCP::MCPResponse API::MCPHandler::handleResourcesSubscribe(const MCP::MCPRequest& request,
                                                                 const QString& sessionId)
 {
+  // Validate URI and add to session subscriptions
   const auto uri = request.params.value(QStringLiteral("uri")).toString();
 
   if (uri.isEmpty()) {
@@ -457,6 +465,7 @@ API::MCP::MCPResponse API::MCPHandler::handleResourcesSubscribe(const MCP::MCPRe
 API::MCP::MCPResponse API::MCPHandler::handleResourcesUnsubscribe(const MCP::MCPRequest& request,
                                                                   const QString& sessionId)
 {
+  // Validate URI and remove from session subscriptions
   const auto uri = request.params.value(QStringLiteral("uri")).toString();
 
   if (uri.isEmpty()) {
@@ -475,6 +484,7 @@ API::MCP::MCPResponse API::MCPHandler::handleResourcesUnsubscribe(const MCP::MCP
  */
 API::MCP::MCPResponse API::MCPHandler::handlePromptsList(const MCP::MCPRequest& request)
 {
+  // Build JSON array from available prompts
   const auto prompts = generatePrompts();
 
   QJsonArray promptsArray;
@@ -492,6 +502,7 @@ API::MCP::MCPResponse API::MCPHandler::handlePromptsList(const MCP::MCPRequest& 
  */
 API::MCP::MCPResponse API::MCPHandler::handlePromptsGet(const MCP::MCPRequest& request)
 {
+  // Validate prompt name and return matching prompt template
   const auto name = request.params.value(QStringLiteral("name")).toString();
 
   if (name.isEmpty()) {
@@ -539,6 +550,7 @@ void API::MCPHandler::tagIoSubmodule(MCP::Tool& tool,
                                      const QString& submodule,
                                      const QStringList& parts) const
 {
+  // Tag manager submodule tools
   if (submodule == QStringLiteral("manager")) {
     tool.tags << QStringLiteral("connection") << QStringLiteral("device");
     return;
@@ -560,6 +572,7 @@ void API::MCPHandler::tagIoSubmodule(MCP::Tool& tool,
  */
 QVector<API::MCP::Tool> API::MCPHandler::generateToolsFromRegistry() const
 {
+  // Iterate commands and build categorized tool metadata
   QVector<MCP::Tool> tools;
 
   const auto& commands = CommandRegistry::instance().commands();
@@ -625,6 +638,7 @@ QVector<API::MCP::Tool> API::MCPHandler::generateToolsFromRegistry() const
  */
 QVector<API::MCP::Resource> API::MCPHandler::generateResources() const
 {
+  // Define frame and history resources
   QVector<MCP::Resource> resources;
 
   MCP::Resource currentFrame;
@@ -649,6 +663,7 @@ QVector<API::MCP::Resource> API::MCPHandler::generateResources() const
  */
 QVector<API::MCP::Prompt> API::MCPHandler::generatePrompts() const
 {
+  // Define available prompt templates
   QVector<MCP::Prompt> prompts;
 
   MCP::Prompt analyzeTelemetry;

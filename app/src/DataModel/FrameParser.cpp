@@ -55,6 +55,7 @@ enum class ArrayType {
  */
 static QStringList jsArrayToStringList(const QJSValue& jsValue)
 {
+  // Convert each element to its string representation
   QStringList result;
   const int length = jsValue.property("length").toInt();
   result.reserve(length);
@@ -79,6 +80,7 @@ static QStringList jsArrayToStringList(const QJSValue& jsValue)
  */
 static ArrayType detectArrayType(const QJSValue& jsValue)
 {
+  // Reject non-arrays and empty arrays as scalars
   if (!jsValue.isArray())
     return ArrayType::Scalar;
 
@@ -116,6 +118,7 @@ static ArrayType detectArrayType(const QJSValue& jsValue)
  */
 static QList<QStringList> convert2DArray(const QJSValue& jsValue)
 {
+  // Extract each row sub-array into a separate frame
   QList<QStringList> results;
   const int rowCount = jsValue.property("length").toInt();
   results.reserve(rowCount);
@@ -152,6 +155,7 @@ static QList<QStringList> convert2DArray(const QJSValue& jsValue)
  */
 static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 {
+  // Separate scalars from vector elements and find max vector length
   const int elementCount = jsValue.property("length").toInt();
 
   QStringList scalars;
@@ -265,6 +269,7 @@ void DataModel::FrameParser::setupExternalConnections()
  */
 QString DataModel::FrameParser::defaultTemplateCode()
 {
+  // Read the default comma-separated parser script from resources
   QString code;
   QFile file(QStringLiteral(":/rcc/scripts/comma_separated.js"));
   if (file.open(QFile::ReadOnly)) {
@@ -284,6 +289,7 @@ QString DataModel::FrameParser::defaultTemplateCode()
  */
 QString DataModel::FrameParser::templateCode(int sourceId) const
 {
+  // Look up the stored template index for this source
   auto it       = m_engines.find(sourceId);
   const int idx = (it != m_engines.end()) ? it.value()->templateIdx : -1;
 
@@ -329,6 +335,7 @@ const QStringList& DataModel::FrameParser::templateFiles() const
  */
 DataModel::FrameParser::SourceEngine& DataModel::FrameParser::engineForSource(int sourceId)
 {
+  // Return existing engine or create a new one for this source
   auto it = m_engines.find(sourceId);
   if (it != m_engines.end())
     return *it.value();
@@ -346,6 +353,7 @@ DataModel::FrameParser::SourceEngine& DataModel::FrameParser::engineForSource(in
  */
 void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
 {
+  // Clear engine if code is empty, otherwise load script
   if (code.isEmpty()) {
     clearSourceEngine(sourceId);
     return;
@@ -364,6 +372,7 @@ void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
  */
 void DataModel::FrameParser::clearSourceEngine(int sourceId)
 {
+  // Find the engine; source 0 is reset in-place, others are deleted
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end())
     return;
@@ -391,6 +400,7 @@ void DataModel::FrameParser::clearSourceEngine(int sourceId)
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame, int sourceId)
 {
+  // Fall back to source 0 if the requested engine is not available
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end() || !it.value()->parseFunction.isCallable()) {
     if (sourceId == 0)
@@ -438,6 +448,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& frame, int sourceId)
 {
+  // Fall back to source 0 if the requested engine is not available
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end() || !it.value()->parseFunction.isCallable()) {
     if (sourceId == 0)
@@ -500,6 +511,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
  */
 bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, bool showMessageBoxes)
 {
+  // Reset the engine and prepare for script evaluation
   auto& se         = engineForSource(sourceId);
   se.parseFunction = QJSValue();
   se.engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
@@ -688,6 +700,7 @@ void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
  */
 void DataModel::FrameParser::readCode()
 {
+  // Destroy all per-source engines except source 0
   QList<int> keysToRemove;
   for (auto it = m_engines.begin(); it != m_engines.end(); ++it) {
     if (it.key() != 0) {
@@ -722,6 +735,7 @@ void DataModel::FrameParser::readCode()
  */
 void DataModel::FrameParser::clearContext()
 {
+  // Destroy all per-source engines except source 0
   QList<int> keysToRemove;
   for (auto it = m_engines.begin(); it != m_engines.end(); ++it) {
     if (it.key() != 0) {
@@ -757,6 +771,7 @@ void DataModel::FrameParser::collectGarbage()
  */
 void DataModel::FrameParser::loadTemplateNames()
 {
+  // Populate the file list and matching display names
   m_templateFiles = {QStringLiteral("at_commands.js"),
                      QStringLiteral("base64_encoded.js"),
                      QStringLiteral("batched_sensor_data.js"),
@@ -831,6 +846,7 @@ void DataModel::FrameParser::loadTemplateNames()
  */
 void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
 {
+  // Validate index and load the selected template
   if (idx < 0 || idx >= m_templateFiles.size())
     return;
 
@@ -857,6 +873,7 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
  */
 void DataModel::FrameParser::loadDefaultTemplate(int sourceId, bool guiTrigger)
 {
+  // Load the default CSV template by filename lookup
   const auto idx = m_templateFiles.indexOf(QStringLiteral("comma_separated.js"));
   setTemplateIdx(sourceId, idx);
 

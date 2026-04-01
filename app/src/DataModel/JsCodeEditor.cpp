@@ -246,6 +246,7 @@ void DataModel::JsCodeEditor::apply()
  */
 void DataModel::JsCodeEditor::import()
 {
+  // Show file picker for external JS files
   auto* dialog = new QFileDialog(
     nullptr, tr("Select Javascript file to import"), QDir::homePath(), QStringLiteral("*.js"));
   dialog->setFileMode(QFileDialog::ExistingFile);
@@ -271,6 +272,7 @@ void DataModel::JsCodeEditor::import()
  */
 void DataModel::JsCodeEditor::evaluate()
 {
+  // Run syntax validation and report the result
   auto& parser = DataModel::FrameParser::instance();
   if (parser.loadScript(m_sourceId, text(), true)) {
     Misc::Utilities::showMessageBox(tr("Code Validation Successful"),
@@ -327,6 +329,7 @@ void DataModel::JsCodeEditor::selectAll()
  */
 void DataModel::JsCodeEditor::selectTemplate()
 {
+  // Show picker dialog for available templates
   auto& parser = DataModel::FrameParser::instance();
 
   bool ok;
@@ -363,6 +366,7 @@ void DataModel::JsCodeEditor::selectTemplate()
  */
 void DataModel::JsCodeEditor::testWithSampleData()
 {
+  // Validate script before opening the test dialog
   auto& parser = DataModel::FrameParser::instance();
   if (parser.loadScript(m_sourceId, text(), true)) {
     m_testDialog.setSourceId(m_sourceId);
@@ -397,6 +401,7 @@ void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
  */
 void DataModel::JsCodeEditor::onThemeChanged()
 {
+  // Resolve theme path and load the syntax style XML
   static const auto* t = &Misc::ThemeManager::instance();
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 
@@ -471,6 +476,7 @@ void DataModel::JsCodeEditor::focusOutEvent(QFocusEvent* event)
 
 void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent* event)
 {
+  // Offset cursor position to account for line number area width
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
   QMouseEvent copy(event->type(),
                    event->position() - QPointF(lineNumWidth, 0),
@@ -485,6 +491,7 @@ void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent* event)
 
 void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent* event)
 {
+  // Offset cursor position to account for line number area width
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
   QMouseEvent copy(event->type(),
                    event->position() - QPointF(lineNumWidth, 0),
@@ -498,6 +505,7 @@ void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent* event)
 
 void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent* event)
 {
+  // Offset cursor position to account for line number area width
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
   QMouseEvent copy(event->type(),
                    event->position() - QPointF(lineNumWidth, 0),
@@ -511,6 +519,7 @@ void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent* event)
 
 void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 {
+  // Offset cursor position to account for line number area width
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
   QMouseEvent copy(event->type(),
                    event->position() - QPointF(lineNumWidth, 0),

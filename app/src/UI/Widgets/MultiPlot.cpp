@@ -339,6 +339,7 @@ void Widgets::MultiPlot::updateData()
  */
 void Widgets::MultiPlot::updateRange()
 {
+  // Validate widget and reset X-axis range for the new point count
   if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
     return;
 
@@ -486,6 +487,7 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
  */
 void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visible)
 {
+  // Update visibility flag and move the curve to the end of the draw order
   if (index >= 0 && index < m_visibleCurves.count()) {
     m_visibleCurves[index] = visible;
     if (visible) {
@@ -506,6 +508,7 @@ void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visib
  */
 void Widgets::MultiPlot::onThemeChanged()
 {
+  // Rebuild per-dataset colors from the current theme
   if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
     const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
 

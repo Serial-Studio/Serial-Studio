@@ -64,6 +64,7 @@ Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endS
  */
 void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
 {
+  // Append incoming bytes and dispatch to the active detection mode
   if (!data || data->isEmpty())
     return;
 
@@ -222,9 +223,11 @@ void Widgets::ImageFrameReader::processAutodetect()
  */
 void Widgets::ImageFrameReader::processManual()
 {
+  // Require both delimiters to be configured
   if (m_startSeq.isEmpty() || m_endSeq.isEmpty())
     return;
 
+  // Scan the accumulator for complete frames between start/end sequences
   while (true) {
     if (!m_inFrame) {
       qsizetype startPos = m_accumulator.indexOf(m_startSeq);
@@ -382,9 +385,11 @@ bool Widgets::ImageView::exportEnabled() const noexcept
  */
 void Widgets::ImageView::setExportEnabled(bool enabled)
 {
+  // Guard unchanged value
   if (m_exportEnabled == enabled)
     return;
 
+  // Update state and close the export session when disabling
   m_exportEnabled = enabled;
 
   if (!enabled)
@@ -402,13 +407,14 @@ void Widgets::ImageView::setExportEnabled(bool enabled)
  */
 void Widgets::ImageView::onFrameReady(const QByteArray& data)
 {
+  // Ignore empty frames and paused state
   if (data.isEmpty())
     return;
 
-  // Respect dashboard pause state
   if (IO::ConnectionManager::instance().paused())
     return;
 
+  // Detect format, decode, and publish the image
   m_imageFormat = detectFormat(data);
 
   QImage img = QImage::fromData(data);
@@ -457,6 +463,7 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
  */
 void Widgets::ImageView::reconfigureReader()
 {
+  // Destroy any existing reader before creating a new one
   if (m_reader) {
     m_reader->deleteLater();
     m_reader = nullptr;
@@ -497,6 +504,7 @@ void Widgets::ImageView::reconfigureReader()
  */
 QString Widgets::ImageView::detectFormat(const QByteArray& data)
 {
+  // Match magic bytes against known image format headers
   if (data.size() >= 3 && static_cast<quint8>(data[0]) == 0xFF
       && static_cast<quint8>(data[1]) == 0xD8 && static_cast<quint8>(data[2]) == 0xFF)
     return QStringLiteral("JPEG");

@@ -119,6 +119,7 @@ int DeclarativeWidget::contentHeight() const
  */
 void DeclarativeWidget::redraw(const QRect& rect)
 {
+  // Grab the widget pixmap if visible and an update was requested
   if (widget() != nullptr) {
     if (auto* tableView = qobject_cast<QTableView*>(widget()))
       tableView->doItemsLayout();
@@ -151,6 +152,7 @@ void DeclarativeWidget::paint(QPainter* painter)
  */
 void DeclarativeWidget::resizeWidget()
 {
+  // Resize the embedded widget to match the QML item dimensions
   if (widget() != nullptr) {
     if (width() > 0 && height() > 0) {
       widget()->setFixedSize(width(), height());
@@ -178,6 +180,7 @@ void DeclarativeWidget::requestUpdate()
  */
 void DeclarativeWidget::setWidget(QWidget* widget)
 {
+  // Accept the new widget and notify QML
   if (widget != nullptr) {
     m_widget = widget;
     Q_EMIT widgetChanged();
@@ -211,6 +214,7 @@ void DeclarativeWidget::setContentHeight(const int height)
  */
 void DeclarativeWidget::setPalette(const QPalette& palette)
 {
+  // Apply the new palette and trigger a repaint
   if (m_widget != nullptr) {
     m_widget->setPalette(palette);
     requestUpdate();

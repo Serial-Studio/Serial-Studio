@@ -103,6 +103,7 @@ bool Widgets::Bar::alarmsDefined() const noexcept
  */
 bool Widgets::Bar::alarmTriggered() const noexcept
 {
+  // Check value against low and high alarm thresholds
   if (m_alarmsDefined) {
     if (!std::isnan(m_alarmLow) && m_alarmLow > m_minValue) {
       if (m_value <= m_alarmLow)
@@ -254,6 +255,7 @@ double Widgets::Bar::normalizedAlarmHigh() const noexcept
  */
 void Widgets::Bar::updateData()
 {
+  // Read latest value from dashboard and clamp to valid range
   if (!isEnabled())
     return;
 

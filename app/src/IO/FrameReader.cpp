@@ -77,9 +77,11 @@ IO::FrameReader::FrameReader(QObject* parent)
  */
 void IO::FrameReader::processData(const ByteArrayPtr& data)
 {
+  // Validate input
   if (!data || data->isEmpty())
     return;
 
+  // Route data through the appropriate frame detection path
   bool framesEnqueued = false;
 
   if (m_operationMode == SerialStudio::ProjectFile
@@ -135,6 +137,7 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
  */
 void IO::FrameReader::setChecksum(const QString& checksum)
 {
+  // Store the algorithm name and compute its output length
   m_checksum      = checksum;
   const auto& map = IO::checksumFunctionMap();
   const auto it   = map.find(m_checksum);

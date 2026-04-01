@@ -61,6 +61,7 @@ Console::Handler::Handler()
   , m_fontFamilyIndex(0)
   , m_textBuffer(10 * 1024)
 {
+  // Restore persisted settings
   clear();
 
   const auto defaultFont = Misc::CommonFonts::instance().monoFont();
@@ -142,6 +143,7 @@ bool Console::Handler::ansiColorsEnabled() const
  */
 bool Console::Handler::vt100Emulation() const
 {
+  // Disable VT-100 when image widgets are active to prevent crashes
   if (hasImageWidget())
     return false;
 
@@ -154,6 +156,7 @@ bool Console::Handler::vt100Emulation() const
  */
 bool Console::Handler::ansiColors() const
 {
+  // Disable ANSI colors when image widgets are active
   if (hasImageWidget())
     return false;
 
@@ -217,6 +220,7 @@ Console::Handler::DisplayMode Console::Handler::displayMode() const
  */
 QString Console::Handler::currentHistoryString() const
 {
+  // Return the selected history entry, or empty if out of range
   if (m_historyItem < m_historyItems.count() && m_historyItem >= 0)
     return m_historyItems.at(m_historyItem);
 
@@ -276,6 +280,7 @@ QStringList Console::Handler::displayModes() const
  */
 QStringList Console::Handler::checksumMethods() const
 {
+  // Build method list once, replacing empty entry with "No Checksum"
   static QStringList list;
   if (list.isEmpty()) {
     list            = IO::availableChecksums();
@@ -328,6 +333,7 @@ int Console::Handler::fontFamilyIndex() const
  */
 QStringList Console::Handler::availableFonts() const
 {
+  // Collect all fixed-pitch fonts, sorted with default mono font first
   QStringList monospaceFonts;
   const auto allFonts = QFontDatabase::families();
   auto defaultFamily  = Misc::CommonFonts::instance().monoFont().family();
@@ -385,6 +391,7 @@ qsizetype Console::Handler::bufferLength() const
  */
 bool Console::Handler::validateUserHex(const QString& text)
 {
+  // Strip spaces and validate hex format
   QString cleanText = text.simplified().remove(' ');
 
   static QRegularExpression hexPattern("^[0-9A-Fa-f]*$");
@@ -403,6 +410,7 @@ bool Console::Handler::validateUserHex(const QString& text)
  */
 QString Console::Handler::formatUserHex(const QString& text)
 {
+  // Strip non-hex characters and reformat as spaced byte pairs
   static QRegularExpression exp("[^0-9A-Fa-f]");
   QString data = text.simplified().remove(exp);
 
@@ -424,6 +432,7 @@ QString Console::Handler::formatUserHex(const QString& text)
  */
 void Console::Handler::clear()
 {
+  // Reset the text buffer and line state
   m_textBuffer.clear();
   m_isStartingLine = true;
   m_lastCharWasCR  = false;
@@ -479,6 +488,7 @@ void Console::Handler::historyDown()
  */
 void Console::Handler::setupExternalConnections()
 {
+  // Wire language, project model, and connection signals
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
@@ -528,12 +538,14 @@ void Console::Handler::setupExternalConnections()
  */
 void Console::Handler::send(const QString& data)
 {
+  // Validate connection and record history
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
   if (!data.isEmpty())
     addToHistory(data);
 
+  // Encode data according to current mode
   QByteArray bin;
   if (dataMode() == DataMode::DataHexadecimal)
     bin = SerialStudio::hexToBytes(data);
@@ -675,6 +687,7 @@ void Console::Handler::setChecksumMethod(const int method)
  */
 void Console::Handler::setFontFamily(const QString& family)
 {
+  // Only accept fixed-pitch font families
   if (m_fontFamily != family) {
     QFont testFont(family);
     QFontInfo fontInfo(testFont);
@@ -738,9 +751,11 @@ void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
  */
 void Console::Handler::append(const QString& string, const bool addTimestamp)
 {
+  // Validate input
   if (string.isEmpty())
     return;
 
+  // Normalize line endings
   auto data = string;
   if (m_lastCharWasCR && data.startsWith('\n'))
     data.removeFirst();
@@ -909,6 +924,7 @@ const QStringList& Console::Handler::deviceNames() const noexcept
  */
 void Console::Handler::setCurrentDeviceId(int deviceId)
 {
+  // Guard against no-op changes
   if (m_currentDeviceId == deviceId)
     return;
 
@@ -947,6 +963,7 @@ void Console::Handler::setCurrentDeviceIndex(int index)
  */
 void Console::Handler::onDevicesChanged()
 {
+  // Gather current connection and source state
   const auto& mgr     = IO::ConnectionManager::instance();
   const auto opMode   = AppState::instance().operationMode();
   const auto& sources = DataModel::ProjectModel::instance().sources();
@@ -1085,6 +1102,7 @@ void Console::Handler::appendToDevice(int deviceId, const QString& str, bool add
 
 bool Console::Handler::hasImageWidget() const
 {
+  // Only check project groups when connected in project mode
   if (!IO::ConnectionManager::instance().isConnected())
     return false;
 
@@ -1114,6 +1132,7 @@ bool Console::Handler::imageWidgetActive() const
  */
 void Console::Handler::updateFont()
 {
+  // Validate font is fixed-pitch, fall back to default if not
   QFont testFont(m_fontFamily, m_fontSize);
   QFontInfo fontInfo(testFont);
 
@@ -1137,6 +1156,7 @@ void Console::Handler::updateFont()
  */
 void Console::Handler::addToHistory(const QString& command)
 {
+  // Trim history to max 100 entries and append the new command
   while (m_historyItems.count() > 100)
     m_historyItems.removeFirst();
 
@@ -1178,6 +1198,7 @@ QString Console::Handler::dataToString(QByteArrayView data)
  */
 QString Console::Handler::plainTextStr(QByteArrayView data)
 {
+  // Decode raw bytes to UTF-8
   QString utf8Data = QString::fromUtf8(data);
 
   if (vt100Emulation())
@@ -1229,6 +1250,7 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
  */
 QString Console::Handler::hexadecimalStr(QByteArrayView data)
 {
+  // Format data as hex dump with 16-byte rows and ASCII sidebar
   QString out;
   constexpr auto rowSize = 16;
 

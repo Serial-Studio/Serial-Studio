@@ -36,6 +36,7 @@
  */
 void API::Handlers::ExtensionHandler::registerCommands()
 {
+  // Obtain registry and register extension commands
   auto& registry = CommandRegistry::instance();
 
   // Empty schema for parameterless commands
@@ -194,6 +195,7 @@ void API::Handlers::ExtensionHandler::registerCommands()
 API::CommandResponse API::Handlers::ExtensionHandler::listAddons(const QString& id,
                                                                  const QJsonObject&)
 {
+  // Obtain instance and validate state
   auto& mgr = Misc::ExtensionManager::instance();
   QJsonArray result;
   for (const auto& addon : mgr.extensions())
@@ -211,6 +213,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::listAddons(const QString& 
 API::CommandResponse API::Handlers::ExtensionHandler::getAddonInfo(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Obtain instance and validate state
   const auto extensionId = params.value("extensionId").toString();
   if (extensionId.isEmpty())
     return CommandResponse::makeError(
@@ -238,6 +241,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::getAddonInfo(const QString
 API::CommandResponse API::Handlers::ExtensionHandler::installExtension(const QString& id,
                                                                        const QJsonObject& params)
 {
+  // Extract and validate parameter
   const int index = params.value("addonIndex").toInt(-1);
   if (index < 0)
     return CommandResponse::makeError(
@@ -258,6 +262,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::installExtension(const QSt
 API::CommandResponse API::Handlers::ExtensionHandler::uninstallExtension(const QString& id,
                                                                          const QJsonObject& params)
 {
+  // Extract and validate parameter
   const int index = params.value("addonIndex").toInt(-1);
   if (index < 0)
     return CommandResponse::makeError(
@@ -278,6 +283,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::uninstallExtension(const Q
 API::CommandResponse API::Handlers::ExtensionHandler::listRepositories(const QString& id,
                                                                        const QJsonObject&)
 {
+  // Obtain instance and validate state
   auto& mgr = Misc::ExtensionManager::instance();
   QJsonArray repos;
   for (const auto& url : mgr.repositories())
@@ -294,6 +300,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::listRepositories(const QSt
 API::CommandResponse API::Handlers::ExtensionHandler::addRepository(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Obtain instance and validate state
   const auto url = params.value("url").toString();
   if (url.isEmpty())
     return CommandResponse::makeError(
@@ -312,6 +319,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::addRepository(const QStrin
 API::CommandResponse API::Handlers::ExtensionHandler::removeRepository(const QString& id,
                                                                        const QJsonObject& params)
 {
+  // Extract and validate parameter
   const int index = params.value("index").toInt(-1);
   if (index < 0)
     return CommandResponse::makeError(
@@ -350,6 +358,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::refreshRepositories(const 
 API::CommandResponse API::Handlers::ExtensionHandler::savePluginState(const QString& id,
                                                                       const QJsonObject& params)
 {
+  // Obtain instance and validate state
   const auto pluginId = params.value("pluginId").toString();
   if (pluginId.isEmpty())
     return CommandResponse::makeError(
@@ -371,6 +380,7 @@ API::CommandResponse API::Handlers::ExtensionHandler::savePluginState(const QStr
 API::CommandResponse API::Handlers::ExtensionHandler::loadPluginState(const QString& id,
                                                                       const QJsonObject& params)
 {
+  // Obtain instance and validate state
   const auto pluginId = params.value("pluginId").toString();
   if (pluginId.isEmpty())
     return CommandResponse::makeError(

@@ -240,6 +240,7 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
                                                 qreal height,
                                                 qreal gap)
 {
+  // Validate inputs
   const int n = static_cast<int>(widgets.size());
   if (n == 0 || width <= 0 || height <= 0)
     return {};

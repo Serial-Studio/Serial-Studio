@@ -427,6 +427,7 @@ bool IO::Drivers::Audio::isWritable() const noexcept
  */
 bool IO::Drivers::Audio::configurationOk() const noexcept
 {
+  // Verify input device is selected and all indices are in range
   if (!validateInput())
     return false;
 
@@ -699,6 +700,7 @@ int IO::Drivers::Audio::selectedSampleRate() const
  */
 QStringList IO::Drivers::Audio::sampleRates() const
 {
+  // Build a string list from the device's supported sample rates
   QStringList list;
   if (!validateInput())
     return list;
@@ -814,6 +816,7 @@ int IO::Drivers::Audio::selectedOutputChannelConfiguration() const
  */
 QStringList IO::Drivers::Audio::inputDeviceList() const
 {
+  // Convert device info array to a name list
   QStringList list;
 
   for (const auto& device : m_inputDevices)
@@ -834,6 +837,7 @@ QStringList IO::Drivers::Audio::inputDeviceList() const
  */
 QStringList IO::Drivers::Audio::inputSampleFormats() const
 {
+  // Map device-supported formats to user-friendly names
   QStringList list;
   if (!validateInput())
     return list;
@@ -856,6 +860,7 @@ QStringList IO::Drivers::Audio::inputSampleFormats() const
  */
 QStringList IO::Drivers::Audio::inputChannelConfigurations() const
 {
+  // Map channel counts to user-friendly labels (Mono, Stereo, etc.)
   QStringList list;
   if (!validateInput())
     return list;
@@ -884,6 +889,7 @@ QStringList IO::Drivers::Audio::inputChannelConfigurations() const
  */
 QStringList IO::Drivers::Audio::outputDeviceList() const
 {
+  // Convert device info array to a name list
   QStringList list;
 
   for (const auto& device : m_outputDevices)
@@ -903,6 +909,7 @@ QStringList IO::Drivers::Audio::outputDeviceList() const
  */
 QStringList IO::Drivers::Audio::outputSampleFormats() const
 {
+  // Map device-supported formats to user-friendly names
   QStringList list;
   if (!validateOutput())
     return list;
@@ -925,6 +932,7 @@ QStringList IO::Drivers::Audio::outputSampleFormats() const
  */
 QStringList IO::Drivers::Audio::outputChannelConfigurations() const
 {
+  // Map channel counts to user-friendly labels
   QStringList list;
   if (!validateOutput())
     return list;

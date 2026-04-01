@@ -56,6 +56,7 @@ bool CSV::ExportWorker::isResourceOpen() const
  */
 void CSV::ExportWorker::closeResources()
 {
+  // Nothing to do if the file isn't open
   if (!m_csvFile.isOpen())
     return;
 
@@ -76,9 +77,11 @@ void CSV::ExportWorker::closeResources()
  */
 void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
+  // Validate batch is non-empty
   if (items.empty())
     return;
 
+  // Open a new CSV file if needed
   if (!m_csvFile.isOpen()) {
     // Use cached template frame (all sources) if available so that all
     // columns are registered upfront. Falls back to first data frame for
@@ -126,6 +129,7 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
  */
 QVector<QPair<int, QString>> CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 {
+  // Build the output file path from the current timestamp
   const auto dt       = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
@@ -196,6 +200,7 @@ CSV::Export::Export()
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
 {
+  // Set up background worker and connect state change signal
   initializeWorker();
   connect(m_worker,
           &ExportWorker::resourceOpenChanged,
@@ -279,6 +284,7 @@ void CSV::Export::closeFile()
  */
 void CSV::Export::onWorkerOpenChanged()
 {
+  // Sync cached open state from worker thread
   auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();
@@ -323,6 +329,7 @@ void CSV::Export::setupExternalConnections()
  */
 void CSV::Export::setExportEnabled(const bool enabled)
 {
+  // Close file first when disabling
   if (!enabled && isOpen())
     closeFile();
 

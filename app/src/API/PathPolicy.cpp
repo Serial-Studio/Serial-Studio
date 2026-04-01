@@ -30,6 +30,7 @@
 
 static QString normalizedPath(const QString& path, bool allowNonexistent)
 {
+  // Resolve and normalize the file path
   QFileInfo info(path);
   if (info.exists())
     return QDir::cleanPath(info.canonicalFilePath());

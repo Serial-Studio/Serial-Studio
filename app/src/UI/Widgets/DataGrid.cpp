@@ -93,6 +93,7 @@ bool Widgets::DataGrid::paused() const noexcept
  */
 void Widgets::DataGrid::setPaused(const bool paused)
 {
+  // Toggle pause state, triggering an immediate update when unpaused
   if (m_paused != paused) {
     m_paused = paused;
 
@@ -112,6 +113,7 @@ void Widgets::DataGrid::setPaused(const bool paused)
  */
 void Widgets::DataGrid::onFontsChanged()
 {
+  // Apply the current widget font to both body and header
   auto& fonts = Misc::CommonFonts::instance();
   setFont(fonts.widgetFont());
   setHeaderFont(fonts.widgetFont(1, true));
@@ -200,6 +202,7 @@ void Widgets::DataGrid::updateData()
  */
 QStringList Widgets::DataGrid::getRow(const DataModel::Dataset& dataset)
 {
+  // Build a title-value pair, appending units when present
   const QString title = dataset.title;
   const QString units = dataset.units;
 

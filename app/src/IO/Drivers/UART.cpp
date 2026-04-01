@@ -136,7 +136,7 @@ IO::Drivers::UART::~UART()
  */
 void IO::Drivers::UART::close()
 {
-  // Disconnect, close and delete the serial port
+  // Disconnect and close the serial port
   if (port() != nullptr) {
     disconnect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
     disconnect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
@@ -228,7 +228,7 @@ qint64 IO::Drivers::UART::write(const QByteArray& data)
  */
 bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
 {
-  // Ensure the device list is populated (live drivers don't run the 1 Hz timer)
+  // Ensure device list is populated (live drivers don't run the 1 Hz timer)
   if (m_deviceNames.isEmpty())
     refreshSerialDevices();
 
@@ -382,6 +382,7 @@ QStringList IO::Drivers::UART::portList() const
  */
 QStringList IO::Drivers::UART::baudRateList() const
 {
+  // Build a sorted set of standard baud rates plus the current custom rate
   QSet<qint32> baudSet = {110,
                           150,
                           300,
@@ -578,7 +579,7 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
-  // Ensure device list is populated so the clamp range is correct
+  // Populate device list and clamp to valid range
   if (m_deviceNames.isEmpty())
     refreshSerialDevices();
 
@@ -608,6 +609,7 @@ void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
  */
 void IO::Drivers::UART::registerDevice(const QString& device)
 {
+  // Validate and register the custom device path
   const auto trimmedPath = device.simplified();
 
   QFile path(trimmedPath);
@@ -631,6 +633,7 @@ void IO::Drivers::UART::registerDevice(const QString& device)
  */
 void IO::Drivers::UART::setParity(const quint8 parityIndex)
 {
+  // Persist the index and update internal parity enum
   Q_ASSERT(parityIndex < parityList().count());
 
   m_parityIndex = parityIndex;
@@ -670,6 +673,7 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
  */
 void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
 {
+  // Persist the index and update internal data bits enum
   Q_ASSERT(dataBitsIndex < dataBitsList().count());
 
   m_dataBitsIndex = dataBitsIndex;
@@ -706,6 +710,7 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
  */
 void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
 {
+  // Persist the index and update internal stop bits enum
   Q_ASSERT(stopBitsIndex < stopBitsList().count());
 
   m_stopBitsIndex = stopBitsIndex;
@@ -752,6 +757,7 @@ void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
  */
 void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
 {
+  // Persist the index and update internal flow control enum
   Q_ASSERT(flowControlIndex < flowControlList().count());
 
   m_flowControlIndex = flowControlIndex;
@@ -949,6 +955,7 @@ QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
  */
 QJsonObject IO::Drivers::UART::deviceIdentifier() const
 {
+  // Validate port index and retrieve port info
   if (m_portIndex < 1)
     return {};
 

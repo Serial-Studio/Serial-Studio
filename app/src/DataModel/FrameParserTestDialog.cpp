@@ -178,6 +178,7 @@ void DataModel::FrameParserTestDialog::clear()
  */
 void DataModel::FrameParserTestDialog::parseData()
 {
+  // Validate and retrieve input text
   const auto input = m_userInput->text();
   if (input.isEmpty())
     return;
@@ -239,6 +240,7 @@ void DataModel::FrameParserTestDialog::onThemeChanged()
  */
 void DataModel::FrameParserTestDialog::onLanguageChanged()
 {
+  // Update all translatable widget texts
   m_hexCheckBox->setText(tr("HEX"));
   m_clearButton->setText(tr("Clear"));
   m_parseButton->setText(tr("Evaluate"));
@@ -362,6 +364,7 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
  */
 QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
 {
+  // Strip non-alphanumeric characters and uppercase letters
   QString cleaned;
   for (const QChar& c : text)
     if (c.isLetterOrNumber())
@@ -404,6 +407,7 @@ QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
  */
 bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 {
+  // Empty input is always valid
   if (text.isEmpty())
     return true;
 
@@ -430,6 +434,7 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 void DataModel::FrameParserTestDialog::displayOutput(const QString& input,
                                                      const QStringList& output)
 {
+  // Reset table and update input display
   m_table->setRowCount(0);
   m_inputDisplay->setPlainText(input);
   if (input.isEmpty())

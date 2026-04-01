@@ -46,6 +46,7 @@
  */
 void API::Handlers::ProjectHandler::registerCommands()
 {
+  // Obtain registry and register all project commands
   auto& registry = CommandRegistry::instance();
 
   // Empty schema for parameterless commands
@@ -368,6 +369,7 @@ void API::Handlers::ProjectHandler::registerCommands()
 API::CommandResponse API::Handlers::ProjectHandler::fileNew(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().newJsonFile();
@@ -384,6 +386,7 @@ API::CommandResponse API::Handlers::ProjectHandler::fileNew(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::setTitle(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("title"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
@@ -409,6 +412,7 @@ API::CommandResponse API::Handlers::ProjectHandler::setTitle(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("filePath"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
@@ -492,6 +496,7 @@ API::CommandResponse API::Handlers::ProjectHandler::fileSave(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::getStatus(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -514,6 +519,7 @@ API::CommandResponse API::Handlers::ProjectHandler::getStatus(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::groupAdd(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("title"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
@@ -551,6 +557,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupAdd(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -569,6 +576,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& i
 API::CommandResponse API::Handlers::ProjectHandler::groupDuplicate(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentGroup();
@@ -585,6 +593,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDuplicate(const QString
 API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id,
                                                                const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("options"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: options"));
@@ -610,6 +619,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
 API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -628,6 +638,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString&
 API::CommandResponse API::Handlers::ProjectHandler::datasetDuplicate(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentDataset();
@@ -644,6 +655,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetDuplicate(const QStri
 API::CommandResponse API::Handlers::ProjectHandler::datasetSetOption(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("option"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: option"));
@@ -672,6 +684,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOption(const QStri
 API::CommandResponse API::Handlers::ProjectHandler::actionAdd(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().addAction();
@@ -687,6 +700,7 @@ API::CommandResponse API::Handlers::ProjectHandler::actionAdd(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::actionDelete(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -705,6 +719,7 @@ API::CommandResponse API::Handlers::ProjectHandler::actionDelete(const QString& 
 API::CommandResponse API::Handlers::ProjectHandler::actionDuplicate(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentAction();
@@ -724,6 +739,7 @@ API::CommandResponse API::Handlers::ProjectHandler::actionDuplicate(const QStrin
 API::CommandResponse API::Handlers::ProjectHandler::outputWidgetAdd(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Extract and validate parameter
   const int type = params.value(QStringLiteral("type")).toInt(0);
 
   DataModel::ProjectModel::instance().addOutputControl(static_cast<SerialStudio::OutputWidgetType>(
@@ -740,6 +756,7 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetAdd(const QStrin
 API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDelete(const QString& id,
                                                                        const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -758,6 +775,7 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDelete(const QSt
 API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDuplicate(const QString& id,
                                                                           const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentOutputWidget();
@@ -774,6 +792,7 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDuplicate(const 
 API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("code"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
@@ -808,6 +827,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
 API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Extract and validate parameter
   const int sourceId = params.contains(QStringLiteral("sourceId"))
                        ? params.value(QStringLiteral("sourceId")).toInt()
                        : 0;
@@ -836,6 +856,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
 API::CommandResponse API::Handlers::ProjectHandler::groupsList(const QString& id,
                                                                const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& groups = DataModel::ProjectModel::instance().groups();
@@ -858,6 +879,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupsList(const QString& id
 API::CommandResponse API::Handlers::ProjectHandler::datasetsList(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& groups = DataModel::ProjectModel::instance().groups();
@@ -887,6 +909,7 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetsList(const QString& 
 API::CommandResponse API::Handlers::ProjectHandler::actionsList(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& actions = DataModel::ProjectModel::instance().actions();
@@ -917,6 +940,7 @@ API::CommandResponse API::Handlers::ProjectHandler::actionsList(const QString& i
 API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("config"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: config"));
@@ -984,6 +1008,7 @@ API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& 
 API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const QString& id,
                                                                          const QJsonObject& params)
 {
+  // Obtain instance and validate state
   auto& model   = DataModel::ProjectModel::instance();
   auto& manager = IO::ConnectionManager::instance();
   bool updated  = false;
@@ -1081,6 +1106,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
 API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const QString& id,
                                                                          const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& cfg = AppState::instance().frameConfig();
@@ -1100,6 +1126,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
 API::CommandResponse API::Handlers::ProjectHandler::exportJson(const QString& id,
                                                                const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -1123,6 +1150,7 @@ API::CommandResponse API::Handlers::ProjectHandler::exportJson(const QString& id
 API::CommandResponse API::Handlers::ProjectHandler::loadIntoFrameBuilder(const QString& id,
                                                                          const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();

@@ -98,6 +98,7 @@ bool API::CommandHandler::isApiMessage(const QByteArray& data) const
  */
 QByteArray API::CommandHandler::processMessage(const QByteArray& data)
 {
+  // Parse and route the incoming message
   QString type;
   QJsonObject json;
 
@@ -172,6 +173,7 @@ API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& r
  */
 API::BatchResponse API::CommandHandler::processBatch(const BatchRequest& batch)
 {
+  // Execute each command sequentially and collect results
   BatchResponse response;
   response.id      = batch.id;
   response.success = true;
@@ -198,6 +200,7 @@ API::BatchResponse API::CommandHandler::processBatch(const BatchRequest& batch)
  */
 QJsonObject API::CommandHandler::getAvailableCommands() const
 {
+  // Build sorted command list with descriptions
   QJsonObject result;
   QJsonArray commandList;
 

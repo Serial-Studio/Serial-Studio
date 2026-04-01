@@ -146,6 +146,7 @@ const QFont& Misc::CommonFonts::boldUiFont() const
  */
 QFont Misc::CommonFonts::customUiFont(const double fraction, const bool bold)
 {
+  // Build a scaled UI font with the requested weight
   QFont font = bold ? m_boldUiFont : m_uiFont;
   font.setPointSizeF(m_uiFont.pointSizeF() * qMax(0.1, fraction));
   return font;
@@ -159,6 +160,7 @@ QFont Misc::CommonFonts::customUiFont(const double fraction, const bool bold)
  */
 QFont Misc::CommonFonts::customMonoFont(const double fraction, const bool bold)
 {
+  // Build a scaled monospace font with the requested weight
   QFont font = m_monoFont;
   font.setPointSizeF(m_monoFont.pointSizeF() * qMax(0.1, fraction));
   if (bold)
@@ -215,6 +217,7 @@ int Misc::CommonFonts::widgetFontIndex() const
  */
 QStringList Misc::CommonFonts::availableFonts() const
 {
+  // Collect non-private font families and sort them
   QStringList families;
   for (const QString& family : QFontDatabase::families()) {
     if (family.startsWith(QLatin1Char('.')))
@@ -244,6 +247,7 @@ QStringList Misc::CommonFonts::availableFonts() const
  */
 QFont Misc::CommonFonts::widgetFont(const double fraction, const bool bold) const
 {
+  // Build a widget font scaled by the global widget scale factor
   QFont font(m_widgetFontFamily);
   font.setPointSizeF(m_uiFont.pointSizeF() * qMax(0.1, fraction) * m_widgetFontScale);
   if (bold)
@@ -262,6 +266,7 @@ QFont Misc::CommonFonts::widgetFont(const double fraction, const bool bold) cons
  */
 void Misc::CommonFonts::setWidgetFontScale(const double scale)
 {
+  // Clamp and apply the new font scale
   const double clamped = qBound(0.5, scale, 3.0);
   if (qFuzzyCompare(m_widgetFontScale, clamped))
     return;

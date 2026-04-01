@@ -98,7 +98,7 @@ IO::FileTransmission& IO::FileTransmission::instance()
  */
 bool IO::FileTransmission::active() const
 {
-  // Plain text or raw binary mode
+  // Check timer-based modes first
   if (m_transferMode == PlainText || m_transferMode == RawBinary)
     return m_timer.isActive();
 
@@ -169,6 +169,7 @@ int IO::FileTransmission::protocolTimeout() const noexcept
  */
 int IO::FileTransmission::transmissionProgress() const
 {
+  // Avoid division by zero when no file is loaded
   if (m_bytesTotal <= 0)
     return 0;
 
@@ -204,6 +205,7 @@ qint64 IO::FileTransmission::bytesTotal() const noexcept
  */
 QString IO::FileTransmission::fileName() const
 {
+  // Return placeholder text when no file is selected
   if (!m_file.isOpen())
     return tr("No file selected...");
 

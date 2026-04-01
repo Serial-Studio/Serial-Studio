@@ -201,11 +201,13 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
 void Widgets::Terminal::drawSegmentSelection(
   QPainter* painter, const QString& line, int lineIndex, int segStart, int segEnd, int y)
 {
+  // Skip if no selection or this line is out of range
   if (m_selectionEnd.isNull())
     return;
   if (lineIndex < m_selectionStart.y() || lineIndex > m_selectionEnd.y())
     return;
 
+  // Determine which character columns are selected in this segment
   int selStartX, selEndX;
   if (lineIndex == m_selectionStart.y() && lineIndex == m_selectionEnd.y()) {
     selStartX = qMax(m_selectionStart.x(), segStart);
@@ -350,6 +352,7 @@ void Widgets::Terminal::renderAnsiSegment(QPainter* painter,
  */
 void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLine, int lineHeight)
 {
+  // Walk visible lines to find the cursor's visual row and draw it
   const int cursorLine = m_cursorPosition.y();
   const int cursorCol  = m_cursorPosition.x();
 
@@ -419,9 +422,11 @@ void Widgets::Terminal::drawCursor(QPainter* painter, int firstLine, int lastVLi
  */
 void Widgets::Terminal::paint(QPainter* painter)
 {
+  // Skip rendering when hidden
   if (!isVisible() || !painter)
     return;
 
+  // Prepare font and compute visible line range
   painter->setFont(m_font);
   int lineHeight      = m_cHeight;
   const int firstLine = m_scrollOffsetY;
@@ -638,6 +643,7 @@ int Widgets::Terminal::lineCount() const
  */
 int Widgets::Terminal::linesPerPage() const
 {
+  // Avoid divide-by-zero when font metrics are not yet available
   if (m_cHeight <= 0)
     return 0;
 
@@ -676,6 +682,7 @@ int Widgets::Terminal::scrollOffsetY() const
  */
 int Widgets::Terminal::maxCharsPerLine() const
 {
+  // Fall back to 84 columns until font metrics are available
   if (m_cWidth <= 0)
     return 84;
 
@@ -733,12 +740,14 @@ int Widgets::Terminal::terminalRows() const
  */
 void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
 {
+  // Delegate to base class when VT-100 emulation is inactive
   if (!vt100emulation() || !IO::ConnectionManager::instance().isConnected()
       || !IO::ConnectionManager::instance().readWrite()) {
     QuickPaintedItemCompat::keyPressEvent(event);
     return;
   }
 
+  // Translate the key event to a VT-100 byte sequence
   QByteArray seq;
   const Qt::KeyboardModifiers mods = event->modifiers();
   const int key                    = event->key();
@@ -876,6 +885,7 @@ void Widgets::Terminal::keyPressEvent(QKeyEvent* event)
  */
 void Widgets::Terminal::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
+  // Forward to base class and notify QML when the size changes
   QuickPaintedItemCompat::geometryChange(newGeometry, oldGeometry);
 
   if (newGeometry.size() != oldGeometry.size())
@@ -915,6 +925,7 @@ int Widgets::Terminal::findCharAtPixelX(const QString& line,
                                         int segEnd,
                                         int pixelX) const
 {
+  // Accumulate character widths until the target pixel offset is reached
   const QFontMetrics fm(m_font);
   int widthSum = 0;
   for (int j = segStart; j < segEnd; ++j) {
@@ -943,6 +954,7 @@ int Widgets::Terminal::findCharAtPixelX(const QString& line,
 int Widgets::Terminal::calcCursorPixelX(
   QPainter* painter, const QString& line, int segStart, int cursorCol, int segEnd) const
 {
+  // Sum character widths from segment start up to the cursor column
   int cursorX     = m_borderX;
   const int limit = qMin(cursorCol, segEnd);
   for (int j = segStart; j < limit; ++j)
@@ -959,6 +971,7 @@ int Widgets::Terminal::calcCursorPixelX(
  */
 QPoint Widgets::Terminal::positionToCursor(const QPoint& pos) const
 {
+  // Map pixel coordinates to a logical (column, line) cursor position
   int localY     = (pos.y() - m_borderY) / m_cHeight;
   int remainingY = localY;
 
@@ -1108,6 +1121,7 @@ void Widgets::Terminal::selectAll()
  */
 void Widgets::Terminal::setFont(const QFont& font)
 {
+  // Apply the font and recalculate character metrics
   m_font = font;
   m_font.setStyleStrategy(QFont::PreferAntialias);
 
@@ -1199,6 +1213,7 @@ void Widgets::Terminal::setVt100Emulation(const bool enabled)
  */
 void Widgets::Terminal::setAnsiColors(const bool enabled)
 {
+  // Toggle ANSI color mode and allocate color data when enabling
   m_ansiColors = enabled;
 
   if (enabled) {
@@ -1321,6 +1336,7 @@ void Widgets::Terminal::loadWelcomeGuide()
  */
 void Widgets::Terminal::append(const QString& data)
 {
+  // Process each character through the VT-100 state machine
   QString text;
   text.reserve(data.size());
 

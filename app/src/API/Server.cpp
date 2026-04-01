@@ -51,6 +51,7 @@ constexpr int kMaxApiBytesPerWindow    = 128 * 1024 * 1024;
 
 bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 {
+  // Track nesting depth while skipping string contents
   int depth     = 0;
   bool inString = false;
   bool escaped  = false;
@@ -115,6 +116,7 @@ bool API::ServerWorker::isResourceOpen() const
  */
 void API::ServerWorker::closeResources()
 {
+  // Abort and schedule deletion for all managed sockets
   for (auto* socket : std::as_const(m_sockets)) {
     if (socket) {
       socket->abort();
@@ -134,6 +136,7 @@ void API::ServerWorker::closeResources()
  */
 void API::ServerWorker::addSocket(QTcpSocket* socket)
 {
+  // Validate socket and register signal handlers
   if (!socket)
     return;
 
@@ -149,6 +152,7 @@ void API::ServerWorker::addSocket(QTcpSocket* socket)
  */
 void API::ServerWorker::removeSocket(QTcpSocket* socket)
 {
+  // Remove socket and notify listeners
   m_sockets.removeAll(socket);
 
   Q_EMIT socketRemoved(socket);
@@ -166,6 +170,7 @@ void API::ServerWorker::removeSocket(QTcpSocket* socket)
  */
 void API::ServerWorker::writeRawData(const IO::ByteArrayPtr& data)
 {
+  // Encode raw data as base64 JSON and broadcast to all clients
   if (!data || data->isEmpty() || m_sockets.isEmpty())
     return;
 
@@ -187,6 +192,7 @@ void API::ServerWorker::writeRawData(const IO::ByteArrayPtr& data)
  */
 void API::ServerWorker::broadcastEvent(const QJsonObject& event)
 {
+  // Serialize event JSON and write to all connected sockets
   if (m_sockets.isEmpty())
     return;
 
@@ -254,6 +260,7 @@ void API::ServerWorker::onSocketDisconnected()
  */
 void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
+  // Serialize frames to JSON and broadcast to all clients
   if (items.empty() || m_sockets.isEmpty())
     return;
 
@@ -291,6 +298,7 @@ API::Server::Server()
   , m_enabled(false)
   , m_externalConnections(false)
 {
+  // Restore persisted settings
   m_externalConnections = m_settings.value("API/ExternalConnections", false).toBool();
 
   initializeWorker();
@@ -381,6 +389,7 @@ int API::Server::clientCount() const noexcept
  */
 void API::Server::removeConnection()
 {
+  // Forward socket removal to the worker thread
   auto* socket = qobject_cast<QTcpSocket*>(sender());
   if (socket) {
     auto* worker = static_cast<ServerWorker*>(m_worker);
@@ -400,6 +409,7 @@ void API::Server::removeConnection()
  */
 void API::Server::setEnabled(const bool enabled)
 {
+  // Determine effective state and start/stop the TCP listener
   bool effectiveEnabled = enabled;
   bool closeResources   = false;
 
@@ -454,6 +464,7 @@ void API::Server::setEnabled(const bool enabled)
  */
 void API::Server::setExternalConnections(const bool enabled)
 {
+  // Guard against duplicate value
   if (m_externalConnections == enabled)
     return;
 
@@ -509,6 +520,7 @@ void API::Server::setExternalConnections(const bool enabled)
  */
 void API::Server::hotpathTxData(const IO::ByteArrayPtr& data)
 {
+  // Forward raw data to worker thread for client transmission
   if (!enabled())
     return;
 
@@ -541,6 +553,7 @@ void API::Server::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
  */
 void API::Server::broadcastLifecycleEvent(const QString& eventName)
 {
+  // Build event JSON and forward to worker thread
   if (!enabled())
     return;
 
@@ -564,6 +577,7 @@ void API::Server::broadcastLifecycleEvent(const QString& eventName)
  */
 void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
 {
+  // Validate connection state and enforce rate limits
   if (!enabled() || data.isEmpty() || !socket)
     return;
 
@@ -916,6 +930,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
  */
 void API::Server::acceptConnection()
 {
+  // Accept socket and move it to the worker thread
   auto* socket = m_server.nextPendingConnection();
   if (!socket) {
     if (enabled())

@@ -34,6 +34,7 @@
  */
 void API::Handlers::MQTTHandler::registerCommands()
 {
+  // Obtain registry and register all MQTT commands
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
@@ -445,6 +446,7 @@ void API::Handlers::MQTTHandler::registerCommands()
 API::CommandResponse API::Handlers::MQTTHandler::setMode(const QString& id,
                                                          const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("modeIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: modeIndex"));
@@ -477,6 +479,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setMode(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setHostname(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("hostname"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: hostname"));
@@ -503,6 +506,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setHostname(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setPort(const QString& id,
                                                          const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("port"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
@@ -531,6 +535,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setPort(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setClientId(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("clientId"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: clientId"));
@@ -552,6 +557,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setClientId(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setUsername(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("username"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: username"));
@@ -573,6 +579,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setUsername(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setPassword(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("password"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: password"));
@@ -594,6 +601,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setPassword(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setTopic(const QString& id,
                                                           const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("topic"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: topic"));
@@ -615,6 +623,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setTopic(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setCleanSession(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -636,6 +645,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setCleanSession(const QString& 
 API::CommandResponse API::Handlers::MQTTHandler::setMqttVersion(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("versionIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: versionIndex"));
@@ -668,6 +678,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setMqttVersion(const QString& i
 API::CommandResponse API::Handlers::MQTTHandler::setKeepAlive(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("seconds"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: seconds"));
@@ -694,6 +705,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setKeepAlive(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setAutoKeepAlive(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -715,6 +727,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setAutoKeepAlive(const QString&
 API::CommandResponse API::Handlers::MQTTHandler::setWillQoS(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("qos"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: qos"));
@@ -743,6 +756,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setWillQoS(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setWillRetain(const QString& id,
                                                                const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -764,6 +778,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setWillRetain(const QString& id
 API::CommandResponse API::Handlers::MQTTHandler::setWillTopic(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("topic"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: topic"));
@@ -785,6 +800,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setWillTopic(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::setWillMessage(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("message"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: message"));
@@ -806,6 +822,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setWillMessage(const QString& i
 API::CommandResponse API::Handlers::MQTTHandler::setSslEnabled(const QString& id,
                                                                const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -827,6 +844,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setSslEnabled(const QString& id
 API::CommandResponse API::Handlers::MQTTHandler::setSslProtocol(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("protocolIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: protocolIndex"));
@@ -859,6 +877,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setSslProtocol(const QString& i
 API::CommandResponse API::Handlers::MQTTHandler::setPeerVerifyMode(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("modeIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: modeIndex"));
@@ -891,6 +910,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setPeerVerifyMode(const QString
 API::CommandResponse API::Handlers::MQTTHandler::setPeerVerifyDepth(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("depth"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: depth"));
@@ -916,6 +936,7 @@ API::CommandResponse API::Handlers::MQTTHandler::setPeerVerifyDepth(const QStrin
 API::CommandResponse API::Handlers::MQTTHandler::connect(const QString& id,
                                                          const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MQTT::Client::instance().openConnection();
@@ -931,6 +952,7 @@ API::CommandResponse API::Handlers::MQTTHandler::connect(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::disconnect(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MQTT::Client::instance().closeConnection();
@@ -946,6 +968,7 @@ API::CommandResponse API::Handlers::MQTTHandler::disconnect(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::toggleConnection(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& mqtt              = MQTT::Client::instance();
@@ -965,6 +988,7 @@ API::CommandResponse API::Handlers::MQTTHandler::toggleConnection(const QString&
 API::CommandResponse API::Handlers::MQTTHandler::regenerateClientId(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& mqtt = MQTT::Client::instance();
@@ -985,6 +1009,7 @@ API::CommandResponse API::Handlers::MQTTHandler::regenerateClientId(const QStrin
 API::CommandResponse API::Handlers::MQTTHandler::getConfiguration(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& mqtt = MQTT::Client::instance();
@@ -1049,6 +1074,7 @@ API::CommandResponse API::Handlers::MQTTHandler::getConfiguration(const QString&
 API::CommandResponse API::Handlers::MQTTHandler::getConnectionStatus(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& mqtt = MQTT::Client::instance();
@@ -1067,6 +1093,7 @@ API::CommandResponse API::Handlers::MQTTHandler::getConnectionStatus(const QStri
 API::CommandResponse API::Handlers::MQTTHandler::getModes(const QString& id,
                                                           const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& modes = MQTT::Client::instance().modes();
@@ -1091,6 +1118,7 @@ API::CommandResponse API::Handlers::MQTTHandler::getModes(const QString& id,
 API::CommandResponse API::Handlers::MQTTHandler::getMqttVersions(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& versions = MQTT::Client::instance().mqttVersions();
@@ -1115,6 +1143,7 @@ API::CommandResponse API::Handlers::MQTTHandler::getMqttVersions(const QString& 
 API::CommandResponse API::Handlers::MQTTHandler::getSslProtocols(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& protocols = MQTT::Client::instance().sslProtocols();
@@ -1139,6 +1168,7 @@ API::CommandResponse API::Handlers::MQTTHandler::getSslProtocols(const QString& 
 API::CommandResponse API::Handlers::MQTTHandler::getPeerVerifyModes(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& modes = MQTT::Client::instance().peerVerifyModes();

@@ -192,10 +192,13 @@ int IO::ConnectionManager::connectedDeviceCount() const
 }
 
 /**
- * @brief Returns true when the active UI driver's configuration is valid.
+ * @brief Returns true when the active connection target(s) are configured.
  */
 bool IO::ConnectionManager::configurationOk() const
 {
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    return projectConfigurationOk();
+
   auto* uiDriver = activeUiDriver();
   if (uiDriver)
     return uiDriver->configurationOk();
@@ -282,6 +285,7 @@ IO::HAL_Driver* IO::ConnectionManager::driver(int deviceId) const
  */
 IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
 {
+  // Find the matching source entry
   const auto& sources = DataModel::ProjectModel::instance().sources();
 
   // Look up the source by deviceId
@@ -510,9 +514,11 @@ void IO::ConnectionManager::setUiDriverProperty(const QString& key, const QVaria
  */
 void IO::ConnectionManager::processPayload(const QByteArray& payload)
 {
+  // Ignore empty payloads
   if (payload.isEmpty())
     return;
 
+  // Forward to console, API server, and frame builder
   static auto& console      = Console::Handler::instance();
   static auto& server       = API::Server::instance();
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
@@ -545,9 +551,11 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
 void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayload,
                                                       const QMap<int, QByteArray>& sourcePayloads)
 {
+  // Ignore empty payloads
   if (fullPayload.isEmpty())
     return;
 
+  // Cache singleton references for the hotpath
   static auto& console      = Console::Handler::instance();
   static auto& server       = API::Server::instance();
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
@@ -681,6 +689,7 @@ void IO::ConnectionManager::resetFrameReader()
  */
 void IO::ConnectionManager::setupExternalConnections()
 {
+  // Restore persisted bus type selection
   auto savedBusType = m_settings.value("IOManager/busType", 0).toInt();
   if (savedBusType < 0 || savedBusType >= availableBuses().count())
     savedBusType = 0;
@@ -1085,9 +1094,11 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
  */
 void IO::ConnectionManager::syncUiDriverToLive()
 {
+  // Skip if we're applying project settings to avoid feedback loops
   if (m_syncingFromProject)
     return;
 
+  // Only sync in single-source or non-ProjectFile modes
   const auto& srcs = DataModel::ProjectModel::instance().sources();
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile && srcs.size() > 1)
     return;
@@ -1113,6 +1124,7 @@ void IO::ConnectionManager::syncUiDriverToLive()
  */
 void IO::ConnectionManager::syncUiDriverFromSource0()
 {
+  // Read current operation mode and project sources
   const auto opMode = AppState::instance().operationMode();
   const auto& model = DataModel::ProjectModel::instance();
   const auto& srcs  = model.sources();
@@ -1159,9 +1171,11 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
  */
 void IO::ConnectionManager::onUiDriverConfigurationChanged()
 {
+  // Skip if we're applying project settings to avoid feedback loops
   if (m_syncingFromProject)
     return;
 
+  // Only persist to source[0] in single-source ProjectFile mode
   const auto opMode = AppState::instance().operationMode();
   auto& model       = DataModel::ProjectModel::instance();
 
@@ -1197,6 +1211,7 @@ void IO::ConnectionManager::onUiDriverConfigurationChanged()
  */
 void IO::ConnectionManager::rebuildDevices()
 {
+  // Snapshot current state before rebuilding
   const auto opMode       = AppState::instance().operationMode();
   const bool wasConnected = isConnected();
 
@@ -1255,13 +1270,11 @@ void IO::ConnectionManager::rebuildDevices()
     auto dm         = std::make_unique<DeviceManager>(
       src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
 
-    // Device 0 config changes must propagate to QML (configurationOk)
-    if (src.sourceId == 0) {
-      connect(rawDriver,
-              &IO::HAL_Driver::configurationChanged,
-              this,
-              &IO::ConnectionManager::configurationChanged);
-    }
+    connect(rawDriver,
+            &IO::HAL_Driver::configurationChanged,
+            this,
+            &IO::ConnectionManager::configurationChanged,
+            Qt::UniqueConnection);
 
     wireDevice(dm.get());
     m_devices[src.sourceId] = std::move(dm);
@@ -1272,6 +1285,7 @@ void IO::ConnectionManager::rebuildDevices()
     resetFrameReader();
 
   // Notify QML and dependent systems that the device topology changed
+  Q_EMIT configurationChanged();
   Q_EMIT driverChanged();
   Q_EMIT connectedChanged();
   Q_EMIT contextsRebuilt();
@@ -1297,6 +1311,31 @@ void IO::ConnectionManager::rebuildDevices()
   // Reconnect if we were connected before the rebuild
   if (wasConnected)
     QMetaObject::invokeMethod(this, [this] { connectDevice(); }, Qt::QueuedConnection);
+}
+
+/**
+ * @brief Returns true when the current project sources are all configured.
+ *
+ * In ProjectFile mode connections come from the per-source live drivers created
+ * by rebuildDevices(), not from the global Quick Plot UI driver. Validate those
+ * live drivers directly so stale hardware-panel state cannot block Connect.
+ */
+bool IO::ConnectionManager::projectConfigurationOk() const
+{
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  if (sources.empty())
+    return false;
+
+  for (const auto& src : sources) {
+    auto it = m_devices.find(src.sourceId);
+    if (it == m_devices.end() || !it->second || !it->second->driver())
+      return false;
+
+    if (!it->second->driver()->configurationOk())
+      return false;
+  }
+
+  return true;
 }
 
 /**
@@ -1371,6 +1410,7 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
  */
 IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 {
+  // Initialize config and determine operation mode
   FrameConfig cfg;
   const auto opMode = AppState::instance().operationMode();
 

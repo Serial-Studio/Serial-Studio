@@ -121,7 +121,7 @@ QVariantList Widgets::Output::Panel::geometry() const
  */
 void Widgets::Output::Panel::updateLayout(qreal width, qreal height)
 {
-  // Compute available area after margins
+  // Compute available area after subtracting margins
   const qreal margin = 4.0;
   const qreal gap    = 4.0;
   const qreal w      = width - 2 * margin;

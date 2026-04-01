@@ -289,10 +289,9 @@ void UI::WidgetRegistry::updateWidget(UI::WidgetID id,
   if (!m_widgets.contains(id))
     return;
 
+  // Merge non-empty fields and notify if anything changed
   WidgetInfo& info = m_widgets[id];
-
-  // Apply non-empty fields and track whether anything changed
-  bool changed = false;
+  bool changed     = false;
 
   if (!title.isEmpty() && info.title != title) {
     info.title = title;

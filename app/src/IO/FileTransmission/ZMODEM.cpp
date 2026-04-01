@@ -76,6 +76,7 @@ bool IO::Protocols::ZMODEM::isActive() const
  */
 void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
 {
+  // Abort any existing transfer and open the file
   if (isActive())
     cancelTransfer();
 
@@ -105,9 +106,11 @@ void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
  */
 void IO::Protocols::ZMODEM::cancelTransfer()
 {
+  // Ignore if no transfer is in progress
   if (!isActive())
     return;
 
+  // Send cancel sequence and reset state
   sendCancel();
   m_timeoutTimer.stop();
   m_state      = State::Idle;
@@ -133,6 +136,7 @@ void IO::Protocols::ZMODEM::cancelTransfer()
  */
 void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
 {
+  // Parse each byte through the ZMODEM header state machine
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
 
@@ -355,6 +359,7 @@ void IO::Protocols::ZMODEM::setMaxRetries(int retries)
  */
 void IO::Protocols::ZMODEM::sendZRQINIT()
 {
+  // Transition to ZRQINIT state
   m_state = State::SentZRQINIT;
 
   // Standard auto-start sequence: rz\r followed by ZRQINIT header
@@ -372,6 +377,7 @@ void IO::Protocols::ZMODEM::sendZRQINIT()
  */
 void IO::Protocols::ZMODEM::sendZFILE()
 {
+  // Transition to ZFILE state
   m_state = State::SentZFILE;
 
   // Send ZFILE binary header (flags = 0 for default)
@@ -400,6 +406,7 @@ void IO::Protocols::ZMODEM::sendZFILE()
  */
 void IO::Protocols::ZMODEM::sendDataSubpackets()
 {
+  // Transition to data-sending state
   m_state = State::SendingData;
 
   // Seek to the requested offset (for crash recovery)
@@ -434,6 +441,7 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
  */
 void IO::Protocols::ZMODEM::sendZEOF()
 {
+  // Send ZEOF header with the file size
   m_state = State::SentZEOF;
   Q_EMIT writeRequested(buildBin32Header(kZEOF, static_cast<quint32>(m_fileSize)));
   Q_EMIT statusMessage(tr("File data sent, waiting for confirmation..."));
@@ -445,6 +453,7 @@ void IO::Protocols::ZMODEM::sendZEOF()
  */
 void IO::Protocols::ZMODEM::sendZFIN()
 {
+  // Send ZFIN header to close the session
   m_state = State::SentZFIN;
   Q_EMIT writeRequested(buildHexHeader(kZFIN, 0));
   Q_EMIT statusMessage(tr("Sending ZFIN..."));
@@ -456,6 +465,7 @@ void IO::Protocols::ZMODEM::sendZFIN()
  */
 void IO::Protocols::ZMODEM::sendCancel()
 {
+  // Build cancel sequence: 5 CAN bytes + 5 backspaces
   QByteArray cancel;
   for (int i = 0; i < 5; ++i)
     cancel.append(static_cast<char>(0x18));
@@ -476,6 +486,7 @@ void IO::Protocols::ZMODEM::sendCancel()
  */
 void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 {
+  // Stop the timeout and dispatch based on header type
   m_timeoutTimer.stop();
 
   switch (type) {
@@ -585,6 +596,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
 {
+  // Allocate header buffer
   QByteArray header;
   header.reserve(32);
 
@@ -632,6 +644,7 @@ QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
 {
+  // Allocate header buffer
   QByteArray header;
   header.reserve(32);
 
@@ -671,6 +684,7 @@ QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 frameEnd)
 {
+  // Allocate packet buffer with room for ZDLE escaping
   QByteArray packet;
   packet.reserve(data.size() * 2 + 16);
 
@@ -712,6 +726,7 @@ QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 
  */
 QByteArray IO::Protocols::ZMODEM::zdleEncode(const QByteArray& data)
 {
+  // Allocate output buffer with headroom for escape sequences
   QByteArray encoded;
   encoded.reserve(data.size() + data.size() / 4);
 
@@ -757,6 +772,7 @@ bool IO::Protocols::ZMODEM::needsEscape(quint8 ch)
  */
 QByteArray IO::Protocols::ZMODEM::toHex(quint8 byte)
 {
+  // Convert byte to two ASCII hex characters
   static const char hexDigits[] = "0123456789abcdef";
   QByteArray result(2, '\0');
   result[0] = hexDigits[(byte >> 4) & 0x0F];
@@ -773,9 +789,11 @@ QByteArray IO::Protocols::ZMODEM::toHex(quint8 byte)
  */
 void IO::Protocols::ZMODEM::handleTimeout()
 {
+  // Ignore timeouts when idle
   if (!isActive())
     return;
 
+  // Abort if maximum retries exceeded
   ++m_retryCount;
   if (m_retryCount >= m_maxRetries) {
     sendCancel();

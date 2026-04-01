@@ -179,6 +179,7 @@ qint64 IO::Drivers::HID::write(const QByteArray& data)
  */
 bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 {
+  // Open the selected HID device and start the read thread
   (void)mode;
 
   if (!configurationOk())
@@ -288,6 +289,7 @@ QString IO::Drivers::HID::usage() const
  */
 void IO::Drivers::HID::setDeviceIndex(const int index)
 {
+  // Update selection, refresh usage info, and persist
   if (m_deviceIndex != index) {
     // Ensure device list is populated so the index is meaningful
     if (m_devicePaths.isEmpty())
@@ -484,6 +486,7 @@ void IO::Drivers::HID::enumerateDevices()
  */
 QJsonObject IO::Drivers::HID::deviceIdentifier() const
 {
+  // Walk the enumeration list to find VID/PID/serial for the selected device
   if (m_deviceIndex < 1 || m_deviceIndex >= m_devicePaths.size())
     return {};
 
@@ -515,6 +518,7 @@ QJsonObject IO::Drivers::HID::deviceIdentifier() const
  */
 bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
 {
+  // Match saved VID/PID/serial against the current device list
   if (id.isEmpty())
     return false;
 
@@ -604,6 +608,7 @@ void IO::Drivers::HID::setDriverProperty(const QString& key, const QVariant& val
  */
 void IO::Drivers::HID::readLoop()
 {
+  // Poll the HID device with a 100ms timeout until stopped
   uint8_t buf[kReadBufSize];
 
   while (m_running.load()) {

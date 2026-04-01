@@ -167,7 +167,7 @@ int UI::WindowManager::zOrder(QQuickItem* item) const
  */
 QJsonObject UI::WindowManager::serializeLayout() const
 {
-  // Save per-window geometry in manual layout mode
+  // Build a JSON object containing window order, mode, and geometries
   QJsonObject layout;
   if (!m_autoLayoutEnabled) {
     QJsonArray geometries;
@@ -217,7 +217,7 @@ QJsonObject UI::WindowManager::serializeLayout() const
  */
 bool UI::WindowManager::restoreLayout(const QJsonObject& layout)
 {
-  // Empty layout, nothing to restore
+  // Validate input
   if (layout.isEmpty())
     return false;
 
@@ -353,7 +353,7 @@ void UI::WindowManager::loadLayout()
  */
 void UI::WindowManager::autoLayout()
 {
-  // Layout constants
+  // Define margins and spacing for the tiling grid
   const int margin  = 4;
   const int spacing = -1;
 
@@ -603,7 +603,7 @@ void UI::WindowManager::autoLayout()
  */
 void UI::WindowManager::cascadeLayout()
 {
-  // Validate canvas dimensions
+  // Obtain canvas dimensions and validate
   const int canvasW = static_cast<int>(width());
   const int canvasH = static_cast<int>(height());
 
@@ -708,7 +708,7 @@ void UI::WindowManager::clearBackgroundImage()
  */
 void UI::WindowManager::selectBackgroundImage()
 {
-  // Create non-native file dialog for image selection
+  // Open a file dialog to let the user pick a wallpaper image
   auto* dialog = new QFileDialog(nullptr,
                                  tr("Select Background Image"),
                                  QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
@@ -792,6 +792,7 @@ void UI::WindowManager::registerWindow(const int id, QQuickItem* item)
  */
 void UI::WindowManager::unregisterWindow(QQuickItem* item)
 {
+  // Remove window from tracking maps and order list
   m_windowZ.remove(item);
   m_windowOrder.removeAll(getIdForWindow(item));
   for (auto it = m_windows.begin(); it != m_windows.end(); ++it) {
@@ -831,6 +832,7 @@ void UI::WindowManager::setBackgroundImage(const QString& path)
  */
 void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 {
+  // Toggle layout mode and restore any maximized windows before re-tiling
   if (m_autoLayoutEnabled != enabled) {
     m_layoutRestored    = false;
     m_autoLayoutEnabled = enabled;
@@ -1013,6 +1015,7 @@ int UI::WindowManager::getIdForWindow(QQuickItem* item) const
  */
 int UI::WindowManager::determineNewIndexFromMousePos(const QPoint& pos) const
 {
+  // Hit-test to find the window under the cursor and return its order index
   QQuickItem* hoveredWindow = getWindow(pos.x(), pos.y());
   if (!hoveredWindow)
     return m_windowOrder.size();
@@ -1058,6 +1061,7 @@ QRect UI::WindowManager::extractGeometry(QQuickItem* item) const
  */
 UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* target) const
 {
+  // Determine which edge or corner the cursor is near for resize
   if (target->state() == "normal") {
     // Map mouse position to window-local coordinates
     const int kResizeMargin = 8;
@@ -1110,7 +1114,7 @@ UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* ta
  */
 QQuickItem* UI::WindowManager::getWindow(const int x, const int y) const
 {
-  // Sort windows by descending z-order for correct hit-testing
+  // Find the topmost visible window containing the given point
   QPointF point(x, y);
   QList<QQuickItem*> windows = m_windows.values();
   std::sort(
@@ -1145,6 +1149,7 @@ QQuickItem* UI::WindowManager::getWindow(const int x, const int y) const
  */
 void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
 {
+  // Compute movement delta from the initial press position
   const QPoint currentPos = event->pos();
   const QPoint delta      = currentPos - m_initialMousePos;
   int dragDistance        = delta.manhattanLength();
@@ -1369,7 +1374,7 @@ void UI::WindowManager::mouseMoveEvent(QMouseEvent* event)
  */
 void UI::WindowManager::mousePressEvent(QMouseEvent* event)
 {
-  // Reset tracking state
+  // Clear previous interaction state before hit-testing
   m_dragWindow      = nullptr;
   m_targetWindow    = nullptr;
   m_resizeWindow    = nullptr;
@@ -1468,7 +1473,7 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
  */
 void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
 {
-  // Auto-layout: swap window order and re-tile
+  // Finalize drag/resize: apply snap, swap order, or commit geometry
   if (autoLayoutEnabled()) {
     if (m_dragWindow && m_targetWindow && m_snapIndicatorVisible) {
       const int draggedId    = getIdForWindow(m_dragWindow);
@@ -1548,7 +1553,7 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
  */
 void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent* event)
 {
-  // Check if there is a window there
+  // Hit-test for a window under the cursor
   m_focusedWindow = getWindow(event->pos().x(), event->pos().y());
   if (!m_focusedWindow) {
     QQuickItem::mouseDoubleClickEvent(event);

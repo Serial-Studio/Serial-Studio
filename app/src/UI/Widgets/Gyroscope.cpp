@@ -284,6 +284,7 @@ void Widgets::Gyroscope::updateData()
  */
 void Widgets::Gyroscope::setIntegrateValues(const bool enabled)
 {
+  // Reset orientation state and update integration mode
   if (m_integrateValues != enabled) {
     m_yaw                      = 0;
     m_roll                     = 0;

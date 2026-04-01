@@ -23,6 +23,7 @@
  */
 google::protobuf::Struct API::GRPC::ConversionUtils::toProtoStruct(const QJsonObject& json)
 {
+  // Build protobuf Struct from JSON key-value pairs
   google::protobuf::Struct result;
   auto* fields = result.mutable_fields();
 
@@ -45,6 +46,7 @@ google::protobuf::Struct API::GRPC::ConversionUtils::toProtoStruct(const QJsonOb
  */
 google::protobuf::Value API::GRPC::ConversionUtils::toProtoValue(const QJsonValue& json)
 {
+  // Map JSON type to protobuf Value kind
   google::protobuf::Value result;
 
   switch (json.type()) {
@@ -93,6 +95,7 @@ google::protobuf::Value API::GRPC::ConversionUtils::toProtoValue(const QJsonValu
  */
 QJsonObject API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::Struct& proto)
 {
+  // Convert each protobuf field to a QJsonValue
   QJsonObject result;
 
   for (const auto& [key, value] : proto.fields())
@@ -170,6 +173,7 @@ inline void setNumber(google::protobuf::Struct& s, const char* key, double val)
 google::protobuf::Struct API::GRPC::ConversionUtils::frameToProtoStruct(
   const DataModel::Frame& frame)
 {
+  // Build top-level Struct with frame title
   google::protobuf::Struct result;
   setString(result, "title", frame.title);
 

@@ -33,6 +33,7 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_title(config.title)
   , m_hasFn(false)
 {
+  // Compile the user's transmit function
   m_rateLimiter.start();
   if (!config.transmitFunction.isEmpty()) {
     const auto wrapped =
@@ -167,7 +168,7 @@ void Widgets::Output::Base::sendValue(const QVariant& value)
  */
 QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value)
 {
-  // No transmit function compiled
+  // Abort if no transmit function was compiled
   if (!m_hasFn)
     return {};
 

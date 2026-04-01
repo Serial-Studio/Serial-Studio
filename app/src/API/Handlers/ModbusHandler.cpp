@@ -34,6 +34,7 @@
  */
 void API::Handlers::ModbusHandler::registerCommands()
 {
+  // Obtain registry and register all Modbus commands
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
@@ -332,6 +333,7 @@ void API::Handlers::ModbusHandler::registerCommands()
 API::CommandResponse API::Handlers::ModbusHandler::setProtocolIndex(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("protocolIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: protocolIndex"));
@@ -364,6 +366,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setProtocolIndex(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::setSlaveAddress(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("address"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: address"));
@@ -392,6 +395,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setSlaveAddress(const QString
 API::CommandResponse API::Handlers::ModbusHandler::setPollInterval(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("intervalMs"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: intervalMs"));
@@ -418,6 +422,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setPollInterval(const QString
 API::CommandResponse API::Handlers::ModbusHandler::setHost(const QString& id,
                                                            const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("host"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: host"));
@@ -444,6 +449,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setHost(const QString& id,
 API::CommandResponse API::Handlers::ModbusHandler::setPort(const QString& id,
                                                            const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("port"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
@@ -472,6 +478,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setPort(const QString& id,
 API::CommandResponse API::Handlers::ModbusHandler::setSerialPortIndex(const QString& id,
                                                                       const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("portIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: portIndex"));
@@ -504,6 +511,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setSerialPortIndex(const QStr
 API::CommandResponse API::Handlers::ModbusHandler::setBaudRate(const QString& id,
                                                                const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("baudRate"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: baudRate"));
@@ -530,6 +538,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setBaudRate(const QString& id
 API::CommandResponse API::Handlers::ModbusHandler::setParityIndex(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("parityIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: parityIndex"));
@@ -562,6 +571,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setParityIndex(const QString&
 API::CommandResponse API::Handlers::ModbusHandler::setDataBitsIndex(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("dataBitsIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: dataBitsIndex"));
@@ -594,6 +604,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setDataBitsIndex(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::setStopBitsIndex(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("stopBitsIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: stopBitsIndex"));
@@ -626,6 +637,7 @@ API::CommandResponse API::Handlers::ModbusHandler::setStopBitsIndex(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::addRegisterGroup(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("type")) || !params.contains(QStringLiteral("startAddress"))
       || !params.contains(QStringLiteral("count"))) {
     return CommandResponse::makeError(
@@ -680,6 +692,7 @@ API::CommandResponse API::Handlers::ModbusHandler::addRegisterGroup(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::removeRegisterGroup(const QString& id,
                                                                        const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("groupIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupIndex"));
@@ -710,6 +723,7 @@ API::CommandResponse API::Handlers::ModbusHandler::removeRegisterGroup(const QSt
 API::CommandResponse API::Handlers::ModbusHandler::clearRegisterGroups(const QString& id,
                                                                        const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   IO::ConnectionManager::instance().modbus()->clearRegisterGroups();
@@ -729,6 +743,7 @@ API::CommandResponse API::Handlers::ModbusHandler::clearRegisterGroups(const QSt
 API::CommandResponse API::Handlers::ModbusHandler::getConfiguration(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* modbus = IO::ConnectionManager::instance().modbus();
@@ -788,6 +803,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getConfiguration(const QStrin
 API::CommandResponse API::Handlers::ModbusHandler::getProtocolList(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& protocolList = IO::ConnectionManager::instance().modbus()->protocolList();
@@ -813,6 +829,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getProtocolList(const QString
 API::CommandResponse API::Handlers::ModbusHandler::getSerialPortList(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& portList = IO::ConnectionManager::instance().modbus()->serialPortList();
@@ -838,6 +855,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getSerialPortList(const QStri
 API::CommandResponse API::Handlers::ModbusHandler::getParityList(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& parityList = IO::ConnectionManager::instance().modbus()->parityList();
@@ -863,6 +881,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getParityList(const QString& 
 API::CommandResponse API::Handlers::ModbusHandler::getDataBitsList(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& dataBitsList = IO::ConnectionManager::instance().modbus()->dataBitsList();
@@ -888,6 +907,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getDataBitsList(const QString
 API::CommandResponse API::Handlers::ModbusHandler::getStopBitsList(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& stopBitsList = IO::ConnectionManager::instance().modbus()->stopBitsList();
@@ -913,6 +933,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getStopBitsList(const QString
 API::CommandResponse API::Handlers::ModbusHandler::getBaudRateList(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& baudRateList = IO::ConnectionManager::instance().modbus()->baudRateList();
@@ -934,6 +955,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getBaudRateList(const QString
 API::CommandResponse API::Handlers::ModbusHandler::getRegisterTypeList(const QString& id,
                                                                        const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& typeList = IO::ConnectionManager::instance().modbus()->registerTypeList();
@@ -957,6 +979,7 @@ API::CommandResponse API::Handlers::ModbusHandler::getRegisterTypeList(const QSt
 API::CommandResponse API::Handlers::ModbusHandler::getRegisterGroups(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* modbus         = IO::ConnectionManager::instance().modbus();

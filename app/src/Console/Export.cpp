@@ -57,6 +57,7 @@ Console::ExportWorker::~ExportWorker() = default;
  */
 bool Console::ExportWorker::isResourceOpen() const
 {
+  // Return true if any per-device file is currently open
   for (const auto& [id, state] : m_deviceFiles)
     if (state.file && state.file->isOpen())
       return true;
@@ -99,6 +100,7 @@ void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items
  */
 void Console::ExportWorker::closeResources()
 {
+  // Close all per-device output files and clear state
   bool wasOpen = isResourceOpen();
   for (auto& [id, state] : m_deviceFiles) {
     if (state.file && state.file->isOpen()) {
@@ -119,6 +121,7 @@ void Console::ExportWorker::closeResources()
  */
 void Console::ExportWorker::createFile(int deviceId)
 {
+  // Validate license tier before creating export files
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
       || token.featureTier() < Licensing::FeatureTier::Hobbyist)
@@ -310,7 +313,7 @@ void Console::Export::setupExternalConnections()
 void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
-  // Update export status only if activated
+  // Validate license and update export status
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist) {
     if (!enabled && isOpen())
@@ -360,6 +363,7 @@ void Console::Export::registerData(int deviceId, QStringView data)
 #ifdef BUILD_COMMERCIAL
 void Console::Export::onWorkerOpenChanged()
 {
+  // Update cached open state from the worker thread
   auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();

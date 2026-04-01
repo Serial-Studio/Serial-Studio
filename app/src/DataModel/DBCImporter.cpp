@@ -97,6 +97,7 @@ QString DataModel::DBCImporter::dbcFileName() const
  */
 QString DataModel::DBCImporter::messageInfo(int index) const
 {
+  // Validate index
   if (index < 0 || index >= m_messages.count())
     return QString();
 
@@ -124,6 +125,7 @@ QString DataModel::DBCImporter::messageInfo(int index) const
  */
 void DataModel::DBCImporter::importDBC()
 {
+  // Create and show the DBC file selection dialog
   const auto p = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
   auto* dialog =
     new QFileDialog(nullptr, tr("Import DBC File"), p, tr("DBC Files (*.dbc);;All Files (*)"));
@@ -148,6 +150,7 @@ void DataModel::DBCImporter::importDBC()
  */
 void DataModel::DBCImporter::cancelImport()
 {
+  // Clear loaded data and notify UI
   m_messages.clear();
   m_dbcFilePath.clear();
   Q_EMIT messagesChanged();
@@ -167,6 +170,7 @@ void DataModel::DBCImporter::cancelImport()
  */
 void DataModel::DBCImporter::showPreview(const QString& filePath)
 {
+  // Parse the DBC file and validate its contents
   QCanDbcFileParser parser;
   if (!parser.parse(filePath)) {
     Misc::Utilities::showMessageBox(tr("Failed to parse DBC file: %1").arg(parser.errorString()),
@@ -219,6 +223,7 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
  */
 void DataModel::DBCImporter::confirmImport()
 {
+  // Abort if no messages were parsed
   if (m_messages.isEmpty())
     return;
 
@@ -280,6 +285,7 @@ void DataModel::DBCImporter::confirmImport()
  */
 QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescription>& messages)
 {
+  // Build project metadata and source configuration
   QJsonObject project;
 
   const auto dbcInfo      = QFileInfo(m_dbcFilePath);
@@ -345,6 +351,7 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
 std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
   const QList<QCanMessageDescription>& messages)
 {
+  // Create a group for each CAN message with datasets for each signal
   std::vector<DataModel::Group> groups;
   int groupId      = 0;
   int datasetIndex = 1;
@@ -439,6 +446,7 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
  */
 QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescription>& messages)
 {
+  // Generate the file header comment and global values array
   QString code;
 
   const auto totalSignals = countTotalSignals(messages);
@@ -606,6 +614,7 @@ QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescr
 QString DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescription& message,
                                                        int& datasetIndex)
 {
+  // Build JSDoc header and extraction code for each signal
   QString code;
   const auto msgId      = static_cast<quint32>(message.uniqueId());
   const auto signalList = message.signalDescriptions();
@@ -724,6 +733,7 @@ QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescrip
  */
 QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& message)
 {
+  // Check for trivial cases: single signal or all booleans
   const auto signalDescriptions = message.signalDescriptions();
   const auto signalCount        = signalDescriptions.count();
 
@@ -866,6 +876,7 @@ QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString& str)
  */
 QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescription& signal)
 {
+  // Classify signal by name and unit to select an appropriate widget
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();
 
@@ -908,6 +919,7 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
  */
 int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription>& messages) const
 {
+  // Sum signal counts across all messages
   int count = 0;
   for (const auto& message : messages)
     count += message.signalDescriptions().count();
@@ -929,6 +941,7 @@ int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription
 bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
                                                   const QStringList& positions) const
 {
+  // Count signals whose names contain any of the position identifiers
   int matchCount = 0;
   for (const auto& signal : signalList) {
     const auto name = signal.name().toLower();
@@ -955,6 +968,7 @@ bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescript
 bool DataModel::DBCImporter::hasNumberedPattern(
   const QList<QCanSignalDescription>& signalList) const
 {
+  // Need at least two signals to form a numbered pattern
   if (signalList.count() < 2)
     return false;
 
@@ -981,6 +995,7 @@ bool DataModel::DBCImporter::hasNumberedPattern(
  */
 bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>& signalList) const
 {
+  // Collect distinct non-empty units and check for uniformity
   if (signalList.isEmpty())
     return false;
 
@@ -1006,6 +1021,7 @@ bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>&
  */
 bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription>& signalList) const
 {
+  // Look for voltage, current, and state-of-charge signal combinations
   if (signalList.count() < 2)
     return false;
 
@@ -1039,6 +1055,7 @@ bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription
  */
 bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>& signalList) const
 {
+  // Check that every multi-bit signal has a status-related name
   for (const auto& signal : signalList) {
     if (signal.bitLength() > 1) {
       const auto name = signal.name().toLower();
@@ -1062,6 +1079,7 @@ bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>
  */
 int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& signalList) const
 {
+  // Count multi-bit signals that are not counters or status fields
   int count = 0;
   for (const auto& signal : signalList) {
     if (signal.bitLength() <= 1)
@@ -1091,6 +1109,7 @@ int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& s
 DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
   const QList<QCanSignalDescription>& signalList) const
 {
+  // Try each pattern detector in priority order
   if (signalList.isEmpty())
     return None;
 
@@ -1139,6 +1158,7 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
  */
 bool DataModel::DBCImporter::isCriticalSignal(const QCanSignalDescription& signal) const
 {
+  // Match signal name and unit against known critical categories
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();
 
@@ -1209,6 +1229,7 @@ bool DataModel::DBCImporter::shouldAssignIndividualWidget(const QString& groupWi
                                                           const QCanSignalDescription& signal,
                                                           bool isSingleBit) const
 {
+  // Boolean signals always get individual LEDs
   if (isSingleBit)
     return true;
 

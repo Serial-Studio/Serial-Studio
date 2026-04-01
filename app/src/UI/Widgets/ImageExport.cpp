@@ -64,6 +64,7 @@ void Widgets::ImageExportWorker::closeResources()
  */
 void Widgets::ImageExportWorker::closeGroup(int groupId)
 {
+  // Flush pending data, then zip and remove the session for this group
   processData();
 
   auto it = m_sessions.find(groupId);
@@ -83,6 +84,7 @@ void Widgets::ImageExportWorker::closeGroup(int groupId)
  */
 void Widgets::ImageExportWorker::processItems(const std::vector<ImageExportItem>& items)
 {
+  // Write each image frame to its per-group session directory
   for (const auto& item : items) {
     if (item.data.isEmpty())
       continue;
@@ -123,6 +125,7 @@ bool Widgets::ImageExportWorker::ensureSession(int groupId,
                                                const QString& projectTitle,
                                                const QString& groupTitle)
 {
+  // Build and create the timestamped session directory
   const auto dt      = QDateTime::currentDateTime();
   const auto session = dt.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss-zzz"));
 
@@ -148,9 +151,11 @@ bool Widgets::ImageExportWorker::ensureSession(int groupId,
  */
 void Widgets::ImageExportWorker::zipAndClean(ImageSession& session)
 {
+  // Skip empty sessions
   if (session.frameIndex == 0)
     return;
 
+  // Compress the session directory into a ZIP and remove the raw folder
   const QString dirPath = session.dir.absolutePath();
   const QString zipPath = dirPath + QStringLiteral(".zip");
 
@@ -223,6 +228,7 @@ bool Widgets::ImageExport::exportEnabled() const
 QString Widgets::ImageExport::imagesPath(const QString& groupTitle,
                                          const QString& projectTitle) const
 {
+  // Construct the stable group-level path without the per-session timestamp
   const auto base = Misc::WorkspaceManager::instance().path(QStringLiteral("Images"));
   return QStringLiteral("%1/%2/%3").arg(base, projectTitle, groupTitle);
 }
@@ -278,9 +284,11 @@ void Widgets::ImageExport::setupExternalConnections()
  */
 void Widgets::ImageExport::setExportEnabled(bool enabled)
 {
+  // Guard unchanged value
   if (m_exportEnabled == enabled)
     return;
 
+  // Persist the new preference and notify QML
   m_exportEnabled = enabled;
   m_settings.setValue(QStringLiteral("ImageExport/enabled"), enabled);
   Q_EMIT enabledChanged();
@@ -303,9 +311,11 @@ void Widgets::ImageExport::enqueueImage(const QByteArray& data,
                                         const QString& groupTitle,
                                         const QString& projectTitle)
 {
+  // Skip during playback mode
   if (SerialStudio::isAnyPlayerOpen())
     return;
 
+  // Submit the frame to the lock-free export queue
   ImageExportItem item{data, format, groupId, groupTitle, projectTitle};
   enqueueData(item);
 }

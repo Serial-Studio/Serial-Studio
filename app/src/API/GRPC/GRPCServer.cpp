@@ -82,6 +82,7 @@ public:
                             const serialstudio::BatchRequest* request,
                             serialstudio::BatchResponse* response) override
   {
+    // Execute each command in the batch and collect results
     response->set_id(request->id());
     bool all_success = true;
 
@@ -148,6 +149,7 @@ public:
                              const serialstudio::StreamRequest* /*request*/,
                              grpc::ServerWriter<serialstudio::RawBatch>* writer) override
   {
+    // Initialize raw stream context
     auto ctx     = std::make_shared<API::GRPC::RawStreamContext>();
     ctx->writer  = writer;
     ctx->context = context;
@@ -184,6 +186,7 @@ public:
                             const serialstudio::RawDataRequest* request,
                             serialstudio::CommandResponse* response) override
   {
+    // Extract raw bytes from the request
     const auto& bytes = request->data();
     QByteArray data(bytes.data(), static_cast<int>(bytes.size()));
 
@@ -212,6 +215,7 @@ public:
                             const google::protobuf::Empty* /*request*/,
                             serialstudio::CommandList* response) override
   {
+    // Populate response with all registered commands
     const auto& commands = API::CommandRegistry::instance().commands();
     for (auto it = commands.begin(); it != commands.end(); ++it) {
       auto* info = response->add_commands();
@@ -238,6 +242,7 @@ private:
  */
 API::GRPC::GRPCServer::GRPCServer() : m_enabled(false)
 {
+  // Connect to API server enable/disable signals
   auto& server = API::Server::instance();
 
   // Mirror the API server: enable/disable gRPC when API is enabled/disabled
@@ -309,6 +314,7 @@ int API::GRPC::GRPCServer::clientCount() const noexcept
  */
 void API::GRPC::GRPCServer::setEnabled(const bool enabled)
 {
+  // Guard against duplicate state
   if (m_enabled == enabled)
     return;
 

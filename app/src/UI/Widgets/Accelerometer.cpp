@@ -182,6 +182,7 @@ void Widgets::Accelerometer::resetPeakG()
  */
 void Widgets::Accelerometer::updateData()
 {
+  // Validate widget state
   if (!isEnabled())
     return;
 
@@ -287,6 +288,7 @@ void Widgets::Accelerometer::updateData()
  */
 void Widgets::Accelerometer::setMaxG(const double maxG)
 {
+  // Clamp and update if changed
   const double clamped = qMax(0.5, maxG);
   if (DSP::notEqual(clamped, m_maxG)) {
     m_maxG = clamped;

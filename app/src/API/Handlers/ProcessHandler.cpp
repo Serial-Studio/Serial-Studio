@@ -26,6 +26,7 @@
  */
 void API::Handlers::ProcessHandler::registerCommands()
 {
+  // Obtain registry and register all process driver commands
   auto& registry = CommandRegistry::instance();
 
   // setMode schema
@@ -162,6 +163,7 @@ void API::Handlers::ProcessHandler::registerCommands()
 API::CommandResponse API::Handlers::ProcessHandler::setMode(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("mode"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: mode"));
@@ -189,6 +191,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setMode(const QString& id,
 API::CommandResponse API::Handlers::ProcessHandler::setExecutable(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("executable"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: executable"));
@@ -215,6 +218,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setExecutable(const QString&
 API::CommandResponse API::Handlers::ProcessHandler::setArguments(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("arguments"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: arguments"));
@@ -235,6 +239,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setArguments(const QString& 
 API::CommandResponse API::Handlers::ProcessHandler::setWorkingDir(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("workingDir"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: workingDir"));
@@ -255,6 +260,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setWorkingDir(const QString&
 API::CommandResponse API::Handlers::ProcessHandler::setPipePath(const QString& id,
                                                                 const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("pipePath"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: pipePath"));
@@ -281,6 +287,7 @@ API::CommandResponse API::Handlers::ProcessHandler::setPipePath(const QString& i
 API::CommandResponse API::Handlers::ProcessHandler::getRunningProcesses(const QString& id,
                                                                         const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   IO::ConnectionManager::instance().process()->refreshProcessList();
@@ -303,6 +310,7 @@ API::CommandResponse API::Handlers::ProcessHandler::getRunningProcesses(const QS
 API::CommandResponse API::Handlers::ProcessHandler::getConfiguration(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* proc = IO::ConnectionManager::instance().process();

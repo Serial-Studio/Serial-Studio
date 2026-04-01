@@ -34,6 +34,7 @@
  */
 void API::Handlers::MDF4ExportHandler::registerCommands()
 {
+  // Obtain registry and register MDF4 export commands
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
@@ -84,6 +85,7 @@ void API::Handlers::MDF4ExportHandler::registerCommands()
 API::CommandResponse API::Handlers::MDF4ExportHandler::setEnabled(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -103,6 +105,7 @@ API::CommandResponse API::Handlers::MDF4ExportHandler::setEnabled(const QString&
 API::CommandResponse API::Handlers::MDF4ExportHandler::close(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MDF4::Export::instance().closeFile();
@@ -122,6 +125,7 @@ API::CommandResponse API::Handlers::MDF4ExportHandler::close(const QString& id,
 API::CommandResponse API::Handlers::MDF4ExportHandler::getStatus(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& mdf4Export = MDF4::Export::instance();

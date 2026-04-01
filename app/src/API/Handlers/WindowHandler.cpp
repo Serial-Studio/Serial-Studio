@@ -46,6 +46,7 @@ static API::CommandResponse noSession(const QString& id)
  */
 void API::Handlers::WindowHandler::registerCommands()
 {
+  // Obtain registry and build command schemas
   auto& registry = CommandRegistry::instance();
 
   // Empty schema for parameterless commands
@@ -254,6 +255,7 @@ void API::Handlers::WindowHandler::registerCommands()
 API::CommandResponse API::Handlers::WindowHandler::getStatus(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* taskbar = UI::UISessionRegistry::instance().primaryTaskbar();
@@ -289,6 +291,7 @@ API::CommandResponse API::Handlers::WindowHandler::getStatus(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::getGroups(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* taskbar = UI::UISessionRegistry::instance().primaryTaskbar();
@@ -322,6 +325,7 @@ API::CommandResponse API::Handlers::WindowHandler::getGroups(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::setActiveGroup(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("groupId"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: groupId"));
@@ -347,6 +351,7 @@ API::CommandResponse API::Handlers::WindowHandler::setActiveGroup(const QString&
 API::CommandResponse API::Handlers::WindowHandler::setActiveGroupIndex(const QString& id,
                                                                        const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("index"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: index"));
@@ -374,6 +379,7 @@ API::CommandResponse API::Handlers::WindowHandler::setActiveGroupIndex(const QSt
 API::CommandResponse API::Handlers::WindowHandler::getWindowStates(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* taskbar = UI::UISessionRegistry::instance().primaryTaskbar();
@@ -423,6 +429,7 @@ API::CommandResponse API::Handlers::WindowHandler::getWindowStates(const QString
 API::CommandResponse API::Handlers::WindowHandler::setWindowState(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("id")) || !params.contains(QStringLiteral("state"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameters: id, state"));
@@ -463,6 +470,7 @@ API::CommandResponse API::Handlers::WindowHandler::setWindowState(const QString&
 API::CommandResponse API::Handlers::WindowHandler::setAutoLayout(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -486,6 +494,7 @@ API::CommandResponse API::Handlers::WindowHandler::setAutoLayout(const QString& 
 API::CommandResponse API::Handlers::WindowHandler::saveLayout(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* taskbar = UI::UISessionRegistry::instance().primaryTaskbar();
@@ -503,6 +512,7 @@ API::CommandResponse API::Handlers::WindowHandler::saveLayout(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::loadLayout(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* wm = UI::UISessionRegistry::instance().primaryWindowManager();
@@ -520,6 +530,7 @@ API::CommandResponse API::Handlers::WindowHandler::loadLayout(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::getLayout(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* wm = UI::UISessionRegistry::instance().primaryWindowManager();
@@ -540,6 +551,7 @@ API::CommandResponse API::Handlers::WindowHandler::getLayout(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::setLayout(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("layout"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: layout"));
@@ -566,6 +578,7 @@ API::CommandResponse API::Handlers::WindowHandler::setLayout(const QString& id,
 API::CommandResponse API::Handlers::WindowHandler::getWidgetSettings(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("widgetId"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: widgetId"));
@@ -587,6 +600,7 @@ API::CommandResponse API::Handlers::WindowHandler::getWidgetSettings(const QStri
 API::CommandResponse API::Handlers::WindowHandler::setWidgetSetting(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("widgetId")) || !params.contains(QStringLiteral("key"))
       || !params.contains(QStringLiteral("settingValue"))) {
     return CommandResponse::makeError(

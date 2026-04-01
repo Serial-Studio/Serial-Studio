@@ -105,6 +105,7 @@ int UI::DashboardWidget::relativeIndex() const
  */
 QColor UI::DashboardWidget::widgetColor() const
 {
+  // Return the dataset color for the current widget index
   if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex)) {
     if (SerialStudio::isDatasetWidget(m_widgetType)) {
       const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
@@ -120,6 +121,7 @@ QColor UI::DashboardWidget::widgetColor() const
  */
 QString UI::DashboardWidget::widgetTitle() const
 {
+  // Retrieve the title from the dataset or group widget
   if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex)) {
     if (SerialStudio::isDatasetWidget(m_widgetType)) {
       const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
@@ -150,6 +152,7 @@ SerialStudio::DashboardWidget UI::DashboardWidget::widgetType() const
  */
 QString UI::DashboardWidget::widgetId() const
 {
+  // Build a stable key from widget type, group ID, and dataset index
   auto id   = UI::WidgetRegistry::instance().widgetIdByTypeAndIndex(m_widgetType, m_relativeIndex);
   auto info = UI::WidgetRegistry::instance().widgetInfo(id);
   return QStringLiteral("%1:%2:%3")
@@ -166,6 +169,7 @@ QString UI::DashboardWidget::widgetId() const
  */
 int UI::DashboardWidget::widgetSourceId() const
 {
+  // Validate widget and look up source ID from group or dataset
   if (!VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
     return 0;
 
@@ -203,6 +207,7 @@ QQuickItem* UI::DashboardWidget::widgetModel() const
  */
 void UI::DashboardWidget::setWidgetIndex(const int index)
 {
+  // Resolve the widget type and relative index for the given global index
   if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0) {
     m_index         = index;
     m_widgetType    = UI::Dashboard::instance().widgetType(index);

@@ -113,6 +113,7 @@ const QStringList& Widgets::LEDPanel::titles() const noexcept
  */
 void Widgets::LEDPanel::updateData()
 {
+  // Update LED on/off states from the latest dataset values
   if (!isEnabled())
     return;
 
@@ -145,6 +146,7 @@ void Widgets::LEDPanel::updateData()
  */
 void Widgets::LEDPanel::onThemeChanged()
 {
+  // Rebuild per-dataset colors from the current theme
   if (VALIDATE_WIDGET(SerialStudio::DashboardLED, m_index)) {
     const auto& group = GET_GROUP(SerialStudio::DashboardLED, m_index);
 

@@ -43,6 +43,7 @@
  */
 void DataModel::finalize_frame(DataModel::Frame& frame)
 {
+  // Detect commercial features and assign stable unique IDs to each dataset
   frame.containsCommercialFeatures = SerialStudio::commercialCfg(frame.groups);
 
   for (auto& group : frame.groups) {
@@ -91,6 +92,7 @@ void DataModel::read_io_settings(QByteArray& frameStart,
 
 QByteArray DataModel::get_tx_bytes(const Action& action)
 {
+  // Convert action payload to bytes (binary hex or escaped UTF-8)
   QByteArray b;
   if (action.binaryData)
     b = SerialStudio::hexToBytes(action.txData);

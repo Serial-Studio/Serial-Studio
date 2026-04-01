@@ -74,10 +74,12 @@ QString Widgets::Compass::text() const noexcept
  */
 void Widgets::Compass::updateData()
 {
+  // Validate widget state and fetch latest compass heading
   if (!isEnabled())
     return;
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index)) {
+    // Read the latest heading value and update display
     const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
     const auto value    = dataset.numericValue;
     if (DSP::notEqual(value, m_value)) {

@@ -102,6 +102,7 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
+  // Determine open/state from the active socket type
   bool open  = false;
   auto state = QAbstractSocket::UnconnectedState;
 
@@ -482,6 +483,7 @@ void IO::Drivers::Network::onReadyRead()
  */
 void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 {
+  // Mark lookup as finished and check results
   m_lookupActive = false;
 
   if (info.error() == QHostInfo::NoError) {
@@ -502,6 +504,7 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
+  // Retrieve the error string from the active socket
   QString error;
   if (socketType() == QAbstractSocket::TcpSocket)
     error = m_tcpSocket.errorString();
@@ -528,6 +531,7 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
  */
 QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
 {
+  // Build property list with socket type selector
   QList<IO::DriverProperty> props;
 
   IO::DriverProperty socketTypeProp;

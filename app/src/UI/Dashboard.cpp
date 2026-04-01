@@ -161,6 +161,7 @@ bool UI::Dashboard::autoHideToolbar() const noexcept
  */
 bool UI::Dashboard::streamAvailable() const
 {
+  // Check if any data source (device, CSV, MDF4, MQTT) is active
   static auto& manager   = IO::ConnectionManager::instance();
   static auto& csvPlayer = CSV::Player::instance();
   static auto& mf4Player = MDF4::Player::instance();
@@ -227,6 +228,7 @@ bool UI::Dashboard::pointsWidgetVisible() const
  */
 bool UI::Dashboard::containsCommercialFeatures() const noexcept
 {
+  // Scan all source frames for commercial feature flags
   for (const auto& f : m_sourceRawFrames)
     if (f.containsCommercialFeatures)
       return true;
@@ -334,6 +336,7 @@ SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex) c
  */
 int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 {
+  // Look up the count in group or dataset widget maps
   if (SerialStudio::isGroupWidget(widget)) {
     auto it = m_widgetGroups.constFind(widget);
     return it != m_widgetGroups.cend() ? it->count() : 0;
@@ -379,6 +382,7 @@ const QString& UI::Dashboard::title() const
  */
 QVariantList UI::Dashboard::actions() const
 {
+  // Build a QML-visible list of action metadata maps
   QVariantList actions;
   for (int i = 0; i < m_actions.count(); ++i) {
     const auto& action = m_actions[i];
@@ -465,6 +469,7 @@ const QMap<int, DataModel::Dataset>& UI::Dashboard::datasets() const
 const DataModel::Group& UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
                                                       const int index) const
 {
+  // Look up group by widget type and validate the index
   static const DataModel::Group emptyGroup;
   const auto it = m_widgetGroups.constFind(widget);
 
@@ -502,6 +507,7 @@ const DataModel::Group& UI::Dashboard::getGroupWidget(const SerialStudio::Dashbo
 const DataModel::Dataset& UI::Dashboard::getDatasetWidget(
   const SerialStudio::DashboardWidget widget, const int index) const
 {
+  // Look up dataset by widget type and validate the index
   static const DataModel::Dataset emptyDataset;
   const auto it = m_widgetDatasets.constFind(widget);
 
@@ -851,6 +857,7 @@ void UI::Dashboard::setAutoHideToolbar(const bool enabled)
  */
 void UI::Dashboard::removeTerminalWidget()
 {
+  // Destroy terminal widget entry and rebuild contiguous widget map
   auto& registry = WidgetRegistry::instance();
 
   if (m_terminalWidgetId != kInvalidWidgetId) {
@@ -889,6 +896,7 @@ void UI::Dashboard::removeTerminalWidget()
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
+  // Toggle terminal widget using incremental registry updates when possible
   if (m_terminalEnabled != enabled) {
     m_terminalEnabled = enabled;
     auto& registry    = WidgetRegistry::instance();
@@ -1158,6 +1166,7 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::Frame& frame)
  */
 void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 {
+  // Disconnect on repeated failure, or retry once after reconfiguring
   if (m_updateRetryInProgress) {
     qWarning() << "Failed to build dashboard widget model";
 
@@ -1231,6 +1240,7 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset,
                                                  DataModel::Group& ledPanel)
 {
+  // Insert or merge dataset, preserving min/max across frames
   if (!m_datasets.contains(dataset.index)) {
     m_datasets.insert(dataset.index, dataset);
   } else {
@@ -1268,6 +1278,7 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
  */
 void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
+  // Check commercial license status for Pro-only widgets
 #ifdef BUILD_COMMERCIAL
   const auto& token = Licensing::CommercialToken::current();
   const bool pro    = token.isValid() && SS_LICENSE_GUARD()

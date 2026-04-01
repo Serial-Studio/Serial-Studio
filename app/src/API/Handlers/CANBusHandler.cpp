@@ -34,6 +34,7 @@
  */
 void API::Handlers::CANBusHandler::registerCommands()
 {
+  // Obtain registry and register all CAN bus commands
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
@@ -151,6 +152,7 @@ void API::Handlers::CANBusHandler::registerCommands()
 API::CommandResponse API::Handlers::CANBusHandler::setPluginIndex(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("pluginIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: pluginIndex"));
@@ -183,6 +185,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setPluginIndex(const QString&
 API::CommandResponse API::Handlers::CANBusHandler::setInterfaceIndex(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("interfaceIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: interfaceIndex"));
@@ -216,6 +219,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setInterfaceIndex(const QStri
 API::CommandResponse API::Handlers::CANBusHandler::setBitrate(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("bitrate"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: bitrate"));
@@ -242,6 +246,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setBitrate(const QString& id,
 API::CommandResponse API::Handlers::CANBusHandler::setCanFD(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -265,6 +270,7 @@ API::CommandResponse API::Handlers::CANBusHandler::setCanFD(const QString& id,
 API::CommandResponse API::Handlers::CANBusHandler::getConfiguration(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* canbus = IO::ConnectionManager::instance().canBus();
@@ -305,6 +311,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getConfiguration(const QStrin
 API::CommandResponse API::Handlers::CANBusHandler::getPluginList(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* canbus           = IO::ConnectionManager::instance().canBus();
@@ -331,6 +338,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getPluginList(const QString& 
 API::CommandResponse API::Handlers::CANBusHandler::getInterfaceList(const QString& id,
                                                                     const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* canbus              = IO::ConnectionManager::instance().canBus();
@@ -356,6 +364,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getInterfaceList(const QStrin
 API::CommandResponse API::Handlers::CANBusHandler::getBitrateList(const QString& id,
                                                                   const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& bitrateList = IO::ConnectionManager::instance().canBus()->bitrateList();
@@ -377,6 +386,7 @@ API::CommandResponse API::Handlers::CANBusHandler::getBitrateList(const QString&
 API::CommandResponse API::Handlers::CANBusHandler::getInterfaceError(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const QString error = IO::ConnectionManager::instance().canBus()->interfaceError();

@@ -134,9 +134,11 @@ Titlebar::Titlebar(QQuickItem* parent)
  */
 void Titlebar::paint(QPainter* painter)
 {
+  // Abort if no parent window is attached
   if (!window())
     return;
 
+  // Fill background and prepare for drawing
   painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
   QRectF rect = boundingRect();
@@ -221,6 +223,7 @@ QColor Titlebar::backgroundColor() const
  */
 QColor Titlebar::foregroundColor() const
 {
+  // Check if background matches the theme's toolbar color
   const auto& theme       = Misc::ThemeManager::instance();
   const QColor toolbarTop = theme.getColor(QStringLiteral("toolbar_top"));
 
@@ -295,6 +298,7 @@ void Titlebar::setBackgroundColor(const QColor& color)
  */
 QRectF Titlebar::buttonRect(Button button) const
 {
+  // Compute centered icon rect from the background rect
   const QRectF bgRect  = buttonBackgroundRect(button);
   const qreal iconSize = CSD::ButtonSize * 0.5;
 
@@ -336,9 +340,11 @@ Titlebar::Button Titlebar::buttonAt(const QPointF& pos) const
  */
 bool Titlebar::shouldShowButton(Button button) const
 {
+  // Default to showing all buttons if window is unavailable
   if (!window())
     return true;
 
+  // Check window flags for per-button visibility
   const auto flags = window()->flags();
 
   // If CustomizeWindowHint is not set, show default buttons
@@ -383,6 +389,7 @@ bool Titlebar::shouldShowButton(Button button) const
  */
 QRectF Titlebar::buttonBackgroundRect(Button button) const
 {
+  // Compute button position based on visibility of sibling buttons
   const qreal h = height();
 
   int buttonIndex         = 0;
@@ -427,6 +434,7 @@ QRectF Titlebar::buttonBackgroundRect(Button button) const
  */
 void Titlebar::drawButton(QPainter* painter, Button button, const QString& svgPath)
 {
+  // Determine icon rectangle, hover/press state, and color
   const QRectF iconRect = buttonRect(button);
   const bool hovered    = (m_hoveredButton == button);
   const bool pressed    = (m_pressedButton == button);
@@ -571,6 +579,7 @@ void Titlebar::mousePressEvent(QMouseEvent* event)
  */
 void Titlebar::mouseReleaseEvent(QMouseEvent* event)
 {
+  // Emit signal if press and release occurred on the same button
   const Button releasedOn = buttonAt(event->position());
 
   if (m_pressedButton != Button::None && m_pressedButton == releasedOn) {
@@ -606,6 +615,7 @@ void Titlebar::mouseReleaseEvent(QMouseEvent* event)
  */
 void Titlebar::mouseMoveEvent(QMouseEvent* event)
 {
+  // Ignore if not dragging or no parent window
   if (!m_dragging || !window()) {
     event->accept();
     return;
@@ -637,6 +647,7 @@ void Titlebar::mouseMoveEvent(QMouseEvent* event)
  */
 void Titlebar::mouseDoubleClickEvent(QMouseEvent* event)
 {
+  // Toggle maximize/restore on double-click outside buttons
   if (buttonAt(event->position()) == Button::None && window()) {
     m_dragging      = false;
     m_pressedButton = Button::None;
@@ -719,6 +730,7 @@ Frame::Frame(QQuickItem* parent)
  */
 void Frame::paint(QPainter* painter)
 {
+  // Compute the content area inset by the shadow radius
   const int r = m_shadowEnabled ? m_shadowRadius : 0;
   const QRectF content(r, r, width() - 2 * r, height() - 2 * r);
 
@@ -821,6 +833,7 @@ void Frame::setShadowEnabled(bool enabled)
  */
 void Frame::regenerateShadow()
 {
+  // Clear all tiles when shadow is disabled
   if (m_shadowRadius <= 0) {
     m_shadowCorner              = QImage();
     m_shadowEdge                = QImage();
@@ -874,6 +887,7 @@ void Frame::regenerateShadow()
  */
 QImage Frame::generateShadowCorner(int size)
 {
+  // Create a square tile with a radial smoothstep falloff
   QImage tile(size, size, QImage::Format_ARGB32_Premultiplied);
   tile.fill(Qt::transparent);
 
@@ -921,6 +935,7 @@ Border::Border(QQuickItem* parent) : QQuickPaintedItem(parent)
  */
 void Border::paint(QPainter* painter)
 {
+  // Draw a 1px semi-transparent border around the window
   const QColor borderColor = QColor(102, 102, 102, 115);
 
   painter->setPen(QPen(borderColor, 1));
@@ -1017,6 +1032,7 @@ Window::Window(QWindow* window, const QString& color, QObject* parent)
  */
 Window::~Window()
 {
+  // Remove event filters and reparent content items to the root
   QQuickWindow* quickWindow = nullptr;
   QQuickItem* root          = nullptr;
 
@@ -1239,9 +1255,11 @@ void Window::setupTitleBar()
  */
 void Window::updateMinimumSize()
 {
+  // Skip if window pointer is invalid
   if (!m_window)
     return;
 
+  // Compute minimum size including shadow margins and title bar
   m_minSize                  = preferredSize();
   const int margin           = shadowMargin();
   const int tbHeight         = titleBarHeight();
@@ -1291,6 +1309,7 @@ void Window::updateBorderGeometry()
  */
 void Window::onMinimumSizeChanged()
 {
+  // Detect if the minimum size has actually changed
   const auto size = preferredSize();
   const int expW  = m_minSize.width() + 2 * shadowMargin();
   const int expH  = m_minSize.height() + 2 * shadowMargin() + titleBarHeight();
@@ -1318,6 +1337,7 @@ void Window::onMinimumSizeChanged()
  */
 void Window::setupContentContainer()
 {
+  // Obtain the QML root item and engine
   auto* quickWindow = qobject_cast<QQuickWindow*>(m_window.data());
   if (!quickWindow)
     return;
@@ -1386,9 +1406,11 @@ void Window::updateTitleBarGeometry()
  */
 void Window::updateContentContainerGeometry()
 {
+  // Skip if components are not ready
   if (!m_contentContainer || !m_window)
     return;
 
+  // Position content below the title bar with shadow margins
   const int margin   = shadowMargin();
   const int tbHeight = titleBarHeight();
   const qreal w      = m_window->width() - 2 * margin;
@@ -1422,9 +1444,11 @@ void Window::updateContentContainerGeometry()
  */
 QSize Window::preferredSize() const
 {
+  // Return zero if window is not available
   if (!m_window)
     return QSize(0, 0);
 
+  // Use QML properties if set, otherwise fall back to minimum size
   auto preferredSize = m_window->minimumSize();
   auto* quickWindow  = qobject_cast<QQuickWindow*>(m_window.data());
   if (!quickWindow)
@@ -1448,6 +1472,7 @@ QSize Window::preferredSize() const
  */
 void Window::updateTheme()
 {
+  // Apply custom or theme-derived color to the title bar
   const auto& theme = Misc::ThemeManager::instance();
 
   if (m_titleBar) {
@@ -1492,12 +1517,14 @@ void Window::reparentChildToContainer(QQuickItem* child)
  */
 Window::ResizeEdge Window::edgeAt(const QPointF& pos) const
 {
+  // Not resizable when maximized or fixed-size
   if (!m_window || (m_window->windowStates() & Qt::WindowMaximized))
     return ResizeEdge::None;
 
   if (isFixedSizeWindow(m_window))
     return ResizeEdge::None;
 
+  // Check proximity to each edge
   const int margin = shadowMargin();
   const int w      = m_window->width();
   const int h      = m_window->height();
@@ -1550,6 +1577,7 @@ Qt::CursorShape Window::cursorForEdge(ResizeEdge edge) const
  */
 Qt::Edges Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
 {
+  // Map internal edge flags to Qt edge flags
   Qt::Edges edges;
   const int e = static_cast<int>(edge);
 
@@ -1579,6 +1607,7 @@ Qt::Edges Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
  */
 bool Window::eventFilter(QObject* watched, QEvent* event)
 {
+  // Handle child reparenting for QML items added to the root
   if (auto* quickWindow = qobject_cast<QQuickWindow*>(m_window.data())) {
     if (watched == quickWindow->contentItem() && event->type() == QEvent::ChildAdded) {
       auto* childEvent = static_cast<QChildEvent*>(event);

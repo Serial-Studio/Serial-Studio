@@ -460,6 +460,7 @@ void Widgets::GPS::setZoomLevelPrecise(double zoom)
  */
 void Widgets::GPS::setMapType(const int type)
 {
+  // Clamp the index and apply the new map type if it changed
   auto mapId = qBound(0, type, m_mapTypes.count() - 1);
   if (m_mapType != mapId) {
 #ifdef BUILD_COMMERCIAL
@@ -525,6 +526,7 @@ void Widgets::GPS::setAutoCenter(const bool enabled)
  */
 void Widgets::GPS::setShowWeather(const bool enabled)
 {
+  // Toggle the cloud overlay and download the image if needed
   if (m_showWeather != enabled) {
     m_showWeather = enabled;
     m_settings.setValue(QStringLiteral("gpsWeather"), enabled);
@@ -786,6 +788,7 @@ void Widgets::GPS::updateTiles()
  */
 void Widgets::GPS::precacheWorld()
 {
+  // Request all tiles at the minimum zoom level for a coarse overview
   for (int tx = 0; tx < (1 << MIN_ZOOM); ++tx) {
     for (int ty = 0; ty < (1 << MIN_ZOOM); ++ty) {
       const QString url = tileUrl(tx, ty, MIN_ZOOM);
@@ -829,6 +832,7 @@ void Widgets::GPS::onThemeChanged()
  */
 void Widgets::GPS::onTileFetched(QNetworkReply* reply)
 {
+  // Cache the downloaded tile image and trigger a repaint
   const QString url = reply->url().toString();
   if (reply->error() == QNetworkReply::NoError) {
     QImage* image = new QImage();

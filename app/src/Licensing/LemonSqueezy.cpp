@@ -45,6 +45,7 @@ static constexpr quint64 PRDCT_ID = 496241;
  */
 static Licensing::FeatureTier tierFromVariant(const QString& variant)
 {
+  // Match the leading word of the variant name to a tier
   const auto lower = variant.toLower();
 
   if (lower.startsWith("enterprise"))
@@ -486,6 +487,7 @@ void Licensing::LemonSqueezy::writeSettings()
  */
 void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
 {
+  // Reset all in-memory licensing state
   m_busy           = false;
   m_seatLimit      = -1;
   m_seatUsage      = -1;

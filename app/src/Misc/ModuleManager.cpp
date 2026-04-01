@@ -238,6 +238,7 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
  */
 void Misc::ModuleManager::onQuit()
 {
+  // Stop all plugins and active modules
   Misc::ExtensionManager::instance().stopAllPlugins();
   Misc::TimerEvents::instance().stopTimers();
 
@@ -267,6 +268,7 @@ void Misc::ModuleManager::onQuit()
  */
 void Misc::ModuleManager::configureUpdater()
 {
+  // Skip if auto-updater is disabled at build time
   if (!autoUpdaterEnabled())
     return;
 

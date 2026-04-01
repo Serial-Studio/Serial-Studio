@@ -401,6 +401,7 @@ static QByteArray packU32BE(uint32_t v)
  */
 const QStringList& IO::availableChecksums()
 {
+  // Lazily build the list from the checksum function map
   static QStringList list;
   if (list.isEmpty()) {
     const auto& map = checksumFunctionMap();
@@ -469,6 +470,7 @@ const QMap<QString, IO::ChecksumFunc>& IO::checksumFunctionMap()
  */
 QByteArray IO::checksum(const QString& name, const QByteArray& data)
 {
+  // Look up algorithm by name and compute checksum
   const auto& map = checksumFunctionMap();
   const auto it   = map.find(name);
   if (it != map.end())

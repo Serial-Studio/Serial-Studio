@@ -157,6 +157,7 @@ QString DataModel::ProjectModel::jsonProjectsPath() const
  */
 QStringList DataModel::ProjectModel::xDataSources() const
 {
+  // Build list of available X-axis data sources from all datasets
   QStringList list;
   list.append(tr("Samples"));
 
@@ -295,6 +296,7 @@ int DataModel::ProjectModel::groupCount() const noexcept
  */
 int DataModel::ProjectModel::datasetCount() const
 {
+  // Sum datasets across all groups
   int count = 0;
   for (const auto& group : m_groups)
     count += static_cast<int>(group.datasets.size());
@@ -348,9 +350,11 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
                                                 const QVariant& value)
 {
+  // Abort if no project file is loaded
   if (m_filePath.isEmpty())
     return;
 
+  // Update in-memory settings and write to disk
   auto obj            = m_widgetSettings.value(widgetId).toObject();
   const auto newValue = QJsonValue::fromVariant(value);
   if (obj.value(key) == newValue)
@@ -380,9 +384,11 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
  */
 void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
 {
+  // Abort if no project file is loaded
   if (m_filePath.isEmpty())
     return;
 
+  // Check for changes before scheduling a debounced write
   const auto key = QStringLiteral("plugin:") + pluginId;
   if (m_widgetSettings.value(key).toObject() == state)
     return;
@@ -400,6 +406,7 @@ void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJs
  */
 void DataModel::ProjectModel::addSource()
 {
+  // GPL builds only allow a single data source
 #ifndef BUILD_COMMERCIAL
   if (!m_sources.empty()) {
     if (!m_suppressMessageBoxes)
@@ -588,9 +595,11 @@ void DataModel::ProjectModel::updateSourceFrameParser(int sourceId, const QStrin
  */
 void DataModel::ProjectModel::captureSourceSettings(int sourceId)
 {
+  // Validate source index
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
+  // Snapshot the UI driver's current properties
   const auto busType     = static_cast<SerialStudio::BusType>(m_sources[sourceId].busType);
   IO::HAL_Driver* driver = IO::ConnectionManager::instance().uiDriverForBusType(busType);
   if (!driver)
@@ -619,9 +628,11 @@ void DataModel::ProjectModel::captureSourceSettings(int sourceId)
  */
 void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
 {
+  // Validate source index
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
+  // Apply saved connection settings to the driver
   const auto& source = m_sources[sourceId];
   if (source.connectionSettings.isEmpty())
     return;
@@ -690,9 +701,11 @@ void DataModel::ProjectModel::setSource0BusType(int busType)
  */
 bool DataModel::ProjectModel::askSave()
 {
+  // Nothing to save if project is unmodified
   if (!modified())
     return true;
 
+  // In API mode, silently discard changes
   if (m_suppressMessageBoxes) {
     qWarning() << "[ProjectModel] Discarding unsaved changes (API mode)";
     if (jsonFilePath().isEmpty())
@@ -746,6 +759,7 @@ bool DataModel::ProjectModel::askSave()
  */
 bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 {
+  // Validate required project fields before saving
   if (m_title.isEmpty()) {
     if (m_suppressMessageBoxes)
       qWarning() << "[ProjectModel] Project title cannot be empty";
@@ -855,6 +869,7 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
  */
 QJsonObject DataModel::ProjectModel::serializeToJson() const
 {
+  // Build the root JSON object with project metadata
   QJsonObject json;
 
   json.insert("title", m_title);
@@ -928,6 +943,7 @@ void DataModel::ProjectModel::setupExternalConnections()
  */
 void DataModel::ProjectModel::newJsonFile()
 {
+  // Clear all project data
   m_groups.clear();
   m_actions.clear();
   m_sources.clear();
@@ -1126,10 +1142,10 @@ void DataModel::ProjectModel::openJsonFile()
  */
 bool DataModel::ProjectModel::openJsonFile(const QString& path)
 {
+  // Validate path and check for redundant reload
   if (path.isEmpty())
     return false;
 
-  // Skip reload when the same file is already loaded
   if (m_filePath == path && !m_groups.empty())
     return true;
 
@@ -1515,6 +1531,7 @@ void DataModel::ProjectModel::updateAction(const int actionId,
  */
 void DataModel::ProjectModel::deleteCurrentGroup()
 {
+  // Confirm deletion with the user unless in API mode
   if (!m_suppressMessageBoxes) {
     const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
@@ -1550,6 +1567,7 @@ void DataModel::ProjectModel::deleteCurrentGroup()
  */
 void DataModel::ProjectModel::deleteCurrentAction()
 {
+  // Confirm deletion with the user unless in API mode
   if (!m_suppressMessageBoxes) {
     const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
@@ -1585,6 +1603,7 @@ void DataModel::ProjectModel::deleteCurrentAction()
  */
 void DataModel::ProjectModel::deleteCurrentDataset()
 {
+  // Confirm deletion with the user unless in API mode
   if (!m_suppressMessageBoxes) {
     const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
@@ -1640,6 +1659,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
  */
 void DataModel::ProjectModel::duplicateCurrentGroup()
 {
+  // Create a copy of the selected group with a new ID
   DataModel::Group group;
   group.groupId = m_groups.size();
   group.widget  = m_selectedGroup.widget;
@@ -1664,6 +1684,7 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
  */
 void DataModel::ProjectModel::duplicateCurrentAction()
 {
+  // Create a copy of the selected action with a new ID
   DataModel::Action action;
   action.actionId             = m_actions.size();
   action.icon                 = m_selectedAction.icon;

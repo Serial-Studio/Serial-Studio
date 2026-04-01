@@ -86,12 +86,14 @@ bool MDF4::ExportWorker::isResourceOpen() const
  */
 void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
+  // Skip empty batches or when disconnected
   if (items.empty())
     return;
 
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
+  // Create the output file on first batch
   if (!isResourceOpen() && !items.empty()) {
     createFile(items.front()->data);
     m_steadyBaseline = items.front()->timestamp;
@@ -142,6 +144,7 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
  */
 void MDF4::ExportWorker::closeResources()
 {
+  // Finalize the MDF4 measurement and release the writer
   if (isResourceOpen() && m_writer) {
     const auto steadyNow    = DataModel::TimestampedFrame::SteadyClock::now();
     const auto steadyOffset = steadyNow - m_steadyBaseline;
@@ -164,9 +167,11 @@ void MDF4::ExportWorker::closeResources()
  */
 void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
 {
+  // Close any previously open file
   if (isResourceOpen())
     closeResources();
 
+  // Validate license before creating the file
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD() || token.featureTier() < Licensing::FeatureTier::Pro)
     return;
@@ -434,6 +439,7 @@ void MDF4::Export::setupExternalConnections()
  */
 void MDF4::Export::setExportEnabled(const bool enabled)
 {
+  // Validate license and apply the export state
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Pro) {
@@ -484,6 +490,7 @@ void MDF4::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
  */
 void MDF4::Export::onWorkerOpenChanged()
 {
+  // Sync the main-thread open state with the worker's state
   auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();

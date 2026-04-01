@@ -249,10 +249,11 @@ bool Misc::ExtensionManager::isInstalled(const QString& id) const
  */
 bool Misc::ExtensionManager::hasUpdate(const QString& id) const
 {
+  // Must be installed to have an update
   if (!isInstalled(id))
     return false;
 
-  // Find the extension in the catalog
+  // Compare installed version against the catalog version
   const auto installed = m_installedExtensions.value(id).toObject();
   const auto localVer  = installed.value("version").toString();
 
@@ -285,13 +286,14 @@ QString Misc::ExtensionManager::installedVersion(const QString& id) const
  */
 void Misc::ExtensionManager::setSelectedIndex(int index)
 {
+  // Guard against redundant updates
   if (m_selectedIndex == index)
     return;
 
+  // Update selection and fetch readme for the new extension
   m_selectedIndex = index;
   Q_EMIT selectedIndexChanged();
 
-  // Clear previous readme and load new one
   m_selectedReadme.clear();
   Q_EMIT selectedReadmeChanged();
 
@@ -364,6 +366,7 @@ void Misc::ExtensionManager::setFilterType(const QString& type)
  */
 void Misc::ExtensionManager::refreshRepositories()
 {
+  // Avoid concurrent fetches
   if (m_loading)
     return;
 
@@ -445,6 +448,7 @@ void Misc::ExtensionManager::removeRepository(int index)
  */
 void Misc::ExtensionManager::resetRepositories()
 {
+  // Confirm the destructive operation with the user
   const auto result = Misc::Utilities::showMessageBox(
     tr("Reset Extensions"),
     tr("This will uninstall all extensions, remove all custom repositories, "
@@ -520,9 +524,11 @@ void Misc::ExtensionManager::browseLocalRepo()
  */
 void Misc::ExtensionManager::installExtension()
 {
+  // Validate selection
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return;
 
+  // Read extension metadata and build the download queue
   const auto addon   = m_filteredExtensions.at(m_selectedIndex).toMap();
   const auto id      = addon.value("id").toString();
   const auto type    = addon.value("type").toString();
@@ -620,9 +626,11 @@ void Misc::ExtensionManager::installExtension()
  */
 void Misc::ExtensionManager::uninstallExtension()
 {
+  // Validate selection
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return;
 
+  // Remove the extension files and update tracking
   const auto addon = m_filteredExtensions.at(m_selectedIndex).toMap();
   const auto id    = addon.value("id").toString();
   const auto type  = addon.value("type").toString();
@@ -658,11 +666,11 @@ void Misc::ExtensionManager::uninstallExtension()
  */
 void Misc::ExtensionManager::autoUpdateExtensions()
 {
-  // Don't start if already loading/installing
+  // Skip if another operation is in progress
   if (m_loading)
     return;
 
-  // Build update queue on first call
+  // Build the update queue on first call
   if (m_autoUpdateQueue.isEmpty()) {
     const auto ids = m_installedExtensions.keys();
     for (const auto& id : ids)
@@ -886,6 +894,7 @@ void Misc::ExtensionManager::downloadNextFile()
  */
 void Misc::ExtensionManager::applyFilter()
 {
+  // Rebuild the filtered list from the full catalog
   m_filteredExtensions.clear();
 
   for (const auto& entry : std::as_const(m_allExtensions)) {
@@ -1037,6 +1046,7 @@ void Misc::ExtensionManager::applyFilter()
  */
 void Misc::ExtensionManager::rebuildInstalledPlugins()
 {
+  // Iterate installed extensions and collect plugin entries
   QVariantList plugins;
   const auto pluginIds = m_installedExtensions.keys();
   for (const auto& iid : pluginIds) {
@@ -1158,6 +1168,7 @@ QString Misc::ExtensionManager::currentPlatformKey() const
  */
 QJsonObject Misc::ExtensionManager::resolvePlatform(const QJsonObject& meta) const
 {
+  // Start with base metadata and overlay platform-specific overrides
   auto result = meta;
 
   const auto platforms = meta.value("platforms").toObject();
@@ -1249,6 +1260,7 @@ void Misc::ExtensionManager::stopSelectedPlugin()
  */
 void Misc::ExtensionManager::launchPlugin(const QString& id)
 {
+  // Validate plugin ID
   if (id.isEmpty())
     return;
 
@@ -1561,6 +1573,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
  */
 void Misc::ExtensionManager::stopPlugin(const QString& id)
 {
+  // Find the running plugin process
   auto it = m_plugins.find(id);
   if (it == m_plugins.end())
     return;

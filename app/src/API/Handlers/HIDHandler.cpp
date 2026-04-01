@@ -25,6 +25,7 @@
  */
 void API::Handlers::HIDHandler::registerCommands()
 {
+  // Obtain registry and register HID commands
   auto& registry = CommandRegistry::instance();
 
   // setDeviceIndex schema
@@ -80,6 +81,7 @@ void API::Handlers::HIDHandler::registerCommands()
 API::CommandResponse API::Handlers::HIDHandler::setDeviceIndex(const QString& id,
                                                                const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("deviceIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
@@ -115,6 +117,7 @@ API::CommandResponse API::Handlers::HIDHandler::setDeviceIndex(const QString& id
 API::CommandResponse API::Handlers::HIDHandler::getDeviceList(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& devices = IO::ConnectionManager::instance().hid()->deviceList();
@@ -135,6 +138,7 @@ API::CommandResponse API::Handlers::HIDHandler::getDeviceList(const QString& id,
 API::CommandResponse API::Handlers::HIDHandler::getConfiguration(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto* hid = IO::ConnectionManager::instance().hid();

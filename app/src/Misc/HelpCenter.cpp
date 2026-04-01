@@ -155,6 +155,7 @@ const QString& Misc::HelpCenter::themeColors() const noexcept
  */
 void Misc::HelpCenter::setCurrentIndex(int index)
 {
+  // Guard against redundant selection
   if (m_currentIndex == index)
     return;
 
@@ -189,7 +190,7 @@ void Misc::HelpCenter::setSearchFilter(const QString& filter)
  */
 bool Misc::HelpCenter::navigateToPage(const QString& link)
 {
-  // Normalize: strip fragment, strip .md extension, trim
+  // Normalize the link by stripping fragment and extension
   auto normalized    = link.trimmed();
   const auto hashIdx = normalized.indexOf('#');
   if (hashIdx >= 0)
@@ -262,6 +263,7 @@ void Misc::HelpCenter::showPage(const QString& pageId)
  */
 void Misc::HelpCenter::onManifestReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -297,6 +299,7 @@ void Misc::HelpCenter::onManifestReply()
  */
 void Misc::HelpCenter::onPageReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -387,6 +390,7 @@ void Misc::HelpCenter::applyFilter()
  */
 void Misc::HelpCenter::fetchPage(int index)
 {
+  // Validate index range
   if (index < 0 || index >= m_filteredPages.count())
     return;
 
@@ -419,6 +423,7 @@ void Misc::HelpCenter::fetchPage(int index)
  */
 void Misc::HelpCenter::preloadAllPages()
 {
+  // Fetch all pages not yet in cache for full-text search
   m_pendingPreloads = 0;
 
   for (const auto& entry : std::as_const(m_allPages)) {
@@ -446,6 +451,7 @@ void Misc::HelpCenter::preloadAllPages()
  */
 void Misc::HelpCenter::onPreloadReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;

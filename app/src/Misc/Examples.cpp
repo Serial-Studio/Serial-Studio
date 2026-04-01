@@ -159,6 +159,7 @@ QVariantMap Misc::Examples::selectedExample() const
  */
 void Misc::Examples::setSelectedIndex(int index)
 {
+  // Guard against redundant selection
   if (m_selectedIndex == index)
     return;
 
@@ -207,6 +208,7 @@ void Misc::Examples::setSearchFilter(const QString& filter)
  */
 void Misc::Examples::downloadExample()
 {
+  // Validate selection
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExamples.count())
     return;
 
@@ -239,6 +241,7 @@ void Misc::Examples::downloadExample()
  */
 void Misc::Examples::onManifestReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -262,6 +265,7 @@ void Misc::Examples::onManifestReply()
  */
 void Misc::Examples::onReadmeReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -301,6 +305,7 @@ void Misc::Examples::onReadmeReply()
  */
 void Misc::Examples::onScreenshotReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -336,6 +341,7 @@ void Misc::Examples::onScreenshotReply()
  */
 void Misc::Examples::onContentsReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -385,6 +391,7 @@ void Misc::Examples::onContentsReply()
  */
 void Misc::Examples::onFileDownloadReply()
 {
+  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -496,7 +503,7 @@ void Misc::Examples::applyFilter()
  */
 void Misc::Examples::fetchReadme(const QString& id)
 {
-  // Check cache first
+  // Try loading from local cache before fetching from network
   const auto cached = exampleCachePath(id) + "/README.md";
   if (QFile::exists(cached)) {
     QFile file(cached);
@@ -524,7 +531,7 @@ void Misc::Examples::fetchReadme(const QString& id)
  */
 void Misc::Examples::fetchScreenshot(const QString& id, const QString& fileName)
 {
-  // Check cache first
+  // Try loading from local cache before fetching from network
   const auto cached = exampleCachePath(id) + "/doc/" + fileName;
   if (QFile::exists(cached)) {
     m_selectedScreenshot = QUrl::fromLocalFile(cached);

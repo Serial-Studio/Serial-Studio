@@ -100,6 +100,7 @@ int NativeWindow::titlebarHeight(QObject* window)
  */
 void NativeWindow::removeWindow(QObject* window)
 {
+  // Validate the window pointer
   auto* w = qobject_cast<QWindow*>(window);
   if (!w)
     return;
@@ -136,6 +137,7 @@ void NativeWindow::removeWindow(QObject* window)
  */
 void NativeWindow::addWindow(QObject* window, const QString& color)
 {
+  // Validate the window pointer
   auto* w = qobject_cast<QWindow*>(window);
   if (!w)
     return;

@@ -182,6 +182,7 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
  */
 qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 {
+  // Validate device, writability, and minimum frame size
   if (!m_device)
     return 0;
 
@@ -237,6 +238,7 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
  */
 bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
 {
+  // Validate CAN support and create a new device connection
   Q_UNUSED(mode)
 
   close();
@@ -413,6 +415,7 @@ QString IO::Drivers::CANBus::interfaceError() const
  */
 QStringList IO::Drivers::CANBus::bitrateList() const
 {
+  // Build list of standard CAN bitrates
   QStringList list;
   list << "10000";
   list << "20000";
@@ -434,6 +437,7 @@ QStringList IO::Drivers::CANBus::bitrateList() const
  */
 QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
 {
+  // Map Qt plugin identifiers to user-friendly names
   if (plugin == "socketcan")
     return "SocketCAN";
   else if (plugin == "peakcan")
@@ -550,6 +554,7 @@ void IO::Drivers::CANBus::setupExternalConnections()
  */
 void IO::Drivers::CANBus::onFramesReceived()
 {
+  // Validate device state before processing incoming frames
   if (!m_device)
     return;
 
@@ -646,6 +651,7 @@ void IO::Drivers::CANBus::onStateChanged(QCanBusDevice::CanBusDeviceState state)
  */
 void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
 {
+  // Ignore non-errors and show descriptive error messages
   if (error == QCanBusDevice::NoError)
     return;
 
@@ -676,6 +682,7 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
  */
 void IO::Drivers::CANBus::refreshInterfaces()
 {
+  // Query the selected plugin for available CAN interfaces
   m_interfaceList.clear();
   m_interfaceError.clear();
 
@@ -745,6 +752,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
  */
 void IO::Drivers::CANBus::refreshPlugins()
 {
+  // Detect newly loaded plugins and refresh interface lists
   const QStringList currentPlugins = QCanBus::instance()->plugins();
 
   if (m_pluginList != currentPlugins) {
@@ -785,6 +793,7 @@ bool IO::Drivers::CANBus::canSupportAvailable() const
  */
 QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
 {
+  // Build property descriptors for plugin, interface, bitrate, and CAN FD
   QList<IO::DriverProperty> props;
 
   IO::DriverProperty plugin;
@@ -828,6 +837,7 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
  */
 void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& value)
 {
+  // Dispatch property change to the appropriate setter
   if (key == QLatin1String("pluginIndex"))
     setPluginIndex(static_cast<quint8>(value.toInt()));
 

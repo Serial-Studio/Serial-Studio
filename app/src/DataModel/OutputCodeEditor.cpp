@@ -247,6 +247,7 @@ void DataModel::OutputCodeEditor::import()
  */
 void DataModel::OutputCodeEditor::readCode()
 {
+  // Guard against reentrancy during code loading
   if (m_readingCode)
     return;
 
@@ -272,6 +273,7 @@ void DataModel::OutputCodeEditor::readCode()
  */
 void DataModel::OutputCodeEditor::selectTemplate()
 {
+  // Abort if no templates are available
   if (m_templateNames.isEmpty())
     return;
 
@@ -306,6 +308,7 @@ void DataModel::OutputCodeEditor::selectTemplate()
  */
 void DataModel::OutputCodeEditor::reload(bool guiTrigger)
 {
+  // Reset editor to the default transmit function
   Q_UNUSED(guiTrigger)
   m_widget.setPlainText(defaultTemplate());
   m_widget.document()->clearUndoRedoStacks();
@@ -337,6 +340,7 @@ QString DataModel::OutputCodeEditor::defaultTemplate()
  */
 void DataModel::OutputCodeEditor::onThemeChanged()
 {
+  // Resolve theme path and load the syntax style XML
   static const auto* t = &Misc::ThemeManager::instance();
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 

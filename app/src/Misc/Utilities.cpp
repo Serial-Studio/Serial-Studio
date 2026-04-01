@@ -102,6 +102,7 @@ QPixmap Misc::Utilities::getHiDpiPixmap(const QString& path)
  */
 bool Misc::Utilities::askAutomaticUpdates()
 {
+  // Prompt the user and return their choice
   const int result = showMessageBox(
     tr("Check for updates automatically?"),
     tr(
@@ -124,6 +125,7 @@ bool Misc::Utilities::askAutomaticUpdates()
  */
 QString Misc::Utilities::hdpiImagePath(const QString& path)
 {
+  // Compute the DPI-appropriate image path suffix (@1x or @2x)
   const auto dpr  = qApp->devicePixelRatio();
   const int ratio = qMin<int>(2, static_cast<int>(ceil(dpr)));
 
@@ -153,6 +155,7 @@ int Misc::Utilities::showMessageBox(const QString& text,
                                     QMessageBox::StandardButton defaultButton,
                                     const ButtonTextMap& buttonTexts)
 {
+  // Skip GUI dialogs in headless/offscreen mode
   if (qApp->platformName() == QLatin1String("offscreen"))
     return QMessageBox::Ok;
 

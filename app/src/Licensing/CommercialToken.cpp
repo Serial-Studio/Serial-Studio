@@ -111,6 +111,7 @@ void Licensing::CommercialToken::clearCurrent()
  */
 bool Licensing::CommercialToken::isValid() const
 {
+  // Validate all required fields are present
   if (m_tier == FeatureTier::None)
     return false;
 
@@ -231,6 +232,7 @@ void Licensing::CommercialToken::seal()
  */
 quint64 Licensing::CommercialToken::deobfuscateSalt()
 {
+  // Unmask and reassemble the 64-bit salt from volatile fragments
   const quint64 p0 = static_cast<quint64>(static_cast<quint16>(s_sf0 ^ kMask0));
   const quint64 p1 = static_cast<quint64>(static_cast<quint16>(s_sf1 ^ kMask1));
   const quint64 p2 = static_cast<quint64>(static_cast<quint16>(s_sf2 ^ kMask2));

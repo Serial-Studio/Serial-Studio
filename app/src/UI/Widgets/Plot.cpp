@@ -194,6 +194,7 @@ const QString& Widgets::Plot::xLabel() const noexcept
  */
 void Widgets::Plot::draw(QXYSeries* series)
 {
+  // Refresh data, replace series points, and recalculate axis scale
   if (series) {
     updateData();
     series->replace(m_data);
@@ -309,7 +310,7 @@ void Widgets::Plot::updateData()
  */
 void Widgets::Plot::updateRange()
 {
-  // Obtain dataset information
+  // Update X-axis range from dataset or default sample count
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     const auto& yD = GET_DATASET(SerialStudio::DashboardPlot, m_index);
     if (yD.xAxisId > 0) {

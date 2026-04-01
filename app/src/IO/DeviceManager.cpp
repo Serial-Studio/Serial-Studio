@@ -206,9 +206,11 @@ void IO::DeviceManager::onRawDataReceived(const IO::ByteArrayPtr& data)
  */
 void IO::DeviceManager::startFrameReader(const FrameConfig& config)
 {
+  // Bail out if the driver has been destroyed
   if (!m_driver)
     return;
 
+  // Destroy any existing FrameReader and create a new one
   killFrameReader();
 
   m_frameReader = new FrameReader();

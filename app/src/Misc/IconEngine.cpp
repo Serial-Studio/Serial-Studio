@@ -94,7 +94,7 @@ const QStringList& Misc::IconEngine::iconPreviews() const noexcept
  */
 QString Misc::IconEngine::resolveActionIconSource(const QString& icon)
 {
-  // Strip the data URI prefix and pass raw base64 to the image provider
+  // Resolve inline SVG data URIs to image provider URLs
   if (isInlineSvg(icon)) {
     const auto base64 = icon.mid(QStringLiteral("data:image/svg+xml;base64,").length());
     return QStringLiteral("image://actionicon/%1").arg(base64);
@@ -124,6 +124,7 @@ bool Misc::IconEngine::isInlineSvg(const QString& icon)
  */
 void Misc::IconEngine::searchIcons(const QString& query)
 {
+  // Validate query
   if (query.trimmed().isEmpty())
     return;
 
@@ -152,7 +153,7 @@ void Misc::IconEngine::searchIcons(const QString& query)
  */
 void Misc::IconEngine::downloadIcon(int index)
 {
-  // Validate index
+  // Validate the icon index
   if (index < 0 || index >= m_iconNames.size())
     return;
 
@@ -190,9 +191,9 @@ void Misc::IconEngine::downloadIcon(int index)
  */
 void Misc::IconEngine::onSearchFinished(QNetworkReply* reply)
 {
+  // Clean up the reply and reset previous results
   reply->deleteLater();
 
-  // Clear previous results
   m_iconNames.clear();
   m_iconPreviews.clear();
 
@@ -233,9 +234,9 @@ void Misc::IconEngine::onSearchFinished(QNetworkReply* reply)
  */
 void Misc::IconEngine::onDownloadFinished(QNetworkReply* reply)
 {
+  // Clean up the reply and clear busy state
   reply->deleteLater();
 
-  // Clear busy state
   m_busy = false;
   Q_EMIT busyChanged();
 
@@ -278,7 +279,7 @@ QImage Misc::ActionIconProvider::requestImage(const QString& id,
                                               QSize* size,
                                               const QSize& requestedSize)
 {
-  // Decode the base64 SVG
+  // Decode the base64 SVG data
   const auto svgData = QByteArray::fromBase64(id.toLatin1());
   if (svgData.isEmpty()) {
     if (size)

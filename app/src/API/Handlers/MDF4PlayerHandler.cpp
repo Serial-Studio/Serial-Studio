@@ -24,6 +24,7 @@
  */
 void API::Handlers::MDF4PlayerHandler::registerCommands()
 {
+  // Obtain registry and build command schemas
   auto& registry = CommandRegistry::instance();
 
   // Open command
@@ -114,6 +115,7 @@ void API::Handlers::MDF4PlayerHandler::registerCommands()
 API::CommandResponse API::Handlers::MDF4PlayerHandler::open(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("filePath"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
@@ -144,6 +146,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::open(const QString& id,
 API::CommandResponse API::Handlers::MDF4PlayerHandler::close(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MDF4::Player::instance().closeFile();
@@ -159,6 +162,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::close(const QString& id,
 API::CommandResponse API::Handlers::MDF4PlayerHandler::play(const QString& id,
                                                             const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MDF4::Player::instance().play();
@@ -174,6 +178,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::play(const QString& id,
 API::CommandResponse API::Handlers::MDF4PlayerHandler::pause(const QString& id,
                                                              const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MDF4::Player::instance().pause();
@@ -189,6 +194,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::pause(const QString& id,
 API::CommandResponse API::Handlers::MDF4PlayerHandler::toggle(const QString& id,
                                                               const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MDF4::Player::instance().toggle();
@@ -204,6 +210,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::toggle(const QString& id,
 API::CommandResponse API::Handlers::MDF4PlayerHandler::nextFrame(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MDF4::Player::instance().nextFrame();
@@ -219,6 +226,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::nextFrame(const QString& 
 API::CommandResponse API::Handlers::MDF4PlayerHandler::previousFrame(const QString& id,
                                                                      const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   MDF4::Player::instance().previousFrame();
@@ -235,6 +243,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::previousFrame(const QStri
 API::CommandResponse API::Handlers::MDF4PlayerHandler::setProgress(const QString& id,
                                                                    const QJsonObject& params)
 {
+  // Validate required parameter
   if (!params.contains(QStringLiteral("progress"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: progress"));
@@ -264,6 +273,7 @@ API::CommandResponse API::Handlers::MDF4PlayerHandler::setProgress(const QString
 API::CommandResponse API::Handlers::MDF4PlayerHandler::getStatus(const QString& id,
                                                                  const QJsonObject& params)
 {
+  // Retrieve current state
   Q_UNUSED(params)
 
   auto& player = MDF4::Player::instance();

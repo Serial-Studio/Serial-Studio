@@ -32,6 +32,7 @@
  */
 QString API::GRPC::ProtoGenerator::generateProto()
 {
+  // Initialize output stream
   QString proto;
   QTextStream out(&proto);
 
@@ -153,6 +154,7 @@ QString API::GRPC::ProtoGenerator::generateProto()
  */
 bool API::GRPC::ProtoGenerator::exportToFile(const QString& filePath)
 {
+  // Validate file path
   if (filePath.isEmpty())
     return false;
 
@@ -174,6 +176,7 @@ bool API::GRPC::ProtoGenerator::exportToFile(const QString& filePath)
  */
 QString API::GRPC::ProtoGenerator::jsonTypeToProtoType(const QString& jsonType)
 {
+  // Map JSON Schema type to protobuf field type
   if (jsonType == QStringLiteral("string"))
     return QStringLiteral("string");
   if (jsonType == QStringLiteral("number"))
@@ -196,6 +199,7 @@ QString API::GRPC::ProtoGenerator::jsonTypeToProtoType(const QString& jsonType)
  */
 QString API::GRPC::ProtoGenerator::sanitizeName(const QString& name)
 {
+  // Convert dot-notation to CamelCase
   QString result;
   bool capitalize = true;
 

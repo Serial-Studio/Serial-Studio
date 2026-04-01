@@ -130,9 +130,11 @@ IO::Drivers::USB::USB()
  */
 IO::Drivers::USB::~USB()
 {
+  // Signal both threads to stop
   m_running          = false;
   m_eventLoopRunning = false;
 
+  // Deregister hotplug and cancel pending transfers
   if (m_ctx && m_hotplugHandle) {
     libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
     m_hotplugHandle = 0;
@@ -471,6 +473,7 @@ bool IO::Drivers::USB::isoModeEnabled() const
  */
 QStringList IO::Drivers::USB::deviceList() const
 {
+  // Prepend a placeholder entry for the ComboBox
   QStringList list;
   list.append(tr("Select Device"));
   list.append(m_deviceLabels);
@@ -499,6 +502,7 @@ int IO::Drivers::USB::deviceIndex() const
  */
 QStringList IO::Drivers::USB::inEndpointList() const
 {
+  // Prepend a placeholder entry for the ComboBox
   QStringList list;
   list.append(tr("Select IN Endpoint"));
   list.append(m_inEndpointLabels);
@@ -515,6 +519,7 @@ QStringList IO::Drivers::USB::inEndpointList() const
  */
 QStringList IO::Drivers::USB::outEndpointList() const
 {
+  // Prepend a "no endpoint" entry for receive-only operation
   QStringList list;
   list.append(tr("None (Read-only)"));
   list.append(m_outEndpointLabels);
@@ -622,6 +627,7 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
  */
 void IO::Drivers::USB::setTransferMode(const int mode)
 {
+  // Show a warning dialog when switching to AdvancedControl mode
   const auto requested = static_cast<TransferMode>(mode);
 
   if (requested == TransferMode::AdvancedControl
@@ -788,9 +794,11 @@ void IO::Drivers::USB::onReadError()
  */
 void IO::Drivers::USB::enumerateDevices()
 {
+  // Skip if libusb context is not initialized
   if (!m_ctx)
     return;
 
+  // Save previous labels for change detection
   const QStringList previous = m_deviceLabels;
   for (auto* dev : std::as_const(m_devicePtrs))
     libusb_unref_device(dev);
@@ -907,6 +915,7 @@ static bool configHasTransferType(const libusb_config_descriptor* cfg, uint8_t t
  */
 QString IO::Drivers::USB::endpointErrorMessage() const
 {
+  // Check if endpoints of the opposite transfer type exist
   const bool wantIso = (m_transferMode == TransferMode::Isochronous);
   bool hasOtherType  = false;
 
@@ -948,6 +957,7 @@ void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
                                        int ifNum,
                                        bool wantIso)
 {
+  // Filter by transfer type and build endpoint info
   const uint8_t type = ep.bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
   const bool isBulk  = (type == LIBUSB_TRANSFER_TYPE_BULK);
   const bool isIso   = (type == LIBUSB_TRANSFER_TYPE_ISOCHRONOUS);
@@ -1006,11 +1016,13 @@ void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
  */
 void IO::Drivers::USB::buildEndpointLists()
 {
+  // Reset and validate device selection
   clearEndpointLists();
 
   if (m_deviceIndex <= 0 || (m_deviceIndex - 1) >= m_devicePtrs.size())
     return;
 
+  // Scan all interfaces and endpoints on the active configuration
   libusb_device* dev               = m_devicePtrs.at(m_deviceIndex - 1);
   libusb_config_descriptor* config = nullptr;
 
@@ -1188,6 +1200,7 @@ void IO::Drivers::USB::readLoop()
  */
 void IO::Drivers::USB::allocateIsoTransfers()
 {
+  // Allocate and submit the isochronous transfer pool
   const int totalBufSize = m_isoPacketSize * kIsoPacketsPerTransfer;
 
   for (int i = 0; i < kIsoNumTransfers; ++i) {
@@ -1259,6 +1272,7 @@ void IO::Drivers::USB::isoReadLoop()
  */
 void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer)
 {
+  // Collect completed packet data and resubmit if still running
   auto* self = static_cast<USB*>(transfer->user_data);
 
   if (transfer->status == LIBUSB_TRANSFER_COMPLETED || transfer->status == LIBUSB_TRANSFER_ERROR) {
@@ -1317,6 +1331,7 @@ qint64 IO::Drivers::USB::sendControlTransfer(uint8_t bmRequestType,
                                              const QByteArray& data,
                                              unsigned int timeout_ms)
 {
+  // Guard against misuse outside AdvancedControl mode
   if (!advancedModeEnabled() || !m_handle)
     return -1;
 

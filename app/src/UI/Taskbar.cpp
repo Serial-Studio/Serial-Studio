@@ -189,7 +189,7 @@ int UI::Taskbar::activeGroupId() const
  */
 int UI::Taskbar::activeGroupIndex() const
 {
-  // Search the group model for a matching group ID
+  // Find the position of the active group ID within the group model
   int index        = 0;
   const auto model = groupModel();
   for (auto it = model.begin(); it != model.end(); ++it) {
@@ -220,6 +220,7 @@ int UI::Taskbar::activeGroupIndex() const
  */
 QVariantList UI::Taskbar::groupModel() const
 {
+  // Build the list of group entries for the tab bar / group selector
   QVariantList model;
 
   // Count widget groups for overview section
@@ -340,6 +341,7 @@ UI::WindowManager* UI::Taskbar::windowManager() const
  */
 bool UI::Taskbar::hasMaximizedWindow() const
 {
+  // Check if any tracked window is in the maximized state
   for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
     if (it.key()->state() == QStringLiteral("maximized"))
       return true;
@@ -358,6 +360,7 @@ bool UI::Taskbar::hasMaximizedWindow() const
  */
 QQuickItem* UI::Taskbar::windowData(const int id) const
 {
+  // Reverse-lookup the QQuickItem for a given window ID
   for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
     if (it.value() == id)
       return it.key();
@@ -444,6 +447,7 @@ void UI::Taskbar::saveLayout()
  */
 void UI::Taskbar::setActiveGroupId(int groupId)
 {
+  // Persist current layout and switch to the requested group
   saveLayout();
 
   // Persist active group so it survives save/load cycles
@@ -565,6 +569,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
  */
 void UI::Taskbar::setActiveGroupIndex(int index)
 {
+  // Look up the group ID at the given index and activate it
   auto model = groupModel();
   if (model.count() > index && index >= 0) {
     auto item = model[index];
@@ -799,6 +804,7 @@ void UI::Taskbar::mapWidgetToWindow(UI::WidgetID wid, int windowId)
 
 void UI::Taskbar::rebuildModel()
 {
+  // Guard against re-entrant rebuilds
   if (m_rebuildInProgress)
     return;
 
