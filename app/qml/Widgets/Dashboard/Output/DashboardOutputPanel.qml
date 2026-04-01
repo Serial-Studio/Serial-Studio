@@ -118,8 +118,6 @@ Item {
           Item { Layout.fillHeight: true }
 
           Button {
-            id: actionBtn
-
             text: cell.owTitle.length > 0 ? cell.owTitle : qsTr("Send")
             icon.source: cell.owIcon.length > 0
                          ? cell.owIcon
@@ -127,21 +125,11 @@ Item {
             icon.color: cell.owMono
                         ? Cpp_ThemeManager.colors["highlighted_text"]
                         : "transparent"
-            Layout.preferredHeight: 36
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredWidth: Math.min(parent.width, 200)
 
             palette.button: cell.accentColor
             palette.buttonText: Cpp_ThemeManager.colors["highlighted_text"]
-
-            background: Rectangle {
-              radius: 6
-              border.width: 1
-              border.color: Qt.darker(cell.accentColor, 1.3)
-              color: actionBtn.down
-                     ? Qt.darker(cell.accentColor, 1.2)
-                     : cell.accentColor
-            }
 
             onClicked: {
               if (cell.owModel)
@@ -187,68 +175,12 @@ Item {
               stepSize: cell.owData ? cell.owData.stepSize : 1
               Layout.fillWidth: true
 
+              palette.dark: cell.accentColor
+              palette.highlight: cell.accentColor
+
               onMoved: {
                 if (cell.owModel)
                   cell.owModel.currentValue = slider.value
-              }
-
-              background: Rectangle {
-                x: slider.leftPadding
-                y: slider.topPadding
-                   + slider.availableHeight / 2 - height / 2
-                width: slider.availableWidth
-                height: 6
-                radius: 3
-                color: Qt.darker(
-                         Cpp_ThemeManager.colors["widget_base"], 1.1)
-                border.width: 1
-                border.color: Qt.rgba(0, 0, 0, 0.1)
-
-                Rectangle {
-                  width: slider.visualPosition * parent.width
-                  height: parent.height
-                  radius: 3
-
-                  gradient: Gradient {
-                    orientation: Gradient.Horizontal
-                    GradientStop {
-                      position: 0.0
-                      color: Qt.lighter(cell.accentColor, 1.2)
-                    }
-                    GradientStop {
-                      position: 1.0
-                      color: cell.accentColor
-                    }
-                  }
-                }
-              }
-
-              handle: Rectangle {
-                x: slider.leftPadding
-                   + slider.visualPosition
-                   * (slider.availableWidth - width)
-                y: slider.topPadding
-                   + slider.availableHeight / 2 - height / 2
-                width: 16
-                height: 16
-                radius: 8
-                border.width: 1
-                border.color: Qt.darker(cell.accentColor, 1.3)
-
-                gradient: Gradient {
-                  GradientStop {
-                    position: 0.0
-                    color: Qt.lighter(cell.accentColor, 1.3)
-                  }
-                  GradientStop {
-                    position: 0.5
-                    color: cell.accentColor
-                  }
-                  GradientStop {
-                    position: 1.0
-                    color: Qt.darker(cell.accentColor, 1.2)
-                  }
-                }
               }
             }
 
@@ -297,21 +229,6 @@ Item {
               if (cell.owModel)
                 cell.owModel.checked = toggle.checked
             }
-          }
-
-          Label {
-            text: {
-              if (!cell.owModel)
-                return ""
-
-              if (toggle.checked)
-                return cell.owModel.onLabel || qsTr("ON")
-
-              return cell.owModel.offLabel || qsTr("OFF")
-            }
-            color: cell.accentColor
-            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
-            Layout.alignment: Qt.AlignHCenter
           }
 
           Item { Layout.fillHeight: true }
@@ -372,7 +289,7 @@ Item {
         }
 
         //
-        // Knob / Dial — gauge-style with ticks, needle, and gradient face
+        // Knob / Dial
         //
         ColumnLayout {
           visible: cell.owType === SerialStudio.OutputKnob
@@ -392,266 +309,30 @@ Item {
             to: cell.owData ? cell.owData.maxValue : 100
             value: cell.owData ? cell.owData.initialValue : 0
             stepSize: cell.owData ? cell.owData.stepSize : 1
-            startAngle: -135
-            endAngle: 135
-            inputMode: Dial.Vertical
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignHCenter
             Layout.maximumWidth: height
+            inputMode: Dial.Circular
 
-            readonly property real angleRangeDeg: 270
-            readonly property int subTicksPerMajor: 4
-            readonly property int tickCount: {
-              const sz = Math.min(availableWidth, availableHeight) * 0.65
-              const r = sz / 2
-              const arc = (270 * Math.PI / 180) * r
-              const lw = knobFontSize * 5
-              const minT = r < 60 ? 3 : 5
-              const maxT = r < 100 ? 7 : 9
-              return Math.max(minT, Math.min(maxT, Math.floor(arc / (lw * 3))))
-            }
-            readonly property real knobFontSize:
-              Math.max(7, Math.min(10, Math.min(availableWidth, availableHeight) * 0.65 / 28))
-              * Cpp_Misc_CommonFonts.widgetFontScale
+            palette.dark: cell.accentColor
+            palette.highlight: cell.accentColor
 
             onMoved: {
               if (cell.owModel)
                 cell.owModel.currentValue = knob.value
             }
 
-            background: Item {
-              implicitWidth: 140
-              implicitHeight: 140
-
-              readonly property real gaugeSize:
-                Math.min(knob.availableWidth, knob.availableHeight) * 0.65
-
-              Rectangle {
-                id: knobFace
-
-                width: parent.gaugeSize
-                height: parent.gaugeSize
-                radius: width / 2
-                anchors.centerIn: parent
-                border.color: "transparent"
-                border.width: Math.max(6, width / 20)
-
-                gradient: Gradient {
-                  GradientStop {
-                    position: 0.0
-                    color: Qt.darker(
-                             Cpp_ThemeManager.colors["widget_base"], 1.05)
-                  }
-                  GradientStop {
-                    position: 0.5
-                    color: Cpp_ThemeManager.colors["widget_base"]
-                  }
-                  GradientStop {
-                    position: 1.0
-                    color: Qt.lighter(
-                             Cpp_ThemeManager.colors["widget_base"], 1.05)
-                  }
-                }
-
-                // Inner shadow ring
-                Rectangle {
-                  border.width: 1
-                  radius: width / 2
-                  anchors.fill: parent
-                  color: "transparent"
-                  anchors.margins: parent.border.width
-                  border.color: Qt.rgba(0, 0, 0, 0.1)
-                }
-
-                // Outer accent ring
-                Rectangle {
-                  opacity: 0.5
-                  border.width: 2
-                  radius: width / 2
-                  width: parent.width
-                  height: parent.height
-                  color: "transparent"
-                  anchors.centerIn: parent
-                  border.color: cell.accentColor
-                }
-
-                // Major ticks + labels
-                Repeater {
-                  model: knob.tickCount
-
-                  delegate: Item {
-                    required property int index
-
-                    readonly property real frac:
-                      index / (knob.tickCount - 1)
-                    readonly property real tickValue:
-                      knob.from + frac * (knob.to - knob.from)
-                    readonly property real angleDeg:
-                      -135 + frac * knob.angleRangeDeg
-                    readonly property real angleRad:
-                      (angleDeg - 90) * Math.PI / 180
-                    readonly property real tickRadius:
-                      knobFace.width / 2 - knobFace.border.width / 2
-                    readonly property real labelRadius:
-                      knobFace.width / 2 + Math.max(18, knob.knobFontSize * 2.5)
-
-                    Rectangle {
-                      height: 2
-                      radius: 1
-                      opacity: 0.8
-                      antialiasing: true
-                      transformOrigin: Item.Center
-                      rotation: parent.angleDeg + 90
-                      color: Qt.darker(cell.accentColor, 1.3)
-                      width: knobFace.border.width * 0.7
-                      x: knobFace.width / 2
-                         + Math.cos(parent.angleRad) * parent.tickRadius
-                         - width / 2
-                      y: knobFace.height / 2
-                         + Math.sin(parent.angleRad) * parent.tickRadius
-                         - height / 2
-                    }
-
-                    Text {
-                      style: Text.Raised
-                      font.pixelSize: knob.knobFontSize
-                      styleColor: Qt.rgba(0, 0, 0, 0.3)
-                      text: Cpp_UI_Dashboard.formatValue(
-                              parent.tickValue, knob.from, knob.to)
-                      verticalAlignment: Text.AlignVCenter
-                      horizontalAlignment: Text.AlignHCenter
-                      color: Cpp_ThemeManager.colors["widget_text"]
-                      font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-                      x: knobFace.width / 2
-                         + Math.cos(parent.angleRad) * parent.labelRadius
-                         - width / 2
-                      y: knobFace.height / 2
-                         + Math.sin(parent.angleRad) * parent.labelRadius
-                         - height / 2
-                    }
-                  }
-                }
-
-                // Sub-ticks
-                Repeater {
-                  model: (knob.tickCount - 1) * knob.subTicksPerMajor
-
-                  delegate: Item {
-                    required property int index
-
-                    readonly property int majorIdx:
-                      Math.floor(index / knob.subTicksPerMajor)
-                    readonly property int subIdx:
-                      (index % knob.subTicksPerMajor) + 1
-                    readonly property real frac:
-                      (majorIdx + subIdx / (knob.subTicksPerMajor + 1))
-                      / (knob.tickCount - 1)
-                    readonly property real angleDeg:
-                      -135 + frac * knob.angleRangeDeg
-                    readonly property real angleRad:
-                      (angleDeg - 90) * Math.PI / 180
-                    readonly property real tickRadius:
-                      knobFace.width / 2 - knobFace.border.width / 2
-
-                    Rectangle {
-                      height: 1
-                      radius: 0.5
-                      opacity: 0.6
-                      antialiasing: true
-                      transformOrigin: Item.Center
-                      rotation: parent.angleDeg + 90
-                      width: knobFace.border.width * 0.5
-                      color: Cpp_ThemeManager.colors["widget_border"]
-                      x: knobFace.width / 2
-                         + Math.cos(parent.angleRad) * parent.tickRadius
-                         - width / 2
-                      y: knobFace.height / 2
-                         + Math.sin(parent.angleRad) * parent.tickRadius
-                         - height / 2
-                    }
-                  }
-                }
-              }
-            }
-
-            handle: Item {
-              anchors.centerIn: parent
-              width: knob.background.gaugeSize
-              height: knob.background.gaugeSize
-
-              // Needle
-              Rectangle {
-                id: knobNeedle
-
-                radius: width / 2
-                antialiasing: true
-                rotation: knob.angle
-                transformOrigin: Item.Bottom
-                height: parent.height * 0.38
-                y: parent.height / 2 - height
-                x: parent.width / 2 - width / 2
-                width: Math.max(4, parent.width * 0.025)
-
-                gradient: Gradient {
-                  GradientStop {
-                    position: 0.0
-                    color: Qt.lighter(cell.accentColor, 1.3)
-                  }
-                  GradientStop {
-                    position: 0.5
-                    color: cell.accentColor
-                  }
-                  GradientStop {
-                    position: 1.0
-                    color: Qt.darker(cell.accentColor, 1.2)
-                  }
-                }
-
-                // Highlight stripe
-                Rectangle {
-                  width: 1
-                  radius: width / 2
-                  anchors.top: parent.top
-                  anchors.left: parent.left
-                  anchors.bottom: parent.bottom
-                  color: Qt.rgba(1, 1, 1, 0.4)
-                }
-
-                // Center pivot knob
-                Rectangle {
-                  height: width
-                  radius: width / 2
-                  y: parent.height - height / 2
-                  width: Math.max(10, knobNeedle.parent.width * 0.07)
-                  anchors.horizontalCenter: parent.horizontalCenter
-
-                  gradient: Gradient {
-                    GradientStop {
-                      position: 0.0
-                      color: Qt.lighter(
-                               Cpp_ThemeManager.colors["widget_border"], 1.2)
-                    }
-                    GradientStop {
-                      position: 0.5
-                      color: Cpp_ThemeManager.colors["widget_border"]
-                    }
-                    GradientStop {
-                      position: 1.0
-                      color: Qt.darker(
-                               Cpp_ThemeManager.colors["widget_border"], 1.3)
-                    }
-                  }
-
-                  Rectangle {
-                    radius: width / 2
-                    anchors.centerIn: parent
-                    width: parent.width * 0.4
-                    height: parent.height * 0.4
-                    color: Qt.rgba(0, 0, 0, 0.3)
-                  }
-                }
-              }
+            background: Rectangle {
+              x: knob.width / 2 - width / 2
+              y: knob.height / 2 - height / 2
+              width: Math.min(knob.availableWidth, knob.availableHeight)
+              height: width
+              radius: width / 2
+              color: "transparent"
+              border.color: cell.accentColor
+              border.width: 2
+              opacity: 0.5
             }
           }
 

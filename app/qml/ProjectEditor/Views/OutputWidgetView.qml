@@ -68,19 +68,6 @@ Widgets.Pane {
       anchors.fill: parent
 
       //
-      // Pro notice
-      //
-      Widgets.ProNotice {
-        Layout.margins: -1
-        Layout.bottomMargin: 0
-        Layout.fillWidth: true
-        closeButtonEnabled: false
-        titleText: qsTr("Output widgets require a Pro license.")
-        activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
-        subtitleText: qsTr("You can configure output widgets, but they will only appear on the dashboard with a Pro license.")
-      }
-
-      //
       // Type toggle buttons + actions toolbar
       //
       Rectangle {
