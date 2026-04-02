@@ -91,48 +91,33 @@ RowLayout {
       id: collapsedCol
       spacing: 4
 
-      Image {
-        opacity: 1
-        source: root.collapsedIcon
-        sourceSize: Qt.size(32, 32)
-        Layout.alignment: Qt.AlignHCenter
-      }
-
       RowLayout {
         spacing: 4
         Layout.alignment: Qt.AlignHCenter
 
-        Label {
-          id: collapsedLabel
-          text: root.collapsedText
+        Image {
+          opacity: 1
+          source: root.collapsedIcon
+          sourceSize: Qt.size(32, 32)
           Layout.alignment: Qt.AlignVCenter
-          font: Cpp_Misc_CommonFonts.uiFont
-          color: Cpp_ThemeManager.colors["toolbar_text"]
         }
 
-        Canvas {
-          width: 8
-          height: 5
-          Layout.alignment: Qt.AlignVCenter
-          y: collapsedLabel.height / 2 - height / 2
-
-          onPaint: {
-            var ctx = getContext("2d")
-            ctx.clearRect(0, 0, width, height)
-            ctx.fillStyle = Cpp_ThemeManager.colors["toolbar_text"].toString()
-            ctx.beginPath()
-            ctx.moveTo(0, 0)
-            ctx.lineTo(width, 0)
-            ctx.lineTo(width / 2, height)
-            ctx.closePath()
-            ctx.fill()
-          }
-
-          Connections {
-            target: Cpp_ThemeManager
-            function onThemeChanged() { parent.update() }
-          }
+        Button {
+          enabled: false
+          icon.width: 12
+          icon.height: 12
+          background: Item {}
+          icon.source: "qrc:/rcc/icons/buttons/dropdown.svg"
+          icon.color: Cpp_ThemeManager.colors["toolbar_text"]
         }
+      }
+
+      Label {
+        id: collapsedLabel
+        text: root.collapsedText
+        Layout.alignment: Qt.AlignHCenter
+        font: Cpp_Misc_CommonFonts.uiFont
+        color: Cpp_ThemeManager.colors["toolbar_text"]
       }
     }
   }
@@ -176,7 +161,7 @@ RowLayout {
         height: 8
         opacity: 0.95
         x: Math.max(4, Math.min(collapsedBtn.width / 2 - 8,
-                                 parent.width - 20))
+                                parent.width - 20))
         y: -7
 
         Connections {
