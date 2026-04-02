@@ -2,28 +2,29 @@
 """
 Dual Drone Telemetry Simulator for Serial Studio
 
-Simulates two drones transmitting flight telemetry and synthetic camera
-imagery over separate TCP connections from the Swiss Alps (Zermatt area):
+Simulates two drones transmitting flight telemetry and real satellite
+camera imagery over separate TCP connections from the Swiss Alps
+(Zermatt area):
 
   Drone Alpha (port 9001) — Circular patrol at 120 m AGL
     CSV delimiters:   A1 01 A1 01 … A1 02 A1 02 (hex)
     Image delimiters: A1 CA FE 01 … A1 FE ED 01
-    11 CSV fields + JPEG camera frames
+    11 CSV fields + JPEG camera frames (satellite view + HUD)
 
   Drone Bravo (port 9002) — Figure-8 survey at 200 m AGL
     CSV delimiters:   B2 03 B2 03 … B2 04 B2 04 (hex)
     Image delimiters: B2 CA FE 02 … B2 FE ED 02
-    11 CSV fields + JPEG camera frames
+    11 CSV fields + JPEG camera frames (thermal/IR remap of satellite)
 
 Both drones start grounded at their helipad near Zermatt. Use the TKO
 command to launch, and RTH to bring them back. On landing the battery is
 recharged and the drone is ready for another flight.
 
-Each drone generates a unique procedural camera image every frame:
-  Alpha — top-down alpine terrain view with snow-capped peaks, green
-          valleys, and rock ridges plus a targeting reticle.
-  Bravo — synthetic thermal/IR style view showing terrain heat
-          signatures with a scanning grid overlay.
+Camera images are fetched from ArcGIS World Imagery satellite tiles
+(free, no API key required) and cached locally. Each drone's view is
+centered on its GPS position and rotated to match heading:
+  Alpha — photorealistic satellite view with green HUD overlay.
+  Bravo — same satellite data remapped to iron-bow thermal palette.
 
 Output Controls (requires Serial Studio Pro):
   Both drones respond to commands sent back over the same TCP link:
@@ -46,12 +47,15 @@ Dependencies:
 """
 
 import argparse
+import io
 import math
+import os
 import random
 import socket
 import sys
 import threading
 import time
+import urllib.request
 
 try:
     import cv2
@@ -73,7 +77,7 @@ PORT_BRAVO = 9002
 
 IMG_WIDTH = 320
 IMG_HEIGHT = 240
-JPEG_QUALITY = 70
+JPEG_QUALITY = 60
 
 # Frame delimiters (hex) — telemetry CSV frames
 DELIM_ALPHA_START = b"\xa1\x01\xa1\x01"
@@ -130,78 +134,169 @@ def steer_toward(current_hdg, target_hdg, max_rate, dt):
 
 
 # ---------------------------------------------------------------------------
-# Synthetic image generators
+# Satellite tile fetcher & image generators
 # ---------------------------------------------------------------------------
 
+# ArcGIS World Imagery — free satellite tiles, no API key required
+_TILE_URL = (
+    "https://server.arcgisonline.com/ArcGIS/rest/services/"
+    "World_Imagery/MapServer/tile/{z}/{y}/{x}"
+)
+_TILE_SIZE = 256
+_TILE_CACHE = {}
+_TILE_CACHE_LOCK = threading.Lock()
+_TILE_CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".tile_cache")
 
-def make_alpha_image(t, lat, lon, heading, alt):
+# Map altitude to zoom level — higher altitude = wider view = lower zoom
+_ALT_ZOOM_TABLE = [
+    (0, 18), (50, 17), (100, 17), (150, 16),
+    (200, 16), (300, 15), (500, 15), (1000, 14),
+]
+
+# Per-drone patch cache: skip re-rendering when position barely changed
+_PATCH_CACHE = {}
+_PATCH_CACHE_LOCK = threading.Lock()
+
+
+def _alt_to_zoom(alt):
+    """Convert altitude (m) to an appropriate tile zoom level."""
+    for threshold, zoom in _ALT_ZOOM_TABLE:
+        if alt <= threshold:
+            return zoom
+    return 14
+
+
+def _lat_lon_to_tile(lat, lon, zoom):
+    """Convert lat/lon to fractional tile coordinates at given zoom."""
+    n = 2 ** zoom
+    x = (lon + 180.0) / 360.0 * n
+    lat_rad = math.radians(lat)
+    y = (1.0 - math.log(math.tan(lat_rad) + 1.0 / math.cos(lat_rad)) / math.pi) / 2.0 * n
+    return x, y
+
+
+def _fetch_tile(tx, ty, zoom):
+    """Fetch a single 256x256 grayscale tile, using memory + disk cache."""
+    key = (zoom, tx, ty)
+
+    with _TILE_CACHE_LOCK:
+        if key in _TILE_CACHE:
+            return _TILE_CACHE[key]
+
+    # Check disk cache
+    cache_path = os.path.join(_TILE_CACHE_DIR, f"{zoom}_{tx}_{ty}.jpg")
+    if os.path.exists(cache_path):
+        tile_img = cv2.imread(cache_path, cv2.IMREAD_GRAYSCALE)
+        if tile_img is not None:
+            with _TILE_CACHE_LOCK:
+                _TILE_CACHE[key] = tile_img
+            return tile_img
+
+    # Fetch from network
+    url = _TILE_URL.format(z=zoom, x=tx, y=ty)
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "SerialStudio-DroneDemo/1.0"})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = resp.read()
+
+        arr = np.frombuffer(data, dtype=np.uint8)
+        tile_img = cv2.imdecode(arr, cv2.IMREAD_GRAYSCALE)
+
+        if tile_img is not None:
+            # Save to disk cache
+            os.makedirs(_TILE_CACHE_DIR, exist_ok=True)
+            cv2.imwrite(cache_path, tile_img)
+
+            with _TILE_CACHE_LOCK:
+                _TILE_CACHE[key] = tile_img
+            return tile_img
+    except Exception:
+        pass
+
+    # Fallback: dark grey tile
+    fallback = np.full((_TILE_SIZE, _TILE_SIZE), 40, dtype=np.uint8)
+    with _TILE_CACHE_LOCK:
+        _TILE_CACHE[key] = fallback
+    return fallback
+
+
+def _get_satellite_patch(lat, lon, heading, alt, width, height, cache_key=None):
     """
-    Generate a top-down alpine terrain camera view for Drone Alpha.
-    Snow-capped peaks, green valleys, and rock ridges with a targeting reticle.
+    Build a grayscale satellite image patch centered on (lat, lon), rotated
+    by heading. Uses a per-drone cache to skip re-rendering when position
+    has barely changed (< ~1 pixel of movement).
     """
-    img = np.zeros((IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
+    zoom = _alt_to_zoom(alt)
+    fx, fy = _lat_lon_to_tile(lat, lon, zoom)
 
-    # Alpine terrain — elevation-based coloring with position-dependent features
-    for y in range(0, IMG_HEIGHT, 4):
-        for x in range(0, IMG_WIDTH, 4):
-            fx = (x / IMG_WIDTH + lon * 80 + t * 0.01) * 6.0
-            fy = (y / IMG_HEIGHT + lat * 80 + t * 0.008) * 6.0
+    # Quantize inputs to skip redundant renders — ~1 pixel threshold
+    qfx = round(fx * _TILE_SIZE)
+    qfy = round(fy * _TILE_SIZE)
+    qhdg = round(heading)
 
-            # Multi-octave terrain height
-            h = (math.sin(fx * 1.1) * math.cos(fy * 0.9) + 1.0) * 0.3
-            h += (math.sin(fx * 2.7 + 1.5) * math.cos(fy * 3.1 + 0.8) + 1.0) * 0.15
-            h += (math.sin(fx * 5.3 + 3.0) * math.cos(fy * 4.7 + 2.1) + 1.0) * 0.07
+    if cache_key is not None:
+        snap = (zoom, qfx, qfy, qhdg)
+        with _PATCH_CACHE_LOCK:
+            prev = _PATCH_CACHE.get(cache_key)
+            if prev is not None and prev[0] == snap:
+                return prev[1].copy()
 
-            # Ridge lines
-            ridge = abs(math.sin(fx * 1.5 + fy * 0.7))
-            h += ridge * 0.1
+    # Only need a 3x3 tile grid for 320x240 output + rotation margin
+    half = 2
+    cx_tile = int(fx)
+    cy_tile = int(fy)
 
-            h = clamp(h, 0, 1)
+    # Build mosaic (grayscale — single channel)
+    span = 2 * half + 1
+    mosaic = np.zeros((span * _TILE_SIZE, span * _TILE_SIZE), dtype=np.uint8)
 
-            # Color by elevation: valley green → rock grey → snow white
-            if h < 0.3:
-                # Valley — dark green meadow
-                g = int(80 + h / 0.3 * 60)
-                r = int(40 + h / 0.3 * 20)
-                b = int(20 + h / 0.3 * 10)
-            elif h < 0.55:
-                # Mid-altitude — rock and sparse vegetation
-                t2 = (h - 0.3) / 0.25
-                g = int(140 - t2 * 50)
-                r = int(60 + t2 * 60)
-                b = int(30 + t2 * 40)
-            elif h < 0.75:
-                # High rock — grey granite
-                t2 = (h - 0.55) / 0.2
-                grey = int(110 + t2 * 40)
-                r, g, b = grey, grey - 5, grey - 10
-            else:
-                # Snow cap — bright white with blue tint
-                t2 = (h - 0.75) / 0.25
-                r = int(200 + t2 * 55)
-                g = int(200 + t2 * 55)
-                b = int(210 + t2 * 45)
+    for dy in range(-half, half + 1):
+        for dx in range(-half, half + 1):
+            tile = _fetch_tile(cx_tile + dx, cy_tile + dy, zoom)
+            px = (dx + half) * _TILE_SIZE
+            py = (dy + half) * _TILE_SIZE
+            if tile.shape[0] == _TILE_SIZE and tile.shape[1] == _TILE_SIZE:
+                mosaic[py : py + _TILE_SIZE, px : px + _TILE_SIZE] = tile
 
-            img[y : y + 4, x : x + 4] = (b, g, r)
+    # Sub-tile pixel offset for exact centering
+    off_x = (fx - cx_tile + half) * _TILE_SIZE
+    off_y = (fy - cy_tile + half) * _TILE_SIZE
 
-    # River/stream through the valley
-    for px in range(0, IMG_WIDTH, 2):
-        river_y = int(
-            IMG_HEIGHT * 0.5
-            + 30 * math.sin(px / IMG_WIDTH * 4.0 + lon * 200)
-            + 15 * math.sin(px / IMG_WIDTH * 7.0 + lat * 150)
-        )
-        river_y = clamp(river_y, 2, IMG_HEIGHT - 3)
-        cv2.line(img, (px, river_y - 1), (px + 2, river_y + 1), (160, 120, 50), 2)
+    # Rotate around the drone's position
+    rot_mat = cv2.getRotationMatrix2D((off_x, off_y), heading, 1.0)
+    rot_mat[0, 2] += width / 2 - off_x
+    rot_mat[1, 2] += height / 2 - off_y
+    result = cv2.warpAffine(mosaic, rot_mat, (width, height), borderValue=40)
 
-    # Static grid overlay
-    grid_spacing = 40
-    for gx in range(0, IMG_WIDTH, grid_spacing):
-        cv2.line(img, (gx, 0), (gx, IMG_HEIGHT), (0, 180, 0), 1)
-    for gy in range(0, IMG_HEIGHT, grid_spacing):
-        cv2.line(img, (0, gy), (IMG_WIDTH, gy), (0, 180, 0), 1)
+    # Cache the result
+    if cache_key is not None:
+        snap = (zoom, qfx, qfy, qhdg)
+        with _PATCH_CACHE_LOCK:
+            _PATCH_CACHE[cache_key] = (snap, result.copy())
 
-    # HUD overlay
+    return result
+
+
+def _draw_hud_alpha(img, lat, lon, heading, alt):
+    """Draw green military-style HUD overlay on Alpha's grayscale view."""
+    h, w = img.shape[:2]
+
+    # Grid overlay
+    for gx in range(0, w, 40):
+        cv2.line(img, (gx, 0), (gx, h), (0, 180, 0), 1)
+    for gy in range(0, h, 40):
+        cv2.line(img, (0, gy), (w, gy), (0, 180, 0), 1)
+
+    # Targeting reticle
+    cx, cy = w // 2, h // 2
+    cv2.circle(img, (cx, cy), 30, (0, 255, 0), 1)
+    cv2.circle(img, (cx, cy), 10, (0, 255, 0), 1)
+    cv2.line(img, (cx - 40, cy), (cx - 20, cy), (0, 255, 0), 1)
+    cv2.line(img, (cx + 20, cy), (cx + 40, cy), (0, 255, 0), 1)
+    cv2.line(img, (cx, cy - 40), (cx, cy - 20), (0, 255, 0), 1)
+    cv2.line(img, (cx, cy + 20), (cx, cy + 40), (0, 255, 0), 1)
+
+    # Text info
     cv2.putText(img, f"ALT {alt:.0f}m", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
     cv2.putText(
         img, f"HDG {heading:.0f}", (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1
@@ -209,94 +304,62 @@ def make_alpha_image(t, lat, lon, heading, alt):
     cv2.putText(
         img,
         f"{lat:.4f} {lon:.4f}",
-        (10, IMG_HEIGHT - 15),
+        (10, h - 15),
         cv2.FONT_HERSHEY_SIMPLEX,
         0.35,
         (0, 255, 0),
         1,
     )
 
-    return img
+
+def _apply_thermal_palette(grey):
+    """Convert a grayscale satellite image to iron-bow thermal palette."""
+    # Invert so snow (bright) becomes cold (dark) and valleys become warm
+    inv = 255 - grey
+
+    # Apply COLORMAP_INFERNO for a realistic thermal/FLIR look
+    return cv2.applyColorMap(inv, cv2.COLORMAP_INFERNO)
 
 
-def make_bravo_image(t, lat, lon, heading, alt):
-    """
-    Generate a synthetic thermal/IR camera view for Drone Bravo.
-    Terrain-aware heat map: snow is cold (dark), exposed rock and valleys are warm.
-    """
-    img = np.zeros((IMG_HEIGHT, IMG_WIDTH, 3), dtype=np.uint8)
+def _draw_hud_bravo(img, lat, lon, heading, alt):
+    """Draw amber FLIR-style HUD overlay on Bravo's thermal view."""
+    h, w = img.shape[:2]
 
-    for y in range(0, IMG_HEIGHT, 4):
-        for x in range(0, IMG_WIDTH, 4):
-            fx = (x / IMG_WIDTH + lon * 80 + t * 0.015) * 6.0
-            fy = (y / IMG_HEIGHT + lat * 80 + t * 0.012) * 6.0
+    # Grid overlay
+    for gx in range(0, w, 40):
+        cv2.line(img, (gx, 0), (gx, h), (100, 100, 100), 1)
+    for gy in range(0, h, 40):
+        cv2.line(img, (0, gy), (w, gy), (100, 100, 100), 1)
 
-            # Same terrain shape as Alpha (correlated terrain)
-            h = (math.sin(fx * 1.1) * math.cos(fy * 0.9) + 1.0) * 0.3
-            h += (math.sin(fx * 2.7 + 1.5) * math.cos(fy * 3.1 + 0.8) + 1.0) * 0.15
-            h += (math.sin(fx * 5.3 + 3.0) * math.cos(fy * 4.7 + 2.1) + 1.0) * 0.07
-
-            # Thermal value — low terrain = warm, high terrain (snow) = cold
-            # Add time-varying solar heating on south-facing slopes
-            solar = (math.sin(fx * 1.5 + t * 0.3) + 1.0) * 0.1
-            val = clamp(1.0 - h + solar, 0, 1)
-
-            # Warm spots (e.g. buildings, animals in the valley)
-            dx = (x / IMG_WIDTH - 0.5) * 2
-            dy = (y / IMG_HEIGHT - 0.5) * 2
-            for sx, sy in [
-                (math.sin(t * 0.3) * 0.5, math.cos(t * 0.25) * 0.3),
-                (math.cos(t * 0.4 + 2) * 0.4, math.sin(t * 0.35 + 1) * 0.4),
-            ]:
-                dist = math.sqrt((dx - sx) ** 2 + (dy - sy) ** 2)
-                val += max(0, 0.3 - dist) * 1.2
-
-            val = clamp(val, 0, 1)
-
-            # Iron-bow thermal palette
-            if val < 0.33:
-                t2 = val / 0.33
-                r = int(t2 * 120)
-                g = 0
-                b = int(t2 * 180)
-            elif val < 0.66:
-                t2 = (val - 0.33) / 0.33
-                r = int(120 + t2 * 135)
-                g = int(t2 * 80)
-                b = int(180 - t2 * 180)
-            else:
-                t2 = (val - 0.66) / 0.34
-                r = 255
-                g = int(80 + t2 * 175)
-                b = 0
-
-            img[y : y + 4, x : x + 4] = (b, g, r)
-
-    # Scanning grid overlay
-    scan_phase = int(t * 40) % IMG_HEIGHT
-    cv2.line(img, (0, scan_phase), (IMG_WIDTH, scan_phase), (255, 255, 255), 1)
-
-    grid_spacing = 40
-    for gx in range(0, IMG_WIDTH, grid_spacing):
-        cv2.line(img, (gx, 0), (gx, IMG_HEIGHT), (100, 100, 100), 1)
-    for gy in range(0, IMG_HEIGHT, grid_spacing):
-        cv2.line(img, (0, gy), (IMG_WIDTH, gy), (100, 100, 100), 1)
-
-    # HUD overlay
-    cv2.putText(img, f"FLIR", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 200, 0), 1)
+    # Text info
+    cv2.putText(img, "FLIR", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 200, 0), 1)
     cv2.putText(
         img, f"ALT {alt:.0f}m", (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 200, 0), 1
     )
     cv2.putText(
         img,
         f"{lat:.4f} {lon:.4f}",
-        (10, IMG_HEIGHT - 15),
+        (10, h - 15),
         cv2.FONT_HERSHEY_SIMPLEX,
         0.35,
         (255, 200, 0),
         1,
     )
 
+
+def make_alpha_image(lat, lon, heading, alt):
+    """Grayscale satellite camera view for Drone Alpha with green HUD."""
+    grey = _get_satellite_patch(lat, lon, heading, alt, IMG_WIDTH, IMG_HEIGHT, cache_key="alpha")
+    img = cv2.cvtColor(grey, cv2.COLOR_GRAY2BGR)
+    _draw_hud_alpha(img, lat, lon, heading, alt)
+    return img
+
+
+def make_bravo_image(lat, lon, heading, alt):
+    """Thermal/IR remap of satellite imagery for Drone Bravo."""
+    grey = _get_satellite_patch(lat, lon, heading, alt, IMG_WIDTH, IMG_HEIGHT, cache_key="bravo")
+    img = _apply_thermal_palette(grey)
+    _draw_hud_bravo(img, lat, lon, heading, alt)
     return img
 
 
@@ -834,7 +897,7 @@ def run_alpha(host, fps, stop_event):
                 if HAS_CV2:
                     if cmds.camera_on:
                         img = make_alpha_image(
-                            drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
+                            data["lat"], data["lon"], data["heading"], data["alt"]
                         )
                     else:
                         img = make_camera_off_image("ALPHA")
@@ -910,7 +973,7 @@ def run_bravo(host, fps, stop_event):
                 if HAS_CV2:
                     if cmds.camera_on:
                         img = make_bravo_image(
-                            drone._t, data["lat"], data["lon"], data["heading"], data["alt"]
+                            data["lat"], data["lon"], data["heading"], data["alt"]
                         )
                     else:
                         img = make_camera_off_image("BRAVO")
@@ -987,7 +1050,8 @@ def main():
     print(f"Alpha helipad: {ALPHA_HOME_LAT:.4f}, {ALPHA_HOME_LON:.4f} (Zermatt village)")
     print(f"Bravo helipad: {BRAVO_HOME_LAT:.4f}, {BRAVO_HOME_LON:.4f} (Trockener Steg)")
     if HAS_CV2:
-        print(f"Camera: {IMG_WIDTH}x{IMG_HEIGHT} synthetic JPEG @ quality {JPEG_QUALITY}")
+        print(f"Camera: {IMG_WIDTH}x{IMG_HEIGHT} satellite JPEG @ quality {JPEG_QUALITY}")
+        print(f"Tile cache: {_TILE_CACHE_DIR}")
     else:
         print("WARNING: opencv-python not installed — no camera images will be sent")
         print("         Install with: pip install opencv-python numpy")

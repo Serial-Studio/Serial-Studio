@@ -10,22 +10,21 @@ Two simulated drones fly completely different flight profiles over the Swiss Alp
 
 | Drone | Port | Flight Pattern | Altitude | Camera Style |
 |-------|------|---------------|----------|-------------|
-| **Alpha** | 9001 | Circular patrol (~330 m radius) | 120 m AGL | Alpine terrain (snow/rock/meadow palette) |
-| **Bravo** | 9002 | Figure-8 survey (~550 m radius) | 200 m AGL | Thermal/IR (iron-bow palette) |
+| **Alpha** | 9001 | Circular patrol (~330 m radius) | 120 m AGL | Satellite imagery + green HUD |
+| **Bravo** | 9002 | Figure-8 survey (~550 m radius) | 200 m AGL | Thermal/IR remap (iron-bow palette) |
 
 ### Camera Feeds
 
-**Alpha Terrain** — top-down alpine camera view:
-- Procedural terrain with snow-capped peaks, granite ridges, green meadow valleys, and a winding river
-- Static green grid overlay
-- Green HUD overlay with altitude, heading, and GPS coordinates
+Camera images are fetched from ArcGIS World Imagery satellite tiles (free, no API key required) and cached locally. Each drone's view is centered on its GPS position and rotated to match heading.
 
-**Bravo Thermal** — synthetic thermal/infrared view:
-- Terrain-correlated heat map: snow appears cold (dark), valleys and exposed rock appear warm
-- Solar heating variation and warm spots (buildings, wildlife)
-- Iron-bow color palette (black → purple → orange → yellow)
-- Scanning line and static grid overlay
-- Amber HUD overlay with FLIR label, altitude, and GPS coordinates
+**Alpha Satellite** — photorealistic satellite camera view:
+- Real satellite imagery centered on drone position, rotated to heading
+- Green military-style HUD overlay with altitude, heading, and GPS coordinates
+
+**Bravo Thermal** — thermal/IR remap of satellite imagery:
+- Same satellite data remapped to iron-bow thermal palette
+- Iron-bow color palette via OpenCV COLORMAP_INFERNO
+- Amber FLIR-style HUD overlay with altitude, heading, and GPS coordinates
 
 ### Output Controls
 
@@ -85,8 +84,10 @@ Both drones use hexadecimal frame delimiters with JPEG images interleaved in the
 - **Alpha**: `A1 01 A1 01` (start) / `A1 02 A1 02` (end)
 - **Bravo**: `B2 03 B2 03` (start) / `B2 04 B2 04` (end)
 
-Each cycle sends a raw JPEG frame first, then a delimited CSV telemetry frame.
-The Image View widget auto-detects JPEG frames by scanning for `FF D8 FF` magic bytes, independent of the CSV telemetry path.
+Each cycle sends a delimited JPEG camera frame, then a delimited CSV telemetry frame. Image delimiters are separate from the CSV delimiters:
+
+- **Alpha images**: `A1 CA FE 01` (start) / `A1 FE ED 01` (end)
+- **Bravo images**: `B2 CA FE 02` (start) / `B2 FE ED 02` (end)
 
 ## Command Protocol
 
@@ -108,7 +109,7 @@ Each drone has six widget groups on the dashboard:
 
 | Widget | Type | Description |
 |--------|------|-------------|
-| Camera | Image View | Live terrain (Alpha) or thermal/IR (Bravo) camera feed |
+| Camera | Image View | Live satellite (Alpha) or thermal/IR (Bravo) camera feed |
 | Position | Map | GPS track on interactive map |
 | Heading | Compass | Compass heading indicator |
 | Attitude | Gyroscope | Roll, pitch, and yaw (heading) visualization |
