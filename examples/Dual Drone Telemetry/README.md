@@ -6,27 +6,26 @@ Multi-source drone telemetry simulator demonstrating Serial Studio's ability to 
 
 ## Overview
 
-Two simulated drones fly completely different flight profiles over the Nevada desert, each transmitting telemetry and synthetic camera imagery over separate TCP connections:
+Two simulated drones fly completely different flight profiles over the Swiss Alps near Zermatt, each transmitting telemetry and synthetic camera imagery over separate TCP connections:
 
 | Drone | Port | Flight Pattern | Altitude | Camera Style |
 |-------|------|---------------|----------|-------------|
-| **Alpha** | 9001 | Circular patrol (~330 m radius) | 120 m | Top-down terrain (green/brown palette) |
-| **Bravo** | 9002 | Figure-8 survey (~550 m radius) | 200 m | Thermal/IR (iron-bow palette) |
+| **Alpha** | 9001 | Circular patrol (~330 m radius) | 120 m AGL | Alpine terrain (snow/rock/meadow palette) |
+| **Bravo** | 9002 | Figure-8 survey (~550 m radius) | 200 m AGL | Thermal/IR (iron-bow palette) |
 
 ### Camera Feeds
 
-**Alpha Terrain** — top-down patrol camera view:
-- Procedural green/brown terrain with position-based parallax
-- Roads rendered as grid lines based on GPS position
-- Targeting reticle circle with crosshair lines and heading arrow
+**Alpha Terrain** — top-down alpine camera view:
+- Procedural terrain with snow-capped peaks, granite ridges, green meadow valleys, and a winding river
+- Static green grid overlay
 - Green HUD overlay with altitude, heading, and GPS coordinates
 
 **Bravo Thermal** — synthetic thermal/infrared view:
+- Terrain-correlated heat map: snow appears cold (dark), valleys and exposed rock appear warm
+- Solar heating variation and warm spots (buildings, wildlife)
 - Iron-bow color palette (black → purple → orange → yellow)
-- Moving thermal hot spots simulating heat signatures
-- Scanning line and grid overlay
+- Scanning line and static grid overlay
 - Amber HUD overlay with FLIR label, altitude, and GPS coordinates
-- Simple crosshair at center
 
 ### Output Controls
 
@@ -37,9 +36,10 @@ Each drone has an output control panel on the dashboard with four interactive wi
 | **Throttle** | Slider | 0-100% | `THR <value>\r\n` |
 | **Heading** | Knob | -180° to +180° | `HDG <value>\r\n` |
 | **Camera** | Toggle | ON/OFF | `CAM ON\r\n` or `CAM OFF\r\n` |
+| **Takeoff** | Button | — | `TKO\r\n` |
 | **Return to Home** | Button | — | `RTH\r\n` |
 
-**Throttle** scales the drone's airspeed — 50% is normal cruise, 0% is idle, 100% is full speed. **Heading** applies a rotational offset to the flight path. **Camera** enables or disables the synthetic JPEG feed (telemetry keeps streaming). **RTH** is a placeholder for return-to-home logic.
+**Throttle** scales the drone's airspeed — 50% is normal cruise, 0% is idle, 100% is full speed. **Heading** applies a rotational offset to the flight path. **Camera** enables or disables the synthetic JPEG feed (telemetry keeps streaming). **Takeoff** launches from the helipad (only when grounded). **RTH** triggers return-to-home, landing, and automatic battery recharge.
 
 ### Telemetry per drone (11 fields)
 
@@ -82,8 +82,8 @@ The simulator works without opencv -- you just won't get camera images.
 
 Both drones use hexadecimal frame delimiters with JPEG images interleaved in the same byte stream:
 
-- **Alpha**: `AB CD EF` (start) / `FE ED` (end)
-- **Bravo**: `DE AD` (start) / `FE ED` (end)
+- **Alpha**: `A1 01 A1 01` (start) / `A1 02 A1 02` (end)
+- **Bravo**: `B2 03 B2 03` (start) / `B2 04 B2 04` (end)
 
 Each cycle sends a raw JPEG frame first, then a delimited CSV telemetry frame.
 The Image View widget auto-detects JPEG frames by scanning for `FF D8 FF` magic bytes, independent of the CSV telemetry path.
@@ -97,7 +97,8 @@ Serial Studio sends commands back to the simulator over the same TCP connection.
 | `THR` | `0`-`100` | Set throttle (scales airspeed; 50 = normal cruise) |
 | `HDG` | `-180`-`180` | Apply heading offset in degrees |
 | `CAM` | `ON` or `OFF` | Enable/disable camera image transmission |
-| `RTH` | — | Trigger return-to-home (placeholder) |
+| `TKO` | — | Launch from helipad (only when grounded) |
+| `RTH` | — | Return to helipad, land, and recharge battery |
 
 Commands are parsed on each simulation tick. Multiple commands can arrive per tick and are applied in order.
 
@@ -117,18 +118,22 @@ Each drone has six widget groups on the dashboard:
 
 ## Flight Models
 
-**Drone Alpha** flies a steady circular patrol:
+Both drones start grounded at their helipads near Zermatt. Send `TKO` to launch — takeoff is intentionally very fast (reaching cruise altitude in ~2 seconds) so that dashboard changes are immediately visible during demos.
+
+**Drone Alpha** — Zermatt village helipad (46.0207°N, 7.7491°E):
+- Circular patrol at 120 m AGL
 - Constant mild bank angle (~12 deg)
 - Slow altitude oscillation (+/- 8 m)
-- Battery drain: ~0.15%/sec
+- Battery drain: ~0.15%/sec in cruise
 
-**Drone Bravo** flies an aggressive figure-8 survey:
+**Drone Bravo** — Trockener Steg plateau (46.0035°N, 7.7465°E):
+- Figure-8 survey at 200 m AGL
 - Dynamic banking (up to +/- 40 deg)
 - Higher altitude variation (+/- 15 m)
 - Faster speed, higher current draw
-- Battery drain: ~0.18%/sec
+- Battery drain: ~0.18%/sec in cruise
 
-Both drones have low-battery alarms configured at 20% charge and 21V.
+Both drones have low-battery alarms configured at 20% charge and 21V. Send `RTH` to return, land, and automatically recharge for another flight.
 
 ## Requirements
 

@@ -1,8 +1,10 @@
 {
-    "actions": [],
+    "actions": [
+    ],
     "groups": [
         {
-            "datasets": [],
+            "datasets": [
+            ],
             "imgDetectionMode": "manual",
             "imgEndSequence": "A1 FE ED 01",
             "imgStartSequence": "A1 CA FE 01",
@@ -365,7 +367,8 @@
             "widget": ""
         },
         {
-            "datasets": [],
+            "datasets": [
+            ],
             "imgDetectionMode": "manual",
             "imgEndSequence": "B2 FE ED 02",
             "imgStartSequence": "B2 CA FE 02",
@@ -734,7 +737,8 @@
             "widget": ""
         },
         {
-            "datasets": [],
+            "datasets": [
+            ],
             "groupType": 1,
             "outputWidgets": [
                 {
@@ -778,6 +782,17 @@
                     "outputStep": 1,
                     "outputType": 0,
                     "sourceId": 0,
+                    "title": "Takeoff",
+                    "transmitFunction": "function transmit(value) {\n  return \"TKO\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 0,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 0,
+                    "sourceId": 0,
                     "title": "Return to Home",
                     "transmitFunction": "function transmit(value) {\n  return \"RTH\\r\\n\";\n}"
                 }
@@ -786,7 +801,8 @@
             "widget": ""
         },
         {
-            "datasets": [],
+            "datasets": [
+            ],
             "groupType": 1,
             "outputWidgets": [
                 {
@@ -821,6 +837,17 @@
                     "sourceId": 1,
                     "title": "Camera",
                     "transmitFunction": "function transmit(value) {\n  return value ? \"CAM ON\\r\\n\" : \"CAM OFF\\r\\n\";\n}"
+                },
+                {
+                    "icon": "",
+                    "initialValue": 0,
+                    "outputMax": 100,
+                    "outputMin": 0,
+                    "outputStep": 1,
+                    "outputType": 0,
+                    "sourceId": 1,
+                    "title": "Takeoff",
+                    "transmitFunction": "function transmit(value) {\n  return \"TKO\\r\\n\";\n}"
                 },
                 {
                     "icon": "",
@@ -896,11 +923,11 @@
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
-                    3,
                     2,
-                    4,
                     6,
+                    4,
                     8,
+                    3,
                     7,
                     5,
                     9
