@@ -1,6 +1,6 @@
 # Serial Studio License Agreement
 
-**Copyright © 2020–2025**  
+**Copyright © 2020–2026**  
 **Alex Spataru** (<https://github.com/alex-spataru>)  
 **All rights reserved where applicable.**
 

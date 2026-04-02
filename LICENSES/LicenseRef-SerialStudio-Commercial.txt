@@ -70,7 +70,7 @@ The Licensee shall not:
    - Modify, decompile, disassemble, or reverse engineer any portion of the Software
    - Circumvent, disable, spoof, or tamper with license enforcement, activation, or trial systems
    - Access or enable Pro features without valid activation credentials
-   - Use the Software to design or train a product with similar feature scope or commercial intent
+   - Use the Software to create a substantially similar product that replicates the core functionality of Serial Studio as a telemetry visualization tool
    - Embed the Software into automated pipelines or products without a distribution license
    - Alter, remove, or obscure any license notices, branding, or author attribution
    - Represent the Software as free, open-source, or publicly licensed
@@ -90,8 +90,6 @@ Upon termination:
    - All rights granted to the Licensee are revoked
    - The Licensee must immediately cease using the Software and delete all installed copies
    - No refunds, credits, or chargebacks are granted
-
-If requested, the Licensee shall provide written attestation confirming full deletion of all copies and activation data.
 
 6. Intellectual Property
 ------------------------
@@ -133,9 +131,7 @@ You assume full responsibility and risk for use of the Software. The Licensor di
 
 TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF REVENUE, PROFITS, BUSINESS INTERRUPTION, OR DATA.
 
-The Licensor’s total liability for claims arising from or related to this Agreement shall not exceed the amount paid by the Licensee during the calendar month immediately preceding the claim.
-
-If no payment was made during that time, the Licensor’s liability shall be zero.
+The Licensor’s total liability for claims arising from or related to this Agreement shall not exceed the total license fees actually paid by the Licensee to the Licensor during the twelve (12) months immediately preceding the claim.
 
 Some jurisdictions do not allow exclusions or limitations of certain liabilities. In such jurisdictions, the Licensor’s liability shall be limited to the minimum extent permitted by law.
 
