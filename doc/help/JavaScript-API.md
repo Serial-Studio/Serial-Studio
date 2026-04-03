@@ -335,6 +335,47 @@ function parse(frame) {
 
 ---
 
+## Output Widget Transmit Helpers
+
+Output controls (Pro feature) use a separate JavaScript engine with built-in protocol helper functions. These are available in every `transmit(value)` function — you do not need to import or declare them.
+
+For full documentation on output controls, see [Output Controls](Output-Controls.md).
+
+### Modbus
+
+| Function | Description |
+|----------|-------------|
+| `modbusWriteRegister(address, value)` | Write a 16-bit integer to a holding register |
+| `modbusWriteCoil(address, on)` | Write a coil (ON = 0xFF00, OFF = 0x0000) |
+| `modbusWriteFloat(address, value)` | Write a 32-bit float across two consecutive registers |
+
+### CAN Bus
+
+| Function | Description |
+|----------|-------------|
+| `canSendFrame(id, payload)` | Send a CAN frame with an array or string payload |
+| `canSendValue(id, value, bytes)` | Send a numeric value packed big-endian (1–8 bytes, default 2) |
+
+### Example
+
+```javascript
+// Slider controlling a Modbus holding register
+function transmit(value) {
+  return modbusWriteRegister(0x0001, value);
+}
+```
+
+```javascript
+// Button sending a CAN command frame
+function transmit(value) {
+  return canSendFrame(0x200, [0x01, 0x00, 0xFF]);
+}
+```
+
+> **Note:** These helpers are only available in output widget transmit functions, not in frame parser `parse()` functions. The frame parser and output widget engines are separate.
+
+---
+
 ## Built-in Template Scripts
 
 Serial Studio includes 28 ready-to-use parser templates accessible from the Frame Parser Code editor in the Project Editor. Select a template from the dropdown to load it:

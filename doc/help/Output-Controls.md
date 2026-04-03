@@ -213,21 +213,153 @@ function transmit(value) {
 }
 ```
 
-#### Modbus Write (Simulated)
+#### Modbus Register Write
 
-Formats a Modbus-style write command. For real Modbus RTU, use the built-in Modbus driver.
+Writes a slider value directly to a Modbus holding register using the built-in helper function.
 
 ```javascript
-var REGISTER = 40001;
-
 function transmit(value) {
-  return "W " + REGISTER + " " + Math.round(value) + "\r\n";
+  return modbusWriteRegister(0x0001, value);
+}
+```
+
+#### CAN Bus Frame
+
+Sends a numeric value as a CAN frame using the built-in helper function.
+
+```javascript
+function transmit(value) {
+  return canSendValue(0x100, value, 2);
 }
 ```
 
 ### Importing from File
 
 Click the import button in the code editor toolbar to load a `.js` file from disk. This is useful for sharing transmit functions across projects or version-controlling them separately.
+
+## Protocol Helper Functions
+
+Every output widget's JavaScript engine includes built-in helper functions for Modbus and CAN Bus protocols. These handle binary byte-packing so you don't have to construct raw bytes manually.
+
+### Modbus Helpers
+
+#### `modbusWriteRegister(address, value)`
+
+Writes a 16-bit integer to a single holding register.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `address` | Number | Register address (0x0000–0xFFFF) |
+| `value` | Number | Value to write (rounded to integer, 0–65535) |
+
+```javascript
+function transmit(value) {
+  return modbusWriteRegister(0x0001, value);
+}
+```
+
+#### `modbusWriteCoil(address, on)`
+
+Writes a coil value (ON = 0xFF00, OFF = 0x0000).
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `address` | Number | Coil address (0x0000–0xFFFF) |
+| `on` | Boolean/Number | Truthy = ON, falsy = OFF |
+
+```javascript
+// Toggle widget controlling a relay coil
+function transmit(value) {
+  return modbusWriteCoil(0x0000, value);
+}
+```
+
+#### `modbusWriteFloat(address, value)`
+
+Writes an IEEE-754 32-bit float across two consecutive holding registers (big-endian).
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `address` | Number | Starting register address |
+| `value` | Number | Floating-point value |
+
+```javascript
+// Slider writing a temperature setpoint as a 32-bit float
+function transmit(value) {
+  return modbusWriteFloat(0x0010, value);
+}
+```
+
+### CAN Bus Helpers
+
+#### `canSendFrame(id, payload)`
+
+Sends an arbitrary CAN frame with the given identifier and payload.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | Number | CAN identifier (11-bit standard: 0x000–0x7FF) |
+| `payload` | Array or String | Payload bytes as an array of numbers (0–255), or a raw string |
+
+```javascript
+// Button sending a fixed command frame
+function transmit(value) {
+  return canSendFrame(0x200, [0x01, 0x00, 0xFF]);
+}
+```
+
+```javascript
+// Slider packing its value into a 3-byte payload
+function transmit(value) {
+  var v = Math.round(value);
+  return canSendFrame(0x100, [0x01, (v >> 8) & 0xFF, v & 0xFF]);
+}
+```
+
+#### `canSendValue(id, value, bytes)`
+
+Sends a numeric value packed big-endian into a CAN frame.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `id` | Number | — | CAN identifier |
+| `value` | Number | — | Numeric value (rounded to integer) |
+| `bytes` | Number | 2 | Number of payload bytes (1–8) |
+
+```javascript
+// Slider sending a 16-bit value on CAN ID 0x100
+function transmit(value) {
+  return canSendValue(0x100, value, 2);
+}
+```
+
+```javascript
+// Knob sending a 32-bit value on CAN ID 0x300
+function transmit(value) {
+  return canSendValue(0x300, value, 4);
+}
+```
+
+### Combining Helpers with Custom Logic
+
+The helpers return strings that can be concatenated or conditionally selected:
+
+```javascript
+// Write different registers based on a toggle state
+function transmit(value) {
+  if (value)
+    return modbusWriteRegister(0x0010, 1);  // Enable
+  else
+    return modbusWriteRegister(0x0010, 0);  // Disable
+}
+```
+
+```javascript
+// Send a CAN frame with a header byte and the widget value
+function transmit(value) {
+  return canSendFrame(0x150, [0xAA, Math.round(value) & 0xFF]);
+}
+```
 
 ## Output Panel Layout
 
@@ -323,6 +455,68 @@ function transmit(value) {
 }
 ```
 
+### Modbus PID Controller
+
+Control a PID loop over Modbus by writing setpoint, Kp, and enable/disable to holding registers.
+
+| Control | Type | Properties |
+|---------|------|------------|
+| Setpoint | Slider | Min: 0, Max: 500, Step: 0.5, Units: "°C" |
+| Kp Gain | Knob | Min: 0, Max: 10, Step: 0.01 |
+| Enable | Toggle | ON: "Running", OFF: "Stopped" |
+
+Setpoint transmit function (32-bit float to registers 0x0010–0x0011):
+```javascript
+function transmit(value) {
+  return modbusWriteFloat(0x0010, value);
+}
+```
+
+Kp Gain transmit function (32-bit float to registers 0x0012–0x0013):
+```javascript
+function transmit(value) {
+  return modbusWriteFloat(0x0012, value);
+}
+```
+
+Enable transmit function (coil at address 0x0000):
+```javascript
+function transmit(value) {
+  return modbusWriteCoil(0x0000, value);
+}
+```
+
+### CAN Bus Motor Controller
+
+Control a motor over CAN Bus with speed setpoint and emergency stop.
+
+| Control | Type | Properties |
+|---------|------|------------|
+| Speed | Slider | Min: 0, Max: 10000, Units: "RPM" |
+| Direction | Toggle | ON: "Forward", OFF: "Reverse" |
+| E-Stop | Button | — |
+
+Speed transmit function (16-bit value on CAN ID 0x100):
+```javascript
+function transmit(value) {
+  return canSendValue(0x100, value, 2);
+}
+```
+
+Direction transmit function (single byte on CAN ID 0x101):
+```javascript
+function transmit(value) {
+  return canSendFrame(0x101, [value ? 0x01 : 0x00]);
+}
+```
+
+E-Stop transmit function (fixed command frame on CAN ID 0x1FF):
+```javascript
+function transmit(value) {
+  return canSendFrame(0x1FF, [0xFF, 0x00]);
+}
+```
+
 ## Common Mistakes
 
 ### Controls Do Not Appear on Dashboard
@@ -359,7 +553,8 @@ function transmit(value) {
 - Test with the Console view open to see exactly what bytes are being transmitted.
 - Use the Ramp Generator to stress-test your device's command handling at sustained rates.
 - Combine output controls with input widgets in the same dashboard for full closed-loop monitoring (e.g., a slider to set a target temperature alongside a gauge showing the actual temperature).
-- For complex protocols, write helper functions inside the transmit function scope — variables declared outside `transmit()` persist across calls (like the `REGISTER` variable in the Modbus template).
+- Use the built-in protocol helpers (`modbusWriteRegister`, `canSendFrame`, etc.) instead of manually packing binary bytes — see [Protocol Helper Functions](#protocol-helper-functions) above.
+- For complex protocols beyond the built-in helpers, write custom helper functions inside the transmit function scope — variables declared outside `transmit()` persist across calls.
 
 ## See Also
 

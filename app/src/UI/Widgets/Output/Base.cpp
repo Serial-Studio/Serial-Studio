@@ -33,8 +33,11 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_title(config.title)
   , m_hasFn(false)
 {
-  // Compile the user's transmit function
+  // Inject protocol helper functions before compiling user code
   m_rateLimiter.start();
+  installProtocolHelpers(m_jsEngine);
+
+  // Compile the user's transmit function
   if (!config.transmitFunction.isEmpty()) {
     const auto wrapped =
       QStringLiteral("(function() { %1; return transmit; })()").arg(config.transmitFunction);
@@ -184,7 +187,92 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
 
   // Convert result to byte array
   if (result.isString())
-    return result.toString().toUtf8();
+    return result.toString().toLatin1();
 
   return result.toVariant().toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Protocol helper injection
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Installs protocol-aware helper functions into the JS engine.
+ *
+ * These pure byte-packing utilities let users write simple transmit functions
+ * like `return modbusWriteRegister(0x0001, value)` instead of manually
+ * constructing binary payloads.
+ *
+ * @param engine The QJSEngine to install helpers into.
+ */
+void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
+{
+  // clang-format off
+  static const QString kHelpers = QStringLiteral(
+    // -----------------------------------------------------------------
+    // Modbus helpers
+    // -----------------------------------------------------------------
+
+    // Write a single 16-bit value to a holding register.
+    // Returns 4 bytes: [addr_hi, addr_lo, value_hi, value_lo]
+    "function modbusWriteRegister(address, value) {"
+    "  var a = address & 0xFFFF;"
+    "  var v = Math.round(value) & 0xFFFF;"
+    "  return String.fromCharCode("
+    "    (a >> 8) & 0xFF, a & 0xFF,"
+    "    (v >> 8) & 0xFF, v & 0xFF);"
+    "}"
+
+    // Write a coil (ON = 0xFF00, OFF = 0x0000).
+    "function modbusWriteCoil(address, on) {"
+    "  return modbusWriteRegister(address, on ? 0xFF00 : 0x0000);"
+    "}"
+
+    // Write an IEEE-754 float across two consecutive holding registers.
+    // Returns 6 bytes: [addr_hi, addr_lo, r1_hi, r1_lo, r2_hi, r2_lo]
+    "function modbusWriteFloat(address, value) {"
+    "  var buf = new ArrayBuffer(4);"
+    "  new DataView(buf).setFloat32(0, value, false);"
+    "  var b = new Uint8Array(buf);"
+    "  var a = address & 0xFFFF;"
+    "  return String.fromCharCode("
+    "    (a >> 8) & 0xFF, a & 0xFF,"
+    "    b[0], b[1], b[2], b[3]);"
+    "}"
+
+    // -----------------------------------------------------------------
+    // CAN Bus helpers
+    // -----------------------------------------------------------------
+
+    // Send an arbitrary CAN frame. Payload is a string or array of bytes.
+    // Returns 3+ bytes: [id_hi, id_lo, dlc, payload...]
+    "function canSendFrame(id, payload) {"
+    "  var canId = id & 0xFFFF;"
+    "  var data = '';"
+    "  if (typeof payload === 'string')"
+    "    data = payload;"
+    "  else if (Array.isArray(payload)) {"
+    "    for (var i = 0; i < payload.length; i++)"
+    "      data += String.fromCharCode(payload[i] & 0xFF);"
+    "  }"
+    "  var dlc = data.length;"
+    "  return String.fromCharCode("
+    "    (canId >> 8) & 0xFF, canId & 0xFF, dlc) + data;"
+    "}"
+
+    // Send a numeric value packed into a CAN frame (big-endian, 1–8 bytes).
+    "function canSendValue(id, value, bytes) {"
+    "  bytes = bytes || 2;"
+    "  var arr = [];"
+    "  var v = Math.round(value);"
+    "  for (var i = bytes - 1; i >= 0; i--)"
+    "    arr.push((v >> (i * 8)) & 0xFF);"
+    "  return canSendFrame(id, arr);"
+    "}"
+  );
+  // clang-format on
+
+  auto result = engine.evaluate(kHelpers);
+  if (result.isError())
+    qWarning() << "Failed to install protocol helpers:" << result.toString();
 }

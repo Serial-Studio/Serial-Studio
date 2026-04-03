@@ -228,25 +228,42 @@ bool IO::Drivers::Modbus::configurationOk() const noexcept
 /**
  * @brief Writes data to the Modbus device
  *
- * The input data is expected to be in Modbus format.
- * This implementation supports writing single registers (function code 0x06).
+ * The input data is expected to be in one of two formats:
+ * - 4 bytes: [addr_hi, addr_lo, value_hi, value_lo] — single register write
+ * - 6 bytes: [addr_hi, addr_lo, r1_hi, r1_lo, r2_hi, r2_lo] — two-register
+ *   write (e.g. 32-bit IEEE-754 float across consecutive registers)
  *
- * @param data The data to write
- * @return Number of bytes successfully written
+ * @param data The data to write.
+ * @return Number of bytes successfully written.
  */
 qint64 IO::Drivers::Modbus::write(const QByteArray& data)
 {
-  // Parse register address and value from the input and send a write request
+  // Validate device state and minimum payload size
   if (!isWritable() || data.length() < 4)
     return 0;
 
-  quint16 register_address = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
-  quint16 register_value   = (static_cast<quint8>(data[2]) << 8) | static_cast<quint8>(data[3]);
+  // Parse register address (first two bytes, common to both formats)
+  quint16 address
+      = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
 
-  QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, register_address, 1);
-  write_unit.setValue(0, register_value);
+  // Determine register count from payload length
+  int register_count = (data.length() >= 6) ? 2 : 1;
 
-  if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress)) {
+  // Build the write unit
+  QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, address,
+                             register_count);
+  write_unit.setValue(
+      0, (static_cast<quint8>(data[2]) << 8) | static_cast<quint8>(data[3]));
+
+  // Second register for 6-byte (float) payloads
+  if (register_count == 2)
+    write_unit.setValue(
+        1,
+        (static_cast<quint8>(data[4]) << 8) | static_cast<quint8>(data[5]));
+
+  // Send write request
+  if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress))
+  {
     if (!reply->isFinished())
       connect(reply, &QModbusReply::finished, reply, &QModbusReply::deleteLater);
     else

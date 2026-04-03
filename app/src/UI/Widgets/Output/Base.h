@@ -85,6 +85,9 @@ protected:
   [[nodiscard]] QByteArray evaluateTransmitFunction(const QVariant& value);
 
 private:
+  static void installProtocolHelpers(QJSEngine& engine);
+
+private:
   int m_sourceId;
   double m_minValue;
   double m_maxValue;
