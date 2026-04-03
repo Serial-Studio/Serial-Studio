@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QByteArray>
+#include <QJsonObject>
 #include <QModbusClient>
 #include <QModbusDevice>
 #include <QModbusReply>
@@ -216,6 +217,7 @@ public:
   [[nodiscard]] Q_INVOKABLE QString registerGroupInfo(const int index) const;
 
 public slots:
+  void generateProject();
   void setDriverProperty(const QString& key, const QVariant& value) override;
   void clearRegisterGroups();
   void setupExternalConnections();
@@ -242,6 +244,8 @@ private slots:
 
 private:
   void doClose();
+  [[nodiscard]] QJsonObject buildProject() const;
+  [[nodiscard]] QString buildFrameParser() const;
 
   QTimer* m_pollTimer;
   QModbusClient* m_device;

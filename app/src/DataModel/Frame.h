@@ -998,6 +998,7 @@ void read_io_settings(QByteArray& frameStart,
         if (ok) {
           dataset.datasetId = i;
           dataset.groupId   = g.groupId;
+          dataset.sourceId  = g.sourceId;
           g.datasets.push_back(dataset);
         }
 

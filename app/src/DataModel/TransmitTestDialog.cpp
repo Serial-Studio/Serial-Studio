@@ -31,8 +31,7 @@
  *
  * @param parent Parent widget.
  */
-DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent)
-  : QDialog(parent)
+DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent) : QDialog(parent)
 {
   // Set window geometry and title
   resize(640, 480);
@@ -103,28 +102,14 @@ DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent)
   mainLayout->addWidget(m_outputGroup);
 
   // Connect signals
-  connect(m_evaluateButton,
-          &QPushButton::clicked,
-          this,
-          &TransmitTestDialog::evaluate);
-  connect(m_clearButton,
-          &QPushButton::clicked,
-          this,
-          &TransmitTestDialog::clear);
-  connect(m_hexCheckBox,
-          &QCheckBox::checkStateChanged,
-          this,
-          &TransmitTestDialog::onInputModeChanged);
-  connect(m_userInput,
-          &QLineEdit::returnPressed,
-          this,
-          &TransmitTestDialog::evaluate);
+  connect(m_evaluateButton, &QPushButton::clicked, this, &TransmitTestDialog::evaluate);
+  connect(m_clearButton, &QPushButton::clicked, this, &TransmitTestDialog::clear);
+  connect(
+    m_hexCheckBox, &QCheckBox::checkStateChanged, this, &TransmitTestDialog::onInputModeChanged);
+  connect(m_userInput, &QLineEdit::returnPressed, this, &TransmitTestDialog::evaluate);
 
   // Add hex formatting and validation
-  connect(m_userInput,
-          &QLineEdit::textChanged,
-          this,
-          &TransmitTestDialog::onInputDataChanged);
+  connect(m_userInput, &QLineEdit::textChanged, this, &TransmitTestDialog::onInputDataChanged);
 
   // Singleton module connections
   connect(&Misc::ThemeManager::instance(),
@@ -186,18 +171,15 @@ void DataModel::TransmitTestDialog::evaluate()
   if (input.isEmpty())
     return;
 
-  if (m_hexCheckBox->isChecked() && !validateHexInput(input))
-  {
-    QMessageBox::warning(
-      this,
-      tr("Invalid Hex Input"),
-      tr("Please enter valid hexadecimal bytes.\n\nValid format: 01 A2 FF 3C"));
+  if (m_hexCheckBox->isChecked() && !validateHexInput(input)) {
+    QMessageBox::warning(this,
+                         tr("Invalid Hex Input"),
+                         tr("Please enter valid hexadecimal bytes.\n\nValid format: 01 A2 FF 3C"));
     return;
   }
 
   // Validate transmit code
-  if (m_transmitCode.trimmed().isEmpty())
-  {
+  if (m_transmitCode.trimmed().isEmpty()) {
     displayOutput({}, tr("No transmit function code to evaluate."));
     return;
   }
@@ -210,25 +192,20 @@ void DataModel::TransmitTestDialog::evaluate()
   const auto wrapped =
     QStringLiteral("(function() { %1; return transmit; })()").arg(m_transmitCode);
   auto transmitFn = engine.evaluate(wrapped);
-  if (!transmitFn.isCallable())
-  {
-    const auto msg = transmitFn.isError()
-                       ? transmitFn.toString()
-                       : tr("transmit function is not callable");
+  if (!transmitFn.isCallable()) {
+    const auto msg =
+      transmitFn.isError() ? transmitFn.toString() : tr("transmit function is not callable");
     displayOutput({}, msg);
     return;
   }
 
   // Build the value to pass to the transmit function
   QJSValue jsValue;
-  if (m_hexCheckBox->isChecked())
-  {
+  if (m_hexCheckBox->isChecked()) {
     // Hex mode: convert hex bytes to a Latin1 string value
     const auto bytes = SerialStudio::hexToBytes(input);
     jsValue          = engine.toScriptValue(QString::fromLatin1(bytes));
-  }
-  else
-  {
+  } else {
     // Auto-detect: try number first, fall back to string
     bool ok;
     double num = input.toDouble(&ok);
@@ -240,8 +217,7 @@ void DataModel::TransmitTestDialog::evaluate()
 
   // Call the transmit function
   auto result = transmitFn.call(QJSValueList{jsValue});
-  if (result.isError())
-  {
+  if (result.isError()) {
     displayOutput({}, result.toString());
     return;
   }
@@ -312,18 +288,13 @@ void DataModel::TransmitTestDialog::onLanguageChanged()
  */
 void DataModel::TransmitTestDialog::onInputModeChanged(Qt::CheckState state)
 {
-  if (state == Qt::Checked)
-  {
+  if (state == Qt::Checked) {
     m_userInput->setPlaceholderText(tr("Enter hex bytes (e.g., 01 A2 FF)"));
-    if (!m_userInput->text().isEmpty())
-    {
+    if (!m_userInput->text().isEmpty()) {
       QString formatted = formatHexInput(m_userInput->text());
       m_userInput->setText(formatted);
     }
-  }
-
-  else
-  {
+  } else {
     m_userInput->setPlaceholderText(tr("Enter value to transmit..."));
     m_userInput->setPalette(QPalette());
   }
@@ -337,16 +308,14 @@ void DataModel::TransmitTestDialog::onInputModeChanged(Qt::CheckState state)
 void DataModel::TransmitTestDialog::onInputDataChanged(const QString& t)
 {
   // Automatically add spaces & highlight invalid hex data
-  if (m_hexCheckBox->isChecked())
-  {
+  if (m_hexCheckBox->isChecked()) {
     // Block signals to prevent recursive calls
     m_userInput->blockSignals(true);
 
     // Update text if formatting changed
     const auto fmt     = formatHexInput(t);
     const auto isValid = validateHexInput(fmt);
-    if (t != fmt)
-    {
+    if (t != fmt) {
       const int pos  = m_userInput->cursorPosition();
       const int diff = fmt.left(pos).count(' ') - t.left(pos).count(' ');
 
@@ -389,8 +358,7 @@ QString DataModel::TransmitTestDialog::formatHexInput(const QString& text)
       cleaned.append(c.toUpper());
 
   QString formatted;
-  for (int i = 0; i < cleaned.length(); ++i)
-  {
+  for (int i = 0; i < cleaned.length(); ++i) {
     formatted.append(cleaned[i]);
     if (i % 2 == 1 && i < cleaned.length() - 1)
       formatted.append(' ');
@@ -431,14 +399,12 @@ bool DataModel::TransmitTestDialog::validateHexInput(const QString& text)
  * @param result The byte array produced by the transmit function.
  * @param errorMsg Error message to display (empty on success).
  */
-void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result,
-                                                   const QString& errorMsg)
+void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result, const QString& errorMsg)
 {
   auto* commonFonts = &Misc::CommonFonts::instance();
 
   // Show error
-  if (!errorMsg.isEmpty())
-  {
+  if (!errorMsg.isEmpty()) {
     m_rawOutput->setFont(commonFonts->uiFont());
     m_rawOutput->setPlainText(errorMsg);
     m_hexOutput->clear();
@@ -447,8 +413,7 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result,
   }
 
   // Show empty result
-  if (result.isEmpty())
-  {
+  if (result.isEmpty()) {
     m_rawOutput->setFont(commonFonts->uiFont());
     m_rawOutput->setPlainText(tr("(empty) No data returned"));
     m_hexOutput->clear();
@@ -458,8 +423,7 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result,
 
   // Build escaped raw string (show control chars as \xNN)
   QString rawStr;
-  for (int i = 0; i < result.size(); ++i)
-  {
+  for (int i = 0; i < result.size(); ++i) {
     unsigned char ch = static_cast<unsigned char>(result.at(i));
     if (ch == '\r')
       rawStr += QStringLiteral("\\r");
@@ -475,19 +439,17 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result,
 
   // Build hex string
   QString hexStr;
-  for (int i = 0; i < result.size(); ++i)
-  {
+  for (int i = 0; i < result.size(); ++i) {
     if (i > 0)
       hexStr += ' ';
 
-    hexStr += QStringLiteral("%1").arg(
-      static_cast<unsigned char>(result.at(i)), 2, 16, QLatin1Char('0'));
+    hexStr +=
+      QStringLiteral("%1").arg(static_cast<unsigned char>(result.at(i)), 2, 16, QLatin1Char('0'));
   }
 
   // Display results
   m_rawOutput->setFont(commonFonts->monoFont());
   m_rawOutput->setPlainText(rawStr);
   m_hexOutput->setPlainText(hexStr.toUpper());
-  m_byteCountLabel->setText(
-    tr("%1 byte(s)").arg(result.size()));
+  m_byteCountLabel->setText(tr("%1 byte(s)").arg(result.size()));
 }

@@ -44,8 +44,7 @@ Window {
     root.flags = Qt.Dialog |
         Qt.CustomizeWindowHint |
         Qt.WindowTitleHint |
-        Qt.WindowCloseButtonHint |
-        Qt.WindowStaysOnTopHint
+        Qt.WindowCloseButtonHint
   }
 
   //

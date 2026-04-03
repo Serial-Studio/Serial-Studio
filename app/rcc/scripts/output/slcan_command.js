@@ -1,24 +1,21 @@
 /**
- * CAN bus binary frame using built-in protocol helpers.
- * Returns binary payload: [id_hi, id_lo, dlc, data...].
+ * SLCAN (Serial CAN) ASCII command.
+ * Produces ASCII-framed CAN messages for SLCAN adapters.
  *
- * Available helpers:
- *   canSendValue(id, value, bytes) - numeric value, big-endian (default 2 bytes)
- *   canSendFrame(id, payload)      - arbitrary payload (string or byte array)
+ * SLCAN format: tIIILDD..DD\r  (standard frame)
+ *   t    = transmit standard frame
+ *   III  = 3-hex-digit CAN ID (000-7FF)
+ *   L    = data length (0-8)
+ *   DD   = data bytes as hex pairs
  *
- * Note: These produce raw binary CAN frames.
- * For SLCAN ASCII framing (tIIILDD..DD\r), frame manually.
+ * Extended frame: TIIIIIIIILDD..DD\r (8-hex-digit ID)
  */
 var CAN_ID = 0x100;
 
 function transmit(value) {
-  // TextField: send raw string
-  if (typeof value === "string")
-    return value + "\r";
-
-  // Send numeric value as 2-byte big-endian CAN frame
-  return canSendValue(CAN_ID, value, 2);
-
-  // Alternative: send arbitrary byte payload
-  // return canSendFrame(CAN_ID, [0x01, value & 0xFF]);
+  // Build standard SLCAN frame with 2-byte big-endian value
+  var id  = ("000" + CAN_ID.toString(16).toUpperCase()).slice(-3);
+  var hi  = ("00" + ((value >> 8) & 0xFF).toString(16).toUpperCase()).slice(-2);
+  var lo  = ("00" + (value & 0xFF).toString(16).toUpperCase()).slice(-2);
+  return "t" + id + "2" + hi + lo + "\r";
 }

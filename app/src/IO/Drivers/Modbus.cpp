@@ -22,17 +22,24 @@
 
 #include "IO/Drivers/Modbus.h"
 
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QModbusDataUnit>
 #include <QModbusRtuSerialClient>
 #include <QModbusTcpClient>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <QStandardPaths>
 #include <QTimer>
 
+#include "DataModel/Frame.h"
+#include "DataModel/ProjectModel.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "Misc/Utilities.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor/destructor & singleton access functions
@@ -243,27 +250,21 @@ qint64 IO::Drivers::Modbus::write(const QByteArray& data)
     return 0;
 
   // Parse register address (first two bytes, common to both formats)
-  quint16 address
-      = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
+  quint16 address = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
 
   // Determine register count from payload length
   int register_count = (data.length() >= 6) ? 2 : 1;
 
   // Build the write unit
-  QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, address,
-                             register_count);
-  write_unit.setValue(
-      0, (static_cast<quint8>(data[2]) << 8) | static_cast<quint8>(data[3]));
+  QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, address, register_count);
+  write_unit.setValue(0, (static_cast<quint8>(data[2]) << 8) | static_cast<quint8>(data[3]));
 
   // Second register for 6-byte (float) payloads
   if (register_count == 2)
-    write_unit.setValue(
-        1,
-        (static_cast<quint8>(data[4]) << 8) | static_cast<quint8>(data[5]));
+    write_unit.setValue(1, (static_cast<quint8>(data[4]) << 8) | static_cast<quint8>(data[5]));
 
   // Send write request
-  if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress))
-  {
+  if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress)) {
     if (!reply->isFinished())
       connect(reply, &QModbusReply::finished, reply, &QModbusReply::deleteLater);
     else
@@ -769,6 +770,265 @@ QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
     .arg(group.startAddress)
     .arg(group.count);
 }
+
+//--------------------------------------------------------------------------------------------------
+// Project generation
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Generates a Serial Studio project from the configured register groups.
+ *
+ * Follows the DBC importer pattern: builds a complete project JSON, writes to a
+ * temporary file, loads it into ProjectModel, then prompts the user to save.
+ */
+void IO::Drivers::Modbus::generateProject()
+{
+  // Validate that we have register groups configured
+  if (m_registerGroups.isEmpty()) {
+    Misc::Utilities::showMessageBox(
+      tr("No register groups configured"),
+      tr("Add at least one register group before generating a project."),
+      QMessageBox::Warning,
+      tr("Modbus Project Generator"));
+    return;
+  }
+
+  // Build the project JSON
+  const auto project   = buildProject();
+  const auto temp_dir  = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+  const auto temp_path = temp_dir + "/modbus_project_temp.ssproj";
+
+  // Write to temporary file
+  QFile file(temp_path);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    Misc::Utilities::showMessageBox(tr("Failed to create temporary project file"),
+                                    tr("Check write permissions to the temporary directory."),
+                                    QMessageBox::Critical,
+                                    tr("Modbus Project Generator"));
+    return;
+  }
+
+  QJsonDocument doc(project);
+  file.write(doc.toJson(QJsonDocument::Indented));
+  file.close();
+
+  // Load and prompt save
+  DataModel::ProjectModel::instance().openJsonFile(temp_path);
+  if (DataModel::ProjectModel::instance().saveJsonFile(true)) {
+    QFile::remove(temp_path);
+
+    // Count total datasets for the success message
+    int total_datasets = 0;
+    for (const auto& g : m_registerGroups)
+      total_datasets += g.count;
+
+    Misc::Utilities::showMessageBox(
+      tr("Successfully generated project with %1 groups and %2 datasets.")
+        .arg(m_registerGroups.count())
+        .arg(total_datasets),
+      tr("The project editor is now open for customization."),
+      QMessageBox::Information,
+      tr("Modbus Project Generator"));
+  } else {
+    QFile::remove(temp_path);
+  }
+}
+
+/**
+ * @brief Assembles the complete project JSON object.
+ *
+ * Creates a project with a single Modbus source, groups derived from the
+ * configured register groups, and an auto-generated JavaScript frame parser.
+ */
+QJsonObject IO::Drivers::Modbus::buildProject() const
+{
+  QJsonObject project;
+  project[QStringLiteral("title")]   = tr("Modbus Project");
+  project[QStringLiteral("actions")] = QJsonArray();
+
+  // Source configuration
+  QJsonObject source;
+  source[QStringLiteral("sourceId")]              = 0;
+  source[QStringLiteral("title")]                 = tr("Modbus");
+  source[QStringLiteral("busType")]               = static_cast<int>(SerialStudio::BusType::ModBus);
+  source[QStringLiteral("frameStart")]            = QString();
+  source[QStringLiteral("frameEnd")]              = QString();
+  source[QStringLiteral("checksum")]              = QString();
+  source[QStringLiteral("frameDetection")]        = static_cast<int>(SerialStudio::NoDelimiters);
+  source[QStringLiteral("decoder")]               = static_cast<int>(SerialStudio::Binary);
+  source[QStringLiteral("hexadecimalDelimiters")] = false;
+  source[QStringLiteral("frameParserCode")]       = buildFrameParser();
+
+  // Save current driver settings (including register groups) into the source
+  QJsonObject conn_settings;
+  for (const auto& prop : driverProperties())
+    conn_settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+  source[QStringLiteral("connection")] = conn_settings;
+
+  project[QStringLiteral("sources")] = QJsonArray{source};
+
+  // Build groups from register configuration
+  static const QStringList type_names = {
+    tr("Holding Registers"),
+    tr("Input Registers"),
+    tr("Coils"),
+    tr("Discrete Inputs"),
+  };
+
+  QJsonArray group_array;
+  int group_id      = 0;
+  int dataset_index = 1;
+
+  for (const auto& reg_group : m_registerGroups) {
+    DataModel::Group group;
+    group.groupId = group_id;
+    group.widget  = QStringLiteral("datagrid");
+
+    // Group title from register type and start address
+    const QString type_name = (reg_group.registerType < type_names.count())
+                                ? type_names[reg_group.registerType]
+                                : tr("Unknown");
+    group.title = QStringLiteral("%1 @ %2").arg(type_name).arg(reg_group.startAddress);
+
+    // Determine if this is a register type (16-bit) or bit type (coil/discrete)
+    const bool is_reg = (reg_group.registerType <= 1);
+
+    // Create one dataset per register/coil
+    for (quint16 i = 0; i < reg_group.count; ++i) {
+      DataModel::Dataset dataset;
+      dataset.index = dataset_index++;
+      dataset.log   = true;
+
+      const quint16 addr = reg_group.startAddress + i;
+
+      if (is_reg) {
+        dataset.title  = tr("Register %1").arg(addr);
+        dataset.plt    = true;
+        dataset.wgtMin = 0;
+        dataset.wgtMax = 65535;
+        dataset.pltMin = 0;
+        dataset.pltMax = 65535;
+      } else {
+        dataset.title =
+          (reg_group.registerType == 2) ? tr("Coil %1").arg(addr) : tr("Discrete %1").arg(addr);
+        dataset.led     = true;
+        dataset.ledHigh = 1;
+        dataset.wgtMin  = 0;
+        dataset.wgtMax  = 1;
+      }
+
+      group.datasets.push_back(dataset);
+    }
+
+    group_array.append(DataModel::serialize(group));
+    ++group_id;
+  }
+
+  project[QStringLiteral("groups")] = group_array;
+  return project;
+}
+
+/**
+ * @brief Generates a JavaScript frame parser for the configured register groups.
+ *
+ * The Modbus driver emits one frame per register group in deterministic
+ * sequential order. Each frame has a 3-byte header [slaveAddr, funcCode,
+ * byteCount] followed by data. The parser uses a cycling counter to track
+ * which group produced the current frame.
+ *
+ * For holding/input registers: data is 2 bytes per register (big-endian).
+ * For coils/discrete inputs: data is bit-packed (LSB-first).
+ */
+QString IO::Drivers::Modbus::buildFrameParser() const
+{
+  static const QStringList type_names = {
+    QStringLiteral("Holding Registers"),
+    QStringLiteral("Input Registers"),
+    QStringLiteral("Coils"),
+    QStringLiteral("Discrete Inputs"),
+  };
+
+  // Count total datasets across all groups
+  int total_datasets = 0;
+  for (const auto& g : m_registerGroups)
+    total_datasets += g.count;
+
+  const int group_count = m_registerGroups.count();
+
+  QString code;
+
+  // Header comment
+  code += QStringLiteral("/**\n");
+  code += QStringLiteral(" * Modbus Register Frame Parser\n");
+  code += QStringLiteral(" * Auto-generated by Serial Studio\n");
+  code += QStringLiteral(" *\n");
+  code += QStringLiteral(" * Total groups: %1\n").arg(group_count);
+  code += QStringLiteral(" * Total datasets: %1\n").arg(total_datasets);
+  code += QStringLiteral(" *\n");
+  code += QStringLiteral(" * Frame format: [slaveAddr, funcCode, byteCount, ...data]\n");
+  code += QStringLiteral(" * Groups are polled sequentially; this parser tracks the cycle.\n");
+  code += QStringLiteral(" */\n\n");
+
+  // Global state
+  code += QStringLiteral("var values = new Array(%1).fill(0);\n").arg(total_datasets);
+  code += QStringLiteral("var currentGroup = 0;\n\n");
+
+  // Main parse function
+  code += QStringLiteral("function parse(frame) {\n");
+  code += QStringLiteral("  if (frame.length < 3)\n");
+  code += QStringLiteral("    return values;\n\n");
+  code += QStringLiteral("  var data = frame.slice(3);\n\n");
+  code += QStringLiteral("  switch (currentGroup) {\n");
+
+  int dataset_offset = 0;
+  for (int g = 0; g < group_count; ++g) {
+    const auto& reg_group = m_registerGroups[g];
+    const bool is_reg     = (reg_group.registerType <= 1);
+
+    const QString type_name = (reg_group.registerType < type_names.count())
+                                ? type_names[reg_group.registerType]
+                                : QStringLiteral("Unknown");
+
+    code += QStringLiteral("    case %1: // %2 @ %3, count=%4\n")
+              .arg(g)
+              .arg(type_name)
+              .arg(reg_group.startAddress)
+              .arg(reg_group.count);
+
+    if (is_reg) {
+      for (quint16 i = 0; i < reg_group.count; ++i) {
+        const int byte_off = i * 2;
+        code += QStringLiteral("      values[%1] = (data[%2] << 8) | data[%3];\n")
+                  .arg(dataset_offset + i)
+                  .arg(byte_off)
+                  .arg(byte_off + 1);
+      }
+    } else {
+      for (quint16 i = 0; i < reg_group.count; ++i) {
+        const int byte_idx = i / 8;
+        const int bit_idx  = i % 8;
+        code += QStringLiteral("      values[%1] = (data[%2] >> %3) & 1;\n")
+                  .arg(dataset_offset + i)
+                  .arg(byte_idx)
+                  .arg(bit_idx);
+      }
+    }
+
+    code += QStringLiteral("      break;\n");
+    dataset_offset += reg_group.count;
+  }
+
+  code += QStringLiteral("  }\n\n");
+  code += QStringLiteral("  currentGroup = (currentGroup + 1) % %1;\n").arg(group_count);
+  code += QStringLiteral("  return values;\n");
+  code += QStringLiteral("}\n");
+
+  return code;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Setters
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Sets the baud rate for Modbus RTU
@@ -1411,6 +1671,24 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
     props.append(stop);
   }
 
+  // Serialize register groups as a JSON array for project persistence
+  if (!m_registerGroups.isEmpty()) {
+    QJsonArray groups_array;
+    for (const auto& g : m_registerGroups) {
+      QJsonObject obj;
+      obj[QStringLiteral("type")]  = g.registerType;
+      obj[QStringLiteral("start")] = g.startAddress;
+      obj[QStringLiteral("count")] = g.count;
+      groups_array.append(obj);
+    }
+
+    IO::DriverProperty groups;
+    groups.key   = QStringLiteral("registerGroups");
+    groups.type  = IO::DriverProperty::Text;
+    groups.value = QVariant::fromValue(groups_array);
+    props.append(groups);
+  }
+
   return props;
 }
 
@@ -1453,5 +1731,26 @@ void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& 
     const int idx   = value.toInt();
     if (idx >= 0 && idx < list.size())
       setBaudRate(list.at(idx).toInt());
+  }
+
+  else if (key == QLatin1String("registerGroups")) {
+    QJsonArray array;
+    if (value.canConvert<QJsonArray>())
+      array = value.toJsonArray();
+    else if (value.typeId() == QMetaType::QVariantList) {
+      const auto list = value.toList();
+      for (const auto& item : list)
+        array.append(QJsonValue::fromVariant(item));
+    }
+
+    if (!array.isEmpty()) {
+      clearRegisterGroups();
+      for (const auto& item : array) {
+        const auto obj = item.toObject();
+        addRegisterGroup(static_cast<quint8>(obj.value(QStringLiteral("type")).toInt()),
+                         static_cast<quint16>(obj.value(QStringLiteral("start")).toInt()),
+                         static_cast<quint16>(obj.value(QStringLiteral("count")).toInt()));
+      }
+    }
   }
 }

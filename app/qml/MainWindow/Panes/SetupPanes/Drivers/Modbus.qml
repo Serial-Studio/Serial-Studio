@@ -357,7 +357,8 @@ Item {
       Layout.columnSpan: 2
       Layout.fillWidth: true
       Layout.topMargin: 16
-      implicitHeight: _groupButton.height + _groupStatus.height + 4
+      implicitHeight: _groupButton.height + _importButton.height
+                      + _groupStatus.height + 12
 
       Button {
         id: _groupButton
@@ -369,6 +370,17 @@ Item {
         text: qsTr("Configure Register Groups...")
       }
 
+      Button {
+        id: _importButton
+
+        anchors.topMargin: 4
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: _groupButton.bottom
+        text: qsTr("Import Register Map...")
+        onClicked: Cpp_JSON_ModbusMapImporter.importRegisterMap()
+      }
+
       Label {
         id: _groupStatus
 
@@ -376,7 +388,7 @@ Item {
         anchors.topMargin: 4
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: _groupButton.bottom
+        anchors.top: _importButton.bottom
         font: Cpp_Misc_CommonFonts.customUiFont(0.85)
         horizontalAlignment: Text.AlignHCenter
         text: Cpp_IO_Modbus.registerGroupCount > 0 ?
@@ -387,6 +399,10 @@ Item {
 
     ModbusGroupsDialog {
       id: _groupsDialog
+    }
+
+    ModbusPreviewDialog {
+      id: _modbusPreviewDialog
     }
 
     //

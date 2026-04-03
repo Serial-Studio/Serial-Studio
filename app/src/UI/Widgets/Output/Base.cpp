@@ -159,7 +159,7 @@ void Widgets::Output::Base::sendValue(const QVariant& value)
   // Evaluate JS function and transmit result
   const auto data = evaluateTransmitFunction(value);
   if (!data.isEmpty())
-    IO::ConnectionManager::instance().writeDataToDevice(m_sourceId, data);
+    (void)IO::ConnectionManager::instance().writeDataToDevice(m_sourceId, data);
 }
 
 /**
@@ -189,6 +189,7 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
   if (result.isString())
     return result.toString().toLatin1();
 
+  // Return the data as a byte array
   return result.toVariant().toByteArray();
 }
 
@@ -272,6 +273,7 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
   );
   // clang-format on
 
+  // Evaluate the code for correctness
   auto result = engine.evaluate(kHelpers);
   if (result.isError())
     qWarning() << "Failed to install protocol helpers:" << result.toString();

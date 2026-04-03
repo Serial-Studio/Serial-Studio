@@ -339,7 +339,7 @@ Widgets.SmartWindow {
             height: parent.height
             anchors.leftMargin: -4
             anchors.left: parent.left
-            cursorShape: Qt.SizeHorCursor
+            cursorShape: Qt.SplitHCursor
 
             property int _startX: 0
             property int _startWidth: 0

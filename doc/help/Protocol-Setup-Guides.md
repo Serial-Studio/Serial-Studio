@@ -166,6 +166,17 @@ Serial Studio will resolve the hostname (if provided) and attempt a TCP connecti
 8. Set the **Poll Interval** in milliseconds (e.g., 100 ms for 10 Hz polling).
 9. Click **Connect**.
 
+### Generate Project from Register Groups
+
+Once you have configured your register groups, you can auto-generate a Serial Studio project file instead of building one by hand:
+
+1. Configure all register groups as described above.
+2. Click **Generate Project** in the register groups dialog.
+3. You will be prompted to save the `.ssproj` file.
+4. The project editor opens for further customization.
+
+The generated project includes one group per register block, one dataset per register/coil, and a JavaScript frame parser. See [How Multi-Group Polling Works](#how-multi-group-polling-works) below for details on the frame parser.
+
 ### Troubleshooting
 
 - **No response:** Verify the slave address matches the device. Check RS-485 wiring polarity. Confirm the baud rate and parity match the device settings. Ensure termination resistors are in place.
@@ -195,6 +206,291 @@ Serial Studio will resolve the hostname (if provided) and attempt a TCP connecti
 
 - **Connection refused:** Verify the device is listening on the specified port. Check firewall rules. Confirm the IP address is correct.
 - **No data:** Verify the slave address, register type, start address, and count match the device's register map documentation.
+
+---
+
+## Modbus Register Map Import (Pro)
+
+**License:** Pro
+
+Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a JavaScript frame parser, and appropriate dashboard widgets.
+
+### Supported Formats
+
+Serial Studio auto-detects the format from the file extension and accepts **CSV**, **XML**, and **JSON** files.
+
+### How to Import
+
+1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
+2. Click **Import Register Map...**.
+3. Select a CSV, XML, or JSON register map file.
+4. Review the registers in the preview dialog.
+5. Click **Create Project**. You will be prompted to save the `.ssproj` file.
+6. The register groups are also loaded into the Modbus driver automatically.
+
+### CSV Format
+
+CSV is the most common format for Modbus register maps. Most PLC vendors, SCADA tools, and device datasheets can export or be converted to this format.
+
+**Columns** (header row required, order is flexible):
+
+| Column      | Aliases                                    | Required | Default    |
+|-------------|--------------------------------------------|----------|------------|
+| `address`   | `addr`, `register`, `reg`                  | Yes      | —         |
+| `name`      | `label`, `tag`                             | No       | Register N |
+| `type`      | `register_type`, `function`, `fc`          | No       | holding    |
+| `dataType`  | `data_type`, `format`                      | No       | uint16     |
+| `units`     | `unit`, `eng_units`                        | No       | —         |
+| `min`       | `minimum`, `range_min`                     | No       | 0          |
+| `max`       | `maximum`, `range_max`                     | No       | 65535      |
+| `scale`     | `factor`, `multiplier`                     | No       | 1.0        |
+| `offset`    |                                            | No       | 0.0        |
+| `description` | `desc`, `comment` (used as name if no name column) | No | — |
+
+**Register type values:** `holding` (or `0x03`, `3`, `hr`), `input` (or `0x04`, `4`, `ir`), `coil` (or `0x01`, `1`), `discrete` (or `0x02`, `2`, `di`).
+
+**Data type values:** `uint16`, `int16`, `uint32`, `int32`, `float32`, `float64`, `bool`.
+
+Lines starting with `#` are treated as comments and skipped.
+
+**Example:**
+
+```csv
+address,name,type,dataType,units,min,max,scale,offset
+0,Temperature,holding,uint16,°C,0,150,0.1,0
+1,Pressure,holding,uint16,PSI,0,5000,1,0
+2,RPM,holding,uint16,RPM,0,3000,1,0
+4,Flow Rate,holding,float32,GPM,0,50,1,0
+0,E-Stop,coil,bool,,0,1,,
+1,Motor Run,coil,bool,,0,1,,
+```
+
+### Converting Vendor Data to CSV
+
+Most Modbus device documentation provides register maps as tables in PDF or Excel. To convert:
+
+1. **Identify the columns:** Look for register address, name/description, data type, and units.
+2. **Map register types:** Holding registers (function code 03), input registers (04), coils (01), discrete inputs (02).
+3. **Note multi-register values:** A `float32` value occupies two consecutive 16-bit registers. Set the address to the first register — Serial Studio handles the rest.
+4. **Add scaling if needed:** If the device stores temperature as raw value × 0.1, add `scale,0.1` to the CSV.
+5. **Save as `.csv`** with UTF-8 encoding.
+
+**Tip:** You only need the `address` and `name` columns to get started. Everything else has sensible defaults.
+
+### XML Format
+
+Two layouts are supported:
+
+**Flat (type as attribute):**
+
+```xml
+<modbus>
+  <register address="0" type="holding" name="Temperature" dataType="uint16" units="°C" min="0" max="150" scale="0.1"/>
+  <register address="0" type="coil" name="E-Stop"/>
+</modbus>
+```
+
+**Nested (type from parent element):**
+
+```xml
+<modbus>
+  <holding-registers>
+    <register address="0" name="Temperature" dataType="uint16" units="°C"/>
+  </holding-registers>
+  <coils>
+    <register address="0" name="E-Stop"/>
+  </coils>
+</modbus>
+```
+
+Supported parent tags: `holding-registers`, `input-registers`, `coils`, `discrete-inputs` (with or without hyphens).
+
+### JSON Format
+
+Two layouts are supported:
+
+**Flat (type per register):**
+
+```json
+{
+  "registers": [
+    {"address": 0, "type": "holding", "name": "Temperature", "dataType": "uint16", "units": "°C", "min": 0, "max": 150, "scale": 0.1},
+    {"address": 0, "type": "coil", "name": "E-Stop", "dataType": "bool"}
+  ]
+}
+```
+
+**Grouped (type from key):**
+
+```json
+{
+  "holdingRegisters": [
+    {"address": 0, "name": "Temperature", "dataType": "uint16", "units": "°C"}
+  ],
+  "coils": [
+    {"address": 0, "name": "E-Stop"}
+  ]
+}
+```
+
+Supported group keys: `holdingRegisters`, `holding_registers`, `holding`, `inputRegisters`, `input_registers`, `input`, `coils`, `discreteInputs`, `discrete_inputs`, `discrete`.
+
+### What Gets Generated
+
+The importer produces:
+
+- **Register groups** loaded into the Modbus driver (ready to connect immediately).
+- **Project groups** — one per contiguous block of same-type registers.
+- **Datasets** — one per register entry, with name, units, min/max, and widget type (LED for booleans, gauge for temperatures/pressures, bar for percentages).
+- **Frame parser** — JavaScript code that extracts values from Modbus protocol frames, handles data types (uint16, int16, float32), and applies scaling/offset. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on how the parser handles multiple register groups.
+
+### Example Files
+
+Below is the same hydraulic test stand register map in all three supported formats.
+
+**CSV:**
+
+```csv
+address,name,type,dataType,units,min,max,scale,offset
+0,Temperature,holding,uint16,°C,0,150,0.1,0
+1,Pressure,holding,uint16,PSI,0,5000,1,0
+2,RPM,holding,uint16,RPM,0,3000,1,0
+3,Valve Position,holding,uint16,%,0,100,0.1,0
+4,Flow Rate,holding,float32,GPM,0,50,1,0
+6,Motor Load,holding,uint16,%,0,100,0.1,0
+7,Vibration,holding,uint16,mm/s,0,50,0.1,0
+0,Pump Inlet Temp,input,int16,°C,-40,150,0.1,0
+1,Pump Outlet Temp,input,int16,°C,-40,150,0.1,0
+2,Ambient Temp,input,int16,°C,-40,80,0.1,0
+0,E-Stop,coil,bool,,0,1,,
+1,Motor Run,coil,bool,,0,1,,
+2,Valve Open,coil,bool,,0,1,,
+3,Alarm Active,coil,bool,,0,1,,
+0,Door Sensor,discrete,bool,,0,1,,
+1,Level Switch,discrete,bool,,0,1,,
+```
+
+**JSON (flat format):**
+
+```json
+{
+  "registers": [
+    {"address": 0, "type": "holding", "name": "Temperature", "dataType": "uint16", "units": "°C", "min": 0, "max": 150, "scale": 0.1},
+    {"address": 1, "type": "holding", "name": "Pressure", "dataType": "uint16", "units": "PSI", "min": 0, "max": 5000},
+    {"address": 2, "type": "holding", "name": "RPM", "dataType": "uint16", "units": "RPM", "min": 0, "max": 3000},
+    {"address": 3, "type": "holding", "name": "Valve Position", "dataType": "uint16", "units": "%", "min": 0, "max": 100, "scale": 0.1},
+    {"address": 4, "type": "holding", "name": "Flow Rate", "dataType": "float32", "units": "GPM", "min": 0, "max": 50},
+    {"address": 6, "type": "holding", "name": "Motor Load", "dataType": "uint16", "units": "%", "min": 0, "max": 100, "scale": 0.1},
+    {"address": 7, "type": "holding", "name": "Vibration", "dataType": "uint16", "units": "mm/s", "min": 0, "max": 50, "scale": 0.1},
+    {"address": 0, "type": "input", "name": "Pump Inlet Temp", "dataType": "int16", "units": "°C", "min": -40, "max": 150, "scale": 0.1},
+    {"address": 1, "type": "input", "name": "Pump Outlet Temp", "dataType": "int16", "units": "°C", "min": -40, "max": 150, "scale": 0.1},
+    {"address": 2, "type": "input", "name": "Ambient Temp", "dataType": "int16", "units": "°C", "min": -40, "max": 80, "scale": 0.1},
+    {"address": 0, "type": "coil", "name": "E-Stop", "dataType": "bool"},
+    {"address": 1, "type": "coil", "name": "Motor Run", "dataType": "bool"},
+    {"address": 2, "type": "coil", "name": "Valve Open", "dataType": "bool"},
+    {"address": 3, "type": "coil", "name": "Alarm Active", "dataType": "bool"},
+    {"address": 0, "type": "discrete", "name": "Door Sensor", "dataType": "bool"},
+    {"address": 1, "type": "discrete", "name": "Level Switch", "dataType": "bool"}
+  ]
+}
+```
+
+**XML:**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<modbus>
+  <holding-registers>
+    <register address="0" name="Temperature" dataType="uint16" units="°C" min="0" max="150" scale="0.1"/>
+    <register address="1" name="Pressure" dataType="uint16" units="PSI" min="0" max="5000"/>
+    <register address="2" name="RPM" dataType="uint16" units="RPM" min="0" max="3000"/>
+    <register address="3" name="Valve Position" dataType="uint16" units="%" min="0" max="100" scale="0.1"/>
+    <register address="4" name="Flow Rate" dataType="float32" units="GPM" min="0" max="50"/>
+    <register address="6" name="Motor Load" dataType="uint16" units="%" min="0" max="100" scale="0.1"/>
+    <register address="7" name="Vibration" dataType="uint16" units="mm/s" min="0" max="50" scale="0.1"/>
+  </holding-registers>
+  <input-registers>
+    <register address="0" name="Pump Inlet Temp" dataType="int16" units="°C" min="-40" max="150" scale="0.1"/>
+    <register address="1" name="Pump Outlet Temp" dataType="int16" units="°C" min="-40" max="150" scale="0.1"/>
+    <register address="2" name="Ambient Temp" dataType="int16" units="°C" min="-40" max="80" scale="0.1"/>
+  </input-registers>
+  <coils>
+    <register address="0" name="E-Stop"/>
+    <register address="1" name="Motor Run"/>
+    <register address="2" name="Valve Open"/>
+    <register address="3" name="Alarm Active"/>
+  </coils>
+  <discrete-inputs>
+    <register address="0" name="Door Sensor"/>
+    <register address="1" name="Level Switch"/>
+  </discrete-inputs>
+</modbus>
+```
+
+---
+
+## How Multi-Group Polling Works
+
+When a Modbus connection has multiple register groups, the driver and the auto-generated frame parser coordinate through a simple sequential protocol. Understanding this mechanism helps when debugging or customizing the generated parser.
+
+### Driver Side
+
+Each poll cycle, the Modbus driver iterates through the configured register groups in order:
+
+1. Poll group 0 → wait for response → emit frame
+2. Poll group 1 → wait for response → emit frame
+3. Poll group 2 → wait for response → emit frame
+4. (next poll timer tick) → start again at group 0
+
+The groups are always polled in the same fixed order (the order they appear in the register groups list). Each response is emitted as a separate frame to the data pipeline.
+
+### Parser Side
+
+The auto-generated frame parser maintains a `currentGroup` counter that starts at 0. Each time `parse(frame)` is called, the parser uses the counter to determine which register group the frame belongs to, extracts the data accordingly, then advances the counter:
+
+```js
+currentGroup = (currentGroup + 1) % numberOfGroups;
+```
+
+For a single register group, the counter is always 0 — the `switch` block has one `case` and the modulo is `% 1`.
+
+For two groups (e.g., holding registers at address 0 and coils at address 100), the generated parser looks like:
+
+```js
+var values = new Array(totalDatasets).fill(0);
+var currentGroup = 0;
+
+function parse(frame) {
+  if (frame.length < 3)
+    return values;
+
+  var data = frame.slice(3);
+
+  switch (currentGroup) {
+    case 0: // Holding Registers @ 0
+      values[0] = (data[0] << 8) | data[1]; // Temperature
+      values[1] = (data[2] << 8) | data[3]; // Pressure
+      break;
+    case 1: // Coils @ 100
+      values[2] = (data[0] >> 0) & 1; // E-Stop
+      values[3] = (data[0] >> 1) & 1; // Motor Run
+      break;
+  }
+
+  currentGroup = (currentGroup + 1) % 2;
+  return values;
+}
+```
+
+Frame 1 arrives → parser is in `case 0` → extracts holding register values → advances to 1.
+Frame 2 arrives → parser is in `case 1` → extracts coil values → advances back to 0.
+
+### Practical Considerations
+
+- **Typical group count:** Most Modbus devices use 1–3 register groups. A single contiguous block of holding registers is the most common configuration.
+- **Synchronization:** The parser relies on the driver always delivering frames in the same fixed order. This works reliably because each poll cycle is sequential — group N+1 is not polled until group N's response arrives.
+- **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser's counter may temporarily misalign for one poll cycle. It self-corrects on the next complete cycle. At typical poll rates (100ms+), this causes at most a brief glitch.
+- **Customization:** If you modify the generated parser, keep the `currentGroup` counter logic intact. Adding or removing register groups requires regenerating the parser (or manually updating the `switch` cases and modulo value).
 
 ---
 

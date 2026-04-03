@@ -485,6 +485,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/ImageExport.h
     src/UI/ImageProvider.h
     src/DataModel/DBCImporter.h
+    src/DataModel/ModbusMapImporter.h
     src/Licensing/Trial.h
     src/Licensing/MachineID.h
     src/Licensing/SimpleCrypt.h
@@ -523,6 +524,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/ImageExport.cpp
     src/UI/ImageProvider.cpp
     src/DataModel/DBCImporter.cpp
+    src/DataModel/ModbusMapImporter.cpp
     src/Licensing/Trial.cpp
     src/Licensing/CommercialToken.cpp
     src/ThirdParty/miniaudio.cpp
@@ -549,6 +551,7 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
+    qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
     qml/Widgets/Dashboard/Plot3D.qml
     qml/Widgets/Dashboard/ImageView.qml

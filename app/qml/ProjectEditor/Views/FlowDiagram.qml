@@ -121,9 +121,6 @@ Item {
     for (const src of srcList)
       srcTotalH[src.sourceId] = 0
 
-    const vizGroupsPre = groups.filter(function(g) { return g.groupType !== SerialStudio.GroupOutput })
-    const showPillsPre = vizGroupsPre.length <= 1
-
     for (const grp of groups) {
       const sid = grp.sourceId || 0
       if (srcTotalH[sid] === undefined) srcTotalH[sid] = 0
@@ -131,7 +128,7 @@ Item {
       let pillCount = 0
       if (grp.groupType === SerialStudio.GroupOutput)
         pillCount = (grp.outputWidgets || []).length
-      else if (showPillsPre || grp.widget === "" || grp.widget === "datagrid")
+      else
         pillCount = (grp.datasets || []).length
 
       srcTotalH[sid] += slotH(pillCount) + vGap
@@ -203,11 +200,6 @@ Item {
 
     }
 
-    // ── count visualization groups (for deciding whether to show pills) ───
-    const vizGroups = groups.filter(function(g) { return g.groupType !== SerialStudio.GroupOutput })
-    const vizCount  = vizGroups.length
-    const showVizPills = vizCount <= 1
-
     // ── place group + dataset/output nodes ─────────────────────────────────
     for (const grp of groups) {
       const sid       = grp.sourceId || 0
@@ -225,7 +217,7 @@ Item {
             id:    oi
           })
         }
-      } else if (showVizPills || grp.widget === "" || grp.widget === "datagrid") {
+      } else {
         for (let di = 0; di < dsList.length; ++di) {
           const ds = dsList[di]
           pills.push({

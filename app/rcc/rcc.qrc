@@ -483,6 +483,7 @@
         <file>scripts/output/default_template.js</file>
         <file>scripts/output/at_command.js</file>
         <file>scripts/output/binary_packet.js</file>
+        <file>scripts/output/canbus_frame.js</file>
         <file>scripts/output/gcode_command.js</file>
         <file>scripts/output/grbl_command.js</file>
         <file>scripts/output/json_command.js</file>

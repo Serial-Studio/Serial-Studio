@@ -73,6 +73,7 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "DataModel/DBCImporter.h"
+#  include "DataModel/ModbusMapImporter.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #  include "MQTT/Client.h"
@@ -378,6 +379,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   const bool qtCommercialAvailable = true;
   auto mqttClient                  = &MQTT::Client::instance();
   auto dbcImporter                 = &DataModel::DBCImporter::instance();
+  auto modbusMapImporter           = &DataModel::ModbusMapImporter::instance();
   auto audioDriver                 = ioManager->audio();
   auto canBusDriver                = ioManager->canBus();
   auto modbusDriver                = ioManager->modbus();
@@ -514,6 +516,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_IO_HID", hidDriver);
   c->setContextProperty("Cpp_IO_Process", processDriver);
   c->setContextProperty("Cpp_JSON_DBCImporter", dbcImporter);
+  c->setContextProperty("Cpp_JSON_ModbusMapImporter", modbusMapImporter);
   c->setContextProperty("Cpp_Licensing_Trial", trial);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);

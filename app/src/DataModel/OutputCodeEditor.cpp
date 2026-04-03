@@ -100,6 +100,7 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
   const struct { const char *file; const char *name; } templates[] = {
     {"at_command.js",       QT_TR_NOOP("AT command")      },
     {"binary_packet.js",    QT_TR_NOOP("Binary packet")   },
+    {"canbus_frame.js",     QT_TR_NOOP("CAN Bus frame")   },
     {"default_template.js", QT_TR_NOOP("Default template")},
     {"gcode_command.js",    QT_TR_NOOP("G-Code command")  },
     {"grbl_command.js",     QT_TR_NOOP("GRBL command")    },
@@ -113,10 +114,10 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
     {"simple_command.js",   QT_TR_NOOP("Simple command")  },
     {"slcan_command.js",    QT_TR_NOOP("SLCAN command")   },
   };
+
   // clang-format on
 
-  for (const auto& t : templates)
-  {
+  for (const auto& t : templates) {
     m_templateFiles.append(QStringLiteral(":/rcc/scripts/output/%1").arg(QLatin1String(t.file)));
     m_templateNames.append(tr(t.name));
   }

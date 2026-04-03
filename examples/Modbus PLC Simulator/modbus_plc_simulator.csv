@@ -1,0 +1,10 @@
+address,name,type,dataType,units,min,max,scale,offset,description
+0,Emergency Stop,holding,bool,,0,1,,,E-stop status (0=OK 1=Triggered)
+1,Start LED,holding,bool,,0,1,,,Motor running indicator
+2,Temperature,holding,uint16,°F,72,180,1,0,Hydraulic oil temperature
+3,Pressure,holding,uint16,PSI,0,3000,1,0,System pressure (alarm at 2800 PSI)
+4,Motor RPM,holding,uint16,RPM,0,3600,1,0,Motor speed
+5,Valve Position,holding,uint16,%,0,100,1,0,Control valve opening percentage
+6,Flow Rate,holding,uint16,GPM,0,500,0.1,0,Pump flow rate (raw value ÷10)
+7,Motor Load,holding,uint16,%,0,100,1,0,Motor load percentage
+8,Vibration,holding,uint16,mm/s,0,150,0.1,0,Vibration velocity RMS (raw value ÷10)

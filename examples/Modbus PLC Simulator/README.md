@@ -131,9 +131,21 @@ The included project file (`Modbus PLC Simulator.ssproj`) provides:
 - **Vibration Graph**: ISO 10816 vibration monitoring
 - **Time-Series Plots**: Trend visualization for all parameters
 
+## Modbus Register Map CSV
+
+The included `modbus_plc_simulator.csv` file defines the register map in a format that Serial Studio's **Modbus Map Importer** can read directly. This allows you to auto-generate a project file from a register map definition instead of configuring registers manually.
+
+CSV columns: `address`, `name`, `type`, `dataType`, `units`, `min`, `max`, `scale`, `offset`, `description`.
+
+To import:
+1. Open Serial Studio and select **Modbus** as the I/O interface
+2. Click **Import Register Map**
+3. Select `modbus_plc_simulator.csv`
+4. Review the register preview and click **Create Project**
+
 ## Frame Parser
 
-The project includes a comprehensive JavaScript frame parser that:
+Serial Studio auto-generates a JavaScript frame parser based on the register map configuration. The parser:
 
 - Handles all Modbus function codes (0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x10)
 - Parses both register and coil/discrete input responses
@@ -141,12 +153,11 @@ The project includes a comprehensive JavaScript frame parser that:
 - Handles Modbus exception responses (0x80+)
 - Maintains last known good values on errors
 
-The parser is embedded in the `.ssproj` file and requires **Binary (Direct)** decoder mode.
-
 ## Files Included
 
 - **plc_simulator.py**: Physics-based hydraulic test stand simulator with Modbus TCP server
 - **Modbus PLC Simulator.ssproj**: Serial Studio project file with dashboard configuration
+- **modbus_plc_simulator.csv**: Register map definition for the Modbus Map Importer
 - **README.md**: This documentation
 - **doc/screenshot.png**: Dashboard screenshot (to be added)
 
