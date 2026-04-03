@@ -84,19 +84,43 @@ Widgets.Pane {
       color: Cpp_ThemeManager.colors["groupbox_background"]
 
       //
-      // Buttons
+      // Scrollable toolbar
       //
-      RowLayout {
-        id: layout
+      Flickable {
+        id: flickable
 
-        spacing: 4
+        clip: true
+        contentHeight: height
+        boundsBehavior: Flickable.StopAtBounds
+        contentWidth: layout.implicitWidth + 16
+        flickableDirection: Flickable.HorizontalFlick
 
         anchors {
           margins: 8
           left: parent.left
           right: parent.right
           verticalCenter: parent.verticalCenter
+          topMargin: 0
+          bottomMargin: 0
         }
+
+        height: layout.implicitHeight
+
+        ScrollBar.horizontal: ScrollBar {
+          height: 3
+          policy: flickable.contentWidth > flickable.width
+                  ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        }
+
+        //
+        // Buttons
+        //
+        RowLayout {
+          id: layout
+
+          spacing: 4
+          width: Math.max(implicitWidth, flickable.width)
+          anchors.verticalCenter: parent.verticalCenter
 
         //
         // Change icon
@@ -120,6 +144,7 @@ Widgets.Pane {
         //
         Item {
           Layout.fillWidth: true
+          Layout.minimumWidth: 16
         }
 
         //
@@ -146,6 +171,59 @@ Widgets.Pane {
           ToolTip.text: qsTr("Delete this action from the project")
           onClicked: Cpp_JSON_ProjectModel.deleteCurrentAction()
           icon.source: "qrc:/rcc/icons/project-editor/actions/delete.svg"
+        }
+      }
+      }
+
+      //
+      // Left fade indicator
+      //
+      Rectangle {
+        z: 10
+        width: 16
+        visible: flickable.contentX > 4
+        anchors.left: flickable.left
+        anchors.top: flickable.top
+        anchors.bottom: flickable.bottom
+
+        gradient: Gradient {
+          orientation: Gradient.Horizontal
+
+          GradientStop {
+            position: 0
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+          }
+
+          GradientStop {
+            position: 1
+            color: "transparent"
+          }
+        }
+      }
+
+      //
+      // Right fade indicator
+      //
+      Rectangle {
+        z: 10
+        width: 16
+        visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
+        anchors.right: flickable.right
+        anchors.top: flickable.top
+        anchors.bottom: flickable.bottom
+
+        gradient: Gradient {
+          orientation: Gradient.Horizontal
+
+          GradientStop {
+            position: 0
+            color: "transparent"
+          }
+
+          GradientStop {
+            position: 1
+            color: Cpp_ThemeManager.colors["groupbox_background"]
+          }
         }
       }
 

@@ -122,6 +122,7 @@ ColumnLayout {
 
       Label {
         text: qsTr("Parameter")
+        elide: Label.ElideRight
         Layout.alignment: Qt.AlignVCenter
         horizontalAlignment: Label.AlignLeft
         font: Cpp_Misc_CommonFonts.boldUiFont
@@ -142,6 +143,7 @@ ColumnLayout {
 
       Label {
         text: qsTr("Value")
+        elide: Label.ElideRight
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
         horizontalAlignment: Label.AlignLeft
@@ -259,11 +261,11 @@ ColumnLayout {
 
               Label {
                 text: model.placeholderValue
+                elide: Label.ElideRight
                 Layout.alignment: Qt.AlignVCenter
                 horizontalAlignment: Label.AlignLeft
                 font: Cpp_Misc_CommonFonts.boldUiFont
-                Layout.minimumWidth: root.parameterWidth
-                Layout.maximumWidth: root.parameterWidth
+                Layout.fillWidth: true
                 color: Cpp_ThemeManager.colors["table_fg_header"]
               }
 
@@ -347,6 +349,7 @@ ColumnLayout {
         //
         Label {
           text: model.parameterName ?? ""
+          elide: Label.ElideRight
           opacity: model.active ? 1 : 0.5
           Layout.alignment: Qt.AlignVCenter
           Layout.minimumWidth: root.parameterWidth
@@ -354,9 +357,11 @@ ColumnLayout {
           color: Cpp_ThemeManager.colors["table_text"]
 
           ToolTip.delay: 700
-          ToolTip.text: model.parameterDescription ?? ""
           visible: model.widgetType !== ProjectEditor.SectionHeader
-          ToolTip.visible: _paramMouseArea.containsMouse && ToolTip.text !== ""
+          ToolTip.text: truncated ? (model.parameterName ?? "")
+                                  : (model.parameterDescription ?? "")
+          ToolTip.visible: _paramMouseArea.containsMouse &&
+                           ToolTip.text !== ""
 
           MouseArea {
             id: _paramMouseArea
