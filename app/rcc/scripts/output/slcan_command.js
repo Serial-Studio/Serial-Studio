@@ -1,22 +1,24 @@
 /**
- * SLCAN (Lawicel) CAN bus ASCII command.
- * For USB-CAN adapters: CANable, USBtin, PCAN, Canable Pro, slcand.
+ * CAN bus binary frame using built-in protocol helpers.
+ * Returns binary payload: [id_hi, id_lo, dlc, data...].
+ *
+ * Available helpers:
+ *   canSendValue(id, value, bytes) - numeric value, big-endian (default 2 bytes)
+ *   canSendFrame(id, payload)      - arbitrary payload (string or byte array)
+ *
+ * Note: These produce raw binary CAN frames.
+ * For SLCAN ASCII framing (tIIILDD..DD\r), frame manually.
  */
-var CAN_ID  = 0x100;
-var DLC     = 2;
+var CAN_ID = 0x100;
 
 function transmit(value) {
-  // TextField: send raw SLCAN command
+  // TextField: send raw string
   if (typeof value === "string")
     return value + "\r";
 
-  // Build standard 11-bit CAN frame: tIIILDD..DD\r
-  var id  = ("00" + CAN_ID.toString(16)).slice(-3).toUpperCase();
-  var val = Math.round(value) & 0xFFFF;
+  // Send numeric value as 2-byte big-endian CAN frame
+  return canSendValue(CAN_ID, value, 2);
 
-  // Pack value as big-endian 16-bit into DLC=2 data bytes
-  var hi = ("0" + ((val >> 8) & 0xFF).toString(16)).slice(-2).toUpperCase();
-  var lo = ("0" + (val & 0xFF).toString(16)).slice(-2).toUpperCase();
-
-  return "t" + id + DLC + hi + lo + "\r";
+  // Alternative: send arbitrary byte payload
+  // return canSendFrame(CAN_ID, [0x01, value & 0xFF]);
 }

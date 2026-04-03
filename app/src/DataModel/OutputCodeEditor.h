@@ -14,6 +14,7 @@
 #include <QSyntaxStyle>
 
 #include "DataModel/Frame.h"
+#include "DataModel/TransmitTestDialog.h"
 
 namespace DataModel {
 
@@ -63,6 +64,7 @@ public slots:
   void selectAll();
   void readCode();
   void selectTemplate();
+  void testTransmitFunction();
   void reload(bool guiTrigger = false);
 
 private slots:
@@ -98,6 +100,7 @@ private:
 
   QStringList m_templateNames;
   QStringList m_templateFiles;
+  TransmitTestDialog m_testDialog;
 };
 
 }  // namespace DataModel

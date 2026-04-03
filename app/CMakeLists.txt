@@ -273,6 +273,7 @@ set(SOURCES
   src/DataModel/Frame.cpp
   src/DataModel/FrameConsumer.cpp
   src/DataModel/FrameParserTestDialog.cpp
+  src/DataModel/TransmitTestDialog.cpp
   src/CSV/Player.cpp
   src/CSV/Export.cpp
   src/MDF4/Player.cpp
@@ -364,6 +365,7 @@ set(HEADERS
   src/DataModel/FrameBuilder.h
   src/DataModel/FrameConsumer.h
   src/DataModel/FrameParserTestDialog.h
+  src/DataModel/TransmitTestDialog.h
   src/CSV/Export.h
   src/CSV/Player.h
   src/MDF4/Player.h

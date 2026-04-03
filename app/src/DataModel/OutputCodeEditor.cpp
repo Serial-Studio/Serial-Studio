@@ -31,7 +31,7 @@
  * @brief Constructs the OutputCodeEditor, loads templates from rcc resources.
  */
 DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
-  : QQuickPaintedItem(parent), m_readingCode(false)
+  : QQuickPaintedItem(parent), m_readingCode(false), m_testDialog(nullptr)
 {
   setMipmap(false);
   setAntialiasing(false);
@@ -95,27 +95,30 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
           this,
           &DataModel::OutputCodeEditor::renderWidget);
 
+  // clang-format off
   // Load templates from resources
-  const QDir templateDir(QStringLiteral(":/rcc/scripts/output"));
-  if (templateDir.exists()) {
-    const auto entries =
-      templateDir.entryList(QStringList{QStringLiteral("*.js")}, QDir::Files, QDir::Name);
-    for (const auto& file : entries) {
-      m_templateFiles.append(templateDir.filePath(file));
+  const struct { const char *file; const char *name; } templates[] = {
+    {"at_command.js",       QT_TR_NOOP("AT command")      },
+    {"binary_packet.js",    QT_TR_NOOP("Binary packet")   },
+    {"default_template.js", QT_TR_NOOP("Default template")},
+    {"gcode_command.js",    QT_TR_NOOP("G-Code command")  },
+    {"grbl_command.js",     QT_TR_NOOP("GRBL command")    },
+    {"json_command.js",     QT_TR_NOOP("JSON command")    },
+    {"modbus_write.js",     QT_TR_NOOP("Modbus write")    },
+    {"nmea_sentence.js",    QT_TR_NOOP("NMEA sentence")   },
+    {"pid_setpoint.js",     QT_TR_NOOP("PID setpoint")    },
+    {"pwm_control.js",      QT_TR_NOOP("PWM control")     },
+    {"relay_toggle.js",     QT_TR_NOOP("Relay toggle")    },
+    {"scpi_command.js",     QT_TR_NOOP("SCPI command")    },
+    {"simple_command.js",   QT_TR_NOOP("Simple command")  },
+    {"slcan_command.js",    QT_TR_NOOP("SLCAN command")   },
+  };
+  // clang-format on
 
-      // Convert filename to display name
-      auto name = file;
-      name.remove(QStringLiteral(".js"));
-      name.replace('_', ' ');
-
-      // Capitalize first letter of each word
-      QStringList words = name.split(' ');
-      for (auto& w : words)
-        if (!w.isEmpty())
-          w[0] = w[0].toUpper();
-
-      m_templateNames.append(words.join(' '));
-    }
+  for (const auto& t : templates)
+  {
+    m_templateFiles.append(QStringLiteral(":/rcc/scripts/output/%1").arg(QLatin1String(t.file)));
+    m_templateNames.append(tr(t.name));
   }
 
   readCode();
@@ -301,6 +304,16 @@ void DataModel::OutputCodeEditor::selectTemplate()
     Q_EMIT modifiedChanged();
     file.close();
   }
+}
+
+/**
+ * @brief Opens the transmit test dialog with the current editor code.
+ */
+void DataModel::OutputCodeEditor::testTransmitFunction()
+{
+  m_testDialog.setTransmitCode(text());
+  m_testDialog.clear();
+  m_testDialog.showNormal();
 }
 
 /**

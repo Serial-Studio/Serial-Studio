@@ -261,29 +261,29 @@ Widgets.Pane {
           anchors.rightMargin: 8
 
           Image {
-            source: "qrc:/rcc/icons/project-editor/treeview/code.svg"
             sourceSize: Qt.size(18, 18)
             Layout.alignment: Qt.AlignVCenter
+            source: "qrc:/rcc/icons/project-editor/treeview/code.svg"
           }
 
           Label {
             text: qsTr("Transmit Function")
+            Layout.alignment: Qt.AlignVCenter
             font: Cpp_Misc_CommonFonts.boldUiFont
             color: Cpp_ThemeManager.colors["table_fg_header"]
-            Layout.alignment: Qt.AlignVCenter
           }
 
           Item { Layout.fillWidth: true }
 
           Widgets.ToolbarButton {
             iconSize: 16
+            text: qsTr("Import")
             toolbarButton: false
             horizontalLayout: true
-            text: qsTr("Import")
-            Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Import transmit function from a .js file")
             onClicked: outputEditor.import()
+            Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/open.svg"
+            ToolTip.text: qsTr("Import transmit function from a .js file")
           }
 
           Widgets.ToolbarButton {
@@ -292,9 +292,20 @@ Widgets.Pane {
             horizontalLayout: true
             text: qsTr("Template")
             Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Select a pre-built transmit function template")
             onClicked: outputEditor.selectTemplate()
             icon.source: "qrc:/rcc/icons/code-editor/template.svg"
+            ToolTip.text: qsTr("Select a pre-built transmit function template")
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 16
+            text: qsTr("Test")
+            toolbarButton: false
+            horizontalLayout: true
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: outputEditor.testTransmitFunction()
+            icon.source: "qrc:/rcc/icons/code-editor/test.svg"
+            ToolTip.text: qsTr("Test the transmit function with sample input")
           }
         }
       }

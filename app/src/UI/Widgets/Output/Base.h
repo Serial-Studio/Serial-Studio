@@ -84,7 +84,7 @@ public slots:
 protected:
   [[nodiscard]] QByteArray evaluateTransmitFunction(const QVariant& value);
 
-private:
+public:
   static void installProtocolHelpers(QJSEngine& engine);
 
 private:
