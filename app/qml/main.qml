@@ -41,6 +41,15 @@ Item {
   property bool quitting: false
   readonly property bool proVersion: Cpp_CommercialBuild ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
 
+  //
+  // IO options enabled/disabled
+  //
+  readonly property bool mqttSubscriber: Cpp_CommercialBuild ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
+  readonly property bool ioEnabled: (!Cpp_IO_Manager.isConnected && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen) || mqttSubscriber
+
+  //
+  // App-level settings
+  //
   Settings {
     category: "App"
     property alias hideWelcomeDialog: app.dontNag

@@ -93,6 +93,7 @@ inline constexpr auto OutputMonoIcon     = "monoIcon";
 inline constexpr auto OutputColumns      = "outputColumns";
 inline constexpr auto TransmitFunction   = "transmitFunction";
 
+inline constexpr auto GroupId   = "groupId";
 inline constexpr auto GroupType = "groupType";
 
 inline constexpr auto ImgMode  = "imgDetectionMode";
@@ -108,6 +109,13 @@ inline constexpr auto PointCount = "pointCount";
 
 // Reserved sub-key stored inside the widgetSettings object.
 inline constexpr auto kActiveGroupSubKey = "activeGroup";
+
+// Keys for user-defined dashboard workspaces.
+inline constexpr auto Workspaces     = "workspaces";
+inline constexpr auto WorkspaceId    = "workspaceId";
+inline constexpr auto WidgetRefs     = "widgetRefs";
+inline constexpr auto WidgetType     = "widgetType";
+inline constexpr auto RelativeIndex  = "relativeIndex";
 
 inline QString layoutKey(int groupId)
 {
@@ -414,6 +422,91 @@ static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
     obj.insert("frameParserCode", s.frameParserCode);
 
   return obj;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Workspace structure
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Represents a reference to a specific widget in the dashboard.
+ *
+ * Each WidgetRef identifies a widget by its type (DashboardWidget enum),
+ * the group it belongs to, and its relative index within that widget type.
+ */
+struct WidgetRef {
+  int widgetType    = 0;
+  int groupId       = -1;
+  int relativeIndex = -1;
+};
+
+/**
+ * @brief Represents a user-defined dashboard workspace.
+ *
+ * A workspace is a named collection of widget references that the user can
+ * create, modify, and switch between in the dashboard. Each workspace
+ * maintains its own layout persistence via the layout key system.
+ */
+struct Workspace {
+  int workspaceId = -1;
+  QString title;
+  QString icon;
+  std::vector<WidgetRef> widgetRefs;
+};
+
+/**
+ * @brief Serializes a Workspace to a QJsonObject.
+ * @param w The Workspace to serialize.
+ * @return QJsonObject representing the Workspace.
+ */
+[[nodiscard]] inline QJsonObject serialize(const Workspace& w)
+{
+  QJsonObject obj;
+  obj.insert(Keys::WorkspaceId, w.workspaceId);
+  obj.insert(Keys::Title, w.title.simplified());
+  if (!w.icon.isEmpty())
+    obj.insert(Keys::Icon, w.icon);
+
+  QJsonArray refs;
+  for (const auto& ref : w.widgetRefs) {
+    QJsonObject r;
+    r.insert(Keys::WidgetType, ref.widgetType);
+    r.insert(Keys::GroupId, ref.groupId);
+    r.insert(Keys::RelativeIndex, ref.relativeIndex);
+    refs.append(r);
+  }
+
+  obj.insert(Keys::WidgetRefs, refs);
+  return obj;
+}
+
+/**
+ * @brief Deserializes a Workspace from a QJsonObject.
+ * @param w Output Workspace object to populate.
+ * @param obj JSON object to read from.
+ * @return true if valid and successfully parsed, false otherwise.
+ */
+[[nodiscard]] inline bool read(Workspace& w, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  w.workspaceId = ss_jsr(obj, Keys::WorkspaceId, -1).toInt();
+  w.title       = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  w.icon        = ss_jsr(obj, Keys::Icon, "").toString().simplified();
+
+  w.widgetRefs.clear();
+  const auto refs = obj.value(Keys::WidgetRefs).toArray();
+  for (const auto& val : refs) {
+    const auto r = val.toObject();
+    WidgetRef ref;
+    ref.widgetType    = ss_jsr(r, Keys::WidgetType, 0).toInt();
+    ref.groupId       = ss_jsr(r, Keys::GroupId, -1).toInt();
+    ref.relativeIndex = ss_jsr(r, Keys::RelativeIndex, -1).toInt();
+    w.widgetRefs.push_back(ref);
+  }
+
+  return w.workspaceId >= 0 && !w.title.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------

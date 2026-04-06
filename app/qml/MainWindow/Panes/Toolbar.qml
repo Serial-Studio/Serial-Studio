@@ -299,8 +299,7 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
         columns: Cpp_CommercialBuild ? 3 : 1
 
-        readonly property bool driverSelectionEnabled: !Cpp_IO_Manager.isConnected &&
-                                                       !root.dashboardVisible &&
+        readonly property bool driverSelectionEnabled: app.ioEnabled &&
                                                        (Cpp_AppState.operationMode !== SerialStudio.ProjectFile ||
                                                         Cpp_JSON_ProjectModel.sourceCount <= 1)
 
@@ -568,13 +567,10 @@ Rectangle {
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
 
       visible: Cpp_CommercialBuild ? (Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated ? false : true) : true
-
-      readonly property bool mqttSubscriber: Cpp_CommercialBuild ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
-
-      enabled: (Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen) || mqttSubscriber
+      enabled: (Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen) || app.mqttSubscriber
 
       onClicked: {
-        if (mqttSubscriber)
+        if (app.mqttSubscriber)
           Cpp_MQTT_Client.toggleConnection()
         else
           Cpp_IO_Manager.toggleConnection()

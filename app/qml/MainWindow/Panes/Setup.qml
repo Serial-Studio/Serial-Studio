@@ -43,7 +43,6 @@ Widgets.Pane {
   property int userPaneWidth: 340
   readonly property int kMinPaneWidth: 280
   readonly property int maxItemWidth: layout.width - 8
-
   readonly property int displayedWidth: Math.max(kMinPaneWidth, userPaneWidth)
 
   //
@@ -210,7 +209,9 @@ Widgets.Pane {
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } RadioButton {
         Layout.leftMargin: -6
+        enabled: app.ioEnabled
         Layout.maximumHeight: 18
+        opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("No Parsing (Device Sends JSON Data)")
         checked: Cpp_AppState.operationMode === SerialStudio.DeviceSendsJSON
@@ -221,7 +222,9 @@ Widgets.Pane {
         }
       } RadioButton {
         Layout.leftMargin: -6
+        enabled: app.ioEnabled
         Layout.maximumHeight: 18
+        opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Quick Plot (Comma Separated Values)")
         checked: Cpp_AppState.operationMode === SerialStudio.QuickPlot
@@ -233,9 +236,11 @@ Widgets.Pane {
       } RadioButton {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
+        opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
         checked: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+        enabled: !Cpp_IO_Manager.isConnected && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen
         onCheckedChanged: {
           const shouldChange = Cpp_AppState.operationMode !== SerialStudio.ProjectFile
           if (checked && shouldChange)
@@ -361,6 +366,8 @@ Widgets.Pane {
 
           ComboBox {
             Layout.fillWidth: true
+            enabled: app.ioEnabled
+            opacity: enabled ? 1 : 0.5
             model: Cpp_IO_Manager.availableBuses
             currentIndex: Cpp_IO_Manager.busType
             displayText: qsTr("I/O Interface: %1").arg(currentText)
@@ -410,9 +417,9 @@ Widgets.Pane {
               }
 
               Image {
-                source: "qrc:/rcc/images/multi-device.svg"
                 fillMode: Image.PreserveAspectFit
                 Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/rcc/images/multi-device.svg"
               }
 
               Item {

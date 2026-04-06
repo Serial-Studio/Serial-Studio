@@ -21,7 +21,6 @@
 
 import QtCore
 import QtQuick
-import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -47,6 +46,15 @@ Item {
   signal startClicked()
   signal settingsClicked()
   signal extendWindowClicked()
+  signal newWorkspaceRequested()
+
+  //
+  // Focus the search field (called externally)
+  //
+  function focusSearch() {
+    searchField.forceActiveFocus(Qt.MouseFocusReason)
+    searchPopup.open()
+  }
 
   //
   // Taskbar background
@@ -94,6 +102,181 @@ Item {
       onClicked: {
         root.startClicked()
         taskBar.activeWindow = null
+      }
+    }
+
+    //
+    // Search field
+    //
+    Item {
+      id: searchContainer
+
+      Layout.preferredHeight: 22
+      Layout.preferredWidth: 172
+      Layout.alignment: Qt.AlignVCenter
+
+      function clearSearch() {
+        searchField.text = ""
+        searchField.focus = false
+      }
+
+      TextField {
+        id: searchField
+
+        rightPadding: 4
+        leftPadding: 26
+        anchors.fill: parent
+        font: Cpp_Misc_CommonFonts.uiFont
+        color: Cpp_ThemeManager.colors["text"]
+        verticalAlignment: Text.AlignVCenter
+        placeholderText: qsTr("Search widgets...")
+        selectionColor: Cpp_ThemeManager.colors["highlight"]
+        selectedTextColor: Cpp_ThemeManager.colors["highlighted_text"]
+        placeholderTextColor: Cpp_ThemeManager.colors["placeholder_text"]
+
+        background: Rectangle {
+          radius: 4
+          border.width: 1
+          color: Cpp_ThemeManager.colors["base"]
+          border.color: searchField.activeFocus
+                        ? Cpp_ThemeManager.colors["highlight"]
+                        : Cpp_ThemeManager.colors["window_border"]
+        }
+
+        onTextChanged: taskBar.searchFilter = text
+
+        Connections {
+          target: taskBar
+          function onSearchFilterChanged() {
+            if (taskBar.searchFilter === "" && searchField.text !== "")
+              searchField.text = ""
+          }
+
+          function onSearchDismissed() {
+            searchField.text = ""
+            searchField.focus = false
+            searchPopup.close()
+          }
+
+          function onActiveWindowChanged() {
+            if (taskBar.activeWindow && searchField.activeFocus)
+              taskBar.dismissSearch()
+          }
+        }
+
+        onActiveFocusChanged: {
+          if (!activeFocus)
+            searchPopup.close()
+        }
+
+        Keys.onEscapePressed: {
+          text = ""
+          focus = false
+        }
+
+        Button {
+          x: 2
+          enabled: false
+          icon.width: 14
+          icon.height: 14
+          background: Item {}
+          icon.source: "qrc:/rcc/icons/buttons/search.svg"
+          anchors.verticalCenter: parent.verticalCenter
+          icon.color: Cpp_ThemeManager.colors["button_text"]
+        }
+      }
+
+      Popup {
+        id: searchPopup
+
+        width: 320
+        padding: 4
+        y: -height - searchContainer.y + 1
+        visible: searchField.activeFocus
+                 && taskBar.searchResults.length > 0
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        background: Rectangle {
+          border.width: 1
+          color: Cpp_ThemeManager.colors["start_menu_background"]
+          border.color: Cpp_ThemeManager.colors["start_menu_border"]
+        }
+
+        contentItem: ListView {
+          id: searchResultsList
+
+          clip: true
+          spacing: 2
+          implicitHeight: Math.min(contentHeight, 300)
+          model: taskBar.searchResults
+          boundsBehavior: Flickable.StopAtBounds
+
+          delegate: Item {
+            id: searchDelegate
+
+            width: searchResultsList.width
+            height: 28
+
+            property bool hovered: _searchMa.containsMouse
+
+            Rectangle {
+              anchors.fill: parent
+              visible: searchDelegate.hovered
+              color: Cpp_ThemeManager.colors["start_menu_highlight"]
+            }
+
+            RowLayout {
+              spacing: 8
+              anchors.fill: parent
+              anchors.leftMargin: 6
+              anchors.rightMargin: 6
+
+              Image {
+                Layout.preferredWidth: 16
+                Layout.preferredHeight: 16
+                sourceSize: Qt.size(16, 16)
+                source: modelData["widgetIcon"]
+              }
+
+              Label {
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+                text: modelData["widgetName"]
+                font: Cpp_Misc_CommonFonts.uiFont
+                color: searchDelegate.hovered
+                       ? Cpp_ThemeManager.colors["start_menu_highlighted_text"]
+                       : Cpp_ThemeManager.colors["start_menu_text"]
+              }
+
+              Label {
+                opacity: 0.5
+                elide: Text.ElideRight
+                Layout.maximumWidth: 120
+                text: modelData["groupName"]
+                font: Cpp_Misc_CommonFonts.uiFont
+                color: searchDelegate.hovered
+                       ? Cpp_ThemeManager.colors["start_menu_highlighted_text"]
+                       : Cpp_ThemeManager.colors["start_menu_text"]
+              }
+            }
+
+            MouseArea {
+              id: _searchMa
+
+              hoverEnabled: true
+              anchors.fill: parent
+              onClicked: {
+                if (modelData["isWorkspace"])
+                  taskBar.activeGroupId = modelData["groupId"]
+                else
+                  taskBar.navigateToWidget(modelData["windowId"],
+                                           modelData["groupId"])
+
+                taskBar.dismissSearch()
+              }
+            }
+          }
+        }
       }
     }
 
@@ -194,6 +377,16 @@ Item {
               }
             }
 
+            TapHandler {
+              acceptedButtons: Qt.RightButton
+              onTapped: {
+                if (taskBar.activeGroupId >= 1000) {
+                  _tbRemoveWindowId = button.model.windowId
+                  _tbContextMenu.popup()
+                }
+              }
+            }
+
             function updateState() {
               const window = taskBar.windowData(model.windowId)
               if (window !== null) {
@@ -237,12 +430,41 @@ Item {
       id: _switcher
 
       textRole: "text"
-      model: taskBar.groupModel
+      Layout.maximumWidth: 220
+      model: taskBar.workspaceModel
       Layout.alignment: Qt.AlignVCenter
       currentIndex: taskBar.activeGroupIndex
       onCurrentIndexChanged: {
         if (currentIndex !== taskBar.activeGroupIndex)
           taskBar.activeGroupIndex = currentIndex
+      }
+
+      popup.width: 240
+      popup.x: _switcher.width - popup.width
+      popup.y: -popup.height - _switcher.y + 1
+
+      popup.background: Rectangle {
+        border.width: 1
+        color: Cpp_ThemeManager.colors["start_menu_background"]
+        border.color: Cpp_ThemeManager.colors["start_menu_border"]
+      }
+
+      popup.enter: Transition {
+        NumberAnimation {
+          property: "opacity"
+          from: 0; to: 1
+          duration: 150
+          easing.type: Easing.OutCubic
+        }
+      }
+
+      popup.exit: Transition {
+        NumberAnimation {
+          property: "opacity"
+          from: 1; to: 0
+          duration: 100
+          easing.type: Easing.InCubic
+        }
       }
 
       indicator: Item {}
@@ -253,32 +475,35 @@ Item {
       }
 
       delegate: ItemDelegate {
-        width: _switcher.width
+        width: _switcher.popup.width
 
         contentItem: RowLayout {
           spacing: 8
-          anchors.verticalCenter: parent.verticalCenter
-          Component.onCompleted: {
-            var itemWidth = Math.min(480, implicitWidth + 32)
-            if (_switcher.implicitWidth < itemWidth)
-              _switcher.implicitWidth = itemWidth
-          }
 
           Image {
-            source: modelData["icon"]
+            source: modelData["icon"] || ""
             sourceSize: Qt.size(16, 16)
             fillMode: Image.PreserveAspectFit
           }
 
           Label {
-            Layout.fillWidth: true
             text: modelData["text"]
             elide: Text.ElideRight
+            Layout.fillWidth: true
+            verticalAlignment: Text.AlignVCenter
             font: text === _switcher.currentText
                   ? Cpp_Misc_CommonFonts.boldUiFont
                   : Cpp_Misc_CommonFonts.uiFont
-            verticalAlignment: Text.AlignVCenter
+            color: hovered
+                   ? Cpp_ThemeManager.colors["start_menu_highlighted_text"]
+                   : Cpp_ThemeManager.colors["start_menu_text"]
           }
+        }
+
+        background: Rectangle {
+          color: hovered
+                 ? Cpp_ThemeManager.colors["start_menu_highlight"]
+                 : "transparent"
         }
       }
 
@@ -363,6 +588,21 @@ Item {
       }
     }
 
+    //
+    // New workspace button
+    //
+    Button {
+      icon.width: 16
+      icon.height: 16
+      background: Item{}
+      Layout.preferredWidth: 24
+      Layout.preferredHeight: 24
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/buttons/plus.svg"
+      icon.color: Cpp_ThemeManager.colors["taskbar_text"]
+      onClicked: root.newWorkspaceRequested()
+    }
+
     Item {
       implicitWidth: 4
     }
@@ -381,4 +621,19 @@ Item {
     height: 1
     color: Cpp_ThemeManager.colors["taskbar_border"]
   }
+
+  //
+  // Taskbar button context menu for removing widgets from user workspaces
+  //
+  property int _tbRemoveWindowId: -1
+
+  Menu {
+    id: _tbContextMenu
+
+    MenuItem {
+      text: qsTr("Remove from Workspace")
+      onTriggered: taskBar.removeWidgetFromActiveWorkspace(root._tbRemoveWindowId)
+    }
+  }
+
 }

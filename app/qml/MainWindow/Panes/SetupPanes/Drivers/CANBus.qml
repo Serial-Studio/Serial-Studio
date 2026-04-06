@@ -86,7 +86,7 @@ Item {
       columnSpacing: 4
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
 
       //
       // CAN Driver selector

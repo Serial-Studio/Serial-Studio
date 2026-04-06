@@ -35,6 +35,7 @@ Item {
   // Custom input properties
   //
   required property SS_Ui.TaskBar taskBar
+  property var taskbarView: null
   onTaskBarChanged: {
     taskBar.windowManager = _wm
   }
@@ -161,6 +162,68 @@ Item {
       visible: _wm.snapIndicatorVisible
       color: Cpp_ThemeManager.colors["snap_indicator_background"]
       border.color: Cpp_ThemeManager.colors["snap_indicator_border"]
+    }
+
+    //
+    // Empty workspace placeholder
+    //
+    Item {
+      z: _wm.zCounter + 20
+      anchors.fill: parent
+      visible: taskBar.activeGroupId >= 1000
+               && taskBar.taskbarButtons.rowCount() === 0
+
+      ColumnLayout {
+        spacing: 16
+        anchors.centerIn: parent
+
+        Image {
+          opacity: 0.4
+          sourceSize: Qt.size(64, 64)
+          Layout.alignment: Qt.AlignHCenter
+          source: "qrc:/rcc/icons/panes/dashboard.svg"
+        }
+
+        Label {
+          opacity: 0.8
+          color: Cpp_ThemeManager.colors["text"]
+          text: qsTr("Empty Workspace")
+          Layout.alignment: Qt.AlignHCenter
+          horizontalAlignment: Text.AlignHCenter
+          font: Cpp_Misc_CommonFonts.customUiFont(1.2, true)
+        }
+
+        Label {
+          opacity: 0.5
+          wrapMode: Text.WordWrap
+          Layout.maximumWidth: 300
+          font: Cpp_Misc_CommonFonts.uiFont
+          color: Cpp_ThemeManager.colors["text"]
+          Layout.alignment: Qt.AlignHCenter
+          horizontalAlignment: Text.AlignHCenter
+          text: qsTr("Use the search bar to find and add widgets, "
+                    + "or right-click a widget in another workspace "
+                    + "to add it here.")
+        }
+
+        Item {
+          implicitHeight: 4
+        }
+
+        Button {
+          topPadding: 8
+          leftPadding: 16
+          bottomPadding: 8
+          rightPadding: 20
+          text: qsTr("Search Widgets")
+          Layout.alignment: Qt.AlignHCenter
+          icon.source: "qrc:/rcc/icons/buttons/search.svg"
+          onClicked: {
+            if (root.taskbarView)
+              root.taskbarView.focusSearch()
+          }
+        }
+      }
     }
   }
 }

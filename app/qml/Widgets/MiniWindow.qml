@@ -96,6 +96,7 @@ Item {
   // Window state properties
   //
   property bool focused: false
+  property bool highlighted: false
 
   //
   // Caption button signals
@@ -571,6 +572,44 @@ Item {
           bottom: parent.bottom
         }
       }
+    }
+  }
+
+  //
+  // Highlight overlay — flashing border for search navigation
+  //
+  Rectangle {
+    id: highlightBorder
+
+    z: 999
+    border.width: 3
+    color: "transparent"
+    radius: root.radius
+    anchors.fill: parent
+    visible: root.highlighted
+    border.color: Cpp_ThemeManager.colors["highlight"]
+
+    SequentialAnimation on opacity {
+      id: flashAnim
+
+      loops: 3
+      running: root.highlighted
+
+      NumberAnimation {
+        from: 1
+        to: 0.2
+        duration: 400
+        easing.type: Easing.InOutSine
+      }
+
+      NumberAnimation {
+        from: 0.2
+        to: 1
+        duration: 400
+        easing.type: Easing.InOutSine
+      }
+
+      onFinished: root.highlighted = false
     }
   }
 }

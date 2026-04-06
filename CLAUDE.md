@@ -234,7 +234,7 @@ private:                         ← member variables (separate block)
 Key rules:
 - `[[nodiscard]]` on every non-void return, including `Q_INVOKABLE` getters.
 - **Never `Q_INVOKABLE void`** — use `public slots:` instead. `Q_INVOKABLE` is only for non-void returns.
-- Christmas-tree ordering (shortest→longest) within each block.
+- Christmas-tree ordering (shortest line→longest line) within each block.
 - `noexcept` on trivial const getters that only read members.
 - Non-singleton: constructor in `public:`, deleted operators right after.
 - **No in-header member initialization** (e.g., `int m_foo = 0;`). Initialize in the constructor member init list.
@@ -292,7 +292,7 @@ void ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
 
 ### QML
 
-- **Christmas-tree property order** (shortest→longest). `id` first, blank line after.
+- **Christmas-tree property order**: sort properties by **total line length** (shortest line first, longest last). `id` first, blank line after. This applies to the full rendered line including the value, not just the property name.
 - **Typography**: always `font: Cpp_Misc_CommonFonts.uiFont` etc. Never individual `font.*` sub-properties **except** in dashboard widgets that compute dynamic pixel sizes (e.g., zoom-dependent `font.pixelSize` + `font.family`). Use `font:` helpers wherever the size is static.
 - **Reactive bindings**: expose as `Q_PROPERTY` + `NOTIFY`. No comma-expression hacks.
 - **Enum access**: `SerialStudio.BusType`, `ProjectModel.SomeEnum`, `ProjectEditor.SomeEnum`.

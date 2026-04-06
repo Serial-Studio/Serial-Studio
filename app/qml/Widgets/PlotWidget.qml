@@ -455,6 +455,27 @@ Item {
       // Highlight colors for better contrast
       multiHighlightColor: Cpp_ThemeManager.colors["widget_highlight"]
       singleHighlightColor: Cpp_ThemeManager.colors["widget_highlighted_text"]
+
+      // Force refresh all theme colors on theme change
+      Connections {
+        target: Cpp_ThemeManager
+        function onThemeChanged() {
+          _theme.borderColors = [Cpp_ThemeManager.colors["widget_border"]]
+          _theme.backgroundColor = Cpp_ThemeManager.colors["widget_window"]
+          _theme.plotAreaBackgroundColor = Cpp_ThemeManager.colors["widget_base"]
+          _theme.axisX.subColor = Cpp_ThemeManager.colors["widget_border"]
+          _theme.axisY.subColor = Cpp_ThemeManager.colors["widget_border"]
+          _theme.axisX.mainColor = Cpp_ThemeManager.colors["widget_border"]
+          _theme.axisY.mainColor = Cpp_ThemeManager.colors["widget_border"]
+          _theme.axisX.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
+          _theme.axisY.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
+          _theme.labelTextColor = Cpp_ThemeManager.colors["widget_text"]
+          _theme.grid.subColor = Cpp_ThemeManager.colors["widget_border"]
+          _theme.grid.mainColor = Cpp_ThemeManager.colors["widget_border"]
+          _theme.multiHighlightColor = Cpp_ThemeManager.colors["widget_highlight"]
+          _theme.singleHighlightColor = Cpp_ThemeManager.colors["widget_highlighted_text"]
+        }
+      }
     }
 
     //

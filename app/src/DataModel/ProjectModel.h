@@ -65,6 +65,9 @@ class ProjectModel : public QObject {
   Q_PROPERTY(int sourceCount
              READ sourceCount
              NOTIFY sourcesChanged)
+  Q_PROPERTY(int workspaceCount
+             READ workspaceCount
+             NOTIFY workspacesChanged)
   Q_PROPERTY(int pointCount
              READ pointCount
              NOTIFY pointCountChanged)
@@ -84,6 +87,7 @@ signals:
   void frameParserCodeChanged();
   void activeGroupIdChanged();
   void widgetSettingsChanged();
+  void workspacesChanged();
 
   void groupAdded(int groupId);
   void groupDeleted();
@@ -133,6 +137,8 @@ public:
   [[nodiscard]] const std::vector<Group>& groups() const noexcept;
   [[nodiscard]] const std::vector<Action>& actions() const noexcept;
   [[nodiscard]] const std::vector<Source>& sources() const noexcept;
+  [[nodiscard]] const std::vector<Workspace>& workspaces() const noexcept;
+  [[nodiscard]] int workspaceCount() const noexcept;
 
   Q_INVOKABLE [[nodiscard]] bool askSave();
   Q_INVOKABLE [[nodiscard]] QVariantList sourcesForDiagram() const;
@@ -213,6 +219,15 @@ public slots:
   void setSelectedDataset(const DataModel::Dataset& dataset);
   void setSelectedOutputWidget(const DataModel::OutputWidget& widget);
 
+  void addWorkspace(const QString& title);
+  void deleteWorkspace(int workspaceId);
+  void renameWorkspace(int workspaceId, const QString& title);
+  void addWidgetToWorkspace(int workspaceId,
+                            int widgetType,
+                            int groupId,
+                            int relativeIndex);
+  void removeWidgetFromWorkspace(int workspaceId, int index);
+
   void addOutputControl(const SerialStudio::OutputWidgetType type);
   void addOutputPanel();
   void setOutputWidgetType(int type);
@@ -227,6 +242,7 @@ public slots:
 private:
   int nextDatasetIndex();
   bool finalizeProjectSave();
+  void clearTransientState();
 
 private:
   QString m_title;
@@ -247,6 +263,7 @@ private:
   std::vector<DataModel::Group> m_groups;
   std::vector<DataModel::Action> m_actions;
   std::vector<DataModel::Source> m_sources;
+  std::vector<DataModel::Workspace> m_workspaces;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

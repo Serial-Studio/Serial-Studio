@@ -20,7 +20,9 @@
 #include "Misc/ThemeManager.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
-#include "UI/Widgets/Output/Base.h"
+#ifdef BUILD_COMMERCIAL
+#  include "UI/Widgets/Output/Base.h"
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -186,7 +188,9 @@ void DataModel::TransmitTestDialog::evaluate()
 
   // Create a temporary JS engine with protocol helpers
   QJSEngine engine;
+#ifdef BUILD_COMMERCIAL
   Widgets::Output::Base::installProtocolHelpers(engine);
+#endif
 
   // Compile the transmit function
   const auto wrapped =
@@ -263,7 +267,6 @@ void DataModel::TransmitTestDialog::onThemeChanged()
  */
 void DataModel::TransmitTestDialog::onLanguageChanged()
 {
-  // Update all translatable widget texts
   m_hexCheckBox->setText(tr("HEX"));
   m_clearButton->setText(tr("Clear"));
   m_evaluateButton->setText(tr("Evaluate"));

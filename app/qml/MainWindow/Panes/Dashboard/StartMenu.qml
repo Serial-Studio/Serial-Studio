@@ -38,6 +38,24 @@ Popup {
   height: Math.max(gradientHeight, _layout.implicitHeight + 16)
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
+  enter: Transition {
+    NumberAnimation {
+      property: "opacity"
+      from: 0; to: 1
+      duration: 200
+      easing.type: Easing.OutCubic
+    }
+  }
+
+  exit: Transition {
+    NumberAnimation {
+      property: "opacity"
+      from: 1; to: 0
+      duration: 120
+      easing.type: Easing.InCubic
+    }
+  }
+
   //
   // Required data inputs
   //
@@ -63,6 +81,8 @@ Popup {
   // Signals
   //
   signal externalWindowClicked()
+  signal newWorkspaceRequested()
+  signal renameWorkspaceRequested(int workspaceId, string currentName)
 
   //
   // Custom components
@@ -157,19 +177,47 @@ Popup {
         if (_groups.popup === null) {
           _groups.popup = _subMenuComponent.createObject(root)
           popup.valueSelected.connect((value) => {
-                                        taskBar.activeGroupId = value
-                                        root.close()
-                                      })
+            if (value === "__new_workspace__") {
+              if (_groups.popup)
+                _groups.popup.close()
+
+              root.close()
+              root.newWorkspaceRequested()
+            } else {
+              taskBar.activeGroupId = value
+              root.close()
+            }
+          })
+
+          popup.valueRightClicked.connect((value, text, gx, gy) => {
+            if (value >= 1000) {
+              _wsContextId = value
+              _wsContextName = text
+              _wsContextMenu.popup()
+            }
+          })
         }
+
+        // Build model: workspace model + separator + "New Workspace..."
+        var items = taskBar.workspaceModel
+        var model = []
+        for (var i = 0; i < items.length; ++i)
+          model.push(items[i])
+
+        model.push({"id": "__separator__", "text": "",
+                     "icon": "", "separator": true})
+        model.push({"id": "__new_workspace__", "separator": false,
+                     "text": qsTr("New Workspace..."),
+                     "icon": "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"})
 
         // Update popup state
         _groups.popup.y = root.y
         _groups.popup.showCheckable = true
-        _groups.popup.model = taskBar.groupModel
+        _groups.popup.model = model
         _groups.popup.maximumHeight = root.height
         _groups.popup.x = root.x + root.width - 1
         _groups.popup.currentValue = taskBar.activeGroupId
-        _groups.popup.placeholderText = qsTr("No Groups Available")
+        _groups.popup.placeholderText = qsTr("No Workspaces Available")
 
         // Open the popup
         _groups.popup.open()
@@ -475,5 +523,37 @@ Popup {
       }
     }
   }
+
+  //
+  // Workspace context menu state
+  //
+  property int _wsContextId: -1
+  property string _wsContextName: ""
+
+  //
+  // Right-click context menu for user workspaces
+  //
+  Menu {
+    id: _wsContextMenu
+
+    MenuItem {
+      text: qsTr("Rename...")
+      onTriggered: {
+        root.close()
+        root.renameWorkspaceRequested(root._wsContextId,
+                                      root._wsContextName)
+      }
+    }
+
+    MenuItem {
+      text: qsTr("Delete")
+      onTriggered: {
+        taskBar.deleteWorkspace(root._wsContextId)
+        if (_groups.popup)
+          _groups.popup.close()
+      }
+    }
+  }
+
 }
 

@@ -46,14 +46,14 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("USB Device") + ":"
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
     } ComboBox {
       id: deviceCombo
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_USB.deviceList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       currentIndex: Cpp_IO_USB.deviceIndex
 
       onCurrentIndexChanged: {
@@ -76,13 +76,13 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Transfer Mode") + ":"
-      enabled: deviceCombo.currentIndex > 0 && !Cpp_IO_Manager.isConnected
+      enabled: deviceCombo.currentIndex > 0 && app.ioEnabled
     } ComboBox {
       id: modeCombo
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
-      enabled: deviceCombo.currentIndex > 0 && !Cpp_IO_Manager.isConnected
+      enabled: deviceCombo.currentIndex > 0 && app.ioEnabled
       model: [
         qsTr("Bulk Stream"),
         qsTr("Advanced (Bulk + Control)"),

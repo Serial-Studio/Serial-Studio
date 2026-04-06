@@ -53,6 +53,7 @@ Popup {
   // Signals
   //
   signal valueSelected(var value)
+  signal valueRightClicked(var value, var text, real globalX, real globalY)
 
   //
   // Internal state
@@ -98,6 +99,7 @@ Popup {
       required property var modelData
 
       readonly property bool isSeparator: modelData[root.valueRole] === "__separator__"
+                                        || modelData["separator"] === true
 
       height: isSeparator ? 9 : 24
       width: root.width - 16
@@ -180,10 +182,18 @@ Popup {
         hoverEnabled: true
         enabled: !isSeparator
         anchors.fill: parent
-        onClicked: {
-          root.currentValue = modelData[root.valueRole]
-          root.valueSelected(root.currentValue)
-          root.close()
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: (mouse) => {
+          if (mouse.button === Qt.RightButton) {
+            const global = mapToGlobal(mouse.x, mouse.y)
+            root.valueRightClicked(modelData[root.valueRole],
+                                   modelData[root.textRole],
+                                   global.x, global.y)
+          } else {
+            root.currentValue = modelData[root.valueRole]
+            root.valueSelected(root.currentValue)
+            root.close()
+          }
         }
       }
     }

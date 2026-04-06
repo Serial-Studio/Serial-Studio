@@ -46,14 +46,14 @@ Item {
     Label {
       text: qsTr("Protocol") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
     } ComboBox {
       id: _protocolCombo
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.protocolList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.protocolIndex
       onCurrentIndexChanged: {
         if (enabled) {
@@ -69,7 +69,7 @@ Item {
     Label {
       text: qsTr("Serial Port") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       id: _serialPortCombo
@@ -77,7 +77,7 @@ Item {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.serialPortList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
       currentIndex: Cpp_IO_Modbus.serialPortIndex
       onCurrentIndexChanged: {
@@ -94,7 +94,7 @@ Item {
     Label {
       text: qsTr("Baud Rate") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       id: _baudRateCombo
@@ -103,7 +103,7 @@ Item {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.baudRateList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
 
       property bool _initializing: true
@@ -186,13 +186,13 @@ Item {
     Label {
       text: qsTr("Parity") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.parityList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.parityIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
@@ -209,13 +209,13 @@ Item {
     Label {
       text: qsTr("Data Bits") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.dataBitsList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.dataBitsIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
@@ -232,13 +232,13 @@ Item {
     Label {
       text: qsTr("Stop Bits") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.stopBitsList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.stopBitsIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
@@ -255,7 +255,7 @@ Item {
     Label {
       text: qsTr("Host") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } TextField {
       id: _hostField
@@ -263,7 +263,7 @@ Item {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       placeholderText: qsTr("IP Address")
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
       Component.onCompleted: text = Cpp_IO_Modbus.host
 
@@ -279,7 +279,7 @@ Item {
     Label {
       text: qsTr("Port") + ":"
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } TextField {
       id: _portField
@@ -287,7 +287,7 @@ Item {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       placeholderText: qsTr("TCP Port")
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
       validator: IntValidator { bottom: 1; top: 65535 }
       Component.onCompleted: text = Cpp_IO_Modbus.port

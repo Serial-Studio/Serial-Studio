@@ -114,6 +114,7 @@ Item {
       title: qsTr("Dashboard %1").arg(windowNumber)
       color: Cpp_ThemeManager.colors["dashboard_background"]
 
+
       //
       // Window number for title display
       //
@@ -231,7 +232,15 @@ Item {
         }
       }
 
-      Component.onCompleted: _extWindow.displayWindow()
+      Component.onCompleted: {
+        var scr = Screen
+        if (scr) {
+          x = Math.round(scr.virtualX + (scr.width - width) / 2)
+          y = Math.round(scr.virtualY + (scr.height - height) / 2)
+        }
+
+        _extWindow.displayWindow()
+      }
     }
   }
 }

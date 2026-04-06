@@ -94,7 +94,7 @@ Item {
     anchors.fill: parent
     visible: _inDev.count > 0
     opacity: enabled ? 1 : 0.5
-    enabled: !Cpp_IO_Manager.isConnected
+    enabled: app.ioEnabled
 
     //
     // Input device selection

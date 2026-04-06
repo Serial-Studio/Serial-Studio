@@ -64,13 +64,13 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Mode") + ":"
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
     } ComboBox {
       id: modeCombo
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       model: [qsTr("Launch Process"), qsTr("Named Pipe")]
       currentIndex: Cpp_IO_Process.mode
 
@@ -98,12 +98,12 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Executable") + ":"
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
-      enabled: !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 0
+      enabled: app.ioEnabled
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 0
 
       TextField {
         id: execField
@@ -111,7 +111,7 @@ Item {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         text: Cpp_IO_Process.executable
-        enabled: !Cpp_IO_Manager.isConnected
+        enabled: app.ioEnabled
         placeholderText: qsTr("/path/to/executable")
 
         onTextChanged: {
@@ -131,7 +131,7 @@ Item {
       Button {
         text: qsTr("Browse")
         opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
+        enabled: app.ioEnabled
         onClicked: Cpp_IO_Process.browseExecutable()
       }
     }
@@ -142,17 +142,17 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Arguments") + ":"
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
-      enabled: !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 0
+      enabled: app.ioEnabled
     } TextField {
       id: argsField
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       text: Cpp_IO_Process.arguments
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       placeholderText: qsTr("--arg1 value1 --arg2 value2")
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 0
 
       onTextChanged: {
         if (enabled && text !== Cpp_IO_Process.arguments)
@@ -174,12 +174,12 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Working Dir") + ":"
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
-      enabled: !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 0
+      enabled: app.ioEnabled
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
-      visible: modeCombo.currentIndex === 0 && !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 0
 
       TextField {
         id: workDirField
@@ -187,7 +187,7 @@ Item {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         text: Cpp_IO_Process.workingDir
-        enabled: !Cpp_IO_Manager.isConnected
+        enabled: app.ioEnabled
         placeholderText: qsTr("(optional) /working/directory")
 
         onTextChanged: {
@@ -207,7 +207,7 @@ Item {
       Button {
         text: qsTr("Browse")
         opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
+        enabled: app.ioEnabled
         onClicked: Cpp_IO_Process.browseWorkingDir()
       }
     }
@@ -222,19 +222,19 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Pipe Path") + ":"
-      visible: modeCombo.currentIndex === 1 && !Cpp_IO_Manager.isConnected
-      enabled: !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 1
+      enabled: app.ioEnabled
     } RowLayout {
       spacing: 4
       Layout.fillWidth: true
-      visible: modeCombo.currentIndex === 1 && !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 1
 
       TextField {
         id: pipeField
 
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
+        enabled: app.ioEnabled
         placeholderText: Qt.platform.os === "windows"
                          ? "\\\\.\\pipe\\myapp"
                          : "/tmp/myapp.fifo"
@@ -257,7 +257,7 @@ Item {
       Button {
         text: qsTr("Browse")
         opacity: enabled ? 1 : 0.5
-        enabled: !Cpp_IO_Manager.isConnected
+        enabled: app.ioEnabled
         onClicked: Cpp_IO_Process.browsePipePath()
       }
     }
@@ -266,13 +266,13 @@ Item {
     // Pick running process button
     //
     Item {
-      visible: modeCombo.currentIndex === 1 && !Cpp_IO_Manager.isConnected
+      visible: modeCombo.currentIndex === 1
     } Button {
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       text: qsTr("Pick Running Process…")
-      enabled: !Cpp_IO_Manager.isConnected
-      visible: modeCombo.currentIndex === 1 && !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
+      visible: modeCombo.currentIndex === 1
       onClicked: {
         Cpp_IO_Process.refreshProcessList()
         picker.show()

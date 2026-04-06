@@ -896,35 +896,36 @@ void UI::Dashboard::removeTerminalWidget()
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
 {
-  // Toggle terminal widget using incremental registry updates when possible
-  if (m_terminalEnabled != enabled) {
-    m_terminalEnabled = enabled;
-    auto& registry    = WidgetRegistry::instance();
+  if (m_terminalEnabled == enabled)
+    return;
 
-    // Use incremental update if we have an active dashboard with widgets
-    if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
-      if (enabled) {
-        // Create terminal group and add to internal structures
-        DataModel::Group terminal;
-        terminal.widget  = "terminal";
-        terminal.title   = tr("Console");
-        terminal.groupId = static_cast<int>(m_lastFrame.groups.size());
+  m_terminalEnabled = enabled;
 
-        // Add to processed frame and widget groups
-        m_lastFrame.groups.push_back(terminal);
-        m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
+  // Use incremental update if we have an active dashboard with widgets
+  if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
+    auto& registry = WidgetRegistry::instance();
+    if (enabled) {
+      // Create terminal group and add to internal structures
+      DataModel::Group terminal;
+      terminal.widget  = "terminal";
+      terminal.title   = tr("Console");
+      terminal.groupId = static_cast<int>(m_lastFrame.groups.size());
 
-        // Register in widget registry and widget map
-        m_terminalWidgetId = registry.createWidget(
-          SerialStudio::DashboardTerminal, terminal.title, terminal.groupId, -1, true);
-        m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardTerminal, 0));
+      // Add to processed frame and widget groups
+      m_lastFrame.groups.push_back(terminal);
+      m_widgetGroups[SerialStudio::DashboardTerminal].append(terminal);
 
-        Q_EMIT widgetCountChanged();
-      } else {
-        removeTerminalWidget();
-        Q_EMIT widgetCountChanged();
-      }
+      // Register in widget registry and widget map
+      m_terminalWidgetId = registry.createWidget(
+        SerialStudio::DashboardTerminal, terminal.title,
+        terminal.groupId, -1, true);
+      m_widgetMap.insert(m_widgetCount++,
+                         qMakePair(SerialStudio::DashboardTerminal, 0));
+    } else {
+      removeTerminalWidget();
     }
+
+    Q_EMIT widgetCountChanged();
   }
 
   Q_EMIT terminalEnabledChanged();

@@ -534,5 +534,6 @@
         <file>icons/dashboard-large/output-panel.svg</file>
         <file>icons/buttons/dropdown.svg</file>
         <file>icons/code-editor/test.svg</file>
+        <file>icons/buttons/plus.svg</file>
     </qresource>
 </RCC>

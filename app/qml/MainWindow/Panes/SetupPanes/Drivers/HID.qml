@@ -46,14 +46,14 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("HID Device") + ":"
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
     } ComboBox {
       id: deviceCombo
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_HID.deviceList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       currentIndex: Cpp_IO_HID.deviceIndex
 
       onCurrentIndexChanged: {

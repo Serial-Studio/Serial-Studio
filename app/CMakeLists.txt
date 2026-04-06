@@ -394,6 +394,7 @@ set(QML_SOURCES
   qml/Dialogs/OnlineIconPicker.qml
   qml/Dialogs/Settings.qml
   qml/Dialogs/Welcome.qml
+  qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
   qml/Dialogs/ExamplesBrowser.qml
   qml/Dialogs/HelpCenter.qml

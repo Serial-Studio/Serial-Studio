@@ -116,8 +116,8 @@ Widgets.SmartDialog {
           radius: 2
           border.width: 1
           anchors.fill: parent
-          border.color: Cpp_ThemeManager.colors["groupbox_border"]
           color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
         }
 
         GridLayout {

@@ -73,7 +73,7 @@ public:
   Q_ENUM(WindowState)
 
   explicit TaskbarModel(QObject* parent = nullptr);
-  QHash<int, QByteArray> roleNames() const override;
+  [[nodiscard]] QHash<int, QByteArray> roleNames() const override;
 };
 
 /**
@@ -127,6 +127,16 @@ class Taskbar : public QQuickItem {
   Q_PROPERTY(QVariantList groupModel
              READ groupModel
              NOTIFY fullModelChanged)
+  Q_PROPERTY(QVariantList workspaceModel
+             READ workspaceModel
+             NOTIFY workspaceModelChanged)
+  Q_PROPERTY(QString searchFilter
+             READ searchFilter
+             WRITE setSearchFilter
+             NOTIFY searchFilterChanged)
+  Q_PROPERTY(QVariantList searchResults
+             READ searchResults
+             NOTIFY searchResultsChanged)
   Q_PROPERTY(UI::WindowManager* windowManager
              READ windowManager
              WRITE setWindowManager
@@ -139,10 +149,15 @@ class Taskbar : public QQuickItem {
 signals:
   void statesChanged();
   void fullModelChanged();
+  void searchDismissed();
+  void highlightWidget(int windowId);
+  void searchFilterChanged();
+  void searchResultsChanged();
   void activeWindowChanged();
   void windowStatesChanged();
   void activeGroupIdChanged();
   void windowManagerChanged();
+  void workspaceModelChanged();
   void taskbarButtonsChanged();
   void registeredWindowsChanged();
 
@@ -152,7 +167,10 @@ public:
 
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] int activeGroupIndex() const;
+  [[nodiscard]] QString searchFilter() const;
   [[nodiscard]] QVariantList groupModel() const;
+  [[nodiscard]] QVariantList searchResults() const;
+  [[nodiscard]] QVariantList workspaceModel() const;
   [[nodiscard]] QQuickItem* activeWindow() const;
 
   [[nodiscard]] TaskbarModel* fullModel() const;
@@ -161,11 +179,13 @@ public:
 
   [[nodiscard]] bool hasMaximizedWindow() const;
 
-  [[nodiscard]] Q_INVOKABLE QQuickItem* windowData(const int id) const;
-  [[nodiscard]] Q_INVOKABLE TaskbarModel::WindowState windowState(QQuickItem* window) const;
+  Q_INVOKABLE [[nodiscard]] QQuickItem* windowData(const int id) const;
+  Q_INVOKABLE [[nodiscard]] TaskbarModel::WindowState windowState(QQuickItem* window) const;
 
 public slots:
   void saveLayout();
+  void dismissSearch();
+  void setSearchFilter(const QString& filter);
   void setActiveGroupId(int groupId);
   void setActiveGroupIndex(int index);
   void showWindow(QQuickItem* window);
@@ -176,8 +196,15 @@ public slots:
   void setWindowManager(UI::WindowManager* manager);
   void registerWindow(const int id, QQuickItem* window);
   void setWindowState(const int id, const UI::TaskbarModel::WindowState state);
+  void navigateToWidget(int windowId, int groupId);
+  void createWorkspace(const QString& name);
+  void deleteWorkspace(int workspaceId);
+  void renameWorkspace(int workspaceId, const QString& name);
+  void addWidgetToActiveWorkspace(int windowId);
+  void removeWidgetFromActiveWorkspace(int windowId);
 
 private slots:
+  void onTerminalToggled();
   void onRegistryCleared();
   void onBatchUpdateCompleted();
   void onWidgetCreated(UI::WidgetID id, const UI::WidgetInfo& info);
@@ -187,15 +214,17 @@ private:
   void rebuildModel();
   void connectToRegistry();
   void mapWidgetToWindow(UI::WidgetID wid, int windowId);
-  QStandardItem* findItemByWindowId(int windowId, QStandardItem* parentItem = nullptr) const;
-  QStandardItem* findItemByWidgetId(UI::WidgetID widgetId,
-                                    QStandardItem* parentItem = nullptr) const;
-  QStandardItem* findGroupItemByGroupId(int groupId) const;
-  QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
+  [[nodiscard]] QStandardItem* findItemByWindowId(int windowId,
+                                                    QStandardItem* parentItem = nullptr) const;
+  [[nodiscard]] QStandardItem* findItemByWidgetId(UI::WidgetID widgetId,
+                                                    QStandardItem* parentItem = nullptr) const;
+  [[nodiscard]] QStandardItem* findGroupItemByGroupId(int groupId) const;
+  [[nodiscard]] QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
 
   int m_activeGroupId;
   bool m_rebuildInProgress;
   bool m_batchUpdateInProgress;
+  QString m_searchFilter;
 
   QQuickItem* m_activeWindow;
   UI::WindowManager* m_windowManager;

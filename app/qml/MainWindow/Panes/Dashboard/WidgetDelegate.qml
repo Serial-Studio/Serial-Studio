@@ -63,15 +63,35 @@ Widgets.MiniWindow {
   onExternalWindowClicked: externalWindowLoader.active = true
 
   //
+  // Right-click context menu for workspace management
+  //
+  TapHandler {
+    acceptedButtons: Qt.RightButton
+    onTapped: widgetContextMenu.popup()
+  }
+
+  Menu {
+    id: widgetContextMenu
+
+    MenuItem {
+      text: qsTr("Remove from Workspace")
+      enabled: taskBar.activeGroupId >= 1000
+      onTriggered: {
+        taskBar.removeWidgetFromActiveWorkspace(root.widgetIndex)
+      }
+    }
+  }
+
+  //
   // Auto-layout hacks to avoid issues with animations
   //
   onStateChanged: _timer.start()
   Timer {
     id: _timer
 
-    interval: 250
     repeat: false
     running: false
+    interval: 250
     onTriggered: windowManager.triggerLayoutUpdate()
   }
 
@@ -158,6 +178,11 @@ Widgets.MiniWindow {
     function onWindowStatesChanged() {
       updateWindowState()
     }
+
+    function onHighlightWidget(windowId) {
+      if (windowId === root.widgetIndex)
+        root.highlighted = true
+    }
   }
 
   //
@@ -239,6 +264,14 @@ Widgets.MiniWindow {
         minimumWidth: root.minimumWidth
         minimumHeight: root.minimumHeight
         onClosing: externalWindowLoader.active = false
+
+        Component.onCompleted: {
+          var screen = Screen
+          if (screen) {
+            x = Math.round(screen.virtualX + (screen.width - width) / 2)
+            y = Math.round(screen.virtualY + (screen.height - height) / 2)
+          }
+        }
 
         property bool hasToolbar: false
         readonly property bool focused: true

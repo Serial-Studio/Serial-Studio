@@ -279,7 +279,6 @@ void IO::Protocols::YMODEM::sendDataBlock()
   // Read the next 1K block, send EOT if file is exhausted
   QByteArray data = m_file.read(1024);
   if (data.isEmpty()) {
-    // File fully read, send EOT
     m_yState = YState::WaitingForFirstEOTResponse;
     Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
     Q_EMIT statusMessage(tr("Sending first EOT..."));

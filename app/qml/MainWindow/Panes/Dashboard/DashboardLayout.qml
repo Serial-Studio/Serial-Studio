@@ -28,6 +28,7 @@ import SerialStudio
 import SerialStudio.UI as SS_Ui
 
 import "../../../Widgets" as Widgets
+import "../../../Dialogs" as Dialogs
 
 Widgets.Pane {
   id: root
@@ -230,6 +231,7 @@ Widgets.Pane {
         id: _canvas
 
         taskBar: root.taskBar
+        taskbarView: _taskbar
         Layout.topMargin: -1
         Layout.leftMargin: -1
         Layout.rightMargin: -1
@@ -246,6 +248,7 @@ Widgets.Pane {
 
         taskBar: root.taskBar
         Layout.fillWidth: true
+        onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
         onStartClicked: {
           if (_startMenu.visible)
             _startMenu.close()
@@ -265,6 +268,15 @@ Widgets.Pane {
       isExternalWindow: root.isExternalWindow
       y: parent.height - height - _taskbar.height + 1
       onExternalWindowClicked: root.externalWindowClicked()
+      onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
+      onRenameWorkspaceRequested: (wsId, name) => _wsDialog.openRename(root.taskBar, wsId, name)
     }
+  }
+
+  //
+  // Shared workspace dialog (accessible from Taskbar + StartMenu)
+  //
+  Dialogs.WorkspaceDialog {
+    id: _wsDialog
   }
 }

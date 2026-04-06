@@ -64,14 +64,14 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("COM Port") + ":"
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
     } ComboBox {
       id: _portCombo
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.portList
-      enabled: !Cpp_IO_Manager.isConnected
+      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Serial.portIndex
       editable: Qt.platform.os !== "windows"
       onCurrentIndexChanged: {
@@ -93,11 +93,14 @@ Item {
     Label {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Baud Rate") + ":"
+      enabled: app.ioEnabled
     } ComboBox {
       id: _baudCombo
 
       editable: true
       Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
 
       property bool _initializing: true
 
@@ -175,10 +178,14 @@ Item {
     //
     Label {
       text: qsTr("Data Bits") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
     } ComboBox {
       id: _dataCombo
 
       Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
       model: Cpp_IO_Serial.dataBitsList
       currentIndex: Cpp_IO_Serial.dataBitsIndex
       onCurrentIndexChanged: {
@@ -192,10 +199,14 @@ Item {
     //
     Label {
       text: qsTr("Parity") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
     } ComboBox {
       id: _parityCombo
 
       Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
       model: Cpp_IO_Serial.parityList
       currentIndex: Cpp_IO_Serial.parityIndex
       onCurrentIndexChanged: {
@@ -209,10 +220,14 @@ Item {
     //
     Label {
       text: qsTr("Stop Bits") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
     } ComboBox {
       id: _stopBitsCombo
 
       Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
       model: Cpp_IO_Serial.stopBitsList
       currentIndex: Cpp_IO_Serial.stopBitsIndex
       onCurrentIndexChanged: {
@@ -226,10 +241,14 @@ Item {
     //
     Label {
       text: qsTr("Flow Control") + ":"
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
     } ComboBox {
       id: _flowCombo
 
       Layout.fillWidth: true
+      opacity: enabled ? 1 : 0.5
+      enabled: app.ioEnabled
       model: Cpp_IO_Serial.flowControlList
       currentIndex: Cpp_IO_Serial.flowControlIndex
       onCurrentIndexChanged: {

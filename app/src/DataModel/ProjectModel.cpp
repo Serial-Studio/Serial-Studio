@@ -337,6 +337,23 @@ int DataModel::ProjectModel::sourceCount() const noexcept
 }
 
 /**
+ * @brief Returns a const reference to the vector of user-defined workspaces.
+ */
+const std::vector<DataModel::Workspace>&
+DataModel::ProjectModel::workspaces() const noexcept
+{
+  return m_workspaces;
+}
+
+/**
+ * @brief Returns the number of user-defined workspaces in the project.
+ */
+int DataModel::ProjectModel::workspaceCount() const noexcept
+{
+  return static_cast<int>(m_workspaces.size());
+}
+
+/**
  * @brief Persists a single key/value setting for a widget to the project file.
  *
  * No-op when the operation mode is not ProjectFile, when no file path is set,
@@ -705,6 +722,11 @@ bool DataModel::ProjectModel::askSave()
   if (!modified())
     return true;
 
+  // Nothing to save if not in ProjectFile mode and no file loaded
+  const auto opMode = AppState::instance().operationMode();
+  if (opMode != SerialStudio::ProjectFile && m_filePath.isEmpty())
+    return true;
+
   // In API mode, silently discard changes
   if (m_suppressMessageBoxes) {
     qWarning() << "[ProjectModel] Discarding unsaved changes (API mode)";
@@ -894,6 +916,15 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
   json.insert(Keys::Sources, sourcesArray);
 
+  // Serialize user-defined workspaces
+  if (!m_workspaces.empty()) {
+    QJsonArray workspacesArray;
+    for (const auto& ws : std::as_const(m_workspaces))
+      workspacesArray.append(DataModel::serialize(ws));
+
+    json.insert(Keys::Workspaces, workspacesArray);
+  }
+
   if (!m_widgetSettings.isEmpty())
     json.insert(Keys::WidgetSettings, m_widgetSettings);
 
@@ -932,6 +963,24 @@ void DataModel::ProjectModel::setupExternalConnections()
 
     Q_EMIT pointCountChanged();
   });
+
+  // Clear transient workspaces and widget settings on disconnect in
+  // non-project modes (QuickPlot, DeviceSendsJSON). These modes have no
+  // backing file, so workspace data is ephemeral and should not accumulate
+  // across sessions or trigger "save changes?" prompts.
+  connect(&IO::ConnectionManager::instance(),
+          &IO::ConnectionManager::connectedChanged, this, [this] {
+    if (!IO::ConnectionManager::instance().isConnected())
+      clearTransientState();
+  });
+
+#ifdef BUILD_COMMERCIAL
+  connect(&MQTT::Client::instance(),
+          &MQTT::Client::connectedChanged, this, [this] {
+    if (!MQTT::Client::instance().isConnected())
+      clearTransientState();
+  });
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -947,6 +996,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_groups.clear();
   m_actions.clear();
   m_sources.clear();
+  m_workspaces.clear();
 
   m_frameEndSequence      = "\\n";
   m_checksumAlgorithm     = "";
@@ -978,6 +1028,7 @@ void DataModel::ProjectModel::newJsonFile()
   Q_EMIT sourcesChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
+  Q_EMIT workspacesChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
@@ -1176,6 +1227,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     m_groups.clear();
     m_actions.clear();
     m_sources.clear();
+    m_workspaces.clear();
     m_widgetSettings = QJsonObject();
   } else
     newJsonFile();
@@ -1280,6 +1332,17 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
 
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
+  // Deserialize user-defined workspaces (backward-compat: missing key = empty)
+  m_workspaces.clear();
+  if (json.contains(Keys::Workspaces)) {
+    const auto wsArray = json.value(Keys::Workspaces).toArray();
+    for (const auto& val : wsArray) {
+      DataModel::Workspace ws;
+      if (DataModel::read(ws, val.toObject()))
+        m_workspaces.push_back(ws);
+    }
+  }
+
   // Read point count from root level (new format) or legacy widgetSettings key
   m_pointCount = UI::Dashboard::instance().points();
   if (json.contains(Keys::PointCount)) {
@@ -1368,6 +1431,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   Q_EMIT sourcesChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
+  Q_EMIT workspacesChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
@@ -2585,8 +2649,146 @@ void DataModel::ProjectModel::setGroupLayout(const int groupId, const QJsonObjec
 }
 
 //--------------------------------------------------------------------------------------------------
+// Workspace CRUD
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Creates a new user-defined workspace with the given title.
+ *
+ * Assigns the next available workspace ID (max existing + 1, starting at 1000
+ * to avoid collision with auto-generated group-based workspace IDs).
+ */
+void DataModel::ProjectModel::addWorkspace(const QString& title)
+{
+  int maxId = 999;
+  for (const auto& ws : m_workspaces)
+    if (ws.workspaceId > maxId)
+      maxId = ws.workspaceId;
+
+  DataModel::Workspace ws;
+  ws.workspaceId = maxId + 1;
+  ws.title       = title.simplified();
+  m_workspaces.push_back(ws);
+
+  setModified(true);
+  Q_EMIT workspacesChanged();
+}
+
+/**
+ * @brief Deletes the workspace with the given ID.
+ */
+void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
+{
+  auto it = std::find_if(m_workspaces.begin(), m_workspaces.end(),
+                         [workspaceId](const auto& ws) {
+                           return ws.workspaceId == workspaceId;
+                         });
+
+  if (it == m_workspaces.end())
+    return;
+
+  m_workspaces.erase(it);
+  setModified(true);
+  Q_EMIT workspacesChanged();
+}
+
+/**
+ * @brief Renames the workspace with the given ID.
+ */
+void DataModel::ProjectModel::renameWorkspace(int workspaceId,
+                                              const QString& title)
+{
+  for (auto& ws : m_workspaces) {
+    if (ws.workspaceId == workspaceId) {
+      ws.title = title.simplified();
+      setModified(true);
+      Q_EMIT workspacesChanged();
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Appends a widget reference to the specified workspace.
+ */
+void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
+                                                   int widgetType,
+                                                   int groupId,
+                                                   int relativeIndex)
+{
+  for (auto& ws : m_workspaces) {
+    if (ws.workspaceId != workspaceId)
+      continue;
+
+    // Avoid duplicates
+    for (const auto& ref : ws.widgetRefs)
+      if (ref.widgetType == widgetType && ref.groupId == groupId
+          && ref.relativeIndex == relativeIndex)
+        return;
+
+    DataModel::WidgetRef ref;
+    ref.widgetType    = widgetType;
+    ref.groupId       = groupId;
+    ref.relativeIndex = relativeIndex;
+    ws.widgetRefs.push_back(ref);
+
+    setModified(true);
+    Q_EMIT workspacesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Removes a widget reference from the specified workspace by index.
+ */
+void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId,
+                                                        int index)
+{
+  for (auto& ws : m_workspaces) {
+    if (ws.workspaceId != workspaceId)
+      continue;
+
+    if (index < 0
+        || static_cast<size_t>(index) >= ws.widgetRefs.size())
+      return;
+
+    ws.widgetRefs.erase(ws.widgetRefs.begin() + index);
+    setModified(true);
+    Q_EMIT workspacesChanged();
+    return;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Clears workspaces and widget settings when disconnecting in
+ *        non-project modes (QuickPlot / DeviceSendsJSON).
+ *
+ * In these modes there is no backing project file, so any workspaces or
+ * widget settings created during a session are transient and should not
+ * survive across connection cycles.
+ */
+void DataModel::ProjectModel::clearTransientState()
+{
+  const auto opMode = AppState::instance().operationMode();
+  if (opMode == SerialStudio::ProjectFile)
+    return;
+
+  if (!m_workspaces.empty()) {
+    m_workspaces.clear();
+    Q_EMIT workspacesChanged();
+  }
+
+  if (!m_widgetSettings.isEmpty()) {
+    m_widgetSettings = QJsonObject();
+    Q_EMIT widgetSettingsChanged();
+  }
+
+  setModified(false);
+}
 
 /**
  * @brief Returns the next available dataset frame index.

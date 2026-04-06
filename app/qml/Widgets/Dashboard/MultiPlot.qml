@@ -90,9 +90,10 @@ Item {
 
     if (s["visibleCurves"] !== undefined) {
       const curves = s["visibleCurves"]
-
-      for (let i = 0; i < curves.length && i < root.model.count; ++i)
-        root.model.modifyCurveVisibility(i, curves[i])
+      if (curves !== undefined && curves !== null) {
+        for (let i = 0; i < curves.length && i < root.model.count; ++i)
+          root.model.modifyCurveVisibility(i, curves[i])
+      }
     }
   }
 
@@ -128,7 +129,7 @@ Item {
         const count = plot.graph.seriesList.length
         for (let i = 0; i < count; ++i) {
           let ptr = plot.graph.seriesList[i]
-          if (ptr.visible)
+          if (ptr.curveVisible)
             root.model.draw(ptr, ptr.curveIndex)
           else
             ptr.clear()
@@ -308,8 +309,9 @@ Item {
         model: root.model.count
         delegate: LineSeries {
           property int curveIndex: index
+          property bool curveVisible: root.interpolate
+                                     && root.model.visibleCurves[index]
           Component.onCompleted: plot.graph.addSeries(this)
-          visible: root.interpolate && root.model.visibleCurves[index]
         }
       }
 
@@ -320,8 +322,9 @@ Item {
         model: root.model.count
         delegate: ScatterSeries {
           property int curveIndex: index
+          property bool curveVisible: !root.interpolate
+                                     && root.model.visibleCurves[index]
           Component.onCompleted: plot.graph.addSeries(this)
-          visible: !root.interpolate && root.model.visibleCurves[index]
           pointDelegate: Rectangle {
             width: 2
             height: 2
@@ -373,7 +376,7 @@ Item {
                   if (checked !== root.model.visibleCurves[index]) {
                     root.model.modifyCurveVisibility(index, checked)
                     Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "visibleCurves",
-                                                       root.model.visibleCurves)
+                                                            root.model.visibleCurves)
                   }
                 }
                 Layout.fillWidth: true
