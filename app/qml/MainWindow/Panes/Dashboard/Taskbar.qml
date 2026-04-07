@@ -47,6 +47,7 @@ Item {
   signal settingsClicked()
   signal extendWindowClicked()
   signal newWorkspaceRequested()
+  signal editWorkspaceRequested(int workspaceId, string currentName)
 
   //
   // Focus the search field (called externally)
@@ -585,6 +586,32 @@ Item {
       onClicked: {
         taskBar.activeWindow = null
         taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
+      }
+    }
+
+    //
+    // Edit workspace button (only for user workspaces)
+    //
+    Button {
+      icon.width: 16
+      icon.height: 16
+      background: Item{}
+      Layout.preferredWidth: 24
+      Layout.preferredHeight: 24
+      opacity: enabled ? 1 : 0.5
+      Layout.alignment: Qt.AlignVCenter
+      icon.source: "qrc:/rcc/icons/buttons/wrench.svg"
+      enabled: taskBar && taskBar.activeGroupId >= 1000
+      icon.color: Cpp_ThemeManager.colors["taskbar_text"]
+      onClicked: {
+        var model = taskBar.workspaceModel
+        for (var i = 0; i < model.length; ++i) {
+          if (model[i]["id"] === taskBar.activeGroupId) {
+            root.editWorkspaceRequested(taskBar.activeGroupId,
+                                        model[i]["text"])
+            return
+          }
+        }
       }
     }
 

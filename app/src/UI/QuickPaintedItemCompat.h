@@ -66,33 +66,18 @@ class QuickPaintedItemCompat : public QCanvasPainterItem {
 
 public:
   explicit QuickPaintedItemCompat(QQuickItem* parent = nullptr);
-
-  /**
-   * @brief Subclasses implement this to paint with QPainter.
-   *
-   * Called from the render thread via the image-bridge renderer.
-   * The painter targets an offscreen QImage whose size matches the item.
-   */
   virtual void paint(QPainter* painter) = 0;
 
-  // Stubs for QQuickPaintedItem API used by existing constructors
-  void setMipmap(bool) {}
+  void setMipmap(bool enabled);
+  void setOpaquePainting(bool enabled);
+  void setRenderTarget(int target);
 
-  void setOpaquePainting(bool) {}
-
-  void setRenderTarget(int) {}
-
-  // Schedule a repaint and mark the item as needing a CPU re-render
-  void update()
-  {
-    m_needsRepaint = true;
-    QCanvasPainterItem::update();
-  }
-
-  void update(const QRect&) { update(); }
+  void update();
+  void update(const QRect& rect);
 
 protected:
   [[nodiscard]] QCanvasPainterItemRenderer* createItemRenderer() const override;
+  void geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
 private:
   friend class QuickPaintedItemCompatRenderer;

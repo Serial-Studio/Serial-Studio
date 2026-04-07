@@ -910,27 +910,24 @@
     ],
     "title": "Dual Drone Telemetry",
     "widgetSettings": {
-        "4:3:-1": {
-            "integrateValues": false
-        },
-        "4:9:-1": {
-            "integrateValues": false
-        },
-        "5:1:-1": {
-            "autoCenter": true
+        "5:7:-1": {
+            "autoCenter": false,
+            "mapType": 0,
+            "showNasaWeather": true,
+            "showWeather": false
         },
         "layout:-1": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
-                    2,
                     6,
                     4,
+                    2,
                     8,
-                    3,
-                    7,
+                    9,
                     5,
-                    9
+                    3,
+                    7
                 ]
             }
         },
@@ -977,20 +974,25 @@
                 ]
             }
         },
-        "layout:0": {
+        "layout:1000": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
-                    6
+                    2,
+                    6,
+                    4,
+                    8
                 ]
             }
         },
-        "layout:1": {
+        "layout:1001": {
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
-                    4,
-                    10
+                    5,
+                    7,
+                    3,
+                    9
                 ]
             }
         },
@@ -1002,64 +1004,6 @@
                 ]
             }
         },
-        "layout:13": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    9
-                ]
-            }
-        },
-        "layout:2": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    34
-                ]
-            }
-        },
-        "layout:3": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    2,
-                    0
-                ]
-            }
-        },
-        "layout:4": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    11,
-                    12,
-                    13,
-                    22,
-                    28,
-                    29
-                ]
-            }
-        },
-        "layout:5": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    14,
-                    15,
-                    23,
-                    24,
-                    30
-                ]
-            }
-        },
-        "layout:6": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    7
-                ]
-            }
-        },
         "layout:7": {
             "data": {
                 "autoLayout": true,
@@ -1068,14 +1012,60 @@
                     16
                 ]
             }
-        },
-        "layout:8": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    35
-                ]
-            }
         }
-    }
+    },
+    "workspaces": [
+        {
+            "title": "Alpha Overview",
+            "widgetRefs": [
+                {
+                    "groupId": 3,
+                    "relativeIndex": 0,
+                    "widgetType": 4
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 14
+                },
+                {
+                    "groupId": 12,
+                    "relativeIndex": 0,
+                    "widgetType": 15
+                }
+            ],
+            "workspaceId": 1000
+        },
+        {
+            "title": "Bravo Overview",
+            "widgetRefs": [
+                {
+                    "groupId": 9,
+                    "relativeIndex": 1,
+                    "widgetType": 4
+                },
+                {
+                    "groupId": 7,
+                    "relativeIndex": 1,
+                    "widgetType": 5
+                },
+                {
+                    "groupId": 6,
+                    "relativeIndex": 1,
+                    "widgetType": 14
+                },
+                {
+                    "groupId": 13,
+                    "relativeIndex": 1,
+                    "widgetType": 15
+                }
+            ],
+            "workspaceId": 1001
+        }
+    ]
 }

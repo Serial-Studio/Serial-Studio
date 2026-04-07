@@ -886,9 +886,9 @@ QJsonObject IO::Drivers::Modbus::buildProject() const
 
     // Group title from register type and start address
     const QString type_name = (reg_group.registerType < type_names.count())
-                                ? type_names[reg_group.registerType]
-                                : tr("Unknown");
-    group.title = QStringLiteral("%1 @ %2").arg(type_name).arg(reg_group.startAddress);
+                              ? type_names[reg_group.registerType]
+                              : tr("Unknown");
+    group.title             = QStringLiteral("%1 @ %2").arg(type_name).arg(reg_group.startAddress);
 
     // Determine if this is a register type (16-bit) or bit type (coil/discrete)
     const bool is_reg = (reg_group.registerType <= 1);
@@ -986,8 +986,8 @@ QString IO::Drivers::Modbus::buildFrameParser() const
     const bool is_reg     = (reg_group.registerType <= 1);
 
     const QString type_name = (reg_group.registerType < type_names.count())
-                                ? type_names[reg_group.registerType]
-                                : QStringLiteral("Unknown");
+                              ? type_names[reg_group.registerType]
+                              : QStringLiteral("Unknown");
 
     code += QStringLiteral("    case %1: // %2 @ %3, count=%4\n")
               .arg(g)

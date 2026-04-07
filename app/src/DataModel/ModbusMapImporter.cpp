@@ -323,25 +323,24 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
       continue;
 
     RegisterEntry entry;
-    entry.address = cols[col_addr].trimmed().remove('"').toUShort();
-    entry.name    = (col_name >= 0 && col_name < cols.count())
-                      ? cols[col_name].trimmed().remove('"')
-                      : QStringLiteral("Register %1").arg(entry.address);
+    entry.address      = cols[col_addr].trimmed().remove('"').toUShort();
+    entry.name         = (col_name >= 0 && col_name < cols.count())
+                         ? cols[col_name].trimmed().remove('"')
+                         : QStringLiteral("Register %1").arg(entry.address);
     entry.registerType = (col_type >= 0 && col_type < cols.count())
-                           ? parseRegisterType(cols[col_type].trimmed().remove('"'))
-                           : 0;
-    entry.dataType = (col_data_type >= 0 && col_data_type < cols.count())
-                       ? cols[col_data_type].trimmed().remove('"').toLower()
-                       : QStringLiteral("uint16");
-    entry.units    = (col_units >= 0 && col_units < cols.count())
-                       ? cols[col_units].trimmed().remove('"')
-                       : QString();
-    entry.min      = (col_min >= 0 && col_min < cols.count())
-                       ? cols[col_min].trimmed().remove('"').toDouble()
-                       : 0;
+                         ? parseRegisterType(cols[col_type].trimmed().remove('"'))
+                         : 0;
+    entry.dataType     = (col_data_type >= 0 && col_data_type < cols.count())
+                         ? cols[col_data_type].trimmed().remove('"').toLower()
+                         : QStringLiteral("uint16");
+    entry.units        = (col_units >= 0 && col_units < cols.count())
+                         ? cols[col_units].trimmed().remove('"')
+                         : QString();
+    entry.min =
+      (col_min >= 0 && col_min < cols.count()) ? cols[col_min].trimmed().remove('"').toDouble() : 0;
     entry.max = (col_max >= 0 && col_max < cols.count())
-                  ? cols[col_max].trimmed().remove('"').toDouble()
-                  : 65535;
+                ? cols[col_max].trimmed().remove('"').toDouble()
+                : 65535;
     entry.scale =
       (col_scale >= 0 && col_scale < cols.count() && !cols[col_scale].trimmed().isEmpty())
         ? cols[col_scale].trimmed().remove('"').toDouble()
@@ -714,8 +713,8 @@ QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlo
               .arg(block.startAddress);
 
     for (int e = 0; e < block.entries.count(); ++e) {
-      const auto& entry   = block.entries[e];
-      const int reg_off   = entry.address - block.startAddress;
+      const auto& entry = block.entries[e];
+      const int reg_off = entry.address - block.startAddress;
 
       if (is_bit) {
         // Coils/discrete: bit extraction

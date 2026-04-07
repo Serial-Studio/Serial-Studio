@@ -98,9 +98,7 @@ IO::FrameConfig AppState::frameConfig() const noexcept
  */
 void AppState::setupExternalConnections()
 {
-  // Connect project model signals to update frame config reactively
   auto& pm = DataModel::ProjectModel::instance();
-
   connect(&pm, &DataModel::ProjectModel::jsonFileChanged, this, &AppState::onProjectLoaded);
   connect(&pm, &DataModel::ProjectModel::frameDetectionChanged, this, &AppState::onProjectLoaded);
 }
@@ -113,9 +111,7 @@ void AppState::setupExternalConnections()
  */
 void AppState::restoreLastProject()
 {
-  // Load the last opened project file if it still exists
-  auto& pm = DataModel::ProjectModel::instance();
-
+  auto& pm                 = DataModel::ProjectModel::instance();
   const QString saved_path = m_settings.value("project_file_path", "").toString();
   if (!saved_path.isEmpty() && QFileInfo::exists(saved_path))
     pm.openJsonFile(saved_path);
@@ -129,7 +125,6 @@ void AppState::restoreLastProject()
  */
 void AppState::setOperationMode(SerialStudio::OperationMode mode)
 {
-  // Guard against duplicate assignments
   if (m_operationMode == mode)
     return;
 
@@ -156,7 +151,6 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
  */
 void AppState::onProjectLoaded()
 {
-  // Update stored path and notify QML bindings
   const QString path = DataModel::ProjectModel::instance().jsonFilePath();
   if (m_projectFilePath != path) {
     m_projectFilePath = path;
@@ -175,7 +169,6 @@ void AppState::onProjectLoaded()
  */
 void AppState::onProjectFileCleared()
 {
-  // Nothing to do if already cleared
   if (m_projectFilePath.isEmpty())
     return;
 
@@ -196,7 +189,6 @@ void AppState::onProjectFileCleared()
  */
 IO::FrameConfig AppState::deriveFrameConfig() const
 {
-  // Build config from current mode and project source[0]
   IO::FrameConfig cfg;
   cfg.operationMode = m_operationMode;
 

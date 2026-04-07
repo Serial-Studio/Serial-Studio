@@ -190,7 +190,7 @@ Popup {
           })
 
           popup.valueRightClicked.connect((value, text, gx, gy) => {
-            if (value >= 1000) {
+            if (value >= 0) {
               _wsContextId = value
               _wsContextName = text
               _wsContextMenu.popup()
@@ -531,13 +531,15 @@ Popup {
   property string _wsContextName: ""
 
   //
-  // Right-click context menu for user workspaces
+  // Right-click context menu for workspaces
   //
   Menu {
     id: _wsContextMenu
 
     MenuItem {
-      text: qsTr("Rename...")
+      text: qsTr("Edit...")
+      visible: root._wsContextId >= 1000
+      height: visible ? implicitHeight : 0
       onTriggered: {
         root.close()
         root.renameWorkspaceRequested(root._wsContextId,
@@ -546,7 +548,8 @@ Popup {
     }
 
     MenuItem {
-      text: qsTr("Delete")
+      text: root._wsContextId >= 1000 ? qsTr("Delete")
+                                      : qsTr("Hide")
       onTriggered: {
         taskBar.deleteWorkspace(root._wsContextId)
         if (_groups.popup)

@@ -299,7 +299,6 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
  */
 SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::Group& group)
 {
-  // Output control panels are a Pro-only feature
 #ifdef BUILD_COMMERCIAL
   if (group.groupType == DataModel::GroupType::Output)
     return DashboardOutputPanel;

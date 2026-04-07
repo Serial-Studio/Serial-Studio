@@ -110,12 +110,15 @@ inline constexpr auto PointCount = "pointCount";
 // Reserved sub-key stored inside the widgetSettings object.
 inline constexpr auto kActiveGroupSubKey = "activeGroup";
 
+// Key for auto-generated workspaces hidden by the user.
+inline constexpr auto HiddenGroups = "hiddenGroups";
+
 // Keys for user-defined dashboard workspaces.
-inline constexpr auto Workspaces     = "workspaces";
-inline constexpr auto WorkspaceId    = "workspaceId";
-inline constexpr auto WidgetRefs     = "widgetRefs";
-inline constexpr auto WidgetType     = "widgetType";
-inline constexpr auto RelativeIndex  = "relativeIndex";
+inline constexpr auto Workspaces    = "workspaces";
+inline constexpr auto WorkspaceId   = "workspaceId";
+inline constexpr auto WidgetRefs    = "widgetRefs";
+inline constexpr auto WidgetType    = "widgetType";
+inline constexpr auto RelativeIndex = "relativeIndex";
 
 inline QString layoutKey(int groupId)
 {

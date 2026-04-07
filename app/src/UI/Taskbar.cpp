@@ -137,18 +137,10 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   });
 
   // Update workspace model when workspaces or full model changes
-  connect(pm,
-          &DataModel::ProjectModel::workspacesChanged,
-          this,
-          &UI::Taskbar::workspaceModelChanged);
-  connect(this,
-          &UI::Taskbar::fullModelChanged,
-          this,
-          &UI::Taskbar::workspaceModelChanged);
-  connect(this,
-          &UI::Taskbar::fullModelChanged,
-          this,
-          &UI::Taskbar::searchResultsChanged);
+  connect(
+    pm, &DataModel::ProjectModel::workspacesChanged, this, &UI::Taskbar::workspaceModelChanged);
+  connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::workspaceModelChanged);
+  connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::searchResultsChanged);
 
   // Persist layout before application exits
   connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
@@ -275,19 +267,6 @@ QVariantList UI::Taskbar::groupModel() const
     main["icon"]      = QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
     main["separator"] = false;
     model.append(main);
-  }
-
-  // Create per-source overview groups (when multiple sources exist)
-  const auto& sources = DataModel::ProjectModel::instance().sources();
-  if (sources.size() > 1) {
-    for (const auto& source : sources) {
-      QVariantMap entry;
-      entry["id"]        = -100 - source.sourceId;
-      entry["text"]      = source.title;
-      entry["icon"]      = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
-      entry["separator"] = false;
-      model.append(entry);
-    }
   }
 
   // Append frame groups
@@ -419,8 +398,7 @@ UI::TaskbarModel::WindowState UI::Taskbar::windowState(QQuickItem* window) const
   if (!item)
     return TaskbarModel::WindowClosed;
 
-  return static_cast<TaskbarModel::WindowState>(
-    item->data(TaskbarModel::WindowStateRole).toInt());
+  return static_cast<TaskbarModel::WindowState>(item->data(TaskbarModel::WindowStateRole).toInt());
 }
 
 /**
@@ -539,17 +517,6 @@ void UI::Taskbar::setActiveGroupId(int groupId)
 
   // Auto-generated workspace: populate from fullModel group filtering
   else {
-    // Build source-ID lookup when filtering by source
-    const bool sourceOverview = (groupId <= -100);
-    const int filterSourceId  = sourceOverview ? -(groupId + 100) : -1;
-    QSet<int> sourceGroupIds;
-    if (sourceOverview) {
-      const auto& frame = UI::Dashboard::instance().rawFrame();
-      for (const auto& g : frame.groups)
-        if (g.sourceId == filterSourceId)
-          sourceGroupIds.insert(g.groupId);
-    }
-
     // Populate taskbar with matching group widgets
     for (int i = 0; i < fullModel()->rowCount(); ++i) {
       auto groupItem = fullModel()->item(i);
@@ -567,16 +534,9 @@ void UI::Taskbar::setActiveGroupId(int groupId)
           continue;
       }
 
-      // Filter by source ID when viewing a per-source overview
-      if (sourceOverview) {
-        if (!sourceGroupIds.contains(groupItem->data(TaskbarModel::GroupIdRole).toInt()))
-          continue;
-      }
-
       auto group = groupItem->clone();
       if (type != SerialStudio::DashboardNoWidget) {
-        setWindowState(group->data(TaskbarModel::WindowIdRole).toInt(),
-                       TaskbarModel::WindowNormal);
+        setWindowState(group->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
         m_taskbarButtons->appendRow(group);
       }
 
@@ -1270,29 +1230,23 @@ void UI::Taskbar::onTerminalToggled()
     }
 
     // Add to fullModel
-    auto icon       = SerialStudio::dashboardWidgetIcon(
-      SerialStudio::DashboardTerminal, true);
+    auto icon       = SerialStudio::dashboardWidgetIcon(SerialStudio::DashboardTerminal, true);
     auto* groupItem = new QStandardItem();
     groupItem->setData(termGroupId, TaskbarModel::GroupIdRole);
     groupItem->setData(termTitle, TaskbarModel::GroupNameRole);
     groupItem->setData(termTitle, TaskbarModel::WidgetNameRole);
-    groupItem->setData(
-      static_cast<int>(SerialStudio::DashboardTerminal),
-      TaskbarModel::WidgetTypeRole);
+    groupItem->setData(static_cast<int>(SerialStudio::DashboardTerminal),
+                       TaskbarModel::WidgetTypeRole);
     groupItem->setData(icon, TaskbarModel::WidgetIconRole);
     groupItem->setData(termWindowId, TaskbarModel::WindowIdRole);
     groupItem->setData(true, TaskbarModel::IsGroupRole);
     groupItem->setData(true, TaskbarModel::OverviewRole);
-    groupItem->setData(
-      static_cast<int>(TaskbarModel::WindowNormal),
-      TaskbarModel::WindowStateRole);
+    groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
     m_fullModel->insertRow(0, groupItem);
 
     // Add to taskbarButtons (always first)
     auto* tbItem = groupItem->clone();
-    setWindowState(
-      tbItem->data(TaskbarModel::WindowIdRole).toInt(),
-      TaskbarModel::WindowNormal);
+    setWindowState(tbItem->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
     m_taskbarButtons->insertRow(0, tbItem);
   }
 
@@ -1370,37 +1324,14 @@ void UI::Taskbar::setSearchFilter(const QString& filter)
  * @brief Returns a flat list of widgets matching the current search filter.
  *
  * Each entry is a QVariantMap with: windowId, widgetName, widgetIcon,
- * widgetType, groupName, groupId. Limited to 30 results.
+ * widgetType, groupName, groupId. Limited to 30 results. Workspace entries
+ * are not included — search is for navigating to individual widgets only.
  */
 QVariantList UI::Taskbar::searchResults() const
 {
   QVariantList results;
-  const auto filter  = m_searchFilter.trimmed();
+  const auto filter   = m_searchFilter.trimmed();
   const bool noFilter = filter.isEmpty();
-
-  // Match workspaces first
-  const auto wsModel = workspaceModel();
-  for (const auto& ws : wsModel) {
-    if (results.size() >= 30)
-      break;
-
-    const auto map = ws.toMap();
-    if (map.value(QStringLiteral("separator")).toBool())
-      continue;
-
-    const auto text = map.value(QStringLiteral("text")).toString();
-    if (noFilter || text.contains(filter, Qt::CaseInsensitive)) {
-      QVariantMap entry;
-      entry[QStringLiteral("windowId")]    = -1;
-      entry[QStringLiteral("widgetName")]  = text;
-      entry[QStringLiteral("widgetIcon")]  = map.value(QStringLiteral("icon"));
-      entry[QStringLiteral("widgetType")]  = -1;
-      entry[QStringLiteral("groupName")]   = tr("Workspace");
-      entry[QStringLiteral("groupId")]     = map.value(QStringLiteral("id"));
-      entry[QStringLiteral("isWorkspace")] = true;
-      results.append(entry);
-    }
-  }
 
   // Match widgets
   for (int i = 0; i < m_fullModel->rowCount() && results.size() < 30; ++i) {
@@ -1433,7 +1364,6 @@ QVariantList UI::Taskbar::searchResults() const
       if (!child)
         continue;
 
-      // Skip sub-groups with no widget type
       const auto childType = child->data(TaskbarModel::WidgetTypeRole).toInt();
       if (childType == SerialStudio::DashboardNoWidget)
         continue;
@@ -1457,6 +1387,65 @@ QVariantList UI::Taskbar::searchResults() const
   return results;
 }
 
+/**
+ * @brief Returns a flat list of every widget in the full model.
+ *
+ * Unlike searchResults(), this function applies no filter and no result limit.
+ * Each entry is a QVariantMap with: windowId, widgetName, widgetIcon,
+ * widgetType, groupName, groupId, isWorkspace.
+ *
+ * Used by the workspace dialog, which needs to display every available widget.
+ */
+QVariantList UI::Taskbar::allWidgets() const
+{
+  QVariantList results;
+
+  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+    auto* groupItem = m_fullModel->item(i);
+    if (!groupItem)
+      continue;
+
+    const auto groupName = groupItem->data(TaskbarModel::GroupNameRole).toString();
+
+    // Add group-level widget
+    const auto groupType = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
+    if (groupType != SerialStudio::DashboardNoWidget) {
+      QVariantMap entry;
+      entry[QStringLiteral("windowId")]    = groupItem->data(TaskbarModel::WindowIdRole);
+      entry[QStringLiteral("widgetName")]  = groupItem->data(TaskbarModel::WidgetNameRole);
+      entry[QStringLiteral("widgetIcon")]  = groupItem->data(TaskbarModel::WidgetIconRole);
+      entry[QStringLiteral("widgetType")]  = groupType;
+      entry[QStringLiteral("groupName")]   = groupName;
+      entry[QStringLiteral("groupId")]     = groupItem->data(TaskbarModel::GroupIdRole);
+      entry[QStringLiteral("isWorkspace")] = false;
+      results.append(entry);
+    }
+
+    // Add child widgets
+    for (int j = 0; j < groupItem->rowCount(); ++j) {
+      auto* child = groupItem->child(j);
+      if (!child)
+        continue;
+
+      const auto childType = child->data(TaskbarModel::WidgetTypeRole).toInt();
+      if (childType == SerialStudio::DashboardNoWidget)
+        continue;
+
+      QVariantMap entry;
+      entry[QStringLiteral("windowId")]    = child->data(TaskbarModel::WindowIdRole);
+      entry[QStringLiteral("widgetName")]  = child->data(TaskbarModel::WidgetNameRole);
+      entry[QStringLiteral("widgetIcon")]  = child->data(TaskbarModel::WidgetIconRole);
+      entry[QStringLiteral("widgetType")]  = child->data(TaskbarModel::WidgetTypeRole);
+      entry[QStringLiteral("groupName")]   = groupName;
+      entry[QStringLiteral("groupId")]     = child->data(TaskbarModel::GroupIdRole);
+      entry[QStringLiteral("isWorkspace")] = false;
+      results.append(entry);
+    }
+  }
+
+  return results;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Workspace model and management
 //--------------------------------------------------------------------------------------------------
@@ -1469,19 +1458,27 @@ QVariantList UI::Taskbar::searchResults() const
  */
 QVariantList UI::Taskbar::workspaceModel() const
 {
-  // Start with the auto-generated group-based entries
-  QVariantList model = groupModel();
+  // Start with the auto-generated group-based entries, filtering hidden ones
+  const auto& pm     = DataModel::ProjectModel::instance();
+  const auto& hidden = pm.hiddenGroupIds();
+  QVariantList model;
+  for (const auto& entry : groupModel()) {
+    const int id = entry.toMap().value(QStringLiteral("id")).toInt();
+    if (id >= 0 && hidden.contains(id))
+      continue;
+
+    model.append(entry);
+  }
 
   // Append user-defined workspaces
-  const auto& workspaces = DataModel::ProjectModel::instance().workspaces();
+  const auto& workspaces = pm.workspaces();
   for (const auto& ws : workspaces) {
     QVariantMap entry;
     entry[QStringLiteral("id")]        = ws.workspaceId;
     entry[QStringLiteral("text")]      = ws.title;
     entry[QStringLiteral("separator")] = false;
-    entry[QStringLiteral("icon")]      = ws.icon.isEmpty()
-                                           ? QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg")
-                                           : ws.icon;
+    entry[QStringLiteral("icon")] =
+      ws.icon.isEmpty() ? QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg") : ws.icon;
     model.append(entry);
   }
 
@@ -1556,7 +1553,6 @@ void UI::Taskbar::createWorkspace(const QString& name)
   auto* pm = &DataModel::ProjectModel::instance();
   pm->addWorkspace(name);
 
-  // Switch to the newly created workspace
   const auto& workspaces = pm->workspaces();
   if (!workspaces.empty())
     setActiveGroupId(workspaces.back().workspaceId);
@@ -1565,23 +1561,36 @@ void UI::Taskbar::createWorkspace(const QString& name)
 }
 
 /**
- * @brief Deletes a user-defined workspace.
+ * @brief Deletes or hides a workspace.
  *
- * If the deleted workspace is active, switches to the first available.
+ * For user-defined workspaces (id >= 1000), permanently deletes the workspace.
+ * For auto-generated group workspaces (id >= 0, id < 1000), hides the group
+ * from the workspace list. Special workspaces (Overview, All Data, per-source)
+ * cannot be deleted.
+ *
+ * If the affected workspace is active, switches to the first available.
  */
 void UI::Taskbar::deleteWorkspace(int workspaceId)
 {
-  if (workspaceId < 1000)
+  auto* pm = &DataModel::ProjectModel::instance();
+
+  // User-defined workspace: delete permanently
+  if (workspaceId >= 1000)
+    pm->deleteWorkspace(workspaceId);
+
+  // Auto-generated group workspace: hide it
+  else if (workspaceId >= 0)
+    pm->hideGroup(workspaceId);
+
+  // Special workspaces (id < 0): not deletable
+  else
     return;
 
-  auto* pm = &DataModel::ProjectModel::instance();
-  pm->deleteWorkspace(workspaceId);
-
-  // Switch away if we deleted the active workspace
+  // Switch away if we deleted/hid the active workspace
   if (m_activeGroupId == workspaceId) {
     auto model = workspaceModel();
     if (!model.isEmpty())
-      setActiveGroupId(model.first().toMap().value("id", -1).toInt());
+      setActiveGroupId(model.first().toMap().value(QStringLiteral("id"), -1).toInt());
   }
 
   Q_EMIT workspaceModelChanged();
@@ -1637,8 +1646,7 @@ void UI::Taskbar::addWidgetToActiveWorkspace(int windowId)
 
   // Add to taskbar buttons and show
   auto clone = item->clone();
-  setWindowState(clone->data(TaskbarModel::WindowIdRole).toInt(),
-                 TaskbarModel::WindowNormal);
+  setWindowState(clone->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
   m_taskbarButtons->appendRow(clone);
   Q_EMIT taskbarButtonsChanged();
 }
@@ -1654,7 +1662,7 @@ void UI::Taskbar::removeWidgetFromActiveWorkspace(int windowId)
     return;
 
   // Find the ref index in the workspace
-  auto* pm             = &DataModel::ProjectModel::instance();
+  auto* pm               = &DataModel::ProjectModel::instance();
   const auto& workspaces = pm->workspaces();
   for (const auto& ws : workspaces) {
     if (ws.workspaceId != m_activeGroupId)
@@ -1683,10 +1691,8 @@ void UI::Taskbar::removeWidgetFromActiveWorkspace(int windowId)
 
     for (size_t i = 0; i < ws.widgetRefs.size(); ++i) {
       const auto& ref = ws.widgetRefs[i];
-      if (ref.widgetType == widgetType && ref.groupId == groupId
-          && ref.relativeIndex == relIdx) {
-        pm->removeWidgetFromWorkspace(m_activeGroupId,
-                                      static_cast<int>(i));
+      if (ref.widgetType == widgetType && ref.groupId == groupId && ref.relativeIndex == relIdx) {
+        pm->removeWidgetFromWorkspace(m_activeGroupId, static_cast<int>(i));
 
         // Unregister and remove from taskbar buttons
         auto* window = windowData(windowId);
@@ -1695,9 +1701,7 @@ void UI::Taskbar::removeWidgetFromActiveWorkspace(int windowId)
 
         for (int r = 0; r < m_taskbarButtons->rowCount(); ++r) {
           auto* tbItem = m_taskbarButtons->item(r);
-          if (tbItem
-              && tbItem->data(TaskbarModel::WindowIdRole).toInt()
-                   == windowId) {
+          if (tbItem && tbItem->data(TaskbarModel::WindowIdRole).toInt() == windowId) {
             m_taskbarButtons->removeRow(r);
             break;
           }
@@ -1710,4 +1714,111 @@ void UI::Taskbar::removeWidgetFromActiveWorkspace(int windowId)
 
     return;
   }
+}
+
+/**
+ * @brief Returns window IDs of all widgets in the given user workspace.
+ *
+ * Used by the workspace editor dialog to pre-check widgets that are already
+ * in the workspace. Returns an empty list for non-user workspaces.
+ */
+QVariantList UI::Taskbar::workspaceWidgetIds(int workspaceId) const
+{
+  QVariantList ids;
+  if (workspaceId < 1000)
+    return ids;
+
+  const auto& workspaces = DataModel::ProjectModel::instance().workspaces();
+  for (const auto& ws : workspaces) {
+    if (ws.workspaceId != workspaceId)
+      continue;
+
+    const auto& widgetMap = UI::Dashboard::instance().widgetMap();
+    for (const auto& ref : ws.widgetRefs) {
+      for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it) {
+        if (static_cast<int>(it.value().first) != ref.widgetType
+            || it.value().second != ref.relativeIndex)
+          continue;
+
+        auto* item = findItemByWindowId(it.key());
+        if (!item)
+          continue;
+
+        if (item->data(TaskbarModel::GroupIdRole).toInt() != ref.groupId)
+          continue;
+
+        ids.append(it.key());
+        break;
+      }
+    }
+
+    break;
+  }
+
+  return ids;
+}
+
+/**
+ * @brief Replaces the widget list of a user workspace with the given IDs.
+ *
+ * Clears existing widget refs and rebuilds from the provided window IDs.
+ * If the edited workspace is currently active, refreshes the taskbar.
+ */
+void UI::Taskbar::setWorkspaceWidgets(int workspaceId, const QVariantList& windowIds)
+{
+  if (workspaceId < 1000)
+    return;
+
+  auto* pm = &DataModel::ProjectModel::instance();
+
+  // Find and clear the workspace's widget refs
+  const auto& workspaces = pm->workspaces();
+  bool found             = false;
+  for (const auto& ws : workspaces) {
+    if (ws.workspaceId == workspaceId) {
+      found = true;
+      break;
+    }
+  }
+
+  if (!found)
+    return;
+
+  // Remove all existing refs (iterate backwards)
+  for (const auto& ws : workspaces) {
+    if (ws.workspaceId != workspaceId)
+      continue;
+
+    for (int i = static_cast<int>(ws.widgetRefs.size()) - 1; i >= 0; --i)
+      pm->removeWidgetFromWorkspace(workspaceId, i);
+
+    break;
+  }
+
+  // Add new refs from window IDs
+  const auto& widgetMap = UI::Dashboard::instance().widgetMap();
+  for (const auto& idVar : windowIds) {
+    const int windowId = idVar.toInt();
+    auto* item         = findItemByWindowId(windowId);
+    if (!item)
+      continue;
+
+    const auto widgetType = item->data(TaskbarModel::WidgetTypeRole).toInt();
+    const auto groupId    = item->data(TaskbarModel::GroupIdRole).toInt();
+
+    int relIdx = -1;
+    for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it) {
+      if (it.key() == windowId) {
+        relIdx = it.value().second;
+        break;
+      }
+    }
+
+    if (relIdx >= 0)
+      pm->addWidgetToWorkspace(workspaceId, widgetType, groupId, relIdx);
+  }
+
+  // Refresh taskbar if this workspace is active
+  if (m_activeGroupId == workspaceId)
+    setActiveGroupId(workspaceId);
 }

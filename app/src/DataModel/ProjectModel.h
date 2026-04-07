@@ -23,6 +23,7 @@
 
 #include <QJsonObject>
 #include <QObject>
+#include <QSet>
 #include <QTimer>
 #include <QVariantList>
 
@@ -138,7 +139,9 @@ public:
   [[nodiscard]] const std::vector<Action>& actions() const noexcept;
   [[nodiscard]] const std::vector<Source>& sources() const noexcept;
   [[nodiscard]] const std::vector<Workspace>& workspaces() const noexcept;
+  [[nodiscard]] const QSet<int>& hiddenGroupIds() const noexcept;
   [[nodiscard]] int workspaceCount() const noexcept;
+  [[nodiscard]] bool isGroupHidden(int groupId) const;
 
   Q_INVOKABLE [[nodiscard]] bool askSave();
   Q_INVOKABLE [[nodiscard]] QVariantList sourcesForDiagram() const;
@@ -222,11 +225,10 @@ public slots:
   void addWorkspace(const QString& title);
   void deleteWorkspace(int workspaceId);
   void renameWorkspace(int workspaceId, const QString& title);
-  void addWidgetToWorkspace(int workspaceId,
-                            int widgetType,
-                            int groupId,
-                            int relativeIndex);
+  void addWidgetToWorkspace(int workspaceId, int widgetType, int groupId, int relativeIndex);
   void removeWidgetFromWorkspace(int workspaceId, int index);
+  void hideGroup(int groupId);
+  void showGroup(int groupId);
 
   void addOutputControl(const SerialStudio::OutputWidgetType type);
   void addOutputPanel();
@@ -263,6 +265,7 @@ private:
   std::vector<DataModel::Group> m_groups;
   std::vector<DataModel::Action> m_actions;
   std::vector<DataModel::Source> m_sources;
+  QSet<int> m_hiddenGroupIds;
   std::vector<DataModel::Workspace> m_workspaces;
 
   DataModel::Group m_selectedGroup;

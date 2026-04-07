@@ -298,7 +298,6 @@ inline QString FMT_VAL(double val, double min, double max)
     if (abs >= 1e-6)
       return 9;
 
-    // Beyond this is just sad
     return 10;
   };
 

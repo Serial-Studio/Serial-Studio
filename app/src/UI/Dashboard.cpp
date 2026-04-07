@@ -917,10 +917,8 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
 
       // Register in widget registry and widget map
       m_terminalWidgetId = registry.createWidget(
-        SerialStudio::DashboardTerminal, terminal.title,
-        terminal.groupId, -1, true);
-      m_widgetMap.insert(m_widgetCount++,
-                         qMakePair(SerialStudio::DashboardTerminal, 0));
+        SerialStudio::DashboardTerminal, terminal.title, terminal.groupId, -1, true);
+      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardTerminal, 0));
     } else {
       removeTerminalWidget();
     }

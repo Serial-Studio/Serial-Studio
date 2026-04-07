@@ -137,6 +137,9 @@ class Taskbar : public QQuickItem {
   Q_PROPERTY(QVariantList searchResults
              READ searchResults
              NOTIFY searchResultsChanged)
+  Q_PROPERTY(QVariantList allWidgets
+             READ allWidgets
+             NOTIFY fullModelChanged)
   Q_PROPERTY(UI::WindowManager* windowManager
              READ windowManager
              WRITE setWindowManager
@@ -169,6 +172,7 @@ public:
   [[nodiscard]] int activeGroupIndex() const;
   [[nodiscard]] QString searchFilter() const;
   [[nodiscard]] QVariantList groupModel() const;
+  [[nodiscard]] QVariantList allWidgets() const;
   [[nodiscard]] QVariantList searchResults() const;
   [[nodiscard]] QVariantList workspaceModel() const;
   [[nodiscard]] QQuickItem* activeWindow() const;
@@ -180,6 +184,7 @@ public:
   [[nodiscard]] bool hasMaximizedWindow() const;
 
   Q_INVOKABLE [[nodiscard]] QQuickItem* windowData(const int id) const;
+  Q_INVOKABLE [[nodiscard]] QVariantList workspaceWidgetIds(int workspaceId) const;
   Q_INVOKABLE [[nodiscard]] TaskbarModel::WindowState windowState(QQuickItem* window) const;
 
 public slots:
@@ -202,6 +207,7 @@ public slots:
   void renameWorkspace(int workspaceId, const QString& name);
   void addWidgetToActiveWorkspace(int windowId);
   void removeWidgetFromActiveWorkspace(int windowId);
+  void setWorkspaceWidgets(int workspaceId, const QVariantList& windowIds);
 
 private slots:
   void onTerminalToggled();
@@ -215,9 +221,9 @@ private:
   void connectToRegistry();
   void mapWidgetToWindow(UI::WidgetID wid, int windowId);
   [[nodiscard]] QStandardItem* findItemByWindowId(int windowId,
-                                                    QStandardItem* parentItem = nullptr) const;
+                                                  QStandardItem* parentItem = nullptr) const;
   [[nodiscard]] QStandardItem* findItemByWidgetId(UI::WidgetID widgetId,
-                                                    QStandardItem* parentItem = nullptr) const;
+                                                  QStandardItem* parentItem = nullptr) const;
   [[nodiscard]] QStandardItem* findGroupItemByGroupId(int groupId) const;
   [[nodiscard]] QStandardItem* createItemFromWidgetInfo(const UI::WidgetInfo& info);
 

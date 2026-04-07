@@ -249,6 +249,7 @@ Widgets.Pane {
         taskBar: root.taskBar
         Layout.fillWidth: true
         onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
+        onEditWorkspaceRequested: (wsId, name) => _wsDialog.openEdit(root.taskBar, wsId, name)
         onStartClicked: {
           if (_startMenu.visible)
             _startMenu.close()
@@ -269,7 +270,7 @@ Widgets.Pane {
       y: parent.height - height - _taskbar.height + 1
       onExternalWindowClicked: root.externalWindowClicked()
       onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
-      onRenameWorkspaceRequested: (wsId, name) => _wsDialog.openRename(root.taskBar, wsId, name)
+      onRenameWorkspaceRequested: (wsId, name) => _wsDialog.openEdit(root.taskBar, wsId, name)
     }
   }
 

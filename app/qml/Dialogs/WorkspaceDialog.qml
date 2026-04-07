@@ -35,20 +35,21 @@ Widgets.SmartDialog {
   // Dialog mode
   //
   property int workspaceId: -1
-  property bool renameMode: false
+  property bool editMode: false
   property SS_Ui.TaskBar taskBar: null
 
   //
   // Internal state
   //
+  property string widgetFilter: ""
   property var checkedWidgets: ({})
 
   //
   // Window options
   //
   staysOnTop: true
-  title: renameMode ? qsTr("Rename Workspace")
-                    : qsTr("New Workspace")
+  title: editMode ? qsTr("Edit Workspace")
+                  : qsTr("New Workspace")
 
   //
   // Open dialog in "new" mode
@@ -56,9 +57,10 @@ Widgets.SmartDialog {
   function openNew(tb) {
     root.taskBar = tb
     root.taskBar.dismissSearch()
-    root.renameMode = false
+    root.editMode = false
     root.workspaceId = -1
     root.checkedWidgets = ({})
+    root.widgetFilter = ""
     _nameField.text = ""
     _nameField.forceActiveFocus()
     root.show()
@@ -66,14 +68,22 @@ Widgets.SmartDialog {
   }
 
   //
-  // Open dialog in "rename" mode
+  // Open dialog in "edit" mode — pre-populate with workspace widgets
   //
-  function openRename(tb, wsId, currentName) {
+  function openEdit(tb, wsId, currentName) {
     root.taskBar = tb
-    root.renameMode = true
+    root.editMode = true
     root.workspaceId = wsId
-    root.checkedWidgets = ({})
+    root.widgetFilter = ""
     _nameField.text = currentName
+
+    // Build checked map from existing workspace widget IDs
+    var map = {}
+    var ids = tb.workspaceWidgetIds(wsId)
+    for (var i = 0; i < ids.length; ++i)
+      map[ids[i]] = true
+
+    root.checkedWidgets = map
     _nameField.selectAll()
     _nameField.forceActiveFocus()
     root.show()
@@ -88,16 +98,27 @@ Widgets.SmartDialog {
     if (name.length === 0 || !root.taskBar)
       return
 
-    if (root.renameMode) {
+    if (root.editMode) {
+      // Rename
       root.taskBar.renameWorkspace(root.workspaceId, name)
+
+      // Collect checked window IDs and update workspace contents
+      var ids = []
+      var keys = Object.keys(root.checkedWidgets)
+      for (var i = 0; i < keys.length; ++i) {
+        if (root.checkedWidgets[keys[i]])
+          ids.push(parseInt(keys[i]))
+      }
+
+      root.taskBar.setWorkspaceWidgets(root.workspaceId, ids)
     } else {
       root.taskBar.createWorkspace(name)
 
       // Add checked widgets to the new workspace
-      var keys = Object.keys(root.checkedWidgets)
-      for (var i = 0; i < keys.length; ++i) {
-        if (root.checkedWidgets[keys[i]])
-          root.taskBar.addWidgetToActiveWorkspace(parseInt(keys[i]))
+      var newKeys = Object.keys(root.checkedWidgets)
+      for (var j = 0; j < newKeys.length; ++j) {
+        if (root.checkedWidgets[newKeys[j]])
+          root.taskBar.addWidgetToActiveWorkspace(parseInt(newKeys[j]))
       }
     }
 
@@ -133,18 +154,24 @@ Widgets.SmartDialog {
     }
 
     //
-    // Widget selection (only for new workspace mode)
+    // Widget selection
     //
     ColumnLayout {
       spacing: 4
       Layout.fillWidth: true
       Layout.fillHeight: true
-      visible: !root.renameMode
 
       Label {
         opacity: 0.8
-        text: qsTr("Select widgets to include:")
         font: Cpp_Misc_CommonFonts.boldUiFont
+        text: qsTr("Select widgets to include:")
+      }
+
+      Widgets.SearchField {
+        Layout.fillWidth: true
+        text: root.widgetFilter
+        placeholderText: qsTr("Filter widgets...")
+        onTextChanged: root.widgetFilter = text
       }
 
       Rectangle {
@@ -166,15 +193,32 @@ Widgets.SmartDialog {
             width: parent.width
 
             Repeater {
-              model: root.taskBar ? root.taskBar.searchResults : []
+              model: root.taskBar ? root.taskBar.allWidgets : []
               delegate: RowLayout {
                 spacing: 0
                 Layout.fillWidth: true
-                visible: !modelData["isWorkspace"]
+                visible: {
+                  if (modelData["isWorkspace"])
+                    return false
+
+                  if (root.widgetFilter.length === 0)
+                    return true
+
+                  var f = root.widgetFilter.toLowerCase()
+                  var name = modelData["widgetName"].toLowerCase()
+                  var group = modelData["groupName"].toLowerCase()
+                  return name.indexOf(f) >= 0 || group.indexOf(f) >= 0
+                }
 
                 CheckBox {
                   id: _checkbox
-                  onCheckedChanged: {
+
+                  checked: {
+                    var wid = modelData["windowId"]
+                    return root.checkedWidgets[wid] === true
+                  }
+
+                  onClicked: {
                     var wid = modelData["windowId"]
                     var map = root.checkedWidgets
                     map[wid] = checked
@@ -193,7 +237,10 @@ Widgets.SmartDialog {
 
                   MouseArea {
                     anchors.fill: parent
-                    onClicked: _checkbox.checked = !_checkbox.checked
+                    onClicked: {
+                      _checkbox.checked = !_checkbox.checked
+                      _checkbox.clicked()
+                    }
                   }
                 }
 
@@ -203,8 +250,8 @@ Widgets.SmartDialog {
 
                 Label {
                   Layout.fillWidth: true
-                  font: Cpp_Misc_CommonFonts.uiFont
                   Layout.alignment: Qt.AlignVCenter
+                  font: Cpp_Misc_CommonFonts.uiFont
                   text: modelData["widgetName"]
                         + (modelData["groupName"]
                            ? " (" + modelData["groupName"] + ")"
@@ -212,7 +259,10 @@ Widgets.SmartDialog {
 
                   MouseArea {
                     anchors.fill: parent
-                    onClicked: _checkbox.checked = !_checkbox.checked
+                    onClicked: {
+                      _checkbox.checked = !_checkbox.checked
+                      _checkbox.clicked()
+                    }
                   }
                 }
               }

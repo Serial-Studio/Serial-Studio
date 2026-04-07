@@ -339,10 +339,17 @@ int DataModel::ProjectModel::sourceCount() const noexcept
 /**
  * @brief Returns a const reference to the vector of user-defined workspaces.
  */
-const std::vector<DataModel::Workspace>&
-DataModel::ProjectModel::workspaces() const noexcept
+const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() const noexcept
 {
   return m_workspaces;
+}
+
+/**
+ * @brief Returns the set of auto-generated group IDs hidden by the user.
+ */
+const QSet<int>& DataModel::ProjectModel::hiddenGroupIds() const noexcept
+{
+  return m_hiddenGroupIds;
 }
 
 /**
@@ -351,6 +358,14 @@ DataModel::ProjectModel::workspaces() const noexcept
 int DataModel::ProjectModel::workspaceCount() const noexcept
 {
   return static_cast<int>(m_workspaces.size());
+}
+
+/**
+ * @brief Returns true if the given group ID is hidden from the workspace list.
+ */
+bool DataModel::ProjectModel::isGroupHidden(int groupId) const
+{
+  return m_hiddenGroupIds.contains(groupId);
 }
 
 /**
@@ -925,6 +940,15 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
     json.insert(Keys::Workspaces, workspacesArray);
   }
 
+  // Serialize hidden auto-generated group IDs
+  if (!m_hiddenGroupIds.isEmpty()) {
+    QJsonArray hiddenArray;
+    for (const int id : std::as_const(m_hiddenGroupIds))
+      hiddenArray.append(id);
+
+    json.insert(Keys::HiddenGroups, hiddenArray);
+  }
+
   if (!m_widgetSettings.isEmpty())
     json.insert(Keys::WidgetSettings, m_widgetSettings);
 
@@ -968,15 +992,14 @@ void DataModel::ProjectModel::setupExternalConnections()
   // non-project modes (QuickPlot, DeviceSendsJSON). These modes have no
   // backing file, so workspace data is ephemeral and should not accumulate
   // across sessions or trigger "save changes?" prompts.
-  connect(&IO::ConnectionManager::instance(),
-          &IO::ConnectionManager::connectedChanged, this, [this] {
-    if (!IO::ConnectionManager::instance().isConnected())
-      clearTransientState();
-  });
+  connect(
+    &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
+      if (!IO::ConnectionManager::instance().isConnected())
+        clearTransientState();
+    });
 
 #ifdef BUILD_COMMERCIAL
-  connect(&MQTT::Client::instance(),
-          &MQTT::Client::connectedChanged, this, [this] {
+  connect(&MQTT::Client::instance(), &MQTT::Client::connectedChanged, this, [this] {
     if (!MQTT::Client::instance().isConnected())
       clearTransientState();
   });
@@ -1341,6 +1364,14 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       if (DataModel::read(ws, val.toObject()))
         m_workspaces.push_back(ws);
     }
+  }
+
+  // Deserialize hidden auto-generated group IDs
+  m_hiddenGroupIds.clear();
+  if (json.contains(Keys::HiddenGroups)) {
+    const auto hiddenArray = json.value(Keys::HiddenGroups).toArray();
+    for (const auto& val : hiddenArray)
+      m_hiddenGroupIds.insert(val.toInt());
   }
 
   // Read point count from root level (new format) or legacy widgetSettings key
@@ -2679,10 +2710,9 @@ void DataModel::ProjectModel::addWorkspace(const QString& title)
  */
 void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
 {
-  auto it = std::find_if(m_workspaces.begin(), m_workspaces.end(),
-                         [workspaceId](const auto& ws) {
-                           return ws.workspaceId == workspaceId;
-                         });
+  auto it = std::find_if(m_workspaces.begin(), m_workspaces.end(), [workspaceId](const auto& ws) {
+    return ws.workspaceId == workspaceId;
+  });
 
   if (it == m_workspaces.end())
     return;
@@ -2695,8 +2725,7 @@ void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
 /**
  * @brief Renames the workspace with the given ID.
  */
-void DataModel::ProjectModel::renameWorkspace(int workspaceId,
-                                              const QString& title)
+void DataModel::ProjectModel::renameWorkspace(int workspaceId, const QString& title)
 {
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId == workspaceId) {
@@ -2741,15 +2770,13 @@ void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
 /**
  * @brief Removes a widget reference from the specified workspace by index.
  */
-void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId,
-                                                        int index)
+void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId, int index)
 {
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId != workspaceId)
       continue;
 
-    if (index < 0
-        || static_cast<size_t>(index) >= ws.widgetRefs.size())
+    if (index < 0 || static_cast<size_t>(index) >= ws.widgetRefs.size())
       return;
 
     ws.widgetRefs.erase(ws.widgetRefs.begin() + index);
@@ -2757,6 +2784,37 @@ void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId,
     Q_EMIT workspacesChanged();
     return;
   }
+}
+
+/**
+ * @brief Hides an auto-generated group workspace from the workspace list.
+ *
+ * Does not affect the Overview workspace (id < 0). The hidden state is
+ * persisted in the project file.
+ */
+void DataModel::ProjectModel::hideGroup(int groupId)
+{
+  if (groupId < 0)
+    return;
+
+  if (m_hiddenGroupIds.contains(groupId))
+    return;
+
+  m_hiddenGroupIds.insert(groupId);
+  setModified(true);
+  Q_EMIT workspacesChanged();
+}
+
+/**
+ * @brief Restores a previously hidden auto-generated group workspace.
+ */
+void DataModel::ProjectModel::showGroup(int groupId)
+{
+  if (!m_hiddenGroupIds.remove(groupId))
+    return;
+
+  setModified(true);
+  Q_EMIT workspacesChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2776,6 +2834,8 @@ void DataModel::ProjectModel::clearTransientState()
   const auto opMode = AppState::instance().operationMode();
   if (opMode == SerialStudio::ProjectFile)
     return;
+
+  m_hiddenGroupIds.clear();
 
   if (!m_workspaces.empty()) {
     m_workspaces.clear();

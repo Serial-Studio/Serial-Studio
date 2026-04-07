@@ -40,11 +40,63 @@ QuickPaintedItemCompat::QuickPaintedItemCompat(QQuickItem* parent)
 }
 
 /**
+ * @brief Stub for QQuickPaintedItem API compatibility.
+ */
+void QuickPaintedItemCompat::setMipmap(bool enabled)
+{
+  Q_UNUSED(enabled)
+}
+
+/**
+ * @brief Stub for QQuickPaintedItem API compatibility.
+ */
+void QuickPaintedItemCompat::setOpaquePainting(bool enabled)
+{
+  Q_UNUSED(enabled)
+}
+
+/**
+ * @brief Stub for QQuickPaintedItem API compatibility.
+ */
+void QuickPaintedItemCompat::setRenderTarget(int target)
+{
+  Q_UNUSED(target)
+}
+
+/**
+ * @brief Schedules a repaint and marks the item as needing a CPU re-render.
+ */
+void QuickPaintedItemCompat::update()
+{
+  m_needsRepaint = true;
+  QCanvasPainterItem::update();
+}
+
+/**
+ * @brief Overload that forwards to the parameterless update().
+ */
+void QuickPaintedItemCompat::update(const QRect& rect)
+{
+  Q_UNUSED(rect)
+  update();
+}
+
+/**
  * @brief Creates the image-bridge renderer.
  */
 QCanvasPainterItemRenderer* QuickPaintedItemCompat::createItemRenderer() const
 {
   return new QuickPaintedItemCompatRenderer;
+}
+
+/**
+ * @brief Triggers a repaint when the item geometry changes.
+ */
+void QuickPaintedItemCompat::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+  QCanvasPainterItem::geometryChange(newGeometry, oldGeometry);
+  if (newGeometry.size() != oldGeometry.size())
+    update();
 }
 
 //--------------------------------------------------------------------------------------------------
