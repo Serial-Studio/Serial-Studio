@@ -554,7 +554,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
         auto name     = child->data(TaskbarModel::WidgetNameRole).toString();
         auto overview = child->data(TaskbarModel::OverviewRole).toBool();
 
-        if (groupId > -1 || sourceOverview) {
+        if (groupId > -1 || overview) {
           setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(),
                          TaskbarModel::WindowNormal);
           m_taskbarButtons->appendRow(child);
