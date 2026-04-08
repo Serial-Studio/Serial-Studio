@@ -873,7 +873,6 @@ Widgets.SmartDialog {
           Cpp_API_Server.enabled = false
           Cpp_API_Server.externalConnections = false
           Cpp_Misc_ModuleManager.automaticUpdates = true
-          Cpp_UI_Dashboard.terminalEnabled = false
           Cpp_UI_Dashboard.autoHideToolbar = false
           Cpp_UI_Dashboard.showTaskbarButtons = false
           Cpp_Console_Handler.fontFamily = Cpp_Misc_CommonFonts.monoFont.family

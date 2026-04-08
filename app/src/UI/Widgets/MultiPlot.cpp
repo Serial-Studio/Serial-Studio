@@ -413,9 +413,12 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     };
 
     int index = 0;
-    for (const auto& curve : std::as_const(m_data))
-      if (m_visibleCurves[index++])
+    for (const auto& curve : std::as_const(m_data)) {
+      if (index < m_visibleCurves.size() && m_visibleCurves[index])
         accumulate(curve);
+
+      ++index;
+    }
 
     // If no finite values found, use default range
     if (!std::isfinite(m_minY) || !std::isfinite(m_maxY)) {

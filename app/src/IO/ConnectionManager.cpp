@@ -947,7 +947,11 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
  */
 void IO::ConnectionManager::setPaused(bool paused)
 {
-  m_paused = paused && isConnected();
+  const bool effective = paused && isConnected();
+  if (m_paused == effective)
+    return;
+
+  m_paused = effective;
   Q_EMIT pausedChanged();
 }
 
@@ -957,6 +961,9 @@ void IO::ConnectionManager::setPaused(bool paused)
  */
 void IO::ConnectionManager::setWriteEnabled(bool enabled)
 {
+  if (m_writeEnabled == enabled)
+    return;
+
   m_writeEnabled = enabled;
   Q_EMIT writeEnabledChanged();
 }
@@ -967,7 +974,11 @@ void IO::ConnectionManager::setWriteEnabled(bool enabled)
  */
 void IO::ConnectionManager::setStartSequence(const QByteArray& sequence)
 {
-  m_startSequence = sequence.isEmpty() ? QByteArray("/*") : sequence;
+  const auto effective = sequence.isEmpty() ? QByteArray("/*") : sequence;
+  if (m_startSequence == effective)
+    return;
+
+  m_startSequence = effective;
   resetFrameReader();
   Q_EMIT startSequenceChanged();
 }
@@ -978,7 +989,11 @@ void IO::ConnectionManager::setStartSequence(const QByteArray& sequence)
  */
 void IO::ConnectionManager::setFinishSequence(const QByteArray& sequence)
 {
-  m_finishSequence = sequence.isEmpty() ? QByteArray("*/") : sequence;
+  const auto effective = sequence.isEmpty() ? QByteArray("*/") : sequence;
+  if (m_finishSequence == effective)
+    return;
+
+  m_finishSequence = effective;
   resetFrameReader();
   Q_EMIT finishSequenceChanged();
 }
@@ -989,6 +1004,9 @@ void IO::ConnectionManager::setFinishSequence(const QByteArray& sequence)
  */
 void IO::ConnectionManager::setChecksumAlgorithm(const QString& algorithm)
 {
+  if (m_checksumAlgorithm == algorithm)
+    return;
+
   m_checksumAlgorithm = algorithm;
   resetFrameReader();
   Q_EMIT checksumAlgorithmChanged();
@@ -1005,6 +1023,9 @@ void IO::ConnectionManager::setChecksumAlgorithm(const QString& algorithm)
  */
 void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 {
+  if (m_busType == type && m_devices.find(0) != m_devices.end())
+    return;
+
   disconnectDevice(0);
 
   m_busType = type;

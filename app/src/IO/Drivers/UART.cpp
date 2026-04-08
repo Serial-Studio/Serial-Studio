@@ -256,6 +256,10 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
       m_port                  = new QSerialPort(name);
     }
 
+    // Bail out if port could not be created
+    if (!m_port)
+      return false;
+
     // Apply serial port parameters
     port()->setParity(parity());
     port()->setBaudRate(baudRate());
@@ -632,8 +636,13 @@ void IO::Drivers::UART::registerDevice(const QString& device)
  */
 void IO::Drivers::UART::setParity(const quint8 parityIndex)
 {
-  // Persist the index and update internal parity enum
-  Q_ASSERT(parityIndex < parityList().count());
+  if (parityIndex >= parityList().count()) {
+    qWarning() << "UART::setParity: index" << parityIndex << "out of range";
+    return;
+  }
+
+  if (m_parityIndex == parityIndex)
+    return;
 
   m_parityIndex = parityIndex;
   m_settings.setValue("UartDriver/parity", parityIndex);
@@ -672,8 +681,13 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
  */
 void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
 {
-  // Persist the index and update internal data bits enum
-  Q_ASSERT(dataBitsIndex < dataBitsList().count());
+  if (dataBitsIndex >= dataBitsList().count()) {
+    qWarning() << "UART::setDataBits: index" << dataBitsIndex << "out of range";
+    return;
+  }
+
+  if (m_dataBitsIndex == dataBitsIndex)
+    return;
 
   m_dataBitsIndex = dataBitsIndex;
   m_settings.setValue("UartDriver/dataBits", dataBitsIndex);
@@ -709,8 +723,13 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
  */
 void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
 {
-  // Persist the index and update internal stop bits enum
-  Q_ASSERT(stopBitsIndex < stopBitsList().count());
+  if (stopBitsIndex >= stopBitsList().count()) {
+    qWarning() << "UART::setStopBits: index" << stopBitsIndex << "out of range";
+    return;
+  }
+
+  if (m_stopBitsIndex == stopBitsIndex)
+    return;
 
   m_stopBitsIndex = stopBitsIndex;
   m_settings.setValue("UartDriver/stopBits", stopBitsIndex);
@@ -756,8 +775,13 @@ void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
  */
 void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
 {
-  // Persist the index and update internal flow control enum
-  Q_ASSERT(flowControlIndex < flowControlList().count());
+  if (flowControlIndex >= flowControlList().count()) {
+    qWarning() << "UART::setFlowControl: index" << flowControlIndex << "out of range";
+    return;
+  }
+
+  if (m_flowControlIndex == flowControlIndex)
+    return;
 
   m_flowControlIndex = flowControlIndex;
   m_settings.setValue("UartDriver/flowControl", flowControlIndex);

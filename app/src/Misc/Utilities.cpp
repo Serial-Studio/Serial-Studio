@@ -64,9 +64,9 @@ void Misc::Utilities::rebootApplication()
   qApp->processEvents();
   QSettings().sync();
 
-  // Relaunch executable
+  // Relaunch executable (skip argv[0] which is the program path)
   QString exe      = QCoreApplication::applicationFilePath();
-  QStringList args = QCoreApplication::arguments();
+  QStringList args = QCoreApplication::arguments().mid(1);
   QProcess::startDetached(exe, args);
 
   // Quit application
@@ -268,10 +268,15 @@ void Misc::Utilities::revealFile(const QString& pathToReveal)
   param += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
   QProcess::startDetached("explorer.exe", param);
 #elif defined(Q_OS_MAC)
+  // Escape backslashes and double quotes to prevent AppleScript injection
+  QString escaped = pathToReveal;
+  escaped.replace(QLatin1String("\\"), QLatin1String("\\\\"));
+  escaped.replace(QLatin1String("\""), QLatin1String("\\\""));
+
   QStringList scriptArgs;
   scriptArgs << QLatin1String("-e")
              << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
-                  .arg(pathToReveal);
+                  .arg(escaped);
   QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
   scriptArgs.clear();
   scriptArgs << QLatin1String("-e") << QLatin1String("tell application \"Finder\" to activate");

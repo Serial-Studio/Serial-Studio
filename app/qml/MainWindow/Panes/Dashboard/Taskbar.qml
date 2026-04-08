@@ -435,7 +435,7 @@ Item {
       model: taskBar.workspaceModel
       Layout.alignment: Qt.AlignVCenter
       currentIndex: taskBar.activeGroupIndex
-      onCurrentIndexChanged: {
+      onActivated: {
         if (currentIndex !== taskBar.activeGroupIndex)
           taskBar.activeGroupIndex = currentIndex
       }

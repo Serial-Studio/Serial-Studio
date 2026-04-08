@@ -34,7 +34,7 @@
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-MQTT::Client::Client() : m_publisher(false), m_sslEnabled(false)
+MQTT::Client::Client() : m_mode(0), m_publisher(false), m_sslEnabled(false)
 {
   // Set initial random client ID
   regenerateClientId();
@@ -519,7 +519,14 @@ void MQTT::Client::regenerateClientId()
  */
 void MQTT::Client::setMode(const quint8 mode)
 {
-  Q_ASSERT(mode >= 0 && mode <= 1);
+  if (mode > 1) {
+    qWarning() << "MQTT::Client::setMode: invalid mode" << mode;
+    return;
+  }
+
+  if (m_mode == mode)
+    return;
+
   m_mode = mode;
   Q_EMIT mqttConfigurationChanged();
 }
@@ -530,6 +537,9 @@ void MQTT::Client::setMode(const quint8 mode)
  */
 void MQTT::Client::setTopic(const QString& topic)
 {
+  if (m_topicFilter == topic)
+    return;
+
   m_topicFilter = topic;
   m_topicName.setName(topic);
   Q_EMIT mqttConfigurationChanged();
@@ -540,6 +550,9 @@ void MQTT::Client::setTopic(const QString& topic)
  */
 void MQTT::Client::setClientId(const QString& id)
 {
+  if (m_clientId == id)
+    return;
+
   m_clientId = id;
   m_client.setClientId(id);
   Q_EMIT mqttConfigurationChanged();
@@ -550,6 +563,9 @@ void MQTT::Client::setClientId(const QString& id)
  */
 void MQTT::Client::setHostname(const QString& hostname)
 {
+  if (m_client.hostname() == hostname)
+    return;
+
   m_client.setHostname(hostname);
   Q_EMIT mqttConfigurationChanged();
 }
@@ -559,6 +575,9 @@ void MQTT::Client::setHostname(const QString& hostname)
  */
 void MQTT::Client::setUsername(const QString& username)
 {
+  if (m_client.username() == username)
+    return;
+
   m_client.setUsername(username);
   Q_EMIT mqttConfigurationChanged();
 }
@@ -568,6 +587,9 @@ void MQTT::Client::setUsername(const QString& username)
  */
 void MQTT::Client::setPassword(const QString& password)
 {
+  if (m_client.password() == password)
+    return;
+
   m_client.setPassword(password);
   Q_EMIT mqttConfigurationChanged();
 }
@@ -622,6 +644,9 @@ void MQTT::Client::setWillMessage(const QString& message)
  */
 void MQTT::Client::setPort(const quint16 port)
 {
+  if (m_client.port() == port)
+    return;
+
   m_client.setPort(port);
   Q_EMIT mqttConfigurationChanged();
 }
@@ -952,7 +977,8 @@ void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopic
     if (!isSubscriber())
       return;
 
-    if (m_topicName != topic)
+    QMqttTopicFilter filter(m_topicFilter);
+    if (!filter.match(topic))
       return;
 
     IO::ConnectionManager::instance().processPayload(message);

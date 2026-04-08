@@ -56,12 +56,14 @@ enum class ArrayType {
 static QStringList jsArrayToStringList(const QJSValue& jsValue)
 {
   // Convert each element to its string representation
+  static const QString kLength = QStringLiteral("length");
+
   QStringList result;
-  const int length = jsValue.property("length").toInt();
+  const int length = jsValue.property(kLength).toInt();
   result.reserve(length);
 
   for (int i = 0; i < length; ++i)
-    result.append(jsValue.property(i).toString());
+    result.append(jsValue.property(static_cast<quint32>(i)).toString());
 
   return result;
 }
@@ -84,27 +86,29 @@ static ArrayType detectArrayType(const QJSValue& jsValue)
   if (!jsValue.isArray())
     return ArrayType::Scalar;
 
-  const int length = jsValue.property("length").toInt();
+  static const QString kLength = QStringLiteral("length");
+  const int length = jsValue.property(kLength).toInt();
   if (length == 0)
     return ArrayType::Scalar;
 
+  // Scan elements to classify; early-exit once type is determined
   bool hasArray  = false;
   bool hasScalar = false;
 
   for (int i = 0; i < length; ++i) {
-    const auto element = jsValue.property(i);
-    if (element.isArray())
+    if (jsValue.property(static_cast<quint32>(i)).isArray())
       hasArray = true;
     else
       hasScalar = true;
+
+    if (hasArray && hasScalar)
+      return ArrayType::ArrayMixed;
   }
 
-  if (hasArray && hasScalar)
-    return ArrayType::ArrayMixed;
-  else if (hasArray && !hasScalar)
+  if (hasArray)
     return ArrayType::Array2D;
-  else
-    return ArrayType::Array1D;
+
+  return ArrayType::Array1D;
 }
 
 /**
@@ -119,12 +123,14 @@ static ArrayType detectArrayType(const QJSValue& jsValue)
 static QList<QStringList> convert2DArray(const QJSValue& jsValue)
 {
   // Extract each row sub-array into a separate frame
+  static const QString kLength = QStringLiteral("length");
+
   QList<QStringList> results;
-  const int rowCount = jsValue.property("length").toInt();
+  const int rowCount = jsValue.property(kLength).toInt();
   results.reserve(rowCount);
 
   for (int row = 0; row < rowCount; ++row) {
-    const auto rowArray = jsValue.property(row);
+    const auto rowArray = jsValue.property(static_cast<quint32>(row));
 
     if (!rowArray.isArray()) [[unlikely]] {
       qWarning() << "[FrameParser] Row" << row << "is not an array, skipping";
@@ -156,14 +162,15 @@ static QList<QStringList> convert2DArray(const QJSValue& jsValue)
 static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 {
   // Separate scalars from vector elements and find max vector length
-  const int elementCount = jsValue.property("length").toInt();
+  static const QString kLength = QStringLiteral("length");
+  const int elementCount = jsValue.property(kLength).toInt();
 
   QStringList scalars;
   QList<QStringList> vectors;
   qsizetype maxVectorLength = 0;
 
   for (int i = 0; i < elementCount; ++i) {
-    const auto element = jsValue.property(i);
+    const auto element = jsValue.property(static_cast<quint32>(i));
 
     if (element.isArray()) {
       const auto vec = jsArrayToStringList(element);
@@ -421,6 +428,18 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
     return {};
   }
 
+  // Fast path for 1D arrays (most common case): extract strings directly
+  // without the overhead of detectArrayType + toVariant().toStringList()
+  if (jsResult.isArray()) [[likely]] {
+    const int length = jsResult.property(QStringLiteral("length")).toInt();
+    if (length > 0 && !jsResult.property(static_cast<quint32>(0)).isArray()) [[likely]] {
+      QList<QStringList> results;
+      results.append(jsArrayToStringList(jsResult));
+      return results;
+    }
+  }
+
+  // Slow path for 2D/mixed arrays and edge cases
   QList<QStringList> results;
   switch (detectArrayType(jsResult)) {
     case ArrayType::Array2D:
@@ -430,7 +449,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
     case ArrayType::Array1D:
     case ArrayType::Scalar:
     default:
-      results.append(jsResult.toVariant().toStringList());
+      results.append(jsArrayToStringList(jsResult));
       return results;
   }
 }
@@ -481,6 +500,17 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
     return {};
   }
 
+  // Fast path for 1D arrays (most common case)
+  if (jsResult.isArray()) [[likely]] {
+    const int length = jsResult.property(QStringLiteral("length")).toInt();
+    if (length > 0 && !jsResult.property(static_cast<quint32>(0)).isArray()) [[likely]] {
+      QList<QStringList> results;
+      results.append(jsArrayToStringList(jsResult));
+      return results;
+    }
+  }
+
+  // Slow path for 2D/mixed arrays and edge cases
   QList<QStringList> results;
   switch (detectArrayType(jsResult)) {
     case ArrayType::Array2D:
@@ -490,7 +520,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
     case ArrayType::Array1D:
     case ArrayType::Scalar:
     default:
-      results.append(jsResult.toVariant().toStringList());
+      results.append(jsArrayToStringList(jsResult));
       return results;
   }
 }
@@ -511,8 +541,18 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
  */
 bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, bool showMessageBoxes)
 {
+  // Save existing parse function in case validation fails
+  auto& se               = engineForSource(sourceId);
+  QJSValue prevParseFn   = se.parseFunction;
+  QJSValue prevHexToArr  = se.hexToArray;
+
+  // Helper to restore previous state on failure
+  auto restorePrevious = [&]() {
+    se.parseFunction = prevParseFn;
+    se.hexToArray    = prevHexToArr;
+  };
+
   // Reset the engine and prepare for script evaluation
-  auto& se         = engineForSource(sourceId);
   se.parseFunction = QJSValue();
   se.engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
@@ -535,6 +575,7 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
       qWarning() << "[FrameParser] Source" << sourceId << "syntax error at line" << lineNumber
                  << ":" << errorMsg;
     }
+    restorePrevious();
     return false;
   }
 
@@ -549,6 +590,7 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
       qWarning() << "[FrameParser] Source" << sourceId
                  << "exceptions:" << exceptionStackTrace.join(QStringLiteral(", "));
     }
+    restorePrevious();
     return false;
   }
 
@@ -564,6 +606,7 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
     } else {
       qWarning() << "[FrameParser] Source" << sourceId << "missing or non-callable parse()";
     }
+    restorePrevious();
     return false;
   }
 
@@ -581,6 +624,7 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
       } else {
         qWarning() << "[FrameParser] No valid 'parse' function declaration found";
       }
+      restorePrevious();
       return false;
     }
 
@@ -597,6 +641,7 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
       } else {
         qWarning() << "[FrameParser] Parse function must have at least one parameter";
       }
+      restorePrevious();
       return false;
     }
 
@@ -613,6 +658,7 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
       } else {
         qWarning() << "[FrameParser] Deprecated two-parameter parse function";
       }
+      restorePrevious();
       return false;
     }
 
@@ -667,6 +713,7 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
       } else {
         qWarning() << "[FrameParser] Runtime error at line" << lineNumber << ":" << errorMsg;
       }
+      restorePrevious();
       return false;
     }
   }

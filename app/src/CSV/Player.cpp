@@ -153,6 +153,9 @@ const QString& CSV::Player::timestamp() const
  */
 void CSV::Player::play()
 {
+  if (frameCount() <= 0)
+    return;
+
   // Wrap around to start if at end of file
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
@@ -472,6 +475,9 @@ void CSV::Player::setProgress(const double progress)
   if (isPlaying())
     pause();
 
+  if (frameCount() <= 0)
+    return;
+
   int newFramePos = qMin(frameCount() - 1, qCeil(frameCount() * validProgress));
 
   if (newFramePos != m_framePos) {
@@ -773,7 +779,7 @@ void CSV::Player::generateDateTimeForRows(int interval)
   const auto format    = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
 
   for (int i = 0; i < m_csvData.size(); ++i) {
-    QString dateTimeString = startTime.addMSecs(i * interval).toString(format);
+    QString dateTimeString = startTime.addMSecs(static_cast<qint64>(i) * interval).toString(format);
     m_csvData[i].prepend(dateTimeString);
   }
 }

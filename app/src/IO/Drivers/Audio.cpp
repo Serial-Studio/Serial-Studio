@@ -241,7 +241,8 @@ static bool checkAndUpdateDeviceList(ma_context* context,
  * functionality will be disabled until fixed.
  */
 IO::Drivers::Audio::Audio()
-  : m_isOpen(false)
+  : m_init(false)
+  , m_isOpen(false)
   , m_selectedSampleRate(0)
   , m_selectedInputDevice(-1)
   , m_selectedInputSampleFormat(0)
@@ -620,10 +621,26 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
 
   // Initialize output device
   if (mode & QIODevice::WriteOnly) {
+    if (m_selectedOutputDevice < 0
+        || m_selectedOutputDevice >= m_outputDevices.size()
+        || m_selectedOutputDevice >= m_outputCapabilities.size()) {
+      qWarning() << "Audio::open: output device index out of range";
+      return false;
+    }
+
+    const auto& oc = m_outputCapabilities[m_selectedOutputDevice];
+    if (m_selectedOutputSampleFormat < 0
+        || m_selectedOutputSampleFormat >= oc.supportedFormats.size()
+        || m_selectedOutputChannelConfiguration < 0
+        || m_selectedOutputChannelConfiguration >= oc.supportedChannelCounts.size()) {
+      qWarning() << "Audio::open: output format/channel index out of range";
+      return false;
+    }
+
     // clang-format off
     m_config.playback.pDeviceID = &m_outputDevices[m_selectedOutputDevice].id;
-    m_config.playback.format = m_outputCapabilities[m_selectedOutputDevice].supportedFormats[m_selectedOutputSampleFormat];
-    m_config.playback.channels = m_outputCapabilities[m_selectedOutputDevice].supportedChannelCounts[m_selectedOutputChannelConfiguration];
+    m_config.playback.format = oc.supportedFormats[m_selectedOutputSampleFormat];
+    m_config.playback.channels = oc.supportedChannelCounts[m_selectedOutputChannelConfiguration];
     // clang-format on
   }
 

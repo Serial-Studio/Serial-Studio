@@ -21,6 +21,7 @@
 
 #include "IO/Checksum.h"
 
+#include <QDebug>
 #include <cstdint>
 
 //--------------------------------------------------------------------------------------------------
@@ -71,7 +72,11 @@
  */
 static void big_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 {
-  assert(frame && data && size > 0);
+  if (!frame || !data || size == 0) {
+    qWarning() << "big_endian_memcpy: invalid arguments";
+    return;
+  }
+
   const uint8_t* raw_data = static_cast<const uint8_t*>(data);
 
 #if IS_LITTLE_ENDIAN
@@ -98,7 +103,11 @@ static void big_endian_memcpy(uint8_t* frame, const void* data, size_t size)
  */
 static void little_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 {
-  assert(frame && data && size > 0);
+  if (!frame || !data || size == 0) {
+    qWarning() << "little_endian_memcpy: invalid arguments";
+    return;
+  }
+
   const uint8_t* raw_data = static_cast<const uint8_t*>(data);
 
 #if IS_LITTLE_ENDIAN

@@ -975,8 +975,10 @@ void Widgets::GPS::renderReferenceOverlay(
  */
 void Widgets::GPS::paintMap(QPainter* painter, const QSize& view)
 {
-  // Validate arguments
-  Q_ASSERT(painter);
+  if (!painter) {
+    qWarning() << "GPS::paintMap: null painter";
+    return;
+  }
 
   // Disable antialiasing for tile rendering to prevent seams
   painter->setRenderHint(QPainter::Antialiasing, false);
@@ -1106,8 +1108,10 @@ void Widgets::GPS::paintMap(QPainter* painter, const QSize& view)
  */
 void Widgets::GPS::paintPathData(QPainter* painter, const QSize& view)
 {
-  // Validate arguments
-  Q_ASSERT(painter);
+  if (!painter) {
+    qWarning() << "GPS::paintPathData: null painter";
+    return;
+  }
 
   // No need to update if widget is not enabled
   if (!isEnabled())
@@ -1248,8 +1252,10 @@ void Widgets::GPS::paintPathData(QPainter* painter, const QSize& view)
  */
 void Widgets::GPS::paintAttributionText(QPainter* painter, const QSize& view)
 {
-  // Validate arguments
-  Q_ASSERT(painter);
+  if (!painter) {
+    qWarning() << "GPS::paintAttributionText: null painter";
+    return;
+  }
 
   // Attribution string to display
   const int margin    = 6;

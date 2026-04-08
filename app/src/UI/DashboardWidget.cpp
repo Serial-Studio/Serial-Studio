@@ -288,9 +288,9 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         break;
     }
 
-    if (m_dbWidget) {
+    if (m_dbWidget)
       m_dbWidget->setParentItem(this);
-      Q_EMIT widgetIndexChanged();
-    }
+
+    Q_EMIT widgetIndexChanged();
   }
 }

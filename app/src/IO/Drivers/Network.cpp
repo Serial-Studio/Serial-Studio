@@ -150,6 +150,9 @@ bool IO::Drivers::Network::isWritable() const noexcept
  */
 bool IO::Drivers::Network::configurationOk() const noexcept
 {
+  if (socketType() == QAbstractSocket::UdpSocket)
+    return udpRemotePort() > 0 && m_hostExists;
+
   return tcpPort() > 0 && m_hostExists;
 }
 

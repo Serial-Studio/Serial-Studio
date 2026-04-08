@@ -160,9 +160,10 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
                                  .arg(m_retryCount)
                                  .arg(m_maxRetries));
 
-          // Re-read the block and resend
+          // Rewind file to re-read the current block
           int blockSize     = m_use1K ? 1024 : 128;
-          qint64 blockStart = static_cast<qint64>(m_blockNumber - 1) * blockSize;
+          qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
+          m_bytesSent       = blockStart;
           m_file.seek(blockStart);
           sendBlock();
         } else if (ch == kCAN) {
@@ -339,7 +340,8 @@ void IO::Protocols::XMODEM::handleTimeout()
     sendEOT();
   } else if (m_state == State::WaitingForAck) {
     int blockSize     = m_use1K ? 1024 : 128;
-    qint64 blockStart = static_cast<qint64>(m_blockNumber - 1) * blockSize;
+    qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
+    m_bytesSent       = blockStart;
     m_file.seek(blockStart);
     sendBlock();
   } else if (m_state == State::WaitingForStart) {

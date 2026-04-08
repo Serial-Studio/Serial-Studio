@@ -950,10 +950,9 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
     } else {
       removeTerminalWidget();
     }
-
-    Q_EMIT widgetCountChanged();
   }
 
+  Q_EMIT widgetCountChanged();
   Q_EMIT terminalEnabledChanged();
 }
 

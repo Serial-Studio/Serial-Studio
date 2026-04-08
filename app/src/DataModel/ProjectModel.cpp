@@ -492,9 +492,6 @@ void DataModel::ProjectModel::deleteSource(int sourceId)
 
   m_sources.erase(m_sources.begin() + sourceId);
 
-  for (auto& group : m_sources)
-    (void)group;
-
   for (auto& group : m_groups)
     if (group.sourceId == sourceId)
       group.sourceId = 0;
@@ -1082,7 +1079,10 @@ void DataModel::ProjectModel::setPointCount(const int points)
     return;
 
   m_pointCount = points;
-  UI::Dashboard::instance().setPoints(points);
+
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    UI::Dashboard::instance().setPoints(points);
+
   setModified(true);
   Q_EMIT pointCountChanged();
 }
@@ -1245,15 +1245,13 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     return false;
 
   // During a silent reload, reset state without emitting signals so the
+  // Clear internal data without emitting intermediate signals, so the
   // dashboard doesn't briefly flash empty while we repopulate from disk.
-  if (m_silentReload) {
-    m_groups.clear();
-    m_actions.clear();
-    m_sources.clear();
-    m_workspaces.clear();
-    m_widgetSettings = QJsonObject();
-  } else
-    newJsonFile();
+  m_groups.clear();
+  m_actions.clear();
+  m_sources.clear();
+  m_workspaces.clear();
+  m_widgetSettings = QJsonObject();
 
   m_filePath = path;
 
@@ -1388,7 +1386,8 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     m_widgetSettings.remove(QStringLiteral("__pointCount__"));
   }
 
-  UI::Dashboard::instance().setPoints(m_pointCount);
+  if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
+    UI::Dashboard::instance().setPoints(m_pointCount);
 
   // Migrate legacy "__layout__:N__" keys to "layout:N"
   const auto keys = m_widgetSettings.keys();

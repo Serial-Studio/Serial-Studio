@@ -115,7 +115,8 @@ Item {
     const srcTotalH = {}
 
     // initialise cursors; handle zero-source case (treat as single source 0)
-    const srcList = sources.length > 0 ? sources : [{ sourceId: 0, busType: 0, title: "" }]
+    const fallback = [{ sourceId: 0, busType: SerialStudio.UART, title: "" }]
+    const srcList = sources.length > 0 ? sources : fallback
 
     // first pass: measure total height per source
     for (const src of srcList)

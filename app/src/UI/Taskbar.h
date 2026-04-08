@@ -235,6 +235,7 @@ private:
   QQuickItem* m_activeWindow;
   UI::WindowManager* m_windowManager;
   QMap<QQuickItem*, int> m_windowIDs;
+  QMap<QQuickItem*, QMetaObject::Connection> m_windowConnections;
 
   QMap<UI::WidgetID, int> m_widgetIdToWindowId;
   QMap<int, UI::WidgetID> m_windowIdToWidgetId;

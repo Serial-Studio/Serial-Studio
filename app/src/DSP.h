@@ -28,6 +28,7 @@
 #include <cstring>
 #include <limits>
 #include <memory>
+#include <QDebug>
 #include <QList>
 #include <QObject>
 #include <QPointF>
@@ -68,7 +69,10 @@ public:
    * @param capacity Maximum number of elements the queue can hold.
    */
   explicit FixedQueue(std::size_t capacity = 100)
-    : m_capacity(capacity), m_data(std::shared_ptr<T[]>(new T[capacity])), m_start(0), m_size(0)
+    : m_capacity(capacity < 1 ? 1 : capacity)
+    , m_data(std::shared_ptr<T[]>(new T[capacity < 1 ? 1 : capacity]))
+    , m_start(0)
+    , m_size(0)
   {}
 
   /**
@@ -189,7 +193,11 @@ public:
    */
   [[nodiscard]] const T& front() const
   {
-    Q_ASSERT(m_size > 0);
+    if (m_size == 0) [[unlikely]] {
+      qWarning() << "DSP::RingBuffer::front() called on empty buffer";
+      return m_data[0];
+    }
+
     return m_data[m_start];
   }
 
@@ -202,8 +210,12 @@ public:
    */
   [[nodiscard]] const T& back() const
   {
-    Q_ASSERT(m_size > 0);
-    return m_data[wrappedIndex(m_size > 0 ? m_size - 1 : 0)];
+    if (m_size == 0) [[unlikely]] {
+      qWarning() << "DSP::RingBuffer::back() called on empty buffer";
+      return m_data[0];
+    }
+
+    return m_data[wrappedIndex(m_size - 1)];
   }
 
   /**
@@ -287,6 +299,9 @@ public:
    */
   void resize(std::size_t newCapacity)
   {
+    if (newCapacity < 1)
+      newCapacity = 1;
+
     if (newCapacity == m_capacity)
       return;
 

@@ -457,6 +457,12 @@ void UI::Taskbar::setActiveGroupId(int groupId)
   if (!m_rebuildInProgress)
     DataModel::ProjectModel::instance().setActiveGroupId(groupId);
 
+  // Disconnect all window state connections before clearing
+  for (auto it = m_windowConnections.begin(); it != m_windowConnections.end(); ++it)
+    disconnect(*it);
+
+  m_windowConnections.clear();
+
   // Reset models and window state
   m_windowIDs.clear();
   m_taskbarButtons->clear();
@@ -704,7 +710,12 @@ void UI::Taskbar::unregisterWindow(QQuickItem* window)
 {
   // Remove the window's association and clean up connections
   if (m_windowIDs.contains(window)) {
-    disconnect(window);
+    auto it = m_windowConnections.find(window);
+    if (it != m_windowConnections.end()) {
+      disconnect(*it);
+      m_windowConnections.erase(it);
+    }
+
     m_windowIDs.remove(window);
     if (m_windowManager)
       m_windowManager->unregisterWindow(window);
@@ -757,7 +768,8 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
   Q_EMIT registeredWindowsChanged();
 
   // Forward window state changes to the taskbar
-  connect(window, &QQuickItem::stateChanged, this, [=, this] { Q_EMIT statesChanged(); });
+  m_windowConnections[window] =
+    connect(window, &QQuickItem::stateChanged, this, [=, this] { Q_EMIT statesChanged(); });
 
   // Restore saved layout once all windows are registered
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager) {
@@ -845,6 +857,12 @@ void UI::Taskbar::rebuildModel()
   {
     QSignalBlocker fullBlocker(m_fullModel);
     QSignalBlocker taskbarBlocker(m_taskbarButtons);
+
+    // Disconnect all window state connections before clearing
+    for (auto it = m_windowConnections.begin(); it != m_windowConnections.end(); ++it)
+      disconnect(*it);
+
+    m_windowConnections.clear();
 
     // Clear all state
     m_windowIDs.clear();
@@ -1205,6 +1223,15 @@ void UI::Taskbar::onTerminalToggled()
   const auto& wm = db.widgetMap();
 
   if (on) {
+    // Skip if terminal already exists in fullModel (e.g. after rebuildModel)
+    for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+      auto* item = m_fullModel->item(i);
+      if (item
+          && item->data(TaskbarModel::WidgetTypeRole).toInt()
+               == static_cast<int>(SerialStudio::DashboardTerminal))
+        return;
+    }
+
     // Find the terminal entry in the widget map
     int termWindowId = -1;
     for (auto it = wm.begin(); it != wm.end(); ++it) {

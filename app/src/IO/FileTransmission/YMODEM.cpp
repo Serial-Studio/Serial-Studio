@@ -131,6 +131,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
         if (ch == kACK) {
           m_timeoutTimer.stop();
           m_retryCount = 0;
+          m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
 
           // Check if file is fully sent
           if (m_file.atEnd()) {
@@ -155,10 +156,11 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
             return;
           }
 
-          // Resend current block
+          // Rewind file to re-read the current block
           Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
-          int blockSize     = 1024;
-          qint64 blockStart = static_cast<qint64>(m_blockNumber - 1) * blockSize;
+          constexpr int blockSize = 1024;
+          qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
+          m_bytesSent       = blockStart;
           m_file.seek(blockStart);
           m_yState = YState::SendingData;
           sendDataBlock();
@@ -300,7 +302,6 @@ void IO::Protocols::YMODEM::sendDataBlock()
   Q_EMIT statusMessage(
     tr("Sending block %1 (%2/%3 bytes)").arg(m_blockNumber).arg(m_bytesSent).arg(m_fileSize));
 
-  m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
-  m_yState      = YState::WaitingForDataAck;
+  m_yState = YState::WaitingForDataAck;
   m_timeoutTimer.start(m_timeoutMs);
 }

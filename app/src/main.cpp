@@ -111,8 +111,8 @@ protected:
       auto* fileEvent    = static_cast<QFileOpenEvent*>(event);
       const QString path = fileEvent->file();
       if (path.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive)) {
-        DataModel::ProjectModel::instance().openJsonFile(path);
         AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+        DataModel::ProjectModel::instance().openJsonFile(path);
         return true;
       }
     }
@@ -296,8 +296,8 @@ int main(int argc, char** argv)
 
   if (parser.isSet(pOpt)) {
     QString projectPath = parser.value(pOpt);
-    DataModel::ProjectModel::instance().openJsonFile(projectPath);
     AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+    DataModel::ProjectModel::instance().openJsonFile(projectPath);
   }
 
   else if (parser.isSet(qOpt))
@@ -419,9 +419,9 @@ int main(int argc, char** argv)
 
       if (parser.isSet(modbusSlaveOpt)) {
         bool ok;
-        quint8 slave = parser.value(modbusSlaveOpt).toUInt(&ok);
-        if (ok && slave >= 1 && slave <= 247)
-          IO::ConnectionManager::instance().modbus()->setSlaveAddress(slave);
+        unsigned int slave_val = parser.value(modbusSlaveOpt).toUInt(&ok);
+        if (ok && slave_val >= 1 && slave_val <= 247)
+          IO::ConnectionManager::instance().modbus()->setSlaveAddress(static_cast<quint8>(slave_val));
         else
           qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
       }
@@ -551,9 +551,9 @@ int main(int argc, char** argv)
 
       if (parser.isSet(modbusSlaveOpt)) {
         bool ok;
-        quint8 slave = parser.value(modbusSlaveOpt).toUInt(&ok);
-        if (ok && slave >= 1 && slave <= 247)
-          IO::ConnectionManager::instance().modbus()->setSlaveAddress(slave);
+        unsigned int slave_val = parser.value(modbusSlaveOpt).toUInt(&ok);
+        if (ok && slave_val >= 1 && slave_val <= 247)
+          IO::ConnectionManager::instance().modbus()->setSlaveAddress(static_cast<quint8>(slave_val));
         else
           qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
       }

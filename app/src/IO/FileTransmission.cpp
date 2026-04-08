@@ -572,7 +572,11 @@ void IO::FileTransmission::setProtocolTimeout(int msec)
  */
 void IO::FileTransmission::setLineTransmissionInterval(int msec)
 {
-  m_timer.setInterval(qMax(0, msec));
+  const int effective = qMax(0, msec);
+  if (m_timer.interval() == effective)
+    return;
+
+  m_timer.setInterval(effective);
   Q_EMIT lineTransmissionIntervalChanged();
 }
 

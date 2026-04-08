@@ -491,7 +491,7 @@ void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
  */
 void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
 {
-  if (index < m_pluginList.count()) {
+  if (index < m_pluginList.count() && m_pluginIndex != index) {
     m_pluginIndex = index;
     m_settings.setValue("CanBusDriver/pluginIndex", index);
     refreshInterfaces();
@@ -504,7 +504,7 @@ void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
  */
 void IO::Drivers::CANBus::setInterfaceIndex(const quint8 index)
 {
-  if (index < m_interfaceList.count()) {
+  if (index < m_interfaceList.count() && m_interfaceIndex != index) {
     m_interfaceIndex = index;
     m_settings.setValue("CanBusDriver/interfaceIndex", index);
     Q_EMIT interfaceIndexChanged();

@@ -144,7 +144,7 @@ private:
   QProcess* m_process;
 
   QThread m_pipeThread;
-  std::atomic<bool> m_pipeRunning{false};
+  std::atomic<bool> m_pipeRunning;
 
   QSettings m_settings;
   QString m_executable;

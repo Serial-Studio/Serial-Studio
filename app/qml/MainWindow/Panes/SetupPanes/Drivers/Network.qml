@@ -165,7 +165,7 @@ Item {
             Cpp_IO_Network.tcpPort = text
 
           if (text.length === 0)
-            Cpp_IO_Network.port = Cpp_IO_Network.defaultTcpPort
+            Cpp_IO_Network.tcpPort = Cpp_IO_Network.defaultTcpPort
         }
 
         validator: IntValidator {

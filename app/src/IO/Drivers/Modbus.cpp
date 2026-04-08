@@ -638,7 +638,7 @@ void IO::Drivers::Modbus::setPort(const quint16 port)
  */
 void IO::Drivers::Modbus::setProtocolIndex(const quint8 index)
 {
-  if (index < 2) {
+  if (index < 2 && m_protocolIndex != index) {
     m_protocolIndex = index;
     m_settings.setValue("ModbusDriver/protocolIndex", index);
     Q_EMIT protocolIndexChanged();
@@ -1038,7 +1038,6 @@ void IO::Drivers::Modbus::setBaudRate(const qint32 rate)
   if (m_baudRate != rate && rate > 0) {
     m_baudRate = rate;
     m_settings.setValue("ModbusDriver/baudRate", rate);
-    qDebug() << "Modbus baud rate set to" << rate;
     Q_EMIT baudRateChanged();
   }
 }
@@ -1052,7 +1051,7 @@ void IO::Drivers::Modbus::setSerialPortIndex(const quint8 index)
   if (m_serialPortNames.isEmpty())
     refreshSerialPorts();
 
-  if (index < m_serialPortNames.count()) {
+  if (index < m_serialPortNames.count() && m_serialPortIndex != index) {
     m_serialPortIndex = index;
     m_settings.setValue("ModbusDriver/serialPortIndex", index);
     Q_EMIT serialPortIndexChanged();
@@ -1064,7 +1063,7 @@ void IO::Drivers::Modbus::setSerialPortIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setParityIndex(const quint8 index)
 {
-  if (index < 5) {
+  if (index < 5 && m_parityIndex != index) {
     m_parityIndex = index;
     m_settings.setValue("ModbusDriver/parityIndex", index);
     Q_EMIT parityIndexChanged();
@@ -1076,7 +1075,7 @@ void IO::Drivers::Modbus::setParityIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setDataBitsIndex(const quint8 index)
 {
-  if (index < 4) {
+  if (index < 4 && m_dataBitsIndex != index) {
     m_dataBitsIndex = index;
     m_settings.setValue("ModbusDriver/dataBitsIndex", index);
     Q_EMIT dataBitsIndexChanged();
@@ -1088,7 +1087,7 @@ void IO::Drivers::Modbus::setDataBitsIndex(const quint8 index)
  */
 void IO::Drivers::Modbus::setStopBitsIndex(const quint8 index)
 {
-  if (index < 3) {
+  if (index < 3 && m_stopBitsIndex != index) {
     m_stopBitsIndex = index;
     m_settings.setValue("ModbusDriver/stopBitsIndex", index);
     Q_EMIT stopBitsIndexChanged();

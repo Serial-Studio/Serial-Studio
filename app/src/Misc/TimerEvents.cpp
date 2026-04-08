@@ -143,7 +143,7 @@ void Misc::TimerEvents::setFPS(int hz)
 
   if (m_uiTimerHz != hz) {
     m_uiTimerHz = hz;
-    m_settings.setValue("uiTimerHz", hz);
+    m_settings.setValue("uiRefreshRate", hz);
 
     if (m_uiTimer.isActive()) {
       m_uiTimer.stop();

@@ -53,7 +53,7 @@
  * Restores all persisted settings from QSettings and connects the pipe-thread
  * started() signal to the read-loop slot.
  */
-IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr)
+IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr), m_pipeRunning(false)
 {
   // Restore persisted settings
   const int saved = m_settings.value("ProcessDriver/mode", 0).toInt();

@@ -273,7 +273,7 @@ void Misc::CommonFonts::setWidgetFontScale(const double scale)
 
   m_widgetFontScale = clamped;
   ++m_widgetFontRevision;
-  m_settings.setValue("Widgets/FontScale", m_widgetFontScale);
+  m_settings.setValue("CommonFonts/FontScale", m_widgetFontScale);
   Q_EMIT fontsChanged();
 }
 
@@ -289,6 +289,6 @@ void Misc::CommonFonts::setWidgetFontFamily(const QString& family)
   m_widgetFontFamily = family;
   m_widgetFontIndex  = availableFonts().indexOf(m_widgetFontFamily);
   ++m_widgetFontRevision;
-  m_settings.setValue("Widgets/FontFamily", m_widgetFontFamily);
+  m_settings.setValue("CommonFonts/FontFamily", m_widgetFontFamily);
   Q_EMIT fontsChanged();
 }

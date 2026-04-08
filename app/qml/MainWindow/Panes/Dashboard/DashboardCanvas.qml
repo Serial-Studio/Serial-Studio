@@ -136,9 +136,11 @@ Item {
         widgetIndex: model.windowId
 
         Component.onDestruction: {
-          root.taskBar.unregisterWindow(this)
-          if (root.taskBar.activeWindow === this)
-            root.taskBar.activeWindow = null
+          if (root.taskBar) {
+            root.taskBar.unregisterWindow(this)
+            if (root.taskBar.activeWindow === this)
+              root.taskBar.activeWindow = null
+          }
         }
 
         Component.onCompleted: {

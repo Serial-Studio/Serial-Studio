@@ -114,7 +114,7 @@ Item {
 
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.serviceNames
-        onCurrentIndexChanged: Cpp_IO_Bluetooth_LE.selectService(currentIndex)
+        onActivated: Cpp_IO_Bluetooth_LE.selectService(currentIndex)
 
         Connections {
           target: Cpp_IO_Bluetooth_LE

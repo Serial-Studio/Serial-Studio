@@ -401,7 +401,11 @@ void Licensing::LemonSqueezy::openCustomerPortal()
  */
 void Licensing::LemonSqueezy::setLicense(const QString& license)
 {
-  m_license = license.simplified();
+  const auto simplified = license.simplified();
+  if (m_license == simplified)
+    return;
+
+  m_license = simplified;
   Q_EMIT licenseChanged();
 }
 
