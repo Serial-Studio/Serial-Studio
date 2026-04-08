@@ -395,6 +395,14 @@ Widgets.SmartDialog {
               if (value !== Cpp_UI_Dashboard.points)
                 Cpp_UI_Dashboard.points = value
             }
+
+            Connections {
+              target: Cpp_UI_Dashboard
+              function onPointsChanged() {
+                if (_points.value !== Cpp_UI_Dashboard.points)
+                  _points.value = Cpp_UI_Dashboard.points
+              }
+            }
           }
 
           Label {

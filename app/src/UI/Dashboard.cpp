@@ -24,6 +24,7 @@
 #include "AppState.h"
 #include "CSV/Player.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Player.h"
 #include "Misc/IconEngine.h"
@@ -73,6 +74,21 @@ UI::Dashboard::Dashboard()
       resetData(true);
   }, Qt::QueuedConnection);
   connect(&AppState::instance(), &AppState::projectFileChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
+  connect(&AppState::instance(), &AppState::operationModeChanged, this, [=, this] {
+    if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
+      const int project_pts = DataModel::ProjectModel::instance().pointCount();
+      if (project_pts > 0 && m_points != project_pts) {
+        m_points = project_pts;
+        Q_EMIT pointsChanged();
+      }
+    } else {
+      const int saved = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
+      if (m_points != saved) {
+        m_points = saved;
+        Q_EMIT pointsChanged();
+      }
+    }
+  }, Qt::QueuedConnection);
   // clang-format on
 
   // Reset dashboard data if MQTT client is subscribed
@@ -701,7 +717,10 @@ void UI::Dashboard::setPoints(const int points)
 {
   if (m_points != points) {
     m_points = points;
-    m_settings.setValue("Dashboard/Points", m_points);
+
+    if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+      m_settings.setValue("Dashboard/Points", m_points);
+
     configureLineSeries();
     configureMultiLineSeries();
     Q_EMIT pointsChanged();
@@ -715,6 +734,15 @@ void UI::Dashboard::setPoints(const int points)
  */
 void UI::Dashboard::resetData(const bool notify)
 {
+  // Restore saved point count when not in ProjectFile mode
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
+    const int saved = qMax(1, m_settings.value("Dashboard/Points", kDefaultPlotPoints).toInt());
+    if (m_points != saved) {
+      m_points = saved;
+      Q_EMIT pointsChanged();
+    }
+  }
+
   // Clear the widget registry (emits widgetDestroyed for each widget)
   WidgetRegistry::instance().clear();
 

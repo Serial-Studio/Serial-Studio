@@ -813,11 +813,12 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
   props.append(iface);
 
   IO::DriverProperty bitrate;
-  bitrate.key     = QStringLiteral("bitrate");
-  bitrate.label   = tr("Bitrate");
-  bitrate.type    = IO::DriverProperty::ComboBox;
-  bitrate.value   = bitrateList().indexOf(QString::number(m_bitrate));
-  bitrate.options = bitrateList();
+  bitrate.key   = QStringLiteral("bitrate");
+  bitrate.label = tr("Bitrate");
+  bitrate.type  = IO::DriverProperty::IntField;
+  bitrate.value = m_bitrate;
+  bitrate.min   = 10000;
+  bitrate.max   = 1000000;
   props.append(bitrate);
 
   IO::DriverProperty canFd;
@@ -845,12 +846,75 @@ void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& 
     setInterfaceIndex(static_cast<quint8>(value.toInt()));
 
   else if (key == QLatin1String("bitrate")) {
-    const auto list = bitrateList();
-    const int idx   = value.toInt();
-    if (idx >= 0 && idx < list.size())
-      setBitrate(static_cast<quint32>(list.at(idx).toUInt()));
+    const auto v = value.toUInt();
+    if (v >= 10000)
+      setBitrate(static_cast<quint32>(v));
+    else {
+      const auto list = bitrateList();
+      const int idx   = static_cast<int>(v);
+      if (idx >= 0 && idx < list.size())
+        setBitrate(static_cast<quint32>(list.at(idx).toUInt()));
+    }
   }
 
   else if (key == QLatin1String("canFD"))
     setCanFD(value.toBool());
+}
+
+/**
+ * @brief Returns a JSON identifier for the currently selected plugin and interface.
+ *
+ * Stores plugin and interface names so they can be matched by name on reload,
+ * regardless of enumeration order.
+ */
+QJsonObject IO::Drivers::CANBus::deviceIdentifier() const
+{
+  QJsonObject id;
+
+  if (m_pluginIndex < m_pluginList.size())
+    id.insert(QStringLiteral("plugin"), m_pluginList.at(m_pluginIndex));
+
+  if (m_interfaceIndex < m_interfaceList.size())
+    id.insert(QStringLiteral("interface"), m_interfaceList.at(m_interfaceIndex));
+
+  return id;
+}
+
+/**
+ * @brief Selects the plugin and interface matching a previously saved identifier.
+ *
+ * Matches by plugin name first, then by interface name within that plugin.
+ */
+bool IO::Drivers::CANBus::selectByIdentifier(const QJsonObject& id)
+{
+  if (id.isEmpty())
+    return false;
+
+  bool matched = false;
+
+  // Match plugin by name
+  const auto saved_plugin = id.value(QStringLiteral("plugin")).toString();
+  if (!saved_plugin.isEmpty()) {
+    for (int i = 0; i < m_pluginList.size(); ++i) {
+      if (m_pluginList.at(i) == saved_plugin) {
+        setPluginIndex(static_cast<quint8>(i));
+        matched = true;
+        break;
+      }
+    }
+  }
+
+  // Match interface by name
+  const auto saved_iface = id.value(QStringLiteral("interface")).toString();
+  if (!saved_iface.isEmpty()) {
+    for (int i = 0; i < m_interfaceList.size(); ++i) {
+      if (m_interfaceList.at(i) == saved_iface) {
+        setInterfaceIndex(static_cast<quint8>(i));
+        matched = true;
+        break;
+      }
+    }
+  }
+
+  return matched;
 }

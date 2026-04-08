@@ -382,7 +382,7 @@ QStringList IO::Drivers::UART::portList() const
  */
 QStringList IO::Drivers::UART::baudRateList() const
 {
-  // Build a sorted set of standard baud rates plus the current custom rate
+  // Build a sorted set of standard baud rates
   QSet<qint32> baudSet = {110,
                           150,
                           300,
@@ -400,7 +400,6 @@ QStringList IO::Drivers::UART::baudRateList() const
                           576000,
                           921600};
 
-  baudSet.insert(m_baudRate);
   QList<qint32> sortedList = baudSet.values();
   std::sort(sortedList.begin(), sortedList.end());
 
@@ -1076,11 +1075,11 @@ QList<IO::DriverProperty> IO::Drivers::UART::driverProperties() const
   props.append(port);
 
   IO::DriverProperty baud;
-  baud.key     = QStringLiteral("baudRate");
-  baud.label   = tr("Baud Rate");
-  baud.type    = IO::DriverProperty::ComboBox;
-  baud.value   = baudRateList().indexOf(QString::number(m_baudRate));
-  baud.options = baudRateList();
+  baud.key   = QStringLiteral("baudRate");
+  baud.label = tr("Baud Rate");
+  baud.type  = IO::DriverProperty::IntField;
+  baud.value = m_baudRate;
+  baud.min   = 1;
   props.append(baud);
 
   IO::DriverProperty parity;
@@ -1143,10 +1142,14 @@ void IO::Drivers::UART::setDriverProperty(const QString& key, const QVariant& va
     setPortIndex(static_cast<quint8>(value.toInt()));
 
   else if (key == QLatin1String("baudRate")) {
-    const auto list = baudRateList();
-    const int idx   = value.toInt();
-    if (idx >= 0 && idx < list.size())
-      setBaudRate(list.at(idx).toInt());
+    const int v = value.toInt();
+    if (v >= 110)
+      setBaudRate(v);
+    else {
+      const auto list = baudRateList();
+      if (v >= 0 && v < list.size())
+        setBaudRate(list.at(v).toInt());
+    }
   }
 
   else if (key == QLatin1String("parityIndex"))

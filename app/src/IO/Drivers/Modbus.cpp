@@ -1038,6 +1038,7 @@ void IO::Drivers::Modbus::setBaudRate(const qint32 rate)
   if (m_baudRate != rate && rate > 0) {
     m_baudRate = rate;
     m_settings.setValue("ModbusDriver/baudRate", rate);
+    qDebug() << "Modbus baud rate set to" << rate;
     Q_EMIT baudRateChanged();
   }
 }
@@ -1639,11 +1640,11 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
     props.append(serial);
 
     IO::DriverProperty baud;
-    baud.key     = QStringLiteral("baudRate");
-    baud.label   = tr("Baud Rate");
-    baud.type    = IO::DriverProperty::ComboBox;
-    baud.value   = baudRateList().indexOf(QString::number(m_baudRate));
-    baud.options = baudRateList();
+    baud.key   = QStringLiteral("baudRate");
+    baud.label = tr("Baud Rate");
+    baud.type  = IO::DriverProperty::IntField;
+    baud.value = m_baudRate;
+    baud.min   = 1;
     props.append(baud);
 
     IO::DriverProperty parity;
@@ -1727,10 +1728,14 @@ void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& 
     setStopBitsIndex(static_cast<quint8>(value.toInt()));
 
   else if (key == QLatin1String("baudRate")) {
-    const auto list = baudRateList();
-    const int idx   = value.toInt();
-    if (idx >= 0 && idx < list.size())
-      setBaudRate(list.at(idx).toInt());
+    const int v = value.toInt();
+    if (v >= 110)
+      setBaudRate(v);
+    else {
+      const auto list = baudRateList();
+      if (v >= 0 && v < list.size())
+        setBaudRate(list.at(v).toInt());
+    }
   }
 
   else if (key == QLatin1String("registerGroups")) {

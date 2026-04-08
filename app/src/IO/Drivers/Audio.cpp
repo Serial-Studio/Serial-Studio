@@ -1681,3 +1681,111 @@ void IO::Drivers::Audio::setDriverProperty(const QString& key, const QVariant& v
   else if (key == QLatin1String("inputChannels"))
     setSelectedInputChannelConfiguration(value.toInt());
 }
+
+/**
+ * @brief Returns a JSON identifier for the currently selected audio input device.
+ *
+ * Stores the device name and actual sample rate, format name, and channel count
+ * so they can be restored by value across sessions.
+ */
+QJsonObject IO::Drivers::Audio::deviceIdentifier() const
+{
+  QJsonObject id;
+
+  if (m_selectedInputDevice < 0 || m_selectedInputDevice >= m_inputDevices.size())
+    return id;
+
+  // Device name
+  id.insert(QStringLiteral("inputDeviceName"),
+            QString::fromUtf8(m_inputDevices[m_selectedInputDevice].name));
+
+  // Actual sample rate value
+  const auto rates = sampleRates();
+  if (m_selectedSampleRate >= 0 && m_selectedSampleRate < rates.size())
+    id.insert(QStringLiteral("sampleRateValue"), rates.at(m_selectedSampleRate).toInt());
+
+  // Format name string
+  const auto fmts = inputSampleFormats();
+  if (m_selectedInputSampleFormat >= 0 && m_selectedInputSampleFormat < fmts.size())
+    id.insert(QStringLiteral("formatName"), fmts.at(m_selectedInputSampleFormat));
+
+  // Channel count
+  if (validateInput()) {
+    const auto& caps = m_inputCapabilities[m_selectedInputDevice];
+    if (m_selectedInputChannelConfiguration >= 0
+        && m_selectedInputChannelConfiguration < caps.supportedChannelCounts.size())
+      id.insert(QStringLiteral("channelCount"),
+                caps.supportedChannelCounts.at(m_selectedInputChannelConfiguration));
+  }
+
+  return id;
+}
+
+/**
+ * @brief Selects the input device and sub-settings matching a saved identifier.
+ *
+ * Matches device by name, then restores sample rate, format, and channel
+ * configuration by looking up their actual values in the device's capability lists.
+ */
+bool IO::Drivers::Audio::selectByIdentifier(const QJsonObject& id)
+{
+  if (id.isEmpty())
+    return false;
+
+  // Match device by name
+  const auto saved_name = id.value(QStringLiteral("inputDeviceName")).toString();
+  if (saved_name.isEmpty())
+    return false;
+
+  int device_idx = -1;
+  for (int i = 0; i < m_inputDevices.size(); ++i) {
+    if (QString::fromUtf8(m_inputDevices[i].name) == saved_name) {
+      device_idx = i;
+      break;
+    }
+  }
+
+  if (device_idx < 0)
+    return false;
+
+  // Select the device (resets sub-settings to defaults)
+  setSelectedInputDevice(device_idx);
+
+  // Restore sample rate by value
+  const int saved_rate = id.value(QStringLiteral("sampleRateValue")).toInt();
+  if (saved_rate > 0) {
+    const auto rates = sampleRates();
+    for (int i = 0; i < rates.size(); ++i) {
+      if (rates.at(i).toInt() == saved_rate) {
+        setSelectedSampleRate(i);
+        break;
+      }
+    }
+  }
+
+  // Restore format by name
+  const auto saved_fmt = id.value(QStringLiteral("formatName")).toString();
+  if (!saved_fmt.isEmpty()) {
+    const auto fmts = inputSampleFormats();
+    for (int i = 0; i < fmts.size(); ++i) {
+      if (fmts.at(i) == saved_fmt) {
+        setSelectedInputSampleFormat(i);
+        break;
+      }
+    }
+  }
+
+  // Restore channel config by count
+  const int saved_ch = id.value(QStringLiteral("channelCount")).toInt();
+  if (saved_ch > 0 && validateInput()) {
+    const auto& caps = m_inputCapabilities[m_selectedInputDevice];
+    for (int i = 0; i < caps.supportedChannelCounts.size(); ++i) {
+      if (caps.supportedChannelCounts.at(i) == saved_ch) {
+        setSelectedInputChannelConfiguration(i);
+        break;
+      }
+    }
+  }
+
+  return true;
+}
