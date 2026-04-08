@@ -362,6 +362,10 @@ endif()
 #
 #---------------------------------------------------------------------------------------------------
 
+set(QSU_QT_VERSION_MAJOR 6)
+set(QSIMPLE_UPDATER_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(QSIMPLE_UPDATER_BUILD_TUTORIAL OFF CACHE BOOL "" FORCE)
+
 add_subdirectory(OpenSSL)
 add_subdirectory(KissFFT)
 add_subdirectory(QCodeEditor)

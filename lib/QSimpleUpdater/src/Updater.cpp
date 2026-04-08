@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2014-2025 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,35 +20,40 @@
  * THE SOFTWARE.
  */
 
-#include <QJsonValue>
-#include <QJsonObject>
-#include <QMessageBox>
-#include <QApplication>
-#include <QJsonDocument>
-#include <QDesktopServices>
-
 #include "Updater.h"
+
+#include <QApplication>
+#include <QDesktopServices>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QMessageBox>
+
 #include "Downloader.h"
 
+/**
+ * @brief Constructs an Updater instance with default settings.
+ *
+ * The platform key is auto-detected based on the build target. The user-agent
+ * string is initialized from the application name and version.
+ */
 Updater::Updater()
+  : m_url("")
+  , m_customAppcast(false)
+  , m_notifyOnUpdate(true)
+  , m_notifyOnFinish(false)
+  , m_updateAvailable(false)
+  , m_downloaderEnabled(true)
+  , m_mandatoryUpdate(false)
+  , m_openUrl("")
+  , m_changelog("")
+  , m_moduleName(qApp->applicationName())
+  , m_downloadUrl("")
+  , m_moduleVersion(qApp->applicationVersion())
+  , m_latestVersion("")
+  , m_downloader(new Downloader())
+  , m_manager(new QNetworkAccessManager())
 {
-  m_url = "";
-  m_openUrl = "";
-  m_changelog = "";
-  m_downloadUrl = "";
-  m_latestVersion = "";
-  m_customAppcast = false;
-  m_notifyOnUpdate = true;
-  m_notifyOnFinish = false;
-  m_updateAvailable = false;
-  m_downloaderEnabled = true;
-  m_moduleName = qApp->applicationDisplayName();
-  m_moduleVersion = qApp->applicationVersion();
-  m_mandatoryUpdate = false;
-
-  m_downloader = new Downloader();
-  m_manager = new QNetworkAccessManager();
-
 #if defined Q_OS_WIN
   m_platform = "windows";
 #elif defined Q_OS_MAC
@@ -62,22 +67,23 @@ Updater::Updater()
 #endif
 
   setUserAgentString(
-      QString("%1/%2 (Qt; QSimpleUpdater)")
-          .arg(qApp->applicationDisplayName(), qApp->applicationVersion()));
+    QString("%1/%2 (Qt; QSimpleUpdater)").arg(qApp->applicationName(), qApp->applicationVersion()));
 
-  connect(m_downloader, SIGNAL(downloadFinished(QString, QString)), this,
-          SIGNAL(downloadFinished(QString, QString)));
-  connect(m_manager, SIGNAL(finished(QNetworkReply *)), this,
-          SLOT(onReply(QNetworkReply *)));
-}
-
-Updater::~Updater()
-{
-  delete m_downloader;
+  connect(m_downloader, &Downloader::downloadFinished, this, &Updater::downloadFinished);
+  connect(m_manager, &QNetworkAccessManager::finished, this, &Updater::onReply);
 }
 
 /**
- * Returns the URL of the update definitions file
+ * @brief Destroys the Updater and its owned Downloader and network manager.
+ */
+Updater::~Updater()
+{
+  delete m_downloader;
+  delete m_manager;
+}
+
+/**
+ * @brief Returns the URL of the update definitions file.
  */
 QString Updater::url() const
 {
@@ -85,10 +91,10 @@ QString Updater::url() const
 }
 
 /**
- * Returns the URL that the update definitions file wants us to open in
- * a web browser.
+ * @brief Returns the URL that the update definitions file wants us to open in
+ *        a web browser.
  *
- * \warning You should call \c checkForUpdates() before using this functio
+ * @warning You should call @c checkForUpdates() before using this function.
  */
 QString Updater::openUrl() const
 {
@@ -96,8 +102,9 @@ QString Updater::openUrl() const
 }
 
 /**
- * Returns the changelog defined by the update definitions file.
- * \warning You should call \c checkForUpdates() before using this function
+ * @brief Returns the changelog defined by the update definitions file.
+ *
+ * @warning You should call @c checkForUpdates() before using this function.
  */
 QString Updater::changelog() const
 {
@@ -105,7 +112,7 @@ QString Updater::changelog() const
 }
 
 /**
- * Returns the name of the module (if defined)
+ * @brief Returns the name of the module (if defined).
  */
 QString Updater::moduleName() const
 {
@@ -113,14 +120,14 @@ QString Updater::moduleName() const
 }
 
 /**
- * Returns the platform key (be it system-set or user-set).
- * If you do not define a platform key, the system will assign the following
- * platform key:
- *    - On iOS: \c ios
- *    - On Mac OSX: \c osx
- *    - On Android: \c android
- *    - On GNU/Linux: \c linux
- *    - On Microsoft Windows: \c windows
+ * @brief Returns the platform key (auto-detected or user-set).
+ *
+ * Default platform keys:
+ *   - On iOS: @c "ios"
+ *   - On macOS: @c "osx"
+ *   - On Android: @c "android"
+ *   - On GNU/Linux: @c "linux"
+ *   - On Microsoft Windows: @c "windows"
  */
 QString Updater::platformKey() const
 {
@@ -128,8 +135,9 @@ QString Updater::platformKey() const
 }
 
 /**
- * Returns the download URL defined by the update definitions file.
- * \warning You should call \c checkForUpdates() before using this function
+ * @brief Returns the download URL defined by the update definitions file.
+ *
+ * @warning You should call @c checkForUpdates() before using this function.
  */
 QString Updater::downloadUrl() const
 {
@@ -137,8 +145,9 @@ QString Updater::downloadUrl() const
 }
 
 /**
- * Returns the latest version defined by the update definitions file.
- * \warning You should call \c checkForUpdates() before using this function
+ * @brief Returns the latest version defined by the update definitions file.
+ *
+ * @warning You should call @c checkForUpdates() before using this function.
  */
 QString Updater::latestVersion() const
 {
@@ -146,8 +155,8 @@ QString Updater::latestVersion() const
 }
 
 /**
- * Returns the user-agent header used by the client when communicating
- * with the server through HTTP
+ * @brief Returns the user-agent header used by the client when communicating
+ *        with the server through HTTP.
  */
 QString Updater::userAgentString() const
 {
@@ -155,7 +164,7 @@ QString Updater::userAgentString() const
 }
 
 /**
- * Returns the "local" version of the installed module
+ * @brief Returns the local version of the installed module.
  */
 QString Updater::moduleVersion() const
 {
@@ -163,9 +172,11 @@ QString Updater::moduleVersion() const
 }
 
 /**
- * Returns \c true if the updater should NOT interpret the downloaded appcast.
- * This is useful if you need to store more variables (or information) in the
- * JSON file or use another appcast format (e.g. XML)
+ * @brief Returns @c true if the updater should NOT interpret the downloaded
+ *        appcast.
+ *
+ * This is useful if you need to store additional variables in the JSON file or
+ * use another appcast format (e.g. XML).
  */
 bool Updater::customAppcast() const
 {
@@ -173,8 +184,8 @@ bool Updater::customAppcast() const
 }
 
 /**
- * Returns \c true if the updater should notify the user when an update is
- * available.
+ * @brief Returns @c true if the updater should notify the user when an update
+ *        is available.
  */
 bool Updater::notifyOnUpdate() const
 {
@@ -182,11 +193,11 @@ bool Updater::notifyOnUpdate() const
 }
 
 /**
- * Returns \c true if the updater should notify the user when it finishes
- * checking for updates.
+ * @brief Returns @c true if the updater should notify the user when it finishes
+ *        checking for updates.
  *
- * \note If set to \c true, the \c Updater will notify the user even when there
- *       are no updates available (by congratulating him/her about being smart)
+ * @note If set to @c true, the Updater will notify the user even when there are
+ *       no updates available.
  */
 bool Updater::notifyOnFinish() const
 {
@@ -194,8 +205,9 @@ bool Updater::notifyOnFinish() const
 }
 
 /**
- * Returns \c true if there the current update is mandatory.
- * \warning You should call \c checkForUpdates() before using this function
+ * @brief Returns @c true if the current update is mandatory.
+ *
+ * @warning You should call @c checkForUpdates() before using this function.
  */
 bool Updater::mandatoryUpdate() const
 {
@@ -203,8 +215,9 @@ bool Updater::mandatoryUpdate() const
 }
 
 /**
- * Returns \c true if there is an update available.
- * \warning You should call \c checkForUpdates() before using this function
+ * @brief Returns @c true if there is an update available.
+ *
+ * @warning You should call @c checkForUpdates() before using this function.
  */
 bool Updater::updateAvailable() const
 {
@@ -212,9 +225,10 @@ bool Updater::updateAvailable() const
 }
 
 /**
- * Returns \c true if the integrated downloader is enabled.
- * \note If set to \c true, the \c Updater will open the downloader dialog if
- *       the user agrees to download the update.
+ * @brief Returns @c true if the integrated downloader is enabled.
+ *
+ * @note If enabled, the Updater will open the downloader dialog when the user
+ *       agrees to download the update.
  */
 bool Updater::downloaderEnabled() const
 {
@@ -222,9 +236,10 @@ bool Updater::downloaderEnabled() const
 }
 
 /**
- * Returns \c true if the updater shall not intervene when the download has
- * finished (you can use the \c QSimpleUpdater signals to know when the
- * download is completed).
+ * @brief Returns @c true if the updater will not intervene when the download
+ *        has finished.
+ *
+ * Use the QSimpleUpdater signals to know when the download is completed.
  */
 bool Updater::useCustomInstallProcedures() const
 {
@@ -232,13 +247,12 @@ bool Updater::useCustomInstallProcedures() const
 }
 
 /**
- * Downloads and interpets the update definitions file referenced by the
- * \c url() function.
+ * @brief Downloads and interprets the update definitions file referenced by
+ *        the @c url() function.
  */
 void Updater::checkForUpdates()
 {
   QNetworkRequest request(url());
-
   request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                        QNetworkRequest::NoLessSafeRedirectPolicy);
 
@@ -249,27 +263,26 @@ void Updater::checkForUpdates()
 }
 
 /**
- * Changes the \c url in which the \c Updater can find the update definitions
- * file.
+ * @brief Changes the @a url of the update definitions file.
  */
-void Updater::setUrl(const QString &url)
+void Updater::setUrl(const QString& url)
 {
   m_url = url;
 }
 
 /**
- * Changes the module \a name.
- * \note The module name is used on the user prompts. If the module name is
- *       empty, then the prompts will show the name of the application.
+ * @brief Changes the module @a name.
+ *
+ * @note The module name is used on user prompts. If empty, the application name
+ *       will be used.
  */
-void Updater::setModuleName(const QString &name)
+void Updater::setModuleName(const QString& name)
 {
   m_moduleName = name;
 }
 
 /**
- * If \a notify is set to \c true, then the \c Updater will notify the user
- * when an update is available.
+ * @brief Sets whether to notify the user when an update is available.
  */
 void Updater::setNotifyOnUpdate(const bool notify)
 {
@@ -277,8 +290,7 @@ void Updater::setNotifyOnUpdate(const bool notify)
 }
 
 /**
- * If \a notify is set to \c true, then the \c Updater will notify the user
- * when it has finished interpreting the update definitions file.
+ * @brief Sets whether to notify the user when checking for updates finishes.
  */
 void Updater::setNotifyOnFinish(const bool notify)
 {
@@ -286,31 +298,31 @@ void Updater::setNotifyOnFinish(const bool notify)
 }
 
 /**
- * Changes the user agent string used to identify the client application
- * from the server in a HTTP session.
- *
- * By default, the user agent will co
+ * @brief Changes the user-agent string used to identify the client application
+ *        in HTTP sessions.
  */
-void Updater::setUserAgentString(const QString &agent)
+void Updater::setUserAgentString(const QString& agent)
 {
   m_userAgentString = agent;
   m_downloader->setUserAgentString(agent);
 }
 
 /**
- * Changes the module \a version
- * \note The module version is used to compare the local and remote versions.
- *       If the \a version parameter is empty, then the \c Updater will use the
- *       application version (referenced by \c qApp)
+ * @brief Changes the module @a version.
+ *
+ * @note The module version is used to compare the local and remote versions.
+ *       If empty, the application version will be used.
  */
-void Updater::setModuleVersion(const QString &version)
+void Updater::setModuleVersion(const QString& version)
 {
   m_moduleVersion = version;
 }
 
 /**
- * If the \a enabled parameter is set to \c true, the \c Updater will open the
- * integrated downloader if the user agrees to install the update (if any)
+ * @brief Enables or disables the integrated downloader.
+ *
+ * If enabled, the Updater will open the integrated downloader when the user
+ * agrees to install the update (if any).
  */
 void Updater::setDownloaderEnabled(const bool enabled)
 {
@@ -318,24 +330,34 @@ void Updater::setDownloaderEnabled(const bool enabled)
 }
 
 /**
- * Changes the platform key.
- * If the platform key is empty, then the system will use the following keys:
- *    - On iOS: \c ios
- *    - On Mac OSX: \c osx
- *    - On Android: \c android
- *    - On GNU/Linux: \c linux
- *    - On Microsoft Windows: \c windows
+ * @brief Sets the directory where downloaded files will be saved.
  */
-void Updater::setPlatformKey(const QString &platformKey)
+void Updater::setDownloadDir(const QString& dir)
+{
+  m_downloader->setDownloadDir(dir);
+}
+
+/**
+ * @brief Changes the platform key.
+ *
+ * Default platform keys:
+ *   - On iOS: @c "ios"
+ *   - On macOS: @c "osx"
+ *   - On Android: @c "android"
+ *   - On GNU/Linux: @c "linux"
+ *   - On Microsoft Windows: @c "windows"
+ */
+void Updater::setPlatformKey(const QString& platformKey)
 {
   m_platform = platformKey;
 }
 
 /**
- * If the \a customAppcast parameter is set to \c true, then the \c Updater
- * will not try to read the network reply from the server, instead, it will
- * emit the \c appcastDownloaded() signal, which allows the application to
- * read and interpret the appcast file by itself
+ * @brief Enables or disables custom appcast interpretation.
+ *
+ * When enabled, the Updater will not parse the server response. Instead, it
+ * emits the @c appcastDownloaded() signal so the application can interpret
+ * the data itself.
  */
 void Updater::setUseCustomAppcast(const bool customAppcast)
 {
@@ -343,9 +365,10 @@ void Updater::setUseCustomAppcast(const bool customAppcast)
 }
 
 /**
- * If the \a custom parameter is set to \c true, the \c Updater will not try
- * to open the downloaded file. Use the signals fired by the \c QSimpleUpdater
- * to install the update from the downloaded file by yourself.
+ * @brief Enables or disables custom install procedures.
+ *
+ * When enabled, the Updater will not try to open the downloaded file. Use the
+ * QSimpleUpdater signals to implement your own install logic.
  */
 void Updater::setUseCustomInstallProcedures(const bool custom)
 {
@@ -353,76 +376,94 @@ void Updater::setUseCustomInstallProcedures(const bool custom)
 }
 
 /**
- * If the \a mandatory_update is set to \c true, the \c Updater has to download
- * and install the update. If the user cancels or exits, the application will
- * close
+ * @brief Sets whether the update is mandatory.
+ *
+ * When mandatory, the application will quit if the user declines the update.
  */
 void Updater::setMandatoryUpdate(const bool mandatory_update)
 {
   m_mandatoryUpdate = mandatory_update;
 }
+
 /**
- * Called when the download of the update definitions file is finished.
+ * @brief Sets the HTTP basic authentication username for downloads.
  */
-void Updater::onReply(QNetworkReply *reply)
+void Updater::setDownloadUserName(const QString& user_name)
 {
-  /* Check if we need to redirect */
-  QUrl redirect
-      = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-  if (!redirect.isEmpty())
-  {
+  m_downloadUserName = user_name;
+}
+
+/**
+ * @brief Sets the HTTP basic authentication password for downloads.
+ */
+void Updater::setDownloadPassword(const QString& password)
+{
+  m_downloadPassword = password;
+}
+
+/**
+ * @brief Called when the download of the update definitions file is finished.
+ *
+ * Parses the JSON response, extracts platform-specific update information,
+ * and determines whether an update is available.
+ */
+void Updater::onReply(QNetworkReply* reply)
+{
+  // Ensure the reply is cleaned up when we're done
+  reply->deleteLater();
+
+  // Check if we need to redirect
+  QUrl redirect = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+  if (!redirect.isEmpty()) {
     setUrl(redirect.toString());
     checkForUpdates();
     return;
   }
 
-  /* There was a network error */
-  if (reply->error() != QNetworkReply::NoError)
-  {
+  // There was a network error
+  if (reply->error() != QNetworkReply::NoError) {
     setUpdateAvailable(false);
     emit checkingFinished(url());
     return;
   }
 
-  /* The application wants to interpret the appcast by itself */
-  if (customAppcast())
-  {
+  // The application wants to interpret the appcast by itself
+  if (customAppcast()) {
     emit appcastDownloaded(url(), reply->readAll());
     emit checkingFinished(url());
     return;
   }
 
-  /* Try to create a JSON document from downloaded data */
+  // Try to create a JSON document from downloaded data
   QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
 
-  /* JSON is invalid */
-  if (document.isNull())
-  {
+  // JSON is invalid
+  if (document.isNull()) {
     setUpdateAvailable(false);
     emit checkingFinished(url());
     return;
   }
 
-  /* Get the platform information */
-  QJsonObject updates = document.object().value("updates").toObject();
+  // Get the platform information
+  QJsonObject updates  = document.object().value("updates").toObject();
   QJsonObject platform = updates.value(platformKey()).toObject();
 
-  /* Get update information */
-  m_openUrl = platform.value("open-url").toString();
-  m_changelog = platform.value("changelog").toString();
-  m_downloadUrl = platform.value("download-url").toString();
+  // Get update information
+  m_openUrl       = platform.value("open-url").toString();
+  m_changelog     = platform.value("changelog").toString();
+  m_downloadUrl   = platform.value("download-url").toString();
   m_latestVersion = platform.value("latest-version").toString();
   if (platform.contains("mandatory-update"))
     m_mandatoryUpdate = platform.value("mandatory-update").toBool();
 
-  /* Compare latest and current version */
+  // Compare latest and current version
   setUpdateAvailable(compare(latestVersion(), moduleVersion()));
   emit checkingFinished(url());
 }
 
 /**
- * Prompts the user based on the value of the \a available parameter and the
- * settings of this instance of the \c Updater class.
+ * @brief Prompts the user based on the value of the @a available parameter and
+ *        the notification settings of this Updater instance.
  */
 void Updater::setUpdateAvailable(const bool available)
 {
@@ -431,62 +472,56 @@ void Updater::setUpdateAvailable(const bool available)
   QMessageBox box;
   box.setTextFormat(Qt::RichText);
   box.setIcon(QMessageBox::Information);
-  box.setWindowFlag(Qt::WindowStaysOnTopHint, true);
 
-  if (updateAvailable() && (notifyOnUpdate() || notifyOnFinish()))
-  {
+  if (updateAvailable() && (notifyOnUpdate() || notifyOnFinish())) {
     QString text = tr("Would you like to download the update now?");
-    if (m_mandatoryUpdate)
-    {
-      text = tr("Would you like to download the update now? This is a "
-                "mandatory update, exiting now will close the "
-                "application");
+    if (m_mandatoryUpdate) {
+      text = tr("Would you like to download the update now?<br />This is a "
+                "mandatory update, exiting now will close the application.");
     }
 
+    text += "<br/><br/>";
+    if (!m_changelog.isEmpty())
+      text += tr("<strong>Change log:</strong><br/>%1").arg(m_changelog);
+
     QString title = "<h3>"
-                    + tr("Version %1 of %2 has been released!")
-                          .arg(latestVersion())
-                          .arg(moduleName())
-                    + "</h3>";
+                  + tr("Version %1 of %2 has been released!").arg(latestVersion()).arg(moduleName())
+                  + "</h3>";
 
     box.setText(title);
     box.setInformativeText(text);
     box.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
     box.setDefaultButton(QMessageBox::Yes);
 
-    if (box.exec() == QMessageBox::Yes)
-    {
+    if (box.exec() == QMessageBox::Yes) {
       if (!openUrl().isEmpty())
         QDesktopServices::openUrl(QUrl(openUrl()));
 
-      else if (downloaderEnabled())
-      {
+      else if (downloaderEnabled()) {
         m_downloader->setUrlId(url());
         m_downloader->setFileName(downloadUrl().split("/").last());
         m_downloader->setMandatoryUpdate(m_mandatoryUpdate);
-        m_downloader->startDownload(QUrl(downloadUrl()));
+        auto download_url = QUrl(downloadUrl());
+        download_url.setUserName(m_downloadUserName);
+        download_url.setPassword(m_downloadPassword);
+        m_downloader->startDownload(download_url);
       }
 
       else
         QDesktopServices::openUrl(QUrl(downloadUrl()));
-    }
-    else
-    {
+    } else {
       if (m_mandatoryUpdate)
-      {
         QApplication::quit();
-      }
     }
   }
 
-  else if (notifyOnFinish())
-  {
+  else if (notifyOnFinish()) {
     box.setStandardButtons(QMessageBox::Close);
     box.setInformativeText(tr("No updates are available for the moment"));
     box.setText("<h3>"
-                + tr("Congratulations! You are running the "
-                     "latest version of %1")
-                      .arg(moduleName())
+                + tr("Congratulations! You are running the latest version "
+                     "of %1")
+                    .arg(moduleName())
                 + "</h3>");
 
     box.exec();
@@ -494,31 +529,15 @@ void Updater::setUpdateAvailable(const bool available)
 }
 
 /**
- * Compares the two version strings (\a x and \a y).
- *     - If \a x is greater than \y, this function returns \c true.
- *     - If \a y is greater than \x, this function returns \c false.
- *     - If both versions are the same, this function returns \c false.
+ * @brief Compares two version strings using QSimpleUpdater::compareVersions().
+ *
+ * @param x The remote version.
+ * @param y The local version.
+ * @return @c true if @a x is greater than @a y.
  */
-bool Updater::compare(const QString &x, const QString &y)
+bool Updater::compare(const QString& x, const QString& y)
 {
-  QStringList versionsX = x.split(".");
-  QStringList versionsY = y.split(".");
-
-  int count = qMin(versionsX.count(), versionsY.count());
-
-  for (int i = 0; i < count; ++i)
-  {
-    int a = QString(versionsX.at(i)).toInt();
-    int b = QString(versionsY.at(i)).toInt();
-
-    if (a > b)
-      return true;
-
-    else if (b > a)
-      return false;
-  }
-
-  return versionsY.count() < versionsX.count();
+  return QSimpleUpdater::compareVersions(x, y);
 }
 
 #if QSU_INCLUDE_MOC

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 Alex Spataru <alex_spataru@outlook.com>
+ * Copyright (c) 2015-2025 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,22 +20,35 @@
  * THE SOFTWARE.
  */
 
-#include "Test_Updater.h"
+#include <QSimpleUpdater.h>
+
+#include <QTest>
+
 #include "Test_Downloader.h"
 #include "Test_QSimpleUpdater.h"
+#include "Test_Updater.h"
+#include "Test_Versioning.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-  QApplication app(argc, argv);
+  int status = 0;
 
-  app.setApplicationName("QSimpleUpdater Tests");
-  app.setOrganizationName("The QSimpleUpdater Library");
+  {
+    Test_Versioning tt;
+    status |= QTest::qExec(&tt, argc, argv);
+  }
+  {
+    Test_Updater tt;
+    status |= QTest::qExec(&tt, argc, argv);
+  }
+  {
+    Test_Downloader tt;
+    status |= QTest::qExec(&tt, argc, argv);
+  }
+  {
+    Test_QSimpleUpdater tt;
+    status |= QTest::qExec(&tt, argc, argv);
+  }
 
-  QTest::qExec(new Test_Updater, argc, argv);
-  QTest::qExec(new Test_Downloader, argc, argv);
-  QTest::qExec(new Test_QSimpleUpdater, argc, argv);
-
-  QTimer::singleShot(1000, Qt::PreciseTimer, qApp, SLOT(quit()));
-
-  return app.exec();
+  return status;
 }

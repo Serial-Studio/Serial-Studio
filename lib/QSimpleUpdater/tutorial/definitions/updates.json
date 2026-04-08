@@ -5,35 +5,35 @@
       "latest-version": "1.0",
       "download-url": "https://raw.githubusercontent.com/alex-spataru/QSimpleUpdater/master/tutorial/download/YesItWorks.jpg",
       "changelog": "This is an example changelog for Windows. Go on...",
-      "mandatory": true
+      "mandatory-update": true
     },
     "osx": {
       "open-url": "",
       "latest-version": "1.0",
       "download-url": "https://raw.githubusercontent.com/alex-spataru/QSimpleUpdater/master/tutorial/download/YesItWorks.jpg",
       "changelog": "This is an example changelog for Mac OS X. Go on...",
-      "mandatory": true
+      "mandatory-update": true
     },
     "linux": {
       "open-url": "",
       "latest-version": "1.0",
       "download-url": "https://raw.githubusercontent.com/alex-spataru/QSimpleUpdater/master/tutorial/download/YesItWorks.jpg",
       "changelog": "This is an example changelog for Linux. Go on...",
-      "mandatory": true
+      "mandatory-update": true
     },
     "ios": {
       "open-url": "",
       "latest-version": "1.0",
       "download-url": "https://raw.githubusercontent.com/alex-spataru/QSimpleUpdater/master/tutorial/download/YesItWorks.jpg",
       "changelog": "This is an example changelog for iOS. Go on...",
-      "mandatory": true
+      "mandatory-update": true
     },
     "android": {
       "open-url": "",
       "latest-version": "1.0",
       "download-url": "https://raw.githubusercontent.com/alex-spataru/QSimpleUpdater/master/tutorial/download/YesItWorks.jpg",
       "changelog": "This is an example changelog for Android. Go on...",
-      "mandatory": true
+      "mandatory-update": true
     }
   }
 }

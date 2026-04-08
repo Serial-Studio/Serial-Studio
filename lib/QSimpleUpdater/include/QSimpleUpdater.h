@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2021 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2014-2025 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,86 +23,87 @@
 #ifndef _QSIMPLEUPDATER_MAIN_H
 #define _QSIMPLEUPDATER_MAIN_H
 
-#include <QUrl>
 #include <QList>
 #include <QObject>
+#include <QUrl>
 
-#if defined(QSIMPLEUPDATER_BUILD_DLIB)
-#  define QSU_SHARED_EXPORT Q_DECL_EXPORT
-#elif defined(QSIMPLEUPDATER_USE_DLIB)
-#  define QSU_SHARED_EXPORT Q_DECL_IMPORT
+#if defined(QSU_SHARED)
+#  define QSU_DECL Q_DECL_EXPORT
+#elif defined(QSU_IMPORT)
+#  define QSU_DECL Q_DECL_IMPORT
 #else
-#  define QSU_SHARED_EXPORT
+#  define QSU_DECL
 #endif
 
 class Updater;
 
 /**
- * \brief Manages the updater instances
+ * @brief Manages the updater instances.
  *
- * The \c QSimpleUpdater class manages the updater system and allows for
- * parallel application modules to check for updates and download them.
+ * The QSimpleUpdater class manages the updater system and allows for parallel
+ * application modules to check for updates and download them.
  *
  * The behavior of each updater can be regulated by specifying the update
  * definitions URL (from where we download the individual update definitions)
- * and defining the desired options by calling the individual "setter"
- * functions (e.g. \c setNotifyOnUpdate()).
+ * and defining the desired options by calling the individual setter functions
+ * (e.g. @c setNotifyOnUpdate()).
  *
- * The \c QSimpleUpdater also implements an integrated downloader.
- * If you need to use a custom install procedure/code, just create a function
- * that is called when the \c downloadFinished() signal is emitted to
- * implement your own install procedures.
+ * QSimpleUpdater also implements an integrated downloader. If you need to use
+ * a custom install procedure, create a function that is called when the
+ * @c downloadFinished() signal is emitted.
  *
- * By default, the downloader will try to open the file as if you opened it
- * from a file manager or a web browser (with the "file:*" url).
+ * By default, the downloader will try to open the downloaded file using the
+ * operating system's default handler.
  */
-class QSU_SHARED_EXPORT QSimpleUpdater : public QObject
-{
+class QSU_DECL QSimpleUpdater : public QObject {
   Q_OBJECT
 
 signals:
-  void checkingFinished(const QString &url);
-  void appcastDownloaded(const QString &url, const QByteArray &data);
-  void downloadFinished(const QString &url, const QString &filepath);
+  void checkingFinished(const QString& url);
+  void appcastDownloaded(const QString& url, const QByteArray& data);
+  void downloadFinished(const QString& url, const QString& filepath);
 
 public:
-  static QSimpleUpdater *getInstance();
+  static QSimpleUpdater* getInstance();
+  static bool compareVersions(const QString& remote, const QString& local);
 
-  bool usesCustomAppcast(const QString &url) const;
-  bool getNotifyOnUpdate(const QString &url) const;
-  bool getNotifyOnFinish(const QString &url) const;
-  bool getUpdateAvailable(const QString &url) const;
-  bool getDownloaderEnabled(const QString &url) const;
-  bool usesCustomInstallProcedures(const QString &url) const;
+  bool usesCustomAppcast(const QString& url) const;
+  bool getNotifyOnUpdate(const QString& url) const;
+  bool getNotifyOnFinish(const QString& url) const;
+  bool getUpdateAvailable(const QString& url) const;
+  bool getDownloaderEnabled(const QString& url) const;
+  bool usesCustomInstallProcedures(const QString& url) const;
 
-  QString getOpenUrl(const QString &url) const;
-  QString getChangelog(const QString &url) const;
-  QString getModuleName(const QString &url) const;
-  QString getDownloadUrl(const QString &url) const;
-  QString getPlatformKey(const QString &url) const;
-  QString getLatestVersion(const QString &url) const;
-  QString getModuleVersion(const QString &url) const;
-  QString getUserAgentString(const QString &url) const;
+  QString getOpenUrl(const QString& url) const;
+  QString getChangelog(const QString& url) const;
+  QString getModuleName(const QString& url) const;
+  QString getDownloadUrl(const QString& url) const;
+  QString getPlatformKey(const QString& url) const;
+  QString getLatestVersion(const QString& url) const;
+  QString getModuleVersion(const QString& url) const;
+  QString getUserAgentString(const QString& url) const;
 
 public slots:
-  void checkForUpdates(const QString &url);
-  void setModuleName(const QString &url, const QString &name);
-  void setNotifyOnUpdate(const QString &url, const bool notify);
-  void setNotifyOnFinish(const QString &url, const bool notify);
-  void setPlatformKey(const QString &url, const QString &platform);
-  void setModuleVersion(const QString &url, const QString &version);
-  void setDownloaderEnabled(const QString &url, const bool enabled);
-  void setUserAgentString(const QString &url, const QString &agent);
-  void setUseCustomAppcast(const QString &url, const bool customAppcast);
-  void setUseCustomInstallProcedures(const QString &url, const bool custom);
-  void setMandatoryUpdate(const QString &url, const bool mandatory_update);
+  void checkForUpdates(const QString& url);
+  void setDownloadDir(const QString& url, const QString& dir);
+  void setModuleName(const QString& url, const QString& name);
+  void setNotifyOnUpdate(const QString& url, const bool notify);
+  void setNotifyOnFinish(const QString& url, const bool notify);
+  void setPlatformKey(const QString& url, const QString& platform);
+  void setModuleVersion(const QString& url, const QString& version);
+  void setDownloaderEnabled(const QString& url, const bool enabled);
+  void setUserAgentString(const QString& url, const QString& agent);
+  void setUseCustomAppcast(const QString& url, const bool customAppcast);
+  void setUseCustomInstallProcedures(const QString& url, const bool custom);
+  void setMandatoryUpdate(const QString& url, const bool mandatory_update);
+  void setDownloadUserName(const QString& url, const QString& userName);
+  void setDownloadPassword(const QString& url, const QString& password);
 
 protected:
-  QSimpleUpdater();
   ~QSimpleUpdater();
 
 private:
-  Updater *getUpdater(const QString &url) const;
+  Updater* getUpdater(const QString& url) const;
 };
 
 #endif

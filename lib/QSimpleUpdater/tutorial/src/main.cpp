@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016 Alex Spataru <alex_spataru@outlook.com>
+ * Copyright (c) 2014-2025 Alex Spataru <https://github.com/alex-spataru>
  *
  * This work is free. You can redistribute it and/or modify it under the
  * terms of the Do What The Fuck You Want To Public License, Version 2,
@@ -8,7 +8,7 @@
 
 #include "Window.h"
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
   app.setApplicationVersion("1.0");

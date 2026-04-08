@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 Alex Spataru <alex_spataru@outlook.com>
+ * Copyright (c) 2015-2025 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,15 +20,12 @@
  * THE SOFTWARE.
  */
 
-#ifndef TEST_UPDATER_H
-#define TEST_UPDATER_H
+#pragma once
+
+#include <QSimpleUpdater.h>
 
 #include <QtTest>
-#include <Updater.h>
 
-class Test_Updater : public QObject
-{
+class Test_Updater : public QObject {
   Q_OBJECT
 };
-
-#endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2025 Alex Spataru <https://github.com/alex-spataru>
+ * Copyright (c) 2014-2025 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,12 +20,35 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#ifndef AUTHENTICATEDIALOG_H
+#define AUTHENTICATEDIALOG_H
 
-#include <QSimpleUpdater.h>
+#include <QDialog>
 
-#include <QtTest>
+namespace Ui {
+class AuthenticateDialog;
+}
 
-class Test_QSimpleUpdater : public QObject {
+/**
+ * @brief A simple dialog for HTTP basic authentication credentials.
+ *
+ * Provides username and password input fields used when the remote server
+ * requires authentication to download the update file.
+ */
+class AuthenticateDialog : public QDialog {
   Q_OBJECT
+
+public:
+  explicit AuthenticateDialog(QWidget* parent = nullptr);
+  ~AuthenticateDialog();
+
+  void setUserName(const QString& userName);
+  void setPassword(const QString& password);
+  QString userName() const;
+  QString password() const;
+
+private:
+  Ui::AuthenticateDialog* ui;
 };
+
+#endif  // AUTHENTICATEDIALOG_H

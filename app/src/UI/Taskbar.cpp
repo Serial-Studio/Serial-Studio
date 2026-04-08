@@ -1019,7 +1019,7 @@ void UI::Taskbar::rebuildModel()
   Q_EMIT registeredWindowsChanged();
 
   // Select the saved group (if available) or the first group
-  auto model = groupModel();
+  auto model = workspaceModel();
   if (!model.isEmpty()) {
     int targetGroupId = -1;
     bool restored     = false;

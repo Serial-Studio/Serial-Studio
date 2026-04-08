@@ -243,6 +243,7 @@ public slots:
 
 private:
   int nextDatasetIndex();
+  void writeProjectFile();
   bool finalizeProjectSave();
   void clearTransientState();
 

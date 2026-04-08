@@ -2702,6 +2702,7 @@ void DataModel::ProjectModel::addWorkspace(const QString& title)
 
   setModified(true);
   Q_EMIT workspacesChanged();
+  writeProjectFile();
 }
 
 /**
@@ -2719,6 +2720,7 @@ void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
   m_workspaces.erase(it);
   setModified(true);
   Q_EMIT workspacesChanged();
+  writeProjectFile();
 }
 
 /**
@@ -2731,6 +2733,7 @@ void DataModel::ProjectModel::renameWorkspace(int workspaceId, const QString& ti
       ws.title = title.simplified();
       setModified(true);
       Q_EMIT workspacesChanged();
+      writeProjectFile();
       return;
     }
   }
@@ -2762,6 +2765,7 @@ void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
 
     setModified(true);
     Q_EMIT workspacesChanged();
+    writeProjectFile();
     return;
   }
 }
@@ -2781,6 +2785,7 @@ void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId, int ind
     ws.widgetRefs.erase(ws.widgetRefs.begin() + index);
     setModified(true);
     Q_EMIT workspacesChanged();
+    writeProjectFile();
     return;
   }
 }
@@ -2802,6 +2807,7 @@ void DataModel::ProjectModel::hideGroup(int groupId)
   m_hiddenGroupIds.insert(groupId);
   setModified(true);
   Q_EMIT workspacesChanged();
+  writeProjectFile();
 }
 
 /**
@@ -2814,11 +2820,31 @@ void DataModel::ProjectModel::showGroup(int groupId)
 
   setModified(true);
   Q_EMIT workspacesChanged();
+  writeProjectFile();
 }
 
 //--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Writes the current project state to disk if a file path is set.
+ *
+ * Convenience wrapper used by workspace CRUD methods to persist changes
+ * immediately rather than waiting for an explicit save.
+ */
+void DataModel::ProjectModel::writeProjectFile()
+{
+  if (m_filePath.isEmpty())
+    return;
+
+  QFile file(m_filePath);
+  if (!file.open(QFile::WriteOnly))
+    return;
+
+  file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
+  file.close();
+}
 
 /**
  * @brief Clears workspaces and widget settings when disconnecting in

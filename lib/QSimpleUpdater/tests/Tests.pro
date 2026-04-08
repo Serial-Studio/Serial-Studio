@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 Alex Spataru <alex_spataru@outlook.com>
+# Copyright (c) 2016-2025 Alex Spataru <https://github.com/alex-spataru>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -33,4 +33,5 @@ SOURCES += \
 HEADERS += \
     $$PWD/Test_Downloader.h \
     $$PWD/Test_QSimpleUpdater.h \
-    $$PWD/Test_Updater.h
+    $$PWD/Test_Updater.h \
+    $$PWD/Test_Versioning.h

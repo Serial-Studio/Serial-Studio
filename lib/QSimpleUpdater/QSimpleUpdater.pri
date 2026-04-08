@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2014-2021 Alex Spataru <https://github.com/alex-spataru>
+# Copyright (c) 2014-2025 Alex Spataru <https://github.com/alex-spataru>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -31,12 +31,17 @@ INCLUDEPATH += $$PWD/include
 SOURCES += \
     $$PWD/src/Updater.cpp \
     $$PWD/src/Downloader.cpp \
-    $$PWD/src/QSimpleUpdater.cpp
+    $$PWD/src/QSimpleUpdater.cpp \
+    $$PWD/src/AuthenticateDialog.cpp \
 
 HEADERS += \
     $$PWD/include/QSimpleUpdater.h \
     $$PWD/src/Updater.h \
-    $$PWD/src/Downloader.h
+    $$PWD/src/Downloader.h \
+    $$PWD/src/AuthenticateDialog.h \
 
-FORMS += $$PWD/src/Downloader.ui
+FORMS += \
+    $$PWD/src/Downloader.ui \
+    $$PWD/src/AuthenticateDialog.ui \
+
 RESOURCES += $$PWD/etc/resources/qsimpleupdater.qrc

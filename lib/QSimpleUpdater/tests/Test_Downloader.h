@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 Alex Spataru <alex_spataru@outlook.com>
+ * Copyright (c) 2015-2025 Alex Spataru <https://github.com/alex-spataru>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,15 +20,10 @@
  * THE SOFTWARE.
  */
 
-#ifndef TEST_DOWNLOADER_H
-#define TEST_DOWNLOADER_H
+#pragma once
 
 #include <QtTest>
-#include <Downloader.h>
 
-class Test_Downloader : public QObject
-{
+class Test_Downloader : public QObject {
   Q_OBJECT
 };
-
-#endif
