@@ -621,8 +621,7 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
 
   // Initialize output device
   if (mode & QIODevice::WriteOnly) {
-    if (m_selectedOutputDevice < 0
-        || m_selectedOutputDevice >= m_outputDevices.size()
+    if (m_selectedOutputDevice < 0 || m_selectedOutputDevice >= m_outputDevices.size()
         || m_selectedOutputDevice >= m_outputCapabilities.size()) {
       qWarning() << "Audio::open: output device index out of range";
       return false;

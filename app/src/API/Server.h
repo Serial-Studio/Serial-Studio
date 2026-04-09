@@ -25,6 +25,7 @@
 #include <QElapsedTimer>
 #include <QHash>
 #include <QHostAddress>
+#include <QJsonObject>
 #include <QObject>
 #include <QSettings>
 #include <QTcpServer>
@@ -172,6 +173,7 @@ private slots:
 
 private:
   struct ConnectionState {
+    QString sessionId;
     QString peerAddress;
     quint16 peerPort = 0;
     QByteArray buffer;
@@ -180,6 +182,25 @@ private:
     int byteCount    = 0;
   };
 
+  void sendResponseToSocket(QTcpSocket* socket, const QByteArray& response);
+  void disconnectClient(QTcpSocket* socket,
+                        ConnectionState& state,
+                        const QString& errorCode,
+                        const QString& errorMessage);
+  [[nodiscard]] bool validateRateLimits(QTcpSocket* socket,
+                                        ConnectionState& state,
+                                        const QByteArray& data);
+  [[nodiscard]] bool validateJsonMessage(QTcpSocket* socket,
+                                         ConnectionState& state,
+                                         const QByteArray& jsonBytes);
+  void handleJsonMessage(QTcpSocket* socket, ConnectionState& state, const QByteArray& jsonBytes);
+  void processRawJsonCommand(QTcpSocket* socket, ConnectionState& state, const QJsonObject& json);
+  void processNoNewlineBuffer(QTcpSocket* socket, ConnectionState& state);
+  void processBufferedJson(QTcpSocket* socket, ConnectionState& state, const QByteArray& trimmed);
+  void processJsonLine(QTcpSocket* socket, ConnectionState& state, const QByteArray& trimmedLine);
+  void processRawLine(QTcpSocket* socket, ConnectionState& state, const QByteArray& line);
+
+private:
   QSettings m_settings;
   int m_clientCount;
   bool m_enabled;

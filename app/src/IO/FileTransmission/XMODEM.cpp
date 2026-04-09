@@ -71,6 +71,9 @@ bool IO::Protocols::XMODEM::isActive() const
  */
 void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
 {
+  Q_ASSERT(!filePath.isEmpty());
+  Q_ASSERT(m_maxRetries > 0);
+
   // Abort any existing transfer
   if (isActive())
     cancelTransfer();
@@ -101,6 +104,9 @@ void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
  */
 void IO::Protocols::XMODEM::cancelTransfer()
 {
+  Q_ASSERT(m_maxRetries > 0);
+  Q_ASSERT(m_timeoutMs >= 1000);
+
   if (!isActive())
     return;
 
@@ -116,6 +122,9 @@ void IO::Protocols::XMODEM::cancelTransfer()
  */
 void IO::Protocols::XMODEM::processInput(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(isActive());
+
   // Process each byte through the state machine
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
@@ -163,7 +172,7 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
           // Rewind file to re-read the current block
           int blockSize     = m_use1K ? 1024 : 128;
           qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-          m_bytesSent = blockStart;
+          m_bytesSent       = blockStart;
           if (!m_file.seek(blockStart)) [[unlikely]] {
             Q_EMIT finished(false, tr("Failed to seek in file"));
             return;
@@ -258,11 +267,20 @@ void IO::Protocols::XMODEM::setTimeoutMs(int ms)
  */
 void IO::Protocols::XMODEM::sendBlock()
 {
+  Q_ASSERT(m_file.isOpen());
+  Q_ASSERT(m_state == State::SendingBlocks);
+
   // Read the next block from file, send EOT if nothing left
   int blockSize   = m_use1K ? 1024 : 128;
   QByteArray data = m_file.read(blockSize);
   if (data.isEmpty()) {
     sendEOT();
+    return;
+  }
+
+  // Validate read did not fail (short read is OK for last block, empty is not)
+  if (data.size() > blockSize) [[unlikely]] {
+    Q_EMIT finished(false, tr("File read returned more data than requested"));
     return;
   }
 
@@ -322,6 +340,9 @@ void IO::Protocols::XMODEM::resetState()
  */
 void IO::Protocols::XMODEM::handleTimeout()
 {
+  Q_ASSERT(m_maxRetries > 0);
+  Q_ASSERT(m_timeoutMs >= 1000);
+
   // Ignore timeouts when idle
   if (!isActive())
     return;
@@ -344,7 +365,7 @@ void IO::Protocols::XMODEM::handleTimeout()
   } else if (m_state == State::WaitingForAck) {
     int blockSize     = m_use1K ? 1024 : 128;
     qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-    m_bytesSent = blockStart;
+    m_bytesSent       = blockStart;
     if (!m_file.seek(blockStart)) [[unlikely]] {
       Q_EMIT finished(false, tr("Failed to seek in file"));
       return;
@@ -363,6 +384,9 @@ void IO::Protocols::XMODEM::handleTimeout()
  */
 QByteArray IO::Protocols::XMODEM::buildBlock(const QByteArray& data, quint8 blockNum)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(data.size() == 128 || data.size() == 1024);
+
   // Allocate packet buffer
   QByteArray packet;
   packet.reserve(data.size() + 5);

@@ -400,6 +400,9 @@ QMqttClient& MQTT::Client::client()
  */
 void MQTT::Client::openConnection()
 {
+  Q_ASSERT(!m_client.hostname().isEmpty());
+  Q_ASSERT(m_client.port() > 0);
+
   // Already connected, nothing to do
   if (isConnected())
     return;
@@ -966,6 +969,9 @@ void MQTT::Client::onAuthenticationRequested(const QMqttAuthenticationProperties
  */
 void MQTT::Client::onMessageReceived(const QByteArray& message, const QMqttTopicName& topic)
 {
+  Q_ASSERT(isConnected());
+  Q_ASSERT(topic.isValid());
+
   // Validate license before processing received data
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()

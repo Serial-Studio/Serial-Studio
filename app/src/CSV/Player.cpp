@@ -153,6 +153,9 @@ const QString& CSV::Player::timestamp() const
  */
 void CSV::Player::play()
 {
+  Q_ASSERT(isOpen());
+  Q_ASSERT(!m_csvData.isEmpty());
+
   if (frameCount() <= 0)
     return;
 
@@ -176,6 +179,9 @@ void CSV::Player::play()
  */
 void CSV::Player::pause()
 {
+  Q_ASSERT(isOpen());
+  Q_ASSERT(!m_csvData.isEmpty());
+
   m_playing = false;
   Q_EMIT playerStateChanged();
 }
@@ -298,131 +304,166 @@ void CSV::Player::previousFrame()
 }
 
 /**
+ * @brief Reads all rows from a CSV text stream into m_csvData.
+ *
+ * Splits each line on commas, strips whitespace and quotes, and discards
+ * rows that contain only empty cells. Stops after kMaxCsvRows to prevent
+ * unbounded memory growth.
+ *
+ * @param stream The QTextStream positioned at the start of the CSV content.
+ */
+void CSV::Player::parseCsvRows(QTextStream& stream)
+{
+  Q_ASSERT(stream.device() != nullptr);
+  Q_ASSERT(stream.device()->isOpen());
+
+  constexpr int kMaxCsvRows = 10'000'000;
+
+  while (!stream.atEnd() && m_csvData.size() < kMaxCsvRows) {
+    QStringList row = stream.readLine().split(',');
+
+    for (auto& item : row) {
+      item = item.simplified();
+      item.remove(QStringLiteral("\""));
+    }
+
+    bool isRowValid =
+      !row.isEmpty()
+      && std::any_of(row.cbegin(), row.cend(), [](const QString& item) { return !item.isEmpty(); });
+
+    if (isRowValid)
+      m_csvData.append(row);
+  }
+
+  if (m_csvData.size() >= kMaxCsvRows) [[unlikely]]
+    qWarning() << "[CSV::Player] Row limit reached:" << kMaxCsvRows << "— file may be truncated";
+}
+
+/**
+ * @brief Detects and initializes the timestamp strategy for the loaded CSV.
+ *
+ * Checks whether the first data cell is a high-precision numeric timestamp
+ * or a parseable date/time string. If neither, prompts the user to select a
+ * date/time column or provide a manual interval.
+ *
+ * On failure (user cancels the prompt), calls closeFile() and returns false.
+ *
+ * @return @c true if timestamps were successfully initialized, @c false if the
+ *         user cancelled and the file was closed.
+ */
+void CSV::Player::initializeTimestamps()
+{
+  Q_ASSERT(!m_csvData.isEmpty());
+  Q_ASSERT(m_csvFile.isOpen());
+
+  // Check for high-precision numeric timestamps
+  bool error            = false;
+  QString firstCell     = getCellValue(1, 0, error);
+  double firstTimestamp = error ? -1.0 : getTimestampSeconds(firstCell);
+
+  if (firstTimestamp >= 0.0) {
+    m_timestampCache.clear();
+    m_timestampCache.reserve(m_csvData.count());
+
+    for (int i = 0; i < m_csvData.count(); ++i) {
+      bool err     = false;
+      QString cell = getCellValue(i, 0, err);
+      double ts    = err ? 0.0 : getTimestampSeconds(cell);
+      m_timestampCache.append(ts);
+    }
+
+    m_useHighPrecisionTimestamps = true;
+    m_startTimestampSeconds      = (m_timestampCache.size() > 1) ? m_timestampCache[1] : 0.0;
+    return;
+  }
+
+  // Check for standard date/time format
+  if (getDateTime(1).isValid()) {
+    m_useHighPrecisionTimestamps = false;
+    m_timestampCache.clear();
+    return;
+  }
+
+  // No recognized timestamp — prompt user for a strategy
+  m_useHighPrecisionTimestamps = false;
+  m_timestampCache.clear();
+}
+
+/**
  * @brief Opens a CSV file, processes its data, and prepares it for playback.
  *
- * This function attempts to open the specified CSV file for reading and
- * processes the data for replaying. It checks if a device is isConnected and,
- * if so, asks the user to disconnect it.
- *
- * The function reads the CSV file into a string matrix (`m_csvData`), validates
- * the date/time format of the first column, and if necessary, prompts the user
- * to either select a valid date/time column or manually set an interval between
- * rows.
- *
- * Once the date/time column is validated, the function sorts the rows in
- * `m_csvData` based on the date/time in the first column. After sorting, it
- * signals the UI to update and starts playback of the first frame of the CSV
- * data.
- *
- * If the file cannot be opened or an error occurs (e.g., invalid CSV data), the
- * function displays an appropriate error message and aborts further processing.
+ * Checks for active device connections, reads and parses the CSV content,
+ * initializes timestamp handling, and emits signals to update the UI.
  *
  * @param filePath The file path of the CSV file to be opened.
  */
 void CSV::Player::openFile(const QString& filePath)
 {
+  Q_ASSERT(!filePath.isEmpty());
+  Q_ASSERT(!m_playing);
+
   // Validate file path and close any open file
   if (filePath.isEmpty())
     return;
 
   closeFile();
 
+  // Prompt user to disconnect if a device is active
   if (IO::ConnectionManager::instance().isConnected()) {
-    auto response = Misc::Utilities::showMessageBox(
-      tr("Device Connection Active"),
-      tr("To use this feature, you must disconnect from the device. Do you want to proceed?"),
-      QMessageBox::Warning,
-      qAppName(),
-      QMessageBox::No | QMessageBox::Yes);
+    auto response =
+      Misc::Utilities::showMessageBox(tr("Device Connection Active"),
+                                      tr("To use this feature, you must disconnect from the "
+                                         "device. Do you want to proceed?"),
+                                      QMessageBox::Warning,
+                                      qAppName(),
+                                      QMessageBox::No | QMessageBox::Yes);
     if (response == QMessageBox::Yes)
       IO::ConnectionManager::instance().disconnectDevice();
     else
       return;
   }
 
+  // Open and read the CSV file
   m_csvFile.setFileName(filePath);
-  if (m_csvFile.open(QIODevice::ReadOnly)) {
-    QTextStream in(&m_csvFile);
-    while (!in.atEnd()) {
-      QStringList row = in.readLine().split(',');
+  if (!m_csvFile.open(QIODevice::ReadOnly)) {
+    Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
+                                    tr("Please check file permissions & location"),
+                                    QMessageBox::Critical);
+    closeFile();
+    return;
+  }
 
-      for (auto& item : row) {
-        item = item.simplified();
-        item.remove(QStringLiteral("\""));
-      }
+  QTextStream in(&m_csvFile);
+  parseCsvRows(in);
 
-      bool isRowValid =
-        !row.isEmpty() && std::any_of(row.cbegin(), row.cend(), [](const QString& item) {
-          return !item.isEmpty();
-        });
-
-      if (isRowValid)
-        m_csvData.append(row);
-    }
-
-    bool error            = false;
-    QString firstCell     = getCellValue(1, 0, error);
-    double firstTimestamp = error ? -1.0 : getTimestampSeconds(firstCell);
-
-    if (firstTimestamp >= 0.0) {
-      m_timestampCache.clear();
-      m_timestampCache.reserve(m_csvData.count());
-
-      for (int i = 0; i < m_csvData.count(); ++i) {
-        bool err     = false;
-        QString cell = getCellValue(i, 0, err);
-        double ts    = err ? 0.0 : getTimestampSeconds(cell);
-        m_timestampCache.append(ts);
-      }
-
-      m_useHighPrecisionTimestamps = true;
-      m_startTimestampSeconds      = (m_timestampCache.size() > 1) ? m_timestampCache[1] : 0.0;
-    }
-
-    else if (getDateTime(1).isValid()) {
-      m_useHighPrecisionTimestamps = false;
-      m_timestampCache.clear();
-    }
-
-    else {
-      m_useHighPrecisionTimestamps = false;
-      m_timestampCache.clear();
-
-      if (!promptUserForDateTimeOrInterval()) {
-        closeFile();
-        return;
-      }
-    }
-
-    sendHeaderFrame();
-
-    m_framePos = 0;
-    m_csvData.removeFirst();
-
-    if (m_useHighPrecisionTimestamps && !m_timestampCache.isEmpty()) {
-      m_timestampCache.removeFirst();
-      if (!m_timestampCache.isEmpty())
-        m_startTimestampSeconds = m_timestampCache[0];
-    }
-
-    if (m_csvData.count() >= 1) {
-      updateData();
-      Q_EMIT openChanged();
-    }
-
-    else {
-      Misc::Utilities::showMessageBox(
-        tr("Insufficient Data in CSV File"),
-        tr(
-          "The CSV file must contain at least one data row to proceed. Please check the file and try again."),
-        QMessageBox::Critical);
+  // Detect timestamp format and build the cache
+  initializeTimestamps();
+  if (!m_useHighPrecisionTimestamps && m_timestampCache.isEmpty() && !getDateTime(1).isValid()) {
+    if (!promptUserForDateTimeOrInterval()) {
       closeFile();
+      return;
     }
   }
 
-  else {
-    Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
-                                    tr("Please check file permissions & location"),
+  // Prepare playback state
+  sendHeaderFrame();
+  m_framePos = 0;
+  m_csvData.removeFirst();
+
+  if (m_useHighPrecisionTimestamps && !m_timestampCache.isEmpty()) {
+    m_timestampCache.removeFirst();
+    if (!m_timestampCache.isEmpty())
+      m_startTimestampSeconds = m_timestampCache[0];
+  }
+
+  // Verify that at least one data row remains
+  if (m_csvData.count() >= 1) {
+    updateData();
+    Q_EMIT openChanged();
+  } else {
+    Misc::Utilities::showMessageBox(tr("Insufficient Data in CSV File"),
+                                    tr("The CSV file must contain at least one data row to "
+                                       "proceed. Please check the file and try again."),
                                     QMessageBox::Critical);
     closeFile();
   }
@@ -469,6 +510,9 @@ void CSV::Player::openFile(const QString& filePath)
  */
 void CSV::Player::setProgress(const double progress)
 {
+  Q_ASSERT(progress >= 0.0 && progress <= 1.0);
+  Q_ASSERT(isOpen());
+
   // Clamp and pause before seeking
   const auto validProgress = std::clamp(progress, 0.0, 1.0);
 
@@ -533,6 +577,9 @@ void CSV::Player::updateTimestampDisplay()
  */
 void CSV::Player::updateData()
 {
+  Q_ASSERT(!m_csvData.isEmpty() || !isOpen());
+  Q_ASSERT(m_framePos >= 0);
+
   // Validate playback state
   if (!isOpen())
     return;
@@ -640,6 +687,9 @@ void CSV::Player::updateData()
  */
 void CSV::Player::processFrameBatch(int startFrame, int endFrame)
 {
+  Q_ASSERT(startFrame <= endFrame);
+  Q_ASSERT(startFrame >= 0);
+
   if (!isOpen())
     return;
 
@@ -957,6 +1007,9 @@ QString CSV::Player::formatTimestamp(double seconds) const
  */
 QByteArray CSV::Player::getFrame(const int row)
 {
+  Q_ASSERT(row >= 0);
+  Q_ASSERT(row < m_csvData.count());
+
   // Build a comma-separated frame, skipping the timestamp column
   QByteArray frame;
 
@@ -981,6 +1034,9 @@ QByteArray CSV::Player::getFrame(const int row)
  */
 const QString CSV::Player::getCellValue(const int row, const int column, bool& error)
 {
+  Q_ASSERT(row >= 0);
+  Q_ASSERT(column >= 0);
+
   // Bounds-check row and column indices
   static auto defaultValue = QLatin1String("");
 

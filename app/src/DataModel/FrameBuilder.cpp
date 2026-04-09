@@ -188,6 +188,8 @@ void DataModel::FrameBuilder::setupExternalConnections()
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
+  Q_ASSERT(&DataModel::ProjectModel::instance() != nullptr);
+
   // Copy in-memory project data directly into the frame
   const auto& pm = DataModel::ProjectModel::instance();
 
@@ -199,6 +201,8 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   m_frame.actions = pm.actions();
 
   finalize_frame(m_frame);
+
+  Q_ASSERT(!m_frame.title.isEmpty());
 
   Q_EMIT jsonFileMapChanged();
 }
@@ -235,6 +239,10 @@ void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& header
  */
 void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
+           && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
+
   switch (AppState::instance().operationMode()) {
     case SerialStudio::QuickPlot:
       parseQuickPlotFrame(data);
@@ -261,6 +269,9 @@ void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray& data)
  */
 void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArray& data)
 {
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!data.isEmpty());
+
   // Delegate to single-source path when not in project mode
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
     hotpathRxFrame(data);
@@ -279,6 +290,10 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArra
  */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
+  Q_ASSERT(&IO::ConnectionManager::instance() != nullptr);
+  Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
+           && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
+
   // Reset quick-plot state and handle disconnect
   m_quickPlotChannels = -1;
 
@@ -294,8 +309,11 @@ void DataModel::FrameBuilder::onConnectedChanged()
 
   const auto& actions = m_frame.actions;
   for (const auto& action : actions)
-    if (action.autoExecuteOnConnect)
-      (void)IO::ConnectionManager::instance().writeData(get_tx_bytes(action));
+    if (action.autoExecuteOnConnect) {
+      const qint64 written = IO::ConnectionManager::instance().writeData(get_tx_bytes(action));
+      if (written < 0) [[unlikely]]
+        qWarning() << "[FrameBuilder] Auto-execute writeData() failed for action:" << action.title;
+    }
 
   // Pre-build per-source frames so the dashboard configures all widgets
   // immediately instead of waiting for each source to send its first data
@@ -342,6 +360,9 @@ void DataModel::FrameBuilder::onConnectedChanged()
  */
 void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(!m_frame.groups.empty());
+
   // Decode data through the JS parser or CSV fallback
   QList<QStringList> multiChannels;
 
@@ -400,6 +421,9 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
  */
 void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& data)
 {
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!data.isEmpty());
+
   // Decode data through the source-specific JS parser
   QList<QStringList> multiChannels;
 
@@ -490,6 +514,9 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
  */
 void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
+
   // Parse CSV values and detect header row on first frame
   auto& channels        = m_channelScratch;
   const int reserveHint = (m_quickPlotChannels > 0) ? m_quickPlotChannels : 64;
@@ -553,90 +580,13 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
  */
 void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 {
+  Q_ASSERT(!channels.isEmpty());
+  Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
+
 #ifdef BUILD_COMMERCIAL
   const auto busType = IO::ConnectionManager::instance().busType();
   if (busType == SerialStudio::BusType::Audio) {
-    const auto* audioPtr = IO::ConnectionManager::instance().audio();
-    if (!audioPtr)
-      return;
-
-    const auto& audio     = *audioPtr;
-    const auto format     = audio.config().capture.format;
-    const auto sampleRate = audio.config().sampleRate;
-
-    double maxValue = 1.0;
-    double minValue = 0.0;
-    switch (format) {
-      case ma_format_u8:
-        maxValue = 255;
-        minValue = 0;
-        break;
-      case ma_format_s16:
-        maxValue = 32767;
-        minValue = -32768;
-        break;
-      case ma_format_s24:
-        maxValue = 8388607;
-        minValue = -8388608;
-        break;
-      case ma_format_s32:
-        maxValue = 2147483647;
-        minValue = -2147483648;
-        break;
-      case ma_format_f32:
-        maxValue = 1.0;
-        minValue = -1.0;
-        break;
-      default:
-        break;
-    }
-
-    const int targetSamples = static_cast<int>(sampleRate * 0.05);
-    int fftSamples          = 256;
-    while (fftSamples < targetSamples && fftSamples < 8192)
-      fftSamples *= 2;
-
-    int index = 1;
-    std::vector<DataModel::Dataset> datasets;
-    datasets.reserve(channels.count());
-    for (const auto& channel : std::as_const(channels)) {
-      DataModel::Dataset dataset;
-      dataset.fft             = true;
-      dataset.plt             = true;
-      dataset.groupId         = 0;
-      dataset.datasetId       = index - 1;
-      dataset.index           = index;
-      dataset.value           = channel;
-      dataset.pltMax          = maxValue;
-      dataset.pltMin          = minValue;
-      dataset.fftMax          = maxValue;
-      dataset.fftMin          = minValue;
-      dataset.fftSamples      = fftSamples;
-      dataset.fftSamplingRate = sampleRate;
-
-      if (m_quickPlotHasHeader && index > 0 && index - 1 < m_quickPlotChannelNames.size())
-        dataset.title = m_quickPlotChannelNames[index - 1];
-      else
-        dataset.title = tr("Channel %1").arg(index);
-
-      dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
-      datasets.push_back(dataset);
-
-      ++index;
-    }
-
-    DataModel::Group group;
-    group.groupId  = 0;
-    group.datasets = datasets;
-    group.title    = tr("Audio Input");
-    if (index > 2)
-      group.widget = QStringLiteral("multiplot");
-
-    clear_frame(m_quickPlotFrame);
-    m_quickPlotFrame.title = tr("Quick Plot");
-    m_quickPlotFrame.groups.push_back(group);
-
-    finalize_frame(m_quickPlotFrame);
+    buildQuickPlotAudioFrame(channels);
     return;
   }
 #endif
@@ -691,6 +641,108 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
   finalize_frame(m_quickPlotFrame);
 }
 
+/**
+ * @brief Builds an audio-specific Quick Plot frame with FFT configuration.
+ *
+ * Reads the audio driver's sample format and rate to set min/max/FFT
+ * parameters, then constructs datasets and a single multiplot group.
+ *
+ * @param channels List of channel values from the most recent audio frame.
+ */
+void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channels)
+{
+  Q_ASSERT(!channels.isEmpty());
+  Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
+
+#ifdef BUILD_COMMERCIAL
+  const auto* audioPtr = IO::ConnectionManager::instance().audio();
+  if (!audioPtr)
+    return;
+
+  // Determine value range from the audio sample format
+  const auto& audio     = *audioPtr;
+  const auto format     = audio.config().capture.format;
+  const auto sampleRate = audio.config().sampleRate;
+
+  double maxValue = 1.0;
+  double minValue = 0.0;
+  switch (format) {
+    case ma_format_u8:
+      maxValue = 255;
+      minValue = 0;
+      break;
+    case ma_format_s16:
+      maxValue = 32767;
+      minValue = -32768;
+      break;
+    case ma_format_s24:
+      maxValue = 8388607;
+      minValue = -8388608;
+      break;
+    case ma_format_s32:
+      maxValue = 2147483647;
+      minValue = -2147483648;
+      break;
+    case ma_format_f32:
+      maxValue = 1.0;
+      minValue = -1.0;
+      break;
+    default:
+      break;
+  }
+
+  // Compute FFT sample count as the next power-of-two >= 50 ms of data
+  const int targetSamples = static_cast<int>(sampleRate * 0.05);
+  int fftSamples          = 256;
+  while (fftSamples < targetSamples && fftSamples < 8192)
+    fftSamples *= 2;
+
+  // Build one dataset per channel with FFT and plot enabled
+  int index = 1;
+  std::vector<DataModel::Dataset> datasets;
+  datasets.reserve(channels.count());
+  for (const auto& channel : std::as_const(channels)) {
+    DataModel::Dataset dataset;
+    dataset.fft             = true;
+    dataset.plt             = true;
+    dataset.groupId         = 0;
+    dataset.datasetId       = index - 1;
+    dataset.index           = index;
+    dataset.value           = channel;
+    dataset.pltMax          = maxValue;
+    dataset.pltMin          = minValue;
+    dataset.fftMax          = maxValue;
+    dataset.fftMin          = minValue;
+    dataset.fftSamples      = fftSamples;
+    dataset.fftSamplingRate = sampleRate;
+
+    if (m_quickPlotHasHeader && index > 0 && index - 1 < m_quickPlotChannelNames.size())
+      dataset.title = m_quickPlotChannelNames[index - 1];
+    else
+      dataset.title = tr("Channel %1").arg(index);
+
+    dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+    datasets.push_back(dataset);
+    ++index;
+  }
+
+  // Assemble the audio group and frame
+  DataModel::Group group;
+  group.groupId  = 0;
+  group.datasets = datasets;
+  group.title    = tr("Audio Input");
+  if (index > 2)
+    group.widget = QStringLiteral("multiplot");
+
+  clear_frame(m_quickPlotFrame);
+  m_quickPlotFrame.title = tr("Quick Plot");
+  m_quickPlotFrame.groups.push_back(group);
+  finalize_frame(m_quickPlotFrame);
+#else
+  Q_UNUSED(channels);
+#endif
+}
+
 //--------------------------------------------------------------------------------------------------
 // Hotpath data publishing functions
 //--------------------------------------------------------------------------------------------------
@@ -718,6 +770,9 @@ void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
  */
 void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
 {
+  Q_ASSERT(!frame.groups.empty());
+  Q_ASSERT(!frame.title.isEmpty());
+
   // Distribute frame to dashboard and export consumers
   static auto& csvExport     = CSV::Export::instance();
   static auto& mdf4Export    = MDF4::Export::instance();

@@ -2342,7 +2342,7 @@ void DataModel::ProjectModel::addGroup(const QString& title, const SerialStudio:
 bool DataModel::ProjectModel::setGroupWidget(const int group,
                                              const SerialStudio::GroupWidget widget)
 {
-  if (group < 0 || group >= m_groups.size()) [[unlikely]]
+  if (group < 0 || group >= static_cast<int>(m_groups.size())) [[unlikely]]
     return false;
 
   auto& grp          = m_groups[group];

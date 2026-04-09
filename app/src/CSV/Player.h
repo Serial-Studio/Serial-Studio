@@ -101,6 +101,8 @@ private:
   void sendHeaderFrame();
   void updateTimestampDisplay();
   void processFrameBatch(int startFrame, int endFrame);
+  void parseCsvRows(QTextStream& stream);
+  void initializeTimestamps();
 
 private:
   bool promptUserForDateTimeOrInterval();

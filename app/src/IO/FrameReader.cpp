@@ -77,6 +77,10 @@ IO::FrameReader::FrameReader(QObject* parent)
  */
 void IO::FrameReader::processData(const ByteArrayPtr& data)
 {
+  Q_ASSERT(m_operationMode >= SerialStudio::ProjectFile
+           && m_operationMode <= SerialStudio::QuickPlot);
+  Q_ASSERT(m_checksumLength >= 0);
+
   // Validate input
   if (!data || data->isEmpty())
     return;
@@ -227,7 +231,15 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
  */
 void IO::FrameReader::readEndDelimitedFrames()
 {
-  while (true) {
+  Q_ASSERT(m_circularBuffer.capacity() > 0);
+  Q_ASSERT(m_operationMode == SerialStudio::QuickPlot
+           || m_frameDetectionMode == SerialStudio::EndDelimiterOnly);
+
+  constexpr int kMaxFramesPerCall = 10000;
+  int iterations                  = 0;
+  while (iterations < kMaxFramesPerCall) {
+    ++iterations;
+
     int endIndex = -1;
     QByteArray delimiter;
 
@@ -281,6 +293,9 @@ void IO::FrameReader::readEndDelimitedFrames()
     else
       (void)m_circularBuffer.read(frameEndPos);
   }
+
+  if (iterations >= kMaxFramesPerCall) [[unlikely]]
+    qWarning() << "[FrameReader] Loop iteration limit reached in readEndDelimitedFrames";
 }
 
 /**
@@ -297,7 +312,14 @@ void IO::FrameReader::readEndDelimitedFrames()
  */
 void IO::FrameReader::readStartDelimitedFrames()
 {
-  while (true) {
+  Q_ASSERT(!m_startSequence.isEmpty());
+  Q_ASSERT(m_circularBuffer.capacity() > 0);
+
+  constexpr int kMaxFramesPerCall = 10000;
+  int iterations                  = 0;
+  while (iterations < kMaxFramesPerCall) {
+    ++iterations;
+
     int startIndex = m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps);
     if (startIndex == -1)
       break;
@@ -358,6 +380,9 @@ void IO::FrameReader::readStartDelimitedFrames()
     else
       (void)m_circularBuffer.read(frameEndPos);
   }
+
+  if (iterations >= kMaxFramesPerCall) [[unlikely]]
+    qWarning() << "[FrameReader] Loop iteration limit reached in readStartDelimitedFrames";
 }
 
 /**
@@ -372,7 +397,14 @@ void IO::FrameReader::readStartDelimitedFrames()
  */
 void IO::FrameReader::readStartEndDelimitedFrames()
 {
-  while (true) {
+  Q_ASSERT(!m_startSequence.isEmpty());
+  Q_ASSERT(!m_finishSequence.isEmpty());
+
+  constexpr int kMaxFramesPerCall = 10000;
+  int iterations                  = 0;
+  while (iterations < kMaxFramesPerCall) {
+    ++iterations;
+
     int finishIndex = m_circularBuffer.findPatternKMP(m_finishSequence, m_finishSequenceLps);
     if (finishIndex == -1)
       break;
@@ -417,6 +449,9 @@ void IO::FrameReader::readStartEndDelimitedFrames()
     else
       (void)m_circularBuffer.read(frameEndPos);
   }
+
+  if (iterations >= kMaxFramesPerCall) [[unlikely]]
+    qWarning() << "[FrameReader] Loop iteration limit reached in readStartEndDelimitedFrames";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -439,6 +474,9 @@ void IO::FrameReader::readStartEndDelimitedFrames()
  */
 IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetype crcPosition)
 {
+  Q_ASSERT(!frame.isEmpty());
+  Q_ASSERT(crcPosition >= 0);
+
   // No checksum configured, always valid
   if (m_checksumLength == 0)
     return ValidationStatus::FrameOk;

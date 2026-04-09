@@ -45,6 +45,9 @@ IO::DeviceManager::DeviceManager(int deviceId,
                                  QObject* parent)
   : QObject(parent), m_deviceId(deviceId), m_frameConfig(config), m_driver(std::move(driver))
 {
+  Q_ASSERT(m_driver);
+  Q_ASSERT(deviceId >= 0);
+
   m_frameScratch.reserve(4096);
 
   connect(
@@ -108,6 +111,9 @@ IO::HAL_Driver* IO::DeviceManager::driver() const noexcept
  */
 qint64 IO::DeviceManager::write(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(m_driver);
+
   if (!m_driver || !m_driver->isOpen())
     return -1;
 
@@ -129,6 +135,9 @@ qint64 IO::DeviceManager::write(const QByteArray& data)
  */
 void IO::DeviceManager::open(QIODevice::OpenMode mode)
 {
+  Q_ASSERT(m_driver);
+  Q_ASSERT(mode != QIODevice::NotOpen);
+
   if (!m_driver)
     return;
 
@@ -143,10 +152,13 @@ void IO::DeviceManager::open(QIODevice::OpenMode mode)
  */
 void IO::DeviceManager::close()
 {
+  Q_ASSERT(m_driver);
+
   if (m_driver)
     m_driver->close();
 
   killFrameReader();
+  Q_ASSERT(m_frameReader.isNull());
 }
 
 /**
@@ -160,6 +172,8 @@ void IO::DeviceManager::close()
  */
 void IO::DeviceManager::reconfigure(const FrameConfig& config)
 {
+  Q_ASSERT(m_driver);
+
   m_frameConfig = config;
   killFrameReader();
   startFrameReader(config);
@@ -174,6 +188,8 @@ void IO::DeviceManager::reconfigure(const FrameConfig& config)
  */
 void IO::DeviceManager::onReadyRead()
 {
+  Q_ASSERT(m_driver);
+
   if (!m_frameReader)
     return;
 
@@ -206,6 +222,9 @@ void IO::DeviceManager::onRawDataReceived(const IO::ByteArrayPtr& data)
  */
 void IO::DeviceManager::startFrameReader(const FrameConfig& config)
 {
+  Q_ASSERT(m_driver);
+  Q_ASSERT(m_deviceId >= 0);
+
   // Bail out if the driver has been destroyed
   if (!m_driver)
     return;

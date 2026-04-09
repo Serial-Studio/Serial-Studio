@@ -202,6 +202,8 @@ IO::Drivers::USB::~USB()
 bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
 {
   Q_UNUSED(mode)
+  Q_ASSERT(configurationOk());
+  Q_ASSERT(m_ctx != nullptr);
 
   // Validate USB subsystem initialized
   if (!m_ctx) {
@@ -310,6 +312,9 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
  */
 void IO::Drivers::USB::close()
 {
+  Q_ASSERT(m_ctx != nullptr);
+  Q_ASSERT(m_activeInEp != 0 || m_handle == nullptr);
+
   // Stop read loop
   m_running = false;
 
@@ -406,11 +411,17 @@ bool IO::Drivers::USB::configurationOk() const noexcept
  */
 qint64 IO::Drivers::USB::write(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(m_handle != nullptr);
+
   if (!isWritable())
     return -1;
 
+  // Copy data to a mutable buffer — libusb may write to it, and const_cast
+  // on a COW QByteArray could silently corrupt shared data
   int transferred = 0;
-  auto* buf       = reinterpret_cast<unsigned char*>(const_cast<char*>(data.constData()));
+  QByteArray mutableData(data);
+  auto* buf = reinterpret_cast<unsigned char*>(mutableData.data());
 
   const int rc = libusb_bulk_transfer(
     m_handle, m_activeOutEp, buf, static_cast<int>(data.size()), &transferred, kBulkWriteTimeout);
@@ -1331,11 +1342,17 @@ qint64 IO::Drivers::USB::sendControlTransfer(uint8_t bmRequestType,
                                              const QByteArray& data,
                                              unsigned int timeout_ms)
 {
+  Q_ASSERT(m_handle != nullptr);
+  Q_ASSERT(advancedModeEnabled());
+
   // Guard against misuse outside AdvancedControl mode
   if (!advancedModeEnabled() || !m_handle)
     return -1;
 
-  auto* buf = reinterpret_cast<unsigned char*>(const_cast<char*>(data.constData()));
+  // Copy data to a mutable buffer — libusb may write to it, and const_cast
+  // on a COW QByteArray could silently corrupt shared data
+  QByteArray mutableData(data);
+  auto* buf = reinterpret_cast<unsigned char*>(mutableData.data());
 
   const int rc = libusb_control_transfer(m_handle,
                                          bmRequestType,

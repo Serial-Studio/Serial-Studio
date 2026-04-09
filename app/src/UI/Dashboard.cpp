@@ -1003,6 +1003,9 @@ void UI::Dashboard::setShowTaskbarButtons(const bool enabled)
  */
 void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
 {
+  Q_ASSERT(index >= 0);
+  Q_ASSERT(index < m_actions.count());
+
   // Validate index
   if (index < 0 || index >= m_actions.count()) {
     qWarning() << "Invalid action index:" << index;
@@ -1139,6 +1142,9 @@ void UI::Dashboard::setMultiplotRunning(const int index, const bool enabled)
  */
 void UI::Dashboard::hotpathRxFrame(const DataModel::Frame& frame)
 {
+  Q_ASSERT(!frame.groups.empty());
+  Q_ASSERT(frame.sourceId >= 0);
+
   // Validate frame
   if (frame.groups.size() <= 0 || !streamAvailable()) [[unlikely]]
     return;
@@ -1192,6 +1198,9 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::Frame& frame)
  */
 void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 {
+  Q_ASSERT(!frame.groups.empty());
+  Q_ASSERT(frame.sourceId >= 0);
+
   // Disconnect on repeated failure, or retry once after reconfiguring
   if (m_updateRetryInProgress) {
     qWarning() << "Failed to build dashboard widget model";
@@ -1226,6 +1235,9 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
  */
 void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 {
+  Q_ASSERT(!frame.groups.empty());
+  Q_ASSERT(!m_datasetReferences.isEmpty());
+
   // Update all datasets of the frame
   for (const auto& group : frame.groups) {
     for (const auto& dataset : group.datasets) {
@@ -1266,6 +1278,9 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
 void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset,
                                                  DataModel::Group& ledPanel)
 {
+  Q_ASSERT(dataset.index >= 0);
+  Q_ASSERT(dataset.uniqueId >= 0);
+
   // Insert or merge dataset, preserving min/max across frames
   if (!m_datasets.contains(dataset.index)) {
     m_datasets.insert(dataset.index, dataset);
@@ -1304,6 +1319,9 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
  */
 void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 {
+  Q_ASSERT(!frame.groups.empty());
+  Q_ASSERT(streamAvailable());
+
   // Check commercial license status for Pro-only widgets
 #ifdef BUILD_COMMERCIAL
   const auto& token = Licensing::CommercialToken::current();
@@ -1338,7 +1356,40 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
     m_lastFrame.groups.push_back(terminal);
   }
 
-  // Parse frame groups
+  // Build widget type -> group lists from the frame
+  buildWidgetGroups(frame, pro);
+
+  // Register all widgets with the dashboard registry
+  registerWidgets();
+
+  // Build dataset reference maps for value propagation
+  buildDatasetReferences();
+
+  // Initialize data series & update actions
+  updateDataSeries();
+  configureActions(frame);
+
+  // Update user interface
+  Q_EMIT widgetCountChanged();
+}
+
+/**
+ * @brief Populates m_widgetGroups and m_widgetDatasets from the current frame.
+ *
+ * Iterates over all groups in m_lastFrame, mapping each to its dashboard
+ * widget type. Handles commercial fallback (3D -> multiplot), accelerometer
+ * and gyroscope multi-widget mappings, per-group dataset routing, and
+ * LED panel aggregation.
+ *
+ * @param frame The source frame (used for context only).
+ * @param pro   Whether commercial/Pro features are active.
+ */
+void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
+{
+  Q_ASSERT(!m_lastFrame.groups.empty());
+  Q_ASSERT(!frame.groups.empty());
+  (void)frame;
+
   for (const auto& group : m_lastFrame.groups) {
     // Append group widgets
     const auto key = SerialStudio::getDashboardWidget(group);
@@ -1371,7 +1422,7 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
     if (key == SerialStudio::DashboardGyroscope)
       m_widgetGroups[SerialStudio::DashboardMultiPlot].append(group);
 
-    // Parse group datasets
+    // Parse group datasets into widget maps and LED panel
     DataModel::Group ledPanel;
     for (const auto& dataset : group.datasets)
       processDatasetIntoWidgetMaps(dataset, ledPanel);
@@ -1384,6 +1435,19 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
       m_widgetGroups[SerialStudio::DashboardLED].append(ledPanel);
     }
   }
+}
+
+/**
+ * @brief Registers all group and dataset widgets with the WidgetRegistry.
+ *
+ * Iterates m_widgetGroups and m_widgetDatasets, creating a registry entry for
+ * each and populating m_widgetMap. The terminal widget ID is captured for
+ * incremental updates.
+ */
+void UI::Dashboard::registerWidgets()
+{
+  Q_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
+  Q_ASSERT(m_widgetCount == 0);
 
   // Begin batch update on the registry (defers batchUpdateCompleted signal)
   auto& registry = WidgetRegistry::instance();
@@ -1421,6 +1485,19 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 
   // End batch update (emits batchUpdateCompleted if changes occurred)
   registry.endBatchUpdate();
+}
+
+/**
+ * @brief Builds the m_datasetReferences map from all widget and frame sources.
+ *
+ * Traverses group-level datasets, widget-level datasets, the flat m_datasets
+ * map, and m_lastFrame groups to collect pointers for every unique dataset ID.
+ * This enables efficient value propagation during real-time updates.
+ */
+void UI::Dashboard::buildDatasetReferences()
+{
+  Q_ASSERT(!m_lastFrame.groups.empty());
+  Q_ASSERT(!m_widgetGroups.isEmpty() || !m_widgetDatasets.isEmpty());
 
   // Traverse all group-level datasets
   for (auto& groupList : m_widgetGroups) {
@@ -1434,7 +1511,7 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
     for (auto& dataset : datasetList)
       m_datasetReferences[dataset.uniqueId].append(&dataset);
 
-  // Transverse all datasets
+  // Traverse all datasets
   for (auto& dataset : m_datasets)
     m_datasetReferences[dataset.uniqueId].append(&dataset);
 
@@ -1446,13 +1523,6 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
         list.append(&dataset);
     }
   }
-
-  // Initialize data series & update actions
-  updateDataSeries();
-  configureActions(frame);
-
-  // Update user interface
-  Q_EMIT widgetCountChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1463,33 +1533,17 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
  * @brief Updates time-series data for all dashboard widgets that require
  * historical tracking.
  *
- * This method handles real-time updating of internal data buffers for all
- * widgets that visualize ordered or continuous data over time, including:
- * - FFT plots
- * - Linear (2D) plots
- * - Multi-series (grouped) plots
- * - GPS trajectory widgets (lat/lon/alt history)
- * - 3D trajectory plots (X/Y/Z vectors) [Pro only]
- *
- * For each type, the function:
- * - Checks if the internal buffer count matches the current number of widgets.
- *   If not, the corresponding `configure*Series()` method is called to
- *   allocate/initialize memory.
- * - Shifts in the latest sample from the dashboard dataset into the correct
- *   slot of the buffer.
- *
- * When @p sourceId is non-negative, only widgets belonging to that source are
- * updated; widgets from other sources are skipped. Pass -1 (default) to update
- * all sources (used during initial configuration).
+ * Delegates to per-widget-type update helpers after ensuring that the internal
+ * buffers are correctly sized. When @p sourceId is non-negative, only widgets
+ * belonging to that source are updated; pass -1 (default) to update all.
  *
  * @param sourceId Source to update, or -1 for all sources.
- *
- * @warning GPS and 3D plots rely on structured dataset groups and expect the
- *          widgets to provide fields like [`lat`, `lon`, `alt`], or
- *          [`x`, `y`, `z`].
  */
 void UI::Dashboard::updateDataSeries(int sourceId)
 {
+  Q_ASSERT(m_widgetCount > 0 || m_widgetMap.isEmpty());
+  Q_ASSERT(!m_sourceRawFrames.isEmpty());
+
   // Cache widget counts
   const int gpsCount   = widgetCount(SerialStudio::DashboardGPS);
   const int fftCount   = widgetCount(SerialStudio::DashboardFFT);
@@ -1513,7 +1567,71 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     configurePlot3DSeries();
 #endif
 
-  // Update GPS data
+  // Delegate to per-type update helpers
+  updateGpsSeries(sourceId);
+  updateFftSeries(sourceId);
+  updateLineSeries(sourceId);
+
+  // Update multi-plots
+  for (int i = 0; i < multiCount; ++i) {
+    if (!m_activeMultiplots[i])
+      continue;
+
+    const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
+    if (sourceId >= 0 && group.sourceId != sourceId)
+      continue;
+
+    auto& multiSeries = m_multipltValues[i];
+    for (size_t j = 0; j < group.datasets.size(); ++j)
+      multiSeries.y[j].push(group.datasets[j].numericValue);
+  }
+
+  // Update 3D plots
+#ifdef BUILD_COMMERCIAL
+  updatePlot3DSeries(sourceId);
+#endif
+}
+
+/**
+ * @brief Updates FFT data series for all active FFT plot widgets.
+ *
+ * Pushes the latest numeric value from each FFT dataset into the
+ * corresponding ring buffer. Skips inactive plots and non-matching sources.
+ *
+ * @param sourceId Source to update, or -1 for all sources.
+ */
+void UI::Dashboard::updateFftSeries(int sourceId)
+{
+  const int fftCount = widgetCount(SerialStudio::DashboardFFT);
+  Q_ASSERT(m_fftValues.size() == fftCount);
+  Q_ASSERT(m_activeFFTPlots.size() == fftCount);
+
+  for (int i = 0; i < fftCount; ++i) {
+    if (!m_activeFFTPlots[i])
+      continue;
+
+    const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
+    if (sourceId >= 0 && dataset.sourceId != sourceId)
+      continue;
+
+    m_fftValues[i].push(dataset.numericValue);
+  }
+}
+
+/**
+ * @brief Updates GPS trajectory series for all GPS widgets.
+ *
+ * Extracts latitude, longitude, and altitude from each GPS group's datasets
+ * and pushes them into the corresponding ring buffers.
+ *
+ * @param sourceId Source to update, or -1 for all sources.
+ */
+void UI::Dashboard::updateGpsSeries(int sourceId)
+{
+  const int gpsCount = widgetCount(SerialStudio::DashboardGPS);
+  Q_ASSERT(m_gpsValues.size() == gpsCount);
+  Q_ASSERT(m_widgetGroups.contains(SerialStudio::DashboardGPS) || gpsCount == 0);
+
   for (int i = 0; i < gpsCount; ++i) {
     const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
     if (sourceId >= 0 && group.sourceId != sourceId)
@@ -1539,20 +1657,68 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     series.longitudes.push(lon);
     series.altitudes.push(alt);
   }
+}
 
-  // Update FFT plots
-  for (int i = 0; i < fftCount; ++i) {
-    if (!m_activeFFTPlots[i])
+/**
+ * @brief Updates 3D trajectory plot series for all 3D plot widgets.
+ *
+ * Extracts X, Y, and Z components from each 3D plot group's datasets and
+ * appends the point to the trajectory buffer, trimming to the configured
+ * maximum point count.
+ *
+ * @param sourceId Source to update, or -1 for all sources.
+ */
+void UI::Dashboard::updatePlot3DSeries(int sourceId)
+{
+#ifdef BUILD_COMMERCIAL
+  const int plot3DCount = widgetCount(SerialStudio::DashboardPlot3D);
+  Q_ASSERT(m_plotData3D.size() == plot3DCount);
+  Q_ASSERT(m_points > 0);
+
+  for (int i = 0; i < plot3DCount; ++i) {
+    const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
+    if (sourceId >= 0 && group.sourceId != sourceId)
       continue;
 
-    const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
-    if (sourceId >= 0 && dataset.sourceId != sourceId)
-      continue;
+    auto& plotData = m_plotData3D[i];
 
-    m_fftValues[i].push(dataset.numericValue);
+    QVector3D point;
+    for (const auto& dataset : group.datasets) {
+      const QString& id = dataset.widget;
+      if (id == "x" || id == "X")
+        point.setX(dataset.numericValue);
+      else if (id == "y" || id == "Y")
+        point.setY(dataset.numericValue);
+      else if (id == "z" || id == "Z")
+        point.setZ(dataset.numericValue);
+    }
+
+    plotData.push_back(point);
+    const size_t maxPoints = static_cast<size_t>(points());
+    if (plotData.size() > maxPoints)
+      plotData.erase(plotData.begin(), plotData.end() - maxPoints);
   }
+#else
+  (void)sourceId;
+#endif
+}
 
-  // Append latest values to linear plots data
+/**
+ * @brief Updates linear plot data series for all active plot widgets.
+ *
+ * Pushes the latest Y-axis value from each plot dataset into its ring buffer.
+ * For plots with a custom X-axis (Pro feature), the X-axis data is also
+ * shifted. Duplicate axis pushes within the same update cycle are prevented
+ * via visited-sets.
+ *
+ * @param sourceId Source to update, or -1 for all sources.
+ */
+void UI::Dashboard::updateLineSeries(int sourceId)
+{
+  const int plotCount = widgetCount(SerialStudio::DashboardPlot);
+  Q_ASSERT(m_pltValues.size() == plotCount);
+  Q_ASSERT(m_activePlots.size() == plotCount);
+
   QSet<int> xAxesMoved;
   QSet<int> yAxesMoved;
   for (int i = 0; i < plotCount; ++i) {
@@ -1585,47 +1751,6 @@ void UI::Dashboard::updateDataSeries(int sourceId)
       m_xAxisData[xAxisId].push(xDataset.numericValue);
     }
   }
-
-  // Update Multi-plots
-  for (int i = 0; i < multiCount; ++i) {
-    if (!m_activeMultiplots[i])
-      continue;
-
-    const auto& group = getGroupWidget(SerialStudio::DashboardMultiPlot, i);
-    if (sourceId >= 0 && group.sourceId != sourceId)
-      continue;
-
-    auto& multiSeries = m_multipltValues[i];
-    for (size_t j = 0; j < group.datasets.size(); ++j)
-      multiSeries.y[j].push(group.datasets[j].numericValue);
-  }
-
-  // Update 3D plots
-#ifdef BUILD_COMMERCIAL
-  for (int i = 0; i < plot3DCount; ++i) {
-    const auto& group = getGroupWidget(SerialStudio::DashboardPlot3D, i);
-    if (sourceId >= 0 && group.sourceId != sourceId)
-      continue;
-
-    auto& plotData = m_plotData3D[i];
-
-    QVector3D point;
-    for (const auto& dataset : group.datasets) {
-      const QString& id = dataset.widget;
-      if (id == "x" || id == "X")
-        point.setX(dataset.numericValue);
-      else if (id == "y" || id == "Y")
-        point.setY(dataset.numericValue);
-      else if (id == "z" || id == "Z")
-        point.setZ(dataset.numericValue);
-    }
-
-    plotData.push_back(point);
-    const size_t maxPoints = static_cast<size_t>(points());
-    if (plotData.size() > maxPoints)
-      plotData.erase(plotData.begin(), plotData.end() - maxPoints);
-  }
-#endif
 }
 
 /**
@@ -1755,6 +1880,8 @@ void UI::Dashboard::registerXAxisIfNeeded(const DataModel::Dataset& dataset)
  */
 void UI::Dashboard::configureLineSeries()
 {
+  Q_ASSERT(m_points > 0);
+
   // Clear memory
   m_xAxisData.clear();
   m_yAxisData.clear();
@@ -1857,6 +1984,8 @@ void UI::Dashboard::configurePlot3DSeries()
  */
 void UI::Dashboard::configureMultiLineSeries()
 {
+  Q_ASSERT(m_points > 0);
+
   // Clear data
   m_multipltValues.clear();
   m_multipltValues.squeeze();
@@ -1912,6 +2041,8 @@ void UI::Dashboard::configureMultiLineSeries()
  */
 void UI::Dashboard::configureActions(const DataModel::Frame& frame)
 {
+  Q_ASSERT(!frame.groups.empty());
+
   // Stop if frame is not valid
   if (frame.groups.size() <= 0)
     return;

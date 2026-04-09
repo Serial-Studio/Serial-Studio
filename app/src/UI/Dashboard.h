@@ -185,12 +185,21 @@ private:
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
   void updateDataSeries(int sourceId = -1);
+  void updateFftSeries(int sourceId);
+  void updateGpsSeries(int sourceId);
+  void updatePlot3DSeries(int sourceId);
+  void updateLineSeries(int sourceId);
+
   void configureGpsSeries();
   void configureFftSeries();
   void configureLineSeries();
   void configurePlot3DSeries();
   void configureMultiLineSeries();
   void configureActions(const DataModel::Frame& frame);
+
+  void buildWidgetGroups(const DataModel::Frame& frame, bool pro);
+  void registerWidgets();
+  void buildDatasetReferences();
 
 private:
   QSettings m_settings;

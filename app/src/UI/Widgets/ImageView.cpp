@@ -64,6 +64,9 @@ Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endS
  */
 void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
 {
+  Q_ASSERT(data != nullptr);
+  Q_ASSERT(m_mode == DetectionMode::Autodetect || m_mode == DetectionMode::Manual);
+
   // Append incoming bytes and dispatch to the active detection mode
   if (!data || data->isEmpty())
     return;
@@ -82,6 +85,9 @@ void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
  */
 void Widgets::ImageFrameReader::processAutodetect()
 {
+  Q_ASSERT(m_mode == DetectionMode::Autodetect);
+  Q_ASSERT(!m_accumulator.isEmpty());
+
   static const QByteArray kJpegStart("\xFF\xD8\xFF", 3);
   static const QByteArray kPngStart("\x89\x50\x4E\x47\x0D\x0A\x1A\x0A", 8);
   static const QByteArray kBmpStart("BM", 2);
@@ -89,7 +95,10 @@ void Widgets::ImageFrameReader::processAutodetect()
   static const QByteArray kJpegEnd("\xFF\xD9", 2);
   static const QByteArray kPngEnd("\x49\x45\x4E\x44\xAE\x42\x60\x82", 8);
 
-  while (true) {
+  constexpr int kMaxIterations = 10000;
+  int iterations               = 0;
+  while (iterations < kMaxIterations) {
+    ++iterations;
     if (!m_inFrame) {
       qsizetype jpegPos = m_accumulator.indexOf(kJpegStart);
       qsizetype pngPos  = m_accumulator.indexOf(kPngStart);
@@ -208,6 +217,9 @@ void Widgets::ImageFrameReader::processAutodetect()
     Q_EMIT frameReady(frame);
   }
 
+  if (iterations >= kMaxIterations) [[unlikely]]
+    qWarning() << "[ImageView] Autodetect loop iteration limit reached";
+
   // Prevent unbounded growth (cap at 16 MiB)
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
   if (m_accumulator.size() > kMaxAccumulator) {
@@ -223,12 +235,18 @@ void Widgets::ImageFrameReader::processAutodetect()
  */
 void Widgets::ImageFrameReader::processManual()
 {
+  Q_ASSERT(m_mode == DetectionMode::Manual);
+  Q_ASSERT(!m_startSeq.isEmpty() && !m_endSeq.isEmpty());
+
   // Require both delimiters to be configured
   if (m_startSeq.isEmpty() || m_endSeq.isEmpty())
     return;
 
   // Scan the accumulator for complete frames between start/end sequences
-  while (true) {
+  constexpr int kMaxIterations = 10000;
+  int iterations               = 0;
+  while (iterations < kMaxIterations) {
+    ++iterations;
     if (!m_inFrame) {
       qsizetype startPos = m_accumulator.indexOf(m_startSeq);
       if (startPos < 0)
@@ -251,6 +269,9 @@ void Widgets::ImageFrameReader::processManual()
     if (!frame.isEmpty())
       Q_EMIT frameReady(frame);
   }
+
+  if (iterations >= kMaxIterations) [[unlikely]]
+    qWarning() << "[ImageView] Manual loop iteration limit reached";
 
   // Prevent unbounded growth (cap at 16 MiB)
   constexpr qsizetype kMaxAccumulator = 16 * 1024 * 1024;
@@ -407,6 +428,9 @@ void Widgets::ImageView::setExportEnabled(bool enabled)
  */
 void Widgets::ImageView::onFrameReady(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(m_reader != nullptr);
+
   // Ignore empty frames and paused state
   if (data.isEmpty())
     return;
@@ -463,6 +487,9 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
  */
 void Widgets::ImageView::reconfigureReader()
 {
+  Q_ASSERT(m_index >= 0);
+  Q_ASSERT(!m_providerKey.isEmpty());
+
   // Destroy any existing reader before creating a new one
   if (m_reader) {
     m_reader->deleteLater();

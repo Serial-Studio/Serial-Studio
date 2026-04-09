@@ -22,7 +22,7 @@
  * recursively using toProtoValue(). Depth-bounded to prevent stack overflow.
  */
 google::protobuf::Struct API::GRPC::ConversionUtils::toProtoStruct(const QJsonObject& json,
-                                                                    int depth)
+                                                                   int depth)
 {
   google::protobuf::Struct result;
 
@@ -125,8 +125,7 @@ QJsonObject API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::St
  *
  * Maps protobuf value kinds to their Qt JSON equivalents.
  */
-QJsonValue API::GRPC::ConversionUtils::toQJsonValue(const google::protobuf::Value& proto,
-                                                    int depth)
+QJsonValue API::GRPC::ConversionUtils::toQJsonValue(const google::protobuf::Value& proto, int depth)
 {
   // Depth guard to prevent stack overflow on deeply nested protobuf
   if (depth >= kMaxConversionDepth) [[unlikely]]

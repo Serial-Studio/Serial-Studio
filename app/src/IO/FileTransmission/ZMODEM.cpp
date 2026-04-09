@@ -76,6 +76,9 @@ bool IO::Protocols::ZMODEM::isActive() const
  */
 void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
 {
+  Q_ASSERT(!filePath.isEmpty());
+  Q_ASSERT(m_maxRetries > 0);
+
   // Abort any existing transfer and open the file
   if (isActive())
     cancelTransfer();
@@ -136,6 +139,9 @@ void IO::Protocols::ZMODEM::cancelTransfer()
  */
 void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(isActive());
+
   // Parse each byte through the ZMODEM header state machine
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
@@ -416,6 +422,9 @@ void IO::Protocols::ZMODEM::sendZFILE()
  */
 void IO::Protocols::ZMODEM::sendDataSubpackets()
 {
+  Q_ASSERT(m_file.isOpen());
+  Q_ASSERT(m_fileSize > 0);
+
   // Transition to data-sending state
   m_state = State::SendingData;
 
@@ -443,6 +452,9 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
  */
 void IO::Protocols::ZMODEM::sendNextDataChunk()
 {
+  Q_ASSERT(m_blockSize >= 64 && m_blockSize <= 8192);
+  Q_ASSERT(m_file.isOpen());
+
   // Abort if transfer was cancelled or state changed
   if (m_state != State::SendingData)
     return;
@@ -450,8 +462,15 @@ void IO::Protocols::ZMODEM::sendNextDataChunk()
   // Send a batch of chunks
   for (int i = 0; i < kChunksPerYield && !m_file.atEnd(); ++i) {
     QByteArray chunk = m_file.read(m_blockSize);
-    if (chunk.isEmpty())
+    if (chunk.isEmpty()) {
+      qWarning() << "[ZMODEM] File read returned empty data at offset" << m_bytesSent;
       break;
+    }
+
+    if (chunk.size() > m_blockSize) [[unlikely]] {
+      Q_EMIT finished(false, tr("File read returned more data than requested"));
+      return;
+    }
 
     m_bytesSent += chunk.size();
     Q_EMIT progressChanged(m_bytesSent, m_fileSize);
@@ -520,6 +539,9 @@ void IO::Protocols::ZMODEM::sendCancel()
  */
 void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 {
+  Q_ASSERT(type <= kZCAN);
+  Q_ASSERT(isActive());
+
   // Stop the timeout and dispatch based on header type
   m_timeoutTimer.stop();
 
@@ -630,6 +652,9 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
 {
+  Q_ASSERT(type <= kZCAN);
+  Q_ASSERT(isActive());
+
   // Allocate header buffer
   QByteArray header;
   header.reserve(32);
@@ -678,6 +703,9 @@ QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
 {
+  Q_ASSERT(type <= kZCAN);
+  Q_ASSERT(m_file.isOpen());
+
   // Allocate header buffer
   QByteArray header;
   header.reserve(32);
@@ -718,6 +746,9 @@ QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
  */
 QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 frameEnd)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(frameEnd >= kZCRCE && frameEnd <= kZCRCW);
+
   // Allocate packet buffer with room for ZDLE escaping
   QByteArray packet;
   packet.reserve(data.size() * 2 + 16);
@@ -760,6 +791,9 @@ QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 
  */
 QByteArray IO::Protocols::ZMODEM::zdleEncode(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(data.size() <= 16384);
+
   // Allocate output buffer with headroom for escape sequences
   QByteArray encoded;
   encoded.reserve(data.size() + data.size() / 4);
@@ -823,6 +857,9 @@ QByteArray IO::Protocols::ZMODEM::toHex(quint8 byte)
  */
 void IO::Protocols::ZMODEM::handleTimeout()
 {
+  Q_ASSERT(m_maxRetries > 0);
+  Q_ASSERT(m_timeoutMs >= 1000);
+
   // Ignore timeouts when idle
   if (!isActive())
     return;

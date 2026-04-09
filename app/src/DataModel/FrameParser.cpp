@@ -87,7 +87,7 @@ static ArrayType detectArrayType(const QJSValue& jsValue)
     return ArrayType::Scalar;
 
   static const QString kLength = QStringLiteral("length");
-  const int length = jsValue.property(kLength).toInt();
+  const int length             = jsValue.property(kLength).toInt();
   if (length == 0)
     return ArrayType::Scalar;
 
@@ -163,7 +163,7 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 {
   // Separate scalars from vector elements and find max vector length
   static const QString kLength = QStringLiteral("length");
-  const int elementCount = jsValue.property(kLength).toInt();
+  const int elementCount       = jsValue.property(kLength).toInt();
 
   constexpr int kMaxElements     = 10000;
   constexpr qsizetype kMaxVecLen = 10000;
@@ -348,6 +348,8 @@ const QStringList& DataModel::FrameParser::templateFiles() const
  */
 DataModel::FrameParser::SourceEngine& DataModel::FrameParser::engineForSource(int sourceId)
 {
+  Q_ASSERT(sourceId >= 0);
+
   // Return existing engine or create a new one for this source
   auto it = m_engines.find(sourceId);
   if (it != m_engines.end())
@@ -359,11 +361,10 @@ DataModel::FrameParser::SourceEngine& DataModel::FrameParser::engineForSource(in
   // Configure runtime watchdog timer to interrupt runaway scripts
   se->watchdog.setSingleShot(true);
   se->watchdog.setInterval(kRuntimeWatchdogMs);
-  connect(&se->watchdog, &QTimer::timeout, this, [se]() {
-    se->engine.setInterrupted(true);
-  });
+  connect(&se->watchdog, &QTimer::timeout, this, [se]() { se->engine.setInterrupted(true); });
 
   m_engines.insert(sourceId, se);
+  Q_ASSERT(m_engines.contains(sourceId));
   return *se;
 }
 
@@ -379,6 +380,9 @@ DataModel::FrameParser::SourceEngine& DataModel::FrameParser::engineForSource(in
  */
 QJSValue DataModel::FrameParser::guardedCall(SourceEngine& se, QJSValueList& args)
 {
+  Q_ASSERT(se.parseFunction.isCallable());
+  Q_ASSERT(!args.isEmpty());
+
   se.engine.setInterrupted(false);
   se.watchdog.start();
   const auto result = se.parseFunction.call(args);
@@ -386,8 +390,8 @@ QJSValue DataModel::FrameParser::guardedCall(SourceEngine& se, QJSValueList& arg
 
   if (se.engine.isInterrupted()) [[unlikely]] {
     se.engine.setInterrupted(false);
-    qWarning() << "[FrameParser] Script execution timed out after"
-               << kRuntimeWatchdogMs << "ms — interrupted";
+    qWarning() << "[FrameParser] Script execution timed out after" << kRuntimeWatchdogMs
+               << "ms — interrupted";
   }
 
   return result;
@@ -400,13 +404,17 @@ QJSValue DataModel::FrameParser::guardedCall(SourceEngine& se, QJSValueList& arg
  */
 void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
 {
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(m_engines.contains(0));
+
   // Clear engine if code is empty, otherwise load script
   if (code.isEmpty()) {
     clearSourceEngine(sourceId);
     return;
   }
 
-  (void)loadScript(sourceId, code, false);
+  if (!loadScript(sourceId, code, false))
+    qWarning() << "[FrameParser] Failed to load script for source" << sourceId;
 }
 
 /**
@@ -447,6 +455,9 @@ void DataModel::FrameParser::clearSourceEngine(int sourceId)
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame, int sourceId)
 {
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!frame.isEmpty());
+
   // Fall back to source 0 if the requested engine is not available
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end() || !it.value()->parseFunction.isCallable()) {
@@ -507,6 +518,9 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& frame, int sourceId)
 {
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!frame.isEmpty());
+
   // Fall back to source 0 if the requested engine is not available
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end() || !it.value()->parseFunction.isCallable()) {
@@ -566,6 +580,185 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
 }
 
 /**
+ * @brief Evaluates a script in the source engine and checks for syntax errors.
+ *
+ * Resets the engine, evaluates the script, and reports any syntax errors or
+ * exceptions via message boxes or log warnings.
+ *
+ * @param se              The source engine to evaluate in.
+ * @param script          The JavaScript source to evaluate.
+ * @param sourceId        Source identifier (for diagnostics).
+ * @param showMessageBoxes When @c false, errors are logged instead of shown.
+ * @return @c true if the script evaluated without errors.
+ */
+bool DataModel::FrameParser::validateScriptSyntax(SourceEngine& se,
+                                                  const QString& script,
+                                                  int sourceId,
+                                                  bool showMessageBoxes)
+{
+  Q_ASSERT(!script.isEmpty());
+  Q_ASSERT(sourceId >= 0);
+
+  // Reset the engine and evaluate the script
+  se.parseFunction = QJSValue();
+  se.engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+
+  QStringList exceptionStackTrace;
+  auto result = se.engine.evaluate(
+    script, QStringLiteral("parser_%1.js").arg(sourceId), 1, &exceptionStackTrace);
+
+  // Report syntax errors
+  if (result.isError()) {
+    const QString errorMsg = result.property("message").toString();
+    const int lineNumber   = result.property("lineNumber").toInt();
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        tr("JavaScript Syntax Error"),
+        tr("The parser code contains a syntax error at line %1:\n\n%2")
+          .arg(lineNumber)
+          .arg(errorMsg),
+        QMessageBox::Critical);
+    } else {
+      qWarning() << "[FrameParser] Source" << sourceId << "syntax error at line" << lineNumber
+                 << ":" << errorMsg;
+    }
+    return false;
+  }
+
+  // Report exceptions raised during evaluation
+  if (!exceptionStackTrace.isEmpty()) {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        tr("JavaScript Exception Occurred"),
+        tr("The parser code triggered the following exceptions:\n\n%1")
+          .arg(exceptionStackTrace.join(QStringLiteral("\n"))),
+        QMessageBox::Critical);
+    } else {
+      qWarning() << "[FrameParser] Source" << sourceId
+                 << "exceptions:" << exceptionStackTrace.join(QStringLiteral(", "));
+    }
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Validates that the engine's global scope contains a callable 'parse'
+ * function.
+ *
+ * @param se              The source engine whose global scope to inspect.
+ * @param sourceId        Source identifier (for diagnostics).
+ * @param showMessageBoxes When @c false, errors are logged instead of shown.
+ * @return The parse function on success, or a null QJSValue on failure.
+ */
+QJSValue DataModel::FrameParser::validateParseFunction(SourceEngine& se,
+                                                       int sourceId,
+                                                       bool showMessageBoxes)
+{
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!se.engine.isInterrupted());
+
+  // Check that 'parse' exists and is callable
+  auto parseFunction = se.engine.globalObject().property(QStringLiteral("parse"));
+  if (parseFunction.isNull() || !parseFunction.isCallable()) {
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(
+        tr("Missing Parse Function"),
+        tr("The 'parse' function is not defined in the script.\n\n"
+           "Please ensure your code includes:\nfunction parse(frame) { ... }"),
+        QMessageBox::Critical);
+    } else {
+      qWarning() << "[FrameParser] Source" << sourceId << "missing or non-callable parse()";
+    }
+    return QJSValue();
+  }
+
+  return parseFunction;
+}
+
+/**
+ * @brief Probes the parse function with representative inputs under a watchdog
+ * timer to detect runtime errors and infinite loops.
+ *
+ * Tries three inputs (string "0", byte array [0], empty string). If any
+ * succeeds, the probe passes. A watchdog thread interrupts the engine after
+ * 500 ms to catch infinite loops.
+ *
+ * @param se              The source engine to probe.
+ * @param parseFunction   The callable parse function to test.
+ * @param sourceId        Source identifier (for diagnostics).
+ * @param showMessageBoxes When @c false, errors are logged instead of shown.
+ * @return @c true if at least one probe input succeeded.
+ */
+bool DataModel::FrameParser::probeParseFunction(SourceEngine& se,
+                                                const QJSValue& parseFunction,
+                                                int sourceId,
+                                                bool showMessageBoxes)
+{
+  Q_ASSERT(parseFunction.isCallable());
+  Q_ASSERT(sourceId >= 0);
+
+  // Prepare three representative probe inputs
+  bool probeOk = false;
+  QJSValue lastError;
+  auto byteProbe = se.engine.newArray(1);
+  byteProbe.setProperty(0, 0);
+  const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
+
+  // Run probes under a watchdog thread
+  {
+    QAtomicInt probeDone(0);
+    auto* watchdog = QThread::create([&se, &probeDone]() {
+      constexpr int kTimeoutMs = 500;
+      constexpr int kSliceMs   = 20;
+      for (int t = 0; t < kTimeoutMs && !probeDone.loadAcquire(); t += kSliceMs)
+        QThread::msleep(kSliceMs);
+
+      if (!probeDone.loadAcquire())
+        se.engine.setInterrupted(true);
+    });
+    watchdog->start();
+
+    for (const auto& input : probeInputs) {
+      QJSValueList probeArgs;
+      probeArgs << input;
+      const auto probeResult = parseFunction.call(probeArgs);
+      if (!probeResult.isError()) {
+        probeOk = true;
+        break;
+      }
+
+      lastError = probeResult;
+    }
+
+    probeDone.storeRelease(1);
+    se.engine.setInterrupted(false);
+    watchdog->wait();
+    watchdog->deleteLater();
+  }
+
+  // Report probe failure
+  if (!probeOk) {
+    const QString errorMsg = lastError.property("message").toString();
+    const int lineNumber   = lastError.property("lineNumber").toInt();
+    if (showMessageBoxes) {
+      Misc::Utilities::showMessageBox(tr("Parse Function Runtime Error"),
+                                      tr("The parse function contains an error at line %1:\n\n"
+                                         "%2\n\n"
+                                         "Please fix the error in the function body.")
+                                        .arg(lineNumber)
+                                        .arg(errorMsg),
+                                      QMessageBox::Critical);
+    } else {
+      qWarning() << "[FrameParser] Runtime error at line" << lineNumber << ":" << errorMsg;
+    }
+  }
+
+  return probeOk;
+}
+
+/**
  * @brief Validates and loads a JavaScript frame parser script into the engine
  * for @p sourceId.
  *
@@ -581,76 +774,33 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
  */
 bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, bool showMessageBoxes)
 {
-  // Save existing parse function in case validation fails
-  auto& se               = engineForSource(sourceId);
-  QJSValue prevParseFn   = se.parseFunction;
-  QJSValue prevHexToArr  = se.hexToArray;
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(!script.isEmpty());
 
-  // Helper to restore previous state on failure
+  // Save existing parse function in case validation fails
+  auto& se              = engineForSource(sourceId);
+  QJSValue prevParseFn  = se.parseFunction;
+  QJSValue prevHexToArr = se.hexToArray;
+
   auto restorePrevious = [&]() {
     se.parseFunction = prevParseFn;
     se.hexToArray    = prevHexToArr;
   };
 
-  // Reset the engine and prepare for script evaluation
-  se.parseFunction = QJSValue();
-  se.engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
-
   // Syntax check
-  QStringList exceptionStackTrace;
-  auto result = se.engine.evaluate(
-    script, QStringLiteral("parser_%1.js").arg(sourceId), 1, &exceptionStackTrace);
-
-  if (result.isError()) {
-    const QString errorMsg = result.property("message").toString();
-    const int lineNumber   = result.property("lineNumber").toInt();
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("JavaScript Syntax Error"),
-        tr("The parser code contains a syntax error at line %1:\n\n%2")
-          .arg(lineNumber)
-          .arg(errorMsg),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[FrameParser] Source" << sourceId << "syntax error at line" << lineNumber
-                 << ":" << errorMsg;
-    }
+  if (!validateScriptSyntax(se, script, sourceId, showMessageBoxes)) {
     restorePrevious();
     return false;
   }
 
-  if (!exceptionStackTrace.isEmpty()) {
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("JavaScript Exception Occurred"),
-        tr("The parser code triggered the following exceptions:\n\n%1")
-          .arg(exceptionStackTrace.join(QStringLiteral("\n"))),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[FrameParser] Source" << sourceId
-                 << "exceptions:" << exceptionStackTrace.join(QStringLiteral(", "));
-    }
+  // Verify the 'parse' function exists and has a valid signature
+  auto parseFunction = validateParseFunction(se, sourceId, showMessageBoxes);
+  if (parseFunction.isNull()) {
     restorePrevious();
     return false;
   }
 
-  // Verify the 'parse' function exists and is callable
-  auto parseFunction = se.engine.globalObject().property(QStringLiteral("parse"));
-  if (parseFunction.isNull() || !parseFunction.isCallable()) {
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("Missing Parse Function"),
-        tr("The 'parse' function is not defined in the script.\n\n"
-           "Please ensure your code includes:\nfunction parse(frame) { ... }"),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[FrameParser] Source" << sourceId << "missing or non-callable parse()";
-    }
-    restorePrevious();
-    return false;
-  }
-
-  // Full signature + probe validation only for source 0 (the global / primary engine)
+  // Full signature + probe validation only for source 0
   if (sourceId == 0) {
     static QRegularExpression functionRegex(
       R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
@@ -662,7 +812,8 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
                                            "Expected format:\nfunction parse(frame) { ... }"),
                                         QMessageBox::Critical);
       } else {
-        qWarning() << "[FrameParser] No valid 'parse' function declaration found";
+        qWarning() << "[FrameParser] No valid 'parse' function "
+                      "declaration found";
       }
       restorePrevious();
       return false;
@@ -673,13 +824,14 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
 
     if (firstArg.isEmpty()) {
       if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(
-          tr("Invalid Function Parameter"),
-          tr("The 'parse' function must have at least one parameter.\n\n"
-             "Expected format:\nfunction parse(frame) { ... }"),
-          QMessageBox::Critical);
+        Misc::Utilities::showMessageBox(tr("Invalid Function Parameter"),
+                                        tr("The 'parse' function must have at least one parameter."
+                                           "\n\nExpected format:\n"
+                                           "function parse(frame) { ... }"),
+                                        QMessageBox::Critical);
       } else {
-        qWarning() << "[FrameParser] Parse function must have at least one parameter";
+        qWarning() << "[FrameParser] Parse function must have at "
+                      "least one parameter";
       }
       restorePrevious();
       return false;
@@ -687,72 +839,24 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
 
     if (!secondArg.isEmpty()) {
       if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(
-          tr("Deprecated Function Signature"),
-          tr("The 'parse' function uses the old two-parameter format: parse(%1, %2)\n\n"
-             "This format is no longer supported. Please update to the new single-parameter "
-             "format:\nfunction parse(%1) { ... }\n\nThe separator parameter is no longer "
-             "needed.")
-            .arg(firstArg, secondArg),
-          QMessageBox::Warning);
+        Misc::Utilities::showMessageBox(tr("Deprecated Function Signature"),
+                                        tr("The 'parse' function uses the old two-parameter "
+                                           "format: parse(%1, %2)\n\n"
+                                           "This format is no longer supported. Please update "
+                                           "to the new single-parameter format:\n"
+                                           "function parse(%1) { ... }\n\n"
+                                           "The separator parameter is no longer needed.")
+                                          .arg(firstArg, secondArg),
+                                        QMessageBox::Warning);
       } else {
-        qWarning() << "[FrameParser] Deprecated two-parameter parse function";
+        qWarning() << "[FrameParser] Deprecated two-parameter "
+                      "parse function";
       }
       restorePrevious();
       return false;
     }
 
-    // Probe with three representative inputs; watchdog kills infinite loops after 500 ms
-    bool probeOk = false;
-    QJSValue lastError;
-    auto byteProbe = se.engine.newArray(1);
-    byteProbe.setProperty(0, 0);
-    const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
-    {
-      QAtomicInt probeDone(0);
-      auto* watchdog = QThread::create([&se, &probeDone]() {
-        constexpr int kTimeoutMs = 500;
-        constexpr int kSliceMs   = 20;
-        for (int t = 0; t < kTimeoutMs && !probeDone.loadAcquire(); t += kSliceMs)
-          QThread::msleep(kSliceMs);
-
-        if (!probeDone.loadAcquire())
-          se.engine.setInterrupted(true);
-      });
-      watchdog->start();
-
-      for (const auto& input : probeInputs) {
-        QJSValueList probeArgs;
-        probeArgs << input;
-        const auto probeResult = parseFunction.call(probeArgs);
-        if (!probeResult.isError()) {
-          probeOk = true;
-          break;
-        }
-
-        lastError = probeResult;
-      }
-
-      probeDone.storeRelease(1);
-      se.engine.setInterrupted(false);
-      watchdog->wait();
-      watchdog->deleteLater();
-    }
-
-    if (!probeOk) {
-      const QString errorMsg = lastError.property("message").toString();
-      const int lineNumber   = lastError.property("lineNumber").toInt();
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(tr("Parse Function Runtime Error"),
-                                        tr("The parse function contains an error at line %1:\n\n"
-                                           "%2\n\n"
-                                           "Please fix the error in the function body.")
-                                          .arg(lineNumber)
-                                          .arg(errorMsg),
-                                        QMessageBox::Critical);
-      } else {
-        qWarning() << "[FrameParser] Runtime error at line" << lineNumber << ":" << errorMsg;
-      }
+    if (!probeParseFunction(se, parseFunction, sourceId, showMessageBoxes)) {
       restorePrevious();
       return false;
     }

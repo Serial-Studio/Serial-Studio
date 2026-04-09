@@ -514,6 +514,8 @@ void IO::ConnectionManager::setUiDriverProperty(const QString& key, const QVaria
  */
 void IO::ConnectionManager::processPayload(const QByteArray& payload)
 {
+  Q_ASSERT(!payload.isEmpty());
+
   // Ignore empty payloads
   if (payload.isEmpty())
     return;
@@ -551,6 +553,9 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
 void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayload,
                                                       const QMap<int, QByteArray>& sourcePayloads)
 {
+  Q_ASSERT(!fullPayload.isEmpty());
+  Q_ASSERT(!sourcePayloads.isEmpty());
+
   // Ignore empty payloads
   if (fullPayload.isEmpty())
     return;
@@ -589,6 +594,9 @@ void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayl
  */
 qint64 IO::ConnectionManager::writeData(const QByteArray& data)
 {
+  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(m_devices.find(0) != m_devices.end());
+
   return writeDataToDevice(0, data);
 }
 
@@ -600,6 +608,9 @@ qint64 IO::ConnectionManager::writeData(const QByteArray& data)
  */
 qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& data)
 {
+  Q_ASSERT(deviceId >= 0);
+  Q_ASSERT(!data.isEmpty());
+
   auto it = m_devices.find(deviceId);
   if (it == m_devices.end() || !it->second)
     return -1;
@@ -1185,6 +1196,9 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
  */
 void IO::ConnectionManager::wireDevice(DeviceManager* dm)
 {
+  Q_ASSERT(dm);
+  Q_ASSERT(dm->driver());
+
   connect(dm,
           &IO::DeviceManager::frameReady,
           this,
@@ -1390,6 +1404,9 @@ bool IO::ConnectionManager::projectConfigurationOk() const
  */
 void IO::ConnectionManager::onFrameReady(int deviceId, const QByteArray& frame)
 {
+  Q_ASSERT(deviceId >= 0);
+  Q_ASSERT(!frame.isEmpty());
+
   if (m_paused)
     return;
 
@@ -1413,6 +1430,9 @@ void IO::ConnectionManager::onFrameReady(int deviceId, const QByteArray& frame)
  */
 void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayPtr& data)
 {
+  Q_ASSERT(data);
+  Q_ASSERT(deviceId >= 0);
+
   if (m_paused)
     return;
 
@@ -1501,6 +1521,9 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
   SerialStudio::BusType type) const
 {
+  Q_ASSERT(static_cast<int>(type) >= 0);
+  Q_ASSERT(static_cast<int>(type) >= static_cast<int>(SerialStudio::BusType::UART));
+
   switch (type) {
     case SerialStudio::BusType::UART:
       return std::make_unique<IO::Drivers::UART>();

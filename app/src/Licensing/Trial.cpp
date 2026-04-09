@@ -61,7 +61,10 @@ static void installTrialToken(int daysRemaining)
  * enabled, it automatically revalidates it with the backend server.
  */
 Licensing::Trial::Trial()
-  : m_busy(false), m_trialEnabled(false), m_deviceRegistered(false), m_trialExpiry(QDateTime::currentDateTimeUtc())
+  : m_busy(false)
+  , m_trialEnabled(false)
+  , m_deviceRegistered(false)
+  , m_trialExpiry(QDateTime::currentDateTimeUtc())
 {
   // Sync-activation dependent modules to trial module
   connect(this,

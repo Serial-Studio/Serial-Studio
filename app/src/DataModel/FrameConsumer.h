@@ -22,6 +22,7 @@
 #pragma once
 
 #include <atomic>
+#include <QDebug>
 #include <QObject>
 #include <QThread>
 #include <QTimer>
@@ -136,9 +137,16 @@ public:
 
     m_writeBuffer.clear();
 
+    constexpr size_t kMaxItemsPerBatch = 10000;
     T item;
-    while (m_queue->try_dequeue(item))
+    size_t dequeued = 0;
+    while (dequeued < kMaxItemsPerBatch && m_queue->try_dequeue(item)) {
       m_writeBuffer.push_back(std::move(item));
+      ++dequeued;
+    }
+
+    if (dequeued >= kMaxItemsPerBatch) [[unlikely]]
+      qWarning() << "[FrameConsumer] Batch size limit reached — remaining items deferred";
 
     const auto count = m_writeBuffer.size();
     if (count == 0)

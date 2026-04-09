@@ -274,9 +274,9 @@ void Misc::Utilities::revealFile(const QString& pathToReveal)
   escaped.replace(QLatin1String("\""), QLatin1String("\\\""));
 
   QStringList scriptArgs;
-  scriptArgs << QLatin1String("-e")
-             << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
-                  .arg(escaped);
+  scriptArgs
+    << QLatin1String("-e")
+    << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"").arg(escaped);
   QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
   scriptArgs.clear();
   scriptArgs << QLatin1String("-e") << QLatin1String("tell application \"Finder\" to activate");

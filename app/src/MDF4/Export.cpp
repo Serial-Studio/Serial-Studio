@@ -114,28 +114,34 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
     }
   };
 
-  for (const auto& frame : items) {
-    const auto steadyOffset = frame->timestamp - m_steadyBaseline;
-    const auto systemTime   = m_systemBaseline + steadyOffset;
-    const auto timestamp_ns =
-      std::chrono::duration_cast<std::chrono::nanoseconds>(systemTime.time_since_epoch()).count();
-    const double timestamp_s = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
+  // Guard mdflib calls — they may throw, and exceptions must not propagate
+  // through Qt's event loop
+  try {
+    for (const auto& frame : items) {
+      const auto steadyOffset = frame->timestamp - m_steadyBaseline;
+      const auto systemTime   = m_systemBaseline + steadyOffset;
+      const auto timestamp_ns =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(systemTime.time_since_epoch()).count();
+      const double timestamp_s = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
 
-    for (const auto& group : frame->data.groups) {
-      auto it = m_groupMap.find(group.groupId);
-      if (it == m_groupMap.end())
-        continue;
+      for (const auto& group : frame->data.groups) {
+        auto it = m_groupMap.find(group.groupId);
+        if (it == m_groupMap.end())
+          continue;
 
-      auto& info = it->second;
-      if (group.datasets.size() != info.channels.size())
-        continue;
+        auto& info = it->second;
+        if (group.datasets.size() != info.channels.size())
+          continue;
 
-      if (info.timeChannel)
-        info.timeChannel->SetChannelValue(timestamp_s);
+        if (info.timeChannel)
+          info.timeChannel->SetChannelValue(timestamp_s);
 
-      writeDatasets(group, info);
-      m_writer->SaveSample(*info.channelGroup, static_cast<uint64_t>(timestamp_ns));
+        writeDatasets(group, info);
+        m_writer->SaveSample(*info.channelGroup, static_cast<uint64_t>(timestamp_ns));
+      }
     }
+  } catch (const std::exception& e) {
+    qWarning() << "[MDF4] Exception in processItems:" << e.what();
   }
 }
 
@@ -146,14 +152,18 @@ void MDF4::ExportWorker::closeResources()
 {
   // Finalize the MDF4 measurement and release the writer
   if (isResourceOpen() && m_writer) {
-    const auto steadyNow    = DataModel::TimestampedFrame::SteadyClock::now();
-    const auto steadyOffset = steadyNow - m_steadyBaseline;
-    const auto systemTime   = m_systemBaseline + steadyOffset;
-    const auto stop_time =
-      std::chrono::duration_cast<std::chrono::nanoseconds>(systemTime.time_since_epoch()).count();
+    try {
+      const auto steadyNow    = DataModel::TimestampedFrame::SteadyClock::now();
+      const auto steadyOffset = steadyNow - m_steadyBaseline;
+      const auto systemTime   = m_systemBaseline + steadyOffset;
+      const auto stop_time =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(systemTime.time_since_epoch()).count();
 
-    m_writer->StopMeasurement(static_cast<uint64_t>(stop_time));
-    m_writer->FinalizeMeasurement();
+      m_writer->StopMeasurement(static_cast<uint64_t>(stop_time));
+      m_writer->FinalizeMeasurement();
+    } catch (const std::exception& e) {
+      qWarning() << "[MDF4] Exception in closeResources:" << e.what();
+    }
 
     m_fileOpen = false;
     m_writer.reset();
@@ -300,7 +310,11 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   }
 
   catch (const std::exception& e) {
-    qWarning() << "MDF4 Export: Failed to create file:" << e.what();
+    qWarning() << "[MDF4] Failed to create file:" << e.what();
+    m_fileOpen = false;
+    m_writer.reset();
+  } catch (...) {
+    qWarning() << "[MDF4] Failed to create file: unknown exception";
     m_fileOpen = false;
     m_writer.reset();
   }

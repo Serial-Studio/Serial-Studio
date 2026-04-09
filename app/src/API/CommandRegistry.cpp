@@ -114,6 +114,9 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
   } catch (const std::exception& e) {
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Command execution failed: %1").arg(e.what()));
+  } catch (...) {
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, QStringLiteral("Command execution failed: unknown exception"));
   }
 }
 

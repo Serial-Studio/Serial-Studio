@@ -78,6 +78,7 @@ private:
   void parseProjectFrame(int sourceId, const QByteArray& data);
   void parseQuickPlotFrame(const QByteArray& data);
   void buildQuickPlotFrame(const QStringList& channels);
+  void buildQuickPlotAudioFrame(const QStringList& channels);
 
   void hotpathTxFrame(const DataModel::Frame& frame);
 

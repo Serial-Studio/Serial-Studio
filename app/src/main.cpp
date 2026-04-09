@@ -421,7 +421,8 @@ int main(int argc, char** argv)
         bool ok;
         unsigned int slave_val = parser.value(modbusSlaveOpt).toUInt(&ok);
         if (ok && slave_val >= 1 && slave_val <= 247)
-          IO::ConnectionManager::instance().modbus()->setSlaveAddress(static_cast<quint8>(slave_val));
+          IO::ConnectionManager::instance().modbus()->setSlaveAddress(
+            static_cast<quint8>(slave_val));
         else
           qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
       }
@@ -553,7 +554,8 @@ int main(int argc, char** argv)
         bool ok;
         unsigned int slave_val = parser.value(modbusSlaveOpt).toUInt(&ok);
         if (ok && slave_val >= 1 && slave_val <= 247)
-          IO::ConnectionManager::instance().modbus()->setSlaveAddress(static_cast<quint8>(slave_val));
+          IO::ConnectionManager::instance().modbus()->setSlaveAddress(
+            static_cast<quint8>(slave_val));
         else
           qWarning() << "Invalid ModBus slave address (1-247):" << parser.value(modbusSlaveOpt);
       }
@@ -677,6 +679,9 @@ static char** injectPlatformArg(int& argc, char** argv, const char* platform)
     return argv;
 
   newArgv[0] = argv[0];
+
+  // const_cast is safe here: Qt copies these strings during QApplication init
+  // and never writes back to the argv pointers
   newArgv[1] = const_cast<char*>("-platform");
   newArgv[2] = const_cast<char*>(platform);
 

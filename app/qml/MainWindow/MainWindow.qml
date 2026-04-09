@@ -335,7 +335,7 @@ Widgets.SmartWindow {
           }
 
           MouseArea {
-            width: 8
+            width: 16
             height: parent.height
             anchors.leftMargin: -4
             anchors.left: parent.left

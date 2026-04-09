@@ -21,8 +21,8 @@
 
 #include "IO/Checksum.h"
 
-#include <QDebug>
 #include <cstdint>
+#include <QDebug>
 
 //--------------------------------------------------------------------------------------------------
 // Endianess detection

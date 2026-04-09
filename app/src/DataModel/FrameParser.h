@@ -92,6 +92,18 @@ private:
   [[nodiscard]] SourceEngine& engineForSource(int sourceId);
   [[nodiscard]] QJSValue guardedCall(SourceEngine& se, QJSValueList& args);
 
+  [[nodiscard]] bool validateScriptSyntax(SourceEngine& se,
+                                          const QString& script,
+                                          int sourceId,
+                                          bool showMessageBoxes);
+  [[nodiscard]] QJSValue validateParseFunction(SourceEngine& se,
+                                               int sourceId,
+                                               bool showMessageBoxes);
+  [[nodiscard]] bool probeParseFunction(SourceEngine& se,
+                                        const QJSValue& parseFunction,
+                                        int sourceId,
+                                        bool showMessageBoxes);
+
 private:
   bool m_suppressMessageBoxes;
 
