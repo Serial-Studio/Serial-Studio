@@ -165,11 +165,14 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
   static const QString kLength = QStringLiteral("length");
   const int elementCount = jsValue.property(kLength).toInt();
 
+  constexpr int kMaxElements     = 10000;
+  constexpr qsizetype kMaxVecLen = 10000;
+
   QStringList scalars;
   QList<QStringList> vectors;
   qsizetype maxVectorLength = 0;
 
-  for (int i = 0; i < elementCount; ++i) {
+  for (int i = 0; i < qMin(elementCount, kMaxElements); ++i) {
     const auto element = jsValue.property(static_cast<quint32>(i));
 
     if (element.isArray()) {
@@ -188,6 +191,9 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
     results.append(scalars);
     return results;
   }
+
+  // Cap to prevent OOM from malformed JS arrays
+  maxVectorLength = qMin(maxVectorLength, kMaxVecLen);
 
   for (auto& vec : vectors) {
     if (!vec.isEmpty() && vec.size() < maxVectorLength) {
@@ -349,8 +355,42 @@ DataModel::FrameParser::SourceEngine& DataModel::FrameParser::engineForSource(in
 
   auto* se = new SourceEngine();
   se->engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+
+  // Configure runtime watchdog timer to interrupt runaway scripts
+  se->watchdog.setSingleShot(true);
+  se->watchdog.setInterval(kRuntimeWatchdogMs);
+  connect(&se->watchdog, &QTimer::timeout, this, [se]() {
+    se->engine.setInterrupted(true);
+  });
+
   m_engines.insert(sourceId, se);
   return *se;
+}
+
+/**
+ * @brief Calls the parse function with a runtime watchdog timer.
+ *
+ * Starts a single-shot timer before the JS call. If the script exceeds
+ * kRuntimeWatchdogMs, the engine is interrupted and an error is returned.
+ *
+ * @param se   The source engine whose parse function to call.
+ * @param args Arguments to pass to the parse function.
+ * @return The JS result, or an error value if interrupted.
+ */
+QJSValue DataModel::FrameParser::guardedCall(SourceEngine& se, QJSValueList& args)
+{
+  se.engine.setInterrupted(false);
+  se.watchdog.start();
+  const auto result = se.parseFunction.call(args);
+  se.watchdog.stop();
+
+  if (se.engine.isInterrupted()) [[unlikely]] {
+    se.engine.setInterrupted(false);
+    qWarning() << "[FrameParser] Script execution timed out after"
+               << kRuntimeWatchdogMs << "ms — interrupted";
+  }
+
+  return result;
 }
 
 /**
@@ -420,7 +460,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
 
   QJSValueList args;
   args << frame;
-  const auto jsResult = se.parseFunction.call(args);
+  const auto jsResult = guardedCall(se, args);
 
   if (jsResult.isError()) [[unlikely]] {
     qWarning() << "[FrameParser] Source" << sourceId
@@ -492,7 +532,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
 
   QJSValueList args;
   args << jsArray;
-  const auto jsResult = se.parseFunction.call(args);
+  const auto jsResult = guardedCall(se, args);
 
   if (jsResult.isError()) [[unlikely]] {
     qWarning() << "[FrameParser] Source" << sourceId

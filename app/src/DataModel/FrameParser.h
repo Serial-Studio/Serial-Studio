@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
+#include <QTimer>
 
 namespace DataModel {
 
@@ -78,14 +79,18 @@ public slots:
   void loadDefaultTemplate(int sourceId, bool guiTrigger = false);
 
 private:
+  static constexpr int kRuntimeWatchdogMs = 1000;
+
   struct SourceEngine {
     QJSEngine engine;
     QJSValue parseFunction;
     QJSValue hexToArray;
+    QTimer watchdog;
     int templateIdx = -1;
   };
 
   [[nodiscard]] SourceEngine& engineForSource(int sourceId);
+  [[nodiscard]] QJSValue guardedCall(SourceEngine& se, QJSValueList& args);
 
 private:
   bool m_suppressMessageBoxes;

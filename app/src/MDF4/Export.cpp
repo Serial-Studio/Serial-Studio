@@ -180,7 +180,14 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   const auto fileName =
     dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss")) + QStringLiteral(".mf4");
 
-  const auto frameName = frame.title.isEmpty() ? QStringLiteral("SerialStudio") : frame.title;
+  // Sanitize frame title to prevent path traversal
+  QString frameName = frame.title;
+  frameName.remove(QChar('/'));
+  frameName.remove(QChar('\\'));
+  frameName.remove(QStringLiteral(".."));
+  if (frameName.isEmpty())
+    frameName = QStringLiteral("SerialStudio");
+
   QDir dir(Misc::WorkspaceManager::instance().path("MDF4"));
   if (!dir.exists(frameName))
     dir.mkpath(frameName);

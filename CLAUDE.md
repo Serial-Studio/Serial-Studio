@@ -316,6 +316,98 @@ Never hardcode as integers. Use `SerialStudio::BusType::UART` etc. In QML: `Seri
 Maintain SPDX headers: `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both.
 Validate at system boundaries only (API input, file I/O, network). Trust internal data.
 
+## Safety-Critical Code — NASA Power of Ten Rules
+
+This application is commonly used for mission-critical data acquisition.
+All code changes MUST be validated against these rules (adapted from NASA JPL's Power
+of Ten for C++ / Qt). Violations in hotpath code are blockers.
+
+### Rule 1 — No Complex Control Flow
+
+- **No `goto`, `setjmp`, `longjmp`.**
+- **No unbounded recursion.** All recursive functions must have a depth parameter
+  with a hard cap. Prefer iterative solutions. Document max depth at call site.
+- Existing bounded recursion: `FrameParser::parseMultiFrame` (depth ≤ 2),
+  `JsonValidator` (depth ≤ 128), `Taskbar::findItemByWindowId` (depth ≤ 3),
+  `ConversionUtils` (depth ≤ 64).
+
+### Rule 2 — All Loops Must Have Fixed Upper Bounds
+
+- Every loop must have a provable upper bound. For `while(true)` loops, document
+  why termination is guaranteed (e.g., "consumes ≥1 byte per iteration from a
+  finite buffer").
+- Loops processing external data must have explicit `kMaxIterations` guards:
+  ```cpp
+  constexpr int kMaxIterations = 10000;
+  for (int i = 0; i < kMaxIterations && condition; ++i) { ... }
+  ```
+
+### Rule 3 — No Dynamic Memory Allocation After Initialization
+
+- Never add `new`, `malloc`, `make_shared`, or container growth (`.append()`,
+  `.push_back()`) in the dashboard hotpath. Pre-allocate in constructors.
+- `FrameBuilder::hotpathTxFrame` allows one `make_shared` for export consumers
+  (guarded by `[[unlikely]]`). Dashboard path must remain zero-alloc.
+
+### Rule 4 — Functions ≤60 Lines
+
+- Target 40–60 lines per function, hard limit 80 for new code. Split anything
+  over 100 lines. Extract logical blocks into named helper functions.
+
+### Rule 5 — Assertion Density ≥2 Per Function
+
+- Every new or modified function must have at least 2 meaningful assertions:
+  - Pre-conditions: validate parameters at entry.
+  - Post-conditions: validate return values and state after mutations.
+  - Loop invariants: assert expected state within loops.
+- Use `Q_ASSERT` for debug-only checks. For runtime safety in release builds,
+  use explicit `if (!condition) return error;` guards.
+- Never use `assert(true)` or trivially-true assertions.
+  ```cpp
+  void processFrame(const Frame& frame, int sourceId)
+  {
+    Q_ASSERT(!frame.groups.empty());
+    Q_ASSERT(sourceId >= 0);
+    // ... processing ...
+    Q_ASSERT(result.isValid());
+  }
+  ```
+
+### Rule 6 — Smallest Possible Scope
+
+- Declare variables at first use. No function-top declarations.
+
+### Rule 7 — Check Return Values, Validate Parameters
+
+- At system boundaries (driver I/O, file I/O, network, API input): always check
+  return values. Cast to `(void)` only with documented justification.
+- Every non-void function call at a system boundary must have its return value
+  checked. Use `[[nodiscard]]` on all non-void returns.
+- `try_enqueue()` return values must be checked and logged on failure.
+- File `seek()` return values must be checked in all protocol implementations.
+- `FrameParser::guardedCall()` provides a runtime watchdog timer for JS calls.
+  Always use `guardedCall()` instead of direct `parseFunction.call()`.
+
+### Rule 8 — Limited Preprocessor Use
+
+- Preprocessor limited to `#include`, `#pragma once`, `#ifdef BUILD_COMMERCIAL`,
+  `#ifdef ENABLE_GRPC`, and platform guards. No token pasting, no variadic macros.
+- Keep conditional compilation minimal. Each `#ifdef` doubles the test matrix.
+
+### Rule 9 — Restricted Pointer Use
+
+- Avoid `reinterpret_cast` except for byte-level access (`const uint8_t*` casts).
+  Prefer `std::bit_cast` (C++20) where possible.
+- No multi-level pointer dereferencing. No raw function pointers (use type-safe
+  `connect()` / `std::function`).
+
+### Rule 10 — All Warnings Enabled, Zero Warnings
+
+- Build with `-Wall -Wextra -Wpedantic` at minimum.
+- Enable `ENABLE_HARDENING` flag for production builds.
+- Run static analysis (clang-tidy, cppcheck) with zero warnings policy.
+- Fix the root cause of any warning. Never suppress without documented justification.
+
 ## MCP / API Testing
 
 TCP port 7777, MCP (JSON-RPC 2.0) + legacy.

@@ -464,9 +464,10 @@ void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
  */
 void IO::Drivers::Network::onReadyRead()
 {
-  // Read from UDP socket
+  // Read from UDP socket (bounded to prevent event loop starvation)
   if (socketType() == QAbstractSocket::UdpSocket) {
-    while (udpSocket()->hasPendingDatagrams()) {
+    constexpr int kMaxDatagramsPerRead = 256;
+    for (int n = 0; n < kMaxDatagramsPerRead && udpSocket()->hasPendingDatagrams(); ++n) {
       const qint64 size = udpSocket()->pendingDatagramSize();
       m_udpBuffer.resize(size);
       udpSocket()->readDatagram(m_udpBuffer.data(), m_udpBuffer.size());

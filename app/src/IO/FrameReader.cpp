@@ -91,6 +91,14 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
   else {
     m_circularBuffer.append(*data);
 
+    // Detect data loss from buffer overflow
+    const auto overflow = m_circularBuffer.overflowCount();
+    if (overflow > 0) [[unlikely]] {
+      qWarning() << "[FrameReader] Buffer overflow:" << overflow
+                 << "bytes lost — data rate exceeds processing capacity";
+      m_circularBuffer.resetOverflowCount();
+    }
+
     const auto initialSize = m_queue.size_approx();
 
     switch (m_operationMode) {
@@ -255,7 +263,8 @@ void IO::FrameReader::readEndDelimitedFrames()
       // Validate checksum & register the frame
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
-        m_queue.try_enqueue(std::move(frame));
+        if (!m_queue.try_enqueue(std::move(frame))) [[unlikely]]
+          qWarning() << "[FrameReader] Frame queue full — frame dropped";
         (void)m_circularBuffer.read(frameEndPos);
       }
 
@@ -331,7 +340,8 @@ void IO::FrameReader::readStartDelimitedFrames()
       // Execute checksum algorithm and register the frame
       const auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
-        m_queue.try_enqueue(std::move(frame));
+        if (!m_queue.try_enqueue(std::move(frame))) [[unlikely]]
+          qWarning() << "[FrameReader] Frame queue full — frame dropped";
         (void)m_circularBuffer.read(frameEndPos);
       }
 
@@ -389,7 +399,8 @@ void IO::FrameReader::readStartEndDelimitedFrames()
       // Validate checksum and register the frame
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
-        m_queue.try_enqueue(std::move(frame));
+        if (!m_queue.try_enqueue(std::move(frame))) [[unlikely]]
+          qWarning() << "[FrameReader] Frame queue full — frame dropped";
         (void)m_circularBuffer.read(frameEndPos);
       }
 

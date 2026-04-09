@@ -163,8 +163,11 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
           // Rewind file to re-read the current block
           int blockSize     = m_use1K ? 1024 : 128;
           qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-          m_bytesSent       = blockStart;
-          m_file.seek(blockStart);
+          m_bytesSent = blockStart;
+          if (!m_file.seek(blockStart)) [[unlikely]] {
+            Q_EMIT finished(false, tr("Failed to seek in file"));
+            return;
+          }
           sendBlock();
         } else if (ch == kCAN) {
           m_timeoutTimer.stop();
@@ -341,8 +344,11 @@ void IO::Protocols::XMODEM::handleTimeout()
   } else if (m_state == State::WaitingForAck) {
     int blockSize     = m_use1K ? 1024 : 128;
     qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-    m_bytesSent       = blockStart;
-    m_file.seek(blockStart);
+    m_bytesSent = blockStart;
+    if (!m_file.seek(blockStart)) [[unlikely]] {
+      Q_EMIT finished(false, tr("Failed to seek in file"));
+      return;
+    }
     sendBlock();
   } else if (m_state == State::WaitingForStart) {
     m_timeoutTimer.start(m_timeoutMs);

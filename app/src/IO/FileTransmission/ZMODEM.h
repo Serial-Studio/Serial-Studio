@@ -125,10 +125,13 @@ private:
     ReadingBinHeader
   };
 
+  static constexpr int kChunksPerYield = 64;
+
   // Transmit helpers
   void sendZRQINIT();
   void sendZFILE();
   void sendDataSubpackets();
+  void sendNextDataChunk();
   void sendZEOF();
   void sendZFIN();
   void sendCancel();

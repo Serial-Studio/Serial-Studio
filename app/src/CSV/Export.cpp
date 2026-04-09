@@ -133,8 +133,16 @@ QVector<QPair<int, QString>> CSV::ExportWorker::createCsvFile(const DataModel::F
   const auto dt       = QDateTime::currentDateTime();
   const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
 
-  const auto subdir  = Misc::WorkspaceManager::instance().path("CSV");
-  const QString path = QString("%1/%2/").arg(subdir, frame.title);
+  // Sanitize frame title to prevent path traversal
+  const auto subdir = Misc::WorkspaceManager::instance().path("CSV");
+  QString safeTitle = frame.title;
+  safeTitle.remove(QChar('/'));
+  safeTitle.remove(QChar('\\'));
+  safeTitle.remove(QStringLiteral(".."));
+  if (safeTitle.isEmpty())
+    safeTitle = QStringLiteral("Untitled");
+
+  const QString path = QString("%1/%2/").arg(subdir, safeTitle);
 
   QDir dir(path);
   if (!dir.exists() && !dir.mkpath(".")) {

@@ -160,8 +160,11 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
           Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
           constexpr int blockSize = 1024;
           qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-          m_bytesSent       = blockStart;
-          m_file.seek(blockStart);
+          m_bytesSent = blockStart;
+          if (!m_file.seek(blockStart)) [[unlikely]] {
+            Q_EMIT finished(false, tr("Failed to seek in file"));
+            return;
+          }
           m_yState = YState::SendingData;
           sendDataBlock();
         } else if (ch == kCAN) {

@@ -35,25 +35,27 @@ namespace ConversionUtils {
  */
 [[nodiscard]] google::protobuf::Struct frameToProtoStruct(const DataModel::Frame& frame);
 
+constexpr int kMaxConversionDepth = 64;
+
 /**
  * @brief Converts a QJsonObject to a google.protobuf.Struct.
  */
-[[nodiscard]] google::protobuf::Struct toProtoStruct(const QJsonObject& json);
+[[nodiscard]] google::protobuf::Struct toProtoStruct(const QJsonObject& json, int depth = 0);
 
 /**
  * @brief Converts a QJsonValue to a google.protobuf.Value.
  */
-[[nodiscard]] google::protobuf::Value toProtoValue(const QJsonValue& json);
+[[nodiscard]] google::protobuf::Value toProtoValue(const QJsonValue& json, int depth = 0);
 
 /**
  * @brief Converts a google.protobuf.Struct to a QJsonObject.
  */
-[[nodiscard]] QJsonObject toQJsonObject(const google::protobuf::Struct& proto);
+[[nodiscard]] QJsonObject toQJsonObject(const google::protobuf::Struct& proto, int depth = 0);
 
 /**
  * @brief Converts a google.protobuf.Value to a QJsonValue.
  */
-[[nodiscard]] QJsonValue toQJsonValue(const google::protobuf::Value& proto);
+[[nodiscard]] QJsonValue toQJsonValue(const google::protobuf::Value& proto, int depth = 0);
 
 }  // namespace ConversionUtils
 }  // namespace GRPC

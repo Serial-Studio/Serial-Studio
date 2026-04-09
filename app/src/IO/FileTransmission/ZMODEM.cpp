@@ -219,8 +219,14 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
     return;
   }
 
-  // Parse type and arg (little-endian)
-  quint8 type          = QByteArray::fromHex(m_headerBuf.mid(0, 2)).at(0);
+  // Parse type and arg (little-endian), validating hex conversion
+  const auto type_bytes = QByteArray::fromHex(m_headerBuf.mid(0, 2));
+  if (type_bytes.isEmpty()) [[unlikely]] {
+    m_parseState = ParseState::Idle;
+    return;
+  }
+
+  quint8 type          = static_cast<quint8>(type_bytes.at(0));
   QByteArray arg_bytes = QByteArray::fromHex(m_headerBuf.mid(2, 8));
   quint32 arg          = 0;
   if (arg_bytes.size() == 4) {
@@ -402,7 +408,11 @@ void IO::Protocols::ZMODEM::sendZFILE()
 }
 
 /**
- * @brief Sends file data as a stream of ZDATA subpackets.
+ * @brief Initiates async file data streaming as ZDATA subpackets.
+ *
+ * Sends the ZDATA header, then schedules chunk-by-chunk transmission
+ * via sendNextDataChunk(). Yields to the event loop every kChunksPerYield
+ * chunks so that incoming ZRPOS/timeout signals can be processed.
  */
 void IO::Protocols::ZMODEM::sendDataSubpackets()
 {
@@ -410,14 +420,35 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
   m_state = State::SendingData;
 
   // Seek to the requested offset (for crash recovery)
-  m_file.seek(m_fileOffset);
+  if (!m_file.seek(m_fileOffset)) [[unlikely]] {
+    Q_EMIT finished(false, tr("Failed to seek to offset %1").arg(m_fileOffset));
+    return;
+  }
+
   m_bytesSent = m_fileOffset;
 
   // Send ZDATA header with current file position
   Q_EMIT writeRequested(buildBin32Header(kZDATA, static_cast<quint32>(m_fileOffset)));
 
-  // Stream subpackets
-  while (!m_file.atEnd()) {
+  // Begin async chunk transmission
+  sendNextDataChunk();
+}
+
+/**
+ * @brief Sends a batch of data chunks, then yields to the event loop.
+ *
+ * Sends up to kChunksPerYield subpackets per invocation. If more data
+ * remains, schedules another call via QTimer::singleShot(0). This allows
+ * the event loop to process incoming headers (ZRPOS, timeouts, cancel).
+ */
+void IO::Protocols::ZMODEM::sendNextDataChunk()
+{
+  // Abort if transfer was cancelled or state changed
+  if (m_state != State::SendingData)
+    return;
+
+  // Send a batch of chunks
+  for (int i = 0; i < kChunksPerYield && !m_file.atEnd(); ++i) {
     QByteArray chunk = m_file.read(m_blockSize);
     if (chunk.isEmpty())
       break;
@@ -432,8 +463,11 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
       Q_EMIT writeRequested(buildSubpacket(chunk, kZCRCG));
   }
 
-  // Send ZEOF with file size
-  sendZEOF();
+  // Schedule next batch or finalize
+  if (!m_file.atEnd() && m_state == State::SendingData)
+    QTimer::singleShot(0, this, &ZMODEM::sendNextDataChunk);
+  else if (m_state == State::SendingData)
+    sendZEOF();
 }
 
 /**

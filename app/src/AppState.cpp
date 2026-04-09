@@ -130,9 +130,10 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
 
   m_operationMode = mode;
   m_settings.setValue("operation_mode", static_cast<int>(mode));
-  Q_EMIT operationModeChanged();
 
+  // Derive config before emitting signals so listeners see consistent state
   m_frameConfig = deriveFrameConfig();
+  Q_EMIT operationModeChanged();
   Q_EMIT frameConfigChanged(m_frameConfig);
 }
 

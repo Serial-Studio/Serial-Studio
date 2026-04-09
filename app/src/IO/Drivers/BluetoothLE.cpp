@@ -463,15 +463,24 @@ void IO::Drivers::BluetoothLE::selectService(const int index)
   if (!operatingSystemSupported())
     return;
 
+  // Re-entrancy guard to prevent cross-instance forwarding cycles
+  static bool s_forwarding = false;
+
   // If this instance has no controller, forward to the instance that does
   if (!m_controller) {
+    if (s_forwarding)
+      return;
+
+    s_forwarding = true;
     for (auto* inst : std::as_const(s_instances)) {
       if (inst != this && inst->m_controller && inst->m_deviceIndex == m_deviceIndex) {
         inst->selectService(index);
+        s_forwarding = false;
         return;
       }
     }
 
+    s_forwarding = false;
     return;
   }
 
@@ -535,15 +544,24 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
   if (!operatingSystemSupported())
     return;
 
+  // Re-entrancy guard to prevent cross-instance forwarding cycles
+  static bool s_charForwarding = false;
+
   // If this instance has no service, forward to the instance that does
   if (!m_service) {
+    if (s_charForwarding)
+      return;
+
+    s_charForwarding = true;
     for (auto* inst : std::as_const(s_instances)) {
       if (inst != this && inst->m_service && inst->m_deviceIndex == m_deviceIndex) {
         inst->setCharacteristicIndex(index);
+        s_charForwarding = false;
         return;
       }
     }
 
+    s_charForwarding = false;
     return;
   }
 
