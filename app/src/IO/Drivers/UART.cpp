@@ -1193,4 +1193,18 @@ void IO::Drivers::UART::setDriverProperty(const QString& key, const QVariant& va
 
   else if (key == QLatin1String("autoReconnect"))
     setAutoReconnect(value.toBool());
+
+  else if (key == QLatin1String("device")) {
+    const auto path = value.toString().simplified();
+    if (!path.isEmpty()) {
+      if (m_deviceNames.isEmpty())
+        refreshSerialDevices();
+
+      registerDevice(path);
+      const auto ports = portList();
+      const int idx    = ports.indexOf(path);
+      if (idx >= 1)
+        setPortIndex(static_cast<quint8>(idx));
+    }
+  }
 }

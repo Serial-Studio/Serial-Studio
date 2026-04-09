@@ -188,10 +188,9 @@ void DataModel::FrameBuilder::setupExternalConnections()
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
-  Q_ASSERT(&DataModel::ProjectModel::instance() != nullptr);
-
   // Copy in-memory project data directly into the frame
   const auto& pm = DataModel::ProjectModel::instance();
+  Q_ASSERT(!pm.title().isEmpty());
 
   clear_frame(m_frame);
   m_sourceFrames.clear();
@@ -290,7 +289,6 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArra
  */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
-  Q_ASSERT(&IO::ConnectionManager::instance() != nullptr);
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
            && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
 
@@ -305,6 +303,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
+  Q_ASSERT(!m_frame.title.isEmpty());
   DataModel::FrameParser::instance().readCode();
 
   const auto& actions = m_frame.actions;

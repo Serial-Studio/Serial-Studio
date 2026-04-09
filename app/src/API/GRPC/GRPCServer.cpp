@@ -9,6 +9,12 @@
 
 #ifdef ENABLE_GRPC
 
+// Suppress GCC false positive from deeply-inlined protobuf InternalSwap
+#  if defined(__GNUC__) && !defined(__clang__)
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wstringop-overflow"
+#  endif
+
 #  include "API/GRPC/GRPCServer.h"
 
 #  include <grpcpp/grpcpp.h>
@@ -526,5 +532,9 @@ void API::GRPC::GRPCServer::writerLoop()
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
+
+#  if defined(__GNUC__) && !defined(__clang__)
+#    pragma GCC diagnostic pop
+#  endif
 
 #endif  // ENABLE_GRPC

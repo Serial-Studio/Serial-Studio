@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QThread>
 #include <QTimer>
+#include <stdexcept>
 #include <vector>
 
 #include "ThirdParty/readerwriterqueue.h"
@@ -154,8 +155,17 @@ public:
 
     m_queueSize->fetch_sub(count, std::memory_order_relaxed);
 
+    // Guard against exceptions — they must never propagate through Qt's
+    // event loop (e.g. when invoked via QueuedConnection or timer).
     const bool wasOpen = isResourceOpen();
-    processItems(m_writeBuffer);
+    try {
+      processItems(m_writeBuffer);
+    } catch (const std::exception& e) {
+      qWarning() << "[FrameConsumer] Exception in processItems:" << e.what();
+    } catch (...) {
+      qWarning() << "[FrameConsumer] Unknown exception in processItems";
+    }
+
     const bool isOpen = isResourceOpen();
 
     if (wasOpen != isOpen)
@@ -170,8 +180,19 @@ public:
    */
   void close() override
   {
-    processData();
-    closeResources();
+    // Guard against exceptions — this method is invoked via
+    // BlockingQueuedConnection from ~FrameConsumer and runs inside the
+    // worker thread's event loop. Any escaping exception triggers Qt's
+    // "exception thrown from an event handler" warning.
+    try {
+      processData();
+      closeResources();
+    } catch (const std::exception& e) {
+      qWarning() << "[FrameConsumer] Exception during close:" << e.what();
+    } catch (...) {
+      qWarning() << "[FrameConsumer] Unknown exception during close";
+    }
+
     Q_EMIT resourceOpenChanged();
   }
 

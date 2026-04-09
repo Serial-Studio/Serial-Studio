@@ -624,6 +624,17 @@ if(ENABLE_GRPC)
 
   include_directories(${PROTO_OUT_DIR})
 
+  # Suppress warnings in auto-generated protobuf/gRPC code
+  if(MSVC)
+    set_source_files_properties(${PROTO_GENERATED_SRCS}
+      PROPERTIES COMPILE_FLAGS "/w"
+    )
+  else()
+    set_source_files_properties(${PROTO_GENERATED_SRCS}
+      PROPERTIES COMPILE_FLAGS "-w"
+    )
+  endif()
+
   set(SOURCES
     ${SOURCES}
     src/API/GRPC/GRPCServer.cpp

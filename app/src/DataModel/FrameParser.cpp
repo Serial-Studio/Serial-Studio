@@ -479,18 +479,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
     return {};
   }
 
-  // Fast path for 1D arrays (most common case): extract strings directly
-  // without the overhead of detectArrayType + toVariant().toStringList()
-  if (jsResult.isArray()) [[likely]] {
-    const int length = jsResult.property(QStringLiteral("length")).toInt();
-    if (length > 0 && !jsResult.property(static_cast<quint32>(0)).isArray()) [[likely]] {
-      QList<QStringList> results;
-      results.append(jsArrayToStringList(jsResult));
-      return results;
-    }
-  }
-
-  // Slow path for 2D/mixed arrays and edge cases
+  // Classify and convert the JS result
   QList<QStringList> results;
   switch (detectArrayType(jsResult)) {
     case ArrayType::Array2D:
@@ -554,17 +543,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
     return {};
   }
 
-  // Fast path for 1D arrays (most common case)
-  if (jsResult.isArray()) [[likely]] {
-    const int length = jsResult.property(QStringLiteral("length")).toInt();
-    if (length > 0 && !jsResult.property(static_cast<quint32>(0)).isArray()) [[likely]] {
-      QList<QStringList> results;
-      results.append(jsArrayToStringList(jsResult));
-      return results;
-    }
-  }
-
-  // Slow path for 2D/mixed arrays and edge cases
+  // Classify and convert the JS result
   QList<QStringList> results;
   switch (detectArrayType(jsResult)) {
     case ArrayType::Array2D:

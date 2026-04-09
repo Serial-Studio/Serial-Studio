@@ -403,16 +403,22 @@ API::CommandResponse API::Handlers::SourceHandler::sourceConfigure(const QString
 
   DataModel::ProjectModel::instance().captureSourceSettings(sourceId);
 
+  // Sync to the live driver so projectConfigurationOk() sees the new values
+  IO::HAL_Driver* live = IO::ConnectionManager::instance().driver(sourceId);
+  if (live && live != driver)
+    for (auto it = settings.constBegin(); it != settings.constEnd(); ++it)
+      live->setDriverProperty(it.key(), it.value().toVariant());
+
   return CommandResponse::makeSuccess(id);
 }
 
 /**
  * @brief Sets a driver connection property for a source.
  *
- * For source 0 in single-source ProjectFile mode, delegates to the UI-config
- * driver so that the change propagates to the Setup panel and to
- * source[0].connectionSettings via onUiDriverConfigurationChanged() — the same
- * path the GUI uses. For all other sources, uses the editing-driver path.
+ * Uses driverForEditing() to resolve the correct UI-config driver for the
+ * source's bus type (avoiding activeUiDriver() which depends on m_busType
+ * and may not match the source's bus type). Also syncs the change to the
+ * live driver so projectConfigurationOk() sees the new value.
  */
 API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QString& id,
                                                                      const QJsonObject& params)
@@ -438,17 +444,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
                        ? params[QStringLiteral("propertyValue")].toVariant()
                        : params[QStringLiteral("value")].toVariant();
 
-  const auto& model = DataModel::ProjectModel::instance();
-  const bool isSingleSourceSource0 =
-    sourceId == 0 && model.sources().size() == 1
-    && AppState::instance().operationMode() == SerialStudio::ProjectFile;
-
-  if (isSingleSourceSource0) {
-    IO::ConnectionManager::instance().setUiDriverProperty(key, val);
-    DataModel::ProjectModel::instance().captureSourceSettings(0);
-    return CommandResponse::makeSuccess(id);
-  }
-
   IO::HAL_Driver* driver = IO::ConnectionManager::instance().driverForEditing(sourceId);
   if (!driver)
     return CommandResponse::makeError(
@@ -456,6 +451,11 @@ API::CommandResponse API::Handlers::SourceHandler::sourceSetProperty(const QStri
 
   driver->setDriverProperty(key, val);
   DataModel::ProjectModel::instance().captureSourceSettings(sourceId);
+
+  // Sync to the live driver so projectConfigurationOk() sees the new value
+  IO::HAL_Driver* live = IO::ConnectionManager::instance().driver(sourceId);
+  if (live && live != driver)
+    live->setDriverProperty(key, val);
 
   return CommandResponse::makeSuccess(id);
 }

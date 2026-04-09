@@ -227,13 +227,13 @@ void DataModel::TransmitTestDialog::evaluate()
   }
 
   // Convert result to byte array (same logic as Base::evaluateTransmitFunction)
-  QByteArray data;
+  QByteArray payload;
   if (result.isString())
-    data = result.toString().toLatin1();
+    payload = result.toString().toLatin1();
   else
-    data = result.toVariant().toByteArray();
+    payload = result.toVariant().toByteArray();
 
-  displayOutput(data, {});
+  displayOutput(payload, {});
 }
 
 //--------------------------------------------------------------------------------------------------

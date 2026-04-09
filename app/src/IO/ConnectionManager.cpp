@@ -1269,8 +1269,10 @@ void IO::ConnectionManager::rebuildDevices()
   const auto opMode       = AppState::instance().operationMode();
   const bool wasConnected = isConnected();
 
-  // Only replace device 0 if source 0 has saved connectionSettings
-  bool willRebuildDevice0 = false;
+  // In ProjectFile mode, only replace device 0 if source 0 has saved
+  // connectionSettings. In other modes, always tear down device 0 so that
+  // setBusType() can recreate it with the correct driver type.
+  bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);
   if (opMode == SerialStudio::ProjectFile) {
     const auto& srcs = DataModel::ProjectModel::instance().sources();
     for (const auto& src : srcs) {
@@ -1297,46 +1299,45 @@ void IO::ConnectionManager::rebuildDevices()
     it = m_devices.erase(it);
   }
 
-  // Create fresh DeviceManagers for sources that need rebuilding
-  const auto& sources = DataModel::ProjectModel::instance().sources();
-  for (const auto& src : sources) {
-    if (src.sourceId == 0 && !willRebuildDevice0)
-      continue;
+  // Create fresh DeviceManagers from project sources (ProjectFile mode only).
+  // In QuickPlot/JSON modes, device 0 is created by setBusType() below.
+  if (opMode == SerialStudio::ProjectFile) {
+    const auto& sources = DataModel::ProjectModel::instance().sources();
+    for (const auto& src : sources) {
+      if (src.sourceId == 0 && !willRebuildDevice0)
+        continue;
 
-    auto driver = createDriver(static_cast<SerialStudio::BusType>(src.busType));
-    if (!driver)
-      continue;
+      auto driver = createDriver(static_cast<SerialStudio::BusType>(src.busType));
+      if (!driver)
+        continue;
 
-    // Apply saved connection settings (port, baud, device index, etc.)
-    if (!src.connectionSettings.isEmpty()) {
-      for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd();
-           ++it)
-        driver->setDriverProperty(it.key(), it.value().toVariant());
+      // Apply saved connection settings (port, baud, device index, etc.)
+      if (!src.connectionSettings.isEmpty()) {
+        for (auto it = src.connectionSettings.constBegin(); it != src.connectionSettings.constEnd();
+             ++it)
+          driver->setDriverProperty(it.key(), it.value().toVariant());
 
-      // Match saved hardware identifiers to available devices
-      const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("deviceId"));
-      if (deviceIdVal.isObject())
-        driver->selectByIdentifier(deviceIdVal.toObject());
+        // Match saved hardware identifiers to available devices
+        const auto deviceIdVal = src.connectionSettings.value(QStringLiteral("deviceId"));
+        if (deviceIdVal.isObject())
+          driver->selectByIdentifier(deviceIdVal.toObject());
+      }
+
+      // Wrap driver in a DeviceManager (owns driver + thread + FrameReader)
+      auto* rawDriver = driver.get();
+      auto dm         = std::make_unique<DeviceManager>(
+        src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
+
+      connect(rawDriver,
+              &IO::HAL_Driver::configurationChanged,
+              this,
+              &IO::ConnectionManager::configurationChanged,
+              Qt::UniqueConnection);
+
+      wireDevice(dm.get());
+      m_devices[src.sourceId] = std::move(dm);
     }
-
-    // Wrap driver in a DeviceManager (owns driver + thread + FrameReader)
-    auto* rawDriver = driver.get();
-    auto dm         = std::make_unique<DeviceManager>(
-      src.sourceId, std::move(driver), buildFrameConfig(src.sourceId), this);
-
-    connect(rawDriver,
-            &IO::HAL_Driver::configurationChanged,
-            this,
-            &IO::ConnectionManager::configurationChanged,
-            Qt::UniqueConnection);
-
-    wireDevice(dm.get());
-    m_devices[src.sourceId] = std::move(dm);
   }
-
-  // Non-ProjectFile modes have a single global FrameReader to reset
-  if (opMode != SerialStudio::ProjectFile)
-    resetFrameReader();
 
   // Notify QML and dependent systems that the device topology changed
   Q_EMIT configurationChanged();
