@@ -288,7 +288,6 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
   // Find the matching source entry
   const auto& sources = DataModel::ProjectModel::instance().sources();
 
-  // Look up the source by deviceId
   const DataModel::Source* srcPtr = nullptr;
   for (const auto& src : sources) {
     if (src.sourceId == deviceId) {
@@ -300,9 +299,7 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
   if (!srcPtr)
     return nullptr;
 
-  // Return the UI-config driver for this source's bus type, with the
-  // source's saved connectionSettings applied so the ProjectEditor
-  // shows the correct port/baud/device selections.
+  // Apply saved connectionSettings to the UI driver
   const auto busType = static_cast<SerialStudio::BusType>(srcPtr->busType);
   HAL_Driver* uiDrv  = uiDriverForBusType(busType);
   if (!uiDrv)
@@ -516,7 +513,6 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
 {
   Q_ASSERT(!payload.isEmpty());
 
-  // Ignore empty payloads
   if (payload.isEmpty())
     return;
 
@@ -556,7 +552,6 @@ void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayl
   Q_ASSERT(!fullPayload.isEmpty());
   Q_ASSERT(!sourcePayloads.isEmpty());
 
-  // Ignore empty payloads
   if (fullPayload.isEmpty())
     return;
 
@@ -746,12 +741,7 @@ void IO::ConnectionManager::setupExternalConnections()
           &IO::ConnectionManager::rebuildDevices,
           Qt::QueuedConnection);
 
-  // --- UI driver → project model & live driver synchronization ---
-  //
-  // Each UI-config driver connects to three slots:
-  //   1. onUiDriverConfigurationChanged — saves settings to source[0]
-  //   2. syncUiDriverToLive — copies properties to live driver (device 0)
-  //   3. configurationChanged — re-evaluates configurationOk for QML
+  // Wire UI drivers: save to source[0], sync to live, re-evaluate configurationOk
   connect(m_uartUi.get(),
           &IO::HAL_Driver::configurationChanged,
           this,
@@ -783,8 +773,7 @@ void IO::ConnectionManager::setupExternalConnections()
           &IO::ConnectionManager::syncUiDriverToLive,
           Qt::UniqueConnection);
 
-  // Forward UI driver configuration changes to ConnectionManager::configurationChanged
-  // so that QML bindings (e.g. configurationOk) are re-evaluated
+  // Forward UI driver changes to configurationChanged for QML
   connect(m_uartUi.get(),
           &IO::HAL_Driver::configurationChanged,
           this,
@@ -1042,8 +1031,7 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
   m_busType = type;
   m_settings.setValue("IOManager/busType", static_cast<int>(type));
 
-  // Remember the user's manual selection so we can restore it when leaving
-  // ProjectFile mode (syncUiDriverFromSource0 overwrites IOManager/busType).
+  // Persist user's manual selection for mode-switch restore
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     m_settings.setValue("IOManager/userBusType", static_cast<int>(type));
 
@@ -1126,7 +1114,7 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
  */
 void IO::ConnectionManager::syncUiDriverToLive()
 {
-  // Skip if we're applying project settings to avoid feedback loops
+  // Re-entrancy guard: skip while syncing from project
   if (m_syncingFromProject)
     return;
 
@@ -1156,7 +1144,6 @@ void IO::ConnectionManager::syncUiDriverToLive()
  */
 void IO::ConnectionManager::syncUiDriverFromSource0()
 {
-  // Read current operation mode and project sources
   const auto opMode = AppState::instance().operationMode();
   const auto& model = DataModel::ProjectModel::instance();
   const auto& srcs  = model.sources();
@@ -1225,32 +1212,41 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
  */
 void IO::ConnectionManager::onUiDriverConfigurationChanged()
 {
-  // Skip if we're applying project settings to avoid feedback loops
+  // Re-entrancy guard: skip while applying project settings
   if (m_syncingFromProject)
     return;
 
-  // Only persist to source[0] in single-source ProjectFile mode
+  // Only persist in single-source ProjectFile mode
   const auto opMode = AppState::instance().operationMode();
   auto& model       = DataModel::ProjectModel::instance();
 
   if (opMode != SerialStudio::ProjectFile || model.sources().size() != 1)
     return;
 
+  // Resolve the active UI driver for the current bus type
   HAL_Driver* uiDriver = activeUiDriver();
   if (!uiDriver)
     return;
 
+  // Discard signals from non-active UI drivers (bus type mismatch)
+  if (sender() && sender() != uiDriver)
+    return;
+
+  // Snapshot driver properties into a JSON object
   QJsonObject settings;
   for (const auto& prop : uiDriver->driverProperties())
     settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
 
+  // Append stable hardware identifiers for cross-platform device matching
   const auto deviceId = uiDriver->deviceIdentifier();
   if (!deviceId.isEmpty())
     settings.insert(QStringLiteral("deviceId"), deviceId);
 
+  // Persist connection settings and bus type into source[0]
   model.setSource0ConnectionSettings(settings);
   model.setSource0BusType(static_cast<int>(m_busType));
 
+  // Auto-save if a project file path exists
   if (!model.jsonFilePath().isEmpty())
     (void)model.saveJsonFile(false);
 }
@@ -1269,9 +1265,7 @@ void IO::ConnectionManager::rebuildDevices()
   const auto opMode       = AppState::instance().operationMode();
   const bool wasConnected = isConnected();
 
-  // In ProjectFile mode, only replace device 0 if source 0 has saved
-  // connectionSettings. In other modes, always tear down device 0 so that
-  // setBusType() can recreate it with the correct driver type.
+  // Only rebuild device 0 if it has saved connectionSettings
   bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);
   if (opMode == SerialStudio::ProjectFile) {
     const auto& srcs = DataModel::ProjectModel::instance().sources();
@@ -1299,8 +1293,7 @@ void IO::ConnectionManager::rebuildDevices()
     it = m_devices.erase(it);
   }
 
-  // Create fresh DeviceManagers from project sources (ProjectFile mode only).
-  // In QuickPlot/JSON modes, device 0 is created by setBusType() below.
+  // Create DeviceManagers from project sources
   if (opMode == SerialStudio::ProjectFile) {
     const auto& sources = DataModel::ProjectModel::instance().sources();
     for (const auto& src : sources) {
@@ -1345,11 +1338,7 @@ void IO::ConnectionManager::rebuildDevices()
   Q_EMIT connectedChanged();
   Q_EMIT contextsRebuilt();
 
-  // In ProjectFile mode, sync UI drivers from source 0 for single-source projects.
-  // In other modes, restore the user's manual bus type and rebuild device 0 so the
-  // live driver matches the UI. Without this, device 0 may still hold a stale driver
-  // created for the project (e.g. Network) while the UI shows the user's choice
-  // (e.g. Audio).
+  // Sync UI drivers (ProjectFile) or restore user bus type (other modes)
   if (opMode == SerialStudio::ProjectFile) {
     QMetaObject::invokeMethod(
       this, &IO::ConnectionManager::syncUiDriverFromSource0, Qt::QueuedConnection);
@@ -1471,7 +1460,6 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
  */
 IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 {
-  // Initialize config and determine operation mode
   FrameConfig cfg;
   const auto opMode = AppState::instance().operationMode();
 

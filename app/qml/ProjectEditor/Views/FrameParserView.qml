@@ -214,7 +214,7 @@ Widgets.Pane {
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/open.svg"
-            ToolTip.text: qsTr("Import a JavaScript file for data parsing")
+            ToolTip.text: qsTr("Import a script file for data parsing")
           }
 
           //
@@ -316,7 +316,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             onClicked: app.showHelpCenter("javascript-api")
             icon.source: "qrc:/rcc/icons/code-editor/help.svg"
-            ToolTip.text: qsTr("Open help documentation for JavaScript data parsing")
+            ToolTip.text: qsTr("Open help documentation for data parsing")
           }
 
           //
@@ -324,6 +324,38 @@ Widgets.Pane {
           //
           Item {
             Layout.fillWidth: true
+          }
+
+          //
+          // Language selector
+          //
+          Rectangle {
+            implicitWidth: 1
+            Layout.fillHeight: true
+            Layout.maximumHeight: 48
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          Label {
+            text: qsTr("Language:")
+            Layout.alignment: Qt.AlignVCenter
+            font: Cpp_Misc_CommonFonts.uiFont
+          }
+
+          ComboBox {
+            id: languageSelector
+
+            model: ["JavaScript", "Lua"]
+            Layout.alignment: Qt.AlignVCenter
+            currentIndex: frameParser.language
+
+            onActivated: {
+              frameParser.switchLanguage(currentIndex)
+              currentIndex = Qt.binding(function() {
+                return frameParser.language
+              })
+            }
           }
         }
       }

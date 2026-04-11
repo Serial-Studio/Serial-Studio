@@ -136,7 +136,7 @@ IO::Drivers::UART::~UART()
  */
 void IO::Drivers::UART::close()
 {
-  // Disconnect and close the serial port
+  // Release the serial port and its signal connections
   if (port() != nullptr) {
     disconnect(port(), &QSerialPort::errorOccurred, this, &IO::Drivers::UART::handleError);
     disconnect(port(), &QIODevice::readyRead, this, &IO::Drivers::UART::onReadyRead);
@@ -386,7 +386,7 @@ QStringList IO::Drivers::UART::portList() const
  */
 QStringList IO::Drivers::UART::baudRateList() const
 {
-  // Build a sorted set of standard baud rates
+  // Standard baud rates supported by most serial hardware
   QSet<qint32> baudSet = {110,
                           150,
                           300,
@@ -582,7 +582,7 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
-  // Populate device list and clamp to valid range
+  // Ensure device list is populated
   if (m_deviceNames.isEmpty())
     refreshSerialDevices();
 
@@ -612,7 +612,7 @@ void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
  */
 void IO::Drivers::UART::registerDevice(const QString& device)
 {
-  // Validate and register the custom device path
+  // Normalize the path and check that the file exists
   const auto trimmedPath = device.simplified();
 
   QFile path(trimmedPath);

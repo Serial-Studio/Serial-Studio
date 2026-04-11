@@ -54,19 +54,17 @@ public:
                               const serialstudio::CommandRequest* request,
                               serialstudio::CommandResponse* response) override
   {
-    // Convert protobuf params to QJsonObject
     const auto params  = API::GRPC::ConversionUtils::toQJsonObject(request->params());
     const auto id      = QString::fromStdString(request->id());
     const auto command = QString::fromStdString(request->command());
 
-    // Marshal to main thread
+    // Marshal command execution to the main thread
     API::CommandResponse result;
     QMetaObject::invokeMethod(
       QCoreApplication::instance(),
       [&]() { result = API::CommandRegistry::instance().execute(command, id, params); },
       Qt::BlockingQueuedConnection);
 
-    // Build response
     response->set_id(request->id());
     response->set_success(result.success);
 
@@ -88,7 +86,6 @@ public:
                             const serialstudio::BatchRequest* request,
                             serialstudio::BatchResponse* response) override
   {
-    // Execute each command in the batch and collect results
     response->set_id(request->id());
     bool all_success = true;
 
@@ -155,7 +152,6 @@ public:
                              const serialstudio::StreamRequest* /*request*/,
                              grpc::ServerWriter<serialstudio::RawBatch>* writer) override
   {
-    // Initialize raw stream context
     auto ctx     = std::make_shared<API::GRPC::RawStreamContext>();
     ctx->writer  = writer;
     ctx->context = context;
@@ -192,7 +188,6 @@ public:
                             const serialstudio::RawDataRequest* request,
                             serialstudio::CommandResponse* response) override
   {
-    // Extract raw bytes from the request
     const auto& bytes = request->data();
     QByteArray data(bytes.data(), static_cast<int>(bytes.size()));
 
@@ -221,7 +216,6 @@ public:
                             const google::protobuf::Empty* /*request*/,
                             serialstudio::CommandList* response) override
   {
-    // Populate response with all registered commands
     const auto& commands = API::CommandRegistry::instance().commands();
     for (auto it = commands.begin(); it != commands.end(); ++it) {
       auto* info = response->add_commands();
@@ -248,15 +242,14 @@ private:
  */
 API::GRPC::GRPCServer::GRPCServer() : m_enabled(false)
 {
-  // Connect to API server enable/disable signals
   auto& server = API::Server::instance();
 
-  // Mirror the API server: enable/disable gRPC when API is enabled/disabled
+  // Mirror the API server enabled state
   connect(&server, &API::Server::enabledChanged, this, [this]() {
     setEnabled(API::Server::instance().enabled());
   });
 
-  // Restart gRPC server when external connections setting changes
+  // Restart gRPC when external connections setting changes
   connect(&server,
           &API::Server::externalConnectionsChanged,
           this,
@@ -320,7 +313,6 @@ int API::GRPC::GRPCServer::clientCount() const noexcept
  */
 void API::GRPC::GRPCServer::setEnabled(const bool enabled)
 {
-  // Guard against duplicate state
   if (m_enabled == enabled)
     return;
 
@@ -475,9 +467,7 @@ void API::GRPC::GRPCServer::writerLoop()
   while (m_writerRunning.load()) {
     bool did_work = false;
 
-    // Drain all queued frames into a single FrameBatch message.
-    // One Write() call per batch amortizes the HTTP/2 framing overhead,
-    // allowing plugins to receive every frame even at 48+ KHz.
+    // Drain all queued frames into a single FrameBatch to amortize HTTP/2 overhead
     {
       serialstudio::FrameBatch batch;
       DataModel::TimestampedFramePtr frame;
@@ -502,7 +492,7 @@ void API::GRPC::GRPCServer::writerLoop()
       }
     }
 
-    // Drain all queued raw data into a single RawBatch message.
+    // Drain all queued raw data into a single RawBatch
     {
       serialstudio::RawBatch batch;
       IO::ByteArrayPtr data;

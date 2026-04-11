@@ -33,7 +33,6 @@
 
 void API::Handlers::LicensingHandler::registerCommands()
 {
-  // Obtain registry and register licensing commands
   auto& registry = CommandRegistry::instance();
 
   {
@@ -138,7 +137,6 @@ void API::Handlers::LicensingHandler::registerCommands()
 API::CommandResponse API::Handlers::LicensingHandler::setLicense(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("licenseKey"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: licenseKey"));
@@ -153,7 +151,6 @@ API::CommandResponse API::Handlers::LicensingHandler::setLicense(const QString& 
 API::CommandResponse API::Handlers::LicensingHandler::activate(const QString& id,
                                                                const QJsonObject&)
 {
-  // Obtain instance and validate state
   auto& ls = Licensing::LemonSqueezy::instance();
 
   if (!ls.canActivate()) {
@@ -173,7 +170,6 @@ API::CommandResponse API::Handlers::LicensingHandler::activate(const QString& id
 API::CommandResponse API::Handlers::LicensingHandler::deactivate(const QString& id,
                                                                  const QJsonObject&)
 {
-  // Obtain instance and validate state
   auto& ls = Licensing::LemonSqueezy::instance();
 
   if (!ls.isActivated()) {
@@ -193,7 +189,6 @@ API::CommandResponse API::Handlers::LicensingHandler::deactivate(const QString& 
 API::CommandResponse API::Handlers::LicensingHandler::validate(const QString& id,
                                                                const QJsonObject&)
 {
-  // Obtain instance and validate state
   auto& ls = Licensing::LemonSqueezy::instance();
 
   if (ls.busy()) {
@@ -208,7 +203,6 @@ API::CommandResponse API::Handlers::LicensingHandler::validate(const QString& id
 API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& id,
                                                                 const QJsonObject&)
 {
-  // Obtain instance and validate state
   const auto& ls = Licensing::LemonSqueezy::instance();
   const auto& tk = Licensing::CommercialToken::current();
 
@@ -261,7 +255,6 @@ API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& i
 API::CommandResponse API::Handlers::LicensingHandler::guardStatus(const QString& id,
                                                                   const QJsonObject&)
 {
-  // Obtain instance and validate state
   const auto& table = Licensing::Guards::guardTable();
   const int count   = static_cast<int>(table.size());
 
@@ -291,7 +284,6 @@ API::CommandResponse API::Handlers::LicensingHandler::guardStatus(const QString&
 API::CommandResponse API::Handlers::LicensingHandler::trialGetStatus(const QString& id,
                                                                      const QJsonObject&)
 {
-  // Obtain instance and validate state
   const auto& trial = Licensing::Trial::instance();
 
   QJsonObject result;
@@ -308,7 +300,6 @@ API::CommandResponse API::Handlers::LicensingHandler::trialGetStatus(const QStri
 API::CommandResponse API::Handlers::LicensingHandler::trialEnable(const QString& id,
                                                                   const QJsonObject&)
 {
-  // Obtain instance and validate state
   auto& trial = Licensing::Trial::instance();
 
   if (!trial.trialAvailable()) {

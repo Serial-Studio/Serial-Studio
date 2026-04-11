@@ -78,14 +78,13 @@ void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
   if (isActive())
     cancelTransfer();
 
-  // Open the file
+  // Open file and initialize transfer state
   m_file.setFileName(filePath);
   if (!m_file.open(QIODevice::ReadOnly)) {
     Q_EMIT finished(false, tr("Cannot open file: %1").arg(m_file.errorString()));
     return;
   }
 
-  // Initialize state
   m_fileSize    = m_file.size();
   m_bytesSent   = 0;
   m_blockNumber = 1;
@@ -95,7 +94,6 @@ void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
   Q_EMIT statusMessage(tr("Waiting for receiver..."));
   Q_EMIT progressChanged(0, m_fileSize);
 
-  // Start timeout for initial handshake
   m_timeoutTimer.start(m_timeoutMs);
 }
 
@@ -125,7 +123,6 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(isActive());
 
-  // Process each byte through the state machine
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
 
@@ -148,7 +145,6 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
           m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
           m_state       = State::SendingBlocks;
 
-          // Check if we've sent everything
           if (m_file.atEnd())
             sendEOT();
           else
@@ -169,7 +165,6 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
                                  .arg(m_retryCount)
                                  .arg(m_maxRetries));
 
-          // Rewind file to re-read the current block
           int blockSize     = m_use1K ? 1024 : 128;
           qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
           m_bytesSent       = blockStart;
@@ -194,7 +189,6 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
           Q_EMIT statusMessage(tr("Transfer complete"));
           Q_EMIT finished(true, QString());
         } else if (ch == kNAK) {
-          // Resend EOT
           m_timeoutTimer.stop();
           sendEOT();
         }
@@ -270,7 +264,7 @@ void IO::Protocols::XMODEM::sendBlock()
   Q_ASSERT(m_file.isOpen());
   Q_ASSERT(m_state == State::SendingBlocks);
 
-  // Read the next block from file, send EOT if nothing left
+  // Read next block; send EOT if file is exhausted
   int blockSize   = m_use1K ? 1024 : 128;
   QByteArray data = m_file.read(blockSize);
   if (data.isEmpty()) {
@@ -278,26 +272,22 @@ void IO::Protocols::XMODEM::sendBlock()
     return;
   }
 
-  // Validate read did not fail (short read is OK for last block, empty is not)
   if (data.size() > blockSize) [[unlikely]] {
     Q_EMIT finished(false, tr("File read returned more data than requested"));
     return;
   }
 
-  // Pad with SUB (0x1A) if the block is incomplete
+  // Pad incomplete block with SUB (0x1A)
   while (data.size() < blockSize)
     data.append(static_cast<char>(0x1A));
 
-  // Build and send the framed block
+  // Build, send, and update progress
   QByteArray packet = buildBlock(data, m_blockNumber);
   Q_EMIT writeRequested(packet);
 
-  // Update progress
   m_bytesSent = qMin(m_bytesSent + blockSize, m_fileSize);
   Q_EMIT progressChanged(m_bytesSent, m_fileSize);
   Q_EMIT statusMessage(tr("Sending block %1 (%2 bytes)").arg(m_blockNumber).arg(m_bytesSent));
-
-  // Advance state
   m_state = State::WaitingForAck;
   m_timeoutTimer.start(m_timeoutMs);
 }
@@ -307,7 +297,6 @@ void IO::Protocols::XMODEM::sendBlock()
  */
 void IO::Protocols::XMODEM::sendEOT()
 {
-  // Transition to EOT state and send the marker
   m_state = State::WaitingForEOTAck;
   Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
   Q_EMIT statusMessage(tr("Sending EOT..."));
@@ -323,7 +312,6 @@ void IO::Protocols::XMODEM::sendEOT()
  */
 void IO::Protocols::XMODEM::resetState()
 {
-  // Reset all transfer state to defaults
   m_timeoutTimer.stop();
   m_state       = State::Idle;
   m_blockNumber = 1;
@@ -343,11 +331,10 @@ void IO::Protocols::XMODEM::handleTimeout()
   Q_ASSERT(m_maxRetries > 0);
   Q_ASSERT(m_timeoutMs >= 1000);
 
-  // Ignore timeouts when idle
   if (!isActive())
     return;
 
-  // Abort if maximum retries exceeded
+  // Abort if retries exhausted
   ++m_retryCount;
   if (m_retryCount >= m_maxRetries) {
     sendCancel();
@@ -359,7 +346,6 @@ void IO::Protocols::XMODEM::handleTimeout()
 
   Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)...").arg(m_retryCount).arg(m_maxRetries));
 
-  // Resend the current block or EOT
   if (m_state == State::WaitingForEOTAck) {
     sendEOT();
   } else if (m_state == State::WaitingForAck) {
@@ -387,24 +373,20 @@ QByteArray IO::Protocols::XMODEM::buildBlock(const QByteArray& data, quint8 bloc
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(data.size() == 128 || data.size() == 1024);
 
-  // Allocate packet buffer
   QByteArray packet;
   packet.reserve(data.size() + 5);
 
-  // Header byte
+  // Header: SOH (128) or STX (1K), block number, complement
   if (data.size() == 1024)
     packet.append(static_cast<char>(kSTX));
   else
     packet.append(static_cast<char>(kSOH));
 
-  // Block number and complement
   packet.append(static_cast<char>(blockNum));
   packet.append(static_cast<char>(~blockNum));
-
-  // Data payload
   packet.append(data);
 
-  // CRC-16
+  // Append CRC-16
   quint16 crc = CRC::crc16(reinterpret_cast<const quint8*>(data.constData()), data.size());
   packet.append(static_cast<char>((crc >> 8) & 0xFF));
   packet.append(static_cast<char>(crc & 0xFF));

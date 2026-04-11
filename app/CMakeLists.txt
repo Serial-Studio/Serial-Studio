@@ -265,6 +265,8 @@ set(SOURCES
   src/IO/FileTransmission/ZMODEM.cpp
   src/IO/FrameReader.cpp
   src/DataModel/FrameParser.cpp
+  src/DataModel/JsScriptEngine.cpp
+  src/DataModel/LuaScriptEngine.cpp
   src/DataModel/JsCodeEditor.cpp
   src/DataModel/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
@@ -357,6 +359,9 @@ set(HEADERS
   src/IO/FileTransmission/ZMODEM.h
   src/IO/FrameReader.h
   src/DataModel/FrameParser.h
+  src/DataModel/IScriptEngine.h
+  src/DataModel/JsScriptEngine.h
+  src/DataModel/LuaScriptEngine.h
   src/DataModel/JsCodeEditor.h
   src/DataModel/OutputCodeEditor.h
   src/DataModel/ProjectModel.h
@@ -802,6 +807,7 @@ target_link_libraries(
 
   ${QT_LIBS}
 
+  lua54
   kissfft
   QCodeEditor
   QSimpleUpdater

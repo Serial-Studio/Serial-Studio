@@ -35,7 +35,6 @@
  */
 void API::Handlers::IOManagerHandler::registerCommands()
 {
-  // Obtain registry and register IO manager commands
   auto& registry = CommandRegistry::instance();
 
   // Empty schema for parameterless commands
@@ -128,7 +127,6 @@ void API::Handlers::IOManagerHandler::registerCommands()
 API::CommandResponse API::Handlers::IOManagerHandler::connect(const QString& id,
                                                               const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& manager = IO::ConnectionManager::instance();
@@ -160,7 +158,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::connect(const QString& id,
 API::CommandResponse API::Handlers::IOManagerHandler::disconnect(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& manager = IO::ConnectionManager::instance();
@@ -184,7 +181,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::disconnect(const QString& 
 API::CommandResponse API::Handlers::IOManagerHandler::setPaused(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("paused"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: paused"));
@@ -205,7 +201,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::setPaused(const QString& i
 API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("busType"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: busType"));
@@ -275,7 +270,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::writeData(const QString& i
 API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& manager = IO::ConnectionManager::instance();
@@ -303,7 +297,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
 API::CommandResponse API::Handlers::IOManagerHandler::getAvailableBuses(const QString& id,
                                                                         const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto buses = IO::ConnectionManager::instance().availableBuses();

@@ -43,7 +43,6 @@ bool Widgets::Output::Toggle::isChecked() const noexcept
  */
 void Widgets::Output::Toggle::setChecked(bool checked)
 {
-  // Update state and transmit the new on/off value
   if (m_checked != checked) {
     m_checked = checked;
     Q_EMIT checkedChanged();

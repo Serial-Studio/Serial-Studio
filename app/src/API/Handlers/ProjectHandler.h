@@ -106,6 +106,8 @@ private:
   // Frame parser
   static CommandResponse parserSetCode(const QString& id, const QJsonObject& params);
   static CommandResponse parserGetCode(const QString& id, const QJsonObject& params);
+  static CommandResponse parserSetLanguage(const QString& id, const QJsonObject& params);
+  static CommandResponse parserGetLanguage(const QString& id, const QJsonObject& params);
   static CommandResponse frameParserConfigure(const QString& id, const QJsonObject& params);
   static CommandResponse frameParserGetConfig(const QString& id, const QJsonObject& params);
 

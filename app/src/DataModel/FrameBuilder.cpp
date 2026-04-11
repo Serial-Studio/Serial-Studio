@@ -67,7 +67,6 @@
  */
 void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveHint)
 {
-  // Pre-allocate output list and iterate through comma-separated fields
   out.clear();
   if (reserveHint > 0)
     out.reserve(reserveHint);
@@ -188,7 +187,6 @@ void DataModel::FrameBuilder::setupExternalConnections()
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
-  // Copy in-memory project data directly into the frame
   const auto& pm = DataModel::ProjectModel::instance();
   Q_ASSERT(!pm.title().isEmpty());
 
@@ -216,7 +214,6 @@ void DataModel::FrameBuilder::syncFromProjectModel()
  */
 void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& headers)
 {
-  // Store explicit channel names or clear them
   if (!headers.isEmpty()) {
     m_quickPlotHasHeader    = true;
     m_quickPlotChannelNames = headers;
@@ -271,7 +268,6 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArra
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!data.isEmpty());
 
-  // Delegate to single-source path when not in project mode
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
     hotpathRxFrame(data);
     return;
@@ -292,9 +288,10 @@ void DataModel::FrameBuilder::onConnectedChanged()
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
            && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
 
-  // Reset quick-plot state and handle disconnect
+  // Reset quick-plot channel count
   m_quickPlotChannels = -1;
 
+  // Clear per-source frames on disconnect
   if (!IO::ConnectionManager::instance().isConnected()) {
     m_sourceFrames.clear();
     return;
@@ -303,6 +300,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
+  // Reload parser scripts and auto-execute connect actions
   Q_ASSERT(!m_frame.title.isEmpty());
   DataModel::FrameParser::instance().readCode();
 
@@ -314,8 +312,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
         qWarning() << "[FrameBuilder] Auto-execute writeData() failed for action:" << action.title;
     }
 
-  // Pre-build per-source frames so the dashboard configures all widgets
-  // immediately instead of waiting for each source to send its first data
+  // Pre-build per-source frames so the dashboard configures immediately
   const auto& sources = DataModel::ProjectModel::instance().sources();
   if (sources.size() > 1) {
     for (const auto& src : sources) {
@@ -362,7 +359,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(!m_frame.groups.empty());
 
-  // Decode data through the JS parser or CSV fallback
+  // Decode via JS parser or CSV fallback
   QList<QStringList> multiChannels;
 
   if (!SerialStudio::isAnyPlayerOpen()) [[likely]] {
@@ -423,7 +420,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!data.isEmpty());
 
-  // Decode data through the source-specific JS parser
+  // Decode via source-specific parser
   QList<QStringList> multiChannels;
 
   if (!SerialStudio::isAnyPlayerOpen()) [[likely]] {
@@ -463,7 +460,7 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
     const auto* channelData = chs.data();
     const int channelCount  = chs.size();
 
-    // Lazily initialize source frame on first encounter
+    // Create source frame on first encounter
     if (!m_sourceFrames.contains(sourceId)) {
       DataModel::Frame newFrame;
       newFrame.sourceId                   = sourceId;
@@ -516,7 +513,6 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
 
-  // Parse CSV values and detect header row on first frame
   auto& channels        = m_channelScratch;
   const int reserveHint = (m_quickPlotChannels > 0) ? m_quickPlotChannels : 64;
   parseCsvValues(data, channels, reserveHint);
@@ -658,7 +654,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
   if (!audioPtr)
     return;
 
-  // Determine value range from the audio sample format
+  // Derive value range from the audio sample format
   const auto& audio     = *audioPtr;
   const auto format     = audio.config().capture.format;
   const auto sampleRate = audio.config().sampleRate;
@@ -690,13 +686,13 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
       break;
   }
 
-  // Compute FFT sample count as the next power-of-two >= 50 ms of data
+  // FFT size: next power-of-two covering at least 50 ms of samples
   const int targetSamples = static_cast<int>(sampleRate * 0.05);
   int fftSamples          = 256;
   while (fftSamples < targetSamples && fftSamples < 8192)
     fftSamples *= 2;
 
-  // Build one dataset per channel with FFT and plot enabled
+  // Build datasets with FFT and plot enabled
   int index = 1;
   std::vector<DataModel::Dataset> datasets;
   datasets.reserve(channels.count());
@@ -725,7 +721,7 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
     ++index;
   }
 
-  // Assemble the audio group and frame
+  // Assemble audio group and frame
   DataModel::Group group;
   group.groupId  = 0;
   group.datasets = datasets;
@@ -751,7 +747,6 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
  */
 void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
 {
-  // Check if any export consumer requires timestamped frames
   m_timestampedFramesEnabled = CSV::Export::instance().exportEnabled()
                             || MDF4::Export::instance().exportEnabled()
                             || API::Server::instance().enabled();
@@ -772,7 +767,6 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
   Q_ASSERT(!frame.groups.empty());
   Q_ASSERT(!frame.title.isEmpty());
 
-  // Distribute frame to dashboard and export consumers
   static auto& csvExport     = CSV::Export::instance();
   static auto& mdf4Export    = MDF4::Export::instance();
   static auto& dashboard     = UI::Dashboard::instance();

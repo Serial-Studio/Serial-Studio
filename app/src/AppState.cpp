@@ -190,6 +190,7 @@ void AppState::onProjectFileCleared()
  */
 IO::FrameConfig AppState::deriveFrameConfig() const
 {
+  // Non-ProjectFile modes use fixed JSON delimiters
   IO::FrameConfig cfg;
   cfg.operationMode = m_operationMode;
 
@@ -201,6 +202,7 @@ IO::FrameConfig AppState::deriveFrameConfig() const
     return cfg;
   }
 
+  // Fall back to defaults if no sources are defined
   const auto& sources = DataModel::ProjectModel::instance().sources();
   if (sources.empty()) {
     cfg.startSequence     = QByteArray("/*");
@@ -210,6 +212,7 @@ IO::FrameConfig AppState::deriveFrameConfig() const
     return cfg;
   }
 
+  // Read delimiters and checksum from source[0]
   const auto& src0 = sources[0];
   QByteArray start, end;
   QString checksum;

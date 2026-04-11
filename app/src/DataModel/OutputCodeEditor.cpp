@@ -251,7 +251,7 @@ void DataModel::OutputCodeEditor::import()
  */
 void DataModel::OutputCodeEditor::readCode()
 {
-  // Guard against reentrancy during code loading
+  // Prevent reentrancy
   if (m_readingCode)
     return;
 
@@ -277,7 +277,7 @@ void DataModel::OutputCodeEditor::readCode()
  */
 void DataModel::OutputCodeEditor::selectTemplate()
 {
-  // Abort if no templates are available
+  // No templates loaded
   if (m_templateNames.isEmpty())
     return;
 
@@ -322,7 +322,6 @@ void DataModel::OutputCodeEditor::testTransmitFunction()
  */
 void DataModel::OutputCodeEditor::reload(bool guiTrigger)
 {
-  // Reset editor to the default transmit function
   Q_UNUSED(guiTrigger)
   m_widget.setPlainText(defaultTemplate());
   m_widget.document()->clearUndoRedoStacks();
@@ -354,13 +353,14 @@ QString DataModel::OutputCodeEditor::defaultTemplate()
  */
 void DataModel::OutputCodeEditor::onThemeChanged()
 {
-  // Resolve theme path and load the syntax style XML
+  // Resolve theme path
   static const auto* t = &Misc::ThemeManager::instance();
   const auto name      = t->parameters().value(QStringLiteral("code-editor-theme")).toString();
 
   const auto path =
     name.startsWith('/') ? name : QStringLiteral(":/rcc/themes/code-editor/%1.xml").arg(name);
 
+  // Load syntax style XML
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
     m_style.load(QString::fromUtf8(file.readAll()));

@@ -57,7 +57,6 @@ Console::ExportWorker::~ExportWorker() = default;
  */
 bool Console::ExportWorker::isResourceOpen() const
 {
-  // Return true if any per-device file is currently open
   for (const auto& [id, state] : m_deviceFiles)
     if (state.file && state.file->isOpen())
       return true;
@@ -78,11 +77,10 @@ void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
-  // Route each item to its device file
   for (const auto& dataPtr : items) {
     const int devId = dataPtr->deviceId;
 
-    // Ensure file exists for this device
+    // Ensure a file is open for this device
     auto it = m_deviceFiles.find(devId);
     if (it == m_deviceFiles.end() || !it->second.file || !it->second.file->isOpen())
       createFile(devId);
@@ -100,7 +98,6 @@ void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items
  */
 void Console::ExportWorker::closeResources()
 {
-  // Close all per-device output files and clear state
   bool wasOpen = isResourceOpen();
   for (auto& [id, state] : m_deviceFiles) {
     if (state.file && state.file->isOpen()) {
@@ -121,13 +118,13 @@ void Console::ExportWorker::closeResources()
  */
 void Console::ExportWorker::createFile(int deviceId)
 {
-  // Validate license tier before creating export files
+  // Require a valid license for export
   const auto& token = Licensing::CommercialToken::current();
   if (!token.isValid() || !SS_LICENSE_GUARD()
       || token.featureTier() < Licensing::FeatureTier::Hobbyist)
     return;
 
-  // Close existing file for this device
+  // Close any existing file for this device
   auto it = m_deviceFiles.find(deviceId);
   if (it != m_deviceFiles.end()) {
     it->second.stream.reset();
@@ -137,7 +134,7 @@ void Console::ExportWorker::createFile(int deviceId)
     m_deviceFiles.erase(it);
   }
 
-  // Obtain file name with optional device suffix
+  // Build filename with optional device suffix
   const auto dateTime = QDateTime::currentDateTime();
   auto fileName       = dateTime.toString(QStringLiteral("yyyy_MMM_dd HH_mm_ss"));
   if (deviceId >= 0)
@@ -145,7 +142,7 @@ void Console::ExportWorker::createFile(int deviceId)
 
   fileName += QStringLiteral(".txt");
 
-  // Derive project subdirectory name (same pattern as CSV/MDF4 export)
+  // Derive project subdirectory name
   const auto opMode        = AppState::instance().operationMode();
   const auto& projectTitle = DataModel::ProjectModel::instance().title();
   QString subdirName;
@@ -156,14 +153,14 @@ void Console::ExportWorker::createFile(int deviceId)
   else
     subdirName = QStringLiteral("Untitled");
 
-  // Obtain directory where to write file
+  // Ensure output directory exists
   QDir dir(Misc::WorkspaceManager::instance().path("Console"));
   if (!dir.exists(subdirName))
     dir.mkpath(subdirName);
 
   dir.cd(subdirName);
 
-  // Create per-device state
+  // Open the output file
   auto& state = m_deviceFiles[deviceId];
   state.file  = std::make_unique<QFile>(dir.filePath(fileName));
 
@@ -175,7 +172,7 @@ void Console::ExportWorker::createFile(int deviceId)
     return;
   }
 
-  // Configure the output stream
+  // Configure UTF-8 output stream
   state.stream = std::make_unique<QTextStream>(state.file.get());
   state.stream->setGenerateByteOrderMark(true);
   state.stream->setEncoding(QStringConverter::Utf8);
@@ -203,17 +200,15 @@ Console::Export::Export()
 #endif
 {
 #ifdef BUILD_COMMERCIAL
-  // Initialize the internal worker thread
+  // Initialize worker and track open state
   initializeWorker();
-
-  // Change open status when the worker updates its internal status
   connect(m_worker,
           &ExportWorker::resourceOpenChanged,
           this,
           &Export::onWorkerOpenChanged,
           Qt::QueuedConnection);
 
-  // Disable console export if user de-activates Serial Studio
+  // Disable export on license deactivation
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged,
           this,
@@ -313,7 +308,7 @@ void Console::Export::setupExternalConnections()
 void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
-  // Validate license and update export status
+  // Validate license
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist) {
     if (!enabled && isOpen())
@@ -328,13 +323,12 @@ void Console::Export::setExportEnabled(const bool enabled)
   setConsumerEnabled(false);
 #endif
 
-  // Close file and disable export
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
   m_settings.setValue("ConsoleExport", false);
   Q_EMIT enabledChanged();
 
-  // If we reach here, either Serial Studio is not activated, or it is a GPLv3 build
+  // Show license prompt for GPL or unlicensed builds
   if (enabled)
     Misc::Utilities::showMessageBox(
       tr("Console Export is a Pro feature."),
@@ -363,7 +357,6 @@ void Console::Export::registerData(int deviceId, QStringView data)
 #ifdef BUILD_COMMERCIAL
 void Console::Export::onWorkerOpenChanged()
 {
-  // Update cached open state from the worker thread
   auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();

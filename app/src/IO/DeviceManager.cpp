@@ -229,7 +229,7 @@ void IO::DeviceManager::startFrameReader(const FrameConfig& config)
   if (!m_driver)
     return;
 
-  // Destroy any existing FrameReader and create a new one
+  // Reset state and configure new FrameReader
   killFrameReader();
 
   m_frameReader = new FrameReader();

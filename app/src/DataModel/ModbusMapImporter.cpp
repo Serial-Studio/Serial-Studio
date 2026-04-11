@@ -148,7 +148,6 @@ void DataModel::ModbusMapImporter::showPreview(const QString& filePath)
 
   m_registers.clear();
 
-  // Auto-detect format from extension
   const auto ext = QFileInfo(filePath).suffix().toLower();
   bool ok        = false;
 
@@ -170,7 +169,7 @@ void DataModel::ModbusMapImporter::showPreview(const QString& filePath)
     return;
   }
 
-  // Sort by register type then address for consistent ordering
+  // Sort by (type, address) for consistent block grouping
   std::sort(
     m_registers.begin(), m_registers.end(), [](const RegisterEntry& a, const RegisterEntry& b) {
       if (a.registerType != b.registerType)
@@ -212,10 +211,9 @@ void DataModel::ModbusMapImporter::confirmImport()
   file.write(doc.toJson(QJsonDocument::Indented));
   file.close();
 
-  // Load register groups into the Modbus driver
   loadRegisterGroups(blocks);
 
-  // Load project and prompt save
+  // Open project and prompt user to save
   ProjectModel::instance().openJsonFile(temp_path);
   if (ProjectModel::instance().saveJsonFile(true)) {
     QFile::remove(temp_path);
@@ -265,7 +263,7 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
   if (lines.count() < 2)
     return false;
 
-  // Parse header — find column indices by matching aliases
+  // Map header columns to field indices using common aliases
   const auto header = lines[0].trimmed().split(',');
   int col_addr = -1, col_name = -1, col_type = -1, col_data_type = -1;
   int col_units = -1, col_min = -1, col_max = -1, col_scale = -1, col_offset = -1;
@@ -308,7 +306,6 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
     // clang-format on
   }
 
-  // Address column is mandatory
   if (col_addr < 0)
     return false;
 
@@ -350,7 +347,6 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
         ? cols[col_offset].trimmed().remove('"').toDouble()
         : 0.0;
 
-    // Default max for boolean types
     if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
       entry.max = 1;
 
@@ -387,7 +383,6 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
 
     const auto tag_name = xml.name().toString().toLower();
 
-    // Detect nested type containers
     // clang-format off
     if (tag_name == QLatin1String("holding-registers")
         || tag_name == QLatin1String("holdingregisters")
@@ -405,7 +400,6 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
       current_type = 3;
     // clang-format on
 
-    // Parse <register> elements
     else if (tag_name == QLatin1String("register")) {
       const auto attrs = xml.attributes();
 
@@ -419,7 +413,6 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
       entry.scale    = attrs.value("scale").isEmpty() ? 1.0 : attrs.value("scale").toDouble();
       entry.offset   = attrs.value("offset").toDouble();
 
-      // Determine register type from attribute or enclosing tag
       if (attrs.hasAttribute("type"))
         entry.registerType = parseRegisterType(attrs.value("type").toString());
       else if (current_type >= 0)
@@ -427,7 +420,6 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
       else
         entry.registerType = 0;
 
-      // Defaults
       if (entry.dataType.isEmpty())
         entry.dataType =
           (entry.registerType >= 2) ? QStringLiteral("bool") : QStringLiteral("uint16");
@@ -469,7 +461,7 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
 
   const auto root = doc.object();
 
-  // Try flat format first: {"registers": [...]}
+  // Flat format: {"registers": [...]}
   if (root.contains(QStringLiteral("registers"))) {
     const auto arr = root.value(QStringLiteral("registers")).toArray();
     for (const auto& item : arr) {
@@ -479,7 +471,7 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
     }
   }
 
-  // Try grouped format: {"holdingRegisters": [...], "coils": [...], ...}
+  // Grouped format: {"holdingRegisters": [...], "coils": [...], ...}
   // clang-format off
   static const struct { const char* key; int type; } groups[] = {
     {"holdingRegisters", 0}, {"holding_registers", 0}, {"holding", 0},
@@ -522,7 +514,6 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
   if (m_registers.isEmpty())
     return {};
 
-  // Registers are already sorted by (type, address) from showPreview()
   QVector<RegisterBlock> blocks;
   RegisterBlock current;
   current.registerType = m_registers[0].registerType;
@@ -534,7 +525,6 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
     const auto& entry     = m_registers[i];
     const quint16 endAddr = current.startAddress + current.count;
 
-    // Continue the block if same type and contiguous (or overlapping)
     if (entry.registerType == current.registerType && entry.address <= endAddr) {
       const quint16 entryEnd = entry.address + registersForDataType(entry.dataType);
       current.count = qMax(current.count, static_cast<quint16>(entryEnd - current.startAddress));
@@ -568,7 +558,6 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
   project[QStringLiteral("title")]   = QFileInfo(m_filePath).baseName();
   project[QStringLiteral("actions")] = QJsonArray();
 
-  // Source configuration
   QJsonObject source;
   source[QStringLiteral("sourceId")]              = 0;
   source[QStringLiteral("title")]                 = tr("Modbus");
@@ -580,8 +569,9 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
   source[QStringLiteral("decoder")]               = static_cast<int>(SerialStudio::Binary);
   source[QStringLiteral("hexadecimalDelimiters")] = false;
   source[QStringLiteral("frameParserCode")]       = buildFrameParser(blocks);
+  source[QStringLiteral("frameParserLanguage")]   = static_cast<int>(SerialStudio::Lua);
 
-  // Save register groups into connection settings
+  // Embed register groups in connection settings
   QJsonArray reg_groups;
   for (const auto& block : blocks) {
     QJsonObject obj;
@@ -597,7 +587,7 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
 
   project[QStringLiteral("sources")] = QJsonArray{source};
 
-  // Build groups and datasets
+  // Build groups with datasets for each register block
   QJsonArray group_array;
   int group_id      = 0;
   int dataset_index = 1;
@@ -606,8 +596,13 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
     DataModel::Group group;
     group.groupId = group_id;
     group.widget  = QStringLiteral("datagrid");
-    group.title =
-      QStringLiteral("%1 @ %2").arg(registerTypeName(block.registerType)).arg(block.startAddress);
+    // Drop the "@ address" suffix when there is only one block — the address
+    // is redundant noise in a single-group project.
+    if (blocks.size() == 1)
+      group.title = registerTypeName(block.registerType);
+    else
+      group.title =
+        QStringLiteral("%1 @ %2").arg(registerTypeName(block.registerType)).arg(block.startAddress);
 
     const bool is_bool = (block.registerType >= 2);
 
@@ -629,7 +624,7 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
         dataset.pltMin = entry.min;
         dataset.pltMax = entry.max;
 
-        // Widget heuristics based on units and range
+        // Select widget based on units and range
         const auto u = entry.units.toLower();
         if (u == QLatin1String("%") || (entry.min == 0 && entry.max == 100))
           dataset.widget = QStringLiteral("bar");
@@ -638,7 +633,6 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
                  || u == QLatin1String("kpa") || u == QLatin1String("v") || u == QLatin1String("a"))
           dataset.widget = QStringLiteral("gauge");
 
-        // Only enable plot if no specific widget was assigned
         dataset.plt = dataset.widget.isEmpty();
       }
 
@@ -661,7 +655,6 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
  */
 QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlock>& blocks) const
 {
-  // Count total datasets
   int total_datasets = 0;
   for (const auto& block : blocks)
     total_datasets += block.entries.count();
@@ -670,19 +663,20 @@ QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlo
 
   QString code;
 
-  // Header
-  code += QStringLiteral("/**\n");
-  code += QStringLiteral(" * Modbus Register Map Parser\n");
-  code += QStringLiteral(" * Auto-generated from: %1\n").arg(QFileInfo(m_filePath).fileName());
-  code += QStringLiteral(" *\n");
-  code += QStringLiteral(" * Groups: %1, Datasets: %2\n").arg(group_count).arg(total_datasets);
-  code += QStringLiteral(" * Frame: [slaveAddr, funcCode, byteCount, ...data]\n");
-  code += QStringLiteral(" */\n\n");
+  // Emit header comment
+  code += QStringLiteral("--\n");
+  code += QStringLiteral("-- Modbus Register Map Parser\n");
+  code += QStringLiteral("-- Auto-generated from: %1\n").arg(QFileInfo(m_filePath).fileName());
+  code += QStringLiteral("--\n");
+  code += QStringLiteral("-- Groups: %1, Datasets: %2\n").arg(group_count).arg(total_datasets);
+  code += QStringLiteral("-- Frame: {slaveAddr, funcCode, byteCount, ...data}\n");
+  code += QStringLiteral("--\n\n");
 
-  code += QStringLiteral("var values = new Array(%1).fill(0);\n").arg(total_datasets);
-  code += QStringLiteral("var currentGroup = 0;\n\n");
+  // Emit global state and helpers
+  code += QStringLiteral("local values = {}\n");
+  code += QStringLiteral("for i = 1, %1 do values[i] = 0 end\n").arg(total_datasets);
+  code += QStringLiteral("local currentGroup = 0\n\n");
 
-  // Float32 helper (only if needed)
   bool needs_float = false;
   for (const auto& block : blocks)
     for (const auto& entry : block.entries)
@@ -690,92 +684,116 @@ QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlo
         needs_float = true;
 
   if (needs_float) {
-    code += QStringLiteral("var _f32Buf = new ArrayBuffer(4);\n");
-    code += QStringLiteral("var _f32U32 = new Uint32Array(_f32Buf);\n");
-    code += QStringLiteral("var _f32F32 = new Float32Array(_f32Buf);\n\n");
+    code += QStringLiteral("local function toFloat32(b0, b1, b2, b3)\n");
+    code += QStringLiteral("  local sign = (b0 & 0x80) ~= 0 and -1 or 1\n");
+    code += QStringLiteral("  local exp  = ((b0 & 0x7F) << 1) | (b1 >> 7)\n");
+    code += QStringLiteral("  local mant = ((b1 & 0x7F) << 16) | (b2 << 8) | b3\n");
+    code += QStringLiteral("  if exp == 0 then return sign * mant * 2.0^(-149) end\n");
+    code +=
+      QStringLiteral("  if exp == 0xFF then return mant ~= 0 and (0/0) or sign * math.huge end\n");
+    code += QStringLiteral("  return sign * (mant | 0x800000) * 2.0^(exp - 150)\n");
+    code += QStringLiteral("end\n\n");
   }
 
-  // Main parse function
-  code += QStringLiteral("function parse(frame) {\n");
-  code += QStringLiteral("  if (frame.length < 3)\n");
-  code += QStringLiteral("    return values;\n\n");
-  code += QStringLiteral("  var data = frame.slice(3);\n\n");
-  code += QStringLiteral("  switch (currentGroup) {\n");
+  // Emit main parse function with group dispatch
+  code += QStringLiteral("function parse(frame)\n");
+  code += QStringLiteral("  if #frame < 3 then return values end\n\n");
+  code += QStringLiteral("  -- Extract data payload (skip slave addr, func code, byte count)\n");
+  code += QStringLiteral("  local data = {}\n");
+  code += QStringLiteral("  for i = 4, #frame do data[#data + 1] = frame[i] end\n\n");
 
   int ds_offset = 0;
   for (int g = 0; g < group_count; ++g) {
     const auto& block = blocks[g];
     const bool is_bit = (block.registerType >= 2);
 
-    code += QStringLiteral("    case %1: // %2 @ %3\n")
-              .arg(g)
+    code += QStringLiteral("  -- %1 @ %2\n")
               .arg(registerTypeName(block.registerType))
               .arg(block.startAddress);
+    if (g == 0)
+      code += QStringLiteral("  if currentGroup == %1 then\n").arg(g);
+    else
+      code += QStringLiteral("  elseif currentGroup == %1 then\n").arg(g);
 
     for (int e = 0; e < block.entries.count(); ++e) {
       const auto& entry = block.entries[e];
       const int reg_off = entry.address - block.startAddress;
+      const int idx     = ds_offset + e + 1;
+
+      if (e > 0)
+        code += QStringLiteral("\n");
+
+      code += QStringLiteral("    -- %1\n").arg(entry.name);
 
       if (is_bit) {
-        // Coils/discrete: bit extraction
-        const int byte_idx = reg_off / 8;
+        const int byte_idx = reg_off / 8 + 1;
         const int bit_idx  = reg_off % 8;
-        code += QStringLiteral("      values[%1] = (data[%2] >> %3) & 1;")
-                  .arg(ds_offset + e)
+        code += QStringLiteral("    values[%1] = (data[%2] >> %3) & 1\n")
+                  .arg(idx)
                   .arg(byte_idx)
                   .arg(bit_idx);
       } else if (entry.dataType == QLatin1String("float32")) {
-        // IEEE 754 float from 2 registers
-        const int byte_off = reg_off * 2;
-        code += QStringLiteral("      _f32U32[0] = ((data[%1] << 24) | (data[%2] << 16) "
-                               "| (data[%3] << 8) | data[%4]) >>> 0; "
-                               "values[%5] = _f32F32[0]")
-                  .arg(byte_off)
-                  .arg(byte_off + 1)
-                  .arg(byte_off + 2)
-                  .arg(byte_off + 3)
-                  .arg(ds_offset + e);
+        const int byte_off = reg_off * 2 + 1;
         if (entry.scale != 1.0 || entry.offset != 0.0)
-          code += QStringLiteral(" * %1 + %2").arg(entry.scale).arg(entry.offset);
-        code += QStringLiteral(";");
+          code += QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], "
+                                 "data[%5]) * %6 + %7\n")
+                    .arg(idx)
+                    .arg(byte_off)
+                    .arg(byte_off + 1)
+                    .arg(byte_off + 2)
+                    .arg(byte_off + 3)
+                    .arg(entry.scale)
+                    .arg(entry.offset);
+        else
+          code +=
+            QStringLiteral("    values[%1] = toFloat32(data[%2], data[%3], data[%4], data[%5])\n")
+              .arg(idx)
+              .arg(byte_off)
+              .arg(byte_off + 1)
+              .arg(byte_off + 2)
+              .arg(byte_off + 3);
       } else if (entry.dataType == QLatin1String("int16")) {
-        // Signed 16-bit
-        const int byte_off = reg_off * 2;
-        code += QStringLiteral("      values[%1] = (data[%2] << 8) | data[%3]; "
-                               "if (values[%1] > 32767) values[%1] -= 65536;")
-                  .arg(ds_offset + e)
+        const int byte_off = reg_off * 2 + 1;
+        code += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
+                  .arg(idx)
                   .arg(byte_off)
                   .arg(byte_off + 1);
+        code +=
+          QStringLiteral("    if values[%1] > 32767 then values[%1] = values[%1] - 65536 end\n")
+            .arg(idx);
         if (entry.scale != 1.0 || entry.offset != 0.0)
-          code += QStringLiteral(" values[%1] = values[%1] * %2 + %3;")
-                    .arg(ds_offset + e)
+          code += QStringLiteral("    values[%1] = values[%1] * %2 + %3\n")
+                    .arg(idx)
                     .arg(entry.scale)
                     .arg(entry.offset);
       } else {
-        // Default: unsigned 16-bit (uint16, uint32 first word, etc.)
-        const int byte_off = reg_off * 2;
-        code += QStringLiteral("      values[%1] = (data[%2] << 8) | data[%3];")
-                  .arg(ds_offset + e)
-                  .arg(byte_off)
-                  .arg(byte_off + 1);
+        const int byte_off = reg_off * 2 + 1;
         if (entry.scale != 1.0 || entry.offset != 0.0)
-          code += QStringLiteral(" values[%1] = values[%1] * %2 + %3;")
-                    .arg(ds_offset + e)
+          code += QStringLiteral("    values[%1] = ((data[%2] << 8) | data[%3]) * %4 + %5\n")
+                    .arg(idx)
+                    .arg(byte_off)
+                    .arg(byte_off + 1)
                     .arg(entry.scale)
                     .arg(entry.offset);
+        else
+          code += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
+                    .arg(idx)
+                    .arg(byte_off)
+                    .arg(byte_off + 1);
       }
-
-      code += QStringLiteral(" // %1\n").arg(entry.name);
     }
 
-    code += QStringLiteral("      break;\n");
     ds_offset += block.entries.count();
   }
 
-  code += QStringLiteral("  }\n\n");
-  code += QStringLiteral("  currentGroup = (currentGroup + 1) % %1;\n").arg(group_count);
-  code += QStringLiteral("  return values;\n");
-  code += QStringLiteral("}\n");
+  if (group_count > 0)
+    code += QStringLiteral("  end\n\n");
+
+  code += QStringLiteral("  currentGroup = (currentGroup + 1) %1 %2\n")
+            .arg(QLatin1Char('%'))
+            .arg(group_count);
+  code += QStringLiteral("  return values\n");
+  code += QStringLiteral("end\n");
 
   return code;
 }

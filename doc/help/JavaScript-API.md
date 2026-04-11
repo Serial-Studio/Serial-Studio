@@ -1,16 +1,27 @@
-# JavaScript API Reference
+# Frame Parser Scripting Reference
 
-Complete reference for Serial Studio's JavaScript frame parser API. Use this to write custom parsers for any data format.
+Complete reference for Serial Studio's frame parser scripting API. Serial Studio supports two scripting languages for custom frame parsers: **Lua** (default, recommended) and **JavaScript**.
 
 ## Overview
 
-When using Project File mode, you can write a JavaScript `parse()` function to transform raw device data into the array of values that Serial Studio maps to your dashboard datasets. This is the most powerful and flexible way to handle custom protocols.
+When using Project File mode, you write a `parse()` function to transform raw device data into the array of values that Serial Studio maps to your dashboard datasets. This is the most powerful and flexible way to handle custom protocols.
 
-The parser runs inside a QJSEngine (ECMAScript 7 / ES2016 compliant) with console and garbage-collection extensions. Each source in a multi-source project gets its own isolated engine instance, so global state in one parser cannot affect another.
+**Lua** is the default language for new projects. It offers faster execution and lower overhead than JavaScript, making it ideal for high-throughput telemetry. **JavaScript** remains fully supported for backward compatibility with existing projects.
+
+You can switch between languages at any time using the **Language** dropdown in the frame parser editor toolbar. Switching loads the equivalent template in the new language.
+
+### Engine Details
+
+| | Lua | JavaScript |
+|---|---|---|
+| **Engine** | Lua 5.4 (embedded) | QJSEngine (ECMAScript 7 / ES2016) |
+| **Performance** | Faster — stack-based C API, no boxing | Slower — QJSValue boxing overhead |
+| **Integer support** | Native 64-bit integers | Numbers are IEEE 754 doubles only |
+| **Timeout** | 1 second per call | 1 second per call |
+| **Isolation** | One lua_State per source | One QJSEngine per source |
+| **Sandboxing** | base, table, string, math, utf8 only | Console + GC extensions only |
 
 ## Parser Pipeline
-
-The following diagram shows how raw device bytes are transformed into dashboard-ready values through the decoder and JavaScript parser stages.
 
 ```mermaid
 flowchart LR
@@ -20,7 +31,7 @@ flowchart LR
     D --> E["Dashboard"]
 ```
 
-> **Legend:** 500 ms timeout per call &bull; ECMAScript 7 (ES2016) &bull; One engine per source
+> **Legend:** 1 second timeout per call &bull; One engine per source
 
 ---
 
@@ -28,6 +39,16 @@ flowchart LR
 
 ### Signature
 
+**Lua:**
+```lua
+function parse(frame)
+  -- Process frame data
+  -- Return table of values
+  return {value1, value2, value3}
+end
+```
+
+**JavaScript:**
 ```javascript
 function parse(frame) {
     // Process frame data
@@ -40,115 +61,157 @@ function parse(frame) {
 
 The `frame` parameter type depends on the Decoder Method selected in the Project Editor:
 
-| Decoder Method         | `frame` Type               | Example Value                      |
-|------------------------|----------------------------|------------------------------------|
-| Plain Text (UTF-8)     | String                     | `"23.5,1013,45.2"`                 |
-| Hexadecimal            | String (hex pairs)         | `"03FF020035A0"`                   |
-| Base64                 | String (base64-encoded)    | `"Av8CADWg"`                       |
-| Binary (Direct) [Pro]  | Array of numbers (0--255)  | `[3, 255, 2, 0, 53, 160]`         |
+| Decoder Method         | Lua `frame` Type             | JS `frame` Type              | Example Value                      |
+|------------------------|------------------------------|------------------------------|------------------------------------|
+| Plain Text (UTF-8)     | String                       | String                       | `"23.5,1013,45.2"`                 |
+| Hexadecimal            | String (hex pairs)           | String (hex pairs)           | `"03FF020035A0"`                   |
+| Base64                 | String (base64-encoded)      | String (base64-encoded)      | `"Av8CADWg"`                       |
+| Binary (Direct) [Pro]  | Table of numbers (0--255)    | Array of numbers (0--255)    | `{3, 255, 2, 0, 53, 160}`         |
 
 **Plain Text** is the default. The frame string contains whatever the device sent, decoded as UTF-8, with start/end delimiters already stripped.
 
-**Hexadecimal** converts the raw bytes to a hex string before passing them in. Each byte becomes two hex characters (e.g., byte `0xFF` becomes `"FF"`).
-
-**Base64** converts the raw bytes to a Base64 string before passing them in.
-
-**Binary (Direct)** passes an array of integer byte values (0--255) directly, with no string encoding. This is the most efficient option for binary protocols. Requires a Pro license.
+**Binary (Direct)** passes byte values directly. In Lua, this is a 1-indexed table; in JavaScript, a 0-indexed array. Requires a Pro license.
 
 ### Return Value
 
-Must return an array. The array index maps to the dataset Frame Index in your project definition: `array[0]` maps to Index 1, `array[1]` maps to Index 2, and so on.
+Must return a table (Lua) or array (JavaScript). The index maps to the dataset Frame Index in your project definition.
 
-Return an empty array `[]` for invalid or incomplete frames.
+> **Lua indexing note:** Lua tables are 1-indexed. `result[1]` maps to dataset Index 1, `result[2]` maps to Index 2, etc. This is a natural match since Serial Studio's dataset indices are also 1-based.
+
+Return an empty table `{}` (Lua) or `[]` (JavaScript) for invalid or incomplete frames.
 
 #### Flat Array (most common)
 
+**Lua:**
+```lua
+function parse(frame)
+  local result = {}
+  for field in frame:gmatch("([^,]+)") do
+    result[#result + 1] = field
+  end
+  return result
+end
+-- Input:  "23.5,1013,45.2"
+-- Output: {"23.5", "1013", "45.2"}  (one frame, three datasets)
+```
+
+**JavaScript:**
 ```javascript
 function parse(frame) {
     return frame.split(",");
 }
-// Input:  "23.5,1013,45.2"
-// Output: ["23.5", "1013", "45.2"]  (one frame, three datasets)
 ```
 
 #### 2D Array (batch / multi-frame)
 
-Return an array of arrays. Each inner array becomes a separate frame:
+Return a table of tables (Lua) or array of arrays (JavaScript). Each inner table/array becomes a separate frame:
 
-```javascript
-function parse(frame) {
-    var lines = frame.split(";");
-    var result = [];
-    for (var i = 0; i < lines.length; i++)
-        result.push(lines[i].split(","));
-    return result;
-}
-// Input:  "23.5,1013;24.0,1012"
-// Output: [["23.5","1013"], ["24.0","1012"]]  (two frames)
+**Lua:**
+```lua
+function parse(frame)
+  local result = {}
+  for line in frame:gmatch("[^;]+") do
+    local row = {}
+    for field in line:gmatch("([^,]+)") do
+      row[#row + 1] = field
+    end
+    result[#result + 1] = row
+  end
+  return result
+end
+-- Input:  "23.5,1013;24.0,1012"
+-- Output: {{"23.5","1013"}, {"24.0","1012"}}  (two frames)
 ```
 
 #### Mixed Scalar/Vector Array
 
-Mix scalar values with arrays. Scalars repeat across generated frames; arrays expand, one element per frame. If multiple vectors have different lengths, shorter ones are extended by repeating their last value.
+Mix scalar values with sub-tables/arrays. Scalars repeat across generated frames; vectors expand, one element per frame. If multiple vectors have different lengths, shorter ones are extended by repeating their last value.
 
-```javascript
-function parse(frame) {
-    var parts = frame.split(",");
-    var timestamp = parseFloat(parts[0]);
-    var sensorId = parseInt(parts[1]);
-    var readings = [];
-    for (var i = 2; i < parts.length; i++)
-        readings.push(parseFloat(parts[i]));
-    return [timestamp, sensorId, readings];
-}
-// Input:  "100.0,7,1.1,2.2,3.3"
-// Generates three frames:
-//   [100.0, 7, 1.1]
-//   [100.0, 7, 2.2]
-//   [100.0, 7, 3.3]
+**Lua:**
+```lua
+function parse(frame)
+  local parts = {}
+  for field in frame:gmatch("([^,]+)") do
+    parts[#parts + 1] = tonumber(field) or field
+  end
+
+  local timestamp = parts[1]
+  local sensorId  = parts[2]
+  local readings  = {}
+  for i = 3, #parts do
+    readings[#readings + 1] = parts[i]
+  end
+
+  return {timestamp, sensorId, readings}
+end
+-- Input:  "100.0,7,1.1,2.2,3.3"
+-- Generates three frames:
+--   {100.0, 7, 1.1}
+--   {100.0, 7, 2.2}
+--   {100.0, 7, 3.3}
 ```
 
 ---
 
-## Available JavaScript APIs
+## Available APIs
 
-The engine provides standard ECMAScript built-ins. No browser DOM, no Node.js modules, no external libraries.
+### Lua Standard Libraries
 
-### String Methods
+The Lua engine loads a safe subset of the standard library. The following modules are available:
 
-`split`, `substring`, `substr`, `indexOf`, `lastIndexOf`, `trim`, `replace`, `toUpperCase`, `toLowerCase`, `charAt`, `charCodeAt`, `startsWith`, `endsWith`, `includes`, `match`, `search`, `slice`, `repeat`, `padStart`, `padEnd`
+| Module | Key Functions |
+|--------|--------------|
+| **base** | `print`, `type`, `tonumber`, `tostring`, `pairs`, `ipairs`, `select`, `error`, `pcall`, `xpcall`, `assert`, `rawget`, `rawset`, `rawlen`, `rawequal`, `next`, `setmetatable`, `getmetatable` |
+| **string** | `string.byte`, `string.char`, `string.find`, `string.format`, `string.gmatch`, `string.gsub`, `string.len`, `string.lower`, `string.upper`, `string.match`, `string.rep`, `string.reverse`, `string.sub` |
+| **table** | `table.concat`, `table.insert`, `table.remove`, `table.sort`, `table.move`, `table.pack`, `table.unpack` |
+| **math** | `math.abs`, `math.ceil`, `math.floor`, `math.max`, `math.min`, `math.sqrt`, `math.sin`, `math.cos`, `math.tan`, `math.pi`, `math.huge`, `math.log`, `math.exp`, `math.random` |
+| **utf8** | `utf8.char`, `utf8.codes`, `utf8.codepoint`, `utf8.len`, `utf8.offset` |
 
-### Array Methods
+**Not available** (sandboxed): `io`, `os`, `debug`, `package`, `require`, `dofile`, `loadfile`, `load`.
 
-`length`, `push`, `pop`, `shift`, `unshift`, `slice`, `splice`, `reverse`, `sort`, `join`, `concat`, `map`, `filter`, `forEach`, `reduce`, `find`, `findIndex`, `indexOf`, `includes`, `every`, `some`, `fill`, `Array.from`, `Array.isArray`
+**Bitwise operators** (Lua 5.4 native): `&` (AND), `|` (OR), `~` (XOR), `<<` (left shift), `>>` (right shift), `~` (unary NOT). These are particularly useful for binary protocol parsing.
 
-### Number Functions
+**Integer division**: `//` operator (e.g., `7 // 2 == 3`).
 
-`parseInt(string, radix)`, `parseFloat(string)`, `isNaN(value)`, `isFinite(value)`, `Number(value)`, `.toFixed(digits)`, `.toString(radix)`, `Number.isInteger`, `Number.isFinite`
+### JavaScript Standard APIs
 
-### Math Object
+The JavaScript engine provides standard ECMAScript built-ins. No browser DOM, no Node.js modules.
 
-`abs`, `min`, `max`, `round`, `floor`, `ceil`, `sqrt`, `pow`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `atan2`, `log`, `log2`, `log10`, `exp`, `sign`, `trunc`, `cbrt`, `hypot`, `PI`, `E`, `random`
-
-### JSON
-
-`JSON.parse(string)` and `JSON.stringify(value)`.
-
-### Base64
-
-`atob(encoded)` decodes a Base64 string. `btoa(string)` encodes a string to Base64.
-
-### Regular Expressions
-
-`/pattern/flags` literal syntax, `.test()`, `.exec()`, `String.match()`, `String.replace()`, `String.search()`.
-
-### Console
-
-`console.log()`, `console.warn()`, `console.error()`. Output appears in Serial Studio's console window. Useful for debugging parsers during development.
+| Category | Available |
+|----------|-----------|
+| **String** | `split`, `substring`, `indexOf`, `trim`, `replace`, `toUpperCase`, `toLowerCase`, `charAt`, `charCodeAt`, `startsWith`, `endsWith`, `includes`, `match`, `search`, `slice`, `padStart`, `padEnd` |
+| **Array** | `length`, `push`, `pop`, `shift`, `unshift`, `slice`, `splice`, `reverse`, `sort`, `join`, `concat`, `map`, `filter`, `forEach`, `reduce`, `find`, `findIndex`, `indexOf`, `includes`, `every`, `some`, `fill`, `Array.from`, `Array.isArray` |
+| **Number** | `parseInt`, `parseFloat`, `isNaN`, `isFinite`, `Number()`, `.toFixed()`, `.toString(radix)` |
+| **Math** | `abs`, `min`, `max`, `round`, `floor`, `ceil`, `sqrt`, `pow`, `sin`, `cos`, `tan`, `atan2`, `log`, `exp`, `PI`, `E`, `random` |
+| **JSON** | `JSON.parse()`, `JSON.stringify()` |
+| **RegExp** | `/pattern/flags`, `.test()`, `.exec()`, `String.match()`, `String.replace()` |
+| **Console** | `console.log()`, `console.warn()`, `console.error()` |
 
 ### Global State
 
-Variables declared outside `parse()` persist between calls within the same engine session. Use for frame counters, state machines, moving averages, checksum accumulators, and protocol state tracking.
+Variables declared outside `parse()` persist between calls within the same engine session. Use for frame counters, state machines, moving averages, and protocol state tracking.
+
+**Lua:**
+```lua
+local frameCount = 0
+local history = {}
+
+function parse(frame)
+  frameCount = frameCount + 1
+  -- ...
+end
+```
+
+**JavaScript:**
+```javascript
+var frameCount = 0;
+var history = [];
+
+function parse(frame) {
+    frameCount++;
+    // ...
+}
+```
 
 Globals are reset when: the project is reloaded, parser code is edited and reapplied, or Serial Studio is restarted.
 
@@ -158,38 +221,39 @@ Globals are reset when: the project is reloaded, parser code is edited and reapp
 
 ### Example 1: Simple CSV
 
+**Lua:**
+```lua
+function parse(frame)
+  local result = {}
+  for field in frame:gmatch("([^,]+)") do
+    result[#result + 1] = field
+  end
+  return result
+end
+```
+
+**JavaScript:**
 ```javascript
 function parse(frame) {
     return frame.split(",");
 }
 ```
 
-### Example 2: Custom Delimiter
+### Example 2: JSON Payload
 
-```javascript
-function parse(frame) {
-    return frame.split("|");
-}
+**Lua:**
+```lua
+-- Lightweight JSON value extraction (flat objects only)
+function parse(frame)
+  local result = {}
+  for key, value in frame:gmatch('"([^"]+)"%s*:%s*([%d%.%-]+)') do
+    result[#result + 1] = tonumber(value)
+  end
+  return result
+end
 ```
 
-### Example 3: NMEA GPS Sentence
-
-```javascript
-function parse(frame) {
-    if (!frame.startsWith("$GPGGA"))
-        return [];
-
-    var parts = frame.split(",");
-    var lat = parseFloat(parts[2]) / 100;
-    var lon = parseFloat(parts[4]) / 100;
-    var alt = parseFloat(parts[9]);
-    var sats = parseInt(parts[7]);
-    return [lat, lon, alt, sats];
-}
-```
-
-### Example 4: JSON Payload
-
+**JavaScript:**
 ```javascript
 function parse(frame) {
     try {
@@ -201,17 +265,26 @@ function parse(frame) {
 }
 ```
 
-### Example 5: Binary Protocol with Header (Binary Direct)
+### Example 3: Binary Protocol with Header (Binary Direct)
 
+**Lua:**
+```lua
+function parse(frame)
+  if #frame < 8 then return {} end
+  if frame[1] ~= 0xAA or frame[2] ~= 0x55 then return {} end
+
+  local temp     = ((frame[3] << 8) | frame[4]) / 100.0
+  local pressure = ((frame[5] << 8) | frame[6]) / 10.0
+  local humidity = frame[7]
+  return {temp, pressure, humidity}
+end
+```
+
+**JavaScript:**
 ```javascript
-// Decoder: Binary (Direct) [Pro]
-// frame is an array of byte values
 function parse(frame) {
-    if (frame.length < 8)
-        return [];
-
-    if (frame[0] !== 0xAA || frame[1] !== 0x55)
-        return [];
+    if (frame.length < 8) return [];
+    if (frame[0] !== 0xAA || frame[1] !== 0x55) return [];
 
     var temp = (frame[2] << 8 | frame[3]) / 100.0;
     var pressure = (frame[4] << 8 | frame[5]) / 10.0;
@@ -220,117 +293,75 @@ function parse(frame) {
 }
 ```
 
-### Example 6: Hex String Byte Extraction (Hexadecimal Decoder)
+### Example 4: Stateful Frame Counter
 
-```javascript
-// Decoder: Hexadecimal
-// frame is a hex string like "03FF020035A0"
-function parse(frame) {
-    var bytes = [];
-    for (var i = 0; i < frame.length; i += 2)
-        bytes.push(parseInt(frame.substr(i, 2), 16));
+**Lua:**
+```lua
+local frameCount = 0
 
-    var temp = ((bytes[0] << 8) | bytes[1]) / 100.0;
-    var humidity = bytes[2];
-    return [temp, humidity];
-}
+function parse(frame)
+  frameCount = frameCount + 1
+  local result = {frameCount}
+  for field in frame:gmatch("([^,]+)") do
+    result[#result + 1] = field
+  end
+  return result
+end
 ```
 
-### Example 7: Stateful Frame Counter
+### Example 5: XOR Checksum Validation
 
-```javascript
-var frameCount = 0;
+**Lua:**
+```lua
+-- Frame format: "1023,512,850*AB"
+function parse(frame)
+  local data, checkHex = frame:match("^(.+)%*(%x+)$")
+  if not data then return {} end
 
-function parse(frame) {
-    frameCount++;
-    var values = frame.split(",");
-    values.unshift(frameCount);
-    return values;
-}
+  local checksumReceived = tonumber(checkHex, 16)
+  local checksumCalc = 0
+  for i = 1, #data do
+    checksumCalc = checksumCalc ~ data:byte(i)
+  end
+
+  if checksumCalc ~= checksumReceived then return {} end
+
+  local result = {}
+  for field in data:gmatch("([^,]+)") do
+    result[#result + 1] = field
+  end
+  return result
+end
 ```
 
-### Example 8: Moving Average Filter
+### Example 6: Multi-Message State Machine
 
-```javascript
-var history = [];
-var windowSize = 10;
+**Lua:**
+```lua
+-- Device sends "A:temp,humidity" and "B:voltage,current"
+local envValues   = {0, 0}
+local powerValues = {0, 0}
 
-function parse(frame) {
-    var value = parseFloat(frame.split(",")[0]);
-    history.push(value);
-    if (history.length > windowSize)
-        history.shift();
+function parse(frame)
+  local msgType = frame:sub(1, 1)
+  local data = frame:sub(3)
 
-    var sum = 0;
-    for (var i = 0; i < history.length; i++)
-        sum += history[i];
+  if msgType == "A" then
+    local i = 1
+    for field in data:gmatch("([^,]+)") do
+      envValues[i] = tonumber(field) or 0
+      i = i + 1
+    end
+  elseif msgType == "B" then
+    local i = 1
+    for field in data:gmatch("([^,]+)") do
+      powerValues[i] = tonumber(field) or 0
+      i = i + 1
+    end
+  end
 
-    var average = sum / history.length;
-    return [value, average];
-}
-```
-
-### Example 9: XOR Checksum Validation
-
-```javascript
-// Frame format: "1023,512,850*AB"
-function parse(frame) {
-    var parts = frame.split("*");
-    if (parts.length !== 2)
-        return [];
-
-    var data = parts[0];
-    var checksumReceived = parseInt(parts[1], 16);
-
-    var checksumCalculated = 0;
-    for (var i = 0; i < data.length; i++)
-        checksumCalculated ^= data.charCodeAt(i);
-
-    if (checksumCalculated !== checksumReceived)
-        return [];
-
-    return data.split(",");
-}
-```
-
-### Example 10: Multi-Message State Machine
-
-```javascript
-// Device sends "A:temp,humidity" and "B:voltage,current"
-var envValues = [0, 0];
-var powerValues = [0, 0];
-
-function parse(frame) {
-    var type = frame.charAt(0);
-    var data = frame.substring(2).split(",");
-
-    if (type === "A")
-        envValues = data;
-    else if (type === "B")
-        powerValues = data;
-
-    return envValues.concat(powerValues);
-}
-```
-
-### Example 11: Key-Value Pairs
-
-```javascript
-var keyOrder = ["temp", "humidity", "pressure"];
-
-function parse(frame) {
-    var result = new Array(keyOrder.length).fill(0);
-    var regex = /([\w]+)=([\d.]+)/g;
-    var match;
-    while ((match = regex.exec(frame)) !== null) {
-        var idx = keyOrder.indexOf(match[1]);
-        if (idx >= 0)
-            result[idx] = parseFloat(match[2]);
-    }
-    return result;
-}
-// Input:  "temp=22.5,humidity=60,pressure=1013"
-// Output: [22.5, 60, 1013]
+  return {envValues[1], envValues[2], powerValues[1], powerValues[2]}
+end
 ```
 
 ---
@@ -354,70 +385,56 @@ For full documentation on output controls, see [Output Controls](Output-Controls
 | Function | Description |
 |----------|-------------|
 | `canSendFrame(id, payload)` | Send a CAN frame with an array or string payload |
-| `canSendValue(id, value, bytes)` | Send a numeric value packed big-endian (1–8 bytes, default 2) |
+| `canSendValue(id, value, bytes)` | Send a numeric value packed big-endian (1--8 bytes, default 2) |
 
-### Example
-
-```javascript
-// Slider controlling a Modbus holding register
-function transmit(value) {
-  return modbusWriteRegister(0x0001, value);
-}
-```
-
-```javascript
-// Button sending a CAN command frame
-function transmit(value) {
-  return canSendFrame(0x200, [0x01, 0x00, 0xFF]);
-}
-```
-
-> **Note:** These helpers are only available in output widget transmit functions, not in frame parser `parse()` functions. The frame parser and output widget engines are separate.
+> **Note:** Output widget transmit functions always use JavaScript. The Lua/JavaScript language selection applies only to the frame parser `parse()` function.
 
 ---
 
 ## Built-in Template Scripts
 
-Serial Studio includes 28 ready-to-use parser templates accessible from the Frame Parser Code editor in the Project Editor. Select a template from the dropdown to load it:
+Serial Studio includes 28 ready-to-use parser templates, available in both Lua and JavaScript. Select a template from the dropdown in the frame parser editor:
 
-| Template                        | Description                          |
-|---------------------------------|--------------------------------------|
-| at_commands.js                  | AT command responses                 |
-| base64_encoded.js               | Base64-encoded data                  |
-| batched_sensor_data.js          | Batched sensor data (multi-frame)    |
-| binary_tlv.js                   | Binary TLV (Tag-Length-Value)        |
-| cobs_encoded.js                 | COBS-encoded frames                  |
-| comma_separated.js              | Comma-separated data (default)       |
-| fixed_width_fields.js           | Fixed-width fields                   |
-| hexadecimal_bytes.js            | Hexadecimal bytes                    |
-| ini_config.js                   | INI/config format                    |
-| json_data.js                    | JSON data                            |
-| key_value_pairs.js              | Key-value pairs                      |
-| mavlink.js                      | MAVLink messages                     |
-| messagepack.js                  | MessagePack data                     |
-| modbus.js                       | Modbus frames                        |
-| nmea_0183.js                    | NMEA 0183 sentences                  |
-| nmea_2000.js                    | NMEA 2000 messages                   |
-| pipe_delimited.js               | Pipe-delimited data                  |
-| raw_bytes.js                    | Raw bytes                            |
-| rtcm_corrections.js             | RTCM corrections                     |
-| semicolon_separated.js          | Semicolon-separated data             |
-| sirf_binary.js                  | SiRF binary protocol                 |
-| slip_encoded.js                 | SLIP-encoded frames                  |
-| tab_separated.js                | Tab-separated data                   |
-| time_series_2d.js               | Time-series 2D arrays (multi-frame)  |
-| ubx_ublox.js                    | UBX protocol (u-blox)               |
-| url_encoded.js                  | URL-encoded data                     |
-| xml_data.js                     | XML data                             |
-| yaml_data.js                    | YAML data                            |
+| Template                  | Description                          |
+|---------------------------|--------------------------------------|
+| AT Commands               | AT command responses                 |
+| Base64 Encoded            | Base64-encoded data                  |
+| Batched Sensor Data       | Batched sensor data (multi-frame)    |
+| Binary TLV                | Binary TLV (Tag-Length-Value)        |
+| COBS Encoded              | COBS-encoded frames                  |
+| Comma Separated           | Comma-separated data (default)       |
+| Fixed Width Fields        | Fixed-width fields                   |
+| Hexadecimal Bytes         | Hexadecimal bytes                    |
+| INI Config                | INI/config format                    |
+| JSON Data                 | JSON data                            |
+| Key-Value Pairs           | Key-value pairs                      |
+| MAVLink                   | MAVLink messages                     |
+| MessagePack               | MessagePack data                     |
+| Modbus                    | Modbus frames                        |
+| NMEA 0183                 | NMEA 0183 sentences                  |
+| NMEA 2000                 | NMEA 2000 messages                   |
+| Pipe Delimited            | Pipe-delimited data                  |
+| Raw Bytes                 | Raw bytes                            |
+| RTCM Corrections          | RTCM corrections                     |
+| Semicolon Separated       | Semicolon-separated data             |
+| SiRF Binary               | SiRF binary protocol                 |
+| SLIP Encoded              | SLIP-encoded frames                  |
+| Tab Separated             | Tab-separated data                   |
+| Time-Series 2D            | Time-series 2D arrays (multi-frame)  |
+| UBX (u-blox)              | UBX protocol (u-blox)               |
+| URL Encoded               | URL-encoded data                     |
+| XML Data                  | XML data                             |
+| YAML Data                 | YAML data                            |
+
+When you switch between Lua and JavaScript, Serial Studio automatically loads the same template in the new language.
 
 ---
 
 ## Per-Source Parsers
 
-In multi-device projects, each Source can have its own independent JavaScript parser. Configure the parser in the Source's "Frame Parser" tab in the Project Editor.
+In multi-device projects, each Source can have its own independent parser. Configure the parser in the Source's "Frame Parser" tab in the Project Editor.
 
-Each source runs in an isolated QJSEngine instance. Global variables in one source do not affect another. If a source has no parser code, it falls back to the global parser (source 0).
+Each source runs in an isolated engine instance. Global variables in one source do not affect another. If a source has no parser code, it falls back to the global parser (source 0).
 
 ---
 
@@ -425,21 +442,58 @@ Each source runs in an isolated QJSEngine instance. Global variables in one sour
 
 1. The function **must** be named `parse` (case-sensitive).
 2. It must accept exactly **one parameter**.
-3. It must **return an array** — not a string, object, number, or undefined.
-4. Return an empty array `[]` for invalid or incomplete frames.
-5. **Synchronous only.** No `async`/`await`, no Promises, no `setTimeout`, no `setInterval`.
-6. **500 ms execution timeout** per parse call. If your function takes longer (e.g., infinite loop), the engine is interrupted and the frame is dropped.
-7. **No file system access**, no network access, no module imports (`require`, `import`).
-8. **No DOM.** No `document`, `window`, `localStorage`, or browser-specific APIs.
-9. `console.log()` output goes to Serial Studio's console window, not to stdout.
-10. Global arrays that grow without bound will leak memory. Always cap history buffers.
+3. It must **return a table** (Lua) or **array** (JavaScript) — not a string, number, or nil.
+4. Return an empty table/array for invalid or incomplete frames.
+5. **Synchronous only.** No coroutines (Lua) or Promises/async (JavaScript).
+6. **1 second execution timeout** per parse call. If your function takes longer (e.g., infinite loop), the engine is interrupted and the frame is dropped.
+7. **No file system access**, no network access, no module imports.
+8. Lua: `io`, `os`, `debug`, `package` libraries are not available. JavaScript: No DOM, `window`, `require`.
+9. Global tables/arrays that grow without bound will leak memory. Always cap history buffers.
+
+---
+
+## Migrating from JavaScript to Lua
+
+If you have an existing JavaScript parser and want to switch to Lua for better performance:
+
+| JavaScript | Lua |
+|---|---|
+| `frame.split(",")` | `for field in frame:gmatch("([^,]+)") do ... end` |
+| `frame.length` | `#frame` |
+| `frame.indexOf("x")` | `frame:find("x", 1, true)` |
+| `parseInt(s, 16)` | `tonumber(s, 16)` |
+| `parseFloat(s)` | `tonumber(s)` |
+| `Math.floor(x)` | `math.floor(x)` |
+| `array.push(v)` | `table[#table + 1] = v` |
+| `array[0]` (0-indexed) | `table[1]` (1-indexed) |
+| `var x = 0;` | `local x = 0` |
+| `for (var i = 0; ...)` | `for i = 1, n do ... end` |
+| `0xFF & mask` | `0xFF & mask` (same in Lua 5.4) |
+| `value << 8` | `value << 8` (same in Lua 5.4) |
+| `JSON.parse(frame)` | Manual extraction (see JSON template) |
+| `try { } catch(e) { }` | `pcall(function() ... end)` |
+| `console.log(x)` | `print(x)` |
+
+> **Key difference:** Lua tables are 1-indexed. Binary frame byte tables start at index 1, not 0. The `#` operator returns the table length.
 
 ---
 
 ## Debugging
 
-Use `console.log()` to inspect frame contents and intermediate values:
+**Lua:**
+```lua
+function parse(frame)
+  print("Frame:", frame, "| Type:", type(frame), "| Length:", #frame)
+  local result = {}
+  for field in frame:gmatch("([^,]+)") do
+    result[#result + 1] = field
+  end
+  print("Parsed " .. #result .. " fields")
+  return result
+end
+```
 
+**JavaScript:**
 ```javascript
 function parse(frame) {
     console.log("Frame:", frame, "| Type:", typeof frame, "| Length:", frame.length);
@@ -449,43 +503,17 @@ function parse(frame) {
 }
 ```
 
-For binary frames, log byte values in hex:
-
-```javascript
-function parse(frame) {
-    var hex = [];
-    for (var i = 0; i < frame.length; i++)
-        hex.push("0x" + frame[i].toString(16));
-    console.log("Bytes:", hex.join(" "));
-    // ...
-}
-```
-
-Wrap risky operations in try/catch and log the error:
-
-```javascript
-function parse(frame) {
-    try {
-        var data = JSON.parse(frame);
-        return [data.temp, data.humidity];
-    } catch (e) {
-        console.log("Parse error:", e.message);
-        return [];
-    }
-}
-```
-
 Output appears in Serial Studio's console/terminal panel.
 
 ---
 
 ## Performance Tips
 
-- Prefer `frame.split(",")` over `frame.split(/,/)`. String splits are faster than regex splits.
-- Use early returns for invalid frames to skip expensive logic.
+- **Use Lua for high-frequency data** (>1 kHz). Lua's stack-based API avoids the QJSValue boxing overhead.
+- Prefer early returns for invalid frames to skip expensive logic.
 - Cap global history buffers with a fixed maximum size.
-- For high-frequency data (>1 kHz), minimize object allocations inside `parse()`. Reuse a global result array when possible.
-- Avoid `JSON.parse()` on every frame unless the data is actually JSON.
+- Reuse a global result table when possible to minimize allocations.
+- In Lua, use `string.find` with `plain=true` (3rd argument) for literal string searches instead of pattern matching.
 
 ---
 

@@ -189,7 +189,6 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
   if (result.isString())
     return result.toString().toLatin1();
 
-  // Return the data as a byte array
   return result.toVariant().toByteArray();
 }
 
@@ -273,7 +272,7 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
   );
   // clang-format on
 
-  // Evaluate the code for correctness
+  // Check for compilation errors
   auto result = engine.evaluate(kHelpers);
   if (result.isError())
     qWarning() << "Failed to install protocol helpers:" << result.toString();

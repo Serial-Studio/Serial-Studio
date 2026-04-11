@@ -36,7 +36,6 @@
  */
 void API::Handlers::CSVPlayerHandler::registerCommands()
 {
-  // Obtain registry and build command schemas
   auto& registry = CommandRegistry::instance();
 
   // Empty schema for parameterless commands
@@ -130,7 +129,6 @@ void API::Handlers::CSVPlayerHandler::registerCommands()
 API::CommandResponse API::Handlers::CSVPlayerHandler::open(const QString& id,
                                                            const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("filePath"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
@@ -161,7 +159,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::open(const QString& id,
 API::CommandResponse API::Handlers::CSVPlayerHandler::close(const QString& id,
                                                             const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   CSV::Player::instance().closeFile();
@@ -177,7 +174,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::close(const QString& id,
 API::CommandResponse API::Handlers::CSVPlayerHandler::play(const QString& id,
                                                            const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   CSV::Player::instance().play();
@@ -193,7 +189,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::play(const QString& id,
 API::CommandResponse API::Handlers::CSVPlayerHandler::pause(const QString& id,
                                                             const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   CSV::Player::instance().pause();
@@ -209,7 +204,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::pause(const QString& id,
 API::CommandResponse API::Handlers::CSVPlayerHandler::toggle(const QString& id,
                                                              const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   CSV::Player::instance().toggle();
@@ -225,7 +219,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::toggle(const QString& id,
 API::CommandResponse API::Handlers::CSVPlayerHandler::nextFrame(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   CSV::Player::instance().nextFrame();
@@ -241,7 +234,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::nextFrame(const QString& i
 API::CommandResponse API::Handlers::CSVPlayerHandler::previousFrame(const QString& id,
                                                                     const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   CSV::Player::instance().previousFrame();
@@ -258,7 +250,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::previousFrame(const QStrin
 API::CommandResponse API::Handlers::CSVPlayerHandler::setProgress(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("progress"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: progress"));
@@ -288,7 +279,6 @@ API::CommandResponse API::Handlers::CSVPlayerHandler::setProgress(const QString&
 API::CommandResponse API::Handlers::CSVPlayerHandler::getStatus(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& player = CSV::Player::instance();

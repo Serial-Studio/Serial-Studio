@@ -84,7 +84,6 @@ void Widgets::ImageExportWorker::closeGroup(int groupId)
  */
 void Widgets::ImageExportWorker::processItems(const std::vector<ImageExportItem>& items)
 {
-  // Write each image frame to its per-group session directory
   for (const auto& item : items) {
     if (item.data.isEmpty())
       continue;
@@ -125,7 +124,6 @@ bool Widgets::ImageExportWorker::ensureSession(int groupId,
                                                const QString& projectTitle,
                                                const QString& groupTitle)
 {
-  // Build and create the timestamped session directory
   const auto dt      = QDateTime::currentDateTime();
   const auto session = dt.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss-zzz"));
 
@@ -155,7 +153,6 @@ void Widgets::ImageExportWorker::zipAndClean(ImageSession& session)
   if (session.frameIndex == 0)
     return;
 
-  // Compress the session directory into a ZIP and remove the raw folder
   const QString dirPath = session.dir.absolutePath();
   const QString zipPath = dirPath + QStringLiteral(".zip");
 
@@ -228,7 +225,6 @@ bool Widgets::ImageExport::exportEnabled() const
 QString Widgets::ImageExport::imagesPath(const QString& groupTitle,
                                          const QString& projectTitle) const
 {
-  // Construct the stable group-level path without the per-session timestamp
   const auto base = Misc::WorkspaceManager::instance().path(QStringLiteral("Images"));
   return QStringLiteral("%1/%2/%3").arg(base, projectTitle, groupTitle);
 }

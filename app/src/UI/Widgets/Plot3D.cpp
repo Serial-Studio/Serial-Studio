@@ -303,7 +303,6 @@ double Widgets::Plot3D::cameraOffsetZ() const
  */
 double Widgets::Plot3D::idealWorldScale() const
 {
-  // Compute the zoom scale from the largest axis extent and a 1-2-5 snap
   const double dx = m_maxPoint.x() - m_minPoint.x();
   const double dy = m_maxPoint.y() - m_minPoint.y();
   const double dz = m_maxPoint.z() - m_minPoint.z();
@@ -381,14 +380,6 @@ bool Widgets::Plot3D::invertEyePositions() const
   return m_invertEyePositions;
 }
 
-/**
- * @brief Checks if orbit navigation is enabled.
- *
- * When orbit navigation is enabled, the view allows rotating (orbiting)
- * around the 3D plot. If disabled, the navigation mode switches to panning.
- *
- * @return true if orbit navigation is enabled; false if panning mode is active.
- */
 /**
  * @brief Returns whether auto-centering on incoming data is enabled.
  */
@@ -545,20 +536,10 @@ void Widgets::Plot3D::setCameraOffsetZ(const double offset)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Enables or disables anaglyph (red/cyan 3D) rendering mode.
- *
- * This function updates the internal anaglyph mode flag. If the value
- * changes, it marks all layers as dirty to trigger re-rendering and emits
- * the anaglyphEnabledChanged() signal to notify connected components.
- *
- * @param enabled True to enable anaglyph mode; false to disable it.
- */
-/**
  * @brief Enables or disables automatic centering on incoming data.
  */
 void Widgets::Plot3D::setAutoCenter(const bool enabled)
 {
-  // Toggle auto-centering and reset to origin when disabling
   if (m_autoCenter != enabled) {
     m_autoCenter = enabled;
     m_settings.setValue("Plot3D_AutoCenter", enabled);
@@ -621,7 +602,6 @@ void Widgets::Plot3D::setOrbitNavigation(const bool enabled)
  */
 void Widgets::Plot3D::setEyeSeparation(const float separation)
 {
-  // Persist the new separation value and trigger a re-render
   m_eyeSeparation = separation;
   m_settings.setValue("Plot3D_EyeSeparation", separation);
   markCameraDirty();
@@ -705,17 +685,15 @@ void Widgets::Plot3D::updateData()
  */
 void Widgets::Plot3D::onThemeChanged()
 {
-  // Obtain color for latest line data
+  // Build head/tail gradient from the dataset color
   const auto color = SerialStudio::getDatasetColor(m_index + 1);
   m_lineHeadColor  = color;
 
-  // Create gradient based on widget index
   QColor midCurve(m_lineHeadColor);
   m_lineHeadColor = midCurve.darker(130);
   m_lineTailColor = midCurve.lighter(130);
   m_lineTailColor.setAlpha(156);
 
-  // Obtain colors for XY plane & axes
   // clang-format off
   m_textColor = Misc::ThemeManager::instance().getColor("widget_text");
   m_xAxisColor = Misc::ThemeManager::instance().getColor("plot3d_x_axis");
@@ -728,7 +706,6 @@ void Widgets::Plot3D::onThemeChanged()
   m_outerBackgroundColor = Misc::ThemeManager::instance().getColor("widget_window");
   // clang-format on
 
-  // Mark all widget as dirty to force re-rendering
   markDirty();
 }
 
@@ -867,7 +844,7 @@ void Widgets::Plot3D::drawData()
     m_plotImg[0] = renderData(matrix, data);
   }
 
-  // Mark dirty flag as false to avoid needless rendering
+  // Reset dirty flag
   m_dirtyData = false;
 }
 
@@ -921,7 +898,7 @@ void Widgets::Plot3D::drawGrid()
     m_gridImg[0] = renderGrid(matrix);
   }
 
-  // Mark dirty flag as false to avoid needless rendering
+  // Reset dirty flag
   m_dirtyGrid = false;
 }
 
@@ -950,16 +927,16 @@ void Widgets::Plot3D::drawBackground()
   gradient.setColorAt(0.0, m_innerBackgroundColor);
   gradient.setColorAt(1.0, m_outerBackgroundColor);
 
-  // Paint the gradient onto the pixmap with antialiasing enabled
+  // Fill with radial gradient
   QPainter painter(&img);
   painter.fillRect(boundingRect(), gradient);
 
-  // Assign background pixmaps
+  // Store result for left (and optionally right) eye
   m_bgImg[0] = img;
   if (anaglyphEnabled())
     m_bgImg[1] = img;
 
-  // Mark dirty flag as false to avoid needless rendering
+  // Reset dirty flag
   m_dirtyBackground = false;
 }
 
@@ -1004,7 +981,7 @@ void Widgets::Plot3D::drawCameraIndicator()
     m_cameraIndicatorImg[0] = renderCameraIndicator(matrix);
   }
 
-  // Mark dirty flag as false to avoid needless rendering
+  // Reset dirty flag
   m_dirtyCameraIndicator = false;
 }
 
@@ -1068,10 +1045,9 @@ std::vector<QPointF> Widgets::Plot3D::screenProjection(const DSP::LineSeries3D& 
   const float halfH = height() * 0.5f;
 
   for (const QVector3D& p : points) {
-    // Project the point
     QVector4D v = matrix * QVector4D(p, 1.0f);
 
-    // Avoid invalid perspective divide
+    // Skip degenerate w values to avoid divide-by-zero
     if (DSP::isZero(v.w()))
       continue;
 
@@ -1159,11 +1135,10 @@ void Widgets::Plot3D::drawLine3D(QPainter& painter,
     float dist  = QLineF(mid, center).length();
     float alpha = 1.0f - std::clamp(dist / maxDist, 0.0f, 1.0f);
 
-    // Apply fade and draw the segment
+    // Apply distance-based fade and draw
     QColor faded = color;
     faded.setAlphaF(color.alphaF() * alpha);
 
-    // Draw line segment
     painter.setPen(QPen(faded, lineWidth, style));
     painter.drawLine(pA, pB);
   }
@@ -1238,13 +1213,12 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
   // drawLine3D(painter, matrix, zAxis.first, zAxis.second, m_zAxisColor, 1.5,
   //            Qt::SolidLine);
 
-  // Render label with grid step
+  // Draw grid step label in lower-left corner
   const QString stepLabel = tr("Grid Interval: %1 unit(s)").arg(step);
   painter.setPen(m_textColor);
   painter.setFont(Misc::CommonFonts::instance().monoFont());
   painter.drawText(QPoint(8, height() - 8), stepLabel);
 
-  // Return the result
   return img;
 }
 
@@ -1311,41 +1285,34 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4& matrix)
               return a.transformed.z() < b.transformed.z();
             });
 
-  // Set axis text font
+  // Size label circles relative to font metrics
   painter.setFont(Misc::CommonFonts::instance().customMonoFont(0.8));
-
-  // Calculate size of circles
   QFontMetrics fm(painter.font());
   int textWidth      = fm.horizontalAdvance("X");
   int textHeight     = fm.height();
   float circleRadius = std::max(textWidth, textHeight) * 0.7f;
 
-  // Draw widget
+  // Draw each axis as a line + labeled circle endpoint
   for (const auto& ta : transformedAxes) {
-    // Obtain en position of axis
+    // Project axis endpoint to screen space
     const QVector4D& t = ta.transformed;
     QPointF endpoint(origin.x() + (t.x() / t.w()) * lineScale,
                      origin.y() - (t.y() / t.w()) * lineScale);
 
-    // Draw line
     painter.setPen(QPen(ta.axis.color, 3));
     painter.drawLine(origin, endpoint);
 
-    // Draw filled circle
     painter.setBrush(ta.axis.color);
     painter.setPen(Qt::NoPen);
     painter.drawEllipse(endpoint, circleRadius, circleRadius);
 
-    // Find where to draw the text
     QRectF textRect(
       endpoint.x() - circleRadius, endpoint.y() - circleRadius, circleRadius * 2, circleRadius * 2);
 
-    // Draw axis label in circle
     painter.setPen(m_axisTextColor);
     painter.drawText(textRect, Qt::AlignCenter, ta.axis.label);
   }
 
-  // Return obtained pixmap
   return img;
 }
 
@@ -1398,7 +1365,6 @@ QImage Widgets::Plot3D::renderData(const QMatrix4x4& matrix, const DSP::LineSeri
       painter.drawEllipse(pt, 1, 1);
   }
 
-  // Return the rendered pixmap
   return img;
 }
 
@@ -1442,7 +1408,6 @@ QPair<QMatrix4x4, QMatrix4x4> Widgets::Plot3D::eyeTransformations(const QMatrix4
   rMatrix.translate(-shift, 0.0f, 0.0f);
   rMatrix.rotate(-angleDeg, 0, 0, 1);
 
-  // Return both cameras
   return qMakePair(lMatrix, rMatrix);
 }
 
@@ -1511,7 +1476,6 @@ void Widgets::Plot3D::mouseMoveEvent(QMouseEvent* event)
     m_cameraOffsetY -= delta.y() * 0.01;
   }
 
-  // Accept event
   event->accept();
 
   // Re-render projection-dependent layers

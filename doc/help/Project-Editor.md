@@ -90,7 +90,7 @@ When the project root is selected, the property panel shows frame detection sett
   - *End Delimiter Only* — frames end with a known sequence (e.g., `\n`). This is the most common choice.
   - *Start and End Delimiter* — frames are bounded by a start marker and an end marker (e.g., `/*` and `*/`).
   - *Start Delimiter Only* — frames begin with a header; the next header marks the end of the previous frame.
-  - *No Delimiters* — raw data is fed directly to the JavaScript frame parser. Use this for fixed-size or length-prefixed protocols.
+  - *No Delimiters* — raw data is fed directly to the frame parser script. Use this for fixed-size or length-prefixed protocols.
 - **Start Delimiter** / **End Delimiter** — the actual delimiter strings.
 - **Hex Delimiters** — check this if the delimiter strings are written in hexadecimal (e.g., `0A` for newline).
 - **Data Conversion** — how the byte stream inside delimiters is decoded before parsing.
@@ -197,16 +197,31 @@ Sources define where data comes from. Single-device projects have one implicit s
    - **Data Conversion / Checksum** — per-source overrides.
    - **Connection Settings** — bus-specific parameters (COM port, baud rate, IP address, etc.) saved with the project.
 
-Each source has its own **Frame Parser** tab for a per-source JavaScript parser.
+Each source has its own **Frame Parser** tab for a per-source parser script.
 
-### Step 7: Write a JavaScript Frame Parser (Optional)
+### Step 7: Write a Frame Parser Script (Optional)
 
-For data that is not plain CSV, write a JavaScript `parse()` function to transform each frame into an array of values.
+For data that is not plain CSV, write a `parse()` function to transform each frame into an array of values. Serial Studio supports **Lua** (default, recommended) and **JavaScript**. Select the language from the **Language** dropdown in the parser editor toolbar.
 
 1. Select a source in the tree (or the "Frame Parser" node for single-source projects).
 2. Open the Frame Parser view.
-3. Write a function:
+3. Choose the scripting language from the **Language** dropdown.
+4. Write a function:
 
+**Lua (default):**
+```lua
+function parse(frame)
+  -- 'frame' is a string (PlainText/Hex/Base64) or byte table (Binary Direct).
+  -- Return a table of values matching dataset frame indices.
+  local result = {}
+  for field in frame:gmatch("([^,]+)") do
+    result[#result + 1] = field
+  end
+  return result
+end
+```
+
+**JavaScript:**
 ```javascript
 function parse(frame) {
   // 'frame' is a string (PlainText/Hex/Base64) or byte array (Binary Direct).
@@ -215,24 +230,24 @@ function parse(frame) {
 }
 ```
 
-4. Click **Apply** to save the parser code.
+5. Click **Apply** to save the parser code.
 
 **Rules:**
 
 - The function must be named `parse` and accept exactly one argument.
-- It must return an array. Each element maps to a dataset frame index (element 0 = index 1, element 1 = index 2, etc.).
+- It must return a table (Lua) or array (JavaScript). Each element maps to a dataset frame index.
 - Global variables declared outside `parse()` persist between calls — useful for stateful protocols.
-- Use `console.log()` to print debug messages to the Serial Studio terminal.
+- Use `print()` (Lua) or `console.log()` (JavaScript) to print debug messages to the Serial Studio terminal.
 
-**Example — binary protocol:**
+**Example — binary protocol (Lua):**
 
-```javascript
-function parse(frame) {
-  // frame is a byte array in Binary Direct mode
-  var temp = (frame[0] << 8) | frame[1];
-  var humidity = (frame[2] << 8) | frame[3];
-  return [temp / 10.0, humidity / 10.0];
-}
+```lua
+function parse(frame)
+  -- frame is a byte table in Binary Direct mode (1-indexed)
+  local temp     = (frame[1] << 8) | frame[2]
+  local humidity = (frame[3] << 8) | frame[4]
+  return {temp / 10.0, humidity / 10.0}
+end
 ```
 
 ## Frame Index Mapping
@@ -321,7 +336,7 @@ When a project has multiple sources, each source represents a separate physical 
 ## See Also
 
 - [Widget Reference](Widget-Reference.md) — complete guide to all widget types.
-- [JavaScript API Reference](JavaScript-API.md) — full parser function documentation.
+- [Frame Parser Scripting](JavaScript-API.md) — complete Lua and JavaScript parser reference.
 - [Data Flow](Data-Flow.md) — how data moves through Serial Studio.
 - [Operation Modes](Operation-Modes.md) — Project File, Device Sends JSON, and Quick Plot modes.
 - [Troubleshooting](Troubleshooting.md) — solutions to common problems.

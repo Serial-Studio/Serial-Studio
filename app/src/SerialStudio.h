@@ -88,6 +88,18 @@ public:
   Q_ENUM(DecoderMethod)
 
   /**
+   * @brief Specifies the scripting language used for the frame parser function.
+   */
+  enum ScriptLanguage {
+    JavaScript = 0, /**< JavaScript via Qt's QJSEngine. */
+    Lua        = 1, /**< Lua 5.4 via embedded interpreter. */
+    /* IMPORTANT: When adding other modes, please don't modify the order of the
+     *            enums to ensure backward compatiblity with previous project
+     *            files!! */
+  };
+  Q_ENUM(ScriptLanguage)
+
+  /**
    * @brief Specifies the method used to detect data frames within a continuous
    *        stream.
    *

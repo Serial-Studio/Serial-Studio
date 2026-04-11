@@ -114,8 +114,7 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
     }
   };
 
-  // Guard mdflib calls — they may throw, and exceptions must not propagate
-  // through Qt's event loop
+  // Guard mdflib calls against exceptions propagating through Qt's event loop
   try {
     for (const auto& frame : items) {
       const auto steadyOffset = frame->timestamp - m_steadyBaseline;
@@ -150,8 +149,8 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
  */
 void MDF4::ExportWorker::closeResources()
 {
-  // Finalize the MDF4 measurement and release the writer
   if (isResourceOpen() && m_writer) {
+    // Finalize the MDF4 measurement
     try {
       const auto steadyNow    = DataModel::TimestampedFrame::SteadyClock::now();
       const auto steadyOffset = steadyNow - m_steadyBaseline;
@@ -165,6 +164,7 @@ void MDF4::ExportWorker::closeResources()
       qWarning() << "[MDF4] Exception in closeResources:" << e.what();
     }
 
+    // Release writer and clear state
     m_fileOpen = false;
     m_writer.reset();
     m_groupMap.clear();
@@ -228,13 +228,11 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
 
     dataGroup->Description("Serial Studio Data");
 
-    // Use full project frame (all sources) if cached, otherwise fall
-    // back to the first data frame (QuickPlot/JSON modes)
+    // Prefer cached project frame, fall back to first data frame
     const bool usingTemplate = !m_templateFrame.groups.empty();
     const auto& allGroups    = usingTemplate ? m_templateFrame.groups : frame.groups;
 
-    // Build (groupId, datasetId) → isNumeric lookup from the live frame
-    // so template groups get the correct data type when available
+    // Build numeric type lookup from the live frame for template groups
     std::map<std::pair<int, int>, bool> numericLookup;
     if (usingTemplate) {
       for (const auto& g : frame.groups)
@@ -257,8 +255,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
       info.channelGroup = channelGroup;
       info.timeChannel  = nullptr;
 
-      // Each channel group gets its own master time channel so that
-      // multi-source recordings store per-group timestamps correctly
+      // Add per-group master time channel for multi-source recordings
       auto* timeChannel = channelGroup->CreateChannel();
       if (timeChannel) {
         timeChannel->Name("Time");
@@ -278,7 +275,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
         channel->Unit(dataset.units.toStdString());
         channel->Type(mdf::ChannelType::FixedLength);
 
-        // For template groups, use live frame lookup or default to numeric
+        // Resolve data type from live frame when using template
         bool isNum = dataset.isNumeric;
         if (usingTemplate) {
           auto nit = numericLookup.find({group.groupId, dataset.datasetId});
@@ -340,6 +337,7 @@ MDF4::Export::Export()
 #endif
 {
 #ifdef BUILD_COMMERCIAL
+  // Wire worker file-state and license-revocation signals
   initializeWorker();
   connect(m_worker,
           &ExportWorker::resourceOpenChanged,
@@ -357,6 +355,7 @@ MDF4::Export::Export()
           });
 #endif
 
+  // Restore persisted export preference
   setExportEnabled(m_settings.value("MDF4Export", false).toBool());
 }
 
@@ -434,9 +433,7 @@ void MDF4::Export::setupExternalConnections()
   connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (IO::ConnectionManager::instance().isConnected()) {
-        // Cache the full project frame (all sources) for file creation.
-        // Only meaningful in ProjectFile mode — QuickPlot/JSON builds
-        // the frame on the fly and FrameBuilder::frame() may be stale.
+        // Cache project frame for file creation (only valid in ProjectFile mode)
         auto* worker = static_cast<ExportWorker*>(m_worker);
         if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
           worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
@@ -473,6 +470,7 @@ void MDF4::Export::setExportEnabled(const bool enabled)
     return;
   }
 
+  // License invalid or missing — force disable
   closeFile();
   setConsumerEnabled(false);
   m_settings.setValue("MDF4Export", false);
@@ -511,7 +509,6 @@ void MDF4::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
  */
 void MDF4::Export::onWorkerOpenChanged()
 {
-  // Sync the main-thread open state with the worker's state
   auto* worker = static_cast<ExportWorker*>(m_worker);
   m_isOpen.store(worker->isResourceOpen(), std::memory_order_relaxed);
   Q_EMIT openChanged();

@@ -97,7 +97,6 @@ QString DataModel::DBCImporter::dbcFileName() const
  */
 QString DataModel::DBCImporter::messageInfo(int index) const
 {
-  // Validate index
   if (index < 0 || index >= m_messages.count())
     return QString();
 
@@ -125,7 +124,6 @@ QString DataModel::DBCImporter::messageInfo(int index) const
  */
 void DataModel::DBCImporter::importDBC()
 {
-  // Create and show the DBC file selection dialog
   const auto p = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
   auto* dialog =
     new QFileDialog(nullptr, tr("Import DBC File"), p, tr("DBC Files (*.dbc);;All Files (*)"));
@@ -150,7 +148,6 @@ void DataModel::DBCImporter::importDBC()
  */
 void DataModel::DBCImporter::cancelImport()
 {
-  // Clear loaded data and notify UI
   m_messages.clear();
   m_dbcFilePath.clear();
   Q_EMIT messagesChanged();
@@ -170,7 +167,6 @@ void DataModel::DBCImporter::cancelImport()
  */
 void DataModel::DBCImporter::showPreview(const QString& filePath)
 {
-  // Parse the DBC file and validate its contents
   QCanDbcFileParser parser;
   if (!parser.parse(filePath)) {
     Misc::Utilities::showMessageBox(tr("Failed to parse DBC file: %1").arg(parser.errorString()),
@@ -190,7 +186,7 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
     return;
   }
 
-  // Sort messages by CAN ID so dataset indices match between UI groups and the JS parser
+  // Sort by CAN ID so dataset indices stay consistent
   std::sort(m_messages.begin(),
             m_messages.end(),
             [](const QCanMessageDescription& a, const QCanMessageDescription& b) {
@@ -223,7 +219,6 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
  */
 void DataModel::DBCImporter::confirmImport()
 {
-  // Abort if no messages were parsed
   if (m_messages.isEmpty())
     return;
 
@@ -285,7 +280,6 @@ void DataModel::DBCImporter::confirmImport()
  */
 QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescription>& messages)
 {
-  // Build project metadata and source configuration
   QJsonObject project;
 
   const auto dbcInfo      = QFileInfo(m_dbcFilePath);
@@ -305,6 +299,7 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
   source["decoder"]               = static_cast<int>(SerialStudio::Binary);
   source["hexadecimalDelimiters"] = false;
   source["frameParserCode"]       = generateFrameParser(messages);
+  source["frameParserLanguage"]   = static_cast<int>(SerialStudio::Lua);
 
   project["sources"] = QJsonArray{source};
 
@@ -351,7 +346,6 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
 std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
   const QList<QCanMessageDescription>& messages)
 {
-  // Create a group for each CAN message with datasets for each signal
   std::vector<DataModel::Group> groups;
   int groupId      = 0;
   int datasetIndex = 1;
@@ -446,73 +440,85 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
  */
 QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescription>& messages)
 {
-  // Generate the file header comment and global values array
   QString code;
 
   const auto totalSignals = countTotalSignals(messages);
 
   // clang-format off
-  code += "/**\n";
-  code += " * CAN DBC Frame Parser\n";
-  code += " *\n";
-  code += QString(" * Auto-generated from: %1\n")
+  code += "--\n";
+  code += "-- CAN DBC Frame Parser\n";
+  code += "--\n";
+  code += QString("-- Auto-generated from: %1\n")
               .arg(QFileInfo(m_dbcFilePath).fileName());
-  code += " *\n";
-  code += " * This parser decodes CAN frames based on DBC message definitions.\n";
-  code += " * It maintains a global array of all signal values across different\n";
-  code += " * CAN message types, allowing multiple messages to coexist in a\n";
-  code += " * single project.\n";
-  code += " *\n";
-  code += QString(" * Total signals: %1\n").arg(totalSignals);
-  code += QString(" * Total messages: %1\n").arg(messageCount());
-  code += " */\n\n";
+  code += "--\n";
+  code += QString("-- Total signals: %1\n").arg(totalSignals);
+  code += QString("-- Total messages: %1\n").arg(messageCount());
+  code += "--\n";
+  code += "-- Frame format:\n";
+  code += "--   Byte 1-2: CAN ID (big-endian, 16-bit)\n";
+  code += "--   Byte 3:   Data Length Code (DLC)\n";
+  code += "--   Byte 4+:  CAN data payload\n";
+  code += "--\n\n";
+
+  code += QString("local values = {}\nfor i = 1, %1 do values[i] = 0 end\n\n").arg(totalSignals);
   // clang-format on
 
+  // Emit extractSignal helper for bit-level extraction
   // clang-format off
-  code += "/**\n";
-  code += " * Global array holding all CAN signal values.\n";
-  code += " *\n";
-  code += " * This array persists between parse() calls, maintaining the most\n";
-  code += " * recent value for each signal across all CAN messages.\n";
-  code += " *\n";
-  code += QString(" * @type {Array<number>} Array of %1 signal values\n").arg(totalSignals);
-  code += " */\n";
-  code += QString("const values = new Array(%1).fill(0);\n\n").arg(totalSignals);
-  code += "/**\n";
-  code += " * Parses a CAN frame and extracts signal values.\n";
-  code += " *\n";
-  code += " * Frame format:\n";
-  code += " *   Byte 0-1: CAN ID (big-endian, 16-bit)\n";
-  code += " *   Byte 2:   Data Length Code (DLC)\n";
-  code += " *   Byte 3+:  CAN data payload\n";
-  code += " *\n";
-  code += " * @param {Uint8Array} frame - Raw CAN frame data\n";
-  code += " * @returns {Array<number>} Global values array with updated signals\n";
-  code += " */\n";
-  code += "function parse(frame) {\n";
-  code += "  if (frame.length < 3) return values;\n\n";
-  code += "  const canId = (frame[0] << 8) | frame[1];\n";
-  code += "  const dlc = frame[2];\n";
-  code += "  const data = frame.slice(3, 3 + dlc);\n\n";
-  code += "  switch(canId) {\n";
+  code += "local function extractSignal(data, startBit, length, isBigEndian, isSigned)\n";
+  code += "  local value = 0\n\n";
+  code += "  if isBigEndian then\n";
+  code += "    local startByte = startBit // 8\n";
+  code += "    local numBytes = (length + 7) // 8\n\n";
+  code += "    -- Byte-aligned fast path\n";
+  code += "    if startBit % 8 == 0 and length % 8 == 0 then\n";
+  code += "      for i = 0, numBytes - 1 do\n";
+  code += "        if startByte + i + 1 <= #data then\n";
+  code += "          value = (value << 8) | data[startByte + i + 1]\n";
+  code += "        end\n";
+  code += "      end\n";
+  code += "    else\n";
+  code += "      -- Non-byte-aligned: bit-by-bit extraction\n";
+  code += "      for bit = 0, length - 1 do\n";
+  code += "        local bitPos = startBit + bit\n";
+  code += "        local byteIdx = bitPos // 8 + 1\n";
+  code += "        local bitIdx = 7 - (bitPos % 8)\n";
+  code += "        if byteIdx <= #data then\n";
+  code += "          value = (value << 1) | ((data[byteIdx] >> bitIdx) & 1)\n";
+  code += "        end\n";
+  code += "      end\n";
+  code += "    end\n";
+  code += "  else\n";
+  code += "    -- Intel (little-endian)\n";
+  code += "    local startByte = startBit // 8\n";
+  code += "    local startBitInByte = startBit % 8\n";
+  code += "    local bitsRead = 0\n\n";
+  code += "    local i = startByte\n";
+  code += "    while i + 1 <= #data and bitsRead < length do\n";
+  code += "      local bitsInThisByte\n";
+  code += "      if i == startByte then\n";
+  code += "        bitsInThisByte = math.min(8 - startBitInByte, length - bitsRead)\n";
+  code += "      else\n";
+  code += "        bitsInThisByte = math.min(8, length - bitsRead)\n";
+  code += "      end\n";
+  code += "      local shift = (i == startByte) and startBitInByte or 0\n";
+  code += "      local mask = ((1 << bitsInThisByte) - 1) << shift\n";
+  code += "      local bits = (data[i + 1] & mask) >> shift\n";
+  code += "      value = value | (bits << bitsRead)\n";
+  code += "      bitsRead = bitsRead + bitsInThisByte\n";
+  code += "      i = i + 1\n";
+  code += "    end\n";
+  code += "  end\n\n";
+  code += "  -- Apply signed conversion\n";
+  code += "  if isSigned and (value & (1 << (length - 1))) ~= 0 then\n";
+  code += "    value = value - (1 << length)\n";
+  code += "  end\n\n";
+  code += "  return value\n";
+  code += "end\n\n";
   // clang-format on
 
-  int datasetIndex = 0;
-  for (const auto& message : messages) {
-    if (message.signalDescriptions().isEmpty())
-      continue;
-
-    const auto msgId = static_cast<quint32>(message.uniqueId());
-    code += QString("    case 0x%1:\n").arg(QString::number(msgId, 16).toUpper());
-    code += QString("      decode_%1(data);\n").arg(QString::number(msgId, 16));
-    code += "      break;\n";
-  }
-
-  code += "  }\n\n";
-  code += "  return values;\n";
-  code += "}\n\n";
-
-  datasetIndex = 1;
+  // Emit per-message decoder functions
+  int datasetIndex = 1;
   for (const auto& message : messages) {
     if (message.signalDescriptions().isEmpty())
       continue;
@@ -521,75 +527,44 @@ QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescr
     code += "\n";
   }
 
+  // Emit main parse function with CAN ID routing
   // clang-format off
-  code += "/**\n";
-  code += " * Extracts a signal from CAN data with arbitrary bit positioning.\n";
-  code += " *\n";
-  code += " * Supports:\n";
-  code += " * - Intel (little-endian) and Motorola (big-endian) byte order\n";
-  code += " * - Signed and unsigned integers\n";
-  code += " * - Signals spanning multiple bytes\n";
-  code += " * - Non-byte-aligned signals\n";
-  code += " *\n";
-  code += " * NOTE: For best compatibility, use byte-aligned signals:\n";
-  code += " *   - Start bits: 0, 8, 16, 24, 32, 40, 48, 56\n";
-  code += " *   - Lengths: 8, 16, 32 bits\n";
-  code += " *\n";
-  code += " * Non-byte-aligned Motorola signals depend on Qt's bit position\n";
-  code += " * normalization and may require validation against other tools.\n";
-  code += " *\n";
-  code += " * @param {Uint8Array} data - CAN message data payload\n";
-  code += " * @param {number} startBit - Signal start bit position\n";
-  code += " * @param {number} length - Signal length in bits\n";
-  code += " * @param {boolean} isBigEndian - true for Motorola, false for Intel\n";
-  code += " * @param {boolean} isSigned - true for signed integer\n";
-  code += " * @returns {number} Extracted raw signal value\n";
-  code += " */\n";
-  code += "function extractSignal(data, startBit, length, isBigEndian, isSigned) {\n";
-  code += "  let value = 0;\n\n";
-  code += "  // Implementation note: Qt's QCanDbcFileParser provides bit positions.\n";
-  code += "  // For byte-aligned signals, this works correctly for both byte orders.\n";
-  code += "  // Non-byte-aligned Motorola signals assume Qt normalizes bit positions.\n\n";
-  code += "  if (isBigEndian) {\n";
-  code += "    // Motorola (big-endian): Read bytes in big-endian order\n";
-  code += "    const startByte = Math.floor(startBit / 8);\n";
-  code += "    const numBytes = Math.ceil(length / 8);\n\n";
-  code += "    // For byte-aligned signals, read bytes directly\n";
-  code += "    if (startBit % 8 === 0 && length % 8 === 0) {\n";
-  code += "      for (let i = 0; i < numBytes && (startByte + i) < data.length; i++) {\n";
-  code += "        value = (value << 8) | data[startByte + i];\n";
-  code += "      }\n";
-  code += "    } else {\n";
-  code += "      // Non-byte-aligned: bit-by-bit extraction\n";
-  code += "      for (let bit = 0; bit < length; bit++) {\n";
-  code += "        const bitPos = startBit + bit;\n";
-  code += "        const byteIdx = Math.floor(bitPos / 8);\n";
-  code += "        const bitIdx = 7 - (bitPos % 8);\n";
-  code += "        if (byteIdx < data.length) {\n";
-  code += "          const bitVal = (data[byteIdx] >> bitIdx) & 1;\n";
-  code += "          value = (value << 1) | bitVal;\n";
-  code += "        }\n";
-  code += "      }\n";
-  code += "    }\n";
-  code += "  } else {\n";
-  code += "    const startByte = Math.floor(startBit / 8);\n";
-  code += "    const startBitInByte = startBit % 8;\n";
-  code += "    let bitsRead = 0;\n\n";
-  code += "    for (let i = startByte; i < data.length && bitsRead < length; i++) {\n";
-  code += "      const bitsInThisByte = Math.min(8 - (i === startByte ? startBitInByte : 0), length - bitsRead);\n";
-  code += "      const shift = (i === startByte) ? startBitInByte : 0;\n";
-  code += "      const mask = ((1 << bitsInThisByte) - 1) << shift;\n";
-  code += "      const bits = (data[i] & mask) >> shift;\n";
-  code += "      value |= bits << bitsRead;\n";
-  code += "      bitsRead += bitsInThisByte;\n";
-  code += "    }\n";
-  code += "  }\n\n";
-  code += "  if (isSigned && (value & (1 << (length - 1)))) {\n";
-  code += "    value -= (1 << length);\n";
-  code += "  }\n\n";
-  code += "  return value;\n";
-  code += "}\n";
+  code += "function parse(frame)\n";
+  code += "  if #frame < 3 then return values end\n\n";
+  code += "  local canId = (frame[1] << 8) | frame[2]\n";
+  code += "  local dlc = frame[3]\n\n";
+  code += "  -- Extract data payload (1-indexed)\n";
+  code += "  local data = {}\n";
+  code += "  for i = 1, dlc do\n";
+  code += "    if 3 + i <= #frame then data[i] = frame[3 + i] end\n";
+  code += "  end\n\n";
   // clang-format on
+
+  code += "  -- Route CAN ID to the matching message decoder\n";
+  bool first = true;
+  for (const auto& message : messages) {
+    if (message.signalDescriptions().isEmpty())
+      continue;
+
+    const auto msgId = static_cast<quint32>(message.uniqueId());
+    const auto hex   = QString::number(msgId, 16).toUpper();
+
+    if (first) {
+      code += QString("  if canId == 0x%1 then\n").arg(hex);
+      first = false;
+    } else {
+      code += QString("  elseif canId == 0x%1 then\n").arg(hex);
+    }
+
+    code += QString("    -- %1\n").arg(message.name());
+    code += QString("    decode_%1(data)\n").arg(QString::number(msgId, 16));
+  }
+
+  if (!first)
+    code += "  end\n\n";
+
+  code += "  return values\n";
+  code += "end\n";
 
   return code;
 }
@@ -614,42 +589,50 @@ QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescr
 QString DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescription& message,
                                                        int& datasetIndex)
 {
-  // Build JSDoc header and extraction code for each signal
   QString code;
   const auto msgId      = static_cast<quint32>(message.uniqueId());
   const auto signalList = message.signalDescriptions();
   const auto startIndex = datasetIndex;
 
-  code += "/**\n";
-  code += QString(" * Decodes CAN message: %1 (ID: 0x%2)\n")
+  code += "--\n";
+  code += QString("-- Decodes CAN message: %1 (ID: 0x%2)\n")
             .arg(message.name())
             .arg(QString::number(msgId, 16).toUpper());
-  code += " *\n";
-  code += QString(" * Signals (%1):\n").arg(signalList.count());
+  code += "--\n";
+  code += QString("-- Signals (%1):\n").arg(signalList.count());
 
   int idx = startIndex;
   for (const auto& signal : signalList) {
-    code += QString(" *   [%1] %2 (%3)\n")
+    code += QString("--   [%1] %2 (%3)\n")
               .arg(idx)
               .arg(signal.name())
               .arg(signal.physicalUnit().isEmpty() ? "no unit" : signal.physicalUnit());
     ++idx;
   }
 
-  code += " *\n";
-  code += " * @param {Uint8Array} data - CAN message data payload\n";
-  code += " */\n";
-  code += QString("function decode_%1(data) {\n").arg(QString::number(msgId, 16));
+  code += "--\n";
+  code += QString("local function decode_%1(data)\n").arg(QString::number(msgId, 16));
 
+  bool firstSignal = true;
   for (const auto& signal : signalList) {
+    if (!firstSignal)
+      code += "\n";
+    firstSignal = false;
+
+    const auto unit = signal.physicalUnit();
+    if (unit.isEmpty())
+      code += QString("  -- %1\n").arg(signal.name());
+    else
+      code += QString("  -- %1 [%2]\n").arg(signal.name(), unit);
+
     code += generateSignalExtraction(signal);
-    code += QString("  values[%1] = value_%2;\n")
-              .arg(datasetIndex - 1)
+    code += QString("  values[%1] = value_%2\n")
+              .arg(datasetIndex)
               .arg(sanitizeJavaScriptString(signal.name()));
     ++datasetIndex;
   }
 
-  code += "}\n";
+  code += "end\n";
 
   return code;
 }
@@ -678,20 +661,20 @@ QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescrip
   // clang-format off
   QString code;
 
-  // Qt's DBC parser reports byte order inverted, so we flip it here
+  // Qt's DBC parser inverts byte order, flip it back
   const auto isBigEndian = (signal.dataEndian() == QSysInfo::LittleEndian);
   const auto isSigned = (signal.dataFormat() == QtCanBus::DataFormat::SignedInteger);
   // clang-format on
 
   // clang-format off
-  code += QString("  const raw_%1 = extractSignal(data, %2, %3, %4, %5);\n")
+  code += QString("  local raw_%1 = extractSignal(data, %2, %3, %4, %5)\n")
               .arg(sanitizeJavaScriptString(signal.name()))
               .arg(signal.startBit())
               .arg(signal.bitLength())
               .arg(isBigEndian ? "true" : "false")
               .arg(isSigned ? "true" : "false");
 
-  code += QString("  const value_%1 = (raw_%2 * %3) + %4;\n")
+  code += QString("  local value_%1 = (raw_%2 * %3) + %4\n")
               .arg(sanitizeJavaScriptString(signal.name()))
               .arg(sanitizeJavaScriptString(signal.name()))
               .arg(signal.factor(), 0, 'g', 10)
@@ -733,7 +716,6 @@ QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescrip
  */
 QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& message)
 {
-  // Check for trivial cases: single signal or all booleans
   const auto signalDescriptions = message.signalDescriptions();
   const auto signalCount        = signalDescriptions.count();
 
@@ -876,10 +858,10 @@ QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString& str)
  */
 QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescription& signal)
 {
-  // Classify signal by name and unit to select an appropriate widget
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();
 
+  // Skip counters and status fields
   if (name.contains("odometer") || name.contains("trip") || name.contains("counter")
       || name.contains("timestamp") || name.contains("status"))
     return QString("");
@@ -919,7 +901,6 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
  */
 int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription>& messages) const
 {
-  // Sum signal counts across all messages
   int count = 0;
   for (const auto& message : messages)
     count += message.signalDescriptions().count();
@@ -941,7 +922,6 @@ int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription
 bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
                                                   const QStringList& positions) const
 {
-  // Count signals whose names contain any of the position identifiers
   int matchCount = 0;
   for (const auto& signal : signalList) {
     const auto name = signal.name().toLower();
@@ -968,7 +948,6 @@ bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescript
 bool DataModel::DBCImporter::hasNumberedPattern(
   const QList<QCanSignalDescription>& signalList) const
 {
-  // Need at least two signals to form a numbered pattern
   if (signalList.count() < 2)
     return false;
 
@@ -995,7 +974,6 @@ bool DataModel::DBCImporter::hasNumberedPattern(
  */
 bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>& signalList) const
 {
-  // Collect distinct non-empty units and check for uniformity
   if (signalList.isEmpty())
     return false;
 
@@ -1021,7 +999,6 @@ bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>&
  */
 bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription>& signalList) const
 {
-  // Look for voltage, current, and state-of-charge signal combinations
   if (signalList.count() < 2)
     return false;
 
@@ -1055,7 +1032,6 @@ bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription
  */
 bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>& signalList) const
 {
-  // Check that every multi-bit signal has a status-related name
   for (const auto& signal : signalList) {
     if (signal.bitLength() > 1) {
       const auto name = signal.name().toLower();
@@ -1079,7 +1055,6 @@ bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>
  */
 int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& signalList) const
 {
-  // Count multi-bit signals that are not counters or status fields
   int count = 0;
   for (const auto& signal : signalList) {
     if (signal.bitLength() <= 1)
@@ -1109,7 +1084,6 @@ int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& s
 DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
   const QList<QCanSignalDescription>& signalList) const
 {
-  // Try each pattern detector in priority order
   if (signalList.isEmpty())
     return None;
 
@@ -1158,7 +1132,6 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
  */
 bool DataModel::DBCImporter::isCriticalSignal(const QCanSignalDescription& signal) const
 {
-  // Match signal name and unit against known critical categories
   const auto name = signal.name().toLower();
   const auto unit = signal.physicalUnit().toLower();
 
@@ -1229,7 +1202,6 @@ bool DataModel::DBCImporter::shouldAssignIndividualWidget(const QString& groupWi
                                                           const QCanSignalDescription& signal,
                                                           bool isSingleBit) const
 {
-  // Boolean signals always get individual LEDs
   if (isSingleBit)
     return true;
 

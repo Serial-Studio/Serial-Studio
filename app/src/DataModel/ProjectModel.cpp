@@ -21,6 +21,7 @@
 
 #include "DataModel/ProjectModel.h"
 
+#include <algorithm>
 #include <QDirIterator>
 #include <QFile>
 #include <QFileDialog>
@@ -157,10 +158,11 @@ QString DataModel::ProjectModel::jsonProjectsPath() const
  */
 QStringList DataModel::ProjectModel::xDataSources() const
 {
-  // Build list of available X-axis data sources from all datasets
+  // Start with the implicit "Samples" option
   QStringList list;
   list.append(tr("Samples"));
 
+  // Collect unique datasets sorted by frame index
   QMap<int, QString> datasets;
   for (const auto& group : m_groups) {
     for (const auto& dataset : group.datasets) {
@@ -170,6 +172,7 @@ QStringList DataModel::ProjectModel::xDataSources() const
     }
   }
 
+  // Append dataset labels in index order
   for (auto it = datasets.cbegin(); it != datasets.cend(); ++it)
     list.append(it.value());
 
@@ -220,6 +223,36 @@ QString DataModel::ProjectModel::frameParserCode() const
     return QString();
 
   return m_sources[0].frameParserCode;
+}
+
+/**
+ * @brief Returns the scripting language for the global frame parser (source 0).
+ *
+ * @return SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ */
+int DataModel::ProjectModel::frameParserLanguage() const
+{
+  if (m_sources.empty())
+    return 0;
+
+  return m_sources[0].frameParserLanguage;
+}
+
+/**
+ * @brief Returns the scripting language for @p sourceId.
+ *
+ * Falls back to source 0's language if the requested source does not exist.
+ *
+ * @param sourceId Source identifier.
+ * @return SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ */
+int DataModel::ProjectModel::frameParserLanguage(int sourceId) const
+{
+  for (const auto& src : m_sources)
+    if (src.sourceId == sourceId)
+      return src.frameParserLanguage;
+
+  return frameParserLanguage();
 }
 
 /**
@@ -296,7 +329,6 @@ int DataModel::ProjectModel::groupCount() const noexcept
  */
 int DataModel::ProjectModel::datasetCount() const
 {
-  // Sum datasets across all groups
   int count = 0;
   for (const auto& group : m_groups)
     count += static_cast<int>(group.datasets.size());
@@ -382,19 +414,21 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
                                                 const QVariant& value)
 {
-  // Abort if no project file is loaded
+  // No project file loaded, nothing to persist
   if (m_filePath.isEmpty())
     return;
 
-  // Update in-memory settings and write to disk
+  // Skip if the value hasn't changed
   auto obj            = m_widgetSettings.value(widgetId).toObject();
   const auto newValue = QJsonValue::fromVariant(value);
   if (obj.value(key) == newValue)
     return;
 
+  // Update in-memory store
   obj.insert(key, newValue);
   m_widgetSettings.insert(widgetId, obj);
 
+  // Flush to disk
   QFile file(m_filePath);
   if (!file.open(QFile::WriteOnly))
     return;
@@ -416,16 +450,16 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
  */
 void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
 {
-  // Abort if no project file is loaded
+  // No project file loaded, nothing to persist
   if (m_filePath.isEmpty())
     return;
 
-  // Check for changes before scheduling a debounced write
+  // Skip if the state hasn't changed
   const auto key = QStringLiteral("plugin:") + pluginId;
   if (m_widgetSettings.value(key).toObject() == state)
     return;
 
-  // Update in-memory state immediately, debounce disk write
+  // Update in-memory store and schedule debounced disk write
   m_widgetSettings.insert(key, state);
   m_pluginSaveTimer.start();
 }
@@ -438,7 +472,7 @@ void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJs
  */
 void DataModel::ProjectModel::addSource()
 {
-  // GPL builds only allow a single data source
+  // Enforce single-source limit in GPL builds
 #ifndef BUILD_COMMERCIAL
   if (!m_sources.empty()) {
     if (!m_suppressMessageBoxes)
@@ -452,6 +486,7 @@ void DataModel::ProjectModel::addSource()
   }
 #endif
 
+  // Build a new source with defaults inherited from the project
   const int newId = static_cast<int>(m_sources.size());
 
   DataModel::Source source;
@@ -464,8 +499,10 @@ void DataModel::ProjectModel::addSource()
   source.frameDetection        = static_cast<int>(m_frameDetection);
   source.decoderMethod         = static_cast<int>(m_frameDecoder);
   source.hexadecimalDelimiters = m_hexadecimalDelimiters;
-  source.frameParserCode       = FrameParser::defaultTemplateCode();
+  source.frameParserLanguage   = static_cast<int>(SerialStudio::Lua);
+  source.frameParserCode       = FrameParser::defaultTemplateCode(SerialStudio::Lua);
 
+  // Append and notify
   m_sources.push_back(source);
   setModified(true);
   Q_EMIT sourcesChanged();
@@ -487,17 +524,21 @@ void DataModel::ProjectModel::deleteSource(int sourceId)
   (void)sourceId;
   return;
 #else
+  // Cannot delete the default source (id 0)
   if (sourceId <= 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
+  // Remove the source entry
   m_sources.erase(m_sources.begin() + sourceId);
 
+  // Reassign groups that referenced the deleted source
   for (auto& group : m_groups)
     if (group.sourceId == sourceId)
       group.sourceId = 0;
     else if (group.sourceId > sourceId)
       --group.sourceId;
 
+  // Renumber remaining source IDs
   for (size_t i = 0; i < m_sources.size(); ++i)
     m_sources[i].sourceId = static_cast<int>(i);
 
@@ -522,6 +563,7 @@ void DataModel::ProjectModel::duplicateSource(int sourceId)
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
+  // Clone the source, reset connection settings for the new copy
   DataModel::Source copy  = m_sources[sourceId];
   copy.sourceId           = static_cast<int>(m_sources.size());
   copy.title              = copy.title + tr(" (Copy)");
@@ -545,9 +587,11 @@ void DataModel::ProjectModel::updateSource(int sourceId, const DataModel::Source
   if (sourceId < 0 || sourceId >= static_cast<int>(m_sources.size()))
     return;
 
+  // Replace the source data, preserving the canonical ID
   m_sources[sourceId]          = source;
   m_sources[sourceId].sourceId = sourceId;
 
+  // Source 0 drives the project-level frame detection settings
   if (sourceId == 0) {
     m_frameStartSequence    = source.frameStart;
     m_frameEndSequence      = source.frameEnd;
@@ -606,6 +650,10 @@ void DataModel::ProjectModel::updateSourceFrameParser(int sourceId, const QStrin
   m_sources[sourceId].frameParserCode = code;
   DataModel::FrameParser::instance().setSourceCode(sourceId, code);
   setModified(true);
+
+  // Targeted per-source notification so JsCodeEditor instances can refresh
+  // without reacting to unrelated sources-changed storms
+  Q_EMIT sourceFrameParserCodeChanged(sourceId);
 }
 
 /**
@@ -755,6 +803,7 @@ bool DataModel::ProjectModel::askSave()
     return true;
   }
 
+  // Ask the user whether to save, discard, or cancel
   auto ret =
     Misc::Utilities::showMessageBox(tr("Do you want to save your changes?"),
                                     tr("You have unsaved modifications in this project!"),
@@ -793,7 +842,7 @@ bool DataModel::ProjectModel::askSave()
  */
 bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 {
-  // Validate required project fields before saving
+  // Title is required
   if (m_title.isEmpty()) {
     if (m_suppressMessageBoxes)
       qWarning() << "[ProjectModel] Project title cannot be empty";
@@ -804,6 +853,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
     return false;
   }
 
+  // At least one group is required
   if (groupCount() <= 0) {
     if (m_suppressMessageBoxes)
       qWarning() << "[ProjectModel] Project needs at least one group";
@@ -814,6 +864,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
     return false;
   }
 
+  // At least one dataset is required (image groups are exempt)
   const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
     return g.widget == QLatin1String("image");
   });
@@ -828,6 +879,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
     return false;
   }
 
+  // Prompt for a save location if no file path is set
   if (jsonFilePath().isEmpty() || askPath) {
     auto* dialog = new QFileDialog(nullptr,
                                    tr("Save Serial Studio Project"),
@@ -871,6 +923,7 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
   if (path.isEmpty())
     return false;
 
+  // Validate required project fields
   if (m_title.isEmpty()) {
     qWarning() << "[ProjectModel] Project title cannot be empty";
     return false;
@@ -890,6 +943,7 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
     return false;
   }
 
+  // Write directly to the specified path
   m_filePath = path;
   return finalizeProjectSave();
 }
@@ -903,32 +957,34 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
  */
 QJsonObject DataModel::ProjectModel::serializeToJson() const
 {
-  // Build the root JSON object with project metadata
+  // Project metadata
   QJsonObject json;
-
   json.insert("title", m_title);
   json.insert("pointCount", m_pointCount);
   json.insert("hexadecimalDelimiters", m_hexadecimalDelimiters);
 
+  // Groups
   QJsonArray groupArray;
   for (const auto& group : std::as_const(m_groups))
     groupArray.append(DataModel::serialize(group));
 
   json.insert("groups", groupArray);
 
+  // Actions
   QJsonArray actionsArray;
   for (const auto& action : std::as_const(m_actions))
     actionsArray.append(DataModel::serialize(action));
 
   json.insert("actions", actionsArray);
 
+  // Data sources
   QJsonArray sourcesArray;
   for (const auto& source : std::as_const(m_sources))
     sourcesArray.append(DataModel::serialize(source));
 
   json.insert(Keys::Sources, sourcesArray);
 
-  // Serialize user-defined workspaces
+  // User-defined workspaces
   if (!m_workspaces.empty()) {
     QJsonArray workspacesArray;
     for (const auto& ws : std::as_const(m_workspaces))
@@ -937,7 +993,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
     json.insert(Keys::Workspaces, workspacesArray);
   }
 
-  // Serialize hidden auto-generated group IDs
+  // Hidden auto-generated group IDs
   if (!m_hiddenGroupIds.isEmpty()) {
     QJsonArray hiddenArray;
     for (const int id : std::as_const(m_hiddenGroupIds))
@@ -985,10 +1041,7 @@ void DataModel::ProjectModel::setupExternalConnections()
     Q_EMIT pointCountChanged();
   });
 
-  // Clear transient workspaces and widget settings on disconnect in
-  // non-project modes (QuickPlot, DeviceSendsJSON). These modes have no
-  // backing file, so workspace data is ephemeral and should not accumulate
-  // across sessions or trigger "save changes?" prompts.
+  // Clear ephemeral workspace data on disconnect in non-project modes
   connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (!IO::ConnectionManager::instance().isConnected())
@@ -1018,6 +1071,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_sources.clear();
   m_workspaces.clear();
 
+  // Reset to factory defaults
   m_frameEndSequence      = "\\n";
   m_checksumAlgorithm     = "";
   m_frameStartSequence    = "$";
@@ -1028,6 +1082,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_frameDetection        = SerialStudio::EndDelimiterOnly;
   m_widgetSettings        = QJsonObject();
 
+  // Create the default data source (source 0)
   DataModel::Source defaultSource;
   defaultSource.sourceId              = 0;
   defaultSource.title                 = tr("Device A");
@@ -1038,9 +1093,11 @@ void DataModel::ProjectModel::newJsonFile()
   defaultSource.frameDetection        = static_cast<int>(m_frameDetection);
   defaultSource.decoderMethod         = static_cast<int>(m_frameDecoder);
   defaultSource.hexadecimalDelimiters = m_hexadecimalDelimiters;
-  defaultSource.frameParserCode       = FrameParser::defaultTemplateCode();
+  defaultSource.frameParserLanguage   = static_cast<int>(SerialStudio::Lua);
+  defaultSource.frameParserCode       = FrameParser::defaultTemplateCode(SerialStudio::Lua);
   m_sources.push_back(defaultSource);
 
+  // Clear file path and notify all listeners
   m_filePath = "";
 
   Q_EMIT groupsChanged();
@@ -1216,13 +1273,14 @@ void DataModel::ProjectModel::openJsonFile()
  */
 bool DataModel::ProjectModel::openJsonFile(const QString& path)
 {
-  // Validate path and check for redundant reload
+  // Validate path and skip redundant reloads
   if (path.isEmpty())
     return false;
 
   if (m_filePath == path && !m_groups.empty())
     return true;
 
+  // Read and validate the JSON file
   QFile file(path);
   QJsonDocument document;
   if (file.open(QFile::ReadOnly)) {
@@ -1244,15 +1302,14 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   if (document.isEmpty())
     return false;
 
-  // During a silent reload, reset state without emitting signals so the
-  // Clear internal data without emitting intermediate signals, so the
-  // dashboard doesn't briefly flash empty while we repopulate from disk.
+  // Clear internal data without emitting intermediate signals
   m_groups.clear();
   m_actions.clear();
   m_sources.clear();
   m_workspaces.clear();
   m_widgetSettings = QJsonObject();
 
+  // Read project metadata
   m_filePath = path;
 
   auto json                      = document.object();
@@ -1269,6 +1326,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   if (!json.contains("frameDetection"))
     m_frameDetection = SerialStudio::StartAndEndDelimiter;
 
+  // Deserialize groups
   auto groups = json.value("groups").toArray();
   for (int g = 0; g < groups.count(); ++g) {
     DataModel::Group group;
@@ -1277,6 +1335,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       m_groups.push_back(group);
   }
 
+  // Deserialize actions
   auto actions = json.value("actions").toArray();
   for (int a = 0; a < actions.count(); ++a) {
     DataModel::Action action;
@@ -1285,6 +1344,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       m_actions.push_back(action);
   }
 
+  // Deserialize data sources
   m_sources.clear();
   if (json.contains(Keys::Sources)) {
     auto sourcesArr = json.value(Keys::Sources).toArray();
@@ -1295,6 +1355,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     }
   }
 
+  // Create a default source if none were loaded (legacy or empty file)
   const bool legacyFormat = !json.contains(Keys::Sources);
 
   if (m_sources.empty()) {
@@ -1312,7 +1373,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     defaultSource.frameParserCode =
       legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
 
-    // Capture current UI driver settings so the migrated source matches the setup panel
+    // Snapshot UI driver settings so the migrated source matches the setup panel
     IO::HAL_Driver* uiDriver = cm.uiDriverForBusType(cm.busType());
     if (uiDriver) {
       QJsonObject settings;
@@ -1332,6 +1393,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       legacyParserCode.isEmpty() ? FrameParser::defaultTemplateCode() : legacyParserCode;
   }
 
+  // Truncate to single source in GPL builds
 #ifndef BUILD_COMMERCIAL
   if (m_sources.size() > 1) {
     m_sources.resize(1);
@@ -1351,9 +1413,10 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   }
 #endif
 
+  // Load widget settings
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
-  // Deserialize user-defined workspaces (backward-compat: missing key = empty)
+  // Deserialize user-defined workspaces
   m_workspaces.clear();
   if (json.contains(Keys::Workspaces)) {
     const auto wsArray = json.value(Keys::Workspaces).toArray();
@@ -1372,7 +1435,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       m_hiddenGroupIds.insert(val.toInt());
   }
 
-  // Read point count from root level (new format) or legacy widgetSettings key
+  // Read point count from root level or legacy widgetSettings key
   m_pointCount = UI::Dashboard::instance().points();
   if (json.contains(Keys::PointCount)) {
     const int pts = json.value(Keys::PointCount).toInt();
@@ -1389,7 +1452,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
     UI::Dashboard::instance().setPoints(m_pointCount);
 
-  // Migrate legacy "__layout__:N__" keys to "layout:N"
+  // Migrate legacy layout keys to canonical "layout:N" format
   const auto keys = m_widgetSettings.keys();
   for (const auto& key : keys) {
     bool isOldFormat = key.startsWith(QStringLiteral("__layout__:"));
@@ -1413,6 +1476,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       m_widgetSettings.insert(key, cleaned);
   }
 
+  // Migrate legacy dashboardLayout/activeGroupId into widgetSettings
   if (json.contains(QStringLiteral("dashboardLayout"))) {
     const int legacy_group_id = json.value(QStringLiteral("activeGroupId")).toInt(-1);
     const auto layout         = json.value(QStringLiteral("dashboardLayout")).toObject();
@@ -1425,6 +1489,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
 
   setModified(false);
 
+  // Migrate legacy "separator" field into the frame parser function
   if (json.contains("separator")) {
     const auto separator = json.value("separator").toString();
     static QRegularExpression legacyRegex(
@@ -1456,6 +1521,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     }
   }
 
+  // Notify all listeners that the project has been fully loaded
   Q_EMIT groupsChanged();
   Q_EMIT actionsChanged();
   Q_EMIT sourcesChanged();
@@ -1474,6 +1540,7 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   if (!m_widgetSettings.isEmpty())
     Q_EMIT widgetSettingsChanged();
 
+  // Auto-save migration from legacy single-source format
   if (legacyFormat) {
     qInfo() << "[ProjectModel] Migrating legacy project to multi-source format, saving...";
     QFile f(m_filePath);
@@ -1625,7 +1692,7 @@ void DataModel::ProjectModel::updateAction(const int actionId,
  */
 void DataModel::ProjectModel::deleteCurrentGroup()
 {
-  // Confirm deletion with the user unless in API mode
+  // Confirm deletion with the user
   if (!m_suppressMessageBoxes) {
     const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete group \"%1\"?").arg(m_selectedGroup.title),
@@ -1638,12 +1705,14 @@ void DataModel::ProjectModel::deleteCurrentGroup()
       return;
   }
 
+  // Validate and erase the group
   const auto gid = m_selectedGroup.groupId;
   if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
     return;
 
   m_groups.erase(m_groups.begin() + gid);
 
+  // Renumber group and dataset IDs to stay contiguous
   int id = 0;
   for (auto g = m_groups.begin(); g != m_groups.end(); ++g, ++id) {
     g->groupId = id;
@@ -1661,7 +1730,7 @@ void DataModel::ProjectModel::deleteCurrentGroup()
  */
 void DataModel::ProjectModel::deleteCurrentAction()
 {
-  // Confirm deletion with the user unless in API mode
+  // Confirm deletion with the user
   if (!m_suppressMessageBoxes) {
     const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete action \"%1\"?").arg(m_selectedAction.title),
@@ -1674,12 +1743,14 @@ void DataModel::ProjectModel::deleteCurrentAction()
       return;
   }
 
+  // Validate and erase the action
   const auto aid = m_selectedAction.actionId;
   if (aid < 0 || static_cast<size_t>(aid) >= m_actions.size())
     return;
 
   m_actions.erase(m_actions.begin() + aid);
 
+  // Renumber remaining action IDs
   int id = 0;
   for (auto a = m_actions.begin(); a != m_actions.end(); ++a, ++id)
     a->actionId = id;
@@ -1697,7 +1768,7 @@ void DataModel::ProjectModel::deleteCurrentAction()
  */
 void DataModel::ProjectModel::deleteCurrentDataset()
 {
-  // Confirm deletion with the user unless in API mode
+  // Confirm deletion with the user
   if (!m_suppressMessageBoxes) {
     const auto ret = Misc::Utilities::showMessageBox(
       tr("Do you want to delete dataset \"%1\"?").arg(m_selectedDataset.title),
@@ -1710,6 +1781,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
       return;
   }
 
+  // Validate group and dataset indices
   const auto groupId   = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;
 
@@ -1719,8 +1791,10 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   if (datasetId < 0 || static_cast<size_t>(datasetId) >= m_groups[groupId].datasets.size())
     return;
 
+  // Erase the dataset
   m_groups[groupId].datasets.erase(m_groups[groupId].datasets.begin() + datasetId);
 
+  // If the group is now empty, remove it and renumber all groups
   if (m_groups[groupId].datasets.empty()) {
     m_groups.erase(m_groups.begin() + groupId);
 
@@ -1737,6 +1811,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
     return;
   }
 
+  // Renumber remaining dataset IDs within the group
   int id     = 0;
   auto begin = m_groups[groupId].datasets.begin();
   auto end   = m_groups[groupId].datasets.end();
@@ -1753,7 +1828,7 @@ void DataModel::ProjectModel::deleteCurrentDataset()
  */
 void DataModel::ProjectModel::duplicateCurrentGroup()
 {
-  // Create a copy of the selected group with a new ID
+  // Build the cloned group with reassigned dataset indices
   DataModel::Group group;
   group.groupId = m_groups.size();
   group.widget  = m_selectedGroup.widget;
@@ -1778,7 +1853,6 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
  */
 void DataModel::ProjectModel::duplicateCurrentAction()
 {
-  // Create a copy of the selected action with a new ID
   DataModel::Action action;
   action.actionId             = m_actions.size();
   action.icon                 = m_selectedAction.icon;
@@ -1952,6 +2026,7 @@ void DataModel::ProjectModel::deleteCurrentOutputWidget()
       return;
   }
 
+  // Validate indices
   const auto gid = m_selectedOutputWidget.groupId;
   const auto wid = m_selectedOutputWidget.widgetId;
 
@@ -1962,13 +2037,13 @@ void DataModel::ProjectModel::deleteCurrentOutputWidget()
   if (wid < 0 || static_cast<size_t>(wid) >= widgets.size())
     return;
 
+  // Erase the widget
   widgets.erase(widgets.begin() + wid);
 
-  // If group is now empty, delete the group too
+  // If group is now empty, remove the group and renumber
   if (widgets.empty()) {
     m_groups.erase(m_groups.begin() + gid);
 
-    // Renumber group IDs
     for (int i = 0; i < static_cast<int>(m_groups.size()); ++i)
       m_groups[i].groupId = i;
 
@@ -1978,7 +2053,7 @@ void DataModel::ProjectModel::deleteCurrentOutputWidget()
     return;
   }
 
-  // Renumber widget IDs
+  // Renumber remaining widget IDs
   for (int i = 0; i < static_cast<int>(widgets.size()); ++i)
     widgets[i].widgetId = i;
 
@@ -2066,6 +2141,7 @@ void DataModel::ProjectModel::duplicateCurrentDataset()
  */
 void DataModel::ProjectModel::ensureValidGroup()
 {
+  // A compatible group accepts user-added datasets
   const auto isValidGroup = [](const DataModel::Group& g) -> bool {
     if (g.groupType == DataModel::GroupType::Output)
       return false;
@@ -2080,6 +2156,7 @@ void DataModel::ProjectModel::ensureValidGroup()
     }
   };
 
+  // Use the current selection if it's already compatible
   const auto selId      = m_selectedGroup.groupId;
   const bool selInRange = selId >= 0 && static_cast<size_t>(selId) < m_groups.size();
 
@@ -2088,6 +2165,7 @@ void DataModel::ProjectModel::ensureValidGroup()
     return;
   }
 
+  // Fall back to the first compatible group
   for (const auto& group : std::as_const(m_groups)) {
     if (!isValidGroup(group))
       continue;
@@ -2096,6 +2174,7 @@ void DataModel::ProjectModel::ensureValidGroup()
     return;
   }
 
+  // No compatible group exists, create one
   addGroup(tr("Group"), SerialStudio::NoGroupWidget);
   m_selectedGroup = m_groups.back();
 }
@@ -2112,6 +2191,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
 {
   ensureValidGroup();
 
+  // Initialize dataset with type-specific defaults
   const auto groupId = m_selectedGroup.groupId;
   DataModel::Dataset dataset;
   dataset.groupId = groupId;
@@ -2153,6 +2233,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
       break;
   }
 
+  // Generate a unique title within the group
   int count        = 1;
   QString newTitle = title;
   for (const auto& d : std::as_const(m_groups[groupId].datasets)) {
@@ -2178,6 +2259,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
       break;
   }
 
+  // Assign the title and the next available frame index
   dataset.title     = newTitle;
   dataset.index     = nextDatasetIndex();
   dataset.datasetId = m_groups[groupId].datasets.size();
@@ -2200,6 +2282,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
 void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOption option,
                                                   const bool checked)
 {
+  // Update the option flag on the cached dataset
   switch (option) {
     case SerialStudio::DatasetPlot:
       m_selectedDataset.plt = checked;
@@ -2223,6 +2306,7 @@ void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOpt
       break;
   }
 
+  // Write the updated dataset back into the group
   const auto groupId   = m_selectedDataset.groupId;
   const auto datasetId = m_selectedDataset.datasetId;
 
@@ -2243,6 +2327,7 @@ void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOpt
  */
 void DataModel::ProjectModel::addAction()
 {
+  // Generate a unique title
   int count     = 1;
   QString title = tr("New Action");
   for (const auto& action : std::as_const(m_actions)) {
@@ -2290,6 +2375,7 @@ void DataModel::ProjectModel::addAction()
  */
 void DataModel::ProjectModel::addGroup(const QString& title, const SerialStudio::GroupWidget widget)
 {
+  // Generate a unique title
   int count        = 1;
   QString newTitle = title;
   for (const auto& group : std::as_const(m_groups)) {
@@ -2315,6 +2401,7 @@ void DataModel::ProjectModel::addGroup(const QString& title, const SerialStudio:
       break;
   }
 
+  // Create the group and assign its widget type
   DataModel::Group group;
   group.title   = newTitle;
   group.groupId = m_groups.size();
@@ -2348,6 +2435,7 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
   auto& grp          = m_groups[group];
   const auto groupId = grp.groupId;
 
+  // Handle existing datasets: compatible types keep them, others require confirmation
   if (!grp.datasets.empty()) {
     if ((widget == SerialStudio::DataGrid || widget == SerialStudio::MultiPlot
          || widget == SerialStudio::NoGroupWidget)
@@ -2369,6 +2457,7 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
     }
   }
 
+  // Assign the widget string and populate canonical datasets for fixed-layout types
   if (widget == SerialStudio::NoGroupWidget)
     grp.widget = "";
 
@@ -2602,6 +2691,67 @@ void DataModel::ProjectModel::setFrameParserCode(const QString& code)
   m_sources[0].frameParserCode = code;
   setModified(true);
   Q_EMIT frameParserCodeChanged();
+  Q_EMIT sourceFrameParserCodeChanged(0);
+}
+
+/**
+ * @brief Sets the scripting language for the global frame parser (source 0).
+ *
+ * Preserved as the Q_PROPERTY writer for the source-0 binding used by the
+ * top-level FrameParserView QML. Multi-source callers should use
+ * @c updateSourceFrameParserLanguage instead.
+ *
+ * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ */
+void DataModel::ProjectModel::setFrameParserLanguage(int language)
+{
+  if (m_sources.empty() || language == m_sources[0].frameParserLanguage)
+    return;
+
+  m_sources[0].frameParserLanguage = language;
+  setModified(true);
+  Q_EMIT frameParserLanguageChanged();
+  Q_EMIT sourceFrameParserLanguageChanged(0);
+}
+
+/**
+ * @brief Sets the scripting language for the source with id @p sourceId.
+ *
+ * Looks up the source by its logical sourceId field (not by vector index),
+ * to stay correct after non-contiguous deletions. Emits the language-changed
+ * and sources-changed notifications on real transitions so the FrameParser
+ * engine map and the QML editor both pick up the new language.
+ *
+ * @param sourceId Source identifier whose language should change.
+ * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ */
+void DataModel::ProjectModel::updateSourceFrameParserLanguage(int sourceId, int language)
+{
+  // Find the source by logical ID
+  auto it =
+    std::find_if(m_sources.begin(), m_sources.end(), [sourceId](const DataModel::Source& src) {
+      return src.sourceId == sourceId;
+    });
+
+  // Unknown source → nothing to do
+  if (it == m_sources.end())
+    return;
+
+  // Skip if the language is already set to the requested value
+  if (it->frameParserLanguage == language)
+    return;
+
+  // Flip the language and notify
+  it->frameParserLanguage = language;
+  setModified(true);
+
+  // Source 0 is also exposed via the legacy Q_PROPERTY; emit for QML bindings
+  if (sourceId == 0)
+    Q_EMIT frameParserLanguageChanged();
+
+  // Per-source targeted signal so JsCodeEditor instances can filter by their
+  // own sourceId instead of reacting to every unrelated sourcesChanged()
+  Q_EMIT sourceFrameParserLanguageChanged(sourceId);
 }
 
 /**
@@ -2634,16 +2784,18 @@ void DataModel::ProjectModel::storeFrameParserCode(int sourceId, const QString& 
  */
 void DataModel::ProjectModel::setActiveGroupId(const int groupId)
 {
+  // Skip if unchanged
   const int current = m_widgetSettings.value(Keys::kActiveGroupSubKey).toInt(-1);
   if (current == groupId)
     return;
 
+  // Update in-memory store
   if (groupId >= 0)
     m_widgetSettings.insert(Keys::kActiveGroupSubKey, groupId);
   else
     m_widgetSettings.remove(Keys::kActiveGroupSubKey);
 
-  // Silent disk write — no signals, no reload
+  // Flush to disk without emitting reload signals
   if (!m_filePath.isEmpty()) {
     QFile file(m_filePath);
     if (file.open(QFile::WriteOnly)) {
@@ -2666,10 +2818,12 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
  */
 void DataModel::ProjectModel::setGroupLayout(const int groupId, const QJsonObject& layout)
 {
+  // Update in-memory store
   QJsonObject entry;
   entry[QStringLiteral("data")] = layout;
   m_widgetSettings.insert(Keys::layoutKey(groupId), entry);
 
+  // Flush to disk
   if (m_filePath.isEmpty())
     return;
 
@@ -2754,7 +2908,7 @@ void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
     if (ws.workspaceId != workspaceId)
       continue;
 
-    // Avoid duplicates
+    // Skip if the widget is already in this workspace
     for (const auto& ref : ws.widgetRefs)
       if (ref.widgetType == widgetType && ref.groupId == groupId
           && ref.relativeIndex == relativeIndex)
@@ -2859,10 +3013,12 @@ void DataModel::ProjectModel::writeProjectFile()
  */
 void DataModel::ProjectModel::clearTransientState()
 {
+  // Only clear in non-project modes (no backing file to persist into)
   const auto opMode = AppState::instance().operationMode();
   if (opMode == SerialStudio::ProjectFile)
     return;
 
+  // Discard ephemeral workspace and widget state
   m_hiddenGroupIds.clear();
 
   if (!m_workspaces.empty()) {
@@ -2925,6 +3081,7 @@ QVariantList DataModel::ProjectModel::groupsForDiagram() const
   result.reserve(static_cast<qsizetype>(m_groups.size()));
 
   for (const auto& grp : m_groups) {
+    // Serialize child datasets
     QVariantList datasets;
     datasets.reserve(static_cast<qsizetype>(grp.datasets.size()));
 
@@ -2937,6 +3094,7 @@ QVariantList DataModel::ProjectModel::groupsForDiagram() const
       datasets.append(dsMap);
     }
 
+    // Serialize output widgets
     QVariantMap map;
     map[QStringLiteral("groupId")] = grp.groupId;
     QVariantList outputWidgets;
@@ -2948,6 +3106,7 @@ QVariantList DataModel::ProjectModel::groupsForDiagram() const
       outputWidgets.append(owMap);
     }
 
+    // Assemble the group entry
     map[QStringLiteral("sourceId")]      = grp.sourceId;
     map[QStringLiteral("title")]         = grp.title;
     map[QStringLiteral("widget")]        = grp.widget;
@@ -2990,6 +3149,7 @@ QVariantList DataModel::ProjectModel::actionsForDiagram() const
  */
 bool DataModel::ProjectModel::finalizeProjectSave()
 {
+  // Open the file for writing
   QFile file(m_filePath);
   if (!file.open(QFile::WriteOnly)) {
     if (m_suppressMessageBoxes)
@@ -3001,10 +3161,12 @@ bool DataModel::ProjectModel::finalizeProjectSave()
     return false;
   }
 
+  // Serialize and write
   const QJsonObject json = serializeToJson();
   file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
   file.close();
 
+  // Switch to project-file mode and notify listeners
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);
   setModified(false);
   Q_EMIT jsonFileChanged();

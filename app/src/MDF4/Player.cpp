@@ -100,8 +100,7 @@ public:
     if (record_id != m_recordId)
       return true;
 
-    // Determine cache key: use timestamp (ns) if time channel is
-    // available, otherwise fall back to the raw sample index
+    // Use timestamp (ns) as cache key when available, else raw sample index
     uint64_t cacheKey = sample;
     if (m_groupTimeChannel) {
       double ts          = 0.0;
@@ -337,19 +336,17 @@ const QString& MDF4::Player::timestamp() const
  */
 void MDF4::Player::play()
 {
-  // Abort if no file is loaded
   if (!isOpen())
     return;
 
-  // Reset to beginning if at the end of the file
+  // Restart from beginning if at the end
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
-  // Update time stamp
+  // Capture start time for real-time synchronization
   m_startTimestamp = m_frameIndex[m_framePos].timestamp;
   m_elapsedTimer.start();
 
-  // Update player state
   m_playing = true;
   Q_EMIT playerStateChanged();
 }
@@ -437,6 +434,7 @@ void MDF4::Player::openFile(const QString& filePath)
 
   closeFile();
 
+  // Open and validate the MDF4 file
   m_reader = std::make_unique<mdf::MdfReader>(filePath.toStdString());
 
   if (!m_reader->IsOk()) {
@@ -455,12 +453,14 @@ void MDF4::Player::openFile(const QString& filePath)
     return;
   }
 
+  // Detect Serial Studio authorship for special handling
   auto* header = m_reader->GetHeader();
   if (header) {
     QString author       = QString::fromStdString(header->Author());
     m_isSerialStudioFile = (author == "Serial Studio");
   }
 
+  // Build the frame index from channel data
   buildFrameIndex();
 
   if (m_frameIndex.empty()) {
@@ -488,11 +488,10 @@ void MDF4::Player::openFile(const QString& filePath)
  */
 void MDF4::Player::closeFile()
 {
-  // Nothing to close if no file is open
   if (!isOpen())
     return;
 
-  // Release all cached data and reset state
+  // Clear all cached data and reset state
   m_framePos = 0;
   m_reader.reset();
   m_filePath.clear();
@@ -585,7 +584,6 @@ void MDF4::Player::previousFrame()
  */
 void MDF4::Player::setProgress(const double progress)
 {
-  // Validate state before seeking
   if (!isOpen())
     return;
 
@@ -739,9 +737,7 @@ void MDF4::Player::buildFrameIndex()
 
   std::vector<mdf::IChannel*> allChannels;
 
-  // Collect per-group time channels for Serial Studio files.
-  // New files have a Master channel in every channel group; old files
-  // have a single Master channel only in the first group.
+  // Collect per-group time channels (new files: per-CG master; old: single master)
   std::map<mdf::IChannelGroup*, mdf::IChannel*> groupTimeChannels;
   int masterChannelCount = 0;
 
@@ -773,8 +769,7 @@ void MDF4::Player::buildFrameIndex()
     }
   }
 
-  // If there is exactly one Master channel, keep the legacy single-
-  // channel path so that old MDF4 files still play correctly
+  // Fall back to legacy single-master path for old MDF4 files
   const bool perGroupTime  = (masterChannelCount > 1);
   uint64_t legacyTimeRecId = 0;
   if (masterChannelCount == 1) {
@@ -786,9 +781,7 @@ void MDF4::Player::buildFrameIndex()
 
   m_channels = allChannels;
 
-  // Attach one observer per channel group, then call ReadData once
-  // per data group. This avoids reading the same data group multiple
-  // times (which would duplicate records across observers).
+  // Attach one observer per CG and read once per DG to avoid duplicate records
   for (auto* dg : dataGroups) {
     if (!dg)
       continue;
@@ -854,9 +847,7 @@ void MDF4::Player::buildFrameIndex()
       obs->DetachObserver();
   }
 
-  // Legacy single-master-channel files: read timestamps in a
-  // separate pass keyed by raw sample index so that the frame index
-  // below can look up the correct wall-clock time
+  // Legacy path: read timestamps keyed by sample index for wall-clock lookup
   if (m_isSerialStudioFile && !perGroupTime && m_masterTimeChannel) {
     for (auto* dg : dataGroups) {
       if (!dg)
@@ -952,8 +943,7 @@ void MDF4::Player::sendHeaderFrame()
   if (!isOpen() || m_channels.empty())
     return;
 
-  // In project mode with multiple sources, build multi-source mapping
-  // and skip QuickPlot header registration (project defines the structure)
+  // Multi-source project mode uses its own mapping instead of QuickPlot headers
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
     const auto& sources = DataModel::ProjectModel::instance().sources();
     if (sources.size() > 1) {
@@ -991,7 +981,6 @@ void MDF4::Player::sendHeaderFrame()
  */
 QString MDF4::Player::formatTimestamp(double timestamp) const
 {
-  // Decompose seconds into hours, minutes, and fractional seconds
   int hours      = static_cast<int>(timestamp / 3600.0);
   int minutes    = static_cast<int>((timestamp - hours * 3600.0) / 60.0);
   double seconds = timestamp - hours * 3600.0 - minutes * 60.0;
@@ -1019,11 +1008,10 @@ QString MDF4::Player::formatTimestamp(double timestamp) const
  */
 QByteArray MDF4::Player::getFrame(const int index)
 {
-  // Validate index before extracting frame data
   if (!isOpen() || index < 0 || index >= frameCount())
     return QByteArray();
 
-  // Build CSV row from the sample cache
+  // Build CSV row from cached channel values
   const auto& frameIdx = m_frameIndex[index];
   QByteArray frame;
 
@@ -1066,10 +1054,8 @@ void MDF4::Player::buildMultiSourceMapping()
   m_channelToSource.clear();
   m_sourceChannelCount.clear();
 
-  // Collect dataset-to-source pairs from the project model
-  const auto& groups = DataModel::ProjectModel::instance().groups();
-
   // Collect (uniqueId, sourceId) pairs for all datasets
+  const auto& groups = DataModel::ProjectModel::instance().groups();
   QVector<QPair<int, int>> uidSourcePairs;
   for (const auto& g : groups)
     for (const auto& d : g.datasets)

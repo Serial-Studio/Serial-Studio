@@ -39,7 +39,6 @@
  */
 static void installTrialToken(int daysRemaining)
 {
-  // Build and install a capability token for the trial period
   Licensing::CommercialToken token;
   token.setVariantName(QStringLiteral("Trial"));
   token.setInstanceName(Licensing::MachineID::instance().machineId());
@@ -66,7 +65,7 @@ Licensing::Trial::Trial()
   , m_deviceRegistered(false)
   , m_trialExpiry(QDateTime::currentDateTimeUtc())
 {
-  // Sync-activation dependent modules to trial module
+  // Propagate activation state changes between trial and license modules
   connect(this,
           &Licensing::Trial::enabledChanged,
           &Licensing::LemonSqueezy::instance(),
@@ -83,7 +82,7 @@ Licensing::Trial::Trial()
   m_crypt.setKey(MachineID::instance().machineSpecificKey());
   m_crypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
 
-  // Read settings
+  // Restore cached trial state if no active license
   if (!Licensing::LemonSqueezy::instance().isActivated())
     readSettings();
 }
@@ -186,10 +185,11 @@ void Licensing::Trial::enableTrial()
  */
 void Licensing::Trial::readSettings()
 {
-  // Reset trial state before reading from persistent storage
+  // Clear state before restoring from disk
   m_trialEnabled = false;
   m_trialExpiry  = QDateTime::currentDateTimeUtc();
 
+  // Decrypt persisted trial data
   m_settings.beginGroup("trial");
   auto expStr = m_crypt.decryptToString(m_settings.value("expiry").toString());
   auto enaStr = m_crypt.decryptToString(m_settings.value("enabled").toString());
@@ -202,6 +202,7 @@ void Licensing::Trial::readSettings()
       m_trialExpiry = expiry;
   }
 
+  // Derive trial activation state from stored values
   const bool enabledStored    = (enaStr == "true");
   const bool registeredStored = (regStr == "true");
   const bool notExpired       = QDateTime::currentDateTimeUtc() <= m_trialExpiry;
@@ -213,6 +214,7 @@ void Licensing::Trial::readSettings()
   if (trialEnabled())
     installTrialToken(daysRemaining());
 
+  // Revalidate with backend if a trial was previously started
   if (trialAvailable() && m_deviceRegistered)
     fetchTrialState();
 }
@@ -225,7 +227,6 @@ void Licensing::Trial::readSettings()
  */
 void Licensing::Trial::writeSettings()
 {
-  // Encrypt and persist trial state to settings
   QString enaStr = m_trialEnabled ? "true" : "false";
   QString regStr = m_deviceRegistered ? "true" : "false";
   QString expStr = m_trialExpiry.toString(Qt::ISODate);
@@ -253,10 +254,11 @@ void Licensing::Trial::fetchTrialState()
   if (m_busy)
     return;
 
-  // Set busy state and build signed payload
+  // Enable busy status
   m_busy = true;
   Q_EMIT busyChanged();
 
+  // Build signed payload with machine ID and nonce
   const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
   const QString nonce    = QUuid::createUuid().toString(QUuid::WithoutBraces);
 
@@ -267,6 +269,7 @@ void Licensing::Trial::fetchTrialState()
 
   const auto payloadData = QJsonDocument(payload).toJson(QJsonDocument::Compact);
 
+  // Send activation request to backend
   const QUrl url(QStringLiteral("https://cloud.serial-studio.com/trial"));
   QNetworkRequest request(url);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -294,10 +297,11 @@ void Licensing::Trial::fetchTrialState()
  */
 void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
-  // Clear busy state and validate the reply
+  // Clear busy state
   m_busy = false;
   Q_EMIT busyChanged();
 
+  // Abort on network error
   if (reply->error() != QNetworkReply::NoError) {
     Misc::Utilities::showMessageBox(QObject::tr("Network error"),
                                     reply->errorString(),
@@ -308,6 +312,7 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     return;
   }
 
+  // Parse JSON response
   const QByteArray data = reply->readAll();
   reply->deleteLater();
 
@@ -323,6 +328,7 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     return;
   }
 
+  // Extract trial state from response, enforcing 14-day cap
   m_trialEnabled     = false;
   m_deviceRegistered = false;
   m_trialExpiry      = QDateTime::currentDateTimeUtc();

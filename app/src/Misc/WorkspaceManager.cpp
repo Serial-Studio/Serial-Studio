@@ -96,7 +96,6 @@ QString Misc::WorkspaceManager::shortPath() const
  */
 QString Misc::WorkspaceManager::path(const QString& subdirectory) const
 {
-  // Resolve full path and ensure subdirectory exists
   QString path = QStringLiteral("%1/%2").arg(m_path, subdirectory);
 
   QDir dir(path);

@@ -521,7 +521,6 @@ const QStringList& DataModel::ProjectEditor::availableActionIcons() const
  */
 bool DataModel::ProjectEditor::currentGroupIsEditable() const
 {
-  // Fixed-layout widgets (Accelerometer, GPS, etc.) are not editable
   if (m_currentView == GroupView) {
     const auto& widget = m_selectedGroup.widget;
     if (widget != "" && widget != "multiplot" && widget != "datagrid")
@@ -539,7 +538,6 @@ bool DataModel::ProjectEditor::currentGroupIsEditable() const
  */
 bool DataModel::ProjectEditor::currentDatasetIsEditable() const
 {
-  // Check the parent group's widget type for editability
   if (m_currentView == DatasetView) {
     const auto& groups = DataModel::ProjectModel::instance().groups();
     const auto groupId = m_selectedDataset.groupId;
@@ -561,7 +559,6 @@ bool DataModel::ProjectEditor::currentDatasetIsEditable() const
  */
 quint8 DataModel::ProjectEditor::datasetOptions() const
 {
-  // Build the option bitmask from the selected dataset's flags
   quint8 option = SerialStudio::DatasetGeneric;
 
   if (m_selectedDataset.plt)
@@ -768,10 +765,12 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_outputWidgetItems.clear();
   m_sourceParserItems.clear();
 
+  // Save expanded state before destroying the old model
   QHash<QString, bool> expandedStates;
   if (m_treeModel)
     saveExpandedStateMap(m_treeModel->invisibleRootItem(), expandedStates, "");
 
+  // Dispose of the previous model and selection
   if (m_selectionModel) {
     disconnect(m_selectionModel);
     m_selectionModel->deleteLater();
@@ -784,6 +783,7 @@ void DataModel::ProjectEditor::buildTreeModel()
     m_treeModel = nullptr;
   }
 
+  // Create fresh model and populate from project data
   m_treeModel = new CustomModel(this);
 
   const auto& pm         = DataModel::ProjectModel::instance();
@@ -801,6 +801,7 @@ void DataModel::ProjectEditor::buildTreeModel()
 
   m_rootItems.insert(root, kRootItem);
 
+  // Add source items with their frame parser children
   for (const auto& source : sources) {
     auto* sourceItem = new QStandardItem(source.title);
     sourceItem->setData(-1, TreeViewFrameIndex);
@@ -821,6 +822,7 @@ void DataModel::ProjectEditor::buildTreeModel()
     m_sourceItems.insert(sourceItem, source);
   }
 
+  // Add action items
   for (const auto& action : actions) {
     auto* actionItem = new QStandardItem(action.title);
     actionItem->setData(-1, TreeViewFrameIndex);
@@ -830,6 +832,7 @@ void DataModel::ProjectEditor::buildTreeModel()
     m_actionItems.insert(actionItem, action);
   }
 
+  // Add group items with their dataset and output widget children
   for (const auto& group : groups) {
     auto* groupItem = new QStandardItem(group.title);
 
@@ -899,6 +902,7 @@ void DataModel::ProjectEditor::buildTreeModel()
     m_groupItems.insert(groupItem, group);
   }
 
+  // Add spacer item at the end of the tree
   auto* spacer = new QStandardItem(" ");
   spacer->setData(" ", TreeViewText);
   spacer->setData("", TreeViewIcon);
@@ -907,6 +911,7 @@ void DataModel::ProjectEditor::buildTreeModel()
   spacer->setSelectable(false);
   root->appendRow(spacer);
 
+  // Connect the selection model and emit the new tree
   m_selectionModel = new QItemSelectionModel(m_treeModel);
   connect(m_selectionModel,
           &QItemSelectionModel::currentChanged,
@@ -915,6 +920,7 @@ void DataModel::ProjectEditor::buildTreeModel()
 
   Q_EMIT treeModelChanged();
 
+  // Restore the previously selected item by matching IDs
   QStandardItem* toSelect = nullptr;
   if (m_currentView == DatasetView) {
     const auto gid = m_selectedDataset.groupId;
@@ -960,6 +966,7 @@ void DataModel::ProjectEditor::buildTreeModel()
     }
   }
 
+  // Fall back to root project item when no match found
   if (!toSelect) {
     for (auto it = m_rootItems.begin(); it != m_rootItems.end(); ++it) {
       if (it.value() == kRootItem) {
@@ -1084,8 +1091,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
     m_groupModel->appendRow(sourceItem);
   }
 
-  // Composite widget selector (hidden for output groups — they have no
-  // visualization widget, only output controls)
+  // Composite widget selector (hidden for output groups)
   if (group.groupType != DataModel::GroupType::Output) {
     int index  = 0;
     bool found = false;
@@ -2201,20 +2207,24 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_fftSamples << "8" << "16" << "32" << "64" << "128" << "256" << "512"
                << "1024" << "2048" << "4096" << "8192" << "16384";
 
+  // Timer modes
   m_timerModes.clear();
   m_timerModes << tr("Off") << tr("Auto Start") << tr("Start on Trigger") << tr("Toggle on Trigger")
                << tr("Repeat N Times");
 
+  // Decoder options
   m_decoderOptions.clear();
   m_decoderOptions << tr("Plain Text (UTF8)") << tr("Hexadecimal") << tr("Base64")
                    << tr("Binary (Direct)");
 
+  // Checksum methods
   m_checksumMethods.clear();
   m_checksumMethods         = IO::availableChecksums();
   const int noChecksumIndex = m_checksumMethods.indexOf(QLatin1String(""));
   if (noChecksumIndex >= 0)
     m_checksumMethods[noChecksumIndex] = tr("No Checksum");
 
+  // Frame detection methods
   m_frameDetectionMethods.clear();
   m_frameDetectionMethodsValues.clear();
   m_frameDetectionMethods << tr("End Delimiter Only") << tr("Start Delimiter Only")
@@ -2232,6 +2242,7 @@ void DataModel::ProjectEditor::generateComboBoxModels()
                       << tr("Knob") << tr("Ramp Generator");
 #endif
 
+  // Group composite widgets
   m_groupWidgets.clear();
   m_groupWidgets.insert(QStringLiteral("datagrid"), tr("Data Grid"));
   m_groupWidgets.insert(QStringLiteral("map"), tr("GPS Map"));
@@ -2242,18 +2253,21 @@ void DataModel::ProjectEditor::generateComboBoxModels()
   m_groupWidgets.insert(QStringLiteral("image"), tr("Image View"));
   m_groupWidgets.insert(QLatin1String(""), tr("None"));
 
+  // Dataset widgets
   m_datasetWidgets.clear();
   m_datasetWidgets.insert(QLatin1String(""), tr("None"));
   m_datasetWidgets.insert(QStringLiteral("bar"), tr("Bar"));
   m_datasetWidgets.insert(QStringLiteral("gauge"), tr("Gauge"));
   m_datasetWidgets.insert(QStringLiteral("compass"), tr("Compass"));
 
+  // End-of-line sequences
   m_eolSequences.clear();
   m_eolSequences.insert(QLatin1String(""), tr("None"));
   m_eolSequences.insert(QStringLiteral("\n"), tr("New Line (\\n)"));
   m_eolSequences.insert(QStringLiteral("\r"), tr("Carriage Return (\\r)"));
   m_eolSequences.insert(QStringLiteral("\r\n"), tr("CRLF (\\r\\n)"));
 
+  // Plot options
   m_plotOptions.clear();
   m_plotOptions.insert(qMakePair(false, false), tr("No"));
   m_plotOptions.insert(qMakePair(true, false), tr("Yes"));
@@ -2691,7 +2705,6 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
 void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& current,
                                                          const QModelIndex& previous)
 {
-  // Identify the selected item and switch to the appropriate view
   (void)previous;
 
   if (!m_treeModel || !current.isValid())

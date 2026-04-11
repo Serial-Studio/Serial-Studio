@@ -210,7 +210,7 @@ Widgets.Pane {
             onClicked: frameParser.import()
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/code-editor/open.svg"
-            ToolTip.text: qsTr("Import a JavaScript file for data parsing")
+            ToolTip.text: qsTr("Import a script file for data parsing")
           }
 
           Widgets.ToolbarButton {
@@ -288,7 +288,7 @@ Widgets.Pane {
             Layout.alignment: Qt.AlignVCenter
             onClicked: app.showHelpCenter("javascript-api")
             icon.source: "qrc:/rcc/icons/code-editor/help.svg"
-            ToolTip.text: qsTr("Open help documentation for JavaScript data parsing")
+            ToolTip.text: qsTr("Open help documentation for data parsing")
           }
 
           Item {
@@ -322,6 +322,31 @@ Widgets.Pane {
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
+          }
+
+          Label {
+            text: qsTr("Language:")
+            Layout.alignment: Qt.AlignVCenter
+            font: Cpp_Misc_CommonFonts.uiFont
+          }
+
+          ComboBox {
+            id: languageSelector
+
+            model: ["JavaScript", "Lua"]
+            Layout.alignment: Qt.AlignVCenter
+            currentIndex: frameParser.language
+
+            onActivated: {
+              frameParser.switchLanguage(currentIndex)
+              currentIndex = Qt.binding(function() {
+                return frameParser.language
+              })
+            }
+          }
+
+          Item {
+            implicitWidth: 4
           }
 
           Button {

@@ -64,7 +64,7 @@ void Misc::Utilities::rebootApplication()
   qApp->processEvents();
   QSettings().sync();
 
-  // Relaunch executable (skip argv[0] which is the program path)
+  // Relaunch executable
   QString exe      = QCoreApplication::applicationFilePath();
   QStringList args = QCoreApplication::arguments().mid(1);
   QProcess::startDetached(exe, args);
@@ -102,7 +102,6 @@ QPixmap Misc::Utilities::getHiDpiPixmap(const QString& path)
  */
 bool Misc::Utilities::askAutomaticUpdates()
 {
-  // Prompt the user and return their choice
   const int result = showMessageBox(
     tr("Check for updates automatically?"),
     tr(
@@ -215,7 +214,7 @@ int Misc::Utilities::showMessageBox(const QString& text,
   if (bt & QMessageBox::RestoreDefaults)
     box.button(QMessageBox::RestoreDefaults)->setText(tr("Restore defaults"));
 
-  // Change text in buttons
+  // Apply caller-provided button text overrides
   for (auto it = buttonTexts.constBegin(); it != buttonTexts.constEnd(); ++it)
     box.button(it.key())->setText(" " + it.value() + " ");
 
@@ -226,7 +225,6 @@ int Misc::Utilities::showMessageBox(const QString& text,
   layout->addItem(spacer, layout->rowCount(), 0, 1, layout->columnCount());
   // clang-format on
 
-  // Show message box & return user decision to caller
   return box.exec();
 }
 

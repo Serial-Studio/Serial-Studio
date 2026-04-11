@@ -838,7 +838,7 @@ All gauges show "NaN"
 - [Getting Started](Getting-Started.md) - First-time setup guide
 - [Data Sources](Data-Sources.md) - Connection configuration
 - [Data Flow](Data-Flow.md) - Understanding how parsing works
-- [JavaScript API](JavaScript-API.md) - Parser function documentation
+- [Frame Parser Scripting](JavaScript-API.md) - Lua and JavaScript parser reference
 - [Widget Reference](Widget-Reference.md) - Widget requirements and usage
 - [FAQ](FAQ.md) - Frequently asked questions
 

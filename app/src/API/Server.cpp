@@ -59,7 +59,7 @@ bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(maxDepth > 0);
 
-  // Track nesting depth while skipping string contents
+  // Track nesting depth, skipping string contents
   int depth     = 0;
   bool inString = false;
   bool escaped  = false;
@@ -126,7 +126,7 @@ void API::ServerWorker::closeResources()
 {
   Q_ASSERT(QThread::currentThread() == thread());
 
-  // Abort and schedule deletion for all managed sockets
+  // Clean up all managed sockets
   for (auto* socket : std::as_const(m_sockets)) {
     if (socket) {
       socket->abort();
@@ -150,7 +150,7 @@ void API::ServerWorker::addSocket(QTcpSocket* socket)
   Q_ASSERT(socket);
   Q_ASSERT(socket->state() != QAbstractSocket::UnconnectedState);
 
-  // Validate socket and register signal handlers
+  // Reject null sockets
   if (!socket)
     return;
 
@@ -190,7 +190,7 @@ void API::ServerWorker::writeRawData(const IO::ByteArrayPtr& data)
   Q_ASSERT(data);
   Q_ASSERT(!m_sockets.isEmpty());
 
-  // Encode raw data as base64 JSON and broadcast to all clients
+  // Nothing to send if data is empty or no clients connected
   if (!data || data->isEmpty() || m_sockets.isEmpty())
     return;
 
@@ -215,7 +215,7 @@ void API::ServerWorker::broadcastEvent(const QJsonObject& event)
   Q_ASSERT(!event.isEmpty());
   Q_ASSERT(!m_sockets.isEmpty());
 
-  // Serialize event JSON and write to all connected sockets
+  // No clients to notify
   if (m_sockets.isEmpty())
     return;
 
@@ -291,7 +291,7 @@ void API::ServerWorker::processItems(const std::vector<DataModel::TimestampedFra
   Q_ASSERT(!items.empty());
   Q_ASSERT(!m_sockets.isEmpty());
 
-  // Serialize frames to JSON and broadcast to all clients
+  // Nothing to process if queue or client list is empty
   if (items.empty() || m_sockets.isEmpty())
     return;
 
@@ -422,7 +422,7 @@ void API::Server::removeConnection()
 {
   Q_ASSERT(sender());
 
-  // Forward socket removal to the worker thread
+  // Schedule removal on the worker thread
   auto* socket = qobject_cast<QTcpSocket*>(sender());
   if (socket) {
     auto* worker = static_cast<ServerWorker*>(m_worker);
@@ -499,7 +499,7 @@ void API::Server::setEnabled(const bool enabled)
  */
 void API::Server::setExternalConnections(const bool enabled)
 {
-  // Guard against duplicate value
+  // No change needed
   if (m_externalConnections == enabled)
     return;
 
@@ -558,7 +558,7 @@ void API::Server::hotpathTxData(const IO::ByteArrayPtr& data)
   Q_ASSERT(data);
   Q_ASSERT(m_worker);
 
-  // Forward raw data to worker thread for client transmission
+  // Server must be active to relay data
   if (!enabled())
     return;
 
@@ -594,7 +594,7 @@ void API::Server::broadcastLifecycleEvent(const QString& eventName)
   Q_ASSERT(!eventName.isEmpty());
   Q_ASSERT(m_worker);
 
-  // Build event JSON and forward to worker thread
+  // Server must be active to broadcast events
   if (!enabled())
     return;
 
@@ -1112,7 +1112,7 @@ void API::Server::onDataReceived(QTcpSocket* socket, const QByteArray& data)
   Q_ASSERT(socket);
   Q_ASSERT(!data.isEmpty());
 
-  // Validate preconditions
+  // Server must be active and data non-empty
   if (!enabled() || data.isEmpty() || !socket)
     return;
 
@@ -1173,7 +1173,7 @@ void API::Server::acceptConnection()
   Q_ASSERT(m_server.isListening());
   Q_ASSERT(m_enabled);
 
-  // Accept socket and move it to the worker thread
+  // Retrieve the pending connection
   auto* socket = m_server.nextPendingConnection();
   if (!socket) {
     if (enabled())
@@ -1242,12 +1242,12 @@ void API::Server::onErrorOccurred(const QAbstractSocket::SocketError socketError
  */
 void API::Server::onSocketDisconnected()
 {
-  // Validate socket
+  // Resolve the disconnected socket from the signal sender
   auto* socket = qobject_cast<QTcpSocket*>(sender());
   if (!socket)
     return;
 
-  // Clean up MCP session using cached session ID
+  // Clean up MCP session and remove connection state
   if (m_connections.contains(socket)) {
     const auto& state = m_connections[socket];
     MCPHandler::instance().clearSession(state.sessionId);

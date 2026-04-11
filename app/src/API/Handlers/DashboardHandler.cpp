@@ -39,7 +39,6 @@
  */
 void API::Handlers::DashboardHandler::registerCommands()
 {
-  // Obtain registry and build command schemas
   auto& registry = CommandRegistry::instance();
 
   // Empty schema for parameter-less commands
@@ -143,14 +142,12 @@ void API::Handlers::DashboardHandler::registerCommands()
 API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QString& id,
                                                                        const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("mode"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: mode"));
   }
 
   const int mode = params.value(QStringLiteral("mode")).toInt();
-
   if (mode < 0 || mode > 2) {
     return CommandResponse::makeError(
       id,
@@ -183,7 +180,6 @@ API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QSt
 API::CommandResponse API::Handlers::DashboardHandler::getOperationMode(const QString& id,
                                                                        const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto mode     = AppState::instance().operationMode();
@@ -206,7 +202,6 @@ API::CommandResponse API::Handlers::DashboardHandler::getOperationMode(const QSt
 API::CommandResponse API::Handlers::DashboardHandler::setFPS(const QString& id,
                                                              const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("fps"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: fps"));
@@ -233,7 +228,6 @@ API::CommandResponse API::Handlers::DashboardHandler::setFPS(const QString& id,
 API::CommandResponse API::Handlers::DashboardHandler::getFPS(const QString& id,
                                                              const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const int fps = Misc::TimerEvents::instance().fps();
@@ -251,7 +245,6 @@ API::CommandResponse API::Handlers::DashboardHandler::getFPS(const QString& id,
 API::CommandResponse API::Handlers::DashboardHandler::setPoints(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("points"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: points"));
@@ -280,7 +273,6 @@ API::CommandResponse API::Handlers::DashboardHandler::setPoints(const QString& i
 API::CommandResponse API::Handlers::DashboardHandler::getPoints(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const int points = UI::Dashboard::instance().points();
@@ -297,7 +289,6 @@ API::CommandResponse API::Handlers::DashboardHandler::getPoints(const QString& i
 API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto mode     = AppState::instance().operationMode();
@@ -325,7 +316,6 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
 API::CommandResponse API::Handlers::DashboardHandler::getData(const QString& id,
                                                               const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& dashboard = UI::Dashboard::instance();

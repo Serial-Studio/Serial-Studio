@@ -51,19 +51,16 @@ constexpr int kEnumIntervalMs = 2000;
 IO::Drivers::HID::HID()
   : m_handle(nullptr), m_deviceInfoList(nullptr), m_running(false), m_deviceIndex(0)
 {
-  // Initialize hidapi and restore device selection
+  // Initialize hidapi and restore last selection
   hid_init();
   m_deviceIndex = m_settings.value("HID/deviceIndex", 0).toInt();
-
-  // Run initial device enumeration
   enumerateDevices();
 
-  // Setup periodic enumeration timer for hotplug detection
+  // Start periodic enumeration for hotplug detection
   m_enumTimer.setInterval(kEnumIntervalMs);
   connect(&m_enumTimer, &QTimer::timeout, this, &HID::enumerateDevices);
   m_enumTimer.start();
 
-  // Start read loop when thread starts
   connect(&m_readThread, &QThread::started, this, &HID::readLoop, Qt::DirectConnection);
 }
 
@@ -76,7 +73,7 @@ IO::Drivers::HID::HID()
  */
 void IO::Drivers::HID::cleanupDevice()
 {
-  // Stop the read thread
+  // Stop the read thread and close the device handle
   m_running = false;
 
   if (m_readThread.isRunning()) {
@@ -84,13 +81,11 @@ void IO::Drivers::HID::cleanupDevice()
     m_readThread.wait();
   }
 
-  // Close device handle
   if (m_handle) {
     hid_close(m_handle);
     m_handle = nullptr;
   }
 
-  // Clear usage info
   m_usagePage.clear();
   m_usage.clear();
 }
@@ -179,12 +174,12 @@ qint64 IO::Drivers::HID::write(const QByteArray& data)
  */
 bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 {
-  // Open the selected HID device and start the read thread
   (void)mode;
 
   if (!configurationOk())
     return false;
 
+  // Open the HID device by path
   const QString path = m_devicePaths.at(m_deviceIndex);
 
   m_handle = hid_open_path(path.toUtf8().constData());
@@ -206,7 +201,7 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 
   hid_set_nonblocking(m_handle, 0);
 
-  // Usage page/usage are cached per device during enumeration
+  // Load cached usage info for this device
   const uint16_t up = m_deviceUsagePages.value(m_deviceIndex, 0);
   const uint16_t u  = m_deviceUsages.value(m_deviceIndex, 0);
   m_usagePage       = up
@@ -216,6 +211,7 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
               : QString();
   Q_EMIT deviceInfoChanged();
 
+  // Start the interrupt read loop on a worker thread
   m_running = true;
   m_readThread.start();
 
@@ -289,20 +285,18 @@ QString IO::Drivers::HID::usage() const
  */
 void IO::Drivers::HID::setDeviceIndex(const int index)
 {
-  // Update selection, refresh usage info, and persist
   if (m_deviceIndex != index) {
     // Ensure device list is populated so the index is meaningful
     if (m_devicePaths.isEmpty())
       enumerateDevices();
 
-    // Clamp to valid range (index 0 is placeholder, ≥1 are real devices)
     if (index > 0 && index >= m_devicePaths.size())
       return;
 
+    // Persist selection and update cached usage info
     m_deviceIndex = index;
     m_settings.setValue("HID/deviceIndex", index);
 
-    // Update usage info from cached enumeration data
     const uint16_t up = m_deviceUsagePages.value(index, 0);
     const uint16_t u  = m_deviceUsages.value(index, 0);
     m_usagePage =
@@ -344,11 +338,11 @@ void IO::Drivers::HID::onReadError()
  */
 void IO::Drivers::HID::enumerateDevices()
 {
-  // Free previous enumeration and get fresh device list
+  // Get fresh device list from hidapi
   hid_free_enumeration(m_deviceInfoList);
   m_deviceInfoList = hid_enumerate(0x0000, 0x0000);
 
-  // Build unique device entries by VID:PID:serial key
+  // Build unique entries keyed by VID:PID:serial
   struct Entry {
     QString label;
     QString path;
@@ -372,8 +366,7 @@ void IO::Drivers::HID::enumerateDevices()
                           .arg(dev->product_id, 4, 16, QLatin1Char('0'))
                           .arg(serial);
 
-    // If we already have this device, upgrade usage info if the current
-    // interface has non-zero values and the stored entry doesn't.
+    // Upgrade usage info if a later interface has non-zero values
     auto it = seen.find(key);
     if (it != seen.end()) {
       auto& existing = entries[it.value()];
@@ -402,12 +395,11 @@ void IO::Drivers::HID::enumerateDevices()
     entries.append({label, QString::fromUtf8(dev->path), dev->usage_page, dev->usage});
   }
 
-  // Sort entries alphabetically by label
   std::sort(entries.begin(), entries.end(), [](const Entry& a, const Entry& b) {
     return a.label < b.label;
   });
 
-  // Build new lists with "Select Device" placeholder at index 0
+  // Build new lists with placeholder at index 0
   QStringList newLabels;
   QList<QString> newPaths;
   QList<uint16_t> newUsagePages;
@@ -424,11 +416,10 @@ void IO::Drivers::HID::enumerateDevices()
     newUsages.append(e.usage);
   }
 
-  // Early exit if list is unchanged
   if (newLabels == m_deviceLabels)
     return;
 
-  // Capture the previously selected path before overwriting m_devicePaths.
+  // Preserve selection by matching the previously selected path
   const QString prevPath = (m_deviceIndex > 0 && m_deviceIndex < m_devicePaths.size())
                            ? m_devicePaths.at(m_deviceIndex)
                            : QString();
@@ -438,8 +429,6 @@ void IO::Drivers::HID::enumerateDevices()
   m_deviceUsagePages = newUsagePages;
   m_deviceUsages     = newUsages;
 
-  // Re-find the previously selected device by path so the index stays correct
-  // even when other devices are added or removed from the list.
   int newIndex = m_deviceIndex;
 
   if (!prevPath.isEmpty()) {
@@ -460,7 +449,7 @@ void IO::Drivers::HID::enumerateDevices()
     Q_EMIT deviceIndexChanged();
   }
 
-  // Sync usage info for the current selection
+  // Update cached usage info for the current selection
   const uint16_t up = m_deviceUsagePages.value(m_deviceIndex, 0);
   const uint16_t u  = m_deviceUsages.value(m_deviceIndex, 0);
   m_usagePage       = up
@@ -486,7 +475,6 @@ void IO::Drivers::HID::enumerateDevices()
  */
 QJsonObject IO::Drivers::HID::deviceIdentifier() const
 {
-  // Walk the enumeration list to find VID/PID/serial for the selected device
   if (m_deviceIndex < 1 || m_deviceIndex >= m_devicePaths.size())
     return {};
 
@@ -518,11 +506,10 @@ QJsonObject IO::Drivers::HID::deviceIdentifier() const
  */
 bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
 {
-  // Match saved VID/PID/serial against the current device list
   if (id.isEmpty())
     return false;
 
-  // Ensure device list is populated so we can match against it
+  // Ensure device list is populated for matching
   if (m_devicePaths.isEmpty())
     enumerateDevices();
 
@@ -540,7 +527,6 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
     if (vid != savedVid || pid != savedPid)
       continue;
 
-    // Verify serial number if provided
     if (!savedSer.isEmpty()) {
       const QString serial = (dev->serial_number && dev->serial_number[0] != L'\0')
                              ? QString::fromWCharArray(dev->serial_number)
@@ -549,7 +535,7 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
         continue;
     }
 
-    // Found a match, look up its index
+    // Look up the device's display-list index
     const auto path = QString::fromUtf8(dev->path);
     const int idx   = m_devicePaths.indexOf(path);
     if (idx > 0) {
@@ -608,7 +594,6 @@ void IO::Drivers::HID::setDriverProperty(const QString& key, const QVariant& val
  */
 void IO::Drivers::HID::readLoop()
 {
-  // Poll the HID device with a 100ms timeout until stopped
   uint8_t buf[kReadBufSize];
 
   while (m_running.load()) {

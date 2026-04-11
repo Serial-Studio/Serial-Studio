@@ -66,6 +66,7 @@ UI::Dashboard::Dashboard()
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
 {
+  // Reset dashboard when data sources open/close or project changes
   // clang-format off
   connect(&CSV::Player::instance(), &CSV::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
   connect(&MDF4::Player::instance(), &MDF4::Player::openChanged, this, [=, this] { resetData(true); }, Qt::QueuedConnection);
@@ -177,7 +178,7 @@ bool UI::Dashboard::autoHideToolbar() const noexcept
  */
 bool UI::Dashboard::streamAvailable() const
 {
-  // Check if any data source (device, CSV, MDF4, MQTT) is active
+  // Cache singleton references
   static auto& manager   = IO::ConnectionManager::instance();
   static auto& csvPlayer = CSV::Player::instance();
   static auto& mf4Player = MDF4::Player::instance();
@@ -244,7 +245,7 @@ bool UI::Dashboard::pointsWidgetVisible() const
  */
 bool UI::Dashboard::containsCommercialFeatures() const noexcept
 {
-  // Scan all source frames for commercial feature flags
+  // Check all sources for Pro-only features
   for (const auto& f : m_sourceRawFrames)
     if (f.containsCommercialFeatures)
       return true;
@@ -352,12 +353,13 @@ SerialStudio::DashboardWidget UI::Dashboard::widgetType(const int widgetIndex) c
  */
 int UI::Dashboard::widgetCount(const SerialStudio::DashboardWidget widget) const
 {
-  // Look up the count in group or dataset widget maps
+  // Check group widgets first
   if (SerialStudio::isGroupWidget(widget)) {
     auto it = m_widgetGroups.constFind(widget);
     return it != m_widgetGroups.cend() ? it->count() : 0;
   }
 
+  // Fall through to dataset widgets
   if (SerialStudio::isDatasetWidget(widget)) {
     auto it = m_widgetDatasets.constFind(widget);
     return it != m_widgetDatasets.cend() ? it->count() : 0;
@@ -398,7 +400,7 @@ const QString& UI::Dashboard::title() const
  */
 QVariantList UI::Dashboard::actions() const
 {
-  // Build a QML-visible list of action metadata maps
+  // Populate metadata for each action
   QVariantList actions;
   for (int i = 0; i < m_actions.count(); ++i) {
     const auto& action = m_actions[i];
@@ -485,7 +487,7 @@ const QMap<int, DataModel::Dataset>& UI::Dashboard::datasets() const
 const DataModel::Group& UI::Dashboard::getGroupWidget(const SerialStudio::DashboardWidget widget,
                                                       const int index) const
 {
-  // Look up group by widget type and validate the index
+  // Validate widget type exists
   static const DataModel::Group emptyGroup;
   const auto it = m_widgetGroups.constFind(widget);
 
@@ -494,6 +496,7 @@ const DataModel::Group& UI::Dashboard::getGroupWidget(const SerialStudio::Dashbo
     return emptyGroup;
   }
 
+  // Validate index bounds
   if (index < 0 || index >= it->size()) [[unlikely]] {
     qWarning() << "getGroupWidget: index out of bounds:" << index << "for widget" << widget;
     return emptyGroup;
@@ -523,7 +526,7 @@ const DataModel::Group& UI::Dashboard::getGroupWidget(const SerialStudio::Dashbo
 const DataModel::Dataset& UI::Dashboard::getDatasetWidget(
   const SerialStudio::DashboardWidget widget, const int index) const
 {
-  // Look up dataset by widget type and validate the index
+  // Validate widget type exists
   static const DataModel::Dataset emptyDataset;
   const auto it = m_widgetDatasets.constFind(widget);
 
@@ -532,6 +535,7 @@ const DataModel::Dataset& UI::Dashboard::getDatasetWidget(
     return emptyDataset;
   }
 
+  // Validate index bounds
   if (index < 0 || index >= it->size()) [[unlikely]] {
     qWarning() << "getDatasetWidget: index out of bounds:" << index << "for widget" << widget;
     return emptyDataset;
@@ -885,7 +889,7 @@ void UI::Dashboard::setAutoHideToolbar(const bool enabled)
  */
 void UI::Dashboard::removeTerminalWidget()
 {
-  // Destroy terminal widget entry and rebuild contiguous widget map
+  // Remove terminal from registry if it exists
   auto& registry = WidgetRegistry::instance();
 
   if (m_terminalWidgetId != kInvalidWidgetId) {
@@ -893,6 +897,7 @@ void UI::Dashboard::removeTerminalWidget()
     m_terminalWidgetId = kInvalidWidgetId;
   }
 
+  // Purge terminal from widget groups and frame
   m_widgetGroups.remove(SerialStudio::DashboardTerminal);
 
   auto& groups = m_lastFrame.groups;
@@ -901,6 +906,7 @@ void UI::Dashboard::removeTerminalWidget()
                               [](const DataModel::Group& g) { return g.widget == "terminal"; }),
                groups.end());
 
+  // Rebuild contiguous widget map from remaining widgets
   m_widgetMap.clear();
   m_widgetCount = 0;
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
@@ -1012,7 +1018,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
     return;
   }
 
-  // Obtain action data
+  // Fetch the action configuration
   const auto& action = m_actions[index];
 
   // Handle RepeatNTimes mode: on GUI trigger, start the repeat sequence
@@ -1076,7 +1082,7 @@ void UI::Dashboard::activateAction(const int index, const bool guiTrigger)
   if (!IO::ConnectionManager::instance().paused())
     (void)IO::ConnectionManager::instance().writeData(DataModel::get_tx_bytes(action));
 
-  // Update action model
+  // Notify UI of potential toggle-state change
   Q_EMIT actionStatusChanged();
 }
 
@@ -1180,7 +1186,7 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::Frame& frame)
   // Update dashboard data (only this source's datasets)
   updateDashboardData(frame);
 
-  // Set dashboard update flag
+  // Schedule a UI refresh on the next timer tick
   m_updateRequired = true;
 }
 
@@ -1218,6 +1224,7 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
     return;
   }
 
+  // Regenerate the dashboard model and retry the update once
   reconfigureDashboard(frame);
 
   m_updateRetryInProgress = true;
@@ -1238,10 +1245,9 @@ void UI::Dashboard::updateDashboardData(const DataModel::Frame& frame)
   Q_ASSERT(!frame.groups.empty());
   Q_ASSERT(!m_datasetReferences.isEmpty());
 
-  // Update all datasets of the frame
+  // Propagate new values to all dataset references
   for (const auto& group : frame.groups) {
     for (const auto& dataset : group.datasets) {
-      // Get the unique ID of the dataset
       const auto uid = dataset.uniqueId;
       const auto it  = m_datasetReferences.find(uid);
 
@@ -1295,6 +1301,7 @@ void UI::Dashboard::processDatasetIntoWidgetMaps(const DataModel::Dataset& datas
     m_datasets.insert(dataset.index, d);
   }
 
+  // Route dataset into per-widget-type lists (LEDs go to the group panel)
   auto keys = SerialStudio::getDashboardWidgets(dataset);
   for (const auto& widgetKey : std::as_const(keys)) {
     if (widgetKey == SerialStudio::DashboardLED) {
@@ -1332,15 +1339,13 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   const bool pro = false;
 #endif
 
-  // Preserve per-source structure cache across the widget reset so that
-  // subsequent frames from other sources can still build the combined frame.
+  // Save per-source cache before reset so multi-source merging still works
   auto savedSourceFrames = m_sourceRawFrames;
 
-  // Reset dashboard data
+  // Reset all dashboard state without notifying the UI
   resetData(false);
 
-  // Restore per-source cache (resetData clears it for disconnect/project-change
-  // semantics, but here we need it intact for multi-source merging).
+  // Restore per-source cache that resetData cleared
   m_sourceRawFrames = std::move(savedSourceFrames);
 
   // Save combined frame structure for terminal/widget tracking
@@ -1453,10 +1458,10 @@ void UI::Dashboard::registerWidgets()
   auto& registry = WidgetRegistry::instance();
   registry.beginBatchUpdate();
 
-  // Reset terminal widget ID
+  // Prepare for fresh widget registration
   m_terminalWidgetId = kInvalidWidgetId;
 
-  // Generate group model map and register widgets
+  // Register group-level widgets
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
     const auto key   = i.key();
     const auto count = widgetCount(key);
@@ -1472,7 +1477,7 @@ void UI::Dashboard::registerWidgets()
     }
   }
 
-  // Generate dataset model map and register widgets
+  // Register dataset-level widgets
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
     const auto key   = i.key();
     const auto count = widgetCount(key);
@@ -1639,6 +1644,7 @@ void UI::Dashboard::updateGpsSeries(int sourceId)
 
     auto& series = m_gpsValues[i];
 
+    // Extract lat/lon/alt from the group's datasets
     double lat = std::nan(""), lon = std::nan(""), alt = std::nan("");
     for (const auto& dataset : group.datasets) {
       if (!dataset.isNumeric)
@@ -1653,6 +1659,7 @@ void UI::Dashboard::updateGpsSeries(int sourceId)
         alt = dataset.numericValue;
     }
 
+    // Append coordinates to the trajectory ring buffers
     series.latitudes.push(lat);
     series.longitudes.push(lon);
     series.altitudes.push(alt);
@@ -1682,6 +1689,7 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
 
     auto& plotData = m_plotData3D[i];
 
+    // Extract X/Y/Z components from the group's datasets
     QVector3D point;
     for (const auto& dataset : group.datasets) {
       const QString& id = dataset.widget;
@@ -1693,6 +1701,7 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
         point.setZ(dataset.numericValue);
     }
 
+    // Append point and trim to configured maximum
     plotData.push_back(point);
     const size_t maxPoints = static_cast<size_t>(points());
     if (plotData.size() > maxPoints)
@@ -1719,6 +1728,7 @@ void UI::Dashboard::updateLineSeries(int sourceId)
   Q_ASSERT(m_pltValues.size() == plotCount);
   Q_ASSERT(m_activePlots.size() == plotCount);
 
+  // Track which axes have been pushed to prevent duplicate shifts
   QSet<int> xAxesMoved;
   QSet<int> yAxesMoved;
   for (int i = 0; i < plotCount; ++i) {
@@ -1769,11 +1779,11 @@ void UI::Dashboard::updateLineSeries(int sourceId)
  */
 void UI::Dashboard::configureGpsSeries()
 {
-  // Clear memory
+  // Release existing GPS buffers
   m_gpsValues.clear();
   m_gpsValues.squeeze();
 
-  // Construct GPS data structure
+  // Allocate and pre-fill series for each GPS widget
   for (int i = 0; i < widgetCount(SerialStudio::DashboardGPS); ++i) {
     DSP::GpsSeries series;
     const auto& group = getGroupWidget(SerialStudio::DashboardGPS, i);
@@ -1808,12 +1818,12 @@ void UI::Dashboard::configureGpsSeries()
  */
 void UI::Dashboard::configureFftSeries()
 {
-  // Clear memory
+  // Release existing FFT buffers
   m_fftValues.clear();
   m_fftValues.squeeze();
   m_activeFFTPlots.clear();
 
-  // Construct FFT plot data structure
+  // Allocate ring buffers sized to each dataset's FFT sample count
   for (int i = 0; i < widgetCount(SerialStudio::DashboardFFT); ++i) {
     const auto& dataset = getDatasetWidget(SerialStudio::DashboardFFT, i);
     m_fftValues.append(DSP::AxisData(dataset.fftSamples));
@@ -1882,7 +1892,7 @@ void UI::Dashboard::configureLineSeries()
 {
   Q_ASSERT(m_points > 0);
 
-  // Clear memory
+  // Release existing plot buffers
   m_xAxisData.clear();
   m_yAxisData.clear();
   m_pltValues.clear();
@@ -1895,10 +1905,9 @@ void UI::Dashboard::configureLineSeries()
 
   // Construct X/Y axis data arrays
   for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
-    // Obtain list of datasets for a widget type
     const auto& datasets = i.value();
 
-    // Iterate over all the datasets
+    // Register axis data for each plottable dataset
     for (auto d = datasets.begin(); d != datasets.end(); ++d) {
       if (!d->plt)
         continue;
@@ -1915,10 +1924,9 @@ void UI::Dashboard::configureLineSeries()
 
   // Construct plot values structure
   for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
-    // Obtain Y-axis data
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
-    // Add X-axis data & generate a line series with X/Y data
+    // Use custom X-axis source if available (Pro feature)
 #ifdef BUILD_COMMERCIAL
     const auto& tk2 = Licensing::CommercialToken::current();
     if (m_datasets.contains(yDataset.xAxisId) && tk2.isValid() && SS_LICENSE_GUARD()
@@ -1986,7 +1994,7 @@ void UI::Dashboard::configureMultiLineSeries()
 {
   Q_ASSERT(m_points > 0);
 
-  // Clear data
+  // Release existing multiplot buffers
   m_multipltValues.clear();
   m_multipltValues.squeeze();
   m_activeMultiplots.clear();
@@ -2047,11 +2055,11 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
   if (frame.groups.size() <= 0)
     return;
 
-  // Delete actions
+  // Tear down previous actions and timers
   m_actions.clear();
   m_actions.squeeze();
 
-  // Stop and delete all timers
+  // Stop and release all existing timers
   for (auto it = m_timers.begin(); it != m_timers.end(); ++it) {
     if (it.value()) {
       disconnect(it.value());
@@ -2060,11 +2068,10 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
     }
   }
 
-  // Clear timer map and repeat counters
   m_timers.clear();
   m_repeatCounters.clear();
 
-  // Update actions
+  // Load actions from the new frame
   for (const auto& action : frame.actions)
     m_actions.append(action);
 
@@ -2103,6 +2110,6 @@ void UI::Dashboard::configureActions(const DataModel::Frame& frame)
     }
   }
 
-  // Update actions
+  // Notify UI about the new action set
   Q_EMIT actionStatusChanged();
 }

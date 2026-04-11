@@ -72,6 +72,10 @@ class ProjectModel : public QObject {
   Q_PROPERTY(int pointCount
              READ pointCount
              NOTIFY pointCountChanged)
+  Q_PROPERTY(int frameParserLanguage
+             READ  frameParserLanguage
+             WRITE setFrameParserLanguage
+             NOTIFY frameParserLanguageChanged)
   // clang-format on
 
 signals:
@@ -86,6 +90,9 @@ signals:
   void sourceStructureChanged();
   void frameDetectionChanged();
   void frameParserCodeChanged();
+  void frameParserLanguageChanged();
+  void sourceFrameParserCodeChanged(int sourceId);
+  void sourceFrameParserLanguageChanged(int sourceId);
   void activeGroupIdChanged();
   void widgetSettingsChanged();
   void workspacesChanged();
@@ -122,6 +129,8 @@ public:
 
   [[nodiscard]] const QString& title() const noexcept;
   [[nodiscard]] const QString& jsonFilePath() const noexcept;
+  [[nodiscard]] int frameParserLanguage() const;
+  [[nodiscard]] int frameParserLanguage(int sourceId) const;
   [[nodiscard]] QString frameParserCode() const;
 
   [[nodiscard]] bool suppressMessageBoxes() const noexcept;
@@ -202,6 +211,8 @@ public slots:
 
   void setModified(const bool modified);
   void setFrameParserCode(const QString& code);
+  void setFrameParserLanguage(int language);
+  void updateSourceFrameParserLanguage(int sourceId, int language);
   void storeFrameParserCode(int sourceId, const QString& code);
   void setActiveGroupId(const int groupId);
   void setGroupLayout(const int groupId, const QJsonObject& layout);

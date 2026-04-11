@@ -71,7 +71,6 @@ UI::TaskbarModel::TaskbarModel(QObject* parent) : QStandardItemModel(parent) {}
  */
 QHash<int, QByteArray> UI::TaskbarModel::roleNames() const
 {
-  // Map custom roles to QML-visible property names
   QHash<int, QByteArray> names;
 
 #define BAL(x) QByteArrayLiteral(x)
@@ -201,7 +200,6 @@ int UI::Taskbar::activeGroupId() const
  */
 int UI::Taskbar::activeGroupIndex() const
 {
-  // Find the position of the active group ID within the workspace model
   int index        = 0;
   const auto model = workspaceModel();
   for (auto it = model.begin(); it != model.end(); ++it) {
@@ -232,7 +230,6 @@ int UI::Taskbar::activeGroupIndex() const
  */
 QVariantList UI::Taskbar::groupModel() const
 {
-  // Build the list of group entries for the tab bar / group selector
   QVariantList model;
 
   // Count widget groups for overview section
@@ -344,7 +341,6 @@ UI::WindowManager* UI::Taskbar::windowManager() const
  */
 bool UI::Taskbar::hasMaximizedWindow() const
 {
-  // Check if any tracked window is in the maximized state
   for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
     if (it.key()->state() == QStringLiteral("maximized"))
       return true;
@@ -363,7 +359,6 @@ bool UI::Taskbar::hasMaximizedWindow() const
  */
 QQuickItem* UI::Taskbar::windowData(const int id) const
 {
-  // Reverse-lookup the QQuickItem for a given window ID
   for (auto it = m_windowIDs.begin(); it != m_windowIDs.end(); ++it)
     if (it.value() == id)
       return it.key();
@@ -448,12 +443,10 @@ void UI::Taskbar::saveLayout()
  */
 void UI::Taskbar::setActiveGroupId(int groupId)
 {
-  // Persist current layout and switch to the requested group
+  // Persist current layout before switching
   saveLayout();
 
-  // Persist active group so it survives save/load cycles
-  // Skip during model rebuilds (disconnect/reset) to avoid overwriting the
-  // user's saved selection
+  // Persist active group (skip during rebuilds to keep saved selection)
   if (!m_rebuildInProgress)
     DataModel::ProjectModel::instance().setActiveGroupId(groupId);
 
@@ -523,7 +516,6 @@ void UI::Taskbar::setActiveGroupId(int groupId)
 
   // Auto-generated workspace: populate from fullModel group filtering
   else {
-    // Populate taskbar with matching group widgets
     for (int i = 0; i < fullModel()->rowCount(); ++i) {
       auto groupItem = fullModel()->item(i);
       if (!groupItem)
@@ -604,7 +596,6 @@ void UI::Taskbar::setActiveGroupId(int groupId)
  */
 void UI::Taskbar::setActiveGroupIndex(int index)
 {
-  // Look up the group ID at the given index and activate it
   auto model = workspaceModel();
   if (model.count() > index && index >= 0) {
     auto item = model[index];
@@ -708,7 +699,6 @@ void UI::Taskbar::setActiveWindow(QQuickItem* window)
  */
 void UI::Taskbar::unregisterWindow(QQuickItem* window)
 {
-  // Remove the window's association and clean up connections
   if (m_windowIDs.contains(window)) {
     auto it = m_windowConnections.find(window);
     if (it != m_windowConnections.end()) {
@@ -795,7 +785,6 @@ void UI::Taskbar::registerWindow(const int id, QQuickItem* window)
  */
 void UI::Taskbar::setWindowState(const int id, const UI::TaskbarModel::WindowState state)
 {
-  // Find the corresponding model item
   QStandardItem* item = findItemByWindowId(id);
   if (!item)
     return;
@@ -888,7 +877,7 @@ void UI::Taskbar::rebuildModel()
     return;
   }
 
-  // Loop through the groups in the dashboard
+  // Build group items from the dashboard frame
   QSet<int> groupIds;
   const auto& widgetMap = db->widgetMap();
   for (const DataModel::Group& group : frame.groups) {
@@ -1069,7 +1058,6 @@ void UI::Taskbar::rebuildModel()
  */
 QStandardItem* UI::Taskbar::findItemByWindowId(int windowId, QStandardItem* parentItem) const
 {
-  // Traverse items at this level of the tree
   int count = parentItem ? parentItem->rowCount() : fullModel()->rowCount();
   for (int i = 0; i < count; ++i) {
     QStandardItem* item = parentItem ? parentItem->child(i) : fullModel()->item(i);
@@ -1103,7 +1091,6 @@ QStandardItem* UI::Taskbar::findItemByWindowId(int windowId, QStandardItem* pare
 QStandardItem* UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
                                                QStandardItem* parentItem) const
 {
-  // Resolve widget ID to window ID, then delegate to window ID search
   if (!m_widgetIdToWindowId.contains(widgetId))
     return nullptr;
 
@@ -1119,7 +1106,6 @@ QStandardItem* UI::Taskbar::findItemByWidgetId(UI::WidgetID widgetId,
  */
 QStandardItem* UI::Taskbar::findGroupItemByGroupId(int groupId) const
 {
-  // Scan top-level items for a matching group ID
   for (int i = 0; i < fullModel()->rowCount(); ++i) {
     QStandardItem* item = fullModel()->item(i);
     if (item && item->data(TaskbarModel::GroupIdRole).toInt() == groupId)
@@ -1137,7 +1123,6 @@ QStandardItem* UI::Taskbar::findGroupItemByGroupId(int groupId) const
  */
 QStandardItem* UI::Taskbar::createItemFromWidgetInfo(const UI::WidgetInfo& info)
 {
-  // Populate a new item with widget metadata and default state
   auto* item = new QStandardItem();
   auto icon  = SerialStudio::dashboardWidgetIcon(info.type, true);
 
@@ -1360,7 +1345,7 @@ QVariantList UI::Taskbar::searchResults() const
   const auto filter   = m_searchFilter.trimmed();
   const bool noFilter = filter.isEmpty();
 
-  // Match widgets
+  // Search group and child widgets against the filter
   for (int i = 0; i < m_fullModel->rowCount() && results.size() < 30; ++i) {
     auto* groupItem = m_fullModel->item(i);
     if (!groupItem)
@@ -1485,7 +1470,7 @@ QVariantList UI::Taskbar::allWidgets() const
  */
 QVariantList UI::Taskbar::workspaceModel() const
 {
-  // Start with the auto-generated group-based entries, filtering hidden ones
+  // Start with auto-generated entries, skipping hidden groups
   const auto& pm     = DataModel::ProjectModel::instance();
   const auto& hidden = pm.hiddenGroupIds();
   QVariantList model;
@@ -1525,7 +1510,7 @@ QVariantList UI::Taskbar::workspaceModel() const
  */
 void UI::Taskbar::navigateToWidget(int windowId, int groupId)
 {
-  // Check if the widget is already in the current taskbar buttons
+  // Focus widget if already visible in current workspace
   for (int i = 0; i < m_taskbarButtons->rowCount(); ++i) {
     auto* item = m_taskbarButtons->item(i);
     if (item && item->data(TaskbarModel::WindowIdRole).toInt() == windowId) {
@@ -1559,8 +1544,7 @@ void UI::Taskbar::navigateToWidget(int windowId, int groupId)
   // Switch to the group workspace that owns this widget
   setActiveGroupId(groupId);
 
-  // After switching, the widget windows are recreated by the Instantiator.
-  // Use a short delay to let QML create the delegates, then focus the window.
+  // Delay focus to let QML create the delegates
   QTimer::singleShot(100, this, [this, windowId]() {
     auto* window = windowData(windowId);
     if (window) {
@@ -1654,7 +1638,7 @@ void UI::Taskbar::addWidgetToActiveWorkspace(int windowId)
   const auto widgetType = item->data(TaskbarModel::WidgetTypeRole).toInt();
   const auto groupId    = item->data(TaskbarModel::GroupIdRole).toInt();
 
-  // Determine relative index by looking up the widget in the dashboard
+  // Look up relative index from the dashboard widget map
   auto& db        = UI::Dashboard::instance();
   const auto& map = db.widgetMap();
   int relIdx      = -1;

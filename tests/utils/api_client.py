@@ -466,6 +466,37 @@ class SerialStudioClient:
         """
         return self.command("project.frameParser.getConfig")
 
+    def set_frame_parser_language(self, language: int, source_id: int = 0) -> dict:
+        """
+        Set the scripting language for the frame parser on a given source.
+
+        Args:
+            language: 0 = JavaScript, 1 = Lua
+            source_id: Logical source identifier (default 0)
+
+        Returns:
+            Dict with {"sourceId": int, "language": int}
+        """
+        return self.command(
+            "project.frameParser.setLanguage",
+            {"language": language, "sourceId": source_id},
+        )
+
+    def get_frame_parser_language(self, source_id: int = 0) -> int:
+        """
+        Get the scripting language for the frame parser on a given source.
+
+        Args:
+            source_id: Logical source identifier (default 0)
+
+        Returns:
+            0 for JavaScript, 1 for Lua
+        """
+        result = self.command(
+            "project.frameParser.getLanguage", {"sourceId": source_id}
+        )
+        return int(result.get("language", 0))
+
     def get_dashboard_data(self) -> dict:
         """
         Get current dashboard dataset values.

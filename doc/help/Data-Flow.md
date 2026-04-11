@@ -47,7 +47,7 @@ Delimiter detection uses the KMP (Knuth-Morris-Pratt) string matching algorithm 
 - **End Delimiter Only**: finds the end marker and extracts everything before it.
 - **Start and End Delimiter**: finds the start marker, then the end marker, and extracts between them.
 - **Start Delimiter Only**: frame boundaries fall between consecutive start markers.
-- **No Delimiters**: passes all data through. Use this with a JavaScript parser for length-prefixed or self-delimiting protocols.
+- **No Delimiters**: passes all data through. Use this with a frame parser script (Lua or JavaScript) for length-prefixed or self-delimiting protocols.
 
 After extraction, the frame reader optionally validates a checksum (CRC-8, CRC-16, or CRC-32). Valid frames are placed into a lock-free queue with a capacity of 4096 entries. The main thread is signaled when frames are ready.
 
@@ -70,19 +70,19 @@ No project file is needed. This mode is designed for rapid prototyping with CSV-
 
 1. Parse the JSON object directly (delimiters are fixed to `/*` and `*/`).
 2. Build the Frame structure from the groups and datasets defined in the JSON.
-3. No JavaScript parser is involved.
+3. No frame parser script is involved.
 
 ### Project File Mode
 
 1. Apply the configured decoder (Plain Text, Hexadecimal, Base64, or Binary Direct) to convert raw bytes into a parse-ready format.
-2. Call the JavaScript `parse(frame)` function via QJSEngine.
-3. The JavaScript function returns an array of values (or a 2D array for multi-frame output).
+2. Call the `parse(frame)` function via the configured scripting engine (Lua 5.4 or QJSEngine).
+3. The function returns a table/array of values (or a 2D table/array for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
 5. Build the Frame object with populated dataset values.
 
 ### Multi-Source Routing
 
-In multi-device projects, each device (source) has its own frame reader. The frame builder routes data by source ID through `hotpathRxSourceFrame(sourceId, data)`. Each source maintains its own per-source Frame and its own JavaScript engine instance. Source frames are published independently to the dashboard.
+In multi-device projects, each device (source) has its own frame reader. The frame builder routes data by source ID through `hotpathRxSourceFrame(sourceId, data)`. Each source maintains its own per-source Frame and its own isolated script engine instance. Source frames are published independently to the dashboard.
 
 ## Stage 5: Dashboard
 
@@ -113,7 +113,7 @@ The API server on port 7777 serializes frames to JSON and broadcasts to connecte
 |-----------|-----------|
 | Circular buffer append | O(1) amortized |
 | KMP delimiter search | O(n + m), n = buffer size, m = delimiter length |
-| JavaScript parse | O(n) interpreter time per frame |
+| Script parse (Lua/JS) | O(n) interpreter time per frame |
 | Dashboard update | O(d), d = total datasets (zero-copy) |
 | Export enqueue | O(1) lock-free |
 
@@ -134,7 +134,7 @@ Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` p
 
 **No data in console**: Check driver configuration — correct port, baud rate, IP address, or BLE characteristic.
 
-**Data in console but no dashboard**: Verify the operation mode. Check that frame delimiters match what your device actually sends. In Project File mode, confirm the JavaScript parser returns valid arrays.
+**Data in console but no dashboard**: Verify the operation mode. Check that frame delimiters match what your device actually sends. In Project File mode, confirm the frame parser returns valid arrays/tables.
 
 **Garbled data**: Wrong baud rate, wrong decoder method, or mismatched delimiters. Compare raw console output against your expected format.
 
@@ -153,7 +153,7 @@ Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` p
 - [Getting Started](Getting-Started.md) — First-time setup and Quick Plot tutorial
 - [Operation Modes](Operation-Modes.md) — Quick Plot, Project File, and Device Sends JSON
 - [Project Editor](Project-Editor.md) — Configure frame parsing and dashboard layout
-- [JavaScript API](JavaScript-API.md) — Complete parser function reference
+- [Frame Parser Scripting](JavaScript-API.md) — Complete Lua and JavaScript parser reference
 - [Widget Reference](Widget-Reference.md) — All 15+ widget types and their data requirements
 - [Communication Protocols](Communication-Protocols.md) — Protocol comparison and setup
 - [Troubleshooting](Troubleshooting.md) — Solutions to common problems

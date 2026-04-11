@@ -97,7 +97,6 @@ const QList<QStringList>& StaticTable::data() const
  */
 void StaticTable::setFont(const QFont& font)
 {
-  // Update font, repaint, and notify QML
   m_font = font;
   m_widget.setFont(font);
   requestUpdate();
@@ -111,7 +110,6 @@ void StaticTable::setFont(const QFont& font)
  */
 void StaticTable::setHeaderFont(const QFont& font)
 {
-  // Update header font, repaint, and notify QML
   m_headerFont = font;
   m_widget.horizontalHeader()->setFont(font);
   requestUpdate();
@@ -125,7 +123,6 @@ void StaticTable::setHeaderFont(const QFont& font)
  */
 void StaticTable::setData(const QList<QStringList>& data)
 {
-  // Reset the table and repopulate from the new data model
   m_data = data;
   m_widget.setRowCount(0);
   m_widget.setColumnCount(0);

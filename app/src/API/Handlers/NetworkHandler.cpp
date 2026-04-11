@@ -35,7 +35,6 @@
  */
 void API::Handlers::NetworkHandler::registerCommands()
 {
-  // Obtain registry and register all network commands
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
@@ -189,7 +188,6 @@ void API::Handlers::NetworkHandler::registerCommands()
 API::CommandResponse API::Handlers::NetworkHandler::setRemoteAddress(const QString& id,
                                                                      const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("address"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: address"));
@@ -215,7 +213,6 @@ API::CommandResponse API::Handlers::NetworkHandler::setRemoteAddress(const QStri
 API::CommandResponse API::Handlers::NetworkHandler::setTcpPort(const QString& id,
                                                                const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("port"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
@@ -241,7 +238,6 @@ API::CommandResponse API::Handlers::NetworkHandler::setTcpPort(const QString& id
 API::CommandResponse API::Handlers::NetworkHandler::setUdpLocalPort(const QString& id,
                                                                     const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("port"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
@@ -267,7 +263,6 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpLocalPort(const QStrin
 API::CommandResponse API::Handlers::NetworkHandler::setUdpRemotePort(const QString& id,
                                                                      const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("port"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: port"));
@@ -293,7 +288,6 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpRemotePort(const QStri
 API::CommandResponse API::Handlers::NetworkHandler::setSocketType(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("socketTypeIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: socketTypeIndex"));
@@ -326,7 +320,6 @@ API::CommandResponse API::Handlers::NetworkHandler::setSocketType(const QString&
 API::CommandResponse API::Handlers::NetworkHandler::setUdpMulticast(const QString& id,
                                                                     const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -350,7 +343,6 @@ API::CommandResponse API::Handlers::NetworkHandler::setUdpMulticast(const QStrin
 API::CommandResponse API::Handlers::NetworkHandler::lookup(const QString& id,
                                                            const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("host"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: host"));
@@ -380,7 +372,6 @@ API::CommandResponse API::Handlers::NetworkHandler::lookup(const QString& id,
 API::CommandResponse API::Handlers::NetworkHandler::getConfiguration(const QString& id,
                                                                      const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto* network = IO::ConnectionManager::instance().network();
@@ -422,7 +413,6 @@ API::CommandResponse API::Handlers::NetworkHandler::getConfiguration(const QStri
 API::CommandResponse API::Handlers::NetworkHandler::getSocketTypes(const QString& id,
                                                                    const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& socketTypes = IO::ConnectionManager::instance().network()->socketTypes();

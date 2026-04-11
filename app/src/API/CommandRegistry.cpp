@@ -49,7 +49,6 @@ void API::CommandRegistry::registerCommand(const QString& name,
                                            const QString& description,
                                            CommandFunction handler)
 {
-  // Build and insert the command definition
   CommandDefinition def;
   def.name        = name;
   def.description = description;
@@ -69,7 +68,6 @@ void API::CommandRegistry::registerCommand(const QString& name,
                                            const QJsonObject& inputSchema,
                                            CommandFunction handler)
 {
-  // Build and insert the command definition with schema
   CommandDefinition def;
   def.name        = name;
   def.description = description;
@@ -103,7 +101,6 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
                                                    const QString& id,
                                                    const QJsonObject& params)
 {
-  // Look up and invoke the registered handler
   if (!hasCommand(name)) {
     return CommandResponse::makeError(
       id, ErrorCode::UnknownCommand, QStringLiteral("Unknown command: %1").arg(name));
@@ -130,7 +127,6 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
  */
 QStringList API::CommandRegistry::availableCommands() const
 {
-  // Return alphabetically sorted command names
   QStringList names = m_commands.keys();
   names.sort();
   return names;

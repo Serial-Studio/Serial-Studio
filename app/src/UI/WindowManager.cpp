@@ -167,7 +167,7 @@ int UI::WindowManager::zOrder(QQuickItem* item) const
  */
 QJsonObject UI::WindowManager::serializeLayout() const
 {
-  // Build a JSON object containing window order, mode, and geometries
+  // Serialize window geometries in manual mode
   QJsonObject layout;
   if (!m_autoLayoutEnabled) {
     QJsonArray geometries;
@@ -708,7 +708,7 @@ void UI::WindowManager::clearBackgroundImage()
  */
 void UI::WindowManager::selectBackgroundImage()
 {
-  // Open a file dialog to let the user pick a wallpaper image
+  // Configure and show the image picker dialog
   auto* dialog = new QFileDialog(nullptr,
                                  tr("Select Background Image"),
                                  QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
@@ -832,13 +832,12 @@ void UI::WindowManager::setBackgroundImage(const QString& path)
  */
 void UI::WindowManager::setAutoLayoutEnabled(const bool enabled)
 {
-  // Toggle layout mode and restore any maximized windows before re-tiling
   if (m_autoLayoutEnabled != enabled) {
     m_layoutRestored    = false;
     m_autoLayoutEnabled = enabled;
     Q_EMIT autoLayoutEnabledChanged();
 
-    // Restore any maximized windows before re-tiling
+    // Restore maximized windows before re-tiling
     for (auto* win : std::as_const(m_windows))
       if (win->state() == "maximized")
         QMetaObject::invokeMethod(win, "restoreClicked");
@@ -1015,7 +1014,7 @@ int UI::WindowManager::getIdForWindow(QQuickItem* item) const
  */
 int UI::WindowManager::determineNewIndexFromMousePos(const QPoint& pos) const
 {
-  // Hit-test to find the window under the cursor and return its order index
+  // Find the hovered window and return its position in m_windowOrder
   QQuickItem* hoveredWindow = getWindow(pos.x(), pos.y());
   if (!hoveredWindow)
     return m_windowOrder.size();
@@ -1061,9 +1060,8 @@ QRect UI::WindowManager::extractGeometry(QQuickItem* item) const
  */
 UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* target) const
 {
-  // Determine which edge or corner the cursor is near for resize
+  // Map mouse position to window-local coordinates
   if (target->state() == "normal") {
-    // Map mouse position to window-local coordinates
     const int kResizeMargin = 8;
     QPointF localPos        = target->mapFromItem(this, m_initialMousePos);
     const int x             = static_cast<int>(localPos.x());
@@ -1114,13 +1112,13 @@ UI::WindowManager::ResizeEdge UI::WindowManager::detectResizeEdge(QQuickItem* ta
  */
 QQuickItem* UI::WindowManager::getWindow(const int x, const int y) const
 {
-  // Find the topmost visible window containing the given point
+  // Sort windows by descending Z so the topmost is tested first
   QPointF point(x, y);
   QList<QQuickItem*> windows = m_windows.values();
   std::sort(
     windows.begin(), windows.end(), [](QQuickItem* a, QQuickItem* b) { return a->z() > b->z(); });
 
-  // Return first visible window containing the point
+  // Return first hit
   for (QQuickItem* window : std::as_const(windows)) {
     if (!window || !window->isVisible() || window == m_dragWindow)
       continue;
@@ -1387,7 +1385,7 @@ void UI::WindowManager::mousePressEvent(QMouseEvent* event)
     Q_EMIT snapIndicatorChanged();
   }
 
-  // Hit-test for topmost window
+  // Find topmost window under the cursor
   m_focusedWindow = getWindow(m_initialMousePos.x(), m_initialMousePos.y());
   if (!m_focusedWindow) {
     if (m_taskbar)
@@ -1560,29 +1558,24 @@ void UI::WindowManager::mouseDoubleClickEvent(QMouseEvent* event)
     return;
   }
 
-  // Check if double-click was in the title bar area (not on window buttons)
+  // Only toggle maximize/restore for clicks in the title bar area
   const int captionH  = m_focusedWindow->property("captionHeight").toInt();
   const int externcW  = m_focusedWindow->property("externControlWidth").toInt();
   const int buttonsW  = m_focusedWindow->property("windowControlsWidth").toInt();
   const auto localPos = m_focusedWindow->mapFromItem(this, event->pos());
   if (localPos.y() <= captionH && localPos.x() <= m_focusedWindow->width() - buttonsW
       && localPos.x() > externcW) {
-    // Obtain current state
     const QString state = m_focusedWindow->property("state").toString();
 
-    // Restore the window
     if (state == "maximized")
       QMetaObject::invokeMethod(m_focusedWindow, "restoreClicked");
 
-    // Maximize the window
     else if (state == "normal")
       QMetaObject::invokeMethod(m_focusedWindow, "maximizeClicked");
 
-    // Block further processing of the event
     event->accept();
     return;
   }
 
-  // Pass the event through
   QQuickItem::mouseDoubleClickEvent(event);
 }

@@ -124,11 +124,9 @@ bool Misc::IconEngine::isInlineSvg(const QString& icon)
  */
 void Misc::IconEngine::searchIcons(const QString& query)
 {
-  // Validate query
   if (query.trimmed().isEmpty())
     return;
 
-  // Set busy state
   m_busy = true;
   Q_EMIT busyChanged();
 
@@ -153,11 +151,9 @@ void Misc::IconEngine::searchIcons(const QString& query)
  */
 void Misc::IconEngine::downloadIcon(int index)
 {
-  // Validate the icon index
   if (index < 0 || index >= m_iconNames.size())
     return;
 
-  // Set busy state
   m_busy = true;
   Q_EMIT busyChanged();
 
@@ -191,13 +187,11 @@ void Misc::IconEngine::downloadIcon(int index)
  */
 void Misc::IconEngine::onSearchFinished(QNetworkReply* reply)
 {
-  // Clean up the reply and reset previous results
   reply->deleteLater();
 
   m_iconNames.clear();
   m_iconPreviews.clear();
 
-  // Parse the JSON response and extract icon identifiers
   if (reply->error() == QNetworkReply::NoError) {
     const auto data  = reply->readAll();
     const auto doc   = QJsonDocument::fromJson(data);
@@ -234,7 +228,6 @@ void Misc::IconEngine::onSearchFinished(QNetworkReply* reply)
  */
 void Misc::IconEngine::onDownloadFinished(QNetworkReply* reply)
 {
-  // Clean up the reply and clear busy state
   reply->deleteLater();
 
   m_busy = false;

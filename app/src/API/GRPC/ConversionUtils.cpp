@@ -26,11 +26,10 @@ google::protobuf::Struct API::GRPC::ConversionUtils::toProtoStruct(const QJsonOb
 {
   google::protobuf::Struct result;
 
-  // Depth guard to prevent stack overflow on deeply nested JSON
+  // Depth guard against deeply nested JSON
   if (depth >= kMaxConversionDepth) [[unlikely]]
     return result;
 
-  // Build protobuf Struct from JSON key-value pairs
   auto* fields = result.mutable_fields();
   for (auto it = json.begin(); it != json.end(); ++it)
     (*fields)[it.key().toStdString()] = toProtoValue(it.value(), depth + 1);
@@ -53,13 +52,12 @@ google::protobuf::Value API::GRPC::ConversionUtils::toProtoValue(const QJsonValu
 {
   google::protobuf::Value result;
 
-  // Depth guard to prevent stack overflow on deeply nested JSON
+  // Depth guard against deeply nested JSON
   if (depth >= kMaxConversionDepth) [[unlikely]] {
     result.set_null_value(google::protobuf::NULL_VALUE);
     return result;
   }
 
-  // Map JSON type to protobuf Value kind
   switch (json.type()) {
     case QJsonValue::Null:
     case QJsonValue::Undefined:
@@ -109,11 +107,10 @@ QJsonObject API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::St
 {
   QJsonObject result;
 
-  // Depth guard to prevent stack overflow on deeply nested protobuf
+  // Depth guard against deeply nested protobuf
   if (depth >= kMaxConversionDepth) [[unlikely]]
     return result;
 
-  // Convert each protobuf field to a QJsonValue
   for (const auto& [key, value] : proto.fields())
     result.insert(QString::fromStdString(key), toQJsonValue(value, depth + 1));
 
@@ -127,7 +124,7 @@ QJsonObject API::GRPC::ConversionUtils::toQJsonObject(const google::protobuf::St
  */
 QJsonValue API::GRPC::ConversionUtils::toQJsonValue(const google::protobuf::Value& proto, int depth)
 {
-  // Depth guard to prevent stack overflow on deeply nested protobuf
+  // Depth guard against deeply nested protobuf
   if (depth >= kMaxConversionDepth) [[unlikely]]
     return QJsonValue(QJsonValue::Null);
 
@@ -193,11 +190,11 @@ inline void setNumber(google::protobuf::Struct& s, const char* key, double val)
 google::protobuf::Struct API::GRPC::ConversionUtils::frameToProtoStruct(
   const DataModel::Frame& frame)
 {
-  // Build top-level Struct with frame title
+  // Build top-level frame Struct
   google::protobuf::Struct result;
   setString(result, "title", frame.title);
 
-  // Groups array
+  // Serialize each group and its datasets
   auto* groups_list = (*result.mutable_fields())["groups"].mutable_list_value();
 
   for (const auto& group : frame.groups) {
@@ -205,7 +202,6 @@ google::protobuf::Struct API::GRPC::ConversionUtils::frameToProtoStruct(
     setString(*group_val, "title", group.title);
     setString(*group_val, "widget", group.widget);
 
-    // Datasets array
     auto* ds_list = (*group_val->mutable_fields())["datasets"].mutable_list_value();
 
     for (const auto& ds : group.datasets) {

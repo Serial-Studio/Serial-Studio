@@ -35,7 +35,6 @@
  */
 void API::Handlers::BluetoothLEHandler::registerCommands()
 {
-  // Obtain registry and register all BLE commands
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
@@ -165,7 +164,6 @@ void API::Handlers::BluetoothLEHandler::registerCommands()
 API::CommandResponse API::Handlers::BluetoothLEHandler::startDiscovery(const QString& id,
                                                                        const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto* ble = IO::ConnectionManager::instance().bluetoothLE();
@@ -196,7 +194,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::startDiscovery(const QSt
 API::CommandResponse API::Handlers::BluetoothLEHandler::selectDevice(const QString& id,
                                                                      const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("deviceIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
@@ -231,7 +228,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectDevice(const QStri
 API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QString& id,
                                                                       const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("serviceIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: serviceIndex"));
@@ -264,7 +260,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::selectService(const QStr
 API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
   const QString& id, const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("characteristicIndex"))) {
     return CommandResponse::makeError(
       id,
@@ -303,7 +298,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::setCharacteristicIndex(
 API::CommandResponse API::Handlers::BluetoothLEHandler::getDeviceList(const QString& id,
                                                                       const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto* ble               = IO::ConnectionManager::instance().bluetoothLE();
@@ -329,7 +323,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getDeviceList(const QStr
 API::CommandResponse API::Handlers::BluetoothLEHandler::getServiceList(const QString& id,
                                                                        const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto* ble                = IO::ConnectionManager::instance().bluetoothLE();
@@ -354,7 +347,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getServiceList(const QSt
 API::CommandResponse API::Handlers::BluetoothLEHandler::getCharacteristicList(
   const QString& id, const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto* ble                       = IO::ConnectionManager::instance().bluetoothLE();
@@ -380,7 +372,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getCharacteristicList(
 API::CommandResponse API::Handlers::BluetoothLEHandler::getConfiguration(const QString& id,
                                                                          const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto* ble = IO::ConnectionManager::instance().bluetoothLE();
@@ -413,7 +404,6 @@ API::CommandResponse API::Handlers::BluetoothLEHandler::getConfiguration(const Q
 API::CommandResponse API::Handlers::BluetoothLEHandler::getStatus(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto* ble = IO::ConnectionManager::instance().bluetoothLE();

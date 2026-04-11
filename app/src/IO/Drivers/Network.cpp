@@ -102,7 +102,7 @@ void IO::Drivers::Network::close()
  */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
-  // Determine open/state from the active socket type
+  // Query the active socket for its connection state
   bool open  = false;
   auto state = QAbstractSocket::UnconnectedState;
 

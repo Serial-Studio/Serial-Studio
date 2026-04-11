@@ -25,7 +25,6 @@
  */
 void API::Handlers::AudioHandler::registerCommands()
 {
-  // Obtain registry and register all audio commands
   auto& registry = CommandRegistry::instance();
 
   // setInputDevice schema
@@ -239,7 +238,6 @@ void API::Handlers::AudioHandler::registerCommands()
 API::CommandResponse API::Handlers::AudioHandler::setInputDevice(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("deviceIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
@@ -272,7 +270,6 @@ API::CommandResponse API::Handlers::AudioHandler::setInputDevice(const QString& 
 API::CommandResponse API::Handlers::AudioHandler::setOutputDevice(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("deviceIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: deviceIndex"));
@@ -305,7 +302,6 @@ API::CommandResponse API::Handlers::AudioHandler::setOutputDevice(const QString&
 API::CommandResponse API::Handlers::AudioHandler::setSampleRate(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("rateIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: rateIndex"));
@@ -338,7 +334,6 @@ API::CommandResponse API::Handlers::AudioHandler::setSampleRate(const QString& i
 API::CommandResponse API::Handlers::AudioHandler::setInputSampleFormat(const QString& id,
                                                                        const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("formatIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: formatIndex"));
@@ -371,7 +366,6 @@ API::CommandResponse API::Handlers::AudioHandler::setInputSampleFormat(const QSt
 API::CommandResponse API::Handlers::AudioHandler::setInputChannelConfig(const QString& id,
                                                                         const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("channelIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: channelIndex"));
@@ -404,7 +398,6 @@ API::CommandResponse API::Handlers::AudioHandler::setInputChannelConfig(const QS
 API::CommandResponse API::Handlers::AudioHandler::setOutputSampleFormat(const QString& id,
                                                                         const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("formatIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: formatIndex"));
@@ -437,7 +430,6 @@ API::CommandResponse API::Handlers::AudioHandler::setOutputSampleFormat(const QS
 API::CommandResponse API::Handlers::AudioHandler::setOutputChannelConfig(const QString& id,
                                                                          const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("channelIndex"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: channelIndex"));
@@ -475,7 +467,6 @@ API::CommandResponse API::Handlers::AudioHandler::getInputDevices(const QString&
 {
   Q_UNUSED(params)
 
-  // Retrieve and serialize the input device list
   const auto& devices = IO::ConnectionManager::instance().audio()->inputDeviceList();
 
   QJsonArray devices_array;
@@ -497,7 +488,6 @@ API::CommandResponse API::Handlers::AudioHandler::getOutputDevices(const QString
 {
   Q_UNUSED(params)
 
-  // Retrieve and serialize the output device list
   const auto& devices = IO::ConnectionManager::instance().audio()->outputDeviceList();
 
   QJsonArray devices_array;
@@ -519,7 +509,6 @@ API::CommandResponse API::Handlers::AudioHandler::getSampleRates(const QString& 
 {
   Q_UNUSED(params)
 
-  // Retrieve and serialize sample rate options
   const auto& rates = IO::ConnectionManager::instance().audio()->sampleRates();
 
   QJsonArray rates_array;
@@ -541,7 +530,6 @@ API::CommandResponse API::Handlers::AudioHandler::getInputFormats(const QString&
 {
   Q_UNUSED(params)
 
-  // Retrieve and serialize input sample format options
   const auto& formats = IO::ConnectionManager::instance().audio()->inputSampleFormats();
 
   QJsonArray formats_array;
@@ -563,7 +551,6 @@ API::CommandResponse API::Handlers::AudioHandler::getOutputFormats(const QString
 {
   Q_UNUSED(params)
 
-  // Retrieve and serialize output sample format options
   const auto& formats = IO::ConnectionManager::instance().audio()->outputSampleFormats();
 
   QJsonArray formats_array;
@@ -585,7 +572,6 @@ API::CommandResponse API::Handlers::AudioHandler::getConfiguration(const QString
 {
   Q_UNUSED(params)
 
-  // Collect all audio configuration settings
   auto* audio = IO::ConnectionManager::instance().audio();
 
   QJsonObject result;

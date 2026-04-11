@@ -45,7 +45,6 @@ double Widgets::Output::Slider::currentValue() const noexcept
  */
 void Widgets::Output::Slider::setCurrentValue(double value)
 {
-  // Clamp and transmit the new value if it changed
   value = qBound(minValue(), value, maxValue());
 
   if (!qFuzzyCompare(m_currentValue, value)) {

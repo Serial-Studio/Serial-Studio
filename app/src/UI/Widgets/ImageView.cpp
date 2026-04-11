@@ -67,7 +67,6 @@ void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
   Q_ASSERT(data != nullptr);
   Q_ASSERT(m_mode == DetectionMode::Autodetect || m_mode == DetectionMode::Manual);
 
-  // Append incoming bytes and dispatch to the active detection mode
   if (!data || data->isEmpty())
     return;
 
@@ -238,11 +237,9 @@ void Widgets::ImageFrameReader::processManual()
   Q_ASSERT(m_mode == DetectionMode::Manual);
   Q_ASSERT(!m_startSeq.isEmpty() && !m_endSeq.isEmpty());
 
-  // Require both delimiters to be configured
   if (m_startSeq.isEmpty() || m_endSeq.isEmpty())
     return;
 
-  // Scan the accumulator for complete frames between start/end sequences
   constexpr int kMaxIterations = 10000;
   int iterations               = 0;
   while (iterations < kMaxIterations) {
@@ -406,11 +403,9 @@ bool Widgets::ImageView::exportEnabled() const noexcept
  */
 void Widgets::ImageView::setExportEnabled(bool enabled)
 {
-  // Guard unchanged value
   if (m_exportEnabled == enabled)
     return;
 
-  // Update state and close the export session when disabling
   m_exportEnabled = enabled;
 
   if (!enabled)
@@ -431,14 +426,13 @@ void Widgets::ImageView::onFrameReady(const QByteArray& data)
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(m_reader != nullptr);
 
-  // Ignore empty frames and paused state
   if (data.isEmpty())
     return;
 
   if (IO::ConnectionManager::instance().paused())
     return;
 
-  // Detect format, decode, and publish the image
+  // Decode and publish the image to the provider
   m_imageFormat = detectFormat(data);
 
   QImage img = QImage::fromData(data);
@@ -490,7 +484,7 @@ void Widgets::ImageView::reconfigureReader()
   Q_ASSERT(m_index >= 0);
   Q_ASSERT(!m_providerKey.isEmpty());
 
-  // Destroy any existing reader before creating a new one
+  // Tear down old reader before creating a new one
   if (m_reader) {
     m_reader->deleteLater();
     m_reader = nullptr;
@@ -531,7 +525,6 @@ void Widgets::ImageView::reconfigureReader()
  */
 QString Widgets::ImageView::detectFormat(const QByteArray& data)
 {
-  // Match magic bytes against known image format headers
   if (data.size() >= 3 && static_cast<quint8>(data[0]) == 0xFF
       && static_cast<quint8>(data[1]) == 0xD8 && static_cast<quint8>(data[2]) == 0xFF)
     return QStringLiteral("JPEG");

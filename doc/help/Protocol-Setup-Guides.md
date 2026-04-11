@@ -175,7 +175,7 @@ Once you have configured your register groups, you can auto-generate a Serial St
 3. You will be prompted to save the `.ssproj` file.
 4. The project editor opens for further customization.
 
-The generated project includes one group per register block, one dataset per register/coil, and a JavaScript frame parser. See [How Multi-Group Polling Works](#how-multi-group-polling-works) below for details on the frame parser.
+The generated project includes one group per register block, one dataset per register/coil, and a Lua frame parser. See [How Multi-Group Polling Works](#how-multi-group-polling-works) below for details on the frame parser.
 
 ### Troubleshooting
 
@@ -213,7 +213,7 @@ The generated project includes one group per register block, one dataset per reg
 
 **License:** Pro
 
-Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a JavaScript frame parser, and appropriate dashboard widgets.
+Instead of manually adding register groups one by one, you can import a register map file that describes all registers for your device. Serial Studio will auto-generate a complete project with register groups, datasets, a Lua frame parser, and appropriate dashboard widgets.
 
 ### Supported Formats
 

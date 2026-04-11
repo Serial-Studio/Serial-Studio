@@ -393,8 +393,9 @@ struct alignas(8) Source {
   int frameDetection         = 0;      ///< SerialStudio::FrameDetection cast to int
   int decoderMethod          = 0;      ///< SerialStudio::DecoderMethod cast to int
   bool hexadecimalDelimiters = false;  ///< True if delimiters are hex-encoded
+  int frameParserLanguage    = 0;      ///< SerialStudio::ScriptLanguage cast to int
   QJsonObject connectionSettings;      ///< Opaque bus-specific connection params
-  QString frameParserCode;             ///< Per-source JavaScript frame parser
+  QString frameParserCode;             ///< Per-source frame parser code
 };
 
 static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
@@ -423,6 +424,9 @@ static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
 
   if (!s.frameParserCode.isEmpty())
     obj.insert("frameParserCode", s.frameParserCode);
+
+  if (s.frameParserLanguage != 0)
+    obj.insert("frameParserLanguage", s.frameParserLanguage);
 
   return obj;
 }
@@ -893,6 +897,7 @@ void read_io_settings(QByteArray& frameStart,
   s.hexadecimalDelimiters = ss_jsr(obj, "hexadecimalDelimiters", false).toBool();
   s.connectionSettings    = ss_jsr(obj, Keys::SourceConn, QJsonObject()).toJsonObject();
   s.frameParserCode       = ss_jsr(obj, "frameParserCode", "").toString();
+  s.frameParserLanguage   = ss_jsr(obj, "frameParserLanguage", 0).toInt();
   return true;
 }
 

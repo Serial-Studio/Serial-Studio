@@ -135,6 +135,7 @@ protected:
  */
 int main(int argc, char** argv)
 {
+  // Configure application metadata
   QLoggingCategory::setFilterRules("*font*=false");
 
   QApplication::setApplicationName(APP_EXECUTABLE);
@@ -146,6 +147,7 @@ int main(int argc, char** argv)
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuWindows);
 
+  // Handle headless mode and platform-specific initialization
   const bool headless = argvHasFlag(argc, argv, "--headless");
   if (headless)
     argv = injectPlatformArg(argc, argv, "offscreen");
@@ -179,6 +181,7 @@ int main(int argc, char** argv)
   app.setStyle(QStyleFactory::create("Fusion"));
   QQuickStyle::setStyle("Fusion");
 
+  // Define command-line options
   // clang-format off
   typedef QCommandLineOption QCLO;
   QCLO vOpt({"v", "version"}, "Displays application version");
@@ -222,6 +225,7 @@ int main(int argc, char** argv)
 #endif
   // clang-format on
 
+  // Parse command line and handle early-exit flags
   QCommandLineParser parser;
   parser.setApplicationDescription(PROJECT_DESCRIPTION_SUMMARY);
   parser.addHelpOption();
@@ -277,6 +281,7 @@ int main(int argc, char** argv)
     return cliDeactivateLicense(app);
 #endif
 
+  // Initialize resources and module manager
   Q_INIT_RESOURCE(rcc);
   Q_INIT_RESOURCE(translations);
 
@@ -291,6 +296,7 @@ int main(int argc, char** argv)
     return EXIT_FAILURE;
   }
 
+  // Apply CLI operation mode and connection settings
   if (parser.isSet(apiServerOpt))
     API::Server::instance().setEnabled(true);
 
@@ -680,8 +686,7 @@ static char** injectPlatformArg(int& argc, char** argv, const char* platform)
 
   newArgv[0] = argv[0];
 
-  // const_cast is safe here: Qt copies these strings during QApplication init
-  // and never writes back to the argv pointers
+  // const_cast is safe: Qt copies argv strings during QApplication init
   newArgv[1] = const_cast<char*>("-platform");
   newArgv[2] = const_cast<char*>(platform);
 
@@ -943,7 +948,7 @@ static void registerWindowsFileAssociation()
   const QString progIdPath = QStringLiteral("Software\\Classes\\%1").arg(progId);
   writeKey(progIdPath, QStringLiteral("Serial Studio Project"));
 
-  // Register default icon (use the app icon)
+  // Register default icon
   writeKey(progIdPath + QStringLiteral("\\DefaultIcon"), QStringLiteral("\"%1\",0").arg(exePath));
 
   // Register open command

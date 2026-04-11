@@ -57,12 +57,17 @@ class JsCodeEditor : public QQuickPaintedItem {
              READ  sourceId
              WRITE setSourceId
              NOTIFY sourceIdChanged)
+  Q_PROPERTY(int language
+             READ  language
+             WRITE setLanguage
+             NOTIFY languageChanged)
   // clang-format on
 
 signals:
   void textChanged();
   void modifiedChanged();
   void sourceIdChanged();
+  void languageChanged();
 
 public:
   explicit JsCodeEditor(QQuickItem* parent = nullptr);
@@ -71,6 +76,7 @@ public:
   [[nodiscard]] bool undoAvailable() const noexcept;
   [[nodiscard]] bool redoAvailable() const noexcept;
   [[nodiscard]] int sourceId() const noexcept;
+  [[nodiscard]] int language() const noexcept;
   [[nodiscard]] QString text() const;
 
 public slots:
@@ -88,6 +94,8 @@ public slots:
   void selectTemplate();
   void testWithSampleData();
   void setSourceId(const int sourceId);
+  void setLanguage(const int language);
+  void switchLanguage(const int language);
   void reload(const bool guiTrigger = false);
   void loadDefaultTemplate(const bool guiTrigger = false);
 
@@ -115,6 +123,7 @@ private:
 
 private:
   int m_sourceId;
+  int m_language;
   bool m_readingCode;
   QPixmap m_pixmap;
   QSyntaxStyle m_style;

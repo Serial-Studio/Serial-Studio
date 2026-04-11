@@ -523,6 +523,34 @@
         <file>scripts/url_encoded.js</file>
         <file>scripts/xml_data.js</file>
         <file>scripts/yaml_data.js</file>
+        <file>scripts/lua/at_commands.lua</file>
+        <file>scripts/lua/base64_encoded.lua</file>
+        <file>scripts/lua/batched_sensor_data.lua</file>
+        <file>scripts/lua/binary_tlv.lua</file>
+        <file>scripts/lua/cobs_encoded.lua</file>
+        <file>scripts/lua/comma_separated.lua</file>
+        <file>scripts/lua/fixed_width_fields.lua</file>
+        <file>scripts/lua/hexadecimal_bytes.lua</file>
+        <file>scripts/lua/ini_config.lua</file>
+        <file>scripts/lua/json_data.lua</file>
+        <file>scripts/lua/key_value_pairs.lua</file>
+        <file>scripts/lua/mavlink.lua</file>
+        <file>scripts/lua/messagepack.lua</file>
+        <file>scripts/lua/modbus.lua</file>
+        <file>scripts/lua/nmea_0183.lua</file>
+        <file>scripts/lua/nmea_2000.lua</file>
+        <file>scripts/lua/pipe_delimited.lua</file>
+        <file>scripts/lua/raw_bytes.lua</file>
+        <file>scripts/lua/rtcm_corrections.lua</file>
+        <file>scripts/lua/semicolon_separated.lua</file>
+        <file>scripts/lua/sirf_binary.lua</file>
+        <file>scripts/lua/slip_encoded.lua</file>
+        <file>scripts/lua/tab_separated.lua</file>
+        <file>scripts/lua/time_series_2d.lua</file>
+        <file>scripts/lua/ubx_ublox.lua</file>
+        <file>scripts/lua/url_encoded.lua</file>
+        <file>scripts/lua/xml_data.lua</file>
+        <file>scripts/lua/yaml_data.lua</file>
         <file>themes/code-editor/default.xml</file>
         <file>themes/code-editor/fluent-dark.xml</file>
         <file>themes/code-editor/fluent-light.xml</file>

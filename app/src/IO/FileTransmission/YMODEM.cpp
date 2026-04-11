@@ -34,7 +34,6 @@
  */
 IO::Protocols::YMODEM::YMODEM(QObject* parent) : XMODEM(parent), m_yState(YState::Idle)
 {
-  // YMODEM always uses 1K blocks for data
   setUse1K(true);
 }
 
@@ -60,14 +59,13 @@ void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
   if (isActive())
     cancelTransfer();
 
-  // Open the file
+  // Open file and initialize transfer state
   m_file.setFileName(filePath);
   if (!m_file.open(QIODevice::ReadOnly)) {
     Q_EMIT finished(false, tr("Cannot open file: %1").arg(m_file.errorString()));
     return;
   }
 
-  // Store metadata
   m_filePath    = filePath;
   m_fileSize    = m_file.size();
   m_bytesSent   = 0;
@@ -88,7 +86,6 @@ void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
  */
 void IO::Protocols::YMODEM::processInput(const QByteArray& data)
 {
-  // Process each byte through the YMODEM state machine
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
 
@@ -133,7 +130,6 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
           m_retryCount  = 0;
           m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
 
-          // Check if file is fully sent
           if (m_file.atEnd()) {
             m_yState = YState::WaitingForFirstEOTResponse;
             Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
@@ -156,7 +152,6 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
             return;
           }
 
-          // Rewind file to re-read the current block
           Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
           constexpr int blockSize = 1024;
           qint64 blockStart       = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
@@ -192,9 +187,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
           m_timeoutTimer.stop();
           m_yState = YState::WaitingForEndBatchC;
           m_timeoutTimer.start(m_timeoutMs);
-        }
-        // Some receivers send 'C' immediately after ACK of second EOT
-        else if (ch == kCRC) {
+        } else if (ch == kCRC) {
           m_timeoutTimer.stop();
           sendEndOfBatch();
         }
@@ -235,21 +228,18 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
  */
 void IO::Protocols::YMODEM::sendBlock0()
 {
-  // Extract file metadata
+  // Build block 0 payload: filename + size
   QFileInfo info(m_filePath);
-
-  // Build block 0 payload: filename\0filesize\0
   QByteArray payload;
   payload.append(info.fileName().toUtf8());
   payload.append('\0');
   payload.append(QByteArray::number(m_fileSize));
   payload.append('\0');
 
-  // Pad to 128 bytes (block 0 always uses SOH/128 in YMODEM)
+  // Pad to 128 bytes and send
   while (payload.size() < 128)
     payload.append('\0');
 
-  // Build the framed block
   QByteArray packet = buildBlock(payload, 0);
 
   Q_EMIT writeRequested(packet);
@@ -265,7 +255,6 @@ void IO::Protocols::YMODEM::sendBlock0()
  */
 void IO::Protocols::YMODEM::sendEndOfBatch()
 {
-  // Build and send an empty block 0 to signal end of batch
   QByteArray payload(128, '\0');
   QByteArray packet = buildBlock(payload, 0);
 
@@ -281,7 +270,7 @@ void IO::Protocols::YMODEM::sendEndOfBatch()
  */
 void IO::Protocols::YMODEM::sendDataBlock()
 {
-  // Read the next 1K block, send EOT if file is exhausted
+  // Read next 1K block; send EOT if file is exhausted
   QByteArray data = m_file.read(1024);
   if (data.isEmpty()) {
     m_yState = YState::WaitingForFirstEOTResponse;
@@ -291,15 +280,12 @@ void IO::Protocols::YMODEM::sendDataBlock()
     return;
   }
 
-  // Pad the last block with SUB (0x1A)
+  // Pad incomplete block and send
   while (data.size() < 1024)
     data.append(static_cast<char>(0x1A));
 
-  // Build and send
   QByteArray packet = buildBlock(data, m_blockNumber);
   Q_EMIT writeRequested(packet);
-
-  // Update progress
   m_bytesSent = qMin(m_bytesSent + 1024, m_fileSize);
   Q_EMIT progressChanged(m_bytesSent, m_fileSize);
   Q_EMIT statusMessage(

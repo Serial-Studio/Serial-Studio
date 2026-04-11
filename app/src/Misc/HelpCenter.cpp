@@ -196,11 +196,9 @@ bool Misc::HelpCenter::navigateToPage(const QString& link)
   if (hashIdx >= 0)
     normalized = normalized.left(hashIdx);
 
-  // Remove .md extension
   if (normalized.endsWith(".md", Qt::CaseInsensitive))
     normalized.chop(3);
 
-  // Skip if normalized page is empty
   if (normalized.isEmpty())
     return false;
 
@@ -263,7 +261,6 @@ void Misc::HelpCenter::showPage(const QString& pageId)
  */
 void Misc::HelpCenter::onManifestReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -299,7 +296,6 @@ void Misc::HelpCenter::onManifestReply()
  */
 void Misc::HelpCenter::onPageReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -390,7 +386,6 @@ void Misc::HelpCenter::applyFilter()
  */
 void Misc::HelpCenter::fetchPage(int index)
 {
-  // Validate index range
   if (index < 0 || index >= m_filteredPages.count())
     return;
 
@@ -431,7 +426,6 @@ void Misc::HelpCenter::preloadAllPages()
     const auto id   = obj.value("id").toString();
     const auto file = obj.value("file").toString();
 
-    // Already loaded
     if (m_pageContents.contains(id))
       continue;
 
@@ -451,7 +445,6 @@ void Misc::HelpCenter::preloadAllPages()
  */
 void Misc::HelpCenter::onPreloadReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;

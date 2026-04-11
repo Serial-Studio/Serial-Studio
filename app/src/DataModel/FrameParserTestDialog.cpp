@@ -44,14 +44,13 @@
 DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWidget* parent)
   : QDialog(parent), m_sourceId(0), m_parser(parser)
 {
-  // Set window geometry and title
+  // Configure window dimensions
   resize(640, 480);
   setMinimumSize(640, 480);
 
-  // Get pointer to fonts module
   auto* commonFonts = &Misc::CommonFonts::instance();
 
-  // Initialize widgets
+  // Create widgets
   m_inputTitle   = new QLabel(this);
   m_outputTitle  = new QLabel(this);
   m_table        = new QTableWidget(this);
@@ -63,17 +62,16 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
   m_parseButton  = new QPushButton(this);
   m_inputDisplay = new QPlainTextEdit(this);
 
-  // Create layout objects
+  // Create layouts
   auto* mainLayout   = new QVBoxLayout(this);
   auto* inputLayout  = new QHBoxLayout(m_inputGroup);
   auto* outputLayout = new QVBoxLayout(m_outputGroup);
 
-  // Configure buttons
+  // Configure buttons and table
   m_parseButton->setDefault(true);
   m_clearButton->setIcon(QIcon(":/rcc/icons/buttons/clear.svg"));
   m_parseButton->setIcon(QIcon(":/rcc/icons/buttons/media-play.svg"));
 
-  // Configure table widget
   m_table->setColumnCount(2);
   m_table->verticalHeader()->hide();
   m_table->setAlternatingRowColors(true);
@@ -84,17 +82,15 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
   m_table->horizontalHeader()->setFont(commonFonts->boldUiFont());
   m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
   m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-
-  // Configure input text edit
   m_inputDisplay->setReadOnly(true);
 
-  // Configure titles
+  // Configure title fonts
   auto titleFont = commonFonts->customUiFont(0.8, true);
   titleFont.setCapitalization(QFont::AllUppercase);
   m_inputTitle->setFont(titleFont);
   m_outputTitle->setFont(titleFont);
 
-  // Configure layouts
+  // Assemble layouts
   inputLayout->addWidget(m_userInput);
   inputLayout->addWidget(m_hexCheckBox);
   inputLayout->addWidget(m_clearButton);
@@ -102,11 +98,10 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
   outputLayout->addWidget(m_inputDisplay);
   outputLayout->addWidget(m_table);
 
-  // Set layout stretch factors
   outputLayout->setStretch(0, 1);
   outputLayout->setStretch(1, 2);
 
-  // Set main layout
+  // Build main layout
   mainLayout->setSpacing(4);
   mainLayout->addWidget(m_inputTitle);
   mainLayout->addWidget(m_inputGroup);
@@ -114,17 +109,15 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
   mainLayout->addWidget(m_outputTitle);
   mainLayout->addWidget(m_outputGroup);
 
-  // Connect signals
+  // Connect widget signals
   connect(m_parseButton, &QPushButton::clicked, this, &FrameParserTestDialog::parseData);
   connect(m_clearButton, &QPushButton::clicked, this, &FrameParserTestDialog::clear);
   connect(
     m_hexCheckBox, &QCheckBox::checkStateChanged, this, &FrameParserTestDialog::onInputModeChanged);
   connect(m_userInput, &QLineEdit::returnPressed, this, &FrameParserTestDialog::parseData);
-
-  // Add hex formatting and validation
   connect(m_userInput, &QLineEdit::textChanged, this, &FrameParserTestDialog::onInputDataChanged);
 
-  // Singleton module connections
+  // Connect theme and language change signals
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
           this,
@@ -134,7 +127,7 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
           this,
           &FrameParserTestDialog::onLanguageChanged);
 
-  // Load theme & translations
+  // Apply initial theme and translations
   onThemeChanged();
   onLanguageChanged();
 
@@ -178,7 +171,6 @@ void DataModel::FrameParserTestDialog::clear()
  */
 void DataModel::FrameParserTestDialog::parseData()
 {
-  // Validate and retrieve input text
   const auto input = m_userInput->text();
   if (input.isEmpty())
     return;
@@ -215,19 +207,17 @@ void DataModel::FrameParserTestDialog::parseData()
  */
 void DataModel::FrameParserTestDialog::onThemeChanged()
 {
-  // Load theme colors
+  // Apply palette and sync input mode
   setPalette(Misc::ThemeManager::instance().palette());
   onInputModeChanged(m_hexCheckBox->checkState());
 
-  // Define QSS for groupboxes
+  // Style groupboxes
   const auto* tm = &Misc::ThemeManager::instance();
   const auto groupBoxStyle =
     QStringLiteral(
       "QGroupBox {  border: 1px solid %1;  border-radius: 2px;  background-color: %2;}")
       .arg(tm->getColor("groupbox_border").name())
       .arg(tm->getColor("groupbox_background").name());
-
-  // Set groupbox style
   m_inputGroup->setStyleSheet(groupBoxStyle);
   m_outputGroup->setStyleSheet(groupBoxStyle);
 }
@@ -240,7 +230,6 @@ void DataModel::FrameParserTestDialog::onThemeChanged()
  */
 void DataModel::FrameParserTestDialog::onLanguageChanged()
 {
-  // Update all translatable widget texts
   m_hexCheckBox->setText(tr("HEX"));
   m_clearButton->setText(tr("Clear"));
   m_parseButton->setText(tr("Evaluate"));
@@ -301,12 +290,9 @@ void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
  */
 void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
 {
-  // Automatically add spaces & highlight invalid hex data
+  // Format and validate hex input
   if (m_hexCheckBox->isChecked()) {
-    // Block signals to prevent recursive calls
     m_userInput->blockSignals(true);
-
-    // Update text if formatting changed
     const auto fmt     = formatHexInput(t);
     const auto isValid = validateHexInput(fmt);
     if (t != fmt) {
@@ -317,7 +303,7 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
       m_userInput->setCursorPosition(pos + diff);
     }
 
-    // Update text color based on validity
+    // Highlight invalid hex in red
     auto palette = m_userInput->palette();
     if (isValid || fmt.isEmpty())
       palette.setColor(QPalette::Text, Qt::black);
@@ -328,7 +314,6 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
     m_userInput->blockSignals(false);
   }
 
-  // Reset to default palette in text mode
   else
     m_userInput->setPalette(QPalette());
 }
@@ -364,7 +349,7 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
  */
 QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
 {
-  // Strip non-alphanumeric characters and uppercase letters
+  // Strip non-hex characters and uppercase
   QString cleaned;
   for (const QChar& c : text)
     if (c.isLetterOrNumber())
@@ -407,7 +392,6 @@ QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
  */
 bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 {
-  // Empty input is always valid
   if (text.isEmpty())
     return true;
 
@@ -434,7 +418,7 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 void DataModel::FrameParserTestDialog::displayOutput(const QString& input,
                                                      const QStringList& output)
 {
-  // Reset table and update input display
+  // Clear previous results
   m_table->setRowCount(0);
   m_inputDisplay->setPlainText(input);
   if (input.isEmpty())

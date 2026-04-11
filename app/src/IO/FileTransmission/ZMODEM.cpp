@@ -79,10 +79,11 @@ void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
   Q_ASSERT(!filePath.isEmpty());
   Q_ASSERT(m_maxRetries > 0);
 
-  // Abort any existing transfer and open the file
+  // Abort any existing transfer
   if (isActive())
     cancelTransfer();
 
+  // Open the file
   m_file.setFileName(filePath);
   if (!m_file.open(QIODevice::ReadOnly)) {
     Q_EMIT finished(false, tr("Cannot open file: %1").arg(m_file.errorString()));
@@ -109,11 +110,10 @@ void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
  */
 void IO::Protocols::ZMODEM::cancelTransfer()
 {
-  // Ignore if no transfer is in progress
   if (!isActive())
     return;
 
-  // Send cancel sequence and reset state
+  // Send cancel and reset state
   sendCancel();
   m_timeoutTimer.stop();
   m_state      = State::Idle;
@@ -142,7 +142,6 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(isActive());
 
-  // Parse each byte through the ZMODEM header state machine
   for (const char byte : data) {
     const quint8 ch = static_cast<quint8>(byte);
 
@@ -213,19 +212,19 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
  */
 void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
 {
-  // Hex headers are terminated by CR/LF
+  // Accumulate until line terminator
   if (ch != '\r' && ch != '\n') {
     m_headerBuf.append(static_cast<char>(ch));
     return;
   }
 
-  // Need at least 14 hex chars: type(2) + arg(8) + crc(4)
+  // Incomplete header, reset
   if (m_headerBuf.size() < 14) {
     m_parseState = ParseState::Idle;
     return;
   }
 
-  // Parse type and arg (little-endian), validating hex conversion
+  // Decode type and argument from hex
   const auto type_bytes = QByteArray::fromHex(m_headerBuf.mid(0, 2));
   if (type_bytes.isEmpty()) [[unlikely]] {
     m_parseState = ParseState::Idle;
@@ -252,7 +251,7 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
  */
 void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
 {
-  // Handle ZDLE escaping
+  // Decode ZDLE-escaped byte
   if (m_zdleEscape) {
     m_headerBuf.append(static_cast<char>(ch ^ 0x40));
     m_zdleEscape = false;
@@ -263,11 +262,10 @@ void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
     m_headerBuf.append(static_cast<char>(ch));
   }
 
-  // Wait until we have all expected bytes
   if (m_headerBuf.size() < m_headerBytesExpected)
     return;
 
-  // Extract type and arg (little-endian)
+  // Extract type and argument
   quint8 type = static_cast<quint8>(m_headerBuf[0]);
   quint32 arg = static_cast<quint32>(static_cast<quint8>(m_headerBuf[1]))
               | (static_cast<quint32>(static_cast<quint8>(m_headerBuf[2])) << 8)
@@ -284,7 +282,7 @@ void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
  */
 void IO::Protocols::ZMODEM::processBinByte(quint8 ch)
 {
-  // Handle ZDLE escaping
+  // Decode ZDLE-escaped byte
   if (m_zdleEscape) {
     m_headerBuf.append(static_cast<char>(ch ^ 0x40));
     m_zdleEscape = false;
@@ -295,11 +293,10 @@ void IO::Protocols::ZMODEM::processBinByte(quint8 ch)
     m_headerBuf.append(static_cast<char>(ch));
   }
 
-  // Wait until we have all expected bytes
   if (m_headerBuf.size() < m_headerBytesExpected)
     return;
 
-  // Extract type and arg (little-endian)
+  // Extract type and argument
   quint8 type = static_cast<quint8>(m_headerBuf[0]);
   quint32 arg = static_cast<quint32>(static_cast<quint8>(m_headerBuf[1]))
               | (static_cast<quint32>(static_cast<quint8>(m_headerBuf[2])) << 8)
@@ -371,10 +368,8 @@ void IO::Protocols::ZMODEM::setMaxRetries(int retries)
  */
 void IO::Protocols::ZMODEM::sendZRQINIT()
 {
-  // Transition to ZRQINIT state
+  // Send auto-start sequence followed by ZRQINIT header
   m_state = State::SentZRQINIT;
-
-  // Standard auto-start sequence: rz\r followed by ZRQINIT header
   QByteArray autoStart;
   autoStart.append("rz\r");
   autoStart.append(buildHexHeader(kZRQINIT, 0));
@@ -389,13 +384,11 @@ void IO::Protocols::ZMODEM::sendZRQINIT()
  */
 void IO::Protocols::ZMODEM::sendZFILE()
 {
-  // Transition to ZFILE state
+  // Send ZFILE binary header
   m_state = State::SentZFILE;
-
-  // Send ZFILE binary header (flags = 0 for default)
   Q_EMIT writeRequested(buildBin32Header(kZFILE, 0));
 
-  // Build file info subpacket: "filename\0size 0 0 0\0"
+  // Build file metadata subpacket
   QFileInfo info(m_filePath);
   QByteArray fileInfo;
   fileInfo.append(info.fileName().toUtf8());
@@ -406,7 +399,7 @@ void IO::Protocols::ZMODEM::sendZFILE()
   fileInfo.append(" 0 0 0 0");
   fileInfo.append('\0');
 
-  // Send as ZCRCW subpacket (CRC next, wait for ZACK)
+  // Send as ZCRCW subpacket and wait for ZACK
   Q_EMIT writeRequested(buildSubpacket(fileInfo, kZCRCW));
 
   Q_EMIT statusMessage(tr("Sending file info: %1 (%2 bytes)").arg(info.fileName()).arg(m_fileSize));
@@ -425,10 +418,9 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
   Q_ASSERT(m_file.isOpen());
   Q_ASSERT(m_fileSize > 0);
 
-  // Transition to data-sending state
   m_state = State::SendingData;
 
-  // Seek to the requested offset (for crash recovery)
+  // Seek to requested offset for crash recovery
   if (!m_file.seek(m_fileOffset)) [[unlikely]] {
     Q_EMIT finished(false, tr("Failed to seek to offset %1").arg(m_fileOffset));
     return;
@@ -436,10 +428,8 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
 
   m_bytesSent = m_fileOffset;
 
-  // Send ZDATA header with current file position
+  // Send ZDATA header and begin async chunk transmission
   Q_EMIT writeRequested(buildBin32Header(kZDATA, static_cast<quint32>(m_fileOffset)));
-
-  // Begin async chunk transmission
   sendNextDataChunk();
 }
 
@@ -455,11 +445,10 @@ void IO::Protocols::ZMODEM::sendNextDataChunk()
   Q_ASSERT(m_blockSize >= 64 && m_blockSize <= 8192);
   Q_ASSERT(m_file.isOpen());
 
-  // Abort if transfer was cancelled or state changed
   if (m_state != State::SendingData)
     return;
 
-  // Send a batch of chunks
+  // Send up to kChunksPerYield subpackets before yielding
   for (int i = 0; i < kChunksPerYield && !m_file.atEnd(); ++i) {
     QByteArray chunk = m_file.read(m_blockSize);
     if (chunk.isEmpty()) {
@@ -475,14 +464,14 @@ void IO::Protocols::ZMODEM::sendNextDataChunk()
     m_bytesSent += chunk.size();
     Q_EMIT progressChanged(m_bytesSent, m_fileSize);
 
-    // Use ZCRCG for intermediate packets, ZCRCE for the last one
+    // ZCRCG for intermediate, ZCRCE for last
     if (m_file.atEnd())
       Q_EMIT writeRequested(buildSubpacket(chunk, kZCRCE));
     else
       Q_EMIT writeRequested(buildSubpacket(chunk, kZCRCG));
   }
 
-  // Schedule next batch or finalize
+  // Yield to event loop or finalize
   if (!m_file.atEnd() && m_state == State::SendingData)
     QTimer::singleShot(0, this, &ZMODEM::sendNextDataChunk);
   else if (m_state == State::SendingData)
@@ -494,7 +483,6 @@ void IO::Protocols::ZMODEM::sendNextDataChunk()
  */
 void IO::Protocols::ZMODEM::sendZEOF()
 {
-  // Send ZEOF header with the file size
   m_state = State::SentZEOF;
   Q_EMIT writeRequested(buildBin32Header(kZEOF, static_cast<quint32>(m_fileSize)));
   Q_EMIT statusMessage(tr("File data sent, waiting for confirmation..."));
@@ -506,7 +494,6 @@ void IO::Protocols::ZMODEM::sendZEOF()
  */
 void IO::Protocols::ZMODEM::sendZFIN()
 {
-  // Send ZFIN header to close the session
   m_state = State::SentZFIN;
   Q_EMIT writeRequested(buildHexHeader(kZFIN, 0));
   Q_EMIT statusMessage(tr("Sending ZFIN..."));
@@ -518,7 +505,6 @@ void IO::Protocols::ZMODEM::sendZFIN()
  */
 void IO::Protocols::ZMODEM::sendCancel()
 {
-  // Build cancel sequence: 5 CAN bytes + 5 backspaces
   QByteArray cancel;
   for (int i = 0; i < 5; ++i)
     cancel.append(static_cast<char>(0x18));
@@ -542,11 +528,10 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
   Q_ASSERT(type <= kZCAN);
   Q_ASSERT(isActive());
 
-  // Stop the timeout and dispatch based on header type
   m_timeoutTimer.stop();
 
   switch (type) {
-    // Receiver is ready
+    // Receiver ready — send file info or close session
     case kZRINIT:
       if (m_state == State::SentZRQINIT) {
         Q_EMIT statusMessage(tr("Receiver ready, sending file info..."));
@@ -558,24 +543,23 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       }
       break;
 
-    // Receiver requests data from a specific position
+    // Resume from requested offset
     case kZRPOS:
       m_fileOffset = static_cast<qint64>(arg);
       Q_EMIT statusMessage(tr("Receiver requests data from offset %1").arg(m_fileOffset));
       sendDataSubpackets();
       break;
 
-    // Receiver acknowledges
     case kZACK:
       break;
 
-    // Receiver wants to skip this file
+    // File skipped by receiver
     case kZSKIP:
       Q_EMIT statusMessage(tr("Receiver skipped the file"));
       sendZFIN();
       break;
 
-    // Receiver NAK — retry
+    // NAK — retry current phase
     case kZNAK:
       ++m_retryCount;
       if (m_retryCount >= m_maxRetries) {
@@ -591,7 +575,6 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       Q_EMIT statusMessage(
         tr("NAK received, retrying (%1/%2)...").arg(m_retryCount).arg(m_maxRetries));
 
-      // Resend based on current state
       if (m_state == State::SentZRQINIT)
         sendZRQINIT();
       else if (m_state == State::SentZFILE)
@@ -600,9 +583,8 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
         sendDataSubpackets();
       break;
 
-    // Session complete
+    // Session complete — send "OO" (Over and Out)
     case kZFIN:
-      // Send "OO" (Over and Out)
       Q_EMIT writeRequested(QByteArray("OO"));
       m_state = State::Done;
 
@@ -613,7 +595,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       Q_EMIT finished(true, QString());
       break;
 
-    // Receiver cancelled
+    // Receiver cancelled or aborted
     case kZABORT:
     case kZCAN:
       m_state = State::Idle;
@@ -623,7 +605,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
       break;
 
-    // Error on receiver side
+    // Receiver file error
     case kZFERR:
       m_state = State::Idle;
       if (m_file.isOpen())
@@ -655,26 +637,21 @@ QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
   Q_ASSERT(type <= kZCAN);
   Q_ASSERT(isActive());
 
-  // Allocate header buffer
   QByteArray header;
   header.reserve(32);
 
-  // Preamble
+  // Preamble + type + argument (little-endian hex)
   header.append(static_cast<char>(kZPAD));
   header.append(static_cast<char>(kZPAD));
   header.append(static_cast<char>(kZDLE));
   header.append(static_cast<char>(kZHEX));
-
-  // Type (2 hex chars)
   header.append(toHex(type));
-
-  // Argument (4 bytes, little-endian, 8 hex chars)
   header.append(toHex(static_cast<quint8>(arg & 0xFF)));
   header.append(toHex(static_cast<quint8>((arg >> 8) & 0xFF)));
   header.append(toHex(static_cast<quint8>((arg >> 16) & 0xFF)));
   header.append(toHex(static_cast<quint8>((arg >> 24) & 0xFF)));
 
-  // CRC-16 over type + 4 arg bytes
+  // Append CRC-16
   quint8 crcData[5];
   crcData[0]  = type;
   crcData[1]  = static_cast<quint8>(arg & 0xFF);
@@ -685,7 +662,6 @@ QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
   header.append(toHex(static_cast<quint8>((crc >> 8) & 0xFF)));
   header.append(toHex(static_cast<quint8>(crc & 0xFF)));
 
-  // Terminator
   header.append('\r');
   header.append('\n');
 
@@ -706,7 +682,6 @@ QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
   Q_ASSERT(type <= kZCAN);
   Q_ASSERT(m_file.isOpen());
 
-  // Allocate header buffer
   QByteArray header;
   header.reserve(32);
 
@@ -716,7 +691,7 @@ QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
   header.append(static_cast<char>(kZDLE));
   header.append(static_cast<char>(kZBIN32));
 
-  // Payload: type + 4 arg bytes
+  // Build payload: type + argument bytes (little-endian)
   QByteArray payload;
   payload.append(static_cast<char>(type));
   payload.append(static_cast<char>(arg & 0xFF));
@@ -724,14 +699,14 @@ QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
   payload.append(static_cast<char>((arg >> 16) & 0xFF));
   payload.append(static_cast<char>((arg >> 24) & 0xFF));
 
-  // CRC-32 over payload
+  // Append CRC-32 to payload
   quint32 crc = CRC::crc32(reinterpret_cast<const quint8*>(payload.constData()), payload.size());
   payload.append(static_cast<char>(crc & 0xFF));
   payload.append(static_cast<char>((crc >> 8) & 0xFF));
   payload.append(static_cast<char>((crc >> 16) & 0xFF));
   payload.append(static_cast<char>((crc >> 24) & 0xFF));
 
-  // ZDLE-encode the payload + CRC
+  // ZDLE-encode and append
   header.append(zdleEncode(payload));
 
   return header;
@@ -749,23 +724,18 @@ QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(frameEnd >= kZCRCE && frameEnd <= kZCRCW);
 
-  // Allocate packet buffer with room for ZDLE escaping
   QByteArray packet;
   packet.reserve(data.size() * 2 + 16);
 
-  // ZDLE-encode the data
+  // ZDLE-encoded data + frame-end marker
   packet.append(zdleEncode(data));
-
-  // Append frame-end (ZDLE-escaped)
   packet.append(static_cast<char>(kZDLE));
   packet.append(static_cast<char>(frameEnd));
 
-  // CRC-32 over data + frame-end byte
+  // Compute and append ZDLE-encoded CRC-32
   QByteArray crcInput = data;
   crcInput.append(static_cast<char>(frameEnd));
   quint32 crc = CRC::crc32(reinterpret_cast<const quint8*>(crcInput.constData()), crcInput.size());
-
-  // ZDLE-encode the CRC bytes
   QByteArray crcBytes;
   crcBytes.append(static_cast<char>(crc & 0xFF));
   crcBytes.append(static_cast<char>((crc >> 8) & 0xFF));
@@ -794,7 +764,6 @@ QByteArray IO::Protocols::ZMODEM::zdleEncode(const QByteArray& data)
   Q_ASSERT(!data.isEmpty());
   Q_ASSERT(data.size() <= 16384);
 
-  // Allocate output buffer with headroom for escape sequences
   QByteArray encoded;
   encoded.reserve(data.size() + data.size() / 4);
 
@@ -840,7 +809,6 @@ bool IO::Protocols::ZMODEM::needsEscape(quint8 ch)
  */
 QByteArray IO::Protocols::ZMODEM::toHex(quint8 byte)
 {
-  // Convert byte to two ASCII hex characters
   static const char hexDigits[] = "0123456789abcdef";
   QByteArray result(2, '\0');
   result[0] = hexDigits[(byte >> 4) & 0x0F];
@@ -860,11 +828,10 @@ void IO::Protocols::ZMODEM::handleTimeout()
   Q_ASSERT(m_maxRetries > 0);
   Q_ASSERT(m_timeoutMs >= 1000);
 
-  // Ignore timeouts when idle
   if (!isActive())
     return;
 
-  // Abort if maximum retries exceeded
+  // Abort if retries exhausted
   ++m_retryCount;
   if (m_retryCount >= m_maxRetries) {
     sendCancel();
@@ -878,7 +845,6 @@ void IO::Protocols::ZMODEM::handleTimeout()
 
   Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)...").arg(m_retryCount).arg(m_maxRetries));
 
-  // Retry based on current state
   switch (m_state) {
     case State::SentZRQINIT:
       sendZRQINIT();

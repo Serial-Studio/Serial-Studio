@@ -21,21 +21,24 @@
 
 #pragma once
 
-#include <QJSEngine>
-#include <QJSValue>
-#include <QMap>
+#include <map>
+#include <memory>
 #include <QObject>
 #include <QStringList>
-#include <QTimer>
+
+#include "DataModel/IScriptEngine.h"
 
 namespace DataModel {
 
 /**
- * @brief Singleton JS engine manager for frame parsing.
+ * @brief Singleton script engine manager for frame parsing.
  *
- * Maintains one QJSEngine per source ID (source 0 = global / single-source
+ * Maintains one IScriptEngine per source ID (source 0 = global / single-source
  * projects). All parse, load, and template operations are sourceId-scoped so
  * that multi-source projects can run independent parser code per device.
+ *
+ * Supports multiple scripting languages via the IScriptEngine interface
+ * (JavaScript via QJSEngine, Lua via embedded Lua 5.4).
  */
 class FrameParser : public QObject {
   Q_OBJECT
@@ -54,7 +57,7 @@ private:
 public:
   [[nodiscard]] static FrameParser& instance();
 
-  [[nodiscard]] static QString defaultTemplateCode();
+  [[nodiscard]] static QString defaultTemplateCode(int language = 0);
 
   [[nodiscard]] QString templateCode(int sourceId = 0) const;
   [[nodiscard]] const QStringList& templateNames() const;
@@ -79,30 +82,8 @@ public slots:
   void loadDefaultTemplate(int sourceId, bool guiTrigger = false);
 
 private:
-  static constexpr int kRuntimeWatchdogMs = 1000;
-
-  struct SourceEngine {
-    QJSEngine engine;
-    QJSValue parseFunction;
-    QJSValue hexToArray;
-    QTimer watchdog;
-    int templateIdx = -1;
-  };
-
-  [[nodiscard]] SourceEngine& engineForSource(int sourceId);
-  [[nodiscard]] QJSValue guardedCall(SourceEngine& se, QJSValueList& args);
-
-  [[nodiscard]] bool validateScriptSyntax(SourceEngine& se,
-                                          const QString& script,
-                                          int sourceId,
-                                          bool showMessageBoxes);
-  [[nodiscard]] QJSValue validateParseFunction(SourceEngine& se,
-                                               int sourceId,
-                                               bool showMessageBoxes);
-  [[nodiscard]] bool probeParseFunction(SourceEngine& se,
-                                        const QJSValue& parseFunction,
-                                        int sourceId,
-                                        bool showMessageBoxes);
+  [[nodiscard]] IScriptEngine& engineForSource(int sourceId);
+  [[nodiscard]] int languageForSource(int sourceId) const;
 
 private:
   bool m_suppressMessageBoxes;
@@ -110,7 +91,7 @@ private:
   QStringList m_templateFiles;
   QStringList m_templateNames;
 
-  QMap<int, SourceEngine*> m_engines;
+  std::map<int, std::unique_ptr<IScriptEngine>> m_engines;
 };
 
 }  // namespace DataModel

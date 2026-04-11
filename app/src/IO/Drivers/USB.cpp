@@ -205,7 +205,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   Q_ASSERT(configurationOk());
   Q_ASSERT(m_ctx != nullptr);
 
-  // Validate USB subsystem initialized
+  // Abort if libusb is not available
   if (!m_ctx) {
     Misc::Utilities::showMessageBox(tr("USB Error"),
                                     tr("Failed to initialize the USB subsystem. "
@@ -214,7 +214,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  // Validate device selection
+  // Require a real device to be selected
   if (m_deviceIndex <= 0 || (m_deviceIndex - 1) >= m_devicePtrs.size()) {
     Misc::Utilities::showMessageBox(
       tr("USB Error"),
@@ -250,7 +250,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   Q_EMIT inEndpointIndexChanged();
   Q_EMIT outEndpointIndexChanged();
 
-  // Validate IN endpoint is available
+  // At least one IN endpoint is required
   if (m_inEndpointIndex <= 0 || (m_inEndpointIndex - 1) >= m_inEndpoints.size()) {
     libusb_close(m_handle);
     m_handle = nullptr;
@@ -259,7 +259,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  // Get active endpoint addresses
+  // Resolve the selected endpoint addresses
   const EndpointInfo& inEp = m_inEndpoints.at(m_inEndpointIndex - 1);
   m_activeInEp             = inEp.address;
 
@@ -268,7 +268,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   else
     m_activeOutEp = 0;
 
-  // Claim USB interface
+  // Claim the interface that owns the selected IN endpoint
   if (!claimInterface(inEp.interfaceNumber)) {
     libusb_close(m_handle);
     m_handle = nullptr;
@@ -315,10 +315,10 @@ void IO::Drivers::USB::close()
   Q_ASSERT(m_ctx != nullptr);
   Q_ASSERT(m_activeInEp != 0 || m_handle == nullptr);
 
-  // Stop read loop
+  // Signal the read loop to exit
   m_running = false;
 
-  // Cancel pending isochronous transfers
+  // Cancel in-flight isochronous transfers so the event loop can drain
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_cancel_transfer(t);
 
@@ -329,24 +329,23 @@ void IO::Drivers::USB::close()
     m_readThread.wait();
   }
 
-  // Free isochronous transfer pool
+  // Free the isochronous transfer pool
   for (auto* t : std::as_const(m_isoTransfers))
     libusb_free_transfer(t);
 
   m_isoTransfers.clear();
 
-  // Disconnect thread signals
+  // Detach thread-started connections for the next open() cycle
   disconnect(&m_readThread, &QThread::started, this, &USB::readLoop);
   disconnect(&m_readThread, &QThread::started, this, &USB::isoReadLoop);
 
-  // Release interface and close device
+  // Release the claimed interface and close the device handle
   if (m_handle) {
     releaseInterface();
     libusb_close(m_handle);
     m_handle = nullptr;
   }
 
-  // Clear endpoint addresses
   m_activeInEp  = 0;
   m_activeOutEp = 0;
 
@@ -417,8 +416,7 @@ qint64 IO::Drivers::USB::write(const QByteArray& data)
   if (!isWritable())
     return -1;
 
-  // Copy data to a mutable buffer — libusb may write to it, and const_cast
-  // on a COW QByteArray could silently corrupt shared data
+  // Mutable copy needed because libusb may write to the buffer
   int transferred = 0;
   QByteArray mutableData(data);
   auto* buf = reinterpret_cast<unsigned char*>(mutableData.data());
@@ -484,7 +482,6 @@ bool IO::Drivers::USB::isoModeEnabled() const
  */
 QStringList IO::Drivers::USB::deviceList() const
 {
-  // Prepend a placeholder entry for the ComboBox
   QStringList list;
   list.append(tr("Select Device"));
   list.append(m_deviceLabels);
@@ -513,7 +510,6 @@ int IO::Drivers::USB::deviceIndex() const
  */
 QStringList IO::Drivers::USB::inEndpointList() const
 {
-  // Prepend a placeholder entry for the ComboBox
   QStringList list;
   list.append(tr("Select IN Endpoint"));
   list.append(m_inEndpointLabels);
@@ -530,7 +526,6 @@ QStringList IO::Drivers::USB::inEndpointList() const
  */
 QStringList IO::Drivers::USB::outEndpointList() const
 {
-  // Prepend a "no endpoint" entry for receive-only operation
   QStringList list;
   list.append(tr("None (Read-only)"));
   list.append(m_outEndpointLabels);
@@ -595,11 +590,9 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
   if (m_deviceIndex == index)
     return;
 
-  // Ensure device list is populated so the index is meaningful
+  // Populate device list if needed for validation
   if (m_devicePtrs.isEmpty())
     enumerateDevices();
-
-  // Clamp to valid range (index 0 is placeholder, ≥1 are real devices)
   if (index > 0 && (index - 1) >= m_devicePtrs.size())
     return;
 
@@ -638,7 +631,7 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
  */
 void IO::Drivers::USB::setTransferMode(const int mode)
 {
-  // Show a warning dialog when switching to AdvancedControl mode
+  // Require user confirmation before enabling AdvancedControl
   const auto requested = static_cast<TransferMode>(mode);
 
   if (requested == TransferMode::AdvancedControl
@@ -662,7 +655,7 @@ void IO::Drivers::USB::setTransferMode(const int mode)
   m_transferMode = requested;
   m_settings.setValue("USB/transferMode", mode);
 
-  // Clear cached endpoints since the new mode scans different types
+  // Stale endpoints from previous mode are no longer valid
   clearEndpointLists();
   m_inEndpointIndex  = 0;
   m_outEndpointIndex = 0;
@@ -751,9 +744,7 @@ void IO::Drivers::USB::setupExternalConnections()
     m_running          = false;
     m_eventLoopRunning = false;
 
-    // Deregister the hotplug callback first — this wakes
-    // libusb_handle_events_timeout() out of its kqueue/poll so the event
-    // thread can see m_eventLoopRunning == false promptly.
+    // Deregister hotplug first to wake the event loop out of its poll
     if (m_ctx && m_hotplugHandle) {
       libusb_hotplug_deregister_callback(m_ctx, m_hotplugHandle);
       m_hotplugHandle = 0;
@@ -805,7 +796,6 @@ void IO::Drivers::USB::onReadError()
  */
 void IO::Drivers::USB::enumerateDevices()
 {
-  // Skip if libusb context is not initialized
   if (!m_ctx)
     return;
 
@@ -926,7 +916,7 @@ static bool configHasTransferType(const libusb_config_descriptor* cfg, uint8_t t
  */
 QString IO::Drivers::USB::endpointErrorMessage() const
 {
-  // Check if endpoints of the opposite transfer type exist
+  // Detect whether switching transfer mode would help
   const bool wantIso = (m_transferMode == TransferMode::Isochronous);
   bool hasOtherType  = false;
 
@@ -968,7 +958,6 @@ void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
                                        int ifNum,
                                        bool wantIso)
 {
-  // Filter by transfer type and build endpoint info
   const uint8_t type = ep.bmAttributes & LIBUSB_TRANSFER_TYPE_MASK;
   const bool isBulk  = (type == LIBUSB_TRANSFER_TYPE_BULK);
   const bool isIso   = (type == LIBUSB_TRANSFER_TYPE_ISOCHRONOUS);
@@ -1027,13 +1016,12 @@ void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
  */
 void IO::Drivers::USB::buildEndpointLists()
 {
-  // Reset and validate device selection
   clearEndpointLists();
 
   if (m_deviceIndex <= 0 || (m_deviceIndex - 1) >= m_devicePtrs.size())
     return;
 
-  // Scan all interfaces and endpoints on the active configuration
+  // Walk all interfaces on the active configuration
   libusb_device* dev               = m_devicePtrs.at(m_deviceIndex - 1);
   libusb_config_descriptor* config = nullptr;
 
@@ -1211,7 +1199,6 @@ void IO::Drivers::USB::readLoop()
  */
 void IO::Drivers::USB::allocateIsoTransfers()
 {
-  // Allocate and submit the isochronous transfer pool
   const int totalBufSize = m_isoPacketSize * kIsoPacketsPerTransfer;
 
   for (int i = 0; i < kIsoNumTransfers; ++i) {
@@ -1283,7 +1270,6 @@ void IO::Drivers::USB::isoReadLoop()
  */
 void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer)
 {
-  // Collect completed packet data and resubmit if still running
   auto* self = static_cast<USB*>(transfer->user_data);
 
   if (transfer->status == LIBUSB_TRANSFER_COMPLETED || transfer->status == LIBUSB_TRANSFER_ERROR) {
@@ -1345,12 +1331,10 @@ qint64 IO::Drivers::USB::sendControlTransfer(uint8_t bmRequestType,
   Q_ASSERT(m_handle != nullptr);
   Q_ASSERT(advancedModeEnabled());
 
-  // Guard against misuse outside AdvancedControl mode
   if (!advancedModeEnabled() || !m_handle)
     return -1;
 
-  // Copy data to a mutable buffer — libusb may write to it, and const_cast
-  // on a COW QByteArray could silently corrupt shared data
+  // Mutable copy needed because libusb may write to the buffer
   QByteArray mutableData(data);
   auto* buf = reinterpret_cast<unsigned char*>(mutableData.data());
 
@@ -1388,7 +1372,7 @@ QJsonObject IO::Drivers::USB::deviceIdentifier() const
   id.insert(QStringLiteral("pid"),
             QString::number(desc.idProduct, 16).rightJustified(4, '0').toUpper());
 
-  // Try to read serial number string descriptor
+  // Append serial number if the device exposes one
   libusb_device_handle* tmp = nullptr;
   if (desc.iSerialNumber && libusb_open(dev, &tmp) == 0) {
     unsigned char buf[256] = {};
@@ -1414,7 +1398,7 @@ bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
   if (id.isEmpty() || !m_ctx)
     return false;
 
-  // Ensure device list is populated so we can match against it
+  // Populate device list if needed for matching
   if (m_devicePtrs.isEmpty())
     enumerateDevices();
 
@@ -1436,7 +1420,7 @@ bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
     if (vid != savedVid || pid != savedPid)
       continue;
 
-    // VID+PID match — check serial if available
+    // Narrow match by serial number when available
     if (!savedSer.isEmpty() && desc.iSerialNumber) {
       libusb_device_handle* tmp = nullptr;
       if (libusb_open(m_devicePtrs.at(i), &tmp) == 0) {

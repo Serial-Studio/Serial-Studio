@@ -97,7 +97,7 @@ Choose the "Parse via JSON Project File" radio button in the Setup Panel. Then l
 - **Data format:** configurable. Incoming bytes can be decoded as plain text (UTF-8), hexadecimal, Base64, or raw binary.
 - **Dashboard definition:** a `.ssproj` JSON file on the host defines all groups, datasets, widgets, alarms, FFT settings, and actions.
 - **Device data:** the device sends only raw values (CSV text, binary packets, etc.). Serial Studio maps each value to the corresponding dataset by index.
-- **JavaScript parser:** an optional `parse(frame)` function can transform arbitrary protocols into the array of values that Serial Studio expects.
+- **Frame parser script:** an optional `parse(frame)` function (Lua or JavaScript) can transform arbitrary protocols into the array of values that Serial Studio expects.
 - **Multi-source:** a single project file can define multiple data sources, each with its own connection, frame detection, and decoder settings.
 
 This mode provides full access to every widget type and configuration option in Serial Studio. It is the most commonly used mode for real-world projects.
@@ -110,25 +110,25 @@ Frame detection determines how Serial Studio identifies the boundaries of each d
 |--------|-----------|----------|
 | **End Delimiter Only** | 0 | A frame ends when the end delimiter is encountered. The most common choice for line-terminated CSV data (e.g., delimiter = `\n`). |
 | **Start and End Delimiter** | 1 | A frame begins at the start delimiter and ends at the end delimiter. Use this for protocols that wrap data in markers (e.g., `$DATA...;\n`). |
-| **No Delimiters** | 2 | All incoming data is passed directly to the JavaScript parser without any delimiter-based splitting. Use this for length-prefixed or fixed-size binary protocols where the parser itself determines frame boundaries. |
+| **No Delimiters** | 2 | All incoming data is passed directly to the frame parser script without any delimiter-based splitting. Use this for length-prefixed or fixed-size binary protocols where the parser itself determines frame boundaries. |
 | **Start Delimiter Only** | 3 | A frame begins at one occurrence of the start delimiter and ends when the next occurrence is found. The second occurrence becomes the start of the next frame. |
 
 Delimiters can be specified as plain text or as hexadecimal byte sequences (toggle the "Hexadecimal Delimiters" option in the Project Editor).
 
 ### Decoder Methods
 
-The decoder determines how raw bytes are converted into a string before being passed to the JavaScript parser (or split as CSV).
+The decoder determines how raw bytes are converted before being passed to the frame parser script (or split as CSV).
 
 | Decoder | Enum Value | Description |
 |---------|-----------|-------------|
 | **Plain Text (UTF-8)** | 0 | Bytes are decoded as UTF-8 text. The most common choice for ASCII/CSV protocols. |
 | **Hexadecimal** | 1 | Each byte is converted to a two-character hex string. For example, bytes `0x03 0xFF 0x02` become `"03FF02"`. |
 | **Base64** | 2 | Bytes are encoded as a Base64 string. |
-| **Binary (Direct)** | 3 | Raw bytes are passed to the JavaScript parser as an array of integers (0--255). This is a Pro feature. |
+| **Binary (Direct)** | 3 | Raw bytes are passed to the frame parser as a table/array of integers (0--255). This is a Pro feature. |
 
-### JavaScript Frame Parser
+### Frame Parser Script
 
-When the incoming data is not simple comma-separated text, you can write a JavaScript function to transform each frame into the array of values that Serial Studio expects.
+When the incoming data is not simple comma-separated text, you can write a Lua or JavaScript `parse()` function to transform each frame into the array of values that Serial Studio expects. Lua is the default and recommended language for new projects due to its faster execution.
 
 The function signature is:
 
@@ -177,7 +177,7 @@ Project File mode supports multiple data sources within a single project. Each s
 - Bus type (UART, Network, BLE, etc.)
 - Frame detection method and delimiters
 - Decoder method
-- JavaScript parser code
+- Frame parser code (Lua or JavaScript)
 - Connection settings
 
 This enables monitoring multiple devices simultaneously on a single dashboard. For example, a weather station project might define one UART source for a ground sensor array and one TCP source for a remote wind station, with both feeding into the same dashboard.
@@ -360,8 +360,8 @@ Device Sends JSON is suited for cases where the firmware must control its own da
 |---------|-----------|--------------|-------------------|
 | Setup effort | None | Create project in editor | Firmware must build JSON |
 | Frame detection | Line-based (auto) | Configurable per source | Fixed `/*` ... `*/` |
-| CSV delimiter | Comma only | Any (via JS parser) | N/A (JSON) |
-| JavaScript parser | No | Yes | No |
+| CSV delimiter | Comma only | Any (via parser script) | N/A (JSON) |
+| Frame parser (Lua/JS) | No | Yes | No |
 | Custom widgets | No (plots only) | Yes (project-defined) | Yes (device-defined) |
 | Alarms and LED indicators | No | Yes | Yes |
 | FFT analysis | No | Yes | Yes |

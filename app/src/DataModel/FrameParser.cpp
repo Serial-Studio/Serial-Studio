@@ -21,213 +21,23 @@
 
 #include "DataModel/FrameParser.h"
 
-#include <QAtomicInt>
 #include <QFile>
-#include <QMessageBox>
-#include <QRegularExpression>
-#include <QThread>
 
+#include "DataModel/IScriptEngine.h"
+#include "DataModel/JsScriptEngine.h"
+#include "DataModel/LuaScriptEngine.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
-#include "Misc/Utilities.h"
+#include "SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
-// Multi-frame parsing helper functions
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Enum to classify JavaScript return value types from the parse
- * function.
- */
-enum class ArrayType {
-  Scalar,
-  Array1D,
-  Array2D,
-  ArrayMixed
-};
-
-/**
- * @brief Converts a JavaScript array to a QStringList.
- *
- * @param jsValue JavaScript array to convert.
- * @return QStringList containing string representation of each element.
- */
-static QStringList jsArrayToStringList(const QJSValue& jsValue)
-{
-  // Convert each element to its string representation
-  static const QString kLength = QStringLiteral("length");
-
-  QStringList result;
-  const int length = jsValue.property(kLength).toInt();
-  result.reserve(length);
-
-  for (int i = 0; i < length; ++i)
-    result.append(jsValue.property(static_cast<quint32>(i)).toString());
-
-  return result;
-}
-
-/**
- * @brief Detects the type of JavaScript array returned by the parse function.
- *
- * Classifies the JavaScript value as:
- * - Scalar: Not an array or empty
- * - Array1D: Flat scalar array [1, 2, 3]
- * - Array2D: Pure 2D array [[1,2], [3,4]]
- * - ArrayMixed: Mixed scalar/vector [1, [2,3], [4,5]]
- *
- * @param jsValue JavaScript value to classify.
- * @return ArrayType classification.
- */
-static ArrayType detectArrayType(const QJSValue& jsValue)
-{
-  // Reject non-arrays and empty arrays as scalars
-  if (!jsValue.isArray())
-    return ArrayType::Scalar;
-
-  static const QString kLength = QStringLiteral("length");
-  const int length             = jsValue.property(kLength).toInt();
-  if (length == 0)
-    return ArrayType::Scalar;
-
-  // Scan elements to classify; early-exit once type is determined
-  bool hasArray  = false;
-  bool hasScalar = false;
-
-  for (int i = 0; i < length; ++i) {
-    if (jsValue.property(static_cast<quint32>(i)).isArray())
-      hasArray = true;
-    else
-      hasScalar = true;
-
-    if (hasArray && hasScalar)
-      return ArrayType::ArrayMixed;
-  }
-
-  if (hasArray)
-    return ArrayType::Array2D;
-
-  return ArrayType::Array1D;
-}
-
-/**
- * @brief Converts a pure 2D JavaScript array to multiple frames.
- *
- * Processes arrays like [[1,2,3], [4,5,6]] and generates one frame per row.
- * Invalid rows (non-arrays) are skipped with a warning.
- *
- * @param jsValue JavaScript 2D array.
- * @return List of QStringList, one per row/frame.
- */
-static QList<QStringList> convert2DArray(const QJSValue& jsValue)
-{
-  // Extract each row sub-array into a separate frame
-  static const QString kLength = QStringLiteral("length");
-
-  QList<QStringList> results;
-  const int rowCount = jsValue.property(kLength).toInt();
-  results.reserve(rowCount);
-
-  for (int row = 0; row < rowCount; ++row) {
-    const auto rowArray = jsValue.property(static_cast<quint32>(row));
-
-    if (!rowArray.isArray()) [[unlikely]] {
-      qWarning() << "[FrameParser] Row" << row << "is not an array, skipping";
-      continue;
-    }
-
-    results.append(jsArrayToStringList(rowArray));
-  }
-
-  return results;
-}
-
-/**
- * @brief Converts a mixed scalar/vector JavaScript array to multiple frames.
- *
- * Processes arrays like [scalar1, scalar2, [vec1, vec2, vec3]] and "unzips"
- * vectors while repeating scalars across frames.
- *
- * Example:
- *   Input:  [25.5, 60.0, [1.1, 2.2, 3.3]]
- *   Output: [[25.5, 60.0, 1.1], [25.5, 60.0, 2.2], [25.5, 60.0, 3.3]]
- *
- * If multiple vectors have different lengths, shorter vectors are extended
- * by repeating their last value.
- *
- * @param jsValue JavaScript mixed array.
- * @return List of QStringList, one per frame.
- */
-static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
-{
-  // Separate scalars from vector elements and find max vector length
-  static const QString kLength = QStringLiteral("length");
-  const int elementCount       = jsValue.property(kLength).toInt();
-
-  constexpr int kMaxElements     = 10000;
-  constexpr qsizetype kMaxVecLen = 10000;
-
-  QStringList scalars;
-  QList<QStringList> vectors;
-  qsizetype maxVectorLength = 0;
-
-  for (int i = 0; i < qMin(elementCount, kMaxElements); ++i) {
-    const auto element = jsValue.property(static_cast<quint32>(i));
-
-    if (element.isArray()) {
-      const auto vec = jsArrayToStringList(element);
-      if (!vec.isEmpty()) {
-        vectors.append(vec);
-        maxVectorLength = std::max(maxVectorLength, vec.size());
-      }
-    } else {
-      scalars.append(element.toString());
-    }
-  }
-
-  if (vectors.isEmpty()) [[unlikely]] {
-    QList<QStringList> results;
-    results.append(scalars);
-    return results;
-  }
-
-  // Cap to prevent OOM from malformed JS arrays
-  maxVectorLength = qMin(maxVectorLength, kMaxVecLen);
-
-  for (auto& vec : vectors) {
-    if (!vec.isEmpty() && vec.size() < maxVectorLength) {
-      const QString lastValue = vec.last();
-      while (vec.size() < maxVectorLength)
-        vec.append(lastValue);
-    }
-  }
-
-  QList<QStringList> results;
-  results.reserve(maxVectorLength);
-
-  for (int i = 0; i < maxVectorLength; ++i) {
-    QStringList frame;
-    frame.reserve(scalars.size() + vectors.size());
-
-    frame.append(scalars);
-
-    for (const auto& vec : std::as_const(vectors))
-      if (i < vec.size())
-        frame.append(vec[i]);
-
-    results.append(frame);
-  }
-
-  return results;
-}
-
-//--------------------------------------------------------------------------------------------------
-// FrameParser singleton implementation
+// Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Initialises the engine map (source 0 = global) and loads template names.
+ * @brief Initialises the engine map (source 0 = global) and loads template
+ * names.
  *
  * Cross-singleton connections to ProjectModel are deferred to
  * @c setupExternalConnections() to avoid static-init-order deadlocks.
@@ -258,6 +68,10 @@ DataModel::FrameParser& DataModel::FrameParser::instance()
   return singleton;
 }
 
+//--------------------------------------------------------------------------------------------------
+// External connections
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Wires cross-singleton connections and performs the initial script load.
  *
@@ -274,17 +88,26 @@ void DataModel::FrameParser::setupExternalConnections()
   readCode();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Default template code
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Returns the source code of the default frame parser template.
+ * @brief Returns the source code of the default frame parser template for the
+ * given @p language.
  *
+ * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
  * @return The default template source code, or an empty string if the
  *         resource could not be read.
  */
-QString DataModel::FrameParser::defaultTemplateCode()
+QString DataModel::FrameParser::defaultTemplateCode(int language)
 {
-  // Read the default comma-separated parser script from resources
+  const auto path = (language == SerialStudio::Lua)
+                    ? QStringLiteral(":/rcc/scripts/lua/comma_separated.lua")
+                    : QStringLiteral(":/rcc/scripts/comma_separated.js");
+
   QString code;
-  QFile file(QStringLiteral(":/rcc/scripts/comma_separated.js"));
+  QFile file(path);
   if (file.open(QFile::ReadOnly)) {
     code = QString::fromUtf8(file.readAll());
     file.close();
@@ -293,8 +116,12 @@ QString DataModel::FrameParser::defaultTemplateCode()
   return code;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Template accessors
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Returns the JavaScript source of the currently selected template for
+ * @brief Returns the source code of the currently selected template for
  * @p sourceId.
  *
  * @param sourceId Source whose stored template index is used (default: 0).
@@ -302,16 +129,24 @@ QString DataModel::FrameParser::defaultTemplateCode()
  */
 QString DataModel::FrameParser::templateCode(int sourceId) const
 {
-  // Look up the stored template index for this source
   auto it       = m_engines.find(sourceId);
-  const int idx = (it != m_engines.end()) ? it.value()->templateIdx : -1;
+  const int idx = (it != m_engines.end()) ? it->second->templateIdx : -1;
 
   if (idx < 0 || idx >= m_templateFiles.count())
     return {};
 
-  QString code;
-  const auto path = QStringLiteral(":/rcc/scripts/%1").arg(m_templateFiles.at(idx));
+  // Resolve template path for the configured language
+  const int lang = languageForSource(sourceId);
+  QString path;
+  if (lang == SerialStudio::Lua) {
+    auto base = m_templateFiles.at(idx);
+    base.replace(QStringLiteral(".js"), QStringLiteral(".lua"));
+    path = QStringLiteral(":/rcc/scripts/lua/%1").arg(base);
+  } else {
+    path = QStringLiteral(":/rcc/scripts/%1").arg(m_templateFiles.at(idx));
+  }
 
+  QString code;
   QFile file(path);
   if (file.open(QFile::ReadOnly)) {
     code = QString::fromUtf8(file.readAll());
@@ -337,77 +172,68 @@ const QStringList& DataModel::FrameParser::templateFiles() const
   return m_templateFiles;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Engine management
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Returns (or lazily creates) the JS engine for @p sourceId.
+ * @brief Returns the scripting language configured for @p sourceId.
  *
+ * @param sourceId Source identifier.
+ * @return SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ */
+int DataModel::FrameParser::languageForSource(int sourceId) const
+{
+  const auto& sources = ProjectModel::instance().sources();
+  for (const auto& src : sources)
+    if (src.sourceId == sourceId)
+      return src.frameParserLanguage;
+
+  return SerialStudio::JavaScript;
+}
+
+/**
+ * @brief Returns (or lazily creates) the script engine for @p sourceId.
+ *
+ * The engine type is determined by the source's configured language.
  * Source 0 is the global engine shared by all single-source projects.
- * Higher IDs get their own isolated engine.
  *
  * @param sourceId Source identifier (0 = global).
- * @return Reference to the SourceEngine for this source.
+ * @return Reference to the IScriptEngine for this source.
  */
-DataModel::FrameParser::SourceEngine& DataModel::FrameParser::engineForSource(int sourceId)
+DataModel::IScriptEngine& DataModel::FrameParser::engineForSource(int sourceId)
 {
   Q_ASSERT(sourceId >= 0);
 
-  // Return existing engine or create a new one for this source
   auto it = m_engines.find(sourceId);
   if (it != m_engines.end())
-    return *it.value();
+    return *it->second;
 
-  auto* se = new SourceEngine();
-  se->engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+  // Create a new engine for the configured language
+  const int lang = languageForSource(sourceId);
+  std::unique_ptr<IScriptEngine> engine;
+  if (lang == SerialStudio::Lua)
+    engine = std::make_unique<LuaScriptEngine>();
+  else
+    engine = std::make_unique<JsScriptEngine>();
 
-  // Configure runtime watchdog timer to interrupt runaway scripts
-  se->watchdog.setSingleShot(true);
-  se->watchdog.setInterval(kRuntimeWatchdogMs);
-  connect(&se->watchdog, &QTimer::timeout, this, [se]() { se->engine.setInterrupted(true); });
-
-  m_engines.insert(sourceId, se);
-  Q_ASSERT(m_engines.contains(sourceId));
-  return *se;
+  auto& ref           = *engine;
+  m_engines[sourceId] = std::move(engine);
+  Q_ASSERT(m_engines.count(sourceId));
+  return ref;
 }
 
 /**
- * @brief Calls the parse function with a runtime watchdog timer.
+ * @brief Sets per-source code, loading it into the source engine.
  *
- * Starts a single-shot timer before the JS call. If the script exceeds
- * kRuntimeWatchdogMs, the engine is interrupted and an error is returned.
- *
- * @param se   The source engine whose parse function to call.
- * @param args Arguments to pass to the parse function.
- * @return The JS result, or an error value if interrupted.
- */
-QJSValue DataModel::FrameParser::guardedCall(SourceEngine& se, QJSValueList& args)
-{
-  Q_ASSERT(se.parseFunction.isCallable());
-  Q_ASSERT(!args.isEmpty());
-
-  se.engine.setInterrupted(false);
-  se.watchdog.start();
-  const auto result = se.parseFunction.call(args);
-  se.watchdog.stop();
-
-  if (se.engine.isInterrupted()) [[unlikely]] {
-    se.engine.setInterrupted(false);
-    qWarning() << "[FrameParser] Script execution timed out after" << kRuntimeWatchdogMs
-               << "ms — interrupted";
-  }
-
-  return result;
-}
-
-/**
- * @brief Sets per-source JavaScript code, loading it into the source engine.
  * @param sourceId Source identifier (0 = global).
- * @param code     JavaScript source code.
+ * @param code     Script source code.
  */
 void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
 {
   Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(m_engines.contains(0));
+  Q_ASSERT(m_engines.count(0));
 
-  // Clear engine if code is empty, otherwise load script
   if (code.isEmpty()) {
     clearSourceEngine(sourceId);
     return;
@@ -418,7 +244,7 @@ void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
 }
 
 /**
- * @brief Removes and destroys the JS engine for @p sourceId.
+ * @brief Removes and destroys the engine for @p sourceId.
  *
  * For source 0 this resets the global engine to a clean, unloaded state
  * rather than removing it from the map (source 0 is always present).
@@ -427,27 +253,27 @@ void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
  */
 void DataModel::FrameParser::clearSourceEngine(int sourceId)
 {
-  // Find the engine; source 0 is reset in-place, others are deleted
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end())
     return;
 
   if (sourceId == 0) {
-    it.value()->parseFunction = QJSValue();
-    it.value()->hexToArray    = QJSValue();
+    it->second->reset();
     return;
   }
 
-  delete it.value();
   m_engines.erase(it);
 }
 
+//--------------------------------------------------------------------------------------------------
+// Parsing dispatch
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Executes the JS engine for @p sourceId over text data, returning one
+ * @brief Executes the engine for @p sourceId over text data, returning one
  * or more frames.
  *
- * Source 0 uses the global engine. For other IDs, falls back to source 0 when
- * the source has no dedicated engine loaded.
+ * Falls back to source 0 when the source has no dedicated engine loaded.
  *
  * @param frame    Decoded UTF-8 string frame.
  * @param sourceId Source identifier whose engine should be used.
@@ -458,48 +284,22 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!frame.isEmpty());
 
-  // Fall back to source 0 if the requested engine is not available
   auto it = m_engines.find(sourceId);
-  if (it == m_engines.end() || !it.value()->parseFunction.isCallable()) {
+  if (it == m_engines.end() || !it->second->isLoaded()) {
     if (sourceId == 0)
       return {};
 
     return parseMultiFrame(frame, 0);
   }
 
-  auto& se = *it.value();
-
-  QJSValueList args;
-  args << frame;
-  const auto jsResult = guardedCall(se, args);
-
-  if (jsResult.isError()) [[unlikely]] {
-    qWarning() << "[FrameParser] Source" << sourceId
-               << "JS error:" << jsResult.property("message").toString();
-    return {};
-  }
-
-  // Classify and convert the JS result
-  QList<QStringList> results;
-  switch (detectArrayType(jsResult)) {
-    case ArrayType::Array2D:
-      return convert2DArray(jsResult);
-    case ArrayType::ArrayMixed:
-      return convertMixedArray(jsResult);
-    case ArrayType::Array1D:
-    case ArrayType::Scalar:
-    default:
-      results.append(jsArrayToStringList(jsResult));
-      return results;
-  }
+  return it->second->parseString(frame);
 }
 
 /**
- * @brief Executes the JS engine for @p sourceId over binary data, returning
+ * @brief Executes the engine for @p sourceId over binary data, returning
  * one or more frames.
  *
- * Source 0 uses the global engine. For other IDs, falls back to source 0 when
- * the source has no dedicated engine loaded.
+ * Falls back to source 0 when the source has no dedicated engine loaded.
  *
  * @param frame    Binary frame data.
  * @param sourceId Source identifier whose engine should be used.
@@ -510,244 +310,29 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!frame.isEmpty());
 
-  // Fall back to source 0 if the requested engine is not available
   auto it = m_engines.find(sourceId);
-  if (it == m_engines.end() || !it.value()->parseFunction.isCallable()) {
+  if (it == m_engines.end() || !it->second->isLoaded()) {
     if (sourceId == 0)
       return {};
 
     return parseMultiFrame(frame, 0);
   }
 
-  auto& se = *it.value();
-
-  QJSValue jsArray;
-  if (se.hexToArray.isCallable()) [[likely]] {
-    QJSValueList hexArgs;
-    hexArgs << QString::fromLatin1(frame.toHex());
-    jsArray = se.hexToArray.call(hexArgs);
-  } else {
-    jsArray          = se.engine.newArray(frame.size());
-    const auto* data = reinterpret_cast<const quint8*>(frame.constData());
-    for (int i = 0; i < frame.size(); ++i)
-      jsArray.setProperty(i, data[i]);
-  }
-
-  QJSValueList args;
-  args << jsArray;
-  const auto jsResult = guardedCall(se, args);
-
-  if (jsResult.isError()) [[unlikely]] {
-    qWarning() << "[FrameParser] Source" << sourceId
-               << "JS error:" << jsResult.property("message").toString();
-    return {};
-  }
-
-  // Classify and convert the JS result
-  QList<QStringList> results;
-  switch (detectArrayType(jsResult)) {
-    case ArrayType::Array2D:
-      return convert2DArray(jsResult);
-    case ArrayType::ArrayMixed:
-      return convertMixedArray(jsResult);
-    case ArrayType::Array1D:
-    case ArrayType::Scalar:
-    default:
-      results.append(jsArrayToStringList(jsResult));
-      return results;
-  }
+  return it->second->parseBinary(frame);
 }
 
-/**
- * @brief Evaluates a script in the source engine and checks for syntax errors.
- *
- * Resets the engine, evaluates the script, and reports any syntax errors or
- * exceptions via message boxes or log warnings.
- *
- * @param se              The source engine to evaluate in.
- * @param script          The JavaScript source to evaluate.
- * @param sourceId        Source identifier (for diagnostics).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return @c true if the script evaluated without errors.
- */
-bool DataModel::FrameParser::validateScriptSyntax(SourceEngine& se,
-                                                  const QString& script,
-                                                  int sourceId,
-                                                  bool showMessageBoxes)
-{
-  Q_ASSERT(!script.isEmpty());
-  Q_ASSERT(sourceId >= 0);
-
-  // Reset the engine and evaluate the script
-  se.parseFunction = QJSValue();
-  se.engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
-
-  QStringList exceptionStackTrace;
-  auto result = se.engine.evaluate(
-    script, QStringLiteral("parser_%1.js").arg(sourceId), 1, &exceptionStackTrace);
-
-  // Report syntax errors
-  if (result.isError()) {
-    const QString errorMsg = result.property("message").toString();
-    const int lineNumber   = result.property("lineNumber").toInt();
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("JavaScript Syntax Error"),
-        tr("The parser code contains a syntax error at line %1:\n\n%2")
-          .arg(lineNumber)
-          .arg(errorMsg),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[FrameParser] Source" << sourceId << "syntax error at line" << lineNumber
-                 << ":" << errorMsg;
-    }
-    return false;
-  }
-
-  // Report exceptions raised during evaluation
-  if (!exceptionStackTrace.isEmpty()) {
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("JavaScript Exception Occurred"),
-        tr("The parser code triggered the following exceptions:\n\n%1")
-          .arg(exceptionStackTrace.join(QStringLiteral("\n"))),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[FrameParser] Source" << sourceId
-                 << "exceptions:" << exceptionStackTrace.join(QStringLiteral(", "));
-    }
-    return false;
-  }
-
-  return true;
-}
+//--------------------------------------------------------------------------------------------------
+// Script loading
+//--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Validates that the engine's global scope contains a callable 'parse'
- * function.
+ * @brief Validates and loads a frame parser script into the engine for
+ * @p sourceId.
  *
- * @param se              The source engine whose global scope to inspect.
- * @param sourceId        Source identifier (for diagnostics).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return The parse function on success, or a null QJSValue on failure.
- */
-QJSValue DataModel::FrameParser::validateParseFunction(SourceEngine& se,
-                                                       int sourceId,
-                                                       bool showMessageBoxes)
-{
-  Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!se.engine.isInterrupted());
-
-  // Check that 'parse' exists and is callable
-  auto parseFunction = se.engine.globalObject().property(QStringLiteral("parse"));
-  if (parseFunction.isNull() || !parseFunction.isCallable()) {
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(
-        tr("Missing Parse Function"),
-        tr("The 'parse' function is not defined in the script.\n\n"
-           "Please ensure your code includes:\nfunction parse(frame) { ... }"),
-        QMessageBox::Critical);
-    } else {
-      qWarning() << "[FrameParser] Source" << sourceId << "missing or non-callable parse()";
-    }
-    return QJSValue();
-  }
-
-  return parseFunction;
-}
-
-/**
- * @brief Probes the parse function with representative inputs under a watchdog
- * timer to detect runtime errors and infinite loops.
- *
- * Tries three inputs (string "0", byte array [0], empty string). If any
- * succeeds, the probe passes. A watchdog thread interrupts the engine after
- * 500 ms to catch infinite loops.
- *
- * @param se              The source engine to probe.
- * @param parseFunction   The callable parse function to test.
- * @param sourceId        Source identifier (for diagnostics).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return @c true if at least one probe input succeeded.
- */
-bool DataModel::FrameParser::probeParseFunction(SourceEngine& se,
-                                                const QJSValue& parseFunction,
-                                                int sourceId,
-                                                bool showMessageBoxes)
-{
-  Q_ASSERT(parseFunction.isCallable());
-  Q_ASSERT(sourceId >= 0);
-
-  // Prepare three representative probe inputs
-  bool probeOk = false;
-  QJSValue lastError;
-  auto byteProbe = se.engine.newArray(1);
-  byteProbe.setProperty(0, 0);
-  const QJSValue probeInputs[] = {QJSValue("0"), byteProbe, QJSValue("")};
-
-  // Run probes under a watchdog thread
-  {
-    QAtomicInt probeDone(0);
-    auto* watchdog = QThread::create([&se, &probeDone]() {
-      constexpr int kTimeoutMs = 500;
-      constexpr int kSliceMs   = 20;
-      for (int t = 0; t < kTimeoutMs && !probeDone.loadAcquire(); t += kSliceMs)
-        QThread::msleep(kSliceMs);
-
-      if (!probeDone.loadAcquire())
-        se.engine.setInterrupted(true);
-    });
-    watchdog->start();
-
-    for (const auto& input : probeInputs) {
-      QJSValueList probeArgs;
-      probeArgs << input;
-      const auto probeResult = parseFunction.call(probeArgs);
-      if (!probeResult.isError()) {
-        probeOk = true;
-        break;
-      }
-
-      lastError = probeResult;
-    }
-
-    probeDone.storeRelease(1);
-    se.engine.setInterrupted(false);
-    watchdog->wait();
-    watchdog->deleteLater();
-  }
-
-  // Report probe failure
-  if (!probeOk) {
-    const QString errorMsg = lastError.property("message").toString();
-    const int lineNumber   = lastError.property("lineNumber").toInt();
-    if (showMessageBoxes) {
-      Misc::Utilities::showMessageBox(tr("Parse Function Runtime Error"),
-                                      tr("The parse function contains an error at line %1:\n\n"
-                                         "%2\n\n"
-                                         "Please fix the error in the function body.")
-                                        .arg(lineNumber)
-                                        .arg(errorMsg),
-                                      QMessageBox::Critical);
-    } else {
-      qWarning() << "[FrameParser] Runtime error at line" << lineNumber << ":" << errorMsg;
-    }
-  }
-
-  return probeOk;
-}
-
-/**
- * @brief Validates and loads a JavaScript frame parser script into the engine
- * for @p sourceId.
- *
- * For source 0, performs full validation: syntax check, function-signature
- * check, and a probe with a watchdog timer. For all other sources, performs
- * lightweight validation (syntax + callable parse function) without the probe,
- * so per-source scripts load without GUI message boxes.
+ * Delegates all language-specific validation to the concrete IScriptEngine.
  *
  * @param sourceId         Target source engine (0 = global).
- * @param script           The JavaScript source to validate and load.
+ * @param script           The script source to validate and load.
  * @param showMessageBoxes When @c false, errors are logged instead of shown.
  * @return @c true on success, @c false if validation failed.
  */
@@ -756,101 +341,21 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!script.isEmpty());
 
-  // Save existing parse function in case validation fails
-  auto& se              = engineForSource(sourceId);
-  QJSValue prevParseFn  = se.parseFunction;
-  QJSValue prevHexToArr = se.hexToArray;
-
-  auto restorePrevious = [&]() {
-    se.parseFunction = prevParseFn;
-    se.hexToArray    = prevHexToArr;
-  };
-
-  // Syntax check
-  if (!validateScriptSyntax(se, script, sourceId, showMessageBoxes)) {
-    restorePrevious();
-    return false;
-  }
-
-  // Verify the 'parse' function exists and has a valid signature
-  auto parseFunction = validateParseFunction(se, sourceId, showMessageBoxes);
-  if (parseFunction.isNull()) {
-    restorePrevious();
-    return false;
-  }
-
-  // Full signature + probe validation only for source 0
-  if (sourceId == 0) {
-    static QRegularExpression functionRegex(
-      R"(\bfunction\s+parse\s*\(\s*([a-zA-Z_$][a-zA-Z0-9_$]*)(\s*,\s*([a-zA-Z_$][a-zA-Z0-9_$]*))?\s*\))");
-    const auto match = functionRegex.match(script);
-    if (!match.hasMatch()) {
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(tr("Invalid Function Declaration"),
-                                        tr("No valid 'parse' function declaration found.\n\n"
-                                           "Expected format:\nfunction parse(frame) { ... }"),
-                                        QMessageBox::Critical);
-      } else {
-        qWarning() << "[FrameParser] No valid 'parse' function "
-                      "declaration found";
-      }
-      restorePrevious();
-      return false;
-    }
-
-    const QString firstArg  = match.captured(1);
-    const QString secondArg = match.captured(3);
-
-    if (firstArg.isEmpty()) {
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(tr("Invalid Function Parameter"),
-                                        tr("The 'parse' function must have at least one parameter."
-                                           "\n\nExpected format:\n"
-                                           "function parse(frame) { ... }"),
-                                        QMessageBox::Critical);
-      } else {
-        qWarning() << "[FrameParser] Parse function must have at "
-                      "least one parameter";
-      }
-      restorePrevious();
-      return false;
-    }
-
-    if (!secondArg.isEmpty()) {
-      if (showMessageBoxes) {
-        Misc::Utilities::showMessageBox(tr("Deprecated Function Signature"),
-                                        tr("The 'parse' function uses the old two-parameter "
-                                           "format: parse(%1, %2)\n\n"
-                                           "This format is no longer supported. Please update "
-                                           "to the new single-parameter format:\n"
-                                           "function parse(%1) { ... }\n\n"
-                                           "The separator parameter is no longer needed.")
-                                          .arg(firstArg, secondArg),
-                                        QMessageBox::Warning);
-      } else {
-        qWarning() << "[FrameParser] Deprecated two-parameter "
-                      "parse function";
-      }
-      restorePrevious();
-      return false;
-    }
-
-    if (!probeParseFunction(se, parseFunction, sourceId, showMessageBoxes)) {
-      restorePrevious();
-      return false;
+  // Recreate engine if the language changed since last load
+  auto it = m_engines.find(sourceId);
+  if (it != m_engines.end()) {
+    const int lang              = languageForSource(sourceId);
+    const bool isLua            = (lang == SerialStudio::Lua);
+    const bool engineIsLua      = (dynamic_cast<LuaScriptEngine*>(it->second.get()) != nullptr);
+    const bool languageMismatch = (isLua != engineIsLua);
+    if (languageMismatch) {
+      m_engines.erase(it);
+      it = m_engines.end();
     }
   }
 
-  se.parseFunction = parseFunction;
-
-  // Hex-to-byte-array helper for binary frame parsing
-  se.engine.evaluate(QStringLiteral("function __ss_internal_hex_to_array__(h){"
-                                    "var n=h.length>>1,a=new Array(n);"
-                                    "for(var i=0,j=0;i<h.length;i+=2,j++)"
-                                    "a[j]=parseInt(h.substr(i,2),16);return a;}"));
-  se.hexToArray = se.engine.globalObject().property(QStringLiteral("__ss_internal_hex_to_array__"));
-
-  return true;
+  auto& engine = engineForSource(sourceId);
+  return engine.loadScript(script, sourceId, showMessageBoxes);
 }
 
 /**
@@ -861,6 +366,10 @@ void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
   m_suppressMessageBoxes = suppress;
 }
 
+//--------------------------------------------------------------------------------------------------
+// Code reload
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Loads the code stored in the project model into all engines.
  *
@@ -870,25 +379,31 @@ void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
  */
 void DataModel::FrameParser::readCode()
 {
-  // Destroy all per-source engines except source 0
-  QList<int> keysToRemove;
-  for (auto it = m_engines.begin(); it != m_engines.end(); ++it) {
-    if (it.key() != 0) {
-      delete it.value();
-      keysToRemove.append(it.key());
-    }
-  }
+  // Remove all per-source engines (source 0 is recreated below)
+  for (auto it = m_engines.begin(); it != m_engines.end();)
+    if (it->first != 0)
+      it = m_engines.erase(it);
+    else
+      ++it;
 
-  for (int k : keysToRemove)
-    m_engines.remove(k);
+  // Recreate source 0 engine if language changed
+  const int lang0  = languageForSource(0);
+  auto it0         = m_engines.find(0);
+  const bool isLua = (lang0 == SerialStudio::Lua);
+  const bool engineIsLua =
+    it0 != m_engines.end() && dynamic_cast<LuaScriptEngine*>(it0->second.get()) != nullptr;
+  if (it0 != m_engines.end() && isLua != engineIsLua)
+    m_engines.erase(0);
 
+  // Load global script and per-source scripts
   const auto& model   = ProjectModel::instance();
   const bool suppress = m_suppressMessageBoxes || model.suppressMessageBoxes();
 
   const auto& sources = model.sources();
   const QString code  = sources.empty() ? QString() : sources[0].frameParserCode;
 
-  (void)loadScript(0, code, !suppress);
+  if (!code.isEmpty())
+    (void)loadScript(0, code, !suppress);
 
   for (const auto& src : sources)
     if (src.sourceId > 0 && !src.frameParserCode.isEmpty())
@@ -898,29 +413,31 @@ void DataModel::FrameParser::readCode()
 }
 
 /**
- * @brief Resets the JS execution context by re-loading the current code.
- *
- * Destroys all per-source engines (source 0 is reset in-place), then reloads
- * all scripts from the project model.
+ * @brief Resets the execution context by re-loading all current code.
  */
 void DataModel::FrameParser::clearContext()
 {
-  // Destroy all per-source engines except source 0
-  QList<int> keysToRemove;
-  for (auto it = m_engines.begin(); it != m_engines.end(); ++it) {
-    if (it.key() != 0) {
-      delete it.value();
-      keysToRemove.append(it.key());
-    }
-  }
+  // Remove all per-source engines (source 0 is recreated below)
+  for (auto it = m_engines.begin(); it != m_engines.end();)
+    if (it->first != 0)
+      it = m_engines.erase(it);
+    else
+      ++it;
 
-  for (int k : keysToRemove)
-    m_engines.remove(k);
+  // Recreate source 0 engine if language changed
+  const int lang0  = languageForSource(0);
+  auto it0         = m_engines.find(0);
+  const bool isLua = (lang0 == SerialStudio::Lua);
+  const bool engineIsLua =
+    it0 != m_engines.end() && dynamic_cast<LuaScriptEngine*>(it0->second.get()) != nullptr;
+  if (it0 != m_engines.end() && isLua != engineIsLua)
+    m_engines.erase(0);
 
   const auto& sources = ProjectModel::instance().sources();
   const QString code  = sources.empty() ? QString() : sources[0].frameParserCode;
 
-  (void)loadScript(0, code, !m_suppressMessageBoxes);
+  if (!code.isEmpty())
+    (void)loadScript(0, code, !m_suppressMessageBoxes);
 
   for (const auto& src : sources)
     if (src.sourceId > 0 && !src.frameParserCode.isEmpty())
@@ -928,20 +445,23 @@ void DataModel::FrameParser::clearContext()
 }
 
 /**
- * @brief Runs one cycle of JS garbage collection on all engines.
+ * @brief Runs one cycle of garbage collection on all engines.
  */
 void DataModel::FrameParser::collectGarbage()
 {
   for (auto it = m_engines.begin(); it != m_engines.end(); ++it)
-    it.value()->engine.collectGarbage();
+    it->second->collectGarbage();
 }
 
+//--------------------------------------------------------------------------------------------------
+// Template management
+//--------------------------------------------------------------------------------------------------
+
 /**
- * @brief Rebuilds the list of available JS template files and display names.
+ * @brief Rebuilds the list of available template files and display names.
  */
 void DataModel::FrameParser::loadTemplateNames()
 {
-  // Populate the file list and matching display names
   m_templateFiles = {QStringLiteral("at_commands.js"),
                      QStringLiteral("base64_encoded.js"),
                      QStringLiteral("batched_sensor_data.js"),
@@ -1007,16 +527,11 @@ void DataModel::FrameParser::loadTemplateNames()
  * @brief Sets the active template index and saves the resulting code to the
  * project model.
  *
- * Loads the template source, evaluates it in the engine for @p sourceId, and
- * persists it. For source 0, also calls @c ProjectModel::setFrameParserCode().
- * For other sources, calls @c ProjectModel::updateSourceFrameParser().
- *
  * @param sourceId Target source engine (0 = global).
  * @param idx      Template index into @c m_templateFiles.
  */
 void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
 {
-  // Validate index and load the selected template
   if (idx < 0 || idx >= m_templateFiles.size())
     return;
 
@@ -1043,7 +558,6 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
  */
 void DataModel::FrameParser::loadDefaultTemplate(int sourceId, bool guiTrigger)
 {
-  // Load the default CSV template by filename lookup
   const auto idx = m_templateFiles.indexOf(QStringLiteral("comma_separated.js"));
   setTemplateIdx(sourceId, idx);
 

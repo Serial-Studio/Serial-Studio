@@ -42,20 +42,6 @@
 // Endian-correct memory utilities for checksum formatting
 //--------------------------------------------------------------------------------------------------
 
-//
-// These helpers write multibyte checksum values (e.g., CRCs, Adler, Fletcher)
-// into output buffers with a defined byte order, regardless of the host CPU's
-// native endianness.
-//
-// This ensures consistent output for binary formats, protocol compliance,
-// and cross-platform validation. For example:
-// - CRC-16-MODBUS requires little-endian output
-// - Network and file formats typically expect big-endian
-//
-// Use `big_endian_memcpy()` and `little_endian_memcpy()` instead of raw
-// memcpy() to ensure deterministic, spec-compliant results.
-//
-
 /**
  * @brief Copies data in big-endian format to a frame buffer.
  *
@@ -410,7 +396,6 @@ static QByteArray packU32BE(uint32_t v)
  */
 const QStringList& IO::availableChecksums()
 {
-  // Lazily build the list from the checksum function map
   static QStringList list;
   if (list.isEmpty()) {
     const auto& map = checksumFunctionMap();
@@ -479,7 +464,6 @@ const QMap<QString, IO::ChecksumFunc>& IO::checksumFunctionMap()
  */
 QByteArray IO::checksum(const QString& name, const QByteArray& data)
 {
-  // Look up algorithm by name and compute checksum
   const auto& map = checksumFunctionMap();
   const auto it   = map.find(name);
   if (it != map.end())

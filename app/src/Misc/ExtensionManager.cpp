@@ -1557,6 +1557,7 @@ void Misc::ExtensionManager::launchPlugin(const QString& id)
 
   Q_EMIT pluginOutputChanged(id);
 
+  // Register the running plugin and update UI state
   m_plugins.insert(id, process);
 
   QVariantMap entry_map;
@@ -1578,8 +1579,7 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
   if (it == m_plugins.end())
     return;
 
-  // Track plugins the user closes while the dashboard is active so we don't
-  // relaunch them automatically when the dashboard is shown again
+  // Track user-closed plugins to prevent auto-relaunch on next dashboard show
   if (UI::Dashboard::instance().available())
     m_userClosedPlugins.insert(id);
 
@@ -1593,6 +1593,7 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
   // Remove from map before terminating to avoid double-free
   m_plugins.erase(it);
 
+  // Terminate the process and capture remaining output
   process->terminate();
   if (!process->waitForFinished(3000))
     process->kill();
@@ -1606,6 +1607,7 @@ void Misc::ExtensionManager::stopPlugin(const QString& id)
 
   delete process;
 
+  // Remove from the running plugins list and update UI
   for (int i = 0; i < m_runningPlugins.count(); ++i) {
     if (m_runningPlugins.at(i).toMap().value("id").toString() == id) {
       m_runningPlugins.removeAt(i);
@@ -1716,6 +1718,7 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
   if (UI::Dashboard::instance().available())
     m_userClosedPlugins.insert(id);
 
+  // Capture remaining output and log exit code
   auto* process        = it.value();
   const auto remaining = QString::fromUtf8(process->readAll());
   if (!remaining.isEmpty())
@@ -1725,6 +1728,7 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
   m_pluginOutput[id] += QStringLiteral("[Exited with code %1]\n").arg(exitCode);
   Q_EMIT pluginOutputChanged(id);
 
+  // Clean up the process and remove from running list
   m_plugins.erase(it);
   process->deleteLater();
 
@@ -1752,6 +1756,7 @@ void Misc::ExtensionManager::onPluginFinished(const QString& id)
  */
 void Misc::ExtensionManager::loadLocalManifest(const QString& repoPath)
 {
+  // Normalize the path and locate the manifest file
   auto path = repoPath;
   if (path.startsWith("file://"))
     path = QUrl(path).toLocalFile();
@@ -1764,6 +1769,7 @@ void Misc::ExtensionManager::loadLocalManifest(const QString& repoPath)
   if (!file.open(QIODevice::ReadOnly))
     return;
 
+  // Parse the manifest and load each addon's metadata
   const auto doc     = QJsonDocument::fromJson(file.readAll());
   const auto root    = doc.object();
   const auto addons  = root.value("extensions").toArray();

@@ -275,7 +275,7 @@ Quick Plot treats each line as a frame and each comma-separated field as a datas
 | Dashboard generated | From project file |
 | Best for | Production telemetry, complex protocols, multi-sensor systems |
 
-This mode provides full control. You define frame delimiters, map data fields to datasets, choose widget types, set units and ranges, configure alarms, add FFT analysis, and write JavaScript parsers for binary protocols. Project File mode also supports multiple data sources for multi-device setups. This is the recommended mode for most real-world projects.
+This mode provides full control. You define frame delimiters, map data fields to datasets, choose widget types, set units and ranges, configure alarms, add FFT analysis, and write frame parser scripts (Lua or JavaScript) for binary protocols. Project File mode also supports multiple data sources for multi-device setups. This is the recommended mode for most real-world projects.
 
 ### Device Sends JSON
 
@@ -333,7 +333,7 @@ Now that you have made your first connection, here are the recommended paths for
 
 - **[Project Editor](Project-Editor.md)** — Create and edit project files with custom groups, datasets, and widget configurations.
 - **[Widget Reference](Widget-Reference.md)** — Explore all 15+ widget types with configuration details and use-case guidance.
-- **[JavaScript API](JavaScript-API.md)** — Write custom frame parsers for binary or non-standard data formats.
+- **[Frame Parser Scripting](JavaScript-API.md)** — Write custom frame parsers in Lua or JavaScript for binary or non-standard data formats.
 
 ### Advanced features
 

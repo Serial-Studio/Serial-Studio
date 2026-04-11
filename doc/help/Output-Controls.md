@@ -561,5 +561,5 @@ function transmit(value) {
 - [Actions](Actions.md) — simple command buttons with timer support.
 - [Project Editor](Project-Editor.md) — complete guide to creating and configuring projects.
 - [Widget Reference](Widget-Reference.md) — all input/visualization widget types.
-- [JavaScript API](JavaScript-API.md) — JavaScript capabilities available in Serial Studio.
+- [Frame Parser Scripting](JavaScript-API.md) — Lua and JavaScript parser reference.
 - [Data Sources](Data-Sources.md) — configuring device connections.

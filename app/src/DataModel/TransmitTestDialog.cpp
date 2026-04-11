@@ -35,11 +35,9 @@
  */
 DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent) : QDialog(parent)
 {
-  // Set window geometry and title
   resize(640, 480);
   setMinimumSize(640, 480);
 
-  // Get pointer to fonts module
   auto* commonFonts = &Misc::CommonFonts::instance();
 
   // Initialize widgets
@@ -55,33 +53,28 @@ DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent) : QDialog(par
   m_rawOutput      = new QPlainTextEdit(this);
   m_hexOutput      = new QPlainTextEdit(this);
 
-  // Create layout objects
   auto* mainLayout   = new QVBoxLayout(this);
   auto* inputLayout  = new QHBoxLayout(m_inputGroup);
   auto* outputLayout = new QVBoxLayout(m_outputGroup);
 
-  // Configure buttons
   m_evaluateButton->setDefault(true);
   m_clearButton->setIcon(QIcon(":/rcc/icons/buttons/clear.svg"));
   m_evaluateButton->setIcon(QIcon(":/rcc/icons/buttons/media-play.svg"));
 
-  // Configure output text displays
   m_rawOutput->setReadOnly(true);
   m_hexOutput->setReadOnly(true);
   m_rawOutput->setFont(commonFonts->monoFont());
   m_hexOutput->setFont(commonFonts->monoFont());
 
-  // Configure byte count label
   m_byteCountLabel->setFont(commonFonts->boldUiFont());
   m_byteCountLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-  // Configure titles
   auto titleFont = commonFonts->customUiFont(0.8, true);
   titleFont.setCapitalization(QFont::AllUppercase);
   m_inputTitle->setFont(titleFont);
   m_outputTitle->setFont(titleFont);
 
-  // Configure layouts
+  // Populate layouts
   inputLayout->addWidget(m_userInput);
   inputLayout->addWidget(m_hexCheckBox);
   inputLayout->addWidget(m_clearButton);
@@ -90,12 +83,10 @@ DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent) : QDialog(par
   outputLayout->addWidget(m_hexOutput);
   outputLayout->addWidget(m_byteCountLabel);
 
-  // Set layout stretch factors
   outputLayout->setStretch(0, 1);
   outputLayout->setStretch(1, 1);
   outputLayout->setStretch(2, 0);
 
-  // Set main layout
   mainLayout->setSpacing(4);
   mainLayout->addWidget(m_inputTitle);
   mainLayout->addWidget(m_inputGroup);
@@ -103,17 +94,15 @@ DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent) : QDialog(par
   mainLayout->addWidget(m_outputTitle);
   mainLayout->addWidget(m_outputGroup);
 
-  // Connect signals
+  // Connect widget signals
   connect(m_evaluateButton, &QPushButton::clicked, this, &TransmitTestDialog::evaluate);
   connect(m_clearButton, &QPushButton::clicked, this, &TransmitTestDialog::clear);
   connect(
     m_hexCheckBox, &QCheckBox::checkStateChanged, this, &TransmitTestDialog::onInputModeChanged);
   connect(m_userInput, &QLineEdit::returnPressed, this, &TransmitTestDialog::evaluate);
-
-  // Add hex formatting and validation
   connect(m_userInput, &QLineEdit::textChanged, this, &TransmitTestDialog::onInputDataChanged);
 
-  // Singleton module connections
+  // React to theme and language changes
   connect(&Misc::ThemeManager::instance(),
           &Misc::ThemeManager::themeChanged,
           this,
@@ -123,11 +112,9 @@ DataModel::TransmitTestDialog::TransmitTestDialog(QWidget* parent) : QDialog(par
           this,
           &TransmitTestDialog::onLanguageChanged);
 
-  // Load theme & translations
   onThemeChanged();
   onLanguageChanged();
 
-  // Make window stay on top
   setWindowFlag(Qt::WindowStaysOnTopHint, true);
 }
 
@@ -168,7 +155,6 @@ void DataModel::TransmitTestDialog::clear()
  */
 void DataModel::TransmitTestDialog::evaluate()
 {
-  // Validate input
   const auto input = m_userInput->text();
   if (input.isEmpty())
     return;
@@ -180,19 +166,19 @@ void DataModel::TransmitTestDialog::evaluate()
     return;
   }
 
-  // Validate transmit code
+  // No transmit code to evaluate
   if (m_transmitCode.trimmed().isEmpty()) {
     displayOutput({}, tr("No transmit function code to evaluate."));
     return;
   }
 
-  // Create a temporary JS engine with protocol helpers
+  // Spin up a temporary JS engine with protocol helpers
   QJSEngine engine;
 #ifdef BUILD_COMMERCIAL
   Widgets::Output::Base::installProtocolHelpers(engine);
 #endif
 
-  // Compile the transmit function
+  // Compile and validate the transmit function
   const auto wrapped =
     QStringLiteral("(function() { %1; return transmit; })()").arg(m_transmitCode);
   auto transmitFn = engine.evaluate(wrapped);
@@ -203,14 +189,12 @@ void DataModel::TransmitTestDialog::evaluate()
     return;
   }
 
-  // Build the value to pass to the transmit function
+  // Convert user input to a JS value (hex bytes or auto-detect number/string)
   QJSValue jsValue;
   if (m_hexCheckBox->isChecked()) {
-    // Hex mode: convert hex bytes to a Latin1 string value
     const auto bytes = SerialStudio::hexToBytes(input);
     jsValue          = engine.toScriptValue(QString::fromLatin1(bytes));
   } else {
-    // Auto-detect: try number first, fall back to string
     bool ok;
     double num = input.toDouble(&ok);
     if (ok)
@@ -219,14 +203,13 @@ void DataModel::TransmitTestDialog::evaluate()
       jsValue = engine.toScriptValue(input);
   }
 
-  // Call the transmit function
   auto result = transmitFn.call(QJSValueList{jsValue});
   if (result.isError()) {
     displayOutput({}, result.toString());
     return;
   }
 
-  // Convert result to byte array (same logic as Base::evaluateTransmitFunction)
+  // Convert JS result to byte array
   QByteArray payload;
   if (result.isString())
     payload = result.toString().toLatin1();
@@ -245,11 +228,10 @@ void DataModel::TransmitTestDialog::evaluate()
  */
 void DataModel::TransmitTestDialog::onThemeChanged()
 {
-  // Load theme colors
   setPalette(Misc::ThemeManager::instance().palette());
   onInputModeChanged(m_hexCheckBox->checkState());
 
-  // Define QSS for groupboxes
+  // Style groupboxes with theme colors
   const auto* tm = &Misc::ThemeManager::instance();
   const auto groupBoxStyle =
     QStringLiteral(
@@ -257,7 +239,6 @@ void DataModel::TransmitTestDialog::onThemeChanged()
       .arg(tm->getColor("groupbox_border").name())
       .arg(tm->getColor("groupbox_background").name());
 
-  // Set groupbox style
   m_inputGroup->setStyleSheet(groupBoxStyle);
   m_outputGroup->setStyleSheet(groupBoxStyle);
 }
@@ -310,12 +291,10 @@ void DataModel::TransmitTestDialog::onInputModeChanged(Qt::CheckState state)
  */
 void DataModel::TransmitTestDialog::onInputDataChanged(const QString& t)
 {
-  // Automatically add spaces & highlight invalid hex data
+  // Auto-format and validate hex input
   if (m_hexCheckBox->isChecked()) {
-    // Block signals to prevent recursive calls
     m_userInput->blockSignals(true);
 
-    // Update text if formatting changed
     const auto fmt     = formatHexInput(t);
     const auto isValid = validateHexInput(fmt);
     if (t != fmt) {
@@ -326,7 +305,6 @@ void DataModel::TransmitTestDialog::onInputDataChanged(const QString& t)
       m_userInput->setCursorPosition(pos + diff);
     }
 
-    // Update text color based on validity
     auto palette = m_userInput->palette();
     if (isValid || fmt.isEmpty())
       palette.setColor(QPalette::Text, Qt::black);
@@ -354,7 +332,7 @@ void DataModel::TransmitTestDialog::onInputDataChanged(const QString& t)
  */
 QString DataModel::TransmitTestDialog::formatHexInput(const QString& text)
 {
-  // Strip non-alphanumeric characters and uppercase letters
+  // Strip non-hex characters and normalize to uppercase
   QString cleaned;
   for (const QChar& c : text)
     if (c.isLetterOrNumber())
@@ -378,7 +356,6 @@ QString DataModel::TransmitTestDialog::formatHexInput(const QString& text)
  */
 bool DataModel::TransmitTestDialog::validateHexInput(const QString& text)
 {
-  // Empty input is always valid
   if (text.isEmpty())
     return true;
 
@@ -406,7 +383,7 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result, cons
 {
   auto* commonFonts = &Misc::CommonFonts::instance();
 
-  // Show error
+  // Display error message
   if (!errorMsg.isEmpty()) {
     m_rawOutput->setFont(commonFonts->uiFont());
     m_rawOutput->setPlainText(errorMsg);
@@ -415,7 +392,7 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result, cons
     return;
   }
 
-  // Show empty result
+  // Handle empty payload
   if (result.isEmpty()) {
     m_rawOutput->setFont(commonFonts->uiFont());
     m_rawOutput->setPlainText(tr("(empty) No data returned"));
@@ -424,7 +401,7 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result, cons
     return;
   }
 
-  // Build escaped raw string (show control chars as \xNN)
+  // Build escaped raw string, showing control chars as \xNN
   QString rawStr;
   for (int i = 0; i < result.size(); ++i) {
     unsigned char ch = static_cast<unsigned char>(result.at(i));
@@ -440,7 +417,7 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result, cons
       rawStr += QChar(ch);
   }
 
-  // Build hex string
+  // Build space-separated hex representation
   QString hexStr;
   for (int i = 0; i < result.size(); ++i) {
     if (i > 0)
@@ -450,7 +427,6 @@ void DataModel::TransmitTestDialog::displayOutput(const QByteArray& result, cons
       QStringLiteral("%1").arg(static_cast<unsigned char>(result.at(i)), 2, 16, QLatin1Char('0'));
   }
 
-  // Display results
   m_rawOutput->setFont(commonFonts->monoFont());
   m_rawOutput->setPlainText(rawStr);
   m_hexOutput->setPlainText(hexStr.toUpper());

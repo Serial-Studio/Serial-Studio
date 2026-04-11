@@ -149,7 +149,7 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
  */
 void IO::FrameReader::setChecksum(const QString& checksum)
 {
-  // Store the algorithm name and compute its output length
+  // Compute output length from algorithm name
   m_checksum      = checksum;
   const auto& map = IO::checksumFunctionMap();
   const auto it   = map.find(m_checksum);
@@ -270,9 +270,8 @@ void IO::FrameReader::readEndDelimitedFrames()
     const auto crcPosition = endIndex + delimiter.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
 
-    // Read frame
+    // Validate checksum and enqueue if valid
     if (!frame.isEmpty()) {
-      // Validate checksum & register the frame
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
         if (!m_queue.try_enqueue(std::move(frame))) [[unlikely]]
@@ -328,7 +327,7 @@ void IO::FrameReader::readStartDelimitedFrames()
     if (startIndex > 0)
       (void)m_circularBuffer.read(startIndex);
 
-    // Search for the next start delimiter after the current one
+    // Locate the next start delimiter to determine frame boundary
     int nextStartIndex =
       m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps, m_startSequence.size());
 
@@ -354,12 +353,11 @@ void IO::FrameReader::readStartDelimitedFrames()
       continue;
     }
 
-    // Build the frame byte array (single allocation via peekRange)
+    // Extract payload excluding checksum bytes
     const auto frame = m_circularBuffer.peekRange(frameStart, frameLength - m_checksumLength);
 
-    // Validate the frame
+    // Validate checksum and enqueue if valid
     if (!frame.isEmpty()) {
-      // Execute checksum algorithm and register the frame
       const auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
         if (!m_queue.try_enqueue(std::move(frame))) [[unlikely]]
@@ -426,9 +424,8 @@ void IO::FrameReader::readStartEndDelimitedFrames()
     const auto frameEndPos = crcPosition + m_checksumLength;
     const auto frame       = m_circularBuffer.peekRange(frameStart, frameLength);
 
-    // Read frame
+    // Validate checksum and enqueue if valid
     if (!frame.isEmpty()) {
-      // Validate checksum and register the frame
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
         if (!m_queue.try_enqueue(std::move(frame))) [[unlikely]]

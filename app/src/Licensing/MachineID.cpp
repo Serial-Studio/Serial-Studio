@@ -135,7 +135,6 @@ quint64 Licensing::MachineID::machineSpecificKey() const noexcept
  */
 void Licensing::MachineID::readInformation()
 {
-  // Initialize common platform variables
   QString id;
   QString os;
   QProcess process;
@@ -176,7 +175,7 @@ void Licensing::MachineID::readInformation()
   os = QStringLiteral("Windows");
   QString machineGuid, uuid;
 
-  // Get MachineGuid from Registry
+  // Read MachineGuid from the registry
   process.start(
     "reg", {"query", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Cryptography", "/v", "MachineGuid"});
   process.waitForFinished();
@@ -189,7 +188,7 @@ void Licensing::MachineID::readInformation()
     }
   }
 
-  // Get UUID using PowerShell
+  // Read system UUID via PowerShell
   process.start("powershell",
                 {"-ExecutionPolicy",
                  "Bypass",
@@ -198,7 +197,6 @@ void Licensing::MachineID::readInformation()
   process.waitForFinished();
   uuid = process.readAllStandardOutput().trimmed();
 
-  // Combine MachineGuid and UUID
   id = machineGuid + uuid;
 #endif
 
@@ -216,15 +214,15 @@ void Licensing::MachineID::readInformation()
   }
 #endif
 
-  // Generate a hash based on the machine ID, application name and OS
+  // Hash the composite identifier with BLAKE2s-128
   auto data = QString("%1@%2:%3").arg(qApp->applicationName(), id, os);
   auto hash = QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Blake2s_128);
 
-  // Obtain the machine ID and encryption key as a base64 string
+  // Derive machine ID and encryption key
   m_machineId          = QString::fromUtf8(hash.toBase64());
   m_machineSpecificKey = qFromBigEndian<quint64>(hash.left(8));
 
-  // Generate application version machine ID
+  // Derive version-specific machine ID
   auto appVerData =
     QString("%1_%2@%3:%4").arg(qApp->applicationName(), qApp->applicationVersion(), id, os);
   auto appVerHash = QCryptographicHash::hash(appVerData.toUtf8(), QCryptographicHash::Blake2s_128);

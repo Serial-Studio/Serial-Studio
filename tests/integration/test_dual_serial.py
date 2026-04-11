@@ -15,6 +15,7 @@ SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
 """
 
 import copy
+import os
 import threading
 import time
 
@@ -24,6 +25,7 @@ from utils import DualSerialPorts, PTY_AVAILABLE
 from utils.api_client import APIError
 from utils.data_generator import DataGenerator
 
+_IS_CI = os.environ.get("CI", "").lower() in ("true", "1", "yes")
 
 # ---------------------------------------------------------------------------
 # Skip conditions
@@ -34,6 +36,7 @@ pytestmark = [
     pytest.mark.integration,
     pytest.mark.project,
     pytest.mark.skipif(not PTY_AVAILABLE, reason="PTY support not available"),
+    pytest.mark.skipif(_IS_CI, reason="QSerialPort cannot open PTY devices reliably in CI"),
 ]
 
 

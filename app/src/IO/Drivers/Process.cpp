@@ -155,7 +155,6 @@ bool IO::Drivers::Process::isWritable() const noexcept
  */
 bool IO::Drivers::Process::configurationOk() const noexcept
 {
-  // Launch mode requires a resolvable executable; NamedPipe needs a path
   if (m_mode == Mode::Launch) {
     if (m_executable.isEmpty())
       return false;
@@ -217,7 +216,7 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
       return false;
     }
 
-    // Configure process with arguments and environment
+    // Set up arguments and augment PATH with platform-specific directories
     const QStringList args = QProcess::splitCommand(m_arguments);
 
     m_process = new QProcess(this);
@@ -410,7 +409,6 @@ void IO::Drivers::Process::setPipePath(const QString& path)
  */
 void IO::Drivers::Process::browseExecutable()
 {
-  // Open a file dialog starting at the current executable's directory
   const auto start = m_executable.isEmpty()
                      ? QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
                      : QFileInfo(m_executable).absolutePath();
@@ -437,7 +435,6 @@ void IO::Drivers::Process::browseExecutable()
  */
 void IO::Drivers::Process::browseWorkingDir()
 {
-  // Open a folder dialog starting at the current working directory
   const auto start = m_workingDir.isEmpty()
                      ? QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
                      : m_workingDir;
@@ -465,7 +462,6 @@ void IO::Drivers::Process::browseWorkingDir()
  */
 void IO::Drivers::Process::browsePipePath()
 {
-  // Open a file dialog starting at the current pipe path's directory
   const auto start = m_pipePath.isEmpty()
                      ? QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
                      : QFileInfo(m_pipePath).absolutePath();
@@ -498,7 +494,6 @@ void IO::Drivers::Process::browsePipePath()
  */
 void IO::Drivers::Process::refreshProcessList()
 {
-  // Enumerate running processes using platform-specific APIs
   QStringList list;
 
 #ifdef Q_OS_WIN
@@ -577,7 +572,7 @@ void IO::Drivers::Process::onReadyRead()
  */
 void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus status)
 {
-  // Drain remaining data and notify user of process termination
+  // Drain any buffered stdout before tearing down
   if (m_process) {
     const QByteArray remaining = m_process->readAllStandardOutput();
     if (!remaining.isEmpty())
@@ -603,7 +598,7 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
  */
 void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 {
-  // Ignore FailedToStart (already reported by open), show other errors
+  // FailedToStart is already reported by open() via waitForStarted()
   if (error == QProcess::FailedToStart)
     return;
 
@@ -806,12 +801,12 @@ QString IO::Drivers::Process::resolveExecutable(const QString& name)
   if (QFileInfo::exists(name))
     return name;
 
-  // Try system PATH first
+  // Search the system PATH
   const QString found = QStandardPaths::findExecutable(name);
   if (!found.isEmpty())
     return found;
 
-  // Try platform-specific extra paths
+  // Fall back to platform-specific directories
   return QStandardPaths::findExecutable(name, extraSearchPaths());
 }
 
@@ -826,7 +821,6 @@ QString IO::Drivers::Process::resolveExecutable(const QString& name)
  */
 QList<IO::DriverProperty> IO::Drivers::Process::driverProperties() const
 {
-  // Build property descriptors for mode, executable, args, working dir, pipe
   QList<IO::DriverProperty> props;
 
   IO::DriverProperty procMode;
@@ -875,7 +869,6 @@ QList<IO::DriverProperty> IO::Drivers::Process::driverProperties() const
  */
 void IO::Drivers::Process::setDriverProperty(const QString& key, const QVariant& value)
 {
-  // Dispatch property change to the appropriate setter
   if (key == QLatin1String("mode"))
     setMode(value.toInt());
 

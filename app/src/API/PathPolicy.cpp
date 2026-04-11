@@ -30,7 +30,6 @@
 
 static QString normalizedPath(const QString& path, bool allowNonexistent)
 {
-  // Resolve and normalize the file path
   QFileInfo info(path);
   if (info.exists())
     return QDir::cleanPath(info.canonicalFilePath());
@@ -53,10 +52,8 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
  */
 bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
 {
-  // Create a list of allowed paths
+  // Build allowed-root list from environment or defaults
   QStringList roots;
-
-  // Extract data from environment variables
   if (qEnvironmentVariableIsSet("SERIAL_STUDIO_API_ALLOWED_PATHS")) {
     const QString envValue = QString::fromLocal8Bit(qgetenv("SERIAL_STUDIO_API_ALLOWED_PATHS"));
     if (envValue.trimmed().isEmpty())
@@ -65,39 +62,32 @@ bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
     roots = envValue.split(QDir::listSeparator(), Qt::SkipEmptyParts);
   }
 
-  // Default to home path & temp. path
   else
     roots = {QDir::homePath(), QDir::tempPath()};
 
-  // Obtain clean path
+  // Normalize and verify the target is under an allowed root
   const QString targetPath = normalizedPath(filePath, allowNonexistent);
   if (targetPath.isEmpty())
     return false;
 
-  // Verify if path is inside allowed paths
   for (const auto& root : std::as_const(roots)) {
-    // Get clean path for allowed paths
     const QString rootPath = normalizedPath(root.trimmed(), true);
     if (rootPath.isEmpty())
       continue;
 
-    // Set case sensitivity
 #ifdef Q_OS_WIN
     const Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
 #else
     const Qt::CaseSensitivity sensitivity = Qt::CaseSensitive;
 #endif
 
-    // Target path is exactly the same as the allowed path
     if (targetPath.compare(rootPath, sensitivity) == 0)
       return true;
 
-    // Target path is inside the allowed path
     const QString prefix = rootPath + QDir::separator();
     if (targetPath.startsWith(prefix, sensitivity))
       return true;
   }
 
-  // Target path is not in allowed paths
   return false;
 }

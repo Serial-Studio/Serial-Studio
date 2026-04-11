@@ -36,7 +36,6 @@
  */
 void API::Handlers::CSVExportHandler::registerCommands()
 {
-  // Obtain registry and register CSV export commands
   auto& registry = CommandRegistry::instance();
 
   // Mutation commands
@@ -84,7 +83,6 @@ void API::Handlers::CSVExportHandler::registerCommands()
 API::CommandResponse API::Handlers::CSVExportHandler::setEnabled(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("enabled"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: enabled"));
@@ -104,7 +102,6 @@ API::CommandResponse API::Handlers::CSVExportHandler::setEnabled(const QString& 
 API::CommandResponse API::Handlers::CSVExportHandler::close(const QString& id,
                                                             const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   CSV::Export::instance().closeFile();
@@ -124,7 +121,6 @@ API::CommandResponse API::Handlers::CSVExportHandler::close(const QString& id,
 API::CommandResponse API::Handlers::CSVExportHandler::getStatus(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& csvExport = CSV::Export::instance();

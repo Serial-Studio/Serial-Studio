@@ -40,7 +40,6 @@
  */
 void API::Handlers::SourceHandler::registerCommands()
 {
-  // Obtain registry and register all source commands
   auto& registry = CommandRegistry::instance();
 
   registry.registerCommand(QStringLiteral("project.source.list"),
@@ -212,9 +211,9 @@ void API::Handlers::SourceHandler::registerCommands()
 API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
                                                               const QJsonObject& params)
 {
-  // Retrieve current state
   (void)params;
 
+  // Build per-source metadata array
   const auto& sources = DataModel::ProjectModel::instance().sources();
   QJsonArray arr;
   for (const auto& src : sources) {
@@ -244,7 +243,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
 API::CommandResponse API::Handlers::SourceHandler::sourceAdd(const QString& id,
                                                              const QJsonObject& params)
 {
-  // Retrieve current state
   (void)params;
 
 #ifndef BUILD_COMMERCIAL
@@ -272,7 +270,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceAdd(const QString& id,
 API::CommandResponse API::Handlers::SourceHandler::sourceDelete(const QString& id,
                                                                 const QJsonObject& params)
 {
-// Check license requirements
 #ifndef BUILD_COMMERCIAL
   (void)params;
   return CommandResponse::makeError(id,
@@ -305,7 +302,6 @@ API::CommandResponse API::Handlers::SourceHandler::sourceDelete(const QString& i
 API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& id,
                                                                 const QJsonObject& params)
 {
-// Check license requirements
 #ifndef BUILD_COMMERCIAL
   (void)params;
   return CommandResponse::makeError(id,
@@ -316,6 +312,7 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
     return CommandResponse::makeError(
       id, QStringLiteral("MISSING_PARAM"), QStringLiteral("sourceId is required"));
 
+  // Copy source and apply field updates
   const int sourceId    = params[QStringLiteral("sourceId")].toInt(-1);
   const auto& sources   = DataModel::ProjectModel::instance().sources();
   const int sourceCount = static_cast<int>(sources.size());

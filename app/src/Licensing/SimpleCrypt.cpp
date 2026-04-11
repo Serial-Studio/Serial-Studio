@@ -150,7 +150,6 @@ void Licensing::SimpleCrypt::setIntegrityProtectionMode(IntegrityProtectionMode 
  */
 QString Licensing::SimpleCrypt::encryptToString(const QString& plaintext)
 {
-  // Encrypt the plaintext and return as base64
   QByteArray plaintextArray = plaintext.toUtf8();
   QByteArray cypher         = encryptToByteArray(plaintextArray);
   QString cypherString      = QString::fromLatin1(cypher.toBase64());
@@ -165,7 +164,6 @@ QString Licensing::SimpleCrypt::encryptToString(const QString& plaintext)
  */
 QString Licensing::SimpleCrypt::encryptToString(const QByteArray& plaintext)
 {
-  // Encrypt the byte array and return as base64
   QByteArray cypher    = encryptToByteArray(plaintext);
   QString cypherString = QString::fromLatin1(cypher.toBase64());
   return cypherString;
@@ -196,13 +194,14 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QString& plaintext)
  */
 QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintext)
 {
-  // Validate that a key has been set
+  // No key configured
   if (m_keyParts.isEmpty()) {
     qWarning() << "No key set.";
     m_lastError = ErrorNoKeySet;
     return QByteArray();
   }
 
+  // Apply compression if configured
   QByteArray ba = plaintext;
 
   CryptoFlags flags = CryptoFlagNone;
@@ -219,6 +218,7 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintex
     }
   }
 
+  // Add integrity protection
   QByteArray integrityProtection;
   if (m_protectionMode == ProtectionChecksum) {
     flags |= CryptoFlagChecksum;
@@ -234,15 +234,13 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintex
     integrityProtection += hash.result();
   }
 
-  // prepend a random char to the string
+  // Prepend random byte and XOR-encrypt
   char randomChar = char(QRandomGenerator::securelySeeded().generate() & 0xFF);
   ba              = randomChar + integrityProtection + ba;
 
   int pos(0);
   char lastChar(0);
-
   int cnt = ba.size();
-
   while (pos < cnt) {
     ba[pos]  = ba.at(pos) ^ m_keyParts.at(pos % 8) ^ lastChar;
     lastChar = ba.at(pos);
@@ -272,7 +270,6 @@ QByteArray Licensing::SimpleCrypt::encryptToByteArray(const QByteArray& plaintex
  */
 QString Licensing::SimpleCrypt::decryptToString(const QByteArray& cypher)
 {
-  // Decrypt the binary cypher to a UTF-8 string
   QByteArray ba     = decryptToByteArray(cypher);
   QString plaintext = QString::fromUtf8(ba, ba.size());
 
@@ -289,7 +286,6 @@ QString Licensing::SimpleCrypt::decryptToString(const QByteArray& cypher)
  */
 QString Licensing::SimpleCrypt::decryptToString(const QString& cyphertext)
 {
-  // Decode base64, decrypt, and return as UTF-8
   QByteArray cyphertextArray = QByteArray::fromBase64(cyphertext.toLatin1());
   QByteArray plaintextArray  = decryptToByteArray(cyphertextArray);
   QString plaintext          = QString::fromUtf8(plaintextArray, plaintextArray.size());
@@ -307,7 +303,7 @@ QString Licensing::SimpleCrypt::decryptToString(const QString& cyphertext)
  */
 QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
 {
-  // Validate that a key has been set
+  // No key configured
   if (m_keyParts.isEmpty()) {
     qWarning() << "No key set.";
     m_lastError = ErrorNoKeySet;
@@ -315,25 +311,22 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
   }
 
   QByteArray ba = cypher;
-
   if (cypher.size() < 3)
     return QByteArray();
 
+  // Only version 3 is supported
   char version = ba.at(0);
-
-  // we only work with version 3
   if (version != 3) {
     m_lastError = ErrorUnknownVersion;
     return QByteArray();
   }
 
+  // XOR-decrypt the payload
   CryptoFlags flags = CryptoFlags(ba.at(1));
-
-  ba = ba.mid(2);
+  ba                = ba.mid(2);
   int pos(0);
   int cnt(ba.size());
   char lastChar = 0;
-
   while (pos < cnt) {
     char currentChar = ba[pos];
     ba[pos]          = ba.at(pos) ^ lastChar ^ m_keyParts.at(pos % 8);
@@ -341,9 +334,10 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
     ++pos;
   }
 
-  // chop off the random number at the start
+  // Strip the random prefix byte
   ba = ba.mid(1);
 
+  // Verify integrity
   bool integrityOk(true);
   if (flags.testFlag(CryptoFlagChecksum)) {
     if (ba.length() < 2) {
@@ -396,7 +390,6 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QByteArray& cypher)
  */
 QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QString& cyphertext)
 {
-  // Decode base64 and decrypt to byte array
   QByteArray cyphertextArray = QByteArray::fromBase64(cyphertext.toLatin1());
   QByteArray ba              = decryptToByteArray(cyphertextArray);
 
@@ -417,7 +410,6 @@ QByteArray Licensing::SimpleCrypt::decryptToByteArray(const QString& cyphertext)
  */
 void Licensing::SimpleCrypt::splitKey()
 {
-  // Reset and extract 8 bytes from the 64-bit key
   m_keyParts.clear();
   m_keyParts.resize(8);
 

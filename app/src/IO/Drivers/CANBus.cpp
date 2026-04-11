@@ -182,7 +182,6 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
  */
 qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 {
-  // Validate device, writability, and minimum frame size
   if (!m_device)
     return 0;
 
@@ -192,6 +191,7 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
   if (data.length() < 3)
     return 0;
 
+  // Parse CAN ID, DLC, and payload from the input buffer
   try {
     quint32 can_id = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
 
@@ -238,11 +238,11 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
  */
 bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
 {
-  // Validate CAN support and create a new device connection
   Q_UNUSED(mode)
 
   close();
 
+  // Abort if no CAN bus plugins are available
   if (!canSupportAvailable()) {
 #if defined(Q_OS_LINUX)
     Misc::Utilities::showMessageBox(
@@ -270,6 +270,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  // Validate configuration before connecting
   if (!configurationOk()) {
     Misc::Utilities::showMessageBox(
       tr("Invalid CAN Configuration"),
@@ -296,6 +297,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  // Create the CAN bus device from the selected plugin and interface
   QString plugin    = m_pluginList.at(m_pluginIndex);
   QString interface = m_interfaceList.at(m_interfaceIndex);
 
@@ -312,10 +314,12 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     return false;
   }
 
+  // Configure bitrate and CAN FD mode
   m_device->setConfigurationParameter(QCanBusDevice::BitRateKey, m_bitrate);
   if (m_canFD)
     m_device->setConfigurationParameter(QCanBusDevice::CanFdKey, true);
 
+  // Connect state and error signals
   connect(m_device,
           &QCanBusDevice::framesReceived,
           this,
@@ -332,6 +336,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
           &IO::Drivers::CANBus::onErrorOccurred,
           Qt::UniqueConnection);
 
+  // Attempt connection
   if (!m_device->connectDevice()) {
     error = m_device->errorString();
     m_device->deleteLater();
@@ -415,7 +420,6 @@ QString IO::Drivers::CANBus::interfaceError() const
  */
 QStringList IO::Drivers::CANBus::bitrateList() const
 {
-  // Build list of standard CAN bitrates
   QStringList list;
   list << "10000";
   list << "20000";
@@ -437,7 +441,6 @@ QStringList IO::Drivers::CANBus::bitrateList() const
  */
 QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
 {
-  // Map Qt plugin identifiers to user-friendly names
   if (plugin == "socketcan")
     return "SocketCAN";
   else if (plugin == "peakcan")
@@ -554,13 +557,13 @@ void IO::Drivers::CANBus::setupExternalConnections()
  */
 void IO::Drivers::CANBus::onFramesReceived()
 {
-  // Validate device state before processing incoming frames
   if (!m_device)
     return;
 
   if (!isOpen())
     return;
 
+  // Process all available frames from the CAN bus device
   try {
     while (m_device->framesAvailable() > 0) {
       const QCanBusFrame frame = m_device->readFrame();
@@ -568,10 +571,12 @@ void IO::Drivers::CANBus::onFramesReceived()
       if (!frame.isValid())
         continue;
 
+      // Skip oversized payloads
       const QByteArray payload = frame.payload();
       if (payload.size() > 64)
         continue;
 
+      // Build output: [ID_hi, ID_lo, DLC, data...] padded to 11 bytes
       QByteArray data;
       data.reserve(11);
 
@@ -651,7 +656,6 @@ void IO::Drivers::CANBus::onStateChanged(QCanBusDevice::CanBusDeviceState state)
  */
 void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
 {
-  // Ignore non-errors and show descriptive error messages
   if (error == QCanBusDevice::NoError)
     return;
 
@@ -682,10 +686,10 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
  */
 void IO::Drivers::CANBus::refreshInterfaces()
 {
-  // Query the selected plugin for available CAN interfaces
   m_interfaceList.clear();
   m_interfaceError.clear();
 
+  // Abort if no valid plugin is selected
   if (m_pluginList.isEmpty() || m_pluginIndex >= m_pluginList.count()) {
     m_interfaceError = tr("No CAN driver selected");
     Q_EMIT interfaceErrorChanged();
@@ -693,6 +697,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
     return;
   }
 
+  // Query available interfaces from the selected plugin
   QString plugin = m_pluginList[m_pluginIndex];
   QString error;
 
@@ -704,6 +709,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
   for (const QCanBusDeviceInfo& info : interfaces)
     m_interfaceList.append(info.name());
 
+  // Provide a platform-specific hint when no interfaces are found
   if (m_interfaceList.isEmpty() && m_interfaceError.isEmpty()) {
     const QString driverName = pluginDisplayName(plugin);
 
@@ -736,6 +742,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
     Q_EMIT interfaceErrorChanged();
   }
 
+  // Clamp index if the selected interface was removed
   if (m_interfaceIndex >= m_interfaceList.count()) {
     m_interfaceIndex = 0;
     m_settings.setValue("CanBusDriver/interfaceIndex", 0);
@@ -752,12 +759,13 @@ void IO::Drivers::CANBus::refreshInterfaces()
  */
 void IO::Drivers::CANBus::refreshPlugins()
 {
-  // Detect newly loaded plugins and refresh interface lists
   const QStringList currentPlugins = QCanBus::instance()->plugins();
 
+  // Update only if the plugin list changed
   if (m_pluginList != currentPlugins) {
     m_pluginList = currentPlugins;
 
+    // Clamp index if the selected plugin was removed
     if (m_pluginIndex >= m_pluginList.count()) {
       m_pluginIndex = m_pluginList.isEmpty()
                       ? 0
@@ -793,7 +801,6 @@ bool IO::Drivers::CANBus::canSupportAvailable() const
  */
 QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
 {
-  // Build property descriptors for plugin, interface, bitrate, and CAN FD
   QList<IO::DriverProperty> props;
 
   IO::DriverProperty plugin;
@@ -838,7 +845,6 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
  */
 void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& value)
 {
-  // Dispatch property change to the appropriate setter
   if (key == QLatin1String("pluginIndex"))
     setPluginIndex(static_cast<quint8>(value.toInt()));
 
@@ -892,7 +898,6 @@ bool IO::Drivers::CANBus::selectByIdentifier(const QJsonObject& id)
 
   bool matched = false;
 
-  // Match plugin by name
   const auto saved_plugin = id.value(QStringLiteral("plugin")).toString();
   if (!saved_plugin.isEmpty()) {
     for (int i = 0; i < m_pluginList.size(); ++i) {
@@ -904,7 +909,6 @@ bool IO::Drivers::CANBus::selectByIdentifier(const QJsonObject& id)
     }
   }
 
-  // Match interface by name
   const auto saved_iface = id.value(QStringLiteral("interface")).toString();
   if (!saved_iface.isEmpty()) {
     for (int i = 0; i < m_interfaceList.size(); ++i) {

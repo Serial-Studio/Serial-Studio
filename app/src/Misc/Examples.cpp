@@ -241,7 +241,6 @@ void Misc::Examples::downloadExample()
  */
 void Misc::Examples::onManifestReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -265,7 +264,6 @@ void Misc::Examples::onManifestReply()
  */
 void Misc::Examples::onReadmeReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -305,7 +303,6 @@ void Misc::Examples::onReadmeReply()
  */
 void Misc::Examples::onScreenshotReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -341,7 +338,6 @@ void Misc::Examples::onScreenshotReply()
  */
 void Misc::Examples::onContentsReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -391,7 +387,6 @@ void Misc::Examples::onContentsReply()
  */
 void Misc::Examples::onFileDownloadReply()
 {
-  // Obtain the reply from the sender signal
   auto* reply = qobject_cast<QNetworkReply*>(sender());
   if (!reply)
     return;
@@ -403,7 +398,6 @@ void Misc::Examples::onFileDownloadReply()
     const auto file_name = reply->property("fileName").toString();
     const auto file_path = m_downloadPath + "/" + file_name;
 
-    // Create subdirectories if needed
     QFileInfo info(file_path);
     QDir().mkpath(info.absolutePath());
 

@@ -33,6 +33,7 @@
 #include "AppState.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/FrameParser.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "SerialStudio.h"
@@ -46,7 +47,6 @@
  */
 void API::Handlers::ProjectHandler::registerCommands()
 {
-  // Obtain registry and register all project commands
   auto& registry = CommandRegistry::instance();
 
   // Empty schema for parameterless commands
@@ -254,24 +254,33 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("code")] = QJsonObject{
-      {       QStringLiteral("type"),                       QStringLiteral("string")},
-      {QStringLiteral("description"), QStringLiteral("Frame parser JavaScript code")}
+      {       QStringLiteral("type"),                               QStringLiteral("string")},
+      {QStringLiteral("description"), QStringLiteral("Frame parser script code (JS or Lua)")}
     };
     props[QStringLiteral("sourceId")] = QJsonObject{
       {       QStringLiteral("type"),                  QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Source index (default 0)")}
+    };
+    props[QStringLiteral("language")] = QJsonObject{
+      {       QStringLiteral("type"),QStringLiteral("integer")                      },
+      {QStringLiteral("description"),
+       QStringLiteral("Optional: 0 = JavaScript, 1 = Lua. When supplied, the "
+       "source language is flipped before the code is validated "
+       "and script errors are returned as API errors.")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
     schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("code")};
     registry.registerCommand(QStringLiteral("project.parser.setCode"),
-                             QStringLiteral("Set frame parser code (params: code)"),
+                             QStringLiteral("Set frame parser code (params: code, "
+                                            "optional sourceId, optional language)"),
                              schema,
                              &parserSetCode);
 
     registry.registerCommand(QStringLiteral("project.frameParser.setCode"),
-                             QStringLiteral("Set frame parser code (params: code)"),
+                             QStringLiteral("Set frame parser code (params: code, "
+                                            "optional sourceId, optional language)"),
                              schema,
                              &parserSetCode);
   }
@@ -289,6 +298,43 @@ void API::Handlers::ProjectHandler::registerCommands()
                              QStringLiteral("Get frame parser code"),
                              schema,
                              &parserGetCode);
+  }
+
+  {
+    QJsonObject props;
+    props[QStringLiteral("language")] = QJsonObject{
+      {       QStringLiteral("type"),                                  QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Script language: 0 = JavaScript, 1 = Lua")}
+    };
+    props[QStringLiteral("sourceId")] = QJsonObject{
+      {       QStringLiteral("type"),                       QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Source identifier (default 0)")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("language")};
+    registry.registerCommand(QStringLiteral("project.frameParser.setLanguage"),
+                             QStringLiteral("Set the script language used by the frame parser "
+                                            "for a given source (params: language, sourceId)"),
+                             schema,
+                             &parserSetLanguage);
+  }
+
+  {
+    QJsonObject props;
+    props[QStringLiteral("sourceId")] = QJsonObject{
+      {       QStringLiteral("type"),                       QStringLiteral("integer")},
+      {QStringLiteral("description"), QStringLiteral("Source identifier (default 0)")}
+    };
+    QJsonObject schema;
+    schema[QStringLiteral("type")]       = QStringLiteral("object");
+    schema[QStringLiteral("properties")] = props;
+    registry.registerCommand(QStringLiteral("project.frameParser.getLanguage"),
+                             QStringLiteral("Get the script language used by the frame parser "
+                                            "for a given source"),
+                             schema,
+                             &parserGetLanguage);
   }
 
   {
@@ -369,7 +415,6 @@ void API::Handlers::ProjectHandler::registerCommands()
 API::CommandResponse API::Handlers::ProjectHandler::fileNew(const QString& id,
                                                             const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().newJsonFile();
@@ -386,7 +431,6 @@ API::CommandResponse API::Handlers::ProjectHandler::fileNew(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::setTitle(const QString& id,
                                                              const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("title"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
@@ -412,7 +456,6 @@ API::CommandResponse API::Handlers::ProjectHandler::setTitle(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::fileOpen(const QString& id,
                                                              const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("filePath"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: filePath"));
@@ -496,7 +539,6 @@ API::CommandResponse API::Handlers::ProjectHandler::fileSave(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::getStatus(const QString& id,
                                                               const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -519,7 +561,6 @@ API::CommandResponse API::Handlers::ProjectHandler::getStatus(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::groupAdd(const QString& id,
                                                              const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("title"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: title"));
@@ -557,7 +598,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupAdd(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -576,7 +616,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDelete(const QString& i
 API::CommandResponse API::Handlers::ProjectHandler::groupDuplicate(const QString& id,
                                                                    const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentGroup();
@@ -593,7 +632,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupDuplicate(const QString
 API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id,
                                                                const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("options"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: options"));
@@ -619,7 +657,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetAdd(const QString& id
 API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -638,7 +675,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetDelete(const QString&
 API::CommandResponse API::Handlers::ProjectHandler::datasetDuplicate(const QString& id,
                                                                      const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentDataset();
@@ -655,7 +691,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetDuplicate(const QStri
 API::CommandResponse API::Handlers::ProjectHandler::datasetSetOption(const QString& id,
                                                                      const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("option"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: option"));
@@ -684,7 +719,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetOption(const QStri
 API::CommandResponse API::Handlers::ProjectHandler::actionAdd(const QString& id,
                                                               const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().addAction();
@@ -700,7 +734,6 @@ API::CommandResponse API::Handlers::ProjectHandler::actionAdd(const QString& id,
 API::CommandResponse API::Handlers::ProjectHandler::actionDelete(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -719,7 +752,6 @@ API::CommandResponse API::Handlers::ProjectHandler::actionDelete(const QString& 
 API::CommandResponse API::Handlers::ProjectHandler::actionDuplicate(const QString& id,
                                                                     const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentAction();
@@ -739,7 +771,6 @@ API::CommandResponse API::Handlers::ProjectHandler::actionDuplicate(const QStrin
 API::CommandResponse API::Handlers::ProjectHandler::outputWidgetAdd(const QString& id,
                                                                     const QJsonObject& params)
 {
-  // Extract and validate parameter
   const int type = params.value(QStringLiteral("type")).toInt(0);
 
   DataModel::ProjectModel::instance().addOutputControl(static_cast<SerialStudio::OutputWidgetType>(
@@ -756,7 +787,6 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetAdd(const QStrin
 API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDelete(const QString& id,
                                                                        const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();
@@ -775,7 +805,6 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDelete(const QSt
 API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDuplicate(const QString& id,
                                                                           const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   DataModel::ProjectModel::instance().duplicateCurrentOutputWidget();
@@ -787,17 +816,27 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetDuplicate(const 
 
 /**
  * @brief Set frame parser code for a source.
- * @param params Requires "code" (string). Optional "sourceId" (int, default 0).
+ *
+ * When the optional "language" parameter is supplied, the project model
+ * language for the target source is switched atomically before the code is
+ * validated, and validation errors (syntax, missing parse(), probe runtime
+ * errors) surface as API errors rather than silently succeeding. When
+ * "language" is absent the legacy fire-and-forget behaviour is preserved
+ * for backwards compatibility with existing clients.
+ *
+ * @param params Requires "code" (string). Optional "sourceId" (int, default 0),
+ *               "language" (int: 0 = JavaScript, 1 = Lua).
  */
 API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Validate required parameter
+  // Validate required "code" parameter
   if (!params.contains(QStringLiteral("code"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: code"));
   }
 
+  // Resolve code and sourceId, validate bounds
   const QString code = params.value(QStringLiteral("code")).toString();
   const int sourceId = params.contains(QStringLiteral("sourceId"))
                        ? params.value(QStringLiteral("sourceId")).toInt()
@@ -809,6 +848,56 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Invalid sourceId"));
 
+  // Optional explicit language validation + atomic flip. When the caller
+  // provides "language" the handler validates the script under that engine
+  // up-front and only commits the language change if validation succeeds —
+  // so a failed setCode leaves the project model unchanged.
+  const bool hasLanguage = params.contains(QStringLiteral("language"));
+  int savedLanguage      = 0;
+  if (hasLanguage) {
+    const int language = params.value(QStringLiteral("language")).toInt();
+    if (language != SerialStudio::JavaScript && language != SerialStudio::Lua)
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::InvalidParam,
+        QStringLiteral("Invalid language: must be 0 (JavaScript) or 1 (Lua)"));
+
+    // Remember the prior language so we can roll back on failure
+    savedLanguage = model.frameParserLanguage(sourceId);
+
+    // Temporarily flip the language so the engine dispatch picks the right
+    // implementation when we call loadScript below
+    model.updateSourceFrameParserLanguage(sourceId, language);
+
+    // Suppress message boxes around the engine load so headless API calls
+    // do not spawn modal dialogs; restore prior state after validation
+    auto& parser            = DataModel::FrameParser::instance();
+    const bool prevSuppress = model.suppressMessageBoxes();
+    model.setSuppressMessageBoxes(true);
+    parser.setSuppressMessageBoxes(true);
+
+    // Ask the matching engine to validate + load the script
+    const bool ok = parser.loadScript(sourceId, code, false);
+
+    // Restore suppression state
+    parser.setSuppressMessageBoxes(prevSuppress);
+    model.setSuppressMessageBoxes(prevSuppress);
+
+    // Roll back the language on validation failure so the caller's view of
+    // the project is unchanged on error
+    if (!ok) {
+      model.updateSourceFrameParserLanguage(sourceId, savedLanguage);
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::InvalidParam,
+        QStringLiteral("Script engine rejected the parser code (check logs)"));
+    }
+  }
+
+  // Persist to the project model. For source 0 this routes through
+  // setFrameParserCode which emits the signal that triggers a
+  // FrameParser::readCode reload; for source > 0, updateSourceFrameParser
+  // directly drives FrameParser::setSourceCode.
   if (sourceId == 0)
     model.setFrameParserCode(code);
   else
@@ -827,7 +916,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
 API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString& id,
                                                                   const QJsonObject& params)
 {
-  // Extract and validate parameter
   const int sourceId = params.contains(QStringLiteral("sourceId"))
                        ? params.value(QStringLiteral("sourceId")).toInt()
                        : 0;
@@ -849,6 +937,94 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
 }
 
 /**
+ * @brief Set the scripting language for a frame parser source.
+ *
+ * @param params Requires "language" (int: 0 = JavaScript, 1 = Lua).
+ *               Optional "sourceId" (int, default 0).
+ */
+API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QString& id,
+                                                                      const QJsonObject& params)
+{
+  // Validate required "language" parameter
+  if (!params.contains(QStringLiteral("language")))
+    return CommandResponse::makeError(
+      id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: language"));
+
+  // Resolve sourceId (logical, default 0)
+  const int sourceId = params.contains(QStringLiteral("sourceId"))
+                       ? params.value(QStringLiteral("sourceId")).toInt()
+                       : 0;
+
+  // Validate language value against the SerialStudio::ScriptLanguage enum
+  const int language = params.value(QStringLiteral("language")).toInt();
+  if (language != SerialStudio::JavaScript && language != SerialStudio::Lua)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Invalid language: must be 0 (JavaScript) or 1 (Lua)"));
+
+  // Locate the source by logical ID (not by vector index)
+  auto& model         = DataModel::ProjectModel::instance();
+  const auto& sources = model.sources();
+  const auto it =
+    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
+      return s.sourceId == sourceId;
+    });
+
+  // Reject unknown source IDs
+  if (it == sources.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
+
+  // Update the project model language for the matching source
+  model.updateSourceFrameParserLanguage(sourceId, language);
+
+  // Replace the parser code with the matching default template so that the
+  // script source actually parses under the new language. loadDefaultTemplate
+  // dispatches through the FrameParser engine map which reads the language
+  // we just set. Pass guiTrigger=true so the project stays flagged as
+  // modified (the caller explicitly asked for this change).
+  DataModel::FrameParser::instance().loadDefaultTemplate(sourceId, true);
+
+  QJsonObject result;
+  result[QStringLiteral("sourceId")] = sourceId;
+  result[QStringLiteral("language")] = language;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
+ * @brief Get the scripting language for a frame parser source.
+ *
+ * @param params Optional "sourceId" (int, default 0).
+ */
+API::CommandResponse API::Handlers::ProjectHandler::parserGetLanguage(const QString& id,
+                                                                      const QJsonObject& params)
+{
+  // Resolve sourceId (logical, default 0)
+  const int sourceId = params.contains(QStringLiteral("sourceId"))
+                       ? params.value(QStringLiteral("sourceId")).toInt()
+                       : 0;
+
+  // Verify the source exists before reporting a language
+  const auto& model   = DataModel::ProjectModel::instance();
+  const auto& sources = model.sources();
+  const auto it =
+    std::find_if(sources.begin(), sources.end(), [sourceId](const DataModel::Source& s) {
+      return s.sourceId == sourceId;
+    });
+
+  // Reject unknown source IDs
+  if (it == sources.end())
+    return CommandResponse::makeError(
+      id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
+
+  QJsonObject result;
+  result[QStringLiteral("sourceId")] = sourceId;
+  result[QStringLiteral("language")] = it->frameParserLanguage;
+  return CommandResponse::makeSuccess(id, result);
+}
+
+/**
  * @brief List all groups with basic info
  *
  * Uses existing serialize() function from Frame.h
@@ -856,7 +1032,6 @@ API::CommandResponse API::Handlers::ProjectHandler::parserGetCode(const QString&
 API::CommandResponse API::Handlers::ProjectHandler::groupsList(const QString& id,
                                                                const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& groups = DataModel::ProjectModel::instance().groups();
@@ -879,7 +1054,6 @@ API::CommandResponse API::Handlers::ProjectHandler::groupsList(const QString& id
 API::CommandResponse API::Handlers::ProjectHandler::datasetsList(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& groups = DataModel::ProjectModel::instance().groups();
@@ -909,7 +1083,6 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetsList(const QString& 
 API::CommandResponse API::Handlers::ProjectHandler::actionsList(const QString& id,
                                                                 const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& actions = DataModel::ProjectModel::instance().actions();
@@ -940,7 +1113,6 @@ API::CommandResponse API::Handlers::ProjectHandler::actionsList(const QString& i
 API::CommandResponse API::Handlers::ProjectHandler::loadFromJSON(const QString& id,
                                                                  const QJsonObject& params)
 {
-  // Validate required parameter
   if (!params.contains(QStringLiteral("config"))) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: config"));
@@ -1106,7 +1278,6 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
 API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const QString& id,
                                                                          const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   const auto& cfg = AppState::instance().frameConfig();
@@ -1126,15 +1297,11 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
 API::CommandResponse API::Handlers::ProjectHandler::exportJson(const QString& id,
                                                                const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
-  auto& project = DataModel::ProjectModel::instance();
-
-  // Serialize project using the public method
+  auto& project          = DataModel::ProjectModel::instance();
   const QJsonObject json = project.serializeToJson();
 
-  // Return the project JSON
   QJsonObject result;
   result[QStringLiteral("config")] = json;
   return CommandResponse::makeSuccess(id, result);
@@ -1150,7 +1317,6 @@ API::CommandResponse API::Handlers::ProjectHandler::exportJson(const QString& id
 API::CommandResponse API::Handlers::ProjectHandler::loadIntoFrameBuilder(const QString& id,
                                                                          const QJsonObject& params)
 {
-  // Retrieve current state
   Q_UNUSED(params)
 
   auto& project = DataModel::ProjectModel::instance();

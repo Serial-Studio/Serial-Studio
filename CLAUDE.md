@@ -259,33 +259,75 @@ Use 98-dash `//---` banners to separate concern groups. Reference: `BluetoothLE.
 ### Comments & Doxygen
 
 - Prefer self-documenting code. Comments explain intent ("why"/"what"), not mechanics.
-- **Function body comments**: one-line `//` section headers above each logical block, separated by blank lines. No multi-line `/* */` inside function bodies. No inline end-of-line comments. No comments inside brace blocks (e.g., `if (x) { // do thing }`). **Skip body comments** for trivial functions (getters, 1–3 line bodies) where the Doxygen is sufficient.
 - **Doxygen mandatory**: class `@brief` in `.h` above `class`; every function in `.cpp`.
 - Tags: `@brief` (always), `@param` (non-trivial), `@return` (non-void). No `@author`/`@date`.
 
+**Function body comments — the gold standard is `LemonSqueezy.cpp`:**
+
+Every non-trivial function must have a one-line `//` section header above **each** logical
+block, so a reader can skim the function and understand its flow without reading the code.
+A function with 5 logical blocks needs 5 comments, not just one at the top.
+
+| Rule | Example |
+|------|---------|
+| Exactly one line per comment | `// Persist connection settings and bus type into source[0]` |
+| Comment every logical block, not just the first | See LemonSqueezy.cpp `readSettings()`, `activate()` |
+| Skip comments for trivial functions (getters, 1–3 lines) | Doxygen is sufficient |
+| No multi-line `/* */` inside function bodies | Use single `//` lines |
+| No inline end-of-line comments | `x = 1; // bad` |
+| No comments inside brace blocks | `if (x) { // bad` |
+| Never duplicate the Doxygen | If the `@brief` says "Returns the port index", don't start the body with `// Return the port index` |
+| Never state what the code literally does | `// Set m_foo to bar` ← useless. Say **why**. |
+| Blank line after each comment + its code block | Separates the sections visually |
+
 ```cpp
-// Good: section-header comments, one per logical block
-void ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
+// Good: every block commented, each comment is one short line
+void LemonSqueezy::activate(const QString& key)
 {
-  // No items, abort
-  if (items.empty())
+  // Skip if license key format is invalid
+  if (!isValidKeyFormat(key))
     return;
 
-  // No device connected, abort
-  if (!IO::ConnectionManager::instance().isConnected())
+  // Avoid repeat activation requests
+  if (m_busy)
     return;
 
-  // No file open, create a new one
-  if (!isResourceOpen())
-    createFile();
+  // Enable busy status
+  m_busy = true;
+  Q_EMIT busyChanged();
 
-  // Write output to file
-  if (m_textStream.device())
-  {
-    for (const auto& dataPtr : items)
-      m_textStream << dataPtr->data;
+  // Obtain machine ID & build JSON payload
+  const auto machineId = MachineID::instance().machineHash();
+  const auto fingerprint = MachineID::instance().fingerprint();
 
-    m_textStream.flush();
+  // Generate the JSON data
+  QJsonObject payload;
+  payload["license_key"]  = key;
+  payload["instance_name"] = fingerprint;
+
+  // Setup network request
+  QNetworkRequest request(activateUrl());
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+  // Send the activation request
+  auto* reply = m_nam.post(request, QJsonDocument(payload).toJson());
+  connect(reply, &QNetworkReply::finished, this, [this, reply] { onActivateReply(reply); });
+}
+
+// Bad: comment only on first block, rest left uncommented
+void ConnectionManager::rebuildDevices()
+{
+  // Snapshot current state before rebuilding       ← good
+  const auto opMode = AppState::instance().operationMode();
+  const bool wasConnected = isConnected();
+
+  bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);  ← no comment, what is this?
+  if (opMode == SerialStudio::ProjectFile) {
+    ...
+  }
+
+  for (auto it = m_devices.begin(); ...) {          ← no comment, what does this loop do?
+    ...
   }
 }
 ```
