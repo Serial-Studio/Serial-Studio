@@ -19,7 +19,10 @@
     "zh_CN":"Fluent 浅色",
     "cs_CZ":"Fluent Světlý",
     "uk_UA":"Fluent Світла",
-    "hi_IN":"फ्लुएंट लाइट"
+    "hi_IN":"फ्लुएंट लाइट",
+    "nl_NL":"Fluent Licht",
+    "ro_RO":"Fluent Luminos",
+    "sv_SE":"Fluent Ljust"
   },
   "colors":{
     "groupbox_border": "#D1D1D1",

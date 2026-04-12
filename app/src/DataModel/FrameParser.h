@@ -68,6 +68,8 @@ public:
 
   [[nodiscard]] bool loadScript(int sourceId, const QString& script, bool showMessageBoxes = true);
 
+  [[nodiscard]] int detectTemplate(const QString& code) const;
+
   void setSuppressMessageBoxes(bool suppress);
   void setSourceCode(int sourceId, const QString& code);
   void clearSourceEngine(int sourceId);
@@ -88,6 +90,7 @@ private:
 private:
   bool m_suppressMessageBoxes;
 
+  QString m_defaultTemplateFile;
   QStringList m_templateFiles;
   QStringList m_templateNames;
 

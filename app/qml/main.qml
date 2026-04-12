@@ -198,16 +198,19 @@ Item {
 
     DialogLoader {
       id: examplesBrowser
+      asynchronous: false
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExamplesBrowser.qml"
     }
 
     DialogLoader {
       id: extensionManager
+      asynchronous: false
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/ExtensionManager.qml"
     }
 
     DialogLoader {
       id: helpCenter
+      asynchronous: false
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/HelpCenter.qml"
     }
   }

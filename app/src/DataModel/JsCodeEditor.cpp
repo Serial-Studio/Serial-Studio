@@ -232,23 +232,22 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
       return;
   }
 
-  // Flip the project model language FIRST so that
-  // FrameParser::templateCode() resolves to the new-language template path
-  // when loadDefaultTemplate runs. The per-source refresh signal is emitted
-  // by updateSourceFrameParserLanguage but any readCode() triggered by it
-  // will see stale frame parser code at this point — the final readCode()
-  // after loadDefaultTemplate re-emits the matching signals and syncs the
-  // editor to the new code + language.
-  auto& model = DataModel::ProjectModel::instance();
+  auto& parser = DataModel::FrameParser::instance();
+  auto& model  = DataModel::ProjectModel::instance();
+
+  // Detect which template the current code matches BEFORE switching
+  const int tmplIdx = parser.detectTemplate(text());
+
+  // Flip the project model language so templateCode() resolves to the
+  // new-language path when setTemplateIdx runs
   model.updateSourceFrameParserLanguage(m_sourceId, language);
 
-  // Load the equivalent template in the new language. This writes new
-  // code into the project model via setFrameParserCode /
-  // updateSourceFrameParser which in turn emits frameParserCodeChanged or
-  // selectedSourceFrameParserCodeChanged, triggering a final readCode()
-  // on this editor that syncs both the displayed text and m_language.
-  auto& parser = DataModel::FrameParser::instance();
-  parser.loadDefaultTemplate(m_sourceId, true);
+  // Load the equivalent template in the new language, or the default if
+  // the current code doesn't match any known template
+  if (tmplIdx >= 0)
+    parser.setTemplateIdx(m_sourceId, tmplIdx);
+  else
+    parser.loadDefaultTemplate(m_sourceId, true);
 }
 
 /**

@@ -255,6 +255,30 @@ Widgets.Pane {
           }
 
           //
+          // Transform code editor
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Transform")
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: Cpp_JSON_ProjectEditor.openTransformEditor()
+            icon.source: "qrc:/rcc/icons/project-editor/actions/transform.svg"
+            ToolTip.text: qsTr("Edit a value transform expression for calibration, filtering, or unit conversion")
+          }
+
+          //
+          // Separator
+          //
+          Rectangle {
+            implicitWidth: 1
+            Layout.fillHeight: true
+            Layout.maximumHeight: 48
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          //
           // Duplicate dataset
           //
           Widgets.ToolbarButton {

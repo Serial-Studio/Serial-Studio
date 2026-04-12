@@ -168,7 +168,7 @@ typedef std::shared_ptr<const QByteArray> ByteArrayPtr;
  *       operations while using pure virtuals for device-specific behavior.
  *
  * @see setBufferSize(), processData(), flushBuffer()
- * @see IO::Manager for the central I/O orchestration layer
+ * @see IO::ConnectionManager for the central I/O orchestration layer
  */
 class HAL_Driver : public QObject {
   Q_OBJECT

@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QStandardItemModel>
 
+#include "DataModel/DatasetTransformEditor.h"
 #include "DataModel/Frame.h"
 #include "SerialStudio.h"
 
@@ -236,6 +237,7 @@ public slots:
   void selectOutputWidget(int groupId, int widgetId);
   void selectFrameParser(int sourceId);
   void setSelectedSourceFrameParserCode(const QString& code);
+  void openTransformEditor();
 
 private slots:
   void generateComboBoxModels();
@@ -287,6 +289,8 @@ private:
   CustomModel* m_projectModel;
   CustomModel* m_datasetModel;
   CustomModel* m_outputWidgetModel;
+
+  DatasetTransformEditor* m_transformEditor;
 
   QStringList m_fftSamples;
   QStringList m_timerModes;

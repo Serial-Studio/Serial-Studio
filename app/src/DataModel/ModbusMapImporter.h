@@ -68,7 +68,6 @@ public:
   [[nodiscard]] int registerCount() const noexcept;
   [[nodiscard]] int groupCount() const noexcept;
   [[nodiscard]] QString fileName() const;
-
   [[nodiscard]] Q_INVOKABLE QString registerInfo(int index) const;
 
 public slots:

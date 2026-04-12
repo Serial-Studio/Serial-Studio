@@ -602,7 +602,7 @@ void IO::Drivers::CANBus::onFramesReceived()
  * @brief Handles CAN bus device state changes
  *
  * Monitors the CAN bus device connection state and emits configurationChanged()
- * signal to notify IO::Manager of state transitions.
+ * signal to notify IO::ConnectionManager of state transitions.
  *
  * ## State Transitions
  * - UnconnectedState: Device is disconnected
@@ -615,8 +615,8 @@ void IO::Drivers::CANBus::onFramesReceived()
  * connection state. The signal chain is:
  * 1. QCanBusDevice state changes
  * 2. onStateChanged() emits configurationChanged()
- * 3. IO::Manager catches configurationChanged()
- * 4. IO::Manager emits connectedChanged()
+ * 3. IO::ConnectionManager catches configurationChanged()
+ * 4. IO::ConnectionManager emits connectedChanged()
  * 5. UI updates connect/disconnect button state
  *
  * @param state The new CAN bus device state

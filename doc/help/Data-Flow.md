@@ -22,36 +22,34 @@ flowchart TD
 
 Your device sends raw bytes over one of nine supported transports: UART, TCP/UDP, Bluetooth LE, Audio Input, Modbus RTU/TCP, CAN Bus, USB (libusb), HID (hidapi), or Process I/O.
 
-The selected driver receives bytes on a dedicated I/O thread managed by `DeviceManager`. No parsing happens here — the driver's only job is raw byte transport. Each driver type handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on.
+The selected driver receives bytes from the operating system and forwards them to `DeviceManager`. No parsing happens here — the driver's only job is raw byte transport. Each driver type handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on. Some drivers (HID, USB) run their read loop on a dedicated thread; most rely on Qt's socket-notifier-driven reads on the main thread.
 
 Drivers are not singletons. `ConnectionManager` holds one UI-configuration instance per driver type (used by the QML interface), while `DeviceManager` creates a fresh live instance for each active connection.
 
 ## Stage 2: Circular Buffer
 
-A 10 MB lock-free single-producer single-consumer (SPSC) ring buffer sits between the driver and the frame reader.
+A 1 MB lock-free single-producer single-consumer (SPSC) ring buffer sits between the driver and the frame reader's parsing stage.
 
-- The driver thread writes bytes into the buffer.
-- The frame reader reads bytes out of it.
+- The producer side is whichever thread the driver's `dataReceived` signal lands on.
+- The consumer side is the frame reader, running on the main thread.
 - No locks, no contention, no blocking.
 
-The SPSC design is a hard architectural constraint. There is exactly one producer (the driver) and one consumer (the frame reader). Adding a second producer or consumer would violate the lock-free guarantee and corrupt data.
+The SPSC design is a hard architectural constraint. There is exactly one producer and one consumer. Adding a second producer or consumer would violate the lock-free guarantee and corrupt data.
 
 The buffer handles burst data without dropping bytes. If data arrives faster than it can be consumed, an overflow counter increments so you can detect the condition.
 
 ## Stage 3: Frame Reader
 
-The frame reader runs on the I/O thread alongside the driver. Its job is to scan the circular buffer for frame boundaries and extract complete frames.
-
-Delimiter detection uses the KMP (Knuth-Morris-Pratt) string matching algorithm for O(n + m) performance, where n is the buffer size and m is the delimiter length. Four detection modes are available:
+The frame reader runs on the main thread. Its job is to scan the circular buffer for frame boundaries and extract complete frames. Delimiter detection uses the KMP (Knuth-Morris-Pratt) string matching algorithm for O(n + m) performance, where n is the buffer size and m is the delimiter length. Four detection modes are available:
 
 - **End Delimiter Only**: finds the end marker and extracts everything before it.
 - **Start and End Delimiter**: finds the start marker, then the end marker, and extracts between them.
 - **Start Delimiter Only**: frame boundaries fall between consecutive start markers.
 - **No Delimiters**: passes all data through. Use this with a frame parser script (Lua or JavaScript) for length-prefixed or self-delimiting protocols.
 
-After extraction, the frame reader optionally validates a checksum (CRC-8, CRC-16, or CRC-32). Valid frames are placed into a lock-free queue with a capacity of 4096 entries. The main thread is signaled when frames are ready.
+After extraction, the frame reader optionally validates a checksum (CRC-8, CRC-16, or CRC-32). Valid frames are placed into a lock-free queue with a capacity of 4096 entries. A single `readyRead` signal notifies the consumer when at least one new frame is available — not one signal per frame.
 
-The frame reader is configured once before being moved to its thread. If configuration changes (different delimiters, different checksum), the entire frame reader is destroyed and recreated via `resetFrameReader()`. Mutexes are never used.
+The frame reader is configured once at construction. If configuration changes (different delimiters, different checksum), the entire frame reader is destroyed and recreated via `ConnectionManager::resetFrameReader()`. Mutexes are never used.
 
 ## Stage 4: Frame Builder
 
@@ -78,7 +76,8 @@ No project file is needed. This mode is designed for rapid prototyping with CSV-
 2. Call the `parse(frame)` function via the configured scripting engine (Lua 5.4 or QJSEngine).
 3. The function returns a table/array of values (or a 2D table/array for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
-5. Build the Frame object with populated dataset values.
+5. For each dataset with a `transform(value)` function, apply the transform to convert raw values to engineering units (calibration, filtering, unit conversion). See [Dataset Value Transforms](Dataset-Transforms.md).
+6. Build the Frame object with populated dataset values.
 
 ### Multi-Source Routing
 
@@ -123,9 +122,9 @@ Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` p
 
 | Component | Thread | Constraint |
 |-----------|--------|-----------|
-| Driver | I/O thread (QThread) | One driver per DeviceManager |
-| Circular Buffer | Shared (write: I/O, read: I/O) | SPSC only, never MPMC |
-| Frame Reader | I/O thread | Configured once, then immutable. Recreate on config change. |
+| Driver | Driver-specific (main or dedicated read thread) | One driver per DeviceManager |
+| Circular Buffer | Shared (write: driver side, read: main) | SPSC only, never MPMC |
+| Frame Reader | Main thread | Configured once, then immutable. Recreate on config change via `ConnectionManager::resetFrameReader()`. |
 | Frame Builder | Main thread | Dequeues from lock-free queue |
 | Dashboard | Main thread | Zero-copy `const Frame&` only |
 | CSV/MDF4/API Export | Worker threads | Lock-free enqueue from main, batch dequeue on worker |
@@ -154,6 +153,7 @@ Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` p
 - [Operation Modes](Operation-Modes.md) — Quick Plot, Project File, and Device Sends JSON
 - [Project Editor](Project-Editor.md) — Configure frame parsing and dashboard layout
 - [Frame Parser Scripting](JavaScript-API.md) — Complete Lua and JavaScript parser reference
+- [Dataset Value Transforms](Dataset-Transforms.md) — Per-dataset calibration, filtering, and unit conversion
 - [Widget Reference](Widget-Reference.md) — All 15+ widget types and their data requirements
 - [Communication Protocols](Communication-Protocols.md) — Protocol comparison and setup
 - [Troubleshooting](Troubleshooting.md) — Solutions to common problems

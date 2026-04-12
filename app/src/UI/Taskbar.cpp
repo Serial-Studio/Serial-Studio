@@ -22,7 +22,6 @@
 #include "Taskbar.h"
 
 #include <algorithm>
-#include <QGuiApplication>
 #include <QSignalBlocker>
 #include <QTimer>
 
@@ -140,9 +139,6 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
     pm, &DataModel::ProjectModel::workspacesChanged, this, &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::searchResultsChanged);
-
-  // Persist layout before application exits
-  connect(qApp, &QGuiApplication::aboutToQuit, this, &UI::Taskbar::saveLayout);
 
   // Perform initial model build and register with the session
   rebuildModel();

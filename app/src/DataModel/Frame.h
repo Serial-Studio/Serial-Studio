@@ -76,6 +76,7 @@ inline constexpr auto FFTSamples      = "fftSamples";
 inline constexpr auto Overview        = "overviewDisplay";
 inline constexpr auto AlarmEnabled    = "alarmEnabled";
 inline constexpr auto FFTSamplingRate = "fftSamplingRate";
+inline constexpr auto TransformCode   = "transformCode";
 
 inline constexpr auto Groups        = "groups";
 inline constexpr auto Actions       = "actions";
@@ -332,6 +333,7 @@ struct alignas(8) Dataset {
   QString title;                 ///< Human-readable title
   QString units;                 ///< Measurement units (e.g., °C)
   QString widget;                ///< Widget type (bar, gauge, etc.)
+  QString transformCode;         ///< Optional Lua/JS expression to transform raw value
 };
 
 static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct");
@@ -789,6 +791,9 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::AlarmLow, qMin(d.alarmLow, d.alarmHigh));
   obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
 
+  if (!d.transformCode.isEmpty())
+    obj.insert(Keys::TransformCode, d.transformCode);
+
   return obj;
 }
 
@@ -992,6 +997,7 @@ void read_io_settings(QByteArray& frameStart,
   d.fftSamplingRate = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
   d.alarmHigh       = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
   d.sourceId        = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
+  d.transformCode   = obj.value(Keys::TransformCode).toString();
 
   if (d.value.isEmpty())
     d.value = QStringLiteral("--.--");

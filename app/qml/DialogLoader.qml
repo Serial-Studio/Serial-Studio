@@ -25,6 +25,15 @@ Loader {
   id: root
 
   active: false
+
+  //
+  // Dialogs that host a WebEngineView (ExtensionManager, ExamplesBrowser,
+  // HelpCenter) must be loaded synchronously on Linux. When loaded
+  // asynchronously the QML scene is assembled on a worker thread while the
+  // WebEngineView's GPU process handshake races with the Window creation,
+  // which crashes on some Linux configurations. Other dialogs can keep
+  // asynchronous loading by leaving this at its default value.
+  //
   asynchronous: true
 
   property var dialog: null

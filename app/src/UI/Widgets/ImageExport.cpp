@@ -253,7 +253,7 @@ void Widgets::ImageExport::closeSession(int groupId)
 }
 
 /**
- * @brief Connects @c IO::Manager signals so sessions close automatically on
+ * @brief Connects @c IO::ConnectionManager signals so sessions close automatically on
  *        device disconnect or stream pause.
  */
 void Widgets::ImageExport::setupExternalConnections()

@@ -303,6 +303,16 @@ SmartDialog {
           }
 
           //
+          // Recover gracefully if the Chromium render process dies
+          // (e.g. GPU sandbox failure on Linux) instead of crashing SS.
+          //
+          onRenderProcessTerminated: function(terminationStatus, exitCode) {
+            console.warn("HelpCenter content view: render process terminated",
+                         terminationStatus, "exit", exitCode)
+            root.webViewReady = false
+          }
+
+          //
           // Handle navigation requests from the page (link clicks)
           //
           onNavigationRequested: function(request) {

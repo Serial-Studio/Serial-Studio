@@ -1,5 +1,5 @@
 """
-Unit tests for all frame-parser scripts in app/rcc/scripts/.
+Unit tests for all frame-parser scripts in app/rcc/scripts/parser/js/.
 
 Every test invokes the script's parse() function through a fresh Node.js
 subprocess (via the run_parser helper defined in conftest.py), which means:

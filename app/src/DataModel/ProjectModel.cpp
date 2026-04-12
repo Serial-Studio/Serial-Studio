@@ -30,7 +30,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>
-#include <QTimer>
 
 #include "AppInfo.h"
 #include "AppState.h"
@@ -73,19 +72,6 @@ DataModel::ProjectModel::ProjectModel()
   , m_filePath("")
   , m_suppressMessageBoxes(false)
 {
-  // Debounce timer for plugin state saves (plugins may save frequently)
-  m_pluginSaveTimer.setSingleShot(true);
-  m_pluginSaveTimer.setInterval(1000);
-  connect(&m_pluginSaveTimer, &QTimer::timeout, this, [this]() {
-    QFile file(m_filePath);
-    if (!file.open(QFile::WriteOnly))
-      return;
-
-    const auto json = serializeToJson();
-    file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
-    file.close();
-  });
-
   newJsonFile();
 }
 
@@ -401,10 +387,12 @@ bool DataModel::ProjectModel::isGroupHidden(int groupId) const
 }
 
 /**
- * @brief Persists a single key/value setting for a widget to the project file.
+ * @brief Stages a single key/value setting for a widget in the project.
  *
- * No-op when the operation mode is not ProjectFile, when no file path is set,
- * or when no I/O connection or MQTT subscription is active.
+ * Updates the in-memory widget settings store and marks the project as
+ * modified. The standard save workflow (Ctrl+S / dirty-project prompt on
+ * close) is responsible for flushing to disk — this method never writes
+ * to disk on its own.
  *
  * @param widgetId  Decimal string of the WidgetID.
  * @param key       Setting key (e.g. "interpolate").
@@ -414,10 +402,6 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
                                                 const QVariant& value)
 {
-  // No project file loaded, nothing to persist
-  if (m_filePath.isEmpty())
-    return;
-
   // Skip if the value hasn't changed
   auto obj            = m_widgetSettings.value(widgetId).toObject();
   const auto newValue = QJsonValue::fromVariant(value);
@@ -428,40 +412,33 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
   obj.insert(key, newValue);
   m_widgetSettings.insert(widgetId, obj);
 
-  // Flush to disk
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly))
-    return;
-
-  const auto json = serializeToJson();
-  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
-  file.close();
+  // Mark the project dirty and notify listeners
+  setModified(true);
+  Q_EMIT widgetSettingsChanged();
 }
 
 /**
- * @brief Persists a plugin's entire state to the project file.
+ * @brief Stages a plugin's entire state in the project.
  *
- * Saves the state object under "plugin:<pluginId>" in the
- * widgetSettings section. The project file is written to disk
- * immediately.
+ * Saves the state object under "plugin:<pluginId>" in the widgetSettings
+ * section and marks the project as modified. The standard save workflow
+ * is responsible for flushing to disk — this method never writes on its
+ * own.
  *
  * @param pluginId The extension ID.
  * @param state    JSON object containing the plugin's state.
  */
 void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
 {
-  // No project file loaded, nothing to persist
-  if (m_filePath.isEmpty())
-    return;
-
   // Skip if the state hasn't changed
   const auto key = QStringLiteral("plugin:") + pluginId;
   if (m_widgetSettings.value(key).toObject() == state)
     return;
 
-  // Update in-memory store and schedule debounced disk write
+  // Update in-memory store and mark the project dirty
   m_widgetSettings.insert(key, state);
-  m_pluginSaveTimer.start();
+  setModified(true);
+  Q_EMIT widgetSettingsChanged();
 }
 
 /**
@@ -2778,9 +2755,11 @@ void DataModel::ProjectModel::storeFrameParserCode(int sourceId, const QString& 
 }
 
 /**
- * @brief Persists the active dashboard tab group ID.
+ * @brief Stages the active dashboard tab group ID.
  *
- * Written into m_widgetSettings so it survives a save/load cycle.
+ * Stored in m_widgetSettings so it survives a save/load cycle and marks
+ * the project as modified. No disk write happens here — the standard
+ * save workflow is responsible for flushing.
  */
 void DataModel::ProjectModel::setActiveGroupId(const int groupId)
 {
@@ -2795,23 +2774,17 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
   else
     m_widgetSettings.remove(Keys::kActiveGroupSubKey);
 
-  // Flush to disk without emitting reload signals
-  if (!m_filePath.isEmpty()) {
-    QFile file(m_filePath);
-    if (file.open(QFile::WriteOnly)) {
-      file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
-      file.close();
-    }
-  }
-
+  // Mark the project dirty and notify listeners
+  setModified(true);
   Q_EMIT activeGroupIdChanged();
 }
 
 /**
- * @brief Persists the widget layout for a specific group.
+ * @brief Stages the widget layout for a specific group.
  *
- * Stores the layout under the canonical key produced by Keys::layoutKey().
- * When a file path is set the project file is updated immediately.
+ * Stores the layout under the canonical key produced by Keys::layoutKey()
+ * and marks the project as modified. No disk write happens here — the
+ * standard save workflow is responsible for flushing.
  *
  * @param groupId  The group whose layout is being saved.
  * @param layout   The layout QJsonObject to store.
@@ -2823,16 +2796,9 @@ void DataModel::ProjectModel::setGroupLayout(const int groupId, const QJsonObjec
   entry[QStringLiteral("data")] = layout;
   m_widgetSettings.insert(Keys::layoutKey(groupId), entry);
 
-  // Flush to disk
-  if (m_filePath.isEmpty())
-    return;
-
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly))
-    return;
-
-  file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
-  file.close();
+  // Mark the project dirty and notify listeners
+  setModified(true);
+  Q_EMIT widgetSettingsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -2859,7 +2825,6 @@ void DataModel::ProjectModel::addWorkspace(const QString& title)
 
   setModified(true);
   Q_EMIT workspacesChanged();
-  writeProjectFile();
 }
 
 /**
@@ -2877,7 +2842,6 @@ void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
   m_workspaces.erase(it);
   setModified(true);
   Q_EMIT workspacesChanged();
-  writeProjectFile();
 }
 
 /**
@@ -2890,7 +2854,6 @@ void DataModel::ProjectModel::renameWorkspace(int workspaceId, const QString& ti
       ws.title = title.simplified();
       setModified(true);
       Q_EMIT workspacesChanged();
-      writeProjectFile();
       return;
     }
   }
@@ -2922,7 +2885,6 @@ void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
 
     setModified(true);
     Q_EMIT workspacesChanged();
-    writeProjectFile();
     return;
   }
 }
@@ -2942,7 +2904,6 @@ void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId, int ind
     ws.widgetRefs.erase(ws.widgetRefs.begin() + index);
     setModified(true);
     Q_EMIT workspacesChanged();
-    writeProjectFile();
     return;
   }
 }
@@ -2964,7 +2925,6 @@ void DataModel::ProjectModel::hideGroup(int groupId)
   m_hiddenGroupIds.insert(groupId);
   setModified(true);
   Q_EMIT workspacesChanged();
-  writeProjectFile();
 }
 
 /**
@@ -2977,31 +2937,11 @@ void DataModel::ProjectModel::showGroup(int groupId)
 
   setModified(true);
   Q_EMIT workspacesChanged();
-  writeProjectFile();
 }
 
 //--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Writes the current project state to disk if a file path is set.
- *
- * Convenience wrapper used by workspace CRUD methods to persist changes
- * immediately rather than waiting for an explicit save.
- */
-void DataModel::ProjectModel::writeProjectFile()
-{
-  if (m_filePath.isEmpty())
-    return;
-
-  QFile file(m_filePath);
-  if (!file.open(QFile::WriteOnly))
-    return;
-
-  file.write(QJsonDocument(serializeToJson()).toJson(QJsonDocument::Indented));
-  file.close();
-}
 
 /**
  * @brief Clears workspaces and widget settings when disconnecting in

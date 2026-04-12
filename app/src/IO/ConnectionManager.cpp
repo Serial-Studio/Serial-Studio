@@ -1186,17 +1186,27 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
   Q_ASSERT(dm);
   Q_ASSERT(dm->driver());
 
+  // DirectConnection — both DeviceManager and ConnectionManager live on
+  // the main thread, and FrameReader is no longer moved to a worker
+  // thread (see beeda4c0). A QueuedConnection between two same-thread
+  // objects only adds per-frame postEvent overhead: QMetaCallEvent
+  // alloc + event-queue lock + deferred dispatch. At high frame rates
+  // that extra work lets the FrameReader's lock-free queue fill faster
+  // than the consumer drains it, triggering "queue full" drops.
+  // Direct calls drain the whole batch in one pass on the caller's
+  // stack, and re-entrancy is not a concern because the frame path
+  // never re-triggers the driver's readyRead.
   connect(dm,
           &IO::DeviceManager::frameReady,
           this,
           &IO::ConnectionManager::onFrameReady,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
 
   connect(dm,
           &IO::DeviceManager::rawDataReceived,
           this,
           &IO::ConnectionManager::onRawDataReceived,
-          Qt::QueuedConnection);
+          Qt::DirectConnection);
 }
 
 /**

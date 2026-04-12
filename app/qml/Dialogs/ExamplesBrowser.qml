@@ -614,6 +614,14 @@ SmartDialog {
                 }
               }
 
+              // Recover gracefully if the Chromium render process dies
+              // (e.g. GPU sandbox failure on Linux) instead of crashing SS.
+              onRenderProcessTerminated: function(terminationStatus, exitCode) {
+                console.warn("ExamplesBrowser readme view: render process terminated",
+                             terminationStatus, "exit", exitCode)
+                root.readmeViewReady = false
+              }
+
               onNavigationRequested: function(request) {
                 var url = request.url.toString()
 

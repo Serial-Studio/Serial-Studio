@@ -9,12 +9,6 @@
 -- Note: Frame delimiters are automatically removed by Serial Studio.
 --
 
---------------------------------------------------------------------------------
--- Frame Parser Function
---------------------------------------------------------------------------------
-
--- Parses a CSV frame into an array of values.
--- Empty fields (e.g. "a,,b") are preserved as empty strings.
 function parse(frame)
   local result = {}
   local start = 1

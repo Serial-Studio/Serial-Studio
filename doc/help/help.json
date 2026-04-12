@@ -8,6 +8,7 @@
   { "id": "widget-reference", "title": "Widget Reference", "section": "Configuration", "file": "Widget-Reference.md" },
   { "id": "output-controls", "title": "Output Controls", "section": "Configuration", "file": "Output-Controls.md" },
   { "id": "javascript-api", "title": "Frame Parser Scripting", "section": "Configuration", "file": "JavaScript-API.md" },
+  { "id": "dataset-transforms", "title": "Dataset Value Transforms", "section": "Configuration", "file": "Dataset-Transforms.md" },
   { "id": "extensions", "title": "Extensions", "section": "Configuration", "file": "Extensions.md" },
   { "id": "communication-protocols", "title": "Communication Protocols", "section": "Connectivity", "file": "Communication-Protocols.md" },
   { "id": "protocol-setup-guides", "title": "Protocol Setup Guides", "section": "Connectivity", "file": "Protocol-Setup-Guides.md" },

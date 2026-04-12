@@ -31,8 +31,8 @@
  * @brief Constructs a FrameReader object.
  *
  * Initializes the FrameReader with default settings, including frame detection
- * mode, operation mode, and buffer settings. Designed to run in a different
- * thread.
+ * mode, operation mode, and buffer settings. Runs on the main thread; see
+ * the class-level docstring for the threading rationale.
  *
  * @param parent The parent QObject (optional).
  */
@@ -41,7 +41,7 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_checksumLength(0)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
-  , m_circularBuffer(256 * 1024)
+  , m_circularBuffer(1024 * 1024)
 {
   m_quickPlotEndSequences.append(QByteArray("\n"));
   m_quickPlotEndSequences.append(QByteArray("\r"));
@@ -85,17 +85,18 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
   if (!data || data->isEmpty())
     return;
 
-  // Route data through the appropriate frame detection path
+  // Variable to detect if a frame has been detected
   bool framesEnqueued = false;
 
+  // Direct processing (no frame delimiters)
   if (m_operationMode == SerialStudio::ProjectFile
       && m_frameDetectionMode == SerialStudio::NoDelimiters)
     framesEnqueued = m_queue.try_enqueue(*data);
 
+  // Delimiter based processing
   else {
-    m_circularBuffer.append(*data);
-
     // Detect data loss from buffer overflow
+    m_circularBuffer.append(*data);
     const auto overflow = m_circularBuffer.overflowCount();
     if (overflow > 0) [[unlikely]] {
       qWarning() << "[FrameReader] Buffer overflow:" << overflow
@@ -103,8 +104,8 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
       m_circularBuffer.resetOverflowCount();
     }
 
+    // Read frames
     const auto initialSize = m_queue.size_approx();
-
     switch (m_operationMode) {
       case SerialStudio::QuickPlot:
         readEndDelimitedFrames();
@@ -131,9 +132,11 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
         break;
     }
 
+    // Detect if we parsed any frame
     framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 
+  // Notify modules if a frame was detected
   if (framesEnqueued)
     Q_EMIT readyRead();
 }
@@ -276,6 +279,7 @@ void IO::FrameReader::readEndDelimitedFrames()
       if (result == ValidationStatus::FrameOk) {
         if (!m_queue.try_enqueue(std::move(frame))) [[unlikely]]
           qWarning() << "[FrameReader] Frame queue full — frame dropped";
+
         (void)m_circularBuffer.read(frameEndPos);
       }
 

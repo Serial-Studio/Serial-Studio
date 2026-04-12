@@ -19,9 +19,11 @@
 
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/TimerEvents.h"
+#include "Misc/Translator.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -95,32 +97,12 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
           this,
           &DataModel::OutputCodeEditor::renderWidget);
 
-  // clang-format off
-  // Load templates from resources
-  const struct { const char *file; const char *name; } templates[] = {
-    {"at_command.js",       QT_TR_NOOP("AT command")      },
-    {"binary_packet.js",    QT_TR_NOOP("Binary packet")   },
-    {"canbus_frame.js",     QT_TR_NOOP("CAN Bus frame")   },
-    {"default_template.js", QT_TR_NOOP("Default template")},
-    {"gcode_command.js",    QT_TR_NOOP("G-Code command")  },
-    {"grbl_command.js",     QT_TR_NOOP("GRBL command")    },
-    {"json_command.js",     QT_TR_NOOP("JSON command")    },
-    {"modbus_write.js",     QT_TR_NOOP("Modbus write")    },
-    {"nmea_sentence.js",    QT_TR_NOOP("NMEA sentence")   },
-    {"pid_setpoint.js",     QT_TR_NOOP("PID setpoint")    },
-    {"pwm_control.js",      QT_TR_NOOP("PWM control")     },
-    {"relay_toggle.js",     QT_TR_NOOP("Relay toggle")    },
-    {"scpi_command.js",     QT_TR_NOOP("SCPI command")    },
-    {"simple_command.js",   QT_TR_NOOP("Simple command")  },
-    {"slcan_command.js",    QT_TR_NOOP("SLCAN command")   },
-  };
+  connect(&Misc::Translator::instance(),
+          &Misc::Translator::languageChanged,
+          this,
+          &DataModel::OutputCodeEditor::loadTemplates);
 
-  // clang-format on
-
-  for (const auto& t : templates) {
-    m_templateFiles.append(QStringLiteral(":/rcc/scripts/output/%1").arg(QLatin1String(t.file)));
-    m_templateNames.append(tr(t.name));
-  }
+  loadTemplates();
 
   readCode();
 }
@@ -334,14 +316,46 @@ void DataModel::OutputCodeEditor::reload(bool guiTrigger)
  */
 QString DataModel::OutputCodeEditor::defaultTemplate()
 {
-  QString code;
-  QFile file(QStringLiteral(":/rcc/scripts/output/default_template.js"));
-  if (file.open(QFile::ReadOnly)) {
-    code = QString::fromUtf8(file.readAll());
-    file.close();
+  const auto templates = loadScriptTemplateManifest(
+    QStringLiteral(":/rcc/scripts/output/templates.json"), "DataModel::OutputCodeEditor");
+
+  QString defaultFile;
+  for (const auto& tmpl : templates) {
+    if (tmpl.isDefault) {
+      defaultFile = tmpl.file;
+      break;
+    }
   }
 
-  return code;
+  if (defaultFile.isEmpty() && !templates.isEmpty())
+    defaultFile = templates.constFirst().file;
+
+  if (defaultFile.isEmpty())
+    return {};
+
+  return readTextResource(templateResourcePath(
+    QStringLiteral(":/rcc/scripts/output"), defaultFile, QStringLiteral(".js")));
+}
+
+void DataModel::OutputCodeEditor::loadTemplates()
+{
+  m_defaultTemplateFile.clear();
+  m_templateNames.clear();
+  m_templateFiles.clear();
+
+  const auto templates = loadScriptTemplateManifest(
+    QStringLiteral(":/rcc/scripts/output/templates.json"), "DataModel::OutputCodeEditor");
+
+  for (const auto& tmpl : templates) {
+    m_templateNames.append(tmpl.name);
+    m_templateFiles.append(templateResourcePath(
+      QStringLiteral(":/rcc/scripts/output"), tmpl.file, QStringLiteral(".js")));
+    if (m_defaultTemplateFile.isEmpty() && tmpl.isDefault)
+      m_defaultTemplateFile = tmpl.file;
+  }
+
+  if (m_defaultTemplateFile.isEmpty() && !templates.isEmpty())
+    m_defaultTemplateFile = templates.constFirst().file;
 }
 
 //--------------------------------------------------------------------------------------------------

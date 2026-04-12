@@ -79,7 +79,7 @@ namespace Drivers {
  * - `availableInterfacesChanged()`: Emitted when interface list updates
  *
  * @see HAL_Driver
- * @see IO::Manager
+ * @see IO::ConnectionManager
  * @see QCanBusDevice
  */
 class CANBus : public HAL_Driver {

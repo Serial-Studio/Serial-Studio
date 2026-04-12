@@ -265,6 +265,14 @@ Parser returns: ["23.5", "1013", "45.2"]
 - Each index should be unique across the entire project.
 - The Project Editor auto-assigns the next available index when you add a dataset.
 
+## Dataset Value Transforms
+
+Each dataset can optionally define a `transform(value)` function that converts the raw parsed value into an engineering value before it reaches the dashboard. Use transforms for calibration, unit conversion, filtering, and signal conditioning.
+
+To add a transform, select a dataset and click the **Transform** button in the toolbar. This opens a dedicated editor with syntax highlighting, built-in templates, and a live test area.
+
+For complete documentation, see [Dataset Value Transforms](Dataset-Transforms.md).
+
 ## Multi-Source Architecture
 
 When a project has multiple sources, each source represents a separate physical device with its own connection, bus type, frame detection, and JS parser.
@@ -337,6 +345,7 @@ When a project has multiple sources, each source represents a separate physical 
 
 - [Widget Reference](Widget-Reference.md) — complete guide to all widget types.
 - [Frame Parser Scripting](JavaScript-API.md) — complete Lua and JavaScript parser reference.
+- [Dataset Value Transforms](Dataset-Transforms.md) — per-dataset calibration, filtering, and unit conversion.
 - [Data Flow](Data-Flow.md) — how data moves through Serial Studio.
 - [Operation Modes](Operation-Modes.md) — Project File, Device Sends JSON, and Quick Plot modes.
 - [Troubleshooting](Troubleshooting.md) — solutions to common problems.

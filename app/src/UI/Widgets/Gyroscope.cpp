@@ -21,7 +21,6 @@
 
 #include "UI/Widgets/Gyroscope.h"
 
-#include <algorithm>
 #include <cmath>
 
 #include "DSP.h"
@@ -35,7 +34,7 @@
  * @brief Constructs a Gyroscope widget.
  *
  * Initializes the gyroscope with the given index and optional parent.
- * If the widget is valid, starts the timer and connects the update signal.
+ * If the widget is valid, connects the update signal.
  *
  * @param index Index of the gyroscope in the Dashboard.
  * @param parent Optional parent QQuickItem.
@@ -46,17 +45,10 @@ Widgets::Gyroscope::Gyroscope(const int index, QQuickItem* parent)
   , m_yaw(0)
   , m_roll(0)
   , m_pitch(0)
-  , m_filteredYawRate(0)
-  , m_filteredRollRate(0)
-  , m_filteredPitchRate(0)
-  , m_integrateValues(false)
-  , m_rateFilterInitialized(false)
   , m_displayFilterInitialized(false)
 {
-  if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index)) {
-    m_timer.start();
+  if (VALIDATE_WIDGET(SerialStudio::DashboardGyroscope, m_index))
     connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Gyroscope::updateData);
-  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,29 +86,16 @@ double Widgets::Gyroscope::pitch() const
 }
 
 //--------------------------------------------------------------------------------------------------
-// Configuration getters
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Indicates whether values are being integrated over time.
- *
- * @return True if integration is enabled, false if values are used as-is.
- */
-bool Widgets::Gyroscope::integrateValues() const
-{
-  return m_integrateValues;
-}
-
-//--------------------------------------------------------------------------------------------------
 // Data updates
 //--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Updates gyroscope orientation values.
  *
- * Pulls new data from the Dashboard and updates yaw, pitch, and roll
- * based on either direct values or time-integrated deltas.
- * Emits `updated()` if orientation changes.
+ * Pulls new absolute-angle data from the Dashboard and drives a per-axis
+ * EMA to smooth the displayed orientation. Emits `updated()` when any
+ * axis changes. If the source only provides angular rates (deg/s), users
+ * should integrate them to absolute angles via a dataset transform.
  */
 void Widgets::Gyroscope::updateData()
 {
@@ -157,7 +136,7 @@ void Widgets::Gyroscope::updateData()
     return angle - 180.0;
   };
 
-  // Collect current axis values before integration/assignment
+  // Collect current axis values before assignment
   double yawInput   = 0;
   double rollInput  = 0;
   double pitchInput = 0;
@@ -183,78 +162,31 @@ void Widgets::Gyroscope::updateData()
   }
 
   // Update the values with EMA filtering for smooth display
-  if (!m_integrateValues) {
-    constexpr double kAlpha = 0.4;
-    if (!m_displayFilterInitialized) {
-      if (hasYaw)
-        m_yaw = yawInput;
-      if (hasRoll)
-        m_roll = rollInput;
-      if (hasPitch)
-        m_pitch = pitchInput;
-      m_displayFilterInitialized = true;
-    } else {
-      auto angleEma = [](double input, double& state) {
-        double delta = input - state;
-        if (delta > 180.0)
-          delta -= 360.0;
-        else if (delta < -180.0)
-          delta += 360.0;
-        state += kAlpha * delta;
-      };
-
-      if (hasYaw)
-        angleEma(yawInput, m_yaw);
-      if (hasRoll)
-        angleEma(rollInput, m_roll);
-      if (hasPitch)
-        angleEma(pitchInput, m_pitch);
-    }
-
-    m_timer.restart();
-    m_rateFilterInitialized = false;
-  }
-
-  // Integrate incoming angular rates into absolute orientation
-  else {
-    double deltaT = m_timer.nsecsElapsed() / 1e9;
-    m_timer.restart();
-    if (!std::isfinite(deltaT) || deltaT <= 0.0)
-      deltaT = 0.0;
-    else
-      deltaT = std::clamp(deltaT, 0.001, 0.1);
-
-    // Low-pass filter rates to reduce high-frequency vibration jitter.
-    constexpr double kCutoffHz = 6.0;
-    constexpr double kTwoPi    = 6.28318530717958647692;
-    const double rc            = 1.0 / (kTwoPi * kCutoffHz);
-    const double alpha         = deltaT / (rc + deltaT);
-
-    auto filteredRate = [&](const double input, double& state) {
-      if (!m_rateFilterInitialized) {
-        state = input;
-        return state;
-      }
-
-      state += alpha * (input - state);
-      if (std::abs(state) < 1e-5)
-        state = 0.0;
-
-      return state;
+  constexpr double kAlpha = 0.4;
+  if (!m_displayFilterInitialized) {
+    if (hasYaw)
+      m_yaw = yawInput;
+    if (hasRoll)
+      m_roll = rollInput;
+    if (hasPitch)
+      m_pitch = pitchInput;
+    m_displayFilterInitialized = true;
+  } else {
+    auto angleEma = [](double input, double& state) {
+      double delta = input - state;
+      if (delta > 180.0)
+        delta -= 360.0;
+      else if (delta < -180.0)
+        delta += 360.0;
+      state += kAlpha * delta;
     };
 
-    const double yawRate   = hasYaw ? filteredRate(yawInput, m_filteredYawRate) : 0.0;
-    const double rollRate  = hasRoll ? filteredRate(rollInput, m_filteredRollRate) : 0.0;
-    const double pitchRate = hasPitch ? filteredRate(pitchInput, m_filteredPitchRate) : 0.0;
-
     if (hasYaw)
-      m_yaw += yawRate * deltaT;
+      angleEma(yawInput, m_yaw);
     if (hasRoll)
-      m_roll += rollRate * deltaT;
+      angleEma(rollInput, m_roll);
     if (hasPitch)
-      m_pitch += pitchRate * deltaT;
-
-    m_rateFilterInitialized = true;
+      angleEma(pitchInput, m_pitch);
   }
 
   // Normalize all angles between -180 and 180
@@ -268,36 +200,4 @@ void Widgets::Gyroscope::updateData()
   const bool pitchChanged = DSP::notEqual(m_pitch, previousPitch);
   if (yawChanged || rollChanged || pitchChanged)
     Q_EMIT updated();
-}
-
-//--------------------------------------------------------------------------------------------------
-// Configuration setters
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Enables or disables value integration.
- *
- * Resets orientation state when toggled. Emits `updated()` and
- * `integrateValuesChanged()` signals.
- *
- * @param enabled True to enable integration, false for direct values.
- */
-void Widgets::Gyroscope::setIntegrateValues(const bool enabled)
-{
-  // Reset orientation state and update integration mode
-  if (m_integrateValues != enabled) {
-    m_yaw                      = 0;
-    m_roll                     = 0;
-    m_pitch                    = 0;
-    m_filteredYawRate          = 0;
-    m_filteredRollRate         = 0;
-    m_filteredPitchRate        = 0;
-    m_rateFilterInitialized    = false;
-    m_displayFilterInitialized = false;
-    m_timer.restart();
-    m_integrateValues = enabled;
-
-    Q_EMIT updated();
-    Q_EMIT integrateValuesChanged();
-  }
 }

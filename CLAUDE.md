@@ -60,21 +60,49 @@ lib/             KissFFT, QCodeEditor, mdflib, OpenSSL
 ### Data Flow
 
 ```
-Driver thread → CircularBuffer (SPSC, KMP) → main thread
-Main thread   → FrameReader → FrameBuilder → Frame
-              → Dashboard::hotpathRxFrame(const Frame&)      ← 0 allocs
-              → [exports only] make_shared<TimestampedFrame>  ← 1 alloc
-              → CSV / MDF4 / API::Server worker threads
+Driver  (driver thread OR main thread, depending on driver)
+  │ HAL_Driver::dataReceived(ByteArrayPtr)              AutoConnection
+  ▼
+FrameReader::processData  (main thread)
+  │ appends to CircularBuffer (SPSC), KMP-scans for delimiters
+  │ enqueues completed frames to lock-free ReaderWriterQueue<QByteArray>
+  │ emits readyRead once per processData call
+  ▼
+DeviceManager::onReadyRead  (main thread, direct)
+  │ while try_dequeue: Q_EMIT frameReady(deviceId, frame)  DirectConnection
+  ▼
+ConnectionManager::onFrameReady  (main thread)
+  │ routes to FrameBuilder::hotpathRxFrame / hotpathRxSourceFrame
+  ▼
+FrameBuilder  (main thread)
+  │ parses → applies per-dataset transforms → mutates m_frame
+  │ hotpathTxFrame(m_frame): Dashboard::hotpathRxFrame(const Frame&)  ← 0 allocs
+  │                          + make_shared<TimestampedFrame> for export workers  ← 1 alloc [[unlikely]]
+  ▼
+CSV / MDF4 / API::Server / gRPC  (worker threads, lock-free enqueue from main)
 ```
 
 ### Threading Rules — DO NOT VIOLATE
 
 | Component | Rule |
 |-----------|------|
-| `FrameReader` | Config set **once** before `moveToThread()`. On change: destroy and recreate via `resetFrameReader()` / `reconfigure()`. **Never add mutexes.** |
-| `CircularBuffer` | **SPSC only.** One producer, one consumer. Never MPMC. |
-| `Dashboard` | **Main thread only.** Receives `const Frame&` — no copy, no allocation. |
-| Export workers | Lock-free enqueue from main, batch on worker thread. |
+| `FrameReader` | **Currently runs on the main thread.** Config set **once** before construction; recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` on change. **Never add mutexes.** Historical note: `m_threadedExtraction` / `moveToThread` was removed in beeda4c0; if it ever returns, flip `DeviceManager::frameReady` / `rawDataReceived` connections back to `Qt::QueuedConnection` in `ConnectionManager::wireDevice()`. |
+| `CircularBuffer` | **SPSC only.** One producer, one consumer. Never MPMC. Even with FrameReader on the main thread, keep SPSC — the driver side still writes from whatever thread emitted `dataReceived`. |
+| `Dashboard` | **Main thread only.** Receives `const Frame&` — no copy. |
+| Export workers | Lock-free enqueue from main, batch on worker thread. `make_shared<TimestampedFrame>` is the only allocation on the tx path (guarded by `[[unlikely]]`). |
+
+### Signal Connection Hops — Hotpath
+
+Same-thread signal hops on the frame path **must be `Qt::DirectConnection`**.
+A queued connection between two main-thread objects is pure overhead: every emit
+becomes a `QMetaCallEvent` allocation + event-queue insertion + deferred dispatch.
+At 10+ kHz frame rates that extra work lets the FrameReader's 4096-slot queue
+fill faster than the consumer drains it → `[FrameReader] Frame queue full — frame dropped`.
+
+Known direct-connection sites:
+- `DeviceManager::frameReady → ConnectionManager::onFrameReady` (wireDevice)
+- `DeviceManager::rawDataReceived → ConnectionManager::onRawDataReceived` (wireDevice)
+- `FrameReader::readyRead → DeviceManager::onReadyRead` (AutoConnection, resolves to Direct)
 
 ### AppState — Single Source of Truth
 
@@ -99,7 +127,7 @@ Main thread   → FrameReader → FrameBuilder → Frame
 - Accessors: `ConnectionManager::instance().uart()`, `.network()`, `.bluetoothLE()`, etc.
 - `createDriver()` makes fresh instances for live connections (owned by `DeviceManager`).
 - QML context properties (`Cpp_IO_Serial`, `Cpp_IO_Network`, etc.) → UI-config instances.
-- `DeviceManager`: non-singleton, owns one `HAL_Driver` + `FrameReader` + `QThread`.
+- `DeviceManager`: non-singleton, owns one `HAL_Driver` + `FrameReader`. No worker thread — FrameReader runs on the main thread (see beeda4c0).
 - `configurationOk()` checks the **UI driver** (not the live driver). UI driver `configurationChanged` is forwarded to `ConnectionManager::configurationChanged`.
 - All drivers must emit `configurationChanged()` from their constructors (connect specific signals like `portIndexChanged` → `configurationChanged`).
 - Live drivers may lack enumerated device lists. UART/Modbus call `refreshSerialDevices()`/`refreshSerialPorts()` in `open()` if lists are empty.
@@ -131,6 +159,17 @@ Main thread   → FrameReader → FrameBuilder → Frame
 - Bus type change: `m_awaitingContextRebuild` flag → one-shot `contextsRebuilt` → `buildSourceModel`.
 - Source JSON keys: `title`, `sourceId`, `busType`, `frameStart`, `frameEnd`, `frameDetection`, `decoder`, `hexadecimalDelimiters`, `frameParserCode`, `connection`.
 
+### Per-Dataset Value Transforms
+
+- Each dataset may carry a `transformCode` string (Lua or JS, language matches the dataset's source).
+  A transform is a small user script defining `function transform(value) → number`.
+- **Compile-once, call-many**: `FrameBuilder::compileTransforms()` runs when the project loads or connection opens. It builds one shared Lua state or `QJSEngine` per source and caches per-dataset function references (`m_transformEngines` map).
+- **Lua isolation**: each dataset's chunk runs once via `luaL_dostring`. Top-level `local` declarations become upvalues captured by the `transform` closure — so `local ema`/`local alpha` give each dataset its own state, even when the Lua state is shared.
+- **JS isolation**: the user's code is wrapped in an IIFE at compile time (`(function(){ <code>; return typeof transform === 'function' ? transform : null; })()`) so top-level `var` declarations are closure-scoped per dataset. Without this, multiple datasets using the same template (e.g. two EMAs) would clobber each other's globals on the shared `QJSEngine`.
+- **Hotpath**: `applyTransform(sourceId, uniqueId, rawValue)` is called on every frame for every dataset with `!transformCode.isEmpty()`. Lookup is an `std::map::find`; Lua call is a `lua_rawgeti` + `lua_pcall`; JS call is a `QJSValue::call`. Non-finite results (NaN/Inf) are rejected and `rawValue` is returned unchanged (`[[unlikely]]` guarded).
+- **Templates**: `app/rcc/scripts/transforms/{js,lua}/<name>.{js,lua}` + `templates.json` manifest with translations. The manifest loader is `DataModel::loadScriptTemplateManifest()` (shared with parser/output templates). New templates must be added to `rcc.qrc` in **both** `js/` and `lua/` sections.
+- **Editor UX**: `DatasetTransformEditor` prefills the editor with a multiline-comment placeholder when the dataset has no transform. QTextEdit's `setPlaceholderText` only renders the first line of multiline hints, so prefill instead. `onApply` detects "code does not define transform()" via `definesTransformFunction()` (disposable engine compile + lookup) and emits an empty string in that case so the placeholder is never persisted to the project.
+
 ### File Transmission — Protocol Architecture
 
 - `IO::FileTransmission` (singleton, `Cpp_IO_FileTransmission`): controller that owns protocol instances and manages plain text / raw binary modes.
@@ -146,7 +185,8 @@ Main thread   → FrameReader → FrameBuilder → Frame
 | Mistake | Fix |
 |---------|-----|
 | `buildTreeModel()` inside item-change handler | `QTimer::singleShot(0, ...)` |
-| Mutexes in FrameReader/CircularBuffer | Recreate via `resetFrameReader()`/`reconfigure()` |
+| Mutexes in FrameReader/CircularBuffer | Recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` |
+| `Qt::QueuedConnection` on the frame hotpath when sender & receiver are both on the main thread | Use `Qt::DirectConnection` — queued costs a `postEvent` per frame and causes queue-full drops |
 | `QMap::operator[]` on `m_sourceFrames[sourceId]` | Use `.find()` and validate |
 | `disconnect(nullptr)` as slot | Capture `QMetaObject::Connection`, disconnect that |
 | Mutating ProjectModel on every keystroke | Update tree item in-place via `m_*Items` |
@@ -162,6 +202,7 @@ Main thread   → FrameReader → FrameBuilder → Frame
 | `Q_INVOKABLE void foo()` | Move to `public slots:` — `Q_INVOKABLE` is for non-void returns only |
 | `int m_foo = 0;` in header | Initialize in constructor member init list, not in-class |
 | `Q_SIGNALS:` / `public Q_SLOTS:` | Use `signals:` / `public slots:` (lowercase, no `Q_` prefix) |
+| Per-dataset `transformCode` in header-filled editor, never dropping the placeholder | `DatasetTransformEditor::onApply` discards code if `definesTransformFunction` returns false |
 
 ## Code Style
 

@@ -144,7 +144,7 @@ pytest tests/performance/ --benchmark-compare
 
 ## Script Tests (`tests/scripts/`)
 
-Unit tests for the JavaScript frame-parser scripts in `app/rcc/scripts/`. Node.js is
+Unit tests for the JavaScript frame-parser scripts in `app/rcc/scripts/parser/js/`. Node.js is
 required; Serial Studio does not need to be running.
 
 Each test calls `run_parser(script_name, frame)`, which spawns a fresh Node.js subprocess,
@@ -286,10 +286,10 @@ The `conftest.py` fixtures handle most boilerplate. A typical test only needs
 
 ### Script tests
 
-Script tests exercise the JavaScript frame-parser scripts in `app/rcc/scripts/`
+Script tests exercise the JavaScript frame-parser scripts in `app/rcc/scripts/parser/js/`
 without any Qt or Serial Studio dependency. Each test calls `run_parser()`, which:
 
-1. Reads the `.js` source file from `app/rcc/scripts/`
+1. Reads the `.js` source file from `app/rcc/scripts/parser/js/`
 2. Appends a one-liner that calls `parse(frame)` and prints the result as JSON
 3. Runs the combined snippet in a **fresh Node.js subprocess** (no shared state)
 4. Deserialises the JSON output and returns it as a Python list

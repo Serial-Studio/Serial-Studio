@@ -346,7 +346,7 @@ Widgets.Pane {
           }
 
           Item {
-            implicitWidth: 4
+            Layout.fillWidth: true
           }
 
           Button {
@@ -358,10 +358,6 @@ Widgets.Pane {
             onClicked: frameParser.selectTemplate()
             icon.source: "qrc:/rcc/icons/buttons/code.svg"
             icon.color: Cpp_ThemeManager.colors["button_text"]
-          }
-
-          Item {
-            Layout.fillWidth: true
           }
 
           Button {

@@ -93,11 +93,13 @@ public:
   [[nodiscard]] static QString defaultTemplate();
 
 private:
+  void loadTemplates();
   bool m_readingCode;
   QPixmap m_pixmap;
   QSyntaxStyle m_style;
   QCodeEditor m_widget;
 
+  QString m_defaultTemplateFile;
   QStringList m_templateNames;
   QStringList m_templateFiles;
   TransmitTestDialog m_testDialog;

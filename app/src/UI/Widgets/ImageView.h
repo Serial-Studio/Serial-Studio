@@ -122,7 +122,7 @@ private:
  * | imageHeight   | int     | Pixel height of the last decoded frame |
  *
  * ### Connection lifecycle
- * 1. @c IO::Manager::driverChanged → @c reconfigureReader() (queued)
+ * 1. @c IO::ConnectionManager::driverChanged → @c reconfigureReader() (queued)
  * 2. @c reconfigureReader() reads delimiter config from
  *    @c ProjectModel::widgetSettings and recreates @c ImageFrameReader.
  * 3. On driver disconnect the driver object is destroyed, severing the

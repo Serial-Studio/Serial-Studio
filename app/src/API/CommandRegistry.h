@@ -57,7 +57,7 @@ struct CommandDefinition {
  * the various handler classes (IOManagerHandler, UARTHandler, etc.).
  *
  * Commands use dot-notation matching the C++ namespace hierarchy:
- * - io.manager.connect -> IO::Manager operations
+ * - io.manager.connect -> IO::ConnectionManager operations
  * - io.driver.uart.setBaudRate -> IO::Drivers::UART operations
  * - io.driver.network.setTcpPort -> IO::Drivers::Network operations
  */

@@ -267,6 +267,7 @@ set(SOURCES
   src/DataModel/FrameParser.cpp
   src/DataModel/JsScriptEngine.cpp
   src/DataModel/LuaScriptEngine.cpp
+  src/DataModel/ScriptTemplates.cpp
   src/DataModel/JsCodeEditor.cpp
   src/DataModel/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
@@ -274,6 +275,7 @@ set(SOURCES
   src/DataModel/FrameBuilder.cpp
   src/DataModel/Frame.cpp
   src/DataModel/FrameConsumer.cpp
+  src/DataModel/DatasetTransformEditor.cpp
   src/DataModel/FrameParserTestDialog.cpp
   src/DataModel/TransmitTestDialog.cpp
   src/CSV/Player.cpp
@@ -362,6 +364,7 @@ set(HEADERS
   src/DataModel/IScriptEngine.h
   src/DataModel/JsScriptEngine.h
   src/DataModel/LuaScriptEngine.h
+  src/DataModel/ScriptTemplates.h
   src/DataModel/JsCodeEditor.h
   src/DataModel/OutputCodeEditor.h
   src/DataModel/ProjectModel.h
@@ -369,6 +372,7 @@ set(HEADERS
   src/DataModel/Frame.h
   src/DataModel/FrameBuilder.h
   src/DataModel/FrameConsumer.h
+  src/DataModel/DatasetTransformEditor.h
   src/DataModel/FrameParserTestDialog.h
   src/DataModel/TransmitTestDialog.h
   src/CSV/Export.h

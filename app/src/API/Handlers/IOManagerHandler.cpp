@@ -31,7 +31,7 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Register all IO::Manager commands with the registry
+ * @brief Register all IO::ConnectionManager commands with the registry
  */
 void API::Handlers::IOManagerHandler::registerCommands()
 {

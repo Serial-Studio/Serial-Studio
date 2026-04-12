@@ -1000,7 +1000,7 @@ void UI::Dashboard::setShowTaskbarButtons(const bool enabled)
  *   start on first activation.
  * - If the action is configured with TimerMode::ToggleOnTrigger, the timer
  *   toggles on GUI-triggered calls.
- * - All actions result in data being transmitted via IO::Manager, using either
+ * - All actions result in data being transmitted via IO::ConnectionManager, using either
  *   binary or text formatting.
  *
  * Emits:

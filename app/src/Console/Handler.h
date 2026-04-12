@@ -35,7 +35,7 @@ namespace Console {
 /**
  * @brief The Console::Handler class
  *
- * The handler class receives data from the @c IO::Manager class and
+ * The handler class receives data from the @c IO::ConnectionManager class and
  * processes it so that it can be easily appended to a text edit widget.
  *
  * The class also controls various UI-related factors, such as the display

@@ -70,7 +70,7 @@ struct ModbusRegisterGroup {
  * 2. `open()` initiates connection (returns true if successful)
  * 3. For TCP: connection state changes from Connecting → Connected
  * 4. `onStateChanged()` emits `configurationChanged()` signal
- * 5. IO::Manager queries `isOpen()` to update UI
+ * 5. IO::ConnectionManager queries `isOpen()` to update UI
  *
  * ## Data Flow
  * - Uses timer-based polling to read Modbus registers periodically
@@ -85,7 +85,7 @@ struct ModbusRegisterGroup {
  * - `availableSerialPortsChanged()`: Emitted when serial port list updates
  *
  * @see HAL_Driver
- * @see IO::Manager
+ * @see IO::ConnectionManager
  */
 class Modbus : public HAL_Driver {
   // clang-format off

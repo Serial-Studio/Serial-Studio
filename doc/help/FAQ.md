@@ -418,6 +418,20 @@ Time,Group/Dataset 1,Group/Dataset 2,...
 
 Yes! Click **Preferences → Theme** and choose your preffered theme.
 
+### How do I calibrate or filter a dataset value?
+
+Use a **Dataset Value Transform**. Select any dataset in the Project Editor, click the **Transform** button in the toolbar, and write a `transform(value)` function:
+
+```lua
+function transform(value)
+  return value * 0.01 + 273.15
+end
+```
+
+The transform runs on every incoming frame and replaces the raw value everywhere — dashboard, plots, CSV export, and API. Built-in templates are available for common operations like linear calibration, moving average, unit conversion, and more.
+
+See [Dataset Value Transforms](Dataset-Transforms.md) for the complete guide.
+
 ---
 
 ## Troubleshooting

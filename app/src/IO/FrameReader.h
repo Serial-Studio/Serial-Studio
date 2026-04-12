@@ -41,29 +41,38 @@ enum class ValidationStatus {
 
 /**
  * @class IO::FrameReader
- * @brief Multithreaded frame reader for detecting and processing streamed data.
+ * @brief Frame extractor for detecting and processing streamed data.
  *
  * Processes incoming data streams by detecting frames using configurable start
  * and end sequences or delimiters. Supports multiple modes for flexible data
  * handling, such as quick plotting, JSON extraction, and project-specific
  * parsing.
  *
+ * **Runs on the main thread.** Historically this class was moved to a
+ * worker thread via m_threadedExtraction; that path was removed (see
+ * beeda4c0). HAL drivers may still emit dataReceived() from their own
+ * read threads — the AutoConnection on processData() resolves to a
+ * queued hop when that happens.
+ *
  * **Thread Safety Model:**
  * This class achieves thread safety through immutability rather than locks.
- * The IO::Manager recreates the FrameReader instance whenever configuration
- * changes (see IO::Manager::resetFrameReader()). This ensures:
+ * ConnectionManager recreates the FrameReader instance whenever configuration
+ * changes (see ConnectionManager::resetFrameReader() and
+ * DeviceManager::reconfigure()). This ensures:
  *
- * - Configuration is set ONCE in constructor
+ * - Configuration is set ONCE on the FrameReader via setters before any
+ *   data is routed through it
  * - No configuration changes occur during the FrameReader's lifetime
  * - processData() can safely read member variables without synchronization
  *
  * DO NOT add mutexes or atomic operations to this class. If configuration
- * needs to change, the IO::Manager will destroy this instance and create
- * a new one with updated settings.
+ * needs to change, destroy this instance and create a new one with updated
+ * settings via ConnectionManager::resetFrameReader().
  *
  * Lock-free operation for 256 KHz+ data rates.
  *
- * @see IO::Manager::resetFrameReader()
+ * @see ConnectionManager::resetFrameReader()
+ * @see DeviceManager::reconfigure()
  */
 class FrameReader : public QObject {
   Q_OBJECT
@@ -74,14 +83,11 @@ signals:
 public:
   explicit FrameReader(QObject* parent = nullptr);
 
+  inline void resetOverflowCount() { m_circularBuffer.resetOverflowCount(); }
+
   inline moodycamel::ReaderWriterQueue<QByteArray>& queue() { return m_queue; }
 
-  [[nodiscard]] qsizetype overflowCount() const noexcept
-  {
-    return m_circularBuffer.overflowCount();
-  }
-
-  void resetOverflowCount() noexcept { m_circularBuffer.resetOverflowCount(); }
+  inline qsizetype overflowCount() const { return m_circularBuffer.overflowCount(); }
 
 public slots:
   void processData(const IO::ByteArrayPtr& data);

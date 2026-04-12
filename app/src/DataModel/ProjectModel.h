@@ -24,7 +24,6 @@
 #include <QJsonObject>
 #include <QObject>
 #include <QSet>
-#include <QTimer>
 #include <QVariantList>
 
 #include "DataModel/Frame.h"
@@ -254,7 +253,6 @@ public slots:
 
 private:
   int nextDatasetIndex();
-  void writeProjectFile();
   bool finalizeProjectSave();
   void clearTransientState();
 
@@ -286,6 +284,5 @@ private:
   DataModel::OutputWidget m_selectedOutputWidget;
 
   QJsonObject m_widgetSettings;
-  QTimer m_pluginSaveTimer;
 };
 }  // namespace DataModel

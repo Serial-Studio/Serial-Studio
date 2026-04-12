@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QTimer>
 
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
@@ -65,6 +66,7 @@ typedef enum {
   kDatasetView_FFT_SamplingRate,
   kDatasetView_xAxis,
   kDatasetView_Overview,
+  kDatasetView_TransformCode,
 } DatasetItem;
 
 typedef enum {
@@ -159,6 +161,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_projectModel(nullptr)
   , m_datasetModel(nullptr)
   , m_outputWidgetModel(nullptr)
+  , m_transformEditor(nullptr)
 {
   generateComboBoxModels();
 
@@ -652,6 +655,71 @@ void DataModel::ProjectEditor::setSelectedSourceFrameParserCode(const QString& c
   m_selectedSource.frameParserCode = code;
   DataModel::ProjectModel::instance().updateSourceFrameParser(m_selectedSource.sourceId, code);
   Q_EMIT selectedSourceFrameParserCodeChanged();
+}
+
+/**
+ * @brief Opens the dataset value transform editor dialog for the currently
+ * selected dataset.
+ *
+ * Pre-populates the editor with the dataset's existing transform code and
+ * the source's scripting language. When the user clicks Apply, updates the
+ * dataset and project model.
+ */
+void DataModel::ProjectEditor::openTransformEditor()
+{
+  // Determine the scripting language from the dataset's source
+  int lang            = SerialStudio::Lua;
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+  for (const auto& src : sources)
+    if (src.sourceId == m_selectedDataset.sourceId) {
+      lang = src.frameParserLanguage;
+      break;
+    }
+
+  // Create the dialog on first use (avoids destruction-order crash)
+  if (!m_transformEditor) {
+    m_transformEditor = new DatasetTransformEditor(nullptr);
+
+    connect(m_transformEditor,
+            &DatasetTransformEditor::transformApplied,
+            this,
+            [this](const QString& code, int /*lang*/, int gId, int dId) {
+              // Update the authoritative data in ProjectModel
+              auto& pm     = DataModel::ProjectModel::instance();
+              auto& groups = pm.groups();
+              if (gId < 0 || static_cast<size_t>(gId) >= groups.size())
+                return;
+
+              if (dId < 0 || static_cast<size_t>(dId) >= groups[gId].datasets.size())
+                return;
+
+              // Build updated dataset from the authoritative source
+              auto dataset          = groups[gId].datasets[dId];
+              dataset.transformCode = code;
+              pm.updateDataset(gId, dId, dataset, false);
+
+              // Update the current selection if it matches
+              if (m_selectedDataset.groupId == gId && m_selectedDataset.datasetId == dId)
+                m_selectedDataset.transformCode = code;
+
+              // Keep the tree-item cache in sync
+              for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+                if (it.value().groupId == gId && it.value().datasetId == dId) {
+                  it.value().transformCode = code;
+                  break;
+                }
+              }
+
+              // Re-sync FrameBuilder to recompile transform engines
+              DataModel::FrameBuilder::instance().syncFromProjectModel();
+            });
+  }
+
+  m_transformEditor->displayDialog(m_selectedDataset.title,
+                                   m_selectedDataset.transformCode,
+                                   lang,
+                                   m_selectedDataset.groupId,
+                                   m_selectedDataset.datasetId);
 }
 
 /**
@@ -2651,6 +2719,9 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     }
     case kDatasetView_FFT_SamplingRate:
       m_selectedDataset.fftSamplingRate = value.toInt();
+      break;
+    case kDatasetView_TransformCode:
+      m_selectedDataset.transformCode = value.toString();
       break;
     default:
       break;

@@ -21,8 +21,15 @@
 
 #pragma once
 
+#include <lua.h>
+
+#include <map>
+#include <QDeadlineTimer>
+#include <QJSEngine>
+#include <QJSValue>
 #include <QMap>
 #include <QObject>
+#include <QTimer>
 
 #include "DataModel/Frame.h"
 #include "SerialStudio.h"
@@ -82,7 +89,27 @@ private:
 
   void hotpathTxFrame(const DataModel::Frame& frame);
 
+  struct TransformEngine {
+    lua_State* luaState = nullptr;
+    QJSEngine* jsEngine = nullptr;
+    std::map<int, int> luaRefs;
+    std::map<int, QJSValue> jsRefs;
+    QDeadlineTimer luaDeadline{QDeadlineTimer::Forever};
+  };
+
+  static constexpr int kTransformWatchdogMs     = 100;
+  static constexpr int kTransformHookInstrCount = 10000;
+
+  static void transformLuaWatchdogHook(lua_State* L, lua_Debug* ar);
+
+  void compileTransforms();
+  void destroyTransformEngines();
+  [[nodiscard]] double applyTransform(int sourceId, int uniqueId, double rawValue);
+
 private:
+  std::map<int, TransformEngine> m_transformEngines;
+  QTimer m_jsTransformWatchdog;
+
   DataModel::Frame m_frame;
   DataModel::Frame m_rawFrame;
   DataModel::Frame m_quickPlotFrame;

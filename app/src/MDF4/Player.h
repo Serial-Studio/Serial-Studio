@@ -58,11 +58,11 @@ namespace MDF4 {
  * ## Architecture
  * The player builds a sparse frame index on file open, sampling every Nth
  * record to create a lightweight lookup table. During playback, frames are
- * streamed on-demand and sent through the standard IO::Manager pipeline for
+ * streamed on-demand and sent through the standard IO::ConnectionManager pipeline for
  * processing, visualization, and export.
  *
  * ## Data Flow
- * MDF4 File → buildFrameIndex() → getFrame() → IO::Manager::processPayload()
+ * MDF4 File → buildFrameIndex() → getFrame() → IO::ConnectionManager::processPayload()
  * → FrameBuilder → Dashboard
  *
  * ## Usage Example
@@ -74,7 +74,7 @@ namespace MDF4 {
  * @note This is a singleton class. Use MDF4::Player::instance() to access it.
  *
  * @see CSV::Player for similar functionality with CSV files
- * @see IO::Manager for data pipeline integration
+ * @see IO::ConnectionManager for data pipeline integration
  */
 class Player : public QObject {
   // clang-format off

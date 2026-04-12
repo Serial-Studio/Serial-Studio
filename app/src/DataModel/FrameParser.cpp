@@ -27,6 +27,7 @@
 #include "DataModel/JsScriptEngine.h"
 #include "DataModel/LuaScriptEngine.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/ScriptTemplates.h"
 #include "Misc/TimerEvents.h"
 #include "Misc/Translator.h"
 #include "SerialStudio.h"
@@ -102,18 +103,28 @@ void DataModel::FrameParser::setupExternalConnections()
  */
 QString DataModel::FrameParser::defaultTemplateCode(int language)
 {
-  const auto path = (language == SerialStudio::Lua)
-                    ? QStringLiteral(":/rcc/scripts/lua/comma_separated.lua")
-                    : QStringLiteral(":/rcc/scripts/comma_separated.js");
+  const auto templates = loadScriptTemplateManifest(
+    QStringLiteral(":/rcc/scripts/parser/templates.json"), "DataModel::FrameParser");
 
-  QString code;
-  QFile file(path);
-  if (file.open(QFile::ReadOnly)) {
-    code = QString::fromUtf8(file.readAll());
-    file.close();
+  QString defaultFile;
+  for (const auto& tmpl : templates) {
+    if (tmpl.isDefault) {
+      defaultFile = tmpl.file;
+      break;
+    }
   }
 
-  return code;
+  if (defaultFile.isEmpty() && !templates.isEmpty())
+    defaultFile = templates.constFirst().file;
+
+  if (defaultFile.isEmpty())
+    return {};
+
+  const bool isLua = (language == SerialStudio::Lua);
+  const auto directory =
+    isLua ? QStringLiteral(":/rcc/scripts/parser/lua") : QStringLiteral(":/rcc/scripts/parser/js");
+  const auto suffix = isLua ? QStringLiteral(".lua") : QStringLiteral(".js");
+  return readTextResource(templateResourcePath(directory, defaultFile, suffix));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -136,24 +147,49 @@ QString DataModel::FrameParser::templateCode(int sourceId) const
     return {};
 
   // Resolve template path for the configured language
-  const int lang = languageForSource(sourceId);
-  QString path;
-  if (lang == SerialStudio::Lua) {
-    auto base = m_templateFiles.at(idx);
-    base.replace(QStringLiteral(".js"), QStringLiteral(".lua"));
-    path = QStringLiteral(":/rcc/scripts/lua/%1").arg(base);
-  } else {
-    path = QStringLiteral(":/rcc/scripts/%1").arg(m_templateFiles.at(idx));
+  const int lang   = languageForSource(sourceId);
+  const bool isLua = (lang == SerialStudio::Lua);
+  const auto directory =
+    isLua ? QStringLiteral(":/rcc/scripts/parser/lua") : QStringLiteral(":/rcc/scripts/parser/js");
+  const auto suffix = isLua ? QStringLiteral(".lua") : QStringLiteral(".js");
+  return readTextResource(templateResourcePath(directory, m_templateFiles.at(idx), suffix));
+}
+
+/**
+ * @brief Checks if @p code matches any known template (Lua or JS variant).
+ *
+ * Compares the trimmed code against both language variants of every
+ * template. This enables language switching to find the equivalent
+ * template even when the code was loaded from a previous session.
+ *
+ * @param code The frame parser code to match.
+ * @return Template index (0-based into templateFiles) if found, or -1.
+ */
+int DataModel::FrameParser::detectTemplate(const QString& code) const
+{
+  const QString trimmed = code.trimmed();
+  if (trimmed.isEmpty())
+    return -1;
+
+  for (int i = 0; i < m_templateFiles.size(); ++i) {
+    const auto& file = m_templateFiles[i];
+
+    // Check Lua variant
+    const auto luaPath = templateResourcePath(
+      QStringLiteral(":/rcc/scripts/parser/lua"), file, QStringLiteral(".lua"));
+    const QString luaCode = readTextResource(luaPath).trimmed();
+    if (!luaCode.isEmpty() && luaCode == trimmed)
+      return i;
+
+    // Check JS variant
+    const auto jsPath =
+      templateResourcePath(QStringLiteral(":/rcc/scripts/parser/js"), file, QStringLiteral(".js"));
+    const QString jsCode = readTextResource(jsPath).trimmed();
+    if (!jsCode.isEmpty() && jsCode == trimmed)
+      return i;
   }
 
-  QString code;
-  QFile file(path);
-  if (file.open(QFile::ReadOnly)) {
-    code = QString::fromUtf8(file.readAll());
-    file.close();
-  }
-
-  return code;
+  return -1;
 }
 
 /**
@@ -462,63 +498,22 @@ void DataModel::FrameParser::collectGarbage()
  */
 void DataModel::FrameParser::loadTemplateNames()
 {
-  m_templateFiles = {QStringLiteral("at_commands.js"),
-                     QStringLiteral("base64_encoded.js"),
-                     QStringLiteral("batched_sensor_data.js"),
-                     QStringLiteral("binary_tlv.js"),
-                     QStringLiteral("cobs_encoded.js"),
-                     QStringLiteral("comma_separated.js"),
-                     QStringLiteral("fixed_width_fields.js"),
-                     QStringLiteral("hexadecimal_bytes.js"),
-                     QStringLiteral("ini_config.js"),
-                     QStringLiteral("json_data.js"),
-                     QStringLiteral("key_value_pairs.js"),
-                     QStringLiteral("mavlink.js"),
-                     QStringLiteral("messagepack.js"),
-                     QStringLiteral("modbus.js"),
-                     QStringLiteral("nmea_0183.js"),
-                     QStringLiteral("nmea_2000.js"),
-                     QStringLiteral("pipe_delimited.js"),
-                     QStringLiteral("raw_bytes.js"),
-                     QStringLiteral("rtcm_corrections.js"),
-                     QStringLiteral("semicolon_separated.js"),
-                     QStringLiteral("sirf_binary.js"),
-                     QStringLiteral("slip_encoded.js"),
-                     QStringLiteral("tab_separated.js"),
-                     QStringLiteral("time_series_2d.js"),
-                     QStringLiteral("ubx_ublox.js"),
-                     QStringLiteral("url_encoded.js"),
-                     QStringLiteral("xml_data.js"),
-                     QStringLiteral("yaml_data.js")};
+  m_defaultTemplateFile.clear();
+  m_templateFiles.clear();
+  m_templateNames.clear();
 
-  m_templateNames = {tr("AT command responses"),
-                     tr("Base64-encoded data"),
-                     tr("Batched sensor data (multi-frame)"),
-                     tr("Binary TLV (Tag-Length-Value)"),
-                     tr("COBS-encoded frames"),
-                     tr("Comma-separated data"),
-                     tr("Fixed-width fields"),
-                     tr("Hexadecimal bytes"),
-                     tr("INI/config format"),
-                     tr("JSON data"),
-                     tr("Key-value pairs"),
-                     tr("MAVLink messages"),
-                     tr("MessagePack data"),
-                     tr("Modbus frames"),
-                     tr("NMEA 0183 sentences"),
-                     tr("NMEA 2000 messages"),
-                     tr("Pipe-delimited data"),
-                     tr("Raw bytes"),
-                     tr("RTCM corrections"),
-                     tr("Semicolon-separated data"),
-                     tr("SiRF binary protocol"),
-                     tr("SLIP-encoded frames"),
-                     tr("Tab-separated data"),
-                     tr("Time-series 2D arrays (multi-frame)"),
-                     tr("UBX protocol (u-blox)"),
-                     tr("URL-encoded data"),
-                     tr("XML data"),
-                     tr("YAML data")};
+  const auto templates = loadScriptTemplateManifest(
+    QStringLiteral(":/rcc/scripts/parser/templates.json"), "DataModel::FrameParser");
+
+  for (const auto& tmpl : templates) {
+    m_templateFiles.append(tmpl.file);
+    m_templateNames.append(tmpl.name);
+    if (m_defaultTemplateFile.isEmpty() && tmpl.isDefault)
+      m_defaultTemplateFile = tmpl.file;
+  }
+
+  if (m_defaultTemplateFile.isEmpty() && !m_templateFiles.isEmpty())
+    m_defaultTemplateFile = m_templateFiles.constFirst();
 
   Q_EMIT templateNamesChanged();
 }
@@ -558,7 +553,7 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
  */
 void DataModel::FrameParser::loadDefaultTemplate(int sourceId, bool guiTrigger)
 {
-  const auto idx = m_templateFiles.indexOf(QStringLiteral("comma_separated.js"));
+  const auto idx = m_templateFiles.indexOf(m_defaultTemplateFile);
   setTemplateIdx(sourceId, idx);
 
   if (!guiTrigger)

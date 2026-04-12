@@ -33,6 +33,8 @@
 #include <QVariantList>
 #include <QVariantMap>
 
+class QNetworkReply;
+
 namespace Misc {
 /**
  * @brief Manages extension repositories, browsing, downloading, and installation.
@@ -221,5 +223,6 @@ private:
   QVariantList m_runningPlugins;
   QVariantList m_installedPlugins;
   QNetworkAccessManager m_nam;
+  QSet<QNetworkReply*> m_activeReplies;
 };
 }  // namespace Misc

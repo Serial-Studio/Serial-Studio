@@ -54,10 +54,10 @@ flowchart TD
 ### Gyroscope
 
 - Widget key: `"gyro"` (also accepts `"gyroscope"`)
-- 3D attitude indicator showing yaw, pitch, roll
+- Attitude indicator showing yaw, pitch, roll
 - Best for: IMU visualization, drone orientation, robotics
 - Requires: exactly 3 datasets (yaw, pitch, roll)
-- OpenGL required for 3D rendering
+- Expects absolute angles in degrees. If your sensor only provides angular rates (deg/s), integrate them using the **Integrate Rate to Angle** transform template.
 
 ### Accelerometer
 
@@ -67,7 +67,6 @@ flowchart TD
 - Configurable max G range
 - Best for: vibration analysis, impact detection, motion sensing
 - Requires: exactly 3 datasets (X, Y, Z acceleration)
-- OpenGL required for 3D rendering
 
 ### LED Panel
 
@@ -94,7 +93,7 @@ flowchart TD
 - Interpolation support
 - Best for: 3D position tracking, spatial data, point clouds
 - Requires: exactly 3 datasets (X, Y, Z coordinates)
-- OpenGL required
+- Renders through Serial Studio's custom QPainter-based 3D pipeline — no GPU/OpenGL driver required, runs on low-end hardware including Raspberry Pi
 - Pro license required
 
 ### Image View [Pro]

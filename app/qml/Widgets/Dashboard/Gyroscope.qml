@@ -48,11 +48,6 @@ Item {
   property real yawAngle: root.model.yaw
   property real rollAngle: root.model.roll
   property real pitchAngle: root.model.pitch
-  property bool integrateValues: root.model.integrateValues
-  onIntegrateValuesChanged: {
-    if (root.model)
-      root.model.integrateValues = root.integrateValues
-  }
 
   //
   // Constants
@@ -73,67 +68,13 @@ Item {
   }
 
   //
-  // Window flags
-  //
-  property bool hasToolbar: root.height >= 296
-
-  //
-  // Restore persisted settings
-  //
-  Component.onCompleted: {
-    const s = Cpp_JSON_ProjectModel.widgetSettings(widgetId)
-
-    if (s["integrateValues"] !== undefined)
-      root.integrateValues = s["integrateValues"]
-  }
-
-  //
-  // Toolbar
-  //
-  RowLayout {
-    id: toolbar
-
-    spacing: 4
-    visible: root.hasToolbar
-    height: root.hasToolbar ? 48 : 0
-
-    anchors {
-      leftMargin: 8
-      top: parent.top
-      left: parent.left
-      right: parent.right
-    }
-
-    DashboardToolButton {
-      onClicked: {
-        root.integrateValues = !root.integrateValues
-        Cpp_JSON_ProjectModel.saveWidgetSetting(widgetId, "integrateValues", root.integrateValues)
-      }
-      checked: root.integrateValues
-      text: qsTr("Integrate Angles")
-      ToolTip.text: qsTr("Integrate Angles")
-      icon.source: "qrc:/rcc/icons/dashboard-buttons/integral.svg"
-    }
-
-    Item {
-      Layout.fillWidth: true
-    }
-  }
-
-  //
   // Main container
   //
   Item {
     id: container
 
     clip: true
-
-    anchors {
-      left: parent.left
-      top: toolbar.bottom
-      right: parent.right
-      bottom: parent.bottom
-    }
+    anchors.fill: parent
 
     //
     // Dark background fills the entire widget

@@ -920,7 +920,7 @@ void MDF4::Player::processFrameBatch(int startFrame, int endFrame)
  * @param frameIndex Index of the frame to send
  *
  * Extracts frame data using getFrame() and sends it through the normal
- * IO::Manager pipeline for console display, FrameBuilder processing,
+ * IO::ConnectionManager pipeline for console display, FrameBuilder processing,
  * and dashboard visualization.
  */
 void MDF4::Player::sendFrame(int frameIndex)
@@ -1000,7 +1000,7 @@ QString MDF4::Player::formatTimestamp(double timestamp) const
  * frame index. Values are retrieved from the sample cache that was populated
  * during ReadData() using the SampleCacheObserver.
  *
- * The output is sent through IO::Manager::processPayload() for display in
+ * The output is sent through IO::ConnectionManager::processPayload() for display in
  * the console and processing by the FrameBuilder.
  *
  * @note Values are engineering values (post-conversion) extracted using

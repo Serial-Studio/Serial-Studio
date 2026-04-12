@@ -27,7 +27,7 @@ namespace API {
 namespace Handlers {
 /**
  * @class IOManagerHandler
- * @brief Registers API commands for IO::Manager operations
+ * @brief Registers API commands for IO::ConnectionManager operations
  *
  * Provides commands for:
  * - io.manager.connect - Connect to configured device
@@ -41,7 +41,7 @@ namespace Handlers {
 class IOManagerHandler {
 public:
   /**
-   * @brief Register all IO::Manager commands with the CommandRegistry
+   * @brief Register all IO::ConnectionManager commands with the CommandRegistry
    */
   static void registerCommands();
 

@@ -32,19 +32,24 @@
 namespace IO {
 
 /**
- * @brief Non-singleton owner of one HAL driver, one FrameReader, and one
- *        worker QThread.
+ * @brief Non-singleton owner of one HAL driver and one FrameReader.
  *
  * DeviceManager encapsulates the full lifecycle of a single device connection:
  * it owns the driver, configures and runs the FrameReader, and emits
  * frameReady() / rawDataReceived() for consumers.
+ *
+ * The FrameReader runs on the main thread (no worker QThread). HAL_Driver
+ * implementations may emit dataReceived() from their own read thread; the
+ * AutoConnection on FrameReader::processData resolves that correctly.
  *
  * Drivers must NEVER be singletons for connection purposes — each DeviceManager
  * holds an independent driver instance. Driver singletons (e.g. UART::instance())
  * exist only for device enumeration (port lists, discovery state, etc.).
  *
  * ConnectionManager owns all DeviceManager instances and wires their outputs to
- * FrameBuilder and Console.
+ * FrameBuilder and Console. The wireDevice() connections are DirectConnection
+ * because both endpoints live on the main thread — see the comment at
+ * ConnectionManager::wireDevice() for the full rationale.
  */
 class DeviceManager : public QObject {
   Q_OBJECT

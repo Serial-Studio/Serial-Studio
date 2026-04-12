@@ -138,12 +138,15 @@ int main(int argc, char** argv)
   // Configure application metadata
   QLoggingCategory::setFilterRules("*font*=false");
 
+  // Set application info
   QApplication::setApplicationName(APP_EXECUTABLE);
   QApplication::setOrganizationName(APP_DEVELOPER);
   QApplication::setApplicationVersion(APP_VERSION);
   QApplication::setApplicationDisplayName(APP_NAME);
   QApplication::setOrganizationDomain(APP_SUPPORT_URL);
 
+  // Set application attributes
+  QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
   QApplication::setAttribute(Qt::AA_DontUseNativeMenuWindows);
 
@@ -153,14 +156,17 @@ int main(int argc, char** argv)
     argv = injectPlatformArg(argc, argv, "offscreen");
 
 #if defined(Q_OS_WIN)
+  // Windows-specific fixes, attach to console and allow fonts to look decent on 1x scaling
   attachToConsole();
   argv = adjustArgumentsForFreeType(argc, argv);
 #endif
 
+  // Allow fractional scaling
   auto policy = Qt::HighDpiScaleFactorRoundingPolicy::PassThrough;
   QApplication::setHighDpiScaleFactorRoundingPolicy(policy);
-  QtWebEngineQuick::initialize();
 
+  // Initialize Web Engine Module & application
+  QtWebEngineQuick::initialize();
   QApplication app(argc, argv);
 
   // Install event filter for file-open events (macOS Finder, Linux xdg-open)
@@ -173,11 +179,13 @@ int main(int argc, char** argv)
 #endif
 
 #if !defined(Q_OS_MAC)
+  // Set window icon
   QIcon appIcon(QStringLiteral(":/rcc/logo/icon.svg"));
   if (!appIcon.isNull())
     app.setWindowIcon(appIcon);
 #endif
 
+  // Set application style to Fusion
   app.setStyle(QStyleFactory::create("Fusion"));
   QQuickStyle::setStyle("Fusion");
 
@@ -192,23 +200,17 @@ int main(int argc, char** argv)
   QCLO pOpt({"p", "project"}, "Loads the specified project file", "file");
   QCLO qOpt({"q", "quick-plot"}, "Enables quick plot mode (auto-detect CSV data)");
   QCLO jOpt({"j", "device-sends-json"}, "Expects pre-formatted JSON from device");
-
   QCLO fpsOpt({"t", "fps"}, "Sets visualization refresh rate", "Hz");
   QCLO pointsOpt({"n", "points"}, "Sets data points per plot", "count");
-
   QCLO uartOpt("uart", "Specifies serial port (e.g., /dev/ttyUSB0, COM3)", "port");
   QCLO baudOpt("baud", "Sets serial baud rate (default: 9600)", "rate");
-
   QCLO tcpOpt("tcp", "Connects to TCP server (e.g., 192.168.1.100:8080)", "host:port");
-
   QCLO udpOpt("udp", "Binds to UDP local port (e.g., 8080)", "port");
   QCLO udpRemoteOpt("udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port");
   QCLO udpMltcstOpt("udp-multicast", "Enables multicast mode for UDP");
-
 #ifdef BUILD_COMMERCIAL
   QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
   QCLO deactivateOpt("deactivate", "Deactivate the current license instance and exit (for CI cleanup)");
-
   QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
   QCLO modbusTcpOpt("modbus-tcp", "Connects to ModBus TCP server (e.g., 192.168.1.100:502)", "host:port");
   QCLO modbusSlaveOpt("modbus-slave", "Sets ModBus slave address (1-247, default: 1)", "address");
@@ -218,7 +220,6 @@ int main(int argc, char** argv)
   QCLO modbusDataBitsOpt("modbus-databits", "Sets ModBus RTU data bits (5/6/7/8, default: 8)", "bits");
   QCLO modbusStopBitsOpt("modbus-stopbits", "Sets ModBus RTU stop bits (1/1.5/2, default: 1)", "bits");
   QCLO modbusRegisterOpt("modbus-register", "Adds ModBus register group: type:start:count (repeatable)", "spec");
-
   QCLO canbusOpt("canbus", "Connects to CAN bus (e.g., socketcan:can0, peakcan:pcan0)", "plugin:interface");
   QCLO canbusBitrateOpt("canbus-bitrate", "Sets CAN bus bitrate in bps (default: 500000)", "rate");
   QCLO canbusFdOpt("canbus-fd", "Enables CAN-FD mode");
@@ -261,22 +262,26 @@ int main(int argc, char** argv)
   parser.addOption(canbusBitrateOpt);
   parser.addOption(canbusFdOpt);
 #endif
+
+  // Process CLI arguments
   parser.process(app);
 
+  // Display application version
   if (parser.isSet(vOpt)) {
     cliShowVersion();
     return EXIT_SUCCESS;
   }
 
+  // Reset application settings
   if (parser.isSet(rOpt)) {
     cliResetSettings();
     return EXIT_SUCCESS;
   }
 
 #ifdef BUILD_COMMERCIAL
+  // Activate/deactivate Serial Studio
   if (parser.isSet(activateOpt))
     return cliActivateLicense(app, parser.value(activateOpt));
-
   if (parser.isSet(deactivateOpt))
     return cliDeactivateLicense(app);
 #endif
@@ -285,10 +290,10 @@ int main(int argc, char** argv)
   Q_INIT_RESOURCE(rcc);
   Q_INIT_RESOURCE(translations);
 
+  // Initialize the module manager & singleton classes
   Misc::ModuleManager moduleManager;
   moduleManager.setHeadless(headless);
   moduleManager.configureUpdater();
-
   moduleManager.registerQmlTypes();
   moduleManager.initializeQmlInterface();
   if (!headless && moduleManager.engine().rootObjects().isEmpty()) {
@@ -300,21 +305,26 @@ int main(int argc, char** argv)
   if (parser.isSet(apiServerOpt))
     API::Server::instance().setEnabled(true);
 
+  // Load a project
   if (parser.isSet(pOpt)) {
     QString projectPath = parser.value(pOpt);
     AppState::instance().setOperationMode(SerialStudio::ProjectFile);
     DataModel::ProjectModel::instance().openJsonFile(projectPath);
   }
 
+  // Enable Quick Plot Mode
   else if (parser.isSet(qOpt))
     AppState::instance().setOperationMode(SerialStudio::QuickPlot);
 
+  // Enable device sends JSON mode
   else if (parser.isSet(jOpt))
     AppState::instance().setOperationMode(SerialStudio::DeviceSendsJSON);
 
+  // Start full screen
   const auto ctx = moduleManager.engine().rootContext();
   ctx->setContextProperty("CLI_START_FULLSCREEN", parser.isSet(fOpt));
 
+  // Set dashboard FPS
   if (parser.isSet(fpsOpt)) {
     bool ok;
     auto fps = parser.value(fpsOpt).toUInt(&ok);
@@ -322,6 +332,7 @@ int main(int argc, char** argv)
       Misc::TimerEvents::instance().setFPS(fps);
   }
 
+  // Set dashboard point count
   if (parser.isSet(pointsOpt)) {
     bool ok;
     auto points = parser.value(pointsOpt).toUInt(&ok);
@@ -329,6 +340,7 @@ int main(int argc, char** argv)
       UI::Dashboard::instance().setPoints(points);
   }
 
+  // Set IO driver to UART
   if (parser.isSet(uartOpt) || parser.isSet(baudOpt)) {
     IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::UART);
 
@@ -349,6 +361,7 @@ int main(int argc, char** argv)
     IO::ConnectionManager::instance().connectDevice();
   }
 
+  // Set IO driver to TCP socket
   else if (parser.isSet(tcpOpt)) {
     QString tcpAddress = parser.value(tcpOpt);
     QStringList parts  = tcpAddress.split(':');
@@ -373,6 +386,7 @@ int main(int argc, char** argv)
       qWarning() << "Invalid TCP address format. Expected: host:port";
   }
 
+  // Set IO driver to UDP socket
   else if (parser.isSet(udpOpt)) {
     bool ok;
     quint16 localPort = parser.value(udpOpt).toUInt(&ok);
@@ -412,6 +426,7 @@ int main(int argc, char** argv)
       qWarning() << "Invalid UDP local port:" << parser.value(udpOpt);
   }
 #ifdef BUILD_COMMERCIAL
+  // Set IO driver to Modbus RTU
   else if (parser.isSet(modbusRtuOpt)) {
     QString portPath = parser.value(modbusRtuOpt);
     IO::ConnectionManager::instance().setBusType(SerialStudio::BusType::ModBus);
@@ -534,6 +549,7 @@ int main(int argc, char** argv)
     }
   }
 
+  // Set IO driver to Modbus TCP
   else if (parser.isSet(modbusTcpOpt)) {
     QString tcpAddress = parser.value(modbusTcpOpt);
     QStringList parts  = tcpAddress.split(':');
@@ -594,6 +610,7 @@ int main(int argc, char** argv)
       qWarning() << "Invalid ModBus TCP address format. Expected: host[:port]";
   }
 
+  // Set IO driver to CanBus
   else if (parser.isSet(canbusOpt)) {
     QString canbusSpec = parser.value(canbusOpt);
     QStringList parts  = canbusSpec.split(':');

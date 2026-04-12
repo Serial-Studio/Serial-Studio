@@ -21,7 +21,12 @@
 
 #include "DataModel/FrameBuilder.h"
 
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+
 #include <algorithm>
+#include <cmath>
 #include <QDateTime>
 
 #include "API/Server.h"
@@ -107,6 +112,19 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
 DataModel::FrameBuilder::FrameBuilder()
   : m_quickPlotChannels(-1), m_quickPlotHasHeader(false), m_timestampedFramesEnabled(false)
 {
+  // Configure the single-shot JS watchdog used by applyTransform() to
+  // interrupt runaway user scripts. The timer fires on the main thread
+  // while the QJSEngine call is still executing — setInterrupted() flips
+  // an atomic flag that the JS VM checks on the next opcode, causing the
+  // call to unwind with an error result.
+  m_jsTransformWatchdog.setSingleShot(true);
+  m_jsTransformWatchdog.setInterval(kTransformWatchdogMs);
+  connect(&m_jsTransformWatchdog, &QTimer::timeout, this, [this]() {
+    for (auto& [id, engine] : m_transformEngines)
+      if (engine.jsEngine)
+        engine.jsEngine->setInterrupted(true);
+  });
+
 #ifdef BUILD_COMMERCIAL
   connect(&Licensing::LemonSqueezy::instance(),
           &Licensing::LemonSqueezy::activatedChanged,
@@ -198,6 +216,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
   m_frame.actions = pm.actions();
 
   finalize_frame(m_frame);
+  compileTransforms();
 
   Q_ASSERT(!m_frame.title.isEmpty());
 
@@ -291,18 +310,20 @@ void DataModel::FrameBuilder::onConnectedChanged()
   // Reset quick-plot channel count
   m_quickPlotChannels = -1;
 
-  // Clear per-source frames on disconnect
+  // Clear per-source frames and transform engines on disconnect
   if (!IO::ConnectionManager::instance().isConnected()) {
     m_sourceFrames.clear();
+    destroyTransformEngines();
     return;
   }
 
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
     return;
 
-  // Reload parser scripts and auto-execute connect actions
+  // Reload parser scripts and recompile transforms for the new session
   Q_ASSERT(!m_frame.title.isEmpty());
   DataModel::FrameParser::instance().readCode();
+  compileTransforms();
 
   const auto& actions = m_frame.actions;
   for (const auto& action : actions)
@@ -387,7 +408,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
     multiChannels.append(channels);
   }
 
-  auto applyChannelData = [this](const QStringList& chs) {
+  auto applyChannelData = [this](const QStringList& chs, int srcId) {
     const auto* channelData = chs.data();
     const int channelCount  = chs.size();
     for (auto& group : m_frame.groups) {
@@ -395,8 +416,15 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
         const int idx = dataset.index;
         if (idx <= 0 || idx > channelCount) [[unlikely]]
           continue;
+
         dataset.value        = channelData[idx - 1];
         dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+
+        // Apply per-dataset value transform if configured
+        if (!dataset.transformCode.isEmpty() && dataset.isNumeric) {
+          dataset.numericValue = applyTransform(srcId, dataset.uniqueId, dataset.numericValue);
+          dataset.value        = QString::number(dataset.numericValue, 'g', 15);
+        }
       }
     }
   };
@@ -404,7 +432,7 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
   for (const auto& channels : std::as_const(multiChannels)) {
     if (channels.isEmpty()) [[unlikely]]
       continue;
-    applyChannelData(channels);
+    applyChannelData(channels, 0);
     hotpathTxFrame(m_frame);
   }
 }
@@ -487,6 +515,12 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
 
         dataset.value        = channelData[idx - 1];
         dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+
+        // Apply per-dataset value transform if configured
+        if (!dataset.transformCode.isEmpty() && dataset.isNumeric) {
+          dataset.numericValue = applyTransform(sourceId, dataset.uniqueId, dataset.numericValue);
+          dataset.value        = QString::number(dataset.numericValue, 'g', 15);
+        }
       }
     }
   };
@@ -785,4 +819,346 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
     grpcServer.hotpathTxFrame(timestampedFrame);
 #endif
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Per-dataset value transforms
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Opens a safe subset of Lua standard libraries for transform engines.
+ */
+static void openSafeLibsForTransform(lua_State* L)
+{
+  static const luaL_Reg kSafeLibs[] = {
+    {    "_G",   luaopen_base},
+    { "table",  luaopen_table},
+    {"string", luaopen_string},
+    {  "math",   luaopen_math},
+    { nullptr,        nullptr}
+  };
+
+  for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
+    luaL_requiref(L, lib->name, lib->func, 1);
+    lua_pop(L, 1);
+  }
+
+  // Remove dangerous functions from base library
+  for (const char* name : {"dofile", "loadfile", "load"}) {
+    lua_pushnil(L);
+    lua_setglobal(L, name);
+  }
+}
+
+/**
+ * @brief Lua instruction-count hook that aborts runaway transforms.
+ *
+ * Installed on every shared transform state via lua_sethook with
+ * LUA_MASKCOUNT. Fires every kTransformHookInstrCount instructions: it
+ * fetches the owning TransformEngine* from the Lua registry and checks
+ * the per-engine deadline. When the deadline has expired, luaL_error()
+ * unwinds the current lua_pcall() with an error, which applyTransform()
+ * catches and translates to "return rawValue unchanged".
+ */
+void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* ar)
+{
+  Q_UNUSED(ar)
+
+  // Retrieve the engine pointer from the registry
+  lua_getfield(L, LUA_REGISTRYINDEX, "__ss_transform__");
+  auto* engine = static_cast<TransformEngine*>(lua_touserdata(L, -1));
+  lua_pop(L, 1);
+
+  // Defensive — registry entry should always be present for our states
+  if (!engine) [[unlikely]]
+    return;
+
+  // Abort the current Lua call if the per-call deadline has expired
+  if (engine->luaDeadline.hasExpired()) [[unlikely]]
+    luaL_error(L, "transform timed out after %d ms", kTransformWatchdogMs);
+}
+
+/**
+ * @brief Compiles per-dataset transform expressions into shared engines.
+ *
+ * Scans all datasets in m_frame.groups. For each source that has at least
+ * one dataset with a non-empty transformCode, creates a shared Lua or JS
+ * engine and compiles each expression into a named function. The function
+ * reference is cached for O(1) lookup during the hotpath.
+ */
+void DataModel::FrameBuilder::compileTransforms()
+{
+  destroyTransformEngines();
+  Q_ASSERT(m_transformEngines.empty());
+
+  // Collect datasets with transforms, grouped by sourceId
+  struct TransformEntry {
+    int uniqueId;
+    QString code;
+  };
+
+  std::map<int, std::vector<TransformEntry>> bySource;
+  for (const auto& group : m_frame.groups)
+    for (const auto& ds : group.datasets)
+      if (!ds.transformCode.isEmpty())
+        bySource[ds.sourceId].push_back({ds.uniqueId, ds.transformCode});
+
+  if (bySource.empty())
+    return;
+
+  // Determine language for each source
+  const auto& sources = DataModel::ProjectModel::instance().sources();
+
+  for (auto& [sourceId, entries] : bySource) {
+    int lang = SerialStudio::Lua;
+    for (const auto& src : sources)
+      if (src.sourceId == sourceId) {
+        lang = src.frameParserLanguage;
+        break;
+      }
+
+    // Insert an empty engine into the map first so the TransformEngine*
+    // we store in the Lua registry (below) remains valid — building the
+    // engine locally and then std::move'ing it would invalidate the
+    // address captured by the watchdog hook
+    auto [it, inserted] = m_transformEngines.emplace(sourceId, TransformEngine{});
+    Q_ASSERT(inserted);
+    TransformEngine& engine = it->second;
+
+    if (lang == SerialStudio::Lua) {
+      // Create a shared Lua state for all transforms in this source
+      lua_State* L = luaL_newstate();
+      Q_ASSERT(L != nullptr);
+      if (!L) [[unlikely]] {
+        m_transformEngines.erase(it);
+        continue;
+      }
+
+      openSafeLibsForTransform(L);
+
+      // Store the engine pointer in the Lua registry so the watchdog
+      // hook can look it up without needing a global singleton pointer
+      lua_pushlightuserdata(L, &engine);
+      lua_setfield(L, LUA_REGISTRYINDEX, "__ss_transform__");
+
+      // Install instruction-count watchdog — fires every N instructions
+      // and checks the per-engine deadline timer
+      lua_sethook(L, &FrameBuilder::transformLuaWatchdogHook, LUA_MASKCOUNT,
+                  kTransformHookInstrCount);
+
+      // Arm the deadline while the user's compile-time chunk runs —
+      // a chunk with `while true do end` at top level would otherwise
+      // hang the main thread during compilation
+      engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
+
+      for (const auto& entry : entries) {
+        // Execute the user's code, which defines transform(value)
+        const QByteArray utf8 = entry.code.toUtf8();
+        if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
+          qWarning() << "[FrameBuilder] Transform compile error for"
+                     << "dataset" << entry.uniqueId << ":" << lua_tostring(L, -1);
+          lua_pop(L, 1);
+          continue;
+        }
+
+        // Clear any values the chunk may have returned (luaL_dostring
+        // uses LUA_MULTRET — if the user writes "return 42" at top
+        // level, the value stays on the stack)
+        lua_settop(L, 0);
+
+        // Verify that the user defined a transform() function
+        lua_getglobal(L, "transform");
+        if (!lua_isfunction(L, -1)) {
+          lua_pop(L, 1);
+          qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
+                     << "transform code does not define transform()";
+          continue;
+        }
+
+        // Move transform → __tf_<id> so the next dataset can reuse
+        // the "transform" name without overwriting this one
+        const auto alias = QStringLiteral("__tf_%1").arg(entry.uniqueId);
+        lua_setglobal(L, alias.toUtf8().constData());
+        lua_pushnil(L);
+        lua_setglobal(L, "transform");
+
+        // Store a registry reference for O(1) hotpath lookup
+        lua_getglobal(L, alias.toUtf8().constData());
+        Q_ASSERT(lua_isfunction(L, -1));
+        engine.luaRefs[entry.uniqueId] = luaL_ref(L, LUA_REGISTRYINDEX);
+      }
+
+      // Disarm the deadline — compile-time runs are done, subsequent
+      // arming happens per-call in applyTransform()
+      engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
+      engine.luaState    = L;
+    } else {
+      // Create a shared QJSEngine for all transforms in this source
+      auto* js = new QJSEngine();
+
+      for (const auto& entry : entries) {
+        // Wrap the user's code in an IIFE so that top-level 'var'
+        // declarations (alpha, ema, prev, etc.) are captured as closure
+        // state for this dataset instead of leaking onto the shared
+        // global object — otherwise two datasets using the same
+        // template would clobber each other's state
+        const QString wrapped =
+          QStringLiteral("(function() {\n"
+                         "%1\n"
+                         "return (typeof transform === 'function') ? transform : null;\n"
+                         "})();")
+            .arg(entry.code);
+
+        // Evaluate the IIFE — its return value is the user's transform
+        // function (or null if the code didn't define one)
+        auto evalResult = js->evaluate(wrapped);
+        if (evalResult.isError()) {
+          qWarning() << "[FrameBuilder] Transform compile error for"
+                     << "dataset" << entry.uniqueId << ":"
+                     << evalResult.property("message").toString();
+          continue;
+        }
+
+        // Reject if the IIFE didn't yield a callable transform function
+        if (!evalResult.isCallable()) {
+          qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
+                     << "transform code does not define transform()";
+          continue;
+        }
+
+        engine.jsRefs[entry.uniqueId] = evalResult;
+      }
+
+      engine.jsEngine = js;
+    }
+  }
+}
+
+/**
+ * @brief Destroys all per-source transform engines and releases resources.
+ */
+void DataModel::FrameBuilder::destroyTransformEngines()
+{
+  for (auto& [id, engine] : m_transformEngines) {
+    // Clear JS function refs BEFORE deleting the engine — QJSValue
+    // destructors access the engine's internal state
+    engine.jsRefs.clear();
+
+    // Release Lua state
+    if (engine.luaState) {
+      lua_close(engine.luaState);
+      engine.luaState = nullptr;
+    }
+
+    // Release JS engine (refs already cleared above)
+    delete engine.jsEngine;
+    engine.jsEngine = nullptr;
+  }
+
+  m_transformEngines.clear();
+  Q_ASSERT(m_transformEngines.empty());
+}
+
+/**
+ * @brief Applies the pre-compiled transform for a dataset.
+ *
+ * Looks up the function reference by uniqueId and calls it with the raw
+ * numeric value. Returns the transformed value, or @p rawValue if no
+ * transform is configured or if the call fails.
+ *
+ * @param sourceId  Source that owns the dataset.
+ * @param uniqueId  Dataset unique identifier.
+ * @param rawValue  Raw numeric value from the frame parser.
+ * @return Transformed value, or rawValue on error / missing transform.
+ */
+double DataModel::FrameBuilder::applyTransform(int sourceId, int uniqueId, double rawValue)
+{
+  Q_ASSERT(sourceId >= 0);
+  Q_ASSERT(uniqueId >= 0);
+
+  auto engineIt = m_transformEngines.find(sourceId);
+  if (engineIt == m_transformEngines.end())
+    return rawValue;
+
+  auto& engine = engineIt->second;
+
+  // Lua transform path
+  if (engine.luaState) {
+    auto refIt = engine.luaRefs.find(uniqueId);
+    if (refIt == engine.luaRefs.end())
+      return rawValue;
+
+    // Arm the per-call deadline — the lua_sethook watchdog installed in
+    // compileTransforms() will abort the call if it runs past this point.
+    // The deadline is disarmed on exit so out-of-band hook fires don't
+    // interrupt anything unrelated.
+    lua_State* L = engine.luaState;
+    engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
+
+    lua_rawgeti(L, LUA_REGISTRYINDEX, refIt->second);
+    lua_pushnumber(L, rawValue);
+    const int pcallStatus = lua_pcall(L, 1, 1, 0);
+
+    engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
+
+    if (pcallStatus != LUA_OK) [[unlikely]] {
+      qWarning() << "[FrameBuilder] Lua transform call failed for dataset"
+                 << uniqueId << ":" << lua_tostring(L, -1);
+      lua_pop(L, 1);
+      return rawValue;
+    }
+
+    // Validate return type — lua_tonumber silently returns 0.0 for nil
+    if (!lua_isnumber(L, -1)) [[unlikely]] {
+      lua_pop(L, 1);
+      return rawValue;
+    }
+
+    const double result = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    // Guard against NaN/Inf propagating to the dashboard
+    if (!std::isfinite(result)) [[unlikely]]
+      return rawValue;
+
+    return result;
+  }
+
+  // JavaScript transform path
+  if (engine.jsEngine) {
+    auto refIt = engine.jsRefs.find(uniqueId);
+    if (refIt == engine.jsRefs.end())
+      return rawValue;
+
+    // Arm the QJSEngine watchdog: the QTimer fires on the main thread
+    // while call() is still executing, and setInterrupted() flips an
+    // atomic flag the JS VM checks on its next opcode — so the call
+    // unwinds with an error result and we fall back to rawValue.
+    engine.jsEngine->setInterrupted(false);
+    m_jsTransformWatchdog.start();
+
+    QJSValueList args;
+    args << QJSValue(rawValue);
+    auto result = refIt->second.call(args);
+
+    m_jsTransformWatchdog.stop();
+
+    if (engine.jsEngine->isInterrupted()) [[unlikely]] {
+      engine.jsEngine->setInterrupted(false);
+      qWarning() << "[FrameBuilder] JS transform for dataset" << uniqueId
+                 << "timed out after" << kTransformWatchdogMs << "ms";
+      return rawValue;
+    }
+
+    if (!result.isNumber())
+      return rawValue;
+
+    const double val = result.toNumber();
+    if (!std::isfinite(val)) [[unlikely]]
+      return rawValue;
+
+    return val;
+  }
+
+  return rawValue;
 }

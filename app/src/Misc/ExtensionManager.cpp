@@ -312,6 +312,7 @@ void Misc::ExtensionManager::setSelectedIndex(int index)
 
     else if (!base.isEmpty()) {
       auto* reply = m_nam.get(QNetworkRequest(QUrl(base + "README.md")));
+      m_activeReplies.insert(reply);
       connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onReadmeReply);
     }
   }
@@ -370,14 +371,27 @@ void Misc::ExtensionManager::refreshRepositories()
   if (m_loading)
     return;
 
+  // Abort any stale replies from a previous refresh so their callbacks
+  // don't append entries to the freshly-cleared catalog with a mismatched
+  // base URL. deleteLater() runs before the aborted-reply handler fires.
+  for (auto* reply : std::as_const(m_activeReplies)) {
+    if (reply) {
+      reply->disconnect(this);
+      reply->abort();
+      reply->deleteLater();
+    }
+  }
+
+  m_activeReplies.clear();
+
   // Clear previous catalog
   m_allExtensions = QJsonArray();
   m_filteredExtensions.clear();
-  m_selectedIndex = -1;
+  m_selectedIndex         = -1;
+  m_pendingManifests      = 0;
+  m_pendingExtensionMetas = 0;
   Q_EMIT selectedIndexChanged();
   Q_EMIT filteredExtensionsChanged();
-
-  m_pendingExtensionMetas = 0;
 
   // Separate local and remote repos
   QStringList remoteRepos;
@@ -401,6 +415,7 @@ void Misc::ExtensionManager::refreshRepositories()
     for (const auto& repoUrl : std::as_const(remoteRepos)) {
       auto* reply = m_nam.get(QNetworkRequest(QUrl(repoUrl)));
       reply->setProperty("repoUrl", repoUrl);
+      m_activeReplies.insert(reply);
       connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onManifestReply);
     }
   }
@@ -524,6 +539,13 @@ void Misc::ExtensionManager::browseLocalRepo()
  */
 void Misc::ExtensionManager::installExtension()
 {
+  // Refuse to start a second install while one is already in flight.
+  // This can happen if the QML user clicks Install while an auto-update
+  // is mid-download, or if autoUpdate re-enters before applyFilter()
+  // has finished rebuilding m_filteredExtensions.
+  if (m_loading)
+    return;
+
   // Validate selection
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return;
@@ -697,15 +719,21 @@ void Misc::ExtensionManager::autoUpdateExtensions()
     break;
   }
 
-  // Schedule next update (after current install completes or immediately)
+  // Schedule next update (after current install completes or immediately).
+  // Both paths use a queued hop so autoUpdate always runs on a clean stack
+  // and m_filteredExtensions has been re-sorted by applyFilter() before
+  // we re-enter.
   if (!m_autoUpdateQueue.isEmpty()) {
     if (found && m_loading) {
-      // Remote install in progress — wait for completion
-      connect(this,
-              &ExtensionManager::extensionInstalled,
-              this,
-              &ExtensionManager::autoUpdateExtensions,
-              Qt::SingleShotConnection);
+      // Remote install in progress — wait for completion, then trampoline
+      // through a queued connection so the outer onFileDownloadReply has
+      // finished its applyFilter() before we re-enter.
+      connect(
+        this,
+        &ExtensionManager::extensionInstalled,
+        this,
+        [this]() { QTimer::singleShot(0, this, &ExtensionManager::autoUpdateExtensions); },
+        Qt::SingleShotConnection);
     }
 
     else {
@@ -728,6 +756,7 @@ void Misc::ExtensionManager::onManifestReply()
   if (!reply)
     return;
 
+  m_activeReplies.remove(reply);
   reply->deleteLater();
 
   // Parse the manifest and fetch each addon's metadata
@@ -748,6 +777,7 @@ void Misc::ExtensionManager::onManifestReply()
         ++m_pendingExtensionMetas;
         auto* metaReply = m_nam.get(QNetworkRequest(QUrl(metaUrl)));
         metaReply->setProperty("addonBase", addonBase);
+        m_activeReplies.insert(metaReply);
         connect(metaReply, &QNetworkReply::finished, this, &ExtensionManager::onExtensionMetaReply);
       }
 
@@ -781,14 +811,20 @@ void Misc::ExtensionManager::onExtensionMetaReply()
   if (!reply)
     return;
 
+  m_activeReplies.remove(reply);
   reply->deleteLater();
 
+  // Only append entries that parse to a non-empty object with a valid id.
+  // Skip entries whose info.json is missing, returned a 404 body, or is
+  // malformed — these would otherwise show up as blank cards in the grid.
   if (reply->error() == QNetworkReply::NoError) {
-    const auto doc       = QJsonDocument::fromJson(reply->readAll());
-    auto obj             = doc.object();
-    const auto addonBase = reply->property("addonBase").toString();
-    obj.insert("_repoBase", addonBase);
-    m_allExtensions.append(obj);
+    const auto doc = QJsonDocument::fromJson(reply->readAll());
+    auto obj       = doc.object();
+    if (!obj.isEmpty() && !obj.value("id").toString().isEmpty()) {
+      const auto addonBase = reply->property("addonBase").toString();
+      obj.insert("_repoBase", addonBase);
+      m_allExtensions.append(obj);
+    }
   }
 
   --m_pendingExtensionMetas;
@@ -810,6 +846,7 @@ void Misc::ExtensionManager::onReadmeReply()
   if (!reply)
     return;
 
+  m_activeReplies.remove(reply);
   reply->deleteLater();
 
   if (reply->error() == QNetworkReply::NoError)
@@ -827,6 +864,7 @@ void Misc::ExtensionManager::onFileDownloadReply()
   if (!reply)
     return;
 
+  m_activeReplies.remove(reply);
   reply->deleteLater();
 
   // Write the downloaded file to the install directory
@@ -884,6 +922,7 @@ void Misc::ExtensionManager::downloadNextFile()
   const auto [localName, url] = m_downloadQueue.takeFirst();
   auto* reply                 = m_nam.get(QNetworkRequest(url));
   reply->setProperty("localName", localName);
+  m_activeReplies.insert(reply);
   connect(reply, &QNetworkReply::finished, this, &ExtensionManager::onFileDownloadReply);
 }
 

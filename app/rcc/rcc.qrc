@@ -126,6 +126,7 @@
         <file>icons/buttons/deactivate.svg</file>
         <file>icons/buttons/disconnected.svg</file>
         <file>icons/buttons/download.svg</file>
+        <file>icons/buttons/dropdown.svg</file>
         <file>icons/buttons/expand.svg</file>
         <file>icons/buttons/forward.svg</file>
         <file>icons/buttons/info.svg</file>
@@ -138,6 +139,7 @@
         <file>icons/buttons/media-stop.svg</file>
         <file>icons/buttons/open.svg</file>
         <file>icons/buttons/paypal.svg</file>
+        <file>icons/buttons/plus.svg</file>
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
         <file>icons/buttons/save.svg</file>
@@ -156,6 +158,7 @@
         <file>icons/code-editor/reload.svg</file>
         <file>icons/code-editor/save.svg</file>
         <file>icons/code-editor/template.svg</file>
+        <file>icons/code-editor/test.svg</file>
         <file>icons/code-editor/undo.svg</file>
         <file>icons/csd/close.svg</file>
         <file>icons/csd/maximize.svg</file>
@@ -169,7 +172,6 @@
         <file>icons/dashboard-buttons/crosshair.svg</file>
         <file>icons/dashboard-buttons/filter.svg</file>
         <file>icons/dashboard-buttons/front_view.svg</file>
-        <file>icons/dashboard-buttons/integral.svg</file>
         <file>icons/dashboard-buttons/interpolate-off.svg</file>
         <file>icons/dashboard-buttons/interpolate-on.svg</file>
         <file>icons/dashboard-buttons/invert.svg</file>
@@ -204,6 +206,7 @@
         <file>icons/dashboard-large/image.svg</file>
         <file>icons/dashboard-large/led.svg</file>
         <file>icons/dashboard-large/multiplot.svg</file>
+        <file>icons/dashboard-large/output-panel.svg</file>
         <file>icons/dashboard-large/plot.svg</file>
         <file>icons/dashboard-large/plot3d.svg</file>
         <file>icons/dashboard-large/terminal.svg</file>
@@ -279,6 +282,7 @@
         <file>icons/project-editor/actions/output-textfield.svg</file>
         <file>icons/project-editor/actions/output-toggle.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
+        <file>icons/project-editor/actions/transform.svg</file>
         <file>icons/project-editor/model/action-behavior.svg</file>
         <file>icons/project-editor/model/action.svg</file>
         <file>icons/project-editor/model/alarm.svg</file>
@@ -317,6 +321,7 @@
         <file>icons/project-editor/toolbar/add-multiplot.svg</file>
         <file>icons/project-editor/toolbar/add-output-button.svg</file>
         <file>icons/project-editor/toolbar/add-output-knob.svg</file>
+        <file>icons/project-editor/toolbar/add-output-panel.svg</file>
         <file>icons/project-editor/toolbar/add-output-ramp.svg</file>
         <file>icons/project-editor/toolbar/add-output-slider.svg</file>
         <file>icons/project-editor/toolbar/add-output-textfield.svg</file>
@@ -480,10 +485,10 @@
         <file>messages/trial/Welcome_UK.txt</file>
         <file>messages/trial/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
-        <file>scripts/output/default_template.js</file>
         <file>scripts/output/at_command.js</file>
         <file>scripts/output/binary_packet.js</file>
         <file>scripts/output/canbus_frame.js</file>
+        <file>scripts/output/default_template.js</file>
         <file>scripts/output/gcode_command.js</file>
         <file>scripts/output/grbl_command.js</file>
         <file>scripts/output/json_command.js</file>
@@ -495,62 +500,131 @@
         <file>scripts/output/scpi_command.js</file>
         <file>scripts/output/simple_command.js</file>
         <file>scripts/output/slcan_command.js</file>
-        <file>scripts/at_commands.js</file>
-        <file>scripts/base64_encoded.js</file>
-        <file>scripts/batched_sensor_data.js</file>
-        <file>scripts/binary_tlv.js</file>
-        <file>scripts/cobs_encoded.js</file>
-        <file>scripts/comma_separated.js</file>
-        <file>scripts/fixed_width_fields.js</file>
-        <file>scripts/hexadecimal_bytes.js</file>
-        <file>scripts/ini_config.js</file>
-        <file>scripts/json_data.js</file>
-        <file>scripts/key_value_pairs.js</file>
-        <file>scripts/mavlink.js</file>
-        <file>scripts/messagepack.js</file>
-        <file>scripts/modbus.js</file>
-        <file>scripts/nmea_0183.js</file>
-        <file>scripts/nmea_2000.js</file>
-        <file>scripts/pipe_delimited.js</file>
-        <file>scripts/raw_bytes.js</file>
-        <file>scripts/rtcm_corrections.js</file>
-        <file>scripts/semicolon_separated.js</file>
-        <file>scripts/sirf_binary.js</file>
-        <file>scripts/slip_encoded.js</file>
-        <file>scripts/tab_separated.js</file>
-        <file>scripts/time_series_2d.js</file>
-        <file>scripts/ubx_ublox.js</file>
-        <file>scripts/url_encoded.js</file>
-        <file>scripts/xml_data.js</file>
-        <file>scripts/yaml_data.js</file>
-        <file>scripts/lua/at_commands.lua</file>
-        <file>scripts/lua/base64_encoded.lua</file>
-        <file>scripts/lua/batched_sensor_data.lua</file>
-        <file>scripts/lua/binary_tlv.lua</file>
-        <file>scripts/lua/cobs_encoded.lua</file>
-        <file>scripts/lua/comma_separated.lua</file>
-        <file>scripts/lua/fixed_width_fields.lua</file>
-        <file>scripts/lua/hexadecimal_bytes.lua</file>
-        <file>scripts/lua/ini_config.lua</file>
-        <file>scripts/lua/json_data.lua</file>
-        <file>scripts/lua/key_value_pairs.lua</file>
-        <file>scripts/lua/mavlink.lua</file>
-        <file>scripts/lua/messagepack.lua</file>
-        <file>scripts/lua/modbus.lua</file>
-        <file>scripts/lua/nmea_0183.lua</file>
-        <file>scripts/lua/nmea_2000.lua</file>
-        <file>scripts/lua/pipe_delimited.lua</file>
-        <file>scripts/lua/raw_bytes.lua</file>
-        <file>scripts/lua/rtcm_corrections.lua</file>
-        <file>scripts/lua/semicolon_separated.lua</file>
-        <file>scripts/lua/sirf_binary.lua</file>
-        <file>scripts/lua/slip_encoded.lua</file>
-        <file>scripts/lua/tab_separated.lua</file>
-        <file>scripts/lua/time_series_2d.lua</file>
-        <file>scripts/lua/ubx_ublox.lua</file>
-        <file>scripts/lua/url_encoded.lua</file>
-        <file>scripts/lua/xml_data.lua</file>
-        <file>scripts/lua/yaml_data.lua</file>
+        <file>scripts/output/templates.json</file>
+        <file>scripts/parser/js/at_commands.js</file>
+        <file>scripts/parser/js/base64_encoded.js</file>
+        <file>scripts/parser/js/batched_sensor_data.js</file>
+        <file>scripts/parser/js/binary_tlv.js</file>
+        <file>scripts/parser/js/cobs_encoded.js</file>
+        <file>scripts/parser/js/comma_separated.js</file>
+        <file>scripts/parser/js/fixed_width_fields.js</file>
+        <file>scripts/parser/js/hexadecimal_bytes.js</file>
+        <file>scripts/parser/js/ini_config.js</file>
+        <file>scripts/parser/js/json_data.js</file>
+        <file>scripts/parser/js/key_value_pairs.js</file>
+        <file>scripts/parser/js/mavlink.js</file>
+        <file>scripts/parser/js/messagepack.js</file>
+        <file>scripts/parser/js/modbus.js</file>
+        <file>scripts/parser/js/nmea_0183.js</file>
+        <file>scripts/parser/js/nmea_2000.js</file>
+        <file>scripts/parser/js/pipe_delimited.js</file>
+        <file>scripts/parser/js/raw_bytes.js</file>
+        <file>scripts/parser/js/rtcm_corrections.js</file>
+        <file>scripts/parser/js/semicolon_separated.js</file>
+        <file>scripts/parser/js/sirf_binary.js</file>
+        <file>scripts/parser/js/slip_encoded.js</file>
+        <file>scripts/parser/js/tab_separated.js</file>
+        <file>scripts/parser/js/time_series_2d.js</file>
+        <file>scripts/parser/js/ubx_ublox.js</file>
+        <file>scripts/parser/js/url_encoded.js</file>
+        <file>scripts/parser/js/xml_data.js</file>
+        <file>scripts/parser/js/yaml_data.js</file>
+        <file>scripts/parser/lua/at_commands.lua</file>
+        <file>scripts/parser/lua/base64_encoded.lua</file>
+        <file>scripts/parser/lua/batched_sensor_data.lua</file>
+        <file>scripts/parser/lua/binary_tlv.lua</file>
+        <file>scripts/parser/lua/cobs_encoded.lua</file>
+        <file>scripts/parser/lua/comma_separated.lua</file>
+        <file>scripts/parser/lua/fixed_width_fields.lua</file>
+        <file>scripts/parser/lua/hexadecimal_bytes.lua</file>
+        <file>scripts/parser/lua/ini_config.lua</file>
+        <file>scripts/parser/lua/json_data.lua</file>
+        <file>scripts/parser/lua/key_value_pairs.lua</file>
+        <file>scripts/parser/lua/mavlink.lua</file>
+        <file>scripts/parser/lua/messagepack.lua</file>
+        <file>scripts/parser/lua/modbus.lua</file>
+        <file>scripts/parser/lua/nmea_0183.lua</file>
+        <file>scripts/parser/lua/nmea_2000.lua</file>
+        <file>scripts/parser/lua/pipe_delimited.lua</file>
+        <file>scripts/parser/lua/raw_bytes.lua</file>
+        <file>scripts/parser/lua/rtcm_corrections.lua</file>
+        <file>scripts/parser/lua/semicolon_separated.lua</file>
+        <file>scripts/parser/lua/sirf_binary.lua</file>
+        <file>scripts/parser/lua/slip_encoded.lua</file>
+        <file>scripts/parser/lua/tab_separated.lua</file>
+        <file>scripts/parser/lua/time_series_2d.lua</file>
+        <file>scripts/parser/lua/ubx_ublox.lua</file>
+        <file>scripts/parser/lua/url_encoded.lua</file>
+        <file>scripts/parser/lua/xml_data.lua</file>
+        <file>scripts/parser/lua/yaml_data.lua</file>
+        <file>scripts/parser/templates.json</file>
+        <file>scripts/transforms/js/absolute_value.js</file>
+        <file>scripts/transforms/js/accumulator.js</file>
+        <file>scripts/transforms/js/adc_to_voltage.js</file>
+        <file>scripts/transforms/js/auto_zero.js</file>
+        <file>scripts/transforms/js/bit_extract.js</file>
+        <file>scripts/transforms/js/celsius_to_fahrenheit.js</file>
+        <file>scripts/transforms/js/clamp.js</file>
+        <file>scripts/transforms/js/dead_zone.js</file>
+        <file>scripts/transforms/js/degrees_to_radians.js</file>
+        <file>scripts/transforms/js/ema.js</file>
+        <file>scripts/transforms/js/fahrenheit_to_celsius.js</file>
+        <file>scripts/transforms/js/high_pass.js</file>
+        <file>scripts/transforms/js/integrate_rate.js</file>
+        <file>scripts/transforms/js/invert_sign.js</file>
+        <file>scripts/transforms/js/kalman_1d.js</file>
+        <file>scripts/transforms/js/kelvin_to_celsius.js</file>
+        <file>scripts/transforms/js/linear_calibration.js</file>
+        <file>scripts/transforms/js/logarithmic_db.js</file>
+        <file>scripts/transforms/js/low_pass.js</file>
+        <file>scripts/transforms/js/map_range.js</file>
+        <file>scripts/transforms/js/median_filter.js</file>
+        <file>scripts/transforms/js/moving_average.js</file>
+        <file>scripts/transforms/js/polynomial_2nd.js</file>
+        <file>scripts/transforms/js/radians_to_degrees.js</file>
+        <file>scripts/transforms/js/rate_of_change.js</file>
+        <file>scripts/transforms/js/rolling_rms.js</file>
+        <file>scripts/transforms/js/round_decimals.js</file>
+        <file>scripts/transforms/js/running_max.js</file>
+        <file>scripts/transforms/js/running_min.js</file>
+        <file>scripts/transforms/js/schmitt_trigger.js</file>
+        <file>scripts/transforms/js/slew_rate_limiter.js</file>
+        <file>scripts/transforms/js/thermistor_steinhart.js</file>
+        <file>scripts/transforms/js/unwrap_angle.js</file>
+        <file>scripts/transforms/lua/absolute_value.lua</file>
+        <file>scripts/transforms/lua/accumulator.lua</file>
+        <file>scripts/transforms/lua/adc_to_voltage.lua</file>
+        <file>scripts/transforms/lua/auto_zero.lua</file>
+        <file>scripts/transforms/lua/bit_extract.lua</file>
+        <file>scripts/transforms/lua/celsius_to_fahrenheit.lua</file>
+        <file>scripts/transforms/lua/clamp.lua</file>
+        <file>scripts/transforms/lua/dead_zone.lua</file>
+        <file>scripts/transforms/lua/degrees_to_radians.lua</file>
+        <file>scripts/transforms/lua/ema.lua</file>
+        <file>scripts/transforms/lua/fahrenheit_to_celsius.lua</file>
+        <file>scripts/transforms/lua/high_pass.lua</file>
+        <file>scripts/transforms/lua/integrate_rate.lua</file>
+        <file>scripts/transforms/lua/invert_sign.lua</file>
+        <file>scripts/transforms/lua/kalman_1d.lua</file>
+        <file>scripts/transforms/lua/kelvin_to_celsius.lua</file>
+        <file>scripts/transforms/lua/linear_calibration.lua</file>
+        <file>scripts/transforms/lua/logarithmic_db.lua</file>
+        <file>scripts/transforms/lua/low_pass.lua</file>
+        <file>scripts/transforms/lua/map_range.lua</file>
+        <file>scripts/transforms/lua/median_filter.lua</file>
+        <file>scripts/transforms/lua/moving_average.lua</file>
+        <file>scripts/transforms/lua/polynomial_2nd.lua</file>
+        <file>scripts/transforms/lua/radians_to_degrees.lua</file>
+        <file>scripts/transforms/lua/rate_of_change.lua</file>
+        <file>scripts/transforms/lua/rolling_rms.lua</file>
+        <file>scripts/transforms/lua/round_decimals.lua</file>
+        <file>scripts/transforms/lua/running_max.lua</file>
+        <file>scripts/transforms/lua/running_min.lua</file>
+        <file>scripts/transforms/lua/schmitt_trigger.lua</file>
+        <file>scripts/transforms/lua/slew_rate_limiter.lua</file>
+        <file>scripts/transforms/lua/thermistor_steinhart.lua</file>
+        <file>scripts/transforms/lua/unwrap_angle.lua</file>
+        <file>scripts/transforms/templates.json</file>
         <file>themes/code-editor/default.xml</file>
         <file>themes/code-editor/fluent-dark.xml</file>
         <file>themes/code-editor/fluent-light.xml</file>
@@ -558,10 +632,5 @@
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
-        <file>icons/project-editor/toolbar/add-output-panel.svg</file>
-        <file>icons/dashboard-large/output-panel.svg</file>
-        <file>icons/buttons/dropdown.svg</file>
-        <file>icons/code-editor/test.svg</file>
-        <file>icons/buttons/plus.svg</file>
     </qresource>
 </RCC>

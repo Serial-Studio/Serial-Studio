@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS_DIR = Path(__file__).parent.parent.parent / "app" / "rcc" / "scripts"
+SCRIPTS_DIR = Path(__file__).parent.parent.parent / "app" / "rcc" / "scripts" / "parser" / "js"
 
 
 def run_parser(script_name: str, frame_input) -> list:
@@ -24,7 +24,7 @@ def run_parser(script_name: str, frame_input) -> list:
     any type-specific encoding gymnastics.
 
     Args:
-        script_name: Filename inside app/rcc/scripts/ (e.g. "comma_separated.js")
+        script_name: Filename inside app/rcc/scripts/parser/js/ (e.g. "comma_separated.js")
         frame_input: String or list to pass as the frame argument to parse()
 
     Returns:

@@ -944,7 +944,7 @@ void MQTT::Client::onAuthenticationRequested(const QMqttAuthenticationProperties
  * - The client is in subscriber mode
  * - The topic matches the currently configured subscription topic
  *
- * If all conditions are met, the message payload is passed to IO::Manager
+ * If all conditions are met, the message payload is passed to IO::ConnectionManager
  * for processing via a queued Qt method invocation.
  *
  * @param message The received MQTT message payload.

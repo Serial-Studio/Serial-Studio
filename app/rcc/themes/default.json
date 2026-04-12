@@ -19,7 +19,10 @@
     "zh_CN":"默认",
     "cs_CZ":"Výchozí",
     "uk_UA":"Типова",
-    "hi_IN":"डिफ़ॉल्ट"
+    "hi_IN":"डिफ़ॉल्ट",
+    "nl_NL":"Standaard",
+    "ro_RO":"Implicit",
+    "sv_SE":"Standard"
   },
   "colors":{
     "groupbox_border": "#c2c2c2",
