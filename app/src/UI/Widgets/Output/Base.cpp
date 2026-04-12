@@ -31,6 +31,7 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   , m_maxValue(config.maxValue)
   , m_stepSize(config.stepSize)
   , m_title(config.title)
+  , m_txEncoding(static_cast<SerialStudio::TextEncoding>(config.txEncoding))
   , m_hasFn(false)
 {
   // Inject protocol helper functions before compiling user code
@@ -185,9 +186,10 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
     return {};
   }
 
-  // Convert result to byte array
+  // Convert result to byte array — string results honor the configured
+  // text encoding so non-ASCII characters survive the round-trip
   if (result.isString())
-    return result.toString().toLatin1();
+    return SerialStudio::encodeText(result.toString(), m_txEncoding);
 
   return result.toVariant().toByteArray();
 }

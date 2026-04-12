@@ -122,6 +122,33 @@ public:
   // clang-format on
 
   /**
+   * @enum TextEncoding
+   * @brief Character encoding used when converting between `QString` and raw
+   *        bytes for terminal I/O, action payloads, and output-widget strings.
+   *
+   * The first few entries are handled natively via `QStringConverter`.  The
+   * entries after `System` are multi-byte East-Asian encodings that require
+   * `QTextCodec` from `Qt6::Core5Compat` (already linked by QuaZip).
+   *
+   * Do NOT reorder or remove entries — project files serialize the canonical
+   * name string (see `textEncodingName()`), but settings may still read ints.
+   */
+  enum TextEncoding {
+    EncUtf8 = 0,     /**< UTF-8 (default). */
+    EncUtf16LE,      /**< UTF-16 little-endian. */
+    EncUtf16BE,      /**< UTF-16 big-endian. */
+    EncLatin1,       /**< ISO-8859-1 / Latin-1. */
+    EncSystem,       /**< System locale encoding. */
+    EncGbk,          /**< Simplified Chinese — GBK. */
+    EncGb18030,      /**< Simplified Chinese — GB18030. */
+    EncBig5,         /**< Traditional Chinese — Big5. */
+    EncShiftJis,     /**< Japanese — Shift_JIS. */
+    EncEucJp,        /**< Japanese — EUC-JP. */
+    EncEucKr,        /**< Korean — EUC-KR. */
+  };
+  Q_ENUM(TextEncoding)
+
+  /**
    * @enum OperationMode
    * @brief Specifies the method used to construct a dashboard.
    *
@@ -331,4 +358,15 @@ public:
   Q_INVOKABLE [[nodiscard]] static QByteArray hexToBytes(const QString& data);
   Q_INVOKABLE [[nodiscard]] static QString resolveEscapeSequences(const QString& str);
   Q_INVOKABLE [[nodiscard]] static QString escapeControlCharacters(const QString& str);
+
+  //
+  // Text encoding helpers
+  //
+  // clang-format off
+  Q_INVOKABLE [[nodiscard]] static QStringList textEncodings();
+  Q_INVOKABLE [[nodiscard]] static QString textEncodingName(SerialStudio::TextEncoding enc);
+  Q_INVOKABLE [[nodiscard]] static SerialStudio::TextEncoding textEncodingFromName(const QString& name);
+  [[nodiscard]] static QByteArray encodeText(const QString& text, SerialStudio::TextEncoding enc);
+  [[nodiscard]] static QString decodeText(QByteArrayView bytes, SerialStudio::TextEncoding enc);
+  // clang-format on
 };

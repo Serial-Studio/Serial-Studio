@@ -497,6 +497,34 @@ class SerialStudioClient:
         )
         return int(result.get("language", 0))
 
+    def set_frame_parser_code(
+        self,
+        code: str,
+        language: int = 0,
+        source_id: int = 0,
+    ) -> dict:
+        """
+        Set the frame parser script for a given source, explicitly specifying
+        the language so the project model and the script engine stay in sync.
+
+        New projects default to Lua (see ProjectModel::newJsonFile), so tests
+        that ship JavaScript snippets MUST pass language=0 — otherwise the JS
+        code is persisted but the Lua engine fails to compile it and frame
+        parsing silently produces empty output.
+
+        Args:
+            code: Frame parser script source.
+            language: 0 = JavaScript, 1 = Lua. Defaults to JS.
+            source_id: Logical source identifier (default 0).
+
+        Returns:
+            Dict with {"sourceId": int, "codeLength": int}.
+        """
+        return self.command(
+            "project.parser.setCode",
+            {"code": code, "language": language, "sourceId": source_id},
+        )
+
     def get_dashboard_data(self) -> dict:
         """
         Get current dashboard dataset values.

@@ -469,6 +469,23 @@ Item {
       }
 
       ComboBox {
+        id: encodingCombo
+
+        implicitHeight: 24
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_Console_Handler.encoding)
+            Cpp_Console_Handler.encoding = currentIndex
+        }
+        Layout.maximumWidth: 164
+        opacity: enabled ? 1 : 0.5
+        enabled: Cpp_IO_Manager.readWrite
+        Layout.alignment: Qt.AlignVCenter
+        model: Cpp_Console_Handler.textEncodings
+        currentIndex: Cpp_Console_Handler.encoding
+        displayText: qsTr("Encoding: %1").arg(currentText)
+      }
+
+      ComboBox {
         id: displayModeCombo
 
         implicitHeight: 24

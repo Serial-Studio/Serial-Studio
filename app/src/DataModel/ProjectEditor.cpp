@@ -75,6 +75,7 @@ typedef enum {
   kActionView_EOL,
   kActionView_Data,
   kActionView_Binary,
+  kActionView_TxEncoding,
   kActionView_SourceId,
   kActionView_AutoExecute,
   kActionView_TimerMode,
@@ -114,7 +115,8 @@ typedef enum {
   kOutputWidget_MaxValue,
   kOutputWidget_StepSize,
   kOutputWidget_InitialValue,
-  kOutputWidget_TransmitFunction
+  kOutputWidget_TransmitFunction,
+  kOutputWidget_TxEncoding
 } OutputWidgetItem;
 
 // clang-format on
@@ -1720,7 +1722,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
     dataItem->setData(tr("Hexadecimal payload to send when the action is triggered"),
                       ParameterDescription);
     m_actionModel->appendRow(dataItem);
-  } else {
+  } else {    
     auto* dataItem = new QStandardItem();
     dataItem->setEditable(true);
     dataItem->setData(true, Active);
@@ -1732,6 +1734,18 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
     dataItem->setData(tr("Text payload to send when the action is triggered"),
                       ParameterDescription);
     m_actionModel->appendRow(dataItem);
+
+    auto* encodingItem = new QStandardItem();
+    encodingItem->setEditable(true);
+    encodingItem->setData(true, Active);
+    encodingItem->setData(ComboBox, WidgetType);
+    encodingItem->setData(SerialStudio::textEncodings(), ComboBoxData);
+    encodingItem->setData(action.txEncoding, EditableValue);
+    encodingItem->setData(kActionView_TxEncoding, ParameterType);
+    encodingItem->setData(tr("Text Encoding"), ParameterName);
+    encodingItem->setData(tr("Character encoding used to serialize the text payload"),
+                          ParameterDescription);
+    m_actionModel->appendRow(encodingItem);
   }
 
   int eolIndex = 0;
@@ -2519,6 +2533,9 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
       m_selectedAction.binaryData = value.toBool();
       buildActionModel(m_selectedAction);
       break;
+    case kActionView_TxEncoding:
+      m_selectedAction.txEncoding = value.toInt();
+      break;
     case kActionView_SourceId: {
       const auto& sources = DataModel::ProjectModel::instance().sources();
       const int srcIdx    = value.toInt();
@@ -2995,6 +3012,20 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
     m_outputWidgetModel->appendRow(initItem);
   }
 
+  // Text encoding picker for string results from transmit(value)
+  auto* encodingItem = new QStandardItem();
+  encodingItem->setEditable(true);
+  encodingItem->setData(true, Active);
+  encodingItem->setData(ComboBox, WidgetType);
+  encodingItem->setData(SerialStudio::textEncodings(), ComboBoxData);
+  encodingItem->setData(widget.txEncoding, EditableValue);
+  encodingItem->setData(kOutputWidget_TxEncoding, ParameterType);
+  encodingItem->setData(tr("Text Encoding"), ParameterName);
+  encodingItem->setData(
+    tr("Character encoding used when transmit() returns a string value"),
+    ParameterDescription);
+  m_outputWidgetModel->appendRow(encodingItem);
+
   // Value range section (for sliders/knobs)
   const bool isNumeric = widget.type == DataModel::OutputWidgetType::Slider
                       || widget.type == DataModel::OutputWidgetType::Knob;
@@ -3090,6 +3121,9 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
       break;
     case kOutputWidget_TransmitFunction:
       m_selectedOutputWidget.transmitFunction = value.toString();
+      break;
+    case kOutputWidget_TxEncoding:
+      m_selectedOutputWidget.txEncoding = value.toInt();
       break;
   }
 

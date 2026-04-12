@@ -420,9 +420,6 @@ int API::Server::clientCount() const noexcept
  */
 void API::Server::removeConnection()
 {
-  Q_ASSERT(sender());
-
-  // Schedule removal on the worker thread
   auto* socket = qobject_cast<QTcpSocket*>(sender());
   if (socket) {
     auto* worker = static_cast<ServerWorker*>(m_worker);

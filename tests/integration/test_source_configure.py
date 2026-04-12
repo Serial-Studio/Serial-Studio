@@ -75,6 +75,14 @@ def _send_json_frame(api_client, device_simulator, values: list):
     time.sleep(0.3)
 
 
+def _send_csv_frame(api_client, device_simulator, values: list):
+    """Send a comma-separated frame (Lua-friendly: no JSON decoder needed)."""
+    payload = ",".join(str(v) for v in values)
+    frame = f"/*{payload}*/".encode()
+    device_simulator.send_frame(frame)
+    time.sleep(0.3)
+
+
 def _get_dataset_values(api_client) -> list:
     """Return current dataset values from the first group."""
     data = api_client.get_dashboard_data()
@@ -157,7 +165,9 @@ function parse(frame) {
     return data.values;
 }
 """
-        api_client.command("project.parser.setCode", {"code": js_code})
+        # New projects default to Lua — pass language=0 explicitly so the JS
+        # engine validates and runs the script.
+        api_client.set_frame_parser_code(js_code, language=0)
         time.sleep(0.1)
 
         _connect_network(api_client, device_simulator)
@@ -211,7 +221,8 @@ function parse(frame) {
     return d.values;
 }
 """
-        api_client.command("project.parser.setCode", {"code": js_code})
+        # New projects default to Lua — pass language=0 explicitly.
+        api_client.set_frame_parser_code(js_code, language=0)
         time.sleep(0.1)
 
         api_client.command("io.manager.setBusType", {"busType": 1})
@@ -237,6 +248,89 @@ function parse(frame) {
         )
 
         _send_json_frame(api_client, device_simulator, [1.1, 2.2, 3.3])
+
+        expected = ["1.1", "2.2", "3.3"]
+        values = _wait_for_values(api_client, expected)
+        assert values == expected, f"Expected {expected}, got {values}"
+
+
+# ---------------------------------------------------------------------------
+# Tests: Lua-equivalent end-to-end coverage
+# ---------------------------------------------------------------------------
+#
+# New projects default to Lua, so these tests run the same source configure /
+# setProperty flow as the JS tests above but install a Lua parser that
+# splits a CSV payload (Lua's standard library has no JSON decoder, so the
+# wire format intentionally avoids JSON).
+# ---------------------------------------------------------------------------
+
+
+_LUA_CSV_PARSER = """
+function parse(frame)
+  local result = {}
+  for v in frame:gmatch("[^,]+") do
+    result[#result + 1] = v
+  end
+  return result
+end
+"""
+
+
+class TestSourceConfigureLua:
+    """Lua-equivalent end-to-end coverage for project.source.configure."""
+
+    def test_configure_end_to_end_with_device_lua(
+        self, api_client, device_simulator, clean_state
+    ):
+        """Configure network via source.configure then receive Lua-parsed CSV."""
+        _new_project(api_client)
+
+        api_client.set_frame_parser_code(_LUA_CSV_PARSER, language=1)
+        time.sleep(0.1)
+
+        _connect_network(api_client, device_simulator)
+
+        _send_csv_frame(api_client, device_simulator, [7.7, 8.8, 9.9])
+
+        expected = ["7.7", "8.8", "9.9"]
+        values = _wait_for_values(api_client, expected)
+        assert values == expected, f"Expected {expected}, got {values}"
+
+
+class TestSourceSetPropertyLua:
+    """Lua-equivalent end-to-end coverage for project.source.setProperty."""
+
+    def test_set_property_single_key_end_to_end_lua(
+        self, api_client, device_simulator, clean_state
+    ):
+        """Set network properties one by one, connect, and receive Lua-parsed CSV."""
+        _new_project(api_client)
+
+        api_client.set_frame_parser_code(_LUA_CSV_PARSER, language=1)
+        time.sleep(0.1)
+
+        api_client.command("io.manager.setBusType", {"busType": 1})
+        time.sleep(0.1)
+
+        api_client.source_set_property(0, "address", "127.0.0.1")
+        time.sleep(0.05)
+        api_client.source_set_property(0, "tcpPort", 9000)
+        time.sleep(0.05)
+        api_client.source_set_property(0, "socketTypeIndex", 0)
+        time.sleep(0.05)
+
+        api_client.configure_frame_parser(
+            start_sequence="/*", end_sequence="*/", operation_mode=0, frame_detection=1
+        )
+        api_client.command("project.loadIntoFrameBuilder")
+        time.sleep(0.2)
+
+        api_client.connect_device()
+        assert device_simulator.wait_for_connection(timeout=5.0), (
+            "Serial Studio did not connect after setProperty configuration"
+        )
+
+        _send_csv_frame(api_client, device_simulator, [1.1, 2.2, 3.3])
 
         expected = ["1.1", "2.2", "3.3"]
         values = _wait_for_values(api_client, expected)

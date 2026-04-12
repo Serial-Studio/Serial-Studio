@@ -86,7 +86,7 @@ def test_checksum_validation(
         time.sleep(0.1)
 
     # Set CSV parser
-    api_client.command("project.parser.setCode", {"code": DataGenerator.CSV_PARSER_TEMPLATE})
+    api_client.set_frame_parser_code(DataGenerator.CSV_PARSER_TEMPLATE, language=0)
     time.sleep(0.2)
 
     # Configure frame parser: Set delimiters FIRST, then detection mode
@@ -189,7 +189,7 @@ def test_invalid_checksum_rejection(
         time.sleep(0.1)
 
     # Set CSV parser
-    api_client.command("project.parser.setCode", {"code": DataGenerator.CSV_PARSER_TEMPLATE})
+    api_client.set_frame_parser_code(DataGenerator.CSV_PARSER_TEMPLATE, language=0)
     time.sleep(0.2)
 
     # Configure frame parser: Set delimiters FIRST, then detection mode
@@ -278,6 +278,113 @@ def test_invalid_checksum_rejection(
     assert data["datasetCount"] >= 6, f"Expected datasets, got {data['datasetCount']}"
 
 
+# ---------------------------------------------------------------------------
+# Lua-engine checksum validation
+# ---------------------------------------------------------------------------
+#
+# The same scenario as `test_checksum_validation` but driving the parser with
+# a Lua script. New projects default to Lua, so this also doubles as a check
+# that the Lua engine is wired up correctly end-to-end (FrameParser ->
+# FrameBuilder -> Dashboard). Only a representative subset of checksums is
+# parameterized here to keep the suite runtime manageable; the JS version
+# above already covers every algorithm.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("checksum_type", [
+    ChecksumType.NONE,
+    ChecksumType.CRC8,
+    ChecksumType.CRC16,
+    ChecksumType.CRC32,
+])
+def test_checksum_validation_lua(
+    api_client, device_simulator, clean_state, checksum_type
+):
+    """Lua engine — frames with the configured checksum still build the dashboard."""
+    api_client.create_new_project()
+    time.sleep(0.2)
+    api_client.command("project.group.add", {"title": "Test Group", "widgetType": 0})
+    time.sleep(0.2)
+
+    for i in range(6):
+        api_client.command("project.dataset.add", {"options": 1})
+        time.sleep(0.1)
+
+    # Lua CSV template — set the language explicitly so the project model
+    # and the script engine agree on which engine should validate the code.
+    api_client.set_frame_parser_code(
+        DataGenerator.CSV_PARSER_TEMPLATE_LUA, language=1
+    )
+    time.sleep(0.2)
+
+    checksum_names = {
+        ChecksumType.NONE: "",
+        ChecksumType.CRC8: "CRC-8",
+        ChecksumType.CRC16: "CRC-16",
+        ChecksumType.CRC32: "CRC-32",
+    }
+
+    api_client.command(
+        "project.setTitle",
+        {"title": f"Lua Checksum Validation {checksum_names[checksum_type] or 'None'}"},
+    )
+    time.sleep(0.1)
+
+    api_client.set_operation_mode("project")
+    time.sleep(0.1)
+
+    api_client.configure_frame_parser(
+        start_sequence="/*",
+        end_sequence="*/",
+        checksum_algorithm=checksum_names[checksum_type],
+        operation_mode=0,
+    )
+    time.sleep(0.1)
+
+    api_client.configure_frame_parser(
+        frame_detection=1,
+        operation_mode=0,
+    )
+    time.sleep(0.1)
+
+    result = api_client.command("project.loadIntoFrameBuilder")
+    time.sleep(0.2)
+    assert result["loaded"], "Should have loaded into FrameBuilder"
+
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+
+    frames = []
+    for i in range(10):
+        payload = DataGenerator.generate_csv_frame()
+        frame = DataGenerator.wrap_frame(
+            payload,
+            start_delimiter="/*",
+            end_delimiter="*/",
+            checksum_type=checksum_type,
+            mode="project",
+        )
+        frames.append(frame)
+
+    api_client.connect_device()
+    assert device_simulator.wait_for_connection(timeout=5.0), "Device did not connect"
+
+    device_simulator.send_frames(frames, interval_seconds=0.1)
+    time.sleep(1.5)
+
+    status = api_client.command("io.manager.getStatus")
+    assert status["isConnected"], "Device should be connected"
+
+    # Sanity-check the language survived the round trip
+    assert api_client.get_frame_parser_language(0) == 1, (
+        "Source 0 should be reporting Lua after explicit setCode"
+    )
+
+    widget_count = _wait_for_dashboard_widgets(api_client, minimum=6)
+    assert widget_count >= 6, f"Expected widgets, got {widget_count}"
+    data = api_client.get_dashboard_data()
+    assert data["datasetCount"] >= 6, f"Expected datasets, got {data['datasetCount']}"
+
+
 def test_json_frame_parsing(api_client, device_simulator, clean_state):
     """Test parsing of JSON-formatted frames."""
     # Create new project and configure for ProjectFile mode
@@ -306,7 +413,7 @@ def test_json_frame_parsing(api_client, device_simulator, clean_state):
   }
   return [];
 }"""
-    api_client.command("project.parser.setCode", {"code": parser_code})
+    api_client.set_frame_parser_code(parser_code, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode
@@ -387,7 +494,7 @@ def test_csv_frame_parsing(api_client, device_simulator, clean_state):
 
     # Set JavaScript parser for comma delimiter
     parser_code = "function parse(frame) { return frame.split(','); }"
-    api_client.command("project.parser.setCode", {"code": parser_code})
+    api_client.set_frame_parser_code(parser_code, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode
@@ -460,7 +567,7 @@ def test_csv_delimiter_resilience(api_client, device_simulator, clean_state, del
     # Set JavaScript parser for the specified delimiter
     delimiter_escaped = delimiter.replace("\t", "\\t")
     parser_code = f"function parse(frame) {{ return frame.split('{delimiter_escaped}'); }}"
-    api_client.command("project.parser.setCode", {"code": parser_code})
+    api_client.set_frame_parser_code(parser_code, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode
@@ -527,7 +634,7 @@ def test_frame_delimiter_line_terminators(api_client, device_simulator, clean_st
         time.sleep(0.1)
 
     # Set JavaScript parser for CSV frames
-    api_client.command("project.parser.setCode", {"code": DataGenerator.CSV_PARSER_TEMPLATE})
+    api_client.set_frame_parser_code(DataGenerator.CSV_PARSER_TEMPLATE, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode
@@ -600,7 +707,7 @@ def test_frame_end_delimiters(api_client, device_simulator, clean_state, end_del
     time.sleep(0.2)
 
     # Explicitly set the parser code (load_project_from_json might not apply it)
-    api_client.command("project.parser.setCode", {"code": DataGenerator.CSV_PARSER_TEMPLATE})
+    api_client.set_frame_parser_code(DataGenerator.CSV_PARSER_TEMPLATE, language=0)
     time.sleep(0.2)
 
     api_client.configure_frame_parser(
@@ -683,7 +790,7 @@ def test_frame_start_end_delimiters(api_client, device_simulator, clean_state, s
     time.sleep(0.2)
 
     # Explicitly set the parser code (load_project_from_json might not apply it)
-    api_client.command("project.parser.setCode", {"code": DataGenerator.CSV_PARSER_TEMPLATE})
+    api_client.set_frame_parser_code(DataGenerator.CSV_PARSER_TEMPLATE, language=0)
     time.sleep(0.2)
 
     api_client.configure_frame_parser(
@@ -759,7 +866,7 @@ def test_high_frequency_frames(api_client, device_simulator, clean_state):
   }
   return [];
 }"""
-    api_client.command("project.parser.setCode", {"code": parser_code})
+    api_client.set_frame_parser_code(parser_code, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode
@@ -834,7 +941,7 @@ def test_empty_frame_handling(api_client, device_simulator, clean_state):
   }
   return [];
 }"""
-    api_client.command("project.parser.setCode", {"code": parser_code})
+    api_client.set_frame_parser_code(parser_code, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode
@@ -913,7 +1020,7 @@ def test_malformed_json_handling(api_client, device_simulator, clean_state):
   }
   return [];
 }"""
-    api_client.command("project.parser.setCode", {"code": parser_code})
+    api_client.set_frame_parser_code(parser_code, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode
@@ -999,7 +1106,7 @@ def test_large_frame_handling(api_client, device_simulator, clean_state):
   }
   return [];
 }"""
-    api_client.command("project.parser.setCode", {"code": parser_code})
+    api_client.set_frame_parser_code(parser_code, language=0)
     time.sleep(0.2)
 
     # Configure frame parser for ProjectFile mode

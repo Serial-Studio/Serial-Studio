@@ -14,12 +14,12 @@ You can switch between languages at any time using the **Language** dropdown in 
 
 | | Lua | JavaScript |
 |---|---|---|
-| **Engine** | Lua 5.4 (embedded) | QJSEngine (ECMAScript 7 / ES2016) |
-| **Performance** | Faster — stack-based C API, no boxing | Slower — QJSValue boxing overhead |
+| **Version** | Lua 5.4 | ECMAScript 7 / ES2016 |
+| **Performance** | Faster, lower overhead | Slower |
 | **Integer support** | Native 64-bit integers | Numbers are IEEE 754 doubles only |
 | **Timeout** | 1 second per call | 1 second per call |
-| **Isolation** | One lua_State per source | One QJSEngine per source |
-| **Sandboxing** | base, table, string, math, utf8 only | Console + GC extensions only |
+| **Isolation** | Separate engine per source | Separate engine per source |
+| **Sandboxing** | `base`, `table`, `string`, `math`, `utf8` libraries | Console and GC extensions |
 
 ## Parser Pipeline
 

@@ -92,15 +92,22 @@ void DataModel::read_io_settings(QByteArray& frameStart,
 
 QByteArray DataModel::get_tx_bytes(const Action& action)
 {
-  // Convert action payload to bytes (binary hex or escaped UTF-8)
+  // Convert action payload to bytes: binary hex or escaped text in the
+  // user-selected encoding (defaults to UTF-8 for back-compat)
+  const auto enc = static_cast<SerialStudio::TextEncoding>(action.txEncoding);
+
   QByteArray b;
   if (action.binaryData)
     b = SerialStudio::hexToBytes(action.txData);
   else
-    b = SerialStudio::resolveEscapeSequences(action.txData).toUtf8();
+    b = SerialStudio::encodeText(SerialStudio::resolveEscapeSequences(action.txData), enc);
 
-  if (!action.eolSequence.isEmpty())
-    b.append(SerialStudio::resolveEscapeSequences(action.eolSequence).toUtf8());
+  // Append the EOL sequence using the same encoding so multi-byte CR/LF
+  // representations line up with the rest of the payload
+  if (!action.eolSequence.isEmpty()) {
+    const auto eol = SerialStudio::resolveEscapeSequences(action.eolSequence);
+    b.append(action.binaryData ? eol.toUtf8() : SerialStudio::encodeText(eol, enc));
+  }
 
   return b;
 }

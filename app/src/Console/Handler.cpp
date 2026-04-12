@@ -48,6 +48,7 @@ Console::Handler::Handler()
   : m_dataMode(DataMode::DataUTF8)
   , m_lineEnding(LineEnding::NoLineEnding)
   , m_displayMode(DisplayMode::DisplayPlainText)
+  , m_encoding(SerialStudio::EncUtf8)
   , m_historyItem(0)
   , m_checksumMethod(0)
   , m_echo(true)
@@ -75,6 +76,10 @@ Console::Handler::Handler()
   m_dataMode             = static_cast<DataMode>(m_settings.value("Console/DataMode", 0).toInt());
   m_lineEnding  = static_cast<LineEnding>(m_settings.value("Console/LineEnding", 0).toInt());
   m_displayMode = static_cast<DisplayMode>(m_settings.value("Console/DisplayMode", 0).toInt());
+
+  const int encInt = m_settings.value("Console/Encoding", 0).toInt();
+  if (encInt >= 0 && encInt <= SerialStudio::EncEucKr)
+    m_encoding = static_cast<SerialStudio::TextEncoding>(encInt);
 
   if (m_fontSize < 6)
     m_fontSize = 6;
@@ -212,6 +217,17 @@ Console::Handler::DisplayMode Console::Handler::displayMode() const
 }
 
 /**
+ * @brief Returns the selected text encoding as an int (TextEncoding enum).
+ *
+ * Returning int instead of the enum keeps the property binding trivial in
+ * QML, where the ComboBox `currentIndex` is already an int.
+ */
+int Console::Handler::encoding() const
+{
+  return static_cast<int>(m_encoding);
+}
+
+/**
  * Returns the current command history string selected by the user.
  *
  * @note the user can navigate through sent commands using the Up/Down keys on
@@ -267,6 +283,18 @@ QStringList Console::Handler::displayModes() const
   list.append(tr("Plain Text"));
   list.append(tr("Hexadecimal"));
   return list;
+}
+
+/**
+ * @brief Returns the list of supported text encodings for QML.
+ *
+ * Delegates to `SerialStudio::textEncodings()` so the list stays in sync with
+ * the central `TextEncoding` enum.  Re-emitted when the language changes so
+ * translated labels refresh automatically.
+ */
+QStringList Console::Handler::textEncodings() const
+{
+  return SerialStudio::textEncodings();
 }
 
 /**
@@ -545,12 +573,12 @@ void Console::Handler::send(const QString& data)
   if (!data.isEmpty())
     addToHistory(data);
 
-  // Encode data according to current mode
+  // Encode data according to current mode and user-selected text encoding
   QByteArray bin;
   if (dataMode() == DataMode::DataHexadecimal)
     bin = SerialStudio::hexToBytes(data);
   else
-    bin = SerialStudio::resolveEscapeSequences(data).toUtf8();
+    bin = SerialStudio::encodeText(SerialStudio::resolveEscapeSequences(data), m_encoding);
 
   switch (lineEnding()) {
     case LineEnding::NoLineEnding:
@@ -739,6 +767,30 @@ void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
     m_settings.setValue("Console/DisplayMode", static_cast<int>(m_displayMode));
     Q_EMIT displayModeChanged();
   }
+}
+
+/**
+ * @brief Changes the text encoding used by send() and plainTextStr().
+ *
+ * The incoming value comes from a QML ComboBox `currentIndex`, so it is
+ * already a valid `SerialStudio::TextEncoding` index — we clamp defensively
+ * and guard-return on no-op changes.
+ */
+void Console::Handler::setEncoding(const int encoding)
+{
+  // Clamp the incoming int to a valid TextEncoding value
+  if (encoding < 0 || encoding > SerialStudio::EncEucKr)
+    return;
+
+  // Guard-return if the encoding is unchanged
+  const auto newEncoding = static_cast<SerialStudio::TextEncoding>(encoding);
+  if (m_encoding == newEncoding)
+    return;
+
+  // Persist the new encoding and notify QML
+  m_encoding = newEncoding;
+  m_settings.setValue("Console/Encoding", static_cast<int>(m_encoding));
+  Q_EMIT encodingChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1198,8 +1250,8 @@ QString Console::Handler::dataToString(QByteArrayView data)
  */
 QString Console::Handler::plainTextStr(QByteArrayView data)
 {
-  // Decode raw bytes to UTF-8
-  QString utf8Data = QString::fromUtf8(data);
+  // Decode raw bytes using the user-selected text encoding
+  QString utf8Data = SerialStudio::decodeText(data, m_encoding);
 
   if (vt100Emulation())
     return utf8Data;

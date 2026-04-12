@@ -30,6 +30,7 @@
 
 #include "IO/CircularBuffer.h"
 #include "IO/HAL_Driver.h"
+#include "SerialStudio.h"
 
 namespace Console {
 /**
@@ -80,6 +81,13 @@ class Handler : public QObject {
              READ displayMode
              WRITE setDisplayMode
              NOTIFY displayModeChanged)
+  Q_PROPERTY(int encoding
+             READ encoding
+             WRITE setEncoding
+             NOTIFY encodingChanged)
+  Q_PROPERTY(QStringList textEncodings
+             READ textEncodings
+             NOTIFY languageChanged)
   Q_PROPERTY(QString currentHistoryString
              READ currentHistoryString
              NOTIFY historyItemChanged)
@@ -140,6 +148,7 @@ signals:
   void fontChanged();
   void fontSizeChanged();
   void dataModeChanged();
+  void encodingChanged();
   void languageChanged();
   void ansiColorsChanged();
   void lineEndingChanged();
@@ -198,12 +207,14 @@ public:
   [[nodiscard]] DataMode dataMode() const;
   [[nodiscard]] LineEnding lineEnding() const;
   [[nodiscard]] DisplayMode displayMode() const;
+  [[nodiscard]] int encoding() const;
   [[nodiscard]] QString currentHistoryString() const;
 
   [[nodiscard]] QStringList dataModes() const;
   [[nodiscard]] QStringList lineEndings() const;
   [[nodiscard]] QStringList displayModes() const;
   [[nodiscard]] QStringList checksumMethods() const;
+  [[nodiscard]] QStringList textEncodings() const;
 
   [[nodiscard]] QFont font() const;
   [[nodiscard]] int fontSize() const;
@@ -239,6 +250,7 @@ public slots:
   void setDataMode(const Console::Handler::DataMode& mode);
   void setLineEnding(const Console::Handler::LineEnding& mode);
   void setDisplayMode(const Console::Handler::DisplayMode& mode);
+  void setEncoding(const int encoding);
   void append(const QString& str, const bool addTimestamp = false);
 
   void setCurrentDeviceId(int deviceId);
@@ -272,6 +284,7 @@ private:
   DataMode m_dataMode;
   LineEnding m_lineEnding;
   DisplayMode m_displayMode;
+  SerialStudio::TextEncoding m_encoding;
 
   int m_historyItem;
   int m_checksumMethod;

@@ -11,49 +11,37 @@ The following diagram shows the complete data flow from hardware device to rende
 ```mermaid
 flowchart TD
     A["Device"] -->|bytes| B["Driver"]
-    B --> C["Buffer · SPSC"]
+    B --> C["Input Buffer"]
     C --> D["Frame Reader"]
     D --> E["Frame Builder"]
-    E -->|"const Frame&"| F["Dashboard"]
+    E --> F["Dashboard"]
     E -->|export| G["CSV · MDF4 · API"]
 ```
 
 ## Stage 1: Device and Driver
 
-Your device sends raw bytes over one of nine supported transports: UART, TCP/UDP, Bluetooth LE, Audio Input, Modbus RTU/TCP, CAN Bus, USB (libusb), HID (hidapi), or Process I/O.
+Your device sends raw bytes over one of nine supported transports: UART, TCP/UDP, Bluetooth LE, Audio Input, Modbus RTU/TCP, CAN Bus, USB, HID, or Process I/O.
 
-The selected driver receives bytes from the operating system and forwards them to `DeviceManager`. No parsing happens here — the driver's only job is raw byte transport. Each driver type handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on. Some drivers (HID, USB) run their read loop on a dedicated thread; most rely on Qt's socket-notifier-driven reads on the main thread.
+The selected driver receives bytes from the operating system and hands them off to the rest of the pipeline. No parsing happens here — the driver's only job is raw byte transport. Each driver type handles its own protocol: serial framing, TCP streams, BLE characteristic notifications, audio sample buffers, and so on.
 
-Drivers are not singletons. `ConnectionManager` holds one UI-configuration instance per driver type (used by the QML interface), while `DeviceManager` creates a fresh live instance for each active connection.
+## Stage 2: Input Buffer
 
-## Stage 2: Circular Buffer
-
-A 1 MB lock-free single-producer single-consumer (SPSC) ring buffer sits between the driver and the frame reader's parsing stage.
-
-- The producer side is whichever thread the driver's `dataReceived` signal lands on.
-- The consumer side is the frame reader, running on the main thread.
-- No locks, no contention, no blocking.
-
-The SPSC design is a hard architectural constraint. There is exactly one producer and one consumer. Adding a second producer or consumer would violate the lock-free guarantee and corrupt data.
-
-The buffer handles burst data without dropping bytes. If data arrives faster than it can be consumed, an overflow counter increments so you can detect the condition.
+A 1 MB input buffer sits between the driver and the frame reader. It absorbs bursts of incoming data so that momentary spikes in data rate don't cause dropped bytes. If data arrives faster than Serial Studio can consume it for a sustained period, an overflow counter increments so you can detect the condition.
 
 ## Stage 3: Frame Reader
 
-The frame reader runs on the main thread. Its job is to scan the circular buffer for frame boundaries and extract complete frames. Delimiter detection uses the KMP (Knuth-Morris-Pratt) string matching algorithm for O(n + m) performance, where n is the buffer size and m is the delimiter length. Four detection modes are available:
+The frame reader scans the input buffer for frame boundaries and extracts complete frames. Four detection modes are available:
 
 - **End Delimiter Only**: finds the end marker and extracts everything before it.
 - **Start and End Delimiter**: finds the start marker, then the end marker, and extracts between them.
 - **Start Delimiter Only**: frame boundaries fall between consecutive start markers.
 - **No Delimiters**: passes all data through. Use this with a frame parser script (Lua or JavaScript) for length-prefixed or self-delimiting protocols.
 
-After extraction, the frame reader optionally validates a checksum (CRC-8, CRC-16, or CRC-32). Valid frames are placed into a lock-free queue with a capacity of 4096 entries. A single `readyRead` signal notifies the consumer when at least one new frame is available — not one signal per frame.
-
-The frame reader is configured once at construction. If configuration changes (different delimiters, different checksum), the entire frame reader is destroyed and recreated via `ConnectionManager::resetFrameReader()`. Mutexes are never used.
+After extraction, the frame reader optionally validates a checksum (CRC-8, CRC-16, or CRC-32). Valid frames are handed to the next stage.
 
 ## Stage 4: Frame Builder
 
-The frame builder runs on the main thread. It dequeues frames from the lock-free queue and processes them according to the current operation mode.
+The frame builder takes each complete frame and turns it into a structured record of groups and datasets, according to the current operation mode.
 
 ### Quick Plot Mode
 
@@ -67,67 +55,33 @@ No project file is needed. This mode is designed for rapid prototyping with CSV-
 ### Device Sends JSON Mode
 
 1. Parse the JSON object directly (delimiters are fixed to `/*` and `*/`).
-2. Build the Frame structure from the groups and datasets defined in the JSON.
+2. Build the frame from the groups and datasets defined in the JSON payload.
 3. No frame parser script is involved.
 
 ### Project File Mode
 
 1. Apply the configured decoder (Plain Text, Hexadecimal, Base64, or Binary Direct) to convert raw bytes into a parse-ready format.
-2. Call the `parse(frame)` function via the configured scripting engine (Lua 5.4 or QJSEngine).
-3. The function returns a table/array of values (or a 2D table/array for multi-frame output).
+2. Call the `parse(frame)` function in your chosen scripting engine (Lua 5.4 or JavaScript).
+3. The function returns a list of values (or a 2D list for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
-5. For each dataset with a `transform(value)` function, apply the transform to convert raw values to engineering units (calibration, filtering, unit conversion). See [Dataset Value Transforms](Dataset-Transforms.md).
-6. Build the Frame object with populated dataset values.
+5. For each dataset with a `transform(value)` function, apply the transform to convert raw values into engineering units (calibration, filtering, unit conversion). See [Dataset Value Transforms](Dataset-Transforms.md).
+6. Build the final frame with the populated dataset values.
 
-### Multi-Source Routing
+### Multi-Source Projects
 
-In multi-device projects, each device (source) has its own frame reader. The frame builder routes data by source ID through `hotpathRxSourceFrame(sourceId, data)`. Each source maintains its own per-source Frame and its own isolated script engine instance. Source frames are published independently to the dashboard.
+In multi-device projects, each device (source) is parsed independently, with its own frame reader and its own isolated script engine. Source frames are published to the dashboard independently, so one noisy source can never block or corrupt another.
 
 ## Stage 5: Dashboard
 
-The dashboard receives a `const Frame&` — a read-only reference. No copying. No heap allocation. This is the critical performance constraint that enables Serial Studio to sustain data rates of 256 KHz and above.
+The dashboard updates all active widgets with the new values as they arrive. Time-series widgets (plots, FFT, GPS trajectory) append new samples to a fixed-size history and automatically discard the oldest samples once the history is full.
 
-The dashboard updates all active widgets with new values. The UI refresh rate is capped at 20 Hz for optimal performance. Time-series data (plots, FFT, GPS trajectory) is appended to fixed-capacity circular buffers that automatically discard the oldest samples.
-
-All dashboard operations run on the main thread. Widget rendering is handled by Qt Quick's scene graph.
+Widget rendering is capped to a configurable refresh rate. The default is **60 Hz**, and you can change it in **Settings → UI Refresh Rate** to any value between 1 and 240 Hz. Higher rates produce smoother animation but consume more CPU and GPU; lower rates are useful on laptops, older machines, or when you want to free resources for recording. Note that incoming data is **not** sampled or discarded at this rate — every frame is still processed and exported. Only the visual refresh of the widgets is capped.
 
 ## Stage 6: Export (Optional Parallel Path)
 
-The export path is the only place where a heap allocation occurs per frame. When CSV export, MDF4 export, or the API server is active:
+When CSV export, MDF4 export, or the API server is active, every frame is additionally handed to the export workers. Each export target (CSV file, MDF4 file, API clients) writes data in the background so disk I/O and network traffic never block the dashboard or slow down the data pipeline.
 
-1. A single `TimestampedFrame` is created with a nanosecond timestamp (one `make_shared` call).
-2. The shared pointer is enqueued into a lock-free queue for each active export worker.
-3. Worker threads dequeue and process frames in batches.
-
-Export worker configuration (CSV example):
-- Queue capacity: 8192 frames
-- Flush threshold: 1024 frames
-- Timer interval: 1000 ms (flush at least once per second)
-
-The API server on port 7777 serializes frames to JSON and broadcasts to connected clients using MCP (JSON-RPC 2.0) or the legacy protocol.
-
-## Performance Characteristics
-
-| Operation | Complexity |
-|-----------|-----------|
-| Circular buffer append | O(1) amortized |
-| KMP delimiter search | O(n + m), n = buffer size, m = delimiter length |
-| Script parse (Lua/JS) | O(n) interpreter time per frame |
-| Dashboard update | O(d), d = total datasets (zero-copy) |
-| Export enqueue | O(1) lock-free |
-
-Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` per frame on the export path only when export is active.
-
-## Threading Summary
-
-| Component | Thread | Constraint |
-|-----------|--------|-----------|
-| Driver | Driver-specific (main or dedicated read thread) | One driver per DeviceManager |
-| Circular Buffer | Shared (write: driver side, read: main) | SPSC only, never MPMC |
-| Frame Reader | Main thread | Configured once, then immutable. Recreate on config change via `ConnectionManager::resetFrameReader()`. |
-| Frame Builder | Main thread | Dequeues from lock-free queue |
-| Dashboard | Main thread | Zero-copy `const Frame&` only |
-| CSV/MDF4/API Export | Worker threads | Lock-free enqueue from main, batch dequeue on worker |
+The API server on port 7777 serializes frames to JSON and broadcasts to connected clients using MCP (JSON-RPC 2.0) or the legacy protocol. See the [API Reference](API-Reference.md) for details.
 
 ## Troubleshooting Data Flow
 
@@ -141,7 +95,11 @@ Total hotpath memory allocations: zero on the dashboard path. One `shared_ptr` p
 
 **Dashboard not updating**: Check that dataset Frame Index values in the project file match the positions in your parsed data array. Index 1 maps to the first element returned by `parse()`.
 
-**High CPU with no dashboard**: The frame reader may be finding too many false frames. Tighten your delimiters or add checksum validation.
+**High CPU with no dashboard**: The frame reader may be matching too many false frames. Tighten your delimiters or add checksum validation.
+
+**Choppy dashboard animation**: Raise the UI refresh rate in **Settings → UI Refresh Rate**. The default of 60 Hz is a good balance; 120 Hz or higher gives smoother motion at the cost of more CPU.
+
+**High CPU from the dashboard itself**: Lower the UI refresh rate. Dropping from 60 Hz to 30 Hz roughly halves the cost of widget redraws without losing any incoming data.
 
 **Export files empty**: Export workers only write when a device is connected. Check that the export was started before disconnecting.
 

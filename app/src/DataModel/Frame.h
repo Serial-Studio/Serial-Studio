@@ -41,6 +41,7 @@ inline constexpr auto Icon          = "icon";
 inline constexpr auto Title         = "title";
 inline constexpr auto TxData        = "txData";
 inline constexpr auto Binary        = "binary";
+inline constexpr auto TxEncoding    = "txEncoding";
 inline constexpr auto TimerMode     = "timerMode";
 inline constexpr auto RepeatCount   = "repeatCount";
 inline constexpr auto TimerInterval = "timerIntervalMs";
@@ -93,6 +94,7 @@ inline constexpr auto OutputOffLabel     = "offLabel";
 inline constexpr auto OutputMonoIcon     = "monoIcon";
 inline constexpr auto OutputColumns      = "outputColumns";
 inline constexpr auto TransmitFunction   = "transmitFunction";
+inline constexpr auto OutputTxEncoding   = "outputTxEncoding";
 
 inline constexpr auto GroupId   = "groupId";
 inline constexpr auto GroupType = "groupType";
@@ -181,6 +183,7 @@ struct alignas(8) Action {
   int sourceId              = 0;                ///< Target source/device ID
   int repeatCount           = 3;                ///< Times to send in RepeatNTimes mode
   int timerIntervalMs       = 100;              ///< Timer interval in ms
+  int txEncoding            = 0;                ///< SerialStudio::TextEncoding for non-binary txData
   TimerMode timerMode       = TimerMode::Off;   ///< Timer behavior mode
   bool binaryData           = false;            ///< If true, txData is binary
   bool autoExecuteOnConnect = false;            ///< Auto execute on connect
@@ -233,6 +236,7 @@ struct alignas(8) OutputWidget {
   int widgetId          = -1;
   int groupId           = -1;
   int sourceId          = 0;
+  int txEncoding        = 0;  ///< SerialStudio::TextEncoding for string results from transmit(value)
   OutputWidgetType type = OutputWidgetType::Button;
   bool monoIcon         = false;
   double minValue       = 0;
@@ -265,6 +269,7 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
   if (w.monoIcon)
     obj.insert(Keys::OutputMonoIcon, true);
   obj.insert(Keys::TransmitFunction, w.transmitFunction);
+  obj.insert(Keys::OutputTxEncoding, w.txEncoding);
   return obj;
 }
 
@@ -291,6 +296,7 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
   w.initialValue     = ss_jsr(obj, Keys::OutputInitialValue, 0).toDouble();
   w.monoIcon         = ss_jsr(obj, Keys::OutputMonoIcon, false).toBool();
   w.transmitFunction = obj.value(Keys::TransmitFunction).toString();
+  w.txEncoding       = ss_jsr(obj, Keys::OutputTxEncoding, 0).toInt();
 
   return !w.title.isEmpty();
 }
@@ -741,6 +747,7 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::EOL, a.eolSequence);
   obj.insert(Keys::Binary, a.binaryData);
   obj.insert(Keys::SourceId, a.sourceId);
+  obj.insert(Keys::TxEncoding, a.txEncoding);  // int (TextEncoding enum)
   obj.insert(Keys::RepeatCount, a.repeatCount);
   obj.insert(Keys::TimerInterval, a.timerIntervalMs);
   obj.insert(Keys::AutoExecute, a.autoExecuteOnConnect);
@@ -935,6 +942,7 @@ void read_io_settings(QByteArray& frameStart,
   a.sourceId             = ss_jsr(obj, Keys::SourceId, 0).toInt();
   a.icon                 = ss_jsr(obj, Keys::Icon, "").toString().simplified();
   a.title                = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  a.txEncoding           = ss_jsr(obj, Keys::TxEncoding, 0).toInt();
   a.repeatCount          = ss_jsr(obj, Keys::RepeatCount, 3).toInt();
   a.timerIntervalMs      = ss_jsr(obj, Keys::TimerInterval, 100).toInt();
   a.autoExecuteOnConnect = ss_jsr(obj, Keys::AutoExecute, false).toBool();

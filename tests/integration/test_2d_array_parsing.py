@@ -70,8 +70,23 @@ def _create_project_with_datasets(api_client, dataset_count: int):
 
 
 def _configure_js_parser(api_client, js_code: str):
-    """Configure JavaScript parser code."""
-    api_client.command("project.parser.setCode", {"code": js_code})
+    """Configure JavaScript parser code.
+
+    New projects default to the Lua engine, so the language is passed
+    explicitly here — otherwise the JS source is persisted but the Lua
+    engine fails to compile it and parsing silently produces no output.
+    """
+    api_client.set_frame_parser_code(js_code, language=0)
+    time.sleep(0.2)
+
+
+def _configure_lua_parser(api_client, lua_code: str):
+    """Configure Lua parser code.
+
+    Sets the source language to Lua before installing the script so the
+    correct engine is used to validate and run it.
+    """
+    api_client.set_frame_parser_code(lua_code, language=1)
     time.sleep(0.2)
 
 
@@ -362,8 +377,10 @@ function parse(frame) {
         """Test CSV mode still works as before (no parseMultiFrame)."""
         _create_project_with_datasets(api_client, 3)
 
-        api_client.command(
-            "project.parser.setCode", {"code": DataGenerator.CSV_PARSER_TEMPLATE}
+        # Project default is Lua; the template is JS, so set the language
+        # explicitly so the right engine validates and runs the script.
+        api_client.set_frame_parser_code(
+            DataGenerator.CSV_PARSER_TEMPLATE, language=0
         )
         time.sleep(0.2)
 
@@ -376,3 +393,185 @@ function parse(frame) {
 
         received = _wait_for_any_frame(api_client)
         assert received, "CSV frame should populate at least one dataset value"
+
+
+# ---------------------------------------------------------------------------
+# Lua-equivalent coverage
+# ---------------------------------------------------------------------------
+#
+# The Lua engine in Serial Studio loads only the standard libraries
+# (`_G`, `string`, `table`, `math`, `utf8`) — no JSON decoder. To exercise
+# the same multi-frame parsing code paths under Lua, the payloads below use
+# a string format Lua can split with `string.gmatch`:
+#
+#   - rows separated by ';'
+#   - columns within a row separated by ','
+#
+# The Lua `parse(frame)` returns nested tables (one per row), which the
+# C++ multi-frame parser expands into individual frames just like the JS
+# tests above.
+# ---------------------------------------------------------------------------
+
+
+_LUA_2D_PARSER = """
+function parse(frame)
+  local rows = {}
+  for row_str in frame:gmatch("[^;]+") do
+    local cols = {}
+    for v in row_str:gmatch("[^,]+") do
+      cols[#cols + 1] = v
+    end
+    rows[#rows + 1] = cols
+  end
+  return rows
+end
+"""
+
+
+_LUA_MIXED_PARSER = """
+-- Format: "scalar1|scalar2|v1,v2,v3"
+-- Returns: { scalar1, scalar2, { v1, v2, v3 } }
+function parse(frame)
+  local fields = {}
+  for f in frame:gmatch("[^|]+") do
+    fields[#fields + 1] = f
+  end
+  local result = {}
+  for i, f in ipairs(fields) do
+    if f:find(",", 1, true) then
+      local vec = {}
+      for v in f:gmatch("[^,]+") do
+        vec[#vec + 1] = v
+      end
+      result[i] = vec
+    else
+      result[i] = f
+    end
+  end
+  return result
+end
+"""
+
+
+class TestBasic2DArrayParsingLua:
+    """Lua engine — pure 2D array parsing.
+
+    Mirrors `TestBasic2DArrayParsing` so the multi-frame code path is
+    exercised under both script engines.
+    """
+
+    def test_2d_array_generates_multiple_frames_lua(
+        self, api_client, device_simulator, clean_state
+    ):
+        """Lua: '1.1,2.2,3.3;4.4,5.5,6.6' produces two frames."""
+        _create_project_with_datasets(api_client, 3)
+        _configure_lua_parser(api_client, _LUA_2D_PARSER)
+        _connect_device(api_client, device_simulator)
+
+        payload = "1.1,2.2,3.3;4.4,5.5,6.6"
+        frame = f"/*{payload}*/"
+        device_simulator.send_frame(frame.encode())
+        time.sleep(0.3)
+
+        expected = ["4.4", "5.5", "6.6"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"Expected last-frame values {expected}, got {values}"
+        )
+
+    def test_2d_array_with_different_row_lengths_lua(
+        self, api_client, device_simulator, clean_state
+    ):
+        """Lua: rows of different widths still flow through parseMultiFrame."""
+        _create_project_with_datasets(api_client, 3)
+        _configure_lua_parser(api_client, _LUA_2D_PARSER)
+        _connect_device(api_client, device_simulator)
+
+        payload = "1.1,2.2;3.3,4.4,5.5;6.6"
+        frame = f"/*{payload}*/"
+        device_simulator.send_frame(frame.encode())
+        time.sleep(0.3)
+
+        received = _wait_for_any_frame(api_client)
+        assert received, "Should have received at least one frame from the 2D array"
+
+        values = _get_dataset_values(api_client)
+        assert len(values) >= 1 and values[0] == "6.6", (
+            f"First dataset should reflect last-row value 6.6, got {values}"
+        )
+
+
+class TestMixedScalarVectorParsingLua:
+    """Lua engine — mixed scalar/vector parsing."""
+
+    def test_mixed_scalar_single_vector_lua(
+        self, api_client, device_simulator, clean_state
+    ):
+        """Lua: '25.5|60|1.1,2.2,3.3' generates 3 frames (last = [25.5, 60, 3.3])."""
+        _create_project_with_datasets(api_client, 3)
+        _configure_lua_parser(api_client, _LUA_MIXED_PARSER)
+        _connect_device(api_client, device_simulator)
+
+        payload = "25.5|60|1.1,2.2,3.3"
+        frame = f"/*{payload}*/"
+        device_simulator.send_frame(frame.encode())
+        time.sleep(0.3)
+
+        expected = ["25.5", "60", "3.3"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"Expected last-frame values {expected}, got {values}"
+        )
+
+
+class TestBLEUseCaseSimulationLua:
+    """Lua engine — large batched-sample BLE-style payload."""
+
+    def test_large_ble_packet_120_samples_lua(
+        self, api_client, device_simulator, clean_state
+    ):
+        """Lua: humidity|temp|<120 accel samples>."""
+        _create_project_with_datasets(api_client, 3)
+        _configure_lua_parser(api_client, _LUA_MIXED_PARSER)
+        _connect_device(api_client, device_simulator)
+
+        accel = ",".join(f"{i * 0.1:.1f}" for i in range(120))
+        payload = f"45.2|22.5|{accel}"
+        frame = f"/*{payload}*/"
+
+        start_time = time.time()
+        device_simulator.send_frame(frame.encode())
+        time.sleep(0.3)
+        processing_time = time.time() - start_time
+
+        expected = ["45.2", "22.5", "11.9"]
+        values = _wait_for_dataset_values(api_client, expected, timeout=3.0)
+        assert values == expected, (
+            f"Expected BLE last-frame values {expected}, got {values}"
+        )
+        assert processing_time < 1.0, (
+            f"Processing should complete within 1 second, took {processing_time:.3f}s"
+        )
+
+
+class TestBackwardCompatibilityLua:
+    """Lua engine — single-frame compatibility coverage."""
+
+    def test_1d_array_generates_single_frame_lua(
+        self, api_client, device_simulator, clean_state
+    ):
+        """Lua: a single CSV row produces one frame (no multi-frame expansion)."""
+        _create_project_with_datasets(api_client, 3)
+        _configure_lua_parser(api_client, DataGenerator.CSV_PARSER_TEMPLATE_LUA)
+        _connect_device(api_client, device_simulator)
+
+        payload = "1.1,2.2,3.3"
+        frame = f"/*{payload}*/"
+        device_simulator.send_frame(frame.encode())
+        time.sleep(0.3)
+
+        expected = ["1.1", "2.2", "3.3"]
+        values = _wait_for_dataset_values(api_client, expected)
+        assert values == expected, (
+            f"1D array should produce a single frame with values {expected}, got {values}"
+        )

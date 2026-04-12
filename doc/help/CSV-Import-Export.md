@@ -13,7 +13,7 @@ flowchart LR
     B --> D["CSV / MDF4 File"]
 ```
 
-> **Export:** 8192 queue capacity | 1024 frame flush threshold | 1 s timer | zero dashboard impact
+> **Export:** runs in the background · writes in batches · never blocks the dashboard
 
 ```mermaid
 flowchart LR
@@ -66,9 +66,9 @@ Each row represents one complete frame. Cells contain the numeric or string valu
 - The file auto-closes when the device disconnects or when export is disabled.
 - If you disconnect and reconnect during the same session, a new file is created with a new timestamp.
 
-### Background Thread
+### Background Writing
 
-The `CSV::ExportWorker` runs on a dedicated background thread. Frames are enqueued from the main thread in a lock-free manner and written to disk in batches. This design ensures that disk I/O latency never blocks the dashboard or data pipeline.
+CSV export runs in the background and writes data to disk in batches. This means that even on slow storage (spinning disks, network shares, SD cards), CSV export never stalls the dashboard, drops incoming frames, or pauses the data pipeline.
 
 ---
 

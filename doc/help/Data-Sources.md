@@ -2,11 +2,9 @@
 
 ## Overview
 
-Serial Studio connects to hardware and software data sources through nine driver types. Three are available in the free GPL edition; six additional drivers require a Pro license. Each driver runs on a dedicated thread and feeds raw bytes into the frame-parsing pipeline.
+Serial Studio connects to hardware and software data sources through nine driver types. Three are available in the free GPL edition; six additional drivers require a Pro license. Each driver feeds raw bytes into the frame-parsing pipeline. The active driver is selected in the Setup Panel or, for multi-device projects, in the Project Editor.
 
-All drivers share a common interface (`HAL_Driver`) that provides `open()`, `close()`, `write()`, `isOpen()`, `configurationOk()`, and `dataReceived()`. The active driver is selected in the Setup Panel or, for multi-device projects, in the Project Editor.
-
-The following diagram shows the driver architecture and how each driver feeds into the data pipeline.
+The following diagram shows how each driver type feeds into the data pipeline.
 
 ```mermaid
 flowchart TD
@@ -16,14 +14,11 @@ flowchart TD
     subgraph Pro["Pro"]
         P1["Audio · Modbus · CAN<br/>USB · HID · Process"]
     end
-    F1 --> HAL["HAL_Driver"]
-    P1 --> HAL
-    HAL --> DM["DeviceManager"]
-    DM --> FB["Frame Builder"]
+    F1 --> FR["Frame Reader"]
+    P1 --> FR
+    FR --> FB["Frame Builder"]
     FB --> DASH["Dashboard"]
 ```
-
-> **Note:** UI-config instances are owned by `ConnectionManager`; live instances are created by `DeviceManager`.
 
 ---
 
@@ -235,9 +230,9 @@ Direct USB access via libusb, bypassing OS serial and HID abstraction layers. Pr
 
 **Transfer modes:**
 
-- **Bulk Stream:** Synchronous bulk IN/OUT on a dedicated read thread. Best for most custom USB firmware.
+- **Bulk Stream:** Standard bulk IN/OUT transfers. Best for most custom USB firmware.
 - **Advanced Control:** Bulk plus control transfers for devices requiring vendor-specific USB control commands.
-- **Isochronous:** Asynchronous transfers for time-sensitive, fixed-rate data streams. Callbacks are processed on a libusb event thread.
+- **Isochronous:** Time-sensitive, fixed-rate streaming transfers. Use this for real-time audio, video, or other isochronous devices.
 
 **Device enumeration:** Uses libusb hotplug callbacks on platforms that support them (Linux, macOS, Windows). Falls back to a 2-second polling timer when hotplug is unavailable.
 
@@ -272,7 +267,7 @@ Connects to Human Interface Devices (gamepads, joysticks, custom HID sensors) us
 
 **Enumeration:** The device list refreshes automatically every 2 seconds. The list includes a placeholder entry at index 0 ("Select Device").
 
-**Data format:** The driver reads 65-byte HID reports on a dedicated thread using blocking `hid_read_timeout()` calls. Fatal read errors are marshalled back to the main thread for safe disconnection.
+**Data format:** The driver reads 65-byte HID reports directly from the device. Unexpected disconnections (unplugging the device, driver errors) are handled cleanly and the UI is notified.
 
 **Quick start:**
 
@@ -296,7 +291,7 @@ Reads data from a child process's stdout or from a named pipe/FIFO. Enables any 
 
 | Mode       | Description                                              |
 |------------|----------------------------------------------------------|
-| Launch     | Spawns a child process via QProcess; reads merged stdout/stderr |
+| Launch     | Spawns a child process and reads its combined stdout/stderr    |
 | Named Pipe | Opens an existing named pipe or FIFO for reading          |
 
 **Launch mode parameters:**

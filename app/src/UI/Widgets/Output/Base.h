@@ -17,6 +17,7 @@
 #include <QQuickItem>
 
 #include "DataModel/Frame.h"
+#include "SerialStudio.h"
 
 namespace Widgets {
 namespace Output {
@@ -96,6 +97,7 @@ private:
   QString m_units;
   QString m_onLabel;
   QString m_offLabel;
+  SerialStudio::TextEncoding m_txEncoding;
 
   QJSEngine m_jsEngine;
   QJSValue m_transmitFn;

@@ -21,6 +21,9 @@
 
 #include "SerialStudio.h"
 
+#include <QStringConverter>
+#include <QtCore5Compat/QTextCodec>
+
 #include "CSV/Player.h"
 #include "MDF4/Player.h"
 #include "Misc/ThemeManager.h"
@@ -731,4 +734,221 @@ QString SerialStudio::escapeControlCharacters(const QString& str)
   result.replace(QStringLiteral("\t"), QStringLiteral("\\t"));
   result.replace(QStringLiteral("\v"), QStringLiteral("\\v"));
   return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Text encoding helpers
+//--------------------------------------------------------------------------------------------------
+
+namespace {
+/**
+ * @brief Returns the QStringConverter encoding for natively-supported entries.
+ *
+ * Returns `std::nullopt` for encodings that must go through QTextCodec
+ * (GBK, GB18030, Big5, Shift_JIS, EUC-JP, EUC-KR).
+ */
+std::optional<QStringConverter::Encoding> nativeEncoding(SerialStudio::TextEncoding enc)
+{
+  switch (enc) {
+    case SerialStudio::EncUtf8:
+      return QStringConverter::Utf8;
+    case SerialStudio::EncUtf16LE:
+      return QStringConverter::Utf16LE;
+    case SerialStudio::EncUtf16BE:
+      return QStringConverter::Utf16BE;
+    case SerialStudio::EncLatin1:
+      return QStringConverter::Latin1;
+    case SerialStudio::EncSystem:
+      return QStringConverter::System;
+    default:
+      return std::nullopt;
+  }
+}
+
+/**
+ * @brief Returns the `QTextCodec` for multi-byte East-Asian encodings.
+ *
+ * The codec is owned by Qt and must not be deleted.  Returns the UTF-8 codec
+ * as a safe fallback if the requested codec is unavailable in this build.
+ */
+QTextCodec* legacyCodec(SerialStudio::TextEncoding enc)
+{
+  // Map the enum to a canonical codec name
+  const char* name = nullptr;
+  switch (enc) {
+    case SerialStudio::EncGbk:
+      name = "GBK";
+      break;
+    case SerialStudio::EncGb18030:
+      name = "GB18030";
+      break;
+    case SerialStudio::EncBig5:
+      name = "Big5";
+      break;
+    case SerialStudio::EncShiftJis:
+      name = "Shift_JIS";
+      break;
+    case SerialStudio::EncEucJp:
+      name = "EUC-JP";
+      break;
+    case SerialStudio::EncEucKr:
+      name = "EUC-KR";
+      break;
+    default:
+      break;
+  }
+
+  // Resolve the codec with a UTF-8 fallback so the caller never sees nullptr
+  QTextCodec* codec = name ? QTextCodec::codecForName(name) : nullptr;
+  if (!codec)
+    codec = QTextCodec::codecForName("UTF-8");
+
+  Q_ASSERT(codec != nullptr);
+  return codec;
+}
+}  // namespace
+
+/**
+ * @brief Returns the display labels for all supported text encodings.
+ *
+ * The list order matches the TextEncoding enum, so the index returned by a
+ * QML combobox can be cast directly to TextEncoding.
+ */
+QStringList SerialStudio::textEncodings()
+{
+  static const QStringList list{
+    tr("UTF-8"),     tr("UTF-16 LE"), tr("UTF-16 BE"), tr("Latin-1"),
+    tr("System"),    tr("GBK"),       tr("GB18030"),   tr("Big5"),
+    tr("Shift-JIS"), tr("EUC-JP"),    tr("EUC-KR"),
+  };
+  return list;
+}
+
+/**
+ * @brief Returns the canonical string name for a text encoding.
+ *
+ * This name is what gets persisted in project files and QSettings; it is
+ * stable across releases even if the enum order shifts.
+ */
+QString SerialStudio::textEncodingName(SerialStudio::TextEncoding enc)
+{
+  // Map to a canonical short name (not translated, for persistence)
+  switch (enc) {
+    case EncUtf8:
+      return QStringLiteral("UTF-8");
+    case EncUtf16LE:
+      return QStringLiteral("UTF-16LE");
+    case EncUtf16BE:
+      return QStringLiteral("UTF-16BE");
+    case EncLatin1:
+      return QStringLiteral("ISO-8859-1");
+    case EncSystem:
+      return QStringLiteral("System");
+    case EncGbk:
+      return QStringLiteral("GBK");
+    case EncGb18030:
+      return QStringLiteral("GB18030");
+    case EncBig5:
+      return QStringLiteral("Big5");
+    case EncShiftJis:
+      return QStringLiteral("Shift_JIS");
+    case EncEucJp:
+      return QStringLiteral("EUC-JP");
+    case EncEucKr:
+      return QStringLiteral("EUC-KR");
+  }
+  return QStringLiteral("UTF-8");
+}
+
+/**
+ * @brief Resolves a persisted encoding name back to the enum.
+ *
+ * Accepts common aliases and is case-insensitive.  Unknown or empty names
+ * fall back to UTF-8 so loading an older project file remains safe.
+ */
+SerialStudio::TextEncoding SerialStudio::textEncodingFromName(const QString& name)
+{
+  // Guard-return for empty input and normalize the name
+  if (name.isEmpty())
+    return EncUtf8;
+
+  const QString n = name.trimmed().toUpper();
+
+  // Match against the canonical names and a few popular aliases
+  if (n == QLatin1String("UTF-8") || n == QLatin1String("UTF8"))
+    return EncUtf8;
+  if (n == QLatin1String("UTF-16LE") || n == QLatin1String("UTF16LE"))
+    return EncUtf16LE;
+  if (n == QLatin1String("UTF-16BE") || n == QLatin1String("UTF16BE"))
+    return EncUtf16BE;
+  if (n == QLatin1String("ISO-8859-1") || n == QLatin1String("LATIN1")
+      || n == QLatin1String("LATIN-1"))
+    return EncLatin1;
+  if (n == QLatin1String("SYSTEM") || n == QLatin1String("LOCALE"))
+    return EncSystem;
+  if (n == QLatin1String("GBK") || n == QLatin1String("CP936"))
+    return EncGbk;
+  if (n == QLatin1String("GB18030"))
+    return EncGb18030;
+  if (n == QLatin1String("BIG5") || n == QLatin1String("BIG-5"))
+    return EncBig5;
+  if (n == QLatin1String("SHIFT_JIS") || n == QLatin1String("SHIFT-JIS")
+      || n == QLatin1String("SJIS") || n == QLatin1String("CP932"))
+    return EncShiftJis;
+  if (n == QLatin1String("EUC-JP") || n == QLatin1String("EUCJP"))
+    return EncEucJp;
+  if (n == QLatin1String("EUC-KR") || n == QLatin1String("EUCKR"))
+    return EncEucKr;
+
+  return EncUtf8;
+}
+
+/**
+ * @brief Encodes a QString to raw bytes using the given text encoding.
+ *
+ * Returns an empty QByteArray for an empty input.  Characters that cannot
+ * be represented in the target encoding are replaced by the codec's default
+ * substitute (typically `'?'` or `0x1A`).
+ */
+QByteArray SerialStudio::encodeText(const QString& text, SerialStudio::TextEncoding enc)
+{
+  // Fast path: empty input produces empty output
+  if (text.isEmpty())
+    return {};
+
+  // Use QStringEncoder for natively-supported encodings
+  if (const auto native = nativeEncoding(enc); native.has_value()) {
+    QStringEncoder encoder(*native);
+    return QByteArray(encoder.encode(text));
+  }
+
+  // Fall back to QTextCodec for East-Asian multi-byte encodings
+  auto* codec = legacyCodec(enc);
+  Q_ASSERT(codec != nullptr);
+  return codec->fromUnicode(text);
+}
+
+/**
+ * @brief Decodes raw bytes to a QString using the given text encoding.
+ *
+ * This is a stateless one-shot decode — callers that stream data across
+ * multiple chunks should keep their own `QStringDecoder`/`QTextDecoder`
+ * so partial multi-byte sequences are carried across boundaries.
+ */
+QString SerialStudio::decodeText(QByteArrayView bytes, SerialStudio::TextEncoding enc)
+{
+  // Fast path: empty input produces empty output
+  if (bytes.isEmpty())
+    return {};
+
+  // Use QStringDecoder for natively-supported encodings
+  if (const auto native = nativeEncoding(enc); native.has_value()) {
+    QStringDecoder decoder(*native);
+    return decoder.decode(bytes);
+  }
+
+  // Fall back to QTextCodec for East-Asian multi-byte encodings
+  auto* codec = legacyCodec(enc);
+  Q_ASSERT(codec != nullptr);
+  return codec->toUnicode(bytes.constData(), static_cast<int>(bytes.size()));
 }
