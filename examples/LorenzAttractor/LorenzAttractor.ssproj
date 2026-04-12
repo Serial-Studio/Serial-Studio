@@ -81,7 +81,7 @@
                 }
             ],
             "title": "2D Visualization",
-            "widget": "datagrid"
+            "widget": "multiplot"
         },
         {
             "datasets": [
@@ -183,7 +183,8 @@
             "decoderMethod": 0,
             "frameDetection": 0,
             "frameEnd": "\\n",
-            "frameParserCode": "/**\n * Comma-Separated Values (CSV) Parser\n *\n * Parses comma-separated data into an array of values.\n *\n * INPUT FORMAT: \"a,b,c,d,e,f\"\n * OUTPUT ARRAY: [\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"]\n *\n * Note: Frame delimiters are automatically removed by Serial Studio.\n */\n\n//------------------------------------------------------------------------------\n// Frame Parser Function\n//------------------------------------------------------------------------------\n\n/**\n * Parses a CSV frame into an array of values.\n *\n * @param {string} frame - The CSV data from the data source\n * @returns {array} Array of string values\n */\nfunction parse(frame) {\n  return frame.split(',');\n}\n",
+            "frameParserCode": "--\n-- Comma-Separated Values (CSV) Parser\n--\n-- Parses comma-separated data into an array of values.\n--\n-- INPUT FORMAT: \"a,b,c,d,e,f\"\n-- OUTPUT ARRAY: {\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"}\n--\n-- Note: Frame delimiters are automatically removed by Serial Studio.\n--\n\nfunction parse(frame)\n  local result = {}\n  local start = 1\n  while true do\n    local sep = frame:find(\",\", start, true)\n    if sep then\n      result[#result + 1] = frame:sub(start, sep - 1)\n      start = sep + 1\n    else\n      result[#result + 1] = frame:sub(start)\n      return result\n    end\n  end\nend\n",
+            "frameParserLanguage": 1,
             "frameStart": "",
             "hexadecimalDelimiters": false,
             "sourceId": 0,
@@ -200,8 +201,8 @@
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
-                    0,
-                    1
+                    1,
+                    0
                 ]
             }
         },
@@ -221,10 +222,10 @@
             "data": {
                 "autoLayout": true,
                 "windowOrder": [
-                    0,
-                    2,
                     3,
-                    4
+                    4,
+                    0,
+                    2
                 ]
             }
         },
