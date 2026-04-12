@@ -761,6 +761,19 @@ Widgets.SmartDialog {
           }
 
           Label {
+            text: qsTr("Text Encoding")
+            color: Cpp_ThemeManager.colors["text"]
+          } ComboBox {
+            Layout.fillWidth: true
+            model: Cpp_Console_Handler.textEncodings
+            currentIndex: Cpp_Console_Handler.encoding
+            onCurrentIndexChanged: {
+              if (currentIndex !== Cpp_Console_Handler.encoding)
+                Cpp_Console_Handler.encoding = currentIndex
+            }
+          }
+
+          Label {
             text: qsTr("Checksum")
             color: Cpp_ThemeManager.colors["text"]
           } ComboBox {
@@ -884,6 +897,7 @@ Widgets.SmartDialog {
           Cpp_Console_Handler.dataMode = 0
           Cpp_Console_Handler.displayMode = 0
           Cpp_Console_Handler.lineEnding = 1
+          Cpp_Console_Handler.encoding = 0
           Cpp_Console_Handler.checksumMethod = 0
           Cpp_Misc_CommonFonts.widgetFontScale = 1.0
           Cpp_Misc_CommonFonts.widgetFontFamily = Cpp_Misc_CommonFonts.monoFont.family
