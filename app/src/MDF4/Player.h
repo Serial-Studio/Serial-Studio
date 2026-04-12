@@ -142,6 +142,8 @@ private slots:
   void processFrameBatch(int startFrame, int endFrame);
 
 private:
+  void buildFrameIndexFromCache();
+
   void sendHeaderFrame();
   void buildMultiSourceMapping();
   void injectFrame(const QByteArray& frame, int frameIndex = -1);

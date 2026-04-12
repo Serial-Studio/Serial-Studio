@@ -691,6 +691,32 @@ void IO::ConnectionManager::resetFrameReader()
 }
 
 /**
+ * @brief Connects a UI driver's configurationChanged signal to the three
+ * standard handlers: persist to source[0], sync to live driver, and
+ * forward to QML.
+ */
+void IO::ConnectionManager::wireUiDriver(IO::HAL_Driver* driver)
+{
+  Q_ASSERT(driver != nullptr);
+
+  connect(driver,
+          &IO::HAL_Driver::configurationChanged,
+          this,
+          &IO::ConnectionManager::onUiDriverConfigurationChanged,
+          Qt::UniqueConnection);
+  connect(driver,
+          &IO::HAL_Driver::configurationChanged,
+          this,
+          &IO::ConnectionManager::syncUiDriverToLive,
+          Qt::UniqueConnection);
+  connect(driver,
+          &IO::HAL_Driver::configurationChanged,
+          this,
+          &IO::ConnectionManager::configurationChanged,
+          Qt::UniqueConnection);
+}
+
+/**
  * @brief Sets up external signal/slot connections after all singletons are initialized.
  */
 void IO::ConnectionManager::setupExternalConnections()
@@ -741,146 +767,18 @@ void IO::ConnectionManager::setupExternalConnections()
           &IO::ConnectionManager::rebuildDevices,
           Qt::QueuedConnection);
 
-  // Wire UI drivers: save to source[0], sync to live, re-evaluate configurationOk
-  connect(m_uartUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_networkUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_bluetoothLEUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_uartUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_networkUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_bluetoothLEUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-
-  // Forward UI driver changes to configurationChanged for QML
-  connect(m_uartUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  connect(m_networkUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  connect(m_bluetoothLEUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  // Same three-slot pattern for commercial drivers
+  // Wire UI drivers: configChanged → save to source[0], sync to live,
+  // re-evaluate configurationOk, and forward to QML
+  wireUiDriver(m_uartUi.get());
+  wireUiDriver(m_networkUi.get());
+  wireUiDriver(m_bluetoothLEUi.get());
 #ifdef BUILD_COMMERCIAL
-  connect(m_audioUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_canBusUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_hidUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_modbusUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_processUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_usbUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::onUiDriverConfigurationChanged,
-          Qt::UniqueConnection);
-  connect(m_audioUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_canBusUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_hidUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_modbusUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_processUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_usbUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::syncUiDriverToLive,
-          Qt::UniqueConnection);
-  connect(m_audioUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  connect(m_canBusUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  connect(m_hidUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  connect(m_modbusUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  connect(m_processUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
-  connect(m_usbUi.get(),
-          &IO::HAL_Driver::configurationChanged,
-          this,
-          &IO::ConnectionManager::configurationChanged,
-          Qt::UniqueConnection);
+  wireUiDriver(m_audioUi.get());
+  wireUiDriver(m_canBusUi.get());
+  wireUiDriver(m_hidUi.get());
+  wireUiDriver(m_modbusUi.get());
+  wireUiDriver(m_processUi.get());
+  wireUiDriver(m_usbUi.get());
 #endif
 
   // Notify when device lists change so the editor refreshes

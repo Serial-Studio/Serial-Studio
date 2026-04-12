@@ -1587,7 +1587,8 @@ void UI::Dashboard::updateDataSeries(int sourceId)
       continue;
 
     auto& multiSeries = m_multipltValues[i];
-    for (size_t j = 0; j < group.datasets.size(); ++j)
+    const size_t yCount = multiSeries.y.size();
+    for (size_t j = 0; j < group.datasets.size() && j < yCount; ++j)
       multiSeries.y[j].push(group.datasets[j].numericValue);
   }
 

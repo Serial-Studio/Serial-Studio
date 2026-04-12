@@ -132,12 +132,16 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
         break;
     }
 
-    // Detect if we parsed any frame
+    // Detect if we parsed any frame (approximate count is sufficient here
+    // because both the enqueue and this check happen on the same thread)
     framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 
-  // Notify modules if a frame was detected
-  if (framesEnqueued)
+  // Always notify the consumer when frames were enqueued so it can drain
+  // the queue. Even if all frames were dropped due to a full queue, emit
+  // readyRead so the consumer processes whatever is already queued and
+  // makes room for the next processData() call.
+  if (framesEnqueued || m_queue.size_approx() > 0)
     Q_EMIT readyRead();
 }
 

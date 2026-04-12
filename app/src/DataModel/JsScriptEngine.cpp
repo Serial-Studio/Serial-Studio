@@ -352,7 +352,16 @@ QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& fram
     QJSValueList hexArgs;
     hexArgs << QString::fromLatin1(frame.toHex());
     jsArray = m_hexToArray.call(hexArgs);
-  } else {
+
+    // Fall back to manual loop if the hex helper failed
+    if (jsArray.isError()) [[unlikely]] {
+      qWarning() << "[JsScriptEngine] hex helper error:"
+                 << jsArray.property("message").toString();
+      jsArray = QJSValue();
+    }
+  }
+
+  if (!jsArray.isArray()) {
     jsArray          = m_engine.newArray(frame.size());
     const auto* data = reinterpret_cast<const quint8*>(frame.constData());
     for (int i = 0; i < frame.size(); ++i)

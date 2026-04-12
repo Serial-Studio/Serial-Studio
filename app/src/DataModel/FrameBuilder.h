@@ -102,7 +102,16 @@ private:
 
   static void transformLuaWatchdogHook(lua_State* L, lua_Debug* ar);
 
+  struct TransformEntry {
+    int uniqueId;
+    QString code;
+  };
+
   void compileTransforms();
+  void compileTransformsLua(TransformEngine& engine,
+                            const std::vector<TransformEntry>& entries);
+  void compileTransformsJS(TransformEngine& engine,
+                           const std::vector<TransformEntry>& entries);
   void destroyTransformEngines();
   [[nodiscard]] double applyTransform(int sourceId, int uniqueId, double rawValue);
 

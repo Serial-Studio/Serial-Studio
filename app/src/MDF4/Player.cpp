@@ -530,13 +530,14 @@ void MDF4::Player::nextFrame()
   if (m_framePos < frameCount() - 1) {
     ++m_framePos;
 
+    // Load historical frames for plot context, then send the current frame
+    UI::Dashboard::instance().clearPlotData();
+
     int framesToLoad = UI::Dashboard::instance().points();
     int startFrame   = std::max(0, m_framePos - framesToLoad);
-    int endFrame     = m_framePos - 1;
+    int endFrame     = std::min(frameCount() - 1, m_framePos);
 
-    if (endFrame >= startFrame)
-      processFrameBatch(startFrame, endFrame);
-
+    processFrameBatch(startFrame, endFrame);
     updateData();
   }
 }
@@ -558,15 +559,14 @@ void MDF4::Player::previousFrame()
   if (m_framePos > 0) {
     --m_framePos;
 
-    int framesToLoad = UI::Dashboard::instance().points();
-    int startFrame   = std::max(0, m_framePos - framesToLoad);
-    int endFrame     = m_framePos - 1;
-
+    // Load historical frames for plot context, then send the current frame
     UI::Dashboard::instance().clearPlotData();
 
-    if (endFrame >= startFrame)
-      processFrameBatch(startFrame, endFrame);
+    int framesToLoad = UI::Dashboard::instance().points();
+    int startFrame   = std::max(0, m_framePos - framesToLoad);
+    int endFrame     = std::min(frameCount() - 1, m_framePos);
 
+    processFrameBatch(startFrame, endFrame);
     updateData();
   }
 }
@@ -861,39 +861,52 @@ void MDF4::Player::buildFrameIndex()
     }
   }
 
+  // Build the frame index from the populated sample cache
+  buildFrameIndexFromCache();
+}
+
+/**
+ * @brief Builds the frame index from the sample cache populated during
+ * observer-based data reading.
+ *
+ * Each entry in m_sampleCache becomes one frame. Timestamps are resolved
+ * from m_timestampCache when available, otherwise a synthetic 1 ms
+ * increment is used. The resulting index is sorted by record ID.
+ */
+void MDF4::Player::buildFrameIndexFromCache()
+{
   if (m_sampleCache.empty())
     return;
 
-  constexpr int kSampleInterval = 1;
-  uint64_t sampleIndex          = 0;
+  uint64_t sampleIndex = 0;
+  m_frameIndex.reserve(m_sampleCache.size());
 
   for (const auto& cachePair : m_sampleCache) {
-    if (sampleIndex % kSampleInterval == 0) {
-      FrameIndex frameIdx;
+    FrameIndex frameIdx;
 
-      if (m_isSerialStudioFile && !m_timestampCache.empty()) {
-        auto timeIt = m_timestampCache.find(cachePair.first);
-        if (timeIt != m_timestampCache.end())
-          frameIdx.timestamp = timeIt->second;
-        else
-          frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
-      }
-
-      else {
+    // Resolve timestamp from cache or fall back to synthetic timing
+    if (m_isSerialStudioFile && !m_timestampCache.empty()) {
+      auto timeIt = m_timestampCache.find(cachePair.first);
+      if (timeIt != m_timestampCache.end())
+        frameIdx.timestamp = timeIt->second;
+      else
         frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
-      }
-
-      frameIdx.recordIndex  = cachePair.first;
-      frameIdx.channelGroup = nullptr;
-
-      m_frameIndex.push_back(frameIdx);
+    } else {
+      frameIdx.timestamp = static_cast<double>(sampleIndex) * 0.001;
     }
+
+    frameIdx.recordIndex  = cachePair.first;
+    frameIdx.channelGroup = nullptr;
+
+    m_frameIndex.push_back(frameIdx);
     ++sampleIndex;
   }
 
-  std::sort(m_frameIndex.begin(), m_frameIndex.end(), [](const FrameIndex& a, const FrameIndex& b) {
-    return a.recordIndex < b.recordIndex;
-  });
+  // Sort by record ID so binary lookups and sequential playback work
+  std::sort(m_frameIndex.begin(), m_frameIndex.end(),
+            [](const FrameIndex& a, const FrameIndex& b) {
+              return a.recordIndex < b.recordIndex;
+            });
 }
 
 //--------------------------------------------------------------------------------------------------

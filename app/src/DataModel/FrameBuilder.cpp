@@ -420,8 +420,9 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
         dataset.value        = channelData[idx - 1];
         dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
 
-        // Apply per-dataset value transform if configured
-        if (!dataset.transformCode.isEmpty() && dataset.isNumeric) {
+        // Skip transforms during playback — exported data is already transformed
+        if (!dataset.transformCode.isEmpty() && dataset.isNumeric
+            && !SerialStudio::isAnyPlayerOpen()) {
           dataset.numericValue = applyTransform(srcId, dataset.uniqueId, dataset.numericValue);
           dataset.value        = QString::number(dataset.numericValue, 'g', 15);
         }
@@ -488,8 +489,9 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
     const auto* channelData = chs.data();
     const int channelCount  = chs.size();
 
-    // Create source frame on first encounter
-    if (!m_sourceFrames.contains(sourceId)) {
+    // Create source frame on first encounter (single lookup)
+    auto it = m_sourceFrames.find(sourceId);
+    if (it == m_sourceFrames.end()) [[unlikely]] {
       DataModel::Frame newFrame;
       newFrame.sourceId                   = sourceId;
       newFrame.title                      = m_frame.title;
@@ -499,12 +501,8 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
         if (g.sourceId == sourceId)
           newFrame.groups.push_back(g);
 
-      m_sourceFrames.insert(sourceId, std::move(newFrame));
+      it = m_sourceFrames.insert(sourceId, std::move(newFrame));
     }
-
-    auto it = m_sourceFrames.find(sourceId);
-    if (it == m_sourceFrames.end()) [[unlikely]]
-      return;
 
     DataModel::Frame& srcFrame = it.value();
     for (auto& group : srcFrame.groups) {
@@ -516,8 +514,9 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
         dataset.value        = channelData[idx - 1];
         dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
 
-        // Apply per-dataset value transform if configured
-        if (!dataset.transformCode.isEmpty() && dataset.isNumeric) {
+        // Skip transforms during playback — exported data is already transformed
+        if (!dataset.transformCode.isEmpty() && dataset.isNumeric
+            && !SerialStudio::isAnyPlayerOpen()) {
           dataset.numericValue = applyTransform(sourceId, dataset.uniqueId, dataset.numericValue);
           dataset.value        = QString::number(dataset.numericValue, 'g', 15);
         }
@@ -631,7 +630,8 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
     dataset.plt       = false;
     dataset.value     = channel;
 
-    if (m_quickPlotHasHeader && idx > 0 && idx - 1 < m_quickPlotChannelNames.size())
+    if (m_quickPlotHasHeader && idx > 0
+        && idx - 1 < static_cast<int>(m_quickPlotChannelNames.size()))
       dataset.title = m_quickPlotChannelNames[idx - 1];
     else
       dataset.title = tr("Channel %1").arg(idx);
@@ -745,7 +745,8 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
     dataset.fftSamples      = fftSamples;
     dataset.fftSamplingRate = sampleRate;
 
-    if (m_quickPlotHasHeader && index > 0 && index - 1 < m_quickPlotChannelNames.size())
+    if (m_quickPlotHasHeader && index > 0
+        && index - 1 < static_cast<int>(m_quickPlotChannelNames.size()))
       dataset.title = m_quickPlotChannelNames[index - 1];
     else
       dataset.title = tr("Channel %1").arg(index);
@@ -892,11 +893,6 @@ void DataModel::FrameBuilder::compileTransforms()
   Q_ASSERT(m_transformEngines.empty());
 
   // Collect datasets with transforms, grouped by sourceId
-  struct TransformEntry {
-    int uniqueId;
-    QString code;
-  };
-
   std::map<int, std::vector<TransformEntry>> bySource;
   for (const auto& group : m_frame.groups)
     for (const auto& ds : group.datasets)
@@ -906,10 +902,11 @@ void DataModel::FrameBuilder::compileTransforms()
   if (bySource.empty())
     return;
 
-  // Determine language for each source
+  // Determine language for each source and compile
   const auto& sources = DataModel::ProjectModel::instance().sources();
 
   for (auto& [sourceId, entries] : bySource) {
+    // Resolve the scripting language for this source
     int lang = SerialStudio::Lua;
     for (const auto& src : sources)
       if (src.sourceId == sourceId) {
@@ -925,113 +922,128 @@ void DataModel::FrameBuilder::compileTransforms()
     Q_ASSERT(inserted);
     TransformEngine& engine = it->second;
 
-    if (lang == SerialStudio::Lua) {
-      // Create a shared Lua state for all transforms in this source
-      lua_State* L = luaL_newstate();
-      Q_ASSERT(L != nullptr);
-      if (!L) [[unlikely]] {
-        m_transformEngines.erase(it);
-        continue;
-      }
+    // Delegate to language-specific compiler
+    if (lang == SerialStudio::Lua)
+      compileTransformsLua(engine, entries);
+    else
+      compileTransformsJS(engine, entries);
 
-      openSafeLibsForTransform(L);
-
-      // Store the engine pointer in the Lua registry so the watchdog
-      // hook can look it up without needing a global singleton pointer
-      lua_pushlightuserdata(L, &engine);
-      lua_setfield(L, LUA_REGISTRYINDEX, "__ss_transform__");
-
-      // Install instruction-count watchdog — fires every N instructions
-      // and checks the per-engine deadline timer
-      lua_sethook(L, &FrameBuilder::transformLuaWatchdogHook, LUA_MASKCOUNT,
-                  kTransformHookInstrCount);
-
-      // Arm the deadline while the user's compile-time chunk runs —
-      // a chunk with `while true do end` at top level would otherwise
-      // hang the main thread during compilation
-      engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
-
-      for (const auto& entry : entries) {
-        // Execute the user's code, which defines transform(value)
-        const QByteArray utf8 = entry.code.toUtf8();
-        if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
-          qWarning() << "[FrameBuilder] Transform compile error for"
-                     << "dataset" << entry.uniqueId << ":" << lua_tostring(L, -1);
-          lua_pop(L, 1);
-          continue;
-        }
-
-        // Clear any values the chunk may have returned (luaL_dostring
-        // uses LUA_MULTRET — if the user writes "return 42" at top
-        // level, the value stays on the stack)
-        lua_settop(L, 0);
-
-        // Verify that the user defined a transform() function
-        lua_getglobal(L, "transform");
-        if (!lua_isfunction(L, -1)) {
-          lua_pop(L, 1);
-          qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
-                     << "transform code does not define transform()";
-          continue;
-        }
-
-        // Move transform → __tf_<id> so the next dataset can reuse
-        // the "transform" name without overwriting this one
-        const auto alias = QStringLiteral("__tf_%1").arg(entry.uniqueId);
-        lua_setglobal(L, alias.toUtf8().constData());
-        lua_pushnil(L);
-        lua_setglobal(L, "transform");
-
-        // Store a registry reference for O(1) hotpath lookup
-        lua_getglobal(L, alias.toUtf8().constData());
-        Q_ASSERT(lua_isfunction(L, -1));
-        engine.luaRefs[entry.uniqueId] = luaL_ref(L, LUA_REGISTRYINDEX);
-      }
-
-      // Disarm the deadline — compile-time runs are done, subsequent
-      // arming happens per-call in applyTransform()
-      engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
-      engine.luaState    = L;
-    } else {
-      // Create a shared QJSEngine for all transforms in this source
-      auto* js = new QJSEngine();
-
-      for (const auto& entry : entries) {
-        // Wrap the user's code in an IIFE so that top-level 'var'
-        // declarations (alpha, ema, prev, etc.) are captured as closure
-        // state for this dataset instead of leaking onto the shared
-        // global object — otherwise two datasets using the same
-        // template would clobber each other's state
-        const QString wrapped =
-          QStringLiteral("(function() {\n"
-                         "%1\n"
-                         "return (typeof transform === 'function') ? transform : null;\n"
-                         "})();")
-            .arg(entry.code);
-
-        // Evaluate the IIFE — its return value is the user's transform
-        // function (or null if the code didn't define one)
-        auto evalResult = js->evaluate(wrapped);
-        if (evalResult.isError()) {
-          qWarning() << "[FrameBuilder] Transform compile error for"
-                     << "dataset" << entry.uniqueId << ":"
-                     << evalResult.property("message").toString();
-          continue;
-        }
-
-        // Reject if the IIFE didn't yield a callable transform function
-        if (!evalResult.isCallable()) {
-          qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
-                     << "transform code does not define transform()";
-          continue;
-        }
-
-        engine.jsRefs[entry.uniqueId] = evalResult;
-      }
-
-      engine.jsEngine = js;
-    }
+    // Remove the engine entry if compilation produced nothing useful
+    if (!engine.luaState && !engine.jsEngine)
+      m_transformEngines.erase(it);
   }
+}
+
+/**
+ * @brief Compiles per-dataset Lua transforms into a shared lua_State.
+ *
+ * Each dataset's chunk is executed to define a transform() global, which is
+ * then renamed to a per-dataset alias and stored via luaL_ref for O(1)
+ * hotpath lookup.
+ */
+void DataModel::FrameBuilder::compileTransformsLua(
+  TransformEngine& engine, const std::vector<TransformEntry>& entries)
+{
+  // Create a shared Lua state for all transforms in this source
+  lua_State* L = luaL_newstate();
+  Q_ASSERT(L != nullptr);
+  if (!L) [[unlikely]]
+    return;
+
+  openSafeLibsForTransform(L);
+
+  // Store the engine pointer in the Lua registry so the watchdog
+  // hook can look it up without needing a global singleton pointer
+  lua_pushlightuserdata(L, &engine);
+  lua_setfield(L, LUA_REGISTRYINDEX, "__ss_transform__");
+
+  // Install instruction-count watchdog
+  lua_sethook(L, &FrameBuilder::transformLuaWatchdogHook, LUA_MASKCOUNT,
+              kTransformHookInstrCount);
+
+  // Arm the deadline while the user's compile-time chunk runs
+  engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
+
+  for (const auto& entry : entries) {
+    // Execute the user's code, which defines transform(value)
+    const QByteArray utf8 = entry.code.toUtf8();
+    if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
+      qWarning() << "[FrameBuilder] Transform compile error for"
+                 << "dataset" << entry.uniqueId << ":" << lua_tostring(L, -1);
+      lua_pop(L, 1);
+      continue;
+    }
+
+    // Clear any values the chunk may have returned
+    lua_settop(L, 0);
+
+    // Verify that the user defined a transform() function
+    lua_getglobal(L, "transform");
+    if (!lua_isfunction(L, -1)) {
+      lua_pop(L, 1);
+      qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
+                 << "transform code does not define transform()";
+      continue;
+    }
+
+    // Move transform → __tf_<id> so the next dataset can reuse the name
+    const auto alias = QStringLiteral("__tf_%1").arg(entry.uniqueId);
+    lua_setglobal(L, alias.toUtf8().constData());
+    lua_pushnil(L);
+    lua_setglobal(L, "transform");
+
+    // Store a registry reference for O(1) hotpath lookup
+    lua_getglobal(L, alias.toUtf8().constData());
+    Q_ASSERT(lua_isfunction(L, -1));
+    engine.luaRefs[entry.uniqueId] = luaL_ref(L, LUA_REGISTRYINDEX);
+  }
+
+  // Disarm the deadline — subsequent arming happens per-call
+  engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
+  engine.luaState    = L;
+}
+
+/**
+ * @brief Compiles per-dataset JavaScript transforms into a shared QJSEngine.
+ *
+ * Each dataset's code is wrapped in an IIFE so that top-level var
+ * declarations become per-dataset closure state.
+ */
+void DataModel::FrameBuilder::compileTransformsJS(
+  TransformEngine& engine, const std::vector<TransformEntry>& entries)
+{
+  // Create a shared QJSEngine for all transforms in this source
+  auto* js = new QJSEngine();
+
+  for (const auto& entry : entries) {
+    // Wrap the user's code in an IIFE for per-dataset closure isolation
+    const QString wrapped =
+      QStringLiteral("(function() {\n"
+                     "%1\n"
+                     "return (typeof transform === 'function') ? transform : null;\n"
+                     "})();")
+        .arg(entry.code);
+
+    // Evaluate the IIFE — its return value is the transform function
+    auto evalResult = js->evaluate(wrapped);
+    if (evalResult.isError()) {
+      qWarning() << "[FrameBuilder] Transform compile error for"
+                 << "dataset" << entry.uniqueId << ":"
+                 << evalResult.property("message").toString();
+      continue;
+    }
+
+    // Reject if the IIFE didn't yield a callable transform function
+    if (!evalResult.isCallable()) {
+      qWarning() << "[FrameBuilder] Dataset" << entry.uniqueId
+                 << "transform code does not define transform()";
+      continue;
+    }
+
+    engine.jsRefs[entry.uniqueId] = evalResult;
+  }
+
+  engine.jsEngine = js;
 }
 
 /**

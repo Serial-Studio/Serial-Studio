@@ -320,6 +320,10 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!frame.isEmpty());
 
+  // Runtime guard for release builds (assertions stripped)
+  if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
+    return {};
+
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end() || !it->second->isLoaded()) {
     if (sourceId == 0)
@@ -345,6 +349,10 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
 {
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!frame.isEmpty());
+
+  // Runtime guard for release builds (assertions stripped)
+  if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
+    return {};
 
   auto it = m_engines.find(sourceId);
   if (it == m_engines.end() || !it->second->isLoaded()) {

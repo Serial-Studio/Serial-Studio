@@ -211,6 +211,8 @@ private slots:
   void onRawDataReceived(int deviceId, const IO::ByteArrayPtr& data);
 
 private:
+  void wireUiDriver(IO::HAL_Driver* driver);
+
   [[nodiscard]] bool projectConfigurationOk() const;
   [[nodiscard]] FrameConfig buildFrameConfig(int deviceId) const;
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;

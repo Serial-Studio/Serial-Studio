@@ -258,6 +258,9 @@ private:
   void addAlarmSection(CustomModel* model, const DataModel::Dataset& dataset);
   void addLEDSection(CustomModel* model, const DataModel::Dataset& dataset);
 
+  void buildTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
+  void restoreTreeSelection();
+
   void saveExpandedStateMap(QStandardItem* item, QHash<QString, bool>& map, const QString& title);
   void restoreExpandedStateMap(QStandardItem* item,
                                QHash<QString, bool>& map,

@@ -853,23 +853,48 @@ void DataModel::ProjectEditor::buildTreeModel()
     m_treeModel = nullptr;
   }
 
-  // Create fresh model and populate from project data
+  // Create fresh model and root item
   m_treeModel = new CustomModel(this);
+
+  const auto& pm = DataModel::ProjectModel::instance();
+  auto* root     = new QStandardItem(pm.title());
+  root->setData(root->text(), TreeViewText);
+  root->setData("qrc:/rcc/icons/project-editor/treeview/project-setup.svg", TreeViewIcon);
+  root->setData(true, TreeViewExpanded);
+
+  m_treeModel->appendRow(root);
+  m_rootItems.insert(root, kRootItem);
+
+  // Populate sources, actions, groups, datasets, output widgets
+  buildTreeItems(root, expandedStates);
+
+  // Connect the selection model and emit the new tree
+  m_selectionModel = new QItemSelectionModel(m_treeModel);
+  connect(m_selectionModel,
+          &QItemSelectionModel::currentChanged,
+          this,
+          &DataModel::ProjectEditor::onCurrentSelectionChanged);
+
+  Q_EMIT treeModelChanged();
+
+  // Restore the previously selected item by matching IDs
+  restoreTreeSelection();
+}
+
+/**
+ * @brief Populates the tree model with source, action, group, dataset, and
+ * output widget items under the given @p root.
+ */
+void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
+                                              QHash<QString, bool>& expandedStates)
+{
+  Q_ASSERT(root != nullptr);
 
   const auto& pm         = DataModel::ProjectModel::instance();
   const auto& groups     = pm.groups();
   const auto& actions    = pm.actions();
   const auto& sources    = pm.sources();
   const bool multiSource = sources.size() > 1;
-
-  auto* root = new QStandardItem(pm.title());
-  root->setData(root->text(), TreeViewText);
-  root->setData("qrc:/rcc/icons/project-editor/treeview/project-setup.svg", TreeViewIcon);
-  root->setData(true, TreeViewExpanded);
-
-  m_treeModel->appendRow(root);
-
-  m_rootItems.insert(root, kRootItem);
 
   // Add source items with their frame parser children
   for (const auto& source : sources) {
@@ -905,8 +930,8 @@ void DataModel::ProjectEditor::buildTreeModel()
   // Add group items with their dataset and output widget children
   for (const auto& group : groups) {
     auto* groupItem = new QStandardItem(group.title);
-
-    auto icon = SerialStudio::dashboardWidgetIcon(SerialStudio::getDashboardWidget(group), false);
+    auto icon = SerialStudio::dashboardWidgetIcon(
+      SerialStudio::getDashboardWidget(group), false);
 
     groupItem->setData(icon, TreeViewIcon);
     groupItem->setData(-1, TreeViewFrameIndex);
@@ -914,6 +939,7 @@ void DataModel::ProjectEditor::buildTreeModel()
     groupItem->setData(QString(), TreeViewSourceName);
     groupItem->setData(group.sourceId, TreeViewSourceId);
 
+    // Add dataset children
     for (const auto& dataset : group.datasets) {
       auto* datasetItem = new QStandardItem(dataset.title);
       auto widgets      = SerialStudio::getDashboardWidgets(dataset);
@@ -930,6 +956,7 @@ void DataModel::ProjectEditor::buildTreeModel()
       m_datasetItems.insert(datasetItem, dataset);
     }
 
+    // Add output widget children
     for (const auto& ow : group.outputWidgets) {
       auto* owItem = new QStandardItem(ow.title);
 
@@ -980,18 +1007,17 @@ void DataModel::ProjectEditor::buildTreeModel()
   spacer->setEnabled(false);
   spacer->setSelectable(false);
   root->appendRow(spacer);
+}
 
-  // Connect the selection model and emit the new tree
-  m_selectionModel = new QItemSelectionModel(m_treeModel);
-  connect(m_selectionModel,
-          &QItemSelectionModel::currentChanged,
-          this,
-          &DataModel::ProjectEditor::onCurrentSelectionChanged);
-
-  Q_EMIT treeModelChanged();
-
-  // Restore the previously selected item by matching IDs
+/**
+ * @brief Restores the tree selection to the previously active item by matching
+ * IDs against the current view state.
+ */
+void DataModel::ProjectEditor::restoreTreeSelection()
+{
   QStandardItem* toSelect = nullptr;
+
+  // Match the current view's selected item against the rebuilt tree
   if (m_currentView == DatasetView) {
     const auto gid = m_selectedDataset.groupId;
     const auto did = m_selectedDataset.datasetId;

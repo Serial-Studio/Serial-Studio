@@ -853,10 +853,18 @@ void CSV::Player::generateDateTimeForRows(int interval)
  */
 void CSV::Player::convertColumnToDateTime(int columnIndex)
 {
+  // Validate column index against header row
+  if (m_csvData.isEmpty() || columnIndex < 0
+      || columnIndex >= m_csvData.first().size())
+    return;
+
   // Rewrite each row so the chosen column becomes the leading timestamp
   const auto format = QStringLiteral("yyyy/MM/dd HH:mm:ss::zzz");
   for (int i = 1; i < m_csvData.size(); ++i) {
-    auto dateTime = getDateTime(i);
+    // Read the timestamp from the user-selected column, not column 0
+    bool error    = false;
+    auto cellText = getCellValue(i, columnIndex, error);
+    auto dateTime = error ? QDateTime() : getDateTime(cellText);
     if (!dateTime.isValid())
       dateTime = QDateTime::currentDateTime();
 
