@@ -82,11 +82,10 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
  */
 void IO::Drivers::Network::close()
 {
-  // Disconnect data-ready signals
-  if (socketType() == QAbstractSocket::TcpSocket)
-    disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
-  else if (socketType() == QAbstractSocket::UdpSocket)
-    disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
+  // Disconnect both socket types — avoids duplicate readyRead after a
+  // socketType flip between open() and close().
+  disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
+  disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
 
   // Abort and close both sockets
   m_tcpSocket.abort();
@@ -508,6 +507,11 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
+  // Ignore UDP "port unreachable" — normal for fire-and-forget datagrams.
+  if (socketType() == QAbstractSocket::UdpSocket
+      && socketError == QAbstractSocket::ConnectionRefusedError) [[unlikely]]
+    return;
+
   // Retrieve the error string from the active socket
   QString error;
   if (socketType() == QAbstractSocket::TcpSocket)

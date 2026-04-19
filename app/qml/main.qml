@@ -44,8 +44,18 @@ Item {
   //
   // IO options enabled/disabled
   //
-  readonly property bool mqttSubscriber: Cpp_CommercialBuild ? (Cpp_MQTT_Client.isConnected && Cpp_MQTT_Client.isSubscriber) : false
-  readonly property bool ioEnabled: (!Cpp_IO_Manager.isConnected && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen) || mqttSubscriber
+  readonly property bool mqttSubscriber: Cpp_CommercialBuild
+                                         ? (Cpp_MQTT_Client.isConnected
+                                            && Cpp_MQTT_Client.isSubscriber)
+                                         : false
+  readonly property bool sessionPlayerOpen: Cpp_CommercialBuild
+                                            ? Cpp_Sessions_Player.isOpen
+                                            : false
+  readonly property bool ioEnabled: (!Cpp_IO_Manager.isConnected
+                                     && !Cpp_CSV_Player.isOpen
+                                     && !Cpp_MDF4_Player.isOpen
+                                     && !sessionPlayerOpen)
+                                    || mqttSubscriber
 
   //
   // App-level settings
@@ -78,6 +88,8 @@ Item {
     app.quitting = true
     mainWindow.visible = false
     projectEditor.visible = false
+    if (dbExplorerLoader.item)
+      dbExplorerLoader.item.visible = false
     quitTimer.restart()
   }
 
@@ -173,6 +185,13 @@ Item {
       id: mdf4Player
     }
 
+    Loader {
+      id: sqlitePlayerLoader
+
+      active: Cpp_CommercialBuild
+      source: "Dialogs/SqlitePlayer.qml"
+    }
+
     Dialogs.Donate {
       id: donateDialog
     }
@@ -223,6 +242,16 @@ Item {
   }
 
   //
+  // Database explorer (Pro)
+  //
+  Loader {
+    id: dbExplorerLoader
+
+    active: Cpp_CommercialBuild
+    source: "DatabaseExplorer/DatabaseExplorer.qml"
+  }
+
+  //
   // License activation dialog
   //
   DialogLoader {
@@ -255,6 +284,10 @@ Item {
   function showFileTransmission()  { fileTransmissionDialog.showNormal() }
   function showExamplesBrowser()   { examplesBrowser.activate() }
   function showExtensionManager()  { extensionManager.activate() }
+  function showDatabaseExplorer()  {
+    if (dbExplorerLoader.item)
+      dbExplorerLoader.item.displayWindow()
+  }
   function showHelpCenter(pageId) {
     if (pageId)
       Cpp_HelpCenter.showPage(pageId)

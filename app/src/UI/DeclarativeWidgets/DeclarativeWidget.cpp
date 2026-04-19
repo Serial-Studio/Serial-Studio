@@ -178,10 +178,11 @@ void DeclarativeWidget::requestUpdate()
  */
 void DeclarativeWidget::setWidget(QWidget* widget)
 {
-  if (widget != nullptr) {
-    m_widget = widget;
-    Q_EMIT widgetChanged();
-  }
+  if (widget == nullptr || m_widget == widget)
+    return;
+
+  m_widget = widget;
+  Q_EMIT widgetChanged();
 }
 
 /**
@@ -191,6 +192,9 @@ void DeclarativeWidget::setWidget(QWidget* widget)
  */
 void DeclarativeWidget::setContentWidth(const int width)
 {
+  if (m_contentWidth == width)
+    return;
+
   m_contentWidth = width;
   Q_EMIT geometryChanged();
 }
@@ -202,6 +206,9 @@ void DeclarativeWidget::setContentWidth(const int width)
  */
 void DeclarativeWidget::setContentHeight(const int height)
 {
+  if (m_contentHeight == height)
+    return;
+
   m_contentHeight = height;
   Q_EMIT geometryChanged();
 }

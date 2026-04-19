@@ -77,7 +77,7 @@ def test_set_operation_mode_projectfile(api_client, clean_state):
 
 @pytest.mark.project
 def test_set_operation_mode_json(api_client, clean_state):
-    """Setting mode to DeviceSendsJSON (1) is reflected in dashboard.getStatus."""
+    """Setting mode to ConsoleOnly (1) is reflected in dashboard.getStatus."""
     api_client.command("dashboard.setOperationMode", {"mode": 1})
     time.sleep(0.1)
 
@@ -153,7 +153,7 @@ def test_get_operation_mode_matches_set(api_client, clean_state):
 @pytest.mark.project
 def test_get_operation_mode_returns_mode_name(api_client, clean_state):
     """dashboard.getOperationMode returns a non-empty modeName for every mode."""
-    expected_names = {0: "ProjectFile", 1: "DeviceSendsJSON", 2: "QuickPlot"}
+    expected_names = {0: "ProjectFile", 1: "ConsoleOnly", 2: "QuickPlot"}
 
     for mode, name in expected_names.items():
         api_client.command("dashboard.setOperationMode", {"mode": mode})
@@ -197,7 +197,7 @@ def test_dashboard_status_operation_mode_consistent_with_get(api_client, clean_s
 @pytest.mark.project
 def test_dashboard_status_operation_mode_name_matches_mode(api_client, clean_state):
     """operationModeName in getStatus is consistent with operationMode value."""
-    expected_names = {0: "ProjectFile", 1: "DeviceSendsJSON", 2: "QuickPlot"}
+    expected_names = {0: "ProjectFile", 1: "ConsoleOnly", 2: "QuickPlot"}
 
     for mode, name in expected_names.items():
         api_client.command("dashboard.setOperationMode", {"mode": mode})

@@ -760,6 +760,16 @@ void MDF4::Player::buildFrameIndex()
           continue;
         }
 
+        // Skip raw pre-transform channels during playback — they exist in the
+        // file so session export can reconstruct raw values, but the playback
+        // stream injects only the final (post-transform) values the dashboard
+        // and downstream consumers expect.
+        const std::string& chName               = ch->Name();
+        static constexpr const char* kRawSuffix = " (raw)";
+        if (chName.size() >= 6 && chName.compare(chName.size() - 6, 6, kRawSuffix) == 0)
+          [[unlikely]]
+          continue;
+
         if (std::find(allChannels.begin(), allChannels.end(), ch) == allChannels.end())
           allChannels.push_back(ch);
       }
@@ -817,9 +827,20 @@ void MDF4::Player::buildFrameIndex()
           ci.timeCh = tit->second;
       }
 
-      for (auto* ch : cgChannels)
-        if (ch && ch->Type() != mdf::ChannelType::Master)
-          ci.dataChs.push_back(ch);
+      // Skip master (time) channels and raw pre-transform channels — the
+      // playback stream injects only final values (see buildFrameIndex).
+      for (auto* ch : cgChannels) {
+        if (!ch || ch->Type() == mdf::ChannelType::Master)
+          continue;
+
+        const std::string& chName               = ch->Name();
+        static constexpr const char* kRawSuffix = " (raw)";
+        if (chName.size() >= 6 && chName.compare(chName.size() - 6, 6, kRawSuffix) == 0)
+          [[unlikely]]
+          continue;
+
+        ci.dataChs.push_back(ch);
+      }
 
       cgInfos.push_back(std::move(ci));
     }
@@ -903,10 +924,9 @@ void MDF4::Player::buildFrameIndexFromCache()
   }
 
   // Sort by record ID so binary lookups and sequential playback work
-  std::sort(m_frameIndex.begin(), m_frameIndex.end(),
-            [](const FrameIndex& a, const FrameIndex& b) {
-              return a.recordIndex < b.recordIndex;
-            });
+  std::sort(m_frameIndex.begin(), m_frameIndex.end(), [](const FrameIndex& a, const FrameIndex& b) {
+    return a.recordIndex < b.recordIndex;
+  });
 }
 
 //--------------------------------------------------------------------------------------------------

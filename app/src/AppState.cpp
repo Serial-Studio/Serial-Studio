@@ -36,9 +36,14 @@
  */
 AppState::AppState() : m_operationMode(SerialStudio::QuickPlot)
 {
-  const int saved = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
-  m_operationMode = static_cast<SerialStudio::OperationMode>(saved);
-  m_frameConfig   = deriveFrameConfig();
+  // Clamp persisted int to [ProjectFile, QuickPlot] — out-of-range would trip
+  // FrameReader::processData's mode assertion.
+  const int saved   = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
+  const int clamped = (saved >= SerialStudio::ProjectFile && saved <= SerialStudio::QuickPlot)
+                      ? saved
+                      : SerialStudio::QuickPlot;
+  m_operationMode   = static_cast<SerialStudio::OperationMode>(clamped);
+  m_frameConfig     = deriveFrameConfig();
 }
 
 /**
@@ -186,41 +191,65 @@ void AppState::onProjectFileCleared()
  * @brief Computes the FrameConfig for device 0 from current state.
  *
  * In ProjectFile mode source[0] delimiters are used when available.
- * In other modes, default delimiters and no checksum are applied.
+ * In QuickPlot mode, line-based end-delimiter detection is used.
+ * In ConsoleOnly mode, FrameReader short-circuits so delimiters are irrelevant.
  */
 IO::FrameConfig AppState::deriveFrameConfig() const
 {
-  // Non-ProjectFile modes use fixed JSON delimiters
+  // QuickPlot and ConsoleOnly share a simple default config
   IO::FrameConfig cfg;
   cfg.operationMode = m_operationMode;
 
-  if (m_operationMode != SerialStudio::ProjectFile) {
-    cfg.startSequence     = QByteArray("/*");
-    cfg.finishSequence    = QByteArray("*/");
+  // QuickPlot: LF first (most common → single KMP scan in the hotpath),
+  // then CRLF and bare CR. CSV parser trims stray \r.
+  if (m_operationMode == SerialStudio::QuickPlot) {
+    cfg.startSequences    = {};
+    cfg.finishSequences   = {QByteArray("\n"), QByteArray("\r\n"), QByteArray("\r")};
     cfg.checksumAlgorithm = QString();
     cfg.frameDetection    = SerialStudio::EndDelimiterOnly;
+    return cfg;
+  }
+
+  if (m_operationMode == SerialStudio::ConsoleOnly) {
+    cfg.startSequences    = {};
+    cfg.finishSequences   = {};
+    cfg.checksumAlgorithm = QString();
+    cfg.frameDetection    = SerialStudio::NoDelimiters;
     return cfg;
   }
 
   // Fall back to defaults if no sources are defined
   const auto& sources = DataModel::ProjectModel::instance().sources();
   if (sources.empty()) {
-    cfg.startSequence     = QByteArray("/*");
-    cfg.finishSequence    = QByteArray("*/");
+    cfg.startSequences    = {QByteArray("/*")};
+    cfg.finishSequences   = {QByteArray("*/")};
     cfg.checksumAlgorithm = QString();
     cfg.frameDetection    = DataModel::ProjectModel::instance().frameDetection();
     return cfg;
   }
 
   // Read delimiters and checksum from source[0]
-  const auto& src0 = sources[0];
-  QByteArray start, end;
-  QString checksum;
-  DataModel::read_io_settings(start, end, checksum, DataModel::serialize(src0));
+  cfg.frameDetection = static_cast<SerialStudio::FrameDetection>(sources[0].frameDetection);
 
-  cfg.startSequence     = start;
-  cfg.finishSequence    = end;
-  cfg.checksumAlgorithm = checksum;
-  cfg.frameDetection    = static_cast<SerialStudio::FrameDetection>(src0.frameDetection);
+  QByteArray startSeq;
+  QByteArray finishSeq;
+  DataModel::read_io_settings(
+    startSeq, finishSeq, cfg.checksumAlgorithm, DataModel::serialize(sources[0]));
+
+  cfg.startSequences  = startSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{startSeq};
+  cfg.finishSequences = finishSeq.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{finishSeq};
+
+  // Downgrade detection when required delimiters are empty — prevents
+  // FrameReader's non-empty-delimiter assertion on a malformed project.
+  if ((cfg.frameDetection == SerialStudio::StartDelimiterOnly
+       || cfg.frameDetection == SerialStudio::StartAndEndDelimiter)
+      && cfg.startSequences.isEmpty()) [[unlikely]]
+    cfg.frameDetection =
+      cfg.finishSequences.isEmpty() ? SerialStudio::NoDelimiters : SerialStudio::EndDelimiterOnly;
+
+  if (cfg.frameDetection == SerialStudio::EndDelimiterOnly && cfg.finishSequences.isEmpty())
+    [[unlikely]]
+    cfg.frameDetection = SerialStudio::NoDelimiters;
+
   return cfg;
 }

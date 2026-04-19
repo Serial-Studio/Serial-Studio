@@ -102,8 +102,8 @@ Widgets.SmartWindow {
   // Obtain document title
   //
   function updateDocumentTitle() {
-    if (Cpp_AppState.operationMode == SerialStudio.DeviceSendsJSON)
-      documentTitle = qsTr("Device Defined Project")
+    if (Cpp_AppState.operationMode == SerialStudio.ConsoleOnly)
+      documentTitle = qsTr("Console Only Mode")
 
     else if (Cpp_AppState.operationMode == SerialStudio.QuickPlot)
       documentTitle = qsTr("Quick Plot Mode")

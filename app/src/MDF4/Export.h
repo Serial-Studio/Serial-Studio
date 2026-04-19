@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <vector>
 
+#include "DataModel/ExportSchema.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 
@@ -66,6 +67,7 @@ private:
     mdf::IChannelGroup* channelGroup;
     mdf::IChannel* timeChannel;
     std::vector<mdf::IChannel*> channels;
+    std::vector<mdf::IChannel*> rawChannels;
     std::vector<bool> isNumeric;
   };
 

@@ -213,12 +213,12 @@ Widgets.Pane {
         Layout.maximumHeight: 18
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
-        text: qsTr("No Parsing (Device Sends JSON Data)")
-        checked: Cpp_AppState.operationMode === SerialStudio.DeviceSendsJSON
+        text: qsTr("Console Only (No Parsing)")
+        checked: Cpp_AppState.operationMode === SerialStudio.ConsoleOnly
         onCheckedChanged: {
-          const shouldChange = Cpp_AppState.operationMode !== SerialStudio.DeviceSendsJSON
+          const shouldChange = Cpp_AppState.operationMode !== SerialStudio.ConsoleOnly
           if (checked && shouldChange)
-            Cpp_AppState.operationMode = SerialStudio.DeviceSendsJSON
+            Cpp_AppState.operationMode = SerialStudio.ConsoleOnly
         }
       } RadioButton {
         Layout.leftMargin: -6
@@ -240,7 +240,10 @@ Widgets.Pane {
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Parse via JSON Project File")
         checked: Cpp_AppState.operationMode === SerialStudio.ProjectFile
-        enabled: !Cpp_IO_Manager.isConnected && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen
+        enabled: !Cpp_IO_Manager.isConnected
+                 && !Cpp_CSV_Player.isOpen
+                 && !Cpp_MDF4_Player.isOpen
+                 && (!Cpp_CommercialBuild || !Cpp_Sessions_Player.isOpen)
         onCheckedChanged: {
           const shouldChange = Cpp_AppState.operationMode !== SerialStudio.ProjectFile
           if (checked && shouldChange)
@@ -311,6 +314,27 @@ Widgets.Pane {
         onCheckedChanged: {
           if (Cpp_MDF4_Export.exportEnabled !== checked)
             Cpp_MDF4_Export.exportEnabled = checked
+        }
+      }
+
+      //
+      // Session log (Pro)
+      //
+      CheckBox {
+        Layout.leftMargin: -6
+        Layout.maximumHeight: 18
+        visible: Cpp_CommercialBuild
+        Layout.alignment: Qt.AlignLeft
+        text: qsTr("Create Session Log")
+        Layout.maximumWidth: root.maxItemWidth
+        checked: Cpp_CommercialBuild && Cpp_Sessions_Export.exportEnabled
+
+        onCheckedChanged: {
+          if (!Cpp_CommercialBuild)
+            return
+
+          if (Cpp_Sessions_Export.exportEnabled !== checked)
+            Cpp_Sessions_Export.exportEnabled = checked
         }
       }
 

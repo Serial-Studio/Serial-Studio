@@ -48,11 +48,9 @@ enum class ValidationStatus {
  * handling, such as quick plotting, JSON extraction, and project-specific
  * parsing.
  *
- * **Runs on the main thread.** Historically this class was moved to a
- * worker thread via m_threadedExtraction; that path was removed (see
- * beeda4c0). HAL drivers may still emit dataReceived() from their own
- * read threads — the AutoConnection on processData() resolves to a
- * queued hop when that happens.
+ * **Runs on the main thread.** HAL drivers may emit dataReceived() from
+ * their own read threads — the AutoConnection on processData() resolves to
+ * a queued hop when that happens.
  *
  * **Thread Safety Model:**
  * This class achieves thread safety through immutability rather than locks.
@@ -93,8 +91,8 @@ public slots:
   void processData(const IO::ByteArrayPtr& data);
 
   void setChecksum(const QString& checksum);
-  void setStartSequence(const QByteArray& start);
-  void setFinishSequence(const QByteArray& finish);
+  void setStartSequences(const QList<QByteArray>& starts);
+  void setFinishSequences(const QList<QByteArray>& finishes);
   void setOperationMode(const SerialStudio::OperationMode mode);
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 
@@ -108,12 +106,15 @@ private:
 private:
   QString m_checksum;
   qsizetype m_checksumLength;
-  QByteArray m_startSequence;
-  QByteArray m_finishSequence;
-  QVector<QByteArray> m_quickPlotEndSequences;
-  std::vector<int> m_startSequenceLps;
-  std::vector<int> m_finishSequenceLps;
-  QVector<std::vector<int>> m_quickPlotEndSequenceLps;
+
+  // Unified delimiter storage — one or more patterns per direction.
+  // Ordered longest-first so CRLF is preferred over bare CR when both
+  // match at the same buffer position.
+  QVector<QByteArray> m_startSequences;
+  QVector<QByteArray> m_finishSequences;
+  QVector<std::vector<int>> m_startSequenceLps;
+  QVector<std::vector<int>> m_finishSequenceLps;
+
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
   CircularBuffer<QByteArray, char> m_circularBuffer;

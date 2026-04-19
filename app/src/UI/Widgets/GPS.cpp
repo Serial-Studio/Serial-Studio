@@ -486,8 +486,8 @@ void Widgets::GPS::setMapType(const int type)
     else
       m_enableReferenceLayer = false;
 
-    if (m_zoom > m_mapMaxZoom[type])
-      m_zoom = m_mapMaxZoom[type];
+    if (m_zoom > m_mapMaxZoom[mapId])
+      m_zoom = m_mapMaxZoom[mapId];
 
     updateTiles();
     precacheWorld();

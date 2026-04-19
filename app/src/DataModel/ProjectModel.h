@@ -75,6 +75,13 @@ class ProjectModel : public QObject {
              READ  frameParserLanguage
              WRITE setFrameParserLanguage
              NOTIFY frameParserLanguageChanged)
+  Q_PROPERTY(int tableCount
+             READ tableCount
+             NOTIFY tablesChanged)
+  Q_PROPERTY(bool customizeWorkspaces
+             READ  customizeWorkspaces
+             WRITE setCustomizeWorkspaces
+             NOTIFY customizeWorkspacesChanged)
   // clang-format on
 
 signals:
@@ -95,6 +102,8 @@ signals:
   void activeGroupIdChanged();
   void widgetSettingsChanged();
   void workspacesChanged();
+  void tablesChanged();
+  void customizeWorkspacesChanged();
 
   void groupAdded(int groupId);
   void groupDeleted();
@@ -146,10 +155,14 @@ public:
   [[nodiscard]] const std::vector<Group>& groups() const noexcept;
   [[nodiscard]] const std::vector<Action>& actions() const noexcept;
   [[nodiscard]] const std::vector<Source>& sources() const noexcept;
-  [[nodiscard]] const std::vector<Workspace>& workspaces() const noexcept;
+  [[nodiscard]] const std::vector<Workspace>& workspaces() const;
   [[nodiscard]] const QSet<int>& hiddenGroupIds() const noexcept;
   [[nodiscard]] int workspaceCount() const noexcept;
   [[nodiscard]] bool isGroupHidden(int groupId) const;
+
+  [[nodiscard]] int tableCount() const noexcept;
+  [[nodiscard]] bool customizeWorkspaces() const noexcept;
+  [[nodiscard]] const std::vector<TableDef>& tables() const noexcept;
 
   Q_INVOKABLE [[nodiscard]] bool askSave();
   Q_INVOKABLE [[nodiscard]] QVariantList sourcesForDiagram() const;
@@ -172,9 +185,43 @@ public slots:
   void openJsonFile();
   bool openJsonFile(const QString& path);
 
+  // Loads a project directly from an in-memory JSON document — used by the
+  // session-replay flow and the project.loadFromJSON API command so neither
+  // needs to round-trip through a temp file. sourcePath is recorded as
+  // m_filePath when non-empty; callers without a real file on disk should
+  // pass an empty string, and the project will load with no file association.
+  bool loadFromJsonDocument(const QJsonDocument& document, const QString& sourcePath = {});
+
   void setTitle(const QString& title);
   void setPointCount(const int points);
   void clearJsonFilePath();
+
+  // Data-table CRUD — user-defined shared-memory tables
+  Q_INVOKABLE QString addTable(const QString& name);
+  Q_INVOKABLE [[nodiscard]] QVariantList registersForTable(const QString& table) const;
+
+  void deleteTable(const QString& name);
+  void renameTable(const QString& oldName, const QString& newName);
+  void addRegister(const QString& table,
+                   const QString& registerName,
+                   bool computed,
+                   const QVariant& defaultValue);
+  void deleteRegister(const QString& table, const QString& registerName);
+  void updateRegister(const QString& table,
+                      const QString& registerName,
+                      const QString& newName,
+                      bool computed,
+                      const QVariant& defaultValue);
+
+  // QInputDialog wrappers — native prompts invoked from QML buttons
+  void promptAddTable();
+  void promptRenameTable(const QString& oldName);
+  void promptAddRegister(const QString& table);
+  void promptRenameRegister(const QString& table, const QString& registerName);
+  void confirmDeleteTable(const QString& name);
+  void confirmDeleteRegister(const QString& table, const QString& registerName);
+  void importTableFromCsv(const QString& tableName);
+  void exportTableToCsv(const QString& tableName);
 
   void setFrameStartSequence(const QString& sequence);
   void setFrameEndSequence(const QString& sequence);
@@ -232,10 +279,21 @@ public slots:
   void setSelectedDataset(const DataModel::Dataset& dataset);
   void setSelectedOutputWidget(const DataModel::OutputWidget& widget);
 
-  void addWorkspace(const QString& title);
+  void setCustomizeWorkspaces(const bool enabled);
+
+  Q_INVOKABLE int addWorkspace(const QString& title);
+  Q_INVOKABLE int autoGenerateWorkspaces();
+  Q_INVOKABLE [[nodiscard]] QString workspaceTitle(int workspaceId) const;
+
   void deleteWorkspace(int workspaceId);
   void renameWorkspace(int workspaceId, const QString& title);
   void addWidgetToWorkspace(int workspaceId, int widgetType, int groupId, int relativeIndex);
+  void removeWidgetFromWorkspace(int workspaceId, int widgetType, int groupId, int relativeIndex);
+
+  void promptAddWorkspace();
+  void promptRenameWorkspace(int workspaceId);
+  void confirmDeleteWorkspace(int workspaceId);
+
   void removeWidgetFromWorkspace(int workspaceId, int index);
   void hideGroup(int groupId);
   void showGroup(int groupId);
@@ -255,6 +313,25 @@ private:
   int nextDatasetIndex();
   bool finalizeProjectSave();
   void clearTransientState();
+
+  // Builds a fresh synthetic workspace list from the current groups/datasets.
+  // Used by workspaces() when customizeWorkspaces is off, and as the initial
+  // seed when the user flips the flag on.
+  [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
+
+  // Per-widget-type counts that a group contributes to Dashboard's walker —
+  // used when computing the ref shift after a group delete.
+  [[nodiscard]] QMap<int, int> widgetTypeCountsForGroup(const Group& g) const;
+
+  // After a group is removed and groupIds renumbered, shift user-customised
+  // widgetRefs. deletedTypeCounts is a snapshot of the deleted group's
+  // per-widget-type contribution, captured BEFORE the erase.
+  void shiftWorkspaceRefsAfterGroupDelete(int deletedGid, const QMap<int, int>& deletedTypeCounts);
+
+  // After a single dataset is removed from a surviving group, shift refs of
+  // the same widget type that lived later in project order. datasetTypeCounts
+  // is a snapshot of the deleted dataset's per-widget-type contribution.
+  void shiftWorkspaceRefsAfterDatasetDelete(int groupId, const QMap<int, int>& datasetTypeCounts);
 
 private:
   QString m_title;
@@ -277,6 +354,15 @@ private:
   std::vector<DataModel::Source> m_sources;
   QSet<int> m_hiddenGroupIds;
   std::vector<DataModel::Workspace> m_workspaces;
+  std::vector<DataModel::TableDef> m_tables;
+
+  // customizeWorkspaces == false: m_workspaces stays empty and workspaces()
+  // returns a lazily-built synthetic list (m_autoWorkspaces). The synthetic
+  // list is never serialised. When the user flips the flag on, the current
+  // synthetic list is copied into m_workspaces and saved from then on.
+  bool m_customizeWorkspaces;
+  mutable std::vector<DataModel::Workspace> m_autoWorkspaces;
+  mutable bool m_autoWorkspacesDirty;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

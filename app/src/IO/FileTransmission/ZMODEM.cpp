@@ -99,6 +99,15 @@ void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
   m_headerBuf.clear();
   m_zdleEscape = false;
 
+  // Reject >4 GiB up-front — ZMODEM's base offsets are 32-bit unsigned.
+  static constexpr qint64 kZmodemMaxFileSize = static_cast<qint64>(0xFFFFFFFFULL);
+  if (m_fileSize > kZmodemMaxFileSize) [[unlikely]] {
+    m_file.close();
+    Q_EMIT finished(false,
+                    tr("File is too large for ZMODEM (%1 bytes, limit 4 GiB).").arg(m_fileSize));
+    return;
+  }
+
   Q_EMIT progressChanged(0, m_fileSize);
 
   // Send ZRQINIT to initiate the session
@@ -212,8 +221,17 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
  */
 void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
 {
+  // Bound m_headerBuf — peer without a line terminator would otherwise OOM.
+  static constexpr int kMaxHexHeaderBytes = 32;
+
   // Accumulate until line terminator
   if (ch != '\r' && ch != '\n') {
+    if (m_headerBuf.size() >= kMaxHexHeaderBytes) [[unlikely]] {
+      m_parseState = ParseState::Idle;
+      m_headerBuf.clear();
+      return;
+    }
+
     m_headerBuf.append(static_cast<char>(ch));
     return;
   }
@@ -239,6 +257,26 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
         | (static_cast<quint32>(static_cast<quint8>(arg_bytes[1])) << 8)
         | (static_cast<quint32>(static_cast<quint8>(arg_bytes[2])) << 16)
         | (static_cast<quint32>(static_cast<quint8>(arg_bytes[3])) << 24);
+  }
+
+  // Validate CRC-16 trailer — corrupted headers would otherwise be obeyed.
+  const QByteArray crc_bytes = QByteArray::fromHex(m_headerBuf.mid(10, 4));
+  if (crc_bytes.size() == 2) {
+    quint8 payload[5];
+    payload[0] = type;
+    payload[1] = static_cast<quint8>(arg & 0xFF);
+    payload[2] = static_cast<quint8>((arg >> 8) & 0xFF);
+    payload[3] = static_cast<quint8>((arg >> 16) & 0xFF);
+    payload[4] = static_cast<quint8>((arg >> 24) & 0xFF);
+
+    const quint16 calc_crc = CRC::crc16(payload, 5);
+    const quint16 rx_crc   = static_cast<quint16>((static_cast<quint8>(crc_bytes[0]) << 8)
+                                                | static_cast<quint8>(crc_bytes[1]));
+    if (calc_crc != rx_crc) [[unlikely]] {
+      Q_EMIT statusMessage(tr("Hex header CRC mismatch, dropping frame"));
+      m_parseState = ParseState::Idle;
+      return;
+    }
   }
 
   parseReceivedHeader(type, arg);
@@ -543,9 +581,9 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       }
       break;
 
-    // Resume from requested offset
+    // Resume from requested offset — clamp so a bogus arg can't seek past EOF.
     case kZRPOS:
-      m_fileOffset = static_cast<qint64>(arg);
+      m_fileOffset = qBound<qint64>(0, static_cast<qint64>(arg), m_fileSize);
       Q_EMIT statusMessage(tr("Receiver requests data from offset %1").arg(m_fileOffset));
       sendDataSubpackets();
       break;

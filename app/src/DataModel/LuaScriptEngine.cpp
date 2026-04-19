@@ -68,6 +68,14 @@ static void openSafeLibs(lua_State* L)
     lua_pushnil(L);
     lua_setglobal(L, name);
   }
+
+  // Strip string.dump — bytecode exfiltration vector pairs with unsafe loaders.
+  lua_getglobal(L, "string");
+  if (lua_istable(L, -1)) {
+    lua_pushnil(L);
+    lua_setfield(L, -2, "dump");
+  }
+  lua_pop(L, 1);
 }
 
 //--------------------------------------------------------------------------------------------------

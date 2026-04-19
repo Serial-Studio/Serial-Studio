@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60pt" height="60pt" viewBox="0 0 60 60" version="1.1">
+<g id="surface127">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 3.75 53.25 L 3.75 3.75 L 56.25 3.75 L 56.25 46.410156 L 42.574219 53.25 Z M 3.75 53.25 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(47.058824%,54.509807%,61.176473%);fill-opacity:1;" d="M 55.5 4.5 L 55.5 45.949219 L 42.394531 52.5 L 4.5 52.5 L 4.5 4.5 L 55.5 4.5 M 57 3 L 3 3 L 3 54 L 42.75 54 L 57 46.875 Z M 57 3 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(78.431374%,81.960785%,85.882354%);fill-opacity:1;" d="M 46.925781 52.5 L 31.5 52.5 L 31.5 54 L 44.148438 54 C 45.042969 53.515625 45.972656 53.011719 46.925781 52.5 Z M 57 47.085938 L 57 41.683594 L 55.5 40.816406 L 55.5 47.890625 C 56.015625 47.613281 56.515625 47.347656 57 47.085938 Z M 57 47.085938 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(47.058824%,54.509807%,61.176473%);fill-opacity:1;" d="M 3 3 L 57 3 L 57 12 L 3 12 Z M 3 3 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(54.509807%,71.764708%,94.117647%);stroke-opacity:1;stroke-miterlimit:10;" d="M 13 15.5 L 31 15.5 M 9 15.5 L 10 15.5 M 13 19.5 L 31 19.5 M 9 19.5 L 10 19.5 M 13 23.5 L 31 23.5 M 9 23.5 L 10 23.5 M 13 27.5 L 31 27.5 M 9 27.5 L 10 27.5 " transform="matrix(1.5,0,0,1.5,0,0)"/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(76.078433%,90.980393%,100%);fill-opacity:1;" d="M 31.5 36 L 45 36 L 42.1875 34.5 L 31.5 34.5 Z M 31.5 40.5 L 45 40.5 L 45 42 L 31.5 42 Z M 31.5 40.5 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(54.509807%,71.764708%,94.117647%);fill-opacity:1;" d="M 35.25 34.246094 L 58.398438 46.5 L 35.25 58.753906 Z M 35.25 34.246094 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(30.588236%,47.843137%,70.980394%);fill-opacity:1;" d="M 36 35.492188 L 56.792969 46.5 L 36 57.507812 L 36 35.492188 M 34.5 33 L 34.5 60 L 60 46.5 Z M 34.5 33 "/>
+</g>
+</svg>

@@ -26,15 +26,20 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QInputDialog>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMessageBox>
 #include <QRegularExpression>
+#include <QTimer>
 
 #include "AppInfo.h"
 #include "AppState.h"
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameParser.h"
 #include "DataModel/OutputCodeEditor.h"
+#include "DataModel/ProjectEditor.h"
 #include "IO/Checksum.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/IconEngine.h"
@@ -71,7 +76,17 @@ DataModel::ProjectModel::ProjectModel()
   , m_silentReload(false)
   , m_filePath("")
   , m_suppressMessageBoxes(false)
+  , m_customizeWorkspaces(false)
+  , m_autoWorkspacesDirty(true)
 {
+  // Any structural change invalidates the synthetic workspace cache and
+  // forces observers (dashboard taskbar, project editor tree) to reload.
+  connect(this, &ProjectModel::groupsChanged, this, [this] {
+    m_autoWorkspacesDirty = true;
+    if (!m_customizeWorkspaces)
+      Q_EMIT workspacesChanged();
+  });
+
   newJsonFile();
 }
 
@@ -355,11 +370,25 @@ int DataModel::ProjectModel::sourceCount() const noexcept
 }
 
 /**
- * @brief Returns a const reference to the vector of user-defined workspaces.
+ * @brief Returns the workspaces that represent the current project layout.
+ *
+ * When `customizeWorkspaces` is on, this is the user-edited list stored in
+ * `m_workspaces` and saved to the project JSON. Otherwise it returns a lazily
+ * rebuilt synthetic list (m_autoWorkspaces) produced by the same rules the
+ * old auto-taskbar used: Overview → All Data → one workspace per group.
+ * The synthetic list is never persisted.
  */
-const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() const noexcept
+const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() const
 {
-  return m_workspaces;
+  if (m_customizeWorkspaces)
+    return m_workspaces;
+
+  if (m_autoWorkspacesDirty) {
+    m_autoWorkspaces      = buildAutoWorkspaces();
+    m_autoWorkspacesDirty = false;
+  }
+
+  return m_autoWorkspaces;
 }
 
 /**
@@ -384,6 +413,22 @@ int DataModel::ProjectModel::workspaceCount() const noexcept
 bool DataModel::ProjectModel::isGroupHidden(int groupId) const
 {
   return m_hiddenGroupIds.contains(groupId);
+}
+
+/**
+ * @brief Returns the number of user-defined data tables.
+ */
+int DataModel::ProjectModel::tableCount() const noexcept
+{
+  return static_cast<int>(m_tables.size());
+}
+
+/**
+ * @brief Returns a const reference to the vector of data tables.
+ */
+const std::vector<DataModel::TableDef>& DataModel::ProjectModel::tables() const noexcept
+{
+  return m_tables;
 }
 
 /**
@@ -873,7 +918,12 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
       if (path.isEmpty())
         return;
 
-      m_filePath = path;
+      // Enforce .ssproj extension — append when missing
+      QString finalPath = path;
+      if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
+        finalPath += QStringLiteral(".ssproj");
+
+      m_filePath = finalPath;
       (void)finalizeProjectSave();
     });
 
@@ -920,8 +970,13 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
     return false;
   }
 
+  // Enforce .ssproj extension — append when missing
+  QString finalPath = path;
+  if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
+    finalPath += QStringLiteral(".ssproj");
+
   // Write directly to the specified path
-  m_filePath = path;
+  m_filePath = finalPath;
   return finalizeProjectSave();
 }
 
@@ -961,8 +1016,11 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
   json.insert(Keys::Sources, sourcesArray);
 
-  // User-defined workspaces
-  if (!m_workspaces.empty()) {
+  // User-defined workspaces — only persisted when the user has opted in to
+  // customising them. Automatic layouts are regenerated from groups on load.
+  if (m_customizeWorkspaces) {
+    json.insert(QStringLiteral("customizeWorkspaces"), true);
+
     QJsonArray workspacesArray;
     for (const auto& ws : std::as_const(m_workspaces))
       workspacesArray.append(DataModel::serialize(ws));
@@ -977,6 +1035,15 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
       hiddenArray.append(id);
 
     json.insert(Keys::HiddenGroups, hiddenArray);
+  }
+
+  // Data tables (skip if empty for backward compat)
+  if (!m_tables.empty()) {
+    QJsonArray tablesArray;
+    for (const auto& table : std::as_const(m_tables))
+      tablesArray.append(DataModel::serialize(table));
+
+    json.insert(Keys::Tables, tablesArray);
   }
 
   if (!m_widgetSettings.isEmpty())
@@ -1018,6 +1085,18 @@ void DataModel::ProjectModel::setupExternalConnections()
     Q_EMIT pointCountChanged();
   });
 
+  // In QuickPlot mode, m_groups is empty — the workspace builder reads from
+  // FrameBuilder::quickPlotFrame(). Invalidate the cache whenever the
+  // dashboard structure changes so the taskbar picks up the new layout.
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetCountChanged, this, [this] {
+    if (AppState::instance().operationMode() != SerialStudio::QuickPlot)
+      return;
+
+    m_autoWorkspacesDirty = true;
+    if (!m_customizeWorkspaces)
+      Q_EMIT workspacesChanged();
+  });
+
   // Clear ephemeral workspace data on disconnect in non-project modes
   connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
@@ -1047,6 +1126,9 @@ void DataModel::ProjectModel::newJsonFile()
   m_actions.clear();
   m_sources.clear();
   m_workspaces.clear();
+  m_tables.clear();
+  m_customizeWorkspaces = false;
+  m_autoWorkspacesDirty = true;
 
   // Reset to factory defaults
   m_frameEndSequence      = "\\n";
@@ -1082,7 +1164,9 @@ void DataModel::ProjectModel::newJsonFile()
   Q_EMIT sourcesChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
+  Q_EMIT tablesChanged();
   Q_EMIT workspacesChanged();
+  Q_EMIT customizeWorkspacesChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
@@ -1276,6 +1360,21 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     file.close();
   }
 
+  return loadFromJsonDocument(document, path);
+}
+
+/**
+ * @brief Deserialises a project from an in-memory QJsonDocument.
+ *
+ * Shared back-end for openJsonFile() and every caller that already has the
+ * document in hand (session replay, the project.loadFromJSON API command).
+ * When @p sourcePath is non-empty it becomes @c m_filePath so subsequent
+ * "Save" writes back to the right file; pass an empty string for sessions
+ * or API uploads that shouldn't be tied to a file on disk.
+ */
+bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document,
+                                                   const QString& sourcePath)
+{
   if (document.isEmpty())
     return false;
 
@@ -1286,8 +1385,8 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   m_workspaces.clear();
   m_widgetSettings = QJsonObject();
 
-  // Read project metadata
-  m_filePath = path;
+  // Record the source path (empty = in-memory load, no file association)
+  m_filePath = sourcePath;
 
   auto json                      = document.object();
   m_title                        = json.value("title").toString();
@@ -1393,9 +1492,20 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   // Load widget settings
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
-  // Deserialize user-defined workspaces
+  // Workspaces. When the project opted in to customising workspaces, load
+  // the saved list; otherwise start in automatic mode and let workspaces()
+  // synthesize the layout on demand.
   m_workspaces.clear();
-  if (json.contains(Keys::Workspaces)) {
+  m_customizeWorkspaces = json.value(QStringLiteral("customizeWorkspaces")).toBool(false);
+  m_autoWorkspacesDirty = true;
+
+  // Migrate pre-v3.3 projects: if a workspaces array is present but the
+  // customize flag wasn't persisted, auto-promote so the saved list isn't lost
+  if (!m_customizeWorkspaces && json.contains(Keys::Workspaces)
+      && !json.value(Keys::Workspaces).toArray().isEmpty())
+    m_customizeWorkspaces = true;
+
+  if (m_customizeWorkspaces && json.contains(Keys::Workspaces)) {
     const auto wsArray = json.value(Keys::Workspaces).toArray();
     for (const auto& val : wsArray) {
       DataModel::Workspace ws;
@@ -1410,6 +1520,17 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
     const auto hiddenArray = json.value(Keys::HiddenGroups).toArray();
     for (const auto& val : hiddenArray)
       m_hiddenGroupIds.insert(val.toInt());
+  }
+
+  // Deserialize data tables (missing key = empty, backward compatible)
+  m_tables.clear();
+  if (json.contains(Keys::Tables)) {
+    const auto tablesArray = json.value(Keys::Tables).toArray();
+    for (const auto& val : tablesArray) {
+      DataModel::TableDef table;
+      if (DataModel::read(table, val.toObject()))
+        m_tables.push_back(table);
+    }
   }
 
   // Read point count from root level or legacy widgetSettings key
@@ -1464,6 +1585,10 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       m_widgetSettings.insert(Keys::kActiveGroupSubKey, legacy_group_id);
   }
 
+  // No explicit workspace generation needed: when customizeWorkspaces is
+  // false, workspaces() returns a lazily-built synthetic list (Overview +
+  // All Data + per-group) that mirrors the legacy Taskbar behaviour.
+
   setModified(false);
 
   // Migrate legacy "separator" field into the frame parser function
@@ -1493,7 +1618,12 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
       else
         qWarning() << "[ProjectModel] Legacy frame parser function automatically migrated";
 
-      (void)saveJsonFile(false);
+      // Persist the migration only when we came from a real file — an
+      // in-memory load has no destination and saveJsonFile(false) would
+      // prompt the user for a path, which is wrong on the replay path.
+      if (!m_filePath.isEmpty())
+        (void)saveJsonFile(false);
+
       return true;
     }
   }
@@ -1504,7 +1634,9 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   Q_EMIT sourcesChanged();
   Q_EMIT titleChanged();
   Q_EMIT jsonFileChanged();
+  Q_EMIT tablesChanged();
   Q_EMIT workspacesChanged();
+  Q_EMIT customizeWorkspacesChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
 
@@ -1517,8 +1649,9 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
   if (!m_widgetSettings.isEmpty())
     Q_EMIT widgetSettingsChanged();
 
-  // Auto-save migration from legacy single-source format
-  if (legacyFormat) {
+  // Auto-save migration from legacy single-source format — skip for
+  // in-memory loads (empty m_filePath) since they have no file to rewrite.
+  if (legacyFormat && !m_filePath.isEmpty()) {
     qInfo() << "[ProjectModel] Migrating legacy project to multi-source format, saving...";
     QFile f(m_filePath);
     if (f.open(QFile::WriteOnly)) {
@@ -1687,6 +1820,12 @@ void DataModel::ProjectModel::deleteCurrentGroup()
   if (gid < 0 || static_cast<size_t>(gid) >= m_groups.size())
     return;
 
+  // Count widgets-of-each-type the deleted group contributed BEFORE erasing
+  // so we can decrement relativeIndex on any ref that came after this group.
+  QMap<int, int> deletedTypeCounts;
+  if (m_customizeWorkspaces)
+    deletedTypeCounts = widgetTypeCountsForGroup(m_groups[gid]);
+
   m_groups.erase(m_groups.begin() + gid);
 
   // Renumber group and dataset IDs to stay contiguous
@@ -1696,6 +1835,13 @@ void DataModel::ProjectModel::deleteCurrentGroup()
     for (auto d = g->datasets.begin(); d != g->datasets.end(); ++d)
       d->groupId = id;
   }
+
+  // If the user has customised workspaces, rewrite widgetRefs so both groupId
+  // and relativeIndex match the post-delete layout — relativeIndex is a
+  // per-widget-type running counter in project order and shifts for every
+  // widget that came after the deleted group.
+  if (m_customizeWorkspaces)
+    shiftWorkspaceRefsAfterGroupDelete(gid, deletedTypeCounts);
 
   Q_EMIT groupsChanged();
   Q_EMIT groupDeleted();
@@ -1768,6 +1914,25 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   if (datasetId < 0 || static_cast<size_t>(datasetId) >= m_groups[groupId].datasets.size())
     return;
 
+  // Snapshot the group's full widget-type counts BEFORE we touch anything so
+  // the post-erase ref rebuild has accurate "count removed" data if the group
+  // ends up being dropped entirely below.
+  QMap<int, int> deletedTypeCounts;
+  if (m_customizeWorkspaces)
+    deletedTypeCounts = widgetTypeCountsForGroup(m_groups[groupId]);
+
+  // Snapshot the deleted dataset's own widget-type contribution — if the
+  // group survives, workspace refs pointing at the same widget type in later
+  // slots need their relativeIndex shifted by exactly this much.
+  QMap<int, int> datasetTypeCounts;
+  if (m_customizeWorkspaces) {
+    const auto& ds  = m_groups[groupId].datasets[datasetId];
+    const auto keys = SerialStudio::getDashboardWidgets(ds);
+    for (const auto& k : keys)
+      if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
+        datasetTypeCounts[static_cast<int>(k)] += 1;
+  }
+
   // Erase the dataset
   m_groups[groupId].datasets.erase(m_groups[groupId].datasets.begin() + datasetId);
 
@@ -1782,6 +1947,11 @@ void DataModel::ProjectModel::deleteCurrentDataset()
         d->groupId = id;
     }
 
+    // Group became empty and was removed — shift refs using the pre-delete
+    // per-type widget counts we captured above.
+    if (m_customizeWorkspaces)
+      shiftWorkspaceRefsAfterGroupDelete(groupId, deletedTypeCounts);
+
     Q_EMIT groupsChanged();
     Q_EMIT datasetDeleted(-1);
     setModified(true);
@@ -1794,6 +1964,11 @@ void DataModel::ProjectModel::deleteCurrentDataset()
   auto end   = m_groups[groupId].datasets.end();
   for (auto dataset = begin; dataset != end; ++dataset, ++id)
     dataset->datasetId = id;
+
+  // Group survives — shift workspace refs of the same widget type whose
+  // running counter lands at or above the removed dataset's slot.
+  if (m_customizeWorkspaces)
+    shiftWorkspaceRefsAfterDatasetDelete(groupId, datasetTypeCounts);
 
   Q_EMIT groupsChanged();
   Q_EMIT datasetDeleted(groupId);
@@ -2811,8 +2986,15 @@ void DataModel::ProjectModel::setGroupLayout(const int groupId, const QJsonObjec
  * Assigns the next available workspace ID (max existing + 1, starting at 1000
  * to avoid collision with auto-generated group-based workspace IDs).
  */
-void DataModel::ProjectModel::addWorkspace(const QString& title)
+int DataModel::ProjectModel::addWorkspace(const QString& title)
 {
+  // Auto-enable customize mode so the auto-generated list is snapshotted into
+  // m_workspaces before appending the new workspace. Without this, adding a
+  // workspace from the dashboard toolbar would leave m_workspaces holding only
+  // the freshly added entry.
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
   int maxId = 999;
   for (const auto& ws : m_workspaces)
     if (ws.workspaceId > maxId)
@@ -2820,11 +3002,12 @@ void DataModel::ProjectModel::addWorkspace(const QString& title)
 
   DataModel::Workspace ws;
   ws.workspaceId = maxId + 1;
-  ws.title       = title.simplified();
+  ws.title       = title.simplified().isEmpty() ? tr("Workspace") : title.simplified();
   m_workspaces.push_back(ws);
 
   setModified(true);
   Q_EMIT workspacesChanged();
+  return ws.workspaceId;
 }
 
 /**
@@ -2832,6 +3015,11 @@ void DataModel::ProjectModel::addWorkspace(const QString& title)
  */
 void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
 {
+  // Materialise the auto list before mutating so the remaining auto
+  // workspaces survive the delete.
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
   auto it = std::find_if(m_workspaces.begin(), m_workspaces.end(), [workspaceId](const auto& ws) {
     return ws.workspaceId == workspaceId;
   });
@@ -2849,6 +3037,11 @@ void DataModel::ProjectModel::deleteWorkspace(int workspaceId)
  */
 void DataModel::ProjectModel::renameWorkspace(int workspaceId, const QString& title)
 {
+  // Renaming implicitly promotes the project into customize mode so the new
+  // title survives future auto-regeneration.
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId == workspaceId) {
       ws.title = title.simplified();
@@ -2856,6 +3049,517 @@ void DataModel::ProjectModel::renameWorkspace(int workspaceId, const QString& ti
       Q_EMIT workspacesChanged();
       return;
     }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Data-table CRUD
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Adds a new empty data table with a unique name derived from @p name.
+ *
+ * @return The actual name used after uniquifying (callers use this to select
+ *         the newly created table in the editor tree).
+ */
+QString DataModel::ProjectModel::addTable(const QString& name)
+{
+  // Derive a unique table name so we never collide with an existing one
+  QString base = name.simplified();
+  if (base.isEmpty())
+    base = tr("Shared Table");
+
+  QString unique     = base;
+  int suffix         = 2;
+  const auto hasName = [this](const QString& n) {
+    for (const auto& t : m_tables)
+      if (t.name == n)
+        return true;
+
+    return false;
+  };
+
+  while (hasName(unique))
+    unique = QStringLiteral("%1 %2").arg(base).arg(suffix++);
+
+  // Append and notify
+  DataModel::TableDef table;
+  table.name = unique;
+  m_tables.push_back(table);
+  setModified(true);
+  Q_EMIT tablesChanged();
+  return unique;
+}
+
+/**
+ * @brief Deletes the table with the given @p name.
+ */
+void DataModel::ProjectModel::deleteTable(const QString& name)
+{
+  auto it = std::find_if(
+    m_tables.begin(), m_tables.end(), [&name](const auto& t) { return t.name == name; });
+
+  if (it == m_tables.end())
+    return;
+
+  m_tables.erase(it);
+  setModified(true);
+  Q_EMIT tablesChanged();
+}
+
+/**
+ * @brief Renames a table (no-op if target name already exists).
+ */
+void DataModel::ProjectModel::renameTable(const QString& oldName, const QString& newName)
+{
+  const QString n = newName.simplified();
+  if (n.isEmpty())
+    return;
+
+  // Reject rename if another table already owns the target name
+  for (const auto& t : m_tables)
+    if (t.name == n && t.name != oldName)
+      return;
+
+  for (auto& t : m_tables) {
+    if (t.name == oldName) {
+      t.name = n;
+      setModified(true);
+      Q_EMIT tablesChanged();
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Appends a register to @p table with a unique name.
+ */
+void DataModel::ProjectModel::addRegister(const QString& table,
+                                          const QString& registerName,
+                                          bool computed,
+                                          const QVariant& defaultValue)
+{
+  // Locate the target table
+  auto it = std::find_if(
+    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
+
+  if (it == m_tables.end())
+    return;
+
+  // Derive a unique register name within this table
+  QString base = registerName.simplified();
+  if (base.isEmpty())
+    base = tr("register");
+
+  QString unique     = base;
+  int suffix         = 2;
+  const auto hasName = [it](const QString& n) {
+    for (const auto& r : it->registers)
+      if (r.name == n)
+        return true;
+
+    return false;
+  };
+
+  while (hasName(unique))
+    unique = QStringLiteral("%1_%2").arg(base).arg(suffix++);
+
+  // Build the register def and append
+  DataModel::RegisterDef reg;
+  reg.name         = unique;
+  reg.type         = computed ? RegisterType::Computed : RegisterType::Constant;
+  reg.defaultValue = defaultValue.isValid() ? defaultValue : QVariant(0.0);
+  it->registers.push_back(reg);
+
+  setModified(true);
+  Q_EMIT tablesChanged();
+}
+
+/**
+ * @brief Removes a register from the specified table.
+ */
+void DataModel::ProjectModel::deleteRegister(const QString& table, const QString& registerName)
+{
+  auto it = std::find_if(
+    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
+
+  if (it == m_tables.end())
+    return;
+
+  auto rit = std::find_if(it->registers.begin(),
+                          it->registers.end(),
+                          [&registerName](const auto& r) { return r.name == registerName; });
+
+  if (rit == it->registers.end())
+    return;
+
+  it->registers.erase(rit);
+  setModified(true);
+  Q_EMIT tablesChanged();
+}
+
+/**
+ * @brief Updates an existing register — rename, retype, and/or default value.
+ */
+void DataModel::ProjectModel::updateRegister(const QString& table,
+                                             const QString& registerName,
+                                             const QString& newName,
+                                             bool computed,
+                                             const QVariant& defaultValue)
+{
+  auto it = std::find_if(
+    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
+
+  if (it == m_tables.end())
+    return;
+
+  // Reject rename collisions
+  const QString n = newName.simplified();
+  if (n.isEmpty())
+    return;
+
+  if (n != registerName) {
+    for (const auto& r : it->registers)
+      if (r.name == n)
+        return;
+  }
+
+  // Apply the update in place
+  for (auto& r : it->registers) {
+    if (r.name == registerName) {
+      r.name         = n;
+      r.type         = computed ? RegisterType::Computed : RegisterType::Constant;
+      r.defaultValue = defaultValue.isValid() ? defaultValue : r.defaultValue;
+      setModified(true);
+      Q_EMIT tablesChanged();
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Returns the register list of a table as a QVariantList for QML.
+ *
+ * Each entry: { name, type ("constant"|"computed"), value, valueType ("number"|"string") }
+ */
+QVariantList DataModel::ProjectModel::registersForTable(const QString& table) const
+{
+  QVariantList result;
+  auto it = std::find_if(
+    m_tables.begin(), m_tables.end(), [&table](const auto& t) { return t.name == table; });
+
+  if (it == m_tables.end())
+    return result;
+
+  for (const auto& r : it->registers) {
+    QVariantMap row;
+    row["name"] = r.name;
+    row["type"] =
+      r.type == RegisterType::Computed ? QStringLiteral("computed") : QStringLiteral("constant");
+    row["value"]     = r.defaultValue;
+    row["valueType"] = r.defaultValue.typeId() == QMetaType::Double ? QStringLiteral("number")
+                                                                    : QStringLiteral("string");
+    result.append(row);
+  }
+
+  return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// QInputDialog wrappers — native prompts invoked from QML
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Prompts for a new shared-memory table name and appends it on accept.
+ */
+void DataModel::ProjectModel::promptAddTable()
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("New Shared Table"), tr("Name:"), QLineEdit::Normal, tr("Shared Table"), &ok);
+
+  if (!ok || name.trimmed().isEmpty())
+    return;
+
+  // Create the table, then defer selection so the editor's tree rebuild
+  // (driven by tablesChanged over a queued connection) has finished first.
+  const QString added = addTable(name.trimmed());
+  QTimer::singleShot(
+    0, this, [added] { DataModel::ProjectEditor::instance().selectUserTable(added); });
+}
+
+/**
+ * @brief Prompts for a new name for an existing table.
+ */
+void DataModel::ProjectModel::promptRenameTable(const QString& oldName)
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("Rename Table"), tr("Name:"), QLineEdit::Normal, oldName, &ok);
+
+  if (!ok || name.trimmed().isEmpty() || name.trimmed() == oldName)
+    return;
+
+  renameTable(oldName, name.trimmed());
+}
+
+/**
+ * @brief Prompts for a register name and type, then appends the register with a
+ *        zero default (numeric). Users can edit the value inline afterwards.
+ */
+void DataModel::ProjectModel::promptAddRegister(const QString& table)
+{
+  if (table.isEmpty())
+    return;
+
+  // Ask for the register name
+  bool okName           = false;
+  const QString regName = QInputDialog::getText(nullptr,
+                                                tr("New Register"),
+                                                tr("Name:"),
+                                                QLineEdit::Normal,
+                                                QStringLiteral("register"),
+                                                &okName);
+
+  if (!okName || regName.trimmed().isEmpty())
+    return;
+
+  // New registers default to Read/Write (transforms can update them). Users
+  // can switch a register to Read-Only from the Permissions column.
+  addRegister(table, regName.trimmed(), true, QVariant(0.0));
+}
+
+/**
+ * @brief Prompts for a new name for an existing register.
+ */
+void DataModel::ProjectModel::promptRenameRegister(const QString& table,
+                                                   const QString& registerName)
+{
+  if (table.isEmpty() || registerName.isEmpty())
+    return;
+
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("Rename Register"), tr("Name:"), QLineEdit::Normal, registerName, &ok);
+
+  if (!ok || name.trimmed().isEmpty() || name.trimmed() == registerName)
+    return;
+
+  // Look up the register to preserve its type and default value
+  for (const auto& t : m_tables) {
+    if (t.name != table)
+      continue;
+
+    for (const auto& r : t.registers) {
+      if (r.name == registerName) {
+        updateRegister(
+          table, registerName, name.trimmed(), r.type == RegisterType::Computed, r.defaultValue);
+        return;
+      }
+    }
+  }
+}
+
+/**
+ * @brief Asks the user to confirm before deleting a table.
+ */
+void DataModel::ProjectModel::confirmDeleteTable(const QString& name)
+{
+  if (name.isEmpty())
+    return;
+
+  // Count registers so the informative text can mention them
+  int registerCount = 0;
+  for (const auto& t : m_tables) {
+    if (t.name == name) {
+      registerCount = static_cast<int>(t.registers.size());
+      break;
+    }
+  }
+
+  const QString informative =
+    registerCount == 0
+      ? tr("This action cannot be undone.")
+      : tr("This removes %1 register(s) along with the table. This action cannot be undone.")
+          .arg(registerCount);
+
+  const int choice = Misc::Utilities::showMessageBox(tr("Delete \"%1\"?").arg(name),
+                                                     informative,
+                                                     QMessageBox::Warning,
+                                                     tr("Delete Table"),
+                                                     QMessageBox::Yes | QMessageBox::Cancel,
+                                                     QMessageBox::Cancel);
+
+  if (choice == QMessageBox::Yes)
+    deleteTable(name);
+}
+
+/**
+ * @brief Asks the user to confirm before deleting a register.
+ */
+void DataModel::ProjectModel::confirmDeleteRegister(const QString& table,
+                                                    const QString& registerName)
+{
+  if (table.isEmpty() || registerName.isEmpty())
+    return;
+
+  const int choice = Misc::Utilities::showMessageBox(tr("Delete \"%1\"?").arg(registerName),
+                                                     tr("This action cannot be undone."),
+                                                     QMessageBox::Warning,
+                                                     tr("Delete Register"),
+                                                     QMessageBox::Yes | QMessageBox::Cancel,
+                                                     QMessageBox::Cancel);
+
+  if (choice == QMessageBox::Yes)
+    deleteRegister(table, registerName);
+}
+
+/**
+ * @brief Exports a table's registers to a CSV file chosen by the user.
+ *
+ * Format: name,type,value — one row per register, no header row.
+ */
+void DataModel::ProjectModel::exportTableToCsv(const QString& tableName)
+{
+  // Find the table
+  const auto it = std::find_if(m_tables.begin(), m_tables.end(), [&](const DataModel::TableDef& t) {
+    return t.name == tableName;
+  });
+
+  if (it == m_tables.end())
+    return;
+
+  // Ask for output path
+  const auto path = QFileDialog::getSaveFileName(
+    nullptr,
+    tr("Export Table"),
+    QStringLiteral("%1/%2.csv").arg(Misc::WorkspaceManager::instance().path("CSV"), tableName),
+    tr("CSV files (*.csv)"));
+
+  if (path.isEmpty())
+    return;
+
+  // Write CSV
+  QFile file(path);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    return;
+
+  QTextStream out(&file);
+  out << "name,type,value\n";
+  for (const auto& reg : it->registers) {
+    const auto type = (reg.type == DataModel::RegisterType::Computed) ? QStringLiteral("computed")
+                                                                      : QStringLiteral("constant");
+
+    // CSV-escape the value
+    auto val = reg.defaultValue.toString();
+    if (val.contains(',') || val.contains('"') || val.contains('\n'))
+      val = QStringLiteral("\"%1\"").arg(val.replace('"', "\"\""));
+
+    out << reg.name << ',' << type << ',' << val << '\n';
+  }
+
+  file.close();
+}
+
+/**
+ * @brief Imports registers from a CSV file into an existing table.
+ *
+ * Expects format: name,type,value (with a header row). Creates registers
+ * that don't exist; updates the type and value of registers that do.
+ */
+void DataModel::ProjectModel::importTableFromCsv(const QString& tableName)
+{
+  // Find the table
+  auto it = std::find_if(m_tables.begin(), m_tables.end(), [&](const DataModel::TableDef& t) {
+    return t.name == tableName;
+  });
+
+  if (it == m_tables.end())
+    return;
+
+  // Ask for input file
+  const auto path = QFileDialog::getOpenFileName(nullptr,
+                                                 tr("Import Table"),
+                                                 Misc::WorkspaceManager::instance().path("CSV"),
+                                                 tr("CSV files (*.csv)"));
+
+  if (path.isEmpty())
+    return;
+
+  QFile file(path);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    return;
+
+  QTextStream in(&file);
+
+  // Skip header row
+  if (!in.atEnd())
+    in.readLine();
+
+  // Hard cap on imported rows to bound this loop per NASA PoT rule 2
+  constexpr int kMaxImportRows = 1'000'000;
+
+  int imported = 0;
+  int rowsRead = 0;
+  while (!in.atEnd() && rowsRead < kMaxImportRows) {
+    ++rowsRead;
+    const auto line = in.readLine().trimmed();
+    if (line.isEmpty())
+      continue;
+
+    // Parse CSV row: name,type,value
+    const auto parts = line.split(',');
+    if (parts.size() < 3)
+      continue;
+
+    // Re-join every field past the second comma so commas embedded in a
+    // quoted value survive. Only strip the surrounding quote pair added by
+    // exportTableToCsv(); preserve any quotes inside the value.
+    const auto name    = parts[0].trimmed();
+    const auto typeStr = parts[1].trimmed().toLower();
+    auto valStr        = parts.mid(2).join(',').trimmed();
+    if (valStr.size() >= 2 && valStr.startsWith('"') && valStr.endsWith('"')) {
+      valStr = valStr.mid(1, valStr.size() - 2);
+      valStr.replace(QStringLiteral("\"\""), QStringLiteral("\""));
+    }
+
+    if (name.isEmpty())
+      continue;
+
+    const bool computed = (typeStr == QStringLiteral("computed"));
+
+    // Determine if the value is numeric
+    bool isNumeric              = false;
+    const double dval           = valStr.toDouble(&isNumeric);
+    const QVariant defaultValue = isNumeric ? QVariant(dval) : QVariant(valStr);
+
+    // Check if the register already exists
+    auto regIt = std::find_if(it->registers.begin(),
+                              it->registers.end(),
+                              [&](const DataModel::RegisterDef& r) { return r.name == name; });
+
+    if (regIt != it->registers.end()) {
+      // Update existing register
+      regIt->type =
+        computed ? DataModel::RegisterType::Computed : DataModel::RegisterType::Constant;
+      regIt->defaultValue = defaultValue;
+    } else {
+      // Create new register
+      DataModel::RegisterDef reg;
+      reg.name = name;
+      reg.type = computed ? DataModel::RegisterType::Computed : DataModel::RegisterType::Constant;
+      reg.defaultValue = defaultValue;
+      it->registers.push_back(reg);
+    }
+
+    ++imported;
+  }
+
+  file.close();
+
+  if (imported > 0) {
+    setModified(true);
+    Q_EMIT tablesChanged();
   }
 }
 
@@ -2867,6 +3571,11 @@ void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
                                                    int groupId,
                                                    int relativeIndex)
 {
+  // Promote to customize mode so the existing auto-generated workspaces are
+  // kept when the dashboard drops a new widget into one of them.
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId != workspaceId)
       continue;
@@ -2894,6 +3603,9 @@ void DataModel::ProjectModel::addWidgetToWorkspace(int workspaceId,
  */
 void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId, int index)
 {
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId != workspaceId)
       continue;
@@ -2906,6 +3618,444 @@ void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId, int ind
     Q_EMIT workspacesChanged();
     return;
   }
+}
+
+/**
+ * @brief Removes a widget reference matching (widgetType, groupId, relativeIndex).
+ */
+void DataModel::ProjectModel::removeWidgetFromWorkspace(int workspaceId,
+                                                        int widgetType,
+                                                        int groupId,
+                                                        int relativeIndex)
+{
+  if (!m_customizeWorkspaces)
+    setCustomizeWorkspaces(true);
+
+  for (auto& ws : m_workspaces) {
+    if (ws.workspaceId != workspaceId)
+      continue;
+
+    auto it = std::find_if(ws.widgetRefs.begin(), ws.widgetRefs.end(), [=](const auto& r) {
+      return r.widgetType == widgetType && r.groupId == groupId && r.relativeIndex == relativeIndex;
+    });
+
+    if (it == ws.widgetRefs.end())
+      return;
+
+    ws.widgetRefs.erase(it);
+    setModified(true);
+    Q_EMIT workspacesChanged();
+    return;
+  }
+}
+
+/**
+ * @brief Returns the title of a workspace, or empty if not found.
+ */
+QString DataModel::ProjectModel::workspaceTitle(int workspaceId) const
+{
+  for (const auto& ws : m_workspaces)
+    if (ws.workspaceId == workspaceId)
+      return ws.title;
+
+  return QString();
+}
+
+/**
+ * @brief Prompts for a new workspace name and creates it. The new workspace
+ *        is then selected in the project editor.
+ */
+void DataModel::ProjectModel::promptAddWorkspace()
+{
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("New Workspace"), tr("Name:"), QLineEdit::Normal, tr("Workspace"), &ok);
+
+  if (!ok || name.trimmed().isEmpty())
+    return;
+
+  const int newId = addWorkspace(name.trimmed());
+  QTimer::singleShot(
+    0, this, [newId] { DataModel::ProjectEditor::instance().selectWorkspace(newId); });
+}
+
+/**
+ * @brief Prompts for a new title for the given workspace.
+ */
+void DataModel::ProjectModel::promptRenameWorkspace(int workspaceId)
+{
+  const QString current = workspaceTitle(workspaceId);
+  if (current.isEmpty())
+    return;
+
+  bool ok            = false;
+  const QString name = QInputDialog::getText(
+    nullptr, tr("Rename Workspace"), tr("Name:"), QLineEdit::Normal, current, &ok);
+
+  if (!ok || name.trimmed().isEmpty() || name.trimmed() == current)
+    return;
+
+  renameWorkspace(workspaceId, name.trimmed());
+}
+
+/**
+ * @brief Returns whether the user has opted in to customising workspaces.
+ */
+bool DataModel::ProjectModel::customizeWorkspaces() const noexcept
+{
+  return m_customizeWorkspaces;
+}
+
+/**
+ * @brief Flips the customize switch.
+ *
+ * Off → On: seeds m_workspaces from the current synthetic layout so the
+ *   user starts editing exactly what the automatic mode was showing.
+ *
+ * On → Off: drops m_workspaces entirely; the synthetic layout takes over
+ *   again on the next read.
+ */
+void DataModel::ProjectModel::setCustomizeWorkspaces(const bool enabled)
+{
+  if (m_customizeWorkspaces == enabled)
+    return;
+
+  m_customizeWorkspaces = enabled;
+
+  if (enabled) {
+    m_workspaces = buildAutoWorkspaces();
+  } else {
+    m_workspaces.clear();
+    m_autoWorkspacesDirty = true;
+  }
+
+  setModified(true);
+  Q_EMIT customizeWorkspacesChanged();
+  Q_EMIT workspacesChanged();
+}
+
+/**
+ * @brief Synthesises the default workspace layout for a project.
+ *
+ * Walks every non-image / non-output group once, computing per-widget-type
+ * running relativeIndex values that match Dashboard::buildWidgetGroups()'s
+ * runtime assignment. Produces: Overview (one group widget per group), All
+ * Data (every widget flattened), then one workspace per group. Mirrors the
+ * legacy Taskbar auto-workspace behaviour so existing projects "just work"
+ * without manual workspace configuration.
+ */
+std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces() const
+{
+  std::vector<DataModel::Workspace> result;
+
+  // QuickPlot groups live in FrameBuilder's quick-plot frame; ProjectFile
+  // groups live in m_groups
+  const auto mode    = AppState::instance().operationMode();
+  const auto& groups = (mode == SerialStudio::QuickPlot)
+                       ? DataModel::FrameBuilder::instance().quickPlotFrame().groups
+                       : m_groups;
+
+  // Running per-type indices, mirroring Dashboard::buildWidgetGroups()
+  QMap<SerialStudio::DashboardWidget, int> groupIdx;
+  QMap<SerialStudio::DashboardWidget, int> datasetIdx;
+
+  // Refs collected across the walk. Reused to populate all three
+  // workspace categories without re-walking the project.
+  std::vector<DataModel::WidgetRef> allRefs;
+  std::vector<DataModel::WidgetRef> overviewRefs;
+  QMap<int, std::vector<DataModel::WidgetRef>> perGroupRefs;
+
+  int eligibleGroups = 0;
+
+  for (const auto& group : groups) {
+    if (!SerialStudio::groupEligibleForWorkspace(group))
+      continue;
+
+    std::vector<DataModel::WidgetRef> groupRefs;
+
+    // Group-level widget
+    const auto groupKey = SerialStudio::getDashboardWidget(group);
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
+      DataModel::WidgetRef r;
+      r.widgetType       = static_cast<int>(groupKey);
+      r.groupId          = group.groupId;
+      r.relativeIndex    = groupIdx.value(groupKey, 0);
+      groupIdx[groupKey] = r.relativeIndex + 1;
+
+      groupRefs.push_back(r);
+      allRefs.push_back(r);
+      overviewRefs.push_back(r);
+    }
+
+    // Dataset widgets
+    for (const auto& ds : group.datasets) {
+      const auto keys = SerialStudio::getDashboardWidgets(ds);
+      for (const auto& k : keys) {
+        if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
+          continue;
+
+        DataModel::WidgetRef r;
+        r.widgetType    = static_cast<int>(k);
+        r.groupId       = group.groupId;
+        r.relativeIndex = datasetIdx.value(k, 0);
+        datasetIdx[k]   = r.relativeIndex + 1;
+
+        groupRefs.push_back(r);
+        allRefs.push_back(r);
+      }
+    }
+
+    if (groupRefs.empty())
+      continue;
+
+    perGroupRefs.insert(group.groupId, std::move(groupRefs));
+    ++eligibleGroups;
+  }
+
+  if (eligibleGroups == 0)
+    return result;
+
+  // Fixed workspace ID slots — stable across group add/remove so a persisted
+  // m_selectedWorkspaceId can't silently rebind to the wrong workspace.
+  static constexpr int kOverviewId      = 1000;
+  static constexpr int kAllDataId       = 1001;
+  static constexpr int kPerGroupIdStart = 1002;
+
+  // "Overview" — one group-level widget per group. Always first so users
+  // land on the project overview by default.
+  if (overviewRefs.size() >= 2) {
+    DataModel::Workspace ws;
+    ws.workspaceId = kOverviewId;
+    ws.title       = tr("Overview");
+    ws.icon        = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
+    ws.widgetRefs  = overviewRefs;
+    result.push_back(std::move(ws));
+  }
+
+  // "All Data" — every widget across every group.
+  if (eligibleGroups >= 2) {
+    DataModel::Workspace ws;
+    ws.workspaceId = kAllDataId;
+    ws.title       = tr("All Data");
+    ws.icon        = QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
+    ws.widgetRefs  = allRefs;
+    result.push_back(std::move(ws));
+  }
+
+  // One workspace per group, in project order. groupId is always contiguous
+  // from 0, so kPerGroupIdStart + groupId cannot collide with the reserved
+  // Overview/All Data slots.
+  for (const auto& group : groups) {
+    const auto it = perGroupRefs.constFind(group.groupId);
+    if (it == perGroupRefs.constEnd())
+      continue;
+
+    DataModel::Workspace ws;
+    ws.workspaceId = kPerGroupIdStart + group.groupId;
+    ws.title       = group.title;
+    ws.widgetRefs  = it.value();
+    result.push_back(std::move(ws));
+  }
+
+  return result;
+}
+
+/**
+ * @brief Materialises the synthetic workspace list into m_workspaces and flips
+ *        the project into customize mode so the user can edit it from there.
+ *
+ * @return id of the first workspace created, or -1 if the project has no
+ *         eligible widgets.
+ */
+int DataModel::ProjectModel::autoGenerateWorkspaces()
+{
+  // Refuse to clobber a hand-curated workspace list — callers must first
+  // toggle customizeWorkspaces off if they really want to regenerate.
+  if (m_customizeWorkspaces && !m_workspaces.empty())
+    return m_workspaces.front().workspaceId;
+
+  // Bail out if nothing eligible — don't flip customize mode on an empty list
+  auto seed = buildAutoWorkspaces();
+  if (seed.empty())
+    return -1;
+
+  // Promote into customize mode so workspaces() reads m_workspaces (not the
+  // synthetic cache) and the list persists in the project file.
+  m_workspaces           = std::move(seed);
+  const bool flagChanged = !m_customizeWorkspaces;
+  m_customizeWorkspaces  = true;
+
+  // Post-condition checks: buildAutoWorkspaces returned a non-empty vector so
+  // the move must have produced a non-empty m_workspaces, and ids start at 1000
+  Q_ASSERT(!m_workspaces.empty());
+  Q_ASSERT(m_workspaces.front().workspaceId >= 1000);
+
+  setModified(true);
+  if (flagChanged)
+    Q_EMIT customizeWorkspacesChanged();
+
+  Q_EMIT workspacesChanged();
+  return m_workspaces.front().workspaceId;
+}
+
+/**
+ * @brief Counts, per dashboard-widget type, how many widgets the given group
+ *        contributes to Dashboard::buildWidgetGroups's running type counter.
+ */
+QMap<int, int> DataModel::ProjectModel::widgetTypeCountsForGroup(const Group& g) const
+{
+  QMap<int, int> counts;
+
+  // Skip groups filtered out by Dashboard
+  if (!SerialStudio::groupEligibleForWorkspace(g))
+    return counts;
+
+  // Group-level widget (one per group at most)
+  const auto groupKey = SerialStudio::getDashboardWidget(g);
+  if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey))
+    counts[static_cast<int>(groupKey)] += 1;
+
+  // Dataset-level widgets — filter identical to buildAutoWorkspaces
+  for (const auto& ds : g.datasets) {
+    const auto keys = SerialStudio::getDashboardWidgets(ds);
+    for (const auto& k : keys) {
+      if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
+        continue;
+
+      counts[static_cast<int>(k)] += 1;
+    }
+  }
+
+  return counts;
+}
+
+/**
+ * @brief Shifts or drops user-customised widget refs after a group delete.
+ *
+ * Refs with groupId == deletedGid are dropped. Refs with groupId > deletedGid
+ * have their groupId decremented and their relativeIndex reduced by the number
+ * of same-type widgets the deleted group contributed.
+ */
+void DataModel::ProjectModel::shiftWorkspaceRefsAfterGroupDelete(
+  int deletedGid, const QMap<int, int>& deletedTypeCounts)
+{
+  Q_ASSERT(deletedGid >= 0);
+  Q_ASSERT(m_customizeWorkspaces);
+
+  for (auto& ws : m_workspaces) {
+    // Drop refs pointing at the deleted group
+    ws.widgetRefs.erase(
+      std::remove_if(ws.widgetRefs.begin(),
+                     ws.widgetRefs.end(),
+                     [deletedGid](const WidgetRef& r) { return r.groupId == deletedGid; }),
+      ws.widgetRefs.end());
+
+    // Shift surviving refs
+    for (auto& r : ws.widgetRefs) {
+      if (r.groupId <= deletedGid)
+        continue;
+
+      r.groupId -= 1;
+      const int lost  = deletedTypeCounts.value(r.widgetType, 0);
+      r.relativeIndex = std::max(0, r.relativeIndex - lost);
+
+      // Post-condition: relativeIndex must remain non-negative
+      Q_ASSERT(r.relativeIndex >= 0);
+    }
+  }
+}
+
+/**
+ * @brief Shifts user-customised widget refs after a single dataset is deleted
+ *        from a surviving group.
+ *
+ * The running per-widget-type counter used by Dashboard walks groups in order,
+ * then datasets inside each group. A dataset removed from groupId "steals" N
+ * positions from the counter for each widget type the dataset contributed —
+ * refs whose relativeIndex is at or above that position need to shift down.
+ * Refs pointing at the removed dataset itself (same groupId, relativeIndex in
+ * the stolen range) are dropped.
+ */
+void DataModel::ProjectModel::shiftWorkspaceRefsAfterDatasetDelete(
+  int groupId, const QMap<int, int>& datasetTypeCounts)
+{
+  Q_ASSERT(groupId >= 0);
+  Q_ASSERT(m_customizeWorkspaces);
+
+  if (datasetTypeCounts.isEmpty())
+    return;
+
+  // Compute, for each widget type, the running counter value at the start of
+  // the deleted group's dataset block. Everything >= this counter is "later"
+  // in project order.
+  QMap<int, int> runningAtGroup;
+  for (const auto& g : m_groups) {
+    if (!SerialStudio::groupEligibleForWorkspace(g))
+      continue;
+
+    if (g.groupId == groupId)
+      break;
+
+    const auto groupKey = SerialStudio::getDashboardWidget(g);
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey))
+      runningAtGroup[static_cast<int>(groupKey)] += 1;
+
+    for (const auto& ds : g.datasets) {
+      const auto keys = SerialStudio::getDashboardWidgets(ds);
+      for (const auto& k : keys)
+        if (SerialStudio::datasetWidgetEligibleForWorkspace(k))
+          runningAtGroup[static_cast<int>(k)] += 1;
+    }
+  }
+
+  for (auto& ws : m_workspaces) {
+    // Drop refs that point into the removed dataset's slice
+    ws.widgetRefs.erase(std::remove_if(ws.widgetRefs.begin(),
+                                       ws.widgetRefs.end(),
+                                       [&](const WidgetRef& r) {
+                                         const int lost = datasetTypeCounts.value(r.widgetType, 0);
+                                         if (lost == 0 || r.groupId != groupId)
+                                           return false;
+
+                                         const int base = runningAtGroup.value(r.widgetType, 0);
+                                         return r.relativeIndex >= base
+                                             && r.relativeIndex < base + lost;
+                                       }),
+                        ws.widgetRefs.end());
+
+    // Shift surviving refs whose relativeIndex is past the removed slice
+    for (auto& r : ws.widgetRefs) {
+      const int lost = datasetTypeCounts.value(r.widgetType, 0);
+      if (lost == 0)
+        continue;
+
+      const int base = runningAtGroup.value(r.widgetType, 0);
+      if (r.relativeIndex >= base + lost) {
+        r.relativeIndex -= lost;
+        Q_ASSERT(r.relativeIndex >= 0);
+      }
+    }
+  }
+}
+
+/**
+ * @brief Asks the user to confirm before deleting a workspace.
+ */
+void DataModel::ProjectModel::confirmDeleteWorkspace(int workspaceId)
+{
+  const QString name = workspaceTitle(workspaceId);
+  if (name.isEmpty())
+    return;
+
+  const int choice = Misc::Utilities::showMessageBox(tr("Delete \"%1\"?").arg(name),
+                                                     tr("This action cannot be undone."),
+                                                     QMessageBox::Warning,
+                                                     tr("Delete Workspace"),
+                                                     QMessageBox::Yes | QMessageBox::Cancel,
+                                                     QMessageBox::Cancel);
+
+  if (choice == QMessageBox::Yes)
+    deleteWorkspace(workspaceId);
 }
 
 /**
@@ -2945,7 +4095,7 @@ void DataModel::ProjectModel::showGroup(int groupId)
 
 /**
  * @brief Clears workspaces and widget settings when disconnecting in
- *        non-project modes (QuickPlot / DeviceSendsJSON).
+ *        non-project modes (QuickPlot / ConsoleOnly).
  *
  * In these modes there is no backing project file, so any workspaces or
  * widget settings created during a session are transient and should not

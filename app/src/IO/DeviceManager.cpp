@@ -235,8 +235,8 @@ void IO::DeviceManager::startFrameReader(const FrameConfig& config)
   m_frameReader = new FrameReader();
 
   m_frameReader->setChecksum(config.checksumAlgorithm);
-  m_frameReader->setStartSequence(config.startSequence);
-  m_frameReader->setFinishSequence(config.finishSequence);
+  m_frameReader->setStartSequences(config.startSequences);
+  m_frameReader->setFinishSequences(config.finishSequences);
   m_frameReader->setOperationMode(config.operationMode);
   m_frameReader->setFrameDetectionMode(config.frameDetection);
 

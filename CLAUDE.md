@@ -86,7 +86,7 @@ CSV / MDF4 / API::Server / gRPC  (worker threads, lock-free enqueue from main)
 
 | Component | Rule |
 |-----------|------|
-| `FrameReader` | **Currently runs on the main thread.** Config set **once** before construction; recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` on change. **Never add mutexes.** Historical note: `m_threadedExtraction` / `moveToThread` was removed in beeda4c0; if it ever returns, flip `DeviceManager::frameReady` / `rawDataReceived` connections back to `Qt::QueuedConnection` in `ConnectionManager::wireDevice()`. |
+| `FrameReader` | **Currently runs on the main thread.** Config set **once** before construction; recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` on change. **Never add mutexes.** Delimiters are `QList<QByteArray>` (multi-pattern); single-delimiter uses KMP fast path, multi-delimiter uses `CircularBuffer::findFirstOfPatterns()` single-pass scan. Historical note: `m_threadedExtraction` / `moveToThread` was removed in beeda4c0; if it ever returns, flip `DeviceManager::frameReady` / `rawDataReceived` connections back to `Qt::QueuedConnection` in `ConnectionManager::wireDevice()`. |
 | `CircularBuffer` | **SPSC only.** One producer, one consumer. Never MPMC. Even with FrameReader on the main thread, keep SPSC — the driver side still writes from whatever thread emitted `dataReceived`. |
 | `Dashboard` | **Main thread only.** Receives `const Frame&` — no copy. |
 | Export workers | Lock-free enqueue from main, batch on worker thread. `make_shared<TimestampedFrame>` is the only allocation on the tx path (guarded by `[[unlikely]]`). |
@@ -114,11 +114,15 @@ Known direct-connection sites:
 
 ### Operation Modes
 
-| Mode | Delimiters | CSV delimiter | JS parser |
-|------|-----------|---------------|-----------|
-| ProjectFile (0) | Configurable per-source | Via JS | Yes |
-| DeviceSendsJSON (1) | Fixed `/*` `*/` | N/A | No |
-| QuickPlot (2) | Line-based (CR/LF/CRLF) | Comma | No |
+| Mode | Delimiters | CSV delimiter | JS parser | Dashboard |
+|------|-----------|---------------|-----------|-----------|
+| ProjectFile (0) | Configurable per-source | Via JS | Yes | Yes |
+| ConsoleOnly (1) | None — FrameReader short-circuits | N/A | No | No (console only) |
+| QuickPlot (2) | Line-based (CR/LF/CRLF) | Comma | No | Yes |
+
+ConsoleOnly replaced the old DeviceSendsJSON mode in 2026-04: raw bytes reach the
+terminal via `DeviceManager::rawDataReceived` only; FrameReader skips the circular
+buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 
 ### IO Architecture — No Singleton Drivers
 
@@ -169,6 +173,22 @@ Known direct-connection sites:
 - **Hotpath**: `applyTransform(sourceId, uniqueId, rawValue)` is called on every frame for every dataset with `!transformCode.isEmpty()`. Lookup is an `std::map::find`; Lua call is a `lua_rawgeti` + `lua_pcall`; JS call is a `QJSValue::call`. Non-finite results (NaN/Inf) are rejected and `rawValue` is returned unchanged (`[[unlikely]]` guarded).
 - **Templates**: `app/rcc/scripts/transforms/{js,lua}/<name>.{js,lua}` + `templates.json` manifest with translations. The manifest loader is `DataModel::loadScriptTemplateManifest()` (shared with parser/output templates). New templates must be added to `rcc.qrc` in **both** `js/` and `lua/` sections.
 - **Editor UX**: `DatasetTransformEditor` prefills the editor with a multiline-comment placeholder when the dataset has no transform. QTextEdit's `setPlaceholderText` only renders the first line of multiline hints, so prefill instead. `onApply` detects "code does not define transform()" via `definesTransformFunction()` (disposable engine compile + lookup) and emits an empty string in that case so the placeholder is never persisted to the project.
+
+### Data Tables — Central Data Bus
+
+- `DataModel::DataTableStore` (`DataTable.h/.cpp`): flat pre-allocated register store, no hotpath allocation.
+- **System table (`__datasets__`)**: auto-generated from template frame. Two registers per dataset: `raw:<uniqueId>` and `final:<uniqueId>`. Populated by FrameBuilder during parsing.
+- **User tables**: defined in project JSON under `"tables"` key. Registers are `Constant` (read-only at runtime) or `Computed` (reset per frame, writable by transforms).
+- **Transform API** (injected at compile time): `tableGet(table, reg)`, `tableSet(table, reg, val)`, `datasetGetRaw(uid)`, `datasetGetFinal(uid)`. Lua uses C closures; JS uses `TableApiBridge` QObject.
+- **Processing order**: datasets processed in group-array then dataset-array order. A transform can read raw values of ALL datasets and final values of EARLIER datasets.
+- `applyTransform` accepts/returns `QVariant` (double or QString), not just double.
+- `Dataset` struct has `rawNumericValue`, `rawValue` (snapshots before transform), `virtual_` (no frame index, computed entirely from transforms).
+
+### Export Architecture
+
+- `DataModel::ExportSchema` (`ExportSchema.h`): shared column layout for all exporters. `buildExportSchema(frame)` produces sorted columns with `uniqueIdToColumnIndex` map.
+- CSV and MDF4 both export raw + transformed values per dataset.
+- `SQLite::Export` (Pro only, `SQLite/Export.h/.cpp`): `FrameConsumer`-based with sessions/columns/readings/raw_bytes/table_snapshots tables. Second lock-free queue for raw bytes from `ConnectionManager::onRawDataReceived`. WAL mode, batch transactions.
 
 ### File Transmission — Protocol Architecture
 
@@ -387,7 +407,8 @@ Scales: `kScaleSmall`=0.85, `kScaleNormal`=1.0, `kScaleLarge`=1.25, `kScaleExtra
 
 - Hotpaths: zero-copy const refs, `[[likely]]`/`[[unlikely]]`, static-cached singletons.
 - Never allocate on the dashboard path. Never copy a Frame.
-- KMP for delimiters, `constexpr` CRC tables.
+- KMP for single-delimiter modes; `CircularBuffer::findFirstOfPatterns()` for multi-delimiter (single-pass byte scan, no heap allocation — stack array of ≤8 `PatInfo`).
+- `constexpr` CRC tables.
 - Profile first — don't optimize without data.
 
 ### Enums

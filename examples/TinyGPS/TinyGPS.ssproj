@@ -1,17 +1,16 @@
 {
     "actions": [
     ],
-    "decoder": 0,
-    "frameDetection": 1,
-    "frameEnd": ";",
-    "frameParser": "/**\n * Splits a data frame into an array of elements using a comma separator.\n *\n * Use this function to break a string (like \"value1,value2,value3\") into\n * individual pieces, which can then be displayed or processed in your project.\n *\n * @param[in]  frame   A string containing the data frame.\n *                     Example: \"value1,value2,value3\"\n * @return     An array of strings with the split elements.\n *             Example: [\"value1\", \"value2\", \"value3\"]\n *\n * @note You can declare global variables outside this function if needed\n *       for storing settings or keeping state between calls.\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
-    "frameStart": "$",
     "groups": [
         {
             "datasets": [
                 {
-                    "alarm": 0,
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
                     "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
                     "fftSamples": 1024,
                     "fftSamplingRate": 0,
                     "graph": false,
@@ -19,16 +18,23 @@
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "max": 0,
-                    "min": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
                     "title": "Latitude",
                     "units": "°",
                     "value": "--.--",
-                    "widget": "lat"
+                    "widget": "lat",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
                 },
                 {
-                    "alarm": 0,
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
                     "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
                     "fftSamples": 1024,
                     "fftSamplingRate": 0,
                     "graph": false,
@@ -36,16 +42,23 @@
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "max": 0,
-                    "min": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
                     "title": "Longitude",
                     "units": "°",
                     "value": "--.--",
-                    "widget": "lon"
+                    "widget": "lon",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
                 },
                 {
-                    "alarm": 0,
+                    "alarmEnabled": false,
+                    "alarmHigh": 0,
+                    "alarmLow": 0,
                     "fft": false,
+                    "fftMax": 0,
+                    "fftMin": 0,
                     "fftSamples": 1024,
                     "fftSamplingRate": 0,
                     "graph": false,
@@ -53,19 +66,45 @@
                     "led": false,
                     "ledHigh": 1,
                     "log": false,
-                    "max": 0,
-                    "min": 0,
+                    "plotMax": 0,
+                    "plotMin": 0,
                     "title": "Altitude",
                     "units": "m",
                     "value": "--.--",
-                    "widget": "alt"
+                    "widget": "alt",
+                    "widgetMax": 0,
+                    "widgetMin": 0,
+                    "xAxis": -1
                 }
             ],
             "title": "GPS Map",
             "widget": "map"
         }
     ],
-    "mapTilerApiKey": "",
-    "thunderforestApiKey": "",
+    "hexadecimalDelimiters": false,
+    "pointCount": 4000,
+    "sources": [
+        {
+            "busType": 1,
+            "checksum": "",
+            "checksumAlgorithm": "",
+            "connection": {
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9000,
+                "udpMulticast": false,
+                "udpRemotePort": 9000
+            },
+            "decoder": 0,
+            "decoderMethod": 0,
+            "frameDetection": 1,
+            "frameEnd": ";",
+            "frameParserCode": "/**\n * Splits a data frame into an array of elements using a comma separator.\n *\n * Use this function to break a string (like \"value1,value2,value3\") into\n * individual pieces, which can then be displayed or processed in your project.\n *\n * @param[in]  frame   A string containing the data frame.\n *                     Example: \"value1,value2,value3\"\n * @return     An array of strings with the split elements.\n *             Example: [\"value1\", \"value2\", \"value3\"]\n *\n * @note You can declare global variables outside this function if needed\n *       for storing settings or keeping state between calls.\n */\nfunction parse(frame) {\n    return frame.split(',');\n}\n",
+            "frameStart": "$",
+            "hexadecimalDelimiters": false,
+            "sourceId": 0,
+            "title": "Device A"
+        }
+    ],
     "title": "TinyGPS"
 }

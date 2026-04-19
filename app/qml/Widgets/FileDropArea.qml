@@ -33,7 +33,7 @@ DropArea {
     // Get file name & set color of rectangle accordingly
     if (drag.urls.length > 0) {
       var path = drag.urls[0].toString()
-      if (path.endsWith(".json") || path.endsWith(".csv") || path.endsWith(".ssproj") || path.endsWith(".mf4") || path.endsWith(".dat")) {
+      if (path.endsWith(".json") || path.endsWith(".csv") || path.endsWith(".ssproj") || path.endsWith(".mf4") || path.endsWith(".dat") || path.endsWith(".db")) {
         drag.accept(Qt.LinkAction)
         dropRectangle.color = Qt.darker(palette.highlight, 1.4)
       }
@@ -78,6 +78,10 @@ DropArea {
     // Process MDF4 files
     else if (lowerCase.endsWith(".mf4") || lowerCase.endsWith(".dat"))
       Cpp_MDF4_Player.openFile(cleanPath)
+
+    // Process SQLite recordings (Pro)
+    else if (lowerCase.endsWith(".db") && Cpp_CommercialBuild)
+      Cpp_Sessions_Player.openFile(cleanPath)
   }
 
   //

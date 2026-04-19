@@ -854,8 +854,7 @@ void CSV::Player::generateDateTimeForRows(int interval)
 void CSV::Player::convertColumnToDateTime(int columnIndex)
 {
   // Validate column index against header row
-  if (m_csvData.isEmpty() || columnIndex < 0
-      || columnIndex >= m_csvData.first().size())
+  if (m_csvData.isEmpty() || columnIndex < 0 || columnIndex >= m_csvData.first().size())
     return;
 
   // Rewrite each row so the chosen column becomes the leading timestamp

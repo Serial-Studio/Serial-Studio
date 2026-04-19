@@ -355,8 +355,7 @@ QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& fram
 
     // Fall back to manual loop if the hex helper failed
     if (jsArray.isError()) [[unlikely]] {
-      qWarning() << "[JsScriptEngine] hex helper error:"
-                 << jsArray.property("message").toString();
+      qWarning() << "[JsScriptEngine] hex helper error:" << jsArray.property("message").toString();
       jsArray = QJSValue();
     }
   }

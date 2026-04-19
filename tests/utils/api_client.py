@@ -346,14 +346,18 @@ class SerialStudioClient:
 
     def set_operation_mode(self, mode: str) -> None:
         """
-        Set dashboard operation mode and configure appropriate delimiters.
+        Set dashboard operation mode.
 
         Args:
-            mode: "project", "json", or "quickplot"
+            mode: "project" (0), "console" (1), or "quickplot" (2).
+                  Legacy "json" is accepted as an alias for "console" — the
+                  old DeviceSendsJSON mode was replaced by ConsoleOnly in
+                  v3.3 and slot 1 in the enum was repurposed.
         """
         mode_map = {
-            "project": 0,  # ProjectFile mode
-            "json": 1,  # DeviceSendsJSON mode
+            "project": 0,    # ProjectFile mode
+            "console": 1,    # ConsoleOnly mode (replaces old DeviceSendsJSON)
+            "json": 1,       # Legacy alias — still maps to slot 1
             "quickplot": 2,  # QuickPlot mode
         }
 
@@ -361,19 +365,7 @@ class SerialStudioClient:
             raise ValueError(f"Invalid operation mode: {mode}")
 
         mode_index = mode_map[mode.lower()]
-
-        # Configure delimiters based on mode
-        if mode.lower() == "json":
-            # DeviceSendsJSON: Set /* */ delimiters, no checksum
-            self.configure_frame_parser(
-                start_sequence="/*",
-                end_sequence="*/",
-                checksum_algorithm="",
-                operation_mode=mode_index
-            )
-        else:
-            # Just set the operation mode for other modes
-            self.command("dashboard.setOperationMode", {"mode": mode_index})
+        self.command("dashboard.setOperationMode", {"mode": mode_index})
 
     def wait_for_connection(self, timeout: float = 10.0) -> bool:
         """
@@ -416,7 +408,7 @@ class SerialStudioClient:
             start_sequence: Frame start delimiter (e.g., "$", "/*")
             end_sequence: Frame end delimiter (e.g., "\\r\\n", "*/", ";")
             checksum_algorithm: Checksum name (e.g., "None", "CRC-16", "CRC-32", "Adler-32")
-            operation_mode: Operation mode (0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)
+            operation_mode: Operation mode (0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot)
             frame_detection: Frame detection mode (0=EndDelimiterOnly, 1=StartAndEndDelimiter, 2=NoDelimiters, 3=StartDelimiterOnly)
 
         Returns:
@@ -548,7 +540,7 @@ class SerialStudioClient:
         """
         Get total number of dashboard widgets currently active.
 
-        This works in all modes (ProjectFile, DeviceSendsJSON, QuickPlot).
+        This works in all modes (ProjectFile, ConsoleOnly, QuickPlot).
 
         Returns:
             Total widget count

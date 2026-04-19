@@ -248,8 +248,10 @@ set(SOURCES
   src/API/Handlers/CSVPlayerHandler.cpp
   src/API/Handlers/ExtensionHandler.cpp
   src/API/Handlers/DashboardHandler.cpp
+  src/API/Handlers/DataTablesHandler.cpp
   src/API/Handlers/WindowHandler.cpp
   src/API/Handlers/SourceHandler.cpp
+  src/API/Handlers/WorkspacesHandler.cpp
   src/IO/Drivers/Network.cpp
   src/IO/Drivers/UART.cpp
   src/IO/Drivers/BluetoothLE.cpp
@@ -275,6 +277,7 @@ set(SOURCES
   src/DataModel/FrameBuilder.cpp
   src/DataModel/Frame.cpp
   src/DataModel/FrameConsumer.cpp
+  src/DataModel/DataTable.cpp
   src/DataModel/DatasetTransformEditor.cpp
   src/DataModel/FrameParserTestDialog.cpp
   src/DataModel/TransmitTestDialog.cpp
@@ -338,8 +341,10 @@ set(HEADERS
   src/API/Handlers/CSVPlayerHandler.h
   src/API/Handlers/ExtensionHandler.h
   src/API/Handlers/DashboardHandler.h
+  src/API/Handlers/DataTablesHandler.h
   src/API/Handlers/WindowHandler.h
   src/API/Handlers/SourceHandler.h
+  src/API/Handlers/WorkspacesHandler.h
   src/UI/UISessionRegistry.h
   src/Platform/NativeWindow.h
   src/Console/Handler.h
@@ -372,6 +377,8 @@ set(HEADERS
   src/DataModel/Frame.h
   src/DataModel/FrameBuilder.h
   src/DataModel/FrameConsumer.h
+  src/DataModel/DataTable.h
+  src/DataModel/ExportSchema.h
   src/DataModel/DatasetTransformEditor.h
   src/DataModel/FrameParserTestDialog.h
   src/DataModel/TransmitTestDialog.h
@@ -397,6 +404,10 @@ set(QML_SOURCES
   qml/Dialogs/AxisRangeDialog.qml
   qml/Dialogs/CsvPlayer.qml
   qml/Dialogs/Mdf4Player.qml
+  qml/Dialogs/SqlitePlayer.qml
+  qml/DatabaseExplorer/DatabaseExplorer.qml
+  qml/DatabaseExplorer/SessionList.qml
+  qml/DatabaseExplorer/SessionDetail.qml
   qml/Dialogs/Donate.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/IconPicker.qml
@@ -426,6 +437,13 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/ActionView.qml
   qml/ProjectEditor/Views/OutputWidgetView.qml
   qml/ProjectEditor/Views/DatasetView.qml
+  qml/ProjectEditor/Views/DataTablesView.qml
+  qml/ProjectEditor/Views/SystemDatasetsView.qml
+  qml/ProjectEditor/Views/UserTableView.qml
+  qml/ProjectEditor/Views/WorkspacesView.qml
+  qml/ProjectEditor/Views/WorkspaceView.qml
+  qml/ProjectEditor/Views/AddWidgetDialog.qml
+  qml/ProjectEditor/Views/ConstantsLibraryDialog.qml
   qml/ProjectEditor/Views/FlowDiagram.qml
   qml/ProjectEditor/Views/FrameParserView.qml
   qml/ProjectEditor/Views/GroupView.qml
@@ -458,6 +476,8 @@ set(QML_SOURCES
   qml/Widgets/RibbonSection.qml
   qml/Widgets/RibbonSpacer.qml
   qml/Widgets/PlotWidget.qml
+  qml/Widgets/ProjectTableHeader.qml
+  qml/Widgets/ProjectTableRow.qml
   qml/Widgets/ProNotice.qml
   qml/Widgets/SearchField.qml
   qml/Widgets/SmartWindow.qml
@@ -483,6 +503,7 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/HIDHandler.h
     src/API/Handlers/USBHandler.h
     src/API/Handlers/ProcessHandler.h
+    src/API/Handlers/SessionsHandler.h
     src/MQTT/Client.h
     src/IO/Drivers/Audio.h
     src/IO/Drivers/CANBus.h
@@ -501,6 +522,9 @@ if(BUILD_COMMERCIAL)
     src/Licensing/SimpleCrypt.h
     src/Licensing/LemonSqueezy.h
     src/Licensing/CommercialToken.h
+    src/Sessions/DatabaseManager.h
+    src/Sessions/Export.h
+    src/Sessions/Player.h
     src/ThirdParty/miniaudio.h
     src/UI/Widgets/Output/Base.h
     src/UI/Widgets/Output/Button.h
@@ -522,6 +546,7 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/USBHandler.cpp
     src/API/Handlers/ProcessHandler.cpp
     src/API/Handlers/LicensingHandler.cpp
+    src/API/Handlers/SessionsHandler.cpp
     src/MQTT/Client.cpp
     src/IO/Drivers/Audio.cpp
     src/IO/Drivers/CANBus.cpp
@@ -537,6 +562,9 @@ if(BUILD_COMMERCIAL)
     src/DataModel/ModbusMapImporter.cpp
     src/Licensing/Trial.cpp
     src/Licensing/CommercialToken.cpp
+    src/Sessions/DatabaseManager.cpp
+    src/Sessions/Export.cpp
+    src/Sessions/Player.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp

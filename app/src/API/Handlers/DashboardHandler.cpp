@@ -51,7 +51,7 @@ void API::Handlers::DashboardHandler::registerCommands()
   QJsonObject modeProp;
   modeProp.insert(QStringLiteral("type"), QStringLiteral("integer"));
   modeProp.insert(QStringLiteral("description"),
-                  QStringLiteral("Operation mode: 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot"));
+                  QStringLiteral("Operation mode: 0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot"));
   modeProps.insert(QStringLiteral("mode"), modeProp);
 
   QJsonObject setModeSchema;
@@ -62,7 +62,7 @@ void API::Handlers::DashboardHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("dashboard.setOperationMode"),
     QStringLiteral(
-      "Set the operation mode (params: mode - 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)"),
+      "Set the operation mode (params: mode - 0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot)"),
     setModeSchema,
     &setOperationMode);
 
@@ -136,7 +136,7 @@ void API::Handlers::DashboardHandler::registerCommands()
 
 /**
  * @brief Set the operation mode
- * @param params Requires "mode" (int: 0=ProjectFile, 1=DeviceSendsJSON,
+ * @param params Requires "mode" (int: 0=ProjectFile, 1=ConsoleOnly,
  * 2=QuickPlot)
  */
 API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QString& id,
@@ -153,7 +153,7 @@ API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QSt
       id,
       ErrorCode::InvalidParam,
       QStringLiteral(
-        "Invalid mode: %1. Valid range: 0-2 (0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)")
+        "Invalid mode: %1. Valid range: 0-2 (0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot)")
         .arg(mode));
   }
 
@@ -164,7 +164,7 @@ API::CommandResponse API::Handlers::DashboardHandler::setOperationMode(const QSt
   result[QStringLiteral("mode")] = mode;
 
   const QStringList modeNames = {
-    QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"), QStringLiteral("QuickPlot")};
+    QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("modeName")] = modeNames[mode];
 
   return CommandResponse::makeSuccess(id, result);
@@ -188,9 +188,14 @@ API::CommandResponse API::Handlers::DashboardHandler::getOperationMode(const QSt
   QJsonObject result;
   result[QStringLiteral("mode")] = modeIndex;
 
-  const QStringList modeNames = {
-    QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"), QStringLiteral("QuickPlot")};
-  result[QStringLiteral("modeName")] = modeNames[modeIndex];
+  // Bounds-guarded lookup — operationMode() is clamped at construction and
+  // the setter rejects out-of-range values, but a wire-level guard avoids
+  // any out-of-range read if enums grow in future versions.
+  static const QStringList kModeNames = {
+    QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
+  result[QStringLiteral("modeName")] = (modeIndex >= 0 && modeIndex < kModeNames.size())
+                                       ? kModeNames[modeIndex]
+                                       : QStringLiteral("Unknown");
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -299,9 +304,12 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
   QJsonObject result;
   result[QStringLiteral("operationMode")] = modeIndex;
 
-  const QStringList modeNames = {
-    QStringLiteral("ProjectFile"), QStringLiteral("DeviceSendsJSON"), QStringLiteral("QuickPlot")};
-  result[QStringLiteral("operationModeName")] = modeNames[modeIndex];
+  // Bounds-guarded mode name — same rationale as getOperationMode
+  static const QStringList kModeNames = {
+    QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
+  result[QStringLiteral("operationModeName")] = (modeIndex >= 0 && modeIndex < kModeNames.size())
+                                                ? kModeNames[modeIndex]
+                                                : QStringLiteral("Unknown");
   result[QStringLiteral("fps")]               = fps;
   result[QStringLiteral("points")]            = points;
   result[QStringLiteral("widgetCount")]       = UI::Dashboard::instance().totalWidgetCount();

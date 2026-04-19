@@ -134,17 +134,17 @@ public:
    * name string (see `textEncodingName()`), but settings may still read ints.
    */
   enum TextEncoding {
-    EncUtf8 = 0,     /**< UTF-8 (default). */
-    EncUtf16LE,      /**< UTF-16 little-endian. */
-    EncUtf16BE,      /**< UTF-16 big-endian. */
-    EncLatin1,       /**< ISO-8859-1 / Latin-1. */
-    EncSystem,       /**< System locale encoding. */
-    EncGbk,          /**< Simplified Chinese — GBK. */
-    EncGb18030,      /**< Simplified Chinese — GB18030. */
-    EncBig5,         /**< Traditional Chinese — Big5. */
-    EncShiftJis,     /**< Japanese — Shift_JIS. */
-    EncEucJp,        /**< Japanese — EUC-JP. */
-    EncEucKr,        /**< Korean — EUC-KR. */
+    EncUtf8 = 0, /**< UTF-8 (default). */
+    EncUtf16LE,  /**< UTF-16 little-endian. */
+    EncUtf16BE,  /**< UTF-16 big-endian. */
+    EncLatin1,   /**< ISO-8859-1 / Latin-1. */
+    EncSystem,   /**< System locale encoding. */
+    EncGbk,      /**< Simplified Chinese — GBK. */
+    EncGb18030,  /**< Simplified Chinese — GB18030. */
+    EncBig5,     /**< Traditional Chinese — Big5. */
+    EncShiftJis, /**< Japanese — Shift_JIS. */
+    EncEucJp,    /**< Japanese — EUC-JP. */
+    EncEucKr,    /**< Korean — EUC-KR. */
   };
   Q_ENUM(TextEncoding)
 
@@ -157,9 +157,9 @@ public:
    * a different approach to interpreting and visualizing the incoming data.
    */
   enum OperationMode {
-    ProjectFile,     /**< Builds the dashboard using a predefined project file. */
-    DeviceSendsJSON, /**< Builds the dashboard from device-sent JSON. */
-    QuickPlot,       /**< Quick and simple data plotting mode. */
+    ProjectFile, /**< Builds the dashboard using a predefined project file. */
+    ConsoleOnly, /**< No parsing: raw bytes flow only to the console. */
+    QuickPlot,   /**< Quick and simple data plotting mode. */
     /* IMPORTANT: When adding other modes, please don't modify the order of the
      *            enums to ensure backward compatiblity with previous project
      *            files!! */
@@ -332,14 +332,25 @@ public:
   // clang-format on
 
   //
+  // Filters used by workspace-ref and auto-workspace builders. Keeping these
+  // centralized so all walkers agree on which widgets can be placed on a
+  // workspace (must mirror Dashboard::buildWidgetGroups exactly).
+  //
+  // clang-format off
+  Q_INVOKABLE [[nodiscard]] static bool groupEligibleForWorkspace(const DataModel::Group& g);
+  Q_INVOKABLE [[nodiscard]] static bool groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w);
+  Q_INVOKABLE [[nodiscard]] static bool datasetWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w);
+  // clang-format on
+
+  //
   // Parsing & project model logic
   //
+  // clang-format off
   Q_INVOKABLE [[nodiscard]] static QString groupWidgetId(const SerialStudio::GroupWidget widget);
   Q_INVOKABLE [[nodiscard]] static SerialStudio::GroupWidget groupWidgetFromId(const QString& id);
-  Q_INVOKABLE [[nodiscard]] static QString datasetWidgetId(
-    const SerialStudio::DatasetWidget widget);
-  Q_INVOKABLE [[nodiscard]] static SerialStudio::DatasetWidget datasetWidgetFromId(
-    const QString& id);
+  Q_INVOKABLE [[nodiscard]] static QString datasetWidgetId(const SerialStudio::DatasetWidget widget);
+  Q_INVOKABLE [[nodiscard]] static SerialStudio::DatasetWidget datasetWidgetFromId(const QString& id);
+  // clang-format on
 
   //
   // Utility functions
@@ -366,7 +377,7 @@ public:
   Q_INVOKABLE [[nodiscard]] static QStringList textEncodings();
   Q_INVOKABLE [[nodiscard]] static QString textEncodingName(SerialStudio::TextEncoding enc);
   Q_INVOKABLE [[nodiscard]] static SerialStudio::TextEncoding textEncodingFromName(const QString& name);
-  [[nodiscard]] static QByteArray encodeText(const QString& text, SerialStudio::TextEncoding enc);
-  [[nodiscard]] static QString decodeText(QByteArrayView bytes, SerialStudio::TextEncoding enc);
+  Q_INVOKABLE [[nodiscard]] static QByteArray encodeText(const QString& text, SerialStudio::TextEncoding enc);
+  Q_INVOKABLE [[nodiscard]] static QString decodeText(QByteArrayView bytes, SerialStudio::TextEncoding enc);
   // clang-format on
 };

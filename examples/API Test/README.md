@@ -355,7 +355,7 @@ python test_api.py send csv.export.setEnabled -p enabled=false
 # Get current dashboard configuration
 python test_api.py send dashboard.getStatus
 
-# Set operation mode (0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot)
+# Set operation mode (0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot)
 python test_api.py send dashboard.setOperationMode -p mode=2
 
 # Set visualization refresh rate (FPS)
@@ -439,7 +439,7 @@ All messages are JSON objects terminated by a newline (`\n`).
 | Index | Name | Description |
 |-------|------|-------------|
 | 0 | ProjectFile | Uses a project file to define dashboard structure and data parsing |
-| 1 | DeviceSendsJSON | Device sends pre-formatted JSON data (no parsing needed) |
+| 1 | ConsoleOnly | No parsing — raw bytes flow only to the terminal (no dashboard) |
 | 2 | QuickPlot | Automatically detects and plots CSV-formatted data |
 
 ## Troubleshooting

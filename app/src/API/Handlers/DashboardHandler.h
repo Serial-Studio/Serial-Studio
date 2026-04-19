@@ -28,7 +28,7 @@ namespace API::Handlers {
  * @brief Handler for dashboard configuration commands
  *
  * Provides API commands to configure dashboard settings including:
- * - Operation mode (ProjectFile, DeviceSendsJSON, QuickPlot)
+ * - Operation mode (ProjectFile, ConsoleOnly, QuickPlot)
  * - Visualization refresh rate (FPS)
  * - Data points per plot
  */

@@ -152,7 +152,8 @@ end
         title: str = "Test Frame",
     ) -> dict:
         """
-        Generate a JSON frame matching Serial Studio DeviceSendsJSON format.
+        Generate a JSON frame in the legacy DeviceSendsJSON shape (retained as
+        a payload helper; mode slot 1 is now ConsoleOnly and does no parsing).
 
         Uses proper Frame keys as defined in Frame.h: "title", "groups", "datasets", etc.
         NOT the abbreviated format ("t", "g") - that's for internal serialization only.

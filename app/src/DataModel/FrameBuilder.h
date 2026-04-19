@@ -30,7 +30,9 @@
 #include <QMap>
 #include <QObject>
 #include <QTimer>
+#include <QVariant>
 
+#include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
 #include "SerialStudio.h"
 
@@ -67,6 +69,7 @@ public:
   [[nodiscard]] static FrameBuilder& instance();
 
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
+  [[nodiscard]] const DataModel::Frame& quickPlotFrame() const noexcept;
 
 public slots:
   void setupExternalConnections();
@@ -108,19 +111,20 @@ private:
   };
 
   void compileTransforms();
-  void compileTransformsLua(TransformEngine& engine,
-                            const std::vector<TransformEntry>& entries);
-  void compileTransformsJS(TransformEngine& engine,
-                           const std::vector<TransformEntry>& entries);
+  void compileTransformsLua(TransformEngine& engine, const std::vector<TransformEntry>& entries);
+  void compileTransformsJS(TransformEngine& engine, const std::vector<TransformEntry>& entries);
   void destroyTransformEngines();
-  [[nodiscard]] double applyTransform(int sourceId, int uniqueId, double rawValue);
+  [[nodiscard]] QVariant applyTransform(int sourceId, int uniqueId, const QVariant& rawValue);
+  void initializeTableStore();
+  void injectTableApiLua(lua_State* L);
+  void injectTableApiJS(QJSEngine* js);
 
 private:
   std::map<int, TransformEngine> m_transformEngines;
   QTimer m_jsTransformWatchdog;
+  DataModel::DataTableStore m_tableStore;
 
   DataModel::Frame m_frame;
-  DataModel::Frame m_rawFrame;
   DataModel::Frame m_quickPlotFrame;
 
   QMap<int, DataModel::Frame> m_sourceFrames;

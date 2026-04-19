@@ -22,19 +22,19 @@ def test_operation_mode_configuration(api_client, clean_state):
 
     Operation modes:
     0 = ProjectFile (manual JSON project definition)
-    1 = DeviceSendsJSON (device sends JSON frames)
+    1 = ConsoleOnly (device sends JSON frames)
     2 = QuickPlot (CSV-based quick plotting)
     """
     # Get current operation mode
     status = api_client.get_dashboard_status()
     initial_mode = status.get("operationMode", 0)
 
-    # Try setting to DeviceSendsJSON mode
+    # Try setting to ConsoleOnly mode
     api_client.command("dashboard.setOperationMode", {"mode": 1})
     time.sleep(0.2)
 
     status = api_client.get_dashboard_status()
-    assert status["operationMode"] == 1, "Should be in DeviceSendsJSON mode"
+    assert status["operationMode"] == 1, "Should be in ConsoleOnly mode"
 
     # Try setting to QuickPlot mode
     api_client.command("dashboard.setOperationMode", {"mode": 2})
@@ -136,38 +136,32 @@ function parse(frame) {
 
 
 @pytest.mark.project
-def test_device_sends_json_workflow(api_client, device_simulator, clean_state):
+def test_console_only_workflow(api_client, device_simulator, clean_state):
     """
-    Test workflow with DeviceSendsJSON operation mode.
+    Test workflow with ConsoleOnly operation mode.
 
-    In this mode, the device sends complete JSON frames with proper Frame keys:
-    {"title": "...", "groups": [{"title": "...", "datasets": [...]}]}
-
-    Frames are newline-delimited, no checksums or special delimiters needed.
+    In this mode, FrameReader short-circuits all parsing; incoming bytes are
+    only routed to the terminal via DeviceManager::rawDataReceived. The test
+    verifies the connection stays open and no assertions fire while bytes
+    stream through.
     """
-    # Configure for DeviceSendsJSON mode
-    api_client.set_operation_mode("json")
+    # Configure for ConsoleOnly mode (value 1 — renamed from DeviceSendsJSON)
+    api_client.command("dashboard.setOperationMode", {"mode": 1})
     time.sleep(0.2)
 
     # Configure network
     api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
 
-    # Create frames using DataGenerator - it handles delimiters automatically
-    frames = []
-    for i in range(10):
-        frame_data = DataGenerator.generate_json_frame()
-        payload = json.dumps(frame_data)
-        # wrap_frame adds /* */ delimiters automatically for JSON mode
-        frames.append(DataGenerator.wrap_frame(payload))
+    # Send raw bytes — no delimiters, no parsing expected
+    frames = [f"raw line {i}\n".encode() for i in range(10)]
 
-    # Connect and send data
     api_client.connect_device()
     assert device_simulator.wait_for_connection(timeout=5.0)
 
     device_simulator.send_frames(frames, interval_seconds=0.2)
     time.sleep(2.5)
 
-    # Verify data was received
+    # Connection must remain stable
     assert api_client.is_connected()
 
     api_client.disconnect_device()
@@ -364,7 +358,7 @@ def test_full_project_configuration_workflow(api_client, device_simulator, clean
     """
     Complete workflow: configure project, set mode, stream data, verify.
     """
-    # 1. Configure for DeviceSendsJSON mode
+    # 1. Configure for ConsoleOnly mode
     api_client.set_operation_mode("json")
     time.sleep(0.2)
 

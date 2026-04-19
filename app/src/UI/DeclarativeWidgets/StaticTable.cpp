@@ -97,6 +97,9 @@ const QList<QStringList>& StaticTable::data() const
  */
 void StaticTable::setFont(const QFont& font)
 {
+  if (m_font == font)
+    return;
+
   m_font = font;
   m_widget.setFont(font);
   requestUpdate();
@@ -110,6 +113,9 @@ void StaticTable::setFont(const QFont& font)
  */
 void StaticTable::setHeaderFont(const QFont& font)
 {
+  if (m_headerFont == font)
+    return;
+
   m_headerFont = font;
   m_widget.horizontalHeader()->setFont(font);
   requestUpdate();

@@ -106,11 +106,22 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   auto writeDatasets = [](const DataModel::Group& group, ChannelGroupInfo& info) {
     for (size_t i = 0; i < group.datasets.size(); ++i) {
       const auto& dataset = group.datasets.at(i);
-      auto* channel       = info.channels[i];
+
+      // Write final (post-transform) values
+      auto* channel = info.channels[i];
       if (info.isNumeric[i])
         channel->SetChannelValue(dataset.numericValue);
       else
         channel->SetChannelValue(dataset.value.toStdString());
+
+      // Write raw (pre-transform) values to raw channels
+      if (i < info.rawChannels.size() && info.rawChannels[i]) {
+        auto* rawCh = info.rawChannels[i];
+        if (info.isNumeric[i])
+          rawCh->SetChannelValue(dataset.rawNumericValue);
+        else
+          rawCh->SetChannelValue(dataset.rawValue.toStdString());
+      }
     }
   };
 
@@ -267,6 +278,14 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
       }
 
       for (const auto& dataset : group.datasets) {
+        // Resolve data type from live frame when using template
+        bool isNum = dataset.isNumeric;
+        if (usingTemplate) {
+          auto nit = numericLookup.find({group.groupId, dataset.datasetId});
+          isNum    = (nit != numericLookup.end()) ? nit->second : true;
+        }
+
+        // Create final (post-transform) channel
         auto* channel = channelGroup->CreateChannel();
         if (!channel)
           continue;
@@ -275,25 +294,37 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
         channel->Unit(dataset.units.toStdString());
         channel->Type(mdf::ChannelType::FixedLength);
 
-        // Resolve data type from live frame when using template
-        bool isNum = dataset.isNumeric;
-        if (usingTemplate) {
-          auto nit = numericLookup.find({group.groupId, dataset.datasetId});
-          isNum    = (nit != numericLookup.end()) ? nit->second : true;
-        }
-
         if (isNum) {
           channel->DataType(mdf::ChannelDataType::FloatLe);
           channel->DataBytes(8);
-        }
-
-        else {
+        } else {
           channel->DataType(mdf::ChannelDataType::StringAscii);
           channel->DataBytes(256);
         }
 
         info.channels.push_back(channel);
         info.isNumeric.push_back(isNum);
+
+        // Create raw (pre-transform) channel. Always push the pointer — null
+        // included — so info.rawChannels[i] stays aligned with info.channels[i]
+        // and the writer's null guard in writeDatasets() handles the miss.
+        auto* rawChannel = channelGroup->CreateChannel();
+        if (rawChannel) {
+          const auto rawName = dataset.title.toStdString() + " (raw)";
+          rawChannel->Name(rawName);
+          rawChannel->Unit(dataset.units.toStdString());
+          rawChannel->Type(mdf::ChannelType::FixedLength);
+
+          if (isNum) {
+            rawChannel->DataType(mdf::ChannelDataType::FloatLe);
+            rawChannel->DataBytes(8);
+          } else {
+            rawChannel->DataType(mdf::ChannelDataType::StringAscii);
+            rawChannel->DataBytes(256);
+          }
+        }
+
+        info.rawChannels.push_back(rawChannel);
       }
 
       m_groupMap[group.groupId] = info;

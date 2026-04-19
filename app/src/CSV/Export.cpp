@@ -61,8 +61,7 @@ void CSV::ExportWorker::closeResources()
     return;
 
   m_csvFile.close();
-  m_knownUniqueIds.clear();
-  m_indexHeaderPairs.clear();
+  m_schema = DataModel::ExportSchema{};
   m_textStream.setDevice(nullptr);
   DataModel::clear_frame(m_templateFrame);
 }
@@ -83,36 +82,42 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
 
   // Open a new CSV file if needed
   if (!m_csvFile.isOpen()) {
-    // Use cached template frame (all sources) if available so that all
-    // columns are registered upfront. Falls back to first data frame for
-    // QuickPlot/JSON modes.
     if (!m_templateFrame.groups.empty())
-      m_indexHeaderPairs = createCsvFile(m_templateFrame);
+      createCsvFile(m_templateFrame);
     else
-      m_indexHeaderPairs = createCsvFile((*items.begin())->data);
+      createCsvFile((*items.begin())->data);
 
-    if (m_indexHeaderPairs.isEmpty())
+    if (m_schema.columns.empty())
       return;
 
     m_referenceTimestamp = (*items.begin())->timestamp;
   }
 
+  const int colCount = static_cast<int>(m_schema.columns.size());
+
   for (const auto& i : items) {
+    // Elapsed time column
     const auto elapsed     = i->timestamp - m_referenceTimestamp;
     const auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
     const double seconds   = static_cast<double>(nanoseconds) / 1'000'000'000.0;
+    m_textStream << QString::number(seconds, 'f', 9);
 
-    m_textStream << QString::number(seconds, 'f', 9) << QStringLiteral(",");
-
-    QMap<int, QString> fieldValues;
+    // Collect post-transform values by uniqueId — CSV exports final values
+    // only, matching what users see on the dashboard. Raw pre-transform
+    // values remain accessible via the SQLite session DB and MDF4 raw
+    // channels when byte-level fidelity is needed.
+    QMap<int, QString> finalValues;
     for (const auto& g : i->data.groups)
       for (const auto& d : g.datasets)
-        fieldValues[d.uniqueId] = d.value.simplified();
+        finalValues[d.uniqueId] = d.value.simplified();
 
-    for (int j = 0; j < m_indexHeaderPairs.count(); ++j) {
-      m_textStream << fieldValues.value(m_indexHeaderPairs[j].first, "");
-      m_textStream << (j < m_indexHeaderPairs.count() - 1 ? "," : "\n");
+    // Write one column per dataset in schema order
+    for (int j = 0; j < colCount; ++j) {
+      const int uid = m_schema.columns[static_cast<size_t>(j)].uniqueId;
+      m_textStream << ',' << finalValues.value(uid, "");
     }
+
+    m_textStream << '\n';
   }
 
   m_textStream.flush();
@@ -127,7 +132,7 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
  * @param frame The frame used to extract header information.
  * @return List of index-title pairs for each dataset.
  */
-QVector<QPair<int, QString>> CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
+void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 {
   // Build the output file path from the current timestamp
   const auto dt       = QDateTime::currentDateTime();
@@ -147,50 +152,33 @@ QVector<QPair<int, QString>> CSV::ExportWorker::createCsvFile(const DataModel::F
   QDir dir(path);
   if (!dir.exists() && !dir.mkpath(".")) {
     qWarning() << "Failed to create directory:" << path;
-    return {};
+    return;
   }
 
   m_csvFile.setFileName(dir.filePath(fileName));
   if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
     qWarning() << "Cannot open CSV file for writing:" << dir.filePath(fileName);
-    return {};
+    return;
   }
 
   m_textStream.setDevice(&m_csvFile);
   m_textStream.setGenerateByteOrderMark(true);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  m_textStream.setCodec("UTF-8");
-#else
   m_textStream.setEncoding(QStringConverter::Utf8);
-#endif
 
-  QSet<int> seenUniqueIds;
-  QVector<QPair<int, QString>> pairs;
-  for (const auto& g : frame.groups) {
-    for (const auto& d : g.datasets) {
-      const int uid = d.uniqueId;
-      if (seenUniqueIds.contains(uid))
-        continue;
+  // Build schema from frame
+  m_schema = DataModel::buildExportSchema(frame);
 
-      seenUniqueIds.insert(uid);
-      auto header = QString("%1/%2").arg(g.title, d.title).simplified();
-      pairs.append(qMakePair(uid, header));
-    }
+  // Write header. The first column is elapsed seconds from the first sample
+  // in this session — NOT a calendar timestamp — so the label must match.
+  m_textStream << "Elapsed (s)";
+  for (const auto& col : m_schema.columns) {
+    const auto label = QString("%1/%2").arg(col.groupTitle, col.title).simplified();
+    m_textStream << ',' << label;
   }
-
-  std::sort(
-    pairs.begin(), pairs.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
-
-  m_knownUniqueIds = seenUniqueIds;
-
-  m_textStream << "RX Date/Time";
-  for (const auto& pair : pairs)
-    m_textStream << ',' << pair.second;
 
   m_textStream << '\n';
 
   Q_EMIT resourceOpenChanged();
-  return pairs;
 }
 
 //--------------------------------------------------------------------------------------------------

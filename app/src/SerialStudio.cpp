@@ -32,6 +32,7 @@
 #  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
+#  include "Sessions/Player.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -230,6 +231,43 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
       return iconPath + "group.svg";
       break;
   }
+}
+
+/**
+ * @brief Returns whether a group contributes any widgets to Dashboard's walker.
+ *
+ * Matches the filtering done by Dashboard::buildWidgetGroups and is the single
+ * source of truth used by ProjectModel::buildAutoWorkspaces,
+ * widgetTypeCountsForGroup, and ProjectEditor::allWidgetsSummary.
+ */
+bool SerialStudio::groupEligibleForWorkspace(const DataModel::Group& g)
+{
+  if (g.groupType == DataModel::GroupType::Output)
+    return false;
+
+  if (g.widget == QLatin1String("image"))
+    return false;
+
+  return true;
+}
+
+/**
+ * @brief Returns whether a group-level widget key should appear on workspaces.
+ */
+bool SerialStudio::groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
+{
+  return w != DashboardNoWidget && w != DashboardTerminal;
+}
+
+/**
+ * @brief Returns whether a dataset-level widget key should appear on workspaces.
+ *
+ * LED is intentionally excluded — LEDs are aggregated into a single panel by
+ * Dashboard and don't get per-dataset entries in a workspace.
+ */
+bool SerialStudio::datasetWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
+{
+  return w != DashboardNoWidget && w != DashboardLED && w != DashboardTerminal;
 }
 
 /**
@@ -514,7 +552,13 @@ bool SerialStudio::isAnyPlayerOpen()
 {
   static auto& csvPlayer  = CSV::Player::instance();
   static auto& mdf4Player = MDF4::Player::instance();
+
+#ifdef BUILD_COMMERCIAL
+  static auto& sqlPlayer = Sessions::Player::instance();
+  return csvPlayer.isOpen() || mdf4Player.isOpen() || sqlPlayer.isOpen();
+#else
   return csvPlayer.isOpen() || mdf4Player.isOpen();
+#endif
 }
 
 /**
@@ -817,9 +861,17 @@ QTextCodec* legacyCodec(SerialStudio::TextEncoding enc)
 QStringList SerialStudio::textEncodings()
 {
   static const QStringList list{
-    tr("UTF-8"),     tr("UTF-16 LE"), tr("UTF-16 BE"), tr("Latin-1"),
-    tr("System"),    tr("GBK"),       tr("GB18030"),   tr("Big5"),
-    tr("Shift-JIS"), tr("EUC-JP"),    tr("EUC-KR"),
+    tr("UTF-8"),
+    tr("UTF-16 LE"),
+    tr("UTF-16 BE"),
+    tr("Latin-1"),
+    tr("System"),
+    tr("GBK"),
+    tr("GB18030"),
+    tr("Big5"),
+    tr("Shift-JIS"),
+    tr("EUC-JP"),
+    tr("EUC-KR"),
   };
   return list;
 }

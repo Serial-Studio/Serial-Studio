@@ -80,6 +80,16 @@ public:
 
   [[nodiscard]] std::vector<int> buildKMPTable(const T& p) const { return computeKMPTable(p); }
 
+  // Single-pass multi-pattern scan: walks the buffer once and returns the
+  // position of the earliest match among all patterns, plus the index of the
+  // matched pattern. Returns {-1, -1} if none match.
+  struct MultiMatchResult {
+    int position     = -1;
+    int patternIndex = -1;
+  };
+
+  [[nodiscard]] MultiMatchResult findFirstOfPatterns(const QVector<T>& patterns) const;
+
   [[nodiscard]] qsizetype overflowCount() const noexcept
   {
     return m_overflowCount.load(std::memory_order_relaxed);
@@ -444,4 +454,77 @@ std::vector<int> IO::CircularBuffer<T, StorageType>::computeKMPTable(const T& p)
       lps[i++] = 0;
 
   return lps;
+}
+
+/**
+ * @brief Single-pass multi-pattern scan over the circular buffer.
+ *
+ * Walks the buffer once from head to tail. At each byte position, tests every
+ * pattern for a full match. Returns the first (leftmost) match and the index
+ * of the matched pattern. Efficient for short delimiters (1–3 bytes).
+ *
+ * @param patterns  Ordered list of patterns to search for.
+ * @return {position, patternIndex} of the first match, or {-1, -1}.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer<T, StorageType>::
+  findFirstOfPatterns(const QVector<T>& patterns) const
+{
+  Q_ASSERT(!patterns.isEmpty());
+
+  const qsizetype bufSize = size();
+  if (patterns.isEmpty() || bufSize <= 0) [[unlikely]]
+    return {};
+
+  // Stack-allocated pattern metadata — avoids heap allocation on the hotpath.
+  // 8 patterns is generous; FrameReader uses at most 3 (QuickPlot line endings).
+  static constexpr int kMaxPatterns = 8;
+  Q_ASSERT(patterns.size() <= kMaxPatterns);
+
+  struct PatInfo {
+    const StorageType* data;
+    qsizetype len;
+  };
+
+  // Snapshot pattern pointers and find the shortest pattern length
+  PatInfo info[kMaxPatterns];
+  const int patCount = qMin(patterns.size(), kMaxPatterns);
+  qsizetype minLen   = bufSize;
+  for (int p = 0; p < patCount; ++p) {
+    info[p].data = reinterpret_cast<const StorageType*>(patterns[p].constData());
+    info[p].len  = patterns[p].size();
+    if (info[p].len < minLen)
+      minLen = info[p].len;
+  }
+
+  if (minLen <= 0 || bufSize < minLen) [[unlikely]]
+    return {};
+
+  // Walk the buffer once, testing all patterns at each position
+  const qsizetype head    = m_head.load(std::memory_order_acquire);
+  const qsizetype cap     = m_capacity;
+  const qsizetype scanEnd = bufSize - minLen + 1;
+
+  for (qsizetype i = 0; i < scanEnd; ++i) {
+    for (int p = 0; p < patCount; ++p) {
+      const auto pLen = info[p].len;
+      if (i + pLen > bufSize)
+        continue;
+
+      // Byte-by-byte comparison against the circular buffer
+      const auto* pData = info[p].data;
+      bool match        = true;
+      for (qsizetype j = 0; j < pLen; ++j) {
+        if (m_buffer[(head + i + j) % cap] != pData[j]) {
+          match = false;
+          break;
+        }
+      }
+
+      if (match)
+        return {static_cast<int>(i), p};
+    }
+  }
+
+  return {};
 }

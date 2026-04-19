@@ -153,10 +153,10 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
           }
 
           Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
-          constexpr int blockSize = 1024;
-          qint64 blockStart       = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-          m_bytesSent             = blockStart;
-          if (!m_file.seek(blockStart)) [[unlikely]] {
+
+          // Rewind by actual bytes read — fixed 1024 over-rewinds the final partial block.
+          m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
+          if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
             Q_EMIT finished(false, tr("Failed to seek in file"));
             return;
           }
@@ -228,12 +228,21 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
  */
 void IO::Protocols::YMODEM::sendBlock0()
 {
-  // Build block 0 payload: filename + size
+  // Build block 0 payload: filename + size in a 128-byte block.
   QFileInfo info(m_filePath);
+  QByteArray fileNameUtf8  = info.fileName().toUtf8();
+  const QByteArray sizeStr = QByteArray::number(m_fileSize);
+
+  // Truncate long filenames — 24 bytes reserved for size string + terminators.
+  static constexpr int kMaxFileNameBytes = 128 - 24;
+  if (fileNameUtf8.size() > kMaxFileNameBytes)
+    fileNameUtf8.truncate(kMaxFileNameBytes);
+
   QByteArray payload;
-  payload.append(info.fileName().toUtf8());
+  payload.reserve(128);
+  payload.append(fileNameUtf8);
   payload.append('\0');
-  payload.append(QByteArray::number(m_fileSize));
+  payload.append(sizeStr);
   payload.append('\0');
 
   // Pad to 128 bytes and send
@@ -270,6 +279,11 @@ void IO::Protocols::YMODEM::sendEndOfBatch()
  */
 void IO::Protocols::YMODEM::sendDataBlock()
 {
+  // Snapshot file position for precise rewind on NAK/timeout. See XMODEM
+  // for the full rationale — the final block is usually partial, so
+  // subtracting 1024 blindly over-rewinds past the true block boundary.
+  m_lastBlockStart = m_file.pos();
+
   // Read next 1K block; send EOT if file is exhausted
   QByteArray data = m_file.read(1024);
   if (data.isEmpty()) {
@@ -280,13 +294,15 @@ void IO::Protocols::YMODEM::sendDataBlock()
     return;
   }
 
+  m_lastBlockBytes = data.size();
+
   // Pad incomplete block and send
   while (data.size() < 1024)
     data.append(static_cast<char>(0x1A));
 
   QByteArray packet = buildBlock(data, m_blockNumber);
   Q_EMIT writeRequested(packet);
-  m_bytesSent = qMin(m_bytesSent + 1024, m_fileSize);
+  m_bytesSent = qMin(m_bytesSent + m_lastBlockBytes, m_fileSize);
   Q_EMIT progressChanged(m_bytesSent, m_fileSize);
   Q_EMIT statusMessage(
     tr("Sending block %1 (%2/%3 bytes)").arg(m_blockNumber).arg(m_bytesSent).arg(m_fileSize));

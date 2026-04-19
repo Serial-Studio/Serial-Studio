@@ -204,7 +204,13 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
     QByteArray payload = data.mid(3, dlc);
 
     QCanBusFrame frame(can_id, payload);
-    frame.setExtendedFrameFormat(m_canFD);
+
+    // Extended ID (29-bit) and CAN FD (rate-switch) are orthogonal flags.
+    if (can_id > 0x7FF)
+      frame.setExtendedFrameFormat(true);
+
+    if (m_canFD)
+      frame.setFlexibleDataRateFormat(true);
 
     if (m_device->writeFrame(frame)) {
       Q_EMIT dataSent(data);

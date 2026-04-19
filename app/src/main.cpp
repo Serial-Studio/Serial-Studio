@@ -199,7 +199,6 @@ int main(int argc, char** argv)
   QCLO apiServerOpt("api-server", "Enable API server on startup (port 7777)");
   QCLO pOpt({"p", "project"}, "Loads the specified project file", "file");
   QCLO qOpt({"q", "quick-plot"}, "Enables quick plot mode (auto-detect CSV data)");
-  QCLO jOpt({"j", "device-sends-json"}, "Expects pre-formatted JSON from device");
   QCLO fpsOpt({"t", "fps"}, "Sets visualization refresh rate", "Hz");
   QCLO pointsOpt({"n", "points"}, "Sets data points per plot", "count");
   QCLO uartOpt("uart", "Specifies serial port (e.g., /dev/ttyUSB0, COM3)", "port");
@@ -237,7 +236,6 @@ int main(int argc, char** argv)
   parser.addOption(apiServerOpt);
   parser.addOption(pOpt);
   parser.addOption(qOpt);
-  parser.addOption(jOpt);
   parser.addOption(fpsOpt);
   parser.addOption(pointsOpt);
   parser.addOption(uartOpt);
@@ -315,10 +313,6 @@ int main(int argc, char** argv)
   // Enable Quick Plot Mode
   else if (parser.isSet(qOpt))
     AppState::instance().setOperationMode(SerialStudio::QuickPlot);
-
-  // Enable device sends JSON mode
-  else if (parser.isSet(jOpt))
-    AppState::instance().setOperationMode(SerialStudio::DeviceSendsJSON);
 
   // Start full screen
   const auto ctx = moduleManager.engine().rootContext();

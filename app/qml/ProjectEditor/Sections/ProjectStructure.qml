@@ -35,21 +35,8 @@ Widgets.Pane {
   signal groupClicked(var title)
   signal datasetClicked(var title)
 
-  TreeView {
-    id: treeView
-
-    focus: true
-    reuseItems: false
-    interactive: true
-    width: parent.width
-    model: Cpp_JSON_ProjectEditor.treeModel
-    boundsBehavior: TreeView.DragAndOvershootBounds
-    selectionModel: Cpp_JSON_ProjectEditor.selectionModel
-
-    ScrollBar.vertical: ScrollBar {
-      policy: treeView.contentHeight > treeView.height ? ScrollBar.AlwaysOn :
-                                                         ScrollBar.AsNeeded
-    }
+  ColumnLayout {
+    spacing: 0
 
     anchors {
       fill: parent
@@ -60,232 +47,325 @@ Widgets.Pane {
     }
 
     //
-    // Keyboard navigation
+    // Search rectangle
     //
-    Keys.onPressed: (event) => {
-                      // Move down to the next sibling (or parent if collapsed)
-                      if (event.key === Qt.Key_Down) {
-                        let nextIndex = treeView.index(treeView.currentRow + 1, treeView.currentColumn)
-                        if (nextIndex.isValid)
-                        treeView.selectionModel.setCurrentIndex(nextIndex, ItemSelectionModel.ClearAndSelect)
-                      }
+    Rectangle {
+      id: searchBarOverlay
 
-                      // Move up to the previous sibling (or parent)
-                      else if (event.key === Qt.Key_Up) {
-                        let prevIndex = treeView.index(treeView.currentRow - 1, treeView.currentColumn)
-                        if (prevIndex.isValid)
-                        treeView.selectionModel.setCurrentIndex(prevIndex, ItemSelectionModel.ClearAndSelect)
-                      }
+      implicitHeight: 48
+      Layout.topMargin: -1
+      Layout.fillWidth: true
+      color: Cpp_ThemeManager.colors["groupbox_background"]
 
-                      // Delete current item
-                      else if (event.key === Qt.Key_Delete) {
-                        if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView)
-                        Cpp_JSON_ProjectModel.deleteCurrentDataset()
-                        else if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.GroupView)
-                        Cpp_JSON_ProjectModel.deleteCurrentGroup()
-                      }
-                    }
-
-    //
-    // Set background item
-    //
-    delegate: Item {
-      id: item
-
-      implicitWidth: treeView.width
-      implicitHeight: depth === 0 ? 30 : 18
-      Component.onCompleted: syncExpandedState()
-
-      required property int row
-      required property int depth
-      required property int column
-      required property bool current
-      required property bool expanded
-      required property bool isTreeNode
-      required property bool hasChildren
-      required property TreeView treeView
-
-      readonly property real padding: 4
-      readonly property real indentation: 16
-
-      //
-      // Restore expanded state from C++ model
-      //
-      function syncExpandedState() {
-        if (model.treeViewExpanded === true)
-          treeView.expand(row)
-        else
-          treeView.collapse(row)
-      }
-
-      //
-      // Show/hide the children of the current item.
-      //
-      function toggleExpanded() {
-        if (hasChildren) {
-          treeView.toggleExpanded(row)
-          model.treeViewExpanded = expanded
-          return true
-        }
-
-        return false
-      }
-
-      //
-      // Select the item and open the associated view automatically.
-      // Skip selection for spacer items (items with only whitespace text).
-      //
-      function onLabelClicked() {
-        if (model.treeViewText.trim().length === 0)
-          return
-
-        treeView.forceActiveFocus()
-        let index = treeView.index(row, column)
-        treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect)
-      }
-
-      //
-      // If item has children, expand on double click.
-      // Otherwise, select the item and open the associated view.
-      //
-      function onLabelDoubleClicked() {
-        if (model.treeViewText.trim().length === 0)
-          return
-
-        treeView.forceActiveFocus()
-        if (!toggleExpanded()) {
-          onLabelClicked()
-        }
-      }
-
-      //
-      // Item background
-      //
       Rectangle {
-        id: background
+        height: 1
+        width: parent.width
+        anchors.bottom: parent.bottom
+        color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
 
-        anchors.fill: parent
-        color: current ? Cpp_ThemeManager.colors["highlight"] : "transparent"
+      Widgets.SearchField {
+        id: searchField
 
-        MouseArea {
-          anchors.fill: parent
-          onClicked: onLabelClicked()
-          onDoubleClicked: onLabelDoubleClicked()
+        implicitHeight: 32
+        placeholderText: qsTr("Search")
+        color: Cpp_ThemeManager.colors["base"]
+        text: Cpp_JSON_ProjectEditor.treeSearchQuery
+        onTextChanged: Cpp_JSON_ProjectEditor.treeSearchQuery = text
+
+        anchors {
+          left: parent.left
+          right: parent.right
+          leftMargin: 6
+          rightMargin: 6
+          verticalCenter: parent.verticalCenter
+        }
+      }
+    }
+
+    //
+    // Treeview
+    //
+    TreeView {
+      id: treeView
+
+      focus: true
+      clip: true
+      reuseItems: false
+      interactive: true
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+      model: Cpp_JSON_ProjectEditor.treeModel
+      boundsBehavior: TreeView.DragAndOvershootBounds
+      selectionModel: Cpp_JSON_ProjectEditor.selectionModel
+
+      //
+      // Preserve scroll position across tree rebuilds. The C++ side
+      // destroys and recreates the model, which resets contentY to 0.
+      // We snapshot the position just before the model swap and restore
+      // it once the new tree has laid out.
+      //
+      property real savedContentY: 0
+
+      Connections {
+        target: Cpp_JSON_ProjectEditor
+        function onTreeModelChanged() {
+          Qt.callLater(function() {
+            treeView.contentY = Math.min(
+              treeView.savedContentY,
+              Math.max(0, treeView.contentHeight - treeView.height))
+          })
+        }
+      }
+
+      onContentYChanged: savedContentY = contentY
+
+      ScrollBar.vertical: ScrollBar {
+        policy: treeView.contentHeight > treeView.height ? ScrollBar.AlwaysOn :
+                                                           ScrollBar.AsNeeded
+      }
+
+      //
+      // Override default scroll speed — TreeView's small delegate heights
+      // (18 px) make the built-in scroll feel sluggish on all platforms.
+      //
+      WheelHandler {
+        onWheel: (event) => {
+          const maxY = Math.max(0, treeView.contentHeight - treeView.height)
+          treeView.contentY = Math.max(0, Math.min(
+            treeView.contentY - event.angleDelta.y / 120 * 60, maxY))
+          event.accepted = true
         }
       }
 
       //
-      // Item controls
+      // Keyboard navigation
       //
-      RowLayout {
-        spacing: 0
-        anchors.fill: parent
-        anchors.rightMargin: 16
-        anchors.leftMargin: padding + (isTreeNode ? depth * indentation : 0)
+      Keys.onPressed: (event) => {
+                        // Move down to the next sibling (or parent if collapsed)
+                        if (event.key === Qt.Key_Down) {
+                          let nextIndex = treeView.index(treeView.currentRow + 1, treeView.currentColumn)
+                          if (nextIndex.isValid)
+                          treeView.selectionModel.setCurrentIndex(nextIndex, ItemSelectionModel.ClearAndSelect)
+                        }
+
+                        // Move up to the previous sibling (or parent)
+                        else if (event.key === Qt.Key_Up) {
+                          let prevIndex = treeView.index(treeView.currentRow - 1, treeView.currentColumn)
+                          if (prevIndex.isValid)
+                          treeView.selectionModel.setCurrentIndex(prevIndex, ItemSelectionModel.ClearAndSelect)
+                        }
+
+                        // Delete current item
+                        else if (event.key === Qt.Key_Delete) {
+                          if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView)
+                          Cpp_JSON_ProjectModel.deleteCurrentDataset()
+                          else if (Cpp_JSON_ProjectEditor.currentView === ProjectEditor.GroupView)
+                          Cpp_JSON_ProjectModel.deleteCurrentGroup()
+                        }
+                      }
+
+      //
+      // Set background item
+      //
+      delegate: Item {
+        id: item
+
+        implicitWidth: treeView.width
+        implicitHeight: depth === 0 ? 30 : 18
+        Component.onCompleted: syncExpandedState()
+
+        required property int row
+        required property int depth
+        required property int column
+        required property bool current
+        required property bool expanded
+        required property bool isTreeNode
+        required property bool hasChildren
+        required property TreeView treeView
+
+        readonly property real padding: 4
+        readonly property real indentation: 16
 
         //
-        // Expanded indicator
+        // Restore expanded state from C++ model
         //
-        Image {
-          id: indicator
+        function syncExpandedState() {
+          if (model.treeViewExpanded === true)
+            treeView.expand(row)
+          else
+            treeView.collapse(row)
+        }
 
-          enabled: hasChildren
-          sourceSize: Qt.size(8, 8)
-          opacity: hasChildren ? 1 : 0
-          Layout.alignment: Qt.AlignVCenter
-          rotation: model.treeViewExpanded ? 0 : 270
-          source: "qrc:/rcc/icons/project-editor/treeview/indicator.svg"
+        //
+        // Show/hide the children of the current item.
+        //
+        function toggleExpanded() {
+          if (hasChildren) {
+            treeView.toggleExpanded(row)
+            model.treeViewExpanded = expanded
+            return true
+          }
+
+          return false
+        }
+
+        //
+        // Select the item and open the associated view automatically.
+        // Skip selection for spacer items (items with only whitespace text).
+        //
+        function onLabelClicked() {
+          if (model.treeViewText.trim().length === 0)
+            return
+
+          treeView.forceActiveFocus()
+          let index = treeView.index(row, column)
+          treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect)
+        }
+
+        //
+        // If item has children, expand on double click.
+        // Otherwise, select the item and open the associated view.
+        //
+        function onLabelDoubleClicked() {
+          if (model.treeViewText.trim().length === 0)
+            return
+
+          treeView.forceActiveFocus()
+          if (!toggleExpanded()) {
+            onLabelClicked()
+          }
+        }
+
+        //
+        // Item background
+        //
+        Rectangle {
+          id: background
+
+          anchors.fill: parent
+          color: current ? Cpp_ThemeManager.colors["highlight"] : "transparent"
 
           MouseArea {
             anchors.fill: parent
-            onClicked: toggleExpanded()
+            onClicked: onLabelClicked()
+            onDoubleClicked: onLabelDoubleClicked()
           }
         }
 
         //
-        // Spacer
+        // Item controls
         //
-        Item {
-          width: 6
-        }
+        RowLayout {
+          spacing: 0
+          anchors.fill: parent
+          anchors.rightMargin: 16
+          anchors.leftMargin: padding + (isTreeNode ? depth * indentation : 0)
 
-        //
-        // Item icon
-        //
-        Image {
-          id: icon
+          //
+          // Expanded indicator
+          //
+          Image {
+            id: indicator
 
-          source: model.treeViewIcon
-          sourceSize: Qt.size(12, 12)
-          Layout.alignment: Qt.AlignVCenter
-        }
+            enabled: hasChildren
+            sourceSize: Qt.size(8, 8)
+            opacity: hasChildren ? 1 : 0
+            Layout.alignment: Qt.AlignVCenter
+            rotation: model.treeViewExpanded ? 0 : 270
+            source: "qrc:/rcc/icons/project-editor/treeview/indicator.svg"
 
-        //
-        // Spacer
-        //
-        Item {
-          width: 4
-        }
-
-        //
-        // Item text
-        //
-        Label {
-          id: label
-
-          Layout.fillWidth: true
-          elide: Label.ElideRight
-          text: model.treeViewText
-          Layout.alignment: Qt.AlignVCenter
-          font: depth === 0 ? Cpp_Misc_CommonFonts.boldUiFont :
-                              Cpp_Misc_CommonFonts.uiFont
-          color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
-                           Cpp_ThemeManager.colors["text"]
-        }
-
-        Label {
-          id: sourceBadge
-
-          opacity: current ? 1.0 : 0.85
-          font: Cpp_Misc_CommonFonts.monoFont
-          text: "[" + String.fromCharCode(65 + model.treeViewSourceId) + "]"
-          visible: model.treeViewSourceName !== undefined
-                && model.treeViewSourceName !== ""
-          Layout.alignment: Qt.AlignVCenter
-          color: {
-            if (current)
-              return Cpp_ThemeManager.colors["highlighted_text"]
-
-            if (Cpp_JSON_ProjectModel.sourceCount > 1)
-              return SerialStudio.getDeviceColor(model.treeViewSourceId + 1)
-
-            return Cpp_ThemeManager.colors["text"]
+            MouseArea {
+              anchors.fill: parent
+              onClicked: toggleExpanded()
+            }
           }
-        }
 
-        Label {
-          id: frameIndex
-
-          opacity: current ? 1.0 : 0.85
-          font: Cpp_Misc_CommonFonts.monoFont
-          visible: depth > 1 && (model.treeViewFrameIndex >= 0
-                                 || model.treeViewFrameIndex === -2)
-          text: {
-            var letter = String.fromCharCode(65 + model.treeViewSourceId)
-            if (model.treeViewFrameIndex === -2)
-              return "[" + letter + "]"
-
-            return "[" + letter + "-" + model.treeViewFrameIndex + "]"
+          //
+          // Spacer
+          //
+          Item {
+            width: 6
           }
-          Layout.alignment: Qt.AlignVCenter
-          color: {
-            if (current)
-              return Cpp_ThemeManager.colors["highlighted_text"]
 
-            if (Cpp_JSON_ProjectModel.sourceCount > 1)
-              return SerialStudio.getDeviceColor(model.treeViewSourceId + 1)
+          //
+          // Item icon
+          //
+          Image {
+            id: icon
 
-            return Cpp_ThemeManager.colors["text"]
+            source: model.treeViewIcon
+            sourceSize: Qt.size(12, 12)
+            Layout.alignment: Qt.AlignVCenter
+          }
+
+          //
+          // Spacer
+          //
+          Item {
+            width: 4
+          }
+
+          //
+          // Item text
+          //
+          Label {
+            id: label
+
+            Layout.fillWidth: true
+            elide: Label.ElideRight
+            text: model.treeViewText
+            Layout.alignment: Qt.AlignVCenter
+            font: depth === 0 ? Cpp_Misc_CommonFonts.boldUiFont :
+                                Cpp_Misc_CommonFonts.uiFont
+            color: current ? Cpp_ThemeManager.colors["highlighted_text"] :
+                             Cpp_ThemeManager.colors["text"]
+          }
+
+          Label {
+            id: sourceBadge
+
+            opacity: current ? 1.0 : 0.85
+            font: Cpp_Misc_CommonFonts.monoFont
+            text: "[" + String.fromCharCode(65 + model.treeViewSourceId) + "]"
+            visible: model.treeViewSourceName !== undefined
+                     && model.treeViewSourceName !== ""
+            Layout.alignment: Qt.AlignVCenter
+            color: {
+              if (current)
+                return Cpp_ThemeManager.colors["highlighted_text"]
+
+              if (Cpp_JSON_ProjectModel.sourceCount > 1)
+                return SerialStudio.getDeviceColor(model.treeViewSourceId + 1)
+
+              return Cpp_ThemeManager.colors["text"]
+            }
+          }
+
+          Label {
+            id: frameIndex
+
+            opacity: current ? 1.0 : 0.85
+            font: Cpp_Misc_CommonFonts.monoFont
+            visible: depth > 1 && (model.treeViewFrameIndex >= 0
+                                   || model.treeViewFrameIndex === -2)
+            text: {
+              var letter = String.fromCharCode(65 + model.treeViewSourceId)
+              if (model.treeViewFrameIndex === -2)
+                return "[" + letter + "]"
+
+              return "[" + letter + "-" + model.treeViewFrameIndex + "]"
+            }
+            Layout.alignment: Qt.AlignVCenter
+            color: {
+              if (current)
+                return Cpp_ThemeManager.colors["highlighted_text"]
+
+              if (Cpp_JSON_ProjectModel.sourceCount > 1)
+                return SerialStudio.getDeviceColor(model.treeViewSourceId + 1)
+
+              return Cpp_ThemeManager.colors["text"]
+            }
           }
         }
       }

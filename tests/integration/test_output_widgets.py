@@ -288,3 +288,33 @@ def test_output_widget_js_function_format(api_client, clean_state):
         # Should not crash
         api_client.load_project_from_json(project)
         time.sleep(0.2)
+
+
+# ---------------------------------------------------------------------------
+# REGRESSION — project.outputWidget.add accepts "type" parameter
+# ---------------------------------------------------------------------------
+
+@pytest.mark.integration
+def test_output_widget_add_accepts_type_param(api_client, clean_state):
+    """
+    The schema-advertised parameter for project.outputWidget.add is the
+    OutputWidgetType enum value under the key "type" (0=Button .. 5=RampGenerator).
+    An earlier revision advertised "groupId" but the handler read "type",
+    so every schema-conformant call was silently creating a Button.
+    """
+    api_client.command("project.group.add", {"title": "Outputs", "widgetType": 0})
+    time.sleep(0.15)
+
+    for widget_name, widget_type in OUTPUT_WIDGET_TYPES.items():
+        try:
+            result = api_client.command(
+                "project.outputWidget.add", {"type": widget_type}
+            )
+        except APIError as e:
+            # Commercial license gating is acceptable; schema mismatch is not.
+            assert "licen" in str(e).lower() or "commercial" in str(e).lower(), (
+                f"outputWidget.add for {widget_name} raised non-licensing error: {e}"
+            )
+            return
+
+        assert result.get("added") is True

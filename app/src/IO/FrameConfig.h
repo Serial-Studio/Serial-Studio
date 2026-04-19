@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QByteArray>
+#include <QList>
 #include <QString>
 
 #include "SerialStudio.h"
@@ -35,10 +36,14 @@ namespace IO {
  * passes it to the FrameReader before moving it to its worker thread. All
  * members have sensible defaults so callers only need to override what they
  * care about.
+ *
+ * Start and finish sequences are lists so a single config can express
+ * multiple valid delimiters (e.g., QuickPlot accepts CR, LF, or CRLF).
+ * For single-delimiter projects the list contains exactly one element.
  */
 struct FrameConfig {
-  QByteArray startSequence{"/*"};
-  QByteArray finishSequence{"*/"};
+  QList<QByteArray> startSequences{QByteArray("/*")};
+  QList<QByteArray> finishSequences{QByteArray("*/")};
   QString checksumAlgorithm;
   SerialStudio::OperationMode operationMode   = SerialStudio::QuickPlot;
   SerialStudio::FrameDetection frameDetection = SerialStudio::EndDelimiterOnly;

@@ -1140,6 +1140,9 @@ int Window::titleBarHeight() const
  */
 void Window::setColor(const QString& color)
 {
+  if (m_color == color)
+    return;
+
   m_color = color;
   updateTheme();
 }

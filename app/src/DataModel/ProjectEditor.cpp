@@ -67,6 +67,7 @@ typedef enum {
   kDatasetView_xAxis,
   kDatasetView_Overview,
   kDatasetView_TransformCode,
+  kDatasetView_Virtual,
 } DatasetItem;
 
 typedef enum {
@@ -155,6 +156,11 @@ static QString busTypeIcon(int busType)
 
 DataModel::ProjectEditor::ProjectEditor()
   : m_currentView(ProjectView)
+  , m_groupsRootItem(nullptr)
+  , m_tablesRootItem(nullptr)
+  , m_systemDatasetsItem(nullptr)
+  , m_workspacesRootItem(nullptr)
+  , m_selectedWorkspaceId(-1)
   , m_treeModel(nullptr)
   , m_selectionModel(nullptr)
   , m_groupModel(nullptr)
@@ -176,6 +182,16 @@ DataModel::ProjectEditor::ProjectEditor()
           Qt::QueuedConnection);
   connect(&pm,
           &DataModel::ProjectModel::actionsChanged,
+          this,
+          &DataModel::ProjectEditor::buildTreeModel,
+          Qt::QueuedConnection);
+  connect(&pm,
+          &DataModel::ProjectModel::tablesChanged,
+          this,
+          &DataModel::ProjectEditor::buildTreeModel,
+          Qt::QueuedConnection);
+  connect(&pm,
+          &DataModel::ProjectModel::workspacesChanged,
           this,
           &DataModel::ProjectEditor::buildTreeModel,
           Qt::QueuedConnection);
@@ -230,10 +246,19 @@ DataModel::ProjectEditor::ProjectEditor()
     &DataModel::ProjectModel::groupDeleted,
     this,
     [this] {
-      if (m_selectionModel) {
-        auto index = m_treeModel->index(0, 0);
-        m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+      if (!m_selectionModel)
+        return;
+
+      // Fall back to the "Groups" parent category (the deleted group's parent
+      // in the tree) rather than jumping all the way to the project root.
+      if (m_groupsRootItem) {
+        m_selectionModel->setCurrentIndex(m_groupsRootItem->index(),
+                                          QItemSelectionModel::ClearAndSelect);
+        return;
       }
+
+      auto index = m_treeModel->index(0, 0);
+      m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     },
     Qt::QueuedConnection);
 
@@ -270,10 +295,19 @@ DataModel::ProjectEditor::ProjectEditor()
         }
       }
 
-      if (m_selectionModel) {
-        auto index = m_treeModel->index(0, 0);
-        m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+      if (!m_selectionModel)
+        return;
+
+      // Group was emptied and removed — fall back to the Groups parent node
+      // rather than the project root.
+      if (m_groupsRootItem) {
+        m_selectionModel->setCurrentIndex(m_groupsRootItem->index(),
+                                          QItemSelectionModel::ClearAndSelect);
+        return;
       }
+
+      auto index = m_treeModel->index(0, 0);
+      m_selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
     },
     Qt::QueuedConnection);
 
@@ -834,6 +868,12 @@ void DataModel::ProjectEditor::buildTreeModel()
   m_datasetItems.clear();
   m_outputWidgetItems.clear();
   m_sourceParserItems.clear();
+  m_userTableItems.clear();
+  m_workspaceItems.clear();
+  m_groupsRootItem     = nullptr;
+  m_tablesRootItem     = nullptr;
+  m_systemDatasetsItem = nullptr;
+  m_workspacesRootItem = nullptr;
 
   // Save expanded state before destroying the old model
   QHash<QString, bool> expandedStates;
@@ -896,29 +936,43 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   const auto& sources    = pm.sources();
   const bool multiSource = sources.size() > 1;
 
-  // Add source items with their frame parser children
-  for (const auto& source : sources) {
-    auto* sourceItem = new QStandardItem(source.title);
-    sourceItem->setData(-1, TreeViewFrameIndex);
-    sourceItem->setData(busTypeIcon(source.busType), TreeViewIcon);
-    sourceItem->setData(source.title, TreeViewText);
-    sourceItem->setData(source.sourceId, TreeViewSourceId);
-    sourceItem->setData(multiSource ? source.title : QString(), TreeViewSourceName);
-    sourceItem->setData(true, TreeViewExpanded);
+  // Tree search query — when non-empty, limit items to those whose title (or
+  // one of their descendants' titles) matches the query (case-insensitive).
+  const QString q         = m_treeSearchQuery.trimmed();
+  const bool filterActive = !q.isEmpty();
+  const auto matches      = [&q](const QString& s) {
+    return s.contains(q, Qt::CaseInsensitive);
+  };
 
-    auto* parserItem = new QStandardItem(tr("Frame Parser"));
-    parserItem->setData(-1, TreeViewFrameIndex);
-    parserItem->setData("qrc:/rcc/icons/project-editor/treeview/code.svg", TreeViewIcon);
-    parserItem->setData(tr("Frame Parser"), TreeViewText);
-    sourceItem->appendRow(parserItem);
-    m_sourceParserItems.insert(parserItem, source);
+  // Add source items with their frame parser children (skip when filtering —
+  // search only spans actions, groups, and datasets)
+  if (!filterActive) {
+    for (const auto& source : sources) {
+      auto* sourceItem = new QStandardItem(source.title);
+      sourceItem->setData(-1, TreeViewFrameIndex);
+      sourceItem->setData(busTypeIcon(source.busType), TreeViewIcon);
+      sourceItem->setData(source.title, TreeViewText);
+      sourceItem->setData(source.sourceId, TreeViewSourceId);
+      sourceItem->setData(multiSource ? source.title : QString(), TreeViewSourceName);
+      sourceItem->setData(true, TreeViewExpanded);
 
-    root->appendRow(sourceItem);
-    m_sourceItems.insert(sourceItem, source);
+      auto* parserItem = new QStandardItem(tr("Frame Parser"));
+      parserItem->setData(-1, TreeViewFrameIndex);
+      parserItem->setData("qrc:/rcc/icons/project-editor/treeview/code.svg", TreeViewIcon);
+      parserItem->setData(tr("Frame Parser"), TreeViewText);
+      sourceItem->appendRow(parserItem);
+      m_sourceParserItems.insert(parserItem, source);
+
+      root->appendRow(sourceItem);
+      m_sourceItems.insert(sourceItem, source);
+    }
   }
 
-  // Add action items
+  // Add action items (filtered by title when search is active)
   for (const auto& action : actions) {
+    if (filterActive && !matches(action.title))
+      continue;
+
     auto* actionItem = new QStandardItem(action.title);
     actionItem->setData(-1, TreeViewFrameIndex);
     actionItem->setData("qrc:/rcc/icons/project-editor/treeview/action.svg", TreeViewIcon);
@@ -927,11 +981,42 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     m_actionItems.insert(actionItem, action);
   }
 
+  // Build the "Groups" category parent — collects every group item as a child
+  // so the whole section can be collapsed/expanded as a unit. Created lazily
+  // so that an empty project (or a filter that hides all groups) doesn't leave
+  // a dangling empty parent node in the tree.
+  QStandardItem* groupsRoot   = nullptr;
+  const auto ensureGroupsRoot = [&]() {
+    if (groupsRoot)
+      return;
+
+    groupsRoot = new QStandardItem(tr("Groups"));
+    groupsRoot->setData(tr("Groups"), TreeViewText);
+    groupsRoot->setData("qrc:/rcc/icons/project-editor/treeview/group.svg", TreeViewIcon);
+    groupsRoot->setData(-1, TreeViewFrameIndex);
+    groupsRoot->setData(true, TreeViewExpanded);
+  };
+
   // Add group items with their dataset and output widget children
   for (const auto& group : groups) {
+    // Determine which datasets in this group match the query — a group is
+    // included if its own title matches OR at least one of its datasets matches.
+    const bool groupMatches = !filterActive || matches(group.title);
+    bool anyDatasetMatches  = false;
+    if (filterActive && !groupMatches) {
+      for (const auto& ds : group.datasets) {
+        if (matches(ds.title)) {
+          anyDatasetMatches = true;
+          break;
+        }
+      }
+
+      if (!anyDatasetMatches)
+        continue;
+    }
+
     auto* groupItem = new QStandardItem(group.title);
-    auto icon = SerialStudio::dashboardWidgetIcon(
-      SerialStudio::getDashboardWidget(group), false);
+    auto icon = SerialStudio::dashboardWidgetIcon(SerialStudio::getDashboardWidget(group), false);
 
     groupItem->setData(icon, TreeViewIcon);
     groupItem->setData(-1, TreeViewFrameIndex);
@@ -939,8 +1024,16 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     groupItem->setData(QString(), TreeViewSourceName);
     groupItem->setData(group.sourceId, TreeViewSourceId);
 
-    // Add dataset children
+    // Force-expand groups that matched via a descendant when filtering
+    if (filterActive)
+      groupItem->setData(true, TreeViewExpanded);
+
+    // Add dataset children — if the group itself matched, show all datasets;
+    // otherwise only show the datasets that individually match the query.
     for (const auto& dataset : group.datasets) {
+      if (filterActive && !groupMatches && !matches(dataset.title))
+        continue;
+
       auto* datasetItem = new QStandardItem(dataset.title);
       auto widgets      = SerialStudio::getDashboardWidgets(dataset);
       QString dIcon     = "qrc:/rcc/icons/project-editor/treeview/dataset.svg";
@@ -956,8 +1049,12 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
       m_datasetItems.insert(datasetItem, dataset);
     }
 
-    // Add output widget children
+    // Add output widget children (skip when filtering — search is scoped to
+    // actions, groups, and datasets)
     for (const auto& ow : group.outputWidgets) {
+      if (filterActive)
+        break;
+
       auto* owItem = new QStandardItem(ow.title);
 
       QString owIcon;
@@ -994,9 +1091,106 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
       m_outputWidgetItems.insert(owItem, ow);
     }
 
-    restoreExpandedStateMap(groupItem, expandedStates, root->text() + "/" + group.title);
-    root->appendRow(groupItem);
+    ensureGroupsRoot();
+    const QString gPath = root->text() + "/" + tr("Groups") + "/" + group.title;
+    restoreExpandedStateMap(groupItem, expandedStates, gPath);
+    groupsRoot->appendRow(groupItem);
     m_groupItems.insert(groupItem, group);
+  }
+
+  if (groupsRoot) {
+    restoreExpandedStateMap(groupsRoot, expandedStates, root->text() + "/" + groupsRoot->text());
+    root->appendRow(groupsRoot);
+    m_groupsRootItem = groupsRoot;
+  }
+
+  // Add "Shared Memory" category root (Pro only). When a tree search is
+  // active, include it only if the root name, "Dataset Values", or any
+  // user-table name matches.
+#ifdef BUILD_COMMERCIAL
+  const auto& userTables = pm.tables();
+  bool includeSharedRoot =
+    !filterActive || matches(tr("Shared Memory")) || matches(tr("Dataset Values"));
+  if (!includeSharedRoot) {
+    for (const auto& t : userTables) {
+      if (matches(t.name)) {
+        includeSharedRoot = true;
+        break;
+      }
+    }
+  }
+
+  if (includeSharedRoot) {
+    auto* tablesRoot = new QStandardItem(tr("Shared Memory"));
+    tablesRoot->setData(tr("Shared Memory"), TreeViewText);
+    tablesRoot->setData("qrc:/rcc/icons/project-editor/treeview/shared-memory.svg", TreeViewIcon);
+    tablesRoot->setData(-1, TreeViewFrameIndex);
+    tablesRoot->setData(true, TreeViewExpanded);
+
+    // Add the read-only "Dataset Values" entry (auto-generated from the project)
+    auto* sysDsItem = new QStandardItem(tr("Dataset Values"));
+    sysDsItem->setData(tr("Dataset Values"), TreeViewText);
+    sysDsItem->setData("qrc:/rcc/icons/project-editor/treeview/dataset-values.svg", TreeViewIcon);
+    sysDsItem->setData(-1, TreeViewFrameIndex);
+    tablesRoot->appendRow(sysDsItem);
+
+    // Add user-defined shared tables as children (filtered by search query)
+    for (const auto& table : userTables) {
+      if (filterActive && !matches(table.name))
+        continue;
+
+      auto* tableItem = new QStandardItem(table.name);
+      tableItem->setData(table.name, TreeViewText);
+      tableItem->setData("qrc:/rcc/icons/project-editor/treeview/shared-table.svg", TreeViewIcon);
+      tableItem->setData(-1, TreeViewFrameIndex);
+      tablesRoot->appendRow(tableItem);
+      m_userTableItems.insert(tableItem, table.name);
+    }
+
+    restoreExpandedStateMap(tablesRoot, expandedStates, root->text() + "/" + tablesRoot->text());
+    root->appendRow(tablesRoot);
+    m_tablesRootItem     = tablesRoot;
+    m_systemDatasetsItem = sysDsItem;
+  }
+#endif  // BUILD_COMMERCIAL
+
+  // Add "Workspaces" category root. Hidden when a tree search is active
+  // unless it or one of its children matches.
+  const auto& workspaces = pm.workspaces();
+  bool includeWorkspaces = !filterActive || matches(tr("Workspaces"));
+  if (!includeWorkspaces) {
+    for (const auto& ws : workspaces) {
+      if (matches(ws.title)) {
+        includeWorkspaces = true;
+        break;
+      }
+    }
+  }
+
+  if (includeWorkspaces) {
+    auto* wsRoot = new QStandardItem(tr("Workspaces"));
+    wsRoot->setData(tr("Workspaces"), TreeViewText);
+    wsRoot->setData("qrc:/rcc/icons/project-editor/treeview/datagrid.svg", TreeViewIcon);
+    wsRoot->setData(-1, TreeViewFrameIndex);
+    wsRoot->setData(true, TreeViewExpanded);
+
+    for (const auto& ws : workspaces) {
+      if (filterActive && !matches(ws.title))
+        continue;
+
+      auto* wsItem = new QStandardItem(ws.title);
+      wsItem->setData(ws.title, TreeViewText);
+      wsItem->setData(ws.icon.isEmpty() ? "qrc:/rcc/icons/project-editor/treeview/group.svg"
+                                        : ws.icon,
+                      TreeViewIcon);
+      wsItem->setData(-1, TreeViewFrameIndex);
+      wsRoot->appendRow(wsItem);
+      m_workspaceItems.insert(wsItem, ws.workspaceId);
+    }
+
+    restoreExpandedStateMap(wsRoot, expandedStates, root->text() + "/" + wsRoot->text());
+    root->appendRow(wsRoot);
+    m_workspacesRootItem = wsRoot;
   }
 
   // Add spacer item at the end of the tree
@@ -1060,6 +1254,35 @@ void DataModel::ProjectEditor::restoreTreeSelection()
         break;
       }
     }
+  } else if (m_currentView == DataTablesView) {
+    toSelect = m_tablesRootItem;
+  } else if (m_currentView == SystemDatasetsView) {
+    toSelect = m_systemDatasetsItem;
+  } else if (m_currentView == UserTableView) {
+    for (auto it = m_userTableItems.begin(); it != m_userTableItems.end(); ++it) {
+      if (it.value() == m_selectedUserTable) {
+        toSelect = it.key();
+        break;
+      }
+    }
+
+    // Table was deleted — fall back to its parent category rather than the
+    // project root.
+    if (!toSelect)
+      toSelect = m_tablesRootItem;
+  } else if (m_currentView == WorkspacesView) {
+    toSelect = m_workspacesRootItem;
+  } else if (m_currentView == WorkspaceView) {
+    for (auto it = m_workspaceItems.begin(); it != m_workspaceItems.end(); ++it) {
+      if (it.value() == m_selectedWorkspaceId) {
+        toSelect = it.key();
+        break;
+      }
+    }
+
+    // Workspace was deleted — fall back to the Workspaces category.
+    if (!toSelect)
+      toSelect = m_workspacesRootItem;
   }
 
   // Fall back to root project item when no match found
@@ -1748,7 +1971,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
     dataItem->setData(tr("Hexadecimal payload to send when the action is triggered"),
                       ParameterDescription);
     m_actionModel->appendRow(dataItem);
-  } else {    
+  } else {
     auto* dataItem = new QStandardItem();
     dataItem->setEditable(true);
     dataItem->setData(true, Active);
@@ -1935,9 +2158,21 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
 
   const auto& pm = DataModel::ProjectModel::instance();
 
+  auto* virtualItem = new QStandardItem();
+  virtualItem->setEditable(true);
+  virtualItem->setData(true, Active);
+  virtualItem->setData(CheckBox, WidgetType);
+  virtualItem->setData(dataset.virtual_, EditableValue);
+  virtualItem->setData(kDatasetView_Virtual, ParameterType);
+  virtualItem->setData(tr("Virtual Dataset"), ParameterName);
+  virtualItem->setData(tr("Virtual datasets compute their value from transforms and data tables, "
+                          "they do not require a frame index"),
+                       ParameterDescription);
+  model->appendRow(virtualItem);
+
   auto* indexItem = new QStandardItem();
-  indexItem->setEditable(true);
-  indexItem->setData(true, Active);
+  indexItem->setEditable(!dataset.virtual_);
+  indexItem->setData(!dataset.virtual_, Active);
   indexItem->setData(IntField, WidgetType);
   indexItem->setData(dataset.index, EditableValue);
   indexItem->setData(kDatasetView_Index, ParameterType);
@@ -2164,18 +2399,6 @@ void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
                       ParameterDescription);
   model->appendRow(widgetItem);
 
-  const auto& pm     = DataModel::ProjectModel::instance();
-  auto* overviewItem = new QStandardItem();
-  overviewItem->setData(CheckBox, WidgetType);
-  overviewItem->setEditable(showWidget && pm.groupCount() > 1);
-  overviewItem->setData(overviewItem->isEditable(), Active);
-  overviewItem->setData(dataset.overviewDisplay, EditableValue);
-  overviewItem->setData(kDatasetView_Overview, ParameterType);
-  overviewItem->setData(tr("Show in Overview"), ParameterName);
-  overviewItem->setData(tr("Display this widget in the dashboard overview (if enabled)"),
-                        ParameterDescription);
-  model->appendRow(overviewItem);
-
   const bool rangeEnabled = showWidget && (dataset.widget == "bar" || dataset.widget == "gauge");
 
   auto* wgtMin = new QStandardItem();
@@ -2394,6 +2617,9 @@ void DataModel::ProjectEditor::generateComboBoxModels()
  */
 void DataModel::ProjectEditor::setCurrentView(const DataModel::ProjectEditor::CurrentView view)
 {
+  if (m_currentView == view)
+    return;
+
   m_currentView = view;
   Q_EMIT currentViewChanged();
   Q_EMIT selectedTextChanged();
@@ -2709,7 +2935,9 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
       m_selectedDataset.ledHigh = value.toDouble();
       break;
     case kDatasetView_Overview:
-      m_selectedDataset.overviewDisplay = value.toBool();
+      // Deprecated — overview option removed in v3.3. Kept in enum to avoid
+      // renumbering downstream cases; never reached because the row is no
+      // longer added to the editor model.
       break;
     case kDatasetView_Plot: {
       const int plotIdx = value.toInt();
@@ -2766,6 +2994,20 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     case kDatasetView_TransformCode:
       m_selectedDataset.transformCode = value.toString();
       break;
+    case kDatasetView_Virtual: {
+      m_selectedDataset.virtual_ = value.toBool();
+
+      // Defer the rebuild so we don't mutate the model mid-item-changed signal
+      // emission. Guard against the user switching selection before the lambda
+      // fires — if a different dataset is now selected, skip the rebuild.
+      const int uid = m_selectedDataset.uniqueId;
+      QTimer::singleShot(0, this, [this, uid] {
+        if (m_selectedDataset.uniqueId == uid)
+          buildDatasetModel(m_selectedDataset);
+      });
+
+      break;
+    }
     default:
       break;
   }
@@ -2861,6 +3103,28 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
     DataModel::ProjectModel::instance().setSelectedOutputWidget(ow);
     setCurrentView(OutputWidgetView);
     buildOutputWidgetModel(ow);
+  } else if (item == m_tablesRootItem) {
+    setCurrentView(DataTablesView);
+  } else if (item == m_systemDatasetsItem) {
+    setCurrentView(SystemDatasetsView);
+  } else if (m_userTableItems.contains(item)) {
+    const auto name = m_userTableItems.value(item);
+    if (m_selectedUserTable != name) {
+      m_selectedUserTable = name;
+      Q_EMIT selectedUserTableChanged();
+    }
+
+    setCurrentView(UserTableView);
+  } else if (item == m_workspacesRootItem) {
+    setCurrentView(WorkspacesView);
+  } else if (m_workspaceItems.contains(item)) {
+    const int wid = m_workspaceItems.value(item);
+    if (m_selectedWorkspaceId != wid) {
+      m_selectedWorkspaceId = wid;
+      Q_EMIT selectedWorkspaceIdChanged();
+    }
+
+    setCurrentView(WorkspaceView);
   } else if (m_rootItems.contains(item)) {
     setCurrentView(ProjectView);
     buildProjectModel();
@@ -3047,9 +3311,8 @@ void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWid
   encodingItem->setData(widget.txEncoding, EditableValue);
   encodingItem->setData(kOutputWidget_TxEncoding, ParameterType);
   encodingItem->setData(tr("Text Encoding"), ParameterName);
-  encodingItem->setData(
-    tr("Character encoding used when transmit() returns a string value"),
-    ParameterDescription);
+  encodingItem->setData(tr("Character encoding used when transmit() returns a string value"),
+                        ParameterDescription);
   m_outputWidgetModel->appendRow(encodingItem);
 
   // Value range section (for sliders/knobs)
@@ -3222,4 +3485,350 @@ void DataModel::ProjectEditor::restoreExpandedStateMap(QStandardItem* item,
     item->setData(map[title], TreeViewExpanded);
   else
     item->setData(true, TreeViewExpanded);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Data tables — read-only summaries for QML views
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns a read-only summary of all user-defined data tables and the
+ *        auto-generated __datasets__ system table for display in QML.
+ *
+ * Each list entry is a QVariantMap with keys:
+ *   - "name":         Table name (QString)
+ *   - "isSystem":     True for the __datasets__ system table (bool)
+ *   - "registerCount": Number of registers in the table (int)
+ */
+QVariantList DataModel::ProjectEditor::tablesSummary() const
+{
+  // Always list the auto-generated "Dataset Values" entry first
+  QVariantList result;
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+
+  int datasetCount = 0;
+  for (const auto& g : groups)
+    datasetCount += static_cast<int>(g.datasets.size());
+
+  QVariantMap sysRow;
+  sysRow["name"]        = tr("Dataset Values");
+  sysRow["description"] = tr("Raw and transformed values for every dataset (read-only)");
+  sysRow["isSystem"]    = true;
+  sysRow["entryCount"]  = datasetCount;
+  result.append(sysRow);
+
+  // Append user-defined shared tables
+  const auto& tables = DataModel::ProjectModel::instance().tables();
+  for (const auto& table : tables) {
+    QVariantMap row;
+    row["name"]        = table.name;
+    row["description"] = tr("Shared table defined in this project");
+    row["isSystem"]    = false;
+    row["entryCount"]  = static_cast<int>(table.registers.size());
+    result.append(row);
+  }
+
+  return result;
+}
+
+/**
+ * @brief Returns the name of the currently selected user table (empty if none).
+ */
+QString DataModel::ProjectEditor::selectedUserTable() const
+{
+  return m_selectedUserTable;
+}
+
+/**
+ * @brief Selects the given user table and switches to the UserTableView.
+ */
+void DataModel::ProjectEditor::selectUserTable(const QString& tableName)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_userTableItems.begin(); it != m_userTableItems.end(); ++it) {
+    if (it.value() == tableName) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Returns the id of the workspace currently displayed in the editor.
+ */
+int DataModel::ProjectEditor::selectedWorkspaceId() const noexcept
+{
+  return m_selectedWorkspaceId;
+}
+
+/**
+ * @brief Selects the workspace with the given id and switches to its editor.
+ */
+void DataModel::ProjectEditor::selectWorkspace(int workspaceId)
+{
+  if (!m_selectionModel)
+    return;
+
+  for (auto it = m_workspaceItems.begin(); it != m_workspaceItems.end(); ++it) {
+    if (it.value() == workspaceId) {
+      m_selectionModel->setCurrentIndex(it.key()->index(), QItemSelectionModel::ClearAndSelect);
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Returns the current tree search query (empty = no filter).
+ */
+const QString& DataModel::ProjectEditor::treeSearchQuery() const noexcept
+{
+  return m_treeSearchQuery;
+}
+
+/**
+ * @brief Updates the tree search query and rebuilds the tree to apply it.
+ *
+ * Matching is case-insensitive substring — rows whose title (or any ancestor's
+ * title) contains the query survive. Empty string restores the full tree.
+ */
+void DataModel::ProjectEditor::setTreeSearchQuery(const QString& query)
+{
+  if (m_treeSearchQuery == query)
+    return;
+
+  m_treeSearchQuery = query;
+  Q_EMIT treeSearchQueryChanged();
+
+  // Defer the rebuild so rapid typing doesn't rebuild on every keystroke
+  // mid-QML binding evaluation. Check the query is still current — if the
+  // user kept typing, a later setter invocation queued its own rebuild.
+  const auto current = m_treeSearchQuery;
+  QTimer::singleShot(0, this, [this, current] {
+    if (m_treeSearchQuery == current)
+      buildTreeModel();
+  });
+}
+
+/**
+ * @brief Returns a read-only summary of the system __datasets__ table.
+ *
+ * Each list entry corresponds to one dataset and is a QVariantMap with keys:
+ *   - "uniqueId":   Dataset unique identifier (int)
+ *   - "groupTitle": Owning group title (QString)
+ *   - "title":      Dataset title (QString)
+ *   - "units":      Dataset units (QString)
+ *   - "rawReg":     Register name for the raw value (QString)
+ *   - "finalReg":   Register name for the final value (QString)
+ *   - "isVirtual":  True if this is a virtual dataset (bool)
+ */
+QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
+{
+  // Recompute uniqueId using the finalize_frame encoding — ProjectModel's
+  // copy of groups is not finalized: sourceId*1000000 + groupId*10000 + datasetId
+  QVariantList result;
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+
+  for (const auto& group : groups) {
+    for (const auto& ds : group.datasets) {
+      const int uid = group.sourceId * 1000000 + ds.groupId * 10000 + ds.datasetId;
+
+      QVariantMap row;
+      row["uniqueId"]   = uid;
+      row["groupTitle"] = group.title;
+      row["title"]      = ds.title;
+      row["units"]      = ds.units;
+      row["rawReg"]     = QStringLiteral("raw:") + QString::number(uid);
+      row["finalReg"]   = QStringLiteral("final:") + QString::number(uid);
+      row["isVirtual"]  = ds.virtual_;
+      result.append(row);
+    }
+  }
+
+  return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Workspaces — read-only summaries for QML views
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns a summary of every workspace defined in the project.
+ *
+ * Each entry: { id (int), title (QString), icon (QString), widgetCount (int) }.
+ */
+QVariantList DataModel::ProjectEditor::workspacesSummary() const
+{
+  QVariantList result;
+  const auto& workspaces = DataModel::ProjectModel::instance().workspaces();
+
+  for (const auto& ws : workspaces) {
+    QVariantMap row;
+    row["id"]          = ws.workspaceId;
+    row["title"]       = ws.title;
+    row["icon"]        = ws.icon;
+    row["widgetCount"] = static_cast<int>(ws.widgetRefs.size());
+    result.append(row);
+  }
+
+  return result;
+}
+
+/**
+ * @brief Returns the list of widget references attached to a workspace.
+ *
+ * Each entry: { widgetType (int), groupId (int), relativeIndex (int),
+ *               groupTitle (QString), datasetTitle (QString) }.
+ *
+ * groupTitle/datasetTitle are resolved from the project so the editor can
+ * display human-readable labels rather than raw numeric refs.
+ */
+QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) const
+{
+  QVariantList result;
+  const auto& pm     = DataModel::ProjectModel::instance();
+  const auto& wsList = pm.workspaces();
+
+  // Locate the workspace
+  auto wsIt = std::find_if(wsList.begin(), wsList.end(), [workspaceId](const auto& w) {
+    return w.workspaceId == workspaceId;
+  });
+
+  if (wsIt == wsList.end())
+    return result;
+
+  // Mirror buildAutoWorkspaces()'s walk — relativeIndex is a per-widget-type
+  // project-wide counter, NOT a dataset array index within the group.
+  struct ResolvedWidget {
+    QString groupTitle;
+    QString datasetTitle;
+  };
+
+  QHash<qint64, ResolvedWidget> lookup;
+  const auto makeKey = [](int widgetType, int groupId, int relIdx) {
+    return (static_cast<qint64>(widgetType) << 40) | (static_cast<qint64>(groupId) << 20)
+         | static_cast<qint64>(relIdx);
+  };
+
+  const auto& groups = pm.groups();
+  QHash<int, int> groupRunning;
+  QHash<int, int> datasetRunning;
+
+  for (const auto& g : groups) {
+    if (!SerialStudio::groupEligibleForWorkspace(g))
+      continue;
+
+    const auto groupKey = SerialStudio::getDashboardWidget(g);
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
+      const int typeKey = static_cast<int>(groupKey);
+      const int relIdx  = groupRunning.value(typeKey, 0);
+      groupRunning.insert(typeKey, relIdx + 1);
+
+      ResolvedWidget entry;
+      entry.groupTitle   = g.title;
+      entry.datasetTitle = QString();
+      lookup.insert(makeKey(typeKey, g.groupId, relIdx), entry);
+    }
+
+    for (const auto& ds : g.datasets) {
+      const auto keys = SerialStudio::getDashboardWidgets(ds);
+      for (const auto& k : keys) {
+        if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
+          continue;
+
+        const int typeKey = static_cast<int>(k);
+        const int relIdx  = datasetRunning.value(typeKey, 0);
+        datasetRunning.insert(typeKey, relIdx + 1);
+
+        ResolvedWidget entry;
+        entry.groupTitle   = g.title;
+        entry.datasetTitle = ds.title;
+        lookup.insert(makeKey(typeKey, g.groupId, relIdx), entry);
+      }
+    }
+  }
+
+  for (const auto& ref : wsIt->widgetRefs) {
+    QVariantMap row;
+    row["widgetType"]     = ref.widgetType;
+    row["widgetTypeName"] = SerialStudio::dashboardWidgetTitle(
+      static_cast<SerialStudio::DashboardWidget>(ref.widgetType));
+    row["groupId"]       = ref.groupId;
+    row["relativeIndex"] = ref.relativeIndex;
+    row["groupTitle"]    = QString();
+    row["datasetTitle"]  = QString();
+
+    const auto it = lookup.constFind(makeKey(ref.widgetType, ref.groupId, ref.relativeIndex));
+    if (it != lookup.constEnd()) {
+      row["groupTitle"]   = it->groupTitle;
+      row["datasetTitle"] = it->datasetTitle;
+    }
+
+    result.append(row);
+  }
+
+  return result;
+}
+
+/**
+ * @brief Returns every widget the project can show, with its (widgetType,
+ *        groupId, relativeIndex) triple.
+ *
+ * Mirrors the walk performed by ProjectModel::autoGenerateWorkspaces() so the
+ * per-type relativeIndex matches what Dashboard produces at runtime. Each
+ * entry: { widgetType, groupId, relativeIndex, groupTitle, datasetTitle,
+ *          isGroupWidget, widgetLabel (human-readable) }.
+ *
+ * Used by the "Add Widget" picker in WorkspaceView.
+ */
+QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
+{
+  QVariantList result;
+  QMap<SerialStudio::DashboardWidget, int> groupIdx;
+  QMap<SerialStudio::DashboardWidget, int> datasetIdx;
+
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+  for (const auto& group : groups) {
+    // Skip groups that don't contribute to Dashboard's widget walker
+    if (!SerialStudio::groupEligibleForWorkspace(group))
+      continue;
+
+    // Group-level widget
+    const auto groupKey = SerialStudio::getDashboardWidget(group);
+    if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
+      QVariantMap row;
+      row["widgetType"]    = static_cast<int>(groupKey);
+      row["groupId"]       = group.groupId;
+      row["relativeIndex"] = groupIdx.value(groupKey, 0);
+      row["groupTitle"]    = group.title;
+      row["datasetTitle"]  = QString();
+      row["isGroupWidget"] = true;
+      row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(groupKey);
+      groupIdx[groupKey]   = row["relativeIndex"].toInt() + 1;
+      result.append(row);
+    }
+
+    // Dataset widgets
+    for (const auto& ds : group.datasets) {
+      const auto keys = SerialStudio::getDashboardWidgets(ds);
+      for (const auto& k : keys) {
+        if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
+          continue;
+
+        QVariantMap row;
+        row["widgetType"]    = static_cast<int>(k);
+        row["groupId"]       = group.groupId;
+        row["relativeIndex"] = datasetIdx.value(k, 0);
+        row["groupTitle"]    = group.title;
+        row["datasetTitle"]  = ds.title;
+        row["isGroupWidget"] = false;
+        row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(k);
+        datasetIdx[k]        = row["relativeIndex"].toInt() + 1;
+        result.append(row);
+      }
+    }
+  }
+
+  return result;
 }

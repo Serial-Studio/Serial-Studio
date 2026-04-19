@@ -77,6 +77,9 @@
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
 #  include "MQTT/Client.h"
+#  include "Sessions/DatabaseManager.h"
+#  include "Sessions/Export.h"
+#  include "Sessions/Player.h"
 #  include "UI/ImageProvider.h"
 #  include "UI/Widgets/ImageExport.h"
 #  include "UI/Widgets/ImageView.h"
@@ -246,6 +249,11 @@ void Misc::ModuleManager::onQuit()
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
   MDF4::Export::instance().closeFile();
+#ifdef BUILD_COMMERCIAL
+  Sessions::Export::instance().closeFile();
+  Sessions::Player::instance().closeFile();
+  Sessions::DatabaseManager::instance().closeDatabase(false);
+#endif
   IO::ConnectionManager::instance().disconnectAllDevices();
   API::Server::instance().removeConnection();
 
@@ -378,6 +386,9 @@ void Misc::ModuleManager::initializeQmlInterface()
 #ifdef BUILD_COMMERCIAL
   const bool qtCommercialAvailable = true;
   auto mqttClient                  = &MQTT::Client::instance();
+  auto sqliteExport                = &Sessions::Export::instance();
+  auto sqlitePlayer                = &Sessions::Player::instance();
+  auto sqliteDbManager             = &Sessions::DatabaseManager::instance();
   auto dbcImporter                 = &DataModel::DBCImporter::instance();
   auto modbusMapImporter           = &DataModel::ModbusMapImporter::instance();
   auto audioDriver                 = ioManager->audio();
@@ -421,6 +432,10 @@ void Misc::ModuleManager::initializeQmlInterface()
   consoleExport->setupExternalConnections();
   consoleHandler->setupExternalConnections();
   ioFileTransmission->setupExternalConnections();
+#ifdef BUILD_COMMERCIAL
+  sqliteExport->setupExternalConnections();
+  sqliteDbManager->setupExternalConnections();
+#endif
 
   // Wire addon manager signals to theme manager for hot-reloading user themes
   connect(miscExtensionManager,
@@ -520,6 +535,9 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Licensing_Trial", trial);
   c->setContextProperty("Cpp_MQTT_Client", mqttClient);
   c->setContextProperty("Cpp_Licensing_LemonSqueezy", lemonSqueezy);
+  c->setContextProperty("Cpp_Sessions_Export", sqliteExport);
+  c->setContextProperty("Cpp_Sessions_Player", sqlitePlayer);
+  c->setContextProperty("Cpp_Sessions_Manager", sqliteDbManager);
 #endif
 
   // Register app info with QML

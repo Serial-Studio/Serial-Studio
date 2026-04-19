@@ -34,18 +34,11 @@ import "../Widgets" as Widgets
 Widgets.SmartWindow {
   id: root
 
-  //
-  // Aliases for tracking minimum content size on native/CSD windows
-  //
-  property alias preferredWidth: layout.implicitWidth
-  property alias preferredHeight: layout.implicitHeight
-
-  //
-  // Window options
-  //
   category: "ProjectEditor"
   minimumWidth: layout.implicitWidth + 32
   minimumHeight: layout.implicitHeight + 32
+  property alias preferredWidth: layout.implicitWidth
+  property alias preferredHeight: layout.implicitHeight
   title: Cpp_JSON_ProjectModel.title + (Cpp_JSON_ProjectModel.modified ? " (" + qsTr("modified") + ")" : "")
 
   //
@@ -212,6 +205,46 @@ Widgets.SmartWindow {
             Views.OutputWidgetView {
               anchors.fill: parent
               visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.OutputWidgetView
+            }
+
+            //
+            // Data tables overview
+            //
+            Views.DataTablesView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DataTablesView
+            }
+
+            //
+            // System __datasets__ table viewer
+            //
+            Views.SystemDatasetsView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.SystemDatasetsView
+            }
+
+            //
+            // User-defined shared memory table editor
+            //
+            Views.UserTableView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.UserTableView
+            }
+
+            //
+            // Workspaces overview
+            //
+            Views.WorkspacesView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.WorkspacesView
+            }
+
+            //
+            // Single workspace editor
+            //
+            Views.WorkspaceView {
+              anchors.fill: parent
+              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.WorkspaceView
             }
           }
         }

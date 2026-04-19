@@ -109,10 +109,23 @@ class ProjectEditor : public QObject {
              READ  selectedSourceFrameParserCode
              WRITE setSelectedSourceFrameParserCode
              NOTIFY selectedSourceFrameParserCodeChanged)
+  Q_PROPERTY(QString treeSearchQuery
+             READ  treeSearchQuery
+             WRITE setTreeSearchQuery
+             NOTIFY treeSearchQueryChanged)
+  Q_PROPERTY(QString selectedUserTable
+             READ selectedUserTable
+             NOTIFY selectedUserTableChanged)
+  Q_PROPERTY(int selectedWorkspaceId
+             READ selectedWorkspaceId
+             NOTIFY selectedWorkspaceIdChanged)
   // clang-format on
 
 signals:
   void treeModelChanged();
+  void treeSearchQueryChanged();
+  void selectedUserTableChanged();
+  void selectedWorkspaceIdChanged();
   void selectedSourceFrameParserCodeChanged();
   void groupModelChanged();
   void sourceModelChanged();
@@ -147,7 +160,12 @@ public:
     ActionView,
     SourceView,
     SourceFrameParserView,
-    OutputWidgetView
+    OutputWidgetView,
+    DataTablesView,
+    SystemDatasetsView,
+    UserTableView,
+    WorkspacesView,
+    WorkspaceView,
   };
   Q_ENUM(CurrentView)
 
@@ -221,7 +239,22 @@ public:
   [[nodiscard]] CustomModel* outputWidgetModel() const;
   [[nodiscard]] const DataModel::OutputWidget& selectedOutputWidget() const noexcept;
 
+  Q_INVOKABLE [[nodiscard]] QVariantList tablesSummary() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList systemDatasetsSummary() const;
+  [[nodiscard]] QString selectedUserTable() const;
+
+  Q_INVOKABLE [[nodiscard]] QVariantList workspacesSummary() const;
+  Q_INVOKABLE [[nodiscard]] QVariantList widgetsForWorkspace(int workspaceId) const;
+  Q_INVOKABLE [[nodiscard]] QVariantList allWidgetsSummary() const;
+  [[nodiscard]] int selectedWorkspaceId() const noexcept;
+
+  [[nodiscard]] const QString& treeSearchQuery() const noexcept;
+
 public slots:
+  void selectUserTable(const QString& tableName);
+  void selectWorkspace(int workspaceId);
+  void setTreeSearchQuery(const QString& query);
+
   void buildTreeModel();
   void buildProjectModel();
   void buildGroupModel(const DataModel::Group& group);
@@ -276,6 +309,29 @@ private:
   QMap<QStandardItem*, DataModel::Dataset> m_datasetItems;
   QMap<QStandardItem*, DataModel::OutputWidget> m_outputWidgetItems;
   QMap<QStandardItem*, DataModel::Source> m_sourceParserItems;
+
+  // Groups tree items:
+  //   m_groupsRootItem → "Groups" category root, parent to every group item
+  QStandardItem* m_groupsRootItem;
+
+  // Data tables tree items:
+  //   m_tablesRootItem      → "Shared Memory" category root (DataTablesView)
+  //   m_systemDatasetsItem  → auto-generated "Dataset Values" (SystemDatasetsView)
+  //   m_userTableItems      → user-defined tables keyed by tree item
+  QStandardItem* m_tablesRootItem;
+  QStandardItem* m_systemDatasetsItem;
+  QMap<QStandardItem*, QString> m_userTableItems;
+  QString m_selectedUserTable;
+
+  // Workspaces tree items:
+  //   m_workspacesRootItem → "Workspaces" category root (WorkspacesView)
+  //   m_workspaceItems     → user workspaces keyed by tree item
+  QStandardItem* m_workspacesRootItem;
+  QMap<QStandardItem*, int> m_workspaceItems;
+  int m_selectedWorkspaceId;
+
+  // Active tree search query (empty = show full tree)
+  QString m_treeSearchQuery;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

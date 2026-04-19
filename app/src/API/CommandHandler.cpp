@@ -27,6 +27,7 @@
 #include "API/Handlers/CSVExportHandler.h"
 #include "API/Handlers/CSVPlayerHandler.h"
 #include "API/Handlers/DashboardHandler.h"
+#include "API/Handlers/DataTablesHandler.h"
 #include "API/Handlers/ExtensionHandler.h"
 #include "API/Handlers/IOManagerHandler.h"
 #include "API/Handlers/NetworkHandler.h"
@@ -34,6 +35,7 @@
 #include "API/Handlers/SourceHandler.h"
 #include "API/Handlers/UARTHandler.h"
 #include "API/Handlers/WindowHandler.h"
+#include "API/Handlers/WorkspacesHandler.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "API/Handlers/AudioHandler.h"
@@ -45,6 +47,7 @@
 #  include "API/Handlers/ModbusHandler.h"
 #  include "API/Handlers/MQTTHandler.h"
 #  include "API/Handlers/ProcessHandler.h"
+#  include "API/Handlers/SessionsHandler.h"
 #  include "API/Handlers/USBHandler.h"
 #endif
 
@@ -245,6 +248,8 @@ void API::CommandHandler::initializeHandlers()
   Handlers::WindowHandler::registerCommands();
   Handlers::SourceHandler::registerCommands();
   Handlers::ExtensionHandler::registerCommands();
+  Handlers::DataTablesHandler::registerCommands();
+  Handlers::WorkspacesHandler::registerCommands();
 
 #ifdef BUILD_COMMERCIAL
   Handlers::ModbusHandler::registerCommands();
@@ -257,6 +262,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::USBHandler::registerCommands();
   Handlers::ProcessHandler::registerCommands();
   Handlers::LicensingHandler::registerCommands();
+  Handlers::SessionsHandler::registerCommands();
 #endif
 
   m_initialized = true;

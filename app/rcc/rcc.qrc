@@ -123,6 +123,7 @@
         <file>icons/buttons/close.svg</file>
         <file>icons/buttons/code.svg</file>
         <file>icons/buttons/connected.svg</file>
+        <file>icons/buttons/copy.svg</file>
         <file>icons/buttons/deactivate.svg</file>
         <file>icons/buttons/disconnected.svg</file>
         <file>icons/buttons/download.svg</file>
@@ -146,6 +147,7 @@
         <file>icons/buttons/search.svg</file>
         <file>icons/buttons/send.svg</file>
         <file>icons/buttons/test.svg</file>
+        <file>icons/buttons/trash.svg</file>
         <file>icons/buttons/visible.svg</file>
         <file>icons/buttons/website.svg</file>
         <file>icons/buttons/wrench.svg</file>
@@ -226,6 +228,12 @@
         <file>icons/dashboard-small/plot.svg</file>
         <file>icons/dashboard-small/plot3d.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
+        <file>icons/database/close.svg</file>
+        <file>icons/database/delete.svg</file>
+        <file>icons/database/export.svg</file>
+        <file>icons/database/open.svg</file>
+        <file>icons/database/replay.svg</file>
+        <file>icons/database/restore.svg</file>
         <file>icons/devices/drivers/audio.svg</file>
         <file>icons/devices/drivers/bluetooth.svg</file>
         <file>icons/devices/drivers/canbus.svg</file>
@@ -266,13 +274,21 @@
         <file>icons/project-editor/actions/add-output-textfield.svg</file>
         <file>icons/project-editor/actions/add-output-toggle.svg</file>
         <file>icons/project-editor/actions/add-plot.svg</file>
+        <file>icons/project-editor/actions/add-register.svg</file>
+        <file>icons/project-editor/actions/add-table.svg</file>
         <file>icons/project-editor/actions/bar.svg</file>
         <file>icons/project-editor/actions/change-group.svg</file>
         <file>icons/project-editor/actions/compass.svg</file>
+        <file>icons/project-editor/actions/customize.svg</file>
+        <file>icons/project-editor/actions/delete-register.svg</file>
+        <file>icons/project-editor/actions/delete-table.svg</file>
         <file>icons/project-editor/actions/delete.svg</file>
         <file>icons/project-editor/actions/duplicate.svg</file>
+        <file>icons/project-editor/actions/export-table.svg</file>
         <file>icons/project-editor/actions/fft.svg</file>
         <file>icons/project-editor/actions/gauge.svg</file>
+        <file>icons/project-editor/actions/import-table.svg</file>
+        <file>icons/project-editor/actions/insert-constant.svg</file>
         <file>icons/project-editor/actions/led.svg</file>
         <file>icons/project-editor/actions/output-button.svg</file>
         <file>icons/project-editor/actions/output-knob.svg</file>
@@ -282,6 +298,7 @@
         <file>icons/project-editor/actions/output-textfield.svg</file>
         <file>icons/project-editor/actions/output-toggle.svg</file>
         <file>icons/project-editor/actions/plot.svg</file>
+        <file>icons/project-editor/actions/rename-table.svg</file>
         <file>icons/project-editor/actions/transform.svg</file>
         <file>icons/project-editor/model/action-behavior.svg</file>
         <file>icons/project-editor/model/action.svg</file>
@@ -302,10 +319,15 @@
         <file>icons/project-editor/model/timer.svg</file>
         <file>icons/project-editor/model/tx-data.svg</file>
         <file>icons/project-editor/model/widget.svg</file>
+        <file>icons/project-editor/permissions/read-only.svg</file>
+        <file>icons/project-editor/permissions/read-write.svg</file>
         <file>icons/project-editor/summary/action.svg</file>
+        <file>icons/project-editor/summary/dataset-values.svg</file>
         <file>icons/project-editor/summary/dataset.svg</file>
         <file>icons/project-editor/summary/device.svg</file>
         <file>icons/project-editor/summary/group.svg</file>
+        <file>icons/project-editor/summary/shared-memory.svg</file>
+        <file>icons/project-editor/summary/shared-table.svg</file>
         <file>icons/project-editor/toolbar/add-accelerometer.svg</file>
         <file>icons/project-editor/toolbar/add-action.svg</file>
         <file>icons/project-editor/toolbar/add-bar.svg</file>
@@ -341,6 +363,7 @@
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
         <file>icons/project-editor/treeview/datagrid.svg</file>
+        <file>icons/project-editor/treeview/dataset-values.svg</file>
         <file>icons/project-editor/treeview/dataset.svg</file>
         <file>icons/project-editor/treeview/encoding.svg</file>
         <file>icons/project-editor/treeview/frame-end.svg</file>
@@ -362,6 +385,8 @@
         <file>icons/project-editor/treeview/project-setup.svg</file>
         <file>icons/project-editor/treeview/project-title.svg</file>
         <file>icons/project-editor/treeview/separator.svg</file>
+        <file>icons/project-editor/treeview/shared-memory.svg</file>
+        <file>icons/project-editor/treeview/shared-table.svg</file>
         <file>icons/project-editor/windows/code.svg</file>
         <file>icons/project-editor/windows/dataset.svg</file>
         <file>icons/project-editor/windows/group.svg</file>
@@ -405,6 +430,7 @@
         <file>icons/toolbar/mqtt.svg</file>
         <file>icons/toolbar/open-project.svg</file>
         <file>icons/toolbar/project-setup.svg</file>
+        <file>icons/toolbar/sessions.svg</file>
         <file>icons/toolbar/settings.svg</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
@@ -633,5 +659,9 @@
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
+        <file>icons/buttons/export-csv.svg</file>
+        <file>icons/panes/details.svg</file>
+        <file>icons/panes/sessions.svg</file>
+        <file>icons/buttons/play.svg</file>
     </qresource>
 </RCC>

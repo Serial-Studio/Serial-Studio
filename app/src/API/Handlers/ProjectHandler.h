@@ -86,6 +86,7 @@ private:
   static CommandResponse groupAdd(const QString& id, const QJsonObject& params);
   static CommandResponse groupDelete(const QString& id, const QJsonObject& params);
   static CommandResponse groupDuplicate(const QString& id, const QJsonObject& params);
+  static CommandResponse groupSelect(const QString& id, const QJsonObject& params);
 
   // Dataset management
   static CommandResponse datasetAdd(const QString& id, const QJsonObject& params);
@@ -120,6 +121,10 @@ private:
   static CommandResponse groupsList(const QString& id, const QJsonObject& params);
   static CommandResponse datasetsList(const QString& id, const QJsonObject& params);
   static CommandResponse actionsList(const QString& id, const QJsonObject& params);
+
+  // Dataset field setters (v3.3 virtual / transform support)
+  static CommandResponse datasetSetVirtual(const QString& id, const QJsonObject& params);
+  static CommandResponse datasetSetTransformCode(const QString& id, const QJsonObject& params);
 };
 
 }  // namespace Handlers

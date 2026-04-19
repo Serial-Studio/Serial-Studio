@@ -226,57 +226,12 @@ int UI::Taskbar::activeGroupIndex() const
  */
 QVariantList UI::Taskbar::groupModel() const
 {
-  QVariantList model;
-
-  // Count widget groups for overview section
-  int groupCount   = 0;
-  int widgetGroups = 0;
-  for (const auto& group : UI::Dashboard::instance().rawFrame().groups) {
-    ++groupCount;
-    auto widget = SerialStudio::getDashboardWidget(group);
-    if (widget != SerialStudio::DashboardNoWidget)
-      ++widgetGroups;
-
-    for (const auto& dataset : group.datasets)
-      if (dataset.overviewDisplay)
-        ++widgetGroups;
-  }
-
-  // Create overview group
-  if (widgetGroups > 1) {
-    QVariantMap main;
-    main["id"]        = -1;
-    main["text"]      = tr("Overview");
-    main["icon"]      = QStringLiteral("qrc:/rcc/icons/panes/overview.svg");
-    main["separator"] = false;
-    model.append(main);
-  }
-
-  // Create all data group
-  if (groupCount > 1) {
-    QVariantMap main;
-    main["id"]        = -2;
-    main["text"]      = tr("All Data");
-    main["icon"]      = QStringLiteral("qrc:/rcc/icons/panes/dashboard.svg");
-    main["separator"] = false;
-    model.append(main);
-  }
-
-  // Append frame groups
-  for (int i = 0; i < m_fullModel->rowCount(); ++i) {
-    const QStandardItem* groupItem = m_fullModel->item(i);
-    if (!groupItem)
-      continue;
-
-    QVariantMap group;
-    group["id"]        = groupItem->data(TaskbarModel::GroupIdRole).toInt();
-    group["text"]      = groupItem->data(TaskbarModel::GroupNameRole).toString();
-    group["icon"]      = groupItem->data(TaskbarModel::WidgetIconRole).toString();
-    group["separator"] = false;
-    model.append(group);
-  }
-
-  return model;
+  // Auto-generated workspaces (Overview, All Data, per-source group entries)
+  // were removed in v3.3 — users now explicitly create and manage their own
+  // workspaces via the project editor. This method is retained for API
+  // stability; workspaceModel() builds its result purely from user-defined
+  // entries in ProjectModel::workspaces().
+  return QVariantList();
 }
 
 /**
@@ -544,17 +499,19 @@ void UI::Taskbar::setActiveGroupId(int groupId)
         if (childType == SerialStudio::DashboardNoWidget)
           continue;
 
-        auto child    = groupItem->child(j)->clone();
-        auto name     = child->data(TaskbarModel::WidgetNameRole).toString();
-        auto overview = child->data(TaskbarModel::OverviewRole).toBool();
+        auto child = groupItem->child(j)->clone();
+        auto name  = child->data(TaskbarModel::WidgetNameRole).toString();
 
-        if (groupId > -1 || overview) {
+        if (groupId > -1) {
           setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(),
                          TaskbarModel::WindowNormal);
           m_taskbarButtons->appendRow(child);
         }
 
-        else if (overview || groupId == -2) {
+        // Legacy "All Data" fallback — groupId == -2 is no longer produced by
+        // groupModel() in v3.3 but is still honoured here for settings that may
+        // reference it from older sessions.
+        else if (groupId == -2) {
           child->setData(QStringLiteral("%1 (%2)").arg(name, groupName),
                          TaskbarModel::WidgetNameRole);
           setWindowState(child->data(TaskbarModel::WindowIdRole).toInt(),
@@ -975,7 +932,7 @@ void UI::Taskbar::rebuildModel()
       else if (SerialStudio::isDatasetWidget(widgetTypes[i])) {
         auto& dbDataset = db->getDatasetWidget(widgetTypes[i], relativeIds[i]);
         child->setData(dbDataset.title, TaskbarModel::WidgetNameRole);
-        child->setData(dbDataset.overviewDisplay, TaskbarModel::OverviewRole);
+        child->setData(false, TaskbarModel::OverviewRole);
         mapWidgetToWindow(registry.widgetIdByTypeAndIndex(widgetTypes[i], relativeIds[i]),
                           windowIds[i]);
       }
@@ -1052,8 +1009,16 @@ void UI::Taskbar::rebuildModel()
  * @param parentItem Optional parent item to limit search scope.
  * @return Pointer to the matching QStandardItem, or nullptr if not found.
  */
-QStandardItem* UI::Taskbar::findItemByWindowId(int windowId, QStandardItem* parentItem) const
+QStandardItem* UI::Taskbar::findItemByWindowId(int windowId,
+                                               QStandardItem* parentItem,
+                                               int depth) const
 {
+  // Bounded recursion (NASA PoT Rule 1) — tree is at most 2 levels deep.
+  static constexpr int kMaxDepth = 4;
+  Q_ASSERT(depth <= kMaxDepth);
+  if (depth > kMaxDepth) [[unlikely]]
+    return nullptr;
+
   int count = parentItem ? parentItem->rowCount() : fullModel()->rowCount();
   for (int i = 0; i < count; ++i) {
     QStandardItem* item = parentItem ? parentItem->child(i) : fullModel()->item(i);
@@ -1065,7 +1030,7 @@ QStandardItem* UI::Taskbar::findItemByWindowId(int windowId, QStandardItem* pare
 
     // Recurse into group children
     if (item->data(TaskbarModel::IsGroupRole).toBool()) {
-      QStandardItem* found = findItemByWindowId(windowId, item);
+      QStandardItem* found = findItemByWindowId(windowId, item, depth + 1);
       if (found)
         return found;
     }

@@ -37,8 +37,8 @@ Rectangle {
   property bool autoHide: false
   property bool toolbarEnabled: true
   property bool dashboardVisible: false
-  readonly property bool showContent: toolbarEnabled && !(autoHide && dashboardVisible)
   readonly property bool dashboardMode: !showContent && dashboardVisible
+  readonly property bool showContent: toolbarEnabled && !(autoHide && dashboardVisible)
 
   //
   // Calculate offset based on platform
@@ -234,6 +234,24 @@ Rectangle {
           icon.source: "qrc:/rcc/icons/toolbar/mf4.svg"
           enabled: !Cpp_MDF4_Player.isOpen && !Cpp_IO_Manager.isConnected
           ToolTip.text: qsTr("Play an MDF4 file as if it were live sensor data (Pro)")
+        }
+      }
+    }
+
+    //
+    // Sessions
+    //
+    Loader {
+      active: Cpp_CommercialBuild
+      Layout.alignment: Qt.AlignVCenter
+      sourceComponent: Component {
+        Widgets.RibbonSection {
+          Widgets.ToolbarButton {
+            text: qsTr("Sessions")
+            icon.source: "qrc:/rcc/icons/toolbar/sessions.svg"
+            ToolTip.text: qsTr("Browse, replay, and export recorded sessions")
+            onClicked: app.showDatabaseExplorer()
+          }
         }
       }
     }
@@ -567,7 +585,11 @@ Rectangle {
                              "qrc:/rcc/icons/toolbar/disconnect.svg"
 
       visible: Cpp_CommercialBuild ? (Cpp_Licensing_Trial.trialExpired && !Cpp_Licensing_LemonSqueezy.isActivated ? false : true) : true
-      enabled: (Cpp_IO_Manager.configurationOk && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen) || app.mqttSubscriber
+      enabled: (Cpp_IO_Manager.configurationOk
+                && !Cpp_CSV_Player.isOpen
+                && !Cpp_MDF4_Player.isOpen
+                && !app.sessionPlayerOpen)
+               || app.mqttSubscriber
 
       onClicked: {
         if (app.mqttSubscriber)

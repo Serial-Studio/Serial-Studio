@@ -101,6 +101,8 @@ protected:
   bool m_use1K;
   qint64 m_bytesSent;
   qint64 m_fileSize;
+  qint64 m_lastBlockStart;  ///< File offset of the block currently awaiting ACK/NAK.
+  qint64 m_lastBlockBytes;  ///< Actual bytes read for the block awaiting ACK/NAK.
 
 private:
   void sendCancel();

@@ -42,16 +42,7 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_circularBuffer(1024 * 1024)
-{
-  m_quickPlotEndSequences.append(QByteArray("\n"));
-  m_quickPlotEndSequences.append(QByteArray("\r"));
-  m_quickPlotEndSequences.append(QByteArray("\r\n"));
-
-  m_quickPlotEndSequenceLps.clear();
-  m_quickPlotEndSequenceLps.reserve(m_quickPlotEndSequences.size());
-  for (const auto& delimiter : std::as_const(m_quickPlotEndSequences))
-    m_quickPlotEndSequenceLps.append(m_circularBuffer.buildKMPTable(delimiter));
-}
+{}
 
 //--------------------------------------------------------------------------------------------------
 // Data entry point function
@@ -85,6 +76,11 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
   if (!data || data->isEmpty())
     return;
 
+  // Console-only mode skips frame extraction entirely; raw bytes still reach
+  // the terminal via DeviceManager::rawDataReceived, which is a separate path.
+  if (m_operationMode == SerialStudio::ConsoleOnly)
+    return;
+
   // Variable to detect if a frame has been detected
   bool framesEnqueued = false;
 
@@ -109,9 +105,6 @@ void IO::FrameReader::processData(const ByteArrayPtr& data)
     switch (m_operationMode) {
       case SerialStudio::QuickPlot:
         readEndDelimitedFrames();
-        break;
-      case SerialStudio::DeviceSendsJSON:
-        readStartEndDelimitedFrames();
         break;
       case SerialStudio::ProjectFile:
         switch (m_frameDetectionMode) {
@@ -167,25 +160,54 @@ void IO::FrameReader::setChecksum(const QString& checksum)
 }
 
 /**
- * @brief Sets the start sequence used for frame detection.
+ * @brief Sets the start sequence(s) used for frame detection.
  *
- * @param start The new start sequence as a QByteArray.
+ * Builds KMP tables for each non-empty pattern. The KMP tables are only
+ * used by the single-delimiter fast path in readStartDelimitedFrames;
+ * multi-pattern scans use findFirstOfPatterns which does its own
+ * byte-by-byte comparison.
+ *
+ * @param starts One or more start delimiter byte sequences.
  */
-void IO::FrameReader::setStartSequence(const QByteArray& start)
+void IO::FrameReader::setStartSequences(const QList<QByteArray>& starts)
 {
-  m_startSequence    = start;
-  m_startSequenceLps = m_circularBuffer.buildKMPTable(m_startSequence);
+  // Clear previous state
+  m_startSequences.clear();
+  m_startSequenceLps.clear();
+
+  // Build KMP tables for each non-empty pattern
+  for (const auto& s : starts) {
+    if (s.isEmpty())
+      continue;
+
+    m_startSequences.append(s);
+    m_startSequenceLps.append(m_circularBuffer.buildKMPTable(s));
+  }
+
+  Q_ASSERT(m_startSequences.size() == m_startSequenceLps.size());
 }
 
 /**
- * @brief Sets the finish sequence used for frame detection.
+ * @brief Sets the finish sequence(s) used for frame detection.
  *
- * @param finish The new finish sequence as a QByteArray.
+ * @param finishes One or more finish delimiter byte sequences.
  */
-void IO::FrameReader::setFinishSequence(const QByteArray& finish)
+void IO::FrameReader::setFinishSequences(const QList<QByteArray>& finishes)
 {
-  m_finishSequence    = finish;
-  m_finishSequenceLps = m_circularBuffer.buildKMPTable(m_finishSequence);
+  // Clear previous state
+  m_finishSequences.clear();
+  m_finishSequenceLps.clear();
+
+  // Build KMP tables for each non-empty pattern
+  for (const auto& f : finishes) {
+    if (f.isEmpty())
+      continue;
+
+    m_finishSequences.append(f);
+    m_finishSequenceLps.append(m_circularBuffer.buildKMPTable(f));
+  }
+
+  Q_ASSERT(m_finishSequences.size() == m_finishSequenceLps.size());
 }
 
 /**
@@ -239,6 +261,7 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
 void IO::FrameReader::readEndDelimitedFrames()
 {
   Q_ASSERT(m_circularBuffer.capacity() > 0);
+  Q_ASSERT(!m_finishSequences.isEmpty());
   Q_ASSERT(m_operationMode == SerialStudio::QuickPlot
            || m_frameDetectionMode == SerialStudio::EndDelimiterOnly);
 
@@ -250,22 +273,16 @@ void IO::FrameReader::readEndDelimitedFrames()
     int endIndex = -1;
     QByteArray delimiter;
 
-    if (m_operationMode == SerialStudio::QuickPlot) {
-      for (int i = 0; i < m_quickPlotEndSequences.size(); ++i) {
-        const auto& d   = m_quickPlotEndSequences[i];
-        const auto& lps = m_quickPlotEndSequenceLps[i];
-        int index       = m_circularBuffer.findPatternKMP(d, lps);
-        if (index != -1 && (endIndex == -1 || index < endIndex)) {
-          endIndex  = index;
-          delimiter = d;
-          break;
-        }
+    // Locate the next finish delimiter in the buffer
+    if (m_finishSequences.size() == 1) [[likely]] {
+      endIndex  = m_circularBuffer.findPatternKMP(m_finishSequences[0], m_finishSequenceLps[0]);
+      delimiter = m_finishSequences[0];
+    } else {
+      const auto match = m_circularBuffer.findFirstOfPatterns(m_finishSequences);
+      if (match.position >= 0) {
+        endIndex  = match.position;
+        delimiter = m_finishSequences[match.patternIndex];
       }
-    }
-
-    else if (m_frameDetectionMode == SerialStudio::EndDelimiterOnly) {
-      delimiter = m_finishSequence;
-      endIndex  = m_circularBuffer.findPatternKMP(delimiter, m_finishSequenceLps);
     }
 
     // No frame found
@@ -319,15 +336,20 @@ void IO::FrameReader::readEndDelimitedFrames()
  */
 void IO::FrameReader::readStartDelimitedFrames()
 {
-  Q_ASSERT(!m_startSequence.isEmpty());
+  Q_ASSERT(!m_startSequences.isEmpty());
+  Q_ASSERT(!m_startSequenceLps.isEmpty());
   Q_ASSERT(m_circularBuffer.capacity() > 0);
+
+  // Start-only mode uses the first start delimiter
+  const auto& startSeq = m_startSequences[0];
+  const auto& startLps = m_startSequenceLps[0];
 
   constexpr int kMaxFramesPerCall = 10000;
   int iterations                  = 0;
   while (iterations < kMaxFramesPerCall) {
     ++iterations;
 
-    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps);
+    int startIndex = m_circularBuffer.findPatternKMP(startSeq, startLps);
     if (startIndex == -1)
       break;
 
@@ -336,15 +358,14 @@ void IO::FrameReader::readStartDelimitedFrames()
       (void)m_circularBuffer.read(startIndex);
 
     // Locate the next start delimiter to determine frame boundary
-    int nextStartIndex =
-      m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps, m_startSequence.size());
+    int nextStartIndex = m_circularBuffer.findPatternKMP(startSeq, startLps, startSeq.size());
 
     // No second start delimiter found — wait for more data
     if (nextStartIndex == -1)
       break;
 
     // Extract frame payload between the two start delimiters
-    qsizetype frameStart  = m_startSequence.size();
+    qsizetype frameStart  = startSeq.size();
     qsizetype frameEndPos = nextStartIndex;
     qsizetype frameLength = frameEndPos - frameStart;
 
@@ -403,32 +424,40 @@ void IO::FrameReader::readStartDelimitedFrames()
  */
 void IO::FrameReader::readStartEndDelimitedFrames()
 {
-  Q_ASSERT(!m_startSequence.isEmpty());
-  Q_ASSERT(!m_finishSequence.isEmpty());
+  Q_ASSERT(!m_startSequences.isEmpty());
+  Q_ASSERT(!m_startSequenceLps.isEmpty());
+  Q_ASSERT(!m_finishSequences.isEmpty());
+  Q_ASSERT(!m_finishSequenceLps.isEmpty());
+
+  // Start+end mode uses the first delimiter in each list
+  const auto& startSeq  = m_startSequences[0];
+  const auto& startLps  = m_startSequenceLps[0];
+  const auto& finishSeq = m_finishSequences[0];
+  const auto& finishLps = m_finishSequenceLps[0];
 
   constexpr int kMaxFramesPerCall = 10000;
   int iterations                  = 0;
   while (iterations < kMaxFramesPerCall) {
     ++iterations;
 
-    int finishIndex = m_circularBuffer.findPatternKMP(m_finishSequence, m_finishSequenceLps);
+    int finishIndex = m_circularBuffer.findPatternKMP(finishSeq, finishLps);
     if (finishIndex == -1)
       break;
 
-    int startIndex = m_circularBuffer.findPatternKMP(m_startSequence, m_startSequenceLps);
+    int startIndex = m_circularBuffer.findPatternKMP(startSeq, startLps);
     if (startIndex == -1 || startIndex >= finishIndex) {
-      (void)m_circularBuffer.read(finishIndex + m_finishSequence.size());
+      (void)m_circularBuffer.read(finishIndex + finishSeq.size());
       continue;
     }
 
-    qsizetype frameStart  = startIndex + m_startSequence.size();
+    qsizetype frameStart  = startIndex + startSeq.size();
     qsizetype frameLength = finishIndex - frameStart;
     if (frameLength <= 0) {
-      (void)m_circularBuffer.read(finishIndex + m_finishSequence.size());
+      (void)m_circularBuffer.read(finishIndex + finishSeq.size());
       continue;
     }
 
-    const auto crcPosition = finishIndex + m_finishSequence.size();
+    const auto crcPosition = finishIndex + finishSeq.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
     const auto frame       = m_circularBuffer.peekRange(frameStart, frameLength);
 

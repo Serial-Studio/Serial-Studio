@@ -1492,7 +1492,7 @@ python test_api.py send dashboard.getStatus
 Set the dashboard operation mode.
 
 **Parameters:**
-- `mode` (int): 0=ProjectFile, 1=DeviceSendsJSON, 2=QuickPlot
+- `mode` (int): 0=ProjectFile, 1=ConsoleOnly, 2=QuickPlot
 
 **Returns:**
 ```json
@@ -1509,7 +1509,7 @@ python test_api.py send dashboard.setOperationMode -p mode=1
 
 **Operation Modes:**
 - `0` - **ProjectFile**: Use a JSON project file to define dashboard layout
-- `1` - **DeviceSendsJSON**: Device sends JSON-formatted data directly
+- `1` - **ConsoleOnly**: No parsing — raw bytes flow only to the terminal (no dashboard)
 - `2` - **QuickPlot**: Automatic plotting of incoming numeric data
 
 #### 🟢 `dashboard.getOperationMode`

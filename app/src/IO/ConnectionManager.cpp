@@ -47,6 +47,7 @@
 #  include "Licensing/Trial.h"
 #  include "Misc/Utilities.h"
 #  include "MQTT/Client.h"
+#  include "Sessions/Export.h"
 #endif
 
 #ifdef ENABLE_GRPC
@@ -1084,16 +1085,8 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
   Q_ASSERT(dm);
   Q_ASSERT(dm->driver());
 
-  // DirectConnection — both DeviceManager and ConnectionManager live on
-  // the main thread, and FrameReader is no longer moved to a worker
-  // thread (see beeda4c0). A QueuedConnection between two same-thread
-  // objects only adds per-frame postEvent overhead: QMetaCallEvent
-  // alloc + event-queue lock + deferred dispatch. At high frame rates
-  // that extra work lets the FrameReader's lock-free queue fill faster
-  // than the consumer drains it, triggering "queue full" drops.
-  // Direct calls drain the whole batch in one pass on the caller's
-  // stack, and re-entrancy is not a concern because the frame path
-  // never re-triggers the driver's readyRead.
+  // DirectConnection — same-thread hop, avoids per-frame postEvent overhead
+  // that lets the FrameReader queue fill faster than the consumer drains it.
   connect(dm,
           &IO::DeviceManager::frameReady,
           this,
@@ -1345,6 +1338,11 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
   if (fileTx.active()) [[unlikely]]
     fileTx.onRawDataReceived(*data);
 
+#ifdef BUILD_COMMERCIAL
+  static auto& sqliteExport = Sessions::Export::instance();
+  sqliteExport.hotpathTxRawBytes(deviceId, data);
+#endif
+
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
   grpcServer.hotpathTxData(data);
@@ -1368,8 +1366,17 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
  */
 IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 {
-  FrameConfig cfg;
   const auto opMode = AppState::instance().operationMode();
+
+  // QuickPlot and ConsoleOnly have fixed configs that don't depend on the
+  // project source list — use the cached config from AppState which is the
+  // single source of truth for these modes.
+  if (opMode == SerialStudio::QuickPlot || opMode == SerialStudio::ConsoleOnly)
+    return AppState::instance().frameConfig();
+
+  // ProjectFile mode — read from source settings
+  FrameConfig cfg;
+  cfg.operationMode = opMode;
 
   const auto& sources = DataModel::ProjectModel::instance().sources();
   for (const auto& src : sources) {
@@ -1381,27 +1388,29 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
     QString checksum;
     DataModel::read_io_settings(start, end, checksum, DataModel::serialize(src));
 
-    // Device 0 outside ProjectFile mode uses global UI settings
-    if (deviceId == 0 && opMode != SerialStudio::ProjectFile) {
-      cfg.startSequence     = m_startSequence;
-      cfg.finishSequence    = m_finishSequence;
-      cfg.checksumAlgorithm = m_checksumAlgorithm;
-      cfg.frameDetection    = DataModel::ProjectModel::instance().frameDetection();
-    } else {
-      cfg.startSequence     = start;
-      cfg.finishSequence    = end;
-      cfg.checksumAlgorithm = checksum;
-      cfg.frameDetection    = static_cast<SerialStudio::FrameDetection>(src.frameDetection);
-    }
+    cfg.startSequences    = start.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{start};
+    cfg.finishSequences   = end.isEmpty() ? QList<QByteArray>{} : QList<QByteArray>{end};
+    cfg.checksumAlgorithm = checksum;
+    cfg.frameDetection    = static_cast<SerialStudio::FrameDetection>(src.frameDetection);
 
-    cfg.operationMode = opMode;
+    // Mirror AppState::deriveFrameConfig's empty-delimiter downgrade.
+    if ((cfg.frameDetection == SerialStudio::StartDelimiterOnly
+         || cfg.frameDetection == SerialStudio::StartAndEndDelimiter)
+        && cfg.startSequences.isEmpty()) [[unlikely]]
+      cfg.frameDetection =
+        cfg.finishSequences.isEmpty() ? SerialStudio::NoDelimiters : SerialStudio::EndDelimiterOnly;
+
+    if (cfg.frameDetection == SerialStudio::EndDelimiterOnly && cfg.finishSequences.isEmpty())
+      [[unlikely]]
+      cfg.frameDetection = SerialStudio::NoDelimiters;
+
     return cfg;
   }
 
-  cfg.startSequence     = m_startSequence;
-  cfg.finishSequence    = m_finishSequence;
-  cfg.checksumAlgorithm = m_checksumAlgorithm;
-  cfg.operationMode     = opMode;
+  // No matching source — use defaults
+  cfg.startSequences    = {QByteArray("/*")};
+  cfg.finishSequences   = {QByteArray("*/")};
+  cfg.checksumAlgorithm = QString();
   cfg.frameDetection    = DataModel::ProjectModel::instance().frameDetection();
   return cfg;
 }

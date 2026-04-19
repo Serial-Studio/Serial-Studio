@@ -93,14 +93,17 @@ Widgets::FFTPlot::FFTPlot(const int index, QQuickItem* parent)
   , m_plan(nullptr)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardFFT, m_index)) {
-    // Initialize FFT parameters from dataset
-    const auto& dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
-    m_size              = 1 << static_cast<int>(std::log2(qMax(8, dataset.fftSamples)));
-    m_samplingRate      = dataset.fftSamplingRate;
-    m_minX              = 0;
-    m_maxY              = 0;
-    m_minY              = -100;
-    m_maxX              = m_samplingRate / 2;
+    // Clamp fftSamples — user-controlled via project JSON, unbounded values
+    // would allocate gigabyte-scale buffers.
+    static constexpr int kMaxFftSamples = 65536;
+    const auto& dataset                 = GET_DATASET(SerialStudio::DashboardFFT, m_index);
+    const int clampedSamples            = qBound(8, dataset.fftSamples, kMaxFftSamples);
+    m_size                              = 1 << static_cast<int>(std::log2(clampedSamples));
+    m_samplingRate                      = dataset.fftSamplingRate;
+    m_minX                              = 0;
+    m_maxY                              = 0;
+    m_minY                              = -100;
+    m_maxX                              = m_samplingRate / 2;
 
     // Allocate FFT buffers and build Blackman-Harris window
     m_samples.resize(m_size);

@@ -230,6 +230,18 @@ protected:
    */
   virtual bool isResourceOpen() const = 0;
 
+  /**
+   * @brief Returns whether processing is currently enabled.
+   *
+   * Derived classes that override processData() to drain additional queues
+   * should gate their extra work on this flag so the disable switch in the
+   * owning FrameConsumer propagates end-to-end.
+   */
+  [[nodiscard]] bool consumerEnabled() const noexcept
+  {
+    return m_enabled && m_enabled->load(std::memory_order_relaxed);
+  }
+
 private:
   std::vector<T> m_writeBuffer;
   moodycamel::ReaderWriterQueue<T>* m_queue;

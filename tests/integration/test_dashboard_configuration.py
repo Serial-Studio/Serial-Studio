@@ -97,7 +97,7 @@ def test_dashboard_points_invalid(api_client, clean_state):
 @pytest.mark.integration
 def test_dashboard_operation_mode_cycle(api_client, clean_state):
     """Verify operation mode can be set to all three valid values."""
-    mode_names = {0: "ProjectFile", 1: "DeviceSendsJSON", 2: "QuickPlot"}
+    mode_names = {0: "ProjectFile", 1: "ConsoleOnly", 2: "QuickPlot"}
 
     for mode, expected_name in mode_names.items():
         api_client.command("dashboard.setOperationMode", {"mode": mode})

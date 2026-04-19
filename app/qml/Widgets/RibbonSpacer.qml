@@ -8,6 +8,7 @@
  */
 
 import QtQuick
+import QtQuick.Layouts
 
 /**
  * @brief Fills remaining horizontal space in a RibbonToolbar.

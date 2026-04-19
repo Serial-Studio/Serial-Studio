@@ -40,6 +40,8 @@ IO::Protocols::XMODEM::XMODEM(QObject* parent)
   , m_use1K(false)
   , m_bytesSent(0)
   , m_fileSize(0)
+  , m_lastBlockStart(0)
+  , m_lastBlockBytes(0)
 {
   m_timeoutTimer.setSingleShot(true);
   connect(&m_timeoutTimer, &QTimer::timeout, this, &XMODEM::handleTimeout);
@@ -165,10 +167,9 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
                                  .arg(m_retryCount)
                                  .arg(m_maxRetries));
 
-          int blockSize     = m_use1K ? 1024 : 128;
-          qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-          m_bytesSent       = blockStart;
-          if (!m_file.seek(blockStart)) [[unlikely]] {
+          // Rewind by actual bytes read — fixed blockSize over-rewinds the final partial block.
+          m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
+          if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
             Q_EMIT finished(false, tr("Failed to seek in file"));
             return;
           }
@@ -264,6 +265,11 @@ void IO::Protocols::XMODEM::sendBlock()
   Q_ASSERT(m_file.isOpen());
   Q_ASSERT(m_state == State::SendingBlocks);
 
+  // Snapshot the file position so retries can seek back precisely. The last
+  // block is usually partial — tracking actual bytes read (vs. the padded
+  // block size) is what the NAK / timeout handlers need to rewind to.
+  m_lastBlockStart = m_file.pos();
+
   // Read next block; send EOT if file is exhausted
   int blockSize   = m_use1K ? 1024 : 128;
   QByteArray data = m_file.read(blockSize);
@@ -277,6 +283,8 @@ void IO::Protocols::XMODEM::sendBlock()
     return;
   }
 
+  m_lastBlockBytes = data.size();
+
   // Pad incomplete block with SUB (0x1A)
   while (data.size() < blockSize)
     data.append(static_cast<char>(0x1A));
@@ -285,7 +293,7 @@ void IO::Protocols::XMODEM::sendBlock()
   QByteArray packet = buildBlock(data, m_blockNumber);
   Q_EMIT writeRequested(packet);
 
-  m_bytesSent = qMin(m_bytesSent + blockSize, m_fileSize);
+  m_bytesSent = qMin(m_bytesSent + m_lastBlockBytes, m_fileSize);
   Q_EMIT progressChanged(m_bytesSent, m_fileSize);
   Q_EMIT statusMessage(tr("Sending block %1 (%2 bytes)").arg(m_blockNumber).arg(m_bytesSent));
   m_state = State::WaitingForAck;
@@ -313,11 +321,13 @@ void IO::Protocols::XMODEM::sendEOT()
 void IO::Protocols::XMODEM::resetState()
 {
   m_timeoutTimer.stop();
-  m_state       = State::Idle;
-  m_blockNumber = 1;
-  m_retryCount  = 0;
-  m_bytesSent   = 0;
-  m_fileSize    = 0;
+  m_state          = State::Idle;
+  m_blockNumber    = 1;
+  m_retryCount     = 0;
+  m_bytesSent      = 0;
+  m_fileSize       = 0;
+  m_lastBlockStart = 0;
+  m_lastBlockBytes = 0;
 
   if (m_file.isOpen())
     m_file.close();
@@ -349,10 +359,9 @@ void IO::Protocols::XMODEM::handleTimeout()
   if (m_state == State::WaitingForEOTAck) {
     sendEOT();
   } else if (m_state == State::WaitingForAck) {
-    int blockSize     = m_use1K ? 1024 : 128;
-    qint64 blockStart = qMax(static_cast<qint64>(0), m_bytesSent - blockSize);
-    m_bytesSent       = blockStart;
-    if (!m_file.seek(blockStart)) [[unlikely]] {
+    // Use the recorded last-block position; see the NAK path for rationale.
+    m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
+    if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
       Q_EMIT finished(false, tr("Failed to seek in file"));
       return;
     }

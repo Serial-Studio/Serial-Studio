@@ -26,7 +26,10 @@
 #include <memory>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QMap>
+#include <QSet>
 #include <QString>
+#include <QVariant>
 #include <vector>
 
 #include "Concepts.h"
@@ -123,6 +126,15 @@ inline constexpr auto WidgetRefs    = "widgetRefs";
 inline constexpr auto WidgetType    = "widgetType";
 inline constexpr auto RelativeIndex = "relativeIndex";
 
+// Keys for virtual datasets.
+inline constexpr auto Virtual = "virtual";
+
+// Keys for data tables.
+inline constexpr auto Tables           = "tables";
+inline constexpr auto Registers        = "registers";
+inline constexpr auto RegisterTypeName = "type";
+inline constexpr auto Name             = "name";
+
 inline QString layoutKey(int groupId)
 {
   return QStringLiteral("layout:") + QString::number(groupId);
@@ -179,14 +191,14 @@ enum class TimerMode {
  * @brief Represents a user-defined action or command to send over serial.
  */
 struct alignas(8) Action {
-  int actionId              = -1;               ///< Unique action ID
-  int sourceId              = 0;                ///< Target source/device ID
-  int repeatCount           = 3;                ///< Times to send in RepeatNTimes mode
-  int timerIntervalMs       = 100;              ///< Timer interval in ms
-  int txEncoding            = 0;                ///< SerialStudio::TextEncoding for non-binary txData
-  TimerMode timerMode       = TimerMode::Off;   ///< Timer behavior mode
-  bool binaryData           = false;            ///< If true, txData is binary
-  bool autoExecuteOnConnect = false;            ///< Auto execute on connect
+  int actionId              = -1;              ///< Unique action ID
+  int sourceId              = 0;               ///< Target source/device ID
+  int repeatCount           = 3;               ///< Times to send in RepeatNTimes mode
+  int timerIntervalMs       = 100;             ///< Timer interval in ms
+  int txEncoding            = 0;               ///< SerialStudio::TextEncoding for non-binary txData
+  TimerMode timerMode       = TimerMode::Off;  ///< Timer behavior mode
+  bool binaryData           = false;           ///< If true, txData is binary
+  bool autoExecuteOnConnect = false;           ///< Auto execute on connect
   QString icon              = "Play Property";  ///< Action icon name or path
   QString title;                                ///< Display title
   QString txData;                               ///< Data to transmit
@@ -233,10 +245,10 @@ enum class OutputWidgetType : quint8 {
  * This allows users to format output data for any protocol or requirement.
  */
 struct alignas(8) OutputWidget {
-  int widgetId          = -1;
-  int groupId           = -1;
-  int sourceId          = 0;
-  int txEncoding        = 0;  ///< SerialStudio::TextEncoding for string results from transmit(value)
+  int widgetId   = -1;
+  int groupId    = -1;
+  int sourceId   = 0;
+  int txEncoding = 0;  ///< SerialStudio::TextEncoding for string results from transmit(value)
   OutputWidgetType type = OutputWidgetType::Button;
   bool monoIcon         = false;
   double minValue       = 0;
@@ -310,36 +322,39 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
  * graphing. Fully aligned and stack-optimized.
  */
 struct alignas(8) Dataset {
-  int index            = 0;      ///< Frame offset index
-  int xAxisId          = -1;     ///< Optional reference to x-axis dataset
-  int groupId          = 0;      ///< Owning group ID
-  int sourceId         = 0;      ///< Source this dataset belongs to
-  int uniqueId         = 0;      ///< Unique ID within frame
-  int datasetId        = 0;      ///< Unique ID within group
-  int fftSamples       = 256;    ///< Number of samples for FFT
-  int fftSamplingRate  = 100;    ///< Sampling rate for FFT
-  bool fft             = false;  ///< Enables FFT processing
-  bool led             = false;  ///< Enables LED widget
-  bool log             = false;  ///< Enables logging
-  bool plt             = false;  ///< Enables plotting
-  bool alarmEnabled    = false;  ///< Enable/disable alarm values
-  bool overviewDisplay = false;  ///< Show in overview
-  bool isNumeric       = false;  ///< True if value was parsed as numeric
-  double fftMin        = 0;      ///< Minimum value (for FFT)
-  double fftMax        = 0;      ///< Maximum value (for FFT)
-  double pltMin        = 0;      ///< Minimum value (for plots)
-  double pltMax        = 0;      ///< Maximum value (for plots)
-  double wgtMin        = 0;      ///< Minimum value (for widgets)
-  double wgtMax        = 0;      ///< Maximum value (for widgets)
-  double ledHigh       = 80;     ///< LED activation threshold
-  double alarmLow      = 20;     ///< Low alarm threshold
-  double alarmHigh     = 80;     ///< High alarm threshold
-  double numericValue  = 0;      ///< Parsed numeric value
-  QString value;                 ///< Raw string value
-  QString title;                 ///< Human-readable title
-  QString units;                 ///< Measurement units (e.g., °C)
-  QString widget;                ///< Widget type (bar, gauge, etc.)
-  QString transformCode;         ///< Optional Lua/JS expression to transform raw value
+  int index              = 0;      ///< Frame offset index
+  int xAxisId            = -1;     ///< Optional reference to x-axis dataset
+  int groupId            = 0;      ///< Owning group ID
+  int sourceId           = 0;      ///< Source this dataset belongs to
+  int uniqueId           = 0;      ///< Unique ID within frame
+  int datasetId          = 0;      ///< Unique ID within group
+  int fftSamples         = 256;    ///< Number of samples for FFT
+  int fftSamplingRate    = 100;    ///< Sampling rate for FFT
+  bool fft               = false;  ///< Enables FFT processing
+  bool led               = false;  ///< Enables LED widget
+  bool log               = false;  ///< Enables logging
+  bool plt               = false;  ///< Enables plotting
+  bool alarmEnabled      = false;  ///< Enable/disable alarm values
+  bool overviewDisplay   = false;  ///< Deprecated in v3.3 — read-only for backward compat
+  bool isNumeric         = false;  ///< True if value was parsed as numeric
+  bool virtual_          = false;  ///< True if dataset computes its value entirely from transforms
+  double fftMin          = 0;      ///< Minimum value (for FFT)
+  double fftMax          = 0;      ///< Maximum value (for FFT)
+  double pltMin          = 0;      ///< Minimum value (for plots)
+  double pltMax          = 0;      ///< Maximum value (for plots)
+  double wgtMin          = 0;      ///< Minimum value (for widgets)
+  double wgtMax          = 0;      ///< Maximum value (for widgets)
+  double ledHigh         = 80;     ///< LED activation threshold
+  double alarmLow        = 20;     ///< Low alarm threshold
+  double alarmHigh       = 80;     ///< High alarm threshold
+  double numericValue    = 0;      ///< Parsed numeric value (post-transform)
+  double rawNumericValue = 0;      ///< Numeric value before transform
+  QString value;                   ///< String value (post-transform)
+  QString rawValue;                ///< String value before transform
+  QString title;                   ///< Human-readable title
+  QString units;                   ///< Measurement units (e.g., °C)
+  QString widget;                  ///< Widget type (bar, gauge, etc.)
+  QString transformCode;           ///< Optional Lua/JS expression to transform raw value
 };
 
 static_assert(sizeof(Dataset) % alignof(Dataset) == 0, "Unaligned Dataset struct");
@@ -408,6 +423,36 @@ struct alignas(8) Source {
 
 static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
 
+//--------------------------------------------------------------------------------------------------
+// Data table structures
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Type of a data table register.
+ */
+enum class RegisterType : quint8 {
+  Constant = 0,  ///< Set at project load, read-only during transforms
+  Computed = 1,  ///< Reset each frame, writable by transforms
+  System   = 2,  ///< Auto-generated for dataset raw/final values
+};
+
+/**
+ * @brief Schema definition for a single register within a data table.
+ */
+struct RegisterDef {
+  QString name;  ///< Register name (unique within table)
+  RegisterType type = RegisterType::Constant;
+  QVariant defaultValue;  ///< Default value (double or QString)
+};
+
+/**
+ * @brief Schema definition for a user-defined data table.
+ */
+struct TableDef {
+  QString name;  ///< Table name (unique within project)
+  std::vector<RegisterDef> registers;
+};
+
 /**
  * @brief Serializes a Source to a QJsonObject.
  * @param s The Source to serialize.
@@ -437,6 +482,95 @@ static_assert(sizeof(Source) % alignof(Source) == 0, "Unaligned Source struct");
     obj.insert("frameParserLanguage", s.frameParserLanguage);
 
   return obj;
+}
+
+/**
+ * @brief Serializes a RegisterDef to a QJsonObject.
+ */
+[[nodiscard]] inline QJsonObject serialize(const RegisterDef& r)
+{
+  QJsonObject obj;
+  obj.insert(Keys::Name, r.name);
+
+  // Store type as string for readability
+  obj.insert(Keys::RegisterTypeName,
+             r.type == RegisterType::Computed ? QStringLiteral("computed")
+                                              : QStringLiteral("constant"));
+
+  // Store value preserving its type (number or string)
+  if (r.defaultValue.typeId() == QMetaType::Double)
+    obj.insert(Keys::Value, r.defaultValue.toDouble());
+  else if (!r.defaultValue.toString().isEmpty())
+    obj.insert(Keys::Value, r.defaultValue.toString());
+
+  return obj;
+}
+
+/**
+ * @brief Deserializes a RegisterDef from a QJsonObject.
+ */
+[[nodiscard]] inline bool read(RegisterDef& r, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  r.name = ss_jsr(obj, Keys::Name, "").toString().simplified();
+  if (r.name.isEmpty())
+    return false;
+
+  // Parse type
+  const auto typeStr = ss_jsr(obj, Keys::RegisterTypeName, "constant").toString();
+  r.type = (typeStr == QLatin1String("computed")) ? RegisterType::Computed : RegisterType::Constant;
+
+  // Parse value preserving type
+  const auto val = obj.value(Keys::Value);
+  if (val.isDouble())
+    r.defaultValue = val.toDouble();
+  else if (val.isString())
+    r.defaultValue = val.toString();
+  else
+    r.defaultValue = QVariant(0.0);
+
+  return true;
+}
+
+/**
+ * @brief Serializes a TableDef to a QJsonObject.
+ */
+[[nodiscard]] inline QJsonObject serialize(const TableDef& t)
+{
+  QJsonArray regs;
+  for (const auto& r : t.registers)
+    regs.append(serialize(r));
+
+  QJsonObject obj;
+  obj.insert(Keys::Name, t.name);
+  obj.insert(Keys::Registers, regs);
+  return obj;
+}
+
+/**
+ * @brief Deserializes a TableDef from a QJsonObject.
+ */
+[[nodiscard]] inline bool read(TableDef& t, const QJsonObject& obj)
+{
+  if (obj.isEmpty())
+    return false;
+
+  t.name = ss_jsr(obj, Keys::Name, "").toString().simplified();
+  if (t.name.isEmpty())
+    return false;
+
+  t.registers.clear();
+  const auto regs = obj.value(Keys::Registers).toArray();
+  t.registers.reserve(regs.count());
+  for (const auto& val : regs) {
+    RegisterDef r;
+    if (read(r, val.toObject()))
+      t.registers.push_back(r);
+  }
+
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -616,11 +750,13 @@ inline void copy_frame_values(Frame& dst, const Frame& src) noexcept
     auto& dstGroup            = dst.groups[g];
     const size_t datasetCount = srcGroup.datasets.size();
     for (size_t d = 0; d < datasetCount; ++d) {
-      const auto& srcDataset  = srcGroup.datasets[d];
-      auto& dstDataset        = dstGroup.datasets[d];
-      dstDataset.value        = srcDataset.value;
-      dstDataset.numericValue = srcDataset.numericValue;
-      dstDataset.isNumeric    = srcDataset.isNumeric;
+      const auto& srcDataset     = srcGroup.datasets[d];
+      auto& dstDataset           = dstGroup.datasets[d];
+      dstDataset.value           = srcDataset.value;
+      dstDataset.numericValue    = srcDataset.numericValue;
+      dstDataset.isNumeric       = srcDataset.isNumeric;
+      dstDataset.rawValue        = srcDataset.rawValue;
+      dstDataset.rawNumericValue = srcDataset.rawNumericValue;
     }
   }
 }
@@ -782,7 +918,6 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::XAxis, d.xAxisId);
   obj.insert(Keys::LedHigh, d.ledHigh);
   obj.insert(Keys::FFTSamples, d.fftSamples);
-  obj.insert(Keys::Overview, d.overviewDisplay);
   obj.insert(Keys::Title, d.title.simplified());
   obj.insert(Keys::Value, d.value.simplified());
   obj.insert(Keys::Units, d.units.simplified());
@@ -800,6 +935,9 @@ void read_io_settings(QByteArray& frameStart,
 
   if (!d.transformCode.isEmpty())
     obj.insert(Keys::TransformCode, d.transformCode);
+
+  if (d.virtual_)
+    obj.insert(Keys::Virtual, true);
 
   return obj;
 }
@@ -1006,6 +1144,7 @@ void read_io_settings(QByteArray& frameStart,
   d.alarmHigh       = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
   d.sourceId        = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
   d.transformCode   = obj.value(Keys::TransformCode).toString();
+  d.virtual_        = ss_jsr(obj, Keys::Virtual, false).toBool();
 
   if (d.value.isEmpty())
     d.value = QStringLiteral("--.--");

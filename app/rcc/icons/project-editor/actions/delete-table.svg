@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-miterlimit:10;">
+    <g id="surface918">
+        <rect x="3.75" y="3.75" width="52.5" height="52.5" style="fill:rgb(254,254,254);fill-rule:nonzero;"/>
+        <path d="M55.5,4.5L55.5,55.5L4.5,55.5L4.5,4.5L55.5,4.5M57,3L3,3L3,57L57,57L57,3Z" style="fill:rgb(120,139,156);fill-rule:nonzero;"/>
+        <rect x="13.5" y="4.5" width="1.5" height="51" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <rect x="24" y="4.5" width="1.5" height="51" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <rect x="34.5" y="4.5" width="1.5" height="51" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <rect x="45" y="4.5" width="1.5" height="51" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <rect x="4.5" y="13.5" width="51" height="1.5" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <rect x="4.5" y="24" width="51" height="1.5" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <rect x="4.5" y="34.5" width="51" height="1.5" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <rect x="4.5" y="45" width="51" height="1.5" style="fill:rgb(197,212,222);fill-rule:nonzero;"/>
+        <path d="M46.5,59.25C39.469,59.25 33.75,53.531 33.75,46.5C33.75,39.469 39.469,33.75 46.5,33.75C53.531,33.75 59.25,39.469 59.25,46.5C59.25,53.531 53.531,59.25 46.5,59.25Z" style="fill:rgb(246,143,143);fill-rule:nonzero;"/>
+        <path d="M46.5,34.5C53.117,34.5 58.5,39.883 58.5,46.5C58.5,53.117 53.117,58.5 46.5,58.5C39.883,58.5 34.5,53.117 34.5,46.5C34.5,39.883 39.883,34.5 46.5,34.5M46.5,33C39.043,33 33,39.043 33,46.5C33,53.957 39.043,60 46.5,60C53.957,60 60,53.957 60,46.5C60,39.043 53.957,33 46.5,33Z" style="fill:rgb(199,67,67);fill-rule:nonzero;"/>
+        <g transform="matrix(1.5,0,0,1.5,0,0)">
+            <path d="M27.5,34.5L34.5,27.5M27.5,27.5L34.5,34.5" style="fill:none;fill-rule:nonzero;stroke:rgb(254,254,254);stroke-width:2px;"/>
+        </g>
+    </g>
+</svg>

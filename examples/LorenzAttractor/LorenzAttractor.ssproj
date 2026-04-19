@@ -173,11 +173,17 @@
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "address": "127.0.0.1",
-                "socketTypeIndex": 1,
-                "udpLocalPort": 9000,
-                "udpMulticast": false,
-                "udpRemotePort": 9000
+                "autoReconnect": false,
+                "baudRate": 115200,
+                "dataBitsIndex": 3,
+                "deviceId": {
+                    "portName": "cu.Bluetooth-Incoming-Port"
+                },
+                "dtr": true,
+                "flowControlIndex": 0,
+                "parityIndex": 0,
+                "portIndex": 2,
+                "stopBitsIndex": 0
             },
             "decoder": 0,
             "decoderMethod": 0,
@@ -191,55 +197,5 @@
             "title": "Device A"
         }
     ],
-    "title": "Lorenz Attractor",
-    "widgetSettings": {
-        "6:1:-1": {
-            "autoCenter": false,
-            "interpolationEnabled": true
-        },
-        "layout:-1": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    1,
-                    0
-                ]
-            }
-        },
-        "layout:-2": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    0,
-                    2,
-                    3,
-                    4,
-                    1
-                ]
-            }
-        },
-        "layout:0": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    3,
-                    4,
-                    0,
-                    2
-                ]
-            }
-        },
-        "layout:1": {
-            "data": {
-                "autoLayout": true,
-                "windowOrder": [
-                    1
-                ]
-            }
-        },
-        "plugin:custom-gauge": {
-            "gauges": [
-            ]
-        }
-    }
+    "title": "Lorenz Attractor"
 }

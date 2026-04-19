@@ -34,6 +34,7 @@
 #ifdef BUILD_COMMERCIAL
 #  include "Licensing/CommercialToken.h"
 #  include "MQTT/Client.h"
+#  include "Sessions/Player.h"
 #endif
 
 #include <QTimer>
@@ -106,6 +107,12 @@ UI::Dashboard::Dashboard()
       if (subscribed || wasSubscribed)
         resetData(true);
     },
+    Qt::QueuedConnection);
+  connect(
+    &Sessions::Player::instance(),
+    &Sessions::Player::openChanged,
+    this,
+    [=, this] { resetData(true); },
     Qt::QueuedConnection);
 #endif
 
@@ -189,8 +196,10 @@ bool UI::Dashboard::streamAvailable() const
 
 #ifdef BUILD_COMMERCIAL
   static auto& mqtt        = MQTT::Client::instance();
+  static auto& sessPlayer  = Sessions::Player::instance();
   const bool mqttConnected = mqtt.isConnected() && mqtt.isSubscriber();
-  return devOpen || csvOpen || mqttConnected || mf4Open;
+  const bool sessOpen      = sessPlayer.isOpen();
+  return devOpen || csvOpen || mqttConnected || mf4Open || sessOpen;
 #else
   return devOpen || csvOpen || mf4Open;
 #endif
@@ -1220,6 +1229,8 @@ void UI::Dashboard::handleMissingDataset(const DataModel::Frame& frame)
 #ifdef BUILD_COMMERCIAL
     else if (MQTT::Client::instance().isConnected())
       MQTT::Client::instance().closeConnection();
+    else if (Sessions::Player::instance().isOpen())
+      Sessions::Player::instance().closeFile();
 #endif
     return;
   }
@@ -1586,7 +1597,7 @@ void UI::Dashboard::updateDataSeries(int sourceId)
     if (sourceId >= 0 && group.sourceId != sourceId)
       continue;
 
-    auto& multiSeries = m_multipltValues[i];
+    auto& multiSeries   = m_multipltValues[i];
     const size_t yCount = multiSeries.y.size();
     for (size_t j = 0; j < group.datasets.size() && j < yCount; ++j)
       multiSeries.y[j].push(group.datasets[j].numericValue);
@@ -1702,11 +1713,15 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
         point.setZ(dataset.numericValue);
     }
 
-    // Append point and trim to configured maximum
-    plotData.push_back(point);
+    // Pre-reserve + single-element erase — keeps the 10kHz+ hotpath alloc-free.
     const size_t maxPoints = static_cast<size_t>(points());
-    if (plotData.size() > maxPoints)
-      plotData.erase(plotData.begin(), plotData.end() - maxPoints);
+    if (plotData.capacity() < maxPoints) [[unlikely]]
+      plotData.reserve(maxPoints);
+
+    if (plotData.size() >= maxPoints) [[likely]]
+      plotData.erase(plotData.begin());
+
+    plotData.push_back(point);
   }
 #else
   (void)sourceId;

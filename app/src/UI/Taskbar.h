@@ -221,7 +221,8 @@ private:
   void connectToRegistry();
   void mapWidgetToWindow(UI::WidgetID wid, int windowId);
   [[nodiscard]] QStandardItem* findItemByWindowId(int windowId,
-                                                  QStandardItem* parentItem = nullptr) const;
+                                                  QStandardItem* parentItem = nullptr,
+                                                  int depth                 = 0) const;
   [[nodiscard]] QStandardItem* findItemByWidgetId(UI::WidgetID widgetId,
                                                   QStandardItem* parentItem = nullptr) const;
   [[nodiscard]] QStandardItem* findGroupItemByGroupId(int groupId) const;

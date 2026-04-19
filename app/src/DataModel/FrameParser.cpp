@@ -21,7 +21,9 @@
 
 #include "DataModel/FrameParser.h"
 
+#include <QCoreApplication>
 #include <QFile>
+#include <QThread>
 
 #include "DataModel/IScriptEngine.h"
 #include "DataModel/JsScriptEngine.h"
@@ -56,6 +58,15 @@ DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
           &Misc::Translator::languageChanged,
           this,
           &DataModel::FrameParser::loadTemplateNames);
+
+  // Tear down engines before static destruction — QJSEngine depends on the
+  // live QCoreApplication.
+  if (auto* app = QCoreApplication::instance()) {
+    connect(app, &QCoreApplication::aboutToQuit, this, [this]() {
+      Q_ASSERT(QThread::currentThread() == this->thread());
+      m_engines.clear();
+    });
+  }
 
   loadTemplateNames();
 }

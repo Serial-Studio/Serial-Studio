@@ -27,6 +27,7 @@
 #include <QTextStream>
 #include <QVector>
 
+#include "DataModel/ExportSchema.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameConsumer.h"
 
@@ -52,7 +53,7 @@ protected:
   void processItems(const std::vector<DataModel::TimestampedFramePtr>& items) override;
 
 private:
-  QVector<QPair<int, QString>> createCsvFile(const DataModel::Frame& frame);
+  void createCsvFile(const DataModel::Frame& frame);
 
 public:
   DataModel::Frame m_templateFrame;
@@ -60,8 +61,7 @@ public:
 private:
   QFile m_csvFile;
   QTextStream m_textStream;
-  QSet<int> m_knownUniqueIds;
-  QVector<QPair<int, QString>> m_indexHeaderPairs;
+  DataModel::ExportSchema m_schema;
   DataModel::TimestampedFrame::SteadyTimePoint m_referenceTimestamp;
 };
 
