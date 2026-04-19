@@ -14,8 +14,9 @@ flowchart TD
     B --> C["Input Buffer"]
     C --> D["Frame Reader"]
     D --> E["Frame Builder"]
-    E --> F["Dashboard"]
-    E -->|export| G["CSV · MDF4 · API"]
+    E --> T["Transforms &<br/>Data Tables"]
+    T --> F["Dashboard"]
+    T -->|export| G["CSV · MDF4 · API · Session DB"]
 ```
 
 ## Stage 1: Device and Driver
@@ -52,20 +53,15 @@ The frame builder takes each complete frame and turns it into a structured recor
 
 No project file is needed. This mode is designed for rapid prototyping with CSV-formatted serial output.
 
-### Device Sends JSON Mode
-
-1. Parse the JSON object directly (delimiters are fixed to `/*` and `*/`).
-2. Build the frame from the groups and datasets defined in the JSON payload.
-3. No frame parser script is involved.
-
 ### Project File Mode
 
 1. Apply the configured decoder (Plain Text, Hexadecimal, Base64, or Binary Direct) to convert raw bytes into a parse-ready format.
 2. Call the `parse(frame)` function in your chosen scripting engine (Lua 5.4 or JavaScript).
 3. The function returns a list of values (or a 2D list for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
-5. For each dataset with a `transform(value)` function, apply the transform to convert raw values into engineering units (calibration, filtering, unit conversion). See [Dataset Value Transforms](Dataset-Transforms.md).
-6. Build the final frame with the populated dataset values.
+5. Reset every computed register in the project's [Data Tables](Data-Tables.md) to its default value, so transform-to-transform communication is always scoped to a single frame.
+6. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. Transforms may read project constants, publish computed registers, and reference other datasets' raw or already-transformed values. See [Dataset Value Transforms](Dataset-Transforms.md).
+7. Build the final frame with the populated dataset values. Virtual datasets — datasets with no Frame Index — are filled entirely by their transform at this point.
 
 ### Multi-Source Projects
 
@@ -79,9 +75,12 @@ Widget rendering is capped to a configurable refresh rate. The default is **60 H
 
 ## Stage 6: Export (Optional Parallel Path)
 
-When CSV export, MDF4 export, or the API server is active, every frame is additionally handed to the export workers. Each export target (CSV file, MDF4 file, API clients) writes data in the background so disk I/O and network traffic never block the dashboard or slow down the data pipeline.
+When CSV export, MDF4 export, the session database, or the API server is active, every frame is additionally handed to the export workers. Each export target writes data in the background so disk I/O and network traffic never block the dashboard or slow down the data pipeline.
 
-The API server on port 7777 serializes frames to JSON and broadcasts to connected clients using MCP (JSON-RPC 2.0) or the legacy protocol. See the [API Reference](API-Reference.md) for details.
+- **CSV** writes one file per session under `Documents/Serial Studio/CSV/`. See [CSV Import & Export](CSV-Import-Export.md).
+- **MDF4 (Pro)** writes a binary measurement file, suitable for automotive and high-rate workflows.
+- **Session Database (Pro)** appends every frame, raw byte, and data-table snapshot to a per-project SQLite file that can be browsed, tagged, and replayed later. See [Session Database](Session-Database.md).
+- **API** on port 7777 serializes frames to JSON and broadcasts to connected clients using MCP (JSON-RPC 2.0) or the legacy protocol. See the [API Reference](API-Reference.md).
 
 ## Troubleshooting Data Flow
 
@@ -108,10 +107,12 @@ The API server on port 7777 serializes frames to JSON and broadcasts to connecte
 ## See Also
 
 - [Getting Started](Getting-Started.md) — First-time setup and Quick Plot tutorial
-- [Operation Modes](Operation-Modes.md) — Quick Plot, Project File, and Device Sends JSON
+- [Operation Modes](Operation-Modes.md) — Quick Plot and Project File modes
 - [Project Editor](Project-Editor.md) — Configure frame parsing and dashboard layout
 - [Frame Parser Scripting](JavaScript-API.md) — Complete Lua and JavaScript parser reference
 - [Dataset Value Transforms](Dataset-Transforms.md) — Per-dataset calibration, filtering, and unit conversion
+- [Data Tables](Data-Tables.md) — Shared constants and computed registers used by transforms
+- [Session Database](Session-Database.md) — Record, tag, and replay sessions through the same pipeline
 - [Widget Reference](Widget-Reference.md) — All 15+ widget types and their data requirements
 - [Communication Protocols](Communication-Protocols.md) — Protocol comparison and setup
 - [Troubleshooting](Troubleshooting.md) — Solutions to common problems

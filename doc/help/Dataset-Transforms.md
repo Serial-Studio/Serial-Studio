@@ -23,6 +23,8 @@ Transforms are useful when:
 
 Transforms are optional. Datasets without a transform function display the raw parsed value unchanged.
 
+A transform can also read and write **shared data tables** — constants defined at project time and computed registers shared across all transforms in a single frame. This is how you pass a calibration value into several channels, or have one transform compute a value that another transform consumes. See [Data Tables](Data-Tables.md) for the full reference.
+
 ---
 
 ## The `transform()` Function
@@ -126,6 +128,20 @@ Always declare stateful variables with `local`/`var` at the top of the file. Thi
 
 In JavaScript, helpers defined at the top of the file (e.g. `function clamp(x, lo, hi) { ... }`) are also closed over by the IIFE and private per dataset. Safe to use.
 
+### Virtual Datasets
+
+A dataset can be marked **virtual** in the Project Editor. A virtual dataset has no Frame Index — nothing in the incoming frame feeds it. Its value is computed entirely by the `transform()` function, typically by reading other datasets or table registers. The `value` argument passed in is always `0`.
+
+```lua
+function transform(value)
+  local a = datasetGetFinal(10)   -- reads final value of dataset with unique ID 10
+  local b = datasetGetFinal(11)
+  return (a + b) / 2              -- average of two channels
+end
+```
+
+Use virtual datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should appear on the dashboard and be exported alongside the raw channels, but that aren't present in the wire format.
+
 In Lua, use `local function` for helpers so they share the isolation:
 
 ```lua
@@ -151,6 +167,67 @@ Persistent state is cleared when:
 - The project is **reloaded** or **saved** with changes
 
 This means filters and accumulators start from scratch on each new connection session, which is typically the desired behavior.
+
+---
+
+## Data Table API
+
+Every transform has access to four built-in functions that read and write the project's **data tables**. Tables are described in full in [Data Tables](Data-Tables.md); this section documents the API surface from the transform's point of view.
+
+| Function | Returns | Purpose |
+|----------|---------|---------|
+| `tableGet(table, reg)` | number, string, or nil/undefined | Read a user-defined register |
+| `tableSet(table, reg, value)` | — | Write a **computed** register (constants are read-only) |
+| `datasetGetRaw(uniqueId)` | number, string, or nil/undefined | Raw (pre-transform) value of any dataset in the current frame |
+| `datasetGetFinal(uniqueId)` | number, string, or nil/undefined | Final (post-transform) value of any dataset already processed in the current frame |
+
+The API is identical in Lua and JavaScript. `table` and `reg` are strings; `uniqueId` is the integer unique ID shown next to each dataset in the Project Editor.
+
+**Lua example — scale a voltage reading by a project-wide calibration factor:**
+
+```lua
+function transform(value)
+  local k = tableGet("calibration", "voltage_scale")  -- constant
+  return value * (k or 1.0)
+end
+```
+
+**JavaScript example — same idea:**
+
+```javascript
+function transform(value) {
+  var k = tableGet("calibration", "voltage_scale");
+  return value * (k !== undefined ? k : 1.0);
+}
+```
+
+**Writing to a computed register — one transform publishes, another consumes:**
+
+```lua
+-- Dataset 10 (processed first): publish the total current
+function transform(value)
+  tableSet("runtime", "total_current", value)
+  return value
+end
+```
+
+```lua
+-- Dataset 20 (processed later): compute power from current × voltage
+function transform(value)
+  local i = tableGet("runtime", "total_current") or 0
+  return value * i
+end
+```
+
+### Processing Order
+
+Transforms are applied **in order**: groups in frame order, and datasets in group order. Inside a single frame:
+
+- `datasetGetRaw(uid)` can read **any** dataset, since all raw values are populated before transforms run.
+- `datasetGetFinal(uid)` only works for datasets that have **already been transformed** — i.e. earlier datasets in the same group, or any dataset in an earlier group.
+- Computed registers are reset to their default at the start of each frame, so writes in one frame do not leak into the next.
+
+If you need dataset B to consume dataset A's final value, make sure A appears before B in the Project Editor tree.
 
 ---
 
@@ -355,6 +432,7 @@ end
 ## See Also
 
 - [Frame Parser Scripting](JavaScript-API.md) — the `parse(frame)` function that feeds values to transforms
+- [Data Tables](Data-Tables.md) — shared constants and computed registers accessible from every transform
 - [Data Flow](Data-Flow.md) — how data moves from device through parsing, transforms, and into the dashboard
-- [Project Editor](Project-Editor.md) — where you configure datasets and their transforms
+- [Project Editor](Project-Editor.md) — where you configure datasets, transforms, and tables
 - [Widget Reference](Widget-Reference.md) — dashboard widgets that display transformed values

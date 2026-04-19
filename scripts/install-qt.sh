@@ -68,7 +68,7 @@ case "$OS_NAME" in
     INSTALLER_PATH="$CACHE_DIR/qt_installer.run"
     ;;
   Darwin*)
-    QT_INSTALLER_URL="https://download.qt.io/official_releases/online_installers/qt-online-installer-mac-${QT_ARCH}-online.dmg"
+    QT_INSTALLER_URL="https://download.qt.io/official_releases/online_installers/qt-online-installer-macOS-universal.dmg"
     DMG_PATH="$CACHE_DIR/qt_installer.dmg"
     MOUNT_POINT="/Volumes/QtInstaller"
     ;;
