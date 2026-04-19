@@ -43,6 +43,7 @@ env:
   UNIXNAME: "serial-studio-pro"
   INSTALL_QT_LINUX_INTEL: false
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
+  LINUXDEPLOY_EXCLUDED_LIBRARIES: "libmysqlclient.so*;libqsqlmimer.so;libqsqlmysql.so;libqsqlodbc.so;libqsqlpsql.so"
 
 #-------------------------------------------------------------------------------
 # Begin workflow jobs definition
