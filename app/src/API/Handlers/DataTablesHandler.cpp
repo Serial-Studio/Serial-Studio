@@ -177,9 +177,8 @@ void API::Handlers::DataTablesHandler::registerCommands()
        QStringLiteral("true=computed (writable by transforms), false=constant")}
     };
     props[QStringLiteral("defaultValue")] = QJsonObject{
-      {       QStringLiteral("type"),
-       QJsonArray{QStringLiteral("number"), QStringLiteral("string")}                },
-      {QStringLiteral("description"),  QStringLiteral("Default value (number or string)")}
+      {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
+      {QStringLiteral("description"),             QStringLiteral("Default value (number or string)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -235,9 +234,8 @@ void API::Handlers::DataTablesHandler::registerCommands()
       {QStringLiteral("description"), QStringLiteral("Switch to computed (true) or constant")}
     };
     props[QStringLiteral("defaultValue")] = QJsonObject{
-      {       QStringLiteral("type"),
-       QJsonArray{QStringLiteral("number"), QStringLiteral("string")}                },
-      {QStringLiteral("description"),  QStringLiteral("Default value (number or string)")}
+      {       QStringLiteral("type"), QJsonArray{QStringLiteral("number"), QStringLiteral("string")}},
+      {QStringLiteral("description"),             QStringLiteral("Default value (number or string)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -373,19 +371,19 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString
   // Detect collision up front — renameTable silently no-ops, so a naive
   // post-check against newName would mistake the existing table for success
   const auto& preTables = pm.tables();
-  const bool hasOld     = std::any_of(preTables.begin(), preTables.end(),
-                                  [&oldName](const auto& t) { return t.name == oldName; });
-  const bool hasNew     = std::any_of(preTables.begin(), preTables.end(),
-                                  [&newName](const auto& t) { return t.name == newName; });
-  const bool collides   = hasNew && (oldName != newName);
+  const bool hasOld     = std::any_of(
+    preTables.begin(), preTables.end(), [&oldName](const auto& t) { return t.name == oldName; });
+  const bool hasNew = std::any_of(
+    preTables.begin(), preTables.end(), [&newName](const auto& t) { return t.name == newName; });
+  const bool collides = hasNew && (oldName != newName);
 
   // Apply only when safe
   bool applied = false;
   if (hasOld && !collides) {
     pm.renameTable(oldName, newName);
     const auto& tables = pm.tables();
-    applied            = std::any_of(tables.begin(), tables.end(),
-                          [&newName](const auto& t) { return t.name == newName; });
+    applied            = std::any_of(
+      tables.begin(), tables.end(), [&newName](const auto& t) { return t.name == newName; });
   }
 
   QJsonObject result;

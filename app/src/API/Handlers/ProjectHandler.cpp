@@ -1500,10 +1500,10 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
     endArr.append(QString::fromUtf8(f));
 
   // Primary (source[0]) delimiters as singular scalars — single-source clients
-  const QString primaryStart
-    = cfg.startSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.startSequences.first());
-  const QString primaryEnd
-    = cfg.finishSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.finishSequences.first());
+  const QString primaryStart =
+    cfg.startSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.startSequences.first());
+  const QString primaryEnd =
+    cfg.finishSequences.isEmpty() ? QString() : QString::fromUtf8(cfg.finishSequences.first());
 
   // Assemble the response
   QJsonObject result;
