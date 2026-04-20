@@ -357,6 +357,15 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
     }
   }
 
+  // ConsoleOnly has no parsed structure — skip groups/actions/sources to
+  // avoid leaking stale project data into the session row
+  if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly) {
+    QJsonObject json;
+    json.insert(QStringLiteral("title"), frame.title);
+    json.insert(QStringLiteral("operationMode"), QStringLiteral("ConsoleOnly"));
+    return json;
+  }
+
   // QuickPlot / Console-only fallback — synthesise a minimal project from
   // the frame so Player::loadFromJsonDocument can restore widgets.
   QJsonObject json;

@@ -933,6 +933,12 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::AlarmLow, qMin(d.alarmLow, d.alarmHigh));
   obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
 
+  // Runtime IDs + current numeric — API clients key updates by (groupId, datasetId);
+  // read() re-derives them from position on project load so this is safe to round-trip.
+  obj.insert(Keys::GroupId, d.groupId);
+  obj.insert(QStringLiteral("datasetId"), d.datasetId);
+  obj.insert(QStringLiteral("numericValue"), d.numericValue);
+
   if (!d.transformCode.isEmpty())
     obj.insert(Keys::TransformCode, d.transformCode);
 

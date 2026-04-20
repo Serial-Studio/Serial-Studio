@@ -9,9 +9,11 @@
 
 **Serial Studio** is an open-source dashboard tool for embedded developers who are tired of staring at scrolling terminals. Describe your data format once in a **project file**, and it builds a live dashboard for you.
 
-It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network. **Raw USB** gives direct bulk/isochronous access to USB devices via libusb. **HID devices** (gamepads, custom USB HIDs, sensors) connect through hidapi. **Process I/O** lets any program that writes to stdout feed data into the dashboard. **Multi-device projects** let you connect several devices at once—each with its own protocol—and monitor them all on a single dashboard.
+It works with **Arduino**, **ESP32**, **STM32**, **Raspberry Pi**, **Teensy**, and anything that talks over **UART**, **Bluetooth LE**, **TCP/UDP**, or **CAN Bus**. **Modbus TCP/RTU** covers industrial and PLC setups, with a built-in register map importer that turns CSV/XML/JSON maps into a ready-to-use project. **Audio** drivers can be used to analyze analog signals. **MQTT** can work either as publisher or subscriber, making it useful for IoT setups where data needs to travel beyond the local network. **Raw USB** gives direct bulk/isochronous access to USB devices via libusb. **HID devices** (gamepads, custom USB HIDs, sensors) connect through hidapi. **Process I/O** lets any program that writes to stdout feed data into the dashboard. **Multi-device projects** let you connect several devices at once—each with its own protocol—and monitor them all on a single dashboard.
 
-Once the data is in, Serial Studio can visualize it using several kinds of widgets, including **plots**, **gauges** and **tables**. Export to **CSV** or **MDF4** for further analysis, or load it back later to replay a session in the dashboard. **Actions** let you define buttons that send commands back to the device, with optional timers for polling or periodic control.
+Parse your frames in **JavaScript** or **Lua 5.4** — whichever you prefer — and apply **per-dataset value transforms** (EMA filters, scaling, calibration, unit conversion…) without touching your firmware. Transmit files over the wire using **XMODEM**, **YMODEM**, or **ZMODEM**, or stream your own output-widget scripts for GCode, SCPI, Modbus, NMEA, CAN, and more.
+
+Once the data is in, Serial Studio can visualize it using several kinds of widgets, including **plots**, **gauges**, **3D views**, and **tables**. Send commands back with **output widgets** (buttons, toggles, sliders, knobs, text fields, and freeform output panels). **Data Tables** act as a central data bus where transforms can share state, derive virtual datasets, and read constants libraries. **Workspaces** let you split a large project into focused dashboard tabs that you can switch between instantly, with a taskbar search for big setups. Export to **CSV** or **MDF4** for further analysis, or record every frame to a **SQLite session database** and replay it later in the **Database Explorer**. **Actions** let you define buttons that send commands back to the device, with optional timers for polling or periodic control.
 
 Serial Studio runs on **Windows**, **macOS**, and **Linux** (including **ARM64** for Raspberry Pi), making it a practical choice for robotics teams, IoT developers, makers, educators, and researchers who want to spend time on their hardware rather than on the tooling around it.
 
@@ -74,19 +76,25 @@ Make sure your system meets these requirements before running the AppImage.
 #### What It Can Do:
 - **No Coding Needed:** Build dashboards using a simple visual interface
 - **10+ Protocols:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, Raw USB, HID devices, and Process I/O
-- **15+ Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids, live image/camera feed (Pro)
+- **15+ Visualization Widgets:** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids, 3D views, live image/camera feed (Pro)
+- **Output Widgets:** Send commands back to your device with buttons, toggles, sliders, knobs, text fields, and freeform output panels — powered by JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro)
 - **Save to CSV:** Automatically save all data for later analysis in Excel, Python, MATLAB, or R
 - **MDF4 Playback & Export:** Play and export MDF4/MF4 files for CAN Bus, LIN, FlexRay, and analog channels (Pro)
+- **Session Database:** Record every frame (plus raw bytes) into a SQLite session, browse, tag, export, and replay it inside the Database Explorer (Pro)
+- **Data Tables:** Central data bus shared across transforms — system datasets, user-defined constant / computed registers, and virtual datasets derived purely from transforms
+- **Workspaces:** Split a large project into focused dashboard tabs, with a taskbar search for quick navigation
+- **File Transmission Protocols:** Send files over the wire using **XMODEM**, **YMODEM**, or **ZMODEM** with CRC and crash-recovery (Pro)
 - **Works Everywhere:** Windows 10/11, macOS 11+ (Intel + Apple Silicon), Linux x64, and Raspberry Pi ARM64
 - **Works with Arduino/ESP32:** Compatible with any device that sends data via serial, BLE, or network
 - **Fast Updates:** 60 FPS dashboard with low delay (<50ms)
-- **Custom Parsing:** Use JavaScript to decode binary data, checksums, and complex formats
-- **Modbus TCP/RTU:** Connect to industrial PLCs and equipment (Pro)
+- **Custom Parsing:** Write frame parsers in **JavaScript** or **Lua 5.4** — whichever you prefer — with 20+ ready-made templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus…)
+- **Per-Dataset Value Transforms:** Filter, scale, calibrate, or derive datasets with short JS/Lua snippets that run on every frame
+- **Modbus TCP/RTU:** Connect to industrial PLCs and equipment, with a register map importer for CSV/XML/JSON (Pro)
 - **CAN Bus Support:** Import DBC files for automotive and industrial applications (Pro)
 - **MQTT for IoT:** Connect to MQTT brokers for distributed sensors (Pro)
 - **Image View:** Display live JPEG/PNG camera streams alongside telemetry on the same connection (Pro)
 - **Multi-Device Support:** Connect multiple devices simultaneously in a single project, each with its own protocol and frame settings (Pro)
-- **API Server (TCP port 7777):** Control Serial Studio programmatically with 182+ API commands (see [API Client example](./examples/API%20Test))
+- **API Server (TCP port 7777):** Control Serial Studio programmatically with 290+ API commands (see [API Client example](./examples/API%20Test))
 - **AI Integration (MCP):** Connect AI models like Claude via Model Context Protocol for automated analysis and control (see [MCP Client](./examples/MCP%20Client))
 - **Dual Licensing:** Open-source GPL-3.0 core, proprietary Pro features (see [LICENSE.md](LICENSE.md))
 
@@ -146,12 +154,16 @@ Upload to Arduino → Connect Serial Studio → Enable Quick Plot → Done!
 ### Key Topics
 - **Installation:** Platform-specific setup for Windows, macOS, Linux, Raspberry Pi
 - **Quick Start:** Connect Arduino/ESP32 and visualize data in 5 minutes
-- **Dashboard Creation:** Build custom layouts with Project Editor (no coding)
+- **Dashboard Creation:** Build custom layouts with Project Editor (no coding), split into workspaces
 - **Protocol Support:** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, Raw USB, HID devices, Process I/O
-- **Frame Parsing:** Handle binary protocols, checksums, custom data formats
+- **Frame Parsing:** Handle binary protocols, checksums, custom data formats in JavaScript **or Lua 5.4**
+- **Per-Dataset Transforms:** EMA filters, scaling, calibration, virtual datasets via Data Tables
+- **Output Widgets:** Send commands back with buttons, sliders, knobs, toggles, and output panels (Pro)
+- **File Transfer:** XMODEM / YMODEM / ZMODEM over the active connection (Pro)
 - **CSV Export & Playback:** Log sensor data and replay CSV files for analysis
 - **MDF4 Playback & Export:** Play and export MDF4/MF4 files (CAN Bus, LIN, FlexRay, analog)
-- **TCP API:** Control Serial Studio programmatically with 116 API commands (see [API Client](./examples/API%20Test))
+- **Session Database & Explorer:** Record, tag, export, and replay full sessions from SQLite (Pro)
+- **TCP API:** Control Serial Studio programmatically with 290+ API commands (see [API Client](./examples/API%20Test))
 
 ## Building Serial Studio
 

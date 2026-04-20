@@ -77,7 +77,8 @@ UI::Dashboard::Dashboard()
   }, Qt::QueuedConnection);
   connect(&AppState::instance(), &AppState::projectFileChanged, this, [=, this] { resetData(); }, Qt::QueuedConnection);
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [=, this] {
-    if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
+    const auto mode = AppState::instance().operationMode();
+    if (mode == SerialStudio::ProjectFile) {
       const int project_pts = DataModel::ProjectModel::instance().pointCount();
       if (project_pts > 0 && m_points != project_pts) {
         m_points = project_pts;
@@ -90,6 +91,10 @@ UI::Dashboard::Dashboard()
         Q_EMIT pointsChanged();
       }
     }
+
+    // Leaving ProjectFile mode invalidates project-derived caches
+    if (mode != SerialStudio::ProjectFile)
+      resetData(true);
   }, Qt::QueuedConnection);
   // clang-format on
 
@@ -792,6 +797,9 @@ void UI::Dashboard::resetData(const bool notify)
   m_widgetGroups.clear();
   m_widgetDatasets.clear();
   m_datasetReferences.clear();
+
+  // Drop the flat dataset cache so callers don't see stale entries
+  m_datasets.clear();
 
   // Clear activity status flags for plot widgets
   m_activePlots.clear();

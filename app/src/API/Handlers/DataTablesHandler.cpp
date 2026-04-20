@@ -176,8 +176,10 @@ void API::Handlers::DataTablesHandler::registerCommands()
       {QStringLiteral("description"),
        QStringLiteral("true=computed (writable by transforms), false=constant")}
     };
-    props[QStringLiteral("value")] = QJsonObject{
-      {QStringLiteral("description"), QStringLiteral("Default value (number or string)")}
+    props[QStringLiteral("defaultValue")] = QJsonObject{
+      {       QStringLiteral("type"),
+       QJsonArray{QStringLiteral("number"), QStringLiteral("string")}                },
+      {QStringLiteral("description"),  QStringLiteral("Default value (number or string)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -186,7 +188,7 @@ void API::Handlers::DataTablesHandler::registerCommands()
       QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
     registry.registerCommand(
       QStringLiteral("project.tables.register.add"),
-      QStringLiteral("Append a register (params: table, name, computed=true, value=0)"),
+      QStringLiteral("Append a register (params: table, name, computed=true, defaultValue=0)"),
       schema,
       &registerAdd);
   }
@@ -232,8 +234,10 @@ void API::Handlers::DataTablesHandler::registerCommands()
       {       QStringLiteral("type"),                               QStringLiteral("boolean")},
       {QStringLiteral("description"), QStringLiteral("Switch to computed (true) or constant")}
     };
-    props[QStringLiteral("value")] = QJsonObject{
-      {QStringLiteral("description"), QStringLiteral("Default value (number or string)")}
+    props[QStringLiteral("defaultValue")] = QJsonObject{
+      {       QStringLiteral("type"),
+       QJsonArray{QStringLiteral("number"), QStringLiteral("string")}                },
+      {QStringLiteral("description"),  QStringLiteral("Default value (number or string)")}
     };
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -242,7 +246,7 @@ void API::Handlers::DataTablesHandler::registerCommands()
       QJsonArray{QStringLiteral("table"), QStringLiteral("name")};
     registry.registerCommand(
       QStringLiteral("project.tables.register.update"),
-      QStringLiteral("Update a register (params: table, name, newName?, computed?, value?)"),
+      QStringLiteral("Update a register (params: table, name, newName?, computed?, defaultValue?)"),
       schema,
       &registerUpdate);
   }
@@ -365,13 +369,24 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: newName"));
 
   auto& pm = DataModel::ProjectModel::instance();
-  pm.renameTable(oldName, newName);
 
-  // Verify the rename actually applied — renameTable silently no-ops on
-  // collision or when oldName doesn't exist.
-  const auto& tables = pm.tables();
-  const bool applied = std::any_of(
-    tables.begin(), tables.end(), [&newName](const auto& t) { return t.name == newName; });
+  // Detect collision up front — renameTable silently no-ops, so a naive
+  // post-check against newName would mistake the existing table for success
+  const auto& preTables = pm.tables();
+  const bool hasOld     = std::any_of(preTables.begin(), preTables.end(),
+                                  [&oldName](const auto& t) { return t.name == oldName; });
+  const bool hasNew     = std::any_of(preTables.begin(), preTables.end(),
+                                  [&newName](const auto& t) { return t.name == newName; });
+  const bool collides   = hasNew && (oldName != newName);
+
+  // Apply only when safe
+  bool applied = false;
+  if (hasOld && !collides) {
+    pm.renameTable(oldName, newName);
+    const auto& tables = pm.tables();
+    applied            = std::any_of(tables.begin(), tables.end(),
+                          [&newName](const auto& t) { return t.name == newName; });
+  }
 
   QJsonObject result;
   result[QStringLiteral("oldName")] = oldName;
@@ -400,10 +415,14 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerAdd(const QString
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: name"));
 
-  const bool computed         = params.value(QStringLiteral("computed")).toBool(true);
-  const QVariant defaultValue = params.contains(QStringLiteral("value"))
-                                ? jsonToVariant(params.value(QStringLiteral("value")))
-                                : QVariant(0.0);
+  const bool computed = params.value(QStringLiteral("computed")).toBool(true);
+
+  // defaultValue is canonical; "value" is accepted as a legacy alias
+  QVariant defaultValue(0.0);
+  if (params.contains(QStringLiteral("defaultValue")))
+    defaultValue = jsonToVariant(params.value(QStringLiteral("defaultValue")));
+  else if (params.contains(QStringLiteral("value")))
+    defaultValue = jsonToVariant(params.value(QStringLiteral("value")));
 
   DataModel::ProjectModel::instance().addRegister(table, name, computed, defaultValue);
 
@@ -482,9 +501,11 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerUpdate(const QStr
                         ? params.value(QStringLiteral("computed")).toBool()
                         : (rit->type == DataModel::RegisterType::Computed);
 
-  const QVariant defaultValue = params.contains(QStringLiteral("value"))
-                                ? jsonToVariant(params.value(QStringLiteral("value")))
-                                : rit->defaultValue;
+  QVariant defaultValue = rit->defaultValue;
+  if (params.contains(QStringLiteral("defaultValue")))
+    defaultValue = jsonToVariant(params.value(QStringLiteral("defaultValue")));
+  else if (params.contains(QStringLiteral("value")))
+    defaultValue = jsonToVariant(params.value(QStringLiteral("value")));
 
   DataModel::ProjectModel::instance().updateRegister(table, name, newName, computed, defaultValue);
 

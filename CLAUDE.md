@@ -29,7 +29,10 @@ Key flags: `ENABLE_HARDENING`, `ENABLE_PGO`, `ENABLE_GRPC`, `USE_SYSTEM_ZLIB`, `
 
 Serial Studio: cross-platform telemetry dashboard, Qt 6.9.2 + C++20.
 Data sources: UART, TCP/UDP, BLE, Audio, Modbus, CAN Bus, MQTT, USB (libusb), HID (hidapi), Process I/O.
-15+ widget types, 256 KHz+ target data rate.
+15+ visualization widgets, 6 output (control) widgets, 256 KHz+ target data rate.
+Frame parsers in JavaScript (QJSEngine) or Lua 5.4 (embedded `lua54`). Per-dataset value transforms
+in either language. Output widgets, Modbus, CAN Bus, MDF4, 3D, ImageView, file transfer protocols
+(XMODEM/YMODEM/ZMODEM), Modbus map importer, and Session Database are Pro features.
 
 ## Directory Structure
 
@@ -38,21 +41,33 @@ app/src/
 ├── IO/          ConnectionManager, DeviceManager, CircularBuffer, FrameReader, FrameConfig
 │   ├── Drivers/ UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, Process, USB
 │   └── FileTransmission/ Protocol base, XMODEM, YMODEM, ZMODEM, CRC utilities
-├── DataModel/   FrameBuilder, Frame, FrameConsumer, FrameParser, ProjectModel, ProjectEditor
-├── UI/          Dashboard + widget types
+├── DataModel/   FrameBuilder, Frame, FrameConsumer, IScriptEngine (JS + Lua),
+│                 ProjectModel, ProjectEditor, DataTable(Store), ExportSchema,
+│                 ModbusMapImporter, DBCImporter, DatasetTransformEditor,
+│                 TransmitTestDialog, OutputCodeEditor, ScriptTemplates
+├── UI/          Dashboard, Taskbar (workspaces), visualization + output widget types
+│   └── Widgets/Output/  Button, Toggle, Slider, TextField, Panel (+ PanelLayout), Base
 ├── API/         TCP server port 7777 (MCP + legacy JSON-RPC)
-│   └── Handlers/ 20 handler classes
+│   └── Handlers/ 25 handler classes (incl. DataTables, Sessions, Workspaces)
 ├── Console/     Terminal + export
 ├── CSV/ MDF4/   File playback & export
+├── Sessions/    (Pro) DatabaseManager + SQLite::Export + SQLite::Player — session DB
 ├── MQTT/        MQTT client
-├── Licensing/   LemonSqueezy, Trial, MachineID, SimpleCrypt
+├── Licensing/   LemonSqueezy, Trial, MachineID, SimpleCrypt, CommercialToken (FeatureTier)
 ├── Platform/    CSD, NativeWindow
 ├── Misc/        JsonValidator, ThemeManager, ModuleManager
 ├── AppState.h   Singleton: OperationMode, projectFilePath, FrameConfig
 ├── SerialStudio.h  Central enums (BusType, OperationMode, FrameDetection)
 └── Concepts.h   C++20 concepts (Numeric, ByteLike, Driver, Frameable…)
-app/qml/         Declarative UI
-lib/             KissFFT, QCodeEditor, mdflib, OpenSSL
+app/qml/
+├── DatabaseExplorer/  Session browsing UI (Pro)
+├── MainWindow/        Setup, Toolbar, Panes
+├── ProjectEditor/     Views: DataTables, SystemDatasets, UserTable, Workspaces,
+│                       OutputWidget, FlowDiagram, AddWidgetDialog, ConstantsLibraryDialog
+├── Widgets/           Ribbon{Toolbar,Section,Spacer}, ProjectTable{Header,Row},
+│                       Dashboard/Output/{Button,Toggle,Slider,TextField,OutputPanel}
+└── Dialogs/           SqlitePlayer, FileTransmission, etc.
+lib/                   KissFFT, QCodeEditor, mdflib, OpenSSL, lua (lua54), QuaZip, hidapi, QSimpleUpdater
 ```
 
 ## Architecture — Critical Invariants
@@ -163,6 +178,18 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 - Bus type change: `m_awaitingContextRebuild` flag → one-shot `contextsRebuilt` → `buildSourceModel`.
 - Source JSON keys: `title`, `sourceId`, `busType`, `frameStart`, `frameEnd`, `frameDetection`, `decoder`, `hexadecimalDelimiters`, `frameParserCode`, `connection`.
 
+### Frame Parser — Dual Language (JS + Lua)
+
+- `DataModel::IScriptEngine` is the parser abstraction. Two implementations:
+  - `JsScriptEngine` — Qt `QJSEngine` with `ConsoleExtension + GarbageCollectionExtension` only
+    (NOT `AllExtensions`). Runtime watchdog via `guardedCall()` (never call `parseFunction.call()`
+    directly — see NASA Rule 7).
+  - `LuaScriptEngine` — embedded Lua 5.4 (`lib/lua/lua54`). One `lua_State*` per source.
+- Per-source `frameParserLanguage` field in project JSON ("javascript" or "lua") selects the
+  engine at `compileFrameParser()` time. Lua example scripts live in `app/rcc/scripts/lua/`,
+  JS in `app/rcc/scripts/js/`, both listed in `templates.json`.
+- QML picker in `FrameParserView` / `SourceFrameParserView` switches between the two editors.
+
 ### Per-Dataset Value Transforms
 
 - Each dataset may carry a `transformCode` string (Lua or JS, language matches the dataset's source).
@@ -184,11 +211,41 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 - `applyTransform` accepts/returns `QVariant` (double or QString), not just double.
 - `Dataset` struct has `rawNumericValue`, `rawValue` (snapshots before transform), `virtual_` (no frame index, computed entirely from transforms).
 
+### Output Widgets (Pro)
+
+- `app/src/UI/Widgets/Output/`: `Button`, `Toggle`, `Slider`, `TextField`, `Panel` (+ `PanelLayout`),
+  sharing a common `Base`. QML counterparts in `app/qml/Widgets/Dashboard/Output/`.
+- Output widgets run user-authored JS "output scripts" (`app/rcc/scripts/output/*.js`) to convert
+  UI state into bytes sent back to the device. `DataModel::OutputCodeEditor` edits the script;
+  `DataModel::TransmitTestDialog` previews the serialized frame.
+- Protocol helper functions (CRC, NMEA, Modbus, SLCAN, GRBL, GCode, SCPI, binary packet…) are
+  injected into the engine so templates can stay short.
+- Gated by `FeatureTier >= Pro` in `CommercialToken` — tier enum is
+  `None=0, Hobbyist=1, Trial=2, Pro=3, Enterprise=4`.
+
+### Workspaces (Dashboard)
+
+- User-defined dashboard tabs that group selected widgets. Persisted in the project file under
+  `"workspaces"`. `UI::Taskbar` owns the active-workspace state.
+- **Workspace IDs ≥ 1000** (distinguishes them from group IDs). Group IDs stay below 1000;
+  `Taskbar::deleteWorkspace(id)` routes to `ProjectModel::deleteWorkspace()` for IDs ≥ 1000 and
+  `hideGroup()` for IDs ≥ 0 — do not cross-wire these branches.
+- Taskbar has a filter/search bar for large projects.
+- Workspace edits stage into memory + `setModified(true)` (no autosave to disk — matches
+  widget-layout persistence rule).
+
 ### Export Architecture
 
 - `DataModel::ExportSchema` (`ExportSchema.h`): shared column layout for all exporters. `buildExportSchema(frame)` produces sorted columns with `uniqueIdToColumnIndex` map.
 - CSV and MDF4 both export raw + transformed values per dataset.
-- `SQLite::Export` (Pro only, `SQLite/Export.h/.cpp`): `FrameConsumer`-based with sessions/columns/readings/raw_bytes/table_snapshots tables. Second lock-free queue for raw bytes from `ConnectionManager::onRawDataReceived`. WAL mode, batch transactions.
+- **Session Database (Pro)** lives in `app/src/Sessions/` (NOT `app/src/SQLite/`):
+  - `Sessions::DatabaseManager` — singleton that owns the open `.db` file, manages browsing,
+    tagging, CSV export, and project metadata. Backs `app/qml/DatabaseExplorer/`.
+  - `SQLite::Export` (`Sessions/Export.h/.cpp`): `FrameConsumer`-based with
+    sessions/columns/readings/raw_bytes/table_snapshots tables. Second lock-free queue for
+    raw bytes from `ConnectionManager::onRawDataReceived`. WAL mode, batch transactions.
+  - `SQLite::Player` (`Sessions/Player.h/.cpp`): replays a stored session back through the
+    FrameBuilder pipeline (see `app/qml/Dialogs/SqlitePlayer.qml`).
 
 ### File Transmission — Protocol Architecture
 
@@ -223,6 +280,10 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 | `int m_foo = 0;` in header | Initialize in constructor member init list, not in-class |
 | `Q_SIGNALS:` / `public Q_SLOTS:` | Use `signals:` / `public slots:` (lowercase, no `Q_` prefix) |
 | Per-dataset `transformCode` in header-filled editor, never dropping the placeholder | `DatasetTransformEditor::onApply` discards code if `definesTransformFunction` returns false |
+| Looking for session DB code under `app/src/SQLite/` | It lives in `app/src/Sessions/` — `namespace Sessions` for DatabaseManager, `namespace SQLite` for Export/Player |
+| Calling `parseFunction.call(args)` directly on a JS parser | Always route through `IScriptEngine::guardedCall()` — watchdog-protected |
+| Mixing workspace IDs with group IDs | Workspace IDs are always `>= 1000`; `Taskbar::deleteWorkspace()` branches on that threshold |
+| `Q_INVOKABLE void` on output-widget helper | `public slots:` — same rule as every other QObject |
 
 ## Code Style
 
@@ -512,8 +573,22 @@ of Ten for C++ / Qt). Violations in hotpath code are blockers.
 - Run static analysis (clang-tidy, cppcheck) with zero warnings policy.
 - Fix the root cause of any warning. Never suppress without documented justification.
 
+### Modbus Map Importer (Pro)
+
+- `DataModel::ModbusMapImporter` (`ModbusMapImporter.h/.cpp`): imports CSV / XML / JSON register
+  maps and auto-generates a Modbus project (groups, datasets, polling). Preview UI in
+  `app/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml`.
+- Paired with `IO::Drivers::Modbus` multi-group polling (see Modbus.cpp `generateRegisterGroupProject`).
+
+### File Transmission Protocols (Pro)
+
+- `IO::FileTransmission` controller + `IO::Protocols::{XMODEM,YMODEM,ZMODEM}` concrete protocols
+  (see section above). Plain text and raw binary modes still available without Pro.
+
 ## MCP / API Testing
 
 TCP port 7777, MCP (JSON-RPC 2.0) + legacy.
 Client: `cd "examples/MCP Client" && python3 client.py`.
-182 tools, 2 resources.
+~290 registered commands across 25 handlers. New handlers added in v3.3: `DataTablesHandler`,
+`SessionsHandler`, `WorkspacesHandler`. See `API/CommandHandler::initializeHandlers()` for the
+full list.
