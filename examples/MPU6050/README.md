@@ -1,75 +1,71 @@
-# MPU6050 + Serial Studio Example
+# MPU6050 + Serial Studio example
 
 ## Overview
 
-This project demonstrates how to use Serial Studio to visualize motion and orientation data from an MPU6050 accelerometer and gyroscope sensor connected to an Arduino. The Arduino program reads processed acceleration, gyroscope, and temperature data from the MPU6050 sensor and sends it to Serial Studio via serial communication for real-time display on widgets, such as a g-meter or an attitude indicator.
+This project shows how to use Serial Studio to visualize motion and orientation data from an MPU6050 accelerometer and gyroscope connected to an Arduino. The Arduino sketch reads processed acceleration, gyroscope, and temperature data from the MPU6050 and sends it to Serial Studio over serial for real-time display on widgets like a g-meter or attitude indicator.
 
-![MPU6050 Data in Serial Studio](doc/screenshot.png)
+![MPU6050 data in Serial Studio](doc/screenshot.png)
 
-**Compatibility**: This project is compatible with any MPU6050 module connected via I2C communication. Adjust connections as needed if using a different Arduino board, such as the Uno or Nano.
+**Compatibility.** Works with any MPU6050 module connected via I2C. Adjust the wiring if you use a different Arduino board like the Uno or Nano.
 
-## Hardware Setup
+## Hardware setup
 
-To get started, you will need an MPU6050 sensor module and an Arduino. Connect the **SDA** and **SCL** pins of the MPU6050 to the corresponding **A4** (SDA) and **A5** (SCL) pins on the Arduino. The code initializes the MPU6050 and configures it with specific accelerometer and gyroscope ranges to ensure accurate data output.
+You need an MPU6050 sensor module and an Arduino. Connect the SDA and SCL pins of the MPU6050 to A4 (SDA) and A5 (SCL) on the Arduino. The code initializes the MPU6050 and configures specific accelerometer and gyroscope ranges for accurate output.
 
-For boards like the Uno or Nano, make sure the default I2C pins are used for communication.
+On Uno and Nano boards, use the default I2C pins.
 
-## Step-by-Step Guide
+## Step by step
 
-### 1. Arduino Sketch (`MPU6050.ino`)
+### 1. Arduino sketch (`MPU6050.ino`)
 
-Begin by installing the **Adafruit MPU6050** and **Adafruit Sensor** libraries:
+Install the **Adafruit MPU6050** and **Adafruit Sensor** libraries:
 
-- Open the Arduino IDE, navigate to **Sketch > Include Library > Manage Libraries**, then search for "Adafruit MPU6050" and install it, along with the "Adafruit Sensor" library.
+- Open the Arduino IDE, go to **Sketch > Include Library > Manage Libraries**, then search for "Adafruit MPU6050" and install it, along with "Adafruit Sensor".
 
-Once the libraries are installed, open the `MPU6050.ino` sketch, connect the MPU6050 sensor, and upload the code to your Arduino. The MPU6050 data will be transmitted as a data frame, formatted with specific delimiters:
+Once the libraries are installed, open the `MPU6050.ino` sketch, connect the MPU6050 sensor, and upload the code to your Arduino. The MPU6050 data is transmitted with specific delimiters:
 
-- **Start Delimiter (`$`)**: Indicates the start of a data frame.
-- **End Delimiter (`;`)**: Marks the end of the frame.
-- **Separator (`,`)**: Separates individual data fields (acceleration, gyroscope, temperature).
+- **Start delimiter (`$`).** Marks the start of a data frame.
+- **End delimiter (`;`).** Marks the end of the frame.
+- **Separator (`,`).** Separates fields (acceleration, gyroscope, temperature).
 
-The data frame looks like this:
+The frame looks like this:
 
 ```
 $accel_x,accel_y,accel_z,gyro_x,gyro_y,gyro_z,temperature;
 ```
 
-**Note:**
-- Expected measurement units for `accel_x`, `accel_y`, `accel_z` are in **m/s²**.
-- Expected measurement units for `gyro_x`, `gyro_y`, `gyro_z` are in **deg/s**. Serial Studio automatically integrates these values to obtain pitch, yaw, and roll angles in degrees for the attitude indicator (AI) widget.
+Notes:
 
-### 2. Serial Studio Configuration
+- `accel_x`, `accel_y`, `accel_z` are in m/s².
+- `gyro_x`, `gyro_y`, `gyro_z` are in deg/s. Serial Studio integrates these to pitch, yaw, and roll in degrees for the attitude indicator widget.
 
-To visualize the data, Serial Studio needs to be configured to parse the incoming sensor data correctly:
+### 2. Serial Studio configuration
 
-1. **Download and Install Serial Studio**:
+Serial Studio needs to know how to parse the incoming sensor data.
 
-   Visit [Serial Studio's official website](https://serial-studio.github.io/) to download and install the software.
+1. **Download and install Serial Studio.** Visit [Serial Studio's website](https://serial-studio.github.io/) to download and install.
+2. **Open Serial Studio and import `MPU6050.ssproj`.** Launch Serial Studio and load the `MPU6050.ssproj` file from this project via the Project Editor. It has everything you need to interpret the Arduino's data.
 
-2. **Open Serial Studio and Import `MPU6050.ssproj`**:
+#### Building the project from scratch
 
-   Launch Serial Studio and load the `MPU6050.ssproj` file included in this project using the **Project Editor**. This file contains all necessary configurations for interpreting the data transmitted by the Arduino.
+If you want to configure it yourself:
 
-#### To Create the Project from Scratch:
+- **Frame start sequence:** `$`.
+- **Frame end sequence:** `;`.
+- **Data separator:** `,`.
 
-Set up Serial Studio to interpret the MPU6050 data by configuring the following settings in a new project:
+Add widgets to display real-time acceleration and gyroscope data, plus temperature. Temperature can also be logged to CSV for later analysis.
 
-- **Frame Start Sequence**: `$`
-- **Frame End Sequence**: `;`
-- **Data Separator**: `,`
+![Serial Studio project setup](doc/project-setup.png)
 
-This setup instructs Serial Studio on how to parse the data sent by the Arduino. Once configured, you can add widgets to display real-time acceleration and gyroscope data, as well as temperature. These widgets are useful for observing orientation and movement, and the temperature data can be recorded in a CSV file for later analysis.
+### 3. Viewing MPU6050 data
 
-![Serial Studio Project Setup](doc/project-setup.png)
+Once Serial Studio is configured:
 
-### 3. Viewing MPU6050 Data in Serial Studio
+- Connect to the Arduino by picking the correct serial port and setting the baud rate to 115200 (matching the Arduino sketch).
+- You'll see real-time motion data on the g-meter, attitude indicator, and other widgets. Temperature can also be logged to CSV.
 
-After setting up Serial Studio:
+### Troubleshooting
 
-- Connect to the Arduino by selecting the correct serial port and setting the baud rate to **115200** (as configured in the Arduino sketch).
-- Once connected, you will see real-time motion data displayed on the g-meter, attitude indicator, or other widgets in Serial Studio. The temperature data can also be logged in a CSV file for future analysis.
-
-### Troubleshooting Tips
-
-- **No Data Displayed**: Ensure that the correct port and baud rate are selected in Serial Studio, and that the MPU6050 is correctly connected to the Arduino.
-- **Incorrect Data Parsing**: Double-check that the **Frame Start Sequence** (`$`), **End Sequence** (`;`), and **Separator** (`,`) are correctly set in Serial Studio's project settings.
+- **No data shown.** Make sure the correct port and baud rate are selected in Serial Studio, and that the MPU6050 is wired correctly.
+- **Incorrect parsing.** Double-check that the start sequence (`$`), end sequence (`;`), and separator (`,`) are set correctly in the project settings.

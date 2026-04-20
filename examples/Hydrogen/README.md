@@ -1,50 +1,53 @@
-# **Hydrogen Atom: 1s Orbital**
+# Hydrogen atom: 1s orbital
 
-## **Overview**
+## Overview
 
-This project simulates the electron probability distribution of a hydrogen atom’s 1s orbital using Monte Carlo sampling. The data is streamed over UDP for real-time visualization in Serial Studio.
+This project simulates the electron probability distribution of a hydrogen atom's 1s orbital using Monte Carlo sampling. The data streams over UDP for real-time visualization in Serial Studio.
 
-This is not a classical orbit model. Instead, it displays probabilistic electron positions derived from quantum mechanics, visualized as a dynamic 3D cloud.
+It's not a classical orbit model. Instead, it shows probabilistic electron positions derived from quantum mechanics, as a dynamic 3D cloud.
 
-**Note:** This project uses features available only under a paid license. Visit [serial-studio.com](https://serial-studio.com/) for more information.
+> This project uses features that need a paid license. See [serial-studio.com](https://serial-studio.com/) for details.
 
-![Electron Cloud in Serial Studio](doc/screenshot.png)
+![Electron cloud in Serial Studio](doc/screenshot.png)
 
-## **Simulation Model**
+## Simulation model
 
-The electron's radial distance from the nucleus, denoted by `r`, is sampled using the probability distribution for the 1s orbital:
+The electron's radial distance from the nucleus, `r`, is sampled from the 1s orbital probability distribution:
 
 $$
 P(r) \propto r^2 \cdot e^{-2r / a_0}
 $$
 
-Where:  
-- $$r$$: Radial distance from the nucleus.
+Where:
+
+- $$r$$: radial distance from the nucleus.
 - $$a_0$$: Bohr radius (normalized to 1.0).
 
 Electron positions are computed in spherical coordinates, then converted to Cartesian $$(x, y, z)$$.
 
-## **Project Features**
+## Project features
 
 - Real-time 3D visualization of the electron cloud.
 - Plot of probability density along the X-axis.
-- 1 kHz data stream for smooth visual updates.
+- 1 kHz data stream for smooth updates.
 
-## **Data Format**
+## Data format
 
 Each UDP frame contains five comma-separated values:
 
 `x, y, z, psi2, r`
 
-Where:  
-- `x, y, z`: Electron position in Cartesian coordinates (in units of $$a_0$$).
-- `psi2`: Probability density $$\psi^2(r) = |\psi(r)|^2$$.
-- `r`: Radial distance from the nucleus (in units of $$a_0$$).
+Where:
 
-**Example:**  
+- `x, y, z`: electron position in Cartesian coordinates (in units of $$a_0$$).
+- `psi2`: probability density $$\psi^2(r) = |\psi(r)|^2$$.
+- `r`: radial distance from the nucleus (in units of $$a_0$$).
+
+Example:
+
 `-0.283291,0.453772,0.125448,0.038142,0.621987`
 
-## **How to Run**
+## How to run
 
 1. Run the simulation:
 
@@ -55,19 +58,19 @@ Where:
    - Set the input source to UDP, port `9000`.
    - Click **Connect**.
 
-## **Serial Studio Visualizations**
+## Visualizations
 
-- **3D Plot**: Displays the real-time electron cloud in space.
-- **XY Plot**: Plots $$psi^2$$ vs. $$x$$, showing spatial density.
+- **3D Plot.** The live electron cloud in space.
+- **XY Plot.** $$\psi^2$$ vs $$x$$, showing spatial density.
 
-## **Files Included**
+## Files included
 
 - `hydrogen.py`: Python script for simulation and UDP streaming.
 - `Hydrogen.ssproj`: Serial Studio project file.
-- `README.md`: Project documentation.  
-- `doc/screenshot.png`: Screenshot of the visualization.
+- `README.md`: project documentation.
+- `doc/screenshot.png`: screenshot of the visualization.
 
-## **Notes**
+## Notes
 
-- This simulation does not numerically solve the Schrödinger equation; it samples from the known analytical 1s solution.
+- This simulation doesn't numerically solve the Schrödinger equation. It samples from the known analytical 1s solution.
 - All spatial values are in normalized Bohr units $$a_0 = 1$$.

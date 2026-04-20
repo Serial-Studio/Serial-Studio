@@ -4,9 +4,9 @@ Complete reference for Serial Studio's frame parser scripting API. Serial Studio
 
 ## Overview
 
-When using Project File mode, you write a `parse()` function to transform raw device data into the array of values that Serial Studio maps to your dashboard datasets. This is the most powerful and flexible way to handle custom protocols.
+In Project File mode, you write a `parse()` function that turns raw device data into the array of values Serial Studio maps to your dashboard datasets. It's the most flexible way to handle custom protocols.
 
-**Lua** is the default language for new projects. It offers faster execution and lower overhead than JavaScript, making it ideal for high-throughput telemetry. **JavaScript** remains fully supported for backward compatibility with existing projects.
+**Lua** is the default for new projects. It runs faster and uses less overhead than JavaScript, which is a good fit for high-throughput telemetry. JavaScript is still fully supported for existing projects.
 
 You can switch between languages at any time using the **Language** dropdown in the frame parser editor toolbar. Switching loads the equivalent template in the new language.
 
@@ -368,7 +368,7 @@ end
 
 ## Output Widget Transmit Helpers
 
-Output controls (Pro feature) use a separate JavaScript engine with built-in protocol helper functions. These are available in every `transmit(value)` function — you do not need to import or declare them.
+Output controls (Pro feature) use a separate JavaScript engine with built-in protocol helper functions. They're available in every `transmit(value)` function. You don't need to import or declare them.
 
 For full documentation on output controls, see [Output Controls](Output-Controls.md).
 
@@ -442,7 +442,7 @@ Each source runs in an isolated engine instance. Global variables in one source 
 
 1. The function **must** be named `parse` (case-sensitive).
 2. It must accept exactly **one parameter**.
-3. It must **return a table** (Lua) or **array** (JavaScript) — not a string, number, or nil.
+3. It must return a table (Lua) or array (JavaScript). Not a string, number, or nil.
 4. Return an empty table/array for invalid or incomplete frames.
 5. **Synchronous only.** No coroutines (Lua) or Promises/async (JavaScript).
 6. **1 second execution timeout** per parse call. If your function takes longer (e.g., infinite loop), the engine is interrupted and the frame is dropped.
@@ -519,8 +519,8 @@ Output appears in Serial Studio's console/terminal panel.
 
 ## See Also
 
-- [Dataset Value Transforms](Dataset-Transforms.md) — per-dataset `transform(value)` for calibration, filtering, and unit conversion
-- [Data Flow](Data-Flow.md) — how data moves from device through parsing to the dashboard
-- [Project Editor](Project-Editor.md) — where you write and configure parser code
-- [Operation Modes](Operation-Modes.md) — when Project File mode (and thus custom parsers) applies
-- [Troubleshooting](Troubleshooting.md) — common parser issues and fixes
+- [Dataset Value Transforms](Dataset-Transforms.md): per-dataset `transform(value)` for calibration, filtering, and unit conversion.
+- [Data Flow](Data-Flow.md): how data moves from device through parsing to the dashboard.
+- [Project Editor](Project-Editor.md): where you write and configure parser code.
+- [Operation Modes](Operation-Modes.md): when Project File mode (and thus custom parsers) applies.
+- [Troubleshooting](Troubleshooting.md): common parser issues and fixes.

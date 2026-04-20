@@ -1,46 +1,46 @@
-# gRPC Server
+# gRPC server
 
-## Table of Contents
+## Table of contents
 
 - [Overview](#overview)
-- [Enabling gRPC](#enabling-grpc)
-- [Service Definition](#service-definition)
-- [Quick Start (Python)](#quick-start-python)
-- [Quick Start (grpcurl)](#quick-start-grpcurl)
-- [Generating Client Stubs](#generating-client-stubs)
-- [Frame Streaming](#frame-streaming)
-- [External Connections](#external-connections)
-- [Comparison with TCP/JSON API](#comparison-with-tcpjson-api)
+- [Turning gRPC on](#turning-grpc-on)
+- [Service definition](#service-definition)
+- [Quick start (Python)](#quick-start-python)
+- [Quick start (grpcurl)](#quick-start-grpcurl)
+- [Generating client stubs](#generating-client-stubs)
+- [Frame streaming](#frame-streaming)
+- [External connections](#external-connections)
+- [Comparison with the TCP/JSON API](#comparison-with-the-tcpjson-api)
 
 ---
 
 ## Overview
 
-Serial Studio exposes its entire API via **gRPC** on **port 8888**. The gRPC server starts automatically when the API server is enabled and provides:
+Serial Studio exposes its entire API over gRPC on port 8888. The gRPC server starts automatically when the API server is enabled. It provides:
 
-- **High-performance frame streaming** — Binary protobuf encoding is ~5–10× smaller and faster than JSON.
-- **Typed service definition** — Full `.proto` file for code generation in any language.
-- **Server-streaming RPCs** — Real-time frame and raw data push with zero polling.
-- **Cross-language support** — Python, C++, Go, Java, Rust, Node.js, C#, and more.
+- **High-performance frame streaming.** Binary protobuf encoding is roughly 5 to 10 times smaller and faster than JSON.
+- **Typed service definition.** A full `.proto` file for code generation in any language.
+- **Server-streaming RPCs.** Real-time frame and raw data push, no polling.
+- **Cross-language support.** Python, C++, Go, Java, Rust, Node.js, C#, and more.
 
-The gRPC server shares the same command set as the [TCP/JSON API](API-Reference.md). Any command available on port 7777 can be executed via gRPC on port 8888.
+The gRPC server shares the same command set as the [TCP/JSON API](API-Reference.md). Any command available on port 7777 can run over gRPC on port 8888.
 
 ---
 
-## Enabling gRPC
+## Turning gRPC on
 
 The gRPC server starts automatically whenever the API server is enabled:
 
 1. Open **Preferences** (wrench icon or **Ctrl/Cmd+,**).
-2. Navigate to the **Miscellaneous** group.
-3. Enable **"Enable API Server (Port 7777)"**.
+2. Go to the **Miscellaneous** group.
+3. Turn on **"Enable API Server (Port 7777)"**.
 4. Click **OK**.
 
 Both the TCP/JSON server (port 7777) and the gRPC server (port 8888) start together.
 
 ---
 
-## Service Definition
+## Service definition
 
 The gRPC API is defined in `serialstudio.proto` (exportable from **Preferences → Export Protobuf File**):
 
@@ -55,18 +55,18 @@ service SerialStudioAPI {
 }
 ```
 
-| RPC | Description |
-|-----|-------------|
-| `ExecuteCommand` | Execute a single API command and get the result. |
-| `ExecuteBatch` | Execute multiple commands in one request. |
-| `StreamFrames` | Server-streaming RPC that pushes parsed frames in real time. |
-| `StreamRawData` | Server-streaming RPC that pushes raw bytes from the device. |
-| `WriteRawData` | Send raw bytes to the connected device. |
-| `ListCommands` | List all available API commands. |
+| RPC               | Description |
+|-------------------|-------------|
+| `ExecuteCommand`  | Execute a single API command and get the result. |
+| `ExecuteBatch`    | Execute multiple commands in one request. |
+| `StreamFrames`    | Server-streaming RPC that pushes parsed frames in real time. |
+| `StreamRawData`   | Server-streaming RPC that pushes raw bytes from the device. |
+| `WriteRawData`    | Send raw bytes to the connected device. |
+| `ListCommands`    | List all available API commands. |
 
 ---
 
-## Quick Start (Python)
+## Quick start (Python)
 
 Install the gRPC Python packages:
 
@@ -91,12 +91,12 @@ print(resp.result)
 
 # Stream frames in real-time
 for frame in stub.StreamFrames(pb.StreamRequest()):
-    print(frame.frame)  # protobuf Struct → dict
+    print(frame.frame)  # protobuf Struct, convertible to dict
 ```
 
 ---
 
-## Quick Start (grpcurl)
+## Quick start (grpcurl)
 
 [grpcurl](https://github.com/fullstorydev/grpcurl) is a command-line tool for interacting with gRPC servers:
 
@@ -114,7 +114,7 @@ grpcurl -plaintext localhost:8888 serialstudio.SerialStudioAPI/StreamFrames
 
 ---
 
-## Generating Client Stubs
+## Generating client stubs
 
 Export the `.proto` file from **Preferences → Export Protobuf File**, then generate stubs for your language:
 
@@ -137,9 +137,9 @@ protoc -I. --csharp_out=. --grpc_out=. --plugin=protoc-gen-grpc=grpc_csharp_plug
 
 ---
 
-## Frame Streaming
+## Frame streaming
 
-The `StreamFrames` RPC is the primary way plugins and external tools receive real-time data. Unlike the TCP/JSON API (which requires polling), gRPC pushes frames to the client as they arrive.
+The `StreamFrames` RPC is the primary way plugins and external tools receive real-time data. Unlike the TCP/JSON API (which needs polling), gRPC pushes frames to the client as they arrive.
 
 ```python
 # Stream frames with automatic reconnection
@@ -158,45 +158,48 @@ def stream_with_retry(stub):
 ```
 
 Each `FrameData` message contains:
-- **frame** — The parsed frame as a protobuf `Struct` (equivalent to a JSON object).
-- **timestamp** — The frame's timestamp in milliseconds.
+
+- **frame.** The parsed frame as a protobuf `Struct` (equivalent to a JSON object).
+- **timestamp.** The frame's timestamp in milliseconds.
 
 ---
 
-## External Connections
+## External connections
 
 The gRPC server follows the same **Allow External API Connections** setting as the TCP server:
 
-| Setting | TCP/JSON (7777) | gRPC (8888) |
-|---------|----------------|-------------|
-| Disabled (default) | `127.0.0.1:7777` | `127.0.0.1:8888` |
-| Enabled | `0.0.0.0:7777` | `0.0.0.0:8888` |
+| Setting             | TCP/JSON (7777)     | gRPC (8888)         |
+|---------------------|---------------------|---------------------|
+| Disabled (default)  | `127.0.0.1:7777`    | `127.0.0.1:8888`    |
+| Enabled             | `0.0.0.0:7777`      | `0.0.0.0:8888`      |
 
 Enable external connections in **Preferences → Miscellaneous → Allow External API Connections**.
 
-> **Security note**: Enabling external connections exposes the API to your network. There is no authentication — use only on trusted networks.
+> **Security note.** Enabling external connections exposes the API to your network. There is no authentication. Use only on trusted networks.
 
 ---
 
-## Comparison with TCP/JSON API
+## Comparison with the TCP/JSON API
 
-| Feature | TCP/JSON (port 7777) | gRPC (port 8888) |
-|---------|---------------------|-------------------|
-| Encoding | JSON text | Protobuf binary |
-| Frame streaming | Poll with commands | Server-push (`StreamFrames`) |
-| Message size | Larger (JSON overhead) | ~5–10× smaller |
-| Code generation | Manual parsing | Auto-generated stubs |
-| Browser support | WebSocket/TCP clients | grpc-web |
-| Ease of use | `nc`, `curl`, any TCP client | Requires gRPC tooling |
+| Feature            | TCP/JSON (port 7777)        | gRPC (port 8888)               |
+|--------------------|-----------------------------|--------------------------------|
+| Encoding           | JSON text                   | Protobuf binary                |
+| Frame streaming    | Poll with commands          | Server-push (`StreamFrames`)   |
+| Message size       | Larger (JSON overhead)      | About 5 to 10 times smaller    |
+| Code generation    | Manual parsing              | Auto-generated stubs           |
+| Browser support    | WebSocket/TCP clients       | grpc-web                       |
+| Ease of use        | `nc`, `curl`, any TCP client| Needs gRPC tooling             |
 
 **When to use gRPC:**
+
 - Plugins that process real-time frame data at high rates.
 - Applications where serialization overhead matters.
-- Projects that benefit from strongly-typed generated clients.
+- Projects that benefit from strongly typed generated clients.
 
 **When to use TCP/JSON:**
+
 - Quick scripting and debugging (`nc`, `curl`).
 - Environments without gRPC tooling.
 - MCP (Model Context Protocol) integration with AI assistants.
 
-See the [API Reference](API-Reference.md) for the complete command list (shared by both protocols).
+See the [API Reference](API-Reference.md) for the full command list. It's shared by both protocols.

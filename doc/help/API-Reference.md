@@ -1509,7 +1509,7 @@ python test_api.py send dashboard.setOperationMode -p mode=1
 
 **Operation Modes:**
 - `0` - **ProjectFile**: Use a JSON project file to define dashboard layout
-- `1` - **ConsoleOnly**: No parsing — raw bytes flow only to the terminal (no dashboard)
+- `1` - **ConsoleOnly**: No parsing. Raw bytes flow only to the terminal, no dashboard.
 - `2` - **QuickPlot**: Automatic plotting of incoming numeric data
 
 #### 🟢 `dashboard.getOperationMode`
@@ -3110,7 +3110,7 @@ ports = ss.uart().get_ports()
 
 ## MCP (Model Context Protocol) Integration
 
-Serial Studio includes a built-in **MCP (Model Context Protocol) server** that exposes the API Server functionality to AI models such as Claude and ChatGPT. This allows AI assistants to directly control Serial Studio — connecting to devices, reading sensor data, sending commands, and managing exports — through natural language instructions.
+Serial Studio includes a built-in **MCP (Model Context Protocol) server** that exposes the API Server functionality to AI models like Claude and ChatGPT. AI assistants can control Serial Studio directly (connecting to devices, reading sensor data, sending commands, and managing exports) through natural language instructions.
 
 ### How It Works
 
@@ -3133,8 +3133,8 @@ See the **[MCP Client example](https://github.com/Serial-Studio/Serial-Studio/tr
 
 ### Related
 
-- [API Test example](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples/API%20Test) — Python test suite covering all API commands
-- [Automation Use Cases](#automation-use-cases) — Non-AI automation patterns
+- [API Test example](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples/API%20Test): Python test suite covering all API commands.
+- [Automation Use Cases](#automation-use-cases): non-AI automation patterns.
 
 ---
 

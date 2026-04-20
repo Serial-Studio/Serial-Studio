@@ -1,85 +1,72 @@
-# Pulse Sensor (Photoplethysmogram) + Serial Studio Example
+# Pulse sensor (photoplethysmogram) + Serial Studio example
 
 ## Overview
 
-This project demonstrates how to use Serial Studio to visualize data from a **heart pulse sensor** connected to an Arduino. The Arduino program reads raw data from the pulse sensor, applies a low-pass filter to remove high-frequency noise, and uses a moving average filter to further smooth the signal. The filtered signal is then transmitted via serial communication for real-time visualization.
+This project shows how to use Serial Studio to visualize data from a heart pulse sensor connected to an Arduino. The Arduino sketch reads raw data from the pulse sensor, applies a low-pass filter to remove high-frequency noise, and uses a moving average filter to smooth the signal further. The filtered signal is sent over serial for real-time visualization.
 
-With **Serial Studio**, you can use the **Quick Plot** feature to easily visualize the data, similar to the Arduino IDE's Serial Plotter, and also export the data into a playable CSV file for later analysis.
+With Serial Studio you can use the **Quick Plot** feature to visualize the data, the same way you would with the Arduino IDE's Serial Plotter, and you can also export the data to a playable CSV for later analysis.
 
-![Pulse Sensor Data in Serial Studio](doc/screenshot.png)
+![Pulse sensor data in Serial Studio](doc/screenshot.png)
 
-**Compatibility**: This project is compatible with any pulse sensor module connected to an analog pin on an Arduino. The program uses analog pin **A0** for reading the pulse sensor data.
+**Compatibility.** Works with any pulse sensor module connected to an analog pin on an Arduino. The program uses A0.
 
-### What is a Photoplethysmogram (PPG)?
+### What is a photoplethysmogram (PPG)?
 
-A **Photoplethysmogram (PPG)** is a type of signal that measures changes in blood volume in the small blood vessels of the skin. It works by using a light source, like an LED, to shine light on the skin, and a phototransistor to measure how much light is either reflected or passed through the tissue. When the heart beats, the amount of blood in the skin changes, which also affects how much light is absorbed. This variation creates a waveform that shows each heartbeat as a peak.
+A photoplethysmogram (PPG) is a signal that measures changes in blood volume in small blood vessels of the skin. It uses a light source (typically an LED) to shine light on the skin, and a phototransistor to measure how much light is reflected or passed through. When the heart beats, the amount of blood in the skin changes, which changes how much light is absorbed. The result is a waveform that shows each heartbeat as a peak.
 
-PPG sensors are often used in pulse oximeters to measure heart rate and estimate blood oxygen levels. They can also provide information related to breathing patterns and blood flow. The PPG waveform can look slightly different depending on where the sensor is placed on the body, as factors such as tissue composition and vascular structure influence the signal.
+PPG sensors are often used in pulse oximeters to measure heart rate and estimate blood oxygen. They can also provide info about breathing patterns and blood flow. The exact shape of the PPG waveform depends on where the sensor sits on the body, since tissue composition and vascular structure affect the signal.
 
-## Hardware Setup
+## Hardware setup
 
-To get started, you will need a [**heart pulse sensor**](https://pulsesensor.com/) and an Arduino board. Connect the **signal output** of the pulse sensor to the **analog pin A0** of the Arduino.
+You need a [pulse sensor](https://pulsesensor.com/) and an Arduino. Connect the sensor's signal output to A0.
 
 ### Connections
 
-- **Pulse Sensor Signal Output**: Connect to the Arduino's **analog pin A0**.
-- **Power and Ground**: Connect the pulse sensor power (VCC) and ground (GND) pins to the Arduino's respective **5V** and **GND** pins.
+- **Pulse sensor signal output.** Connect to A0 on the Arduino.
+- **Power and ground.** Connect VCC and GND of the pulse sensor to 5V and GND on the Arduino.
 
-## Step-by-Step Guide
+## Step by step
 
-### 1. Arduino Sketch (`PulseSensor.ino`)
+### 1. Arduino sketch (`PulseSensor.ino`)
 
-This sketch reads the analog value from the heart pulse sensor, applies filtering, and transmits the filtered data over the serial port.
+The sketch reads the analog value from the pulse sensor, applies filtering, and sends the filtered data over the serial port.
 
-#### Program Overview:
+**What it does:**
 
-- **Low-Pass Filtering**: Smooths out high-frequency noise from the raw sensor readings.
-- **Moving Average Filtering**: Further smooths the filtered signal to make it more consistent.
-- **Serial Output**: The final filtered value is printed via the serial port at a baud rate of **115200**, which can be visualized in Serial Studio.
+- **Low-pass filter.** Smooths out high-frequency noise from the raw readings.
+- **Moving-average filter.** Further smooths the filtered signal.
+- **Serial output.** The final filtered value is printed to serial at 115200 baud for Serial Studio.
 
-### Code Structure:
+**Code structure.** The sketch reads raw data from the sensor on A0, then processes it through two filtering stages:
 
-The Arduino sketch reads raw data from the pulse sensor connected to **A0**, then processes it through two stages of filtering:
+1. Low-pass filter to reduce high-frequency noise.
+2. Moving-average filter to smooth further.
 
-1. **Low-Pass Filter**: Reduces high-frequency noise.
-2. **Moving Average Filter**: Smooths the filtered signal further.
+The filtered signal is printed to serial so Serial Studio can visualize it.
 
-The final filtered signal is printed to the serial port, allowing you to visualize the data using Serial Studio.
+### 2. Serial Studio configuration
 
-### 2. Serial Studio Configuration
+**Using Quick Plot:**
 
-#### Using Quick Plot in Serial Studio
-
-1. **Download and Install Serial Studio**:
-
-   Visit [Serial Studio's official website](https://serial-studio.github.io/) to download and install the software.
-
-2. **Open Serial Studio**:
-
-   - Connect your Arduino to your computer.
-   - Launch Serial Studio and select the appropriate serial port.
-   - Set the **baud rate** to **115200**, which matches the settings in the Arduino sketch.
-
-3. **Enable Quick Plot**:
-
-   - In Serial Studio, click on the **Quick Plot** radio box in the **Setup** pane. This will automatically plot all numerical values received line by line from the serial port, similar to the Arduino IDE's Serial Plotter.
-   - The real-time plotting allows you to observe the filtered pulse sensor data visually.
-
-4. **CSV Export**:
-
-   One of the advantages of Serial Studio is that it allows you to export a **playable CSV file** of the serial data, even if you have not created a JSON project. This file can be used for further analysis or for sharing your results.
+1. **Download and install Serial Studio.** Visit [Serial Studio's website](https://serial-studio.github.io/) to download and install.
+2. **Open Serial Studio.**
+   - Connect your Arduino to the computer.
+   - Launch Serial Studio and pick the right serial port.
+   - Set the baud rate to 115200 to match the sketch.
+3. **Enable Quick Plot.** In the Setup pane, click the **Quick Plot** radio box. It plots all numeric values it receives, line by line, like the Arduino IDE's Serial Plotter.
+4. **CSV export.** Serial Studio can export a playable CSV file even if you haven't created a project. Good for offline analysis or sharing.
 
 ![Serial Studio Quick Plot](doc/csv.png)
 
-### 3. Viewing Filtered Pulse Data in Serial Studio
+### 3. Viewing filtered pulse data
 
-After setting up Serial Studio:
+Once Serial Studio is set up:
 
-- **Connect to the Arduino**: Ensure the correct serial port is selected, and set the baud rate to **115200**.
-- **Visualize the Data**: The filtered pulse signal will be plotted in real-time, giving you a clear view of the pulse waveform.
-- **CSV Logging**: You can save the data into a CSV file directly from Serial Studio for offline analysis.
+- **Connect.** Pick the correct serial port and set the baud rate to 115200.
+- **Visualize.** The filtered pulse signal plots in real time.
+- **Log to CSV.** Save the data straight from Serial Studio for offline analysis.
 
-### Troubleshooting Tips
+### Troubleshooting
 
-- **No Data in Quick Plot**: Ensure that the pulse sensor is correctly connected and that the serial port and baud rate match the configuration in Serial Studio.
-- **Noise in the Plot**: If the data appears noisy, consider adjusting the **low-pass filter coefficient** (`lowPassAlpha`) in the Arduino sketch for a smoother signal.
+- **No data in Quick Plot.** Make sure the pulse sensor is wired correctly and the serial port and baud rate match.
+- **Noise in the plot.** If the signal looks noisy, adjust the low-pass filter coefficient (`lowPassAlpha`) in the sketch.

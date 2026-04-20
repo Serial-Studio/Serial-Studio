@@ -508,17 +508,17 @@ sudo chmod 666 /dev/ttyUSB0  # Replace with your port
 
 **Debugging steps:**
 
-1. **Verify the function is named `transform`** — it must be exactly `function transform(value)` (Lua) or `function transform(value) {` (JavaScript). The function name is case-sensitive.
+1. **Check the function is named `transform`.** It has to be exactly `function transform(value)` (Lua) or `function transform(value) {` (JavaScript). The name is case-sensitive.
 
-2. **Click Apply in the transform editor** — changes are only saved when you click Apply. Closing the dialog without Apply discards changes.
+2. **Click Apply in the transform editor.** Changes are only saved when you click Apply. Closing the dialog without Apply discards changes.
 
-3. **Test with the built-in Test area** — enter a raw value in the Input field and click Test. If you see an error, fix the function before applying.
+3. **Test with the built-in Test area.** Enter a raw value in the Input field and click Test. If you see an error, fix the function before applying.
 
-4. **Check for non-numeric datasets** — transforms only run on numeric values. If the dataset value is a string (e.g., "N/A"), the transform is skipped.
+4. **Check for non-numeric datasets.** Transforms only run on numeric values. If the dataset value is a string (for example "N/A"), the transform is skipped.
 
-5. **Check the console for errors** — compilation errors are logged at connect time. Look for `[FrameBuilder] Transform compile error` messages.
+5. **Check the console for errors.** Compilation errors are logged at connect time. Look for `[FrameBuilder] Transform compile error` messages.
 
-6. **Save and reload the project** — if the transform was applied during a live session, saving ensures it persists. After reload, transforms are recompiled automatically.
+6. **Save and reload the project.** If the transform was applied during a live session, saving makes sure it persists. After reload, transforms are recompiled automatically.
 
 See [Dataset Value Transforms](Dataset-Transforms.md) for the complete reference.
 

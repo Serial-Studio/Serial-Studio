@@ -1,10 +1,10 @@
-# Dataset Value Transforms
+# Dataset value transforms
 
 Per-dataset scripting for calibration, unit conversion, filtering, and signal conditioning. Each dataset can optionally define a `transform(value)` function that converts the raw parsed value into an engineering value before it reaches the dashboard.
 
 ## Overview
 
-The frame parser (`parse(frame)`) produces an array of raw values. Each value is mapped to a dataset by its Frame Index. **Before** the value reaches the dashboard, an optional transform function can modify it:
+The frame parser (`parse(frame)`) produces an array of raw values. Each value is mapped to a dataset by its Frame Index. Before the value reaches the dashboard, an optional transform function can modify it:
 
 ```mermaid
 flowchart LR
@@ -15,23 +15,24 @@ flowchart LR
 
 Transforms are useful when:
 
-- Your device sends raw ADC counts that need calibration (slope + offset)
-- You need unit conversion (Celsius → Fahrenheit, radians → degrees)
-- The signal is noisy and needs filtering (moving average, EMA, low-pass)
-- You want derived values (rate of change, running total, dB conversion)
-- Sensor non-linearity requires polynomial correction or lookup tables
+- Your device sends raw ADC counts that need calibration (slope + offset).
+- You need unit conversion (Celsius to Fahrenheit, radians to degrees).
+- The signal is noisy and needs filtering (moving average, EMA, low-pass).
+- You want derived values (rate of change, running total, dB conversion).
+- Sensor non-linearity needs polynomial correction or a lookup table.
 
-Transforms are optional. Datasets without a transform function display the raw parsed value unchanged.
+Transforms are optional. Datasets without one display the raw parsed value unchanged.
 
-A transform can also read and write **shared data tables** — constants defined at project time and computed registers shared across all transforms in a single frame. This is how you pass a calibration value into several channels, or have one transform compute a value that another transform consumes. See [Data Tables](Data-Tables.md) for the full reference.
+A transform can also read and write **shared data tables**: constants defined at project time, and computed registers shared across all transforms in a single frame. That's how you pass a calibration value into several channels, or have one transform compute a value that another transform consumes. See [Data Tables](Data-Tables.md) for the full reference.
 
 ---
 
-## The `transform()` Function
+## The `transform()` function
 
 ### Signature
 
 **Lua (default):**
+
 ```lua
 function transform(value)
   return value * 0.01 + 273.15
@@ -39,6 +40,7 @@ end
 ```
 
 **JavaScript:**
+
 ```javascript
 function transform(value) {
     return value * 0.01 + 273.15;
@@ -47,25 +49,26 @@ function transform(value) {
 
 ### Input
 
-The `value` parameter is the **numeric** value already parsed from the frame and mapped to this dataset by its Frame Index. It is a floating-point number (Lua `number` / JS `number`).
+The `value` parameter is the numeric value already parsed from the frame and mapped to this dataset by its Frame Index. It's a floating-point number (Lua `number` / JS `number`).
 
-Non-numeric dataset values (strings) skip the transform entirely — the raw string is displayed as-is.
+Non-numeric dataset values (strings) skip the transform entirely: the raw string is displayed as-is.
 
 ### Output
 
-The function must return a **number**. The returned value replaces the raw value everywhere: dashboard widgets, plots, CSV export, MDF4 export, and the API.
+The function has to return a number. The returned value replaces the raw value everywhere: dashboard widgets, plots, CSV export, MDF4 export, and the API.
 
-If the function returns `nil` (Lua), `undefined`/`NaN`/`Infinity` (JS), or if an error occurs, the raw value is kept unchanged and no error is shown to avoid interrupting the data stream.
+If the function returns `nil` (Lua), `undefined`/`NaN`/`Infinity` (JS), or if an error happens, the raw value is kept unchanged and no error is shown, so the data stream isn't interrupted.
 
 ---
 
-## Persistent State
+## Persistent state
 
-Variables declared at the **top level** of the transform code — outside the `transform()` function — persist between frames. This is how filters, accumulators, and other stateful transforms maintain state across calls.
+Variables declared at the top level of the transform code (outside the `transform()` function) persist between frames. That's how filters, accumulators, and other stateful transforms keep state across calls.
 
-The key rule: **use `local` (Lua) or `var` (JavaScript) at the top of the file.** Do NOT rely on bare globals. Serial Studio deliberately isolates each dataset's top-level state so that two datasets using the same template (for example two EMAs on two different channels) cannot clobber each other's variables.
+The key rule: use `local` (Lua) or `var` (JavaScript) at the top of the file. Don't rely on bare globals. Serial Studio deliberately isolates each dataset's top-level state so two datasets using the same template (for example two EMAs on two different channels) can't clobber each other's variables.
 
-**Lua — declare `local` at the top of the file:**
+**Lua: declare `local` at the top of the file:**
+
 ```lua
 local alpha = 0.1
 local ema
@@ -80,9 +83,10 @@ function transform(value)
 end
 ```
 
-`alpha` and `ema` are **chunk locals**. Lua captures them as upvalues of the `transform` closure, so they survive between calls **and** they are private to this dataset — another dataset on the same source with its own `local ema` won't see or overwrite this one.
+`alpha` and `ema` are chunk locals. Lua captures them as upvalues of the `transform` closure, so they survive between calls and they're private to this dataset. Another dataset on the same source with its own `local ema` won't see or overwrite this one.
 
-**JavaScript — declare `var` at the top of the file:**
+**JavaScript: declare `var` at the top of the file:**
+
 ```javascript
 var alpha = 0.1;
 var ema;
@@ -96,11 +100,11 @@ function transform(value) {
 }
 ```
 
-Serial Studio wraps every JavaScript transform in an IIFE at compile time, so top-level `var` declarations are scoped to that dataset's closure — not the shared engine's global object. You get the same isolation as Lua without any extra effort.
+Serial Studio wraps every JavaScript transform in an IIFE at compile time, so top-level `var` declarations are scoped to that dataset's closure, not the shared engine's global object. You get the same isolation as Lua without any extra effort.
 
 ### What NOT to do
 
-Avoid bare globals — they bypass the isolation and will collide with other datasets on the same source:
+Avoid bare globals. They bypass the isolation and will collide with other datasets on the same source:
 
 ```lua
 -- WRONG in Lua: ema is a shared global
@@ -113,7 +117,7 @@ end
 
 ```javascript
 // WRONG in JavaScript: ema without var is an implicit global
-// on the shared engine — another dataset with the same mistake
+// on the shared engine, so another dataset with the same mistake
 // would clobber it. Always declare var at the top.
 function transform(value) {
   if (typeof ema === 'undefined') ema = value;
@@ -122,25 +126,25 @@ function transform(value) {
 }
 ```
 
-Always declare stateful variables with `local`/`var` at the top of the file. This also makes your code easier to read — someone scanning the top of the transform can see at a glance which variables carry state.
+Always declare stateful variables with `local`/`var` at the top of the file. It also makes the code easier to read: someone scanning the top of the transform can see at a glance which variables carry state.
 
 ### Helper functions
 
-In JavaScript, helpers defined at the top of the file (e.g. `function clamp(x, lo, hi) { ... }`) are also closed over by the IIFE and private per dataset. Safe to use.
+In JavaScript, helpers defined at the top of the file (for example `function clamp(x, lo, hi) { ... }`) are also closed over by the IIFE and private per dataset. Safe to use.
 
-### Virtual Datasets
+### Virtual datasets
 
-A dataset can be marked **virtual** in the Project Editor. A virtual dataset has no Frame Index — nothing in the incoming frame feeds it. Its value is computed entirely by the `transform()` function, typically by reading other datasets or table registers. The `value` argument passed in is always `0`.
+A dataset can be marked **virtual** in the Project Editor. A virtual dataset has no Frame Index: nothing in the incoming frame feeds it. Its value is computed entirely by the `transform()` function, typically by reading other datasets or table registers. The `value` argument passed in is always `0`.
 
 ```lua
 function transform(value)
-  local a = datasetGetFinal(10)   -- reads final value of dataset with unique ID 10
+  local a = datasetGetFinal(10)   -- reads the final value of dataset with unique ID 10
   local b = datasetGetFinal(11)
   return (a + b) / 2              -- average of two channels
 end
 ```
 
-Use virtual datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should appear on the dashboard and be exported alongside the raw channels, but that aren't present in the wire format.
+Use virtual datasets for derived metrics (averages, ratios, sums, percentage-of-total) that should show up on the dashboard and be exported alongside the raw channels, but that aren't present in the wire format.
 
 In Lua, use `local function` for helpers so they share the isolation:
 
@@ -156,34 +160,34 @@ function transform(value)
 end
 ```
 
-A plain `function foo() end` at chunk top level in Lua creates a global and would collide with other datasets — always prefix helpers with `local function`.
+A plain `function foo() end` at chunk top level in Lua creates a global and would collide with other datasets. Always prefix helpers with `local function`.
 
-### When State Resets
+### When state resets
 
 Persistent state is cleared when:
 
-- The device is **disconnected** (transform engines are destroyed)
-- The user clicks **Apply** in the transform editor (engines are recompiled with fresh state)
-- The project is **reloaded** or **saved** with changes
+- The device is disconnected (transform engines are destroyed).
+- The user clicks **Apply** in the transform editor (engines are recompiled with fresh state).
+- The project is reloaded or saved with changes.
 
-This means filters and accumulators start from scratch on each new connection session, which is typically the desired behavior.
+So filters and accumulators start from scratch on each new connection session, which is usually what you want.
 
 ---
 
 ## Data Table API
 
-Every transform has access to four built-in functions that read and write the project's **data tables**. Tables are described in full in [Data Tables](Data-Tables.md); this section documents the API surface from the transform's point of view.
+Every transform has access to four built-in functions for reading and writing the project's data tables. Tables are covered in full in [Data Tables](Data-Tables.md). This section documents the API surface from the transform's point of view.
 
-| Function | Returns | Purpose |
-|----------|---------|---------|
-| `tableGet(table, reg)` | number, string, or nil/undefined | Read a user-defined register |
-| `tableSet(table, reg, value)` | — | Write a **computed** register (constants are read-only) |
-| `datasetGetRaw(uniqueId)` | number, string, or nil/undefined | Raw (pre-transform) value of any dataset in the current frame |
-| `datasetGetFinal(uniqueId)` | number, string, or nil/undefined | Final (post-transform) value of any dataset already processed in the current frame |
+| Function                       | Returns                        | Purpose |
+|--------------------------------|--------------------------------|---------|
+| `tableGet(table, reg)`         | number, string, or nil/undefined | Read a user-defined register |
+| `tableSet(table, reg, value)`  | nothing                        | Write a **computed** register (constants are read-only) |
+| `datasetGetRaw(uniqueId)`      | number, string, or nil/undefined | Raw (pre-transform) value of any dataset in the current frame |
+| `datasetGetFinal(uniqueId)`    | number, string, or nil/undefined | Final (post-transform) value of any dataset already processed in the current frame |
 
-The API is identical in Lua and JavaScript. `table` and `reg` are strings; `uniqueId` is the integer unique ID shown next to each dataset in the Project Editor.
+The API is identical in Lua and JavaScript. `table` and `reg` are strings. `uniqueId` is the integer unique ID shown next to each dataset in the Project Editor.
 
-**Lua example — scale a voltage reading by a project-wide calibration factor:**
+**Lua example: scale a voltage reading by a project-wide calibration factor:**
 
 ```lua
 function transform(value)
@@ -192,7 +196,7 @@ function transform(value)
 end
 ```
 
-**JavaScript example — same idea:**
+**JavaScript example: same idea.**
 
 ```javascript
 function transform(value) {
@@ -201,7 +205,7 @@ function transform(value) {
 }
 ```
 
-**Writing to a computed register — one transform publishes, another consumes:**
+**Writing to a computed register. One transform publishes, another consumes:**
 
 ```lua
 -- Dataset 10 (processed first): publish the total current
@@ -219,15 +223,15 @@ function transform(value)
 end
 ```
 
-### Processing Order
+### Processing order
 
-Transforms are applied **in order**: groups in frame order, and datasets in group order. Inside a single frame:
+Transforms are applied in order: groups in frame order, datasets in group order. Inside a single frame:
 
-- `datasetGetRaw(uid)` can read **any** dataset, since all raw values are populated before transforms run.
-- `datasetGetFinal(uid)` only works for datasets that have **already been transformed** — i.e. earlier datasets in the same group, or any dataset in an earlier group.
-- Computed registers are reset to their default at the start of each frame, so writes in one frame do not leak into the next.
+- `datasetGetRaw(uid)` can read any dataset, since all raw values are populated before transforms run.
+- `datasetGetFinal(uid)` only works for datasets that have already been transformed (earlier datasets in the same group, or any dataset in an earlier group).
+- Computed registers are reset to their default at the start of each frame, so writes in one frame don't leak into the next.
 
-If you need dataset B to consume dataset A's final value, make sure A appears before B in the Project Editor tree.
+If you need dataset B to consume dataset A's final value, make sure A comes before B in the Project Editor tree.
 
 ---
 
@@ -235,125 +239,125 @@ If you need dataset B to consume dataset A's final value, make sure A appears be
 
 1. Select a dataset in the Project Editor tree.
 2. Click the **Transform** button in the dataset toolbar.
-3. The Transform Editor dialog opens with:
-   - **Language selector** — Lua (default) or JavaScript. Follows the source's frame parser language.
-   - **Template dropdown** — 33 ready-made transforms for common operations.
-   - **Code editor** — syntax-highlighted, with auto-completion.
-   - **Test area** — enter a raw value, click Test, see the transformed output.
-4. Write or select a `transform(value)` function.
+3. The Transform Editor opens with:
+   - **Language selector.** Lua (default) or JavaScript. Follows the source's frame parser language.
+   - **Template dropdown.** 33 ready-made transforms for common operations.
+   - **Code editor.** Syntax-highlighted, with auto-completion.
+   - **Test area.** Enter a raw value, click Test, see the transformed output.
+4. Write or pick a `transform(value)` function.
 5. Click **Apply** to save the transform to the dataset.
 
-When you open the editor on a dataset that has no transform yet, it is pre-filled with a multiline comment explaining how `transform(value)` works and how top-level `local`/`var` state is captured. This placeholder is not a real transform — if you click Apply without defining a `transform()` function, the placeholder is discarded and the dataset keeps displaying raw values. The same rule applies if you later clear the code or write notes that never define `transform()`: nothing is saved to the project.
+When you open the editor on a dataset with no transform yet, it's pre-filled with a multiline comment explaining how `transform(value)` works and how top-level `local`/`var` state is captured. The placeholder isn't a real transform. If you click Apply without defining a `transform()` function, the placeholder is discarded and the dataset keeps showing raw values. Same rule if you later clear the code or write notes that never define `transform()`: nothing is saved to the project.
 
-### Switching Languages
+### Switching languages
 
-When you switch the language dropdown, the editor automatically loads the equivalent template in the new language (if the current code matches a known template). Custom code is left unchanged — only the syntax highlighter switches.
+When you switch the language dropdown, the editor loads the equivalent template in the new language automatically (if the current code matches a known template). Custom code is left unchanged. Only the syntax highlighter switches.
 
 ---
 
-## Built-in Templates
+## Built-in templates
 
 The Transform Editor includes 33 ready-to-use templates. Pick one from the Template dropdown and it loads into the editor ready to tune.
 
-### Calibration & Conversion
+### Calibration and conversion
 
-| Template | Description |
-|----------|-------------|
-| Linear Calibration | `y = slope × value + offset` — sensor calibration |
-| Polynomial (2nd order) | `y = a×x² + b×x + c` — non-linear response curves |
-| Map Range | Rescale from `[inMin, inMax]` to `[outMin, outMax]` |
-| ADC to Voltage | 10-bit ADC count → voltage (3.3V reference) |
+| Template                | Description |
+|-------------------------|-------------|
+| Linear Calibration      | `y = slope × value + offset`. Sensor calibration. |
+| Polynomial (2nd order)  | `y = a×x² + b×x + c`. Non-linear response curves. |
+| Map Range               | Rescale from `[inMin, inMax]` to `[outMin, outMax]`. |
+| ADC to Voltage          | 10-bit ADC count to voltage (3.3 V reference). |
 
-### Smoothing Filters
+### Smoothing filters
 
-| Template | Description |
-|----------|-------------|
-| Moving Average | Averages the last N samples via a circular buffer |
-| Exponential Moving Average (EMA) | Weighted average, tunable responsiveness (alpha) |
-| Low-Pass Filter | First-order IIR, adjustable cutoff via alpha |
-| High-Pass Filter | First-order IIR, removes DC drift and slow offsets |
-| Median Filter | Rolling-window median — robust to outlier spikes |
-| Kalman Filter (1D) | Scalar Kalman filter with tunable Q (process) and R (measurement) noise |
+| Template                         | Description |
+|----------------------------------|-------------|
+| Moving Average                   | Averages the last N samples via a circular buffer. |
+| Exponential Moving Average (EMA) | Weighted average, tunable responsiveness (alpha). |
+| Low-Pass Filter                  | First-order IIR, adjustable cutoff via alpha. |
+| High-Pass Filter                 | First-order IIR. Removes DC drift and slow offsets. |
+| Median Filter                    | Rolling-window median. Robust to outlier spikes. |
+| Kalman Filter (1D)               | Scalar Kalman filter with tunable Q (process) and R (measurement) noise. |
 
 ### Statistical
 
-| Template | Description |
-|----------|-------------|
-| Rolling RMS | Root-mean-square over the last N samples — useful for AC signals, vibration, audio |
-| Running Minimum | Smallest value observed since the transform started |
-| Running Maximum | Largest value observed since the transform started |
-| Running Accumulator | Discrete integral (running sum) |
-| Rate of Change | Discrete derivative (`value − previous`) |
+| Template              | Description |
+|-----------------------|-------------|
+| Rolling RMS           | Root-mean-square over the last N samples. Useful for AC signals, vibration, audio. |
+| Running Minimum       | Smallest value observed since the transform started. |
+| Running Maximum       | Largest value observed since the transform started. |
+| Running Accumulator   | Discrete integral (running sum). |
+| Rate of Change        | Discrete derivative (`value - previous`). |
 
-### Signal Shaping
+### Signal shaping
 
-| Template | Description |
-|----------|-------------|
-| Clamp | Restrict output to `[min, max]` range |
-| Dead Zone | Suppress small values near zero |
-| Slew-Rate Limiter | Cap how much the value can change between consecutive samples |
-| Auto-Zero / Tare | Average the first N samples, then subtract that bias from every subsequent value |
-| Schmitt Trigger | Hysteresis comparator — outputs 0/1 with separate rising and falling thresholds |
+| Template             | Description |
+|----------------------|-------------|
+| Clamp                | Restrict output to `[min, max]`. |
+| Dead Zone            | Suppress small values near zero. |
+| Slew-Rate Limiter    | Cap how much the value can change between consecutive samples. |
+| Auto-Zero / Tare     | Average the first N samples, then subtract that bias from every later value. |
+| Schmitt Trigger      | Hysteresis comparator. Outputs 0/1 with separate rising and falling thresholds. |
 
-### Angle Math
+### Angle math
 
-| Template | Description |
-|----------|-------------|
-| Unwrap Angle | Remove ±360° jumps so the output is continuous across the boundary |
-| Integrate Rate to Angle | Integrate an angular rate (deg/s) into an absolute angle at a fixed sample rate |
-| Radians → Degrees | deg = rad × 180/π |
-| Degrees → Radians | rad = deg × π/180 |
+| Template                  | Description |
+|---------------------------|-------------|
+| Unwrap Angle              | Remove ±360° jumps so the output is continuous across the boundary. |
+| Integrate Rate to Angle   | Integrate an angular rate (deg/s) into an absolute angle at a fixed sample rate. |
+| Radians to Degrees        | deg = rad × 180/π. |
+| Degrees to Radians        | rad = deg × π/180. |
 
-### Unit Conversions
+### Unit conversions
 
-| Template | Description |
-|----------|-------------|
-| Celsius → Fahrenheit | °F = °C × 9/5 + 32 |
-| Fahrenheit → Celsius | °C = (°F − 32) × 5/9 |
-| Kelvin → Celsius | °C = K − 273.15 |
-| Logarithmic (dB) | Convert linear amplitude to decibels |
+| Template                  | Description |
+|---------------------------|-------------|
+| Celsius to Fahrenheit     | °F = °C × 9/5 + 32. |
+| Fahrenheit to Celsius     | °C = (°F - 32) × 5/9. |
+| Kelvin to Celsius         | °C = K - 273.15. |
+| Logarithmic (dB)          | Convert linear amplitude to decibels. |
 
-### Logic & Bit Operations
+### Logic and bit operations
 
-| Template | Description |
-|----------|-------------|
-| Bit Extract | Return a single bit from a packed status word (0 or 1) |
-| Absolute Value | Unsigned magnitude |
-| Invert Sign | Negate the value |
-| Round to N Decimals | Precision control |
+| Template             | Description |
+|----------------------|-------------|
+| Bit Extract          | Return a single bit from a packed status word (0 or 1). |
+| Absolute Value       | Unsigned magnitude. |
+| Invert Sign          | Negate the value. |
+| Round to N Decimals  | Precision control. |
 
 ### Sensors
 
-| Template | Description |
-|----------|-------------|
-| Steinhart-Hart Thermistor | NTC resistance → temperature (°C) |
+| Template                    | Description |
+|-----------------------------|-------------|
+| Steinhart-Hart Thermistor   | NTC resistance to temperature (°C). |
 
 ---
 
-## How Transforms Relate to the Data Pipeline
+## How transforms fit into the data pipeline
 
-Serial Studio processes data in a clear pipeline. Understanding where transforms fit helps you decide what belongs in `parse()` vs `transform()`:
+Serial Studio processes data in a clear pipeline. Knowing where transforms sit helps you decide what belongs in `parse()` vs `transform()`.
 
-| Stage | Function | Scope | Purpose |
-|-------|----------|-------|---------|
-| **Frame Parser** | `parse(frame)` | Per-source | Decode raw bytes into an array of values |
-| **Dataset Transform** | `transform(value)` | Per-dataset | Convert raw values to engineering units |
-| **Dashboard** | — | Per-widget | Display the final values |
+| Stage                 | Function          | Scope        | Purpose |
+|-----------------------|-------------------|--------------|---------|
+| **Frame parser**      | `parse(frame)`    | Per-source   | Decode raw bytes into an array of values |
+| **Dataset transform** | `transform(value)`| Per-dataset  | Convert raw values to engineering units |
+| **Dashboard**         | —                 | Per-widget   | Display the final values |
 
 **Rule of thumb:**
 
-- **Frame parser** handles protocol decoding: byte extraction, bit manipulation, CRC validation, multi-message state machines. It deals with the wire format.
-- **Dataset transform** handles value conditioning: calibration, unit conversion, filtering, derived calculations. It deals with the physical meaning.
+- The frame parser handles protocol decoding: byte extraction, bit manipulation, CRC validation, multi-message state machines. It deals with the wire format.
+- The dataset transform handles value conditioning: calibration, unit conversion, filtering, derived calculations. It deals with physical meaning.
 
-This separation keeps parsers focused on protocol logic and transforms focused on sensor characteristics. You can reuse the same parser across different projects with different calibrations by only changing the per-dataset transforms.
+That separation keeps parsers focused on protocol logic and transforms focused on sensor characteristics. You can reuse the same parser across different projects with different calibrations by changing only the per-dataset transforms.
 
 ---
 
-## Practical Examples
+## Practical examples
 
-### Example 1: Linear Calibration
+### Example 1: linear calibration
 
-A pressure sensor outputs raw ADC counts (0–4095). The datasheet says 0 = 0 PSI, 4095 = 100 PSI:
+A pressure sensor outputs raw ADC counts (0 to 4095). The datasheet says 0 = 0 PSI, 4095 = 100 PSI:
 
 ```lua
 function transform(value)
@@ -361,7 +365,7 @@ function transform(value)
 end
 ```
 
-### Example 2: Noisy Temperature Sensor
+### Example 2: noisy temperature sensor
 
 An RTD sensor fluctuates ±0.5°C around the true value. Smooth it with EMA:
 
@@ -379,11 +383,11 @@ function transform(value)
 end
 ```
 
-Both `alpha` and `ema` are declared `local` at the top of the file, so Lua captures them as upvalues of the `transform` closure — state persists between frames and is private to this dataset. Another dataset on the same source can use the exact same EMA template with its own `local ema` and the two will not interfere.
+Both `alpha` and `ema` are declared `local` at the top of the file, so Lua captures them as upvalues of the `transform` closure. State persists between frames and is private to this dataset. Another dataset on the same source can use the same EMA template with its own `local ema` without interference.
 
-### Example 3: Compass Heading Normalization
+### Example 3: compass heading normalization
 
-A magnetometer reports heading in radians. Convert to degrees and clamp to 0–360:
+A magnetometer reports heading in radians. Convert to degrees and clamp to 0 to 360:
 
 ```lua
 function transform(value)
@@ -392,9 +396,9 @@ function transform(value)
 end
 ```
 
-### Example 4: Battery Voltage with Dead Zone
+### Example 4: battery voltage with dead zone
 
-A battery monitor fluctuates around 0V when disconnected. Suppress noise below 0.5V:
+A battery monitor fluctuates around 0 V when disconnected. Suppress noise below 0.5 V:
 
 ```lua
 function transform(value)
@@ -406,7 +410,7 @@ function transform(value)
 end
 ```
 
-### Example 5: Speed in km/h from m/s
+### Example 5: speed in km/h from m/s
 
 ```lua
 function transform(value)
@@ -416,23 +420,23 @@ end
 
 ---
 
-## Rules and Limitations
+## Rules and limitations
 
-1. The function **must** be named `transform` (case-sensitive).
-2. It must accept exactly **one parameter** (`value`).
-3. It must **return a number**.
+1. The function has to be named `transform` (case-sensitive).
+2. It has to accept exactly one parameter (`value`).
+3. It has to return a number.
 4. Returning `nil`, `NaN`, or `Infinity` silently falls back to the raw value.
 5. The transform language matches the source's frame parser language (Lua or JavaScript).
-6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is **isolated**: declare stateful variables with `local` in Lua or `var` in JavaScript and they will not collide with other datasets. Bare globals in Lua (and `function foo() end` at chunk top level) DO leak across datasets — always use `local`.
+6. Datasets on the same source share one underlying scripting engine, but each dataset's top-level state is isolated. Declare stateful variables with `local` in Lua or `var` in JavaScript and they won't collide with other datasets. Bare globals in Lua (and `function foo() end` at chunk top level) DO leak across datasets. Always use `local`.
 7. The engine is sandboxed: no file I/O, no network, no OS commands.
 8. Transforms run on every incoming frame, so keep them fast. Avoid unbounded loops or heavy computation.
 
 ---
 
-## See Also
+## See also
 
-- [Frame Parser Scripting](JavaScript-API.md) — the `parse(frame)` function that feeds values to transforms
-- [Data Tables](Data-Tables.md) — shared constants and computed registers accessible from every transform
-- [Data Flow](Data-Flow.md) — how data moves from device through parsing, transforms, and into the dashboard
-- [Project Editor](Project-Editor.md) — where you configure datasets, transforms, and tables
-- [Widget Reference](Widget-Reference.md) — dashboard widgets that display transformed values
+- [Frame Parser Scripting](JavaScript-API.md): the `parse(frame)` function that feeds values to transforms.
+- [Data Tables](Data-Tables.md): shared constants and computed registers available to every transform.
+- [Data Flow](Data-Flow.md): how data moves from device through parsing, transforms, and into the dashboard.
+- [Project Editor](Project-Editor.md): where you configure datasets, transforms, and tables.
+- [Widget Reference](Widget-Reference.md): dashboard widgets that display transformed values.

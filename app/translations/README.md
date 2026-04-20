@@ -1,78 +1,81 @@
-# Translation Manager
+# Translation manager
 
-`translation_manager.py` is a Python script designed to manage Qt translation files (`.ts` and `.qm`). It can be used to:
-1. Create new translation source (`.ts`) files for a given language.
-2. Update existing `.ts` files by running `lupdate` and removing obsolete strings.
+`translation_manager.py` is a Python script for managing Qt translation files (`.ts` and `.qm`). It can:
+
+1. Create a new translation source (`.ts`) file for a given language.
+2. Update existing `.ts` files by running `lupdate` and pruning obsolete strings.
 3. Compile `.ts` files into binary `.qm` files using `lrelease`.
 
 ## Prerequisites
 
-Before using this script, ensure the following tools are installed on your system:
-- **Qt Linguist**: The `lupdate` and `lrelease` commands are part of the Qt toolchain. Make sure they are available in your system's path.
+Before running this script, make sure you have:
 
-You can verify the installation by running:
+- **Qt Linguist.** The `lupdate` and `lrelease` commands come with the Qt toolchain. They need to be on your `PATH`.
+
+You can check the install with:
 
 ```bash
 lupdate --version
 lrelease --version
 ```
 
-Additionally, ensure that you have Python 3.x installed.
+You also need Python 3.x.
 
 ## Usage
 
-The script provides three main functionalities:
-- **Create a new `.ts` file for a language**
-- **Update existing `.ts` files using `lupdate`**
-- **Compile `.ts` files into `.qm` files using `lrelease`**
+The script exposes three main operations:
 
-### 1. Creating a New Translation File
+- Create a new `.ts` file for a language.
+- Update existing `.ts` files with `lupdate`.
+- Compile `.ts` files into `.qm` files with `lrelease`.
 
-To create a new `.ts` file for a language, use the `--new-ts` option followed by the language code (e.g., `es_MX` for Mexican Spanish):
+### 1. Creating a new translation file
+
+Pass `--new-ts` with the language code (for example `es_MX` for Mexican Spanish):
 
 ```bash
 python3 translation_manager.py --new-ts es_MX
 ```
 
-This will generate a new `es_MX.ts` file in the `app/translations/ts` folder with the source language set to `en_US`.
+This creates `es_MX.ts` in `app/translations/ts`, with the source language set to `en_US`.
 
-### 2. Updating Existing `.ts` Files
+### 2. Updating existing `.ts` files
 
-To update existing `.ts` files and remove obsolete entries, use the `--lupdate` option:
+To refresh `.ts` files and drop obsolete entries, use `--lupdate`:
 
 ```bash
 python3 translation_manager.py --lupdate
 ```
 
-This will scan the source files (both `.cpp`, `.h`, and `.qml`) in the `app` and `lib` directories and update the translations in the `.ts` files located in the `app/translations/ts` folder.
+This scans `.cpp`, `.h`, and `.qml` sources in the `app` and `lib` directories and updates the `.ts` files in `app/translations/ts`.
 
-### 3. Compiling `.ts` Files into `.qm` Files
+### 3. Compiling `.ts` into `.qm`
 
-To compile the `.ts` files into binary `.qm` files for use in the application, use the `--lrelease` option:
+To build the binary `.qm` files that the app loads at runtime, use `--lrelease`:
 
 ```bash
 python3 translation_manager.py --lrelease
 ```
 
-The `.qm` files will be generated and placed in the `app/translations/qm` folder.
+The `.qm` files land in `app/translations/qm`.
 
-### 4. Running Both `lupdate` and `lrelease`
+### 4. Running both `lupdate` and `lrelease`
 
-You can also combine both updating and compiling into a single command:
+You can chain the two:
 
 ```bash
 python3 translation_manager.py --lupdate --lrelease
 ```
 
-### 5. Help and Usage Instructions
+### 5. Help
 
-If no arguments are provided, the script will display the help message:
+Running the script with no arguments prints help:
 
 ```bash
 python3 translation_manager.py
 ```
 
-This will output the following information:
+Output:
 
 ```
 usage: translation_manager.py [-h] [--new-ts LANGUAGE] [--lupdate] [--lrelease]
@@ -86,22 +89,22 @@ optional arguments:
   --lrelease           Run lrelease to compile .ts files into .qm files.
 ```
 
-## Folder Structure
+## Folder structure
 
-Here’s an example of the folder structure where the script operates:
+The script expects a layout like this:
 
 ```
 app/
 ├── translations/
-│   ├── ts/          # Folder containing the .ts files (source translations)
+│   ├── ts/                      # Source .ts files
 │   │   ├── en_US.ts
 │   │   ├── es_MX.ts
 │   │   └── ru_RU.ts
-│   ├── qm/          # Folder where the .qm files (compiled translations) are stored
+│   ├── qm/                      # Compiled .qm files
 │   └── translation_manager.py   # This script
 ```
 
-## Example Commands
+## Example commands
 
 1. Create a new French translation file (`fr_FR.ts`):
 
@@ -121,7 +124,7 @@ python3 translation_manager.py --lupdate
 python3 translation_manager.py --lrelease
 ```
 
-4. Perform both update and compile:
+4. Update and compile in one go:
 
 ```bash
 python3 translation_manager.py --lupdate --lrelease
@@ -129,5 +132,5 @@ python3 translation_manager.py --lupdate --lrelease
 
 ## Notes
 
-- The script assumes that your source language is `en_US`, and this is automatically set when creating new `.ts` files.
-- Make sure that the `lib` folder (which contains additional source files) exists at the same level as the `app` folder.
+- The source language is assumed to be `en_US`, and it's set automatically when you create a new `.ts` file.
+- The `lib` folder (which holds extra source files) needs to sit next to `app`.

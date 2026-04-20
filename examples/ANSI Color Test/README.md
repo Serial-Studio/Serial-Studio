@@ -1,6 +1,6 @@
 # ANSI Color & VT-100 Test Suite
 
-This example demonstrates Serial Studio's comprehensive ANSI color and VT-100 terminal emulation support.
+This example exercises Serial Studio's ANSI color and VT-100 terminal emulation support.
 
 ![Serial Studio ANSI Color Test](doc/screenshot.png)
 
@@ -69,7 +69,7 @@ Run the complete test script with all color tests:
 python3 test_ansi_colors.py
 ```
 
-The script will send a comprehensive suite of ANSI color and VT-100 test sequences to Serial Studio via UDP. Watch the console pane to see:
+The script sends a full suite of ANSI color and VT-100 test sequences to Serial Studio via UDP. Watch the console pane to see:
 
 - All color combinations rendered with their ANSI codes
 - Background colors behind text

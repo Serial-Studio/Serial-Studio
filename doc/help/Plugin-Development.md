@@ -21,15 +21,15 @@
 
 Plugins are external programs that connect to Serial Studio's API to receive live data, compute statistics, display custom visualizations, or automate workflows. They run as separate processes alongside Serial Studio and communicate over the network.
 
-Plugins can be written in any language — Python, C++, Go, Rust, Node.js, etc. — and are distributed through the [Extension Manager](Extensions.md).
+Plugins can be written in any language (Python, C++, Go, Rust, Node.js, and so on) and are distributed through the [Extension Manager](Extensions.md).
 
-### What Plugins Can Do
+### What plugins can do
 
-- **Custom visualizations** — 3D renders, maps, specialized charts.
-- **Data processing** — Filtering, FFT analysis, anomaly detection.
-- **Export to external systems** — Push data to databases, cloud services, or other tools.
-- **Automated test sequences** — Connect, configure, validate, and report.
-- **Hardware control** — Send commands back to the device based on incoming data.
+- **Custom visualizations.** 3D renders, maps, specialized charts.
+- **Data processing.** Filtering, FFT analysis, anomaly detection.
+- **Export to external systems.** Push data to databases, cloud services, or other tools.
+- **Automated test sequences.** Connect, configure, validate, and report.
+- **Hardware control.** Send commands back to the device based on incoming data.
 
 ---
 
@@ -150,13 +150,13 @@ A plugin lives in its own folder inside a repository:
 
 ```
 plugin/my-plugin/
-  info.json          # Required — metadata and entry point
+  info.json          # Required: metadata and entry point
   plugin.py          # Entry point script
-  requirements.txt   # Optional — Python dependencies
-  run.sh             # Optional — launcher for macOS/Linux
-  run.cmd            # Optional — launcher for Windows
-  serialstudio_pb2.py       # Optional — gRPC stubs
-  serialstudio_pb2_grpc.py  # Optional — gRPC stubs
+  requirements.txt   # Optional: Python dependencies
+  run.sh             # Optional: launcher for macOS/Linux
+  run.cmd            # Optional: launcher for Windows
+  serialstudio_pb2.py       # Optional: gRPC stubs
+  serialstudio_pb2_grpc.py  # Optional: gRPC stubs
 ```
 
 ### Launcher Scripts

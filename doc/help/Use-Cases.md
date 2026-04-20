@@ -1,6 +1,6 @@
-# Serial Studio Use Cases
+# Serial Studio use cases
 
-Real-world applications and success stories for Serial Studio across industries, education, and hobbyist projects.
+Real-world applications of Serial Studio across industries, education, and hobbyist projects.
 
 ## Table of Contents
 
@@ -45,7 +45,7 @@ Real-world applications and success stories for Serial Studio across industries,
 
 **Hardware:** Arduino Mega + servo controllers
 **Data Format:** Comma-separated values at 50 Hz
-**Key Benefit:** No custom software needed—connect, configure baud rate, and visualize immediately
+**Key Benefit:** No custom software needed. Connect, set the baud rate, and visualize.
 
 ---
 
@@ -288,7 +288,7 @@ Real-world applications and success stories for Serial Studio across industries,
 ---
 
 ### Multi-Device Drone Telemetry
-**Problem:** A drone swarm or dual-drone system requires monitoring multiple aircraft simultaneously, each sending telemetry over different links — and the operator needs to send steering commands and toggle cameras from the same dashboard.
+**Problem:** A drone swarm or dual-drone system needs to monitor multiple aircraft at the same time, each sending telemetry over different links, and the operator needs to send steering commands and toggle cameras from the same dashboard.
 
 **Solution:** Serial Studio's multi-device project mode connects to each drone's data link independently:
 - Drone A over UART (900 MHz radio modem)

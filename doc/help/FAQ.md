@@ -1,73 +1,73 @@
 # Frequently Asked Questions (FAQ)
 
-Answers to common questions about Serial Studio, from installation to advanced usage.
+Answers to common questions about Serial Studio, from installation to advanced use.
 
-## Table of Contents
+## Table of contents
 
-- [General Questions](#general-questions)
-- [Installation and Setup](#installation-and-setup)
-- [Data Sources and Protocols](#data-sources-and-protocols)
-- [Dashboard Configuration](#dashboard-configuration)
+- [General](#general)
+- [Installation and setup](#installation-and-setup)
+- [Data sources and protocols](#data-sources-and-protocols)
+- [Dashboard configuration](#dashboard-configuration)
 - [Troubleshooting](#troubleshooting)
-- [Pro vs. GPL Version](#pro-vs-gpl-version)
-- [Arduino and Embedded Systems](#arduino-and-embedded-systems)
-- [Advanced Topics](#advanced-topics)
+- [Pro vs GPL](#pro-vs-gpl)
+- [Arduino and embedded systems](#arduino-and-embedded-systems)
+- [Advanced topics](#advanced-topics)
 
 ---
 
-## General Questions
+## General
 
 ### What is Serial Studio?
 
-Serial Studio is an open-source tool that helps you see data from devices in real-time. You can monitor sensors, debug hardware, and create custom dashboards without coding.
+Serial Studio is an open source tool that lets you see data from devices in real time. You can monitor sensors, debug hardware, and build custom dashboards without writing code.
 
-**Think of it as:** A universal dashboard for any device that sends data via serial port, Bluetooth, MQTT, Modbus TCP/RTU, CAN Bus, or network.
+Think of it as a universal dashboard for any device that sends data via serial port, Bluetooth, MQTT, Modbus TCP/RTU, CAN Bus, or the network.
 
 ---
 
 ### Is Serial Studio open source?
 
-**The core is open source, with two options:**
+The core is open source, with two flavors:
 
-1. **GPL version (open source):** Build from source code under GPL-3.0 license. Includes core features but excludes Pro modules like MQTT, Modbus, CAN Bus, 3D visualization, and advanced plotting.
+1. **GPL version (open source).** Built from source under GPL-3.0. Includes core features, but leaves out Pro modules like MQTT, Modbus, CAN Bus, 3D visualization, and advanced plotting.
+2. **Pro version (proprietary).** Official binary with everything, plus a 14-day trial. A license runs about $9.99 to $179.00 (check current pricing at [store.serial-studio.com](https://store.serial-studio.com/)).
 
-2. **Pro version (proprietary):** Official binary with all features, 14-day trial included. Purchase license for ~$9.99-179.00 (check current pricing at [store.serial-studio.com](https://store.serial-studio.com/)).
-
-Pro features are proprietary and not open source. See the [License Agreement](License-Agreement.md) and [Pro vs. GPL Version](#pro-vs-gpl-version) for details.
+Pro features are proprietary. They're not open source. See the [License Agreement](License-Agreement.md) and [Pro vs GPL](#pro-vs-gpl) for details.
 
 ---
 
 ### What platforms does Serial Studio support?
 
-- **Windows:** Windows 10/11 (x64)
-- **macOS:** macOS 11+ (Universal binary: Intel and Apple Silicon)
-- **Linux:** x64 via AppImage or Flatpak
-- **Raspberry Pi:** ARM64 (requires Ubuntu 24.04+ equivalent)
+- **Windows:** Windows 10/11 (x64).
+- **macOS:** macOS 11+ (universal binary: Intel and Apple Silicon).
+- **Linux:** x64 via AppImage or Flatpak.
+- **Raspberry Pi:** ARM64 (Ubuntu 24.04+ or equivalent).
 
 ---
 
-### How is Serial Studio different from Arduino Serial Plotter?
+### How is Serial Studio different from the Arduino Serial Plotter?
 
-Arduino Serial Plotter is good for quick debugging but only works with serial ports and basic plots.
+The Arduino Serial Plotter is good for quick debugging, but it only works with serial ports and basic plots.
 
-**Serial Studio adds:**
-- More data sources (BLE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP)
-- 15+ widgets (gauges, maps, FFT, accelerometers, etc.)
-- Custom dashboards with Project Editor
-- Save data to CSV files
-- Parse complex data with JavaScript
+Serial Studio adds:
 
-See [Pro vs. Free](Pro-vs-Free.md) for a detailed comparison.
+- More data sources: BLE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP.
+- 15+ widgets: gauges, maps, FFT, accelerometers, and others.
+- Custom dashboards through the Project Editor.
+- Save data to CSV.
+- Parse complex data with JavaScript.
+
+See [Pro vs Free](Pro-vs-Free.md) for a detailed comparison.
 
 ---
 
 ### Can I use Serial Studio for commercial projects?
 
-**Official binaries:** Yes, but you need a **Pro license** for commercial use (business, revenue-generating projects, closed-source products). Pro features are proprietary.
+**Official binaries:** yes, but you need a Pro license for commercial use (business, revenue-generating projects, closed-source products). Pro features are proprietary.
 
-**GPL build:** Yes, if you build from source and comply with GPL-3.0 terms (your project must also be open source). GPL builds exclude Pro features like MQTT, Modbus, CAN Bus, and 3D visualization.
+**GPL build:** yes, if you build from source and comply with GPL-3.0 (your project has to be open source too). GPL builds don't include Pro features like MQTT, Modbus, CAN Bus, or 3D visualization.
 
-See the [License Agreement](License-Agreement.md) for full dual-licensing details.
+See the [License Agreement](License-Agreement.md) for the full dual-licensing details.
 
 ---
 
@@ -78,30 +78,32 @@ Spataru, A. (2025). Serial Studio: Open-Source Telemetry Dashboard and Data Visu
 GitHub. https://github.com/Serial-Studio/Serial-Studio
 ```
 
-Or use the DOI if available (check GitHub repository).
+Use the DOI if there is one (check the GitHub repository).
 
 ---
 
-## Installation and Setup
+## Installation and setup
 
 ### How do I install Serial Studio on Windows?
 
-1. Download `SerialStudio-Pro-3.x.x-Windows-x64.exe` from [GitHub releases](https://github.com/Serial-Studio/Serial-Studio/releases)
-2. Install [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) if prompted
-3. Run the installer
-4. On first launch, Windows may show "Unknown developer" warning—click "More Info → Run Anyway"
+1. Download `SerialStudio-Pro-3.x.x-Windows-x64.exe` from [GitHub releases](https://github.com/Serial-Studio/Serial-Studio/releases).
+2. Install the [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) if prompted.
+3. Run the installer.
+4. On first launch, Windows may show an "Unknown developer" warning. Click "More Info → Run Anyway".
 
 ---
 
 ### How do I install Serial Studio on macOS?
 
-**Option 1: Official DMG (recommended)**
-1. Download `SerialStudio-Pro-3.x.x-macOS-Universal.dmg` from [GitHub releases](https://github.com/Serial-Studio/Serial-Studio/releases)
-2. Open the DMG file
-3. Drag Serial Studio to Applications folder
-4. Open Serial Studio via Spotlight or Finder.
+**Option 1: official DMG (recommended).**
 
-**Option 2: Homebrew (community-maintained)**
+1. Download `SerialStudio-Pro-3.x.x-macOS-Universal.dmg` from [GitHub releases](https://github.com/Serial-Studio/Serial-Studio/releases).
+2. Open the DMG.
+3. Drag Serial Studio into Applications.
+4. Open it from Spotlight or Finder.
+
+**Option 2: Homebrew (community-maintained).**
+
 ```bash
 brew install --cask serial-studio
 ```
@@ -110,7 +112,8 @@ brew install --cask serial-studio
 
 ### How do I install Serial Studio on Linux?
 
-**Recommended: AppImage**
+**Recommended: AppImage.**
+
 ```bash
 # Download from GitHub releases
 chmod +x SerialStudio-Pro-3.x.x-Linux-x64.AppImage
@@ -118,11 +121,13 @@ chmod +x SerialStudio-Pro-3.x.x-Linux-x64.AppImage
 ```
 
 If it fails to launch, install `libfuse2`:
+
 ```bash
 sudo apt install libfuse2
 ```
 
-**Alternative: Flatpak (GPLv3)**
+**Alternative: Flatpak (GPLv3).**
+
 ```bash
 flatpak install flathub com.serial_studio.Serial-Studio
 flatpak run com.serial_studio.Serial-Studio
@@ -138,18 +143,20 @@ You need permission to access serial devices. Add your user to the `dialout` gro
 sudo usermod -a -G dialout $USER
 ```
 
-Then **log out and log back in** for changes to take effect.
+Then log out and back in for the change to take effect.
 
 ---
 
 ### How do I build Serial Studio from source?
 
 **Prerequisites:**
-- Qt 6.7+ (6.9.2 recommended)
-- C++20 compiler (GCC 10+, Clang 12+, MSVC 2019+)
-- CMake 3.16+
+
+- Qt 6.7+ (6.9.2 recommended).
+- C++20 compiler: GCC 10+, Clang 12+, or MSVC 2019+.
+- CMake 3.16+.
 
 **Linux build:**
+
 ```bash
 sudo apt install libgl1-mesa-dev build-essential
 mkdir build && cd build
@@ -157,50 +164,50 @@ cmake ../ -DPRODUCTION_OPTIMIZATION=ON -DCMAKE_BUILD_TYPE=Release
 cmake --build . -j$(nproc)
 ```
 
-**macOS/Windows:** See the build instructions in the project repository.
+For macOS and Windows, see the build instructions in the project repository.
 
 ---
 
-## Data Sources and Protocols
+## Data sources and protocols
 
 ### What data sources does Serial Studio support?
 
-- **Serial ports:** UART, RS232, RS485 (via USB-serial adapter)
-- **Bluetooth Low Energy (BLE):** GATT characteristics
-- **MQTT:** Publish/subscribe for IoT (Pro only)
-- **Modbus TCP/RTU:** Industrial PLCs and equipment (Pro only)
-- **CAN Bus:** Automotive and industrial networks (Pro only)
-- **TCP/UDP sockets:** Network-connected devices
-- **Audio input:** Microphone, line-in (Pro only)
-- **Raw USB:** Bulk/isochronous transfers via libusb (Pro only)
-- **HID devices:** Gamepads, sensors, custom USB HIDs via hidapi (Pro only)
-- **Process I/O:** Stream stdout from any program or named pipe into the dashboard (Pro only)
-- **CSV files:** Replay previously recorded telemetry data
-- **MDF4/MF4 files:** Playback automotive measurement files (CAN Bus, LIN, FlexRay, analog) (Pro only)
+- **Serial ports:** UART, RS232, RS485 (via USB-serial adapter).
+- **Bluetooth Low Energy (BLE):** GATT characteristics.
+- **MQTT:** publish/subscribe for IoT (Pro).
+- **Modbus TCP/RTU:** industrial PLCs and equipment (Pro).
+- **CAN Bus:** automotive and industrial networks (Pro).
+- **TCP/UDP sockets:** network-connected devices.
+- **Audio input:** microphone, line-in (Pro).
+- **Raw USB:** bulk and isochronous transfers via libusb (Pro).
+- **HID devices:** gamepads, sensors, and custom USB HIDs via hidapi (Pro).
+- **Process I/O:** pipe stdout from any program or named pipe into the dashboard (Pro).
+- **CSV files:** replay previously recorded telemetry.
+- **MDF4/MF4 files:** play automotive measurement files (CAN Bus, LIN, FlexRay, analog) (Pro).
 
 ---
 
 ### How do I connect to a serial port?
 
-1. Plug in your device
-2. In Serial Studio, click the **UART icon** in toolbar
-3. Select your serial port from the dropdown
-4. Set baud rate (common: 9600, 115200)
-5. Click **Connect**
+1. Plug in your device.
+2. Click the UART icon in the toolbar.
+3. Pick your serial port from the dropdown.
+4. Set the baud rate (9600 and 115200 are common).
+5. Click **Connect**.
 
-**Tip:** If you don't see your device, check drivers (FTDI, CH340, CP2102) and permissions (Linux: `dialout` group).
+If you don't see your device, check drivers (FTDI, CH340, CP2102) and permissions (on Linux, the `dialout` group).
 
 ---
 
 ### Can I connect multiple devices at once?
 
-**Yes (Pro only).** Multi-device projects let you define multiple data sources in a single project file—each with its own protocol, connection settings, and frame detection. For example, you can simultaneously connect:
+Yes (Pro). Multi-device projects let you define several data sources in a single project file, each with its own protocol, connection settings, and frame detection. For example, all at the same time you can connect:
 
-- An Arduino over UART at 115200 baud
-- An ESP32 over Bluetooth LE
-- A PLC over Modbus TCP
+- An Arduino over UART at 115200 baud.
+- An ESP32 over Bluetooth LE.
+- A PLC over Modbus TCP.
 
-All devices feed into the same dashboard. Each source's data is routed to its own groups and widgets. Export (CSV/MDF4) captures all sources' data in a single file.
+All devices feed into the same dashboard. Each source's data is routed to its own groups and widgets. CSV and MDF4 export captures every source in one file.
 
 To set this up, open the Project Editor and add sources under the "Sources" section. Each source defines a bus type, connection parameters, and frame parsing rules.
 
@@ -208,123 +215,130 @@ To set this up, open the Project Editor and add sources under the "Sources" sect
 
 ### How do I connect via Bluetooth Low Energy?
 
-1. In Serial Studio, select **Bluetooth LE** as data source
+1. Select **Bluetooth LE** as the data source.
 2. Wait for device discovery to finish.
-3. Select your device and characteristic UUID
-4. Click **Connect**
+3. Select your device and characteristic UUID.
+4. Click **Connect**.
 
 ---
 
 ### How do I receive data via MQTT?
 
-**Pro version only.**
+Pro only.
 
-1. Set up an MQTT broker (Mosquitto, HiveMQ, AWS IoT, etc.)
-2. In Serial Studio, click the **MQTT** icon in the toolbar. 
-3. Enter broker address (e.g., `mqtt://broker.hivemq.com:1883`)
-4. Enter topic to subscribe (e.g., `sensors/temperature`)
-5. (Optional) Set username/password
+1. Set up an MQTT broker (Mosquitto, HiveMQ, AWS IoT, and so on).
+2. Click the MQTT icon in the toolbar.
+3. Enter the broker address (for example `mqtt://broker.hivemq.com:1883`).
+4. Enter the topic to subscribe to (for example `sensors/temperature`).
+5. (Optional) set a username and password.
 6. Set the connection mode to **subscriber**.
-7. Click **Connect**
+7. Click **Connect**.
 
-Your devices should publish data to the MQTT topic, and Serial Studio will visualize it in real-time.
+Your devices should publish to the MQTT topic, and Serial Studio will visualize the data in real time.
 
 ---
 
 ### How do I use Modbus?
 
-**Pro version only.** Supports both Modbus TCP and Modbus RTU.
+Pro only. Both Modbus TCP and Modbus RTU are supported.
 
-**For Modbus TCP:**
-1. Set up a Modbus TCP server (industrial PLC, simulator, or Python script)
-2. In Serial Studio, select **Modbus** as data source
-3. Enter server address (e.g., `192.168.1.100:502`)
-4. Configure registers to read in your project file
-5. Click **Connect**
+**Modbus TCP:**
 
-**For Modbus RTU:**
-1. Connect Modbus RTU device to serial port
-2. In Serial Studio, select **Modbus** as data source
-3. Select serial port and configure baud rate, parity, stop bits
-4. Configure registers to read in your project file
-5. Click **Connect**
+1. Set up a Modbus TCP server (industrial PLC, simulator, or Python script).
+2. Select **Modbus** as the data source.
+3. Enter the server address (for example `192.168.1.100:502`).
+4. Configure registers to read in your project file.
+5. Click **Connect**.
 
-See the Modbus PLC Simulator example in the `/examples` folder for a complete demo.
+**Modbus RTU:**
+
+1. Connect your Modbus RTU device to a serial port.
+2. Select **Modbus** as the data source.
+3. Pick the serial port and set baud rate, parity, and stop bits.
+4. Configure registers to read in your project file.
+5. Click **Connect**.
+
+See the Modbus PLC Simulator example in `/examples` for a full demo.
 
 ---
 
 ### How do I use CAN Bus?
 
-**Pro version only.**
+Pro only.
 
-1. Install CAN hardware drivers (or use VirtualCAN for testing)
-2. In Serial Studio, select **CAN Bus** as data source
-3. Choose driver (VirtualCAN, SocketCAN, PEAK, Vector, etc.)
-4. Select interface and bitrate
-5. Import DBC file to automatically create dashboard
-6. Click **Connect**
+1. Install CAN hardware drivers (or use VirtualCAN for testing).
+2. Select **CAN Bus** as the data source.
+3. Choose a driver (VirtualCAN, SocketCAN, PEAK, Vector, and so on).
+4. Select an interface and bitrate.
+5. Import a DBC file to build the dashboard automatically.
+6. Click **Connect**.
 
-See the CAN Bus Example in the `/examples` folder for step-by-step instructions.
+See the CAN Bus Example in `/examples` for step-by-step instructions.
 
 ---
 
 ### How do I play MDF4/MF4 files?
 
-**Pro version only.** MDF4 (Measurement Data Format 4) files are commonly used in automotive and industrial applications to record CAN Bus, LIN, FlexRay, and analog sensor data.
+Pro only. MDF4 (Measurement Data Format 4) is common in automotive and industrial settings for recording CAN Bus, LIN, FlexRay, and analog sensor data.
 
-1. In Serial Studio, click **Open MDF4** in the toolbar.
-2. Select your MDF4/MF4 file
+1. Click **Open MDF4** in the toolbar.
+2. Select your MDF4/MF4 file.
 3. Serial Studio will:
-   - Parse all available channels (CAN, LIN, FlexRay, analog)
-   - Create a dashboard automatically based on channel data
-   - Provide playback controls (play, pause, seek)
-   - Support real-time visualization during playback
+   - Parse all available channels (CAN, LIN, FlexRay, analog).
+   - Create a dashboard automatically based on the channel data.
+   - Give you playback controls (play, pause, seek).
+   - Support real-time visualization during playback.
 
 **Supported channels:**
-- CAN Bus messages (raw and decoded with DBC)
-- LIN frames
-- FlexRay frames
-- Analog voltage/current channels
-- Temperature, pressure, and other sensor data
+
+- CAN Bus messages, raw or decoded with DBC.
+- LIN frames.
+- FlexRay frames.
+- Analog voltage and current channels.
+- Temperature, pressure, and other sensors.
 
 **Use cases:**
-- Analyzing recorded vehicle test drives
-- Debugging automotive ECU communication
-- Post-processing industrial machine data
-- Comparing multiple test runs
+
+- Analyzing recorded vehicle test drives.
+- Debugging automotive ECU communication.
+- Post-processing industrial machine data.
+- Comparing multiple test runs.
 
 ---
 
 ### How do I export data to MDF4 format?
 
-**Pro version only.**
+Pro only.
 
-1. Click the **MDF4 export checkbox** in the setup panel to enable MDF4 logging
-2. Start receiving real-time data (from any source: serial, CAN Bus, Modbus, etc.)
-3. Serial Studio saves all received data to a timestamped MDF4 file
+1. Click the **MDF4 export** checkbox in the setup panel to enable MDF4 logging.
+2. Start receiving real-time data (from any source: serial, CAN Bus, Modbus, and so on).
+3. Serial Studio saves all received data to a timestamped MDF4 file.
 
 **Benefits of MDF4 export:**
-- Industry-standard format compatible with Vector CANalyzer, CANape, ETAS INCA
-- Efficient binary storage (smaller than CSV)
-- Preserves timestamp precision (nanosecond resolution)
-- Supports metadata (channel names, units, descriptions)
 
-**Supported data sources for MDF4 export:**
-- CAN Bus (with DBC decoding)
-- Modbus registers
-- Serial/UART sensors
-- MQTT messages
-- Any real-time data source
+- Industry-standard format compatible with Vector CANalyzer, CANape, and ETAS INCA.
+- Efficient binary storage (smaller than CSV).
+- Nanosecond timestamp resolution.
+- Preserves metadata (channel names, units, descriptions).
+
+**Supported sources for MDF4 export:**
+
+- CAN Bus (with DBC decoding).
+- Modbus registers.
+- Serial/UART sensors.
+- MQTT messages.
+- Any real-time data source.
 
 ---
 
 ### How do I connect via TCP/UDP?
 
-1. Select **Network (TCP)** or **Network (UDP)** as data source
-2. Enter IP address and port (e.g., `192.168.1.100:8080`)
-3. Click **Connect**
+1. Select **Network (TCP)** or **Network (UDP)** as the data source.
+2. Enter the IP address and port (for example `192.168.1.100:8080`).
+3. Click **Connect**.
 
-**Example:** Python script sending UDP data to Serial Studio:
+Example: a Python script sending UDP to Serial Studio:
+
 ```python
 import socket
 
@@ -338,74 +352,80 @@ while True:
 
 ### What data format should my device send?
 
-Serial Studio works with three modes:
+Serial Studio works in three modes:
 
-**1. Quick Plot Mode (easiest):**
-- Send comma-separated values: `23.5,67.2,1013.25\n`
-- Serial Studio shows plots automatically
+**1. Quick Plot mode (easiest).**
 
-**2. Project File Mode (recommended):**
-- Create a JSON project file with your dashboard layout
-- Device sends raw data (CSV, binary, or custom format)
-- Serial Studio reads the data based on your project file
+- Send comma-separated values: `23.5,67.2,1013.25\n`.
+- Serial Studio shows plots automatically.
 
-**3. Device-defined JSON Mode:**
-- Device sends JSON with data and widget info
-- JSON format can change between versions
-- Open a JSON file from Project Editor to see the format
+**2. Project File mode (recommended).**
 
-See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md) for more details.
+- Create a JSON project file with your dashboard layout.
+- The device sends raw data (CSV, binary, or a custom format).
+- Serial Studio interprets it based on the project file.
+
+**3. Device-defined JSON mode.**
+
+- The device sends JSON with both data and widget info.
+- The JSON format can change between versions.
+- Open a JSON file in the Project Editor to see the shape.
+
+See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md) for more.
 
 ---
 
-## Dashboard Configuration
+## Dashboard configuration
 
 ### How do I create a custom dashboard?
 
-**Method 1: Project Editor (easy)**
-1. Click **Project Editor** in the toolbar
-2. Click **New Project**
-3. Add **Groups** (containers for your data)
-4. Add **Datasets** to each group
-5. Pick a widget for each dataset (gauge, plot, map, etc.)
-6. Add units, min/max values, and labels
-7. Save the project file (`.json`)
-8. Load the project in Serial Studio
+**Method 1: Project Editor (easy).**
 
-**Method 2: Edit JSON by hand**
-Not recommended unless you need to create projects automatically with scripts.
+1. Click **Project Editor** in the toolbar.
+2. Click **New Project**.
+3. Add groups (containers for your data).
+4. Add datasets to each group.
+5. Pick a widget for each dataset (gauge, plot, map, and so on).
+6. Add units, min/max values, and labels.
+7. Save the project file (`.json`).
+8. Load the project in Serial Studio.
+
+**Method 2: edit JSON by hand.** Not recommended unless you're generating projects with scripts.
 
 ---
 
 ### What widgets are available?
 
 **Free (GPL + Pro):**
-- Line plots (single and multi-dataset)
-- Bar charts
-- Gauges (circular and linear)
-- Compass
-- Data grids and tables
-- Accelerometer (3-axis)
-- Gyroscope (3-axis)
-- FFT spectrum analyzer
-- GPS maps (OpenStreetMap)
+
+- Line plots (single and multi-dataset).
+- Bar charts.
+- Gauges (circular and linear).
+- Compass.
+- Data grids and tables.
+- Accelerometer (3-axis).
+- Gyroscope (3-axis).
+- FFT spectrum analyzer.
+- GPS maps (OpenStreetMap).
 
 **Pro only:**
-- XY plots (parametric plots)
-- 3D visualizations
-- Advanced plotting features
-- Image View (live JPEG/PNG camera feed widget)
+
+- XY plots (parametric plots).
+- 3D visualizations.
+- Advanced plotting features.
+- Image View (live JPEG/PNG camera feed widget).
 
 ---
 
 ### How do I export data to CSV?
 
-1. Click the **CSV icon** in toolbar to enable CSV logging
-2. Serial Studio saves all received data to timestamped CSV file
-3. File location shown in console panel
-4. Stop CSV logging by clicking icon again
+1. Click the CSV icon in the toolbar to enable CSV logging.
+2. Serial Studio saves all received data to a timestamped CSV file.
+3. The file location is shown in the console panel.
+4. Click the icon again to stop logging.
 
 **CSV format:**
+
 ```
 Time,Group/Dataset 1,Group/Dataset 2,...
 0.010000,...
@@ -414,9 +434,9 @@ Time,Group/Dataset 1,Group/Dataset 2,...
 
 ---
 
-### Can I change the appliction theme?
+### Can I change the application theme?
 
-Yes! Click **Preferences → Theme** and choose your preffered theme.
+Yes. Click **Preferences → Theme** and pick one.
 
 ### How do I calibrate or filter a dataset value?
 
@@ -428,9 +448,9 @@ function transform(value)
 end
 ```
 
-The transform runs on every incoming frame and replaces the raw value everywhere — dashboard, plots, CSV export, and API. Built-in templates are available for common operations like linear calibration, moving average, unit conversion, and more.
+The transform runs on every incoming frame and replaces the raw value everywhere: dashboard, plots, CSV export, and API. Built-in templates cover common operations like linear calibration, moving average, and unit conversion.
 
-See [Dataset Value Transforms](Dataset-Transforms.md) for the complete guide.
+See [Dataset Value Transforms](Dataset-Transforms.md) for the full guide.
 
 ---
 
@@ -439,56 +459,61 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the complete guide.
 ### Serial Studio doesn't detect my serial port
 
 **Windows:**
-- Check Device Manager for COM port number
-- Install driver (FTDI, CH340, CP2102)
-- Try a different USB cable (data cable, not charge-only)
+
+- Check Device Manager for the COM port number.
+- Install the driver (FTDI, CH340, CP2102).
+- Try a different USB cable (data, not charge-only).
 
 **macOS:**
-- Install driver if needed (modern macOS has built-in drivers)
-- Check `/dev/tty.usbserial-*` or `/dev/tty.usbmodem-*`
+
+- Install a driver if needed (modern macOS ships with most).
+- Check `/dev/tty.usbserial-*` or `/dev/tty.usbmodem-*`.
 
 **Linux:**
-- Add user to `dialout` group: `sudo usermod -a -G dialout $USER` (log out and back in)
-- Check `/dev/ttyUSB*` or `/dev/ttyACM*`
-- Verify permissions: `ls -l /dev/ttyUSB0`
+
+- Add your user to `dialout`: `sudo usermod -a -G dialout $USER`, then log out and back in.
+- Check `/dev/ttyUSB*` or `/dev/ttyACM*`.
+- Check permissions: `ls -l /dev/ttyUSB0`.
 
 ---
 
 ### I see garbled data or strange characters
 
-**Check baud rate:** This is the most common problem. Make sure Serial Studio baud rate matches your device (common: 9600, 115200).
+**Baud rate.** This is the most common cause. Make sure Serial Studio's baud rate matches the device (9600 or 115200 are common).
 
-**Check data bits, parity, stop bits:** Usually 8N1 (8 data bits, no parity, 1 stop bit). Change in Serial Studio settings if your device uses something different.
+**Data bits, parity, stop bits.** Usually 8N1 (8 data bits, no parity, 1 stop bit). Change it in Serial Studio's settings if your device uses something else.
 
-**Check frame delimiters:** Serial Studio expects newline (`\n`) by default. If your device uses a different end character (like `\r\n`, semicolon, or custom byte), change it in Settings → Frame Detection.
+**Frame delimiters.** Serial Studio expects newline (`\n`) by default. If your device uses something different (`\r\n`, a semicolon, a custom byte), change it in Settings → Frame Detection.
 
 ---
 
-### My plots look incorrect or don't update
+### My plots look wrong or don't update
 
-**Quick Plot mode issues:**
-- Ensure you're sending **comma-separated values**: `val1,val2,val3\n`.
-- Each line should have the **same number of values**.
-- End each frame with a **newline** character (`\n`) or a **carret line** character (`\r`).
+**Quick Plot mode:**
 
-**Project File mode issues:**
-- Verify project file matches data format
-- Check frame start/end sequences in project settings
-- Verify the frame parser code.
+- Make sure you're sending comma-separated values: `val1,val2,val3\n`.
+- Every line should have the same number of values.
+- End each frame with a newline (`\n`) or a carriage return (`\r`).
+
+**Project File mode:**
+
+- Check that the project file matches your data format.
+- Check frame start/end sequences in project settings.
+- Check the frame parser code.
 
 ---
 
 ### How do I parse binary or custom protocols?
 
-Use **JavaScript frame parser**:
+Use the **JavaScript frame parser**.
 
-1. In Project Editor, click on the **Frame Parser** icon in the project tree.
-2. Write JavaScript function to parse raw data:
+1. In the Project Editor, click the **Frame Parser** icon in the project tree.
+2. Write a JavaScript function that parses the raw data:
 
 ```javascript
 function parse(frame) {
   // frame is QByteArray of raw data
-  // Return comma-separated string
+  // Return a comma-separated string
   let byte1 = frame.at(0);
   let byte2 = frame.at(1);
   let value = (byte1 << 8) | byte2;
@@ -496,8 +521,8 @@ function parse(frame) {
 }
 ```
 
-3. Save project file
-4. Serial Studio calls your function for each frame
+3. Save the project file.
+4. Serial Studio calls your function for every frame.
 
 See the [examples folder](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples) for sample parsers.
 
@@ -505,104 +530,109 @@ See the [examples folder](https://github.com/Serial-Studio/Serial-Studio/tree/ma
 
 ### Serial Studio crashes or freezes
 
-**Bug report:** If crashes persist, open a GitHub issue with:
-- OS and Serial Studio version
-- Steps to reproduce
-- Console log (View → Console)
+**Bug report.** If crashes persist, open a GitHub issue with:
+
+- OS and Serial Studio version.
+- Steps to reproduce.
+- Console log (View → Console).
 
 ---
 
 ### AppImage won't launch on Linux
 
-**Error: `cannot open shared object file`**
+**Error: `cannot open shared object file`.**
 
-Install missing library:
+Install the missing library:
+
 ```bash
 sudo apt install libfuse2
 ```
 
-**Error: `glibc version too old`**
+**Error: `glibc version too old`.**
 
-ARM64 AppImage requires Ubuntu 24.04+ (glibc 2.38+). Upgrade your OS or use Flatpak version.
+The ARM64 AppImage needs Ubuntu 24.04+ (glibc 2.38+). Upgrade the OS or use the Flatpak version.
 
 ---
 
-## Pro vs. GPL Version
+## Pro vs GPL
 
-### What features are in Pro vs. GPL?
+### What features are in Pro vs GPL?
 
-| Feature | GPL (Open Source) | Pro (Proprietary) |
-|---------|-------------------|-------------------|
-| Serial, BLE, TCP/UDP | ✅ | ✅ |
-| MQTT | ❌ | ✅ |
-| Modbus TCP/RTU | ❌ | ✅ |
-| CAN Bus | ❌ | ✅ |
-| Audio input | ❌ | ✅ |
-| Basic plots, gauges, maps | ✅ | ✅ |
-| XY plots | ❌ | ✅ |
-| 3D visualization | ❌ | ✅ |
-| FFT spectrum analyzer | ❌ | ✅ |
-| Advanced plotting | ❌ | ✅ |
-| Image View (camera/image stream) | ❌ | ✅ |
-| Raw USB (libusb) | ❌ | ✅ |
-| HID devices (hidapi) | ❌ | ✅ |
-| Process I/O | ❌ | ✅ |
-| Multi-device projects | ❌ | ✅ |
-| CSV export & playback | ✅ | ✅ |
-| MDF4 playback & export | ❌ | ✅ |
-| DBC file import (CAN) | ❌ | ✅ |
-| Commercial use | ⚠️ GPL compliant only | ✅ |
-| Priority support | ❌ | ✅ |
-| Source availability | ✅ Open source | ⚠️ Visible but proprietary |
+| Feature                          | GPL (open source)          | Pro (proprietary)              |
+|----------------------------------|----------------------------|--------------------------------|
+| Serial, BLE, TCP/UDP             | ✅                         | ✅                             |
+| MQTT                             | ❌                         | ✅                             |
+| Modbus TCP/RTU                   | ❌                         | ✅                             |
+| CAN Bus                          | ❌                         | ✅                             |
+| Audio input                      | ❌                         | ✅                             |
+| Basic plots, gauges, maps        | ✅                         | ✅                             |
+| XY plots                         | ❌                         | ✅                             |
+| 3D visualization                 | ❌                         | ✅                             |
+| FFT spectrum analyzer            | ❌                         | ✅                             |
+| Advanced plotting                | ❌                         | ✅                             |
+| Image View (camera/image stream) | ❌                         | ✅                             |
+| Raw USB (libusb)                 | ❌                         | ✅                             |
+| HID devices (hidapi)             | ❌                         | ✅                             |
+| Process I/O                      | ❌                         | ✅                             |
+| Multi-device projects            | ❌                         | ✅                             |
+| CSV export and playback          | ✅                         | ✅                             |
+| MDF4 playback and export         | ❌                         | ✅                             |
+| DBC file import (CAN)            | ❌                         | ✅                             |
+| Commercial use                   | ⚠️ GPL compliant only      | ✅                             |
+| Priority support                 | ❌                         | ✅                             |
+| Source availability              | ✅ Open source             | ⚠️ Visible but proprietary     |
 
 ---
 
 ### How much does Pro cost?
 
-Check current pricing at [serial-studio.com](https://serial-studio.com). Typically:
-- **Individual license:** ~$9.99 (subscription), or $179.00 one-time
-- **Team/Enterprise licenses:** Discounts available
+Check current pricing at [serial-studio.com](https://serial-studio.com). Typical numbers:
 
-**14-day free trial** included with official binary.
+- **Individual license:** around $9.99/month, or $179.00 one-time.
+- **Team and enterprise licenses:** discounts available.
+
+The official binary ships with a 14-day free trial.
 
 ---
 
 ### Can I try Pro features before buying?
 
-Yes! Download the official binary and you get a **14-day trial** with all Pro features enabled.
+Yes. Download the official binary and you get a 14-day trial with all Pro features enabled.
 
 After 14 days:
-- Enter license key to continue using Pro features
-- Or continue using GPL features for free (MQTT, 3D, etc. will be disabled)
+
+- Enter a license key to keep using Pro features.
+- Or keep using the GPL features for free (MQTT, 3D, and others will be disabled).
 
 ---
 
-### I'm a student/educator. Is there a discount?
+### I'm a student or educator. Is there a discount?
 
-Contact alex@serial-studio.com with:
-- Educational institution email
-- Proof of enrollment/employment
-- Intended use case
+Email alex@serial-studio.com with:
 
-Educational discounts are considered on a case-by-case basis.
+- Your educational institution email.
+- Proof of enrollment or employment.
+- Your intended use case.
+
+Educational discounts are considered case by case.
 
 ---
 
-### Can I use Pro features in open-source projects?
+### Can I use Pro features in open source projects?
 
-If you have a Pro license, yes, you can use all features for your open-source work.
+If you have a Pro license, yes, you can use all features in your open source work.
 
-However, Pro features are proprietary (not open source), even though the source code is visible in the repository. If you want to distribute your project under GPL and your users build Serial Studio from source, they won't have access to Pro features (MQTT, Modbus, CAN Bus, 3D, etc.) unless they purchase licenses.
+That said, Pro features are proprietary even though their source code is visible in the repo. If you ship your project under GPL and your users build Serial Studio from source, they won't get Pro features (MQTT, Modbus, CAN Bus, 3D, and so on) unless they buy licenses.
 
 See the [License Agreement](License-Agreement.md) for the dual-licensing details.
 
 ---
 
-## Arduino and Embedded Systems
+## Arduino and embedded systems
 
 ### What's the easiest way to get started with Arduino?
 
-**Arduino Quick Start:**
+**Arduino quick start:**
 
 ```cpp
 void setup() {
@@ -621,15 +651,15 @@ void loop() {
 }
 ```
 
-1. Upload this sketch
-2. Open Serial Studio
-3. Select serial port, set 9600 baud
-4. Enable **Quick Plot mode**
-5. Done! Your sensor values are plotted in real-time
+1. Upload this sketch.
+2. Open Serial Studio.
+3. Select the serial port and set it to 9600 baud.
+4. Enable **Quick Plot** mode.
+5. Done. Your sensor values are plotted live.
 
 ---
 
-### How do I send data from ESP32 via BLE?
+### How do I send data from an ESP32 via BLE?
 
 **ESP32 BLE UART example:**
 
@@ -667,13 +697,13 @@ void loop() {
 }
 ```
 
-Connect via Serial Studio BLE interface.
+Connect via the Serial Studio BLE interface.
 
 ---
 
-### How do I send data from Raspberry Pi?
+### How do I send data from a Raspberry Pi?
 
-**Python example (serial via USB cable to computer):**
+**Python over USB serial:**
 
 ```python
 import serial
@@ -687,7 +717,7 @@ while True:
     time.sleep(1)
 ```
 
-**Python example (TCP server for network connection):**
+**Python TCP server:**
 
 ```python
 import socket
@@ -735,31 +765,31 @@ void loop() {
 }
 ```
 
-In Serial Studio, use JavaScript frame parser to validate checksum and extract data.
+In Serial Studio, use a JavaScript frame parser to validate the checksum and extract the data.
 
 ---
 
 ### Can Serial Studio control my Arduino (send data back)?
 
-Not directly in current version. Right now, Serial Studio is primarily for **receiving and visualizing data**, not for sending commands.
+Not directly in the current version. Today, Serial Studio is mainly a receive-and-visualize tool, not a command sender.
 
 **Workarounds:**
-- Write a [plugin application](https://github.com/Serial-Studio/Serial-Studio/tree/master/app/src/API) in your preffered language/framework that shares the device with Serial Studio.
-- Use MQTT (Pro): Serial Studio can publish commands to MQTT topics that your device subscribes to
-- **Feature request:** Bidirectional communication is planned for future versions
-- 
+
+- Write a [plugin application](https://github.com/Serial-Studio/Serial-Studio/tree/master/app/src/API) in your preferred language or framework that shares the device with Serial Studio.
+- Use MQTT (Pro). Serial Studio can publish commands to MQTT topics that your device subscribes to.
+- Bidirectional communication is planned for a future version.
+
 ---
 
 ### Can I integrate Serial Studio with my CI/CD pipeline?
 
-Serial Studio is primarily a GUI application, not designed for headless automation. However:
+Serial Studio is primarily a GUI app, not built for headless automation. That said:
 
-**Workaround:**
-- Serial Studio exports CSV in real-time
-- Write script to monitor CSV file and validate data
-- Use script in CI/CD for hardware-in-the-loop testing
+- Serial Studio exports CSV in real time.
+- Write a script that watches the CSV file and validates the data.
+- Use that script in CI/CD for hardware-in-the-loop testing.
 
-**Future:** CLI mode is being considered for automated testing scenarios.
+A CLI mode is being considered for automated testing scenarios.
 
 ---
 
@@ -768,114 +798,120 @@ Serial Studio is primarily a GUI application, not designed for headless automati
 See [README.md - Contributing](https://github.com/Serial-Studio/Serial-Studio#contributing) for guidelines.
 
 **Quick start:**
-1. Fork repository
-2. Check the code style guidelines in the repository
-3. Focus on GPL-licensed code (avoid commercial modules)
-4. Submit pull request
+
+1. Fork the repository.
+2. Check the code style guidelines in the repo.
+3. Stick to GPL-licensed code. Leave the commercial modules alone.
+4. Submit a pull request.
 
 **Non-code contributions:**
-- Report bugs (GitHub issues)
-- Write documentation
-- Share use cases and examples
-- Translate UI to other languages
+
+- Report bugs on GitHub issues.
+- Write documentation.
+- Share use cases and examples.
+- Translate the UI.
 
 ---
 
 ### How do I report a bug?
 
 Open a GitHub issue with:
-- **OS and Serial Studio version**
-- **Steps to reproduce**
-- **Expected vs. actual behavior**
-- **Console log** (View → Console, copy all text)
-- **Sample data** (if possible, share example data that triggers the bug)
+
+- **OS and Serial Studio version.**
+- **Steps to reproduce.**
+- **Expected vs actual behavior.**
+- **Console log** (View → Console, copy all text).
+- **Sample data**, if you can share something that triggers the bug.
 
 ---
 
 ### Is there a command-line interface (CLI)?
 
-Not currently. Serial Studio is designed as a GUI application.
+Not yet. Serial Studio is built as a GUI app.
 
-**Feature request:** CLI mode is being considered for:
-- Automated testing
-- Headless data logging
-- Server deployments
+A CLI mode is being considered for:
 
-Upvote relevant GitHub issues if you need this feature.
+- Automated testing.
+- Headless data logging.
+- Server deployments.
+
+Upvote related GitHub issues if you need this.
 
 ---
 
 ### Can Serial Studio run on Raspberry Pi?
 
-**Yes**, if you have:
-- **64-bit OS** (Ubuntu 24.04+ equivalent)
-- **ARM64 AppImage** (download from GitHub releases)
-- **Adequate GPU** (Serial Studio UI requires OpenGL)
+Yes, if you have:
 
-**Performance:** Depends on Raspberry Pi model and connected display. Raspberry Pi 4/5 with 4GB+ RAM recommended.
+- A 64-bit OS (Ubuntu 24.04+ or equivalent).
+- The ARM64 AppImage (from GitHub releases).
+- An adequate GPU. Serial Studio's UI needs OpenGL.
 
-**Alternative:** Use Raspberry Pi as data aggregator (collect sensor data, forward to Serial Studio running on desktop computer).
+Performance depends on the Pi model and the connected display. Raspberry Pi 4 or 5 with 4 GB+ of RAM is a good starting point.
 
+Alternatively, use the Pi as a data aggregator: collect sensor data and forward it to Serial Studio running on a desktop.
 
 ---
 
 ### Can I use Serial Studio for audio signal analysis?
 
-**Pro version only** (audio input support).
+Pro only (audio input).
 
-1. Select **Audio** as data source
-2. Choose audio input device (microphone, line-in)
-3. Use FFT widget to visualize frequency spectrum
-4. Use oscilloscope widget for waveform
+1. Select **Audio** as the data source.
+2. Choose an audio input device (microphone, line-in).
+3. Use the FFT widget to see the frequency spectrum.
+4. Use the oscilloscope widget for the waveform.
 
-**Use cases:** Audio analysis, ultrasonic sensors, software-defined radio (SDR) with audio output.
+Use cases: audio analysis, ultrasonic sensors, software-defined radio (SDR) with audio output.
 
 ---
 
 ### Can Serial Studio display live camera or image data?
 
-**Pro version only** (Image View widget).
+Pro only (Image View widget).
 
-Serial Studio can display live JPEG, PNG, BMP, or WebP images streamed from any connected device over any supported transport (UART, UDP, TCP, BLE, etc.).
+Serial Studio can display live JPEG, PNG, BMP, or WebP images streamed from any connected device over any supported transport (UART, UDP, TCP, BLE, and so on).
 
-**How it works:**
+**How it works.**
 
 The Image View widget runs an independent frame reader alongside the telemetry path. It scans the raw byte stream for image data without interfering with CSV or JSON telemetry in the same stream.
 
 **Two detection modes:**
 
-- **Autodetect (default):** No configuration needed. The widget automatically detects JPEG (`FF D8 FF … FF D9`) and PNG (`89 50 4E 47 … 49 45 4E 44 AE 42 60 82`) frames by their magic bytes. Perfect for embedded cameras streaming raw JPEG.
-
-- **Manual delimiters:** Specify custom start/end byte sequences for proprietary framing (e.g. `$IMG_START$…$IMG_END$`). Configure these in the Project Editor group settings.
+- **Autodetect (default).** No configuration needed. The widget automatically detects JPEG (`FF D8 FF … FF D9`) and PNG (`89 50 4E 47 … 49 45 4E 44 AE 42 60 82`) frames by their magic bytes. A good fit for embedded cameras streaming raw JPEG.
+- **Manual delimiters.** Specify custom start/end byte sequences for proprietary framing (for example `$IMG_START$…$IMG_END$`). Configure them in the Project Editor group settings.
 
 **Quick setup:**
 
-1. In the Project Editor, add a new **Group** and set its widget type to **Image View**
-2. Leave detection mode as **Autodetect** (works for most cameras out of the box)
-3. Load your project and connect — the widget shows "Waiting for image…" until the first frame arrives
+1. In the Project Editor, add a new group and set its widget type to **Image View**.
+2. Leave detection mode as **Autodetect** (works for most cameras out of the box).
+3. Load your project and connect. The widget shows "Waiting for image…" until the first frame arrives.
 
-**Mixed telemetry + image stream:**
+**Mixed telemetry and image stream.**
 
-You can send image data and telemetry (gauges, plots, etc.) over the same connection simultaneously. The Image View widget extracts image frames by magic bytes; the normal telemetry parser ignores binary image data between its `frameStart`/`frameEnd` delimiters. See the **Camera Telemetry** example in the `/examples` folder for a complete Python + project file demo.
+You can send image data and telemetry (gauges, plots, and so on) over the same connection at the same time. The Image View widget extracts image frames by magic bytes. The normal telemetry parser ignores binary image data between its `frameStart`/`frameEnd` delimiters. See the **Camera Telemetry** example in `/examples` for a full Python + project file demo.
 
-**Use cases:** Embedded camera modules (OV2640, ESP32-CAM), UAV video feeds, industrial vision systems, any device that streams JPEG/PNG images over serial or network.
+Use cases: embedded camera modules (OV2640, ESP32-CAM), UAV video feeds, industrial vision systems, and any device that streams JPEG or PNG images over serial or the network.
 
 ---
 
-### How do I use Serial Studio with MATLAB/Python for post-processing?
+### How do I use Serial Studio with MATLAB or Python for post-processing?
 
 **Workflow:**
-1. Serial Studio receives real-time data and exports to CSV
-2. Monitor data in Serial Studio during experiment
-3. When done, import CSV into MATLAB/Python for analysis
 
-**MATLAB example:**
+1. Serial Studio receives real-time data and writes it to CSV.
+2. Monitor the data in Serial Studio during the experiment.
+3. When you're done, import the CSV into MATLAB or Python for analysis.
+
+**MATLAB:**
+
 ```matlab
 data = readtable('serial_studio_output.csv');
 plot(data.Timestamp, data.Temperature);
 ```
 
-**Python example:**
+**Python:**
+
 ```python
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -889,43 +925,46 @@ plt.show()
 
 ### Where can I find examples and templates?
 
-- **`/examples` folder** in GitHub repository: 10+ ready-to-use projects (Arduino, Python, project files)
-- **[Getting Started](Getting-Started.md):** Setup guide and tutorials
-- **Community projects:** Search GitHub for "Serial Studio" to find user contributions
+- `/examples` folder in the GitHub repo: 10+ ready-to-use projects (Arduino, Python, project files).
+- [Getting Started](Getting-Started.md): setup guide and tutorials.
+- Community projects: search GitHub for "Serial Studio" to find user contributions.
 
 ---
 
 ### How do I get support?
 
 **Free users (GPL):**
-- GitHub Issues (bug reports, feature requests)
-- GitHub Discussions (community help)
-- Documentation and Wiki
+
+- GitHub Issues for bug reports and feature requests.
+- GitHub Discussions for community help.
+- Documentation and wiki.
 
 **Pro users:**
-- Priority email support: alex@serial-studio.com
-- Faster response times
-- Custom feature consultations (within reason)
+
+- Priority email support at alex@serial-studio.com.
+- Faster response times.
+- Custom feature consultations (within reason).
 
 ---
 
 ### Can I use Serial Studio offline?
 
-Yes! Serial Studio is a **desktop application** that runs entirely offline. No internet required except for:
-- Initial download/installation
-- MQTT (if broker is on internet)
-- GPS map tiles (cached after first download)
-- Update checks (can be disabled)
+Yes. Serial Studio is a desktop app that runs entirely offline. No internet is required except for:
+
+- Initial download and install.
+- MQTT (if the broker lives on the internet).
+- GPS map tiles (cached after first download).
+- Update checks (can be turned off).
 - License verification every 30 days.
 
 ---
 
 ## Still have questions?
 
-- **Documentation:** [Getting Started](Getting-Started.md)
-- **Examples:** [examples folder](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples)
-- **Issues:** [GitHub Issues](https://github.com/Serial-Studio/Serial-Studio/issues)
-- **Email:** alex@serial-studio.com (Pro users get priority)
+- **Documentation:** [Getting Started](Getting-Started.md).
+- **Examples:** [examples folder](https://github.com/Serial-Studio/Serial-Studio/tree/master/examples).
+- **Issues:** [GitHub Issues](https://github.com/Serial-Studio/Serial-Studio/issues).
+- **Email:** alex@serial-studio.com (Pro users get priority).
 
 ---
 

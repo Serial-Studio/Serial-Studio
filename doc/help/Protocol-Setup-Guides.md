@@ -70,7 +70,7 @@ Serial Studio will resolve the hostname (if provided) and attempt a TCP connecti
 
 ### Troubleshooting
 
-- **No data received:** Verify the device is sending to your computer's IP and the correct local port. Check firewall rules — UDP is often blocked by default. If using multicast, ensure both devices are on the same multicast-capable network segment.
+- **No data received.** Check that the device is sending to your computer's IP and the correct local port. Check firewall rules: UDP is often blocked by default. If you're using multicast, make sure both devices are on the same multicast-capable network segment.
 - **Data from wrong source:** UDP is connectionless. Any device sending to your bound port will be received. Use firewall rules or application-level filtering if needed.
 
 ---
@@ -234,18 +234,18 @@ CSV is the most common format for Modbus register maps. Most PLC vendors, SCADA 
 
 **Columns** (header row required, order is flexible):
 
-| Column      | Aliases                                    | Required | Default    |
-|-------------|--------------------------------------------|----------|------------|
-| `address`   | `addr`, `register`, `reg`                  | Yes      | —         |
-| `name`      | `label`, `tag`                             | No       | Register N |
-| `type`      | `register_type`, `function`, `fc`          | No       | holding    |
-| `dataType`  | `data_type`, `format`                      | No       | uint16     |
-| `units`     | `unit`, `eng_units`                        | No       | —         |
-| `min`       | `minimum`, `range_min`                     | No       | 0          |
-| `max`       | `maximum`, `range_max`                     | No       | 65535      |
-| `scale`     | `factor`, `multiplier`                     | No       | 1.0        |
-| `offset`    |                                            | No       | 0.0        |
-| `description` | `desc`, `comment` (used as name if no name column) | No | — |
+| Column        | Aliases                                           | Required | Default    |
+|---------------|---------------------------------------------------|----------|------------|
+| `address`     | `addr`, `register`, `reg`                         | Yes      | None       |
+| `name`        | `label`, `tag`                                    | No       | Register N |
+| `type`        | `register_type`, `function`, `fc`                 | No       | holding    |
+| `dataType`    | `data_type`, `format`                             | No       | uint16     |
+| `units`       | `unit`, `eng_units`                               | No       | None       |
+| `min`         | `minimum`, `range_min`                            | No       | 0          |
+| `max`         | `maximum`, `range_max`                            | No       | 65535      |
+| `scale`       | `factor`, `multiplier`                            | No       | 1.0        |
+| `offset`      |                                                   | No       | 0.0        |
+| `description` | `desc`, `comment` (used as name if no name column)| No       | None       |
 
 **Register type values:** `holding` (or `0x03`, `3`, `hr`), `input` (or `0x04`, `4`, `ir`), `coil` (or `0x01`, `1`), `discrete` (or `0x02`, `2`, `di`).
 
@@ -271,7 +271,7 @@ Most Modbus device documentation provides register maps as tables in PDF or Exce
 
 1. **Identify the columns:** Look for register address, name/description, data type, and units.
 2. **Map register types:** Holding registers (function code 03), input registers (04), coils (01), discrete inputs (02).
-3. **Note multi-register values:** A `float32` value occupies two consecutive 16-bit registers. Set the address to the first register — Serial Studio handles the rest.
+3. **Note multi-register values.** A `float32` value occupies two consecutive 16-bit registers. Set the address to the first register. Serial Studio handles the rest.
 4. **Add scaling if needed:** If the device stores temperature as raw value × 0.1, add `scale,0.1` to the CSV.
 5. **Save as `.csv`** with UTF-8 encoding.
 
@@ -340,9 +340,9 @@ Supported group keys: `holdingRegisters`, `holding_registers`, `holding`, `input
 The importer produces:
 
 - **Register groups** loaded into the Modbus driver (ready to connect immediately).
-- **Project groups** — one per contiguous block of same-type registers.
-- **Datasets** — one per register entry, with name, units, min/max, and widget type (LED for booleans, gauge for temperatures/pressures, bar for percentages).
-- **Frame parser** — JavaScript code that extracts values from Modbus protocol frames, handles data types (uint16, int16, float32), and applies scaling/offset. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on how the parser handles multiple register groups.
+- **Project groups.** One per contiguous block of same-type registers.
+- **Datasets.** One per register entry, with name, units, min/max, and widget type (LED for booleans, gauge for temperatures/pressures, bar for percentages).
+- **Frame parser.** JavaScript code that extracts values from Modbus protocol frames, handles data types (uint16, int16, float32), and applies scaling/offset. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on how the parser handles multiple register groups.
 
 ### Example Files
 
@@ -452,7 +452,7 @@ The auto-generated frame parser maintains a `currentGroup` counter that starts a
 currentGroup = (currentGroup + 1) % numberOfGroups;
 ```
 
-For a single register group, the counter is always 0 — the `switch` block has one `case` and the modulo is `% 1`.
+For a single register group, the counter is always 0: the `switch` block has one `case` and the modulo is `% 1`.
 
 For two groups (e.g., holding registers at address 0 and coils at address 100), the generated parser looks like:
 
@@ -488,7 +488,7 @@ Frame 2 arrives → parser is in `case 1` → extracts coil values → advances 
 ### Practical Considerations
 
 - **Typical group count:** Most Modbus devices use 1–3 register groups. A single contiguous block of holding registers is the most common configuration.
-- **Synchronization:** The parser relies on the driver always delivering frames in the same fixed order. This works reliably because each poll cycle is sequential — group N+1 is not polled until group N's response arrives.
+- **Synchronization.** The parser relies on the driver always delivering frames in the same fixed order. This works reliably because each poll cycle is sequential: group N+1 isn't polled until group N's response arrives.
 - **Frame loss:** If a Modbus response times out or is dropped (rare over TCP, uncommon over RTU), the parser's counter may temporarily misalign for one poll cycle. It self-corrects on the next complete cycle. At typical poll rates (100ms+), this causes at most a brief glitch.
 - **Customization:** If you modify the generated parser, keep the `currentGroup` counter logic intact. Adding or removing register groups requires regenerating the parser (or manually updating the `switch` cases and modulo value).
 
@@ -569,7 +569,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 ### Steps
 
 1. In the **Setup Panel**, select **Raw USB** from the I/O Interface dropdown.
-2. Select the **Device** from the dropdown. Devices are listed as `VID:PID — Product Name`.
+2. Pick the device from the dropdown. Devices are listed as `VID:PID, Product Name`.
 3. Select the **Transfer Mode**:
    - **Bulk Stream** (default): Standard synchronous bulk IN/OUT. Works for most devices.
    - **Advanced Control**: Bulk transfers plus vendor-specific control transfers. A confirmation dialog appears before enabling.
@@ -597,7 +597,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 1. In the **Setup Panel**, select **HID** from the I/O Interface dropdown.
 2. Wait for device enumeration. HID devices are re-enumerated every 2 seconds automatically.
-3. Select the **Device** from the dropdown. Devices are listed as `VID:PID — Product Name`.
+3. Pick the device from the dropdown. Devices are listed as `VID:PID, Product Name`.
 4. Review the **Usage Page** and **Usage** fields to confirm the correct device function is selected.
 5. Click **Connect**.
 
@@ -608,7 +608,7 @@ Audio data flows into the pipeline as PCM samples, which can be visualized with 
 
 ---
 
-## Process I/O Setup — Launch Mode (Pro)
+## Process I/O setup: Launch mode (Pro)
 
 **License:** Pro
 
@@ -633,7 +633,7 @@ Serial Studio spawns the process, reads its merged stdout and stderr, and feeds 
 
 ---
 
-## Process I/O Setup — Named Pipe Mode (Pro)
+## Process I/O setup: Named Pipe mode (Pro)
 
 **License:** Pro
 
@@ -659,7 +659,7 @@ Serial Studio opens the named pipe for reading and streams data into the pipelin
 
 ## See Also
 
-- [Communication Protocols](Communication-Protocols.md) — Protocol overviews and comparison
-- [MQTT Integration](MQTT-Integration.md) — In-depth MQTT documentation
-- [Getting Started](Getting-Started.md) — First-time setup tutorial
-- [Troubleshooting](Troubleshooting.md) — General troubleshooting guide
+- [Communication Protocols](Communication-Protocols.md): protocol overview and comparison.
+- [MQTT Integration](MQTT-Integration.md): in-depth MQTT documentation.
+- [Getting Started](Getting-Started.md): first-time setup tutorial.
+- [Troubleshooting](Troubleshooting.md): general troubleshooting guide.

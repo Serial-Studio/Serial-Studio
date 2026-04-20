@@ -1,6 +1,6 @@
-# Serial Studio Examples
+# Serial Studio examples
 
-Example projects for [Serial Studio](https://serial-studio.com). Each folder contains source code, project files (`*.ssproj`), a README with setup instructions, and screenshots where applicable.
+Example projects for [Serial Studio](https://serial-studio.com). Each folder has source code, a project file (`*.ssproj`), a README with setup instructions, and screenshots where applicable.
 
 You can also browse and download examples directly from Serial Studio via **Help > Examples Browser**.
 
@@ -8,10 +8,10 @@ You can also browse and download examples directly from Serial Studio via **Help
 
 | Example | Description | Difficulty | Pro |
 |---------|-------------|:----------:|:---:|
-| [ANSI Color Test](ANSI%20Color%20Test) | ANSI color & VT-100 terminal emulation test suite | Beginner | |
+| [ANSI Color Test](ANSI%20Color%20Test) | ANSI color and VT-100 terminal emulation test suite | Beginner | |
 | [API Test](API%20Test) | Python API client with interactive REPL and test suite | Intermediate | Yes |
 | [BLE Battery](BLE%20Battery) | BLE Battery Service level monitor | Beginner | |
-| [Camera Telemetry](Camera%20Telemetry) | Live camera video + image analytics over UDP | Intermediate | |
+| [Camera Telemetry](Camera%20Telemetry) | Live camera video plus image analytics over UDP | Intermediate | |
 | [CAN Bus Example](CAN%20Bus%20Example) | ECU simulator with DBC file import | Intermediate | |
 | [csv2wav](csv2wav) | Convert Audio I/O recordings to WAV files | Intermediate | |
 | [Dual Drone Telemetry](Dual%20Drone%20Telemetry) | Multi-source two-drone simulator with synthetic camera feeds | Advanced | Yes |
@@ -24,23 +24,23 @@ You can also browse and download examples directly from Serial Studio via **Help
 | [LTE modem](LTE%20modem) | LTE modem signal quality via serial, MQTT, or UDP | Intermediate | |
 | [MCP Client](MCP%20Client) | Model Context Protocol client for AI integration | Advanced | |
 | [Modbus PLC Simulator](Modbus%20PLC%20Simulator) | Hydraulic test stand Modbus TCP simulator | Intermediate | Yes |
-| [MPU6050](MPU6050) | MPU6050 accelerometer & gyroscope visualization | Beginner | |
+| [MPU6050](MPU6050) | MPU6050 accelerometer and gyroscope visualization | Beginner | |
 | [NI DAQmx](NI%20DAQmx) | NI DAQ device data acquisition bridge | Intermediate | |
 | [PulseSensor](PulseSensor) | Heart rate PPG sensor with signal filtering | Beginner | |
 | [RC Plane Simulator](RC%20Plane%20Simulator) | RC plane flight telemetry simulator | Intermediate | |
-| [System Monitor](System%20Monitor) | Live CPU, memory, disk & network dashboard | Intermediate | Yes |
+| [System Monitor](System%20Monitor) | Live CPU, memory, disk, and network dashboard | Intermediate | Yes |
 | [TinyGPS](TinyGPS) | GPS location tracker with map widget | Beginner | |
 | [UDP Function Generator](UDP%20Function%20Generator) | Multi-waveform signal generator over UDP | Beginner | |
 
-## Getting Started
+## Getting started
 
-1. Open the example's folder and read its **README** for hardware and software requirements.
-2. Upload firmware (if applicable) or run the companion script.
+1. Open the example's folder and read the README for hardware and software requirements.
+2. Upload the firmware (if applicable) or run the companion script.
 3. Open Serial Studio, load the `.ssproj` project file (if provided), and connect.
 
 ## Requirements
 
-- **Serial Studio** — download from [serial-studio.com](https://serial-studio.com).
-- **Arduino IDE** — for examples that use Arduino sketches.
-- **Python 3** — for examples that use Python scripts.
-- Check each example's README for additional libraries or hardware.
+- **Serial Studio.** Download from [serial-studio.com](https://serial-studio.com).
+- **Arduino IDE** for examples that use Arduino sketches.
+- **Python 3** for examples that use Python scripts.
+- Check each example's README for extra libraries or hardware.

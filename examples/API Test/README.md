@@ -2,7 +2,7 @@
 
 **Difficulty:** 🟡 Intermediate | **Time:** ~10 minutes | **License:** GPL / Pro
 
-A Python client for the Serial Studio API that allows external programs to control and configure Serial Studio through a TCP connection. Provides an interactive REPL, command-line interface, and automated testing capabilities.
+A Python client for the Serial Studio API that lets external programs control and configure Serial Studio over a TCP connection. It provides an interactive REPL, a command-line interface, and automated testing.
 
 ![Serial Studio API Client](doc/screenshot.png)
 
@@ -439,7 +439,7 @@ All messages are JSON objects terminated by a newline (`\n`).
 | Index | Name | Description |
 |-------|------|-------------|
 | 0 | ProjectFile | Uses a project file to define dashboard structure and data parsing |
-| 1 | ConsoleOnly | No parsing — raw bytes flow only to the terminal (no dashboard) |
+| 1 | ConsoleOnly | No parsing. Raw bytes flow only to the terminal, no dashboard |
 | 2 | QuickPlot | Automatically detects and plots CSV-formatted data |
 
 ## Troubleshooting

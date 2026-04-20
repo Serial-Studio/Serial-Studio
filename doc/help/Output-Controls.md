@@ -2,9 +2,9 @@
 
 ## Overview
 
-Output controls are interactive dashboard widgets that send data back to a connected device. While standard widgets visualize incoming telemetry, output controls let you transmit commands, setpoints, and parameters — enabling full bidirectional communication from the Serial Studio dashboard.
+Output controls are interactive dashboard widgets that send data back to a connected device. While standard widgets visualize incoming telemetry, output controls let you transmit commands, setpoints, and parameters, giving you full bidirectional communication from the Serial Studio dashboard.
 
-Each output control uses a user-defined JavaScript `transmit(value)` function that converts widget interactions (button clicks, slider drags, text input) into the exact bytes your device expects. This makes output controls protocol-agnostic: the same slider widget can drive a plain-text serial command, a JSON payload, or a binary packet — just by changing the transmit function.
+Each output control uses a user-defined JavaScript `transmit(value)` function that converts widget interactions (button clicks, slider drags, text input) into the exact bytes your device expects. That makes output controls protocol-agnostic: the same slider widget can drive a plain-text serial command, a JSON payload, or a binary packet, just by changing the transmit function.
 
 Output controls require a **Pro license**.
 
@@ -46,7 +46,7 @@ Sends a numeric value from a draggable slider.
 | Max Value | 100 | Upper bound of the slider range |
 | Step Size | 1 | Increment between discrete positions |
 | Initial Value | 0 | Starting position |
-| Units | — | Label suffix (e.g., "%", "rpm") |
+| Units | none | Label suffix (for example "%", "rpm") |
 
 The value passed to `transmit()` is a number clamped to [Min, Max]. Transmissions occur continuously while dragging, rate-limited to 50 ms intervals.
 
@@ -56,8 +56,8 @@ Binary on/off switch.
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| ON Label | — | Text shown in the ON state |
-| OFF Label | — | Text shown in the OFF state |
+| ON Label | none | Text shown in the ON state |
+| OFF Label | none | Text shown in the OFF state |
 | Initial Value | 0 | Starting state (0 = off, 1 = on) |
 
 Passes `1` to `transmit()` when switched on, `0` when switched off.
@@ -322,8 +322,8 @@ Sends a numeric value packed big-endian into a CAN frame.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `id` | Number | — | CAN identifier |
-| `value` | Number | — | Numeric value (rounded to integer) |
+| `id` | Number | Required | CAN identifier |
+| `value` | Number | Required | Numeric value (rounded to integer) |
 | `bytes` | Number | 2 | Number of payload bytes (1–8) |
 
 ```javascript
@@ -398,7 +398,7 @@ Control motor speed with a slider and an emergency stop button.
 | Control | Type | Properties |
 |---------|------|------------|
 | Speed | Slider | Min: 0, Max: 100, Units: "%" |
-| Emergency Stop | Button | — |
+| Emergency Stop | Button |   |
 
 Speed transmit function:
 ```javascript
@@ -438,7 +438,7 @@ Combine a text field for commands with a knob for fine adjustment.
 
 | Control | Type | Properties |
 |---------|------|------------|
-| Command | TextField | — |
+| Command | TextField |   |
 | Offset | Knob | Min: -10, Max: 10, Step: 0.1, Units: "mV" |
 
 Command transmit function:
@@ -494,7 +494,7 @@ Control a motor over CAN Bus with speed setpoint and emergency stop.
 |---------|------|------------|
 | Speed | Slider | Min: 0, Max: 10000, Units: "RPM" |
 | Direction | Toggle | ON: "Forward", OFF: "Reverse" |
-| E-Stop | Button | — |
+| E-Stop | Button |   |
 
 Speed transmit function (16-bit value on CAN ID 0x100):
 ```javascript
@@ -533,7 +533,7 @@ function transmit(value) {
 1. Check the **Console** view to confirm data is being sent.
 2. Verify the transmit function returns a properly terminated string (most devices expect `\r\n`).
 3. Confirm the correct **Target Device** is selected in multi-source projects.
-4. Check that your Pro license is active — transmission is disabled without it.
+4. Check that your Pro license is active. Transmission is disabled without it.
 
 ### Slider Sends Too Many Commands
 
@@ -549,17 +549,17 @@ function transmit(value) {
 
 ## Tips
 
-- Start with a built-in template and modify it — this avoids common syntax mistakes.
+- Start with a built-in template and modify it. That avoids common syntax mistakes.
 - Test with the Console view open to see exactly what bytes are being transmitted.
 - Use the Ramp Generator to stress-test your device's command handling at sustained rates.
 - Combine output controls with input widgets in the same dashboard for full closed-loop monitoring (e.g., a slider to set a target temperature alongside a gauge showing the actual temperature).
-- Use the built-in protocol helpers (`modbusWriteRegister`, `canSendFrame`, etc.) instead of manually packing binary bytes — see [Protocol Helper Functions](#protocol-helper-functions) above.
-- For complex protocols beyond the built-in helpers, write custom helper functions inside the transmit function scope — variables declared outside `transmit()` persist across calls.
+- Use the built-in protocol helpers (`modbusWriteRegister`, `canSendFrame`, and so on) instead of packing binary bytes by hand. See [Protocol Helper Functions](#protocol-helper-functions) above.
+- For complex protocols beyond the built-in helpers, write custom helper functions inside the transmit function scope. Variables declared outside `transmit()` persist across calls.
 
 ## See Also
 
-- [Actions](Actions.md) — simple command buttons with timer support.
-- [Project Editor](Project-Editor.md) — complete guide to creating and configuring projects.
-- [Widget Reference](Widget-Reference.md) — all input/visualization widget types.
-- [Frame Parser Scripting](JavaScript-API.md) — Lua and JavaScript parser reference.
-- [Data Sources](Data-Sources.md) — configuring device connections.
+- [Actions](Actions.md): simple command buttons with timer support.
+- [Project Editor](Project-Editor.md): full guide to creating and configuring projects.
+- [Widget Reference](Widget-Reference.md): all input and visualization widget types.
+- [Frame Parser Scripting](JavaScript-API.md): Lua and JavaScript parser reference.
+- [Data Sources](Data-Sources.md): configuring device connections.

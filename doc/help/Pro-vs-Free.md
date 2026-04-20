@@ -1,22 +1,22 @@
-Complete comparison of features available in the free (GPLv3) version versus Serial Studio Pro.
+A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
-## Quick Summary
+## Quick summary
 
-**Free (GPLv3) Version:**
-- Core protocols: Serial/UART, TCP/UDP, Bluetooth LE
-- All standard widgets and visualization
-- Full project editor and dashboard customization
-- CSV export and playback
-- Perfect for hobbyists, students, and open-source projects
+**Free (GPLv3) version:**
+- Core protocols: Serial/UART, TCP/UDP, Bluetooth LE.
+- All standard widgets and visualization.
+- Full project editor and dashboard customization.
+- CSV export and playback.
+- A good fit for hobbyists, students, and open source projects.
 
-**Pro Version:**
-- Everything in Free, plus:
-- Advanced protocols: MQTT, Modbus, CAN Bus, Audio Input, Raw USB, HID Devices, Process I/O
-- Pro widgets: 3D Plot, XY Plot, Image View (live camera feed)
-- Binary Direct mode (high-performance parsing)
-- MDF4 file export and playback
-- Commercial use rights
-- Email support
+**Pro version:**
+- Everything in the free version, plus:
+- Advanced protocols: MQTT, Modbus, CAN Bus, Audio Input, raw USB, HID, Process I/O.
+- Pro widgets: 3D Plot, XY Plot, Image View (live camera feed).
+- Binary Direct mode (high-performance parsing).
+- MDF4 file export and playback.
+- Commercial use rights.
+- Email support.
 
 ---
 
@@ -376,44 +376,44 @@ function parse(frame) {
 
 ---
 
-## Which Version Do I Need?
+## Which version do I need?
 
 ### Choose Free (GPLv3) if:
 
-- ✅ You're a student, educator, or hobbyist
-- ✅ Personal or educational projects
-- ✅ Open-source software development
-- ✅ You only need basic protocols (Serial, TCP/UDP, BLE)
-- ✅ Standard widgets meet your needs
-- ✅ Non-commercial use
+- ✅ You're a student, educator, or hobbyist.
+- ✅ You're working on personal or educational projects.
+- ✅ You're doing open source software development.
+- ✅ You only need basic protocols (Serial, TCP/UDP, BLE).
+- ✅ Standard widgets cover your needs.
+- ✅ Your use is non-commercial.
 
-**Perfect for:**
-- Arduino projects
-- ESP32/ESP8266 development
-- Learning embedded systems
-- University research (non-commercial)
-- Home automation
+**A good fit for:**
+- Arduino projects.
+- ESP32/ESP8266 development.
+- Learning embedded systems.
+- University research (non-commercial).
+- Home automation.
 
 ---
 
 ### Choose Pro if:
 
-- ✅ Commercial or business use
-- ✅ You need MQTT, Modbus, CAN Bus, or Audio Input
-- ✅ You need Raw USB (bulk/isochronous via libusb), HID Devices, or Process I/O
-- ✅ Industrial automation projects
-- ✅ Automotive diagnostics or telemetry
-- ✅ You need 3D/XY plots or live Image View (camera feeds)
-- ✅ You want MDF4 export/playback
-- ✅ You need Binary Direct mode for performance
-- ✅ You want email support
+- ✅ Commercial or business use.
+- ✅ You need MQTT, Modbus, CAN Bus, or Audio Input.
+- ✅ You need raw USB (bulk/isochronous via libusb), HID, or Process I/O.
+- ✅ You're doing industrial automation.
+- ✅ You're doing automotive diagnostics or telemetry.
+- ✅ You need 3D/XY plots or live Image View (camera feeds).
+- ✅ You want MDF4 export and playback.
+- ✅ You need Binary Direct mode for performance.
+- ✅ You want email support.
 
-**Perfect for:**
-- Professional engineers
-- Industrial applications
-- Automotive development
-- Commercial products
-- Enterprise deployments
+**A good fit for:**
+- Professional engineers.
+- Industrial applications.
+- Automotive development.
+- Commercial products.
+- Enterprise deployments.
 
 ---
 

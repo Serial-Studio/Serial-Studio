@@ -1,21 +1,23 @@
-# IMU Batched Data Simulator
+# IMU batched data simulator
 
-This example demonstrates Serial Studio's **multi-frame parsing** feature, which automatically expands batched sensor data into individual frames for smooth visualization.
+This example shows off Serial Studio's **multi-frame parsing** feature, which automatically expands batched sensor data into individual frames for smooth visualization.
 
-![IMU Batched Data Simulator](doc/screenshot.png)
+![IMU batched data simulator](doc/screenshot.png)
 
-## Use Case
+## Use case
 
-Many devices batch high-frequency sensor readings before transmission to reduce communication overhead. For example:
-- **Wearable IMU**: Samples accelerometer at 120 Hz, transmits packets at 1 Hz
-- **Environmental sensors**: Batch temperature/humidity readings
-- **Audio devices**: Send chunks of audio samples
+Many devices batch high-frequency sensor readings before transmission to cut communication overhead. For example:
 
-Without multi-frame parsing, you'd need to manually duplicate scalar values (battery, temperature) for each sample in JavaScript. With this feature, Serial Studio handles it automatically.
+- **Wearable IMU.** Samples accelerometer at 120 Hz, transmits packets at 1 Hz.
+- **Environmental sensors.** Batch temperature/humidity readings.
+- **Audio devices.** Send chunks of audio samples.
 
-## How It Works
+Without multi-frame parsing, you'd need to manually duplicate scalar values (battery, temperature) for each sample in JavaScript. With this feature, Serial Studio handles it for you.
 
-### Input Packet (sent once per second)
+## How it works
+
+### Input packet (sent once per second)
+
 ```json
 {
   "battery": 3.75,
@@ -26,7 +28,8 @@ Without multi-frame parsing, you'd need to manually duplicate scalar values (bat
 }
 ```
 
-### JavaScript Parser
+### JavaScript parser
+
 ```javascript
 function parse(frame) {
     if (frame.length > 0) {
@@ -34,11 +37,11 @@ function parse(frame) {
     
         // Return mixed scalar/vector array
         return [
-            data.battery,      // Scalar - repeated across frames
-            data.temperature,  // Scalar - repeated across frames
-            data.accel_x,      // Vector - unzipped element-by-element
-            data.accel_y,      // Vector - unzipped element-by-element
-            data.accel_z       // Vector - unzipped element-by-element
+            data.battery,      // Scalar: repeated across frames
+            data.temperature,  // Scalar: repeated across frames
+            data.accel_x,      // Vector: unzipped element-by-element
+            data.accel_y,      // Vector: unzipped element-by-element
+            data.accel_z       // Vector: unzipped element-by-element
         ];
     }
 
@@ -46,7 +49,8 @@ function parse(frame) {
 }
 ```
 
-### Output: 120 Frames Automatically Generated
+### Output: 120 frames generated automatically
+
 ```
 Frame 1: [3.75, 25.5, 0.12, 0.23, 9.81]
 Frame 2: [3.75, 25.5, 0.15, 0.21, 9.79]
@@ -54,23 +58,26 @@ Frame 2: [3.75, 25.5, 0.15, 0.21, 9.79]
 Frame 120: [3.75, 25.5, 0.08, 0.19, 9.82]
 ```
 
-The scalars (battery, temperature) are **automatically repeated**, and the vectors are **unzipped** element-by-element!
+The scalars (battery, temperature) are repeated automatically, and the vectors are unzipped element-by-element.
 
-## Running the Example
+## Running the example
 
-### 1. Start the Simulator
+### 1. Start the simulator
+
 ```bash
 python3 imu_simulator.py
 ```
 
 **Optional arguments:**
-- `--host HOST` - UDP destination (default: 127.0.0.1)
-- `--port PORT` - UDP port (default: 9000)
-- `--sample-rate RATE` - Samples per packet (default: 120)
-- `--packet-rate RATE` - Packets per second (default: 1.0)
-- `--duration SECONDS` - Run duration (default: infinite)
+
+- `--host HOST`. UDP destination (default: 127.0.0.1).
+- `--port PORT`. UDP port (default: 9000).
+- `--sample-rate RATE`. Samples per packet (default: 120).
+- `--packet-rate RATE`. Packets per second (default: 1.0).
+- `--duration SECONDS`. Run duration (default: infinite).
 
 **Example:**
+
 ```bash
 # Send 240 samples per packet at 2 Hz
 python3 imu_simulator.py --sample-rate 240 --packet-rate 2.0
@@ -78,41 +85,47 @@ python3 imu_simulator.py --sample-rate 240 --packet-rate 2.0
 
 ### 2. Configure Serial Studio
 
-1. **Bus Type**: UDP Client
-2. **Host**: 127.0.0.1
-3. **Port**: 9000
-4. **Project**: Load `imu_batched.ssproj`
-5. **Connect**
+1. **Bus type:** UDP Client.
+2. **Host:** 127.0.0.1.
+3. **Port:** 9000.
+4. **Project:** load `imu_batched.ssproj`.
+5. Click **Connect**.
 
 ### 3. Observe
 
-- **1 packet/second** generates **120 frames/second** automatically
-- Battery and temperature values are constant within each batch
-- Accelerometer plots show smooth high-frequency motion
-- Dashboard reports **120 frames received per second** from 1 packet
+- 1 packet per second generates 120 frames per second automatically.
+- Battery and temperature values are constant within each batch.
+- Accelerometer plots show smooth high-frequency motion.
+- The dashboard reports 120 frames received per second from 1 packet.
 
-## Key Features Demonstrated
+## Key features
 
-### ✅ Mixed Scalar/Vector Parsing
-Scalars (battery, temp) + Vectors (accel arrays) in one return value
+### Mixed scalar/vector parsing
 
-### ✅ Automatic Scalar Repetition
-No need to manually duplicate battery/temperature 120 times in JavaScript
+Scalars (battery, temp) + vectors (accel arrays) in a single return value.
 
-### ✅ Vector Unzipping
-Three 120-element arrays are automatically transposed into 120 frames
+### Automatic scalar repetition
 
-### ✅ Efficient Protocol
-Transmit 1 packet instead of 120 individual frames
+No need to manually duplicate battery or temperature 120 times in JavaScript.
 
-### ✅ Smooth Visualization
-High-frequency data (120 Hz) visualized smoothly despite low transmission rate (1 Hz)
+### Vector unzipping
+
+Three 120-element arrays are transposed into 120 frames automatically.
+
+### Efficient protocol
+
+Transmit 1 packet instead of 120 individual frames.
+
+### Smooth visualization
+
+High-frequency data (120 Hz) visualized smoothly despite a low transmission rate (1 Hz).
 
 ## Customization
 
-### Different Sensor Types
+### Different sensor types
 
 **GPS with batched position samples:**
+
 ```javascript
 function parse(frame) {
     var data = JSON.parse(frame);
@@ -127,6 +140,7 @@ function parse(frame) {
 ```
 
 **Environmental sensor with hourly batches:**
+
 ```javascript
 function parse(frame) {
     var data = JSON.parse(frame);
@@ -140,21 +154,21 @@ function parse(frame) {
 }
 ```
 
-## Technical Details
+## Technical details
 
-### Frame Expansion Algorithm
+### Frame expansion algorithm
 
-1. **Detect array type**: Mixed scalar/vector
-2. **Find longest vector**: 120 elements
-3. **Extend shorter vectors**: Repeat last value if needed
-4. **Generate frames**: Transpose into 120 frames with scalars repeated
+1. **Detect array type.** Mixed scalar/vector.
+2. **Find the longest vector.** 120 elements.
+3. **Extend shorter vectors.** Repeat the last value if needed.
+4. **Generate frames.** Transpose into 120 frames with scalars repeated.
 
 ### Performance
 
-- **Parsing overhead**: Single JavaScript call per packet
-- **Memory**: One allocation for multi-frame list
-- **Dashboard updates**: Zero-copy via const reference (preserved)
-- **Throughput**: Tested with 120 samples/packet at 10 Hz = 1200 frames/sec
+- **Parsing overhead.** Single JavaScript call per packet.
+- **Memory.** One allocation for the multi-frame list.
+- **Dashboard updates.** Zero-copy via const reference (preserved).
+- **Throughput.** Tested with 120 samples/packet at 10 Hz = 1200 frames/sec.
 
 ## License
 
