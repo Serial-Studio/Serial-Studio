@@ -53,7 +53,7 @@ env:
   INSTALL_QT_LINUX_INTEL: false
   INSTALL_QT_LINUX_ARM64: false
   QTFRAMEWORK_BYPASS_LICENSE_CHECK: "true"
-  LINUXDEPLOY_EXCLUDED_LIBRARIES: "libmysqlclient.so*;libqsqlmimer.so;libqsqlmysql.so;libqsqlodbc.so;libqsqlpsql.so"
+  LINUXDEPLOY_EXCLUDED_LIBRARIES: "libmysqlclient.so*;libqsqlmimer.so;libqsqlmysql.so;libqsqlodbc.so;libqsqlpsql.so;libqsqloci.so;libqsqldb2.so;libqsqlibase.so"
   DESCRIPTION: "Multi-purpose serial data visualization & processing program"
 
 #-------------------------------------------------------------------------------
