@@ -2934,10 +2934,15 @@ void DataModel::ProjectModel::storeFrameParserCode(int sourceId, const QString& 
  *
  * Stored in m_widgetSettings so it survives a save/load cycle and marks
  * the project as modified. No disk write happens here — the standard
- * save workflow is responsible for flushing.
+ * save workflow is responsible for flushing. No-op outside ProjectFile
+ * mode so QuickPlot/ConsoleOnly can't pollute the loaded project.
  */
 void DataModel::ProjectModel::setActiveGroupId(const int groupId)
 {
+  // Only persist tab selection for the active project file
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
   // Skip if unchanged
   const int current = m_widgetSettings.value(Keys::kActiveGroupSubKey).toInt(-1);
   if (current == groupId)
@@ -2959,13 +2964,18 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
  *
  * Stores the layout under the canonical key produced by Keys::layoutKey()
  * and marks the project as modified. No disk write happens here — the
- * standard save workflow is responsible for flushing.
+ * standard save workflow is responsible for flushing. No-op outside
+ * ProjectFile mode so QuickPlot/ConsoleOnly can't pollute the loaded project.
  *
  * @param groupId  The group whose layout is being saved.
  * @param layout   The layout QJsonObject to store.
  */
 void DataModel::ProjectModel::setGroupLayout(const int groupId, const QJsonObject& layout)
 {
+  // Only persist layouts for the active project file
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
   // Update in-memory store
   QJsonObject entry;
   entry[QStringLiteral("data")] = layout;
@@ -4094,18 +4104,18 @@ void DataModel::ProjectModel::showGroup(int groupId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Clears workspaces and widget settings when disconnecting in
- *        non-project modes (QuickPlot / ConsoleOnly).
+ * @brief Clears workspaces and widget settings for QuickPlot/ConsoleOnly
+ *        sessions that have no backing project file.
  *
- * In these modes there is no backing project file, so any workspaces or
- * widget settings created during a session are transient and should not
- * survive across connection cycles.
+ * Skips when a file is loaded so a project's state survives across mode
+ * switches and connection cycles — even when the user runs QuickPlot on
+ * top of an open project.
  */
 void DataModel::ProjectModel::clearTransientState()
 {
-  // Only clear in non-project modes (no backing file to persist into)
+  // Preserve project-owned state whenever a file is loaded
   const auto opMode = AppState::instance().operationMode();
-  if (opMode == SerialStudio::ProjectFile)
+  if (opMode == SerialStudio::ProjectFile || !m_filePath.isEmpty())
     return;
 
   // Discard ephemeral workspace and widget state
