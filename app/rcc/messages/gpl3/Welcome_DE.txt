@@ -12,10 +12,11 @@ mit Serial Studio Pro:
 → https://store.serial-studio.com/
 
 Pro-Funktionen:
-→ MQTT-Integration
-→ XY- und 3D-Visualisierung
-→ Audioeingang
-→ CANBus- & MODBUS-Treiber
+→ MQTT-, XY- und 3D-Visualisierung
+→ Audio-, CAN Bus-, Modbus-, USB-, HID- und Process-I/O-Treiber
+→ Output-Widgets, MDF4-Export und XMODEM/YMODEM/ZMODEM-Übertragung
+→ Sitzungsdatenbank, Data Tables und Werttransformationen (JS + Lua)
+→ Multi-Source-Projekte und benutzerdefinierte Arbeitsbereiche
 → Kommerzielle Lizenz (keine GPL-Verpflichtungen)
 
 → Mehr erfahren: https://serial-studio.com/

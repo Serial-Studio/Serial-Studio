@@ -289,6 +289,17 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
  */
 void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
 {
+  // Bound m_headerBuf — a hostile peer sending only ZDLE-escape prefixes would otherwise OOM.
+  static constexpr int kMaxBinHeaderBytes = 128;
+
+  // Drop the in-flight header if growth exceeds the hard cap
+  if (m_headerBuf.size() >= kMaxBinHeaderBytes) [[unlikely]] {
+    m_parseState = ParseState::Idle;
+    m_headerBuf.clear();
+    m_zdleEscape = false;
+    return;
+  }
+
   // Decode ZDLE-escaped byte
   if (m_zdleEscape) {
     m_headerBuf.append(static_cast<char>(ch ^ 0x40));
@@ -320,6 +331,17 @@ void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
  */
 void IO::Protocols::ZMODEM::processBinByte(quint8 ch)
 {
+  // Bound m_headerBuf — a hostile peer sending only ZDLE-escape prefixes would otherwise OOM.
+  static constexpr int kMaxBinHeaderBytes = 128;
+
+  // Drop the in-flight header if growth exceeds the hard cap
+  if (m_headerBuf.size() >= kMaxBinHeaderBytes) [[unlikely]] {
+    m_parseState = ParseState::Idle;
+    m_headerBuf.clear();
+    m_zdleEscape = false;
+    return;
+  }
+
   // Decode ZDLE-escaped byte
   if (m_zdleEscape) {
     m_headerBuf.append(static_cast<char>(ch ^ 0x40));

@@ -748,6 +748,12 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
   quint8 index = 0;
   for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i) {
     if (index == verifyMode) {
+      // Warn operators when TLS peer verification is disabled — the dropdown
+      // is still user-facing on purpose (self-signed brokers exist) but this
+      // flips the connection into a MITM-vulnerable state.
+      if (i.value() == QSslSocket::VerifyNone) [[unlikely]]
+        qWarning() << "[MQTT] TLS peer verification disabled — connection vulnerable to MITM";
+
       m_sslConfiguration.setPeerVerifyMode(i.value());
       Q_EMIT sslConfigurationChanged();
       break;

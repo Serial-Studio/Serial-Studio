@@ -10,7 +10,8 @@ GPLv3 kaynak kodunu kendiniz derleyin.
 → Daha fazla bilgi edinin: https://serial-studio.com/
 
 Mevcut Pro özellikleri:
-→ MQTT entegrasyonu
-→ XY ve 3D görselleştirme
-→ Ses girişi
-→ CANBus & MODBUS sürücüleri
+→ MQTT, XY ve 3D görselleştirme
+→ Audio, CAN Bus, Modbus, USB, HID ve Process I/O sürücüleri
+→ Çıkış widget'ları, MDF4 dışa aktarma ve XMODEM/YMODEM/ZMODEM aktarımları
+→ Oturum veritabanı, Data Tables ve değer dönüşümleri (JS + Lua)
+→ Çok kaynaklı projeler ve özel çalışma alanları

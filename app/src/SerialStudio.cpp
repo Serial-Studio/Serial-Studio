@@ -71,8 +71,7 @@ bool SerialStudio::proWidgetsEnabled()
 #ifdef BUILD_COMMERCIAL
   const auto& token = Licensing::CommercialToken::current();
   return token.isValid() && SS_LICENSE_GUARD()
-      && token.featureTier() >= Licensing::FeatureTier::Trial
-      && !token.variantName().isEmpty();
+      && token.featureTier() >= Licensing::FeatureTier::Trial && !token.variantName().isEmpty();
 #else
   return false;
 #endif

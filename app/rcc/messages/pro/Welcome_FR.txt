@@ -9,8 +9,9 @@ Votre licence est active et approuvée pour un usage commercial et propriétaire
 → En savoir plus : https://serial-studio.com/
 
 Fonctionnalités Pro :
-→ Intégration MQTT
-→ Visualisation XY et 3D
-→ Entrée audio
-→ Pilotes CANBus & MODBUS
+→ Visualisation MQTT, XY et 3D
+→ Pilotes Audio, CAN Bus, Modbus, USB, HID et Process I/O
+→ Widgets de sortie, export MDF4 et transferts XMODEM/YMODEM/ZMODEM
+→ Base de données de sessions, Data Tables et transformations (JS + Lua)
+→ Projets multi-sources et espaces de travail personnalisés
 → Support prioritaire

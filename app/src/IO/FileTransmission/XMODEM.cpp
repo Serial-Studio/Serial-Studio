@@ -170,6 +170,7 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
           // Rewind by actual bytes read — fixed blockSize over-rewinds the final partial block.
           m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
           if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
+            m_file.close();
             Q_EMIT finished(false, tr("Failed to seek in file"));
             return;
           }
@@ -362,6 +363,7 @@ void IO::Protocols::XMODEM::handleTimeout()
     // Use the recorded last-block position; see the NAK path for rationale.
     m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
     if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
+      m_file.close();
       Q_EMIT finished(false, tr("Failed to seek in file"));
       return;
     }

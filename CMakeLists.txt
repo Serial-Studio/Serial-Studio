@@ -58,7 +58,7 @@ find_package(
 #   BUILD_COMMERCIAL=OFF (default) - Enable Pro features (requires license)
 #
 # Performance:
-#   PRODUCTION_OPTIMIZATION=OFF (default) - Enable O3, LTO, vectorization
+#   PRODUCTION_OPTIMIZATION=OFF (default) - Set to ON to enable O3, LTO, vectorization
 #   ENABLE_PGO=OFF (default)              - Profile-Guided Optimization
 #
 # Security:

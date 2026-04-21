@@ -173,34 +173,39 @@ DataModel::ProjectEditor::ProjectEditor()
 {
   generateComboBoxModels();
 
+  // Coalesce rapid mutation bursts (keystrokes, batch edits) into one rebuild
+  m_rebuildTimer.setSingleShot(true);
+  m_rebuildTimer.setInterval(0);
+  connect(&m_rebuildTimer, &QTimer::timeout, this, &DataModel::ProjectEditor::buildTreeModel);
+
   auto& pm = DataModel::ProjectModel::instance();
 
   connect(&pm,
           &DataModel::ProjectModel::groupsChanged,
           this,
-          &DataModel::ProjectEditor::buildTreeModel,
+          &DataModel::ProjectEditor::scheduleTreeRebuild,
           Qt::QueuedConnection);
   connect(&pm,
           &DataModel::ProjectModel::actionsChanged,
           this,
-          &DataModel::ProjectEditor::buildTreeModel,
+          &DataModel::ProjectEditor::scheduleTreeRebuild,
           Qt::QueuedConnection);
   connect(&pm,
           &DataModel::ProjectModel::tablesChanged,
           this,
-          &DataModel::ProjectEditor::buildTreeModel,
+          &DataModel::ProjectEditor::scheduleTreeRebuild,
           Qt::QueuedConnection);
   connect(&pm,
           &DataModel::ProjectModel::workspacesChanged,
           this,
-          &DataModel::ProjectEditor::buildTreeModel,
+          &DataModel::ProjectEditor::scheduleTreeRebuild,
           Qt::QueuedConnection);
   connect(
     &pm,
     &DataModel::ProjectModel::sourcesChanged,
     this,
     [this] {
-      buildTreeModel();
+      scheduleTreeRebuild();
 
       if (m_currentView == GroupView)
         buildGroupModel(m_selectedGroup);
@@ -848,6 +853,21 @@ void DataModel::ProjectEditor::displayFrameParserView(int sourceId)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Coalesces rapid ProjectModel mutation bursts into a single rebuild.
+ *
+ * Many ProjectModel signals (groupsChanged, actionsChanged, tablesChanged,
+ * workspacesChanged) fire once per keystroke during batch edits. Connecting
+ * them directly to buildTreeModel() enqueues one rebuild per emission, even
+ * when they all resolve on the same event-loop tick. Routing through this
+ * single-shot zero-interval timer collapses the burst into one rebuild.
+ */
+void DataModel::ProjectEditor::scheduleTreeRebuild()
+{
+  if (!m_rebuildTimer.isActive())
+    m_rebuildTimer.start();
+}
+
+/**
  * @brief Rebuilds the full project-structure tree model from scratch.
  *
  * Saves and restores per-item expanded state. After the new tree is emitted via
@@ -880,9 +900,14 @@ void DataModel::ProjectEditor::buildTreeModel()
   if (m_treeModel)
     saveExpandedStateMap(m_treeModel->invisibleRootItem(), expandedStates, "");
 
-  // Dispose of the previous model and selection
+  // Disconnect only our captured lambda/slot connection, not every signal
+  if (m_currentSelectionConnection) {
+    QObject::disconnect(m_currentSelectionConnection);
+    m_currentSelectionConnection = QMetaObject::Connection();
+  }
+
+  // Dispose of the previous selection model
   if (m_selectionModel) {
-    disconnect(m_selectionModel);
     m_selectionModel->deleteLater();
     m_selectionModel = nullptr;
   }
@@ -909,11 +934,11 @@ void DataModel::ProjectEditor::buildTreeModel()
   buildTreeItems(root, expandedStates);
 
   // Connect the selection model and emit the new tree
-  m_selectionModel = new QItemSelectionModel(m_treeModel);
-  connect(m_selectionModel,
-          &QItemSelectionModel::currentChanged,
-          this,
-          &DataModel::ProjectEditor::onCurrentSelectionChanged);
+  m_selectionModel             = new QItemSelectionModel(m_treeModel);
+  m_currentSelectionConnection = connect(m_selectionModel,
+                                         &QItemSelectionModel::currentChanged,
+                                         this,
+                                         &DataModel::ProjectEditor::onCurrentSelectionChanged);
 
   Q_EMIT treeModelChanged();
 

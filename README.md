@@ -44,11 +44,11 @@ The Homebrew cask is community-maintained. It's available, but not officially te
 
 ### Linux
 
-The recommended way to install on Linux is via the official [AppImage](https://appimage.org/). Make it executable and run it:
+The recommended way to install on Linux is via the official [AppImage](https://appimage.org/). Download it from the [latest release](https://github.com/Serial-Studio/Serial-Studio/releases/latest), then make it executable and run it (replace `<version>` with the version you downloaded):
 
 ```bash
-chmod +x SerialStudio-Pro-3.2.7-Linux-x64.AppImage
-./SerialStudio-Pro-3.2.7-Linux-x64.AppImage
+chmod +x SerialStudio-Pro-<version>-Linux-x64.AppImage
+./SerialStudio-Pro-<version>-Linux-x64.AppImage
 ```
 
 If the AppImage fails to launch, your system is probably missing `libfuse2`:

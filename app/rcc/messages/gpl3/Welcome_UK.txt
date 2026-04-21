@@ -1,20 +1,21 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 
-This software is free and open source under the GNU GPLv3 license.
-You may use, modify, and redistribute it, provided derivative works
-remain open source under the same terms.
+Це програмне забезпечення є безкоштовним і з відкритим кодом за ліцензією
+GNU GPLv3. Ви можете використовувати, змінювати та розповсюджувати його,
+за умови, що похідні твори залишаються відкритими на тих самих умовах.
 
-→ License: https://www.gnu.org/licenses/gpl-3.0.html
-→ Source:  https://github.com/serial-studio/serial-studio
+→ Ліцензія: https://www.gnu.org/licenses/gpl-3.0.html
+→ Вихідний код: https://github.com/serial-studio/serial-studio
 
-Like this project? Consider supporting development with Serial Studio Pro:
+Подобається цей проєкт? Підтримайте розробку за допомогою Serial Studio Pro:
 → https://store.serial-studio.com/
 
-Pro features:
-→ MQTT integration
-→ XY and 3D visualization
-→ Audio input
-→ CANBus & MODBUS drivers
-→ Commercial license (no GPL obligations)
+Функції Pro:
+→ Візуалізація MQTT, XY та 3D
+→ Драйвери Audio, CAN Bus, Modbus, USB, HID та Process I/O
+→ Віджети виводу, експорт MDF4 та передача XMODEM/YMODEM/ZMODEM
+→ База даних сесій, Data Tables та перетворення значень (JS + Lua)
+→ Мультиджерельні проєкти та власні робочі простори
+→ Комерційна ліцензія (без зобов'язань GPL)
 
-→ Learn more: https://serial-studio.com/
+→ Дізнатися більше: https://serial-studio.com/

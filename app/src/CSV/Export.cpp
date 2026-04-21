@@ -35,6 +35,27 @@
 #include <QDateTime>
 #include <QDir>
 
+namespace {
+
+// RFC 4180 CSV field escape: quote fields containing separators, quotes, or
+// newlines and double any embedded quotes. Returning the input unchanged for
+// safe values keeps the common-case hotpath allocation-free.
+static QString escapeCsvField(const QString& s)
+{
+  // Bail early when no special characters are present
+  const bool needs = s.contains(QChar(',')) || s.contains(QChar('"')) || s.contains(QChar('\n'))
+                  || s.contains(QChar('\r')) || s.contains(QChar('\t'));
+  if (!needs)
+    return s;
+
+  // Double-up any embedded quotes per RFC 4180 and wrap the result
+  QString out = s;
+  out.replace(QChar('"'), QStringLiteral("\"\""));
+  return QStringLiteral("\"%1\"").arg(out);
+}
+
+}  // namespace
+
 //--------------------------------------------------------------------------------------------------
 // ExportWorker implementation
 //--------------------------------------------------------------------------------------------------
@@ -111,10 +132,12 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
       for (const auto& d : g.datasets)
         finalValues[d.uniqueId] = d.value.simplified();
 
-    // Write one column per dataset in schema order
+    // Write one column per dataset in schema order, escaping per RFC 4180
+    // so transform outputs containing commas/quotes/newlines don't corrupt
+    // the row layout for downstream consumers.
     for (int j = 0; j < colCount; ++j) {
       const int uid = m_schema.columns[static_cast<size_t>(j)].uniqueId;
-      m_textStream << ',' << finalValues.value(uid, "");
+      m_textStream << ',' << escapeCsvField(finalValues.value(uid, QString()));
     }
 
     m_textStream << '\n';
@@ -170,10 +193,11 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 
   // Write header. The first column is elapsed seconds from the first sample
   // in this session — NOT a calendar timestamp — so the label must match.
+  // Escape titles in case group/dataset names contain commas or quotes.
   m_textStream << "Elapsed (s)";
   for (const auto& col : m_schema.columns) {
     const auto label = QString("%1/%2").arg(col.groupTitle, col.title).simplified();
-    m_textStream << ',' << label;
+    m_textStream << ',' << escapeCsvField(label);
   }
 
   m_textStream << '\n';

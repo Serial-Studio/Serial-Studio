@@ -214,6 +214,11 @@ void Licensing::MachineID::readInformation()
   }
 #endif
 
+  // Warn when every platform fallback returned an empty identifier so issues
+  // with license activation can be diagnosed. Derivation still proceeds below.
+  if (id.isEmpty()) [[unlikely]]
+    qWarning() << "[MachineID] fallback produced empty fingerprint";
+
   // Hash the composite identifier with BLAKE2s-128
   auto data = QString("%1@%2:%3").arg(qApp->applicationName(), id, os);
   auto hash = QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Blake2s_128);

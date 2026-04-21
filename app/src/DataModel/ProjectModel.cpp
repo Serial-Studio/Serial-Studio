@@ -374,16 +374,19 @@ int DataModel::ProjectModel::sourceCount() const noexcept
 }
 
 /**
- * @brief Returns the workspaces that represent the current project layout.
+ * @brief Returns the workspaces that represent the current dashboard layout.
  *
- * m_workspaces is the authoritative list in both modes:
- *   - customizeWorkspaces == false: regenerated from groupsChanged by
- *     regenerateAutoWorkspaces() (Overview → All Data → one per group).
- *   - customizeWorkspaces == true:  hand-edited by the user.
- * The list is persisted to JSON either way.
+ * QuickPlot / ConsoleOnly return a session-scoped list built from the live
+ * dashboard frame (m_sessionWorkspaces), so a loaded project's hand-edited
+ * workspaces never leak into those modes. ProjectFile returns m_workspaces —
+ * auto-regenerated from m_groups when customizeWorkspaces is off, or the
+ * user's saved list when it's on.
  */
 const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() const
 {
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return m_sessionWorkspaces;
+
   return m_workspaces;
 }
 
@@ -1081,18 +1084,27 @@ void DataModel::ProjectModel::setupExternalConnections()
     Q_EMIT pointCountChanged();
   });
 
-  // In QuickPlot mode, m_groups is empty — the workspace builder reads from
-  // FrameBuilder::quickPlotFrame(). Regenerate the auto-workspace list
-  // whenever the dashboard structure changes so the taskbar picks up the new
-  // layout.
+  // In QuickPlot mode the session workspace list is driven by the dashboard
+  // frame, not m_groups — rebuild it whenever Dashboard's widget count
+  // changes. ConsoleOnly has no dashboard, so the list stays empty there.
   connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetCountChanged, this, [this] {
     if (AppState::instance().operationMode() != SerialStudio::QuickPlot)
       return;
 
-    if (m_customizeWorkspaces)
-      return;
+    m_sessionWorkspaces = buildAutoWorkspaces();
+    Q_EMIT workspacesChanged();
+  });
 
-    regenerateAutoWorkspaces();
+  // Mode switch: rebuild the session list for the new mode and republish so
+  // the taskbar drops the previous mode's workspaces immediately (without
+  // waiting for a frame or a groupsChanged).
+  connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
+    const auto opMode = AppState::instance().operationMode();
+    if (opMode == SerialStudio::ProjectFile)
+      m_sessionWorkspaces.clear();
+    else
+      m_sessionWorkspaces = buildAutoWorkspaces();
+
     Q_EMIT workspacesChanged();
   });
 

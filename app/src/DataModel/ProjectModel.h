@@ -364,9 +364,14 @@ private:
   // customizeWorkspaces == false: m_workspaces is regenerated from the current
   // project structure on every groupsChanged signal. When the user flips the
   // flag on, regeneration stops and m_workspaces becomes hand-edited.
-  // Either way, m_workspaces is what workspaces() returns and what the save
-  // path persists.
+  // Either way, m_workspaces is what ProjectFile mode returns and what the
+  // save path persists.
   bool m_customizeWorkspaces;
+
+  // Session-scoped workspaces used by QuickPlot/ConsoleOnly. Kept separate so
+  // a loaded project's m_workspaces survives across mode switches and cannot
+  // leak into the session taskbar.
+  std::vector<DataModel::Workspace> m_sessionWorkspaces;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

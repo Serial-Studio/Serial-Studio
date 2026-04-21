@@ -187,29 +187,32 @@ int UI::Taskbar::activeGroupId() const
 /**
  * @brief Returns the index of the currently active group.
  *
- * Iterates through the list returned by groupModel() and finds the index
- * of the group whose "id" matches the current active group ID
- * (m_activeGroupId). If no match is found, the method returns the total number
- * of groups, which may indicate an invalid or unassigned state.
+ * Iterates through the list returned by workspaceModel() and finds the index
+ * of the entry whose "id" matches the current active group ID. Returns -1 if
+ * no entry matches, so QML bindings can handle the "not found" case explicitly
+ * instead of receiving an out-of-bounds index.
  *
- * @return Index of the active group within the group model.
+ * @return Index of the active group within the workspace model, or -1 if not
+ *         found.
  */
 int UI::Taskbar::activeGroupIndex() const
 {
-  int index        = 0;
+  // Walk the workspace model looking for the active group's entry
   const auto model = workspaceModel();
+  int index        = 0;
   for (auto it = model.begin(); it != model.end(); ++it) {
-    auto map = it->toMap();
-    if (map.contains("id")) {
-      auto id = map.value("id").toInt();
-      if (id == m_activeGroupId)
-        break;
+    const auto map = it->toMap();
+    if (!map.contains(QStringLiteral("id")))
+      continue;
 
-      ++index;
-    }
+    if (map.value(QStringLiteral("id")).toInt() == m_activeGroupId)
+      return index;
+
+    ++index;
   }
 
-  return index;
+  // No match — signal "not found" rather than an out-of-bounds index
+  return -1;
 }
 
 /**
@@ -1743,29 +1746,23 @@ void UI::Taskbar::setWorkspaceWidgets(int workspaceId, const QVariantList& windo
 
   auto* pm = &DataModel::ProjectModel::instance();
 
-  // Find and clear the workspace's widget refs
+  // Locate the workspace and clear its existing widget refs (iterate backwards)
   const auto& workspaces = pm->workspaces();
   bool found             = false;
-  for (const auto& ws : workspaces) {
-    if (ws.workspaceId == workspaceId) {
-      found = true;
-      break;
-    }
-  }
-
-  if (!found)
-    return;
-
-  // Remove all existing refs (iterate backwards)
   for (const auto& ws : workspaces) {
     if (ws.workspaceId != workspaceId)
       continue;
 
+    found = true;
     for (int i = static_cast<int>(ws.widgetRefs.size()) - 1; i >= 0; --i)
       pm->removeWidgetFromWorkspace(workspaceId, i);
 
     break;
   }
+
+  // Abort if the workspace no longer exists
+  if (!found)
+    return;
 
   // Add new refs from window IDs
   const auto& widgetMap = UI::Dashboard::instance().widgetMap();

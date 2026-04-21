@@ -38,6 +38,11 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config, QQuickItem* p
   m_rateLimiter.start();
   installProtocolHelpers(m_jsEngine);
 
+  // Arm the watchdog timer — flips the interrupt flag to unwind runaway transmit scripts
+  m_watchdog.setSingleShot(true);
+  m_watchdog.setInterval(kTransmitWatchdogMs);
+  connect(&m_watchdog, &QTimer::timeout, this, [this]() { m_jsEngine.setInterrupted(true); });
+
   // Compile the user's transmit function
   if (!config.transmitFunction.isEmpty()) {
     const auto wrapped =
@@ -176,22 +181,45 @@ QByteArray Widgets::Output::Base::evaluateTransmitFunction(const QVariant& value
   if (!m_hasFn)
     return {};
 
+  // Arm the watchdog so a runaway user script cannot hang the UI thread
+  m_jsEngine.setInterrupted(false);
+  m_watchdog.start();
+
   // Invoke the JS function with the widget value
   auto jsValue = m_jsEngine.toScriptValue(value);
   auto result  = m_transmitFn.call(QJSValueList{jsValue});
 
+  // Disarm the watchdog once the script returns (or is interrupted)
+  m_watchdog.stop();
+
+  // Report runaway-script interruption and drop the result
+  if (m_jsEngine.isInterrupted()) [[unlikely]] {
+    m_jsEngine.setInterrupted(false);
+    Q_EMIT transmitError(tr("Transmit script timed out after %1 ms").arg(kTransmitWatchdogMs));
+    return {};
+  }
+
   // Handle JS execution errors
-  if (result.isError()) {
+  if (result.isError()) [[unlikely]] {
     Q_EMIT transmitError(result.toString());
     return {};
   }
 
   // Convert result to byte array — string results honor the configured
   // text encoding so non-ASCII characters survive the round-trip
+  QByteArray data;
   if (result.isString())
-    return SerialStudio::encodeText(result.toString(), m_txEncoding);
+    data = SerialStudio::encodeText(result.toString(), m_txEncoding);
+  else
+    data = result.toVariant().toByteArray();
 
-  return result.toVariant().toByteArray();
+  // Enforce hard payload size cap — oversized returns indicate runaway / hostile scripts
+  if (data.size() > kMaxPayloadBytes) [[unlikely]] {
+    Q_EMIT transmitError(tr("Payload exceeds maximum size"));
+    return {};
+  }
+
+  return data;
 }
 
 //--------------------------------------------------------------------------------------------------

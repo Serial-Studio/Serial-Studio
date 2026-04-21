@@ -12,10 +12,11 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 → https://store.serial-studio.com/
 
 Proの機能：
-→ MQTT統合
-→ XYおよび3Dビジュアライゼーション
-→ オーディオ入力
-→ CANBus & MODBUSドライバ
+→ MQTT、XY、3Dビジュアライゼーション
+→ Audio、CAN Bus、Modbus、USB、HID、Process I/Oドライバ
+→ 出力ウィジェット、MDF4エクスポート、XMODEM/YMODEM/ZMODEM転送
+→ セッションデータベース、Data Tables、値変換（JS + Lua）
+→ マルチソースプロジェクトとカスタムワークスペース
 → 商用ライセンス（GPL義務なし）
 
 → 詳細はこちら: https://serial-studio.com/

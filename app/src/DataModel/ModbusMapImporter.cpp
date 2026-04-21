@@ -22,6 +22,7 @@
 
 #include "DataModel/ModbusMapImporter.h"
 
+#include <QDebug>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -316,11 +317,25 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
       continue;
 
     const auto cols = line.split(',');
-    if (cols.count() <= col_addr)
+    if (cols.count() <= col_addr) {
+      qWarning().nospace() << "[ModbusMapImporter] CSV row " << row
+                           << " skipped: not enough columns (expected address at index " << col_addr
+                           << ", got " << cols.count() << " columns)";
       continue;
+    }
+
+    // Parse the register address; skip the row if it isn't a valid uint16
+    bool addrOk              = false;
+    const auto addrText      = cols[col_addr].trimmed().remove('"');
+    const quint16 addrParsed = addrText.toUShort(&addrOk);
+    if (!addrOk) {
+      qWarning().nospace() << "[ModbusMapImporter] CSV row " << row
+                           << " skipped: invalid register address '" << addrText << "'";
+      continue;
+    }
 
     RegisterEntry entry;
-    entry.address      = cols[col_addr].trimmed().remove('"').toUShort();
+    entry.address      = addrParsed;
     entry.name         = (col_name >= 0 && col_name < cols.count())
                          ? cols[col_name].trimmed().remove('"')
                          : QStringLiteral("Register %1").arg(entry.address);
@@ -403,8 +418,19 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
     else if (tag_name == QLatin1String("register")) {
       const auto attrs = xml.attributes();
 
+      // Validate the address attribute — skip the element if missing or malformed
+      bool addrOk              = false;
+      const auto addrText      = attrs.value("address").toString();
+      const quint16 addrParsed = addrText.toUShort(&addrOk);
+      if (!addrOk) {
+        qWarning().nospace() << "[ModbusMapImporter] XML <register> at line " << xml.lineNumber()
+                             << " skipped: invalid or missing 'address' attribute ('" << addrText
+                             << "')";
+        continue;
+      }
+
       RegisterEntry entry;
-      entry.address  = attrs.value("address").toUShort();
+      entry.address  = addrParsed;
       entry.name     = attrs.value("name").toString();
       entry.dataType = attrs.value("dataType").toString().toLower();
       entry.units    = attrs.value("units").toString();

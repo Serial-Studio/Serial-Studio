@@ -7,14 +7,16 @@ derivati rimangano open source sotto gli stessi termini.
 → Licenza: https://www.gnu.org/licenses/gpl-3.0.html
 → Fonte:   https://github.com/serial-studio/serial-studio
 
-Ti piace questo progetto? Considera di supportare lo sviluppo con Serial Studio Pro:
+Ti piace questo progetto? Considera di supportare lo sviluppo con
+Serial Studio Pro:
 → https://store.serial-studio.com/
 
 Funzionalità Pro:
-→ Integrazione MQTT
-→ Visualizzazione XY e 3D
-→ Input audio
-→ Driver CANBus & MODBUS
+→ Visualizzazione MQTT, XY e 3D
+→ Driver Audio, CAN Bus, Modbus, USB, HID e Process I/O
+→ Widget di output, export MDF4 e trasferimenti XMODEM/YMODEM/ZMODEM
+→ Database di sessioni, Data Tables e trasformazioni (JS + Lua)
+→ Progetti multi-sorgente e workspace personalizzati
 → Licenza commerciale (nessun obbligo GPL)
 
 → Scopri di più: https://serial-studio.com/

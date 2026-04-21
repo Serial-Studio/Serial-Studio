@@ -175,7 +175,12 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::Timestamp
     }
   }
 
-  m_db.commit();
+  // Flush the batch — failed commit leaves a dangling transaction that would
+  // poison the next writer, so log and roll back instead of silently dropping.
+  if (!m_db.commit()) [[unlikely]] {
+    qWarning() << "[Sessions::Export] commit() failed:" << m_db.lastError().text();
+    m_db.rollback();
+  }
 }
 
 /**

@@ -157,6 +157,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
           // Rewind by actual bytes read — fixed 1024 over-rewinds the final partial block.
           m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
           if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
+            m_file.close();
             Q_EMIT finished(false, tr("Failed to seek in file"));
             return;
           }

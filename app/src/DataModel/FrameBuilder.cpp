@@ -206,6 +206,14 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &IO::ConnectionManager::connectedChanged,
           this,
           &DataModel::FrameBuilder::onConnectedChanged);
+
+  // Source IDs get renumbered on delete — wipe transform engines so stale
+  // keys can't fire the wrong Lua/JS ref on the next frame. Engines
+  // recompile lazily on the next connect or project sync.
+  connect(&DataModel::ProjectModel::instance(),
+          &DataModel::ProjectModel::sourceDeleted,
+          this,
+          &DataModel::FrameBuilder::onSourceRemoved);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -311,6 +319,19 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArra
 //--------------------------------------------------------------------------------------------------
 // Private slots
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Wipes all transform engines when a source is removed.
+ *
+ * ProjectModel renumbers source IDs after deletion, which would leave stale
+ * keys in m_transformEngines pointing at the wrong Lua state / JS engine.
+ * Safest fix is a blanket teardown — engines get rebuilt on the next
+ * compileTransforms() call (triggered by project sync or connect).
+ */
+void DataModel::FrameBuilder::onSourceRemoved()
+{
+  destroyTransformEngines();
+}
 
 /**
  * @brief Handles device connection events and triggers auto-execute actions.
@@ -1100,6 +1121,12 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
     // Store a registry reference for O(1) hotpath lookup
     lua_getglobal(L, alias.toUtf8().constData());
     Q_ASSERT(lua_isfunction(L, -1));
+
+    // Release any previous ref for this dataset before overwriting
+    auto existingIt = engine.luaRefs.find(entry.uniqueId);
+    if (existingIt != engine.luaRefs.end()) [[unlikely]]
+      luaL_unref(L, LUA_REGISTRYINDEX, existingIt->second);
+
     engine.luaRefs[entry.uniqueId] = luaL_ref(L, LUA_REGISTRYINDEX);
   }
 
@@ -1162,6 +1189,12 @@ void DataModel::FrameBuilder::destroyTransformEngines()
     // Clear JS function refs BEFORE deleting the engine — QJSValue
     // destructors access the engine's internal state
     engine.jsRefs.clear();
+
+    // Release each Lua registry ref before closing the state
+    if (engine.luaState)
+      for (const auto& [uid, ref] : engine.luaRefs)
+        luaL_unref(engine.luaState, LUA_REGISTRYINDEX, ref);
+    engine.luaRefs.clear();
 
     // Release Lua state
     if (engine.luaState) {

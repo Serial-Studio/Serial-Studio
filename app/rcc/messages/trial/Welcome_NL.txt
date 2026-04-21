@@ -10,7 +10,8 @@ plan of compileer de GPLv3-broncode zelf.
 → Meer informatie: https://serial-studio.com/
 
 Beschikbare Pro-functies:
-→ MQTT-integratie
-→ XY- en 3D-visualisatie
-→ Audio-invoer
-→ CANBus & MODBUS-drivers
+→ MQTT-, XY- en 3D-visualisatie
+→ Audio-, CAN Bus-, Modbus-, USB-, HID- en Process-I/O-drivers
+→ Output-widgets, MDF4-export en XMODEM/YMODEM/ZMODEM-overdracht
+→ Sessiedatabase, Data Tables en waardetransformaties (JS + Lua)
+→ Multi-bron-projecten en aangepaste werkruimtes

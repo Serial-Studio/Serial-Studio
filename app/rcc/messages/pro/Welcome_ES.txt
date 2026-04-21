@@ -9,8 +9,9 @@ Su licencia está activa y aprobada para uso comercial y propietario.
 → Más información: https://serial-studio.com/
 
 Características Pro:
-→ Integración MQTT
-→ Visualización XY y 3D
-→ Entrada de audio
-→ Controladores CANBus y MODBUS
+→ Visualización MQTT, XY y 3D
+→ Controladores Audio, CAN Bus, Modbus, USB, HID y Process I/O
+→ Widgets de salida, exportación MDF4 y transferencias XMODEM/YMODEM/ZMODEM
+→ Base de datos de sesiones, Data Tables y transformaciones (JS + Lua)
+→ Proyectos multifuente y espacios de trabajo personalizados
 → Soporte prioritario

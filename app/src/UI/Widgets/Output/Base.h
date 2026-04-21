@@ -15,6 +15,7 @@
 #include <QJSEngine>
 #include <QJSValue>
 #include <QQuickItem>
+#include <QTimer>
 
 #include "DataModel/Frame.h"
 #include "SerialStudio.h"
@@ -103,8 +104,11 @@ private:
   QJSValue m_transmitFn;
   bool m_hasFn;
 
+  QTimer m_watchdog;
   QElapsedTimer m_rateLimiter;
-  static constexpr int kMinSendIntervalMs = 50;
+  static constexpr int kMinSendIntervalMs  = 50;
+  static constexpr int kTransmitWatchdogMs = 500;
+  static constexpr int kMaxPayloadBytes    = 65536;
 };
 
 }  // namespace Output

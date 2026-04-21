@@ -11,10 +11,11 @@ Líbí se vám tento projekt? Zvažte podporu vývoje s Serial Studio Pro:
 → https://store.serial-studio.com/
 
 Funkce Pro:
-→ Integrace MQTT
-→ Vizualizace XY a 3D
-→ Vstup zvuku
-→ Ovladače CANBus & MODBUS
+→ Vizualizace MQTT, XY a 3D
+→ Ovladače Audio, CAN Bus, Modbus, USB, HID a Process I/O
+→ Výstupní widgety, export MDF4 a přenosy XMODEM/YMODEM/ZMODEM
+→ Databáze relací, Data Tables a transformace hodnot (JS + Lua)
+→ Projekty s více zdroji a vlastní pracovní plochy
 → Komerční licence (bez povinností GPL)
 
 → Více informací: https://serial-studio.com/

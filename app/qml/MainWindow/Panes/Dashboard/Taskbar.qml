@@ -350,9 +350,9 @@ Item {
           interactive: true
           Layout.fillWidth: true
           Layout.fillHeight: true
-          model: taskBar.taskbarButtons
           orientation: ListView.Horizontal
           boundsBehavior: Flickable.StopAtBounds
+          model: taskBar ? taskBar.taskbarButtons : null
 
           delegate: Widgets.TaskbarButton {
             required property var model
@@ -361,7 +361,8 @@ Item {
 
             text: model.widgetName
             icon.source: SerialStudio.dashboardWidgetIcon(model.widgetType)
-            forceVisible: Cpp_UI_Dashboard.showTaskbarButtons || taskBar.hasMaximizedWindow
+            forceVisible: Cpp_UI_Dashboard.showTaskbarButtons
+                          || (taskBar && taskBar.hasMaximizedWindow)
 
             width: opacity > 0 ? 144 : 0
             Behavior on width { NumberAnimation{} }
@@ -381,7 +382,7 @@ Item {
             TapHandler {
               acceptedButtons: Qt.RightButton
               onTapped: {
-                if (taskBar.activeGroupId >= 1000) {
+                if (taskBar && taskBar.activeGroupId >= 1000) {
                   _tbRemoveWindowId = button.model.windowId
                   _tbContextMenu.popup()
                 }
@@ -432,11 +433,11 @@ Item {
 
       textRole: "text"
       Layout.maximumWidth: 220
-      model: taskBar.workspaceModel
       Layout.alignment: Qt.AlignVCenter
-      currentIndex: taskBar.activeGroupIndex
+      model: taskBar ? taskBar.workspaceModel : []
+      currentIndex: taskBar ? Math.max(0, taskBar.activeGroupIndex) : 0
       onActivated: {
-        if (currentIndex !== taskBar.activeGroupIndex)
+        if (taskBar && currentIndex !== taskBar.activeGroupIndex)
           taskBar.activeGroupIndex = currentIndex
       }
 

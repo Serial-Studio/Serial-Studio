@@ -80,6 +80,7 @@ public slots:
   void hotpathRxSourceFrame(int sourceId, const QByteArray& data);
 
 private slots:
+  void onSourceRemoved();
   void onConnectedChanged();
   void updateTimestampedFramesEnabled();
 

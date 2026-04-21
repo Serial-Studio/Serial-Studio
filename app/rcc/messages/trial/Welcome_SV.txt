@@ -10,7 +10,8 @@ till en betald plan eller kompilera GPLv3-källkoden själv.
 → Läs mer: https://serial-studio.com/
 
 Pro-funktioner tillgängliga:
-→ MQTT-integration
-→ XY och 3D-visualisering
-→ Ljudingång
-→ CANBus & MODBUS-drivrutiner
+→ MQTT-, XY- och 3D-visualisering
+→ Audio-, CAN Bus-, Modbus-, USB-, HID- och Process-I/O-drivrutiner
+→ Output-widgetar, MDF4-export och XMODEM/YMODEM/ZMODEM-överföring
+→ Sessionsdatabas, Data Tables och värdetransformer (JS + Lua)
+→ Multikällsprojekt och anpassade arbetsytor

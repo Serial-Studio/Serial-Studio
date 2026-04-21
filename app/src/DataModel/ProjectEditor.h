@@ -24,6 +24,7 @@
 #include <QItemSelectionModel>
 #include <QObject>
 #include <QStandardItemModel>
+#include <QTimer>
 
 #include "DataModel/DatasetTransformEditor.h"
 #include "DataModel/Frame.h"
@@ -273,6 +274,7 @@ public slots:
   void openTransformEditor();
 
 private slots:
+  void scheduleTreeRebuild();
   void generateComboBoxModels();
   void onGroupItemChanged(QStandardItem* item);
   void onSourceItemChanged(QStandardItem* item);
@@ -360,7 +362,9 @@ private:
   QStringList m_imgDetectionModes;
   QStringList m_outputWidgetTypes;
 
+  QTimer m_rebuildTimer;
   QMetaObject::Connection m_deviceListConn;
+  QMetaObject::Connection m_currentSelectionConnection;
 
   QMap<QString, QString> m_eolSequences;
   QMap<QString, QString> m_groupWidgets;
