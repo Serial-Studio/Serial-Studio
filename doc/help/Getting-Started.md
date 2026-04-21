@@ -10,7 +10,7 @@ Serial Studio is a cross-platform telemetry dashboard for visualizing real-time 
 - **15+ widget types.** Plot, MultiPlot, FFT Plot, Bar, Gauge, Compass, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot, XY Plot, and Image View.
 - **Export.** Save sessions to CSV or MDF4 for offline analysis.
 - **Performance.** Built with Qt 6 and C++20, aimed at 256 KHz+ data rates.
-- **Three operation modes.** Quick Plot for instant visualization, Project File for full dashboard customization, and Device Sends JSON for self-describing devices.
+- **Three operation modes.** Console Only for inspecting the raw stream, Quick Plot for instant CSV visualization, and Project File for fully customized dashboards.
 
 Whether you're reading temperature from an Arduino, monitoring a CAN Bus in a vehicle, or building a ground station for a rocket, Serial Studio handles the visualization layer so you can focus on your hardware and firmware.
 
@@ -126,7 +126,7 @@ Once Serial Studio parses at least one valid frame, the view switches from the C
 
 The Setup panel is where you configure the connection:
 
-- **Operation mode.** Quick Plot, Project File, or Device Sends JSON.
+- **Operation mode.** Console Only, Quick Plot, or Project File.
 - **I/O interface settings.** Port, baud rate, IP address, and so on, depending on the interface.
 - **Frame parsing options.** Delimiters, data conversion, and other protocol settings.
 - **Export options.** Turn on CSV or MDF4 logging.
@@ -192,7 +192,7 @@ That's all. No project file, no JSON, just connect and visualize.
 
 ## Your first connection: Project File mode
 
-Project File mode gives you full control over how Serial Studio interprets your data and what widgets show up on the dashboard. You create a `.json` project file in the built-in Project Editor, and Serial Studio uses it to parse incoming data and build the dashboard. It's the recommended mode for most real-world projects.
+Project File mode gives you full control over how Serial Studio interprets your data and what widgets show up on the dashboard. You create a `.ssproj` project file in the built-in Project Editor, and Serial Studio uses it to parse incoming data and build the dashboard. It's the recommended mode for most real-world projects.
 
 ### Step 1: open the Project Editor
 
@@ -213,7 +213,7 @@ Click the wrench icon in the toolbar, or pick **Project Editor** from the menu. 
 
 ### Step 4: save and load
 
-1. Save the project file (a `.json`).
+1. Save the project file (a `.ssproj`).
 2. Back in the main window, set the operation mode to **Parse via JSON Project File**.
 3. Load your project file through the file selector in the Setup panel.
 
@@ -223,36 +223,36 @@ Configure your I/O interface and click **Connect**. Serial Studio uses your proj
 
 ---
 
-## Your first connection: JSON mode
+## Your first connection: Console Only mode
 
-> This mode isn't recommended for most projects. The JSON frame structure can change between Serial Studio versions, which can break firmware. Consider using Project File mode instead. It keeps the dashboard definition on the host and avoids shipping large JSON payloads over the data link.
-
-If your device can emit JSON, it can define its own dashboard layout. Serial Studio wraps JSON frames in delimiters so it can find them in the data stream.
-
-### What the device sends
-
-Your device needs to output JSON frames wrapped in `/*` and `*/`:
-
-```
-/*{"title":"Weather Station","groups":[{"title":"Environment","widget":"datagrid","datasets":[{"title":"Temperature","value":"23.5","units":"°C"},{"title":"Pressure","value":"1013","units":"hPa"},{"title":"Humidity","value":"45.2","units":"%"}]}]}*/
-```
-
-The JSON tells Serial Studio everything: dashboard name, groups, which widget to use for each group, and what datasets to display.
+Console Only is a diagnostic mode. Serial Studio doesn't try to parse anything — raw bytes from the data source go straight to the terminal. Use it when you want to verify that a device is alive, check the baud rate and framing, or send commands interactively.
 
 ### Steps
 
-1. In the Setup panel, set the operation mode to **No Parsing (Device Sends JSON Data)**.
+1. In the Setup panel, set the operation mode to **Console Only (No Parsing)**.
 2. Pick your I/O interface and configure the connection (port, baud rate, IP, and so on).
 3. Click **Connect**.
-4. Serial Studio extracts JSON frames between `/*` and `*/`, parses them, and builds the dashboard automatically.
+4. Raw bytes appear in the terminal. Toggle between ASCII and hexadecimal display from the console toolbar.
+5. Use the input box at the bottom of the console to send bytes back to the device.
 
-This mode exists for cases where the firmware has to control the dashboard layout at runtime, for example when the device switches between operating modes that expose different sensors.
+No dashboard, no CSV export, no parsing. Once the stream looks correct, switch to Quick Plot or Project File to actually visualize the data.
 
 ---
 
 ## Operation modes
 
 Serial Studio has three operation modes. The right one depends on how much control you need and how your device formats its output.
+
+### Console Only
+
+| Aspect               | Detail |
+|----------------------|--------|
+| Configuration needed | None |
+| Data format          | Any (bytes are never parsed) |
+| Dashboard generated  | None — raw bytes go to the terminal |
+| Best for             | Probing an unknown device, debugging baud/wiring, AT commands |
+
+Console Only turns Serial Studio into a bidirectional terminal. No frame detection, no dashboard, no parsing. Switch to it whenever you want to see exactly what bytes are coming out of your device.
 
 ### Quick Plot
 
@@ -270,23 +270,12 @@ Quick Plot treats each line as a frame and each comma-separated field as a datas
 
 | Aspect               | Detail |
 |----------------------|--------|
-| Configuration needed | JSON project file (created in the Project Editor) |
-| Data format          | Configurable (CSV with custom delimiters, binary with a JS parser) |
+| Configuration needed | `.ssproj` project file (created in the Project Editor) |
+| Data format          | Configurable (CSV with custom delimiters, binary with a Lua/JS parser) |
 | Dashboard generated  | From the project file |
 | Best for             | Production telemetry, complex protocols, multi-sensor systems |
 
-This mode gives you full control: define frame delimiters, map data fields to datasets, pick widget types, set units and ranges, configure alarms, add FFT analysis, write frame parser scripts (Lua or JavaScript) for binary protocols, and add per-dataset value transforms for calibration and filtering. Project File mode also supports multiple data sources for multi-device setups. It's the recommended mode for most real-world projects.
-
-### Device Sends JSON
-
-| Aspect               | Detail |
-|----------------------|--------|
-| Configuration needed | None (the device defines everything) |
-| Data format          | JSON wrapped in `/*` and `*/` |
-| Dashboard generated  | From the JSON structure |
-| Best for             | Devices that change dashboard layout at runtime |
-
-The device sends full JSON frames that define groups, datasets, widget types, units, and actions. Serial Studio reads the frames and builds the dashboard from them. This mode generally isn't recommended: it requires sending verbose JSON over the data link, and the JSON frame structure can change between Serial Studio versions. Use it only when firmware has to control its own dashboard layout dynamically.
+This mode gives you full control: define frame delimiters, map data fields to datasets, pick widget types, set units and ranges, configure alarms, add FFT analysis, write frame parser scripts (Lua or JavaScript) for binary protocols, and add per-dataset value transforms for calibration and filtering. Project File mode also supports multiple data sources for multi-device setups (Pro). It's the recommended mode for most real-world projects.
 
 ---
 
@@ -308,8 +297,8 @@ The device sends full JSON frames that define groups, datasets, widget types, un
 ### Console shows data but no dashboard
 
 - In Quick Plot mode, make sure the device sends comma-separated numeric values terminated by a newline. Non-numeric text (other than numbers, commas, and whitespace) blocks parsing.
-- In Project File mode, check that your frame delimiters match what the device actually sends. Look at the raw bytes in the console.
-- In JSON mode, make sure JSON frames are wrapped in `/*` and `*/` and that the JSON is valid.
+- In Project File mode, check that your frame delimiters match what the device actually sends. Switch to Console Only mode to inspect the raw stream, then come back once you know the framing.
+- If nothing parses, try Console Only first. If the raw bytes look wrong there, it's a connection/baud/wiring problem, not a parsing problem.
 
 ### Garbled or corrupted data in the console
 

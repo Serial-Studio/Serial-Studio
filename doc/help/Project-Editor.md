@@ -286,7 +286,7 @@ When a project has multiple sources, each source represents a separate physical 
 
 ## Saving and loading
 
-- Click **Save** (Ctrl+S / Cmd+S) to write the project to disk as a `.json` file.
+- Click **Save** (Ctrl+S / Cmd+S) to write the project to disk as a `.ssproj` file.
 - You can reopen it later with **Open**, or load it automatically if it's set as the default project.
 - Serial Studio prompts to save unsaved changes when you close the editor or open a different file.
 - Use the **Examples** browser (Help menu) to open working project files as reference.
@@ -352,5 +352,5 @@ When a project has multiple sources, each source represents a separate physical 
 - [Frame Parser Scripting](JavaScript-API.md): full Lua and JavaScript parser reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and unit conversion.
 - [Data Flow](Data-Flow.md): how data moves through Serial Studio.
-- [Operation Modes](Operation-Modes.md): Project File, Device Sends JSON, and Quick Plot modes.
+- [Operation Modes](Operation-Modes.md): Console Only, Quick Plot, and Project File modes.
 - [Troubleshooting](Troubleshooting.md): fixes for common problems.

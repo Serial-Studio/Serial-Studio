@@ -6,35 +6,62 @@ Serial Studio has three parsing modes that determine how incoming data is interp
 
 The three modes, in order of increasing complexity:
 
-1. **Quick Plot.** Automatic CSV plotting with zero configuration.
-2. **Project File.** A JSON project file on the host defines the dashboard, and the device sends raw values.
-3. **Device Sends JSON.** The device transmits a self-describing JSON frame that defines both data and dashboard layout.
+1. **Console Only.** No parsing, no dashboard. Raw bytes stream to the terminal so you can inspect what your device is actually sending.
+2. **Quick Plot.** Automatic CSV plotting with zero configuration.
+3. **Project File.** A `.ssproj` project file on the host defines the dashboard, and the device sends raw values (CSV, binary, or anything a frame parser can decode).
 
 The diagram below compares data flow through each mode side by side.
 
 ```mermaid
 flowchart LR
+    subgraph CO["Console Only"]
+        C1["Raw Bytes"] --> C2["Terminal"]
+    end
     subgraph QP["Quick Plot"]
         Q1["CSV"] --> Q2["Auto Dashboard"]
     end
     subgraph PF["Project File"]
         P1["Any Format"] --> P2["Custom Dashboard"]
     end
-    subgraph JSON["JSON Mode"]
-        J1["JSON Frame"] --> J2["Device Layout"]
-    end
 ```
 
-| Feature          | Quick Plot | Project File | Device Sends JSON |
-|------------------|:----------:|:------------:|:-----------------:|
-| JS Parser        | No         | Yes          | No                |
-| Custom Widgets   | No         | Yes          | Yes               |
-| Multi-Source     | No         | Yes (Pro)    | No                |
-| Setup Effort     | None       | Editor       | Firmware          |
+| Feature          | Console Only | Quick Plot | Project File |
+|------------------|:------------:|:----------:|:------------:|
+| Dashboard        | No           | Auto       | Custom       |
+| Frame Parser     | No           | No         | Lua / JS     |
+| Custom Widgets   | No           | No         | Yes          |
+| Multi-Source     | No           | No         | Yes (Pro)    |
+| Setup Effort     | None         | None       | Editor       |
 
-> **Note.** All modes work with any data source: Serial, TCP/UDP, BLE, and all Pro drivers.
+> **Note.** All modes work with any data source: Serial, TCP/UDP, BLE, and all Pro drivers (MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O).
 >
 > **Frame detection options (Project File mode only):** End Only, Start+End, Start Only, No Delimiters.
+
+---
+
+## Console Only mode
+
+### Selection
+
+Pick the "Console Only (No Parsing)" radio button in the Setup panel.
+
+### How it works
+
+- **Frame detection.** None. Serial Studio doesn't scan for delimiters, doesn't buffer frames, and doesn't build a dashboard.
+- **Data flow.** Raw bytes from the data source go straight to the terminal. The circular buffer, frame queue, and FrameBuilder are all skipped.
+- **Display.** The terminal shows the raw stream in ASCII or hex. You can still save the console transcript to a file.
+- **Transmit.** The console input box still works — you can send bytes back to the device.
+
+Console Only is not a parsing mode. No widgets render, no CSV export, no frame parser scripts. It exists purely as a diagnostic view.
+
+### When to use it
+
+- Figuring out what protocol your device is actually using.
+- Verifying baud rate / pin wiring / framing before you commit to a project file.
+- Debugging a stream that isn't being parsed correctly in another mode.
+- Interactively driving a device with a simple text protocol (AT commands, CLI, and so on).
+
+Once you've confirmed the data looks sane, switch to Quick Plot or Project File to actually visualize it.
 
 ---
 
@@ -190,191 +217,43 @@ Project File mode is the right choice for any application that needs custom widg
 
 ---
 
-## Device Sends JSON mode
-
-> This mode exists for specific cases where the device has to control its own dashboard layout at runtime. For most projects, Project File mode is the recommended approach: it's more flexible, doesn't need firmware changes, and isn't affected by protocol changes between Serial Studio versions. The JSON frame structure used here may change across versions, which can break firmware written against an older format.
-
-### Selection
-
-Pick the "No Parsing (Device Sends JSON Data)" radio button in the Setup panel.
-
-### How it works
-
-- **Frame detection.** Fixed delimiters. Every frame has to begin with `/*` and end with `*/`. These are hardcoded and can't be changed.
-- **Data format.** A complete JSON object enclosed between the delimiters. The JSON defines both the dashboard layout and the current data values.
-- **Dashboard behavior.** Serial Studio rebuilds the dashboard dynamically whenever the JSON structure changes (new groups, different widgets, and so on). If only values change, the existing dashboard updates in place.
-
-No project file required. No JavaScript parsing involved. The device firmware is entirely responsible for generating valid JSON.
-
-### Transmission format
-
-```
-/*{ ... JSON payload ... }*/
-```
-
-The device sends the opening `/*`, then a JSON object, then `*/`. Whitespace inside the delimiters is allowed.
-
-### JSON frame structure
-
-A complete frame has a root object with three optional top-level keys:
-
-| Key       | Type   | Required | Description |
-|-----------|--------|----------|-------------|
-| `title`   | string | Yes      | Dashboard title shown at the top of the window. |
-| `groups`  | array  | Yes      | Array of group objects. Each group becomes a widget panel. |
-| `actions` | array  | No       | Array of action objects. Each action becomes a button that transmits data back to the device. |
-
-#### Group object
-
-Each group represents a panel on the dashboard with one or more datasets.
-
-| Key         | Type   | Default | Description |
-|-------------|--------|---------|-------------|
-| `title`     | string | —       | Display name of the group. |
-| `widget`    | string | `""`    | Group widget type. See the table below. |
-| `datasets`  | array  | —       | Array of dataset objects that belong to this group. |
-
-**Group widget values:**
-
-| Value             | Dashboard widget                     | Required datasets |
-|-------------------|--------------------------------------|-------------------|
-| `"datagrid"`      | Data Grid                            | Any number of datasets. |
-| `"multiplot"`     | MultiPlot (overlaid time-series)     | Two or more datasets with `graph: true`. |
-| `"accelerometer"` | Accelerometer visualization          | Three datasets (X, Y, Z). |
-| `"gyro"`          | Gyroscope visualization              | Three datasets (X, Y, Z). |
-| `"map"`           | GPS Map                              | Two or three datasets (latitude, longitude, optional altitude). Uses `widget` values `"lat"`, `"lon"`, `"alt"` on datasets. |
-| `"plot3d"`        | 3D scatter/line plot                 | Three datasets (X, Y, Z). |
-| `"image"`         | Image viewer (Pro)                   | Image data embedded in the stream. |
-| `""` (empty)      | No group-level widget                | Datasets rendered individually based on their own `widget` values. |
-
-#### Dataset object
-
-Each dataset represents a single data channel within a group.
-
-| Key                 | Type   | Default | Description |
-|---------------------|--------|---------|-------------|
-| `title`             | string | —       | Human-readable channel name. |
-| `value`             | string | —       | Current value as a string (even for numbers). |
-| `units`             | string | `""`    | Unit label (for example "degC", "%", "hPa"). |
-| `index`             | int    | 0       | Position index within the frame (used for mapping). |
-| `widget`            | string | `""`    | Dataset-level widget: `"bar"`, `"gauge"`, `"compass"`, or `""` for none. For special groups, use `"x"`, `"y"`, `"z"`, `"lat"`, `"lon"`, `"alt"`. |
-| `graph`             | bool   | false   | If true, this dataset is plotted as a time-series line. |
-| `fft`               | bool   | false   | Enable FFT analysis for this channel. |
-| `fftSamples`        | int    | 256     | Number of samples per FFT window. |
-| `fftSamplingRate`   | int    | 100     | Sampling rate in Hz for the FFT frequency axis. |
-| `fftMin`            | double | 0       | Minimum display value for the FFT plot. |
-| `fftMax`            | double | 0       | Maximum display value for the FFT plot. |
-| `led`               | bool   | false   | Show an LED indicator for this channel. |
-| `ledHigh`           | double | 80      | Threshold above which the LED activates. |
-| `alarmEnabled`      | bool   | false   | Enable alarm monitoring. |
-| `alarmLow`          | double | 20      | Low alarm threshold. |
-| `alarmHigh`         | double | 80      | High alarm threshold. |
-| `widgetMin`         | double | 0       | Minimum value for bar/gauge/compass widgets. |
-| `widgetMax`         | double | 100     | Maximum value for bar/gauge/compass widgets. |
-| `plotMin`           | double | 0       | Fixed minimum for the plot Y-axis (0 = auto-scale). |
-| `plotMax`           | double | 0       | Fixed maximum for the plot Y-axis (0 = auto-scale). |
-
-#### Action object
-
-Actions define buttons in the dashboard toolbar that send data back to the connected device.
-
-| Key      | Type   | Default            | Description |
-|----------|--------|--------------------|-------------|
-| `title`  | string | —                  | Button label. |
-| `icon`   | string | `"Play Property"`  | Icon name for the button. |
-| `txData` | string | —                  | Data string to transmit when the button is pressed. |
-| `eol`    | string | `""`               | End-of-line sequence appended after `txData` (for example `"\r\n"`). |
-| `binary` | bool   | false              | If true, `txData` is interpreted as binary hex data. |
-
-### Full example
-
-```json
-/*{
-  "title": "Weather Station",
-  "groups": [
-    {
-      "title": "Environment",
-      "widget": "datagrid",
-      "datasets": [
-        {
-          "title": "Temperature",
-          "value": "23.5",
-          "units": "degC",
-          "widget": "gauge",
-          "widgetMin": -20,
-          "widgetMax": 60,
-          "graph": true,
-          "alarmEnabled": true,
-          "alarmHigh": 50
-        },
-        {
-          "title": "Humidity",
-          "value": "45.2",
-          "units": "%",
-          "widget": "bar",
-          "widgetMin": 0,
-          "widgetMax": 100,
-          "graph": true
-        },
-        {
-          "title": "Pressure",
-          "value": "1013",
-          "units": "hPa",
-          "graph": true
-        }
-      ]
-    }
-  ],
-  "actions": [
-    {
-      "title": "Reset Sensor",
-      "icon": "Refresh",
-      "txData": "RST",
-      "eol": "\r\n"
-    }
-  ]
-}*/
-```
-
-### When to use it
-
-Device Sends JSON is a fit for cases where firmware has to control its own dashboard layout at runtime, for example when a device switches between operating modes and needs different widgets for each. Keep in mind that shipping large JSON payloads over a serial port adds a lot of overhead compared to sending raw values, and the JSON structure is tied to the specific Serial Studio version you're using.
-
----
-
 ## Picking the right mode
 
 | Scenario                                                     | Recommended mode |
 |--------------------------------------------------------------|------------------|
+| Just want to see what bytes the device is sending            | Console Only |
+| Debugging a garbled stream, unknown baud rate, wrong wiring  | Console Only |
+| Sending AT commands or a text CLI to a modem / module        | Console Only |
 | Arduino or ESP32 sending CSV numbers for quick debugging     | Quick Plot |
 | Rapid prototyping or classroom demo                          | Quick Plot |
 | Need gauges, bars, compass, GPS map, FFT, or alarms          | Project File |
-| Custom binary protocol with length-prefixed packets          | Project File + Binary decoder + JS parser |
+| Custom binary protocol with length-prefixed packets          | Project File + Binary decoder + Lua/JS parser |
 | Multiple sensors on different ports in one dashboard         | Project File (multi-source, Pro) |
 | Production telemetry system with saved configuration         | Project File |
-| Device changes its dashboard layout at runtime               | Device Sends JSON |
 
 ### Feature comparison
 
-| Feature                     | Quick Plot       | Project File                  | Device Sends JSON         |
-|-----------------------------|------------------|-------------------------------|---------------------------|
-| Setup effort                | None             | Create project in editor      | Firmware has to build JSON |
-| Frame detection             | Line-based (auto)| Configurable per source       | Fixed `/*` to `*/`        |
-| CSV delimiter               | Comma only       | Any (via parser script)       | N/A (JSON)                |
-| Frame parser (Lua/JS)       | No               | Yes                           | No                        |
-| Custom widgets              | No (plots only)  | Yes (project-defined)         | Yes (device-defined)      |
-| Alarms and LED indicators   | No               | Yes                           | Yes                       |
-| FFT analysis                | No               | Yes                           | Yes                       |
-| Multi-source                | No               | Yes (Pro)                     | No                        |
-| Saved configuration         | No               | Yes (.ssproj file)            | N/A                       |
-| Device data complexity      | Minimal          | Any format with JS parser     | Has to generate JSON      |
+| Feature                     | Console Only        | Quick Plot       | Project File                  |
+|-----------------------------|---------------------|------------------|-------------------------------|
+| Setup effort                | None                | None             | Create project in editor      |
+| Dashboard                   | No                  | Auto             | Custom                        |
+| Frame detection             | None (raw stream)   | Line-based (auto)| Configurable per source       |
+| CSV delimiter               | N/A                 | Comma only       | Any (via parser script)       |
+| Frame parser (Lua/JS)       | No                  | No               | Yes                           |
+| Dataset value transforms    | No                  | No               | Yes                           |
+| Custom widgets              | No                  | No (plots only)  | Yes (project-defined)         |
+| Alarms and LED indicators   | No                  | No               | Yes                           |
+| FFT analysis                | No                  | No               | Yes                           |
+| Multi-source                | No                  | No               | Yes (Pro)                     |
+| CSV / MDF4 export           | No                  | Yes              | Yes                           |
+| Saved configuration         | No                  | No               | Yes (.ssproj file)            |
 
 ---
 
 ## Getting started recommendations
 
-If you're new to Serial Studio, start with Quick Plot. Connect your device, make sure it sends comma-separated numbers terminated by a newline, and click Connect. You'll see data on screen in seconds.
+If you're hooking up a new device and don't yet know what it sends, start in **Console Only** mode. Connect, watch the raw bytes, confirm the baud rate and framing make sense.
 
-Once you need more control (specific widget types, unit labels, alarm thresholds, or a polished dashboard layout), move to Project File mode. Open the Project Editor, define your groups and datasets, and load the resulting `.ssproj` file. This is the recommended mode for most real-world projects.
+Once you can see clean comma-separated numbers in the console, switch to **Quick Plot**. You'll get a dashboard with one plot per CSV field in seconds, with no configuration.
 
-Device Sends JSON exists for niche cases where firmware has to control the dashboard layout at runtime. It's generally not recommended: it requires shipping verbose JSON over the data link, and the expected JSON structure can change between Serial Studio versions, which can break your firmware without warning. If you're unsure which mode to use, pick Project File.
+Once you need more control — specific widget types, unit labels, alarm thresholds, a polished dashboard layout, binary protocol parsing, or multiple concurrent data sources — move to **Project File** mode. Open the Project Editor, define your groups and datasets, save a `.ssproj` file, and load it from the Setup panel. This is the recommended mode for most real-world projects.

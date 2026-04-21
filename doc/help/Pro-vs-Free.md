@@ -36,9 +36,9 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | HID Devices (gamepads, custom HIDs via hidapi) | ❌ | ✅ |
 | | Process I/O (child process stdout / named pipe) | ❌ | ✅ |
 | **Operation Modes** | | | |
+| | Console Only Mode | ✅ | ✅ |
 | | Quick Plot Mode | ✅ | ✅ |
-| | JSON Project File Mode | ✅ | ✅ |
-| | Device-Defined Dashboard | ✅ | ✅ |
+| | Project File Mode | ✅ | ✅ |
 | **Data Processing** | | | |
 | | Plain Text (UTF-8) Decoding | ✅ | ✅ |
 | | Hexadecimal Decoding | ✅ | ✅ |

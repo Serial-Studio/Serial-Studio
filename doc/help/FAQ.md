@@ -354,22 +354,21 @@ while True:
 
 Serial Studio works in three modes:
 
-**1. Quick Plot mode (easiest).**
+**1. Console Only mode (diagnostic).**
+
+- No parsing, no dashboard. Raw bytes flow straight to the terminal.
+- Use it to check that the device is alive and that the baud rate and framing are correct.
+
+**2. Quick Plot mode (easiest).**
 
 - Send comma-separated values: `23.5,67.2,1013.25\n`.
 - Serial Studio shows plots automatically.
 
-**2. Project File mode (recommended).**
+**3. Project File mode (recommended).**
 
-- Create a JSON project file with your dashboard layout.
+- Create a `.ssproj` project file with your dashboard layout in the Project Editor.
 - The device sends raw data (CSV, binary, or a custom format).
-- Serial Studio interprets it based on the project file.
-
-**3. Device-defined JSON mode.**
-
-- The device sends JSON with both data and widget info.
-- The JSON format can change between versions.
-- Open a JSON file in the Project Editor to see the shape.
+- Serial Studio interprets it based on the project file and its optional Lua or JavaScript frame parser.
 
 See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md) for more.
 
@@ -387,7 +386,7 @@ See [Operation Modes](Operation-Modes.md) and [Project Editor](Project-Editor.md
 4. Add datasets to each group.
 5. Pick a widget for each dataset (gauge, plot, map, and so on).
 6. Add units, min/max values, and labels.
-7. Save the project file (`.json`).
+7. Save the project file (`.ssproj`).
 8. Load the project in Serial Studio.
 
 **Method 2: edit JSON by hand.** Not recommended unless you're generating projects with scripts.

@@ -94,7 +94,7 @@ In subscriber mode, Serial Studio subscribes to the configured topic filter as s
 - The message payload should be the frame data without start/end delimiters. Serial Studio wraps it internally.
 - For Quick Plot mode: comma-separated numeric values (for example `23.5,48.2,1013.25`).
 - For Project File mode: data matching your project's frame parser.
-- For Device Sends JSON mode: a JSON object matching Serial Studio's JSON schema.
+- Console Only mode just displays the payload as-is in the terminal — no special format expected.
 
 **Example.** If your ESP32 publishes `23.5,48.2,1013.25` to `weather/data`, and Serial Studio subscribes to `weather/data` in Quick Plot mode, the dashboard shows three datasets.
 
