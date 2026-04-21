@@ -3712,6 +3712,7 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
   };
 
   const auto& groups = pm.groups();
+  const bool pro     = SerialStudio::proWidgetsEnabled();
   QHash<int, int> groupRunning;
   QHash<int, int> datasetRunning;
 
@@ -3719,7 +3720,10 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
     if (!SerialStudio::groupEligibleForWorkspace(g))
       continue;
 
-    const auto groupKey = SerialStudio::getDashboardWidget(g);
+    auto groupKey = SerialStudio::getDashboardWidget(g);
+    if (groupKey == SerialStudio::DashboardPlot3D && !pro)
+      groupKey = SerialStudio::DashboardMultiPlot;
+
     if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
       const int typeKey = static_cast<int>(groupKey);
       const int relIdx  = groupRunning.value(typeKey, 0);
@@ -3789,13 +3793,18 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
   QMap<SerialStudio::DashboardWidget, int> datasetIdx;
 
   const auto& groups = DataModel::ProjectModel::instance().groups();
+  const bool pro     = SerialStudio::proWidgetsEnabled();
   for (const auto& group : groups) {
     // Skip groups that don't contribute to Dashboard's widget walker
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;
 
-    // Group-level widget
-    const auto groupKey = SerialStudio::getDashboardWidget(group);
+    // Group-level widget — mirror Dashboard's non-Pro Plot3D fallback so the
+    // picker advertises the widget that will actually render.
+    auto groupKey = SerialStudio::getDashboardWidget(group);
+    if (groupKey == SerialStudio::DashboardPlot3D && !pro)
+      groupKey = SerialStudio::DashboardMultiPlot;
+
     if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
       QVariantMap row;
       row["widgetType"]    = static_cast<int>(groupKey);

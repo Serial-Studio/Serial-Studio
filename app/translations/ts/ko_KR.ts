@@ -3346,120 +3346,120 @@ Any unsaved changes will be lost. Continue?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="144"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="148"/>
         <source>New Project</source>
         <translation>새 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="168"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="502"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="498"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>여러 데이터 소스는 Pro 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="503"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="499"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro는 여러 장치에 동시에 연결할 수 있습니다. 이 기능을 사용하려면 업그레이드하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="512"/>
         <source>Device %1</source>
         <translation>장치 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source> (Copy)</source>
         <translation>(복사)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="830"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="826"/>
         <source>Do you want to save your changes?</source>
         <translation>변경 사항을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="831"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="827"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>이 프로젝트에 저장되지 않은 수정 사항이 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>Project error</source>
         <translation>프로젝트 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
         <source>Project title cannot be empty!</source>
         <translation>프로젝트 제목은 비워둘 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
         <source>You need to add at least one group!</source>
         <translation>최소한 하나의 그룹을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>You need to add at least one dataset!</source>
         <translation>최소한 하나의 데이터 세트를 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="907"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="903"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="905"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio 프로젝트 파일 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1136"/>
         <source>Untitled Project</source>
         <translation>제목 없음 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1147"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1440"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1438"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Select Project File</source>
         <translation>프로젝트 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>프로젝트 파일 (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
         <source>JSON validation error</source>
         <translation>JSON 유효성 검사 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1480"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>다중 소스 프로젝트는 Pro 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1483"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1481"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>이 프로젝트에는 여러 데이터 소스가 포함되어 있습니다. 첫 번째 소스만 로드되었습니다. 다중 소스 프로젝트를 사용하려면 Serial Studio Pro 라이선스가 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1614"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1610"/>
         <source>Legacy frame parser function updated</source>
         <translation>레거시 프레임 파서 함수 업데이트됨</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1611"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>프로젝트에서 '구분자' 인수를 사용하는 레거시 프레임 파서 함수를 사용했습니다. 새로운 형식으로 자동 마이그레이션되었습니다.</translation>
     </message>
@@ -3472,289 +3472,289 @@ Any unsaved changes will be lost. Continue?</source>
         <translation type="vanished">이 작업 모드는 프로젝트 파일에서 대시보드를 로드하고 표시하는 데 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1804"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>그룹 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1809"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1860"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1898"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2172"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1805"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1856"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1894"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2168"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>이 작업은 되돌릴 수 없습니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1859"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1855"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>작업 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1897"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1893"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>데이터셋 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1987"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2016"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2230"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2275"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1983"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2012"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2271"/>
         <source>%1 (Copy)</source>
         <translation>%1 (복사본)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2118"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2114"/>
         <source>Output Controls</source>
         <translation>출력 제어</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2126"/>
         <source>New Button</source>
         <translation>새 버튼</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2133"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2129"/>
         <source>New Slider</source>
         <translation>새 슬라이더</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2136"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2132"/>
         <source>New Toggle</source>
         <translation>새 토글</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2139"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2135"/>
         <source>New Text Field</source>
         <translation>새 텍스트 필드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2138"/>
         <source>New Knob</source>
         <translation>새 노브</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2141"/>
         <source>New Ramp Generator</source>
         <translation>새 램프 생성기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2167"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>출력 위젯 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2326"/>
         <source>Group</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>New Dataset</source>
         <translation>새 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2353"/>
         <source>New Plot</source>
         <translation>새 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
         <source>New FFT Plot</source>
         <translation>새 FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
         <source>New Level Indicator</source>
         <translation>새 레벨 표시기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
         <source>New Gauge</source>
         <translation>새 게이지</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2373"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
         <source>New Compass</source>
         <translation>새 나침반</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2377"/>
         <source>New LED Indicator</source>
         <translation>새 LED 표시기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2480"/>
         <source>New Action</source>
         <translation>새 동작</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2598"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2594"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>그룹 수준 위젯을 변경하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2600"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2596"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>이 그룹의 기존 데이터 세트가 삭제됩니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2661"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2662"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2663"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2657"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Accelerometer %1</source>
         <translation>가속도계 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2709"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2705"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2706"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2707"/>
         <source>Gyro %1</source>
         <translation>자이로 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Latitude</source>
         <translation>위도</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2755"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2751"/>
         <source>Longitude</source>
         <translation>경도</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2756"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2752"/>
         <source>Altitude</source>
         <translation>고도</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2791"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2792"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2797"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2793"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3005"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3011"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>Workspace</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3070"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3076"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>Shared Table</source>
         <translation>공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3152"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3158"/>
         <source>register</source>
         <translation>등록</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>New Shared Table</source>
         <translation>새 공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
         <source>Rename Table</source>
         <translation>테이블 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
         <source>New Register</source>
         <translation>새 레지스터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
         <source>Rename Register</source>
         <translation>레지스터 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3407"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3413"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4083"/>
         <source>This action cannot be undone.</source>
         <translation>이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3389"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>이 작업은 테이블과 함께 %1 레지스터를 제거합니다. 이 작업은 되돌릴 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3386"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3406"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3392"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3412"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4082"/>
         <source>Delete "%1"?</source>
         <translation>"%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3389"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3395"/>
         <source>Delete Table</source>
         <translation>테이블 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3409"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>Delete Register</source>
         <translation>레지스터 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3435"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3441"/>
         <source>Export Table</source>
         <translation>테이블 내보내기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3437"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3443"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3490"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 파일 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3488"/>
         <source>Import Table</source>
         <translation>테이블 가져오기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>New Workspace</source>
         <translation>새 작업 공간</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Rename Workspace</source>
         <translation>작업 공간 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3829"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3840"/>
         <source>Overview</source>
         <translation>개요</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3839"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
         <source>All Data</source>
         <translation>모든 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4053"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4085"/>
         <source>Delete Workspace</source>
         <translation>작업 공간 삭제</translation>
     </message>
@@ -4279,7 +4279,7 @@ Any unsaved changes will be lost. Continue?</source>
         <translation type="vanished">변경 사항 저장</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4281"/>
         <source>File open error</source>
         <translation>파일 열기 오류</translation>
     </message>
@@ -11713,127 +11713,127 @@ function parse(%1) { ... }
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="282"/>
+        <location filename="../../src/SerialStudio.cpp" line="300"/>
         <source>Data Grids</source>
         <translation>데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="285"/>
+        <location filename="../../src/SerialStudio.cpp" line="303"/>
         <source>Multiple Data Plots</source>
         <translation>다중 데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="288"/>
+        <location filename="../../src/SerialStudio.cpp" line="306"/>
         <source>Accelerometers</source>
         <translation>가속도계</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="291"/>
+        <location filename="../../src/SerialStudio.cpp" line="309"/>
         <source>Gyroscopes</source>
         <translation>자이로스코프</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="294"/>
+        <location filename="../../src/SerialStudio.cpp" line="312"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="297"/>
+        <location filename="../../src/SerialStudio.cpp" line="315"/>
         <source>FFT Plots</source>
         <translation>FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="300"/>
+        <location filename="../../src/SerialStudio.cpp" line="318"/>
         <source>LED Panels</source>
         <translation>LED 패널</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="303"/>
+        <location filename="../../src/SerialStudio.cpp" line="321"/>
         <source>Data Plots</source>
         <translation>데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="306"/>
+        <location filename="../../src/SerialStudio.cpp" line="324"/>
         <source>Bars</source>
         <translation>막대</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="309"/>
+        <location filename="../../src/SerialStudio.cpp" line="327"/>
         <source>Gauges</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="312"/>
+        <location filename="../../src/SerialStudio.cpp" line="330"/>
         <source>Terminal</source>
         <translation>터미널</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="315"/>
+        <location filename="../../src/SerialStudio.cpp" line="333"/>
         <source>Compasses</source>
         <translation>나침반</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="318"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>3D Plots</source>
         <translation>3D 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="322"/>
+        <location filename="../../src/SerialStudio.cpp" line="340"/>
         <source>Image Views</source>
         <translation>이미지 보기</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="864"/>
+        <location filename="../../src/SerialStudio.cpp" line="882"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="865"/>
+        <location filename="../../src/SerialStudio.cpp" line="883"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="866"/>
+        <location filename="../../src/SerialStudio.cpp" line="884"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="867"/>
+        <location filename="../../src/SerialStudio.cpp" line="885"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="868"/>
+        <location filename="../../src/SerialStudio.cpp" line="886"/>
         <source>System</source>
         <translation>시스템</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="869"/>
+        <location filename="../../src/SerialStudio.cpp" line="887"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="870"/>
+        <location filename="../../src/SerialStudio.cpp" line="888"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="871"/>
+        <location filename="../../src/SerialStudio.cpp" line="889"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="872"/>
+        <location filename="../../src/SerialStudio.cpp" line="890"/>
         <source>Shift-JIS</source>
         <translation>Shift-JIS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="873"/>
+        <location filename="../../src/SerialStudio.cpp" line="891"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="874"/>
+        <location filename="../../src/SerialStudio.cpp" line="892"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -13373,18 +13373,18 @@ function parse(%1) { ... }
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1369"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="962"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1370"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1420"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (대체)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1450"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1451"/>
         <source>LED Panel (%1)</source>
         <translation>LED 패널 (%1)</translation>
     </message>

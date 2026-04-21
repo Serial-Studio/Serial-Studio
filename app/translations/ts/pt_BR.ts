@@ -3346,120 +3346,120 @@ Quaisquer alterações não salvas serão perdidas. Continuar?</translation>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="144"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="148"/>
         <source>New Project</source>
         <translation>Novo Projeto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="168"/>
         <source>Samples</source>
         <translation>Amostras</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="502"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="498"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Múltiplas fontes de dados requerem uma licença Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="503"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="499"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro permite conectar a vários dispositivos simultaneamente. Atualize para desbloquear este recurso.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="512"/>
         <source>Device %1</source>
         <translation>Dispositivo %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source> (Copy)</source>
         <translation>(Copiar)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="830"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="826"/>
         <source>Do you want to save your changes?</source>
         <translation>Deseja salvar suas alterações?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="831"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="827"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Você tem modificações não salvas neste projeto!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>Project error</source>
         <translation>Erro no projeto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
         <source>Project title cannot be empty!</source>
         <translation>O título do projeto não pode estar vazio!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
         <source>You need to add at least one group!</source>
         <translation>Você precisa adicionar pelo menos um grupo!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>You need to add at least one dataset!</source>
         <translation>Você precisa adicionar pelo menos um conjunto de dados!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="907"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="903"/>
         <source>Save Serial Studio Project</source>
         <translation>Salvar Projeto do Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="905"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Arquivos de Projeto do Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1136"/>
         <source>Untitled Project</source>
         <translation>Projeto sem Título</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1147"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1440"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1438"/>
         <source>Device A</source>
         <translation>Dispositivo A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Select Project File</source>
         <translation>Selecionar Arquivo de Projeto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Arquivos de Projeto (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
         <source>JSON validation error</source>
         <translation>Erro de validação JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1480"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Projetos com múltiplas fontes requerem uma licença Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1483"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1481"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Este projeto contém múltiplas fontes de dados. Apenas a primeira fonte foi carregada. Uma licença Serial Studio Pro é necessária para usar projetos com múltiplas fontes.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1614"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1610"/>
         <source>Legacy frame parser function updated</source>
         <translation>Função de análise de quadro legado atualizada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1611"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Seu projeto usou uma função de análise de quadro legado com um argumento 'separator'. Ela foi migrada automaticamente para o novo formato.</translation>
     </message>
@@ -3472,289 +3472,289 @@ Quaisquer alterações não salvas serão perdidas. Continuar?</translation>
         <translation type="vanished">Este modo de operação é necessário para carregar e exibir painéis a partir de arquivos de projeto.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1804"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Deseja excluir o grupo "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1809"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1860"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1898"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2172"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1805"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1856"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1894"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2168"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Esta ação não pode ser desfeita. Deseja prosseguir?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1859"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1855"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Você deseja excluir a ação "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1897"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1893"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Você deseja excluir o conjunto de dados "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1987"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2016"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2230"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2275"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1983"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2012"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2271"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Cópia)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2118"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2114"/>
         <source>Output Controls</source>
         <translation>Controles de Saída</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2126"/>
         <source>New Button</source>
         <translation>Novo Botão</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2133"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2129"/>
         <source>New Slider</source>
         <translation>Novo Controle Deslizante</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2136"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2132"/>
         <source>New Toggle</source>
         <translation>Novo Alternador</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2139"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2135"/>
         <source>New Text Field</source>
         <translation>Novo Campo de Texto</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2138"/>
         <source>New Knob</source>
         <translation>Novo Botão Giratório</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2141"/>
         <source>New Ramp Generator</source>
         <translation>Novo Gerador de Rampa</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2167"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Você deseja excluir o widget de saída "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2326"/>
         <source>Group</source>
         <translation>Grupo</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>New Dataset</source>
         <translation>Novo Conjunto de Dados</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2353"/>
         <source>New Plot</source>
         <translation>Novo Gráfico</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
         <source>New FFT Plot</source>
         <translation>Novo Gráfico FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
         <source>New Level Indicator</source>
         <translation>Novo Indicador de Nível</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
         <source>New Gauge</source>
         <translation>Novo Medidor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2373"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
         <source>New Compass</source>
         <translation>Novo Compasso</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2377"/>
         <source>New LED Indicator</source>
         <translation>Novo Indicador LED</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2480"/>
         <source>New Action</source>
         <translation>Nova Ação</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2598"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2594"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Tem certeza de que deseja alterar o widget de nível de grupo?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2600"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2596"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Conjuntos de dados existentes para este grupo serão excluídos</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2661"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2662"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2663"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2657"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Accelerometer %1</source>
         <translation>Acelerômetro %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2709"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2705"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2706"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2707"/>
         <source>Gyro %1</source>
         <translation>Giroscópio %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Latitude</source>
         <translation>Latitude</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2755"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2751"/>
         <source>Longitude</source>
         <translation>Longitude</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2756"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2752"/>
         <source>Altitude</source>
         <translation>Altitude</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2791"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2792"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2797"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2793"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3005"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3011"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>Workspace</source>
         <translation>Espaço de Trabalho</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3070"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3076"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>Shared Table</source>
         <translation>Tabela Compartilhada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3152"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3158"/>
         <source>register</source>
         <translation>registrar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>New Shared Table</source>
         <translation>Nova Tabela Compartilhada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
         <source>Rename Table</source>
         <translation>Renomear Tabela</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
         <source>New Register</source>
         <translation>Novo Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
         <source>Rename Register</source>
         <translation>Renomear Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3407"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3413"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4083"/>
         <source>This action cannot be undone.</source>
         <translation>Esta ação não pode ser desfeita.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3389"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Isso remove %1 registro(s) junto com a tabela. Esta ação não pode ser desfeita.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3386"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3406"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3392"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3412"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4082"/>
         <source>Delete "%1"?</source>
         <translation>Excluir "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3389"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3395"/>
         <source>Delete Table</source>
         <translation>Excluir Tabela</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3409"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>Delete Register</source>
         <translation>Excluir Registro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3435"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3441"/>
         <source>Export Table</source>
         <translation>Exportar Tabela</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3437"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3443"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3490"/>
         <source>CSV files (*.csv)</source>
         <translation>Arquivos CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3488"/>
         <source>Import Table</source>
         <translation>Importar Tabela</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>New Workspace</source>
         <translation>Novo Espaço de Trabalho</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Rename Workspace</source>
         <translation>Renomear Espaço de Trabalho</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3829"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3840"/>
         <source>Overview</source>
         <translation>Visão Geral</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3839"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
         <source>All Data</source>
         <translation>Todos os Dados</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4053"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4085"/>
         <source>Delete Workspace</source>
         <translation>Excluir Espaço de Trabalho</translation>
     </message>
@@ -4279,7 +4279,7 @@ Quaisquer alterações não salvas serão perdidas. Continuar?</translation>
         <translation type="vanished">Salvar Alterações</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4281"/>
         <source>File open error</source>
         <translation>Erro ao abrir arquivo</translation>
     </message>
@@ -11710,127 +11710,127 @@ O parâmetro separador não é mais necessário.</translation>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="282"/>
+        <location filename="../../src/SerialStudio.cpp" line="300"/>
         <source>Data Grids</source>
         <translation>Grades de Dados</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="285"/>
+        <location filename="../../src/SerialStudio.cpp" line="303"/>
         <source>Multiple Data Plots</source>
         <translation>Múltiplos Gráficos de Dados</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="288"/>
+        <location filename="../../src/SerialStudio.cpp" line="306"/>
         <source>Accelerometers</source>
         <translation>Acelerômetros</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="291"/>
+        <location filename="../../src/SerialStudio.cpp" line="309"/>
         <source>Gyroscopes</source>
         <translation>Giroscópios</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="294"/>
+        <location filename="../../src/SerialStudio.cpp" line="312"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="297"/>
+        <location filename="../../src/SerialStudio.cpp" line="315"/>
         <source>FFT Plots</source>
         <translation>Gráficos FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="300"/>
+        <location filename="../../src/SerialStudio.cpp" line="318"/>
         <source>LED Panels</source>
         <translation>Painéis LED</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="303"/>
+        <location filename="../../src/SerialStudio.cpp" line="321"/>
         <source>Data Plots</source>
         <translation>Gráficos de Dados</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="306"/>
+        <location filename="../../src/SerialStudio.cpp" line="324"/>
         <source>Bars</source>
         <translation>Barras</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="309"/>
+        <location filename="../../src/SerialStudio.cpp" line="327"/>
         <source>Gauges</source>
         <translation>Medidores</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="312"/>
+        <location filename="../../src/SerialStudio.cpp" line="330"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="315"/>
+        <location filename="../../src/SerialStudio.cpp" line="333"/>
         <source>Compasses</source>
         <translation>Bússolas</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="318"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>3D Plots</source>
         <translation>Gráficos 3D</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="322"/>
+        <location filename="../../src/SerialStudio.cpp" line="340"/>
         <source>Image Views</source>
         <translation>Visualizações de Imagem</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="864"/>
+        <location filename="../../src/SerialStudio.cpp" line="882"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="865"/>
+        <location filename="../../src/SerialStudio.cpp" line="883"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="866"/>
+        <location filename="../../src/SerialStudio.cpp" line="884"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="867"/>
+        <location filename="../../src/SerialStudio.cpp" line="885"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="868"/>
+        <location filename="../../src/SerialStudio.cpp" line="886"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="869"/>
+        <location filename="../../src/SerialStudio.cpp" line="887"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="870"/>
+        <location filename="../../src/SerialStudio.cpp" line="888"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="871"/>
+        <location filename="../../src/SerialStudio.cpp" line="889"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="872"/>
+        <location filename="../../src/SerialStudio.cpp" line="890"/>
         <source>Shift-JIS</source>
         <translation>Shift-JIS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="873"/>
+        <location filename="../../src/SerialStudio.cpp" line="891"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="874"/>
+        <location filename="../../src/SerialStudio.cpp" line="892"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -12091,32 +12091,32 @@ O parâmetro separador não é mais necessário.</translation>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="395"/>
         <source>No sessions found</source>
-        <translation type="unfinished"/>
+        <translation>Nenhuma sessão encontrada</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="396"/>
         <source>This file does not contain any recording sessions.</source>
-        <translation type="unfinished"/>
+        <translation>Este arquivo não contém nenhuma sessão de gravação.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="407"/>
         <source>Session has no columns</source>
-        <translation type="unfinished"/>
+        <translation>Sessão não tem colunas</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="408"/>
         <source>The selected session is missing its column definitions.</source>
-        <translation type="unfinished"/>
+        <translation>A sessão selecionada está sem definições de coluna.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="416"/>
         <source>Session has no readings</source>
-        <translation type="unfinished"/>
+        <translation>Sessão não tem leituras</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="417"/>
         <source>The selected session does not contain any frames.</source>
-        <translation type="unfinished"/>
+        <translation>A sessão selecionada não contém nenhum quadro.</translation>
     </message>
 </context>
 <context>
@@ -12450,7 +12450,7 @@ O parâmetro separador não é mais necessário.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="216"/>
         <source>Console Only (No Parsing)</source>
-        <translation type="unfinished"/>
+        <translation>Apenas Console (Sem Análise)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="229"/>
@@ -12490,7 +12490,7 @@ O parâmetro separador não é mais necessário.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="328"/>
         <source>Create Session Log</source>
-        <translation type="unfinished"/>
+        <translation>Criar Registro de Sessão</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="348"/>
@@ -12689,7 +12689,7 @@ O parâmetro separador não é mais necessário.</translation>
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="24"/>
         <source>Session Player</source>
-        <translation type="unfinished"/>
+        <translation>Reprodutor de Sessão</translation>
     </message>
 </context>
 <context>
@@ -12837,57 +12837,57 @@ O parâmetro separador não é mais necessário.</translation>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="183"/>
         <source>Dataset Values</source>
-        <translation type="unfinished"/>
+        <translation>Valores do Conjunto de Dados</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="193"/>
         <source>All datasets in the project, available for cross-referencing in transforms.</source>
-        <translation type="unfinished"/>
+        <translation>Todos os conjuntos de dados no projeto, disponíveis para referência cruzada em transformações.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="201"/>
         <source>%1 datasets</source>
-        <translation type="unfinished"/>
+        <translation>%1 conjuntos de dados</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="202"/>
         <source>%1 of %2 datasets</source>
-        <translation type="unfinished"/>
+        <translation>%1 de %2 conjuntos de dados</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="243"/>
         <source>Search</source>
-        <translation type="unfinished">Buscar</translation>
+        <translation>Buscar</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="257"/>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="258"/>
         <source>Group</source>
-        <translation type="unfinished">Grupo</translation>
+        <translation>Grupo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
         <source>Dataset</source>
-        <translation type="unfinished"/>
+        <translation>Conjunto de Dados</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="260"/>
         <source>Units</source>
-        <translation type="unfinished">Unidades</translation>
+        <translation>Unidades</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="329"/>
         <source>(virtual)</source>
-        <translation type="unfinished"/>
+        <translation>(virtual)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="373"/>
         <source>Copy ID %1 to clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Copiar ID %1 para a área de transferência</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="409"/>
@@ -13370,18 +13370,18 @@ O parâmetro separador não é mais necessário.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1369"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="962"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1370"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1420"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Alternativa)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1450"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1451"/>
         <source>LED Panel (%1)</source>
         <translation>Painel de LED (%1)</translation>
     </message>
@@ -13613,27 +13613,27 @@ O parâmetro separador não é mais necessário.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="362"/>
         <source>Default Value</source>
-        <translation type="unfinished"/>
+        <translation>Valor Padrão</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Somente Leitura</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
         <source>Read/Write</source>
-        <translation type="unfinished"/>
+        <translation>Leitura/Escrita</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="561"/>
         <source>Delete register</source>
-        <translation type="unfinished"/>
+        <translation>Excluir Registro</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="577"/>
         <source>No registers.</source>
-        <translation type="unfinished"/>
+        <translation>Nenhum Registro.</translation>
     </message>
 </context>
 <context>
@@ -13931,75 +13931,75 @@ Entendo que quando terminar, precisarei comprar uma licença ou compilar a vers�
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="39"/>
         <source>Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Área de Trabalho</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="125"/>
         <source>Add Widget</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="127"/>
         <source>Add widget to workspace</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar Widget à Área de Trabalho</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="138"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Renomear</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="140"/>
         <source>Rename workspace</source>
-        <translation type="unfinished"/>
+        <translation>Renomear Área de Trabalho</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="149"/>
         <source>Delete</source>
-        <translation type="unfinished">Excluir</translation>
+        <translation>Excluir</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="151"/>
         <source>Delete workspace</source>
-        <translation type="unfinished"/>
+        <translation>Excluir espaço de trabalho</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="173"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="179"/>
         <source>Group</source>
-        <translation type="unfinished">Grupo</translation>
+        <translation>Grupo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="174"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="180"/>
         <source>Widget</source>
-        <translation type="unfinished">Widget</translation>
+        <translation>Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="175"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="181"/>
         <source>Type</source>
-        <translation type="unfinished">Tipo</translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="212"/>
         <source>(unknown)</source>
-        <translation type="unfinished"/>
+        <translation>(desconhecido)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="230"/>
         <source>(group widget)</source>
-        <translation type="unfinished"/>
+        <translation>(widget de grupo)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="285"/>
         <source>Remove from workspace</source>
-        <translation type="unfinished"/>
+        <translation>Remover do espaço de trabalho</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="304"/>
         <source>No widgets in this workspace.</source>
-        <translation type="unfinished"/>
+        <translation>Nenhum widget neste espaço de trabalho.</translation>
     </message>
 </context>
 <context>
@@ -14007,7 +14007,7 @@ Entendo que quando terminar, precisarei comprar uma licença ou compilar a vers�
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="34"/>
         <source>Workspaces</source>
-        <translation type="unfinished">Espaços de Trabalho</translation>
+        <translation>Espaços de Trabalho</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="121"/>

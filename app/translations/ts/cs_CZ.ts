@@ -261,77 +261,77 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="43"/>
         <source>Add Widget</source>
-        <translation type="unfinished"/>
+        <translation>Přidat Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="210"/>
         <source>Available Widgets</source>
-        <translation type="unfinished"/>
+        <translation>Dostupné Widgety</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="218"/>
         <source>Click a row to add it to the workspace.</source>
-        <translation type="unfinished"/>
+        <translation>Klikněte na řádek pro přidání do pracovního prostoru.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="226"/>
         <source>Search</source>
-        <translation type="unfinished">Hledat</translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="233"/>
         <source>Widget</source>
-        <translation type="unfinished">Widget</translation>
+        <translation>Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="234"/>
         <source>Group</source>
-        <translation type="unfinished">Skupina</translation>
+        <translation>Skupina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="235"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="301"/>
         <source>(entire group)</source>
-        <translation type="unfinished"/>
+        <translation>(celá skupina)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="336"/>
         <source>Already in workspace</source>
-        <translation type="unfinished"/>
+        <translation>Již v pracovním prostoru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="337"/>
         <source>Add to workspace</source>
-        <translation type="unfinished"/>
+        <translation>Přidat do pracovního prostoru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="366"/>
         <source>No widgets available.</source>
-        <translation type="unfinished"/>
+        <translation>Žádné widgety nejsou k dispozici.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="367"/>
         <source>No widgets match.</source>
-        <translation type="unfinished"/>
+        <translation>Žádné widgety neodpovídají.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="382"/>
         <source>%1 widgets</source>
-        <translation type="unfinished"/>
+        <translation>%1 widgety</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="383"/>
         <source>%1 of %2 widgets</source>
-        <translation type="unfinished"/>
+        <translation>%1 z %2 widgetů</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="390"/>
         <source>Close</source>
-        <translation type="unfinished">Zavřít</translation>
+        <translation>Zavřít</translation>
     </message>
 </context>
 <context>
@@ -906,7 +906,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="43"/>
         <source>Insert Constant</source>
-        <translation type="unfinished"/>
+        <translation>Vložit Konstantu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="123"/>
@@ -916,22 +916,22 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
         <source>Fundamental</source>
-        <translation type="unfinished"/>
+        <translation>Základní</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="123"/>
         <source>Speed of light in vacuum</source>
-        <translation type="unfinished"/>
+        <translation>Rychlost světla ve vakuu</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="124"/>
         <source>Planck constant</source>
-        <translation type="unfinished"/>
+        <translation>Planckova konstanta</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="125"/>
         <source>Elementary charge</source>
-        <translation type="unfinished"/>
+        <translation>Elementární náboj</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
@@ -1046,100 +1046,100 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <source>Heat capacity ratio (dry air)</source>
-        <translation type="unfinished"/>
+        <translation>Poměr tepelných kapacit (suchý vzduch)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Electromagnetism</source>
-        <translation type="unfinished"/>
+        <translation>Elektromagnetismus</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Vacuum permittivity</source>
-        <translation type="unfinished"/>
+        <translation>Permitivita vakua</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Vacuum permeability</source>
-        <translation type="unfinished"/>
+        <translation>Permeabilita vakua</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Math</source>
-        <translation type="unfinished"/>
+        <translation>Matematika</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Pi</source>
-        <translation type="unfinished"/>
+        <translation>Pí</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Euler's number</source>
-        <translation type="unfinished"/>
+        <translation>Eulerovo číslo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Golden ratio</source>
-        <translation type="unfinished"/>
+        <translation>Zlatý řez</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="209"/>
         <source>Physics Constants</source>
-        <translation type="unfinished"/>
+        <translation>Fyzikální Konstanty</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="217"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
-        <translation type="unfinished"/>
+        <translation>Přednastavené hodnoty v jednotkách SI. Klikněte na řádek pro vložení do %1.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="226"/>
         <source>Search</source>
-        <translation type="unfinished">Hledat</translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="245"/>
         <source>Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Symbol</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="246"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="247"/>
         <source>Value</source>
-        <translation type="unfinished">Hodnota</translation>
+        <translation>Hodnota</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="248"/>
         <source>Category</source>
-        <translation type="unfinished"/>
+        <translation>Kategorie</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="353"/>
         <source>No constants match.</source>
-        <translation type="unfinished"/>
+        <translation>Žádné odpovídající konstanty.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="373"/>
         <source>%1 constants</source>
-        <translation type="unfinished"/>
+        <translation>%1 konstant</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="374"/>
         <source>%1 of %2 constants</source>
-        <translation type="unfinished"/>
+        <translation>%1 z %2 konstant</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
         <source>Close</source>
-        <translation type="unfinished">Zavřít</translation>
+        <translation>Zavřít</translation>
     </message>
 </context>
 <context>
@@ -2482,12 +2482,12 @@ Jakékoliv neuložené změny budou ztraceny. Pokračovat?</translation>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="2167"/>
         <source>Virtual Dataset</source>
-        <translation type="unfinished"/>
+        <translation>Virtuální Datová Sada</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="2168"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation type="unfinished"/>
+        <translation>Virtuální datové sady vypočítávají svou hodnotu z transformací a datových tabulek, nevyžadují index rámce</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="2569"/>
@@ -2515,14 +2515,14 @@ Jakékoliv neuložené změny budou ztraceny. Pokračovat?</translation>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="994"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1095"/>
         <source>Groups</source>
-        <translation type="unfinished">Skupiny</translation>
+        <translation>Skupiny</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1113"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1124"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1125"/>
         <source>Shared Memory</source>
-        <translation type="unfinished"/>
+        <translation>Sdílená paměť</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1113"/>
@@ -2530,14 +2530,14 @@ Jakékoliv neuložené změny budou ztraceny. Pokračovat?</translation>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1132"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="3514"/>
         <source>Dataset Values</source>
-        <translation type="unfinished"/>
+        <translation>Hodnoty datové sady</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1160"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1171"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1172"/>
         <source>Workspaces</source>
-        <translation type="unfinished">Pracovní prostory</translation>
+        <translation>Pracovní prostory</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1389"/>
@@ -2854,12 +2854,12 @@ Jakékoliv neuložené změny budou ztraceny. Pokračovat?</translation>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="3515"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
-        <translation type="unfinished"/>
+        <translation>Surové a transformované hodnoty pro každou datovou sadu (pouze pro čtení)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="3525"/>
         <source>Shared table defined in this project</source>
-        <translation type="unfinished"/>
+        <translation>Sdílená tabulka definovaná v tomto projektu</translation>
     </message>
     <message>
         <source>Select which connected device provides this dataset's values</source>
@@ -3346,120 +3346,120 @@ Jakékoliv neuložené změny budou ztraceny. Pokračovat?</translation>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="144"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="148"/>
         <source>New Project</source>
         <translation>Nový Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="168"/>
         <source>Samples</source>
         <translation>Vzorky</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="502"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="498"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Více zdrojů dat vyžaduje licenci Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="503"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="499"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro umožňuje připojení k více zařízením současně. Pro odemknutí této funkce prosím proveďte upgrade.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="512"/>
         <source>Device %1</source>
         <translation>Zařízení %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source> (Copy)</source>
         <translation>(Kopírovat)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="830"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="826"/>
         <source>Do you want to save your changes?</source>
         <translation>Chcete uložit své změny?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="831"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="827"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Máte neuložené úpravy v tomto projektu!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>Project error</source>
         <translation>Chyba projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
         <source>Project title cannot be empty!</source>
         <translation>Název projektu nesmí být prázdný!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
         <source>You need to add at least one group!</source>
         <translation>Musíte přidat alespoň jednu skupinu!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>You need to add at least one dataset!</source>
         <translation>Musíte přidat alespoň jeden datový soubor!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="907"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="903"/>
         <source>Save Serial Studio Project</source>
         <translation>Uložit Projekt Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="905"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Soubory Projektů Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1136"/>
         <source>Untitled Project</source>
         <translation>Nepojmenovaný Projekt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1147"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1440"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1438"/>
         <source>Device A</source>
         <translation>Zařízení A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Select Project File</source>
         <translation>Vyberte Soubor Projektu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Soubory Projektů (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
         <source>JSON validation error</source>
         <translation>Chyba ověření JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1480"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Projekty s více zdroji vyžadují licenci Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1483"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1481"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Tento projekt obsahuje více zdrojů dat. Byl načten pouze první zdroj. Pro použití projektů s více zdroji je vyžadována licence Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1614"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1610"/>
         <source>Legacy frame parser function updated</source>
         <translation>Funkce parseru staršího rámce byla aktualizována</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1611"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Váš projekt používal funkci parseru staršího rámce s argumentem 'separator'. Byl automaticky převeden na nový formát.</translation>
     </message>
@@ -3472,291 +3472,291 @@ Jakékoliv neuložené změny budou ztraceny. Pokračovat?</translation>
         <translation type="vanished">Tento provozní režim je vyžadován pro načítání a zobrazení dashboardů ze souborů projektů.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1804"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Chcete smazat skupinu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1809"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1860"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1898"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2172"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1805"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1856"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1894"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2168"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Tuto akci nelze vrátit zpět. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1859"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1855"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Chcete smazat akci "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1897"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1893"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Chcete smazat datovou sadu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1987"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2016"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2230"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2275"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1983"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2012"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2271"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2118"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2114"/>
         <source>Output Controls</source>
         <translation>Ovládací Prvky Výstupu</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2126"/>
         <source>New Button</source>
         <translation>Nové Tlačítko</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2133"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2129"/>
         <source>New Slider</source>
         <translation>Nový Posuvník</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2136"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2132"/>
         <source>New Toggle</source>
         <translation>Nový Přepínač</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2139"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2135"/>
         <source>New Text Field</source>
         <translation>Nové Textové Pole</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2138"/>
         <source>New Knob</source>
         <translation>Nový Knoflík</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2141"/>
         <source>New Ramp Generator</source>
         <translation>Nový Generátor Ramp</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2167"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Chcete smazat výstupní widget "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2326"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>New Dataset</source>
         <translation>Nová Datová Sada</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2353"/>
         <source>New Plot</source>
         <translation>Nový Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
         <source>New FFT Plot</source>
         <translation>Nový FFT Graf</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
         <source>New Level Indicator</source>
         <translation>Nový Indikátor Úrovně</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
         <source>New Gauge</source>
         <translation>Nový Měřič</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2373"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
         <source>New Compass</source>
         <translation>Nový Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2377"/>
         <source>New LED Indicator</source>
         <translation>Nový LED Indikátor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2480"/>
         <source>New Action</source>
         <translation>Nová Akce</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2598"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2594"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Opravdu chcete změnit widget na úrovni skupiny?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2600"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2596"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Existující datové sady pro tuto skupinu budou smazány</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2661"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2662"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2663"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2657"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Accelerometer %1</source>
         <translation>Akcelerometr %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2709"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2705"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2706"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2707"/>
         <source>Gyro %1</source>
         <translation>Gyroskop %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Latitude</source>
         <translation>Zeměpisná šířka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2755"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2751"/>
         <source>Longitude</source>
         <translation>Zeměpisná délka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2756"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2752"/>
         <source>Altitude</source>
         <translation>Nadmořská výška</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2791"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2792"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2797"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2793"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3005"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3011"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Pracovní prostor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3070"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3076"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>Shared Table</source>
-        <translation type="unfinished"/>
+        <translation>Sdílená tabulka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3152"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3158"/>
         <source>register</source>
-        <translation type="unfinished"/>
+        <translation>registrovat</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>New Shared Table</source>
         <translation>Nová Sdílená Tabulka</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Name:</source>
         <translation>Název:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
         <source>Rename Table</source>
         <translation>Přejmenovat Tabulku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
         <source>New Register</source>
         <translation>Nový Registr</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
         <source>Rename Register</source>
         <translation>Přejmenovat Registr</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3407"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3413"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4083"/>
         <source>This action cannot be undone.</source>
         <translation>Tuto akci nelze vrátit zpět.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3389"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Tímto odstraníte %1 registr(y) spolu s tabulkou. Tuto akci nelze vrátit zpět.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3386"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3406"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4050"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3392"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3412"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4082"/>
         <source>Delete "%1"?</source>
         <translation>Smazat "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3389"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3395"/>
         <source>Delete Table</source>
         <translation>Smazat Tabulku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3409"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>Delete Register</source>
         <translation>Smazat Registr</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3435"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3441"/>
         <source>Export Table</source>
-        <translation type="unfinished"/>
+        <translation>Exportovat tabulku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3437"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3443"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3490"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">CSV soubory (*.csv)</translation>
+        <translation>Soubory CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3488"/>
         <source>Import Table</source>
-        <translation type="unfinished"/>
+        <translation>Importovat tabulku</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>New Workspace</source>
-        <translation type="unfinished">Nová Pracovní plocha</translation>
+        <translation>Nový pracovní prostor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Rename Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Přejmenovat pracovní prostor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3829"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3840"/>
         <source>Overview</source>
-        <translation type="unfinished">Přehled</translation>
+        <translation>Přehled</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3839"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
         <source>All Data</source>
-        <translation type="unfinished">Všechna Data</translation>
+        <translation>Všechna data</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4053"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4085"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Smazat pracovní prostor</translation>
     </message>
     <message>
         <source>Frame Parser Code</source>
@@ -4279,7 +4279,7 @@ Jakékoliv neuložené změny budou ztraceny. Pokračovat?</translation>
         <translation type="vanished">Uložit Změny</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4281"/>
         <source>File open error</source>
         <translation>Chyba při otevírání souboru</translation>
     </message>
@@ -4383,42 +4383,42 @@ Platný formát: 01 A2 FF 3C</translation>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="33"/>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="158"/>
         <source>Shared Memory</source>
-        <translation type="unfinished"/>
+        <translation>Sdílená paměť</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="168"/>
         <source>Define constants and computed values shared across all transforms.</source>
-        <translation type="unfinished"/>
+        <translation>Definujte konstanty a vypočítané hodnoty sdílené napříč všemi transformacemi.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="227"/>
         <source>Add Shared Table</source>
-        <translation type="unfinished"/>
+        <translation>Přidat Sdílenou Tabulku</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="229"/>
         <source>Add shared table</source>
-        <translation type="unfinished"/>
+        <translation>Přidat sdílenou tabulku</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="246"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="247"/>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Popis</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="248"/>
         <source>Entries</source>
-        <translation type="unfinished"/>
+        <translation>Záznamy</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="345"/>
         <source>No shared tables.</source>
-        <translation type="unfinished"/>
+        <translation>Žádné sdílené tabulky.</translation>
     </message>
 </context>
 <context>
@@ -4427,22 +4427,22 @@ Platný formát: 01 A2 FF 3C</translation>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="31"/>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="32"/>
         <source>Sessions</source>
-        <translation type="unfinished"/>
+        <translation>Relace</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="175"/>
         <source>Open</source>
-        <translation type="unfinished">Otevřít</translation>
+        <translation>Otevřít</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="177"/>
         <source>Open a session file</source>
-        <translation type="unfinished"/>
+        <translation>Otevřít soubor relace</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="183"/>
         <source>Close</source>
-        <translation type="unfinished">Zavřít</translation>
+        <translation>Zavřít</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="185"/>
@@ -7325,7 +7325,7 @@ Zařízení nemusí v aktivní konfiguraci vystavovat datové koncové body, neb
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="276"/>
         <source>Hex header CRC mismatch, dropping frame</source>
-        <translation type="unfinished"/>
+        <translation>Nesoulad CRC záhlaví Hex, zahazuji rámec</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="416"/>
@@ -9744,7 +9744,7 @@ Poskytněte prosím potřebné údaje.</translation>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="106"/>
         <source>Console Only Mode</source>
-        <translation type="unfinished"/>
+        <translation>Režim pouze konzole</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="109"/>
@@ -11018,7 +11018,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="71"/>
         <source>Search</source>
-        <translation type="unfinished">Hledat</translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <source>IDX %1</source>
@@ -11710,127 +11710,127 @@ Parametr oddělovače již není potřeba.</translation>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="282"/>
+        <location filename="../../src/SerialStudio.cpp" line="300"/>
         <source>Data Grids</source>
         <translation>Datové Mřížky</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="285"/>
+        <location filename="../../src/SerialStudio.cpp" line="303"/>
         <source>Multiple Data Plots</source>
         <translation>Více Datových Grafů</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="288"/>
+        <location filename="../../src/SerialStudio.cpp" line="306"/>
         <source>Accelerometers</source>
         <translation>Akcelerometry</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="291"/>
+        <location filename="../../src/SerialStudio.cpp" line="309"/>
         <source>Gyroscopes</source>
         <translation>Gyroskopy</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="294"/>
+        <location filename="../../src/SerialStudio.cpp" line="312"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="297"/>
+        <location filename="../../src/SerialStudio.cpp" line="315"/>
         <source>FFT Plots</source>
         <translation>FFT Grafy</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="300"/>
+        <location filename="../../src/SerialStudio.cpp" line="318"/>
         <source>LED Panels</source>
         <translation>LED Panely</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="303"/>
+        <location filename="../../src/SerialStudio.cpp" line="321"/>
         <source>Data Plots</source>
         <translation>Datové Grafy</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="306"/>
+        <location filename="../../src/SerialStudio.cpp" line="324"/>
         <source>Bars</source>
         <translation>Sloupce</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="309"/>
+        <location filename="../../src/SerialStudio.cpp" line="327"/>
         <source>Gauges</source>
         <translation>Měřidla</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="312"/>
+        <location filename="../../src/SerialStudio.cpp" line="330"/>
         <source>Terminal</source>
         <translation>Terminál</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="315"/>
+        <location filename="../../src/SerialStudio.cpp" line="333"/>
         <source>Compasses</source>
         <translation>Kompasy</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="318"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>3D Plots</source>
         <translation>3D Grafy</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="322"/>
+        <location filename="../../src/SerialStudio.cpp" line="340"/>
         <source>Image Views</source>
         <translation>Zobrazení Obrázků</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="864"/>
+        <location filename="../../src/SerialStudio.cpp" line="882"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="865"/>
+        <location filename="../../src/SerialStudio.cpp" line="883"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="866"/>
+        <location filename="../../src/SerialStudio.cpp" line="884"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="867"/>
+        <location filename="../../src/SerialStudio.cpp" line="885"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="868"/>
+        <location filename="../../src/SerialStudio.cpp" line="886"/>
         <source>System</source>
         <translation>Systém</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="869"/>
+        <location filename="../../src/SerialStudio.cpp" line="887"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="870"/>
+        <location filename="../../src/SerialStudio.cpp" line="888"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="871"/>
+        <location filename="../../src/SerialStudio.cpp" line="889"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="872"/>
+        <location filename="../../src/SerialStudio.cpp" line="890"/>
         <source>Shift-JIS</source>
         <translation>Shift-JIS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="873"/>
+        <location filename="../../src/SerialStudio.cpp" line="891"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="874"/>
+        <location filename="../../src/SerialStudio.cpp" line="892"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -11840,77 +11840,77 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
         <source>Session Details</source>
-        <translation type="unfinished"/>
+        <translation>Podrobnosti relace</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="58"/>
         <source>Select a session to view details.</source>
-        <translation type="unfinished"/>
+        <translation>Vyberte relaci pro zobrazení podrobností.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="99"/>
         <source>Project:</source>
-        <translation type="unfinished">Projekt:</translation>
+        <translation>Projekt:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="112"/>
         <source>Started:</source>
-        <translation type="unfinished"/>
+        <translation>Zahájeno:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="125"/>
         <source>Ended:</source>
-        <translation type="unfinished"/>
+        <translation>Ukončeno:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="131"/>
         <source>(in progress)</source>
-        <translation type="unfinished"/>
+        <translation>(probíhá)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="138"/>
         <source>Frames:</source>
-        <translation type="unfinished"/>
+        <translation>Snímky:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="154"/>
         <source>Notes</source>
-        <translation type="unfinished"/>
+        <translation>Poznámky</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="165"/>
         <source>Add session notes...</source>
-        <translation type="unfinished"/>
+        <translation>Přidat poznámky k relaci...</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="183"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Štítky</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="236"/>
         <source>New tag...</source>
-        <translation type="unfinished"/>
+        <translation>Nový štítek...</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="243"/>
         <source>Add</source>
-        <translation type="unfinished">Přidat</translation>
+        <translation>Přidat</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="277"/>
         <source>Replay</source>
-        <translation type="unfinished"/>
+        <translation>Přehrát</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
         <source>Export CSV</source>
-        <translation type="unfinished"/>
+        <translation>Exportovat CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="297"/>
         <source>Delete</source>
-        <translation type="unfinished">Smazat</translation>
+        <translation>Smazat</translation>
     </message>
 </context>
 <context>
@@ -11918,37 +11918,37 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="19"/>
         <source>Sessions</source>
-        <translation type="unfinished"/>
+        <translation>Relace</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="62"/>
         <source>Search</source>
-        <translation type="unfinished">Hledat</translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="79"/>
         <source>Date</source>
-        <translation type="unfinished"/>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="80"/>
         <source>Frames</source>
-        <translation type="unfinished"/>
+        <translation>Snímky</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="81"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Štítky</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="177"/>
         <source>No sessions found.</source>
-        <translation type="unfinished"/>
+        <translation>Nebyly nalezeny žádné relace.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="178"/>
         <source>No session file open.</source>
-        <translation type="unfinished"/>
+        <translation>Žádný soubor relace není otevřen.</translation>
     </message>
 </context>
 <context>
@@ -11956,79 +11956,80 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="338"/>
         <source>Open Session File</source>
-        <translation type="unfinished"/>
+        <translation>Otevřít soubor relace</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="340"/>
         <source>Session files (*.db)</source>
-        <translation type="unfinished"/>
+        <translation>Soubory relace (*.db)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="373"/>
         <source>Cannot open session file</source>
-        <translation type="unfinished"/>
+        <translation>Nelze otevřít soubor relace</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="532"/>
         <source>Delete session from %1?</source>
-        <translation type="unfinished"/>
+        <translation>Odstranit relaci z %1?</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="533"/>
         <source>All readings and raw data for this session will be permanently removed.</source>
-        <translation type="unfinished"/>
+        <translation>Všechna měření a surová data pro tuto relaci budou trvale odstraněna.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="535"/>
         <source>Delete Session</source>
-        <translation type="unfinished"/>
+        <translation>Smazat Sezení</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="557"/>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="847"/>
         <source>No project data</source>
-        <translation type="unfinished"/>
+        <translation>Žádná data projektu</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="558"/>
         <source>This session does not contain an embedded project file — the dashboard will fall back to a quick-plot layout.</source>
-        <translation type="unfinished"/>
+        <translation>Toto sezení neobsahuje vložený soubor projektu — panel se vrátí k rychlému zobrazení grafu.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
         <source>Export Session to CSV</source>
-        <translation type="unfinished"/>
+        <translation>Exportovat Sezení do CSV</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">CSV soubory (*.csv)</translation>
+        <translation>CSV soubory (*.csv)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="794"/>
         <source>Export Complete</source>
-        <translation type="unfinished"/>
+        <translation>Export Dokončen</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="794"/>
         <source>Session exported to:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Sezení exportováno do:
+%1</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="848"/>
         <source>This session file does not contain an embedded project.</source>
-        <translation type="unfinished"/>
+        <translation>Tento soubor sezení neobsahuje vložený projekt.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="858"/>
         <source>Invalid project data</source>
-        <translation type="unfinished"/>
+        <translation>Neplatná data projektu</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="859"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
-        <translation type="unfinished"/>
+        <translation>Vložený projekt JSON je poškozený a nelze jej obnovit.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="871"/>
@@ -12090,32 +12091,32 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="395"/>
         <source>No sessions found</source>
-        <translation type="unfinished"/>
+        <translation>Nebyly nalezeny žádné relace</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="396"/>
         <source>This file does not contain any recording sessions.</source>
-        <translation type="unfinished"/>
+        <translation>Tento soubor neobsahuje žádné nahrávací relace.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="407"/>
         <source>Session has no columns</source>
-        <translation type="unfinished"/>
+        <translation>Relace nemá žádné sloupce</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="408"/>
         <source>The selected session is missing its column definitions.</source>
-        <translation type="unfinished"/>
+        <translation>Vybrané relaci chybí definice sloupců.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="416"/>
         <source>Session has no readings</source>
-        <translation type="unfinished"/>
+        <translation>Relace nemá žádné hodnoty</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="417"/>
         <source>The selected session does not contain any frames.</source>
-        <translation type="unfinished"/>
+        <translation>Vybraná relace neobsahuje žádné snímky.</translation>
     </message>
 </context>
 <context>
@@ -12449,7 +12450,7 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="216"/>
         <source>Console Only (No Parsing)</source>
-        <translation type="unfinished"/>
+        <translation>Pouze konzole (bez analýzy)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="229"/>
@@ -12489,7 +12490,7 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="328"/>
         <source>Create Session Log</source>
-        <translation type="unfinished"/>
+        <translation>Vytvořit záznam relace</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="348"/>
@@ -12688,7 +12689,7 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="24"/>
         <source>Session Player</source>
-        <translation type="unfinished"/>
+        <translation>Přehrávač relací</translation>
     </message>
 </context>
 <context>
@@ -12836,57 +12837,57 @@ Parametr oddělovače již není potřeba.</translation>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="183"/>
         <source>Dataset Values</source>
-        <translation type="unfinished"/>
+        <translation>Hodnoty datové sady</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="193"/>
         <source>All datasets in the project, available for cross-referencing in transforms.</source>
-        <translation type="unfinished"/>
+        <translation>Všechna datová pole v projektu, dostupná pro křížové odkazy v transformacích.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="201"/>
         <source>%1 datasets</source>
-        <translation type="unfinished"/>
+        <translation>%1 datových polí</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="202"/>
         <source>%1 of %2 datasets</source>
-        <translation type="unfinished"/>
+        <translation>%1 z %2 datových polí</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="243"/>
         <source>Search</source>
-        <translation type="unfinished">Hledat</translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="257"/>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="258"/>
         <source>Group</source>
-        <translation type="unfinished">Skupina</translation>
+        <translation>Skupina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
         <source>Dataset</source>
-        <translation type="unfinished">Datová sada</translation>
+        <translation>Datové pole</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="260"/>
         <source>Units</source>
-        <translation type="unfinished">Jednotky</translation>
+        <translation>Jednotky</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="329"/>
         <source>(virtual)</source>
-        <translation type="unfinished"/>
+        <translation>(virtuální)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="373"/>
         <source>Copy ID %1 to clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Zkopírovat ID %1 do schránky</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="409"/>
@@ -13369,18 +13370,18 @@ Parametr oddělovače již není potřeba.</translation>
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1369"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="962"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1370"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1420"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Záložní)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1450"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1451"/>
         <source>LED Panel (%1)</source>
         <translation>LED Panel (%1)</translation>
     </message>
@@ -13562,77 +13563,77 @@ Parametr oddělovače již není potřeba.</translation>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="267"/>
         <source>Import</source>
-        <translation type="unfinished">Importovat</translation>
+        <translation>Importovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="270"/>
         <source>Import registers from CSV</source>
-        <translation type="unfinished"/>
+        <translation>Importovat registry z CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="277"/>
         <source>Export</source>
-        <translation type="unfinished"/>
+        <translation>Exportovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="280"/>
         <source>Export registers to CSV</source>
-        <translation type="unfinished"/>
+        <translation>Exportovat registry do CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Přejmenovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="296"/>
         <source>Rename table</source>
-        <translation type="unfinished"/>
+        <translation>Přejmenovat tabulku</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="306"/>
         <source>Delete</source>
-        <translation type="unfinished">Smazat</translation>
+        <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="309"/>
         <source>Delete table</source>
-        <translation type="unfinished"/>
+        <translation>Smazat tabulku</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="360"/>
         <source>Permissions</source>
-        <translation type="unfinished"/>
+        <translation>Oprávnění</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="361"/>
         <source>Register Name</source>
-        <translation type="unfinished"/>
+        <translation>Název registru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="362"/>
         <source>Default Value</source>
-        <translation type="unfinished"/>
+        <translation>Výchozí hodnota</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Pouze pro čtení</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
         <source>Read/Write</source>
-        <translation type="unfinished"/>
+        <translation>Čtení/Zápis</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="561"/>
         <source>Delete register</source>
-        <translation type="unfinished"/>
+        <translation>Smazat registr</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="577"/>
         <source>No registers.</source>
-        <translation type="unfinished"/>
+        <translation>Žádné registry.</translation>
     </message>
 </context>
 <context>
@@ -13930,75 +13931,75 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="39"/>
         <source>Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Pracovní prostor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="125"/>
         <source>Add Widget</source>
-        <translation type="unfinished"/>
+        <translation>Přidat Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="127"/>
         <source>Add widget to workspace</source>
-        <translation type="unfinished"/>
+        <translation>Přidat widget do pracovního prostoru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="138"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Přejmenovat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="140"/>
         <source>Rename workspace</source>
-        <translation type="unfinished"/>
+        <translation>Přejmenovat pracovní prostor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="149"/>
         <source>Delete</source>
-        <translation type="unfinished">Smazat</translation>
+        <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="151"/>
         <source>Delete workspace</source>
-        <translation type="unfinished"/>
+        <translation>Smazat pracovní prostor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="173"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="179"/>
         <source>Group</source>
-        <translation type="unfinished">Skupina</translation>
+        <translation>Skupina</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="174"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="180"/>
         <source>Widget</source>
-        <translation type="unfinished">Widget</translation>
+        <translation>Widget</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="175"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="181"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="212"/>
         <source>(unknown)</source>
-        <translation type="unfinished"/>
+        <translation>(neznámý)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="230"/>
         <source>(group widget)</source>
-        <translation type="unfinished"/>
+        <translation>(skupinový widget)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="285"/>
         <source>Remove from workspace</source>
-        <translation type="unfinished"/>
+        <translation>Odebrat z pracovního prostoru</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="304"/>
         <source>No widgets in this workspace.</source>
-        <translation type="unfinished"/>
+        <translation>V tomto pracovním prostoru nejsou žádné widgety.</translation>
     </message>
 </context>
 <context>
@@ -14006,42 +14007,42 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="34"/>
         <source>Workspaces</source>
-        <translation type="unfinished">Pracovní prostory</translation>
+        <translation>Pracovní prostory</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="121"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>Přizpůsobit</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="123"/>
         <source>Edit workspaces manually</source>
-        <translation type="unfinished"/>
+        <translation>Upravit pracovní prostory ručně</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="135"/>
         <source>Add Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Přidat Pracovní Prostor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="137"/>
         <source>Add workspace</source>
-        <translation type="unfinished"/>
+        <translation>Přidat pracovní prostor</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="151"/>
         <source>Title</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="152"/>
         <source>Widgets</source>
-        <translation type="unfinished"/>
+        <translation>Widgety</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="215"/>
         <source>No workspaces.</source>
-        <translation type="unfinished"/>
+        <translation>Žádné pracovní prostory.</translation>
     </message>
 </context>
 </TS>

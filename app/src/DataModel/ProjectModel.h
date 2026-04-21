@@ -315,9 +315,14 @@ private:
   void clearTransientState();
 
   // Builds a fresh synthetic workspace list from the current groups/datasets.
-  // Used by workspaces() when customizeWorkspaces is off, and as the initial
-  // seed when the user flips the flag on.
+  // Used as the source for m_workspaces when customizeWorkspaces is off and
+  // as the initial seed when the user flips the flag on.
   [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
+
+  // Re-seeds m_workspaces from buildAutoWorkspaces() when customizeWorkspaces
+  // is off. No-ops if the user has opted into manual editing. Does not call
+  // setModified() — auto-regeneration is not a user-visible edit.
+  void regenerateAutoWorkspaces();
 
   // Per-widget-type counts that a group contributes to Dashboard's walker —
   // used when computing the ref shift after a group delete.
@@ -356,13 +361,12 @@ private:
   std::vector<DataModel::Workspace> m_workspaces;
   std::vector<DataModel::TableDef> m_tables;
 
-  // customizeWorkspaces == false: m_workspaces stays empty and workspaces()
-  // returns a lazily-built synthetic list (m_autoWorkspaces). The synthetic
-  // list is never serialised. When the user flips the flag on, the current
-  // synthetic list is copied into m_workspaces and saved from then on.
+  // customizeWorkspaces == false: m_workspaces is regenerated from the current
+  // project structure on every groupsChanged signal. When the user flips the
+  // flag on, regeneration stops and m_workspaces becomes hand-edited.
+  // Either way, m_workspaces is what workspaces() returns and what the save
+  // path persists.
   bool m_customizeWorkspaces;
-  mutable std::vector<DataModel::Workspace> m_autoWorkspaces;
-  mutable bool m_autoWorkspacesDirty;
 
   DataModel::Group m_selectedGroup;
   DataModel::Action m_selectedAction;

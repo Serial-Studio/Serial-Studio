@@ -77,17 +77,21 @@ DataModel::ProjectModel::ProjectModel()
   , m_filePath("")
   , m_suppressMessageBoxes(false)
   , m_customizeWorkspaces(false)
-  , m_autoWorkspacesDirty(true)
 {
-  // Any structural change invalidates the synthetic workspace cache and
-  // forces observers (dashboard taskbar, project editor tree) to reload.
-  connect(this, &ProjectModel::groupsChanged, this, [this] {
-    m_autoWorkspacesDirty = true;
-    if (!m_customizeWorkspaces)
-      Q_EMIT workspacesChanged();
-  });
-
+  // newJsonFile() must run before the auto-regen hook is wired — it emits
+  // groupsChanged, and regenerateAutoWorkspaces() reaches into AppState,
+  // which is itself mid-init on the very first ProjectModel::instance() call.
   newJsonFile();
+
+  // Any structural change rebuilds the auto-generated workspace list.
+  // When the user has opted into manual editing the list is theirs, so skip.
+  connect(this, &ProjectModel::groupsChanged, this, [this] {
+    if (m_customizeWorkspaces)
+      return;
+
+    regenerateAutoWorkspaces();
+    Q_EMIT workspacesChanged();
+  });
 }
 
 /**
@@ -372,23 +376,15 @@ int DataModel::ProjectModel::sourceCount() const noexcept
 /**
  * @brief Returns the workspaces that represent the current project layout.
  *
- * When `customizeWorkspaces` is on, this is the user-edited list stored in
- * `m_workspaces` and saved to the project JSON. Otherwise it returns a lazily
- * rebuilt synthetic list (m_autoWorkspaces) produced by the same rules the
- * old auto-taskbar used: Overview → All Data → one workspace per group.
- * The synthetic list is never persisted.
+ * m_workspaces is the authoritative list in both modes:
+ *   - customizeWorkspaces == false: regenerated from groupsChanged by
+ *     regenerateAutoWorkspaces() (Overview → All Data → one per group).
+ *   - customizeWorkspaces == true:  hand-edited by the user.
+ * The list is persisted to JSON either way.
  */
 const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() const
 {
-  if (m_customizeWorkspaces)
-    return m_workspaces;
-
-  if (m_autoWorkspacesDirty) {
-    m_autoWorkspaces      = buildAutoWorkspaces();
-    m_autoWorkspacesDirty = false;
-  }
-
-  return m_autoWorkspaces;
+  return m_workspaces;
 }
 
 /**
@@ -1016,17 +1012,17 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 
   json.insert(Keys::Sources, sourcesArray);
 
-  // User-defined workspaces — only persisted when the user has opted in to
-  // customising them. Automatic layouts are regenerated from groups on load.
-  if (m_customizeWorkspaces) {
-    json.insert(QStringLiteral("customizeWorkspaces"), true);
+  // Persist the workspace list on every save. When customizeWorkspaces is
+  // off the list is auto-generated, but we still write it so a project
+  // opened on a different machine — or an older build — sees the same
+  // layout without having to rebuild it.
+  json.insert(QStringLiteral("customizeWorkspaces"), m_customizeWorkspaces);
 
-    QJsonArray workspacesArray;
-    for (const auto& ws : std::as_const(m_workspaces))
-      workspacesArray.append(DataModel::serialize(ws));
+  QJsonArray workspacesArray;
+  for (const auto& ws : std::as_const(m_workspaces))
+    workspacesArray.append(DataModel::serialize(ws));
 
-    json.insert(Keys::Workspaces, workspacesArray);
-  }
+  json.insert(Keys::Workspaces, workspacesArray);
 
   // Hidden auto-generated group IDs
   if (!m_hiddenGroupIds.isEmpty()) {
@@ -1086,15 +1082,18 @@ void DataModel::ProjectModel::setupExternalConnections()
   });
 
   // In QuickPlot mode, m_groups is empty — the workspace builder reads from
-  // FrameBuilder::quickPlotFrame(). Invalidate the cache whenever the
-  // dashboard structure changes so the taskbar picks up the new layout.
+  // FrameBuilder::quickPlotFrame(). Regenerate the auto-workspace list
+  // whenever the dashboard structure changes so the taskbar picks up the new
+  // layout.
   connect(&UI::Dashboard::instance(), &UI::Dashboard::widgetCountChanged, this, [this] {
     if (AppState::instance().operationMode() != SerialStudio::QuickPlot)
       return;
 
-    m_autoWorkspacesDirty = true;
-    if (!m_customizeWorkspaces)
-      Q_EMIT workspacesChanged();
+    if (m_customizeWorkspaces)
+      return;
+
+    regenerateAutoWorkspaces();
+    Q_EMIT workspacesChanged();
   });
 
   // Clear ephemeral workspace data on disconnect in non-project modes
@@ -1128,7 +1127,6 @@ void DataModel::ProjectModel::newJsonFile()
   m_workspaces.clear();
   m_tables.clear();
   m_customizeWorkspaces = false;
-  m_autoWorkspacesDirty = true;
 
   // Reset to factory defaults
   m_frameEndSequence      = "\\n";
@@ -1493,11 +1491,10 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
   // Workspaces. When the project opted in to customising workspaces, load
-  // the saved list; otherwise start in automatic mode and let workspaces()
-  // synthesize the layout on demand.
+  // the saved list verbatim; otherwise the list will be regenerated below
+  // once all groups have been parsed.
   m_workspaces.clear();
   m_customizeWorkspaces = json.value(QStringLiteral("customizeWorkspaces")).toBool(false);
-  m_autoWorkspacesDirty = true;
 
   // Migrate pre-v3.3 projects: if a workspaces array is present but the
   // customize flag wasn't persisted, auto-promote so the saved list isn't lost
@@ -1585,9 +1582,8 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
       m_widgetSettings.insert(Keys::kActiveGroupSubKey, legacy_group_id);
   }
 
-  // No explicit workspace generation needed: when customizeWorkspaces is
-  // false, workspaces() returns a lazily-built synthetic list (Overview +
-  // All Data + per-group) that mirrors the legacy Taskbar behaviour.
+  // m_workspaces is regenerated by the groupsChanged handler emitted below,
+  // so nothing to seed explicitly here when customizeWorkspaces is off.
 
   setModified(false);
 
@@ -3719,11 +3715,11 @@ bool DataModel::ProjectModel::customizeWorkspaces() const noexcept
 /**
  * @brief Flips the customize switch.
  *
- * Off → On: seeds m_workspaces from the current synthetic layout so the
- *   user starts editing exactly what the automatic mode was showing.
+ * Off → On: m_workspaces is already the auto layout; simply stop
+ *   regenerating it so the user's subsequent edits stick.
  *
- * On → Off: drops m_workspaces entirely; the synthetic layout takes over
- *   again on the next read.
+ * On → Off: discard the hand-edited list and re-seed from the current
+ *   project structure.
  */
 void DataModel::ProjectModel::setCustomizeWorkspaces(const bool enabled)
 {
@@ -3732,12 +3728,8 @@ void DataModel::ProjectModel::setCustomizeWorkspaces(const bool enabled)
 
   m_customizeWorkspaces = enabled;
 
-  if (enabled) {
-    m_workspaces = buildAutoWorkspaces();
-  } else {
-    m_workspaces.clear();
-    m_autoWorkspacesDirty = true;
-  }
+  if (!enabled)
+    regenerateAutoWorkspaces();
 
   setModified(true);
   Q_EMIT customizeWorkspacesChanged();
@@ -3769,6 +3761,11 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
   QMap<SerialStudio::DashboardWidget, int> groupIdx;
   QMap<SerialStudio::DashboardWidget, int> datasetIdx;
 
+  // Dashboard remaps Plot3D → MultiPlot on non-Pro builds (see
+  // UI::Dashboard::buildWidgetGroups). Mirror that here so workspace refs
+  // resolve to the widget Dashboard actually instantiates.
+  const bool pro = SerialStudio::proWidgetsEnabled();
+
   // Refs collected across the walk. Reused to populate all three
   // workspace categories without re-walking the project.
   std::vector<DataModel::WidgetRef> allRefs;
@@ -3783,8 +3780,12 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
 
     std::vector<DataModel::WidgetRef> groupRefs;
 
-    // Group-level widget
-    const auto groupKey = SerialStudio::getDashboardWidget(group);
+    // Group-level widget. Plot3D falls back to MultiPlot on non-Pro so the
+    // workspace ref matches the widget Dashboard actually registers.
+    auto groupKey = SerialStudio::getDashboardWidget(group);
+    if (groupKey == SerialStudio::DashboardPlot3D && !pro)
+      groupKey = SerialStudio::DashboardMultiPlot;
+
     if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey)) {
       DataModel::WidgetRef r;
       r.widgetType       = static_cast<int>(groupKey);
@@ -3871,6 +3872,22 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
 }
 
 /**
+ * @brief Refreshes m_workspaces from the current project structure.
+ *
+ * Called on project load and on every groupsChanged signal while
+ * customizeWorkspaces is off. Does not touch m_customizeWorkspaces and does
+ * not call setModified() — auto-regeneration is not a user-visible edit.
+ * Caller is responsible for emitting workspacesChanged() when appropriate.
+ */
+void DataModel::ProjectModel::regenerateAutoWorkspaces()
+{
+  if (m_customizeWorkspaces)
+    return;
+
+  m_workspaces = buildAutoWorkspaces();
+}
+
+/**
  * @brief Materialises the synthetic workspace list into m_workspaces and flips
  *        the project into customize mode so the user can edit it from there.
  *
@@ -3889,8 +3906,8 @@ int DataModel::ProjectModel::autoGenerateWorkspaces()
   if (seed.empty())
     return -1;
 
-  // Promote into customize mode so workspaces() reads m_workspaces (not the
-  // synthetic cache) and the list persists in the project file.
+  // Promote into customize mode so subsequent groupsChanged signals don't
+  // overwrite the freshly materialised list.
   m_workspaces           = std::move(seed);
   const bool flagChanged = !m_customizeWorkspaces;
   m_customizeWorkspaces  = true;
@@ -3920,8 +3937,13 @@ QMap<int, int> DataModel::ProjectModel::widgetTypeCountsForGroup(const Group& g)
   if (!SerialStudio::groupEligibleForWorkspace(g))
     return counts;
 
-  // Group-level widget (one per group at most)
-  const auto groupKey = SerialStudio::getDashboardWidget(g);
+  // Group-level widget (one per group at most). Mirror buildAutoWorkspaces's
+  // non-Pro Plot3D → MultiPlot remap so shift math stays consistent with
+  // what the refs were actually assigned.
+  auto groupKey = SerialStudio::getDashboardWidget(g);
+  if (groupKey == SerialStudio::DashboardPlot3D && !SerialStudio::proWidgetsEnabled())
+    groupKey = SerialStudio::DashboardMultiPlot;
+
   if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey))
     counts[static_cast<int>(groupKey)] += 1;
 

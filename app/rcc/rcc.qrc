@@ -616,6 +616,7 @@
         <file>scripts/transforms/js/running_min.js</file>
         <file>scripts/transforms/js/schmitt_trigger.js</file>
         <file>scripts/transforms/js/slew_rate_limiter.js</file>
+        <file>scripts/transforms/js/table_calibration.js</file>
         <file>scripts/transforms/js/thermistor_steinhart.js</file>
         <file>scripts/transforms/js/unwrap_angle.js</file>
         <file>scripts/transforms/lua/absolute_value.lua</file>
@@ -649,6 +650,7 @@
         <file>scripts/transforms/lua/running_min.lua</file>
         <file>scripts/transforms/lua/schmitt_trigger.lua</file>
         <file>scripts/transforms/lua/slew_rate_limiter.lua</file>
+        <file>scripts/transforms/lua/table_calibration.lua</file>
         <file>scripts/transforms/lua/thermistor_steinhart.lua</file>
         <file>scripts/transforms/lua/unwrap_angle.lua</file>
         <file>scripts/transforms/templates.json</file>

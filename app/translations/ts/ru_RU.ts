@@ -261,77 +261,77 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="43"/>
         <source>Add Widget</source>
-        <translation type="unfinished"/>
+        <translation>Добавить Виджет</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="210"/>
         <source>Available Widgets</source>
-        <translation type="unfinished"/>
+        <translation>Доступные Виджеты</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="218"/>
         <source>Click a row to add it to the workspace.</source>
-        <translation type="unfinished"/>
+        <translation>Щелкните по строке, чтобы добавить её в рабочую область.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="226"/>
         <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="233"/>
         <source>Widget</source>
-        <translation type="unfinished">Виджет</translation>
+        <translation>Виджет</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="234"/>
         <source>Group</source>
-        <translation type="unfinished">Группа</translation>
+        <translation>Группа</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="235"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="301"/>
         <source>(entire group)</source>
-        <translation type="unfinished"/>
+        <translation>(вся группа)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="336"/>
         <source>Already in workspace</source>
-        <translation type="unfinished"/>
+        <translation>Уже в рабочей области</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="337"/>
         <source>Add to workspace</source>
-        <translation type="unfinished"/>
+        <translation>Добавить в рабочую область</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="366"/>
         <source>No widgets available.</source>
-        <translation type="unfinished"/>
+        <translation>Нет доступных виджетов.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="367"/>
         <source>No widgets match.</source>
-        <translation type="unfinished"/>
+        <translation>Нет совпадающих виджетов.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="382"/>
         <source>%1 widgets</source>
-        <translation type="unfinished"/>
+        <translation>%1 виджетов</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="383"/>
         <source>%1 of %2 widgets</source>
-        <translation type="unfinished"/>
+        <translation>%1 из %2 виджетов</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="390"/>
         <source>Close</source>
-        <translation type="unfinished">Закрыть</translation>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
@@ -906,7 +906,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="43"/>
         <source>Insert Constant</source>
-        <translation type="unfinished"/>
+        <translation>Вставить Константу</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="123"/>
@@ -916,91 +916,91 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
         <source>Fundamental</source>
-        <translation type="unfinished"/>
+        <translation>Фундаментальная</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="123"/>
         <source>Speed of light in vacuum</source>
-        <translation type="unfinished"/>
+        <translation>Скорость света в вакууме</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="124"/>
         <source>Planck constant</source>
-        <translation type="unfinished"/>
+        <translation>Постоянная Планка</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="125"/>
         <source>Elementary charge</source>
-        <translation type="unfinished"/>
+        <translation>Элементарный заряд</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="126"/>
         <source>Avogadro constant</source>
-        <translation type="unfinished"/>
+        <translation>Постоянная Авогадро</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
         <source>Boltzmann constant</source>
-        <translation type="unfinished"/>
+        <translation>Постоянная Больцмана</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
         <source>Stefan-Boltzmann constant</source>
-        <translation type="unfinished"/>
+        <translation>Постоянная Стефана-Больцмана</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Mechanics</source>
-        <translation type="unfinished"/>
+        <translation>Механика</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <source>Standard gravity</source>
-        <translation type="unfinished"/>
+        <translation>Стандартное ускорение свободного падения</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Gravitational constant</source>
-        <translation type="unfinished"/>
+        <translation>Гравитационная постоянная</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Pressure</source>
-        <translation type="unfinished"/>
+        <translation>Давление</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <source>Standard atmosphere</source>
-        <translation type="unfinished"/>
+        <translation>Стандартная атмосфера</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Sea-level barometric pressure</source>
-        <translation type="unfinished"/>
+        <translation>Барометрическое давление на уровне моря</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Temperature</source>
-        <translation type="unfinished"/>
+        <translation>Температура</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
         <source>Absolute zero (Celsius)</source>
-        <translation type="unfinished"/>
+        <translation>Абсолютный ноль (Цельсий)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Water freezing point</source>
-        <translation type="unfinished"/>
+        <translation>Точка замерзания воды</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Water boiling point (1 atm)</source>
-        <translation type="unfinished"/>
+        <translation>Точка кипения воды (1 атм)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
@@ -1011,135 +1011,135 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <source>Gases &amp; Fluids</source>
-        <translation type="unfinished"/>
+        <translation>Газы и жидкости</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <source>Universal gas constant</source>
-        <translation type="unfinished"/>
+        <translation>Универсальная газовая постоянная</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Specific gas constant (dry air)</source>
-        <translation type="unfinished"/>
+        <translation>Удельная газовая постоянная (сухой воздух)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
         <source>Specific gas constant (water vapor)</source>
-        <translation type="unfinished"/>
+        <translation>Удельная газовая постоянная (водяной пар)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
         <source>Air density (sea level, 15°C)</source>
-        <translation type="unfinished"/>
+        <translation>Плотность воздуха (уровень моря, 15°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
         <source>Water density (4°C)</source>
-        <translation type="unfinished"/>
+        <translation>Плотность воды (4°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Speed of sound in air (20°C)</source>
-        <translation type="unfinished"/>
+        <translation>Скорость звука в воздухе (20°C)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <source>Heat capacity ratio (dry air)</source>
-        <translation type="unfinished"/>
+        <translation>Коэффициент теплоемкости (сухой воздух)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Electromagnetism</source>
-        <translation type="unfinished"/>
+        <translation>Электромагнетизм</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Vacuum permittivity</source>
-        <translation type="unfinished"/>
+        <translation>Диэлектрическая проницаемость вакуума</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Vacuum permeability</source>
-        <translation type="unfinished"/>
+        <translation>Магнитная проницаемость вакуума</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Math</source>
-        <translation type="unfinished"/>
+        <translation>Математика</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Pi</source>
-        <translation type="unfinished"/>
+        <translation>Число Пи</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Euler's number</source>
-        <translation type="unfinished"/>
+        <translation>Число Эйлера</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Golden ratio</source>
-        <translation type="unfinished"/>
+        <translation>Золотое сечение</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="209"/>
         <source>Physics Constants</source>
-        <translation type="unfinished"/>
+        <translation>Константы Физики</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="217"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
-        <translation type="unfinished"/>
+        <translation>Значения предустановок СИ-единиц. Щелкните по строке, чтобы вставить в %1.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="226"/>
         <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="245"/>
         <source>Symbol</source>
-        <translation type="unfinished"/>
+        <translation>Символ</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="246"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="247"/>
         <source>Value</source>
-        <translation type="unfinished">Значение</translation>
+        <translation>Значение</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="248"/>
         <source>Category</source>
-        <translation type="unfinished"/>
+        <translation>Категория</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="353"/>
         <source>No constants match.</source>
-        <translation type="unfinished"/>
+        <translation>Нет совпадающих констант.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="373"/>
         <source>%1 constants</source>
-        <translation type="unfinished"/>
+        <translation>%1 констант</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="374"/>
         <source>%1 of %2 constants</source>
-        <translation type="unfinished"/>
+        <translation>%1 из %2 констант</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
         <source>Close</source>
-        <translation type="unfinished">Закрыть</translation>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
@@ -2482,12 +2482,12 @@ Any unsaved changes will be lost. Continue?</source>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="2167"/>
         <source>Virtual Dataset</source>
-        <translation type="unfinished"/>
+        <translation>Виртуальный набор данных</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="2168"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation type="unfinished"/>
+        <translation>Виртуальные наборы данных вычисляют свое значение из преобразований и таблиц данных, они не требуют индекса кадра</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="2569"/>
@@ -2515,14 +2515,14 @@ Any unsaved changes will be lost. Continue?</source>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="994"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1095"/>
         <source>Groups</source>
-        <translation type="unfinished">Группы</translation>
+        <translation>Группы</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1113"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1124"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1125"/>
         <source>Shared Memory</source>
-        <translation type="unfinished"/>
+        <translation>Общая память</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1113"/>
@@ -2530,14 +2530,14 @@ Any unsaved changes will be lost. Continue?</source>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1132"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="3514"/>
         <source>Dataset Values</source>
-        <translation type="unfinished"/>
+        <translation>Значения набора данных</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1160"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1171"/>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1172"/>
         <source>Workspaces</source>
-        <translation type="unfinished">Рабочие пространства</translation>
+        <translation>Рабочие пространства</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1389"/>
@@ -2854,12 +2854,12 @@ Any unsaved changes will be lost. Continue?</source>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="3515"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
-        <translation type="unfinished"/>
+        <translation>Исходные и преобразованные значения для каждого набора данных (только для чтения)</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="3525"/>
         <source>Shared table defined in this project</source>
-        <translation type="unfinished"/>
+        <translation>Общая таблица, определенная в этом проекте</translation>
     </message>
     <message>
         <source>Select which connected device provides this dataset's values</source>
@@ -3346,120 +3346,120 @@ Any unsaved changes will be lost. Continue?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="144"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="148"/>
         <source>New Project</source>
         <translation>Новый Проект</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="164"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="168"/>
         <source>Samples</source>
         <translation>Образцы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="502"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="498"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Несколько источников данных требуют Pro-лицензии</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="503"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="499"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro позволяет подключаться к нескольким устройствам одновременно. Пожалуйста, обновите версию, чтобы разблокировать эту функцию.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="512"/>
         <source>Device %1</source>
         <translation>Устройство %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="587"/>
         <source> (Copy)</source>
         <translation>(Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="830"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="826"/>
         <source>Do you want to save your changes?</source>
         <translation>Хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="831"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="827"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>У вас есть несохраненные изменения в этом проекте!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>Project error</source>
         <translation>Ошибка проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="873"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="869"/>
         <source>Project title cannot be empty!</source>
         <translation>Название проекта не может быть пустым!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="880"/>
         <source>You need to add at least one group!</source>
         <translation>Необходимо добавить хотя бы одну группу!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="899"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="895"/>
         <source>You need to add at least one dataset!</source>
         <translation>Необходимо добавить хотя бы один набор данных!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="907"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="903"/>
         <source>Save Serial Studio Project</source>
         <translation>Сохранить Проект Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="909"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="905"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файлы Проектов Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1138"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1136"/>
         <source>Untitled Project</source>
         <translation>Безымянный Проект</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1147"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1440"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1438"/>
         <source>Device A</source>
         <translation>Устройство A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Select Project File</source>
         <translation>Выберите Файл Проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1307"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Файлы Проектов (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
         <source>JSON validation error</source>
         <translation>Ошибка проверки JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1480"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Проекты с несколькими источниками требуют Pro-лицензии</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1483"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1481"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Этот проект содержит несколько источников данных. Загружен только первый источник. Для использования проектов с несколькими источниками требуется лицензия Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1614"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1610"/>
         <source>Legacy frame parser function updated</source>
         <translation>Функция парсера старого формата обновлена</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1615"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1611"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Ваш проект использовал функцию парсера старого формата с аргументом 'separator'. Он был автоматически преобразован в новый формат.</translation>
     </message>
@@ -3472,291 +3472,291 @@ Any unsaved changes will be lost. Continue?</source>
         <translation type="vanished">Этот режим необходим для загрузки и отображения панелей управления из файлов проектов.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1808"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1804"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Вы хотите удалить группу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1809"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1860"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1898"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2172"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1805"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1856"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1894"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2168"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Это действие нельзя отменить. Вы хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1859"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1855"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Вы хотите удалить действие "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1897"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1893"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Вы хотите удалить набор данных "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1987"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2016"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2230"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2275"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1983"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2012"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2271"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2118"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2114"/>
         <source>Output Controls</source>
         <translation>Элементы Управления Выводом</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2130"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2126"/>
         <source>New Button</source>
         <translation>Новая Кнопка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2133"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2129"/>
         <source>New Slider</source>
         <translation>Новый Ползунок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2136"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2132"/>
         <source>New Toggle</source>
         <translation>Новый Переключатель</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2139"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2135"/>
         <source>New Text Field</source>
         <translation>Новое Текстовое Поле</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2138"/>
         <source>New Knob</source>
         <translation>Новая Ручка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2145"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2141"/>
         <source>New Ramp Generator</source>
         <translation>Новый Генератор Пандуса</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2167"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Вы хотите удалить виджет вывода "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2326"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2354"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2350"/>
         <source>New Dataset</source>
         <translation>Новый Набор Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2353"/>
         <source>New Plot</source>
         <translation>Новый График</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2357"/>
         <source>New FFT Plot</source>
         <translation>Новый График БПФ</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2361"/>
         <source>New Level Indicator</source>
         <translation>Новый Индикатор Уровня</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2365"/>
         <source>New Gauge</source>
         <translation>Новый Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2373"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2369"/>
         <source>New Compass</source>
         <translation>Новый Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2381"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2377"/>
         <source>New LED Indicator</source>
         <translation>Новый Светодиодный Индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2480"/>
         <source>New Action</source>
         <translation>Новое Действие</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2598"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2594"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Вы уверены, что хотите изменить виджет уровня группы?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2600"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2596"/>
         <source>Existing datasets for this group will be deleted</source>
         <translation>Существующие наборы данных для этой группы будут удалены</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2661"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2662"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2663"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2657"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2658"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2659"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2709"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2710"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2711"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2705"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2706"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2707"/>
         <source>Gyro %1</source>
         <translation>Гироскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2754"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2755"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2751"/>
         <source>Longitude</source>
         <translation>Долгота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2756"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2752"/>
         <source>Altitude</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2791"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2792"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2797"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2793"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3005"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3011"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3070"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3076"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>Shared Table</source>
-        <translation type="unfinished"/>
+        <translation>Общая таблица</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3152"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3158"/>
         <source>register</source>
-        <translation type="unfinished"/>
+        <translation>зарегистрировать</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
         <source>New Shared Table</source>
-        <translation type="unfinished"/>
+        <translation>Новая Общая Таблица</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3319"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3285"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3325"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Name:</source>
-        <translation type="unfinished">Имя:</translation>
+        <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3298"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3304"/>
         <source>Rename Table</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3324"/>
         <source>New Register</source>
-        <translation type="unfinished"/>
+        <translation>Новый Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3343"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
         <source>Rename Register</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3382"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3407"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3388"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3413"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4083"/>
         <source>This action cannot be undone.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3383"/>
-        <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3386"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3406"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4050"/>
-        <source>Delete "%1"?</source>
-        <translation type="unfinished"/>
+        <translation>Это действие нельзя отменить.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectModel.cpp" line="3389"/>
+        <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
+        <translation>Это удаляет %1 регистр(ов) вместе с таблицей. Это действие нельзя отменить.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3392"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3412"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4082"/>
+        <source>Delete "%1"?</source>
+        <translation>Удалить "%1"?</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3395"/>
         <source>Delete Table</source>
-        <translation type="unfinished"/>
+        <translation>Удалить Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3409"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>Delete Register</source>
-        <translation type="unfinished"/>
+        <translation>Удалить Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3435"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3441"/>
         <source>Export Table</source>
-        <translation type="unfinished"/>
+        <translation>Экспорт таблицы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3437"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3484"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3443"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3490"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">CSV файлы (*.csv)</translation>
+        <translation>CSV файлы (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3482"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3488"/>
         <source>Import Table</source>
-        <translation type="unfinished"/>
+        <translation>Импорт таблицы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>New Workspace</source>
-        <translation type="unfinished">Новая Рабочая Область</translation>
+        <translation>Новое рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3699"/>
         <source>Rename Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3829"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3840"/>
         <source>Overview</source>
-        <translation type="unfinished">Обзор</translation>
+        <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3839"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3850"/>
         <source>All Data</source>
-        <translation type="unfinished">Все Данные</translation>
+        <translation>Все данные</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4053"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4085"/>
         <source>Delete Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Удалить рабочее пространство</translation>
     </message>
     <message>
         <source>Frame Parser Code</source>
@@ -4279,7 +4279,7 @@ Any unsaved changes will be lost. Continue?</source>
         <translation type="vanished">Сохранить Изменения</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4249"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4281"/>
         <source>File open error</source>
         <translation>Ошибка открытия файла</translation>
     </message>
@@ -4383,42 +4383,42 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="33"/>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="158"/>
         <source>Shared Memory</source>
-        <translation type="unfinished"/>
+        <translation>Общая память</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="168"/>
         <source>Define constants and computed values shared across all transforms.</source>
-        <translation type="unfinished"/>
+        <translation>Определите константы и вычисленные значения, общие для всех преобразований.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="227"/>
         <source>Add Shared Table</source>
-        <translation type="unfinished"/>
+        <translation>Добавить Общую Таблицу</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="229"/>
         <source>Add shared table</source>
-        <translation type="unfinished"/>
+        <translation>Добавить общую таблицу</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="246"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="247"/>
         <source>Description</source>
-        <translation type="unfinished"/>
+        <translation>Описание</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="248"/>
         <source>Entries</source>
-        <translation type="unfinished"/>
+        <translation>Записи</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="345"/>
         <source>No shared tables.</source>
-        <translation type="unfinished"/>
+        <translation>Нет общих таблиц.</translation>
     </message>
 </context>
 <context>
@@ -4427,67 +4427,67 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="31"/>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="32"/>
         <source>Sessions</source>
-        <translation type="unfinished"/>
+        <translation>Сеансы</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="175"/>
         <source>Open</source>
-        <translation type="unfinished">Открыть</translation>
+        <translation>Открыть</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="177"/>
         <source>Open a session file</source>
-        <translation type="unfinished"/>
+        <translation>Открыть файл сеанса</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="183"/>
         <source>Close</source>
-        <translation type="unfinished">Закрыть</translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="185"/>
         <source>Close session file</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть файл сессии</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="197"/>
         <source>Replay</source>
-        <translation type="unfinished"/>
+        <translation>Повтор</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="201"/>
         <source>Replay selected session on the dashboard</source>
-        <translation type="unfinished"/>
+        <translation>Повтор выбранной сессии на панели управления</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="207"/>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="211"/>
         <source>Delete the selected session</source>
-        <translation type="unfinished"/>
+        <translation>Удалить выбранную сессию</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="218"/>
         <source>Export</source>
-        <translation type="unfinished"/>
+        <translation>Экспорт</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="223"/>
         <source>Export selected session to CSV</source>
-        <translation type="unfinished"/>
+        <translation>Экспортировать выбранную сессию в CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="237"/>
         <source>Restore Project</source>
-        <translation type="unfinished"/>
+        <translation>Восстановить проект</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="240"/>
         <source>Restore the project file from this session file</source>
-        <translation type="unfinished"/>
+        <translation>Восстановить файл проекта из этого файла сессии</translation>
     </message>
 </context>
 <context>
@@ -7310,7 +7310,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="107"/>
         <source>File is too large for ZMODEM (%1 bytes, limit 4 GiB).</source>
-        <translation type="unfinished"/>
+        <translation>Файл слишком большой для ZMODEM (%1 байт, лимит 4 ГиБ).</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="134"/>
@@ -7325,7 +7325,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="276"/>
         <source>Hex header CRC mismatch, dropping frame</source>
-        <translation type="unfinished"/>
+        <translation>Несоответствие CRC заголовка Hex, пропуск кадра</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="416"/>
@@ -9744,7 +9744,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="106"/>
         <source>Console Only Mode</source>
-        <translation type="unfinished"/>
+        <translation>Только режим консоли</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="109"/>
@@ -11018,7 +11018,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectStructure.qml" line="71"/>
         <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <source>IDX %1</source>
@@ -11710,127 +11710,127 @@ function parse(%1) { ... }
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="282"/>
+        <location filename="../../src/SerialStudio.cpp" line="300"/>
         <source>Data Grids</source>
         <translation>Таблицы Данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="285"/>
+        <location filename="../../src/SerialStudio.cpp" line="303"/>
         <source>Multiple Data Plots</source>
         <translation>Несколько Графиков Данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="288"/>
+        <location filename="../../src/SerialStudio.cpp" line="306"/>
         <source>Accelerometers</source>
         <translation>Акселерометры</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="291"/>
+        <location filename="../../src/SerialStudio.cpp" line="309"/>
         <source>Gyroscopes</source>
         <translation>Гироскопы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="294"/>
+        <location filename="../../src/SerialStudio.cpp" line="312"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="297"/>
+        <location filename="../../src/SerialStudio.cpp" line="315"/>
         <source>FFT Plots</source>
         <translation>Графики FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="300"/>
+        <location filename="../../src/SerialStudio.cpp" line="318"/>
         <source>LED Panels</source>
         <translation>Светодиодные Панели</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="303"/>
+        <location filename="../../src/SerialStudio.cpp" line="321"/>
         <source>Data Plots</source>
         <translation>Графики Данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="306"/>
+        <location filename="../../src/SerialStudio.cpp" line="324"/>
         <source>Bars</source>
         <translation>Полосы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="309"/>
+        <location filename="../../src/SerialStudio.cpp" line="327"/>
         <source>Gauges</source>
         <translation>Индикаторы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="312"/>
+        <location filename="../../src/SerialStudio.cpp" line="330"/>
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="315"/>
+        <location filename="../../src/SerialStudio.cpp" line="333"/>
         <source>Compasses</source>
         <translation>Компасы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="318"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>3D Plots</source>
         <translation>3D Графики</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="322"/>
+        <location filename="../../src/SerialStudio.cpp" line="340"/>
         <source>Image Views</source>
         <translation>Просмотры Изображений</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="864"/>
+        <location filename="../../src/SerialStudio.cpp" line="882"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="865"/>
+        <location filename="../../src/SerialStudio.cpp" line="883"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="866"/>
+        <location filename="../../src/SerialStudio.cpp" line="884"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="867"/>
+        <location filename="../../src/SerialStudio.cpp" line="885"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="868"/>
+        <location filename="../../src/SerialStudio.cpp" line="886"/>
         <source>System</source>
         <translation>Система</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="869"/>
+        <location filename="../../src/SerialStudio.cpp" line="887"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="870"/>
+        <location filename="../../src/SerialStudio.cpp" line="888"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="871"/>
+        <location filename="../../src/SerialStudio.cpp" line="889"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="872"/>
+        <location filename="../../src/SerialStudio.cpp" line="890"/>
         <source>Shift-JIS</source>
         <translation>Shift-JIS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="873"/>
+        <location filename="../../src/SerialStudio.cpp" line="891"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="874"/>
+        <location filename="../../src/SerialStudio.cpp" line="892"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -11840,77 +11840,77 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
         <source>Session Details</source>
-        <translation type="unfinished"/>
+        <translation>Детали сессии</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="58"/>
         <source>Select a session to view details.</source>
-        <translation type="unfinished"/>
+        <translation>Выберите сессию для просмотра деталей.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="99"/>
         <source>Project:</source>
-        <translation type="unfinished">Проект:</translation>
+        <translation>Проект:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="112"/>
         <source>Started:</source>
-        <translation type="unfinished"/>
+        <translation>Начато:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="125"/>
         <source>Ended:</source>
-        <translation type="unfinished"/>
+        <translation>Завершено:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="131"/>
         <source>(in progress)</source>
-        <translation type="unfinished"/>
+        <translation>(в процессе)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="138"/>
         <source>Frames:</source>
-        <translation type="unfinished"/>
+        <translation>Кадры:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="154"/>
         <source>Notes</source>
-        <translation type="unfinished"/>
+        <translation>Заметки</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="165"/>
         <source>Add session notes...</source>
-        <translation type="unfinished"/>
+        <translation>Добавить заметки сеанса...</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="183"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Теги</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="236"/>
         <source>New tag...</source>
-        <translation type="unfinished"/>
+        <translation>Новый тег...</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="243"/>
         <source>Add</source>
-        <translation type="unfinished">Добавить</translation>
+        <translation>Добавить</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="277"/>
         <source>Replay</source>
-        <translation type="unfinished"/>
+        <translation>Воспроизвести</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="286"/>
         <source>Export CSV</source>
-        <translation type="unfinished"/>
+        <translation>Экспортировать CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="297"/>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
 </context>
 <context>
@@ -11918,37 +11918,37 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="19"/>
         <source>Sessions</source>
-        <translation type="unfinished"/>
+        <translation>Сеансы</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="62"/>
         <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="79"/>
         <source>Date</source>
-        <translation type="unfinished"/>
+        <translation>Дата</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="80"/>
         <source>Frames</source>
-        <translation type="unfinished"/>
+        <translation>Кадры</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="81"/>
         <source>Tags</source>
-        <translation type="unfinished"/>
+        <translation>Теги</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="177"/>
         <source>No sessions found.</source>
-        <translation type="unfinished"/>
+        <translation>Сеансы не найдены.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="178"/>
         <source>No session file open.</source>
-        <translation type="unfinished"/>
+        <translation>Файл сеанса не открыт.</translation>
     </message>
 </context>
 <context>
@@ -11956,99 +11956,100 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="338"/>
         <source>Open Session File</source>
-        <translation type="unfinished"/>
+        <translation>Открыть файл сеанса</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="340"/>
         <source>Session files (*.db)</source>
-        <translation type="unfinished"/>
+        <translation>Файлы сеансов (*.db)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="373"/>
         <source>Cannot open session file</source>
-        <translation type="unfinished"/>
+        <translation>Не удается открыть файл сеанса</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="532"/>
         <source>Delete session from %1?</source>
-        <translation type="unfinished"/>
+        <translation>Удалить сеанс из %1?</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="533"/>
         <source>All readings and raw data for this session will be permanently removed.</source>
-        <translation type="unfinished"/>
+        <translation>Все показания и необработанные данные для этого сеанса будут удалены навсегда.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="535"/>
         <source>Delete Session</source>
-        <translation type="unfinished"/>
+        <translation>Удалить сессию</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="557"/>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="847"/>
         <source>No project data</source>
-        <translation type="unfinished"/>
+        <translation>Нет данных проекта</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="558"/>
         <source>This session does not contain an embedded project file — the dashboard will fall back to a quick-plot layout.</source>
-        <translation type="unfinished"/>
+        <translation>Эта сессия не содержит встроенного файла проекта — панель управления перейдет к макету быстрого построения графиков.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
         <source>Export Session to CSV</source>
-        <translation type="unfinished"/>
+        <translation>Экспортировать сессию в CSV</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="681"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished">CSV файлы (*.csv)</translation>
+        <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="794"/>
         <source>Export Complete</source>
-        <translation type="unfinished"/>
+        <translation>Экспорт завершен</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="794"/>
         <source>Session exported to:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Сессия экспортирована в:
+%1</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="848"/>
         <source>This session file does not contain an embedded project.</source>
-        <translation type="unfinished"/>
+        <translation>Этот файл сессии не содержит встроенного проекта.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="858"/>
         <source>Invalid project data</source>
-        <translation type="unfinished"/>
+        <translation>Неверные данные проекта</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="859"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
-        <translation type="unfinished"/>
+        <translation>Встроенный проект JSON поврежден и не может быть восстановлен.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="871"/>
         <source>Restore Project</source>
-        <translation type="unfinished"/>
+        <translation>Восстановить Проект</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="871"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
-        <translation type="unfinished"/>
+        <translation>Проекты Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="879"/>
         <source>Cannot write file</source>
-        <translation type="unfinished"/>
+        <translation>Не удается записать файл</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="880"/>
         <source>Please check file permissions and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Пожалуйста, проверьте разрешения на файл и попробуйте снова.</translation>
     </message>
 </context>
 <context>
@@ -12056,66 +12057,66 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="200"/>
         <source>Open Session File</source>
-        <translation type="unfinished"/>
+        <translation>Открыть Файл Сессии</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="202"/>
         <source>Session files (*.db)</source>
-        <translation type="unfinished"/>
+        <translation>Файлы сессий (*.db)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="288"/>
         <location filename="../../src/Sessions/Player.cpp" line="351"/>
         <source>Device Connection Active</source>
-        <translation type="unfinished">Подключение Устройства Активно</translation>
+        <translation>Подключение Устройства Активно</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="289"/>
         <location filename="../../src/Sessions/Player.cpp" line="352"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation type="unfinished">Чтобы использовать эту функцию, необходимо отключиться от устройства. Вы хотите продолжить?</translation>
+        <translation>Чтобы использовать эту функцию, необходимо отключиться от устройства. Хотите продолжить?</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="310"/>
         <location filename="../../src/Sessions/Player.cpp" line="371"/>
         <source>Cannot open session file</source>
-        <translation type="unfinished"/>
+        <translation>Не удается открыть файл сессии</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="311"/>
         <location filename="../../src/Sessions/Player.cpp" line="372"/>
         <source>Please check file permissions and try again.</source>
-        <translation type="unfinished"/>
+        <translation>Пожалуйста, проверьте разрешения на файл и попробуйте снова.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="395"/>
         <source>No sessions found</source>
-        <translation type="unfinished"/>
+        <translation>Сеансы не найдены</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="396"/>
         <source>This file does not contain any recording sessions.</source>
-        <translation type="unfinished"/>
+        <translation>Этот файл не содержит сеансов записи.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="407"/>
         <source>Session has no columns</source>
-        <translation type="unfinished"/>
+        <translation>В сеансе нет столбцов</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="408"/>
         <source>The selected session is missing its column definitions.</source>
-        <translation type="unfinished"/>
+        <translation>В выбранном сеансе отсутствуют определения столбцов.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="416"/>
         <source>Session has no readings</source>
-        <translation type="unfinished"/>
+        <translation>В сеансе нет показаний</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/Player.cpp" line="417"/>
         <source>The selected session does not contain any frames.</source>
-        <translation type="unfinished"/>
+        <translation>Выбранный сеанс не содержит кадров.</translation>
     </message>
 </context>
 <context>
@@ -12449,7 +12450,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="216"/>
         <source>Console Only (No Parsing)</source>
-        <translation type="unfinished"/>
+        <translation>Только консоль (без разбора)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="229"/>
@@ -12489,7 +12490,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="328"/>
         <source>Create Session Log</source>
-        <translation type="unfinished"/>
+        <translation>Создать журнал сеанса</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="348"/>
@@ -12688,7 +12689,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="24"/>
         <source>Session Player</source>
-        <translation type="unfinished"/>
+        <translation>Воспроизведение сеанса</translation>
     </message>
 </context>
 <context>
@@ -12836,67 +12837,67 @@ function parse(%1) { ... }
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="183"/>
         <source>Dataset Values</source>
-        <translation type="unfinished"/>
+        <translation>Значения набора данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="193"/>
         <source>All datasets in the project, available for cross-referencing in transforms.</source>
-        <translation type="unfinished"/>
+        <translation>Все наборы данных в проекте, доступные для перекрестных ссылок в преобразованиях.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="201"/>
         <source>%1 datasets</source>
-        <translation type="unfinished"/>
+        <translation>%1 наборов данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="202"/>
         <source>%1 of %2 datasets</source>
-        <translation type="unfinished"/>
+        <translation>%1 из %2 наборов данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="243"/>
         <source>Search</source>
-        <translation type="unfinished">Поиск</translation>
+        <translation>Поиск</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="257"/>
         <source>ID</source>
-        <translation type="unfinished"/>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="258"/>
         <source>Group</source>
-        <translation type="unfinished">Группа</translation>
+        <translation>Группа</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
         <source>Dataset</source>
-        <translation type="unfinished">Набор данных</translation>
+        <translation>Набор данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="260"/>
         <source>Units</source>
-        <translation type="unfinished">Единицы</translation>
+        <translation>Единицы</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="329"/>
         <source>(virtual)</source>
-        <translation type="unfinished"/>
+        <translation>(виртуальный)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="373"/>
         <source>Copy ID %1 to clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Копировать ID %1 в буфер обмена</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="409"/>
         <source>No datasets defined in this project.</source>
-        <translation type="unfinished"/>
+        <translation>В этом проекте не определены наборы данных.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="410"/>
         <source>No datasets match your search.</source>
-        <translation type="unfinished"/>
+        <translation>Наборы данных, соответствующие вашему запросу, не найдены.</translation>
     </message>
 </context>
 <context>
@@ -13051,12 +13052,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="250"/>
         <source>Sessions</source>
-        <translation type="unfinished"/>
+        <translation>Сессии</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="252"/>
         <source>Browse, replay, and export recorded sessions</source>
-        <translation type="unfinished"/>
+        <translation>Просмотр, воспроизведение и экспорт записанных сессий</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
@@ -13369,18 +13370,18 @@ function parse(%1) { ... }
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="954"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1369"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="962"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1370"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1419"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1420"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (резервный)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1450"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1451"/>
         <source>LED Panel (%1)</source>
         <translation>Панель LED (%1)</translation>
     </message>
@@ -13532,107 +13533,107 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="174"/>
         <source>Registers shared across all transforms in the project.</source>
-        <translation type="unfinished"/>
+        <translation>Регистры, общие для всех преобразований в проекте.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="182"/>
         <source>%1 registers</source>
-        <translation type="unfinished"/>
+        <translation>%1 регистров</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="244"/>
         <source>Add Register</source>
-        <translation type="unfinished"/>
+        <translation>Добавить регистр</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="247"/>
         <source>Add register</source>
-        <translation type="unfinished"/>
+        <translation>Добавить регистр</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="257"/>
         <source>Insert Constant</source>
-        <translation type="unfinished"/>
+        <translation>Вставить константу</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="260"/>
         <source>Insert constant</source>
-        <translation type="unfinished"/>
+        <translation>Вставить константу</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="267"/>
         <source>Import</source>
-        <translation type="unfinished"/>
+        <translation>Импорт</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="270"/>
         <source>Import registers from CSV</source>
-        <translation type="unfinished"/>
+        <translation>Импортировать записи из CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="277"/>
         <source>Export</source>
-        <translation type="unfinished"/>
+        <translation>Экспорт</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="280"/>
         <source>Export registers to CSV</source>
-        <translation type="unfinished"/>
+        <translation>Экспортировать записи в CSV</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="296"/>
         <source>Rename table</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать таблицу</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="306"/>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="309"/>
         <source>Delete table</source>
-        <translation type="unfinished"/>
+        <translation>Удалить таблицу</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="360"/>
         <source>Permissions</source>
-        <translation type="unfinished"/>
+        <translation>Разрешения</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="361"/>
         <source>Register Name</source>
-        <translation type="unfinished"/>
+        <translation>Имя записи</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="362"/>
         <source>Default Value</source>
-        <translation type="unfinished"/>
+        <translation>Значение по умолчанию</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Только для чтения</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
         <source>Read/Write</source>
-        <translation type="unfinished"/>
+        <translation>Чтение/Запись</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="561"/>
         <source>Delete register</source>
-        <translation type="unfinished"/>
+        <translation>Удалить регистр</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="577"/>
         <source>No registers.</source>
-        <translation type="unfinished"/>
+        <translation>Нет регистров.</translation>
     </message>
 </context>
 <context>
@@ -13930,75 +13931,75 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="39"/>
         <source>Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Рабочая область</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="125"/>
         <source>Add Widget</source>
-        <translation type="unfinished"/>
+        <translation>Добавить Виджет</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="127"/>
         <source>Add widget to workspace</source>
-        <translation type="unfinished"/>
+        <translation>Добавить виджет в рабочую область</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="138"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="140"/>
         <source>Rename workspace</source>
-        <translation type="unfinished"/>
+        <translation>Переименовать рабочую область</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="149"/>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="151"/>
         <source>Delete workspace</source>
-        <translation type="unfinished"/>
+        <translation>Удалить рабочее пространство</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="173"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="179"/>
         <source>Group</source>
-        <translation type="unfinished">Группа</translation>
+        <translation>Группа</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="174"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="180"/>
         <source>Widget</source>
-        <translation type="unfinished">Виджет</translation>
+        <translation>Виджет</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="175"/>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="181"/>
         <source>Type</source>
-        <translation type="unfinished">Тип</translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="212"/>
         <source>(unknown)</source>
-        <translation type="unfinished"/>
+        <translation>(неизвестно)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="230"/>
         <source>(group widget)</source>
-        <translation type="unfinished"/>
+        <translation>(групповой виджет)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="285"/>
         <source>Remove from workspace</source>
-        <translation type="unfinished"/>
+        <translation>Удалить из рабочего пространства</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="304"/>
         <source>No widgets in this workspace.</source>
-        <translation type="unfinished"/>
+        <translation>В этом рабочем пространстве нет виджетов.</translation>
     </message>
 </context>
 <context>
@@ -14006,42 +14007,42 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="34"/>
         <source>Workspaces</source>
-        <translation type="unfinished">Рабочие пространства</translation>
+        <translation>Рабочие пространства</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="121"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>Настроить</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="123"/>
         <source>Edit workspaces manually</source>
-        <translation type="unfinished"/>
+        <translation>Редактировать рабочие пространства вручную</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="135"/>
         <source>Add Workspace</source>
-        <translation type="unfinished"/>
+        <translation>Добавить Рабочее Пространство</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="137"/>
         <source>Add workspace</source>
-        <translation type="unfinished"/>
+        <translation>Добавить рабочее пространство</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="151"/>
         <source>Title</source>
-        <translation type="unfinished">Заголовок</translation>
+        <translation>Заголовок</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="152"/>
         <source>Widgets</source>
-        <translation type="unfinished"/>
+        <translation>Виджеты</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="215"/>
         <source>No workspaces.</source>
-        <translation type="unfinished"/>
+        <translation>Нет рабочих пространств.</translation>
     </message>
 </context>
 </TS>

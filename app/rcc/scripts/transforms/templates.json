@@ -744,6 +744,30 @@
     }
   },
   {
+    "file": "table_calibration",
+    "name": "Calibration from Data Table",
+    "translations": {
+      "en_US": "Calibration from Data Table",
+      "es_MX": "Calibración desde tabla de datos",
+      "de_DE": "Kalibrierung aus Datentabelle",
+      "fr_FR": "Calibration depuis une table de données",
+      "it_IT": "Calibrazione da tabella dati",
+      "ja_JP": "データテーブルからのキャリブレーション",
+      "ko_KR": "데이터 테이블 기반 보정",
+      "pl_PL": "Kalibracja z tabeli danych",
+      "pt_BR": "Calibração a partir de tabela de dados",
+      "ru_RU": "Калибровка из таблицы данных",
+      "tr_TR": "Veri tablosundan kalibrasyon",
+      "zh_CN": "从数据表读取校准",
+      "cs_CZ": "Kalibrace z datové tabulky",
+      "uk_UA": "Калібрування з таблиці даних",
+      "hi_IN": "डेटा टेबल से कैलिब्रेशन",
+      "nl_NL": "Kalibratie uit datatabel",
+      "ro_RO": "Calibrare din tabel de date",
+      "sv_SE": "Kalibrering från datatabell"
+    }
+  },
+  {
     "file": "thermistor_steinhart",
     "name": "Thermistor (Steinhart-Hart)",
     "translations": {

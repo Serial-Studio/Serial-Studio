@@ -58,6 +58,27 @@ bool SerialStudio::activated()
 }
 
 /**
+ * @brief Checks whether Pro-only dashboard widgets (Plot3D, ImageView,
+ *        OutputPanel) should be materialised for this build.
+ *
+ * Single source of truth for the Pro-widget gate used by
+ * Dashboard::reconfigureDashboard and ProjectModel::buildAutoWorkspaces.
+ * Matches the stricter Trial+ tier check those callers share — a bare
+ * Hobbyist token does not unlock Pro widgets.
+ */
+bool SerialStudio::proWidgetsEnabled()
+{
+#ifdef BUILD_COMMERCIAL
+  const auto& token = Licensing::CommercialToken::current();
+  return token.isValid() && SS_LICENSE_GUARD()
+      && token.featureTier() >= Licensing::FeatureTier::Trial
+      && !token.variantName().isEmpty();
+#else
+  return false;
+#endif
+}
+
+/**
  * @brief Checks if a project configuration requires commercial features.
  *
  * This function inspects the provided list of JSON groups and determines
@@ -243,9 +264,6 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
 bool SerialStudio::groupEligibleForWorkspace(const DataModel::Group& g)
 {
   if (g.groupType == DataModel::GroupType::Output)
-    return false;
-
-  if (g.widget == QLatin1String("image"))
     return false;
 
   return true;

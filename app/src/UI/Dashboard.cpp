@@ -1349,14 +1349,7 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
   Q_ASSERT(streamAvailable());
 
   // Check commercial license status for Pro-only widgets
-#ifdef BUILD_COMMERCIAL
-  const auto& token = Licensing::CommercialToken::current();
-  const bool pro    = token.isValid() && SS_LICENSE_GUARD()
-                && token.featureTier() >= Licensing::FeatureTier::Trial
-                && !token.variantName().isEmpty();
-#else
-  const bool pro = false;
-#endif
+  const bool pro = SerialStudio::proWidgetsEnabled();
 
   // Save per-source cache before reset so multi-source merging still works
   auto savedSourceFrames = m_sourceRawFrames;

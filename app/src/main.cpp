@@ -57,7 +57,6 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include <QTimer>
-
 #  include "Licensing/LemonSqueezy.h"
 #endif
 

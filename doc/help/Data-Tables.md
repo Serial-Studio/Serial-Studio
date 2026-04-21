@@ -141,6 +141,168 @@ Table and register names are free-form strings, but keep them short and descript
 
 ---
 
+## Common use cases
+
+Here's a tour of patterns that come up repeatedly in real projects. Each one is a small recipe you can adapt rather than a fully finished template. The shipped **Calibration from Data Table** transform template covers the first pattern — open the transform editor's template picker and use it as a starting point.
+
+### Sensor calibration constants
+
+Problem: several datasets share the same calibration, and every firmware rev, lab recalibration, or field swap forces you to edit each transform by hand.
+
+Solution: store the calibration in a Constant register and read it from the transform.
+
+Table `calibration`:
+
+| Register | Type     | Default | Purpose                       |
+|----------|----------|---------|-------------------------------|
+| `slope`  | Constant | `0.01`  | V per ADC count               |
+| `offset` | Constant | `0.0`   | Zero-offset in volts          |
+
+```lua
+function transform(value)
+  local slope  = tableGet("calibration", "slope")  or 1.0
+  local offset = tableGet("calibration", "offset") or 0.0
+  return slope * value + offset
+end
+```
+
+When the sensor is recalibrated, edit the defaults in the Project Editor — every dataset using this transform picks up the new values on the next project load.
+
+### Unit conversions that change per deployment
+
+Same pattern, different use. A register called `units_per_count` lets you keep one generic transform but ship the project to customers on metric or imperial units without code changes. Good candidates: `m_to_ft`, `c_to_f`, `psi_to_bar`, `counts_per_rev`.
+
+### Thresholds and alarm limits
+
+Store your warning and critical levels in Constant registers and let a transform return a status code that downstream widgets can color by:
+
+Table `limits`:
+
+| Register  | Type     | Default |
+|-----------|----------|---------|
+| `warn_lo` | Constant | `10`    |
+| `warn_hi` | Constant | `80`    |
+| `crit_lo` | Constant | `0`     |
+| `crit_hi` | Constant | `95`    |
+
+```lua
+function transform(value)
+  local wl = tableGet("limits", "warn_lo")
+  local wh = tableGet("limits", "warn_hi")
+  local cl = tableGet("limits", "crit_lo")
+  local ch = tableGet("limits", "crit_hi")
+  if value <= cl or value >= ch then return 2  -- critical
+  elseif value <= wl or value >= wh then return 1  -- warning
+  else return 0 end  -- ok
+end
+```
+
+Pair this with a [virtual dataset](Dataset-Transforms.md#virtual-datasets) so the status has its own channel without consuming a frame index.
+
+### Derived quantities from other datasets
+
+The classic case: compute power from voltage and current. Create a virtual dataset whose transform reads both channels with `datasetGetFinal()`. The ordering rule is important — both source datasets must come before the derived one in project order.
+
+Assume voltage has uniqueId 10, current has 11:
+
+```lua
+function transform(value)
+  local v = datasetGetFinal(10)
+  local i = datasetGetFinal(11)
+  if v == nil or i == nil then return 0 end
+  return v * i
+end
+```
+
+Other classics that fit this shape: IMU accelerometer magnitude `sqrt(ax² + ay² + az²)`, RMS of three phase currents, torque × angular velocity, differential pressure from two absolute pressure channels.
+
+### Cross-dataset scratch pad within a frame
+
+If two transforms both need the output of an expensive calculation (an FFT peak, a filtered value, a CRC), compute it once in an earlier dataset, publish it to a Computed register, and read it from the later datasets. Computed registers reset at the start of every frame, so there's no risk of stale values leaking between frames.
+
+Table `runtime`:
+
+| Register      | Type     | Default |
+|---------------|----------|---------|
+| `filtered_v`  | Computed | `0`     |
+
+```lua
+-- Earlier dataset: compute and publish
+function transform(value)
+  local smoothed = 0.9 * (tableGet("runtime", "filtered_v") or value) + 0.1 * value
+  tableSet("runtime", "filtered_v", smoothed)
+  return smoothed
+end
+```
+
+```lua
+-- Later dataset: consume without recomputing
+function transform(value)
+  local f = tableGet("runtime", "filtered_v") or 0
+  return value - f  -- residual vs filtered baseline
+end
+```
+
+### Quality flags that downstream transforms respect
+
+Set a Computed register to a "data valid" flag from one transform and have the others branch on it. Useful when a single out-of-range channel should taint several derived channels:
+
+```lua
+-- Range check on a temperature probe
+function transform(value)
+  if value < -50 or value > 150 then
+    tableSet("runtime", "probe_ok", 0)
+  else
+    tableSet("runtime", "probe_ok", 1)
+  end
+  return value
+end
+```
+
+```lua
+-- Downstream dataset
+function transform(value)
+  if (tableGet("runtime", "probe_ok") or 0) == 0 then
+    return 0  -- or a sentinel your widgets recognize
+  end
+  return value
+end
+```
+
+### Tunable filter parameters
+
+Keep the filter state in transform-local (closure/top-level) variables, but put the knob — cutoff, alpha, window size — in a Constant register. That separates *configuration* (in the table) from *running state* (in the script), and lets you re-tune a filter without editing its code.
+
+```lua
+local ema
+
+function transform(value)
+  local alpha = tableGet("filters", "ema_alpha") or 0.1
+  if ema == nil then ema = value end
+  ema = alpha * value + (1 - alpha) * ema
+  return ema
+end
+```
+
+### Nameplate and identity strings
+
+Registers can hold strings, not just numbers. A Constant register with a device serial number, firmware version, or site ID is occasionally useful when a transform produces a string output (for a log message, an MQTT topic, or a console line).
+
+```lua
+function transform(value)
+  local serial = tableGet("device", "serial") or "unknown"
+  return string.format("%s=%.2f", serial, value)
+end
+```
+
+### What *not* to do
+
+- **Don't expect Computed registers to survive between frames.** They reset every frame. For running state (filters, accumulators, peak tracking), use local variables in the transform itself.
+- **Don't put arrays in a register.** Registers are scalars. Use multiple registers or multiple datasets.
+- **Don't use a data table as a configuration dialog.** Tables persist with the project file, so editing a Constant register always means saving the project. For UI knobs that change at runtime, use an Output widget instead.
+
+---
+
 ## Virtual datasets
 
 A virtual dataset has no Frame Index. It receives no value from the frame parser and computes its entire output from transforms. Pair a virtual dataset with a transform that reads other datasets or table registers, and you can add a derived channel that's plotted, exported, and broadcast to the API alongside the real data.
