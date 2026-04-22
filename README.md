@@ -13,7 +13,9 @@ Connect an Arduino, ESP32, STM32, Raspberry Pi, Teensy, or any device that speak
 
 It runs on Windows, macOS, Linux, and Raspberry Pi.
 
-### What you can do with it
+![Software usage](doc/screenshot.png)
+
+## What you can do with it
 
 **Connect to almost anything.** Serial/UART, Bluetooth LE, TCP/UDP, CAN Bus, Modbus TCP/RTU, MQTT, Audio, raw USB (libusb), HID (gamepads, custom devices), and Process I/O. Projects can connect to multiple devices at once, each with its own protocol.
 
@@ -32,8 +34,6 @@ It runs on Windows, macOS, Linux, and Raspberry Pi.
 **Industrial and automotive ready.** A Modbus register-map importer (CSV/XML/JSON) builds a ready-to-use project from vendor documentation. DBC files import decoded CAN signals.
 
 New here? Have a look at the [help center](https://serial-studio.com/help) for FAQs, use cases, and comparisons with similar tools.
-
-![Software usage](doc/screenshot.png)
 
 ## Download
 
