@@ -17,11 +17,11 @@ It runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Connect to almost anything.** Serial/UART, Bluetooth LE, TCP/UDP, CAN Bus, Modbus TCP/RTU, MQTT, Audio, raw USB (libusb), HID (gamepads, custom devices), and Process I/O. Projects can connect to multiple devices at once, each with its own protocol.
 
-**Visualize data live.** 15+ widget types — line plots, XY plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed. 60 FPS updates with under 50 ms latency.
+**Visualize data live.** 15+ widget types, including line plots, XY plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed. 60 FPS updates with under 50 ms latency.
 
-**Configure dashboards without custom code.** The Project Editor is a structured editor where you define groups, datasets, and widgets through forms — closer to editing a schema than coding a UI. Or skip the project file entirely with Quick Plot: print comma-separated values from your device and see them plot instantly. Workspaces split large projects into focused tabs, with a taskbar search for big setups.
+**Configure dashboards without custom code.** The Project Editor lets you define groups, datasets, and widgets through structured forms, closer to editing a schema than coding a UI. Or skip the project file entirely with Quick Plot: print comma-separated values from your device and see them plot instantly. Workspaces split large projects into focused tabs, with a taskbar search for big setups.
 
-**Parse and transform data.** Write frame parsers in JavaScript or Lua 5.4, or pick from 20+ templates (MAVLink, NMEA, UBX, RTCM, MessagePack, COBS, SLIP, JSON, Modbus, and more). Apply per-dataset transforms (EMA filters, scaling, calibration, unit conversion) with short scripts that run every frame — no re-flashing firmware. Data Tables act as a shared bus so transforms can derive virtual datasets from each other.
+**Parse and transform data.** Write frame parsers in JavaScript or Lua 5.4, or pick from 20+ templates (MAVLink, NMEA, UBX, RTCM, MessagePack, COBS, SLIP, JSON, Modbus, and more). Apply per-dataset transforms (EMA filters, scaling, calibration, unit conversion) with short scripts that run every frame, no re-flashing firmware needed. Data Tables act as a shared bus so transforms can derive virtual datasets from each other.
 
 **Send commands back.** Buttons, toggles, sliders, knobs, text fields, and freeform output panels run JS templates that emit GCode, SCPI, Modbus, NMEA, CAN, or any other protocol your device speaks. Define Actions with optional timers for polling or periodic control.
 
@@ -88,13 +88,13 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance 
 
 ### How it works
 
-- **Project file mode (recommended):** Define your data format and dashboard in the Project Editor — structured forms for groups, datasets, and widgets.
+- **Project file mode (recommended):** Define your data format and dashboard in the Project Editor, using structured forms for groups, datasets, and widgets.
 - **Quick plot mode:** Drop in comma-separated values from Arduino and get an instant plot.
 - **Console only mode:** Use Serial Studio as a plain terminal without any dashboard.
 
 ### What it can do
 
-- **Structured project editor.** Configure groups, datasets, widgets, and actions through forms — no UI code to write.
+- **Structured project editor.** Configure groups, datasets, widgets, and actions through forms. No UI code to write.
 - **10+ protocols.** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, raw USB, HID, and Process I/O.
 - **15+ visualization widgets.** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids, 3D views, and live camera feed (Pro).
 - **Output widgets.** Send commands back to your device via buttons, toggles, sliders, knobs, text fields, and freeform output panels, powered by JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).

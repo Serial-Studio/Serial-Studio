@@ -50,7 +50,7 @@ Pick the "Console Only (No Parsing)" radio button in the Setup panel.
 - **Frame detection.** None. Serial Studio doesn't scan for delimiters, doesn't buffer frames, and doesn't build a dashboard.
 - **Data flow.** Raw bytes from the data source go straight to the terminal. The circular buffer, frame queue, and FrameBuilder are all skipped.
 - **Display.** The terminal shows the raw stream in ASCII or hex. You can still save the console transcript to a file.
-- **Transmit.** The console input box still works — you can send bytes back to the device.
+- **Transmit.** The console input box still works, so you can send bytes back to the device.
 
 Console Only is not a parsing mode. No widgets render, no CSV export, no frame parser scripts. It exists purely as a diagnostic view.
 
@@ -256,4 +256,4 @@ If you're hooking up a new device and don't yet know what it sends, start in **C
 
 Once you can see clean comma-separated numbers in the console, switch to **Quick Plot**. You'll get a dashboard with one plot per CSV field in seconds, with no configuration.
 
-Once you need more control — specific widget types, unit labels, alarm thresholds, a polished dashboard layout, binary protocol parsing, or multiple concurrent data sources — move to **Project File** mode. Open the Project Editor, define your groups and datasets, save a `.ssproj` file, and load it from the Setup panel. This is the recommended mode for most real-world projects.
+Once you need more control (specific widget types, unit labels, alarm thresholds, a polished dashboard layout, binary protocol parsing, or multiple concurrent data sources), move to **Project File** mode. Open the Project Editor, define your groups and datasets, save a `.ssproj` file, and load it from the Setup panel. This is the recommended mode for most real-world projects.

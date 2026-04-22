@@ -225,7 +225,7 @@ Configure your I/O interface and click **Connect**. Serial Studio uses your proj
 
 ## Your first connection: Console Only mode
 
-Console Only is a diagnostic mode. Serial Studio doesn't try to parse anything — raw bytes from the data source go straight to the terminal. Use it when you want to verify that a device is alive, check the baud rate and framing, or send commands interactively.
+Console Only is a diagnostic mode. Serial Studio doesn't try to parse anything; raw bytes from the data source go straight to the terminal. Use it when you want to verify that a device is alive, check the baud rate and framing, or send commands interactively.
 
 ### Steps
 
@@ -249,7 +249,7 @@ Serial Studio has three operation modes. The right one depends on how much contr
 |----------------------|--------|
 | Configuration needed | None |
 | Data format          | Any (bytes are never parsed) |
-| Dashboard generated  | None — raw bytes go to the terminal |
+| Dashboard generated  | None; raw bytes go to the terminal |
 | Best for             | Probing an unknown device, debugging baud/wiring, AT commands |
 
 Console Only turns Serial Studio into a bidirectional terminal. No frame detection, no dashboard, no parsing. Switch to it whenever you want to see exactly what bytes are coming out of your device.

@@ -143,7 +143,7 @@ Table and register names are free-form strings, but keep them short and descript
 
 ## Common use cases
 
-Here's a tour of patterns that come up repeatedly in real projects. Each one is a small recipe you can adapt rather than a fully finished template. The shipped **Calibration from Data Table** transform template covers the first pattern — open the transform editor's template picker and use it as a starting point.
+Here's a tour of patterns that come up repeatedly in real projects. Each one is a small recipe you can adapt rather than a fully finished template. The shipped **Calibration from Data Table** transform template covers the first pattern; open the transform editor's template picker and use it as a starting point.
 
 ### Sensor calibration constants
 
@@ -166,7 +166,7 @@ function transform(value)
 end
 ```
 
-When the sensor is recalibrated, edit the defaults in the Project Editor — every dataset using this transform picks up the new values on the next project load.
+When the sensor is recalibrated, edit the defaults in the Project Editor. Every dataset using this transform picks up the new values on the next project load.
 
 ### Unit conversions that change per deployment
 
@@ -201,7 +201,7 @@ Pair this with a [virtual dataset](Dataset-Transforms.md#virtual-datasets) so th
 
 ### Derived quantities from other datasets
 
-The classic case: compute power from voltage and current. Create a virtual dataset whose transform reads both channels with `datasetGetFinal()`. The ordering rule is important — both source datasets must come before the derived one in project order.
+The classic case: compute power from voltage and current. Create a virtual dataset whose transform reads both channels with `datasetGetFinal()`. The ordering rule matters: both source datasets must come before the derived one in project order.
 
 Assume voltage has uniqueId 10, current has 11:
 
@@ -271,7 +271,7 @@ end
 
 ### Tunable filter parameters
 
-Keep the filter state in transform-local (closure/top-level) variables, but put the knob — cutoff, alpha, window size — in a Constant register. That separates *configuration* (in the table) from *running state* (in the script), and lets you re-tune a filter without editing its code.
+Keep the filter state in transform-local (closure/top-level) variables, but put the knob (cutoff, alpha, window size) in a Constant register. That separates *configuration* (in the table) from *running state* (in the script), and lets you re-tune a filter without editing its code.
 
 ```lua
 local ema

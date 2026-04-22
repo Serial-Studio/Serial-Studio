@@ -105,7 +105,7 @@ Session DBs grow linearly with data rate and session length. There's no built-in
 | Archive every run of a project, then search, tag, or replay later | Session database (Pro)    |
 | A shareable, printable summary with charts for a customer or lab notebook | Session report (Pro) |
 
-CSV and MDF4 produce one file per session. The session database produces one file per project, indexed by session, with replay and metadata built in. Session reports are rendered on demand from the database — one HTML or PDF per session, ready to email or archive. They're not mutually exclusive: you can use all of them together.
+CSV and MDF4 produce one file per session. The session database produces one file per project, indexed by session, with replay and metadata built in. Session reports are rendered on demand from the database: one HTML or PDF per session, ready to email or archive. They're not mutually exclusive: you can use all of them together.
 
 ---
 

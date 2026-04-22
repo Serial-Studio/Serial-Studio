@@ -28,7 +28,7 @@ The report has four sections, each independently toggleable:
 |---|---|
 | **Cover page** | Logo, company name, document title, project name, session ID, duration, sample count, parameter count, start/end timestamps, author, generation date |
 | **Test information** | Project title, session ID, start/end times, duration, sample count, parameter count, tags (as chips), and session notes |
-| **Measurement summary** | Per-parameter table — sample count, min, max, mean, standard deviation. Non-numeric datasets show `—` for numeric columns |
+| **Measurement summary** | Per-parameter table with sample count, min, max, mean, and standard deviation. Non-numeric datasets show `—` for numeric columns |
 | **Parameter trends** | One Chart.js line chart per numeric dataset, laid out in a responsive grid. A screen-only overlay chart (hidden on print) plots all parameters on shared axes for shape comparison |
 
 ---
@@ -62,8 +62,8 @@ Both formats ship the same content, rendered from the same template.
 | | **HTML** | **PDF** |
 |---|---|---|
 | Single file | Yes | Yes |
-| Self-contained | Yes — Chart.js, CSS, JS, and logo are inlined | N/A (rasterized) |
-| Interactive charts | Yes — hover, tooltip, overlay toggle | No — charts are rendered as images |
+| Self-contained | Yes (Chart.js, CSS, JS, and logo are inlined) | N/A (rasterized) |
+| Interactive charts | Yes (hover, tooltip, overlay toggle) | No (charts are rendered as images) |
 | File size | Larger (embeds Chart.js + raw data) | Smaller, fixed per page count |
 | Best for | Internal review, web sharing, debugging | Customer deliverables, regulatory submissions, printing |
 
@@ -73,7 +73,7 @@ Choose **Export Both** to get an interactive version for your team and a printab
 
 ## How charts are rendered
 
-Charts use **Chart.js 4.x**, bundled inside Serial Studio. No network access is required — the full library, stylesheet, and client runtime are embedded in the HTML at render time.
+Charts use **Chart.js 4.x**, bundled inside Serial Studio. No network access is required, since the full library, stylesheet, and client runtime are embedded in the HTML at render time.
 
 ### Downsampling
 
@@ -90,7 +90,7 @@ Tick labels use scientific notation for values with magnitude below 10⁻³ or a
 ## Performance notes
 
 - HTML export is near-instant for any session size: the template inlines the data as JSON and all rendering happens in the browser when the file is opened.
-- PDF export is slower — Serial Studio loads the HTML in an off-screen browser, waits for Chart.js to finish rendering, then rasterizes the page. Expect a few seconds for sessions with many datasets.
+- PDF export is slower. Serial Studio loads the HTML in an off-screen browser, waits for Chart.js to finish rendering, then rasterizes the page. Expect a few seconds for sessions with many datasets.
 - The report is independent of the live project: it pulls session data directly from the SQLite database, so you can regenerate reports from archived sessions long after the original project has changed.
 
 ---
