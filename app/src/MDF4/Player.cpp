@@ -390,7 +390,6 @@ void MDF4::Player::openFile()
                                  tr("MDF4 files (*.mf4 *.dat)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())

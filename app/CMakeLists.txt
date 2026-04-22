@@ -408,6 +408,8 @@ set(QML_SOURCES
   qml/DatabaseExplorer/DatabaseExplorer.qml
   qml/DatabaseExplorer/SessionList.qml
   qml/DatabaseExplorer/SessionDetail.qml
+  qml/DatabaseExplorer/ReportOptionsDialog.qml
+  qml/DatabaseExplorer/ReportProgressDialog.qml
   qml/Dialogs/Donate.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/IconPicker.qml
@@ -524,7 +526,9 @@ if(BUILD_COMMERCIAL)
     src/Licensing/CommercialToken.h
     src/Sessions/DatabaseManager.h
     src/Sessions/Export.h
+    src/Sessions/HtmlReport.h
     src/Sessions/Player.h
+    src/Sessions/ReportData.h
     src/ThirdParty/miniaudio.h
     src/UI/Widgets/Output/Base.h
     src/UI/Widgets/Output/Button.h
@@ -564,7 +568,9 @@ if(BUILD_COMMERCIAL)
     src/Licensing/CommercialToken.cpp
     src/Sessions/DatabaseManager.cpp
     src/Sessions/Export.cpp
+    src/Sessions/HtmlReport.cpp
     src/Sessions/Player.cpp
+    src/Sessions/ReportData.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/SimpleCrypt.cpp
@@ -749,9 +755,13 @@ elseif(APPLE)
     ${ICON_MACOSX}
     ${ASSETS_MACOSX}
     "src/Platform/NativeWindow_macOS.mm"
+    "src/Misc/Utilities_macOS.mm"
   )
 
-  set_source_files_properties("src/Platform/NativeWindow_macOS.mm" 
+  set_source_files_properties("src/Platform/NativeWindow_macOS.mm"
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+  )
+  set_source_files_properties("src/Misc/Utilities_macOS.mm"
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )
 elseif(UNIX)

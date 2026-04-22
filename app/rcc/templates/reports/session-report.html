@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{DOCUMENT_TITLE}}</title>
+
+  <!-- ===========================================================
+       Chart.js — embedded verbatim at export time so the document
+       is fully self-contained. Licence: MIT (see LICENSE.md).
+       =========================================================== -->
+  <script>{{CHART_JS}}</script>
+
+  <!-- ===========================================================
+       Report stylesheet — inlined for portability.
+       =========================================================== -->
+  <style>{{REPORT_CSS}}</style>
+</head>
+<body>
+
+  <!-- ===========================================================
+       Screen-only toolbar — hidden on @media print.
+       =========================================================== -->
+  <header class="toolbar screen-only">
+    <span class="brand">
+      {{BRAND_ICON_SVG}}
+      Serial Studio
+    </span>
+    <span class="spacer"></span>
+    <button id="print-button" class="primary" type="button">
+      Print to PDF
+    </button>
+  </header>
+
+  <!-- ===========================================================
+       Page sheet — mimics a physical document at screen zoom.
+       =========================================================== -->
+  <main class="page">
+
+    {{COVER_SECTION}}
+    {{METADATA_SECTION}}
+    {{SUMMARY_SECTION}}
+    {{CHARTS_SECTION}}
+
+  </main>
+
+  <!-- ===========================================================
+       Decimated time-series for every numeric parameter. Consumed
+       by session-report.js to build Chart.js line charts.
+       =========================================================== -->
+  <script id="report-data" type="application/json">{{REPORT_DATA_JSON}}</script>
+
+  <!-- ===========================================================
+       Runtime — embedded at export time.
+       =========================================================== -->
+  <script>{{REPORT_JS}}</script>
+</body>
+</html>

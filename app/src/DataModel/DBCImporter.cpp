@@ -129,7 +129,6 @@ void DataModel::DBCImporter::importDBC()
     new QFileDialog(nullptr, tr("Import DBC File"), p, tr("DBC Files (*.dbc);;All Files (*)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())
       showPreview(path);

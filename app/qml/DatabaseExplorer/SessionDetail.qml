@@ -37,6 +37,19 @@ Widgets.Pane {
     }
   }
 
+  //
+  // Report options dialog — opened by the Generate Report button
+  //
+  ReportOptionsDialog {
+    id: _reportDialog
+  }
+
+  //
+  // Progress dialog — auto-opens on the busy signal, closes when done
+  //
+  ReportProgressDialog {
+  }
+
   ColumnLayout {
     spacing: 0
     anchors {
@@ -287,6 +300,15 @@ Widgets.Pane {
             icon.source: "qrc:/rcc/icons/buttons/export-csv.svg"
             onClicked: Cpp_Sessions_Manager.exportSessionToCsv(root.sessionId)
             enabled: (root.metadata.frame_count || 0) > 0 && !Cpp_Sessions_Manager.csvExportBusy
+          }
+
+          Button {
+            icon.width: 18
+            icon.height: 18
+            text: qsTr("Generate Report")
+            icon.source: "qrc:/rcc/icons/buttons/report.svg"
+            onClicked: _reportDialog.openFor(root.sessionId)
+            enabled: (root.metadata.frame_count || 0) > 0 && !Cpp_Sessions_Manager.pdfExportBusy
           }
 
           Item { Layout.fillWidth: true }

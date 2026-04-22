@@ -128,7 +128,6 @@ void DataModel::ModbusMapImporter::importRegisterMap()
   dialog->setNameFilter(
     tr("Modbus Register Maps (*.csv *.xml *.json);;CSV Files (*.csv);;XML Files "
        "(*.xml);;JSON Files (*.json);;All Files (*)"));
-  dialog->setOption(QFileDialog::DontUseNativeDialog, true);
 
   connect(dialog, &QFileDialog::fileSelected, this, &DataModel::ModbusMapImporter::showPreview);
   connect(dialog, &QFileDialog::finished, dialog, &QObject::deleteLater);

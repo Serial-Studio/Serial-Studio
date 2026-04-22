@@ -32,7 +32,9 @@
 #  include "Misc/WorkspaceManager.h"
 #  include "SerialStudio.h"
 #  include "Sessions/Export.h"
+#  include "Sessions/HtmlReport.h"
 #  include "Sessions/Player.h"
+#  include "Sessions/ReportData.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -55,6 +57,34 @@ static QString formatDateForDisplay(const QString& isoDate)
   return dt.toString(QStringLiteral("MMM d, yyyy — h:mm AP"));
 }
 
+/**
+ * @brief Scrubs a project title for use as a folder/file name component.
+ *
+ * Removes POSIX/Windows-forbidden characters, collapses whitespace, and
+ * falls back to "Untitled" if nothing survives. Kept as a free function
+ * so both @c canonicalDbPath and the per-project Reports directory can
+ * share the same sanitation logic.
+ */
+static QString sanitiseTitleForPath(const QString& title)
+{
+  QString safe = title;
+  safe.remove(QChar('/'));
+  safe.remove(QChar('\\'));
+  safe.remove(QChar(':'));
+  safe.remove(QChar('*'));
+  safe.remove(QChar('?'));
+  safe.remove(QChar('"'));
+  safe.remove(QChar('<'));
+  safe.remove(QChar('>'));
+  safe.remove(QChar('|'));
+  safe.remove(QChar('\0'));
+  safe.remove(QStringLiteral(".."));
+  safe = safe.simplified();
+  if (safe.isEmpty())
+    safe = QStringLiteral("Untitled");
+  return safe;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton
 //--------------------------------------------------------------------------------------------------
@@ -63,7 +93,12 @@ static QString formatDateForDisplay(const QString& isoDate)
  * @brief Initializes member variables. External connections are deferred to
  * @c setupExternalConnections() to avoid static-init-order issues.
  */
-Sessions::DatabaseManager::DatabaseManager() : m_selectedSessionId(-1), m_csvExportBusy(false) {}
+Sessions::DatabaseManager::DatabaseManager()
+  : m_selectedSessionId(-1)
+  , m_csvExportBusy(false)
+  , m_pdfExportBusy(false)
+  , m_pdfExportProgress(0.0)
+{}
 
 /**
  * @brief Closes the database before the singleton destructs.
@@ -147,6 +182,30 @@ int Sessions::DatabaseManager::selectedSessionId() const
 bool Sessions::DatabaseManager::csvExportBusy() const
 {
   return m_csvExportBusy;
+}
+
+/**
+ * @brief Returns @c true while a PDF report is being rendered.
+ */
+bool Sessions::DatabaseManager::pdfExportBusy() const
+{
+  return m_pdfExportBusy;
+}
+
+/**
+ * @brief Returns the user-facing status label for the active export.
+ */
+QString Sessions::DatabaseManager::pdfExportStatus() const
+{
+  return m_pdfExportStatus;
+}
+
+/**
+ * @brief Returns the active export's progress as a fraction in [0, 1].
+ */
+double Sessions::DatabaseManager::pdfExportProgress() const
+{
+  return m_pdfExportProgress;
 }
 
 /**
@@ -297,31 +356,35 @@ QString Sessions::DatabaseManager::sessionProjectJson(int sessionId) const
 }
 
 /**
+ * @brief Opens a native QFileDialog to pick a logo for the report.
+ *
+ * Emits @c reportLogoPicked with the chosen path, or does nothing if the
+ * user cancels. Matches the rest of the app's file pickers.
+ */
+void Sessions::DatabaseManager::pickReportLogo()
+{
+  auto* dialog = new QFileDialog(
+    nullptr, tr("Select logo image"), QString(), tr("Images (*.png *.jpg *.jpeg *.svg)"));
+  dialog->setAcceptMode(QFileDialog::AcceptOpen);
+  dialog->setFileMode(QFileDialog::ExistingFile);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    dialog->deleteLater();
+    if (!path.isEmpty())
+      Q_EMIT reportLogoPicked(path);
+  });
+
+  dialog->open();
+}
+
+/**
  * @brief Returns the canonical .db path for a project title. Export uses this
  * to decide whether to create a new file or append to an existing one.
  */
 QString Sessions::DatabaseManager::canonicalDbPath(const QString& projectTitle)
 {
-  // Scrub characters that can escape the SQLite directory or break POSIX /
-  // Windows filesystems. Collapse whitespace, fall back to "Untitled" when
-  // nothing survives the scrub.
-  QString safeTitle = projectTitle;
-  safeTitle.remove(QChar('/'));
-  safeTitle.remove(QChar('\\'));
-  safeTitle.remove(QChar(':'));
-  safeTitle.remove(QChar('*'));
-  safeTitle.remove(QChar('?'));
-  safeTitle.remove(QChar('"'));
-  safeTitle.remove(QChar('<'));
-  safeTitle.remove(QChar('>'));
-  safeTitle.remove(QChar('|'));
-  safeTitle.remove(QChar('\0'));
-  safeTitle.remove(QStringLiteral(".."));
-  safeTitle = safeTitle.simplified();
-  if (safeTitle.isEmpty())
-    safeTitle = QStringLiteral("Untitled");
-
-  const auto subdir = Misc::WorkspaceManager::instance().path("Session Databases");
+  const QString safeTitle = sanitiseTitleForPath(projectTitle);
+  const auto subdir       = Misc::WorkspaceManager::instance().path("Session Databases");
   return QStringLiteral("%1/%2/%2.db").arg(subdir, safeTitle);
 }
 
@@ -340,7 +403,6 @@ void Sessions::DatabaseManager::openDatabase()
                                  tr("Session files (*.db)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())
@@ -792,6 +854,168 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
 
   Misc::Utilities::showMessageBox(
     tr("Export Complete"), tr("Session exported to:\n%1").arg(path), QMessageBox::Information);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Session report export (HTML + PDF via QWebEngine)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Renders a session report using the options bundle from QML.
+ *
+ * Despite the legacy name, this slot can emit HTML, PDF, or both — the
+ * format is selected via @c options["outputFormat"] ("pdf", "html", "both").
+ * The PDF path is async (QWebEngine drives it), so the method returns
+ * immediately and the eventual result is delivered via @c pdfExportFinished.
+ *
+ * @param sessionId Session to export.
+ * @param options   QVariantMap populated by @c ReportOptionsDialog.qml.
+ */
+void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariantMap& options)
+{
+  if (!isOpen() || m_pdfExportBusy)
+    return;
+
+  // Translate the QVariantMap into typed options
+  HtmlReportOptions opts;
+  opts.outputPath    = options.value("outputPath").toString();
+  opts.companyName   = options.value("companyName").toString();
+  opts.documentTitle = options.value("documentTitle").toString();
+  opts.authorName    = options.value("authorName").toString();
+  opts.logoPath      = options.value("logoPath").toString();
+  opts.pageSize =
+    static_cast<QPageSize::PageSizeId>(options.value("pageSize", QPageSize::A4).toInt());
+  opts.orientation = static_cast<QPageLayout::Orientation>(
+    options.value("orientation", QPageLayout::Portrait).toInt());
+  opts.includeCover    = options.value("includeCover", true).toBool();
+  opts.includeMetadata = options.value("includeMetadata", true).toBool();
+  opts.includeStats    = options.value("includeStats", true).toBool();
+  opts.includeCharts   = options.value("includeCharts", true).toBool();
+  opts.lineWidth       = options.value("lineWidth", 1.4).toDouble();
+  opts.lineStyle       = options.value("lineStyle", QStringLiteral("solid")).toString();
+
+  // Decode the output format string — defaults to PDF for backwards compat
+  const QString fmtStr = options.value("outputFormat", QStringLiteral("pdf")).toString().toLower();
+  if (fmtStr == QStringLiteral("html"))
+    opts.format = HtmlReportOptions::Format::Html;
+  else if (fmtStr == QStringLiteral("both"))
+    opts.format = HtmlReportOptions::Format::Both;
+  else
+    opts.format = HtmlReportOptions::Format::Pdf;
+
+  // Runs the export once the output path is known (picker-fed or preset)
+  auto startExport = [this, sessionId](HtmlReportOptions opts) {
+    // HTML-only is synchronous — don't flash the progress dialog for it
+    const bool reportBusy = (opts.format != HtmlReportOptions::Format::Html);
+    if (reportBusy) {
+      m_pdfExportBusy     = true;
+      m_pdfExportProgress = 0.0;
+      m_pdfExportStatus   = tr("Preparing export…");
+      Q_EMIT pdfExportBusyChanged();
+      Q_EMIT pdfExportProgressChanged();
+    }
+
+    // Assemble the data bundle from SQL
+    const auto data = ReportData::buildFromSession(m_db, sessionId);
+
+    // Load decimated time-series when the caller asked for charts.
+    // 1200 points ≈ 300 buckets × 4 per-bucket — close to one bucket per
+    // pixel at landscape-A4 print width, preserving the signal envelope.
+    std::vector<DatasetSeries> series;
+    if (opts.includeCharts)
+      series = loadChartSeries(m_db, sessionId, 1200);
+
+    // Renderer emits finished() exactly once; parented so Qt cleans up
+    auto* renderer = new HtmlReport(this);
+
+    if (reportBusy) {
+      connect(renderer, &HtmlReport::progress, this, [this](const QString& status, double percent) {
+        m_pdfExportStatus   = status;
+        m_pdfExportProgress = percent;
+        Q_EMIT pdfExportProgressChanged();
+      });
+    }
+
+    connect(renderer,
+            &HtmlReport::finished,
+            this,
+            [this, renderer, reportBusy](const QString& outputPath, bool ok) {
+              if (reportBusy) {
+                m_pdfExportBusy     = false;
+                m_pdfExportProgress = 1.0;
+                m_pdfExportStatus   = ok ? tr("Done") : tr("Failed");
+                Q_EMIT pdfExportBusyChanged();
+                Q_EMIT pdfExportProgressChanged();
+              }
+              Q_EMIT pdfExportFinished(outputPath, ok);
+
+              if (ok) {
+                // Reveal in Finder/Explorer — the user's next action anyway
+                Misc::Utilities::revealFile(outputPath);
+              } else {
+                Misc::Utilities::showMessageBox(
+                  tr("Report Failed"),
+                  tr("Could not generate the report. Check the output path and try again."),
+                  QMessageBox::Warning);
+              }
+
+              renderer->deleteLater();
+            });
+
+    renderer->render(data, std::move(series), opts);
+  };
+
+  // Preset path skips the picker; otherwise fall through to the save dialog
+  if (!opts.outputPath.isEmpty()) {
+    startExport(std::move(opts));
+    return;
+  }
+
+  const bool wantsPdf  = (opts.format != HtmlReportOptions::Format::Html);
+  const QString ext    = wantsPdf ? QStringLiteral("pdf") : QStringLiteral("html");
+  const QString title  = wantsPdf ? tr("Save PDF Report") : tr("Save HTML Report");
+  const QString filter = wantsPdf ? tr("PDF files (*.pdf)") : tr("HTML files (*.html)");
+
+  // Default directory matches the per-project nesting used by other exporters
+  const auto meta         = sessionMetadata(sessionId);
+  const QString projTitle = meta.value("project_title").toString();
+  const QString safeProj  = sanitiseTitleForPath(projTitle);
+  const QString dir =
+    QStringLiteral("%1/%2").arg(Misc::WorkspaceManager::instance().path("Reports"), safeProj);
+  QDir().mkpath(dir);
+
+  const QString baseName  = opts.documentTitle.isEmpty()
+                            ? QStringLiteral("session_%1").arg(sessionId)
+                            : sanitiseTitleForPath(opts.documentTitle);
+  const QString suggested = QStringLiteral("%1/%2.%3").arg(dir, baseName, ext);
+
+  auto* dialog = new QFileDialog(nullptr, title, suggested, filter);
+  dialog->setAcceptMode(QFileDialog::AcceptSave);
+  dialog->setFileMode(QFileDialog::AnyFile);
+
+  // fileSelected also fires on cancel — empty path → re-enable the QML button
+  connect(dialog,
+          &QFileDialog::fileSelected,
+          this,
+          [this, dialog, opts, ext, startExport](const QString& path) mutable {
+            dialog->deleteLater();
+
+            if (path.isEmpty()) {
+              Q_EMIT pdfExportFinished(QString(), false);
+              return;
+            }
+
+            // Enforce the expected extension if the user typed a bare name
+            QString finalPath = path;
+            const QString dot = QStringLiteral(".") + ext;
+            if (!finalPath.endsWith(dot, Qt::CaseInsensitive))
+              finalPath += dot;
+
+            opts.outputPath = finalPath;
+            startExport(std::move(opts));
+          });
+
+  dialog->open();
 }
 
 //--------------------------------------------------------------------------------------------------

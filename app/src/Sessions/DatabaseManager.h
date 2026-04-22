@@ -65,6 +65,15 @@ class DatabaseManager : public QObject {
   Q_PROPERTY(bool csvExportBusy
              READ csvExportBusy
              NOTIFY csvExportBusyChanged)
+  Q_PROPERTY(bool pdfExportBusy
+             READ pdfExportBusy
+             NOTIFY pdfExportBusyChanged)
+  Q_PROPERTY(QString pdfExportStatus
+             READ pdfExportStatus
+             NOTIFY pdfExportProgressChanged)
+  Q_PROPERTY(double pdfExportProgress
+             READ pdfExportProgress
+             NOTIFY pdfExportProgressChanged)
   // clang-format on
 
 signals:
@@ -74,6 +83,10 @@ signals:
   void tagsChanged();
   void csvExportBusyChanged();
   void csvExportFinished(const QString& outputPath, bool success);
+  void pdfExportBusyChanged();
+  void pdfExportProgressChanged();
+  void pdfExportFinished(const QString& outputPath, bool success);
+  void reportLogoPicked(const QString& path);
   void projectMetadataRestored();
 
 private:
@@ -93,6 +106,9 @@ public:
   [[nodiscard]] int sessionCount() const;
   [[nodiscard]] int selectedSessionId() const;
   [[nodiscard]] bool csvExportBusy() const;
+  [[nodiscard]] bool pdfExportBusy() const;
+  [[nodiscard]] QString pdfExportStatus() const;
+  [[nodiscard]] double pdfExportProgress() const;
   [[nodiscard]] QVariantList sessionList() const;
   [[nodiscard]] QVariantList tagList() const;
   [[nodiscard]] QVariantList selectedSessionTags() const;
@@ -125,6 +141,8 @@ public slots:
   void removeTagFromSession(int sessionId, int tagId);
 
   void exportSessionToCsv(int sessionId);
+  void exportSessionToPdf(int sessionId, const QVariantMap& options);
+  void pickReportLogo();
 
   void storeProjectMetadata();
   void restoreProjectFromDb();
@@ -145,6 +163,9 @@ private:
 
   int m_selectedSessionId;
   bool m_csvExportBusy;
+  bool m_pdfExportBusy;
+  double m_pdfExportProgress;
+  QString m_pdfExportStatus;
 
   QVariantList m_sessionList;
   QVariantList m_tagList;

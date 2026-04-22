@@ -108,6 +108,8 @@
         <file>actions/Xbox Y.svg</file>
         <file>actions/Zoom In.svg</file>
         <file>actions/Zoom Out.svg</file>
+        <file>chartjs/chart.umd.min.js</file>
+        <file>chartjs/LICENSE.md</file>
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>
@@ -129,7 +131,9 @@
         <file>icons/buttons/download.svg</file>
         <file>icons/buttons/dropdown.svg</file>
         <file>icons/buttons/expand.svg</file>
+        <file>icons/buttons/export-csv.svg</file>
         <file>icons/buttons/forward.svg</file>
+        <file>icons/buttons/html.svg</file>
         <file>icons/buttons/info.svg</file>
         <file>icons/buttons/invisible.svg</file>
         <file>icons/buttons/lemonsqueezy.svg</file>
@@ -140,9 +144,12 @@
         <file>icons/buttons/media-stop.svg</file>
         <file>icons/buttons/open.svg</file>
         <file>icons/buttons/paypal.svg</file>
+        <file>icons/buttons/pdf.svg</file>
+        <file>icons/buttons/play.svg</file>
         <file>icons/buttons/plus.svg</file>
         <file>icons/buttons/print.svg</file>
         <file>icons/buttons/refresh.svg</file>
+        <file>icons/buttons/report.svg</file>
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/search.svg</file>
         <file>icons/buttons/send.svg</file>
@@ -257,9 +264,11 @@
         <file>icons/miniwindow/restore.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
+        <file>icons/panes/details.svg</file>
         <file>icons/panes/important.svg</file>
         <file>icons/panes/info.svg</file>
         <file>icons/panes/overview.svg</file>
+        <file>icons/panes/sessions.svg</file>
         <file>icons/panes/setup.svg</file>
         <file>icons/project-editor/actions/add-bar.svg</file>
         <file>icons/project-editor/actions/add-compass.svg</file>
@@ -654,6 +663,9 @@
         <file>scripts/transforms/lua/thermistor_steinhart.lua</file>
         <file>scripts/transforms/lua/unwrap_angle.lua</file>
         <file>scripts/transforms/templates.json</file>
+        <file>templates/reports/session-report.css</file>
+        <file>templates/reports/session-report.html</file>
+        <file>templates/reports/session-report.js</file>
         <file>themes/code-editor/default.xml</file>
         <file>themes/code-editor/fluent-dark.xml</file>
         <file>themes/code-editor/fluent-light.xml</file>
@@ -661,9 +673,5 @@
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
-        <file>icons/buttons/export-csv.svg</file>
-        <file>icons/panes/details.svg</file>
-        <file>icons/panes/sessions.svg</file>
-        <file>icons/buttons/play.svg</file>
     </qresource>
 </RCC>

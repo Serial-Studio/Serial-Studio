@@ -715,7 +715,6 @@ void UI::WindowManager::selectBackgroundImage()
                                  tr("Images (*.png *.jpg *.jpeg *.bmp)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   // Apply selected image and clean up dialog
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {

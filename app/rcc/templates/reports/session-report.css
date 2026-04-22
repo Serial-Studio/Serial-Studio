@@ -1,0 +1,544 @@
+/* =========================================================================
+ * Serial Studio — Session Report stylesheet
+ * =========================================================================
+ *
+ * Two-layer design:
+ *   1. Screen CSS — interactive HTML viewing (hover, tooltips, sticky TOC)
+ *   2. Print CSS — controlled pagination, page numbers, clean typography
+ *
+ * Colours are driven by CSS custom properties so a dark-mode switch or a
+ * client-specific theme can be applied by overriding the ``:root`` block.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --text:             #1b1d21;
+  --text-muted:       #6b7280;
+  --text-faint:       #9ca3af;
+  --bg:               #ffffff;
+  --bg-soft:          #f7f8fa;
+  --bg-sunken:        #f1f3f5;
+  --border:           #e5e7eb;
+  --border-strong:    #d1d5db;
+  --accent:           #1e5aaa;
+  --accent-soft:      #e8efff;
+  --danger:           #b91c1c;
+  --success:          #166534;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+               Arial, system-ui, sans-serif;
+  --font-mono: ui-monospace, SF Mono, Menlo, Consolas, "Liberation Mono",
+               monospace;
+
+  --page-width: 210mm;          /* A4 portrait; overridden at runtime */
+  --page-margin: 18mm 16mm;
+
+  --radius: 6px;
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04),
+                 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* -------------------------------------------------------------------------
+ * Reset
+ * ------------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 14px; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-sunken);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 0.25em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+h1 { font-size: 2.25rem; line-height: 1.15; letter-spacing: -0.025em; }
+h2 { font-size: 1.35rem; letter-spacing: -0.015em; }
+h3 { font-size: 1.05rem; }
+h4 { font-size: 0.85rem; font-weight: 600; text-transform: uppercase;
+     letter-spacing: 0.08em; color: var(--text-muted); }
+
+p  { margin: 0 0 0.8em; }
+
+a  { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* -------------------------------------------------------------------------
+ * Sticky toolbar (screen-only)
+ * ------------------------------------------------------------------------- */
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.toolbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.toolbar .brand svg { width: 22px; height: 22px; }
+
+.toolbar .spacer { flex: 1; }
+
+.toolbar button {
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.12s, border-color 0.12s, transform 0.06s;
+}
+
+.toolbar button:hover { background: var(--bg-soft); border-color: var(--text-muted); }
+.toolbar button:active { transform: translateY(1px); }
+
+.toolbar button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.toolbar button.primary:hover { filter: brightness(1.08); }
+
+/* -------------------------------------------------------------------------
+ * Page canvas — a centred "sheet" that mimics a printed document
+ * ------------------------------------------------------------------------- */
+
+.page {
+  max-width: var(--page-width);
+  margin: 24px auto;
+  background: var(--bg);
+  padding: var(--page-margin);
+  box-shadow: var(--shadow-soft);
+  border-radius: 2px;
+}
+
+/* -------------------------------------------------------------------------
+ * Cover block
+ * ------------------------------------------------------------------------- */
+
+.cover {
+  min-height: 260mm;                /* nearly a full A4 sheet */
+  padding: 32mm 16mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  page-break-after: always;
+}
+
+.cover .logo {
+  max-width: 40%;
+  max-height: 26mm;
+  align-self: center;
+  margin-top: 10mm;
+}
+
+.cover .logo img,
+.cover .logo svg { width: 100%; height: auto; }
+
+.cover-body { text-align: center; }
+
+.cover .company {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.cover .title {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+
+.cover .subtitle {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.cover .subtitle strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Cover facts strip — horizontal row of "label / value" pairs */
+.cover-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 20px;
+  padding: 18px 24px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 0 auto;
+  max-width: 130mm;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.cover-facts .fact-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.cover-facts .fact-value {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.cover-footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.cover-footer .author { color: var(--text); font-weight: 500; }
+
+/* -------------------------------------------------------------------------
+ * Section heading
+ * ------------------------------------------------------------------------- */
+
+.section { margin: 0 0 28px; }
+
+.section.new-page { page-break-before: always; }
+
+.section > h2 {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  page-break-after: avoid;
+}
+
+.section > h2 .muted {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* -------------------------------------------------------------------------
+ * Definition grid (Test Information)
+ * ------------------------------------------------------------------------- */
+
+.defs {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 10px 24px;
+  margin: 0;
+}
+
+.defs dt {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+}
+
+.defs dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.notes {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  white-space: pre-wrap;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.notes-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------
+ * Tag chips
+ * ------------------------------------------------------------------------- */
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* -------------------------------------------------------------------------
+ * Measurement summary table
+ * ------------------------------------------------------------------------- */
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+}
+
+.summary-table thead th {
+  text-align: right;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border-strong);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  user-select: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.summary-table thead th:first-child,
+.summary-table thead th.align-left { text-align: left; }
+
+.summary-table thead th::after {
+  content: " ";
+  display: inline-block;
+  width: 8px;
+  color: var(--text-faint);
+}
+
+.summary-table thead th.sort-asc::after  { content: " ↑"; }
+.summary-table thead th.sort-desc::after { content: " ↓"; }
+
+.summary-table tbody td {
+  padding: 9px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.summary-table tbody td:first-child,
+.summary-table tbody td.align-left { text-align: left; font-family: var(--font-sans); }
+
+.summary-table tbody td.numeric { font-family: var(--font-mono); font-size: 0.87rem; }
+
+.summary-table tbody tr:nth-child(even) { background: var(--bg-soft); }
+.summary-table tbody tr:hover { background: var(--accent-soft); }
+
+.summary-table tbody td.dim { color: var(--text-faint); }
+
+/* -------------------------------------------------------------------------
+ * Overlay chart (screen-only) — every signal on one plot, toggleable.
+ * ------------------------------------------------------------------------- */
+
+.overlay-section .overlay-box {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.overlay-section .overlay-box canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* -------------------------------------------------------------------------
+ * Charts — one per row, full-width, tall. Each card gets its own page in
+ * printed output so individual peaks stay readable.
+ * ------------------------------------------------------------------------- */
+
+.charts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chart-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px 14px;
+  background: var(--bg);
+  page-break-inside: avoid;
+}
+
+.chart-card + .chart-card { page-break-before: always; }
+
+.chart-card h3 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  page-break-after: avoid;
+}
+
+.chart-card .chart-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-card .chart-box {
+  position: relative;
+  width: 100%;
+  height: 340px;
+}
+
+.chart-card .chart-box canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* -------------------------------------------------------------------------
+ * Print CSS — Chromium / QWebEnginePage::printToPdf follows these rules
+ * ------------------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --bg-sunken: #ffffff;
+  }
+
+  @page {
+    size: {{PAGE_SIZE_CSS}};
+    margin: 16mm 14mm 18mm 14mm;
+  }
+
+  /* Chart pages rotate to landscape so the time-series fills a wide page
+     the natural way round — trying to fit a long X-axis signal into a
+     portrait frame squashes the trace vertically. */
+  @page chart-page {
+    size: {{PAGE_SIZE_CSS_LANDSCAPE}};
+    margin: 14mm 16mm 16mm 16mm;
+  }
+
+  html, body { background: white; }
+
+  .toolbar,
+  .screen-only { display: none !important; }
+
+  .page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .cover {
+    min-height: calc(100vh - 4mm);
+    padding: 24mm 8mm 16mm;
+  }
+
+  .section { page-break-inside: auto; }
+  .chart-card { page-break-inside: avoid; }
+
+  /* Keep every table header row together with its first data row */
+  .summary-table thead { display: table-header-group; }
+  .summary-table tr    { page-break-inside: avoid; }
+
+  /* One chart per landscape page. The shared "Parameter Trends" heading
+     would otherwise get its own portrait page between the summary and the
+     first chart — hide it since each chart card has its own heading. */
+  #parameter-trends-heading { display: none; }
+
+  .charts-grid { gap: 0; }
+
+  .chart-card {
+    page: chart-page;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    page-break-inside: avoid;
+    /* Force the card to exactly fill the landscape @page printable area so
+       the chart-box has a real target size to flex-grow into. Landscape A4
+       printable height = 210 - 14 - 16 = 180mm; likewise width = 297 - 32
+       = 265mm. Explicit dimensions are the only reliable way to get a full-
+       page chart in Chromium's print layout. */
+    width: 265mm;
+    height: 180mm;
+  }
+  .chart-card + .chart-card { page-break-before: always; }
+
+  .chart-card h3         { margin: 0 0 2px; }
+  .chart-card .chart-sub { margin: 0 0 8px; }
+
+  /* Chart-box claims every remaining pixel after the heading strip. */
+  .chart-card .chart-box {
+    flex: 1 1 auto;
+    height: auto;
+    width: 100%;
+    min-height: 0;
+  }
+
+  /* Bottom-left: doc title; bottom-right: page X of Y — supported by
+     Chromium's print stack via standard @page margin boxes */
+  @page {
+    @bottom-left {
+      content: "{{PRINT_FOOTER_LEFT}}";
+      font-family: var(--font-sans);
+      font-size: 9pt;
+      color: #6b7280;
+    }
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: var(--font-sans);
+      font-size: 9pt;
+      color: #6b7280;
+    }
+  }
+}

@@ -139,7 +139,6 @@ void Misc::WorkspaceManager::selectPath()
 
   dialog->setFileMode(QFileDialog::Directory);
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     dialog->deleteLater();

@@ -213,7 +213,6 @@ void CSV::Player::openFile()
                                  tr("CSV files (*.csv)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())

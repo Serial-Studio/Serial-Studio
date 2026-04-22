@@ -358,7 +358,6 @@ void DataModel::JsCodeEditor::import()
     (m_language == 1) ? tr("Select Lua file to import") : tr("Select Javascript file to import");
   auto* dialog = new QFileDialog(nullptr, title, QDir::homePath(), filter);
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty()) {

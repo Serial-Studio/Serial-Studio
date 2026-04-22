@@ -262,7 +262,6 @@ void IO::FileTransmission::openFile()
 {
   auto* dialog = new QFileDialog(nullptr, tr("Select file to transmit"), QDir::homePath());
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     dialog->deleteLater();

@@ -212,7 +212,6 @@ void DataModel::OutputCodeEditor::import()
   auto* dialog = new QFileDialog(
     nullptr, tr("Select Javascript file to import"), QDir::homePath(), QStringLiteral("*.js"));
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty()) {

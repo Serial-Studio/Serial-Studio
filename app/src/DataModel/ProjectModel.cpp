@@ -909,7 +909,6 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setFileMode(QFileDialog::AnyFile);
-    dialog->setOption(QFileDialog::DontUseNativeDialog);
 
     connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
       dialog->deleteLater();
@@ -1319,7 +1318,6 @@ void DataModel::ProjectModel::openJsonFile()
     nullptr, tr("Select Project File"), jsonProjectsPath(), tr("Project Files (*.json *.ssproj)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())

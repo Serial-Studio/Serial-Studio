@@ -416,7 +416,6 @@ void IO::Drivers::Process::browseExecutable()
   auto* dialog = new QFileDialog(nullptr, tr("Select Executable"), start);
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())
@@ -443,7 +442,6 @@ void IO::Drivers::Process::browseWorkingDir()
 
   dialog->setFileMode(QFileDialog::Directory);
   dialog->setOption(QFileDialog::ShowDirsOnly, true);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())
@@ -469,7 +467,6 @@ void IO::Drivers::Process::browsePipePath()
   auto* dialog = new QFileDialog(nullptr, tr("Select Named Pipe / FIFO"), start);
 
   dialog->setFileMode(QFileDialog::ExistingFile);
-  dialog->setOption(QFileDialog::DontUseNativeDialog);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())

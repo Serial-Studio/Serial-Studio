@@ -39,6 +39,20 @@
 #include "AppInfo.h"
 
 //--------------------------------------------------------------------------------------------------
+// Platform-specific hooks
+//--------------------------------------------------------------------------------------------------
+
+#ifdef Q_OS_MACOS
+extern int Misc_Utilities_showNativeMessageBox(const QString& text,
+                                               const QString& informativeText,
+                                               QMessageBox::Icon icon,
+                                               const QString& windowTitle,
+                                               QMessageBox::StandardButtons bt,
+                                               QMessageBox::StandardButton defaultButton,
+                                               const ButtonTextMap& buttonTexts);
+#endif
+
+//--------------------------------------------------------------------------------------------------
 // Singleton access
 //--------------------------------------------------------------------------------------------------
 
@@ -158,6 +172,12 @@ int Misc::Utilities::showMessageBox(const QString& text,
   if (qApp->platformName() == QLatin1String("offscreen"))
     return QMessageBox::Ok;
 
+  // Route through a real NSAlert on macOS
+#ifdef Q_OS_MACOS
+  return Misc_Utilities_showNativeMessageBox(
+    text, informativeText, icon, windowTitle, bt, defaultButton, buttonTexts);
+#endif
+
   // Create message box & set options
   QMessageBox box;
   box.setStandardButtons(bt);
@@ -266,11 +286,9 @@ void Misc::Utilities::revealFile(const QString& pathToReveal)
   param += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
   QProcess::startDetached("explorer.exe", param);
 #elif defined(Q_OS_MAC)
-  // Escape backslashes and double quotes to prevent AppleScript injection
   QString escaped = pathToReveal;
   escaped.replace(QLatin1String("\\"), QLatin1String("\\\\"));
   escaped.replace(QLatin1String("\""), QLatin1String("\\\""));
-
   QStringList scriptArgs;
   scriptArgs
     << QLatin1String("-e")
