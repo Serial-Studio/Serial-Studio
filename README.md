@@ -17,23 +17,23 @@ It runs on Windows, macOS, Linux, and Raspberry Pi.
 
 ## What you can do with it
 
-**Connect to almost anything.** Serial/UART, Bluetooth LE, TCP/UDP, CAN Bus, Modbus TCP/RTU, MQTT, Audio, raw USB (libusb), HID (gamepads, custom devices), and Process I/O. Projects can connect to multiple devices at once, each with its own protocol.
+**Connect to almost anything.** Serial/UART, Bluetooth LE, TCP/UDP, CAN Bus, Modbus TCP/RTU, MQTT, Audio, raw USB (libusb), HID (gamepads, custom devices), and Process I/O. One project can talk to several devices at once, each on its own protocol.
 
-**Visualize data live.** 15+ widget types, including line plots, XY plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed. 60 FPS updates with under 50 ms latency.
+**Visualize data live.** 15+ widget types: line plots, XY plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed. 60 FPS with under 50 ms latency.
 
 **Configure dashboards without custom code.** The Project Editor lets you define groups, datasets, and widgets through structured forms, closer to editing a schema than coding a UI. Or skip the project file entirely with Quick Plot: print comma-separated values from your device and see them plot instantly. Workspaces split large projects into focused tabs, with a taskbar search for big setups.
 
 **Parse and transform data.** Write frame parsers in JavaScript or Lua 5.4, or pick from 20+ templates (MAVLink, NMEA, UBX, RTCM, MessagePack, COBS, SLIP, JSON, Modbus, and more). Apply per-dataset transforms (EMA filters, scaling, calibration, unit conversion) with short scripts that run every frame, no re-flashing firmware needed. Data Tables act as a shared bus so transforms can derive virtual datasets from each other.
 
-**Send commands back.** Buttons, toggles, sliders, knobs, text fields, and freeform output panels run JS templates that emit GCode, SCPI, Modbus, NMEA, CAN, or any other protocol your device speaks. Define Actions with optional timers for polling or periodic control.
+**Send commands back.** Buttons, toggles, sliders, knobs, text fields, and freeform output panels run JS templates that emit GCode, SCPI, Modbus, NMEA, CAN, or whatever your device speaks. Define Actions with optional timers for polling or periodic control.
 
-**Record, replay, and share.** Export to CSV or MDF4. Record full sessions (frames plus raw bytes) into a SQLite database, then browse, tag, replay, or export them from the Database Explorer. Generate styled HTML or PDF reports with embedded interactive charts for sharing results. Transfer files over XMODEM, YMODEM, or ZMODEM with CRC and crash recovery.
+**Record, replay, and share.** Export to CSV or MDF4. Record full sessions (frames plus raw bytes) into a SQLite database, then browse, tag, replay, or export them from the Database Explorer. Turn a session into a styled HTML or PDF report with interactive charts for sharing results. Transfer files over XMODEM, YMODEM, or ZMODEM with CRC and crash recovery.
 
 **Automate and integrate.** A TCP API on port 7777 exposes 290+ commands for programmatic control. An MCP server lets AI models like Claude drive the app directly for automated analysis.
 
-**Industrial and automotive ready.** A Modbus register-map importer (CSV/XML/JSON) builds a ready-to-use project from vendor documentation. DBC files import decoded CAN signals.
+**Industrial and automotive ready.** A Modbus register-map importer (CSV/XML/JSON) builds a ready-to-use project straight from vendor documentation. DBC files import decoded CAN signals.
 
-New here? Have a look at the [help center](https://serial-studio.com/help) for FAQs, use cases, and comparisons with similar tools.
+New here? The [help center](https://serial-studio.com/help) has FAQs, use cases, and comparisons with similar tools.
 
 ## Download
 
@@ -92,32 +92,28 @@ An ARM64 AppImage is available for Raspberry Pi and similar boards. Performance 
 - **Quick plot mode:** Drop in comma-separated values from Arduino and get an instant plot.
 - **Console only mode:** Use Serial Studio as a plain terminal without any dashboard.
 
-### What it can do
+### At a glance
 
-- **Structured project editor.** Configure groups, datasets, widgets, and actions through forms. No UI code to write.
-- **10+ protocols.** Serial/UART, Bluetooth LE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP, Audio, raw USB, HID, and Process I/O.
-- **15+ visualization widgets.** Line plots, gauges, bar charts, GPS maps, FFT spectrum, accelerometers, gyroscopes, compass, data grids, 3D views, and live camera feed (Pro).
-- **Output widgets.** Send commands back to your device via buttons, toggles, sliders, knobs, text fields, and freeform output panels, powered by JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
-- **CSV export.** Saves every frame for later analysis in Excel, Python, MATLAB, or R.
-- **MDF4 playback and export.** Read and write MDF4/MF4 files for CAN Bus, LIN, FlexRay, and analog channels (Pro).
-- **Session database.** Record every frame plus raw bytes into a SQLite session, then browse, tag, export, and replay it in the Database Explorer (Pro).
-- **Session reports.** Export a session as a styled HTML or PDF report with embedded interactive Chart.js plots for sharing results (Pro).
-- **Data Tables.** Central bus shared across transforms: system datasets, user-defined constant and computed registers, and virtual datasets derived entirely from transforms.
-- **Workspaces.** Break a large project into focused dashboard tabs with a taskbar search.
-- **File transmission.** Send files over the wire with XMODEM, YMODEM, or ZMODEM, including CRC and crash recovery (Pro).
-- **Cross-platform.** Windows 10/11, macOS 11+ (Intel and Apple Silicon), Linux x64, Raspberry Pi ARM64.
-- **Works with Arduino/ESP32.** Compatible with any device that talks over serial, BLE, or the network.
-- **Fast updates.** 60 FPS dashboard with latency under 50 ms.
-- **Custom parsing.** Frame parsers in JavaScript or Lua 5.4, with 20+ ready-made templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and others).
-- **Per-dataset transforms.** Filter, scale, calibrate, or derive datasets with short JS or Lua snippets that run every frame.
-- **Modbus TCP/RTU.** Talk to industrial PLCs and equipment. A register-map importer reads CSV, XML, and JSON (Pro).
-- **CAN Bus.** Import DBC files for automotive and industrial work (Pro).
-- **MQTT for IoT.** Connect to brokers for distributed sensor networks (Pro).
-- **Image view.** Display live JPEG or PNG camera streams alongside telemetry on the same connection (Pro).
-- **Multi-device support.** Connect multiple devices at once in a single project, each with its own protocol and frame settings (Pro).
-- **API server on TCP port 7777.** Control Serial Studio programmatically with 290+ commands (see the [API client example](./examples/API%20Test)).
-- **AI integration via MCP.** Connect models like Claude through the Model Context Protocol for automated analysis and control (see [MCP Client](./examples/MCP%20Client)).
-- **Dual licensing.** Open source GPL-3.0 core with proprietary Pro features (see [LICENSE.md](LICENSE.md)).
+- **Protocols:** Serial/UART, Bluetooth LE, TCP/UDP, Audio, raw USB, HID, Process I/O, plus MQTT, Modbus TCP/RTU, and CAN Bus (Pro).
+- **Visualization:** 15+ widgets — line plots, gauges, bar charts, GPS maps, FFT, accelerometer, gyroscope, compass, data grids, 3D views, and live camera feed (some Pro).
+- **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
+- **Custom parsing:** JavaScript or Lua 5.4 frame parsers, plus 20+ templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, …).
+- **Per-dataset transforms:** short JS or Lua snippets to filter, scale, calibrate, or derive values every frame.
+- **Data Tables:** shared bus for system datasets, user-defined constants and computed registers, and virtual datasets built entirely from transforms.
+- **Workspaces:** split large projects into focused dashboard tabs, with a taskbar search.
+- **CSV export:** every frame, ready for Excel, Python, MATLAB, or R.
+- **MDF4:** read and write MDF4/MF4 for CAN Bus, LIN, FlexRay, and analog (Pro).
+- **Session database:** record frames and raw bytes into SQLite, then browse, tag, export, and replay in the Database Explorer (Pro).
+- **Session reports:** export a session as a styled HTML or PDF with interactive Chart.js plots (Pro).
+- **File transfer:** XMODEM, YMODEM, and ZMODEM with CRC and crash recovery (Pro).
+- **Modbus register maps:** import CSV, XML, or JSON straight from vendor docs (Pro).
+- **CAN DBC import:** decoded signals for automotive and industrial work (Pro).
+- **Image view:** live JPEG or PNG camera streams alongside telemetry on the same connection (Pro).
+- **Multi-device:** several devices in one project, each with its own protocol (Pro).
+- **TCP API on port 7777:** 290+ commands for programmatic control (see the [API client example](./examples/API%20Test)).
+- **AI integration:** Claude and other models via the Model Context Protocol (see [MCP Client](./examples/MCP%20Client)).
+- **Fast and cross-platform:** 60 FPS, under 50 ms latency, on Windows 10/11, macOS 11+ (Intel and Apple Silicon), Linux x64, and Raspberry Pi ARM64.
+- **Dual licensed:** open source GPL-3.0 core with proprietary Pro features (see [LICENSE.md](LICENSE.md)).
 
 ## Quick start
 
