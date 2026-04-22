@@ -17,6 +17,7 @@
   { "id": "file-transmission", "title": "File Transmission", "section": "Connectivity", "file": "File-Transmission.md" },
   { "id": "csv-export", "title": "CSV Import & Export", "section": "Data Management", "file": "CSV-Import-Export.md" },
   { "id": "session-database", "title": "Session Database", "section": "Data Management", "file": "Session-Database.md" },
+  { "id": "session-reports", "title": "Session Reports", "section": "Data Management", "file": "Session-Reports.md" },
   { "id": "api-reference", "title": "API Reference", "section": "Integration", "file": "API-Reference.md" },
   { "id": "grpc-server", "title": "gRPC Server", "section": "Integration", "file": "gRPC-Server.md" },
   { "id": "plugin-development", "title": "Plugin Development", "section": "Integration", "file": "Plugin-Development.md" },

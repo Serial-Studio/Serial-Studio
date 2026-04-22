@@ -60,6 +60,7 @@ Open the Session Explorer from the **File** menu or the toolbar. It lists every 
 
 - **Replay.** Feed the recorded frames back through the Frame Builder and dashboard. The project embedded with the session is restored automatically, so widgets render the way they did during the original run.
 - **Export to CSV.** Write the session's frames to a CSV file in the workspace. Final (post-transform) values are emitted one column per dataset, plus a timestamp column.
+- **Generate report.** Export the session as a self-contained HTML file or a PDF, with a cover page, metadata, summary statistics, and interactive Chart.js plots. See [Session Reports](Session-Reports.md).
 - **Tag.** Attach freeform labels like `flight-test`, `anomaly`, or `regression`. Tags are shared across the workspace so the same label can group sessions from different projects.
 - **Annotate.** Add free-text notes to any session.
 - **Restore project.** Extract the embedded project JSON into a standalone `.ssproj` file and open it in the editor.
@@ -95,20 +96,22 @@ Session DBs grow linearly with data rate and session length. There's no built-in
 
 ---
 
-## CSV, MDF4, or session database: which one?
+## CSV, MDF4, session database, or report: which one?
 
 | Goal                                                              | Best option               |
 |-------------------------------------------------------------------|---------------------------|
 | Hand a single file to a collaborator who uses Excel or pandas     | CSV export                |
 | Long recordings, high data rates, automotive toolchain            | MDF4 export (Pro)         |
 | Archive every run of a project, then search, tag, or replay later | Session database (Pro)    |
+| A shareable, printable summary with charts for a customer or lab notebook | Session report (Pro) |
 
-CSV and MDF4 produce one file per session. The session database produces one file per project, indexed by session, with replay and metadata built in. They're not mutually exclusive: you can enable all three at once.
+CSV and MDF4 produce one file per session. The session database produces one file per project, indexed by session, with replay and metadata built in. Session reports are rendered on demand from the database — one HTML or PDF per session, ready to email or archive. They're not mutually exclusive: you can use all of them together.
 
 ---
 
 ## See also
 
+- [Session Reports](Session-Reports.md): export sessions as self-contained HTML or PDF reports with charts.
 - [CSV Import & Export](CSV-Import-Export.md): live CSV export and CSV playback.
 - [Data Flow](Data-Flow.md): where session recording sits in the overall pipeline.
 - [Dataset Value Transforms](Dataset-Transforms.md): transforms contribute to the recorded final values.
