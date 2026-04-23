@@ -163,10 +163,11 @@ First time using it? The [help center](https://serial-studio.com/help) covers tr
 
 ### Official docs
 
-- [Wiki](https://github.com/Serial-Studio/Serial-Studio/wiki): full guides and tutorials.
 - [Help center](https://serial-studio.com/help): FAQs, use cases, comparisons, troubleshooting.
+- [Local help docs](./doc/help): Markdown source for the in-app help center.
 - [AI agent guide](AGENTS.md): for ChatGPT, Claude, and other assistants.
-- [API reference](https://github.com/Serial-Studio/Serial-Studio/wiki/API-Reference): full TCP API and automation docs.
+- [API reference](./doc/help/API-Reference.md): full TCP API and automation docs.
+- [gRPC server](./doc/help/gRPC-Server.md): protobuf API and streaming reference.
 - [Examples](./examples): Arduino, ESP32, Python code with sample projects.
 
 ### Key topics
