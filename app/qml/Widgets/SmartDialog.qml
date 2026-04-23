@@ -31,6 +31,7 @@ Window {
   //
   property int titlebarHeight: 0
   property bool staysOnTop: false
+  property bool fixedSize: true
   property bool nativeWindow: true
   property int contentPadding: 16
   property alias dialogContent: contentArea.contentItem
@@ -50,6 +51,8 @@ Window {
   height: preferredHeight
   minimumWidth: preferredWidth
   minimumHeight: preferredHeight
+  maximumWidth: fixedSize ? preferredWidth : 16777215
+  maximumHeight: fixedSize ? preferredHeight : 16777215
 
   //
   // Configure window flags

@@ -29,6 +29,7 @@ import "../Widgets"
 SmartDialog {
   id: root
   title: qsTr("Help Center")
+  fixedSize: false
 
   //
   // Allow resizing and maximizing

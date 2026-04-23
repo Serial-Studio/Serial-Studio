@@ -78,6 +78,10 @@ static bool isFixedSizeWindow(const QWindow* window)
   if (!window)
     return false;
 
+  const auto fixedSize = window->property("fixedSize");
+  if (fixedSize.isValid())
+    return fixedSize.toBool();
+
   const auto minSize = window->minimumSize();
   const auto maxSize = window->maximumSize();
   if (!minSize.isValid() || !maxSize.isValid())
