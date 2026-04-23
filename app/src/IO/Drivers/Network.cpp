@@ -28,9 +28,6 @@
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Constructor function
- */
 IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_lookupActive(false)
 {
   // Restore persisted settings
@@ -77,8 +74,7 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Closes the current network connection and discards signals/slots with the
- * TCP/UDP socket in use by the network module.
+ * @brief Closes the current network connection and discards the socket signals/slots.
  */
 void IO::Drivers::Network::close()
 {
@@ -96,9 +92,6 @@ void IO::Drivers::Network::close()
   m_udpSocket.disconnectFromHost();
 }
 
-/**
- * Returns @c true if a network connection is currently open
- */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
   // Query the active socket for its connection state
@@ -118,9 +111,6 @@ bool IO::Drivers::Network::isOpen() const noexcept
   return open && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
 }
 
-/**
- * Returns @c true if the current network device is readable
- */
 bool IO::Drivers::Network::isReadable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
@@ -131,9 +121,6 @@ bool IO::Drivers::Network::isReadable() const noexcept
   return false;
 }
 
-/**
- * Returns @c true if the current network device is writable
- */
 bool IO::Drivers::Network::isWritable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
@@ -145,7 +132,7 @@ bool IO::Drivers::Network::isWritable() const noexcept
 }
 
 /**
- * Returns @c true if the port is greater than 0 and the host address is valid.
+ * @brief Returns @c true if the port is greater than 0 and the host address is valid.
  */
 bool IO::Drivers::Network::configurationOk() const noexcept
 {
@@ -157,12 +144,6 @@ bool IO::Drivers::Network::configurationOk() const noexcept
 
 /**
  * @brief Writes data to the network socket.
- *
- * Sends the provided data to the network socket if it is writable.
- *
- * @param data The data to be written to the port.
- * @return The number of bytes written on success, or `-1` if the socket is not
- *         writable.
  */
 qint64 IO::Drivers::Network::write(const QByteArray& data)
 {
@@ -178,13 +159,6 @@ qint64 IO::Drivers::Network::write(const QByteArray& data)
 
 /**
  * @brief Opens a network connection with the specified mode.
- *
- * Initializes and configures the network socket based on the selected socket
- * type (TCP or UDP). For TCP, it connects to the remote host, while for UDP,
- * it binds to the specified local port and joins a multicast group if required.
- *
- * @param mode The mode in which to open the network connection.
- * @return `true` if the connection is successfully opened, `false` otherwise.
  */
 bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 {
@@ -232,50 +206,33 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 // Driver specifics
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Returns the TCP port number
- */
 quint16 IO::Drivers::Network::tcpPort() const
 {
   return m_tcpPort;
 }
 
-/**
- * Returns the UDP local port number
- */
 quint16 IO::Drivers::Network::udpLocalPort() const
 {
   return m_udpLocalPort;
 }
 
-/**
- * Returns the UDP remote port number
- */
 quint16 IO::Drivers::Network::udpRemotePort() const
 {
   return m_udpRemotePort;
 }
 
-/**
- * Returns @c true if the UDP socket is managing a multicasted
- * connection.
- */
 bool IO::Drivers::Network::udpMulticast() const
 {
   return m_udpMulticast;
 }
 
-/**
- * Returns @c true if we are currently performing a DNS lookup
- */
 bool IO::Drivers::Network::lookupActive() const
 {
   return m_lookupActive;
 }
 
 /**
- * Returns the current socket type as an index of the list returned by the @c
- * socketType function.
+ * @brief Returns the current socket type as an index of the list returned by socketType().
  */
 int IO::Drivers::Network::socketTypeIndex() const
 {
@@ -292,16 +249,13 @@ int IO::Drivers::Network::socketTypeIndex() const
   }
 }
 
-/**
- * Returns the host address
- */
 const QString& IO::Drivers::Network::remoteAddress() const
 {
   return m_address;
 }
 
 /**
- * Returns a list with the available socket types
+ * @brief Returns a list with the available socket types.
  */
 QStringList IO::Drivers::Network::socketTypes() const
 {
@@ -311,21 +265,13 @@ QStringList IO::Drivers::Network::socketTypes() const
   return list;
 }
 
-/**
- * Returns the socket type. Valid return values are:
- *
- * @c QAbstractSocket::TcpSocket
- * @c QAbstractSocket::UdpSocket
- * @c QAbstractSocket::SctpSocket
- * @c QAbstractSocket::UnknownSocketType
- */
 QAbstractSocket::SocketType IO::Drivers::Network::socketType() const
 {
   return m_socketType;
 }
 
 /**
- * Instructs the module to communicate via a TCP socket.
+ * @brief Instructs the module to communicate via a TCP socket.
  */
 void IO::Drivers::Network::setTcpSocket()
 {
@@ -333,7 +279,7 @@ void IO::Drivers::Network::setTcpSocket()
 }
 
 /**
- * Instructs the module to communicate via an UDP socket.
+ * @brief Instructs the module to communicate via a UDP socket.
  */
 void IO::Drivers::Network::setUdpSocket()
 {
@@ -341,7 +287,7 @@ void IO::Drivers::Network::setUdpSocket()
 }
 
 /**
- * Changes the TCP socket's @c port number
+ * @brief Changes the TCP socket's port number.
  */
 void IO::Drivers::Network::setTcpPort(const quint16 port)
 {
@@ -354,7 +300,7 @@ void IO::Drivers::Network::setTcpPort(const quint16 port)
 }
 
 /**
- * Changes the UDP socket's local @c port number
+ * @brief Changes the UDP socket's local port number.
  */
 void IO::Drivers::Network::setUdpLocalPort(const quint16 port)
 {
@@ -367,7 +313,7 @@ void IO::Drivers::Network::setUdpLocalPort(const quint16 port)
 }
 
 /**
- * Changes the UDP socket's remote @c port number
+ * @brief Changes the UDP socket's remote port number.
  */
 void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
 {
@@ -380,7 +326,7 @@ void IO::Drivers::Network::setUdpRemotePort(const quint16 port)
 }
 
 /**
- * Sets the IPv4 or IPv6 address specified by the input string representation
+ * @brief Sets the IPv4 or IPv6 address, performing a DNS lookup if needed.
  */
 void IO::Drivers::Network::setRemoteAddress(const QString& address)
 {
@@ -401,7 +347,7 @@ void IO::Drivers::Network::setRemoteAddress(const QString& address)
 }
 
 /**
- * Performs a DNS lookup for the given @a host name
+ * @brief Performs a DNS lookup for the given host name.
  */
 void IO::Drivers::Network::lookup(const QString& host)
 {
@@ -411,7 +357,7 @@ void IO::Drivers::Network::lookup(const QString& host)
 }
 
 /**
- * Enables/Disables multicast connections with the UDP socket.
+ * @brief Enables/disables multicast connections with the UDP socket.
  */
 void IO::Drivers::Network::setUdpMulticast(const bool enabled)
 {
@@ -424,8 +370,7 @@ void IO::Drivers::Network::setUdpMulticast(const bool enabled)
 }
 
 /**
- * Changes the current socket type given an index of the list returned by the
- * @c socketType() function.
+ * @brief Changes the current socket type given an index of the socketTypes() list.
  */
 void IO::Drivers::Network::setSocketTypeIndex(const int index)
 {
@@ -442,11 +387,7 @@ void IO::Drivers::Network::setSocketTypeIndex(const int index)
 }
 
 /**
- * Changes the socket type. Valid input values are:
- *
- * @c QAbstractSocket::TcpSocket
- * @c QAbstractSocket::UdpSocket
- * @c QAbstractSocket::UnknownSocketType
+ * @brief Changes the socket type.
  */
 void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
 {
@@ -459,7 +400,7 @@ void IO::Drivers::Network::setSocketType(const QAbstractSocket::SocketType type)
 }
 
 /**
- * Reads incoming data from the UDP/TCP ports
+ * @brief Reads incoming data from the UDP/TCP ports.
  */
 void IO::Drivers::Network::onReadyRead()
 {
@@ -470,19 +411,17 @@ void IO::Drivers::Network::onReadyRead()
       const qint64 size = udpSocket()->pendingDatagramSize();
       m_udpBuffer.resize(size);
       udpSocket()->readDatagram(m_udpBuffer.data(), m_udpBuffer.size());
-      Q_EMIT dataReceived(makeByteArray(m_udpBuffer));
+      publishReceivedData(m_udpBuffer);
     }
   }
 
   // Read from TCP socket
   else if (socketType() == QAbstractSocket::TcpSocket)
-    Q_EMIT dataReceived(makeByteArray(tcpSocket()->readAll()));
+    publishReceivedData(tcpSocket()->readAll());
 }
 
 /**
- * Sets the host IP address when the lookup finishes.
- * If the lookup fails, the error code/string shall be shown to the user in a
- * messagebox.
+ * @brief Sets the host IP address when the lookup finishes.
  */
 void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 {
@@ -502,8 +441,7 @@ void IO::Drivers::Network::lookupFinished(const QHostInfo& info)
 }
 
 /**
- * This function is called whenever a socket error occurs, it disconnects the
- * socket from the host and displays the error in a message box.
+ * @brief Handles socket errors by disconnecting and showing a message box.
  */
 void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
@@ -531,11 +469,6 @@ void IO::Drivers::Network::onErrorOccurred(const QAbstractSocket::SocketError so
 
 /**
  * @brief Returns the Network configuration as a flat list of editable properties.
- *
- * Only the properties relevant to the current socket type are included so the
- * ProjectEditor form never shows TCP fields when UDP is selected and vice versa.
- *
- * @return List of DriverProperty descriptors with current values.
  */
 QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
 {
@@ -598,8 +531,6 @@ QList<IO::DriverProperty> IO::Drivers::Network::driverProperties() const
 
 /**
  * @brief Applies a single Network configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::Network::setDriverProperty(const QString& key, const QVariant& value)
 {

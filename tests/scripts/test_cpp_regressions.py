@@ -315,3 +315,53 @@ def test_license_guard_build_dir_is_gitignored():
     text = _read(".gitignore")
 
     assert "LicenseGuards.generated.h" in text
+
+
+def test_session_report_series_preserve_raw_points_under_budget():
+    """Session report charts should keep raw samples up to the 10k budget."""
+    report = _read("app/src/Sessions/ReportData.cpp")
+    manager = _read("app/src/Sessions/DatabaseManager.cpp")
+    runtime = _read("app/rcc/templates/reports/session-report.js")
+
+    assert "x.clear();" in report
+    assert "y.clear();" in report
+    assert "writeReportSamples(x, y, count, maxSamples, series);" in report
+    assert "appendBucketSamples(y, begin, end, target, indices);" in report
+    assert "appendBudgetFillSamples(count, budget, indices);" in report
+    assert "std::sort(indices.begin(), indices.end());" in report
+    assert "series.values.size() == std::min<std::size_t>(count, maxSamples)" in report
+    assert "series = loadChartSeries(m_db, sessionId, 10000);" in manager
+    assert runtime.count("tension: 0") >= 2
+    assert runtime.count("decimation: { enabled: false }") >= 2
+
+
+def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
+    """Driver timestamps should flow through FrameReader into one shared parsed frame object."""
+    hal = _read("app/src/IO/HAL_Driver.h")
+    reader_h = _read("app/src/IO/FrameReader.h")
+    reader_cpp = _read("app/src/IO/FrameReader.cpp")
+    builder_h = _read("app/src/DataModel/FrameBuilder.h")
+    builder_cpp = _read("app/src/DataModel/FrameBuilder.cpp")
+    dashboard_h = _read("app/src/UI/Dashboard.h")
+    sessions_h = _read("app/src/Sessions/Export.h")
+
+    assert "struct CapturedData" in hal
+    assert "void dataReceived(const IO::CapturedDataPtr& data);" in hal
+    assert "void publishReceivedData(" in hal
+    assert "Q_DECLARE_METATYPE(IO::CapturedDataPtr)" not in hal
+
+    assert "moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>" in reader_h
+    assert "void processData(const IO::CapturedDataPtr& data);" in reader_h
+    assert "frameTimestamp(qsizetype endOffsetExclusive)" in reader_h
+    assert "buildFrame(QByteArray&& data, qsizetype endOffsetExclusive)" in reader_h
+    assert "m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))" in reader_cpp
+
+    assert "void hotpathRxFrame(const IO::CapturedDataPtr& data);" in builder_h
+    assert "void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);" in builder_h
+    assert "dashboard.hotpathRxFrame(frame);" in builder_cpp
+    assert "std::make_shared<DataModel::TimestampedFrame>(m_frame, data->timestamp + step * i)" in builder_cpp
+    assert "updateTimestampedFramesEnabled" not in builder_cpp
+    assert "nextTimestampedFrameTime" not in builder_cpp
+
+    assert "void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);" in dashboard_h
+    assert "void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);" in sessions_h

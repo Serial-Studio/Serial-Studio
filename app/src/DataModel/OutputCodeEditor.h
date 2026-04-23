@@ -19,11 +19,7 @@
 namespace DataModel {
 
 /**
- * @class OutputCodeEditor
- * @brief QML-embeddable code editor for output widget transmit functions.
- *
- * Renders a QCodeEditor inside a QQuickPaintedItem. Reads and writes the
- * JavaScript transmit function of the currently selected output widget.
+ * @brief QML-embeddable code editor for output-widget transmit scripts.
  */
 class OutputCodeEditor : public QQuickPaintedItem {
   // clang-format off

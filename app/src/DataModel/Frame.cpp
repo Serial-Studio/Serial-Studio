@@ -28,18 +28,7 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Finalises a frame by computing the commercial-features flag and
- * assigning a globally stable uniqueId to every dataset.
- *
- * uniqueId encodes (sourceId, groupId, datasetId) as a single integer so the
- * same logical dataset always gets the same ID regardless of how many sources
- * are active.  The encoding is:
- *   uniqueId = sourceId * 1 000 000 + groupId * 10 000 + datasetId
- *
- * This guarantees no collision even when two sources share the same groupId
- * (e.g. both have a group 0 with datasets 0–9).  It also propagates
- * group.sourceId down to each dataset so callers never need to walk back up
- * to the group to discover which source a dataset belongs to.
+ * @brief Finalises a frame: commercial flag and stable uniqueId per dataset.
  */
 void DataModel::finalize_frame(DataModel::Frame& frame)
 {

@@ -51,6 +51,7 @@ Sessions::ExportWorker::ExportWorker(
   : DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>(frameQueue, enabled, queueSize)
   , m_dbOpen(false)
   , m_sessionId(-1)
+  , m_lastRawBytesNs(-1)
   , m_rawQueue(rawQueue)
   , m_operationMode(operationMode)
   , m_projectSnapshotMutex(projectSnapshotMutex)
@@ -83,9 +84,11 @@ void Sessions::ExportWorker::closeResources()
   m_db = QSqlDatabase();
   QSqlDatabase::removeDatabase(connName);
 
-  m_dbOpen    = false;
-  m_sessionId = -1;
-  m_schema    = DataModel::ExportSchema{};
+  m_dbOpen         = false;
+  m_sessionId      = -1;
+  m_lastRawBytesNs = -1;
+  m_schema         = DataModel::ExportSchema{};
+  resetMonotonicClock();
 }
 
 /**
@@ -104,13 +107,11 @@ void Sessions::ExportWorker::processData()
   // Drain the frame queue via base class
   DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr>::processData();
 
-  // Honour the same enabled gate the base class uses — do not open a new
-  // database or touch the raw queue when the consumer has been disabled.
+  // Honour the base class' enabled gate
   if (!consumerEnabled())
     return;
 
-  // Console-only has no frames — open schema-less DB when raw bytes arrive.
-  // Non-Console modes defer to processItems() for the proper template schema.
+  // Console-only has no frames — open schema-less DB when raw bytes arrive
   if (!m_dbOpen
       && m_operationMode->load(std::memory_order_relaxed)
            == static_cast<int>(SerialStudio::ConsoleOnly)) {
@@ -119,7 +120,7 @@ void Sessions::ExportWorker::processData()
       emptyFrame.title = QStringLiteral("ConsoleOnly");
       createDatabase(emptyFrame);
       if (m_dbOpen) {
-        m_steadyBaseline = head->timestamp;
+        m_steadyBaseline = head->data->timestamp;
         Q_EMIT resourceOpenChanged();
       }
     }
@@ -138,8 +139,7 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::Timestamp
   if (items.empty())
     return;
 
-  // Create database on first batch — seed schema from the frame's own
-  // groups/datasets; no cross-thread template handoff.
+  // Lazily create the database on the first incoming batch
   if (!m_dbOpen) {
     createDatabase(items.front()->data);
 
@@ -147,17 +147,13 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::Timestamp
       return;
 
     m_steadyBaseline = items.front()->timestamp;
+    resetMonotonicClock();
   }
 
-  // Begin transaction for batch performance
+  // Batch writes into a single transaction
   m_db.transaction();
-
   for (const auto& frame : items) {
-    // Compute timestamp relative to session start
-    const auto elapsed = frame->timestamp - m_steadyBaseline;
-    const qint64 ns    = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
-
-    // Write readings for each dataset
+    const qint64 ns = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
     for (const auto& group : frame->data.groups) {
       for (const auto& dataset : group.datasets) {
         m_readingQuery.bindValue(0, m_sessionId);
@@ -175,8 +171,7 @@ void Sessions::ExportWorker::processItems(const std::vector<DataModel::Timestamp
     }
   }
 
-  // Flush the batch — failed commit leaves a dangling transaction that would
-  // poison the next writer, so log and roll back instead of silently dropping.
+  // Roll back on failure
   if (!m_db.commit()) [[unlikely]] {
     qWarning() << "[Sessions::Export] commit() failed:" << m_db.lastError().text();
     m_db.rollback();
@@ -190,8 +185,7 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
 {
   Q_ASSERT(!m_dbOpen);
 
-  // Use the canonical per-project path so all sessions for the same project
-  // accumulate in a single .db file instead of one file per recording.
+  // Use the canonical per-project path
   const auto dbPath  = Sessions::DatabaseManager::canonicalDbPath(frame.title);
   const auto dirPath = QFileInfo(dbPath).absolutePath();
   QDir dir(dirPath);
@@ -219,9 +213,7 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
   // Create every table the session format expects
   createSchema(pragma);
 
-  // Insert the new session row. If this fails we abandon the open — proceeding
-  // would let readings, raw_bytes, and columns rows reference session_id = -1
-  // and poison the shared .db for every future browse/replay.
+  // Insert the new session row — abandon the open on failure
   insertSession(frame, dt);
   if (m_sessionId < 0) [[unlikely]] {
     qWarning() << "[SQLite] Aborting database open — session row was not inserted";
@@ -246,8 +238,7 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
 }
 
 /**
- * @brief Delegates to DatabaseManager::createSchema so Export and the
- *        read-side share a single source of truth for the session-log schema.
+ * @brief Delegates to DatabaseManager::createSchema for a single source of truth.
  */
 void Sessions::ExportWorker::createSchema(QSqlQuery& q)
 {
@@ -259,9 +250,7 @@ void Sessions::ExportWorker::createSchema(QSqlQuery& q)
  */
 void Sessions::ExportWorker::insertSession(const DataModel::Frame& frame, const QDateTime& dt)
 {
-  // Serialize a replayable project JSON — falls back to synthesising from
-  // the live frame when the user is recording in QuickPlot mode and
-  // ProjectModel has no groups.
+  // Serialize a replayable project JSON
   const auto projectJson =
     QString::fromUtf8(QJsonDocument(buildReplayProjectJson(frame)).toJson(QJsonDocument::Compact));
 
@@ -312,8 +301,7 @@ void Sessions::ExportWorker::writeColumnDefs(const DataModel::Frame& frame)
  */
 void Sessions::ExportWorker::storeProjectMetadata(const DataModel::Frame& frame)
 {
-  // Same replayable snapshot the session row uses — ensures the global
-  // project_metadata fallback matches what per-session rows reference.
+  // Same replayable snapshot the session row uses
   const auto json =
     QString::fromUtf8(QJsonDocument(buildReplayProjectJson(frame)).toJson(QJsonDocument::Compact));
   const auto now = QDateTime::currentDateTime().toString(Qt::ISODate);
@@ -342,17 +330,10 @@ void Sessions::ExportWorker::storeProjectMetadata(const DataModel::Frame& frame)
 
 /**
  * @brief Produces the project JSON stored with the session.
- *
- * In ProjectFile mode the user's loaded project is the source of truth, so
- * we snapshot ProjectModel directly. In QuickPlot mode ProjectModel has no
- * groups (FrameBuilder synthesises them into m_quickPlotFrame), so we build
- * a minimal project JSON from the live frame itself — that's what the
- * replay Player reads back to restore the widget layout.
  */
 QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Frame& frame) const
 {
-  // Prefer the main-thread snapshot — ProjectModel is not thread-safe, so
-  // touching its vectors from the worker would race with a user edit.
+  // Prefer the main-thread snapshot (ProjectModel is not thread-safe)
   {
     QMutexLocker locker(m_projectSnapshotMutex);
     if (!m_projectSnapshot->isEmpty()) {
@@ -362,8 +343,7 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
     }
   }
 
-  // ConsoleOnly has no parsed structure — skip groups/actions/sources to
-  // avoid leaking stale project data into the session row
+  // ConsoleOnly has no parsed structure
   if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly) {
     QJsonObject json;
     json.insert(QStringLiteral("title"), frame.title);
@@ -371,13 +351,11 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
     return json;
   }
 
-  // QuickPlot / Console-only fallback — synthesise a minimal project from
-  // the frame so Player::loadFromJsonDocument can restore widgets.
+  // QuickPlot fallback — synthesise a minimal project from the frame
   QJsonObject json;
   json.insert(QStringLiteral("title"), frame.title);
 
-  // Frame detection settings — QuickPlot uses line-based delimiters with
-  // comma-separated values and PlainText decoding.
+  // Frame detection settings (QuickPlot line-based CSV)
   json.insert(QStringLiteral("frameDetection"), static_cast<int>(SerialStudio::EndDelimiterOnly));
   json.insert(QStringLiteral("frameEnd"), QStringLiteral("\\n"));
   json.insert(QStringLiteral("frameStart"), QStringLiteral(""));
@@ -391,11 +369,7 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
   json.insert(QStringLiteral("groups"), groupsArray);
   json.insert(QStringLiteral("actions"), QJsonArray());
 
-  // Build a default source with a default template parser and matching
-  // frame detection so FrameBuilder can parse the CSV-style data the
-  // Player injects during replay. Prefer the Lua template; fall back to
-  // JS if the Lua resource is somehow unavailable so the stored project
-  // always carries a working (language, code) pair.
+  // Build a default source with a working parser (prefer Lua, fall back to JS)
   int parserLanguage = static_cast<int>(SerialStudio::Lua);
   QString parserCode = DataModel::FrameParser::defaultTemplateCode(SerialStudio::Lua);
   if (parserCode.isEmpty()) {
@@ -426,21 +400,24 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
  */
 void Sessions::ExportWorker::prepareHotpathQueries()
 {
+  // Readings (one row per dataset per frame)
   m_readingQuery = QSqlQuery(m_db);
   m_readingQuery.prepare(
-    "INSERT OR IGNORE INTO readings "
+    "INSERT INTO readings "
     "(session_id, timestamp_ns, unique_id, raw_numeric_value, raw_string_value, "
     " final_numeric_value, final_string_value, is_numeric) "
     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
+  // Raw device bytes (separate stream, batched on its own queue)
   m_rawBytesQuery = QSqlQuery(m_db);
   m_rawBytesQuery.prepare(
-    "INSERT OR IGNORE INTO raw_bytes (session_id, timestamp_ns, device_id, data) "
+    "INSERT INTO raw_bytes (session_id, timestamp_ns, device_id, data) "
     "VALUES (?, ?, ?, ?)");
 
+  // Snapshots of user data tables taken per frame
   m_tableSnapshotQuery = QSqlQuery(m_db);
   m_tableSnapshotQuery.prepare(
-    "INSERT OR IGNORE INTO table_snapshots "
+    "INSERT INTO table_snapshots "
     "(session_id, timestamp_ns, table_name, register_name, numeric_value, string_value) "
     "VALUES (?, ?, ?, ?, ?, ?)");
 }
@@ -458,18 +435,20 @@ void Sessions::ExportWorker::writeRawBytes()
 
   m_db.transaction();
   while (count < kMaxRawBatch && m_rawQueue->try_dequeue(entry)) {
-    const auto elapsed = entry.timestamp - m_steadyBaseline;
+    const auto elapsed = entry.data->timestamp - m_steadyBaseline;
     qint64 ns          = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
 
-    // Clamp: raw bytes may predate the first-frame baseline → negative ns
-    // would collide on the (session, ts_ns, device) PK via INSERT OR IGNORE.
+    // Clamp pre-baseline ns, then force strict monotonicity
     if (ns < 0) [[unlikely]]
       ns = 0;
+    if (ns <= m_lastRawBytesNs)
+      ns = m_lastRawBytesNs + 1;
+    m_lastRawBytesNs = ns;
 
     m_rawBytesQuery.bindValue(0, m_sessionId);
     m_rawBytesQuery.bindValue(1, ns);
     m_rawBytesQuery.bindValue(2, entry.deviceId);
-    m_rawBytesQuery.bindValue(3, entry.data ? *entry.data : QByteArray());
+    m_rawBytesQuery.bindValue(3, entry.data && entry.data->data ? *entry.data->data : QByteArray());
 
     if (!m_rawBytesQuery.exec()) [[unlikely]]
       qWarning() << "[SQLite] Insert raw_bytes failed:" << m_rawBytesQuery.lastError().text();
@@ -558,17 +537,16 @@ void Sessions::Export::closeFile()
  */
 void Sessions::Export::setupExternalConnections()
 {
-  // Mirror the main-thread operation mode into the worker-visible atomic so
-  // the Console-only DB-open path in processData() knows when to trigger. If
-  // the mode changes with an open session, close the current session — its
-  // schema was chosen for the previous mode and continuing to write into it
-  // would either orphan rows under the wrong title or mix incompatible data.
+  // Mirror operation mode and force-off when entering Console-only
   connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
-    m_operationMode.store(static_cast<int>(AppState::instance().operationMode()),
-                          std::memory_order_relaxed);
+    const auto mode = AppState::instance().operationMode();
+    m_operationMode.store(static_cast<int>(mode), std::memory_order_relaxed);
 
     if (isOpen())
       closeFile();
+
+    if (mode == SerialStudio::ConsoleOnly && exportEnabled())
+      setExportEnabled(false);
   });
 
   // Close on disconnect
@@ -589,9 +567,7 @@ void Sessions::Export::setupExternalConnections()
       closeFile();
   });
 
-  // Mirror ProjectModel into a thread-safe snapshot the worker reads when
-  // writing the replayable project_json column. Every signal that changes
-  // the serialised shape of the project feeds this.
+  // Mirror ProjectModel into a thread-safe snapshot for the worker
   auto& pm = DataModel::ProjectModel::instance();
   connect(&pm,
           &DataModel::ProjectModel::jsonFileChanged,
@@ -610,9 +586,7 @@ void Sessions::Export::setupExternalConnections()
           this,
           &Sessions::Export::refreshProjectSnapshot);
 
-  // Switching operation modes (ProjectFile ↔ QuickPlot/ConsoleOnly) does NOT
-  // clear ProjectModel's groups, so refreshProjectSnapshot must re-run to
-  // avoid stamping QuickPlot sessions with a previously-loaded project.
+  // Re-run on mode switch (ProjectModel's groups are not cleared)
   connect(&AppState::instance(),
           &AppState::operationModeChanged,
           this,
@@ -620,21 +594,20 @@ void Sessions::Export::setupExternalConnections()
 
   refreshProjectSnapshot();
 
-  // Restore enabled state from settings
-  m_exportEnabled.store(m_settings.value("SQLiteExport/Enabled", false).toBool(),
-                        std::memory_order_relaxed);
+  // Restore enabled state from settings (never enable in Console-only)
+  const bool persisted = m_settings.value("SQLiteExport/Enabled", false).toBool();
+  const bool allow = persisted
+                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+  m_exportEnabled.store(allow, std::memory_order_relaxed);
 }
 
 /**
- * @brief Main-thread-only: snapshots ProjectModel into m_projectSnapshot so
- *        the worker thread never touches ProjectModel across threads.
+ * @brief Main-thread-only: snapshots ProjectModel into m_projectSnapshot.
  */
 void Sessions::Export::refreshProjectSnapshot()
 {
+  // Only snapshot when operation mode is set to project file
   QByteArray payload;
-
-  // Only snapshot when ProjectFile mode is active — otherwise stale project
-  // groups from a previous load would stamp QuickPlot/Console sessions.
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
     const auto& pm = DataModel::ProjectModel::instance();
     if (!pm.groups().empty()) {
@@ -643,6 +616,7 @@ void Sessions::Export::refreshProjectSnapshot()
     }
   }
 
+  // Update the project snapshot
   QMutexLocker locker(&m_projectSnapshotMutex);
   m_projectSnapshot = std::move(payload);
 }
@@ -652,16 +626,22 @@ void Sessions::Export::refreshProjectSnapshot()
  */
 void Sessions::Export::setExportEnabled(const bool enabled)
 {
-  if (m_exportEnabled.load(std::memory_order_relaxed) == enabled)
+  // Refuse to enable while the app is in Console-only mode
+  const bool allow = enabled
+                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+
+  // No-op when state is unchanged
+  if (m_exportEnabled.load(std::memory_order_relaxed) == allow)
     return;
 
-  if (!enabled && isOpen())
+  // Close the open session when disabling
+  if (!allow && isOpen())
     closeFile();
 
-  m_exportEnabled.store(enabled, std::memory_order_relaxed);
-  setConsumerEnabled(enabled);
-
-  m_settings.setValue("SQLiteExport/Enabled", enabled);
+  // Apply and persist the new state
+  m_exportEnabled.store(allow, std::memory_order_relaxed);
+  setConsumerEnabled(allow);
+  m_settings.setValue("SQLiteExport/Enabled", allow);
   Q_EMIT enabledChanged();
 }
 
@@ -682,16 +662,14 @@ void Sessions::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& fram
 /**
  * @brief Enqueues raw console bytes for the raw_bytes table.
  */
-void Sessions::Export::hotpathTxRawBytes(int deviceId, const IO::ByteArrayPtr& data)
+void Sessions::Export::hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data)
 {
   if (!m_exportEnabled.load(std::memory_order_relaxed))
     return;
 
-  // No m_isOpen gate — Console-only opens the DB lazily from processData().
   TimestampedRawBytes entry;
-  entry.deviceId  = deviceId;
-  entry.data      = data;
-  entry.timestamp = std::chrono::steady_clock::now();
+  entry.deviceId = deviceId;
+  entry.data     = data;
   m_rawBytesQueue.try_enqueue(std::move(entry));
 }
 

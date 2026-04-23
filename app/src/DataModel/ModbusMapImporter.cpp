@@ -42,14 +42,8 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Private constructor for the singleton.
- */
 DataModel::ModbusMapImporter::ModbusMapImporter() {}
 
-/**
- * @brief Returns the singleton instance.
- */
 DataModel::ModbusMapImporter& DataModel::ModbusMapImporter::instance()
 {
   static ModbusMapImporter inst;
@@ -60,35 +54,23 @@ DataModel::ModbusMapImporter& DataModel::ModbusMapImporter::instance()
 // Property getters
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the number of parsed register entries.
- */
 int DataModel::ModbusMapImporter::registerCount() const noexcept
 {
   return m_registers.count();
 }
 
-/**
- * @brief Returns the number of contiguous register blocks.
- */
 int DataModel::ModbusMapImporter::groupCount() const noexcept
 {
   return computeBlocks().count();
 }
 
-/**
- * @brief Returns the base filename of the imported register map.
- */
 QString DataModel::ModbusMapImporter::fileName() const
 {
   return QFileInfo(m_filePath).fileName();
 }
 
 /**
- * @brief Returns a formatted info string for the register at @p index.
- *
- * Format: "N: Name @ Address (Type, DataType) [Units]"
- * Used by QML preview table for regex-based column extraction.
+ * @brief Returns "N: Name @ Address (Type, DataType) [Units]" for the register.
  */
 QString DataModel::ModbusMapImporter::registerInfo(int index) const
 {
@@ -114,10 +96,7 @@ QString DataModel::ModbusMapImporter::registerInfo(int index) const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens a file dialog for the user to select a Modbus register map file.
- *
- * Supports CSV, XML, and JSON formats. Auto-detects the format from the file
- * extension and falls back to trying all parsers if the extension is unknown.
+ * @brief Opens a file dialog to select a CSV/XML/JSON register map.
  */
 void DataModel::ModbusMapImporter::importRegisterMap()
 {
@@ -136,10 +115,7 @@ void DataModel::ModbusMapImporter::importRegisterMap()
 }
 
 /**
- * @brief Parses the selected file and emits @c previewReady() on success.
- *
- * Auto-detects the format from the file extension. Falls back to trying all
- * parsers sequentially if the extension is unrecognized.
+ * @brief Parses the selected file and emits previewReady on success.
  */
 void DataModel::ModbusMapImporter::showPreview(const QString& filePath)
 {
@@ -244,11 +220,7 @@ void DataModel::ModbusMapImporter::cancelImport()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Parses a CSV register map file with flexible column detection.
- *
- * Reads the header row to auto-detect column positions using common aliases
- * (e.g., "addr"/"register" for address, "fc"/"function" for register type).
- * Skips empty lines and comment lines starting with '#'.
+ * @brief Parses a CSV register map with header-based column auto-detection.
  */
 bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
 {
@@ -375,11 +347,7 @@ bool DataModel::ModbusMapImporter::parseCSV(const QString& path)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Parses an XML register map file.
- *
- * Supports two layouts:
- * - Flat: <modbus><register address="0" type="holding" .../></modbus>
- * - Nested: <modbus><holding-registers><register .../></holding-registers></modbus>
+ * @brief Parses an XML register map (flat or nested by register type).
  */
 bool DataModel::ModbusMapImporter::parseXML(const QString& path)
 {
@@ -466,11 +434,7 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Parses a JSON register map file.
- *
- * Supports two layouts:
- * - Flat: {"registers": [{address, type, name, ...}]}
- * - Grouped: {"holdingRegisters": [...], "coils": [...], ...}
+ * @brief Parses a JSON register map (flat registers array or grouped by type).
  */
 bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
 {
@@ -528,10 +492,7 @@ bool DataModel::ModbusMapImporter::parseJSON(const QString& path)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Groups parsed register entries into contiguous blocks of the same type.
- *
- * Accounts for multi-register data types (float32 = 2 registers) when computing
- * contiguity. Non-contiguous entries of the same type produce separate blocks.
+ * @brief Groups registers into contiguous blocks of the same type.
  */
 QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporter::computeBlocks()
   const
@@ -573,7 +534,7 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds a complete Serial Studio project JSON from the parsed registers.
+ * @brief Builds a complete .ssproj JSON from the parsed registers.
  */
 QJsonObject DataModel::ModbusMapImporter::buildProject() const
 {
@@ -673,10 +634,7 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
 }
 
 /**
- * @brief Generates a JavaScript frame parser for the register blocks.
- *
- * Extends the Modbus driver's frame parser pattern with data-type-aware
- * extraction (int16 sign extension, float32 IEEE 754) and scaling/offset.
+ * @brief Generates the Lua frame parser with typed extraction and scaling.
  */
 QString DataModel::ModbusMapImporter::buildFrameParser(const QVector<RegisterBlock>& blocks) const
 {
@@ -883,7 +841,6 @@ int DataModel::ModbusMapImporter::registersForDataType(const QString& dataType)
 
 /**
  * @brief Parses a single register entry from a JSON object.
- * @param defaultType If >= 0, used when the object lacks a "type" field.
  */
 bool DataModel::ModbusMapImporter::parseRegisterEntry(const QJsonObject& obj,
                                                       RegisterEntry& entry,

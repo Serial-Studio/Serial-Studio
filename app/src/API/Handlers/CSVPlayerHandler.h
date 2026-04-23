@@ -26,33 +26,16 @@
 namespace API {
 namespace Handlers {
 /**
- * @class CSVPlayerHandler
- * @brief Registers API commands for CSV::Player operations
- *
- * Provides commands for:
- * - csv.player.open - Open CSV file
- * - csv.player.close - Close CSV file
- * - csv.player.play - Start playback
- * - csv.player.pause - Pause playback
- * - csv.player.toggle - Toggle play/pause
- * - csv.player.nextFrame - Advance to next frame
- * - csv.player.previousFrame - Go to previous frame
- * - csv.player.setProgress - Seek to position
- * - csv.player.getStatus - Query player status
+ * @brief Registers API commands for CSV::Player operations.
  */
 class CSVPlayerHandler {
 public:
-  /**
-   * @brief Register all CSV Player commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // File operations
   static CommandResponse open(const QString& id, const QJsonObject& params);
   static CommandResponse close(const QString& id, const QJsonObject& params);
 
-  // Playback control
   static CommandResponse play(const QString& id, const QJsonObject& params);
   static CommandResponse pause(const QString& id, const QJsonObject& params);
   static CommandResponse toggle(const QString& id, const QJsonObject& params);
@@ -60,7 +43,6 @@ private:
   static CommandResponse previousFrame(const QString& id, const QJsonObject& params);
   static CommandResponse setProgress(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 

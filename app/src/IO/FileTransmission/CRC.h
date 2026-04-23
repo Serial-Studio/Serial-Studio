@@ -26,13 +26,8 @@
 
 namespace IO {
 namespace Protocols {
-
-/**
- * @brief CRC utilities for XMODEM/YMODEM/ZMODEM file transfer protocols.
- */
 namespace CRC {
 
-// CRC-16/XMODEM (polynomial 0x1021, init 0x0000)
 static constexpr std::array<quint16, 256> kCrc16Table = [] {
   std::array<quint16, 256> table{};
   for (int i = 0; i < 256; ++i) {
@@ -49,7 +44,6 @@ static constexpr std::array<quint16, 256> kCrc16Table = [] {
   return table;
 }();
 
-// CRC-32 for ZMODEM (polynomial 0xEDB88320, reflected)
 static constexpr std::array<quint32, 256> kCrc32Table = [] {
   std::array<quint32, 256> table{};
   for (quint32 i = 0; i < 256; ++i) {
@@ -66,9 +60,6 @@ static constexpr std::array<quint32, 256> kCrc32Table = [] {
   return table;
 }();
 
-/**
- * @brief Compute CRC-16/XMODEM over a byte range.
- */
 [[nodiscard]] inline quint16 crc16(const quint8* data, int length)
 {
   quint16 crc = 0x0000;
@@ -78,9 +69,6 @@ static constexpr std::array<quint32, 256> kCrc32Table = [] {
   return crc;
 }
 
-/**
- * @brief Compute CRC-32 for ZMODEM over a byte range.
- */
 [[nodiscard]] inline quint32 crc32(const quint8* data, int length)
 {
   quint32 crc = 0xFFFFFFFF;

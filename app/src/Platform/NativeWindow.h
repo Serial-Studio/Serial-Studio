@@ -26,19 +26,7 @@
 #include <QWindow>
 
 /**
- * @class NativeWindow
- * @brief Provides native window customization features across different
- *        operating systems.
- *
- * The class offers a set of methods to modify and interact with the window
- * system at a native level. This includes setting the style of the window's
- * caption and calculating the title bar height based on the window's state and
- * operating system specifics.
- *
- * The actual behavior of the class methods are dependent on the operating
- * system on which the application is compiled and run. This allows for
- * platform-specific window customizations such as transparent title bars on
- * macOS or caption colorization on Windows.
+ * @brief Provides native window customization features across operating systems.
  */
 class NativeWindow : public QObject {
   Q_OBJECT

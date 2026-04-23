@@ -35,17 +35,10 @@ static const QString kFinalPrefix = QStringLiteral("final:");
 // Initialization
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs an empty (uninitialized) store.
- */
 DataModel::DataTableStore::DataTableStore() : m_initialized(false) {}
 
 /**
- * @brief Pre-allocates all registers for user tables and the system dataset
- *        table.
- *
- * @param userTables  Table definitions from the project file.
- * @param templateFrame  Template frame providing dataset uniqueIds.
+ * @brief Pre-allocates registers for user tables and the system dataset table.
  */
 void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTables,
                                            const Frame& templateFrame)
@@ -122,7 +115,7 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
 }
 
 /**
- * @brief Releases all storage and resets the store to its uninitialized state.
+ * @brief Releases storage and resets the store to its uninitialized state.
  */
 void DataModel::DataTableStore::clear()
 {
@@ -136,9 +129,6 @@ void DataModel::DataTableStore::clear()
   m_initialized = false;
 }
 
-/**
- * @brief Returns whether the store has been initialized.
- */
 bool DataModel::DataTableStore::isInitialized() const noexcept
 {
   return m_initialized;
@@ -150,8 +140,6 @@ bool DataModel::DataTableStore::isInitialized() const noexcept
 
 /**
  * @brief Looks up a register by table and register name.
- *
- * @return Pointer to the register value, or nullptr if not found.
  */
 const DataModel::RegisterValue* DataModel::DataTableStore::get(const QString& table,
                                                                const QString& reg) const
@@ -166,10 +154,7 @@ const DataModel::RegisterValue* DataModel::DataTableStore::get(const QString& ta
 }
 
 /**
- * @brief Writes a value to a computed register. No-op for constant/system
- *        registers.
- *
- * @return true if the write succeeded, false if register not found or read-only.
+ * @brief Writes to a computed register; no-op for constant or system registers.
  */
 bool DataModel::DataTableStore::set(const QString& table,
                                     const QString& reg,
@@ -271,9 +256,6 @@ const DataModel::RegisterValue* DataModel::DataTableStore::getDatasetFinal(int u
 
 /**
  * @brief Resets all computed registers to their default values.
- *
- * Called once per frame before the dataset processing loop. O(n) where
- * n = number of computed registers. No heap allocation.
  */
 void DataModel::DataTableStore::resetComputedRegisters()
 {
@@ -337,9 +319,7 @@ void DataModel::DataTableStore::addRegister(const QString& table,
 }
 
 /**
- * @brief Resolves a (table, register) pair to a storage offset.
- *
- * @return Non-negative offset, or -1 if not found.
+ * @brief Resolves a (table, register) pair to a storage offset, or -1.
  */
 int DataModel::DataTableStore::indexOf(const QString& table, const QString& reg) const
 {

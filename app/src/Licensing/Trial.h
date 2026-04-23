@@ -31,26 +31,7 @@
 
 namespace Licensing {
 /**
- * @class Licensing::Trial
  * @brief Handles activation and validation of a time-limited trial license.
- *
- * This singleton class manages trial license functionality, including:
- * - Secure storage of trial activation state and expiration.
- * - Requesting and validating trial status from the licensing backend.
- * - Ensuring trials are only activated once per machine, based on MachineID.
- *
- * The trial is optional and must be explicitly enabled by the user.
- * If a commercial license is already activated, the trial becomes unavailable.
- *
- * Encrypted local settings are stored with integrity checks using SimpleCrypt.
- *
- * Backend communication is handled via HTTPS and emits `trialEnabledChanged()`
- * upon updates.
- *
- * Example use cases:
- * - Show trial remaining time via `daysRemaining()`
- * - Trigger trial activation via `enableTrial()`
- * - Check trial eligibility via `trialAvailable()`
  */
 class Trial : public QObject {
   // clang-format off

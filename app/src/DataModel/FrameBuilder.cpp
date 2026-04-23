@@ -50,26 +50,7 @@
 #endif
 
 /**
- * @brief Parse comma-separated values from data.
- *
- * IMPORTANT: This function ONLY supports comma (,) as the delimiter.
- *
- * For other delimiters (semicolon, tab, pipe), use a custom JavaScript
- * parser in your project file. Example for semicolon delimiter:
- *
- * @code{.js}
- * function parse(frame) {
- *   return frame.split(';');
- * }
- * @endcode
- *
- * This limitation is intentional to keep the hotpath simple and fast.
- * Custom parsers provide flexibility for non-standard formats without
- * complicating the default CSV parsing logic.
- *
- * @param data UTF-8 encoded CSV data with comma separators
- * @param out Output string list for parsed values (cleared before use)
- * @param reserveHint Expected number of values (optimization hint)
+ * @brief Hotpath CSV split — comma delimiter only; users needing other delimiters write a custom parser.
  */
 void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveHint)
 {
@@ -103,15 +84,21 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
   }
 }
 
+[[nodiscard]] std::chrono::nanoseconds capturedFrameStep(const IO::CapturedDataPtr& data)
+{
+  if (!data)
+    return std::chrono::nanoseconds(1);
+
+  return std::max(std::chrono::nanoseconds(1), data->frameStep);
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs FrameBuilder and wires export-consumer state tracking.
- */
 DataModel::FrameBuilder::FrameBuilder()
-  : m_quickPlotChannels(-1), m_quickPlotHasHeader(false), m_timestampedFramesEnabled(false)
+  : m_quickPlotChannels(-1)
+  , m_quickPlotHasHeader(false)
 {
   // JS transform watchdog — flips interrupt flag to unwind runaway scripts.
   m_jsTransformWatchdog.setSingleShot(true);
@@ -129,43 +116,11 @@ DataModel::FrameBuilder::FrameBuilder()
           [this] { syncFromProjectModel(); });
 #endif
 
-  connect(&CSV::Export::instance(),
-          &CSV::Export::enabledChanged,
-          this,
-          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-  connect(&MDF4::Export::instance(),
-          &MDF4::Export::enabledChanged,
-          this,
-          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-  connect(&API::Server::instance(),
-          &API::Server::enabledChanged,
-          this,
-          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-
-#ifdef BUILD_COMMERCIAL
-  connect(&Sessions::Export::instance(),
-          &Sessions::Export::enabledChanged,
-          this,
-          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-#endif
-
-#ifdef ENABLE_GRPC
-  connect(&API::GRPC::GRPCServer::instance(),
-          &API::GRPC::GRPCServer::enabledChanged,
-          this,
-          &DataModel::FrameBuilder::updateTimestampedFramesEnabled);
-#endif
-
-  updateTimestampedFramesEnabled();
-
   // Tear down engines before static destruction — QJSEngine depends on live Qt.
   if (auto* app = QCoreApplication::instance())
     connect(app, &QCoreApplication::aboutToQuit, this, [this]() { destroyTransformEngines(); });
 }
 
-/**
- * @brief Returns the only instance of the class.
- */
 DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 {
   static FrameBuilder singleton;
@@ -176,18 +131,11 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 // Public accessors
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the currently loaded DataModel frame.
- * @return A constant reference to the current DataModel::Frame.
- */
 const DataModel::Frame& DataModel::FrameBuilder::frame() const noexcept
 {
   return m_frame;
 }
 
-/**
- * @brief Returns the Quick Plot frame (only populated in QuickPlot mode).
- */
 const DataModel::Frame& DataModel::FrameBuilder::quickPlotFrame() const noexcept
 {
   return m_quickPlotFrame;
@@ -197,9 +145,6 @@ const DataModel::Frame& DataModel::FrameBuilder::quickPlotFrame() const noexcept
 // External connection setup
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Wires connection-state signals. Project sync is driven by AppState.
- */
 void DataModel::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::ConnectionManager::instance(),
@@ -221,11 +166,7 @@ void DataModel::FrameBuilder::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Populates m_frame directly from ProjectModel's already-parsed data.
- *
- * Called by AppState::onProjectLoaded() after ProjectModel::openJsonFile()
- * completes. No file I/O and no JSON re-parsing — copies the in-memory
- * group and action vectors directly.
+ * @brief Rebuilds m_frame from ProjectModel's already-parsed in-memory state (no file I/O).
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
@@ -252,10 +193,6 @@ void DataModel::FrameBuilder::syncFromProjectModel()
 // Quick Plot header registration
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Registers explicit channel headers for Quick Plot mode.
- * @param headers List of channel names to use; pass empty list to clear.
- */
 void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& headers)
 {
   if (!headers.isEmpty()) {
@@ -272,14 +209,13 @@ void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& header
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Dispatches raw data to the appropriate frame parser based on the
- * current operation mode (from AppState).
- *
- * @param data Raw binary input data to be processed.
+ * @brief Dispatches a captured chunk to the parser for the current operation mode.
  */
-void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray& data)
+void DataModel::FrameBuilder::hotpathRxFrame(const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(data);
+  Q_ASSERT(data->data);
+  Q_ASSERT(!data->data->isEmpty());
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
            && AppState::instance().operationMode() <= SerialStudio::QuickPlot);
 
@@ -298,15 +234,14 @@ void DataModel::FrameBuilder::hotpathRxFrame(const QByteArray& data)
 }
 
 /**
- * @brief Dispatches raw data from the given source to the project frame parser.
- *
- * @param sourceId Identifier of the source that produced @p data.
- * @param data     Raw binary input data.
+ * @brief Per-source variant of hotpathRxFrame — routes data through the matching source parser.
  */
-void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArray& data)
+void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data)
 {
   Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(data);
+  Q_ASSERT(data->data);
+  Q_ASSERT(!data->data->isEmpty());
 
   if (AppState::instance().operationMode() != SerialStudio::ProjectFile) {
     hotpathRxFrame(data);
@@ -321,21 +256,13 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const QByteArra
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Wipes all transform engines when a source is removed.
- *
- * ProjectModel renumbers source IDs after deletion, which would leave stale
- * keys in m_transformEngines pointing at the wrong Lua state / JS engine.
- * Safest fix is a blanket teardown — engines get rebuilt on the next
- * compileTransforms() call (triggered by project sync or connect).
+ * @brief Wipes transform engines on source deletion — ProjectModel renumbers IDs and engines recompile lazily.
  */
 void DataModel::FrameBuilder::onSourceRemoved()
 {
   destroyTransformEngines();
 }
 
-/**
- * @brief Handles device connection events and triggers auto-execute actions.
- */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
@@ -384,7 +311,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
 
       if (!srcFrame.groups.empty()) {
         m_sourceFrames.insert(src.sourceId, srcFrame);
-        hotpathTxFrame(srcFrame);
+        hotpathTxFrame(std::make_shared<DataModel::TimestampedFrame>(srcFrame));
       }
     }
 
@@ -399,7 +326,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
        });
 
   if (allImageGroups)
-    hotpathTxFrame(m_frame);
+    hotpathTxFrame(std::make_shared<DataModel::TimestampedFrame>(m_frame));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -408,12 +335,12 @@ void DataModel::FrameBuilder::onConnectedChanged()
 
 /**
  * @brief Parses a project frame using the configured decoding method.
- *
- * @param data Raw binary input to be decoded and assigned to frame datasets.
  */
-void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
+void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(data);
+  Q_ASSERT(data->data);
+  Q_ASSERT(!data->data->isEmpty());
   Q_ASSERT(!m_frame.groups.empty());
 
   // Decode via JS parser or CSV fallback
@@ -425,22 +352,22 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
 
     switch (decoderMethod) {
       case SerialStudio::Hexadecimal:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data.toHex()), 0);
+        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toHex()), 0);
         break;
       case SerialStudio::Base64:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data.toBase64()), 0);
+        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toBase64()), 0);
         break;
       case SerialStudio::Binary:
-        multiChannels = parser.parseMultiFrame(data, 0);
+        multiChannels = parser.parseMultiFrame(*data->data, 0);
         break;
       case SerialStudio::PlainText:
       default:
-        multiChannels = parser.parseMultiFrame(QString::fromUtf8(data), 0);
+        multiChannels = parser.parseMultiFrame(QString::fromUtf8(*data->data), 0);
         break;
     }
   } else {
     auto& channels = m_channelScratch;
-    parseCsvValues(data, channels, 64);
+    parseCsvValues(*data->data, channels, 64);
     multiChannels.append(channels);
   }
 
@@ -503,24 +430,26 @@ void DataModel::FrameBuilder::parseProjectFrame(const QByteArray& data)
     }
   };
 
-  for (const auto& channels : std::as_const(multiChannels)) {
+  const auto step = capturedFrameStep(data);
+  for (int i = 0; i < multiChannels.size(); ++i) {
+    const auto& channels = multiChannels.at(i);
     if (channels.isEmpty()) [[unlikely]]
       continue;
+
     applyChannelData(channels, 0);
-    hotpathTxFrame(m_frame);
+    hotpathTxFrame(std::make_shared<DataModel::TimestampedFrame>(m_frame, data->timestamp + step * i));
   }
 }
 
 /**
  * @brief Source-aware variant of parseProjectFrame.
- *
- * @param sourceId Which source produced @p data.
- * @param data     Raw bytes received from the source's FrameReader.
  */
-void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& data)
+void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data)
 {
   Q_ASSERT(sourceId >= 0);
-  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(data);
+  Q_ASSERT(data->data);
+  Q_ASSERT(!data->data->isEmpty());
 
   // Decode via source-specific parser
   QList<QStringList> multiChannels;
@@ -539,22 +468,22 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
 
     switch (decoderMethod) {
       case SerialStudio::Hexadecimal:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data.toHex()), sourceId);
+        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toHex()), sourceId);
         break;
       case SerialStudio::Base64:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data.toBase64()), sourceId);
+        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toBase64()), sourceId);
         break;
       case SerialStudio::Binary:
-        multiChannels = parser.parseMultiFrame(data, sourceId);
+        multiChannels = parser.parseMultiFrame(*data->data, sourceId);
         break;
       case SerialStudio::PlainText:
       default:
-        multiChannels = parser.parseMultiFrame(QString::fromUtf8(data), sourceId);
+        multiChannels = parser.parseMultiFrame(QString::fromUtf8(*data->data), sourceId);
         break;
     }
   } else {
     auto& channels = m_channelScratch;
-    parseCsvValues(data, channels, 64);
+    parseCsvValues(*data->data, channels, 64);
     multiChannels.append(channels);
   }
 
@@ -632,7 +561,9 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
     }
   };
 
-  for (const auto& channels : std::as_const(multiChannels)) {
+  const auto step = capturedFrameStep(data);
+  for (int i = 0; i < multiChannels.size(); ++i) {
+    const auto& channels = multiChannels.at(i);
     if (channels.isEmpty()) [[unlikely]]
       continue;
 
@@ -640,23 +571,24 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const QByteArray& 
 
     auto txIt = m_sourceFrames.find(sourceId);
     if (txIt != m_sourceFrames.end()) [[likely]]
-      hotpathTxFrame(txIt.value());
+      hotpathTxFrame(
+        std::make_shared<DataModel::TimestampedFrame>(txIt.value(), data->timestamp + step * i));
   }
 }
 
 /**
  * @brief Parses and updates the Quick Plot frame with incoming CSV values.
- *
- * @param data UTF-8 encoded, comma-separated channel values for plotting.
  */
-void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
+void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& data)
 {
-  Q_ASSERT(!data.isEmpty());
+  Q_ASSERT(data);
+  Q_ASSERT(data->data);
+  Q_ASSERT(!data->data->isEmpty());
   Q_ASSERT(AppState::instance().operationMode() == SerialStudio::QuickPlot);
 
   auto& channels        = m_channelScratch;
   const int reserveHint = (m_quickPlotChannels > 0) ? m_quickPlotChannels : 64;
-  parseCsvValues(data, channels, reserveHint);
+  parseCsvValues(*data->data, channels, reserveHint);
 
   const int channelCount = channels.size();
   if (channelCount <= 0)
@@ -700,7 +632,7 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
     }
   }
 
-  hotpathTxFrame(m_quickPlotFrame);
+  hotpathTxFrame(std::make_shared<DataModel::TimestampedFrame>(m_quickPlotFrame, data->timestamp));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -708,11 +640,7 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Rebuilds the internal frame structure for Quick Plot mode.
- *
- * Only called when the number of input channels changes.
- *
- * @param channels List of channel values received in the most recent data frame.
+ * @brief Rebuilds the Quick Plot frame structure when the channel count changes.
  */
 void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 {
@@ -780,11 +708,6 @@ void DataModel::FrameBuilder::buildQuickPlotFrame(const QStringList& channels)
 
 /**
  * @brief Builds an audio-specific Quick Plot frame with FFT configuration.
- *
- * Reads the audio driver's sample format and rate to set min/max/FFT
- * parameters, then constructs datasets and a single multiplot group.
- *
- * @param channels List of channel values from the most recent audio frame.
  */
 void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channels)
 {
@@ -886,34 +809,13 @@ void DataModel::FrameBuilder::buildQuickPlotAudioFrame(const QStringList& channe
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the cached flag indicating if any timestamped frame consumer is enabled.
- */
-void DataModel::FrameBuilder::updateTimestampedFramesEnabled()
-{
-  m_timestampedFramesEnabled = CSV::Export::instance().exportEnabled()
-                            || MDF4::Export::instance().exportEnabled()
-                            || API::Server::instance().enabled();
-
-#ifdef BUILD_COMMERCIAL
-  m_timestampedFramesEnabled =
-    m_timestampedFramesEnabled || Sessions::Export::instance().exportEnabled();
-#endif
-
-#ifdef ENABLE_GRPC
-  m_timestampedFramesEnabled =
-    m_timestampedFramesEnabled || API::GRPC::GRPCServer::instance().enabled();
-#endif
-}
-
-/**
  * @brief Publishes a fully constructed DataModel frame to all registered output modules.
- *
- * @param frame The fully populated frame to distribute.
  */
-void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
+void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {
-  Q_ASSERT(!frame.groups.empty());
-  Q_ASSERT(!frame.title.isEmpty());
+  Q_ASSERT(frame);
+  Q_ASSERT(!frame->data.groups.empty());
+  Q_ASSERT(!frame->data.title.isEmpty());
 
   static auto& csvExport     = CSV::Export::instance();
   static auto& mdf4Export    = MDF4::Export::instance();
@@ -921,32 +823,25 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::Frame& frame)
   static auto& pluginsServer = API::Server::instance();
 
   dashboard.hotpathRxFrame(frame);
-
-  if (m_timestampedFramesEnabled) [[unlikely]] {
-    auto timestampedFrame = std::make_shared<DataModel::TimestampedFrame>(frame);
-    csvExport.hotpathTxFrame(timestampedFrame);
-    mdf4Export.hotpathTxFrame(timestampedFrame);
-    pluginsServer.hotpathTxFrame(timestampedFrame);
+  csvExport.hotpathTxFrame(frame);
+  mdf4Export.hotpathTxFrame(frame);
+  pluginsServer.hotpathTxFrame(frame);
 
 #ifdef BUILD_COMMERCIAL
-    static auto& sqliteExport = Sessions::Export::instance();
-    sqliteExport.hotpathTxFrame(timestampedFrame);
+  static auto& sqliteExport = Sessions::Export::instance();
+  sqliteExport.hotpathTxFrame(frame);
 #endif
 
 #ifdef ENABLE_GRPC
-    static auto& grpcServer = API::GRPC::GRPCServer::instance();
-    grpcServer.hotpathTxFrame(timestampedFrame);
+  static auto& grpcServer = API::GRPC::GRPCServer::instance();
+  grpcServer.hotpathTxFrame(frame);
 #endif
-  }
 }
 
 //--------------------------------------------------------------------------------------------------
 // Per-dataset value transforms
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Opens a safe subset of Lua standard libraries for transform engines.
- */
 static void openSafeLibsForTransform(lua_State* L)
 {
   static const luaL_Reg kSafeLibs[] = {
@@ -979,14 +874,7 @@ static void openSafeLibsForTransform(lua_State* L)
 }
 
 /**
- * @brief Lua instruction-count hook that aborts runaway transforms.
- *
- * Installed on every shared transform state via lua_sethook with
- * LUA_MASKCOUNT. Fires every kTransformHookInstrCount instructions: it
- * fetches the owning TransformEngine* from the Lua registry and checks
- * the per-engine deadline. When the deadline has expired, luaL_error()
- * unwinds the current lua_pcall() with an error, which applyTransform()
- * catches and translates to "return rawValue unchanged".
+ * @brief Lua LUA_MASKCOUNT hook that aborts runaway transforms via luaL_error() when the per-engine deadline expires.
  */
 void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* ar)
 {
@@ -1007,12 +895,7 @@ void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* 
 }
 
 /**
- * @brief Compiles per-dataset transform expressions into shared engines.
- *
- * Scans all datasets in m_frame.groups. For each source that has at least
- * one dataset with a non-empty transformCode, creates a shared Lua or JS
- * engine and compiles each expression into a named function. The function
- * reference is cached for O(1) lookup during the hotpath.
+ * @brief Compiles per-dataset transforms into one shared Lua/JS engine per source, caching function refs.
  */
 void DataModel::FrameBuilder::compileTransforms()
 {
@@ -1059,11 +942,7 @@ void DataModel::FrameBuilder::compileTransforms()
 }
 
 /**
- * @brief Compiles per-dataset Lua transforms into a shared lua_State.
- *
- * Each dataset's chunk is executed to define a transform() global, which is
- * then renamed to a per-dataset alias and stored via luaL_ref for O(1)
- * hotpath lookup.
+ * @brief Compiles per-dataset Lua transforms into a shared lua_State, caching refs for O(1) hotpath lookup.
  */
 void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
                                                    const std::vector<TransformEntry>& entries)
@@ -1136,10 +1015,7 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
 }
 
 /**
- * @brief Compiles per-dataset JavaScript transforms into a shared QJSEngine.
- *
- * Each dataset's code is wrapped in an IIFE so that top-level var
- * declarations become per-dataset closure state.
+ * @brief Compiles per-dataset JavaScript transforms into a shared QJSEngine; code is IIFE-wrapped for isolation.
  */
 void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
                                                   const std::vector<TransformEntry>& entries)
@@ -1212,15 +1088,7 @@ void DataModel::FrameBuilder::destroyTransformEngines()
 }
 
 /**
- * @brief Applies the pre-compiled transform for a dataset.
- *
- * Looks up the function reference by uniqueId and calls it with the raw
- * value. Supports both numeric and string inputs/outputs.
- *
- * @param sourceId  Source that owns the dataset.
- * @param uniqueId  Dataset unique identifier.
- * @param rawValue  Raw value (double or QString) from the frame parser.
- * @return Transformed value, or rawValue on error / missing transform.
+ * @brief Applies the pre-compiled transform for a dataset; returns @p rawValue on error or missing transform.
  */
 QVariant DataModel::FrameBuilder::applyTransform(int sourceId,
                                                  int uniqueId,
@@ -1336,10 +1204,6 @@ QVariant DataModel::FrameBuilder::applyTransform(int sourceId,
 // Data table store initialization and transform API injection
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Initializes the DataTableStore from ProjectModel's tables and the
- *        current frame template.
- */
 void DataModel::FrameBuilder::initializeTableStore()
 {
   const auto& pm = DataModel::ProjectModel::instance();
@@ -1451,8 +1315,7 @@ static int luaDatasetGetFinal(lua_State* L)
 }
 
 /**
- * @brief Injects tableGet, tableSet, datasetGetRaw, and datasetGetFinal
- *        into a Lua state as global C closures.
+ * @brief Injects tableGet / tableSet / datasetGetRaw / datasetGetFinal into the Lua state as C closures.
  */
 void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 {
@@ -1478,11 +1341,7 @@ void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 }
 
 /**
- * @brief Injects tableGet, tableSet, datasetGetRaw, and datasetGetFinal
- *        into a QJSEngine as global functions.
- *
- * Uses a TableApiBridge QObject (defined in DataTable.h) parented to the
- * engine. Thin JS wrappers delegate to the bridge's invokable methods.
+ * @brief Injects the same four API globals into a QJSEngine via a `TableApiBridge` QObject.
  */
 void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 {

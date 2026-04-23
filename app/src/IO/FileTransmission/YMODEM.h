@@ -27,19 +27,7 @@ namespace IO {
 namespace Protocols {
 
 /**
- * @brief YMODEM (batch) file transfer protocol implementation.
- *
- * YMODEM extends XMODEM-1K with:
- * - Block 0 containing filename and file size
- * - 1024-byte data blocks with CRC-16
- * - End-of-batch signaling via empty block 0
- *
- * Protocol flow:
- *   Receiver sends 'C' → Sender sends block 0 (filename + size)
- *   → Receiver ACKs + sends 'C' → Sender sends data blocks (1K)
- *   → EOT → Receiver NAKs → EOT → Receiver ACKs
- *   → Receiver sends 'C' → Sender sends empty block 0 (end of batch)
- *   → Receiver ACKs → Done
+ * @brief YMODEM (batch) sender built on top of XMODEM-1K.
  */
 class YMODEM : public XMODEM {
   Q_OBJECT

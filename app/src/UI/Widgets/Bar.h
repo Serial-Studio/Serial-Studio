@@ -27,13 +27,7 @@
 
 namespace Widgets {
 /**
- * @class Widgets::Bar
  * @brief Data model for a normalized value display (e.g. bar or gauge).
- *
- * Holds value, range, and alarm threshold data for a single dashboard element.
- * Emits update signals when the value changes.
- *
- * Designed for use in real-time UI components like bar or gauge widgets.
  */
 class Bar : public QQuickItem {
   // clang-format off

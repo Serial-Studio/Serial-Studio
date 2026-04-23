@@ -34,11 +34,7 @@ namespace DataModel {
 class CustomModel;
 
 /**
- * @brief Editor controller for the project structure UI.
- *
- * Owns the tree model, form models, selection state, combobox data and view
- * state for the Project Editor window. Observes ProjectModel signals and
- * rebuilds models when the project data changes.
+ * @brief Editor controller for the Project Editor window (tree, forms, selection).
  */
 class ProjectEditor : public QObject {
   // clang-format off
@@ -149,10 +145,6 @@ private:
 public:
   [[nodiscard]] static ProjectEditor& instance();
 
-  /**
-   * @brief Enum representing the different views available in the project
-   *        editor.
-   */
   enum CurrentView {
     ProjectView,
     GroupView,
@@ -170,10 +162,6 @@ public:
   };
   Q_ENUM(CurrentView)
 
-  /**
-   * @brief Enum representing the different types of editor widgets available
-   *        for editing parameters.
-   */
   enum EditorWidget {
     TextField,
     HexTextField,
@@ -186,10 +174,6 @@ public:
   };
   Q_ENUM(EditorWidget)
 
-  /**
-   * @brief Enum representing custom roles used in the tree view for data
-   *        access.
-   */
   enum CustomRoles {
     Active = Qt::UserRole,
 
@@ -312,27 +296,17 @@ private:
   QMap<QStandardItem*, DataModel::OutputWidget> m_outputWidgetItems;
   QMap<QStandardItem*, DataModel::Source> m_sourceParserItems;
 
-  // Groups tree items:
-  //   m_groupsRootItem → "Groups" category root, parent to every group item
   QStandardItem* m_groupsRootItem;
 
-  // Data tables tree items:
-  //   m_tablesRootItem      → "Shared Memory" category root (DataTablesView)
-  //   m_systemDatasetsItem  → auto-generated "Dataset Values" (SystemDatasetsView)
-  //   m_userTableItems      → user-defined tables keyed by tree item
   QStandardItem* m_tablesRootItem;
   QStandardItem* m_systemDatasetsItem;
   QMap<QStandardItem*, QString> m_userTableItems;
   QString m_selectedUserTable;
 
-  // Workspaces tree items:
-  //   m_workspacesRootItem → "Workspaces" category root (WorkspacesView)
-  //   m_workspaceItems     → user workspaces keyed by tree item
   QStandardItem* m_workspacesRootItem;
   QMap<QStandardItem*, int> m_workspaceItems;
   int m_selectedWorkspaceId;
 
-  // Active tree search query (empty = show full tree)
   QString m_treeSearchQuery;
 
   DataModel::Group m_selectedGroup;
@@ -373,8 +347,7 @@ private:
 };
 
 /**
- * @brief A custom data model extending QStandardItemModel for managing
- *        project-specific data in the UI.
+ * @brief QStandardItemModel subclass exposing Project Editor custom roles to QML.
  */
 class CustomModel : public QStandardItemModel {
 public:

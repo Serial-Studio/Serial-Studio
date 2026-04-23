@@ -26,32 +26,13 @@
 namespace API {
 namespace Handlers {
 /**
- * @class UARTHandler
- * @brief Registers API commands for IO::Drivers::UART operations
- *
- * Provides commands for:
- * - io.driver.uart.setDevice - Set port by device name
- * - io.driver.uart.setPortIndex - Set port by index
- * - io.driver.uart.setBaudRate - Set baud rate
- * - io.driver.uart.setParity - Set parity
- * - io.driver.uart.setDataBits - Set data bits
- * - io.driver.uart.setStopBits - Set stop bits
- * - io.driver.uart.setFlowControl - Set flow control
- * - io.driver.uart.setDtrEnabled - Enable/disable DTR
- * - io.driver.uart.setAutoReconnect - Set auto-reconnect behavior
- * - io.driver.uart.getPortList - Query available ports
- * - io.driver.uart.getBaudRateList - Query available baud rates
- * - io.driver.uart.getConfiguration - Query current configuration
+ * @brief Registers API commands for IO::Drivers::UART operations.
  */
 class UARTHandler {
 public:
-  /**
-   * @brief Register all UART commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Mutation commands
   static CommandResponse setDevice(const QString& id, const QJsonObject& params);
   static CommandResponse setPortIndex(const QString& id, const QJsonObject& params);
   static CommandResponse setBaudRate(const QString& id, const QJsonObject& params);
@@ -62,7 +43,6 @@ private:
   static CommandResponse setDtrEnabled(const QString& id, const QJsonObject& params);
   static CommandResponse setAutoReconnect(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getPortList(const QString& id, const QJsonObject& params);
   static CommandResponse getBaudRateList(const QString& id, const QJsonObject& params);
   static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);

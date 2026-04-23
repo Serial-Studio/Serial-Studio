@@ -30,10 +30,6 @@ namespace Misc {
 /**
  * @brief Provides online icon search via the Iconify API and inline SVG
  *        resolution for action icons.
- *
- * Exposes a search interface to QML, downloads SVG data on selection, and
- * provides a QQuickImageProvider that can render base64-encoded inline SVGs
- * via the @c image://actionicon/ scheme.
  */
 class IconEngine : public QObject {
   // clang-format off
@@ -89,11 +85,6 @@ private:
 
 /**
  * @brief QQuickImageProvider for rendering inline base64-encoded SVG icons.
- *
- * Registered under @c "actionicon" so QML can use URLs of the form:
- * @code
- *   image://actionicon/<base64SvgData>
- * @endcode
  */
 class ActionIconProvider : public QQuickImageProvider {
 public:

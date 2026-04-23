@@ -39,7 +39,6 @@ Widgets.SmartDialog {
     property string authorName: ""
     property string logoPath: ""
     property int pageSizeIndex: 0
-    property int orientationIndex: 0
     property bool includeCover: true
     property bool includeMetadata: true
     property bool includeStats: true
@@ -68,21 +67,25 @@ Widgets.SmartDialog {
   }
 
   //
-  // Page size enum values (match QPageSize::PageSizeId)
+  // Page size enum values (match QPageSize::PageSizeId). Reports always
+  // print landscape — a chart with a long X-axis looks squashed on a
+  // portrait page — so the dialog doesn't expose an orientation control.
   //
   readonly property var pageSizes: [
-    { label: qsTr("A4"),     value: 0 },
-    { label: qsTr("A3"),     value: 8 },
-    { label: qsTr("Letter"), value: 2 },
-    { label: qsTr("Legal"),  value: 3 }
-  ]
-
-  //
-  // Orientation enum values (QPageLayout::Orientation)
-  //
-  readonly property var orientations: [
-    { label: qsTr("Portrait"),  value: 0 },
-    { label: qsTr("Landscape"), value: 1 }
+    { label: qsTr("A4 (210 × 297 mm)"),         value: 0  },
+    { label: qsTr("A3 (297 × 420 mm)"),         value: 8  },
+    { label: qsTr("A2 (420 × 594 mm)"),         value: 7  },
+    { label: qsTr("A1 (594 × 841 mm)"),         value: 6  },
+    { label: qsTr("A0 (841 × 1189 mm)"),        value: 5  },
+    { label: qsTr("A5 (148 × 210 mm)"),         value: 9  },
+    { label: qsTr("A6 (105 × 148 mm)"),         value: 10 },
+    { label: qsTr("B4 (250 × 353 mm)"),         value: 16 },
+    { label: qsTr("B5 (176 × 250 mm)"),         value: 1  },
+    { label: qsTr("Letter (8.5 × 11 in)"),      value: 2  },
+    { label: qsTr("Legal (8.5 × 14 in)"),       value: 3  },
+    { label: qsTr("Executive (7.25 × 10.5 in)"), value: 4  },
+    { label: qsTr("Tabloid (11 × 17 in)"),      value: 29 },
+    { label: qsTr("Ledger (17 × 11 in)"),       value: 28 }
   ]
 
   //
@@ -102,8 +105,7 @@ Widgets.SmartDialog {
     _authorField.text  = _prefs.authorName
     _logoField.text    = _prefs.logoPath
 
-    _pageSizeCombo.currentIndex    = Math.max(0, _prefs.pageSizeIndex)
-    _orientationCombo.currentIndex = Math.max(0, _prefs.orientationIndex)
+    _pageSizeCombo.currentIndex = Math.max(0, _prefs.pageSizeIndex)
 
     _coverCheck.checked    = _prefs.includeCover
     _metadataCheck.checked = _prefs.includeMetadata
@@ -125,7 +127,6 @@ Widgets.SmartDialog {
     _prefs.authorName       = _authorField.text
     _prefs.logoPath         = _logoField.text
     _prefs.pageSizeIndex    = _pageSizeCombo.currentIndex
-    _prefs.orientationIndex = _orientationCombo.currentIndex
     _prefs.includeCover     = _coverCheck.checked
     _prefs.includeMetadata  = _metadataCheck.checked
     _prefs.includeStats     = _statsCheck.checked
@@ -146,7 +147,6 @@ Widgets.SmartDialog {
       "authorName":      _authorField.text,
       "logoPath":        _logoField.text,
       "pageSize":        root.pageSizes[_pageSizeCombo.currentIndex].value,
-      "orientation":     root.orientations[_orientationCombo.currentIndex].value,
       "includeCover":    _coverCheck.checked,
       "includeMetadata": _metadataCheck.checked,
       "includeStats":    _statsCheck.checked,
@@ -166,7 +166,7 @@ Widgets.SmartDialog {
     id: layout
 
     spacing: 12
-    anchors.centerIn: parent
+    anchors.fill: parent
 
     //
     // Tab bar
@@ -197,19 +197,22 @@ Widgets.SmartDialog {
     }
 
     //
-    // Tab contents
+    // Tab contents. A fixed preferred size pins the dialog so the window
+    // doesn't balloon on platforms whose system font renders taller than
+    // macOS (Windows Segoe UI, some Linux DE fonts). Each tab uses
+    // anchors.fill so its contents expand into the reserved box instead of
+    // pushing the container outward.
     //
     StackLayout {
       id: _stack
 
       clip: true
       Layout.fillWidth: true
-      Layout.minimumWidth: 560
+      Layout.minimumWidth: 520
+      Layout.preferredWidth: 540
+      Layout.preferredHeight: 280
       currentIndex: _tab.currentIndex
       Layout.topMargin: -parent.spacing - 1
-      implicitHeight: Math.max(_brandingTab.implicitHeight,
-                               _pageTab.implicitHeight,
-                               _sectionsTab.implicitHeight)
 
       //
       // Branding tab
@@ -219,7 +222,6 @@ Widgets.SmartDialog {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-        implicitHeight: _brandingLayout.implicitHeight + 16
 
         Rectangle {
           radius: 2
@@ -238,7 +240,6 @@ Widgets.SmartDialog {
           anchors.fill: parent
           anchors.margins: 12
 
-          Item { implicitHeight: 2; Layout.columnSpan: 2 }
           Label {
             Layout.columnSpan: 2
             text: qsTr("Identity")
@@ -252,7 +253,6 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             color: Cpp_ThemeManager.colors["groupbox_border"]
           }
-          Item { implicitHeight: 2; Layout.columnSpan: 2 }
 
           Label {
             text: qsTr("Company")
@@ -290,7 +290,7 @@ Widgets.SmartDialog {
             font: Cpp_Misc_CommonFonts.uiFont
           }
 
-          Item { implicitHeight: 6; Layout.columnSpan: 2 }
+          Item { implicitHeight: 4; Layout.columnSpan: 2 }
           Label {
             Layout.columnSpan: 2
             text: qsTr("Logo")
@@ -304,7 +304,6 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             color: Cpp_ThemeManager.colors["groupbox_border"]
           }
-          Item { implicitHeight: 2; Layout.columnSpan: 2 }
 
           Label {
             text: qsTr("File")
@@ -332,10 +331,7 @@ Widgets.SmartDialog {
             }
           }
 
-          Item {
-            Layout.columnSpan: 2
-            Layout.fillHeight: true
-          }
+          Item { Layout.fillHeight: true; Layout.columnSpan: 2 }
         }
       }
 
@@ -347,7 +343,6 @@ Widgets.SmartDialog {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-        implicitHeight: _pageLayout.implicitHeight + 16
 
         Rectangle {
           radius: 2
@@ -366,7 +361,6 @@ Widgets.SmartDialog {
           anchors.fill: parent
           anchors.margins: 12
 
-          Item { implicitHeight: 2; Layout.columnSpan: 2 }
           Label {
             Layout.columnSpan: 2
             text: qsTr("Paper")
@@ -380,7 +374,6 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             color: Cpp_ThemeManager.colors["groupbox_border"]
           }
-          Item { implicitHeight: 2; Layout.columnSpan: 2 }
 
           Label {
             text: qsTr("Page size")
@@ -394,22 +387,10 @@ Widgets.SmartDialog {
             font: Cpp_Misc_CommonFonts.uiFont
           }
 
-          Label {
-            text: qsTr("Orientation")
-            color: Cpp_ThemeManager.colors["text"]
-          }
-          ComboBox {
-            id: _orientationCombo
-
-            Layout.fillWidth: true
-            model: root.orientations.map(o => o.label)
-            font: Cpp_Misc_CommonFonts.uiFont
-          }
-
           //
           // Plot appearance sub-section
           //
-          Item { implicitHeight: 6; Layout.columnSpan: 2 }
+          Item { implicitHeight: 4; Layout.columnSpan: 2 }
           Label {
             Layout.columnSpan: 2
             text: qsTr("Plot appearance")
@@ -423,7 +404,6 @@ Widgets.SmartDialog {
             Layout.fillWidth: true
             color: Cpp_ThemeManager.colors["groupbox_border"]
           }
-          Item { implicitHeight: 2; Layout.columnSpan: 2 }
 
           Label {
             text: qsTr("Line width")
@@ -461,10 +441,7 @@ Widgets.SmartDialog {
             font: Cpp_Misc_CommonFonts.uiFont
           }
 
-          Item {
-            Layout.columnSpan: 2
-            Layout.fillHeight: true
-          }
+          Item { Layout.fillHeight: true; Layout.columnSpan: 2 }
         }
       }
 
@@ -476,7 +453,6 @@ Widgets.SmartDialog {
 
         Layout.fillWidth: true
         Layout.fillHeight: true
-        implicitHeight: _sectionsLayout.implicitHeight + 16
 
         Rectangle {
           radius: 2
@@ -493,10 +469,6 @@ Widgets.SmartDialog {
           anchors.fill: parent
           anchors.margins: 12
 
-          Item {
-            implicitHeight: 2
-          }
-
           Label {
             text: qsTr("Include")
             color: Cpp_ThemeManager.colors["pane_section_label"]
@@ -508,10 +480,6 @@ Widgets.SmartDialog {
             implicitHeight: 1
             Layout.fillWidth: true
             color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
-
-          Item {
-            implicitHeight: 6
           }
 
           CheckBox {

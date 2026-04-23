@@ -30,28 +30,14 @@
 
 namespace API {
 /**
- * @class MCPHandler
- * @brief Handler for Model Context Protocol (MCP) messages
- *
- * The MCPHandler implements the MCP specification and provides a bridge
- * between MCP clients (AI models) and Serial Studio's existing API.
- *
- * Key features:
- * - Automatic tool generation from CommandRegistry
- * - Real-time telemetry data as MCP resources
- * - Protocol negotiation and lifecycle management
- * - Stateful sessions per client connection
- *
- * Design: Each TCP client socket can have its own MCP session state.
- * The handler is stateless and creates/manages session objects per socket.
+ * @brief Handler for Model Context Protocol (MCP) messages.
  */
 class MCPHandler : public QObject {
   Q_OBJECT
 
 public:
   /**
-   * @struct ClientSession
-   * @brief Tracks MCP session state for a client connection
+   * @brief Tracks MCP session state for a client connection.
    */
   struct ClientSession {
     bool initialized = false;
@@ -68,36 +54,12 @@ private:
   MCPHandler& operator=(const MCPHandler&) = delete;
 
 public:
-  /**
-   * @brief Gets the singleton instance
-   */
   [[nodiscard]] static MCPHandler& instance();
 
-  /**
-   * @brief Check if data appears to be an MCP message
-   * @param data Raw bytes to check
-   * @return true if data looks like an MCP JSON-RPC message
-   */
   [[nodiscard]] bool isMCPMessage(const QByteArray& data) const;
-
-  /**
-   * @brief Process an incoming MCP message and return the response
-   * @param data Raw JSON-RPC message bytes
-   * @param sessionId Session identifier (e.g., socket pointer address)
-   * @return Response as JSON bytes (ready to send back to client)
-   */
   [[nodiscard]] QByteArray processMessage(const QByteArray& data, const QString& sessionId);
 
-  /**
-   * @brief Clear session state for a disconnected client
-   * @param sessionId Session identifier to clean up
-   */
   void clearSession(const QString& sessionId);
-
-  /**
-   * @brief Get current frame data for resource reads
-   * @param frame Latest frame from Serial Studio
-   */
   void updateCurrentFrame(const DataModel::Frame& frame);
 
 public slots:

@@ -41,13 +41,6 @@ constexpr int kEnumIntervalMs = 2000;
 // Constructor / destructor / singleton
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the HID driver singleton.
- *
- * Initialises hidapi, restores the last-selected device index from persistent
- * settings, kicks off an initial device enumeration, and sets up the 2-second
- * polling timer used when OS-level hotplug is unavailable.
- */
 IO::Drivers::HID::HID()
   : m_handle(nullptr), m_deviceInfoList(nullptr), m_running(false), m_deviceIndex(0)
 {
@@ -66,10 +59,6 @@ IO::Drivers::HID::HID()
 
 /**
  * @brief Stops the read thread, closes the device handle, and clears usage info.
- *
- * Called by both close() and the destructor to avoid duplicating the teardown
- * sequence. Does not free the enumerated device list or shut down hidapi —
- * those steps belong only to the destructor.
  */
 void IO::Drivers::HID::cleanupDevice()
 {
@@ -90,12 +79,6 @@ void IO::Drivers::HID::cleanupDevice()
   m_usage.clear();
 }
 
-/**
- * @brief Destroys the HID driver.
- *
- * Closes any open device, frees the enumerated device list, and shuts down
- * hidapi.
- */
 IO::Drivers::HID::~HID()
 {
   cleanupDevice();
@@ -110,34 +93,22 @@ IO::Drivers::HID::~HID()
 // HAL_Driver interface
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Closes the open HID device and stops the read thread.
- */
 void IO::Drivers::HID::close()
 {
   cleanupDevice();
   Q_EMIT deviceInfoChanged();
 }
 
-/**
- * @brief Returns true when a HID device is currently open.
- */
 bool IO::Drivers::HID::isOpen() const noexcept
 {
   return m_handle != nullptr;
 }
 
-/**
- * @brief Returns true — the driver supports interrupt IN reads.
- */
 bool IO::Drivers::HID::isReadable() const noexcept
 {
   return isOpen();
 }
 
-/**
- * @brief Returns true — the driver supports interrupt OUT / feature writes.
- */
 bool IO::Drivers::HID::isWritable() const noexcept
 {
   return isOpen();
@@ -153,8 +124,6 @@ bool IO::Drivers::HID::configurationOk() const noexcept
 
 /**
  * @brief Sends @p data to the device as an interrupt OUT / feature report.
- *
- * @return Number of bytes written, or -1 on error.
  */
 qint64 IO::Drivers::HID::write(const QByteArray& data)
 {
@@ -168,9 +137,6 @@ qint64 IO::Drivers::HID::write(const QByteArray& data)
 
 /**
  * @brief Opens the selected HID device and starts the read thread.
- *
- * @param mode  Ignored (HID does not distinguish read/write at open time).
- * @return true on success, false if the device could not be opened.
  */
 bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 {
@@ -224,24 +190,12 @@ bool IO::Drivers::HID::open(const QIODevice::OpenMode mode)
 
 /**
  * @brief Returns the device list with a placeholder entry at index 0.
- *
- * Index 0 is always "Select Device"; real devices start at index 1,
- * mirroring the UART driver's pattern so the ComboBox binding is uniform.
- *
- * @return String list of discovered HID device labels with placeholder prepended.
  */
 QStringList IO::Drivers::HID::deviceList() const
 {
   return m_deviceLabels;
 }
 
-/**
- * @brief Returns the currently selected device index.
- *
- * 0 means no device selected (placeholder); real selections start at 1.
- *
- * @return m_deviceIndex.
- */
 int IO::Drivers::HID::deviceIndex() const
 {
   return m_deviceIndex;
@@ -249,11 +203,6 @@ int IO::Drivers::HID::deviceIndex() const
 
 /**
  * @brief Returns the HID usage page of the currently open device.
- *
- * Formatted as a zero-padded hexadecimal string (e.g. "0xFF00"). Empty when
- * no device is open.
- *
- * @return Usage page string, or an empty QString if no device is open.
  */
 QString IO::Drivers::HID::usagePage() const
 {
@@ -262,11 +211,6 @@ QString IO::Drivers::HID::usagePage() const
 
 /**
  * @brief Returns the HID usage of the currently open device.
- *
- * Formatted as a zero-padded hexadecimal string (e.g. "0x0001"). Empty when
- * no device is open.
- *
- * @return Usage string, or an empty QString if no device is open.
  */
 QString IO::Drivers::HID::usage() const
 {
@@ -279,9 +223,6 @@ QString IO::Drivers::HID::usage() const
 
 /**
  * @brief Selects the device at @p index in the device list.
- *
- * Index 0 is always the "Select Device" placeholder. Persists the selection
- * to QSettings so it survives application restarts.
  */
 void IO::Drivers::HID::setDeviceIndex(const int index)
 {
@@ -317,9 +258,6 @@ void IO::Drivers::HID::setDeviceIndex(const int index)
 
 /**
  * @brief Handles a fatal read error from the read thread.
- *
- * Called on the main thread (via QueuedConnection from readLoop). Closes the
- * device and notifies the user.
  */
 void IO::Drivers::HID::onReadError()
 {
@@ -331,10 +269,6 @@ void IO::Drivers::HID::onReadError()
 
 /**
  * @brief Re-enumerates all connected HID devices.
- *
- * Rebuilds m_devicePaths and m_deviceLabels. Emits deviceListChanged() and
- * configurationChanged() only when the list actually differs from the
- * previous enumeration to avoid spurious UI redraws.
  */
 void IO::Drivers::HID::enumerateDevices()
 {
@@ -469,9 +403,6 @@ void IO::Drivers::HID::enumerateDevices()
 
 /**
  * @brief Returns VID, PID, and serial number of the currently selected HID device.
- *
- * Walks the cached enumeration list to find the entry whose path matches the
- * currently selected device.
  */
 QJsonObject IO::Drivers::HID::deviceIdentifier() const
 {
@@ -553,7 +484,6 @@ bool IO::Drivers::HID::selectByIdentifier(const QJsonObject& id)
 
 /**
  * @brief Returns the HID configuration as a flat list of editable properties.
- * @return List of DriverProperty descriptors with current values.
  */
 QList<IO::DriverProperty> IO::Drivers::HID::driverProperties() const
 {
@@ -572,8 +502,6 @@ QList<IO::DriverProperty> IO::Drivers::HID::driverProperties() const
 
 /**
  * @brief Applies a single HID configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::HID::setDriverProperty(const QString& key, const QVariant& value)
 {
@@ -587,10 +515,6 @@ void IO::Drivers::HID::setDriverProperty(const QString& key, const QVariant& val
 
 /**
  * @brief Interrupt read loop executed on m_readThread.
- *
- * Reads HID reports with a 100 ms timeout so the loop can check m_running
- * periodically without blocking the thread forever. On a fatal error the
- * main thread is notified via a queued invocation of onReadError().
  */
 void IO::Drivers::HID::readLoop()
 {
@@ -600,7 +524,7 @@ void IO::Drivers::HID::readLoop()
     const int n = hid_read_timeout(m_handle, buf, kReadBufSize, kReadTimeoutMs);
 
     if (n > 0)
-      Q_EMIT dataReceived(makeByteArray(QByteArray(reinterpret_cast<char*>(buf), n)));
+      publishReceivedData(QByteArray(reinterpret_cast<char*>(buf), n));
 
     else if (n < 0) {
       QMetaObject::invokeMethod(this, "onReadError", Qt::QueuedConnection);

@@ -62,15 +62,15 @@ Widgets::ImageFrameReader::ImageFrameReader(QByteArray startSeq, QByteArray endS
  *        active detection mode.
  * @param data  Shared pointer to the raw byte chunk from the HAL driver.
  */
-void Widgets::ImageFrameReader::processData(const IO::ByteArrayPtr& data)
+void Widgets::ImageFrameReader::processData(const IO::CapturedDataPtr& data)
 {
   Q_ASSERT(data != nullptr);
   Q_ASSERT(m_mode == DetectionMode::Autodetect || m_mode == DetectionMode::Manual);
 
-  if (!data || data->isEmpty())
+  if (!data || !data->data || data->data->isEmpty())
     return;
 
-  m_accumulator.append(*data);
+  m_accumulator.append(*data->data);
 
   if (m_mode == DetectionMode::Autodetect)
     processAutodetect();

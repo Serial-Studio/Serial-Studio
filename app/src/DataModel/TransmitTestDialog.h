@@ -24,12 +24,7 @@
 namespace DataModel {
 
 /**
- * @brief Dialog for testing output widget transmit functions with sample input.
- *
- * Provides an interface for users to:
- * - Enter a sample value (number or text, optionally in hex)
- * - Execute the transmit function with that value
- * - View the output as raw text, hex bytes, and byte count
+ * @brief Dialog for exercising an output-widget transmit script against sample input.
  */
 class TransmitTestDialog : public QDialog {
   Q_OBJECT

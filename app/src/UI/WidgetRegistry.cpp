@@ -25,9 +25,6 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructor function
- */
 UI::WidgetRegistry::WidgetRegistry()
   : QObject(nullptr), m_nextId(1), m_batchDepth(0), m_batchHadChanges(false)
 {}
@@ -48,16 +45,6 @@ UI::WidgetRegistry& UI::WidgetRegistry::instance()
 
 /**
  * @brief Begins a batch update operation.
- *
- * During batch mode, individual widgetCreated/widgetDestroyed signals
- * are still emitted immediately, but batchUpdateCompleted() is deferred
- * until endBatchUpdate() is called.
- *
- * This allows subscribers to defer expensive operations (like layout
- * recalculation) until all changes are complete.
- *
- * Batch operations can be nested; only the outermost endBatchUpdate()
- * will emit batchUpdateCompleted().
  */
 void UI::WidgetRegistry::beginBatchUpdate()
 {
@@ -66,9 +53,6 @@ void UI::WidgetRegistry::beginBatchUpdate()
 
 /**
  * @brief Ends a batch update operation.
- *
- * Emits batchUpdateCompleted() if this is the outermost batch and
- * any widgets were added or removed during the batch.
  */
 void UI::WidgetRegistry::endBatchUpdate()
 {
@@ -96,10 +80,6 @@ bool UI::WidgetRegistry::isInBatchUpdate() const
 
 /**
  * @brief Creates a new widget and assigns a unique ID.
- *
- * The ID is guaranteed to be unique and will not be reused during this
- * session, even after the widget is destroyed.
- *
  * @param type The widget type (from SerialStudio::DashboardWidget).
  * @param title Display title for the widget.
  * @param groupId The parent group ID (-1 for standalone widgets like terminal).
@@ -221,9 +201,6 @@ int UI::WidgetRegistry::widgetCount() const
 
 /**
  * @brief Clears all widgets from the registry.
- *
- * This emits widgetDestroyed for each widget (in reverse creation order),
- * then registryCleared.
  */
 void UI::WidgetRegistry::clear()
 {
@@ -242,16 +219,10 @@ void UI::WidgetRegistry::clear()
 
 /**
  * @brief Destroys a widget and removes it from the registry.
- *
- * Note: The ID will NOT be reused during this session to prevent
- * dangling references.
- *
  * @param id The widget ID to destroy.
- * @return True if the widget existed and was destroyed.
  */
 void UI::WidgetRegistry::destroyWidget(UI::WidgetID id)
 {
-  // Widget not found, nothing to do
   if (!m_widgets.contains(id))
     return;
 
@@ -260,7 +231,6 @@ void UI::WidgetRegistry::destroyWidget(UI::WidgetID id)
   m_widgets.remove(id);
   m_widgetOrder.removeOne(id);
 
-  // Mark batch as dirty if inside a batch operation
   if (m_batchDepth > 0)
     m_batchHadChanges = true;
 }
@@ -277,7 +247,6 @@ void UI::WidgetRegistry::updateWidget(UI::WidgetID id,
                                       const QString& icon,
                                       const QVariant& userData)
 {
-  // Widget not found, nothing to do
   if (!m_widgets.contains(id))
     return;
 

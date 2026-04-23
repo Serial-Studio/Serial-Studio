@@ -17,10 +17,7 @@ namespace Widgets {
 namespace Output {
 
 /**
- * @class Widgets::Output::Slider
  * @brief Output widget with a slider that sends scaled numeric values.
- *
- * Calls transmit(value) where value is clamped to [minValue, maxValue].
  */
 class Slider : public Base {
   // clang-format off

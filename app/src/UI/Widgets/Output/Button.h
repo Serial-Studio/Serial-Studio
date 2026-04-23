@@ -17,10 +17,7 @@ namespace Widgets {
 namespace Output {
 
 /**
- * @class Widgets::Output::Button
  * @brief Output widget that sends a command when clicked.
- *
- * Calls transmit(1) on each click. The JS function decides what to send.
  */
 class Button : public Base {
   Q_OBJECT

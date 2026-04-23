@@ -47,13 +47,10 @@
 
 #ifdef BUILD_COMMERCIAL
 
-/**
- * @brief Destructor - closes file
- */
 Console::ExportWorker::~ExportWorker() = default;
 
 /**
- * @brief Returns true if at least one device file is open
+ * @brief Returns true if at least one device file is open.
  */
 bool Console::ExportWorker::isResourceOpen() const
 {
@@ -69,11 +66,9 @@ bool Console::ExportWorker::isResourceOpen() const
  */
 void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items)
 {
-  // No items, abort
   if (items.empty())
     return;
 
-  // No device connected, abort
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
@@ -186,8 +181,7 @@ void Console::ExportWorker::createFile(int deviceId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Constructor function, configures the path in which Serial Studio shall
- * automatically write generated console log files.
+ * @brief Constructs the console export singleton.
  */
 Console::Export::Export()
 #ifdef BUILD_COMMERCIAL
@@ -222,9 +216,6 @@ Console::Export::Export()
   setExportEnabled(m_settings.value("ConsoleExport", false).toBool());
 }
 
-/**
- * Close file & finnish write-operations before destroying the class.
- */
 Console::Export::~Export() = default;
 
 #ifdef BUILD_COMMERCIAL
@@ -238,7 +229,7 @@ DataModel::FrameConsumerWorkerBase* Console::Export::createWorker()
 #endif
 
 /**
- * Returns a pointer to the only instance of this class.
+ * @brief Returns the singleton instance.
  */
 Console::Export& Console::Export::instance()
 {
@@ -247,7 +238,7 @@ Console::Export& Console::Export::instance()
 }
 
 /**
- * Returns @c true if the console output file is open.
+ * @brief Returns true if the console output file is open.
  */
 bool Console::Export::isOpen() const
 {
@@ -259,7 +250,7 @@ bool Console::Export::isOpen() const
 }
 
 /**
- * Returns @c true if console log export is enabled.
+ * @brief Returns true if console log export is enabled.
  */
 bool Console::Export::exportEnabled() const
 {
@@ -271,10 +262,7 @@ bool Console::Export::exportEnabled() const
 }
 
 /**
- * Write all remaining console data & close the output file.
- *
- * Flushes any remaining data in the queue before closing to prevent
- * creating small trailing files.
+ * @brief Flushes remaining console data and closes the output file.
  */
 void Console::Export::closeFile()
 {
@@ -285,8 +273,7 @@ void Console::Export::closeFile()
 }
 
 /**
- * Configures the signal/slot connections with the modules of the application
- * that this module depends upon.
+ * @brief Configures signal/slot connections with dependent modules.
  */
 void Console::Export::setupExternalConnections()
 {
@@ -303,7 +290,7 @@ void Console::Export::setupExternalConnections()
 }
 
 /**
- * Enables or disables data export.
+ * @brief Enables or disables data export.
  */
 void Console::Export::setExportEnabled(const bool enabled)
 {
@@ -352,7 +339,7 @@ void Console::Export::registerData(int deviceId, QStringView data)
 }
 
 /**
- * Called when the worker thread changes the file open state.
+ * @brief Called when the worker thread changes the file open state.
  */
 #ifdef BUILD_COMMERCIAL
 void Console::Export::onWorkerOpenChanged()

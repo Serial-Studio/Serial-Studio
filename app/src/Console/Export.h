@@ -32,9 +32,6 @@
 
 namespace Console {
 
-/**
- * @brief Represents a single console data item for export
- */
 struct ExportData {
   int deviceId = -1;
   QString data;
@@ -49,16 +46,13 @@ struct ExportData {
   ExportData& operator=(const ExportData&) = delete;
 };
 
-/**
- * @brief Shared pointer to ExportData for efficient queuing
- */
 typedef std::shared_ptr<ExportData> ExportDataPtr;
 
 class Export;
 
 #ifdef BUILD_COMMERCIAL
 /**
- * @brief Worker that handles console export file I/O on background thread
+ * @brief Worker that handles console export file I/O on a background thread.
  */
 class ExportWorker : public DataModel::FrameConsumerWorker<ExportDataPtr> {
   Q_OBJECT
@@ -87,30 +81,7 @@ private:
 #endif
 
 /**
- * @class Export
  * @brief Manages automatic export of console data to log files.
- *
- * The Export class is a singleton that provides functionality to capture
- * and export console output data to persistent log files. This is particularly
- * useful for debugging, data logging, and post-analysis of serial communication
- * sessions.
- *
- * Key Features:
- * - **Automatic File Creation**: Automatically creates dated log files in the
- *   workspace directory
- * - **Buffered Writing**: Buffers console data and writes periodically to
- *   reduce disk I/O
- * - **Pro Feature**: Available only in commercial builds with valid license
- * - **Singleton Pattern**: Single instance ensures consistent file handling
- *   across the application
- *
- * @note This feature is only available in commercial builds (BUILD_COMMERCIAL).
- *       In GPL builds, all methods return false/empty values and no export
- *       occurs.
- *
- * @warning Export functionality requires an active Serial Studio Pro license.
- *          The export will be automatically disabled if the license becomes
- *          invalid.
  */
 class Export
 #ifdef BUILD_COMMERCIAL

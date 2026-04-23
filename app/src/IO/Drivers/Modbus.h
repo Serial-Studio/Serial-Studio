@@ -37,8 +37,7 @@
 namespace IO {
 namespace Drivers {
 /**
- * @struct ModbusRegisterGroup
- * @brief Defines a group of registers to poll
+ * @brief A contiguous block of Modbus registers to poll.
  */
 struct ModbusRegisterGroup {
   quint8 registerType;
@@ -53,39 +52,7 @@ struct ModbusRegisterGroup {
 };
 
 /**
- * @class Modbus
- * @brief Serial Studio driver for Modbus RTU and Modbus TCP communication
- *
- * This class provides a complete implementation of the Modbus protocol driver
- * for Serial Studio, supporting both Modbus RTU (over serial ports) and
- * Modbus TCP (over network) connections.
- *
- * ## Supported Protocols
- * - **Modbus RTU**: Serial communication using RS-232/RS-485
- * - **Modbus TCP**: Network communication using TCP/IP
- *
- * ## Connection Lifecycle
- * The driver implements an asynchronous connection model:
- * 1. User selects protocol and configures parameters
- * 2. `open()` initiates connection (returns true if successful)
- * 3. For TCP: connection state changes from Connecting → Connected
- * 4. `onStateChanged()` emits `configurationChanged()` signal
- * 5. IO::ConnectionManager queries `isOpen()` to update UI
- *
- * ## Data Flow
- * - Uses timer-based polling to read Modbus registers periodically
- * - Converts register data to byte arrays for Serial Studio's frame parser
- * - Supports reading holding registers (function code 0x03)
- * - Emits `dataReceived()` signal with formatted register data
- *
- * ## Signal Integration
- * - `configurationChanged()`: Emitted when connection state or config changes
- * - `dataReceived()`: Emitted when register data is successfully read
- * - `connectionError()`: Emitted when connection or read errors occur
- * - `availableSerialPortsChanged()`: Emitted when serial port list updates
- *
- * @see HAL_Driver
- * @see IO::ConnectionManager
+ * @brief HAL driver for Modbus RTU and Modbus TCP communication.
  */
 class Modbus : public HAL_Driver {
   // clang-format off

@@ -27,20 +27,7 @@ namespace API {
 namespace Handlers {
 
 /**
- * @class WorkspacesHandler
  * @brief Registers API commands for dashboard workspace management.
- *
- * Commands:
- *  - project.workspaces.list                List all workspaces (ids, titles, widget counts)
- *  - project.workspaces.get                 Return widget refs for a specific workspace
- *  - project.workspaces.add                 Create a new workspace
- *  - project.workspaces.delete              Delete a workspace
- *  - project.workspaces.rename              Rename a workspace
- *  - project.workspaces.autoGenerate        Materialise auto workspaces into customized set
- *  - project.workspaces.customize.get       Read the customizeWorkspaces flag
- *  - project.workspaces.customize.set       Flip the customizeWorkspaces flag
- *  - project.workspaces.widgets.add         Attach a widget ref to a workspace
- *  - project.workspaces.widgets.remove      Detach a widget ref from a workspace
  */
 class WorkspacesHandler {
 public:

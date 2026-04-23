@@ -25,17 +25,7 @@
 
 namespace Widgets {
 /**
- * @class Widgets::Gyroscope
  * @brief Attitude indicator widget for visualizing 3-axis gyroscope data.
- *
- * The Gyroscope class provides a visual representation of angular orientation
- * using yaw, pitch, and roll values. Incoming datasets are expected to carry
- * absolute angles in degrees — if you only have angular rates (deg/s),
- * integrate them to absolute angles via a per-dataset transform script.
- *
- * Key Features:
- * - **Three-Axis Display**: Visualizes yaw, pitch, and roll simultaneously
- * - **Real-time Updates**: Smooth visualization of changing orientation data
  */
 class Gyroscope : public QQuickItem {
   // clang-format off

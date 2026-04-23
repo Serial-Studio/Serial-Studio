@@ -28,6 +28,9 @@ class QJsonObject;
 
 namespace DataModel {
 
+/**
+ * @brief Single entry from a script-template manifest (file + display name).
+ */
 struct ScriptTemplateDefinition {
   QString file;
   QString name;

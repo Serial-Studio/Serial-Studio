@@ -26,27 +26,8 @@
 
 namespace Licensing {
 /**
- * @class MachineID
  * @brief Provides a consistent, hashed machine identifier for licensing
  *        and data encryption.
- *
- * The `MachineID` singleton class generates a unique, platform-agnostic machine
- * identifier based on system-specific properties.
- *
- * This ID is used to:
- * - Bind license keys and activations to a specific machine.
- * - Derive a stable encryption key for securing sensitive data such as license
- *   keys, passwords, and configuration values.
- *
- * The generated identifier does not contain personal or hardware-identifiable
- * information. It is a one-way hash, ensuring privacy while enforcing
- * per-device restrictions (e.g., seat limits).
- *
- * If encrypted data (e.g., license info) is copied from one machine to another,
- * the app will detect the mismatch and invalidate the cache automatically.
- *
- * This class guarantees that each machine returns the same ID across sessions,
- * while remaining secure and non-reversible.
  */
 class MachineID : public QObject {
   // clang-format off

@@ -31,16 +31,7 @@
 
 namespace Widgets {
 /**
- * @class Plot3D
- * @brief A 3D plotting widget with optional anaglyph (stereo) rendering.
- *
- * Renders a 3D plot with grid, data, and camera indicator.
- * Supports zoom, camera rotation, and anaglyph mode for red/cyan 3D effect.
- *
- * Exposed properties:
- * - zoom
- * - anaglyphEnabled
- * - cameraAngleX, cameraAngleY, cameraAngleZ
+ * @brief 3D plotting widget with optional anaglyph (stereo) rendering.
  */
 class Plot3D : public QuickPaintedItemCompat {
   // clang-format off

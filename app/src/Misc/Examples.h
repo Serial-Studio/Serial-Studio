@@ -30,12 +30,7 @@
 
 namespace Misc {
 /**
- * @brief Provides an in-app catalog of Serial Studio example projects with
- *        download, preview, and search capabilities.
- *
- * The Examples class loads a bundled manifest of example metadata and allows
- * users to browse, search, and download example projects directly from GitHub
- * without leaving Serial Studio.
+ * @brief In-app catalog of Serial Studio example projects.
  */
 class Examples : public QObject {
   // clang-format off

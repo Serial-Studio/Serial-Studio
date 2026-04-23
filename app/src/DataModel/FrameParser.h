@@ -31,14 +31,7 @@
 namespace DataModel {
 
 /**
- * @brief Singleton script engine manager for frame parsing.
- *
- * Maintains one IScriptEngine per source ID (source 0 = global / single-source
- * projects). All parse, load, and template operations are sourceId-scoped so
- * that multi-source projects can run independent parser code per device.
- *
- * Supports multiple scripting languages via the IScriptEngine interface
- * (JavaScript via QJSEngine, Lua via embedded Lua 5.4).
+ * @brief Per-source script engine manager driving the frame parser pipeline.
  */
 class FrameParser : public QObject {
   Q_OBJECT

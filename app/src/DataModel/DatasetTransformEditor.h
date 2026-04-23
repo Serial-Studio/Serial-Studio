@@ -33,16 +33,7 @@
 namespace DataModel {
 
 /**
- * @brief Dialog for editing per-dataset value transform expressions.
- *
- * Provides a syntax-highlighted code editor (Lua or JavaScript), built-in
- * template snippets loaded from Qt resources, and a live test area where
- * the user can enter a raw value and see the transformed output.
- *
- * Template code is tracked so that switching language automatically loads
- * the equivalent template in the new language. If the user has manually
- * edited the code (diverged from any template), the language switch only
- * changes the syntax highlighter and leaves the code untouched.
+ * @brief Dialog for editing per-dataset value transform scripts (Lua or JS).
  */
 class DatasetTransformEditor : public QDialog {
   Q_OBJECT

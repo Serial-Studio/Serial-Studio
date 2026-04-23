@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <deque>
 #include <memory>
 #include <QByteArray>
 #include <QObject>
@@ -43,34 +44,10 @@ enum class ValidationStatus {
  * @class IO::FrameReader
  * @brief Frame extractor for detecting and processing streamed data.
  *
- * Processes incoming data streams by detecting frames using configurable start
- * and end sequences or delimiters. Supports multiple modes for flexible data
- * handling, such as quick plotting, JSON extraction, and project-specific
- * parsing.
- *
- * **Runs on the main thread.** HAL drivers may emit dataReceived() from
- * their own read threads — the AutoConnection on processData() resolves to
- * a queued hop when that happens.
- *
- * **Thread Safety Model:**
- * This class achieves thread safety through immutability rather than locks.
- * ConnectionManager recreates the FrameReader instance whenever configuration
- * changes (see ConnectionManager::resetFrameReader() and
- * DeviceManager::reconfigure()). This ensures:
- *
- * - Configuration is set ONCE on the FrameReader via setters before any
- *   data is routed through it
- * - No configuration changes occur during the FrameReader's lifetime
- * - processData() can safely read member variables without synchronization
- *
- * DO NOT add mutexes or atomic operations to this class. If configuration
- * needs to change, destroy this instance and create a new one with updated
- * settings via ConnectionManager::resetFrameReader().
- *
- * Lock-free operation for 256 KHz+ data rates.
- *
- * @see ConnectionManager::resetFrameReader()
- * @see DeviceManager::reconfigure()
+ * Runs on the main thread. Configuration is immutable for the FrameReader's
+ * lifetime — callers must recreate the instance via
+ * ConnectionManager::resetFrameReader() or DeviceManager::reconfigure() to
+ * apply new settings. Do NOT add mutexes.
  */
 class FrameReader : public QObject {
   Q_OBJECT
@@ -83,12 +60,12 @@ public:
 
   inline void resetOverflowCount() { m_circularBuffer.resetOverflowCount(); }
 
-  inline moodycamel::ReaderWriterQueue<QByteArray>& queue() { return m_queue; }
+  inline moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>& queue() { return m_queue; }
 
   inline qsizetype overflowCount() const { return m_circularBuffer.overflowCount(); }
 
 public slots:
-  void processData(const IO::ByteArrayPtr& data);
+  void processData(const IO::CapturedDataPtr& data);
 
   void setChecksum(const QString& checksum);
   void setStartSequences(const QList<QByteArray>& starts);
@@ -97,6 +74,19 @@ public slots:
   void setFrameDetectionMode(const SerialStudio::FrameDetection mode);
 
 private:
+  struct PendingChunk {
+    IO::CapturedDataPtr chunk;
+    qsizetype bytesRemaining = 0;
+    IO::CapturedData::SteadyTimePoint nextFrameTimestamp;
+    std::chrono::nanoseconds frameStep = std::chrono::nanoseconds(1);
+  };
+
+  void appendChunk(const IO::CapturedDataPtr& data);
+  void discardPendingBytes(qsizetype size);
+  void consumeBytes(qsizetype size);
+  [[nodiscard]] IO::CapturedData::SteadyTimePoint frameTimestamp(qsizetype endOffsetExclusive);
+  [[nodiscard]] IO::CapturedDataPtr buildFrame(QByteArray&& data, qsizetype endOffsetExclusive);
+
   void readEndDelimitedFrames();
   void readStartDelimitedFrames();
   void readStartEndDelimitedFrames();
@@ -107,9 +97,6 @@ private:
   QString m_checksum;
   qsizetype m_checksumLength;
 
-  // Unified delimiter storage — one or more patterns per direction.
-  // Ordered longest-first so CRLF is preferred over bare CR when both
-  // match at the same buffer position.
   QVector<QByteArray> m_startSequences;
   QVector<QByteArray> m_finishSequences;
   QVector<std::vector<int>> m_startSequenceLps;
@@ -118,6 +105,7 @@ private:
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;
   CircularBuffer<QByteArray, char> m_circularBuffer;
-  moodycamel::ReaderWriterQueue<QByteArray> m_queue{4096};
+  std::deque<PendingChunk> m_pendingChunks;
+  moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue{4096};
 };
 }  // namespace IO

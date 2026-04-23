@@ -25,21 +25,7 @@
 
 namespace Widgets {
 /**
- * @class Widgets::Accelerometer
  * @brief Visual widget for displaying 3D acceleration vector data.
- *
- * The Accelerometer class visualizes acceleration data from three axes (X, Y,
- * Z), computing derived values such as total G-force, pitch and roll tilt
- * angles, and peak tracking. A configurable polar plot displays the 2D
- * projection (magnitude + theta) while an info strip shows computed values.
- *
- * Key Features:
- * - **3-Axis Input**: Reads X, Y, Z acceleration datasets
- * - **Polar Representation**: 2D magnitude and direction on configurable range
- * - **Tilt Angles**: Computes pitch and roll from raw acceleration
- * - **Peak Tracking**: Tracks session maximum G-force
- * - **Configurable Range**: User-adjustable max G for polar plot
- * - **Input Unit Toggle**: Supports both m/s^2 and G-force input
  */
 class Accelerometer : public QQuickItem {
   // clang-format off

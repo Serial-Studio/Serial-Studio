@@ -22,6 +22,7 @@
 #pragma once
 
 #include <atomic>
+#include <chrono>
 #include <QDebug>
 #include <QObject>
 #include <QThread>
@@ -32,12 +33,6 @@
 #include "ThirdParty/readerwriterqueue.h"
 
 namespace DataModel {
-/**
- * @brief Configuration parameters for frame consumers.
- *
- * This struct defines the tuning parameters for the threaded frame consumer
- * architecture. These values balance throughput, latency, and resource usage.
- */
 struct FrameConsumerConfig {
   size_t queueCapacity  = 8192;
   size_t flushThreshold = 1024;
@@ -45,10 +40,9 @@ struct FrameConsumerConfig {
 };
 
 /**
- * @brief Non-template base class for frame consumer workers.
- *
- * Provides Q_OBJECT functionality (signals, slots, meta-object) without
- * template parameters. Template classes cannot use Q_OBJECT directly.
+ * @class FrameConsumerWorkerBase
+ * @brief Non-template Q_OBJECT base for frame consumer workers. Owns the
+ *        monotonic-ns clock shared by CSV, MDF4 and Sessions export workers.
  */
 class FrameConsumerWorkerBase : public QObject {
   Q_OBJECT
@@ -60,57 +54,28 @@ public:
   explicit FrameConsumerWorkerBase(QObject* parent = nullptr);
   virtual ~FrameConsumerWorkerBase();
 
+  qint64 monotonicFrameNs(std::chrono::steady_clock::time_point now,
+                          std::chrono::steady_clock::time_point baseline);
+
+  void resetMonotonicClock();
+
 public slots:
   virtual void processData() = 0;
   virtual void close()       = 0;
+
+private:
+  qint64 m_lastFrameNs;
 };
 
 /**
- * @brief Abstract worker class for processing frames on a dedicated thread.
- *
- * This template class provides the worker thread logic for consuming frames
- * from a lock-free queue. It handles queue draining, batch processing, and
- * periodic flushing via timer.
- *
- * Derived classes must implement:
- * - processItems(): Process a batch of dequeued items
- * - closeResources(): Clean up resources (files, connections, etc.)
- * - isResourceOpen(): Check if resources are currently open
- *
- * @tparam T The type of items to process (e.g.,
- * std::shared_ptr<JSON::TimestampFrame>)
- *
- * @note This class is designed to run on a QThread via moveToThread().
- *       All public slots will be invoked on the worker thread.
- *
- * @example
- * class MyWorker : public FrameConsumerWorker<std::shared_ptr<MyFrame>>
- * {
- * protected:
- *   void processItems(const std::vector<std::shared_ptr<MyFrame>> &items)
- * override
- *   {
- *     for (const auto &frame : items)
- *       writeToFile(frame);
- *   }
- *
- *   void closeResources() override { m_file.close(); }
- *   bool isResourceOpen() const override { return m_file.isOpen(); }
- *
- * private:
- *   QFile m_file;
- * };
+ * @class FrameConsumerWorker
+ * @brief Threaded worker that drains a lock-free queue of T into
+ *        `processItems()` in batches. Subclasses implement `processItems()`,
+ *        `closeResources()`, `isResourceOpen()`.
  */
 template<typename T>
 class FrameConsumerWorker : public FrameConsumerWorkerBase {
 public:
-  /**
-   * @brief Constructs a frame consumer worker.
-   *
-   * @param queue Pointer to the lock-free queue shared with main thread
-   * @param enabled Pointer to atomic flag controlling processing
-   * @param queueSize Pointer to atomic counter tracking queue depth
-   */
   FrameConsumerWorker(moodycamel::ReaderWriterQueue<T>* queue,
                       std::atomic<bool>* enabled,
                       std::atomic<size_t>* queueSize)
@@ -119,18 +84,6 @@ public:
 
   ~FrameConsumerWorker() override = default;
 
-  /**
-   * @brief Processes all pending frames from the queue.
-   *
-   * This slot drains the entire queue into a local buffer, updates the queue
-   * size counter, and delegates processing to the derived class via
-   * processItems().
-   *
-   * Called by:
-   * - Periodic timer (e.g., every 1000ms)
-   * - Threshold trigger when queue reaches flushThreshold
-   * - Shutdown sequence to flush remaining data
-   */
   void processData() override
   {
     if (!m_enabled->load(std::memory_order_relaxed))
@@ -155,8 +108,6 @@ public:
 
     m_queueSize->fetch_sub(count, std::memory_order_relaxed);
 
-    // Guard against exceptions — they must never propagate through Qt's
-    // event loop (e.g. when invoked via QueuedConnection or timer).
     const bool wasOpen = isResourceOpen();
     try {
       processItems(m_writeBuffer);
@@ -172,18 +123,8 @@ public:
       Q_EMIT resourceOpenChanged();
   }
 
-  /**
-   * @brief Flushes remaining data and closes resources.
-   *
-   * Called during shutdown to ensure all queued data is processed and
-   * resources are properly cleaned up.
-   */
   void close() override
   {
-    // Guard against exceptions — this method is invoked via
-    // BlockingQueuedConnection from ~FrameConsumer and runs inside the
-    // worker thread's event loop. Any escaping exception triggers Qt's
-    // "exception thrown from an event handler" warning.
     try {
       processData();
       closeResources();
@@ -197,46 +138,10 @@ public:
   }
 
 protected:
-  /**
-   * @brief Processes a batch of dequeued items.
-   *
-   * Derived classes implement this to perform the actual work (e.g., writing
-   * to CSV, serializing to JSON, etc.).
-   *
-   * @param items Vector of items drained from the queue
-   *
-   * @note This method runs on the worker thread. It may open resources lazily
-   *       on first call (e.g., create CSV file when first frame arrives).
-   */
   virtual void processItems(const std::vector<T>& items) = 0;
-
-  /**
-   * @brief Closes all resources managed by this worker.
-   *
-   * Derived classes implement this to clean up files, network connections,
-   * or other resources.
-   *
-   * @note Called during shutdown and when processing is disabled.
-   */
   virtual void closeResources() = 0;
-
-  /**
-   * @brief Checks if resources are currently open.
-   *
-   * @return true if resources (file, connection, etc.) are open, false
-   * otherwise
-   *
-   * @note Used to emit resourceOpenChanged() signal when state changes.
-   */
   virtual bool isResourceOpen() const = 0;
 
-  /**
-   * @brief Returns whether processing is currently enabled.
-   *
-   * Derived classes that override processData() to drain additional queues
-   * should gate their extra work on this flag so the disable switch in the
-   * owning FrameConsumer propagates end-to-end.
-   */
   [[nodiscard]] bool consumerEnabled() const noexcept
   {
     return m_enabled && m_enabled->load(std::memory_order_relaxed);
@@ -250,57 +155,14 @@ private:
 };
 
 /**
- * @brief Abstract base class for threaded frame consumers.
- *
- * This template class provides a complete threaded frame consumer
- * implementation with lock-free queuing, batch processing, and dual-trigger
- * flushing (periodic timer + threshold-based).
- *
- * Derived classes must implement:
- * - createWorker(): Factory method to create the worker object
- *
- * The consumer manages:
- * - Dedicated worker thread via QThread
- * - Lock-free queue for wait-free enqueue from main thread
- * - Atomic state flags for thread-safe enable/disable
- * - Periodic flushing timer on worker thread
- * - Threshold-based early flushing when queue depth reaches limit
- * - Graceful shutdown with blocking wait for data flush
- *
- * @tparam T The type of items to process (e.g.,
- * std::shared_ptr<JSON::TimestampFrame>)
- *
- * @note Enqueuing is lock-free and safe to call from the main thread hotpath.
- *
- * @example
- * class MyExport : public FrameConsumer<std::shared_ptr<MyFrame>>
- * {
- * public:
- *   MyExport() : FrameConsumer(FrameConsumerConfig{8192, 1024, 1000}) {}
- *
- *   void hotpathTxFrame(const std::shared_ptr<MyFrame> &frame)
- *   {
- *     enqueueData(frame);
- *   }
- *
- * protected:
- *   FrameConsumerWorker<std::shared_ptr<MyFrame>> *createWorker() override
- *   {
- *     return new MyWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
- *   }
- * };
+ * @class FrameConsumer
+ * @brief Main-thread façade that owns a `FrameConsumerWorker` on a dedicated
+ *        QThread. Provides a lock-free `enqueueData()` hotpath with periodic +
+ *        threshold-based flushing.
  */
 template<typename T>
 class FrameConsumer : public QObject {
 public:
-  /**
-   * @brief Constructs a frame consumer with the given configuration.
-   *
-   * Sets up the worker thread, creates the worker object, and starts the
-   * periodic flushing timer.
-   *
-   * @param config Configuration parameters for queue and timer
-   */
   explicit FrameConsumer(const FrameConsumerConfig& config = {})
     : m_config(config)
     , m_pendingQueue(config.queueCapacity)
@@ -309,12 +171,6 @@ public:
     , m_worker(nullptr)
   {}
 
-  /**
-   * @brief Initializes the worker thread and timer.
-   *
-   * Must be called after construction, typically from derived class
-   * constructor.
-   */
   void initializeWorker()
   {
     m_worker = createWorker();
@@ -335,12 +191,6 @@ public:
     QMetaObject::invokeMethod(timer, "start", Qt::QueuedConnection);
   }
 
-  /**
-   * @brief Destructor ensures all data is flushed before shutdown.
-   *
-   * Performs a blocking wait for the worker thread to process all remaining
-   * queued data and clean up resources.
-   */
   virtual ~FrameConsumer()
   {
     if (m_worker) {
@@ -352,58 +202,19 @@ public:
     }
   }
 
-  /**
-   * @brief Checks if the consumer is currently enabled.
-   *
-   * @return true if processing is enabled, false if paused
-   */
   [[nodiscard]] bool consumerEnabled() const
   {
     return m_consumerEnabled.load(std::memory_order_relaxed);
   }
 
-  /**
-   * @brief Enables or disables frame processing.
-   *
-   * When disabled, frames are still enqueued but not processed. When
-   * re-enabled, queued frames will be processed on the next timer tick or
-   * threshold trigger.
-   *
-   * @param enabled true to enable processing, false to pause
-   */
   void setConsumerEnabled(const bool enabled)
   {
     m_consumerEnabled.store(enabled, std::memory_order_relaxed);
   }
 
 protected:
-  /**
-   * @brief Factory method to create the worker object.
-   *
-   * Derived classes implement this to instantiate their specific worker type.
-   *
-   * @return Pointer to newly created worker (ownership transferred to thread)
-   *
-   * @example
-   * FrameConsumerWorkerBase *createWorker() override
-   * {
-   *   return new MyWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
-   * }
-   */
   virtual FrameConsumerWorkerBase* createWorker() = 0;
 
-  /**
-   * @brief Enqueues a data item for processing on the worker thread.
-   *
-   * This method is lock-free and safe to call from the main thread hotpath.
-   * If the queue depth reaches the flush threshold, it triggers an immediate
-   * flush on the worker thread.
-   *
-   * @param item The item to enqueue
-   *
-   * @note If the queue is full, the item is silently dropped (wait-free
-   * guarantee).
-   */
   void enqueueData(const T& item)
   {
     if (!m_consumerEnabled.load(std::memory_order_relaxed))

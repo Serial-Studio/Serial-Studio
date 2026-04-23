@@ -32,11 +32,7 @@
 namespace DataModel {
 
 /**
- * @brief Pure data model for Serial Studio project configuration.
- *
- * Owns the project title, frame detection settings, frame parser code,
- * groups, actions, widget settings, and all file I/O. Does not own any
- * Qt item models or UI state — those live in ProjectEditor.
+ * @brief Pure data model for the Serial Studio project configuration.
  */
 class ProjectModel : public QObject {
   // clang-format off
@@ -185,18 +181,12 @@ public slots:
   void openJsonFile();
   bool openJsonFile(const QString& path);
 
-  // Loads a project directly from an in-memory JSON document — used by the
-  // session-replay flow and the project.loadFromJSON API command so neither
-  // needs to round-trip through a temp file. sourcePath is recorded as
-  // m_filePath when non-empty; callers without a real file on disk should
-  // pass an empty string, and the project will load with no file association.
   bool loadFromJsonDocument(const QJsonDocument& document, const QString& sourcePath = {});
 
   void setTitle(const QString& title);
   void setPointCount(const int points);
   void clearJsonFilePath();
 
-  // Data-table CRUD — user-defined shared-memory tables
   Q_INVOKABLE QString addTable(const QString& name);
   Q_INVOKABLE [[nodiscard]] QVariantList registersForTable(const QString& table) const;
 
@@ -213,7 +203,6 @@ public slots:
                       bool computed,
                       const QVariant& defaultValue);
 
-  // QInputDialog wrappers — native prompts invoked from QML buttons
   void promptAddTable();
   void promptRenameTable(const QString& oldName);
   void promptAddRegister(const QString& table);
@@ -314,28 +303,14 @@ private:
   bool finalizeProjectSave();
   void clearTransientState();
 
-  // Builds a fresh synthetic workspace list from the current groups/datasets.
-  // Used as the source for m_workspaces when customizeWorkspaces is off and
-  // as the initial seed when the user flips the flag on.
   [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
 
-  // Re-seeds m_workspaces from buildAutoWorkspaces() when customizeWorkspaces
-  // is off. No-ops if the user has opted into manual editing. Does not call
-  // setModified() — auto-regeneration is not a user-visible edit.
   void regenerateAutoWorkspaces();
 
-  // Per-widget-type counts that a group contributes to Dashboard's walker —
-  // used when computing the ref shift after a group delete.
   [[nodiscard]] QMap<int, int> widgetTypeCountsForGroup(const Group& g) const;
 
-  // After a group is removed and groupIds renumbered, shift user-customised
-  // widgetRefs. deletedTypeCounts is a snapshot of the deleted group's
-  // per-widget-type contribution, captured BEFORE the erase.
   void shiftWorkspaceRefsAfterGroupDelete(int deletedGid, const QMap<int, int>& deletedTypeCounts);
 
-  // After a single dataset is removed from a surviving group, shift refs of
-  // the same widget type that lived later in project order. datasetTypeCounts
-  // is a snapshot of the deleted dataset's per-widget-type contribution.
   void shiftWorkspaceRefsAfterDatasetDelete(int groupId, const QMap<int, int>& datasetTypeCounts);
 
 private:
@@ -361,16 +336,8 @@ private:
   std::vector<DataModel::Workspace> m_workspaces;
   std::vector<DataModel::TableDef> m_tables;
 
-  // customizeWorkspaces == false: m_workspaces is regenerated from the current
-  // project structure on every groupsChanged signal. When the user flips the
-  // flag on, regeneration stops and m_workspaces becomes hand-edited.
-  // Either way, m_workspaces is what ProjectFile mode returns and what the
-  // save path persists.
   bool m_customizeWorkspaces;
 
-  // Session-scoped workspaces used by QuickPlot/ConsoleOnly. Kept separate so
-  // a loaded project's m_workspaces survives across mode switches and cannot
-  // leak into the session taskbar.
   std::vector<DataModel::Workspace> m_sessionWorkspaces;
 
   DataModel::Group m_selectedGroup;

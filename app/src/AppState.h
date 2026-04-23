@@ -29,12 +29,8 @@
 #include "SerialStudio.h"
 
 /**
- * @brief Singleton that owns the application-level operation mode, project file
- *        path, and the derived FrameConfig for device 0.
- *
- * AppState is the single authoritative source for the current OperationMode and
- * the loaded project file. All other modules (FrameBuilder, ConnectionManager,
- * UI) react to its signals rather than querying each other.
+ * @brief Singleton owning the application-level operation mode, project file path,
+ *        and derived FrameConfig for device 0.
  */
 class AppState : public QObject {
   // clang-format off

@@ -42,7 +42,7 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Constructor function
+ * @brief Constructs the console handler singleton.
  */
 Console::Handler::Handler()
   : m_dataMode(DataMode::DataUTF8)
@@ -104,7 +104,7 @@ Console::Handler::Handler()
 }
 
 /**
- * Returns the only instance of the class
+ * @brief Returns the singleton instance.
  */
 Console::Handler& Console::Handler::instance()
 {
@@ -117,7 +117,7 @@ Console::Handler& Console::Handler::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns @c true if the console shall display sent commands
+ * @brief Returns true when the console shall display sent commands.
  */
 bool Console::Handler::echo() const
 {
@@ -125,8 +125,7 @@ bool Console::Handler::echo() const
 }
 
 /**
- * Returns @c true if a timestamp should be shown before each displayed data
- * block.
+ * @brief Returns true if a timestamp should be shown before each data block.
  */
 bool Console::Handler::showTimestamp() const
 {
@@ -134,7 +133,7 @@ bool Console::Handler::showTimestamp() const
 }
 
 /**
- * Returns @c true if ANSI color codes should be used in console output.
+ * @brief Returns true if ANSI color codes are used in console output.
  */
 bool Console::Handler::ansiColorsEnabled() const
 {
@@ -142,13 +141,10 @@ bool Console::Handler::ansiColorsEnabled() const
 }
 
 /**
- * Returns @c true if VT-100 terminal emulation is enabled.
- * Always returns @c false when the project contains an image widget,
- * to prevent crashes caused by conflicting terminal escape processing.
+ * @brief Returns true if VT-100 terminal emulation is enabled.
  */
 bool Console::Handler::vt100Emulation() const
 {
-  // Disable VT-100 when image widgets are active to prevent crashes
   if (hasImageWidget())
     return false;
 
@@ -156,12 +152,10 @@ bool Console::Handler::vt100Emulation() const
 }
 
 /**
- * Returns @c true if ANSI color rendering is enabled.
- * Always returns @c false when the project contains an image widget.
+ * @brief Returns true if ANSI color rendering is enabled.
  */
 bool Console::Handler::ansiColors() const
 {
-  // Disable ANSI colors when image widgets are active
   if (hasImageWidget())
     return false;
 
@@ -170,11 +164,6 @@ bool Console::Handler::ansiColors() const
 
 /**
  * @brief Returns the index of the currently selected checksum method.
- *
- * The index corresponds to the position in the list returned by
- * checksumMethods(), where 0 typically represents "None".
- *
- * @return The index of the active checksum method.
  */
 int Console::Handler::checksumMethod() const
 {
@@ -182,10 +171,7 @@ int Console::Handler::checksumMethod() const
 }
 
 /**
- * Returns the type of data that the user inputs to the console. There are two
- * possible values:
- * - @c DataMode::DataUTF8
- * - @c DataMode::DataHexadecimal
+ * @brief Returns the data mode for outgoing commands.
  */
 Console::Handler::DataMode Console::Handler::dataMode() const
 {
@@ -193,12 +179,7 @@ Console::Handler::DataMode Console::Handler::dataMode() const
 }
 
 /**
- * Returns the line ending character that is added to each datablock sent by the
- * user. Possible values are:
- * - @c LineEnding::NoLineEnding
- * - @c LineEnding::NewLine
- * - @c LineEnding::CarriageReturn
- * - @c LineEnding::BothNewLineAndCarriageReturn
+ * @brief Returns the line ending appended to each sent data block.
  */
 Console::Handler::LineEnding Console::Handler::lineEnding() const
 {
@@ -206,10 +187,7 @@ Console::Handler::LineEnding Console::Handler::lineEnding() const
 }
 
 /**
- * Returns the display format of the console. Posible values are:
- * - @c DisplayMode::DisplayPlainText   display incoming data as an UTF-8 stream
- * - @c DisplayMode::DisplayHexadecimal display incoming data in hexadecimal
- * format
+ * @brief Returns the display format of the console.
  */
 Console::Handler::DisplayMode Console::Handler::displayMode() const
 {
@@ -218,9 +196,6 @@ Console::Handler::DisplayMode Console::Handler::displayMode() const
 
 /**
  * @brief Returns the selected text encoding as an int (TextEncoding enum).
- *
- * Returning int instead of the enum keeps the property binding trivial in
- * QML, where the ComboBox `currentIndex` is already an int.
  */
 int Console::Handler::encoding() const
 {
@@ -228,15 +203,10 @@ int Console::Handler::encoding() const
 }
 
 /**
- * Returns the current command history string selected by the user.
- *
- * @note the user can navigate through sent commands using the Up/Down keys on
- * the keyboard. This behaviour is managed by the @c historyUp() & @c
- * historyDown() functions.
+ * @brief Returns the current command history entry.
  */
 QString Console::Handler::currentHistoryString() const
 {
-  // Return the selected history entry, or empty if out of range
   if (m_historyItem < m_historyItems.count() && m_historyItem >= 0)
     return m_historyItems.at(m_historyItem);
 
@@ -248,8 +218,7 @@ QString Console::Handler::currentHistoryString() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns a list with the available data (sending) modes. This list must be
- * synchronized with the order of the @c DataMode enums.
+ * @brief Returns the list of available data sending modes.
  */
 QStringList Console::Handler::dataModes() const
 {
@@ -260,8 +229,7 @@ QStringList Console::Handler::dataModes() const
 }
 
 /**
- * Returns a list with the available line endings options. This list must be
- * synchronized with the order of the @c LineEnding enums.
+ * @brief Returns the list of available line ending options.
  */
 QStringList Console::Handler::lineEndings() const
 {
@@ -274,8 +242,7 @@ QStringList Console::Handler::lineEndings() const
 }
 
 /**
- * Returns a list with the available console display modes. This list must be
- * synchronized with the order of the @c DisplayMode enums.
+ * @brief Returns the list of available console display modes.
  */
 QStringList Console::Handler::displayModes() const
 {
@@ -287,10 +254,6 @@ QStringList Console::Handler::displayModes() const
 
 /**
  * @brief Returns the list of supported text encodings for QML.
- *
- * Delegates to `SerialStudio::textEncodings()` so the list stays in sync with
- * the central `TextEncoding` enum.  Re-emitted when the language changes so
- * translated labels refresh automatically.
  */
 QStringList Console::Handler::textEncodings() const
 {
@@ -299,12 +262,6 @@ QStringList Console::Handler::textEncodings() const
 
 /**
  * @brief Returns a list of supported checksum methods including "None".
- *
- * This list is typically used for populating UI elements such as dropdowns
- * or configuration panels. It includes a "None" option followed by all
- * supported checksum algorithms defined in the IO namespace.
- *
- * @return A QStringList of available checksum method names.
  */
 QStringList Console::Handler::checksumMethods() const
 {
@@ -325,7 +282,7 @@ QStringList Console::Handler::checksumMethods() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns the current console font
+ * @brief Returns the current console font.
  */
 QFont Console::Handler::font() const
 {
@@ -333,7 +290,7 @@ QFont Console::Handler::font() const
 }
 
 /**
- * Returns the current console font size in points
+ * @brief Returns the current console font size in points.
  */
 int Console::Handler::fontSize() const
 {
@@ -341,7 +298,7 @@ int Console::Handler::fontSize() const
 }
 
 /**
- * Returns the current console font family
+ * @brief Returns the current console font family.
  */
 QString Console::Handler::fontFamily() const
 {
@@ -349,7 +306,7 @@ QString Console::Handler::fontFamily() const
 }
 
 /**
- * Returns the index of the current font family in the availableFonts() list
+ * @brief Returns the index of the current font family in availableFonts().
  */
 int Console::Handler::fontFamilyIndex() const
 {
@@ -357,7 +314,7 @@ int Console::Handler::fontFamilyIndex() const
 }
 
 /**
- * Returns a list of all available monospace fonts
+ * @brief Returns the list of all available monospace fonts.
  */
 QStringList Console::Handler::availableFonts() const
 {
@@ -381,7 +338,7 @@ QStringList Console::Handler::availableFonts() const
 }
 
 /**
- * Returns the character width for the default monospace font
+ * @brief Returns the character width for the default monospace font.
  */
 int Console::Handler::defaultCharWidth() const
 {
@@ -391,7 +348,7 @@ int Console::Handler::defaultCharWidth() const
 }
 
 /**
- * Returns the character height for the default monospace font
+ * @brief Returns the character height for the default monospace font.
  */
 int Console::Handler::defaultCharHeight() const
 {
@@ -405,7 +362,7 @@ int Console::Handler::defaultCharHeight() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns the number of bytes stored in the console buffer.
+ * @brief Returns the number of bytes stored in the console buffer.
  */
 qsizetype Console::Handler::bufferLength() const
 {
@@ -413,13 +370,10 @@ qsizetype Console::Handler::bufferLength() const
 }
 
 /**
- * Validates the given @a text to ensure it contains only valid HEX characters
- * and consists of complete byte pairs (even-length string).
- * Returns true if the input is valid, otherwise false.
+ * @brief Validates that @a text contains only hex characters and complete byte pairs.
  */
 bool Console::Handler::validateUserHex(const QString& text)
 {
-  // Strip spaces and validate hex format
   QString cleanText = text.simplified().remove(' ');
 
   static QRegularExpression hexPattern("^[0-9A-Fa-f]*$");
@@ -433,12 +387,10 @@ bool Console::Handler::validateUserHex(const QString& text)
 }
 
 /**
- * Validates the given @a text and adds space to display the text in a
- * byte-oriented view
+ * @brief Reformats @a text as spaced byte pairs for byte-oriented display.
  */
 QString Console::Handler::formatUserHex(const QString& text)
 {
-  // Strip non-hex characters and reformat as spaced byte pairs
   static QRegularExpression exp("[^0-9A-Fa-f]");
   QString data = text.simplified().remove(exp);
 
@@ -456,7 +408,7 @@ QString Console::Handler::formatUserHex(const QString& text)
 }
 
 /**
- * Deletes all the text displayed by the current QML text document
+ * @brief Clears the console text and per-device buffer for the current device.
  */
 void Console::Handler::clear()
 {
@@ -477,11 +429,7 @@ void Console::Handler::clear()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c QStringList, in which the first
- * items are the oldest commands.
- *
- * The user can navigate the list using the up/down keys. This function allows
- * the user to navigate the list from most recent command to oldest command.
+ * @brief Navigates to an older entry in the command history.
  */
 void Console::Handler::historyUp()
 {
@@ -492,11 +440,7 @@ void Console::Handler::historyUp()
 }
 
 /**
- * Comamnds sent by the user are stored in a @c QStringList, in which the first
- * items are the oldest commands.
- *
- * The user can navigate the list using the up/down keys. This function allows
- * the user to navigate the list from oldst command to most recent command.
+ * @brief Navigates to a newer entry in the command history.
  */
 void Console::Handler::historyDown()
 {
@@ -511,8 +455,7 @@ void Console::Handler::historyDown()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Configures the signal/slot connections with the rest of the modules of the
- * application.
+ * @brief Configures signal/slot connections with dependent modules.
  */
 void Console::Handler::setupExternalConnections()
 {
@@ -558,11 +501,8 @@ void Console::Handler::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Sends the given @a data to the currently isConnected device using the options
- * specified by the user with the rest of the functions of this class.
- *
- * @note @c data is added to the history of sent commands, regardless if the
- * data writing was successfull or not.
+ * @brief Sends @a data to the connected device using the current send options.
+ * @param data User-entered text or hex string.
  */
 void Console::Handler::send(const QString& data)
 {
@@ -616,7 +556,7 @@ void Console::Handler::send(const QString& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Enables/disables displaying a timestamp of each received data block.
+ * @brief Enables or disables a timestamp for each received data block.
  */
 void Console::Handler::setShowTimestamp(const bool enabled)
 {
@@ -628,7 +568,7 @@ void Console::Handler::setShowTimestamp(const bool enabled)
 }
 
 /**
- * Enables/disables ANSI color codes in console output.
+ * @brief Enables or disables ANSI color codes in console output.
  */
 void Console::Handler::setAnsiColorsEnabled(const bool enabled)
 {
@@ -639,7 +579,7 @@ void Console::Handler::setAnsiColorsEnabled(const bool enabled)
 }
 
 /**
- * Enables/disables VT-100 terminal emulation and persists the setting.
+ * @brief Enables or disables VT-100 terminal emulation and persists the setting.
  */
 void Console::Handler::setVt100Emulation(const bool enabled)
 {
@@ -655,7 +595,7 @@ void Console::Handler::setVt100Emulation(const bool enabled)
 }
 
 /**
- * Enables/disables ANSI color rendering and persists the setting.
+ * @brief Enables or disables ANSI color rendering and persists the setting.
  */
 void Console::Handler::setAnsiColors(const bool enabled)
 {
@@ -668,7 +608,7 @@ void Console::Handler::setAnsiColors(const bool enabled)
 }
 
 /**
- * Enables/disables showing the sent data on the console
+ * @brief Enables or disables echoing sent data to the console.
  */
 void Console::Handler::setEcho(const bool enabled)
 {
@@ -680,7 +620,7 @@ void Console::Handler::setEcho(const bool enabled)
 }
 
 /**
- * Sets the console font size
+ * @brief Sets the console font size.
  */
 void Console::Handler::setFontSize(const int size)
 {
@@ -695,11 +635,7 @@ void Console::Handler::setFontSize(const int size)
 
 /**
  * @brief Sets the currently selected checksum method by index.
- *
- * Updates the internal checksum method if the provided index differs
- * from the current one, and emits the checksumMethodChanged() signal.
- *
- * @param method The new checksum method index (from checksumMethods()).
+ * @param method New checksum method index (from checksumMethods()).
  */
 void Console::Handler::setChecksumMethod(const int method)
 {
@@ -711,7 +647,7 @@ void Console::Handler::setChecksumMethod(const int method)
 }
 
 /**
- * Sets the console font family
+ * @brief Sets the console font family.
  */
 void Console::Handler::setFontFamily(const QString& family)
 {
@@ -731,8 +667,7 @@ void Console::Handler::setFontFamily(const QString& family)
 }
 
 /**
- * Changes the data mode for user commands. See @c dataMode() for more
- * information.
+ * @brief Changes the data mode used for user commands.
  */
 void Console::Handler::setDataMode(const Console::Handler::DataMode& mode)
 {
@@ -744,8 +679,7 @@ void Console::Handler::setDataMode(const Console::Handler::DataMode& mode)
 }
 
 /**
- * Changes line ending mode for sent user commands. See @c lineEnding() for more
- * information.
+ * @brief Changes the line ending mode for sent user commands.
  */
 void Console::Handler::setLineEnding(const Console::Handler::LineEnding& mode)
 {
@@ -757,8 +691,7 @@ void Console::Handler::setLineEnding(const Console::Handler::LineEnding& mode)
 }
 
 /**
- * Changes the display mode of the console. See @c displayMode() for more
- * information.
+ * @brief Changes the display mode of the console.
  */
 void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
 {
@@ -771,18 +704,14 @@ void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
 
 /**
  * @brief Changes the text encoding used by send() and plainTextStr().
- *
- * The incoming value comes from a QML ComboBox `currentIndex`, so it is
- * already a valid `SerialStudio::TextEncoding` index — we clamp defensively
- * and guard-return on no-op changes.
  */
 void Console::Handler::setEncoding(const int encoding)
 {
-  // Clamp the incoming int to a valid TextEncoding value
+  // Clamp to a valid TextEncoding value
   if (encoding < 0 || encoding > SerialStudio::EncEucKr)
     return;
 
-  // Guard-return if the encoding is unchanged
+  // Guard against no-op changes
   const auto newEncoding = static_cast<SerialStudio::TextEncoding>(encoding);
   if (m_encoding == newEncoding)
     return;
@@ -798,12 +727,10 @@ void Console::Handler::setEncoding(const int encoding)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Inserts the given @a string into the list of lines of the console, if @a
- * addTimestamp is set to @c true, an timestamp is added for each line.
+ * @brief Appends @a string to the console, optionally prefixing timestamps.
  */
 void Console::Handler::append(const QString& string, const bool addTimestamp)
 {
-  // Validate input
   if (string.isEmpty())
     return;
 
@@ -868,12 +795,12 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
 
   m_textBuffer.append(processedString.toUtf8());
 
-  // Buffer for throttled display (flushed by m_displayFlushTimer)
+  // Buffer for throttled display
   m_pendingDisplay.append(processedString);
 }
 
 /**
- * Displays the given @a data in the console without Hex formatting
+ * @brief Displays @a data in the console without hex formatting.
  */
 void Console::Handler::displayDebugData(const QString& data)
 {
@@ -893,10 +820,6 @@ void Console::Handler::hotpathRxData(const IO::ByteArrayPtr& data)
 
 /**
  * @brief Routes incoming raw data to the per-device console buffer.
- *
- * Converts raw bytes to a display string, appends to the device's buffer,
- * and if this device is currently selected, displays it live.
- *
  * @param deviceId Source device identifier.
  * @param data     Raw incoming bytes.
  */
@@ -970,9 +893,6 @@ const QStringList& Console::Handler::deviceNames() const noexcept
 
 /**
  * @brief Switches the console view to the given @p deviceId.
- *
- * Guard-returns if unchanged. Clears the display, replays the selected
- * device's buffer, and emits currentDeviceIdChanged().
  */
 void Console::Handler::setCurrentDeviceId(int deviceId)
 {
@@ -1009,9 +929,6 @@ void Console::Handler::setCurrentDeviceIndex(int index)
 
 /**
  * @brief Rebuilds the device name list from project sources and connection state.
- *
- * Called when sources change or connection state changes. Resets to device 0
- * if the current device is no longer available.
  */
 void Console::Handler::onDevicesChanged()
 {
@@ -1063,13 +980,8 @@ void Console::Handler::onDevicesChanged()
 
 /**
  * @brief Appends a string to the per-device buffer and optionally displays it.
- *
- * The display string is processed through the same timestamp/newline logic as
- * append(), but state is tracked per-device. If the device is the currently
- * selected one, the processed string is also shown live in the console.
- *
- * @param deviceId    Target device ID.
- * @param str         The string to append.
+ * @param deviceId     Target device ID.
+ * @param str          The string to append.
  * @param addTimestamp Whether to prepend timestamps.
  */
 void Console::Handler::appendToDevice(int deviceId, const QString& str, bool addTimestamp)
@@ -1170,9 +1082,7 @@ bool Console::Handler::hasImageWidget() const
 }
 
 /**
- * @brief Returns @c true when project mode is active and at least one image widget is present.
- *
- * Used by QML to disable and dim VT-100/ANSI checkboxes in this state.
+ * @brief Returns true when project mode is active and at least one image widget is present.
  */
 bool Console::Handler::imageWidgetActive() const
 {
@@ -1180,7 +1090,7 @@ bool Console::Handler::imageWidgetActive() const
 }
 
 /**
- * Updates the font based on current family and size settings
+ * @brief Updates the font based on current family and size settings.
  */
 void Console::Handler::updateFont()
 {
@@ -1204,7 +1114,7 @@ void Console::Handler::updateFont()
 }
 
 /**
- * Registers the given @a command to the list of sent commands.
+ * @brief Registers @a command in the list of sent commands.
  */
 void Console::Handler::addToHistory(const QString& command)
 {
@@ -1218,8 +1128,7 @@ void Console::Handler::addToHistory(const QString& command)
 }
 
 /**
- * Converts the given @a data to a string according to the console display mode
- * set by the user.
+ * @brief Converts @a data to a string according to the active display mode.
  */
 QString Console::Handler::dataToString(QByteArrayView data)
 {
@@ -1235,18 +1144,8 @@ QString Console::Handler::dataToString(QByteArrayView data)
 
 /**
  * @brief Converts raw received bytes to a display string.
- *
- * @param data The raw bytes to convert.
- * @return A QString ready for the terminal widget.
- *
- * In VT-100 emulation mode every byte (except NUL) is passed through
- * unchanged so that the terminal's own state machine can process control
- * characters such as backspace (0x08), which zsh's line editor sends
- * constantly for in-place redraws.  Replacing those with '.' would make
- * typed commands appear corrupted (e.g. "ls" → "l.ls").
- *
- * In plain-text mode non-printable characters that are not recognised
- * control codes are substituted with '.' for readability.
+ * @param data Raw bytes to convert.
+ * @return QString ready for the terminal widget.
  */
 QString Console::Handler::plainTextStr(QByteArrayView data)
 {
@@ -1298,7 +1197,7 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
 }
 
 /**
- * Converts the given @a data into a HEX representation string.
+ * @brief Converts @a data into a HEX dump string.
  */
 QString Console::Handler::hexadecimalStr(QByteArrayView data)
 {

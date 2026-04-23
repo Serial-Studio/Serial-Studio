@@ -49,18 +49,6 @@ namespace IO {
 /**
  * @brief Singleton orchestrator that owns all DeviceManager instances and wires
  *        them to FrameBuilder, Console, and the API server.
- *
- * ConnectionManager replaces both IO::Manager and IO::SourceManager. It exposes
- * the same Q_PROPERTYs and signals as the old IO::Manager so that all existing
- * QML bindings continue to work without modification (the context property
- * "Cpp_IO_Manager" is pointed at this class instead).
- *
- * Device 0 is the primary (UI-configured) device. Devices 1+ correspond to
- * additional project sources. All devices are owned as DeviceManager instances
- * inside m_devices.
- *
- * Drivers are NEVER singletons for connection purposes. Driver singletons
- * (e.g. UART::instance()) are used ONLY for device enumeration.
  */
 class ConnectionManager : public QObject {
   // clang-format off
@@ -106,18 +94,18 @@ class ConnectionManager : public QObject {
   // clang-format on
 
 signals:
-  void driverChanged();             ///< Active driver type changed (bus type switch or rebuild)
-  void pausedChanged();             ///< Streaming paused/resumed (device stays connected)
-  void busTypeChanged();            ///< Primary device bus type changed
-  void busListChanged();            ///< Available bus list changed (language switch)
-  void connectedChanged();          ///< Any device connected or disconnected
-  void contextsRebuilt();           ///< rebuildDevices() completed (all DeviceManagers recreated)
-  void writeEnabledChanged();       ///< Write capability toggled
-  void configurationChanged();      ///< UI driver config changed (triggers configurationOk re-eval)
-  void startSequenceChanged();      ///< Frame start delimiter changed
-  void deviceListRefreshed();       ///< Hardware device enumeration updated (UART ports, BLE, etc.)
-  void finishSequenceChanged();     ///< Frame end delimiter changed
-  void checksumAlgorithmChanged();  ///< Checksum algorithm changed
+  void driverChanged();
+  void pausedChanged();
+  void busTypeChanged();
+  void busListChanged();
+  void connectedChanged();
+  void contextsRebuilt();
+  void writeEnabledChanged();
+  void configurationChanged();
+  void startSequenceChanged();
+  void deviceListRefreshed();
+  void finishSequenceChanged();
+  void checksumAlgorithmChanged();
 
 private:
   explicit ConnectionManager();
@@ -131,7 +119,6 @@ private:
 public:
   [[nodiscard]] static ConnectionManager& instance();
 
-  // Status queries
   [[nodiscard]] bool paused() const noexcept;
   [[nodiscard]] bool readOnly() const;
   [[nodiscard]] bool readWrite() const;
@@ -139,24 +126,19 @@ public:
   [[nodiscard]] bool configurationOk() const;
   [[nodiscard]] int connectedDeviceCount() const;
 
-  // Primary device configuration
   [[nodiscard]] SerialStudio::BusType busType() const noexcept;
 
-  // Frame delimiter / checksum configuration
   [[nodiscard]] const QByteArray& startSequence() const noexcept;
   [[nodiscard]] const QByteArray& finishSequence() const noexcept;
   [[nodiscard]] const QString& checksumAlgorithm() const noexcept;
 
-  // Bus type names for QML combo box
   [[nodiscard]] QStringList availableBuses() const;
 
-  // Driver access — live drivers (from DeviceManagers) and UI-config drivers
   [[nodiscard]] HAL_Driver* driver(int deviceId = 0) const;
   [[nodiscard]] HAL_Driver* driverForEditing(int deviceId);
   [[nodiscard]] HAL_Driver* activeUiDriver() const noexcept;
   [[nodiscard]] HAL_Driver* uiDriverForBusType(SerialStudio::BusType type) const noexcept;
 
-  // Per-type UI-config driver accessors (used by QML context properties)
   [[nodiscard]] IO::Drivers::UART* uart() const noexcept;
   [[nodiscard]] IO::Drivers::Network* network() const noexcept;
   [[nodiscard]] IO::Drivers::BluetoothLE* bluetoothLE() const noexcept;
@@ -169,12 +151,10 @@ public:
   [[nodiscard]] IO::Drivers::USB* usb() const noexcept;
 #endif
 
-  // Data transmission and payload injection
   [[nodiscard]] Q_INVOKABLE qint64 writeData(const QByteArray& data);
   [[nodiscard]] Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data);
 
 public slots:
-  // Connection lifecycle
   void connectDevice();
   void toggleConnection();
   void disconnectDevice();
@@ -183,11 +163,9 @@ public slots:
   void connectDevice(int deviceId);
   void disconnectDevice(int deviceId);
 
-  // Initialization and reconfiguration
   void resetFrameReader();
   void setupExternalConnections();
 
-  // Property setters
   void setPaused(bool paused);
   void setWriteEnabled(bool enabled);
   void setStartSequence(const QByteArray& sequence);
@@ -197,7 +175,6 @@ public slots:
   void setUiDriverProperty(const QString& key, const QVariant& value);
   void processPayload(const QByteArray& payload);
 
-  // Data processing
   void processMultiSourcePayload(const QByteArray& fullPayload,
                                  const QMap<int, QByteArray>& sourcePayloads);
 
@@ -207,8 +184,8 @@ private slots:
   void syncUiDriverFromSource0();
   void wireDevice(DeviceManager* dm);
   void onUiDriverConfigurationChanged();
-  void onFrameReady(int deviceId, const QByteArray& frame);
-  void onRawDataReceived(int deviceId, const IO::ByteArrayPtr& data);
+  void onFrameReady(int deviceId, const IO::CapturedDataPtr& frame);
+  void onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data);
 
 private:
   void wireUiDriver(IO::HAL_Driver* driver);
@@ -218,26 +195,19 @@ private:
   [[nodiscard]] std::unique_ptr<HAL_Driver> createDriver(SerialStudio::BusType type) const;
 
 private:
-  // State flags
-  std::atomic<bool> m_paused;       ///< True = streaming paused, device stays open
-  bool m_writeEnabled;              ///< False = read-only mode (no TX)
-  bool m_syncingFromProject;        ///< Re-entrancy guard for project → UI sync
-  SerialStudio::BusType m_busType;  ///< Active bus type for device 0
+  std::atomic<bool> m_paused;
+  bool m_writeEnabled;
+  bool m_syncingFromProject;
+  SerialStudio::BusType m_busType;
 
-  // Frame detection parameters (global, used in non-ProjectFile modes)
   QByteArray m_startSequence;
   QByteArray m_finishSequence;
   QString m_checksumAlgorithm;
 
   QSettings m_settings;
 
-  // Live devices: deviceId → DeviceManager (owns driver + thread + FrameReader)
   std::unordered_map<int, std::unique_ptr<DeviceManager>> m_devices;
 
-  // UI-config driver instances (one per bus type, never used for live I/O).
-  // QML context properties (Cpp_IO_Serial, etc.) point to these for
-  // port/baud/device enumeration. On connect, a FRESH driver is created
-  // via createDriver() and the UI driver's properties are copied into it.
   std::unique_ptr<IO::Drivers::UART> m_uartUi;
   std::unique_ptr<IO::Drivers::Network> m_networkUi;
   std::unique_ptr<IO::Drivers::BluetoothLE> m_bluetoothLEUi;

@@ -31,10 +31,7 @@
 
 namespace CSV {
 /**
- * @brief The Player class
- *
- * The CSV player class allows users to select a CSV file and "re-play" it
- * with Serial Studio.
+ * @brief CSV player that re-plays a CSV file as if it were live data.
  */
 class Player : public QObject {
   // clang-format off
@@ -141,9 +138,7 @@ private:
   bool m_useHighPrecisionTimestamps;
   QVector<double> m_timestampCache;
 
-  // Multi-source playback mapping: column index → sourceId
   QMap<int, int> m_columnToSource;
-  // Per-source column count for re-indexing
   QMap<int, int> m_sourceColumnCount;
 };
 }  // namespace CSV

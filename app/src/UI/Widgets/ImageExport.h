@@ -56,10 +56,6 @@ struct ImageSession {
 
 /**
  * @brief Worker that writes image files on a dedicated background thread.
- *
- * Maintains one session per group title so multiple @c ImageView widgets
- * can export concurrently without interfering with each other. Each session
- * is zipped independently when closed.
  */
 class ImageExportWorker : public DataModel::FrameConsumerWorker<ImageExportItem> {
   Q_OBJECT
@@ -86,21 +82,6 @@ private:
 /**
  * @brief Singleton consumer that exports decoded image frames to disk and
  *        zips them into per-group archives when sessions end.
- *
- * One session directory is maintained per widget group title, so multiple
- * @c ImageView widgets can record simultaneously without interference.
- *
- * Directory layout while recording:
- *   <workspace>/Images/<ProjectTitle>/<GroupTitle>/<yyyy-MM-dd_HH-mm-ss>/
- *       frame_0000.<ext>
- *       frame_0001.<ext>
- *       …
- *
- * On disconnect or when a widget's export toggle is turned off, that group's
- * session directory is compressed:
- *   <workspace>/Images/<ProjectTitle>/<GroupTitle>/<yyyy-MM-dd_HH-mm-ss>.zip
- *
- * Only available in commercial builds (BUILD_COMMERCIAL).
  */
 class ImageExport : public DataModel::FrameConsumer<ImageExportItem> {
   // clang-format off

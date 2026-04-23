@@ -17,10 +17,7 @@ namespace Widgets {
 namespace Output {
 
 /**
- * @class Widgets::Output::TextField
  * @brief Output widget with a text input field and send button.
- *
- * Calls transmit(text) where text is the string typed by the user.
  */
 class TextField : public Base {
   Q_OBJECT

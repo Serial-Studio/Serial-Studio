@@ -42,8 +42,6 @@
 
 /**
  * @brief Formats an ISO 8601 date string into a user-friendly display string.
- *
- * Returns the original string unchanged if parsing fails.
  */
 static QString formatDateForDisplay(const QString& isoDate)
 {
@@ -59,11 +57,6 @@ static QString formatDateForDisplay(const QString& isoDate)
 
 /**
  * @brief Scrubs a project title for use as a folder/file name component.
- *
- * Removes POSIX/Windows-forbidden characters, collapses whitespace, and
- * falls back to "Untitled" if nothing survives. Kept as a free function
- * so both @c canonicalDbPath and the per-project Reports directory can
- * share the same sanitation logic.
  */
 static QString sanitiseTitleForPath(const QString& title)
 {
@@ -90,8 +83,7 @@ static QString sanitiseTitleForPath(const QString& title)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Initializes member variables. External connections are deferred to
- * @c setupExternalConnections() to avoid static-init-order issues.
+ * @brief Initializes member variables.
  */
 Sessions::DatabaseManager::DatabaseManager()
   : m_selectedSessionId(-1)
@@ -210,9 +202,6 @@ double Sessions::DatabaseManager::pdfExportProgress() const
 
 /**
  * @brief Returns the cached session list as a QVariantList.
- *
- * Each entry is a QVariantMap with: session_id, project_title, started_at,
- * ended_at, frame_count, tag_labels.
  */
 QVariantList Sessions::DatabaseManager::sessionList() const
 {
@@ -332,9 +321,6 @@ QString Sessions::DatabaseManager::projectJsonFromDb() const
 
 /**
  * @brief Returns the project JSON embedded in a specific session row.
- *
- * Falls back to the global project_metadata if the session row doesn't
- * have its own snapshot (early-development rows with NULL project_json).
  */
 QString Sessions::DatabaseManager::sessionProjectJson(int sessionId) const
 {
@@ -357,9 +343,6 @@ QString Sessions::DatabaseManager::sessionProjectJson(int sessionId) const
 
 /**
  * @brief Opens a native QFileDialog to pick a logo for the report.
- *
- * Emits @c reportLogoPicked with the chosen path, or does nothing if the
- * user cancels. Matches the rest of the app's file pickers.
  */
 void Sessions::DatabaseManager::pickReportLogo()
 {
@@ -501,10 +484,6 @@ void Sessions::DatabaseManager::setSelectedSessionId(int sessionId)
 
 /**
  * @brief Persists the notes for the currently selected session.
- *
- * Exposed as a Q_PROPERTY WRITE — QML TextArea two-way bindings call this on
- * every keystroke. The guard below avoids a full SQL UPDATE when nothing has
- * changed (same character typed then removed, binding re-propagation, etc).
  */
 void Sessions::DatabaseManager::setSelectedSessionNotes(const QString& notes)
 {
@@ -538,9 +517,7 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
     return;
   }
 
-  // Helper to run each delete and roll back on failure. Without this any
-  // failed exec silently continues and commit() produces a half-deleted
-  // session with orphan readings / raw_bytes / tags.
+  // Run each delete and roll back on failure
   const auto runDelete = [&](const char* sql) -> bool {
     QSqlQuery q(m_db);
     q.prepare(QString::fromLatin1(sql));
@@ -603,18 +580,14 @@ void Sessions::DatabaseManager::confirmDeleteSession(int sessionId)
 }
 
 /**
- * @brief Restores the project embedded in the selected session, sets the
- * operation mode to ProjectFile, activates the recorded variant, and starts
- * playback.
+ * @brief Restores the project embedded in the selected session and starts playback.
  */
 void Sessions::DatabaseManager::replaySelectedSession()
 {
   if (m_selectedSessionId < 0 || m_filePath.isEmpty())
     return;
 
-  // Warn early if this session lacks an embedded snapshot — Player falls
-  // back to QuickPlot column registration, but the user loses the widget
-  // layout they likely expect.
+  // Warn early if this session lacks an embedded snapshot
   if (sessionProjectJson(m_selectedSessionId).isEmpty()) {
     Misc::Utilities::showMessageBox(tr("No project data"),
                                     tr("This session does not contain an embedded project file — "
@@ -622,7 +595,6 @@ void Sessions::DatabaseManager::replaySelectedSession()
                                     QMessageBox::Warning);
   }
 
-  // Player::openFile handles project restoration + mode switching itself
   Sessions::Player::instance().openFile(m_filePath, m_selectedSessionId);
 }
 
@@ -735,13 +707,18 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
   if (!isOpen() || m_csvExportBusy)
     return;
 
-  // Let the user pick the output path
-  const auto dir       = Misc::WorkspaceManager::instance().path("CSV");
-  const auto suggested = QStringLiteral("%1/session_%2.csv").arg(dir).arg(sessionId);
+  // Nest the output under the project title, like the PDF/HTML reports do
+  const auto meta         = sessionMetadata(sessionId);
+  const QString projTitle = meta.value("project_title").toString();
+  const QString safeProj  = sanitiseTitleForPath(projTitle);
+  const QString dir =
+    QStringLiteral("%1/%2").arg(Misc::WorkspaceManager::instance().path("CSV"), safeProj);
+  QDir().mkpath(dir);
 
-  const auto path = QFileDialog::getSaveFileName(
+  // Prompt for the final file path
+  const QString suggested = QStringLiteral("%1/session_%2.csv").arg(dir).arg(sessionId);
+  const auto path         = QFileDialog::getSaveFileName(
     nullptr, tr("Export Session to CSV"), suggested, tr("CSV files (*.csv)"));
-
   if (path.isEmpty())
     return;
 
@@ -759,6 +736,7 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
     return;
   }
 
+  // Build the CSV header from the column metadata
   std::vector<int> uniqueIds;
   QStringList headerCells;
   headerCells.append("Timestamp (s)");
@@ -773,12 +751,12 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
     headerCells.append(label);
   }
 
-  // Query all readings for this session, ordered by timestamp
+  // Fetch readings in (timestamp, reading_id) order
   QSqlQuery readQ(m_db);
   readQ.setForwardOnly(true);
   readQ.prepare(
     "SELECT timestamp_ns, unique_id, final_numeric_value, final_string_value, is_numeric "
-    "FROM readings WHERE session_id = ? ORDER BY timestamp_ns, unique_id");
+    "FROM readings WHERE session_id = ? ORDER BY timestamp_ns, reading_id");
   readQ.bindValue(0, sessionId);
   if (!readQ.exec()) {
     m_csvExportBusy = false;
@@ -786,12 +764,12 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
     return;
   }
 
-  // Build uniqueId → column index map
+  // uniqueId → column index for fast placement while streaming
   QMap<int, int> uidToCol;
   for (int i = 0; i < static_cast<int>(uniqueIds.size()); ++i)
     uidToCol.insert(uniqueIds[static_cast<size_t>(i)], i);
 
-  // Write CSV
+  // Open the output file
   QFile file(path);
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     m_csvExportBusy = false;
@@ -802,50 +780,52 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
   QTextStream out(&file);
   out << headerCells.join(',') << '\n';
 
+  // Row state + helpers for the streaming write
   qint64 currentTs = -1;
   QStringList row;
   const int colCount = static_cast<int>(uniqueIds.size());
 
+  auto flushRow = [&]() {
+    if (currentTs < 0 || row.isEmpty())
+      return;
+
+    out << QString::number(currentTs / 1e9, 'f', 9);
+    for (const auto& cell : std::as_const(row))
+      out << ',' << cell;
+    out << '\n';
+  };
+
+  auto startRow = [&](qint64 ts) {
+    currentTs = ts;
+    row.clear();
+    row.reserve(colCount);
+    for (int i = 0; i < colCount; ++i)
+      row.append(QString());
+  };
+
+  // Emit one CSV row per distinct timestamp
   while (readQ.next()) {
-    const qint64 ts = readQ.value(0).toLongLong();
-
-    // New timestamp — flush the previous row
-    if (ts != currentTs) {
-      if (currentTs >= 0 && !row.isEmpty()) {
-        out << QString::number(currentTs / 1e9, 'f', 9);
-        for (const auto& cell : std::as_const(row))
-          out << ',' << cell;
-        out << '\n';
-      }
-
-      currentTs = ts;
-      row.clear();
-      row.reserve(colCount);
-      for (int i = 0; i < colCount; ++i)
-        row.append(QString());
-    }
-
-    // Place value in the correct column
+    const qint64 ts  = readQ.value(0).toLongLong();
     const int uid    = readQ.value(1).toInt();
     const auto colIt = uidToCol.constFind(uid);
     if (colIt == uidToCol.constEnd())
       continue;
 
+    if (ts != currentTs) {
+      flushRow();
+      startRow(ts);
+    }
+
     const bool isNumeric = readQ.value(4).toInt() != 0;
+    const int col        = colIt.value();
     if (isNumeric)
-      row[colIt.value()] = QString::number(readQ.value(2).toDouble(), 'g', 17);
+      row[col] = QString::number(readQ.value(2).toDouble(), 'g', 17);
     else
-      row[colIt.value()] = readQ.value(3).toString();
+      row[col] = readQ.value(3).toString();
   }
 
-  // Flush last row
-  if (currentTs >= 0 && !row.isEmpty()) {
-    out << QString::number(currentTs / 1e9, 'f', 9);
-    for (const auto& cell : std::as_const(row))
-      out << ',' << cell;
-    out << '\n';
-  }
-
+  // Flush the last in-flight row and close
+  flushRow();
   file.close();
 
   m_csvExportBusy = false;
@@ -862,12 +842,6 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
 
 /**
  * @brief Renders a session report using the options bundle from QML.
- *
- * Despite the legacy name, this slot can emit HTML, PDF, or both — the
- * format is selected via @c options["outputFormat"] ("pdf", "html", "both").
- * The PDF path is async (QWebEngine drives it), so the method returns
- * immediately and the eventual result is delivered via @c pdfExportFinished.
- *
  * @param sessionId Session to export.
  * @param options   QVariantMap populated by @c ReportOptionsDialog.qml.
  */
@@ -885,8 +859,6 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   opts.logoPath      = options.value("logoPath").toString();
   opts.pageSize =
     static_cast<QPageSize::PageSizeId>(options.value("pageSize", QPageSize::A4).toInt());
-  opts.orientation = static_cast<QPageLayout::Orientation>(
-    options.value("orientation", QPageLayout::Portrait).toInt());
   opts.includeCover    = options.value("includeCover", true).toBool();
   opts.includeMetadata = options.value("includeMetadata", true).toBool();
   opts.includeStats    = options.value("includeStats", true).toBool();
@@ -903,9 +875,9 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   else
     opts.format = HtmlReportOptions::Format::Pdf;
 
-  // Runs the export once the output path is known (picker-fed or preset)
+  // Run the export once the output path is known
   auto startExport = [this, sessionId](HtmlReportOptions opts) {
-    // HTML-only is synchronous — don't flash the progress dialog for it
+    // HTML-only is synchronous — skip the progress dialog
     const bool reportBusy = (opts.format != HtmlReportOptions::Format::Html);
     if (reportBusy) {
       m_pdfExportBusy     = true;
@@ -918,14 +890,12 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
     // Assemble the data bundle from SQL
     const auto data = ReportData::buildFromSession(m_db, sessionId);
 
-    // Load decimated time-series when the caller asked for charts.
-    // 1200 points ≈ 300 buckets × 4 per-bucket — close to one bucket per
-    // pixel at landscape-A4 print width, preserving the signal envelope.
+    // Load time-series when charts are enabled
     std::vector<DatasetSeries> series;
     if (opts.includeCharts)
-      series = loadChartSeries(m_db, sessionId, 1200);
+      series = loadChartSeries(m_db, sessionId, 10000);
 
-    // Renderer emits finished() exactly once; parented so Qt cleans up
+    // Create renderer parented so Qt cleans up
     auto* renderer = new HtmlReport(this);
 
     if (reportBusy) {
@@ -950,7 +920,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
               Q_EMIT pdfExportFinished(outputPath, ok);
 
               if (ok) {
-                // Reveal in Finder/Explorer — the user's next action anyway
+                // Reveal in Finder/Explorer
                 Misc::Utilities::revealFile(outputPath);
               } else {
                 Misc::Utilities::showMessageBox(
@@ -965,7 +935,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
     renderer->render(data, std::move(series), opts);
   };
 
-  // Preset path skips the picker; otherwise fall through to the save dialog
+  // Preset path skips the picker
   if (!opts.outputPath.isEmpty()) {
     startExport(std::move(opts));
     return;
@@ -976,7 +946,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   const QString title  = wantsPdf ? tr("Save PDF Report") : tr("Save HTML Report");
   const QString filter = wantsPdf ? tr("PDF files (*.pdf)") : tr("HTML files (*.html)");
 
-  // Default directory matches the per-project nesting used by other exporters
+  // Default directory matches the per-project nesting of other exporters
   const auto meta         = sessionMetadata(sessionId);
   const QString projTitle = meta.value("project_title").toString();
   const QString safeProj  = sanitiseTitleForPath(projTitle);
@@ -993,7 +963,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setFileMode(QFileDialog::AnyFile);
 
-  // fileSelected also fires on cancel — empty path → re-enable the QML button
+  // fileSelected also fires on cancel (empty path re-enables the QML button)
   connect(dialog,
           &QFileDialog::fileSelected,
           this,
@@ -1005,7 +975,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
               return;
             }
 
-            // Enforce the expected extension if the user typed a bare name
+            // Enforce the expected extension
             QString finalPath = path;
             const QString dot = QStringLiteral(".") + ext;
             if (!finalPath.endsWith(dot, Qt::CaseInsensitive))
@@ -1059,9 +1029,6 @@ void Sessions::DatabaseManager::storeProjectMetadata()
 
 /**
  * @brief Restores the project from the stored JSON in the database.
- *
- * Shows a save-file dialog so the user picks where to write the .ssproj,
- * writes the embedded JSON, then opens it as the active project.
  */
 void Sessions::DatabaseManager::restoreProjectFromDb()
 {
@@ -1118,10 +1085,6 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
 
 /**
  * @brief Reopens the database that was open during the last application run.
- *
- * Called from QML after the UI is fully loaded so property bindings see the
- * restored state. Does nothing if no database was previously open or if the
- * file no longer exists on disk.
  */
 void Sessions::DatabaseManager::restoreLastDatabase()
 {
@@ -1207,8 +1170,7 @@ void Sessions::DatabaseManager::loadTagList()
 }
 
 /**
- * @brief Runs the shared CREATE TABLE IF NOT EXISTS block on the currently
- *        open database so browsing/replay never trips over a missing table.
+ * @brief Runs the shared CREATE TABLE IF NOT EXISTS block on the open database.
  */
 void Sessions::DatabaseManager::ensureSchema()
 {
@@ -1220,17 +1182,11 @@ void Sessions::DatabaseManager::ensureSchema()
 }
 
 /**
- * @brief Single source of truth for the session-log schema, shared between
- *        Sessions::Export and Sessions::DatabaseManager.
- *
- * Every statement uses CREATE TABLE IF NOT EXISTS so repeated calls on the
- * same .db are a no-op and tables accumulating across sessions are never
- * touched. The schema is designed to grow additively — add new tables or
- * new NULL-tolerant columns to existing tables; do not rename or repurpose
- * a shipped column.
+ * @brief Creates or upgrades the session-log schema on the open database.
  */
 void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
 {
+  // Session header
   q.exec("CREATE TABLE IF NOT EXISTS sessions ("
          "  session_id    INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  project_title TEXT NOT NULL,"
@@ -1240,6 +1196,7 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  notes         TEXT"
          ")");
 
+  // Column definitions exported from ExportSchema at session start
   q.exec("CREATE TABLE IF NOT EXISTS columns ("
          "  column_id   INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id  INTEGER NOT NULL REFERENCES sessions,"
@@ -1251,7 +1208,9 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  is_virtual  INTEGER NOT NULL DEFAULT 0"
          ")");
 
+  // One row per dataset per frame; surrogate PK lets same-ns frames coexist
   q.exec("CREATE TABLE IF NOT EXISTS readings ("
+         "  reading_id          INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id          INTEGER NOT NULL,"
          "  timestamp_ns        INTEGER NOT NULL,"
          "  unique_id           INTEGER NOT NULL,"
@@ -1259,28 +1218,38 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  raw_string_value    TEXT,"
          "  final_numeric_value REAL,"
          "  final_string_value  TEXT,"
-         "  is_numeric          INTEGER NOT NULL DEFAULT 1,"
-         "  PRIMARY KEY (session_id, timestamp_ns, unique_id)"
-         ") WITHOUT ROWID");
+         "  is_numeric          INTEGER NOT NULL DEFAULT 1"
+         ")");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_readings_session_uid_ts "
+         "ON readings (session_id, unique_id, timestamp_ns)");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_readings_session_ts "
+         "ON readings (session_id, timestamp_ns)");
 
+  // Raw device bytes captured in parallel with the frame stream
   q.exec("CREATE TABLE IF NOT EXISTS raw_bytes ("
+         "  raw_id       INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id   INTEGER NOT NULL,"
          "  timestamp_ns INTEGER NOT NULL,"
          "  device_id    INTEGER NOT NULL DEFAULT 0,"
-         "  data         BLOB NOT NULL,"
-         "  PRIMARY KEY (session_id, timestamp_ns, device_id)"
-         ") WITHOUT ROWID");
+         "  data         BLOB NOT NULL"
+         ")");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_raw_bytes_session_ts "
+         "ON raw_bytes (session_id, timestamp_ns)");
 
+  // Per-frame snapshots of user data tables
   q.exec("CREATE TABLE IF NOT EXISTS table_snapshots ("
+         "  snapshot_id   INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id    INTEGER NOT NULL,"
          "  timestamp_ns  INTEGER NOT NULL,"
          "  table_name    TEXT NOT NULL,"
          "  register_name TEXT NOT NULL,"
          "  numeric_value REAL,"
-         "  string_value  TEXT,"
-         "  PRIMARY KEY (session_id, timestamp_ns, table_name, register_name)"
-         ") WITHOUT ROWID");
+         "  string_value  TEXT"
+         ")");
+  q.exec("CREATE INDEX IF NOT EXISTS idx_snapshots_session_ts "
+         "ON table_snapshots (session_id, timestamp_ns, table_name)");
 
+  // Free-form tags and the session → tag join
   q.exec("CREATE TABLE IF NOT EXISTS tags ("
          "  tag_id INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  label  TEXT NOT NULL UNIQUE COLLATE NOCASE"
@@ -1292,6 +1261,7 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  PRIMARY KEY (session_id, tag_id)"
          ") WITHOUT ROWID");
 
+  // Key/value store for project-level metadata
   q.exec("CREATE TABLE IF NOT EXISTS project_metadata ("
          "  key   TEXT PRIMARY KEY,"
          "  value TEXT NOT NULL"

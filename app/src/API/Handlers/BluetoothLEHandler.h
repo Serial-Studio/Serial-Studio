@@ -26,35 +26,18 @@
 namespace API {
 namespace Handlers {
 /**
- * @class BluetoothLEHandler
- * @brief Registers API commands for IO::Drivers::BluetoothLE operations
- *
- * Provides commands for:
- * - io.driver.ble.startDiscovery - Start scanning for BLE devices
- * - io.driver.ble.selectDevice - Select device by index
- * - io.driver.ble.selectService - Select service by index
- * - io.driver.ble.setCharacteristicIndex - Select characteristic
- * - io.driver.ble.getDeviceList - Query discovered devices
- * - io.driver.ble.getServiceList - Query services for selected device
- * - io.driver.ble.getCharacteristicList - Query characteristics
- * - io.driver.ble.getConfiguration - Query current BLE configuration
- * - io.driver.ble.getStatus - Query adapter and connection status
+ * @brief Registers API commands for IO::Drivers::BluetoothLE operations.
  */
 class BluetoothLEHandler {
 public:
-  /**
-   * @brief Register all BluetoothLE commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Mutation commands
   static CommandResponse startDiscovery(const QString& id, const QJsonObject& params);
   static CommandResponse selectDevice(const QString& id, const QJsonObject& params);
   static CommandResponse selectService(const QString& id, const QJsonObject& params);
   static CommandResponse setCharacteristicIndex(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getDeviceList(const QString& id, const QJsonObject& params);
   static CommandResponse getServiceList(const QString& id, const QJsonObject& params);
   static CommandResponse getCharacteristicList(const QString& id, const QJsonObject& params);

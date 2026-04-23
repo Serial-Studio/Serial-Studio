@@ -42,11 +42,6 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
 
-/**
- * @brief Constructs the JsCodeEditor and wires all signal connections.
- *
- * @param parent Optional QQuickItem parent.
- */
 DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent)
   , m_sourceId(0)
@@ -136,29 +131,18 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   readCode();
 }
 
-/**
- * @brief Returns the current text displayed in the code editor.
- */
 QString DataModel::JsCodeEditor::text() const
 {
   return m_widget.toPlainText();
 }
 
-/**
- * @brief Returns the source ID this editor is bound to (0 = global parser).
- */
 int DataModel::JsCodeEditor::sourceId() const noexcept
 {
   return m_sourceId;
 }
 
 /**
- * @brief Switches the editor to show the frame parser code for @p sourceId.
- *
- * When @p sourceId == 0 the editor works in global-parser mode (existing
- * behaviour). Any other value loads the per-source code from ProjectModel.
- *
- * @param sourceId The source to edit, or 0 for the global parser.
+ * @brief Switches the editor to show the frame parser code for the source.
  */
 void DataModel::JsCodeEditor::setSourceId(const int sourceId)
 {
@@ -170,19 +154,13 @@ void DataModel::JsCodeEditor::setSourceId(const int sourceId)
   readCode();
 }
 
-/**
- * @brief Returns the current scripting language (0 = JS, 1 = Lua).
- */
 int DataModel::JsCodeEditor::language() const noexcept
 {
   return m_language;
 }
 
 /**
- * @brief Switches the editor's syntax highlighter and completer to match
- * the selected scripting language.
- *
- * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ * @brief Switches the syntax highlighter and completer for the language.
  */
 void DataModel::JsCodeEditor::setLanguage(const int language)
 {
@@ -205,12 +183,6 @@ void DataModel::JsCodeEditor::setLanguage(const int language)
 
 /**
  * @brief Handles a user-initiated language switch from the QML combobox.
- *
- * If the editor has unsaved modifications, prompts the user for confirmation
- * before switching. On switch, updates the project model language, loads the
- * equivalent template in the new language, and reloads the engine.
- *
- * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
  */
 void DataModel::JsCodeEditor::switchLanguage(const int language)
 {
@@ -251,10 +223,7 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
 }
 
 /**
- * @brief Returns @c true when the editor document has been modified since the
- *        last load. Code is auto-synced to ProjectModel on every keystroke,
- *        so this reflects the QTextDocument edit state, not unsaved project
- *        changes.
+ * @brief Returns true when the editor document has unsaved edits.
  */
 bool DataModel::JsCodeEditor::isModified() const noexcept
 {
@@ -264,9 +233,6 @@ bool DataModel::JsCodeEditor::isModified() const noexcept
   return false;
 }
 
-/**
- * @brief Returns @c true when an undo action is available.
- */
 bool DataModel::JsCodeEditor::undoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -275,9 +241,6 @@ bool DataModel::JsCodeEditor::undoAvailable() const noexcept
   return false;
 }
 
-/**
- * @brief Returns @c true when a redo action is available.
- */
 bool DataModel::JsCodeEditor::redoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -286,25 +249,16 @@ bool DataModel::JsCodeEditor::redoAvailable() const noexcept
   return false;
 }
 
-/**
- * @brief Removes selected text and copies it to the clipboard.
- */
 void DataModel::JsCodeEditor::cut()
 {
   m_widget.cut();
 }
 
-/**
- * @brief Undoes the last edit.
- */
 void DataModel::JsCodeEditor::undo()
 {
   m_widget.undo();
 }
 
-/**
- * @brief Redoes the previously undone edit.
- */
 void DataModel::JsCodeEditor::redo()
 {
   m_widget.redo();
@@ -320,27 +274,18 @@ void DataModel::JsCodeEditor::help()
   // clang-format on
 }
 
-/**
- * @brief Copies selected text to the clipboard.
- */
 void DataModel::JsCodeEditor::copy()
 {
   m_widget.copy();
 }
 
-/**
- * @brief Pastes clipboard content into the editor.
- */
 void DataModel::JsCodeEditor::paste()
 {
   m_widget.paste();
 }
 
 /**
- * @brief Validates the current code via the JS engine.
- *
- * Code is already stored in ProjectModel on every keystroke, so this only
- * runs syntax validation and reloads the FrameParser engine.
+ * @brief Validates the current code and reloads the FrameParser engine.
  */
 void DataModel::JsCodeEditor::apply()
 {
@@ -348,7 +293,7 @@ void DataModel::JsCodeEditor::apply()
 }
 
 /**
- * @brief Opens a file dialog to import an external JavaScript file.
+ * @brief Opens a file dialog to import an external script file.
  */
 void DataModel::JsCodeEditor::import()
 {
@@ -390,9 +335,6 @@ void DataModel::JsCodeEditor::evaluate()
 
 /**
  * @brief Reloads the editor text from the current project model code.
- *
- * Code is pushed to the model on every keystroke, so there is no need to
- * prompt for unsaved changes — just load unconditionally.
  */
 void DataModel::JsCodeEditor::readCode()
 {
@@ -428,9 +370,6 @@ void DataModel::JsCodeEditor::readCode()
   Q_EMIT modifiedChanged();
 }
 
-/**
- * @brief Selects all text in the editor.
- */
 void DataModel::JsCodeEditor::selectAll()
 {
   m_widget.selectAll();
@@ -486,10 +425,7 @@ void DataModel::JsCodeEditor::testWithSampleData()
 }
 
 /**
- * @brief Reloads the default template after confirming with the user if
- * the document is modified.
- *
- * @param guiTrigger Passed through to @c loadDefaultTemplate().
+ * @brief Reloads the default template.
  */
 void DataModel::JsCodeEditor::reload(const bool guiTrigger)
 {
@@ -497,9 +433,7 @@ void DataModel::JsCodeEditor::reload(const bool guiTrigger)
 }
 
 /**
- * @brief Loads the default comma-separated-values template.
- *
- * @param guiTrigger Forwarded to @c FrameParser::loadDefaultTemplate().
+ * @brief Loads the default CSV template.
  */
 void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
 {
@@ -507,7 +441,7 @@ void DataModel::JsCodeEditor::loadDefaultTemplate(const bool guiTrigger)
 }
 
 /**
- * @brief Updates the editor colour scheme to match the active application theme.
+ * @brief Updates the editor colour scheme to match the active theme.
  */
 void DataModel::JsCodeEditor::onThemeChanged()
 {

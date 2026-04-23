@@ -55,11 +55,8 @@ static bool isWindows11()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructor for NativeWindow class.
- * @param parent The parent QObject.
- *
- * Connects theme change signals to the appropriate slot for handling UI theme
- * updates across all managed windows.
+ * @brief Constructs NativeWindow.
+ * @param parent Parent QObject.
  */
 NativeWindow::NativeWindow(QObject* parent) : QObject(parent)
 {
@@ -72,21 +69,15 @@ NativeWindow::NativeWindow(QObject* parent) : QObject(parent)
 /**
  * @brief No-op on non-macOS platforms.
  */
-void NativeWindow::installMacOSQuitInterceptor()
-{
-  // Only implemented on macOS
-}
+void NativeWindow::installMacOSQuitInterceptor() {}
 
 //--------------------------------------------------------------------------------------------------
 // Window management
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the height of the title bar.
- * @param window The window for which the title bar height is queried.
- * @return Height of the title bar in pixels. Always returns 0 in this
- *         implementation, since the client does not need to move the window
- *         elements (e.g. the caption/titlebar is not transparent, as in macOS).
+ * @brief Returns the height of the title bar in pixels.
+ * @param window Window to query.
  */
 int NativeWindow::titlebarHeight(QObject* window)
 {
@@ -95,12 +86,11 @@ int NativeWindow::titlebarHeight(QObject* window)
 }
 
 /**
- * @brief Removes a window from the management list of NativeWindow.
- * @param window Pointer to the window object to be removed.
+ * @brief Removes a window from the management list.
+ * @param window Window to remove.
  */
 void NativeWindow::removeWindow(QObject* window)
 {
-  // Validate the window pointer
   auto* w = qobject_cast<QWindow*>(window);
   if (!w)
     return;
@@ -123,21 +113,11 @@ void NativeWindow::removeWindow(QObject* window)
 
 /**
  * @brief Configures native window customization.
- * @param window The window to customize.
- * @param color Optional color for the title bar (hex string).
- *
- * On Windows 11: Uses native DWM caption color customization.
- * On Windows 10 and other platforms: Creates a CSD::Window which provides:
- * - Frameless window with custom title bar
- * - Window dragging and resizing
- * - Minimize, maximize, and close buttons
- * - Theme-aware coloring
- *
- * If a window is already registered, this method updates its color.
+ * @param window Window to customize.
+ * @param color  Optional title bar color (hex string).
  */
 void NativeWindow::addWindow(QObject* window, const QString& color)
 {
-  // Validate the window pointer
   auto* w = qobject_cast<QWindow*>(window);
   if (!w)
     return;
@@ -203,10 +183,6 @@ void NativeWindow::addWindow(QObject* window, const QString& color)
 
 /**
  * @brief Handles theme change events.
- *
- * On Windows 11: Triggers caption color updates for all windows.
- * On other platforms: Propagates theme updates to all CSD decorators,
- * causing them to update their title bar colors based on the new theme.
  */
 void NativeWindow::onThemeChanged()
 {
@@ -236,12 +212,6 @@ void NativeWindow::onWindowStateChanged(Qt::WindowState state)
 
 /**
  * @brief Handles the active state change of a window.
- *
- * On Windows 11: Updates the native caption color using DWM API based on
- * the window's active state and current theme.
- *
- * On other platforms: The CSD window class handles active state changes
- * internally via its connection to QWindow::activeChanged.
  */
 void NativeWindow::onActiveChanged()
 {

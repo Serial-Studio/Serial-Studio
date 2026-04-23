@@ -57,16 +57,15 @@ IO::FileTransmission::FileTransmission()
   m_timer.setInterval(100);
   m_timer.setTimerType(Qt::PreciseTimer);
 
-  // Speed update timer
+  // Configure speed update timer
   m_speedUpdateTimer.setInterval(1000);
   connect(&m_speedUpdateTimer, &QTimer::timeout, this, &FileTransmission::updateTransferSpeed);
 
-  // Create protocol instances
+  // Create and wire protocol instances
   m_xmodem = new IO::Protocols::XMODEM(this);
   m_ymodem = new IO::Protocols::YMODEM(this);
   m_zmodem = new IO::Protocols::ZMODEM(this);
 
-  // Connect all protocol signals
   connectProtocol(m_xmodem);
   connectProtocol(m_ymodem);
   connectProtocol(m_zmodem);
@@ -98,11 +97,9 @@ IO::FileTransmission& IO::FileTransmission::instance()
  */
 bool IO::FileTransmission::active() const
 {
-  // Check timer-based modes first
   if (m_transferMode == PlainText || m_transferMode == RawBinary)
     return m_timer.isActive();
 
-  // Protocol-based modes
   switch (m_transferMode) {
     case XModem:
     case XModem1K:
@@ -169,7 +166,6 @@ int IO::FileTransmission::protocolTimeout() const noexcept
  */
 int IO::FileTransmission::transmissionProgress() const
 {
-  // Avoid division by zero when no file is loaded
   if (m_bytesTotal <= 0)
     return 0;
 
@@ -205,7 +201,6 @@ qint64 IO::FileTransmission::bytesTotal() const noexcept
  */
 QString IO::FileTransmission::fileName() const
 {
-  // Return placeholder text when no file is selected
   if (!m_file.isOpen())
     return tr("No file selected...");
 
@@ -278,7 +273,6 @@ void IO::FileTransmission::openFile()
       m_bytesTotal = m_file.size();
       m_bytesSent  = 0;
 
-      // Create text stream for plain text mode
       if (m_transferMode == PlainText)
         m_stream = new QTextStream(&m_file);
 
@@ -300,25 +294,22 @@ void IO::FileTransmission::openFile()
  */
 void IO::FileTransmission::closeFile()
 {
-  // Stop active transmission
+  // Stop active transmission and release resources
   stopTransmission();
 
-  // Close the file handle
   if (m_file.isOpen())
     m_file.close();
 
-  // Delete the text stream
   if (m_stream) {
     delete m_stream;
     m_stream = nullptr;
   }
 
-  // Reset counters
+  // Reset counters and notify UI
   m_bytesSent  = 0;
   m_bytesTotal = 0;
   m_filePath.clear();
 
-  // Update the UI
   Q_EMIT fileChanged();
   Q_EMIT progressChanged();
 }
@@ -341,7 +332,6 @@ void IO::FileTransmission::clearLog()
  */
 void IO::FileTransmission::stopTransmission()
 {
-  // Stop timers
   m_timer.stop();
   m_speedUpdateTimer.stop();
 
@@ -353,7 +343,6 @@ void IO::FileTransmission::stopTransmission()
   if (m_zmodem->isActive())
     m_zmodem->cancelTransfer();
 
-  // Reset speed display
   m_transferSpeed.clear();
   Q_EMIT transferSpeedChanged();
   Q_EMIT activeChanged();
@@ -364,13 +353,12 @@ void IO::FileTransmission::stopTransmission()
  */
 void IO::FileTransmission::beginTransmission()
 {
-  // Validate connection
+  // Skip if not connected
   if (!IO::ConnectionManager::instance().isConnected()) {
     stopTransmission();
     return;
   }
 
-  // Validate file
   if (!m_file.isOpen())
     return;
 
@@ -383,7 +371,7 @@ void IO::FileTransmission::beginTransmission()
 
   appendLog(tr("Starting %1 transfer...").arg(transferModes().at(m_transferMode)));
 
-  // Ensure timer is connected to the correct slot for this mode
+  // Wire timer to the correct slot for this mode
   disconnect(&m_timer, &QTimer::timeout, this, &FileTransmission::sendLine);
   disconnect(&m_timer, &QTimer::timeout, this, &FileTransmission::sendRawBlock);
 
@@ -394,7 +382,7 @@ void IO::FileTransmission::beginTransmission()
 
   switch (m_transferMode) {
     case PlainText: {
-      // Reset stream position if file was fully sent
+      // Rewind if previous file was fully sent
       if (m_stream && transmissionProgress() >= 100) {
         m_stream->seek(0);
         m_bytesSent = 0;
@@ -407,7 +395,7 @@ void IO::FileTransmission::beginTransmission()
     }
 
     case RawBinary: {
-      // Reset file position if fully sent
+      // Rewind if previous file was fully sent
       if (transmissionProgress() >= 100) {
         m_file.seek(0);
         m_bytesSent = 0;
@@ -465,13 +453,12 @@ void IO::FileTransmission::beginTransmission()
  */
 void IO::FileTransmission::setupExternalConnections()
 {
-  // Stop transmission on disconnect
+  // Stop transmission and refresh UI on connection state changes
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
           &FileTransmission::stopTransmission);
 
-  // Refresh UI on connection state changes
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
@@ -486,7 +473,6 @@ void IO::FileTransmission::setupExternalConnections()
           this,
           &IO::FileTransmission::fileChanged);
 
-  // Retranslate transfer modes on language change
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
@@ -528,13 +514,12 @@ void IO::FileTransmission::setTransferMode(int mode)
 {
   auto newMode = static_cast<TransferMode>(qBound(0, mode, 5));
   if (m_transferMode != newMode) {
-    // Stop any active transfer before switching modes
     if (active())
       stopTransmission();
 
     m_transferMode = newMode;
 
-    // Reset file position and counters for the new mode
+    // Reset file position and stream for the new mode
     if (m_file.isOpen()) {
       m_file.seek(0);
       m_bytesSent = 0;
@@ -683,7 +668,6 @@ void IO::FileTransmission::onProtocolStatus(const QString& message)
   Q_EMIT statusTextChanged();
   appendLog(message);
 
-  // Track NAK/retry as errors
   if (message.contains("NAK") || message.contains("retry", Qt::CaseInsensitive)
       || message.contains("Timeout")) {
     ++m_errorCount;
@@ -707,7 +691,6 @@ void IO::FileTransmission::onRawDataReceived(const QByteArray& data)
   if (!active())
     return;
 
-  // Only protocol modes need incoming data
   switch (m_transferMode) {
     case XModem:
     case XModem1K:
@@ -762,7 +745,7 @@ void IO::FileTransmission::appendLog(const QString& message)
   auto timestamp = QTime::currentTime().toString("HH:mm:ss");
   m_logEntries.append(QStringLiteral("[%1] %2").arg(timestamp, message));
 
-  // Trim log if it gets too long
+  // Trim oldest entries when capacity is exceeded
   while (m_logEntries.size() > kMaxLogEntries)
     m_logEntries.removeFirst();
 

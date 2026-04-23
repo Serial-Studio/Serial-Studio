@@ -26,27 +26,16 @@
 namespace API {
 namespace Handlers {
 /**
- * @class CSVExportHandler
- * @brief Registers API commands for CSV::Export operations
- *
- * Provides commands for:
- * - csv.export.setEnabled - Enable/disable CSV export
- * - csv.export.close - Close current CSV file
- * - csv.export.getStatus - Query export status
+ * @brief Registers API commands for CSV::Export operations.
  */
 class CSVExportHandler {
 public:
-  /**
-   * @brief Register all CSV Export commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Mutation commands
   static CommandResponse setEnabled(const QString& id, const QJsonObject& params);
   static CommandResponse close(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 

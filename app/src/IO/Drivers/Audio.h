@@ -22,10 +22,6 @@
 
 #pragma once
 
-//--------------------------------------------------------------------------------------------------
-// Class declaration & Qt Libs
-//--------------------------------------------------------------------------------------------------
-
 #include <QBuffer>
 #include <QMap>
 #include <QMutex>
@@ -41,6 +37,9 @@
 
 namespace IO {
 namespace Drivers {
+/**
+ * @brief HAL driver that captures and plays audio via miniaudio.
+ */
 class Audio : public HAL_Driver {
   // clang-format off
   Q_OBJECT

@@ -58,14 +58,6 @@
 // Constructor, destructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the ConnectionManager singleton.
- *
- * Initializes default settings and registers cleanup on application quit. The
- * bus type and primary driver are set later in setupExternalConnections() so
- * that other singletons (FrameBuilder, ProjectModel) are fully constructed
- * before we reference them.
- */
 IO::ConnectionManager::ConnectionManager()
   : m_paused(false)
   , m_writeEnabled(true)
@@ -85,20 +77,17 @@ IO::ConnectionManager::ConnectionManager()
   , m_usbUi(std::make_unique<IO::Drivers::USB>())
 #endif
 {
-  // Bus type changes invalidate configuration → re-evaluate configurationOk
+  // Re-evaluate configuration when bus type changes
   connect(this, &ConnectionManager::busTypeChanged, this, &ConnectionManager::configurationChanged);
 
-  // Configuration changes may affect isConnected / readOnly / readWrite
+  // Configuration changes may affect connected state
   connect(
     this, &ConnectionManager::configurationChanged, this, &ConnectionManager::connectedChanged);
 
-  // Clean shutdown: disconnect all devices before the event loop exits
+  // Disconnect all devices on application quit
   connect(qApp, &QApplication::aboutToQuit, this, &ConnectionManager::disconnectAllDevices);
 }
 
-/**
- * @brief Destroys the ConnectionManager, disconnecting all devices.
- */
 IO::ConnectionManager::~ConnectionManager()
 {
   for (auto* drv : {static_cast<QObject*>(m_uartUi.get()),
@@ -123,9 +112,6 @@ IO::ConnectionManager::~ConnectionManager()
   disconnectAllDevices();
 }
 
-/**
- * @brief Returns the singleton instance of ConnectionManager.
- */
 IO::ConnectionManager& IO::ConnectionManager::instance()
 {
   static ConnectionManager singleton;
@@ -136,35 +122,21 @@ IO::ConnectionManager& IO::ConnectionManager::instance()
 // Status queries
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns true when data streaming is paused (device still connected).
- */
 bool IO::ConnectionManager::paused() const noexcept
 {
   return m_paused;
 }
 
-/**
- * @brief Returns true when device 0 is open and write is disabled.
- */
 bool IO::ConnectionManager::readOnly() const
 {
   return isConnected() && !m_writeEnabled;
 }
 
-/**
- * @brief Returns true when device 0 is open and write is enabled.
- */
 bool IO::ConnectionManager::readWrite() const
 {
   return isConnected() && m_writeEnabled;
 }
 
-/**
- * @brief Returns true when at least one device is connected.
- *
- * In ProjectFile mode all sources are checked. Otherwise only device 0.
- */
 bool IO::ConnectionManager::isConnected() const
 {
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
@@ -179,9 +151,6 @@ bool IO::ConnectionManager::isConnected() const
   return it != m_devices.end() && it->second && it->second->isOpen();
 }
 
-/**
- * @brief Returns the number of currently open (connected) devices.
- */
 int IO::ConnectionManager::connectedDeviceCount() const
 {
   int count = 0;
@@ -207,33 +176,21 @@ bool IO::ConnectionManager::configurationOk() const
   return false;
 }
 
-/**
- * @brief Returns the current bus type for the primary device.
- */
 SerialStudio::BusType IO::ConnectionManager::busType() const noexcept
 {
   return m_busType;
 }
 
-/**
- * @brief Returns the start delimiter used for frame detection.
- */
 const QByteArray& IO::ConnectionManager::startSequence() const noexcept
 {
   return m_startSequence;
 }
 
-/**
- * @brief Returns the end delimiter used for frame detection.
- */
 const QByteArray& IO::ConnectionManager::finishSequence() const noexcept
 {
   return m_finishSequence;
 }
 
-/**
- * @brief Returns the active checksum algorithm name.
- */
 const QString& IO::ConnectionManager::checksumAlgorithm() const noexcept
 {
   return m_checksumAlgorithm;
@@ -261,9 +218,6 @@ QStringList IO::ConnectionManager::availableBuses() const
 
 /**
  * @brief Returns the active driver for the given device ID.
- *
- * @param deviceId The device to query (default: 0, the primary device).
- * @return Raw pointer to the live driver, or nullptr if the device is not connected.
  */
 IO::HAL_Driver* IO::ConnectionManager::driver(int deviceId) const
 {
@@ -276,19 +230,11 @@ IO::HAL_Driver* IO::ConnectionManager::driver(int deviceId) const
 
 /**
  * @brief Returns (lazily creating) a driver instance for editing source @p deviceId.
- *
- * Editing drivers are independent instances not used for live connections.
- * They allow the ProjectEditor to read/write driver properties without touching
- * the live connection.
- *
- * @param deviceId Source ID whose driver should be returned for editing.
- * @return Raw pointer to the editing driver, or nullptr if unsupported.
  */
 IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
 {
   // Find the matching source entry
   const auto& sources = DataModel::ProjectModel::instance().sources();
-
   const DataModel::Source* srcPtr = nullptr;
   for (const auto& src : sources) {
     if (src.sourceId == deviceId) {
@@ -334,74 +280,47 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
 // UI driver accessors
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the UART UI-config driver instance.
- */
 IO::Drivers::UART* IO::ConnectionManager::uart() const noexcept
 {
   return m_uartUi.get();
 }
 
-/**
- * @brief Returns the Network UI-config driver instance.
- */
 IO::Drivers::Network* IO::ConnectionManager::network() const noexcept
 {
   return m_networkUi.get();
 }
 
-/**
- * @brief Returns the BluetoothLE UI-config driver instance.
- */
 IO::Drivers::BluetoothLE* IO::ConnectionManager::bluetoothLE() const noexcept
 {
   return m_bluetoothLEUi.get();
 }
 
 #ifdef BUILD_COMMERCIAL
-/**
- * @brief Returns the Audio UI-config driver instance.
- */
 IO::Drivers::Audio* IO::ConnectionManager::audio() const noexcept
 {
   return m_audioUi.get();
 }
 
-/**
- * @brief Returns the CANBus UI-config driver instance.
- */
 IO::Drivers::CANBus* IO::ConnectionManager::canBus() const noexcept
 {
   return m_canBusUi.get();
 }
 
-/**
- * @brief Returns the HID UI-config driver instance.
- */
 IO::Drivers::HID* IO::ConnectionManager::hid() const noexcept
 {
   return m_hidUi.get();
 }
 
-/**
- * @brief Returns the Modbus UI-config driver instance.
- */
 IO::Drivers::Modbus* IO::ConnectionManager::modbus() const noexcept
 {
   return m_modbusUi.get();
 }
 
-/**
- * @brief Returns the Process UI-config driver instance.
- */
 IO::Drivers::Process* IO::ConnectionManager::process() const noexcept
 {
   return m_processUi.get();
 }
 
-/**
- * @brief Returns the USB UI-config driver instance.
- */
 IO::Drivers::USB* IO::ConnectionManager::usb() const noexcept
 {
   return m_usbUi.get();
@@ -410,7 +329,6 @@ IO::Drivers::USB* IO::ConnectionManager::usb() const noexcept
 
 /**
  * @brief Returns the UI-config driver for the currently selected bus type.
- * @return Raw pointer to the active UI driver, or nullptr if none.
  */
 IO::HAL_Driver* IO::ConnectionManager::activeUiDriver() const noexcept
 {
@@ -442,8 +360,6 @@ IO::HAL_Driver* IO::ConnectionManager::activeUiDriver() const noexcept
 
 /**
  * @brief Returns the UI-config driver for a given bus type (not necessarily the active one).
- * @param type The bus type to look up.
- * @return Raw pointer to the UI driver, or nullptr if unsupported.
  */
 IO::HAL_Driver* IO::ConnectionManager::uiDriverForBusType(SerialStudio::BusType type) const noexcept
 {
@@ -475,15 +391,6 @@ IO::HAL_Driver* IO::ConnectionManager::uiDriverForBusType(SerialStudio::BusType 
 
 /**
  * @brief Sets a property on the active UI-config driver and mirrors it to the live driver.
- *
- * Equivalent to the user changing a setting in the Setup panel. The change is applied
- * to the UI-config driver (saving to QSettings), and also mirrored to the live DeviceManager
- * driver for device 0 so that connect_device() uses the current values. In single-source
- * ProjectFile mode the change also propagates to source[0].connectionSettings via
- * onUiDriverConfigurationChanged().
- *
- * @param key   Driver property key.
- * @param value New value for the property.
  */
 void IO::ConnectionManager::setUiDriverProperty(const QString& key, const QVariant& value)
 {
@@ -504,11 +411,6 @@ void IO::ConnectionManager::setUiDriverProperty(const QString& key, const QVaria
 
 /**
  * @brief Feeds a pre-built payload directly into the frame processing pipeline.
- *
- * Used by file playback (CSV, MDF4) and MQTT to inject frames without going
- * through a physical driver. Forwards to Console, API server, and FrameBuilder.
- *
- * @param payload The raw frame bytes to process.
  */
 void IO::ConnectionManager::processPayload(const QByteArray& payload)
 {
@@ -517,15 +419,15 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
   if (payload.isEmpty())
     return;
 
-  // Forward to console, API server, and frame builder
+  // Forward payload to console, API server, and frame builder
   static auto& console      = Console::Handler::instance();
   static auto& server       = API::Server::instance();
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
-  const auto data = makeByteArray(payload);
-  server.hotpathTxData(data);
-  console.hotpathRxData(data);
-  frameBuilder.hotpathRxFrame(payload);
+  const auto captured = makeCapturedData(payload);
+  server.hotpathTxData(captured->data);
+  console.hotpathRxData(captured->data);
+  frameBuilder.hotpathRxFrame(captured);
 
 #ifdef BUILD_COMMERCIAL
   static auto& mqtt = MQTT::Client::instance();
@@ -534,18 +436,12 @@ void IO::ConnectionManager::processPayload(const QByteArray& payload)
 
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
-  grpcServer.hotpathTxData(data);
+  grpcServer.hotpathTxData(captured->data);
 #endif
 }
 
 /**
  * @brief Injects per-source payloads for multi-source playback.
- *
- * Sends the full payload to console and API (for display), then routes
- * each source's sub-payload through FrameBuilder's per-source path.
- *
- * @param fullPayload Complete CSV row for console/API display.
- * @param sourcePayloads Map of sourceId → per-source CSV sub-row.
  */
 void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayload,
                                                       const QMap<int, QByteArray>& sourcePayloads)
@@ -561,32 +457,28 @@ void IO::ConnectionManager::processMultiSourcePayload(const QByteArray& fullPayl
   static auto& server       = API::Server::instance();
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
-  // Console and API get the full payload for display
-  const auto data = makeByteArray(fullPayload);
-  server.hotpathTxData(data);
-  console.hotpathRxData(data);
+  // Forward full payload to console and API for display
+  const auto captured = makeCapturedData(fullPayload);
+  server.hotpathTxData(captured->data);
+  console.hotpathRxData(captured->data);
 
   // Route each source's data through per-source frame building
   for (auto it = sourcePayloads.constBegin(); it != sourcePayloads.constEnd(); ++it)
-    frameBuilder.hotpathRxSourceFrame(it.key(), it.value());
+    frameBuilder.hotpathRxSourceFrame(it.key(), makeCapturedData(it.value(), captured->timestamp));
 
-// Route data to MQTT
 #ifdef BUILD_COMMERCIAL
   static auto& mqtt = MQTT::Client::instance();
   mqtt.hotpathTxFrame(fullPayload);
 #endif
 
-// Route data to GRPC
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
-  grpcServer.hotpathTxData(data);
+  grpcServer.hotpathTxData(captured->data);
 #endif
 }
 
 /**
  * @brief Writes @p data to device 0.
- * @param data Bytes to transmit.
- * @return Number of bytes written, or -1 on failure.
  */
 qint64 IO::ConnectionManager::writeData(const QByteArray& data)
 {
@@ -598,9 +490,6 @@ qint64 IO::ConnectionManager::writeData(const QByteArray& data)
 
 /**
  * @brief Writes @p data to the specified @p deviceId.
- * @param deviceId Target device.
- * @param data     Bytes to transmit.
- * @return Number of bytes written, or -1 on failure.
  */
 qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& data)
 {
@@ -626,9 +515,6 @@ qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& 
 // Connection lifecycle
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Toggles the connection state of the primary device.
- */
 void IO::ConnectionManager::toggleConnection()
 {
   if (isConnected())
@@ -662,9 +548,6 @@ void IO::ConnectionManager::connectDevice()
   Q_EMIT connectedChanged();
 }
 
-/**
- * @brief Disconnects all devices and cleans up.
- */
 void IO::ConnectionManager::disconnectDevice()
 {
   disconnectDevice(0);
@@ -692,9 +575,7 @@ void IO::ConnectionManager::resetFrameReader()
 }
 
 /**
- * @brief Connects a UI driver's configurationChanged signal to the three
- * standard handlers: persist to source[0], sync to live driver, and
- * forward to QML.
+ * @brief Wires a UI driver's configurationChanged to persist, sync-to-live, and QML-forward handlers.
  */
 void IO::ConnectionManager::wireUiDriver(IO::HAL_Driver* driver)
 {
@@ -761,15 +642,14 @@ void IO::ConnectionManager::setupExternalConnections()
     [this](const IO::FrameConfig&) { resetFrameReader(); },
     Qt::QueuedConnection);
 
-  // Switching operation mode (QuickPlot ↔ ProjectFile ↔ JSON) triggers rebuild
+  // Rebuild when operation mode changes
   connect(&AppState::instance(),
           &AppState::operationModeChanged,
           this,
           &IO::ConnectionManager::rebuildDevices,
           Qt::QueuedConnection);
 
-  // Wire UI drivers: configChanged → save to source[0], sync to live,
-  // re-evaluate configurationOk, and forward to QML
+  // Wire UI drivers for save + sync + forward
   wireUiDriver(m_uartUi.get());
   wireUiDriver(m_networkUi.get());
   wireUiDriver(m_bluetoothLEUi.get());
@@ -805,9 +685,6 @@ void IO::ConnectionManager::connectAllDevices()
       connectDevice(id);
 }
 
-/**
- * @brief Disconnects all devices including the primary device.
- */
 void IO::ConnectionManager::disconnectAllDevices()
 {
   for (auto& [id, dm] : m_devices)
@@ -816,7 +693,6 @@ void IO::ConnectionManager::disconnectAllDevices()
 
 /**
  * @brief Connects the device with the given @p deviceId.
- * @param deviceId Device to connect.
  */
 void IO::ConnectionManager::connectDevice(int deviceId)
 {
@@ -831,7 +707,6 @@ void IO::ConnectionManager::connectDevice(int deviceId)
 
 /**
  * @brief Disconnects the device with the given @p deviceId.
- * @param deviceId Device to disconnect.
  */
 void IO::ConnectionManager::disconnectDevice(int deviceId)
 {
@@ -842,7 +717,6 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
 
 /**
  * @brief Enables or disables data streaming pause (device stays connected).
- * @param paused True to pause, false to resume.
  */
 void IO::ConnectionManager::setPaused(bool paused)
 {
@@ -856,7 +730,6 @@ void IO::ConnectionManager::setPaused(bool paused)
 
 /**
  * @brief Enables or disables write capability.
- * @param enabled True to allow writes.
  */
 void IO::ConnectionManager::setWriteEnabled(bool enabled)
 {
@@ -869,7 +742,6 @@ void IO::ConnectionManager::setWriteEnabled(bool enabled)
 
 /**
  * @brief Sets the start delimiter and recreates device 0's FrameReader.
- * @param sequence New start delimiter bytes.
  */
 void IO::ConnectionManager::setStartSequence(const QByteArray& sequence)
 {
@@ -884,7 +756,6 @@ void IO::ConnectionManager::setStartSequence(const QByteArray& sequence)
 
 /**
  * @brief Sets the end delimiter and recreates device 0's FrameReader.
- * @param sequence New end delimiter bytes.
  */
 void IO::ConnectionManager::setFinishSequence(const QByteArray& sequence)
 {
@@ -899,7 +770,6 @@ void IO::ConnectionManager::setFinishSequence(const QByteArray& sequence)
 
 /**
  * @brief Sets the checksum algorithm and recreates device 0's FrameReader.
- * @param algorithm Algorithm name; empty disables checksum validation.
  */
 void IO::ConnectionManager::setChecksumAlgorithm(const QString& algorithm)
 {
@@ -913,12 +783,6 @@ void IO::ConnectionManager::setChecksumAlgorithm(const QString& algorithm)
 
 /**
  * @brief Changes the bus type for the primary device, disconnecting first.
- *
- * Creates a fresh driver instance (NOT a singleton) for the new bus type and
- * installs it as device 0. Driver singletons are only referenced for BLE
- * discovery state, never for the connection itself.
- *
- * @param type New bus type.
  */
 void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 {
@@ -943,7 +807,7 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
   }
 
   if (driver) {
-    // Copy current UI-config driver properties into the fresh live driver
+    // Copy UI-config driver properties into the fresh live driver
     HAL_Driver* uiDriver = activeUiDriver();
     if (uiDriver)
       for (const auto& prop : uiDriver->driverProperties())
@@ -965,11 +829,10 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
                 &IO::ConnectionManager::connectedChanged);
     }
 
-    // Create DeviceManager (owns driver + thread + FrameReader)
+    // Create DeviceManager and replace previous device 0
     auto dm = std::make_unique<DeviceManager>(0, std::move(driver), buildFrameConfig(0), this);
     wireDevice(dm.get());
 
-    // Replace the previous device 0, disconnecting its signals first
     auto existing = m_devices.find(0);
     if (existing != m_devices.end() && existing->second)
       disconnect(existing->second.get(), nullptr, this, nullptr);
@@ -1006,10 +869,6 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 
 /**
  * @brief Mirrors all properties from the active UI-config driver to the live DeviceManager driver.
- *
- * Called whenever any UI-config driver emits configurationChanged(). Keeps the live driver for
- * device 0 in sync with whatever the GUI or API has configured on the UI driver, so that the
- * next connectDevice() call uses the current settings even when called before connect_device().
  */
 void IO::ConnectionManager::syncUiDriverToLive()
 {
@@ -1036,10 +895,6 @@ void IO::ConnectionManager::syncUiDriverToLive()
 
 /**
  * @brief Applies source[0]'s busType and connectionSettings to the matching UI-config driver.
- *
- * Called after rebuildDevices() when in single-source ProjectFile mode. Updates m_busType and
- * populates the UI-config driver (e.g. m_uartUi) with stored settings so the Setup panel
- * reflects the project's saved configuration without requiring the user to re-enter values.
  */
 void IO::ConnectionManager::syncUiDriverFromSource0()
 {
@@ -1078,15 +933,13 @@ void IO::ConnectionManager::syncUiDriverFromSource0()
 
 /**
  * @brief Connects a DeviceManager's output signals to ConnectionManager's routing slots.
- * @param dm The DeviceManager to wire up.
  */
 void IO::ConnectionManager::wireDevice(DeviceManager* dm)
 {
   Q_ASSERT(dm);
   Q_ASSERT(dm->driver());
 
-  // DirectConnection — same-thread hop, avoids per-frame postEvent overhead
-  // that lets the FrameReader queue fill faster than the consumer drains it.
+  // DirectConnection: avoid per-frame postEvent overhead on main-thread hop
   connect(dm,
           &IO::DeviceManager::frameReady,
           this,
@@ -1102,14 +955,6 @@ void IO::ConnectionManager::wireDevice(DeviceManager* dm)
 
 /**
  * @brief Captures current UI-config driver settings back to source[0].
- *
- * Called whenever a UI-config driver emits configurationChanged() in single-source ProjectFile
- * mode. Serializes the active UI-config driver's properties into source[0].connectionSettings
- * and also updates source[0].busType. If a project file path exists the file is saved silently.
- *
- * The jsonFilePath guard is intentionally absent: the in-memory model must always reflect
- * the current hardware configuration so that loadIntoFrameBuilder and the GUI project view
- * show the correct bus type and connection settings even for unsaved projects.
  */
 void IO::ConnectionManager::onUiDriverConfigurationChanged()
 {
@@ -1154,11 +999,6 @@ void IO::ConnectionManager::onUiDriverConfigurationChanged()
 
 /**
  * @brief Rebuilds DeviceManagers for all sources when the project source list changes.
- *
- * In ProjectFile mode, source 0 is also rebuilt from project settings so that its
- * bus type and connection settings (port, baud rate, etc.) come from the project
- * file rather than from the global UI hardware panel. This is required for
- * multi-source projects where each source uses a different port or bus type.
  */
 void IO::ConnectionManager::rebuildDevices()
 {
@@ -1260,10 +1100,6 @@ void IO::ConnectionManager::rebuildDevices()
 
 /**
  * @brief Returns true when the current project sources are all configured.
- *
- * In ProjectFile mode connections come from the per-source live drivers created
- * by rebuildDevices(), not from the global Quick Plot UI driver. Validate those
- * live drivers directly so stale hardware-panel state cannot block Connect.
  */
 bool IO::ConnectionManager::projectConfigurationOk() const
 {
@@ -1285,18 +1121,13 @@ bool IO::ConnectionManager::projectConfigurationOk() const
 
 /**
  * @brief Routes a completed frame from device @p deviceId to FrameBuilder.
- *
- * In ProjectFile mode all frames go through hotpathRxSourceFrame() so that
- * multi-source merging works correctly. Otherwise device-0 frames use the
- * normal hotpathRxFrame() path.
- *
- * @param deviceId Source device identifier.
- * @param frame    Extracted frame bytes.
  */
-void IO::ConnectionManager::onFrameReady(int deviceId, const QByteArray& frame)
+void IO::ConnectionManager::onFrameReady(int deviceId, const IO::CapturedDataPtr& frame)
 {
   Q_ASSERT(deviceId >= 0);
-  Q_ASSERT(!frame.isEmpty());
+  Q_ASSERT(frame);
+  Q_ASSERT(frame->data);
+  Q_ASSERT(!frame->data->isEmpty());
 
   if (m_paused)
     return;
@@ -1305,7 +1136,7 @@ void IO::ConnectionManager::onFrameReady(int deviceId, const QByteArray& frame)
 
 #ifdef BUILD_COMMERCIAL
   static auto& mqtt = MQTT::Client::instance();
-  mqtt.hotpathTxFrame(frame);
+  mqtt.hotpathTxFrame(*frame->data);
 #endif
 
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
@@ -1316,12 +1147,11 @@ void IO::ConnectionManager::onFrameReady(int deviceId, const QByteArray& frame)
 
 /**
  * @brief Forwards raw bytes from device @p deviceId to Console and API Server.
- * @param deviceId Source device identifier.
- * @param data     Raw incoming bytes.
  */
-void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayPtr& data)
+void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::CapturedDataPtr& data)
 {
   Q_ASSERT(data);
+  Q_ASSERT(data->data);
   Q_ASSERT(deviceId >= 0);
 
   if (m_paused)
@@ -1331,12 +1161,12 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
   static auto& server  = API::Server::instance();
   static auto& fileTx  = IO::FileTransmission::instance();
 
-  server.hotpathTxData(data);
-  console.hotpathRxDeviceData(deviceId, data);
+  server.hotpathTxData(data->data);
+  console.hotpathRxDeviceData(deviceId, data->data);
 
   // Route incoming data to file transfer protocols
   if (fileTx.active()) [[unlikely]]
-    fileTx.onRawDataReceived(*data);
+    fileTx.onRawDataReceived(*data->data);
 
 #ifdef BUILD_COMMERCIAL
   static auto& sqliteExport = Sessions::Export::instance();
@@ -1345,7 +1175,7 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
 
 #ifdef ENABLE_GRPC
   static auto& grpcServer = API::GRPC::GRPCServer::instance();
-  grpcServer.hotpathTxData(data);
+  grpcServer.hotpathTxData(data->data);
 #endif
 }
 
@@ -1355,22 +1185,12 @@ void IO::ConnectionManager::onRawDataReceived(int deviceId, const IO::ByteArrayP
 
 /**
  * @brief Builds a FrameConfig for the given @p deviceId from current settings.
- *
- * In ProjectFile mode all devices (including device 0) read their per-source
- * frame delimiter and checksum values from ProjectModel so that each source
- * uses its own independently configured delimiters. In other modes device 0
- * continues to use the global ConnectionManager settings.
- *
- * @param deviceId Device to build config for.
- * @return Populated FrameConfig.
  */
 IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 {
   const auto opMode = AppState::instance().operationMode();
 
-  // QuickPlot and ConsoleOnly have fixed configs that don't depend on the
-  // project source list — use the cached config from AppState which is the
-  // single source of truth for these modes.
+  // QuickPlot/ConsoleOnly have fixed configs — use AppState
   if (opMode == SerialStudio::QuickPlot || opMode == SerialStudio::ConsoleOnly)
     return AppState::instance().frameConfig();
 
@@ -1393,7 +1213,7 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
     cfg.checksumAlgorithm = checksum;
     cfg.frameDetection    = static_cast<SerialStudio::FrameDetection>(src.frameDetection);
 
-    // Mirror AppState::deriveFrameConfig's empty-delimiter downgrade.
+    // Downgrade frame detection when delimiters are empty
     if ((cfg.frameDetection == SerialStudio::StartDelimiterOnly
          || cfg.frameDetection == SerialStudio::StartAndEndDelimiter)
         && cfg.startSequences.isEmpty()) [[unlikely]]
@@ -1407,7 +1227,7 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
     return cfg;
   }
 
-  // No matching source — use defaults
+  // Fall back to defaults when no source matches
   cfg.startSequences    = {QByteArray("/*")};
   cfg.finishSequences   = {QByteArray("*/")};
   cfg.checksumAlgorithm = QString();
@@ -1417,12 +1237,6 @@ IO::FrameConfig IO::ConnectionManager::buildFrameConfig(int deviceId) const
 
 /**
  * @brief Creates a fresh driver instance for the given bus @p type.
- *
- * This always returns a new heap-allocated instance — never a reference to a
- * singleton. Singleton drivers exist only for device enumeration.
- *
- * @param type Bus type enum value.
- * @return Unique pointer to the new driver, or nullptr for unknown types.
  */
 std::unique_ptr<IO::HAL_Driver> IO::ConnectionManager::createDriver(
   SerialStudio::BusType type) const

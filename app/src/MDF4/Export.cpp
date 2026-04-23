@@ -25,6 +25,7 @@
 #include <QDir>
 #include <QTimer>
 
+#include "AppState.h"
 #include "Misc/Utilities.h"
 #include "SerialStudio.h"
 
@@ -36,7 +37,6 @@
 #  include <mdf/mdffactory.h>
 #  include <mdf/mdfwriter.h>
 
-#  include "AppState.h"
 #  include "CSV/Player.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "IO/ConnectionManager.h"
@@ -98,6 +98,7 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
     createFile(items.front()->data);
     m_steadyBaseline = items.front()->timestamp;
     m_systemBaseline = std::chrono::system_clock::now();
+    resetMonotonicClock();
   }
 
   if (!isResourceOpen() || !m_writer)
@@ -128,11 +129,14 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   // Guard mdflib calls against exceptions propagating through Qt's event loop
   try {
     for (const auto& frame : items) {
-      const auto steadyOffset = frame->timestamp - m_steadyBaseline;
-      const auto systemTime   = m_systemBaseline + steadyOffset;
-      const auto timestamp_ns =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(systemTime.time_since_epoch()).count();
-      const double timestamp_s = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
+      // Monotonic offset from session start, shifted onto the system-clock
+      // epoch so downstream tools see wall-clock timestamps
+      const qint64 offsetNs = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
+      const auto systemEpochNs =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(m_systemBaseline.time_since_epoch())
+          .count();
+      const qint64 timestamp_ns = systemEpochNs + offsetNs;
+      const double timestamp_s  = static_cast<double>(timestamp_ns) / 1'000'000'000.0;
 
       for (const auto& group : frame->data.groups) {
         auto it = m_groupMap.find(group.groupId);
@@ -480,6 +484,12 @@ void MDF4::Export::setupExternalConnections()
     if (IO::ConnectionManager::instance().paused())
       closeFile();
   });
+
+  // Force-off when the app enters Console-only mode
+  connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
+    if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly && exportEnabled())
+      setExportEnabled(false);
+  });
 #endif
 }
 
@@ -488,15 +498,19 @@ void MDF4::Export::setupExternalConnections()
  */
 void MDF4::Export::setExportEnabled(const bool enabled)
 {
+  // Refuse to enable while the app is in Console-only mode
+  const bool allow = enabled
+                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+
   // Validate license and apply the export state
 #ifdef BUILD_COMMERCIAL
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Pro) {
-    if (!enabled && isOpen())
+    if (!allow && isOpen())
       closeFile();
 
-    setConsumerEnabled(enabled);
-    m_settings.setValue("MDF4Export", enabled);
+    setConsumerEnabled(allow);
+    m_settings.setValue("MDF4Export", allow);
     Q_EMIT enabledChanged();
     return;
   }

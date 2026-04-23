@@ -18,6 +18,7 @@
 #  include <QObject>
 #  include <QPageLayout>
 #  include <QPageSize>
+#  include <QSizeF>
 #  include <QString>
 #  include <vector>
 
@@ -28,11 +29,7 @@ class QWebEnginePage;
 namespace Sessions {
 
 /**
- * @brief Caller-supplied rendering options (branding, paper, output format).
- *
- * Fields mirror the QVariantMap sent from the QML options dialog — keep POD-
- * friendly so the adapter in @c DatabaseManager stays a straight
- * field-by-field copy.
+ * @brief Caller-supplied HTML / PDF session-report rendering options.
  */
 struct HtmlReportOptions {
   enum class Format {
@@ -47,33 +44,17 @@ struct HtmlReportOptions {
   QString authorName;
   QString logoPath;
   QPageSize::PageSizeId pageSize;
-  QPageLayout::Orientation orientation;
   bool includeCover;
   bool includeMetadata;
   bool includeStats;
   bool includeCharts;
-  double lineWidth;   // stroke width in CSS pixels (1.4 default)
-  QString lineStyle;  // "solid" | "dashed" | "dotted"
+  double lineWidth;
+  QString lineStyle;
   Format format;
 };
 
 /**
- * @brief Renders a session report as a self-contained HTML document and,
- *        optionally, as a PDF produced by printing that HTML.
- *
- * The HTML is built from a resource-embedded template with
- * ``{{PLACEHOLDER}}`` expansion. Chart.js, the runtime JS, the stylesheet
- * and the Serial Studio brand icon are all inlined at render time so the
- * output works offline and travels as a single file.
- *
- * For PDF output the renderer drives an off-screen @c QWebEnginePage,
- * waits for the client-side runtime to flip ``window.__reportReady``, then
- * calls ``printToPdf()``. Because that call is asynchronous the renderer is
- * a @c QObject that emits @c finished() when the whole pipeline settles.
- *
- * @c HtmlReport instances are single-shot: call @c render() once and listen
- * for @c finished(). The caller owns the instance and should @c deleteLater
- * it from the @c finished slot.
+ * @brief Renders a session report as HTML and optionally prints it to PDF.
  */
 class HtmlReport : public QObject {
   Q_OBJECT
@@ -91,11 +72,6 @@ public:
   HtmlReport& operator=(HtmlReport&&)      = delete;
   HtmlReport& operator=(const HtmlReport&) = delete;
 
-  /**
-   * @brief Start the render. Emits @c finished() exactly once.
-   *
-   * Returns immediately if the inputs are invalid (no path, invalid data).
-   */
   void render(const ReportData& data,
               std::vector<DatasetSeries> series,
               const HtmlReportOptions& opts);
@@ -109,7 +85,7 @@ private:
   [[nodiscard]] QString buildReportDataJson() const;
   [[nodiscard]] QString buildPrintFooterLeft() const;
   [[nodiscard]] QString pageSizeCssValue() const;
-  [[nodiscard]] QString pageSizeCssLandscape() const;
+  [[nodiscard]] QSizeF chartPagePrintableSize() const;
   [[nodiscard]] QString encodeLogoAsDataUri(const QString& path) const;
 
   [[nodiscard]] static QString readResource(const QString& path);

@@ -34,10 +34,7 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Safe subset of Lua standard libraries.
- *
- * Excludes io, os, debug, and package to prevent filesystem/process access
- * from user-provided scripts (same sandboxing philosophy as the JS engine).
+ * @brief Sandboxed subset of Lua standard libraries.
  */
 static const luaL_Reg kSafeLibs[] = {
   {    "_G",   luaopen_base},
@@ -49,9 +46,7 @@ static const luaL_Reg kSafeLibs[] = {
 };
 
 /**
- * @brief Opens only the safe standard libraries in the given Lua state.
- *
- * @param L Lua state to configure.
+ * @brief Opens the safe standard libraries and strips dangerous globals.
  */
 static void openSafeLibs(lua_State* L)
 {
@@ -82,18 +77,12 @@ static void openSafeLibs(lua_State* L)
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the Lua engine and creates the initial state.
- */
 DataModel::LuaScriptEngine::LuaScriptEngine()
   : m_state(nullptr), m_loaded(false), m_deadline(QDeadlineTimer::Forever)
 {
   createState();
 }
 
-/**
- * @brief Destroys the Lua engine and releases the state.
- */
 DataModel::LuaScriptEngine::~LuaScriptEngine()
 {
   destroyState();
@@ -141,17 +130,11 @@ void DataModel::LuaScriptEngine::destroyState()
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
 }
 
-/**
- * @brief Returns @c true when a callable parse function is loaded.
- */
 bool DataModel::LuaScriptEngine::isLoaded() const noexcept
 {
   return m_loaded;
 }
 
-/**
- * @brief Runs one cycle of Lua garbage collection.
- */
 void DataModel::LuaScriptEngine::collectGarbage()
 {
   if (m_state)
@@ -159,7 +142,7 @@ void DataModel::LuaScriptEngine::collectGarbage()
 }
 
 /**
- * @brief Resets the engine to an unloaded state by recreating the Lua state.
+ * @brief Resets the engine by recreating the Lua state.
  */
 void DataModel::LuaScriptEngine::reset()
 {
@@ -172,14 +155,7 @@ void DataModel::LuaScriptEngine::reset()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Lua debug hook that fires every kHookInstructionCount instructions.
- *
- * Retrieves the owning engine from the Lua registry and checks its
- * QDeadlineTimer. If the deadline has expired, raises a Lua error to unwind
- * the current lua_pcall. This provides timeout protection without threading.
- *
- * @param L  The Lua state.
- * @param ar Debug info (unused).
+ * @brief Lua debug hook that aborts the call when the deadline expires.
  */
 void DataModel::LuaScriptEngine::watchdogHook(lua_State* L, lua_Debug* ar)
 {
@@ -205,14 +181,6 @@ void DataModel::LuaScriptEngine::watchdogHook(lua_State* L, lua_Debug* ar)
 
 /**
  * @brief Validates and loads a Lua frame parser script.
- *
- * Recreates the Lua state, evaluates the script, and verifies that a global
- * `parse` function exists. For source 0, probes the function with test inputs.
- *
- * @param script           The Lua source to validate and load.
- * @param sourceId         Target source (0 = global).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return @c true on success, @c false if validation failed.
  */
 bool DataModel::LuaScriptEngine::loadScript(const QString& script,
                                             int sourceId,
@@ -353,10 +321,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Executes the Lua parse function over text data.
- *
- * @param frame Decoded UTF-8 string frame.
- * @return List of QStringList, each representing one frame.
+ * @brief Runs the Lua parse function over a text frame.
  */
 QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
 {
@@ -387,12 +352,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseString(const QString& frame)
 }
 
 /**
- * @brief Executes the Lua parse function over binary data.
- *
- * Passes the frame as a Lua table of byte integers (1-indexed).
- *
- * @param frame Binary frame data.
- * @return List of QStringList, each representing one frame.
+ * @brief Runs the Lua parse function over a binary frame (1-indexed byte table).
  */
 QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& frame)
 {
@@ -432,10 +392,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Converts a Lua table at the top of the stack to a QStringList.
- *
- * @param tableIndex Stack index of the table.
- * @return QStringList with string representation of each element.
+ * @brief Converts the Lua table at tableIndex to a QStringList.
  */
 QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
 {
@@ -462,14 +419,7 @@ QStringList DataModel::LuaScriptEngine::tableToStringList(int tableIndex)
 }
 
 /**
- * @brief Converts the Lua return value at stack top to frame list.
- *
- * Classifies the return as scalar, 1D table, 2D table, or mixed and
- * converts accordingly (same semantics as the JS engine).
- *
- * Pops the return value from the stack before returning.
- *
- * @return List of QStringList, each representing one frame.
+ * @brief Converts the Lua return value at stack top to a frame list.
  */
 QList<QStringList> DataModel::LuaScriptEngine::convertResult()
 {

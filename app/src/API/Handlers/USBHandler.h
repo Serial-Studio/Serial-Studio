@@ -17,21 +17,7 @@ namespace API {
 namespace Handlers {
 
 /**
- * @class USBHandler
- * @brief Registers API commands for IO::Drivers::USB operations (Pro feature)
- *
- * Provides commands for raw USB driver configuration:
- *
- * Configuration:
- * - io.driver.usb.setDeviceIndex     - Select USB device by index
- * - io.driver.usb.setTransferMode   - Set transfer mode (0=Bulk, 1=Advanced, 2=ISO)
- * - io.driver.usb.setInEndpointIndex  - Select IN endpoint (post-connect)
- * - io.driver.usb.setOutEndpointIndex - Select OUT endpoint (post-connect)
- * - io.driver.usb.setIsoPacketSize   - Set ISO packet size (post-connect)
- *
- * Queries:
- * - io.driver.usb.getDeviceList     - List available USB devices
- * - io.driver.usb.getConfiguration  - Get complete USB config
+ * @brief Registers API commands for IO::Drivers::USB operations (Pro feature).
  */
 class USBHandler {
 public:

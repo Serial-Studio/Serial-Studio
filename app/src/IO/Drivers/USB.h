@@ -22,7 +22,6 @@
 
 #pragma once
 
-// Prevent windows.h (pulled in by libusb) from defining min/max macros
 #if defined(_WIN32) && !defined(NOMINMAX)
 #  define NOMINMAX
 #endif
@@ -43,25 +42,7 @@ namespace IO {
 namespace Drivers {
 
 /**
- * @brief Raw USB driver supporting bulk, control, and isochronous transfers.
- *
- * Device enumeration is driven by libusb hotplug callbacks when the platform
- * supports them (macOS, Linux, Windows). A dedicated event thread runs
- * libusb_handle_events_timeout() continuously so both hotplug notifications
- * and isochronous transfer callbacks are processed without polling. On
- * platforms where hotplug is unavailable a 2-second QTimer fallback is used.
- *
- * Three transfer modes:
- *   BulkStream      — synchronous bulk IN/OUT (default).
- *   AdvancedControl — bulk + control transfers; requires user confirmation.
- *   Isochronous     — async isochronous transfers using the event thread.
- *
- * Threading:
- *   m_eventThread runs libusb_handle_events_timeout() at all times.
- *   BulkStream / AdvancedControl: blocking libusb_bulk_transfer loop on
- *     m_readThread.
- *   Isochronous: submitted transfers are driven by m_eventThread; callbacks
- *     resubmit completed transfers.
+ * @brief HAL driver for raw USB devices via libusb.
  */
 class USB : public HAL_Driver {
   // clang-format off
@@ -114,13 +95,10 @@ signals:
   void isoPacketSizeChanged();
 
 public:
-  /**
-   * @brief USB transfer mode.
-   */
   enum class TransferMode {
-    BulkStream      = 0, /**< Synchronous bulk IN/OUT (default). */
-    AdvancedControl = 1, /**< Bulk + control transfers. */
-    Isochronous     = 2, /**< Async isochronous transfers. */
+    BulkStream      = 0,
+    AdvancedControl = 1,
+    Isochronous     = 2,
   };
   Q_ENUM(TransferMode)
 

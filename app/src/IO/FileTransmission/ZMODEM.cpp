@@ -72,7 +72,6 @@ bool IO::Protocols::ZMODEM::isActive() const
 
 /**
  * @brief Starts a ZMODEM file transfer.
- * @param filePath Path to the file to transmit.
  */
 void IO::Protocols::ZMODEM::startTransfer(const QString& filePath)
 {
@@ -137,14 +136,6 @@ void IO::Protocols::ZMODEM::cancelTransfer()
 
 /**
  * @brief Processes bytes received from the remote device.
- *
- * Parses ZMODEM headers from the incoming byte stream. ZMODEM headers
- * begin with ZPAD ZPAD ZDLE followed by a header type byte:
- *   'B' = hex header (human-readable)
- *   'A' = binary header with CRC-16
- *   'C' = binary header with CRC-32
- *
- * @param data Raw bytes from the device.
  */
 void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
 {
@@ -217,7 +208,6 @@ void IO::Protocols::ZMODEM::processInput(const QByteArray& data)
 
 /**
  * @brief Processes one byte of an incoming hex header.
- * @param ch The byte to process.
  */
 void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
 {
@@ -285,7 +275,6 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
 
 /**
  * @brief Processes one byte of an incoming binary-32 header (ZDLE-decoded).
- * @param ch The byte to process.
  */
 void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
 {
@@ -327,7 +316,6 @@ void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
 
 /**
  * @brief Processes one byte of an incoming binary header (ZDLE-decoded).
- * @param ch The byte to process.
  */
 void IO::Protocols::ZMODEM::processBinByte(quint8 ch)
 {
@@ -468,10 +456,6 @@ void IO::Protocols::ZMODEM::sendZFILE()
 
 /**
  * @brief Initiates async file data streaming as ZDATA subpackets.
- *
- * Sends the ZDATA header, then schedules chunk-by-chunk transmission
- * via sendNextDataChunk(). Yields to the event loop every kChunksPerYield
- * chunks so that incoming ZRPOS/timeout signals can be processed.
  */
 void IO::Protocols::ZMODEM::sendDataSubpackets()
 {
@@ -495,10 +479,6 @@ void IO::Protocols::ZMODEM::sendDataSubpackets()
 
 /**
  * @brief Sends a batch of data chunks, then yields to the event loop.
- *
- * Sends up to kChunksPerYield subpackets per invocation. If more data
- * remains, schedules another call via QTimer::singleShot(0). This allows
- * the event loop to process incoming headers (ZRPOS, timeouts, cancel).
  */
 void IO::Protocols::ZMODEM::sendNextDataChunk()
 {
@@ -580,8 +560,6 @@ void IO::Protocols::ZMODEM::sendCancel()
 
 /**
  * @brief Handles a fully parsed receiver header.
- * @param type ZMODEM header type byte.
- * @param arg 32-bit argument (interpretation depends on type).
  */
 void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 {
@@ -684,13 +662,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds a ZMODEM hex header.
- *
- * Format: ZPAD ZPAD ZDLE ZHEX type[2hex] arg[8hex] crc[4hex] CR LF
- *
- * @param type Header type (kZRQINIT, kZFIN, etc.).
- * @param arg 32-bit argument.
- * @return Complete hex header bytes.
+ * @brief Builds a ZMODEM hex header (ZPAD ZPAD ZDLE ZHEX type[2hex] arg[8hex] crc[4hex] CR LF).
  */
 QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
 {
@@ -729,13 +701,7 @@ QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
 }
 
 /**
- * @brief Builds a ZMODEM binary-32 header.
- *
- * Format: ZPAD ZPAD ZDLE ZBIN32 type arg[4] crc32[4] (all ZDLE-encoded)
- *
- * @param type Header type.
- * @param arg 32-bit argument.
- * @return Complete binary header bytes.
+ * @brief Builds a ZMODEM binary-32 header (ZPAD ZPAD ZDLE ZBIN32 type arg[4] crc32[4], ZDLE-encoded).
  */
 QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
 {
@@ -774,10 +740,6 @@ QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
 
 /**
  * @brief Builds a ZDLE-encoded data subpacket with CRC-32.
- *
- * @param data Raw data bytes.
- * @param frameEnd Frame-end type (kZCRCE, kZCRCG, kZCRCQ, kZCRCW).
- * @return ZDLE-encoded subpacket.
  */
 QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 frameEnd)
 {
@@ -811,13 +773,7 @@ QByteArray IO::Protocols::ZMODEM::buildSubpacket(const QByteArray& data, quint8 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief ZDLE-encodes a byte sequence.
- *
- * Bytes that conflict with ZMODEM framing or XON/XOFF flow control
- * are prefixed with ZDLE and XORed with 0x40.
- *
- * @param data Raw bytes.
- * @return ZDLE-encoded bytes.
+ * @brief ZDLE-encodes a byte sequence (escapes framing/flow-control bytes).
  */
 QByteArray IO::Protocols::ZMODEM::zdleEncode(const QByteArray& data)
 {

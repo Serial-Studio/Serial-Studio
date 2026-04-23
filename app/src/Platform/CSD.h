@@ -32,15 +32,7 @@
 
 namespace CSD {
 /**
- * @class Titlebar
  * @brief Custom title bar widget with window controls for CSD windows.
- *
- * Provides a painted title bar with:
- * - Application icon
- * - Centered window title
- * - Minimize, maximize, and close buttons
- * - Window dragging support
- * - Double-click to maximize/restore
  */
 class Titlebar : public QQuickPaintedItem {
   Q_OBJECT
@@ -114,11 +106,7 @@ private:
 };
 
 /**
- * @class Border
  * @brief Draws a 1px border around the entire CSD window.
- *
- * Renders a thin border on top of all content, including the titlebar.
- * Hidden when window is maximized or fullscreen.
  */
 class Border : public QQuickPaintedItem {
   Q_OBJECT
@@ -129,13 +117,7 @@ public:
 };
 
 /**
- * @class Frame
- * @brief Draws window shadow for CSD windows.
- *
- * Renders:
- * - Soft drop shadow around the content area
- *
- * Shadow is automatically disabled when window is maximized or fullscreen.
+ * @brief Draws the window shadow for CSD windows.
  */
 class Frame : public QQuickPaintedItem {
   Q_OBJECT
@@ -176,23 +158,7 @@ private:
 };
 
 /**
- * @class Window
  * @brief Manages client-side decorations for a QQuickWindow.
- *
- * Provides complete CSD functionality:
- * - Frameless window with custom title bar
- * - Window shadow and border
- * - Content container with automatic margins
- * - Window dragging and edge resizing
- * - Theme integration
- *
- * Usage:
- * @code
- * auto *decorator = new Window(quickWindow);
- * @endcode
- *
- * QML content is automatically reparented into a container that
- * respects shadow margins and title bar height.
  */
 class Window : public QObject {
   Q_OBJECT

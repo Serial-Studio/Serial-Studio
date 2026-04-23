@@ -47,12 +47,6 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the Process driver.
- *
- * Restores all persisted settings from QSettings and connects the pipe-thread
- * started() signal to the read-loop slot.
- */
 IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr), m_pipeRunning(false)
 {
   // Restore persisted settings
@@ -68,10 +62,6 @@ IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr), m_pi
   connect(&m_pipeThread, &QThread::started, this, &Process::pipeReadLoop, Qt::DirectConnection);
 }
 
-/**
- * @brief Destructor — ensures the worker thread is stopped before the QThread
- *        member is destroyed.
- */
 IO::Drivers::Process::~Process()
 {
   doClose();
@@ -81,9 +71,6 @@ IO::Drivers::Process::~Process()
 // HAL_Driver interface
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Closes the active connection and releases all associated resources.
- */
 void IO::Drivers::Process::close()
 {
   doClose();
@@ -91,10 +78,6 @@ void IO::Drivers::Process::close()
 
 /**
  * @brief Non-virtual cleanup implementation shared by close() and ~Process().
- *
- * Unconditionally cleans up resources for both Launch and NamedPipe modes
- * so that switching modes between connections never leaks the previous
- * mode's resources.
  */
 void IO::Drivers::Process::doClose()
 {
@@ -117,9 +100,6 @@ void IO::Drivers::Process::doClose()
   }
 }
 
-/**
- * @brief Returns true when the driver has an active data channel.
- */
 bool IO::Drivers::Process::isOpen() const noexcept
 {
   if (m_mode == Mode::Launch)
@@ -128,9 +108,6 @@ bool IO::Drivers::Process::isOpen() const noexcept
   return m_pipeRunning.load();
 }
 
-/**
- * @brief Returns true — both Launch and NamedPipe modes support reading.
- */
 bool IO::Drivers::Process::isReadable() const noexcept
 {
   return isOpen();
@@ -138,8 +115,6 @@ bool IO::Drivers::Process::isReadable() const noexcept
 
 /**
  * @brief Returns true only in Launch mode while the channel is open.
- *
- * NamedPipe mode opens the pipe read-only and does not support writes.
  */
 bool IO::Drivers::Process::isWritable() const noexcept
 {
@@ -148,10 +123,6 @@ bool IO::Drivers::Process::isWritable() const noexcept
 
 /**
  * @brief Returns true when enough configuration is present to call open().
- *
- * Launch mode: the executable field must be non-empty and either point to an
- * existing file or be resolvable to a full path via the system PATH.
- * NamedPipe mode: the pipe path must be non-empty.
  */
 bool IO::Drivers::Process::configurationOk() const noexcept
 {
@@ -170,9 +141,6 @@ bool IO::Drivers::Process::configurationOk() const noexcept
 
 /**
  * @brief Writes @p data to the child process stdin.
- *
- * @return Number of bytes written, or -1 if the driver is not in Launch mode
- *         or no channel is open.
  */
 qint64 IO::Drivers::Process::write(const QByteArray& data)
 {
@@ -186,17 +154,7 @@ qint64 IO::Drivers::Process::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens the data channel.
- *
- * Launch mode: resolves the executable against the system PATH, then spawns it
- * via QProcess with merged stdout+stderr channels.
- *
- * NamedPipe mode: starts m_pipeThread which runs pipeReadLoop() and returns
- * immediately; pipe-open failures are reported asynchronously via onPipeError().
- *
- * @param mode Ignored — open mode is determined by the driver's Mode setting.
- * @return false if the executable cannot be resolved or the process fails to
- *         start.
+ * @brief Opens the data channel (spawns process or starts pipe reader thread).
  */
 bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
 {
@@ -272,25 +230,18 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the current driver mode as an integer (0 = Launch,
- *        1 = NamedPipe).
+ * @brief Returns the current driver mode (0 = Launch, 1 = NamedPipe).
  */
 int IO::Drivers::Process::mode() const noexcept
 {
   return static_cast<int>(m_mode);
 }
 
-/**
- * @brief Returns the configured executable path or bare name for Launch mode.
- */
 QString IO::Drivers::Process::executable() const
 {
   return m_executable;
 }
 
-/**
- * @brief Returns the command-line argument string for Launch mode.
- */
 QString IO::Drivers::Process::arguments() const
 {
   return m_arguments;
@@ -298,27 +249,19 @@ QString IO::Drivers::Process::arguments() const
 
 /**
  * @brief Returns the working directory for Launch mode.
- *
- * An empty string means the child inherits the application's current directory.
  */
 QString IO::Drivers::Process::workingDir() const
 {
   return m_workingDir;
 }
 
-/**
- * @brief Returns the named-pipe / FIFO path for NamedPipe mode.
- */
 QString IO::Drivers::Process::pipePath() const
 {
   return m_pipePath;
 }
 
 /**
- * @brief Returns the snapshot of running processes populated by
- *        refreshProcessList().
- *
- * Each entry is formatted as "name [PID]".
+ * @brief Returns the snapshot of running processes populated by refreshProcessList().
  */
 QStringList IO::Drivers::Process::runningProcesses() const
 {
@@ -331,8 +274,6 @@ QStringList IO::Drivers::Process::runningProcesses() const
 
 /**
  * @brief Sets the driver mode (Launch or NamedPipe).
- *
- * Persists the choice and emits modeChanged() and configurationChanged().
  */
 void IO::Drivers::Process::setMode(int mode)
 {
@@ -348,8 +289,6 @@ void IO::Drivers::Process::setMode(int mode)
 
 /**
  * @brief Sets the executable path or bare name for Launch mode.
- *
- * Persists the value and emits executableChanged() and configurationChanged().
  */
 void IO::Drivers::Process::setExecutable(const QString& path)
 {
@@ -376,8 +315,6 @@ void IO::Drivers::Process::setArguments(const QString& args)
 
 /**
  * @brief Sets the working directory for Launch mode.
- *
- * Pass an empty string to inherit the application's current directory.
  */
 void IO::Drivers::Process::setWorkingDir(const QString& dir)
 {
@@ -391,8 +328,6 @@ void IO::Drivers::Process::setWorkingDir(const QString& dir)
 
 /**
  * @brief Sets the named-pipe / FIFO path for NamedPipe mode.
- *
- * Persists the value and emits pipePathChanged() and configurationChanged().
  */
 void IO::Drivers::Process::setPipePath(const QString& path)
 {
@@ -482,12 +417,6 @@ void IO::Drivers::Process::browsePipePath()
 
 /**
  * @brief Enumerates running processes and updates the runningProcesses list.
- *
- * On Unix: runs `ps -eo pid,comm` and formats entries as "name [PID]".
- * On Windows: uses the Toolhelp32 snapshot API.
- *
- * Call this before opening the ProcessPicker dialog.  Emits
- * runningProcessesChanged() if the list differs from the previous snapshot.
  */
 void IO::Drivers::Process::refreshProcessList()
 {
@@ -546,8 +475,6 @@ void IO::Drivers::Process::refreshProcessList()
 
 /**
  * @brief Handles data available from the QProcess.
- *
- * Reads merged stdout+stderr and emits dataReceived().
  */
 void IO::Drivers::Process::onReadyRead()
 {
@@ -556,16 +483,11 @@ void IO::Drivers::Process::onReadyRead()
 
   const QByteArray data = m_process->readAllStandardOutput();
   if (!data.isEmpty())
-    Q_EMIT dataReceived(makeByteArray(data));
+    publishReceivedData(data);
 }
 
 /**
  * @brief Handles QProcess termination.
- *
- * Drains any remaining stdout, shows an informational message box, and
- * requests disconnection via a queued call so the UI is updated on the main
- * thread.  When doClose() initiates the disconnect it calls
- * m_process->disconnect() first, so this slot will not fire in that case.
  */
 void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus status)
 {
@@ -573,7 +495,7 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
   if (m_process) {
     const QByteArray remaining = m_process->readAllStandardOutput();
     if (!remaining.isEmpty())
-      Q_EMIT dataReceived(makeByteArray(remaining));
+      publishReceivedData(remaining);
   }
 
   const QString reason = (status == QProcess::CrashExit) ? tr("The process crashed.")
@@ -589,9 +511,6 @@ void IO::Drivers::Process::onProcessFinished(int exitCode, QProcess::ExitStatus 
 
 /**
  * @brief Handles a QProcess-level error during execution.
- *
- * FailedToStart is ignored — it is already reported by open() via
- * waitForStarted().  All other errors show a warning and trigger disconnect.
  */
 void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 {
@@ -607,9 +526,6 @@ void IO::Drivers::Process::onProcessError(QProcess::ProcessError error)
 
 /**
  * @brief Called on the main thread when pipeReadLoop() fails to open the pipe.
- *
- * Shows a warning and triggers a full disconnect so the UI reflects the closed
- * state.
  */
 void IO::Drivers::Process::onPipeError()
 {
@@ -625,16 +541,6 @@ void IO::Drivers::Process::onPipeError()
 
 /**
  * @brief Blocking read loop for NamedPipe mode, executed on m_pipeThread.
- *
- * On Unix: creates the FIFO if it does not exist, opens it O_RDONLY|O_NONBLOCK,
- * then polls with a 100 ms timeout so m_pipeRunning can be checked between
- * iterations.  POLLHUP with n == 0 means the writer closed its end.
- *
- * On Windows: creates a named pipe server, waits for a writer to connect using
- * overlapped I/O, then reads with PeekNamedPipe / ReadFile in a polling loop.
- *
- * If the pipe cannot be opened, onPipeError() is scheduled on the main thread
- * via a queued QMetaObject::invokeMethod().
  */
 void IO::Drivers::Process::pipeReadLoop()
 {
@@ -690,7 +596,7 @@ void IO::Drivers::Process::pipeReadLoop()
     if (!ok || bytesRead == 0)
       break;
 
-    Q_EMIT dataReceived(makeByteArray(QByteArray(buf, static_cast<int>(bytesRead))));
+    publishReceivedData(QByteArray(buf, static_cast<int>(bytesRead)));
   }
 
   CloseHandle(hPipe);
@@ -739,7 +645,7 @@ void IO::Drivers::Process::pipeReadLoop()
       continue;
     }
 
-    Q_EMIT dataReceived(makeByteArray(QByteArray(buf, static_cast<int>(n))));
+    publishReceivedData(QByteArray(buf, static_cast<int>(n)));
   }
 
   ::close(fd);
@@ -752,9 +658,6 @@ void IO::Drivers::Process::pipeReadLoop()
 
 /**
  * @brief Returns common executable directories not always present in PATH.
- *
- * Includes platform-specific locations such as Homebrew paths on macOS,
- * snap/flatpak/local paths on Linux, and common Windows program directories.
  */
 QStringList IO::Drivers::Process::extraSearchPaths()
 {
@@ -788,10 +691,7 @@ QStringList IO::Drivers::Process::extraSearchPaths()
 }
 
 /**
- * @brief Resolves a bare executable name against the system PATH and common
- *        platform-specific directories.
- *
- * @return The full path, or an empty string when nothing is found.
+ * @brief Resolves a bare executable name against the system PATH and common platform-specific directories.
  */
 QString IO::Drivers::Process::resolveExecutable(const QString& name)
 {
@@ -812,9 +712,7 @@ QString IO::Drivers::Process::resolveExecutable(const QString& name)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the Process configuration as a flat list of editable
- *        properties.
- * @return List of DriverProperty descriptors with current values.
+ * @brief Returns the Process configuration as a flat list of editable properties.
  */
 QList<IO::DriverProperty> IO::Drivers::Process::driverProperties() const
 {
@@ -861,8 +759,6 @@ QList<IO::DriverProperty> IO::Drivers::Process::driverProperties() const
 
 /**
  * @brief Applies a single Process configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::Process::setDriverProperty(const QString& key, const QVariant& value)
 {

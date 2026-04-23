@@ -26,34 +26,13 @@
 namespace API {
 namespace Handlers {
 /**
- * @class ConsoleHandler
- * @brief Registers API commands for Console::Handler operations
- *
- * Provides commands for:
- * - console.setEcho - Enable/disable echo
- * - console.setShowTimestamp - Show/hide timestamps
- * - console.setDisplayMode - Set display mode (PlainText/Hex)
- * - console.setDataMode - Set data mode (UTF8/Hex)
- * - console.setLineEnding - Set line ending
- * - console.setFontFamily - Set font family
- * - console.setFontSize - Set font size
- * - console.setChecksumMethod - Set checksum method
- * - console.clear - Clear console
- * - console.send - Send data
- * - console.export.setEnabled - Enable/disable console export
- * - console.export.close - Close console export file
- * - console.export.getStatus - Get console export status
- * - console.getConfiguration - Get all settings
+ * @brief Registers API commands for Console::Handler operations.
  */
 class ConsoleHandler {
 public:
-  /**
-   * @brief Register all Console commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Settings commands
   static CommandResponse setEcho(const QString& id, const QJsonObject& params);
   static CommandResponse setShowTimestamp(const QString& id, const QJsonObject& params);
   static CommandResponse setDisplayMode(const QString& id, const QJsonObject& params);
@@ -63,11 +42,9 @@ private:
   static CommandResponse setFontSize(const QString& id, const QJsonObject& params);
   static CommandResponse setChecksumMethod(const QString& id, const QJsonObject& params);
 
-  // Operations
   static CommandResponse clear(const QString& id, const QJsonObject& params);
   static CommandResponse send(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse exportSetEnabled(const QString& id, const QJsonObject& params);
   static CommandResponse exportClose(const QString& id, const QJsonObject& params);
   static CommandResponse exportGetStatus(const QString& id, const QJsonObject& params);

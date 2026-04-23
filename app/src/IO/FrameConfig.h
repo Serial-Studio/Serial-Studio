@@ -31,15 +31,6 @@ namespace IO {
 
 /**
  * @brief Plain aggregate carrying all FrameReader configuration parameters.
- *
- * DeviceManager constructs one of these from the project/source settings and
- * passes it to the FrameReader before moving it to its worker thread. All
- * members have sensible defaults so callers only need to override what they
- * care about.
- *
- * Start and finish sequences are lists so a single config can express
- * multiple valid delimiters (e.g., QuickPlot accepts CR, LF, or CRLF).
- * For single-delimiter projects the list contains exactly one element.
  */
 struct FrameConfig {
   QList<QByteArray> startSequences{QByteArray("/*")};

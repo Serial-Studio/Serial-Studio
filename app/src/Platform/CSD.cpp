@@ -71,8 +71,7 @@ constexpr qreal ShadowOpacity         = 0.10;
 #endif
 
 /**
- * @brief Returns @c true if the given @a window has same minimum and
- *        maximum sizes set.
+ * @brief Returns true if @a window has identical minimum and maximum sizes.
  */
 static bool isFixedSizeWindow(const QWindow* window)
 {
@@ -93,10 +92,7 @@ static bool isFixedSizeWindow(const QWindow* window)
 
 /**
  * @brief Constructs a Titlebar.
- * @param parent The parent QQuickItem.
- *
- * Initializes the title bar with default values, enables mouse and hover
- * event handling, and loads the application icon for display.
+ * @param parent Parent QQuickItem.
  */
 Titlebar::Titlebar(QQuickItem* parent)
   : QQuickPaintedItem(parent)
@@ -124,13 +120,7 @@ Titlebar::Titlebar(QQuickItem* parent)
 
 /**
  * @brief Paints the title bar.
- * @param painter The QPainter used for rendering.
- *
- * Renders the complete title bar including:
- * - Background with rounded top corners (when not maximized)
- * - Application icon on the left
- * - Centered window title text
- * - Minimize, maximize/restore, and close buttons
+ * @param painter QPainter used for rendering.
  */
 void Titlebar::paint(QPainter* painter)
 {
@@ -183,7 +173,6 @@ void Titlebar::paint(QPainter* painter)
 
 /**
  * @brief Returns the window title text.
- * @return The current title string.
  */
 QString Titlebar::title() const
 {
@@ -196,7 +185,6 @@ QString Titlebar::title() const
 
 /**
  * @brief Returns whether the parent window is currently active.
- * @return True if the window is active, false otherwise.
  */
 bool Titlebar::windowActive() const
 {
@@ -205,7 +193,6 @@ bool Titlebar::windowActive() const
 
 /**
  * @brief Returns the title bar background color.
- * @return The current background color.
  */
 QColor Titlebar::backgroundColor() const
 {
@@ -213,12 +200,7 @@ QColor Titlebar::backgroundColor() const
 }
 
 /**
- * @brief Calculates the foreground color based on background luminance.
- * @return Appropriate text color for readability.
- *
- * If the background matches the theme's toolbar_top color, returns the
- * theme's titlebar_text color. Otherwise, calculates optimal contrast
- * using the W3C relative luminance formula and WCAG AA threshold.
+ * @brief Returns the foreground color with optimal contrast to the background.
  */
 QColor Titlebar::foregroundColor() const
 {
@@ -242,9 +224,7 @@ QColor Titlebar::foregroundColor() const
 
 /**
  * @brief Sets the title bar text.
- * @param title The new title string.
- *
- * Emits titleChanged() and triggers a repaint if the title changes.
+ * @param title New title string.
  */
 void Titlebar::setTitle(const QString& title)
 {
@@ -257,10 +237,7 @@ void Titlebar::setTitle(const QString& title)
 
 /**
  * @brief Sets the window active state.
- * @param active The new active state.
- *
- * When inactive, the title bar renders with dimmed colors.
- * Emits windowActiveChanged() and triggers a repaint if the state changes.
+ * @param active New active state.
  */
 void Titlebar::setWindowActive(bool active)
 {
@@ -273,9 +250,7 @@ void Titlebar::setWindowActive(bool active)
 
 /**
  * @brief Sets the title bar background color.
- * @param color The new background color.
- *
- * Emits backgroundColorChanged() and triggers a repaint if the color changes.
+ * @param color New background color.
  */
 void Titlebar::setBackgroundColor(const QColor& color)
 {
@@ -287,11 +262,8 @@ void Titlebar::setBackgroundColor(const QColor& color)
 }
 
 /**
- * @brief Calculates the bounding rectangle for a window control button.
- * @param button The button type to get the rectangle for.
- * @return The button's bounding rectangle in item coordinates.
- *
- * Buttons are positioned from right to left: close, maximize, minimize.
+ * @brief Returns the bounding rectangle for a window control button.
+ * @param button Button type to query.
  */
 QRectF Titlebar::buttonRect(Button button) const
 {
@@ -303,9 +275,8 @@ QRectF Titlebar::buttonRect(Button button) const
 }
 
 /**
- * @brief Determines which button (if any) is at the given position.
- * @param pos The position to test in item coordinates.
- * @return The button at the position, or Button::None if no button.
+ * @brief Returns the button (if any) at the given position.
+ * @param pos Position in item coordinates.
  */
 Titlebar::Button Titlebar::buttonAt(const QPointF& pos) const
 {
@@ -324,15 +295,8 @@ Titlebar::Button Titlebar::buttonAt(const QPointF& pos) const
 }
 
 /**
- * @brief Determines if a button should be shown based on window flags.
- * @param button The button type to check.
- * @return True if the button should be displayed, false otherwise.
- *
- * Checks the window flags to determine visibility:
- * - If CustomizeWindowHint is not set, all buttons are shown (default behavior)
- * - If CustomizeWindowHint is set, only buttons with explicit hints are shown
- * - Maximize button is hidden if window has fixed size (minimumSize ==
- * maximumSize)
+ * @brief Returns true if a button should be shown based on window flags.
+ * @param button Button type to query.
  */
 bool Titlebar::shouldShowButton(Button button) const
 {
@@ -370,15 +334,8 @@ bool Titlebar::shouldShowButton(Button button) const
 }
 
 /**
- * @brief Calculates the background rectangle for drawing button hover/press
- *        states.
- *
- * @param button The button type to get the rectangle for.
- * @return The button's background rectangle.
- *
- * Windows 11 style: buttons span full titlebar height with ~46px width.
- * Close button extends to window edge. Buttons are positioned dynamically
- * based on visibility (window flags and resize constraints).
+ * @brief Returns the background rectangle for drawing button hover/press states.
+ * @param button Button type to query.
  */
 QRectF Titlebar::buttonBackgroundRect(Button button) const
 {
@@ -418,12 +375,9 @@ QRectF Titlebar::buttonBackgroundRect(Button button) const
 
 /**
  * @brief Draws a window control button with an SVG icon.
- * @param painter The painter to use.
- * @param button The button type to draw.
+ * @param painter Painter to use.
+ * @param button  Button type to draw.
  * @param svgPath Path to the SVG icon resource.
- *
- * Renders the SVG icon centered within the button bounds, colorized
- * based on the current state (normal, hovered, pressed, or inactive).
  */
 void Titlebar::drawButton(QPainter* painter, Button button, const QString& svgPath)
 {
@@ -531,10 +485,6 @@ void Titlebar::drawButton(QPainter* painter, Button button, const QString& svgPa
 
 /**
  * @brief Handles loss of mouse grab.
- *
- * Resets all interaction state (hover, press, drag) to prevent buttons
- * from remaining stuck in highlighted state when the grab is lost
- * unexpectedly.
  */
 void Titlebar::mouseUngrabEvent()
 {
@@ -546,10 +496,7 @@ void Titlebar::mouseUngrabEvent()
 
 /**
  * @brief Handles mouse press events.
- * @param event The mouse event.
- *
- * If a button is pressed, records the pressed state for visual feedback.
- * Otherwise, marks the start of a potential window drag operation.
+ * @param event Mouse event.
  */
 void Titlebar::mousePressEvent(QMouseEvent* event)
 {
@@ -567,11 +514,7 @@ void Titlebar::mousePressEvent(QMouseEvent* event)
 
 /**
  * @brief Handles mouse release events.
- * @param event The mouse event.
- *
- * If a button was pressed and released on the same button, emits the
- * corresponding signal (minimizeClicked, maximizeClicked, or closeClicked).
- * Updates hover state based on current mouse position.
+ * @param event Mouse event.
  */
 void Titlebar::mouseReleaseEvent(QMouseEvent* event)
 {
@@ -603,11 +546,7 @@ void Titlebar::mouseReleaseEvent(QMouseEvent* event)
 
 /**
  * @brief Handles mouse move events for window dragging.
- * @param event The mouse event.
- *
- * On first movement after press, initiates native window drag via
- * startSystemMove(). If the window is maximized, restores it first
- * and repositions so the cursor maintains its relative position.
+ * @param event Mouse event.
  */
 void Titlebar::mouseMoveEvent(QMouseEvent* event)
 {
@@ -634,12 +573,8 @@ void Titlebar::mouseMoveEvent(QMouseEvent* event)
 }
 
 /**
- * @brief Handles double-click events to toggle window maximized state.
- * @param event The mouse event.
- *
- * Double-clicking on the title bar (not on a button) toggles the window
- * between maximized and normal states, unless the window has a fixed size
- * (minimumSize == maximumSize) or lacks the maximize button hint.
+ * @brief Toggles the window maximized state on double-click.
+ * @param event Mouse event.
  */
 void Titlebar::mouseDoubleClickEvent(QMouseEvent* event)
 {
@@ -663,10 +598,7 @@ void Titlebar::mouseDoubleClickEvent(QMouseEvent* event)
 
 /**
  * @brief Handles hover move events to update button hover states.
- * @param event The hover event.
- *
- * Updates the currently hovered button and triggers a repaint if
- * the hover state changes.
+ * @param event Hover event.
  */
 void Titlebar::hoverMoveEvent(QHoverEvent* event)
 {
@@ -679,9 +611,7 @@ void Titlebar::hoverMoveEvent(QHoverEvent* event)
 
 /**
  * @brief Handles hover leave events to clear button hover states.
- * @param event The hover event.
- *
- * Clears the hovered button state when the mouse leaves the title bar.
+ * @param event Hover event.
  */
 void Titlebar::hoverLeaveEvent(QHoverEvent* event)
 {
@@ -698,10 +628,7 @@ void Titlebar::hoverLeaveEvent(QHoverEvent* event)
 
 /**
  * @brief Constructs a Frame.
- * @param parent The parent QQuickItem.
- *
- * Initializes the frame with default shadow settings, enables transparency,
- * and generates the initial shadow tile images.
+ * @param parent Parent QQuickItem.
  */
 Frame::Frame(QQuickItem* parent)
   : QQuickPaintedItem(parent), m_shadowRadius(CSD::ShadowRadius), m_shadowEnabled(true)
@@ -713,15 +640,7 @@ Frame::Frame(QQuickItem* parent)
 
 /**
  * @brief Paints the window frame including shadow and background.
- * @param painter The QPainter used for rendering.
- *
- * Renders the complete window frame including:
- * - Corner shadow tiles at each corner
- * - Edge shadow strips between corners
- * - Background fill matching the theme
- *
- * When shadows are disabled (e.g., window maximized), only the background
- * is drawn.
+ * @param painter QPainter used for rendering.
  */
 void Frame::paint(QPainter* painter)
 {
@@ -767,7 +686,6 @@ void Frame::paint(QPainter* painter)
 
 /**
  * @brief Returns the shadow blur radius in pixels.
- * @return The current shadow radius.
  */
 int Frame::shadowRadius() const
 {
@@ -776,7 +694,6 @@ int Frame::shadowRadius() const
 
 /**
  * @brief Returns whether the shadow is enabled.
- * @return True if shadow rendering is enabled, false otherwise.
  */
 bool Frame::shadowEnabled() const
 {
@@ -785,10 +702,7 @@ bool Frame::shadowEnabled() const
 
 /**
  * @brief Sets the shadow blur radius.
- * @param radius The new radius in pixels.
- *
- * Regenerates shadow tiles and triggers a repaint if the radius changes.
- * Emits shadowRadiusChanged().
+ * @param radius New radius in pixels.
  */
 void Frame::setShadowRadius(int radius)
 {
@@ -803,10 +717,6 @@ void Frame::setShadowRadius(int radius)
 /**
  * @brief Enables or disables shadow rendering.
  * @param enabled True to enable shadows, false to disable.
- *
- * When disabled, the frame renders without shadows or rounded corners
- * (typically used when the window is maximized).
- * Emits shadowEnabledChanged() and triggers a repaint if the state changes.
  */
 void Frame::setShadowEnabled(bool enabled)
 {
@@ -819,11 +729,6 @@ void Frame::setShadowEnabled(bool enabled)
 
 /**
  * @brief Regenerates the shadow tile images.
- *
- * Creates pre-rendered corner and edge tiles for efficient shadow painting.
- * The corner tile accounts for the rounded content corners, while the edge
- * tile is a 1-pixel wide gradient that gets stretched during rendering.
- * Uses a smoothstep falloff for natural shadow appearance.
  */
 void Frame::regenerateShadow()
 {
@@ -877,11 +782,7 @@ void Frame::regenerateShadow()
 
 /**
  * @brief Generates a shadow corner tile image.
- * @param size The shadow blur radius in pixels.
- * @return The generated corner tile image.
- *
- * Creates a square shadow tile with a diagonal gradient.
- * Uses smoothstep falloff for natural shadow appearance.
+ * @param size Shadow blur radius in pixels.
  */
 QImage Frame::generateShadowCorner(int size)
 {
@@ -910,10 +811,7 @@ QImage Frame::generateShadowCorner(int size)
 
 /**
  * @brief Constructs a Border.
- * @param parent The parent QQuickItem.
- *
- * Initializes the border overlay with transparency and configures
- * the render target for proper alpha blending.
+ * @param parent Parent QQuickItem.
  */
 Border::Border(QQuickItem* parent) : QQuickPaintedItem(parent)
 {
@@ -925,10 +823,7 @@ Border::Border(QQuickItem* parent) : QQuickPaintedItem(parent)
 
 /**
  * @brief Paints the window border.
- * @param painter The QPainter used for rendering.
- *
- * Draws a 1px border around the entire window area using a semi-transparent
- * gray color.
+ * @param painter QPainter used for rendering.
  */
 void Border::paint(QPainter* painter)
 {
@@ -945,17 +840,9 @@ void Border::paint(QPainter* painter)
 
 /**
  * @brief Constructs a Window decorator.
- * @param window The QWindow to decorate with client-side decorations.
- * @param color Optional custom title bar color (hex string). Empty for theme
- * default.
+ * @param window QWindow to decorate.
+ * @param color  Optional custom title bar color (hex string).
  * @param parent Parent QObject.
- *
- * Initializes complete CSD functionality including:
- * - Frameless window configuration with transparency
- * - Shadow frame, title bar, and content container setup
- * - Event filter installation for resize handling
- * - Minimum size tracking and adjustment
- * - Theme change monitoring
  */
 Window::Window(QWindow* window, const QString& color, QObject* parent)
   : QObject(parent)
@@ -1018,9 +905,6 @@ Window::Window(QWindow* window, const QString& color, QObject* parent)
 
 /**
  * @brief Destructor.
- *
- * Removes event filters from the window and its content item to prevent
- * dangling callbacks after destruction.
  */
 Window::~Window()
 {
@@ -1065,7 +949,6 @@ Window::~Window()
 
 /**
  * @brief Returns the shadow frame component.
- * @return Pointer to the Frame used for shadow and border rendering.
  */
 Frame* Window::frame() const
 {
@@ -1074,7 +957,6 @@ Frame* Window::frame() const
 
 /**
  * @brief Returns the decorated window.
- * @return Pointer to the QWindow being decorated, or nullptr if invalid.
  */
 QWindow* Window::window() const
 {
@@ -1083,7 +965,6 @@ QWindow* Window::window() const
 
 /**
  * @brief Returns the title bar component.
- * @return Pointer to the Titlebar used for window controls.
  */
 Titlebar* Window::titleBar() const
 {
@@ -1091,11 +972,7 @@ Titlebar* Window::titleBar() const
 }
 
 /**
- * @brief Returns the current shadow margin.
- * @return Shadow radius in pixels, or 0 if window is maximized/fullscreen.
- *
- * The shadow margin determines the offset between the window edge
- * and the visible content area.
+ * @brief Returns the current shadow margin in pixels.
  */
 int Window::shadowMargin() const
 {
@@ -1110,11 +987,7 @@ int Window::shadowMargin() const
 }
 
 /**
- * @brief Returns the current title bar height.
- * @return Height in pixels, adjusted for maximized/fullscreen state.
- *
- * Returns a smaller height when maximized, and 0 when fullscreen,
- * following common desktop environment conventions.
+ * @brief Returns the current title bar height in pixels.
  */
 int Window::titleBarHeight() const
 {
@@ -1133,10 +1006,7 @@ int Window::titleBarHeight() const
 
 /**
  * @brief Sets a custom color for the title bar.
- * @param color The color as a hex string (e.g., "#2d2d2d").
- *
- * Setting an empty string causes the title bar to use the
- * theme's toolbar_top color.
+ * @param color Color as a hex string (empty to use theme default).
  */
 void Window::setColor(const QString& color)
 {
@@ -1149,10 +1019,6 @@ void Window::setColor(const QString& color)
 
 /**
  * @brief Creates and configures the shadow frame.
- *
- * Sets up window transparency, creates the Frame component,
- * and connects geometry update signals. The frame is placed
- * at z-index -1 to render behind all content.
  */
 void Window::setupFrame()
 {
@@ -1178,9 +1044,6 @@ void Window::setupFrame()
 
 /**
  * @brief Creates and configures the border overlay.
- *
- * Creates the Border component on top of all other content.
- * The border is hidden when the window is maximized or fullscreen.
  */
 void Window::setupBorder()
 {
@@ -1199,10 +1062,6 @@ void Window::setupBorder()
 
 /**
  * @brief Creates and configures the title bar.
- *
- * Creates the Titlebar component, connects window control signals
- * (minimize, maximize, close), and sets up tracking for window
- * title and active state changes.
  */
 void Window::setupTitleBar()
 {
@@ -1245,10 +1104,6 @@ void Window::setupTitleBar()
 
 /**
  * @brief Updates the window minimum size to account for CSD decorations.
- *
- * Adds shadow margins and title bar height to the content minimum size
- * to ensure the content area never becomes smaller than intended.
- * Also enforces a minimum width to fit title bar controls.
  */
 void Window::updateMinimumSize()
 {
@@ -1270,9 +1125,6 @@ void Window::updateMinimumSize()
 
 /**
  * @brief Updates the frame position and size to fill the window.
- *
- * The frame always covers the entire window area, including the
- * shadow region around the content.
  */
 void Window::updateFrameGeometry()
 {
@@ -1285,9 +1137,6 @@ void Window::updateFrameGeometry()
 
 /**
  * @brief Updates the border position and size.
- *
- * Positions the border to cover the visible content area
- * (excluding the shadow margin).
  */
 void Window::updateBorderGeometry()
 {
@@ -1300,8 +1149,7 @@ void Window::updateBorderGeometry()
 }
 
 /**
- * @brief Re-calculates minimum window size (considering titlebar & shadows)
- *        when the QML user interface changes it's minimum size requirements.
+ * @brief Recalculates minimum window size when QML minimums change.
  */
 void Window::onMinimumSizeChanged()
 {
@@ -1326,10 +1174,7 @@ void Window::onMinimumSizeChanged()
 }
 
 /**
- * @brief Creates content container for QML content.
- *
- * Creates a simple Item container that holds all QML content,
- * positioned below the title bar with appropriate margins.
+ * @brief Creates the content container for QML content.
  */
 void Window::setupContentContainer()
 {
@@ -1378,8 +1223,6 @@ void Window::setupContentContainer()
 
 /**
  * @brief Updates the title bar position and size.
- *
- * Positions the title bar at the top of the visible content area.
  */
 void Window::updateTitleBarGeometry()
 {
@@ -1395,9 +1238,6 @@ void Window::updateTitleBarGeometry()
 
 /**
  * @brief Updates the content container position and size.
- *
- * Positions the container below the title bar with appropriate margins.
- * Also updates the size of all children to match the container.
  */
 void Window::updateContentContainerGeometry()
 {
@@ -1422,20 +1262,7 @@ void Window::updateContentContainerGeometry()
 }
 
 /**
- * @brief Retrieves the preferred size of the window
- *
- * Determines the preferred dimensions for the window by first using the
- * minimum size as a baseline. For QQuickWindow instances, this can be
- * overridden by custom QML properties @c preferredWidth and @c preferredHeight.
- *
- * @note If the underlying window is null, returns a zero size (0x0).
- *
- * @return QSize The preferred window dimensions, determined by:
- *         - Custom QML properties if available and valid (for QQuickWindow)
- *         - Minimum window size otherwise
- *
- * @see QWindow::minimumSize()
- * @see QQuickWindow
+ * @brief Returns the preferred size of the window.
  */
 QSize Window::preferredSize() const
 {
@@ -1460,9 +1287,6 @@ QSize Window::preferredSize() const
 
 /**
  * @brief Updates theme colors for the title bar.
- *
- * Applies either the custom color or the theme's toolbar_top color
- * to the title bar background.
  */
 void Window::updateTheme()
 {
@@ -1477,11 +1301,7 @@ void Window::updateTheme()
 
 /**
  * @brief Reparents a child item to the content container.
- * @param child The item to reparent.
- *
- * Skips CSD components (frame, border, title bar, content container)
- * and items already in the container. This ensures all user QML content
- * respects the CSD margins automatically.
+ * @param child Item to reparent.
  */
 void Window::reparentChildToContainer(QQuickItem* child)
 {
@@ -1500,13 +1320,8 @@ void Window::reparentChildToContainer(QQuickItem* child)
 }
 
 /**
- * @brief Determines the resize edge at the given position.
- * @param pos The position in window coordinates.
- * @return The ResizeEdge flags indicating which edges are under the cursor.
- *
- * Returns ResizeEdge::None if the window is maximized, has fixed size
- * (minimumSize == maximumSize), or the position is not within the
- * resize margin of any edge.
+ * @brief Returns the resize edge flags at the given position.
+ * @param pos Position in window coordinates.
  */
 Window::ResizeEdge Window::edgeAt(const QPointF& pos) const
 {
@@ -1538,9 +1353,8 @@ Window::ResizeEdge Window::edgeAt(const QPointF& pos) const
 }
 
 /**
- * @brief Returns the appropriate cursor shape for a resize edge.
- * @param edge The resize edge.
- * @return The Qt::CursorShape to display for resize feedback.
+ * @brief Returns the cursor shape for a resize edge.
+ * @param edge Resize edge.
  */
 Qt::CursorShape Window::cursorForEdge(ResizeEdge edge) const
 {
@@ -1564,8 +1378,7 @@ Qt::CursorShape Window::cursorForEdge(ResizeEdge edge) const
 
 /**
  * @brief Converts internal ResizeEdge to Qt::Edges flags.
- * @param edge The internal resize edge value.
- * @return The equivalent Qt::Edges flags for use with startSystemResize().
+ * @param edge Internal resize edge value.
  */
 Qt::Edges Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
 {
@@ -1586,15 +1399,8 @@ Qt::Edges Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
 
 /**
  * @brief Event filter for window resize and content reparenting.
- * @param watched The object being watched.
- * @param event The event to process.
- * @return True if the event was handled, false to continue propagation.
- *
- * Handles two types of events:
- * - ChildAdded on content item: Reparents new QML items to the container
- * - Mouse events on window: Updates resize cursors and initiates system resize
- *
- * Uses native startSystemResize() for proper compositor integration.
+ * @param watched Object being watched.
+ * @param event   Event to process.
  */
 bool Window::eventFilter(QObject* watched, QEvent* event)
 {

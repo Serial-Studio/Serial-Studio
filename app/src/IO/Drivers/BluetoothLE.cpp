@@ -42,12 +42,6 @@ QList<IO::Drivers::BluetoothLE*> IO::Drivers::BluetoothLE::s_instances;
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs a BluetoothLE driver instance.
- *
- * All instances share a single discovery agent and device list via static state.
- * Each instance maintains its own connection (controller, service, characteristics).
- */
 IO::Drivers::BluetoothLE::BluetoothLE()
   : m_deviceIndex(-1)
   , m_deviceConnected(false)
@@ -75,9 +69,6 @@ IO::Drivers::BluetoothLE::BluetoothLE()
   });
 }
 
-/**
- * @brief Destructor — unregisters from shared instance list.
- */
 IO::Drivers::BluetoothLE::~BluetoothLE()
 {
   close();
@@ -90,9 +81,6 @@ IO::Drivers::BluetoothLE::~BluetoothLE()
 
 /**
  * @brief Closes the Bluetooth LE connection.
- *
- * Clears per-instance connection state (controller, service, characteristics).
- * Does not affect shared discovery state.
  */
 void IO::Drivers::BluetoothLE::close()
 {
@@ -201,9 +189,6 @@ qint64 IO::Drivers::BluetoothLE::write(const QByteArray& data)
 
 /**
  * @brief Opens a connection to a Bluetooth LE device.
- *
- * Uses the shared discovery device list. Each instance creates its own
- * QLowEnergyController so multiple BLE connections can coexist.
  */
 bool IO::Drivers::BluetoothLE::open(const QIODevice::OpenMode mode)
 {
@@ -379,9 +364,6 @@ QString IO::Drivers::BluetoothLE::selectedServiceUuid() const
 
 /**
  * @brief Starts the shared BLE device discovery process.
- *
- * Initializes the Bluetooth adapter (if needed) and starts scanning. All
- * registered instances are notified when devices are found.
  */
 void IO::Drivers::BluetoothLE::startDiscovery()
 {
@@ -431,8 +413,6 @@ void IO::Drivers::BluetoothLE::startDiscovery()
 
 /**
  * @brief Changes the index of the device selected by the user.
- *
- * Compensates for the added "Select device" placeholder element.
  */
 void IO::Drivers::BluetoothLE::selectDevice(const int index)
 {
@@ -454,8 +434,6 @@ void IO::Drivers::BluetoothLE::selectDevice(const int index)
 
 /**
  * @brief Changes the index of the service selected by the user.
- *
- * Compensates for the added "Select service" placeholder element.
  */
 void IO::Drivers::BluetoothLE::selectService(const int index)
 {
@@ -581,7 +559,7 @@ void IO::Drivers::BluetoothLE::setCharacteristicIndex(const int index)
       m_service->writeDescriptor(cccd, QLowEnergyCharacteristic::CCCDEnableNotification);
 
     if (!c.value().isEmpty())
-      Q_EMIT dataReceived(makeByteArray(c.value()));
+      publishReceivedData(c.value());
   }
 
   Q_EMIT characteristicIndexChanged();
@@ -730,13 +708,13 @@ void IO::Drivers::BluetoothLE::onCharacteristicChanged(const QLowEnergyCharacter
 {
   // Forward data if no specific characteristic is selected or it matches
   if (m_selectedCharacteristic == -1) {
-    Q_EMIT dataReceived(makeByteArray(value));
+    publishReceivedData(value);
     return;
   }
 
   if (m_selectedCharacteristic >= 0 && m_selectedCharacteristic < m_characteristics.count()
       && info == m_characteristics.at(m_selectedCharacteristic)) {
-    Q_EMIT dataReceived(makeByteArray(value));
+    publishReceivedData(value);
   }
 }
 
@@ -772,8 +750,6 @@ void IO::Drivers::BluetoothLE::initializeSharedState()
 
 /**
  * @brief Static callback — registers a discovered BLE device in the shared list.
- *
- * Notifies all registered instances so their device lists update.
  */
 void IO::Drivers::BluetoothLE::onDeviceDiscovered(const QBluetoothDeviceInfo& device)
 {
@@ -1002,9 +978,6 @@ QList<IO::DriverProperty> IO::Drivers::BluetoothLE::driverProperties() const
 
 /**
  * @brief Applies a single Bluetooth LE configuration change by key.
- *
- * Sets the internal value directly (no placeholder compensation) since
- * driverProperties() returns the raw internal values.
  */
 void IO::Drivers::BluetoothLE::setDriverProperty(const QString& key, const QVariant& value)
 {

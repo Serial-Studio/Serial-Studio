@@ -29,9 +29,6 @@
 // Constructor
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the OutputCodeEditor, loads templates from rcc resources.
- */
 DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent), m_readingCode(false), m_testDialog(nullptr)
 {
@@ -111,17 +108,11 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
 // Property getters
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the editor's current text content.
- */
 QString DataModel::OutputCodeEditor::text() const
 {
   return m_widget.toPlainText();
 }
 
-/**
- * @brief Returns @c true if the document has unsaved modifications.
- */
 bool DataModel::OutputCodeEditor::isModified() const noexcept
 {
   if (m_widget.document())
@@ -130,9 +121,6 @@ bool DataModel::OutputCodeEditor::isModified() const noexcept
   return false;
 }
 
-/**
- * @brief Returns @c true if an undo step is available.
- */
 bool DataModel::OutputCodeEditor::undoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -141,9 +129,6 @@ bool DataModel::OutputCodeEditor::undoAvailable() const noexcept
   return false;
 }
 
-/**
- * @brief Returns @c true if a redo step is available.
- */
 bool DataModel::OutputCodeEditor::redoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -156,49 +141,31 @@ bool DataModel::OutputCodeEditor::redoAvailable() const noexcept
 // Editor operations
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Cuts the selection to the clipboard.
- */
 void DataModel::OutputCodeEditor::cut()
 {
   m_widget.cut();
 }
 
-/**
- * @brief Undoes the last edit operation.
- */
 void DataModel::OutputCodeEditor::undo()
 {
   m_widget.undo();
 }
 
-/**
- * @brief Re-applies the last undone edit.
- */
 void DataModel::OutputCodeEditor::redo()
 {
   m_widget.redo();
 }
 
-/**
- * @brief Copies the selection to the clipboard.
- */
 void DataModel::OutputCodeEditor::copy()
 {
   m_widget.copy();
 }
 
-/**
- * @brief Pastes clipboard content at the cursor.
- */
 void DataModel::OutputCodeEditor::paste()
 {
   m_widget.paste();
 }
 
-/**
- * @brief Selects the entire document.
- */
 void DataModel::OutputCodeEditor::selectAll()
 {
   m_widget.selectAll();
@@ -311,7 +278,7 @@ void DataModel::OutputCodeEditor::reload(bool guiTrigger)
 }
 
 /**
- * @brief Loads the default transmit function template from application resources.
+ * @brief Loads the default transmit function template from resources.
  */
 QString DataModel::OutputCodeEditor::defaultTemplate()
 {

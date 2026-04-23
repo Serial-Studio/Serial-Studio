@@ -1,6 +1,7 @@
 {
     "actions": [
     ],
+    "customizeWorkspaces": false,
     "groups": [
         {
             "datasets": [
@@ -185,17 +186,11 @@
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
-                "autoReconnect": false,
-                "baudRate": 115200,
-                "dataBitsIndex": 3,
-                "deviceId": {
-                    "portName": "cu.Bluetooth-Incoming-Port"
-                },
-                "dtr": true,
-                "flowControlIndex": 0,
-                "parityIndex": 0,
-                "portIndex": 2,
-                "stopBitsIndex": 0
+                "address": "127.0.0.1",
+                "socketTypeIndex": 1,
+                "udpLocalPort": 9000,
+                "udpMulticast": false,
+                "udpRemotePort": 9000
             },
             "decoder": 0,
             "decoderMethod": 0,
@@ -209,5 +204,93 @@
             "title": "Device A"
         }
     ],
-    "title": "Lorenz Attractor"
+    "title": "Lorenz Attractor",
+    "workspaces": [
+        {
+            "icon": "qrc:/rcc/icons/panes/overview.svg",
+            "title": "Overview",
+            "widgetRefs": [
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 2
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 6
+                }
+            ],
+            "workspaceId": 1000
+        },
+        {
+            "icon": "qrc:/rcc/icons/panes/dashboard.svg",
+            "title": "All Data",
+            "widgetRefs": [
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 2
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 1,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 2,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 6
+                }
+            ],
+            "workspaceId": 1001
+        },
+        {
+            "title": "2D Visualization",
+            "widgetRefs": [
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 2
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 1,
+                    "widgetType": 9
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 2,
+                    "widgetType": 9
+                }
+            ],
+            "workspaceId": 1002
+        },
+        {
+            "title": "3D Visualization",
+            "widgetRefs": [
+                {
+                    "groupId": 1,
+                    "relativeIndex": 0,
+                    "widgetType": 6
+                }
+            ],
+            "workspaceId": 1003
+        }
+    ]
 }

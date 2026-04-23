@@ -28,17 +28,7 @@
 #include "UI/QuickPaintedItemCompat.h"
 
 /**
- * @class DeclarativeWidget
- *
  * @brief Base class for embedding a QWidget inside a QML UI.
- *
- * This class enables a QWidget to be rendered within a QML interface by
- * capturing its output as a QPixmap and displaying it in QML. User interaction
- * is disabled to avoid slowing down the rendering engine.
- *
- * QWidget and QML use fundamentally different rendering models—native OS
- * rendering vs. GPU-accelerated rendering—which makes direct embedding
- * normally impossible. This class works around that by bridging the two.
  */
 class DeclarativeWidget : public QuickPaintedItemCompat {
   // clang-format off

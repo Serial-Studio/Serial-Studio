@@ -31,22 +31,7 @@
 
 namespace UI {
 /**
- * @class UI::Dashboard
  * @brief Real-time dashboard manager for displaying data-driven widgets.
- *
- * The `Dashboard` class creates and maintains the model used for generating a
- * dashboard user interface, updating various widgets such as plots, multiplots,
- * and status indicators based on JSON frame data.
- *
- * Updates occur at a maximum rate of 20 Hz for optimal performance. It manages
- * real-time data for different plot types (linear, FFT, multiplot) and supports
- * actions that can be triggered from the UI.
- *
- * Properties notify changes to dynamically adjust UI elements like widget
- * visibility and count.
- *
- * @note This class is implemented as a singleton and is non-copyable and
- *       non-movable.
  */
 class Dashboard : public QObject {
   // clang-format off
@@ -174,7 +159,7 @@ public slots:
   void setFFTPlotRunning(const int index, const bool enabled);
   void setMultiplotRunning(const int index, const bool enabled);
 
-  void hotpathRxFrame(const DataModel::Frame& frame);
+  void hotpathRxFrame(const DataModel::TimestampedFramePtr& frame);
 
 private:
   void updateDashboardData(const DataModel::Frame& frame);
@@ -238,13 +223,8 @@ private:
   SerialStudio::WidgetMap m_widgetMap;
   QMap<int, DataModel::Dataset> m_datasets;
 
-  // Maps unique dataset ID to all dataset refs for value updates
   QMap<int, QVector<DataModel::Dataset*>> m_datasetReferences;
-
-  // Groups by widgets type
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> m_widgetGroups;
-
-  // Datasets by widget type
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> m_widgetDatasets;
 
   DataModel::Frame m_lastFrame;
@@ -252,28 +232,6 @@ private:
 };
 }  // namespace UI
 
-//--------------------------------------------------------------------------------------------------
-// Inline functions for widgets
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Formats a floating-point value with dynamic decimal precision based on
- * context.
- *
- * This function determines a suitable number of decimal places for the input
- * value `val` based on the magnitudes of `min` and `max`, which define the
- * expected range of values. The formatting logic is intended to make numeric
- * output clean, readable, and free from scientific notation in most practical
- * engineering use cases.
- *
- * If `min` and `max` are both zero, it will determine the precision solely from
- * `val`.
- *
- * @param val The value to format.
- * @param min The minimum value of the range.
- * @param max The maximum value of the range.
- * @return A QString representing the formatted number.
- */
 inline QString FMT_VAL(double val, double min, double max)
 {
   auto decPoints = [](double v) {
@@ -319,71 +277,21 @@ inline QString FMT_VAL(double val, double min, double max)
   }
 }
 
-/**
- * @brief Formats a floating-point value with adaptive decimal precision based
- * on dataset range.
- *
- * Determines the number of decimal places to display based on the magnitude of
- * the dataset’s pltMin and pltMax. Useful for presenting values in UIs where
- * consistent but meaningful precision is important.
- *
- * @param val The value to format.
- * @param dataset A dataset providing context (pltMin/pltMax) for determining
- *                required precision.
- *
- * @return QString Formatted number with appropriate decimal places.
- */
 inline QString FMT_VAL(double val, const DataModel::Dataset& dataset)
 {
   return FMT_VAL(val, dataset.pltMin, dataset.pltMax);
 }
 
-/**
- * @brief Retrieves a reference to a dataset group widget by type and index.
- *
- * Provides direct access to a dataset group from the dashboard instance.
- * Use this in contexts where group-based widgets (e.g., GPS, 3D, multi-plot)
- * are expected.
- *
- * @param type The widget type (must be a group-based widget).
- * @param index Index of the widget in the corresponding group list.
- * @return Reference to the matching DataModel::Group.
- *
- * @note Caller is responsible for ensuring the index is valid.
- */
 inline const DataModel::Group& GET_GROUP(const SerialStudio::DashboardWidget type, int index)
 {
   return UI::Dashboard::instance().getGroupWidget(type, index);
 }
 
-/**
- * @brief Retrieves a reference to a dataset widget by type and index.
- *
- * Provides direct access to a single dataset widget from the dashboard
- * instance. Use for widget types tied to individual datasets (e.g., plots,
- * FFT, gauges).
- *
- * @param type The widget type (must be a dataset-based widget).
- * @param index Index of the widget in the corresponding dataset list.
- * @return Reference to the matching DataModel::Dataset.
- *
- * @note Caller is responsible for ensuring the index is valid.
- */
 inline const DataModel::Dataset& GET_DATASET(const SerialStudio::DashboardWidget type, int index)
 {
   return UI::Dashboard::instance().getDatasetWidget(type, index);
 }
 
-/**
- * @brief Validates whether a widget index is in bounds for the given type.
- *
- * Checks if a widget of the given type exists at the specified index.
- * Prevents out-of-bounds access when working with dashboard widgets.
- *
- * @param type The widget type to check.
- * @param index Index to validate.
- * @return true if the widget index is valid, false otherwise.
- */
 inline bool VALIDATE_WIDGET(const SerialStudio::DashboardWidget type, int index)
 {
   return index >= 0 && index < UI::Dashboard::instance().widgetCount(type);

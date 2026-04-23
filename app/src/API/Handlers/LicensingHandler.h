@@ -27,18 +27,7 @@
 namespace API {
 namespace Handlers {
 /**
- * @class LicensingHandler
- * @brief Registers API commands for license management operations
- *
- * Provides commands for:
- * - licensing.setLicense       - Set the license key to activate
- * - licensing.activate         - Activate the stored license key
- * - licensing.deactivate       - Deactivate the license on this machine
- * - licensing.validate         - Re-validate the current license with server
- * - licensing.getStatus        - Query current activation status (read-only)
- * - licensing.trial.getStatus  - Query current trial status (read-only)
- * - licensing.trial.enable     - Start a trial period
- * - licensing.guardStatus      - Run all build-time license guards (diagnostic)
+ * @brief Registers API commands for license management operations.
  */
 class LicensingHandler {
 public:

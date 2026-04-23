@@ -38,19 +38,8 @@ class ZMODEM;
 }  // namespace Protocols
 
 /**
- * @class FileTransmission
  * @brief Manages file transmission through the active I/O device using
  *        multiple industry-standard protocols.
- *
- * Supported transfer modes:
- * - **Plain Text**: Line-by-line text file transmission with configurable
- *   interval (original behavior).
- * - **Raw Binary**: Block-by-block binary file transmission with configurable
- *   block size and inter-block delay.
- * - **XMODEM**: 128-byte blocks with CRC-16, ACK/NAK flow control.
- * - **XMODEM-1K**: 1024-byte blocks with CRC-16.
- * - **YMODEM**: XMODEM-1K with batch header (filename + size).
- * - **ZMODEM**: Streaming protocol with 32-bit CRC, auto-start, crash recovery.
  */
 class FileTransmission : public QObject {
   // clang-format off
@@ -133,9 +122,6 @@ private:
   FileTransmission& operator=(const FileTransmission&) = delete;
 
 public:
-  /**
-   * @brief Available file transfer modes.
-   */
   enum TransferMode {
     PlainText = 0,
     RawBinary = 1,
@@ -192,17 +178,14 @@ private:
   void appendLog(const QString& message);
   void connectProtocol(Protocols::Protocol* protocol);
 
-  // Plain text / raw binary state
   QFile m_file;
   QTimer m_timer;
   QTextStream* m_stream;
 
-  // Protocol instances
   Protocols::XMODEM* m_xmodem;
   Protocols::YMODEM* m_ymodem;
   Protocols::ZMODEM* m_zmodem;
 
-  // Transfer state
   TransferMode m_transferMode;
   QString m_filePath;
   QString m_statusText;
@@ -215,7 +198,6 @@ private:
   int m_maxRetries;
   int m_protocolTimeout;
 
-  // Speed tracking
   QElapsedTimer m_speedTimer;
   QTimer m_speedUpdateTimer;
   qint64 m_lastSpeedBytes;

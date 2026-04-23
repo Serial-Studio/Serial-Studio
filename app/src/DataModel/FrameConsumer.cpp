@@ -25,14 +25,30 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the frame consumer worker base.
- *
- * @param parent Optional parent QObject.
- */
-DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent) : QObject(parent) {}
+DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent)
+  : QObject(parent)
+  , m_lastFrameNs(-1)
+{
+}
 
-/**
- * @brief Destructor for the frame consumer worker base.
- */
 DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;
+
+//--------------------------------------------------------------------------------------------------
+// Monotonic clock tracker — shared by every export worker
+//--------------------------------------------------------------------------------------------------
+
+qint64 DataModel::FrameConsumerWorkerBase::monotonicFrameNs(
+  std::chrono::steady_clock::time_point now, std::chrono::steady_clock::time_point baseline)
+{
+  qint64 ns = std::chrono::duration_cast<std::chrono::nanoseconds>(now - baseline).count();
+  if (ns <= m_lastFrameNs)
+    ns = m_lastFrameNs + 1;
+
+  m_lastFrameNs = ns;
+  return ns;
+}
+
+void DataModel::FrameConsumerWorkerBase::resetMonotonicClock()
+{
+  m_lastFrameNs = -1;
+}

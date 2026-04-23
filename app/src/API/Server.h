@@ -35,18 +35,13 @@
 #include "DataModel/FrameConsumer.h"
 #include "IO/HAL_Driver.h"
 
-/**
- * Default TCP port to use for incoming connections, I choose 7777 because 7 is
- * one of my favourite numbers :)
- */
 #define API_TCP_PORT 7777
 
 namespace API {
 class Server;
 
 /**
- * @brief Worker that handles JSON serialization and socket I/O on background
- * thread
+ * @brief Worker that handles JSON serialization and socket I/O on a background thread.
  */
 class ServerWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   // clang-format off
@@ -85,36 +80,7 @@ private:
 };
 
 /**
- * @class API::Server
  * @brief TCP server interface for API communication in Serial Studio.
- *
- * Implements a TCP server that listens on port 7777, allowing external
- * applications to control Serial Studio and exchange data with it
- * over the local network or localhost.
- *
- * Connected clients can:
- * - Receive real-time JSON data frames processed by Serial Studio.
- * - Send API commands to control Serial Studio (configure devices, start/stop
- *   connections, etc.)
- * - Transmit raw data directly to the underlying I/O device via the TCP socket.
- *
- * This design enables companion applications to be written in any language or
- * framework, without requiring integration with Qt or C++.
- *
- * The server supports multiple simultaneous client connections and handles
- * connection management, data serialization, and dispatch internally. It can
- * be enabled or disabled at runtime using setEnabled(), and will only accept
- * connections when enabled.
- *
- * **Performance:** JSON serialization and socket I/O are performed on a
- * background worker thread to prevent blocking the main UI thread. This
- * eliminates cross-thread communication overhead for high-frequency frame
- * transmission (writes >> reads in typical usage).
- *
- * Example client: https://github.com/Kaan-Sat/CC2021-Control-Panel
- *
- * @note Accessed as a singleton via API::Server::instance().
- * @note Socket management must be on the main Qt thread.
  */
 class Server : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
   // clang-format off

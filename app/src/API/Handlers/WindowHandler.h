@@ -25,10 +25,7 @@
 
 namespace API::Handlers {
 /**
- * @brief Handler for window/taskbar UI commands
- *
- * Exposes group navigation, window state, layout save/restore, and
- * per-widget settings over the API under the ui.window.* namespace.
+ * @brief Handler for window/taskbar UI commands.
  */
 class WindowHandler {
 public:

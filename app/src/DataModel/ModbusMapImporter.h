@@ -30,10 +30,7 @@
 namespace DataModel {
 
 /**
- * @brief Imports Modbus register map files (CSV, XML, JSON) and generates
- *        Serial Studio projects with auto-configured register groups.
- *
- * Follows the same singleton + preview + confirm pattern as DBCImporter.
+ * @brief Imports Modbus register maps (CSV, XML, JSON) and generates a project.
  */
 class ModbusMapImporter : public QObject {
   // clang-format off
@@ -76,9 +73,6 @@ public slots:
   void cancelImport();
 
 private:
-  /**
-   * @brief Internal representation of a single Modbus register/coil entry.
-   */
   struct RegisterEntry {
     quint16 address;
     QString name;
@@ -91,9 +85,6 @@ private:
     double offset;
   };
 
-  /**
-   * @brief A contiguous block of registers of the same type.
-   */
   struct RegisterBlock {
     quint8 registerType;
     quint16 startAddress;

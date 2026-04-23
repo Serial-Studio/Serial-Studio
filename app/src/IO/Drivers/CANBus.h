@@ -34,53 +34,7 @@
 namespace IO {
 namespace Drivers {
 /**
- * @class CANBus
- * @brief Serial Studio driver for CAN bus communication
- *
- * This class provides a complete implementation of the CAN bus protocol driver
- * for Serial Studio, supporting various CAN hardware interfaces through Qt's
- * QCanBus plugin system.
- *
- * ## Supported Hardware
- * Platform-specific CAN interface support:
- * - **Linux**: SocketCAN (kernel module)
- * - **Windows**: PEAK PCAN, Vector CAN, Systec CAN
- * - **macOS**: Limited support (requires third-party drivers)
- *
- * ## CAN Frame Format
- * The driver handles both standard and extended CAN frames:
- * - **Standard CAN**: 11-bit identifier (0x000-0x7FF)
- * - **Extended CAN (CAN FD)**: 29-bit identifier (0x00000000-0x1FFFFFFF)
- * - **Data Length**: 0-8 bytes (standard) or 0-64 bytes (CAN FD)
- *
- * ## Connection Lifecycle
- * The driver implements an event-driven model:
- * 1. Discovers available CAN plugins (socketcan, peakcan, etc.)
- * 2. User selects plugin and interface (can0, can1, etc.)
- * 3. `open()` creates and configures CAN device
- * 4. Device connects and transitions to Connected state
- * 5. `framesReceived` signal triggers data reception
- *
- * ## Data Flow
- * - Receives CAN frames via `onFramesReceived()` event handler
- * - Converts CAN frames to byte arrays: [ID_high, ID_low, DLC, data...]
- * - Emits `dataReceived()` signal for Serial Studio's frame parser
- * - Supports bidirectional communication (read/write)
- *
- * ## Platform Detection
- * The driver automatically detects available CAN plugins and provides
- * platform-specific error messages when hardware support is unavailable.
- *
- * ## Signal Integration
- * - `configurationChanged()`: Emitted when connection state or config changes
- * - `dataReceived()`: Emitted when CAN frames are received
- * - `connectionError()`: Emitted when connection or frame errors occur
- * - `availablePluginsChanged()`: Emitted when plugin list updates
- * - `availableInterfacesChanged()`: Emitted when interface list updates
- *
- * @see HAL_Driver
- * @see IO::ConnectionManager
- * @see QCanBusDevice
+ * @brief HAL driver for CAN and CAN FD interfaces via Qt QCanBus.
  */
 class CANBus : public HAL_Driver {
   // clang-format off

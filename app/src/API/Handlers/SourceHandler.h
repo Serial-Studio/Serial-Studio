@@ -28,23 +28,9 @@ namespace Handlers {
 
 /**
  * @brief Registers API commands for multi-source project management.
- *
- * Provides 9 commands for source (device) management:
- * - project.source.list             - List all sources (GPL)
- * - project.source.add              - Add a new source (Commercial)
- * - project.source.delete           - Delete a source (Commercial)
- * - project.source.update           - Update source fields (Commercial)
- * - project.source.setProperty      - Set a single driver connection property (GPL)
- * - project.source.configure        - Set multiple driver properties at once (GPL)
- * - project.source.getConfiguration - Get full source configuration (GPL)
- * - project.source.setFrameParserCode - Set per-source JS parser (GPL)
- * - project.source.getFrameParserCode - Get per-source JS parser (GPL)
  */
 class SourceHandler {
 public:
-  /**
-   * @brief Register all Source commands with the CommandRegistry.
-   */
   static void registerCommands();
 
 private:

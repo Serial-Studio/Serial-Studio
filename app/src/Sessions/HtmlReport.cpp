@@ -286,10 +286,16 @@ QString Sessions::HtmlReport::buildHtml() const
   html.replace(QStringLiteral("{{CHARTS_SECTION}}"), chartsHtml);
   html.replace(QStringLiteral("{{REPORT_DATA_JSON}}"), buildReportDataJson());
 
-  // Expand the @media print values last so they don't collide with section markup
+  // Expand the @media print placeholders last
   html.replace(QStringLiteral("{{PAGE_SIZE_CSS}}"), pageSizeCssValue());
-  html.replace(QStringLiteral("{{PAGE_SIZE_CSS_LANDSCAPE}}"), pageSizeCssLandscape());
   html.replace(QStringLiteral("{{PRINT_FOOTER_LEFT}}"), buildPrintFooterLeft());
+
+  // Pin the chart card to the landscape printable area
+  const auto chartMm = chartPagePrintableSize();
+  html.replace(QStringLiteral("{{CHART_PAGE_WIDTH_MM}}"),
+               QString::number(chartMm.width(), 'f', 1));
+  html.replace(QStringLiteral("{{CHART_PAGE_HEIGHT_MM}}"),
+               QString::number(chartMm.height(), 'f', 1));
 
   return html;
 }
@@ -548,10 +554,10 @@ QString Sessions::HtmlReport::buildChartsSection() const
     const QString units =
       s.units.isEmpty() ? QString() : QStringLiteral(" (%1)").arg(escapeHtml(s.units));
 
-    // Subtitle with sample count and duration
+    // Subtitle with real sample count (not the decimated point count)
     const double duration = s.timesSec.empty() ? 0.0 : s.timesSec.back();
     const QString sub     = tr("%1 samples over %2 seconds")
-                          .arg(QString::number(static_cast<qulonglong>(s.values.size())),
+                          .arg(QString::number(static_cast<qulonglong>(s.totalSamples)),
                                QString::number(duration, 'f', 2));
 
     cards += QStringLiteral("<div class=\"chart-card\">"
@@ -629,54 +635,29 @@ QString Sessions::HtmlReport::buildReportDataJson() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Maps the selected @c QPageSize to a CSS @page size token.
+ * @brief Returns the landscape CSS @page size token for the selected paper.
  */
 QString Sessions::HtmlReport::pageSizeCssValue() const
 {
-  QString name;
-  switch (m_opts.pageSize) {
-    case QPageSize::A3:
-      name = QStringLiteral("A3");
-      break;
-    case QPageSize::Letter:
-      name = QStringLiteral("letter");
-      break;
-    case QPageSize::Legal:
-      name = QStringLiteral("legal");
-      break;
-    default:
-      name = QStringLiteral("A4");
-  }
-
-  return name
-       + (m_opts.orientation == QPageLayout::Landscape ? QStringLiteral(" landscape")
-                                                       : QStringLiteral(" portrait"));
+  const QString key  = QPageSize(m_opts.pageSize).key();
+  const QString name = key.isEmpty() ? QStringLiteral("A4") : key;
+  return name + QStringLiteral(" landscape");
 }
 
 /**
- * @brief Same size token as @c pageSizeCssValue() but always landscape.
- *
- * Used for the named @c chart-page rule so every trend chart lands on a
- * wide sheet regardless of the document's primary orientation.
+ * @brief Printable area of the chart page in millimetres.
  */
-QString Sessions::HtmlReport::pageSizeCssLandscape() const
+QSizeF Sessions::HtmlReport::chartPagePrintableSize() const
 {
-  QString name;
-  switch (m_opts.pageSize) {
-    case QPageSize::A3:
-      name = QStringLiteral("A3");
-      break;
-    case QPageSize::Letter:
-      name = QStringLiteral("letter");
-      break;
-    case QPageSize::Legal:
-      name = QStringLiteral("legal");
-      break;
-    default:
-      name = QStringLiteral("A4");
-  }
+  // Landscape paper dimensions, matching startPrinting()
+  QSizeF paper = QPageSize(m_opts.pageSize).size(QPageSize::Millimeter);
+  if (paper.width() < paper.height())
+    paper = QSizeF(paper.height(), paper.width());
 
-  return name + QStringLiteral(" landscape");
+  // Subtract the 16 mm margin on each side
+  const double printableW = std::max(50.0, paper.width() - 32.0);
+  const double printableH = std::max(50.0, paper.height() - 32.0);
+  return QSizeF(printableW, printableH);
 }
 
 /**
@@ -820,7 +801,7 @@ void Sessions::HtmlReport::probeReadiness()
 }
 
 /**
- * @brief Hands off the loaded page to Chromium's PDF printer.
+ * @brief Hands off the loaded page to Chromium's PDF printer (landscape).
  */
 void Sessions::HtmlReport::startPrinting()
 {
@@ -831,8 +812,8 @@ void Sessions::HtmlReport::startPrinting()
   Q_EMIT progress(tr("Generating PDF…"), 0.85);
 
   const QPageLayout layout(QPageSize(m_opts.pageSize),
-                           m_opts.orientation,
-                           QMarginsF(16, 18, 16, 24),
+                           QPageLayout::Landscape,
+                           QMarginsF(16, 16, 16, 16),
                            QPageLayout::Millimeter);
   m_page->printToPdf(m_pdfPath, layout);
 }

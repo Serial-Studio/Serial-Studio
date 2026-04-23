@@ -39,8 +39,7 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Installs an application-wide event filter for keyboard shortcuts and
- * wires state changes back into @c updateData().
+ * @brief Installs an application-wide event filter and wires state changes.
  */
 Sessions::Player::Player()
   : m_sessionId(-1)
@@ -57,8 +56,7 @@ Sessions::Player::Player()
 }
 
 /**
- * @brief Ensures the open database is flushed and the connection removed
- * before the singleton destructs.
+ * @brief Closes the database before the singleton destructs.
  */
 Sessions::Player::~Player()
 {
@@ -153,7 +151,7 @@ void Sessions::Player::play()
   if (!isOpen())
     return;
 
-  // Wrap to the first frame if we were parked at the end.
+  // Wrap to the first frame if parked at the end
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
@@ -250,9 +248,7 @@ void Sessions::Player::closeFile()
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
-  // Restore project + operation mode to what the user had before opening the
-  // session. No-op when capturePreSessionState never ran (e.g. the closeFile
-  // call at the start of a subsequent openFile() — capture runs afterwards).
+  // Restore project + operation mode that existed before the session
   restorePreSessionState();
 
   Q_EMIT openChanged();
@@ -262,10 +258,6 @@ void Sessions::Player::closeFile()
 
 /**
  * @brief Opens @p filePath, loads the latest session, and emits @c openChanged.
- *
- * Refuses to open while a live device is connected; the user is asked to
- * disconnect first. Any previously opened database is closed before the new
- * one is loaded.
  */
 void Sessions::Player::openFile(const QString& filePath)
 {
@@ -276,12 +268,10 @@ void Sessions::Player::openFile(const QString& filePath)
 
   closeFile();
 
-  // Snapshot mode + project path BEFORE restoreProjectFromSession mutates
-  // them, so closeFile can roll back to what the user had before.
+  // Snapshot mode + project path before restoreProjectFromSession mutates them
   capturePreSessionState();
 
-  // Ask the user to disconnect live devices — playback injects synthetic
-  // frames into the same pipeline the device feeds.
+  // Ask the user to disconnect live devices
   if (IO::ConnectionManager::instance().isConnected()) {
     auto response =
       Misc::Utilities::showMessageBox(tr("Device Connection Active"),
@@ -297,8 +287,7 @@ void Sessions::Player::openFile(const QString& filePath)
       return;
   }
 
-  // Open the database with a unique connection name so parallel exporter
-  // instances don't clash with us on QSqlDatabase::database(<default>).
+  // Open the database with a unique connection name
   m_filePath       = filePath;
   m_connectionName = QStringLiteral("ss_sqlite_player_%1").arg(QDateTime::currentMSecsSinceEpoch());
 
@@ -313,15 +302,12 @@ void Sessions::Player::openFile(const QString& filePath)
     return;
   }
 
-  // Coexist with a live Export writer on the same file — WAL keeps readers
-  // non-blocking, busy_timeout lets SQLite retry instead of immediately
-  // returning SQLITE_BUSY during a commit.
+  // WAL + busy_timeout to coexist with a live Export writer
   QSqlQuery pragma(m_db);
   pragma.exec("PRAGMA journal_mode=WAL");
   pragma.exec("PRAGMA busy_timeout=5000");
 
-  // Pick the newest session in the file, and restore its embedded project
-  // so the dashboard builds the widget tree before any frame is injected.
+  // Pick the newest session and restore its embedded project
   const int newestId = latestSessionId();
   if (newestId >= 0)
     (void)restoreProjectFromSession(newestId);
@@ -419,18 +405,14 @@ void Sessions::Player::openSessionInternal(int sessionId)
     return;
   }
 
-  // In ProjectFile mode the FrameBuilder uses the project's frame parser to
-  // interpret injected payloads — no header registration needed. For
-  // multi-source projects, build the column→source mapping so frames are
-  // split correctly.
+  // ProjectFile mode uses the project's parser; QuickPlot needs synthetic headers
   const auto mode = AppState::instance().operationMode();
   if (mode == SerialStudio::ProjectFile) {
     const auto& sources = DataModel::ProjectModel::instance().sources();
     if (sources.size() > 1)
       buildMultiSourceMapping();
   } else {
-    // QuickPlot / standalone mode — register synthetic headers so the
-    // FrameBuilder creates a quick-plot frame from the CSV values.
+    // QuickPlot fallback — register synthetic headers
     QStringList headers;
     headers.reserve(static_cast<int>(m_columnUniqueIds.size()));
     for (int uid : m_columnUniqueIds)
@@ -442,7 +424,7 @@ void Sessions::Player::openSessionInternal(int sessionId)
   m_framePos              = 0;
   m_startTimestampSeconds = m_timestampsNs.front() / 1e9;
 
-  // Push the first frame so the dashboard shows something before Play is hit
+  // Push the first frame so the dashboard shows something before Play
   updateData();
   Q_EMIT openChanged();
   Q_EMIT playerStateChanged();
@@ -472,7 +454,7 @@ void Sessions::Player::setProgress(const double progress)
 
   UI::Dashboard::instance().clearPlotData();
 
-  // Rehydrate the plot buffer so scrolling backwards shows history.
+  // Rehydrate the plot buffer so scrolling backwards shows history
   const int toLoad   = UI::Dashboard::instance().points();
   const int startIdx = std::max(0, m_framePos - toLoad);
   processFrameBatch(startIdx, m_framePos);
@@ -515,8 +497,7 @@ void Sessions::Player::previousFrame()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Pushes the current frame and, if playing, schedules the next one
- * with real-time pacing derived from the recorded timestamp deltas.
+ * @brief Pushes the current frame and, if playing, schedules the next one.
  */
 void Sessions::Player::updateData()
 {
@@ -535,15 +516,13 @@ void Sessions::Player::updateData()
     return;
   }
 
-  // Schedule the next frame so its emission time matches the recording's
-  // wall-clock delta since play() was pressed.
+  // Schedule the next frame on the recording's wall-clock delta
   const qint64 elapsedMs = m_elapsedTimer.elapsed();
   const double nextSec   = m_timestampsNs[static_cast<size_t>(m_framePos + 1)] / 1e9;
   const double targetSec = m_startTimestampSeconds + (elapsedMs / 1000.0);
   qint64 msUntilNext     = qMax(0LL, static_cast<qint64>((nextSec - targetSec) * 1000.0));
 
-  // Burst-emit frames that fell past their scheduled time in one chunk so
-  // seeking and slow consumers don't snowball into runaway queues.
+  // Burst-emit late frames in one chunk to prevent runaway queues
   if (msUntilNext <= 0) {
     constexpr int kMaxBatchSize = 100;
     int processed               = 0;
@@ -620,13 +599,7 @@ int Sessions::Player::latestSessionId() const
 }
 
 /**
- * @brief Loads the project JSON embedded in a session row and switches the
- *        app into ProjectFile mode so the dashboard can build widgets.
- *
- * Returns true when a project was restored. Falls back to whatever operation
- * mode the user had configured (typically QuickPlot) when the session has
- * no embedded snapshot — Player's QuickPlot code path then handles column
- * registration via synthetic headers.
+ * @brief Loads the project JSON embedded in a session row.
  */
 bool Sessions::Player::restoreProjectFromSession(int sessionId)
 {
@@ -653,8 +626,7 @@ bool Sessions::Player::restoreProjectFromSession(int sessionId)
   if (projectJson.isEmpty())
     return false;
 
-  // Parse the blob once and hand the in-memory document straight to ProjectModel
-  // — no temp file, no file association.
+  // Parse the blob and hand the document to ProjectModel
   QJsonParseError parseError{};
   const auto doc = QJsonDocument::fromJson(projectJson.toUtf8(), &parseError);
   if (parseError.error != QJsonParseError::NoError || doc.isEmpty()) {
@@ -663,8 +635,7 @@ bool Sessions::Player::restoreProjectFromSession(int sessionId)
     return false;
   }
 
-  // Flip to ProjectFile mode BEFORE loading so AppState/FrameBuilder react
-  // to the mode change and pick up the new project layout on the same tick.
+  // Flip to ProjectFile mode before loading
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);
   if (!DataModel::ProjectModel::instance().loadFromJsonDocument(doc)) {
     qWarning() << "[Sessions::Player] ProjectModel rejected the embedded JSON";
@@ -675,12 +646,7 @@ bool Sessions::Player::restoreProjectFromSession(int sessionId)
 }
 
 /**
- * @brief Snapshots the active operation mode and project file path so
- *        closeFile() can restore them after the session is torn down.
- *
- * Called exactly once per "session editing session" — m_preSessionCaptured
- * guards re-entrant openFile calls so opening a second session doesn't
- * stamp the session-mutated state as the new baseline.
+ * @brief Snapshots the active operation mode and project file path.
  */
 void Sessions::Player::capturePreSessionState()
 {
@@ -693,9 +659,7 @@ void Sessions::Player::capturePreSessionState()
 }
 
 /**
- * @brief Restores the operation mode and project file captured before the
- *        session was opened. If no project was loaded before, resets the
- *        ProjectModel to a fresh untitled project.
+ * @brief Restores the operation mode and project captured before the session.
  */
 void Sessions::Player::restorePreSessionState()
 {
@@ -737,9 +701,6 @@ void Sessions::Player::loadColumnOrder()
 
 /**
  * @brief Builds the column→sourceId map used by multi-source playback.
- *
- * Mirrors CSV::Player's strategy: walk project datasets, sort by uniqueId to
- * match the export column order, and record the sourceId of each column.
  */
 void Sessions::Player::buildMultiSourceMapping()
 {
@@ -759,9 +720,7 @@ void Sessions::Player::buildMultiSourceMapping()
     return a.first < b.first;
   });
 
-  // Use the project mapping rather than the on-disk columns in case the
-  // user opened a .db whose schema doesn't fully match this project: we
-  // still play back what we can by uniqueId intersection.
+  // Use the project mapping so mismatched schemas still play back
   for (int col = 0; col < uidSourcePairs.size(); ++col) {
     const int srcId       = uidSourcePairs[col].second;
     m_columnToSource[col] = srcId;
@@ -772,8 +731,7 @@ void Sessions::Player::buildMultiSourceMapping()
 }
 
 /**
- * @brief Populates @c m_timestampsNs with every distinct timestamp in the
- * session, sorted ascending.
+ * @brief Populates @c m_timestampsNs with every distinct timestamp, ascending.
  */
 void Sessions::Player::buildTimestampIndex()
 {
@@ -800,11 +758,6 @@ void Sessions::Player::buildTimestampIndex()
 
 /**
  * @brief Reconstructs a CSV-style payload for the given timestamp.
- *
- * Reads every reading row at @p timestampNs, matches each to its column
- * position via @c m_columnUniqueIds, and produces a comma-separated line
- * with one cell per column. Missing values are emitted as empty cells so
- * column alignment is preserved for downstream parsers.
  */
 QByteArray Sessions::Player::buildFrameAt(qint64 timestampNs)
 {
@@ -818,11 +771,11 @@ QByteArray Sessions::Player::buildFrameAt(qint64 timestampNs)
   for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
     uidToCol.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
 
-  // Pull the row set for this timestamp; prefer the final_* columns since
-  // downstream consumers re-apply transforms to the raw values we'd emit.
+  // Pull the row set for this timestamp (prefer final_*, ordered by reading_id)
   QSqlQuery q(m_db);
   q.prepare("SELECT unique_id, final_numeric_value, final_string_value, is_numeric "
-            "FROM readings WHERE session_id = ? AND timestamp_ns = ?");
+            "FROM readings WHERE session_id = ? AND timestamp_ns = ? "
+            "ORDER BY reading_id");
   q.bindValue(0, m_sessionId);
   q.bindValue(1, timestampNs);
 
@@ -864,8 +817,7 @@ void Sessions::Player::injectFrame(const QByteArray& frame)
     return;
   }
 
-  // Multi-source: slice the single CSV row into per-source payloads by
-  // column position, same strategy CSV::Player uses.
+  // Multi-source: slice the CSV row into per-source payloads by column position
   const auto fields = QString::fromUtf8(frame).trimmed().split(',');
 
   QMap<int, QStringList> sourceFields;

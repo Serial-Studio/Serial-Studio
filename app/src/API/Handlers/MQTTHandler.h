@@ -27,49 +27,13 @@
 namespace API {
 namespace Handlers {
 /**
- * @class MQTTHandler
- * @brief Registers API commands for MQTT::Client operations
- *
- * Provides commands for:
- * - mqtt.setMode - Set publisher/subscriber mode
- * - mqtt.setHostname - Set broker hostname
- * - mqtt.setPort - Set broker port
- * - mqtt.setClientId - Set client ID
- * - mqtt.setUsername - Set username
- * - mqtt.setPassword - Set password
- * - mqtt.setTopic - Set topic filter
- * - mqtt.setCleanSession - Set clean session flag
- * - mqtt.setMqttVersion - Set MQTT protocol version
- * - mqtt.setKeepAlive - Set keep-alive interval
- * - mqtt.setAutoKeepAlive - Set auto keep-alive
- * - mqtt.setWillQoS - Set will message QoS
- * - mqtt.setWillRetain - Set will retain flag
- * - mqtt.setWillTopic - Set will topic
- * - mqtt.setWillMessage - Set will message
- * - mqtt.setSslEnabled - Enable/disable SSL
- * - mqtt.setSslProtocol - Set SSL protocol
- * - mqtt.setPeerVerifyMode - Set peer verification mode
- * - mqtt.setPeerVerifyDepth - Set peer verification depth
- * - mqtt.connect - Open MQTT connection
- * - mqtt.disconnect - Close MQTT connection
- * - mqtt.toggleConnection - Toggle connection state
- * - mqtt.regenerateClientId - Generate new client ID
- * - mqtt.getConfiguration - Query MQTT configuration
- * - mqtt.getConnectionStatus - Query connection state
- * - mqtt.getModes - Query mode list
- * - mqtt.getMqttVersions - Query MQTT version list
- * - mqtt.getSslProtocols - Query SSL protocol list
- * - mqtt.getPeerVerifyModes - Query peer verify mode list
+ * @brief Registers API commands for MQTT::Client operations.
  */
 class MQTTHandler {
 public:
-  /**
-   * @brief Register all MQTT commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Mutation commands
   static CommandResponse setMode(const QString& id, const QJsonObject& params);
   static CommandResponse setHostname(const QString& id, const QJsonObject& params);
   static CommandResponse setPort(const QString& id, const QJsonObject& params);
@@ -94,7 +58,6 @@ private:
   static CommandResponse toggleConnection(const QString& id, const QJsonObject& params);
   static CommandResponse regenerateClientId(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
   static CommandResponse getConnectionStatus(const QString& id, const QJsonObject& params);
   static CommandResponse getModes(const QString& id, const QJsonObject& params);

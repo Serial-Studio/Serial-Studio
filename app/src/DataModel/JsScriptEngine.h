@@ -30,11 +30,7 @@
 namespace DataModel {
 
 /**
- * @brief IScriptEngine implementation backed by Qt's QJSEngine.
- *
- * Wraps all JavaScript-specific parsing, validation, and watchdog logic that
- * was previously embedded directly in FrameParser. Each instance owns one
- * QJSEngine and can load/evaluate a single frame parser script.
+ * @brief JavaScript script engine implementation backed by QJSEngine.
  */
 class JsScriptEngine final : public IScriptEngine {
 public:

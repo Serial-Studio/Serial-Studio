@@ -24,12 +24,7 @@ namespace Widgets {
 namespace Output {
 
 /**
- * @class Widgets::Output::Base
  * @brief Base class for all interactive output widgets.
- *
- * Provides JavaScript-based value-to-bytes transformation via a user-defined
- * `transmit(value)` function. Subclasses only differ in QML UI; the C++ base
- * handles JS evaluation, rate limiting, and data transmission.
  */
 class Base : public QQuickItem {
   // clang-format off

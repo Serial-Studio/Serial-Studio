@@ -44,6 +44,8 @@ Widgets.Pane {
   readonly property int kMinPaneWidth: 280
   readonly property int maxItemWidth: layout.width - 8
   readonly property int displayedWidth: Math.max(kMinPaneWidth, userPaneWidth)
+  readonly property bool dataExportAllowed:
+    Cpp_AppState.operationMode !== SerialStudio.ConsoleOnly
 
   //
   // Displays the setup panel
@@ -237,8 +239,8 @@ Widgets.Pane {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
         opacity: enabled ? 1 : 0.5
+        text: qsTr("Parse via Project File")
         Layout.maximumWidth: root.maxItemWidth
-        text: qsTr("Parse via JSON Project File")
         checked: Cpp_AppState.operationMode === SerialStudio.ProjectFile
         enabled: !Cpp_IO_Manager.isConnected
                  && !Cpp_CSV_Player.isOpen
@@ -289,10 +291,12 @@ Widgets.Pane {
         id: csvLogging
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
+        opacity: enabled ? 1 : 0.5
         text: qsTr("Create CSV File")
         Layout.alignment: Qt.AlignLeft
-        checked: Cpp_CSV_Export.exportEnabled
+        enabled: root.dataExportAllowed
         Layout.maximumWidth: root.maxItemWidth
+        checked: root.dataExportAllowed && Cpp_CSV_Export.exportEnabled
 
         onCheckedChanged:  {
           if (Cpp_CSV_Export.exportEnabled !== checked)
@@ -306,10 +310,12 @@ Widgets.Pane {
       CheckBox {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
+        opacity: enabled ? 1 : 0.5
         text: qsTr("Create MDF4 File")
         Layout.alignment: Qt.AlignLeft
-        checked: Cpp_MDF4_Export.exportEnabled
+        enabled: root.dataExportAllowed
         Layout.maximumWidth: root.maxItemWidth
+        checked: root.dataExportAllowed && Cpp_MDF4_Export.exportEnabled
 
         onCheckedChanged: {
           if (Cpp_MDF4_Export.exportEnabled !== checked)
@@ -323,11 +329,15 @@ Widgets.Pane {
       CheckBox {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
+        opacity: enabled ? 1 : 0.5
         visible: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignLeft
         text: qsTr("Create Session Log")
+        enabled: root.dataExportAllowed
         Layout.maximumWidth: root.maxItemWidth
-        checked: Cpp_CommercialBuild && Cpp_Sessions_Export.exportEnabled
+        checked: Cpp_CommercialBuild
+                 && root.dataExportAllowed
+                 && Cpp_Sessions_Export.exportEnabled
 
         onCheckedChanged: {
           if (!Cpp_CommercialBuild)

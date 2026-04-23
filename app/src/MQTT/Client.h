@@ -30,24 +30,12 @@
 
 namespace MQTT {
 /**
- * @class MQTT::Client
  * @brief Singleton wrapper around QMqttClient for managing MQTT connections.
- *
- * This class encapsulates an MQTT client with support for publisher/subscriber
- * roles, clean session management, SSL configuration, and MQTT 3.1 to 5.0.
- * Provides a Qt-friendly API with slots and signals for integration in GUI
- * apps or service components. It handles connection lifecycle, error reporting,
- * authentication (including MQTT 5.0 extended), and user interaction via
- * dialogs.
- *
- * Modes, protocols, and options are exposed via QStringLists to integrate with
- * Qt model/view components. Single instance, use via Client::instance().
  */
 class Client : public QObject {
   // clang-format off
   Q_OBJECT
 
-  // Connection and identification
   Q_PROPERTY(bool     cleanSession
              READ     cleanSession
              WRITE    setCleanSession
@@ -73,7 +61,6 @@ class Client : public QObject {
              WRITE    setPassword
              NOTIFY   mqttConfigurationChanged)
 
-  // MQTT mode and state
   Q_PROPERTY(bool isConnected
              READ isConnected
              NOTIFY connectedChanged)
@@ -88,7 +75,6 @@ class Client : public QObject {
              WRITE setMode
              NOTIFY mqttConfigurationChanged)
 
-  // MQTT protocol config
   Q_PROPERTY(quint8 mqttVersion
              READ mqttVersion
              WRITE setMqttVersion
@@ -97,7 +83,6 @@ class Client : public QObject {
              READ mqttVersions
              CONSTANT)
 
-  // Will message
   Q_PROPERTY(bool    willRetain
              READ    willRetain
              WRITE   setWillRetain
@@ -115,7 +100,6 @@ class Client : public QObject {
              WRITE   setWillMessage
              NOTIFY  mqttConfigurationChanged)
 
-  // Keep alive
   Q_PROPERTY(bool    autoKeepAlive
              READ    autoKeepAlive
              WRITE   setAutoKeepAlive
@@ -125,13 +109,11 @@ class Client : public QObject {
              WRITE   setKeepAlive
              NOTIFY  mqttConfigurationChanged)
 
-  // Topic
   Q_PROPERTY(QString topicFilter
              READ    topicFilter
              WRITE   setTopic
              NOTIFY  mqttConfigurationChanged)
 
-  // SSL
   Q_PROPERTY(bool    sslEnabled
              READ    sslEnabled
              WRITE   setSslEnabled
@@ -158,7 +140,6 @@ class Client : public QObject {
              READ peerVerifyModes
              CONSTANT)
 
-  // Modes (Publisher/Subscriber descriptions)
   Q_PROPERTY(QStringList modes
              READ modes
              CONSTANT)

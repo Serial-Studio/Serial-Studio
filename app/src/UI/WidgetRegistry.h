@@ -51,26 +51,7 @@ struct WidgetInfo {
 };
 
 /**
- * @class WidgetRegistry
- * @brief Central registry for all dashboard widgets.
- *
- * The WidgetRegistry maintains the authoritative list of all widgets in the
- * dashboard. It provides:
- *
- * - **Stable IDs**: Widget IDs are monotonically increasing and never reused
- *   during a session, ensuring QML components can maintain stable references
- *   even across rebuilds.
- *
- * - **Lifecycle events**: Signals for widget creation, destruction, and
- *   updates allow subscribers (Taskbar, WindowManager) to react incrementally
- *   rather than rebuilding their entire state.
- *
- * - **Decoupled state**: Widget metadata is stored separately from any
- *   presentation model, enabling independent updates.
- *
- * This design is inspired by window management systems like X11/Wayland
- * where window IDs are assigned by the display server and remain stable
- * throughout the window's lifetime.
+ * @brief Central registry for all dashboard widgets with stable session-scoped IDs.
  */
 class WidgetRegistry : public QObject {
   Q_OBJECT

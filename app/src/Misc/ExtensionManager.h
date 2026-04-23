@@ -38,14 +38,6 @@ class QNetworkReply;
 namespace Misc {
 /**
  * @brief Manages extension repositories, browsing, downloading, and installation.
- *
- * ExtensionManager is a singleton that provides an in-app catalog of community
- * addons (starting with themes). It fetches manifests from configurable
- * repository URLs, allows users to browse and search addons, and handles
- * downloading and installing extension files to the local workspace.
- *
- * Users can add custom repository URLs (like KiCad's plugin manager).
- * The default repository is hosted at https://github.com/serial-studio/extensions.
  */
 class ExtensionManager : public QObject {
   // clang-format off

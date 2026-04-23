@@ -76,11 +76,12 @@ lib/                   KissFFT, QCodeEditor, mdflib, OpenSSL, lua (lua54), QuaZi
 
 ```
 Driver  (driver thread OR main thread, depending on driver)
-  │ HAL_Driver::dataReceived(ByteArrayPtr)              AutoConnection
+  │ HAL_Driver::dataReceived(CapturedDataPtr)           AutoConnection
   ▼
 FrameReader::processData  (main thread)
-  │ appends to CircularBuffer (SPSC), KMP-scans for delimiters
-  │ enqueues completed frames to lock-free ReaderWriterQueue<QByteArray>
+  │ appends raw bytes to CircularBuffer (SPSC), tracks chunk timestamps
+  │ KMP-scans for delimiters, assigns each completed frame a source-derived timestamp
+  │ enqueues completed frames to lock-free ReaderWriterQueue<CapturedDataPtr>
   │ emits readyRead once per processData call
   ▼
 DeviceManager::onReadyRead  (main thread, direct)
@@ -90,21 +91,32 @@ ConnectionManager::onFrameReady  (main thread)
   │ routes to FrameBuilder::hotpathRxFrame / hotpathRxSourceFrame
   ▼
 FrameBuilder  (main thread)
-  │ parses → applies per-dataset transforms → mutates m_frame
-  │ hotpathTxFrame(m_frame): Dashboard::hotpathRxFrame(const Frame&)  ← 0 allocs
-  │                          + make_shared<TimestampedFrame> for export workers  ← 1 alloc [[unlikely]]
+  │ parses → applies per-dataset transforms → mutates m_frame / m_sourceFrames
+  │ creates one TimestampedFramePtr per parsed frame and shares it with every consumer
   ▼
-CSV / MDF4 / API::Server / gRPC  (worker threads, lock-free enqueue from main)
+Dashboard / CSV / MDF4 / API::Server / gRPC / Sessions  (shared parsed frame object)
 ```
+
+### Timestamp Ownership — Source Owns Time
+
+Timing is stamped at the driver boundary and preserved downstream. Do not reintroduce export-only or report-only timestamp synthesis.
+
+- `IO::CapturedData` (`HAL_Driver.h`): shared chunk carrying `data` (`ByteArrayPtr`), `timestamp` (steady_clock), `frameStep` (cadence in ns), `logicalFramesHint`. `CapturedDataPtr` is the transport type on the whole hotpath.
+- Drivers publish via `HAL_Driver::publishReceivedData(...)`. Never emit timing-free `QByteArray`. When a driver knows cadence, fill `frameStep`; when it can backdate (e.g. audio — `Audio.cpp::processInputBuffer()` sets `timestamp = now - step * (totalFrames - 1)`), do so.
+- If a driver posts to the main thread (queued connection, `QMetaObject::invokeMethod`), capture `SteadyClock::now()` **before** queueing and pass it to `publishReceivedData`. Default-constructed timestamps fire on the receiving thread — a latent bug.
+- `FrameReader` propagates timing: `appendChunk` records `PendingChunk { nextFrameTimestamp, frameStep }`; `frameTimestamp(endOffsetExclusive)` walks pending chunks to stamp each extracted logical frame, advancing that chunk's clock by `frameStep`. It is a splitter, not a clock source.
+- `FrameBuilder` does the one legitimate interpolation: when a captured chunk expands into N parsed frames, publishes at `data->timestamp + step * i`. Single `TimestampedFramePtr` is shared with dashboard, CSV, MDF4, API, gRPC, Sessions, MQTT.
+- Export workers derive strictly-increasing offsets from `FrameConsumerWorkerBase::monotonicFrameNs(frame->timestamp, baseline)` — a safety net against same-ns collisions on coarse clocks (Windows `steady_clock` ~15 ms), not the source of truth.
+- Debugging checklist when timing looks wrong: driver stamp → `CapturedData` propagation → FrameReader split → `FrameBuilder` fan-out → export/report. Never patch PDF/Chart.js first.
 
 ### Threading Rules — DO NOT VIOLATE
 
 | Component | Rule |
 |-----------|------|
-| `FrameReader` | **Currently runs on the main thread.** Config set **once** before construction; recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` on change. **Never add mutexes.** Delimiters are `QList<QByteArray>` (multi-pattern); single-delimiter uses KMP fast path, multi-delimiter uses `CircularBuffer::findFirstOfPatterns()` single-pass scan. Historical note: `m_threadedExtraction` / `moveToThread` was removed in beeda4c0; if it ever returns, flip `DeviceManager::frameReady` / `rawDataReceived` connections back to `Qt::QueuedConnection` in `ConnectionManager::wireDevice()`. |
+| `FrameReader` | **Currently runs on the main thread.** Config set **once** before construction; recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` on change. **Never add mutexes.** Delimiters are `QList<QByteArray>` (multi-pattern); single-delimiter uses KMP fast path, multi-delimiter uses `CircularBuffer::findFirstOfPatterns()` single-pass scan. It must preserve driver-side timing metadata by tracking pending chunk spans alongside the byte buffer. Historical note: `m_threadedExtraction` / `moveToThread` was removed in beeda4c0; if it ever returns, flip `DeviceManager::frameReady` / `rawDataReceived` connections back to `Qt::QueuedConnection` in `ConnectionManager::wireDevice()`. |
 | `CircularBuffer` | **SPSC only.** One producer, one consumer. Never MPMC. Even with FrameReader on the main thread, keep SPSC — the driver side still writes from whatever thread emitted `dataReceived`. |
-| `Dashboard` | **Main thread only.** Receives `const Frame&` — no copy. |
-| Export workers | Lock-free enqueue from main, batch on worker thread. `make_shared<TimestampedFrame>` is the only allocation on the tx path (guarded by `[[unlikely]]`). |
+| `Dashboard` | **Main thread only.** Receives the same `TimestampedFramePtr` object that export/API consumers receive and reads `frame->data` from it. |
+| Export workers | Lock-free enqueue from main, batch on worker thread. They consume the shared `TimestampedFramePtr` published by `FrameBuilder`; timestamp synthesis in export workers is only a monotonic safety net now, not the primary source of time. |
 
 ### Signal Connection Hops — Hotpath
 
@@ -146,7 +158,8 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 - Accessors: `ConnectionManager::instance().uart()`, `.network()`, `.bluetoothLE()`, etc.
 - `createDriver()` makes fresh instances for live connections (owned by `DeviceManager`).
 - QML context properties (`Cpp_IO_Serial`, `Cpp_IO_Network`, etc.) → UI-config instances.
-- `DeviceManager`: non-singleton, owns one `HAL_Driver` + `FrameReader`. No worker thread — FrameReader runs on the main thread (see beeda4c0).
+- `DeviceManager`: non-singleton, owns one `HAL_Driver` + `FrameReader`. FrameReader runs on the main thread (see beeda4c0).
+- Drivers publish `IO::CapturedDataPtr` via `HAL_Driver::publishReceivedData(...)`. See the Timestamp Ownership section above.
 - `configurationOk()` checks the **UI driver** (not the live driver). UI driver `configurationChanged` is forwarded to `ConnectionManager::configurationChanged`.
 - All drivers must emit `configurationChanged()` from their constructors (connect specific signals like `portIndexChanged` → `configurationChanged`).
 - Live drivers may lack enumerated device lists. UART/Modbus call `refreshSerialDevices()`/`refreshSerialPorts()` in `open()` if lists are empty.
@@ -246,6 +259,23 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
     raw bytes from `ConnectionManager::onRawDataReceived`. WAL mode, batch transactions.
   - `SQLite::Player` (`Sessions/Player.h/.cpp`): replays a stored session back through the
     FrameBuilder pipeline (see `app/qml/Dialogs/SqlitePlayer.qml`).
+  - **Per-sample tables use surrogate rowid PKs.** `readings`, `raw_bytes`, `table_snapshots`
+    are keyed by `reading_id` / `raw_id` / `snapshot_id` `INTEGER PRIMARY KEY AUTOINCREMENT`
+    with covering indexes on `(session_id, unique_id, timestamp_ns)` and
+    `(session_id, timestamp_ns)`. Writers use plain `INSERT` — never `INSERT OR IGNORE` —
+    because `timestamp_ns` collisions are routine (Windows `steady_clock` ~15 ms granularity,
+    audio at ≥48 kHz). No schema versioning, no migration — nightly feature, old .db files
+    are regenerated.
+  - **Break timestamp ties with `reading_id`.** All queries that need deterministic "first"
+    / "last" / per-frame ordering must include `reading_id` in `ORDER BY` or in
+    `MIN/MAX`-based subqueries. `DISTINCT timestamp_ns`-based stats undercount on collisions
+    — acceptable for display, not authoritative.
+  - **Session reports** (`ReportData.cpp`, `HtmlReport.cpp`): `loadChartSeries` passes raw
+    samples through verbatim under the 10k-point budget and switches to min/max bucket
+    decimation above. `DatasetSeries::totalSamples` carries the real row count for chart
+    subtitles. Chart-card CSS pins the landscape printable area per selected paper size via
+    `{{CHART_PAGE_WIDTH_MM}}` / `{{CHART_PAGE_HEIGHT_MM}}` so A3 / Letter / Legal print
+    without stretching.
 
 ### File Transmission — Protocol Architecture
 
@@ -261,6 +291,10 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 
 | Mistake | Fix |
 |---------|-----|
+| Function doxygen / member-variable comments / signal comments in a header | Headers hold only the license banner and **one** class-level `/** @brief */`. Everything else is names-as-documentation. |
+| Multi-line `//` narrative blocks, inline comments on declarations/members | One-line `//` section headers in `.cpp`; no header comments except the two allowed above |
+| `QMetaObject::invokeMethod(...)` forwarding received data without a captured timestamp | Capture `SteadyClock::now()` in the callback, pass it to `publishReceivedData(data, timestamp)` so stamping stays at acquisition |
+| Report/export worker calling `steady_clock::now()` to stamp a frame | Use the timestamp already on the shared `TimestampedFramePtr` via `monotonicFrameNs(frame->timestamp, baseline)` |
 | `buildTreeModel()` inside item-change handler | `QTimer::singleShot(0, ...)` |
 | Mutexes in FrameReader/CircularBuffer | Recreate via `ConnectionManager::resetFrameReader()` / `DeviceManager::reconfigure()` |
 | `Qt::QueuedConnection` on the frame hotpath when sender & receiver are both on the main thread | Use `Qt::DirectConnection` — queued costs a `postEvent` per frame and causes queue-full drops |
@@ -380,78 +414,90 @@ Use 98-dash `//---` banners to separate concern groups. Reference: `BluetoothLE.
 
 ### Comments & Doxygen
 
-- Prefer self-documenting code. Comments explain intent ("why"/"what"), not mechanics.
-- **Doxygen mandatory**: class `@brief` in `.h` above `class`; every function in `.cpp`.
-- Tags: `@brief` (always), `@param` (non-trivial), `@return` (non-void). No `@author`/`@date`.
+**Write like a programmer, not a novelist.** Code is the spec. Comments label sections; they do not narrate. Before writing a comment, ask: would removing it cost the reader anything? If no, don't write it.
 
-**Function body comments — the gold standard is `LemonSqueezy.cpp`:**
+**Headers (.h) — strict rule:**
+Only two kinds of comments are allowed in a header:
+1. The SPDX license banner at the top of the file.
+2. **One** class-level `/** @brief ... */` directly above the class declaration.
 
-Every non-trivial function must have a one-line `//` section header above **each** logical
-block, so a reader can skim the function and understand its flow without reading the code.
-A function with 5 logical blocks needs 5 comments, not just one at the top.
+Nothing else. No function doxygen. No member-variable comments. No signal/slot comments. No `@param`, `@return`, `@note`, `@see`. No inline `//`. Function names, argument names, and types are the documentation.
 
-| Rule | Example |
-|------|---------|
-| Exactly one line per comment | `// Persist connection settings and bus type into source[0]` |
-| Comment every logical block, not just the first | See LemonSqueezy.cpp `readSettings()`, `activate()` |
-| Skip comments for trivial functions (getters, 1–3 lines) | Doxygen is sufficient |
-| No multi-line `/* */` inside function bodies | Use single `//` lines |
-| No inline end-of-line comments | `x = 1; // bad` |
-| No comments inside brace blocks | `if (x) { // bad` |
-| Never duplicate the Doxygen | If the `@brief` says "Returns the port index", don't start the body with `// Return the port index` |
-| Never state what the code literally does | `// Set m_foo to bar` ← useless. Say **why**. |
-| Blank line after each comment + its code block | Separates the sections visually |
+**Source (.cpp):**
+- One-line `//` section header above each logical block inside a function body. That's it.
+- Single-line `/** @brief ... */` on a non-trivial function is allowed when the name isn't self-explanatory. Default is no function doxygen.
+- 98-dash `//---` banners separate concern groups (constructor, getters, slots…). Reference: `BluetoothLE.cpp`.
+- No inline end-of-line comments, no `if (x) { // ...`, no multi-line `//` prose, no `/* ... */` inside function bodies.
+- Never restate what code literally does (`// Set m_foo to bar`). Never repeat the `@brief` as the first line of the body. If context is truly load-bearing, put it in the commit message.
 
 ```cpp
-// Good: every block commented, each comment is one short line
+// Good header — license + class-level doxygen only
+/*
+ * Serial Studio
+ * ...
+ * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
+ */
+
+#pragma once
+
+/**
+ * @class ExportWorker
+ * @brief Writes telemetry frames and raw bytes to SQLite on a worker thread.
+ */
+class ExportWorker : public FrameConsumerWorker<TimestampedFramePtr> {
+  Q_OBJECT
+
+public:
+  ExportWorker(Queue* q, Enabled* e);
+
+  void closeResources() override;
+  bool isResourceOpen() const override;
+  [[nodiscard]] QJsonObject buildReplayProjectJson(const Frame& f) const;
+
+private:
+  bool m_dbOpen;
+  int m_sessionId;
+  qint64 m_lastFrameNs;
+  QMutex* m_projectSnapshotMutex;
+};
+```
+
+```cpp
+// Good source — one-line section headers, no narrative
 void LemonSqueezy::activate(const QString& key)
 {
-  // Skip if license key format is invalid
+  // Skip invalid license-key format
   if (!isValidKeyFormat(key))
     return;
 
-  // Avoid repeat activation requests
+  // Guard against repeat activation
   if (m_busy)
     return;
 
-  // Enable busy status
+  // Enable busy state
   m_busy = true;
   Q_EMIT busyChanged();
 
-  // Obtain machine ID & build JSON payload
-  const auto machineId = MachineID::instance().machineHash();
-  const auto fingerprint = MachineID::instance().fingerprint();
-
-  // Generate the JSON data
+  // Build the activation payload
   QJsonObject payload;
-  payload["license_key"]  = key;
-  payload["instance_name"] = fingerprint;
+  payload["license_key"]   = key;
+  payload["instance_name"] = MachineID::instance().fingerprint();
 
-  // Setup network request
+  // Fire the network request
   QNetworkRequest request(activateUrl());
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-  // Send the activation request
   auto* reply = m_nam.post(request, QJsonDocument(payload).toJson());
   connect(reply, &QNetworkReply::finished, this, [this, reply] { onActivateReply(reply); });
 }
+```
 
-// Bad: comment only on first block, rest left uncommented
-void ConnectionManager::rebuildDevices()
-{
-  // Snapshot current state before rebuilding       ← good
-  const auto opMode = AppState::instance().operationMode();
-  const bool wasConnected = isConnected();
+```cpp
+// Bad — multi-line narrative, inline comment, "why" prose
+// Only snapshot when ProjectFile mode is active — otherwise stale project
+// groups from a previous load would stamp QuickPlot/Console sessions.
+if (AppState::instance().operationMode() == SerialStudio::ProjectFile) { ... }
 
-  bool willRebuildDevice0 = (opMode != SerialStudio::ProjectFile);  ← no comment, what is this?
-  if (opMode == SerialStudio::ProjectFile) {
-    ...
-  }
-
-  for (auto it = m_devices.begin(); ...) {          ← no comment, what does this loop do?
-    ...
-  }
-}
+QMutexLocker locker(&m_projectSnapshotMutex);   // lock for write
 ```
 
 ### QML
@@ -511,8 +557,9 @@ of Ten for C++ / Qt). Violations in hotpath code are blockers.
 
 - Never add `new`, `malloc`, `make_shared`, or container growth (`.append()`,
   `.push_back()`) in the dashboard hotpath. Pre-allocate in constructors.
-- `FrameBuilder::hotpathTxFrame` allows one `make_shared` for export consumers
-  (guarded by `[[unlikely]]`). Dashboard path must remain zero-alloc.
+- `FrameBuilder` now creates one shared `TimestampedFramePtr` per parsed frame
+  and fans that same object out to dashboard/export/API consumers. Do not add a
+  second ownership layer or duplicate per-consumer frame copies on the tx path.
 
 ### Rule 4 — Functions ≤60 Lines
 

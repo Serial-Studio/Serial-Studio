@@ -30,11 +30,7 @@
 namespace DataModel {
 
 /**
- * @brief IScriptEngine implementation backed by Lua 5.4.
- *
- * Each instance owns a sandboxed lua_State with only safe standard libraries
- * loaded (base, table, string, math, utf8). Uses an instruction-count debug
- * hook as a watchdog to interrupt runaway scripts.
+ * @brief Lua 5.4 script engine implementation with an instruction-count watchdog.
  */
 class LuaScriptEngine final : public IScriptEngine {
 public:

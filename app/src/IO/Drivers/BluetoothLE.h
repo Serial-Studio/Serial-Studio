@@ -33,8 +33,7 @@ namespace IO {
 namespace Drivers {
 
 /**
- * @brief The BluetoothLE class
- * Serial Studio driver class to interact with Bluetooth Low Energy devices.
+ * @brief HAL driver for Bluetooth Low Energy peripherals.
  */
 class BluetoothLE : public HAL_Driver {
   // clang-format off

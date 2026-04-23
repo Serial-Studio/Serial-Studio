@@ -17,17 +17,7 @@ namespace API {
 namespace Handlers {
 
 /**
- * @class HIDHandler
- * @brief Registers API commands for IO::Drivers::HID operations (Pro feature)
- *
- * Provides commands for HID device driver configuration:
- *
- * Configuration:
- * - io.driver.hid.setDeviceIndex - Select HID device by index
- *
- * Queries:
- * - io.driver.hid.getDeviceList  - List available HID devices
- * - io.driver.hid.getConfiguration - Get complete HID config and info
+ * @brief Registers API commands for IO::Drivers::HID operations (Pro feature).
  */
 class HIDHandler {
 public:

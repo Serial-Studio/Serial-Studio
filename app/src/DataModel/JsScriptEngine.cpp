@@ -33,8 +33,7 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Enum to classify JavaScript return value types from the parse
- * function.
+ * @brief Classifies JavaScript return-value shapes from the parse function.
  */
 enum class ArrayType {
   Scalar,
@@ -45,9 +44,6 @@ enum class ArrayType {
 
 /**
  * @brief Converts a JavaScript array to a QStringList.
- *
- * @param jsValue JavaScript array to convert.
- * @return QStringList containing string representation of each element.
  */
 static QStringList jsArrayToStringList(const QJSValue& jsValue)
 {
@@ -64,16 +60,7 @@ static QStringList jsArrayToStringList(const QJSValue& jsValue)
 }
 
 /**
- * @brief Detects the type of JavaScript array returned by the parse function.
- *
- * Classifies the JavaScript value as:
- * - Scalar: Not an array or empty
- * - Array1D: Flat scalar array [1, 2, 3]
- * - Array2D: Pure 2D array [[1,2], [3,4]]
- * - ArrayMixed: Mixed scalar/vector [1, [2,3], [4,5]]
- *
- * @param jsValue JavaScript value to classify.
- * @return ArrayType classification.
+ * @brief Classifies the JS value as scalar, 1D, 2D, or mixed array.
  */
 static ArrayType detectArrayType(const QJSValue& jsValue)
 {
@@ -107,13 +94,7 @@ static ArrayType detectArrayType(const QJSValue& jsValue)
 }
 
 /**
- * @brief Converts a pure 2D JavaScript array to multiple frames.
- *
- * Processes arrays like [[1,2,3], [4,5,6]] and generates one frame per row.
- * Invalid rows (non-arrays) are skipped with a warning.
- *
- * @param jsValue JavaScript 2D array.
- * @return List of QStringList, one per row/frame.
+ * @brief Converts a pure 2D JavaScript array to one frame per row.
  */
 static QList<QStringList> convert2DArray(const QJSValue& jsValue)
 {
@@ -138,20 +119,7 @@ static QList<QStringList> convert2DArray(const QJSValue& jsValue)
 }
 
 /**
- * @brief Converts a mixed scalar/vector JavaScript array to multiple frames.
- *
- * Processes arrays like [scalar1, scalar2, [vec1, vec2, vec3]] and "unzips"
- * vectors while repeating scalars across frames.
- *
- * Example:
- *   Input:  [25.5, 60.0, [1.1, 2.2, 3.3]]
- *   Output: [[25.5, 60.0, 1.1], [25.5, 60.0, 2.2], [25.5, 60.0, 3.3]]
- *
- * If multiple vectors have different lengths, shorter vectors are extended
- * by repeating their last value.
- *
- * @param jsValue JavaScript mixed array.
- * @return List of QStringList, one per frame.
+ * @brief Unzips a mixed scalar/vector JS array into one frame per vector index.
  */
 static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 {
@@ -217,9 +185,6 @@ static QList<QStringList> convertMixedArray(const QJSValue& jsValue)
 
 /**
  * @brief Classifies the JS result and converts it to a list of frames.
- *
- * @param jsResult The value returned by the parse function.
- * @return List of QStringList, each representing one frame.
  */
 static QList<QStringList> convertJsResult(const QJSValue& jsResult)
 {
@@ -241,9 +206,6 @@ static QList<QStringList> convertJsResult(const QJSValue& jsResult)
 // JsScriptEngine implementation
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the JS engine and configures the runtime watchdog timer.
- */
 DataModel::JsScriptEngine::JsScriptEngine()
 {
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
@@ -253,17 +215,11 @@ DataModel::JsScriptEngine::JsScriptEngine()
   QObject::connect(&m_watchdog, &QTimer::timeout, [this]() { m_engine.setInterrupted(true); });
 }
 
-/**
- * @brief Returns @c true when a callable parse function is loaded.
- */
 bool DataModel::JsScriptEngine::isLoaded() const noexcept
 {
   return m_parseFunction.isCallable();
 }
 
-/**
- * @brief Runs one cycle of JS garbage collection.
- */
 void DataModel::JsScriptEngine::collectGarbage()
 {
   m_engine.collectGarbage();
@@ -279,13 +235,7 @@ void DataModel::JsScriptEngine::reset()
 }
 
 /**
- * @brief Calls the parse function with a runtime watchdog timer.
- *
- * Starts a single-shot timer before the JS call. If the script exceeds
- * kRuntimeWatchdogMs, the engine is interrupted and an error is returned.
- *
- * @param args Arguments to pass to the parse function.
- * @return The JS result, or an error value if interrupted.
+ * @brief Calls the parse function under a runtime watchdog timer.
  */
 QJSValue DataModel::JsScriptEngine::guardedCall(QJSValueList& args)
 {
@@ -307,11 +257,7 @@ QJSValue DataModel::JsScriptEngine::guardedCall(QJSValueList& args)
 }
 
 /**
- * @brief Executes the JS parse function over text data, returning one or more
- * frames.
- *
- * @param frame Decoded UTF-8 string frame.
- * @return List of QStringList, each representing one frame.
+ * @brief Runs the JS parse function over a text frame.
  */
 QList<QStringList> DataModel::JsScriptEngine::parseString(const QString& frame)
 {
@@ -333,11 +279,7 @@ QList<QStringList> DataModel::JsScriptEngine::parseString(const QString& frame)
 }
 
 /**
- * @brief Executes the JS parse function over binary data, returning one or
- * more frames.
- *
- * @param frame Binary frame data.
- * @return List of QStringList, each representing one frame.
+ * @brief Runs the JS parse function over a binary frame.
  */
 QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& frame)
 {
@@ -380,12 +322,7 @@ QList<QStringList> DataModel::JsScriptEngine::parseBinary(const QByteArray& fram
 }
 
 /**
- * @brief Evaluates a script and checks for syntax errors.
- *
- * @param script          The JavaScript source to evaluate.
- * @param sourceId        Source identifier (for diagnostics).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return @c true if the script evaluated without errors.
+ * @brief Evaluates the script and reports any syntax errors.
  */
 bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
                                                      int sourceId,
@@ -439,12 +376,7 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
 }
 
 /**
- * @brief Validates that the engine's global scope contains a callable 'parse'
- * function.
- *
- * @param sourceId        Source identifier (for diagnostics).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return The parse function on success, or a null QJSValue on failure.
+ * @brief Returns the global 'parse' function, or a null QJSValue on failure.
  */
 QJSValue DataModel::JsScriptEngine::validateParseFunction(int sourceId, bool showMessageBoxes)
 {
@@ -469,13 +401,7 @@ QJSValue DataModel::JsScriptEngine::validateParseFunction(int sourceId, bool sho
 }
 
 /**
- * @brief Probes the parse function with representative inputs under a watchdog
- * timer to detect runtime errors and infinite loops.
- *
- * @param parseFunction   The callable parse function to test.
- * @param sourceId        Source identifier (for diagnostics).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return @c true if at least one probe input succeeded.
+ * @brief Probes parse() with sample inputs under a watchdog thread.
  */
 bool DataModel::JsScriptEngine::probeParseFunction(const QJSValue& parseFunction,
                                                    int sourceId,
@@ -546,15 +472,6 @@ bool DataModel::JsScriptEngine::probeParseFunction(const QJSValue& parseFunction
 
 /**
  * @brief Validates and loads a JavaScript frame parser script.
- *
- * For source 0, performs full validation: syntax check, function-signature
- * check, and a probe with a watchdog timer. For all other sources, performs
- * lightweight validation (syntax + callable parse function) without the probe.
- *
- * @param script           The JavaScript source to validate and load.
- * @param sourceId         Target source engine (0 = global).
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return @c true on success, @c false if validation failed.
  */
 bool DataModel::JsScriptEngine::loadScript(const QString& script,
                                            int sourceId,

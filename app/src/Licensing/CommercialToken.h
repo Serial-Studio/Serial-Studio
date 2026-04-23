@@ -65,17 +65,6 @@
 #endif
 // clang-format on
 
-//--------------------------------------------------------------------------------------------------
-// SS_LICENSE_GUARD — per-call-site license integrity check
-//--------------------------------------------------------------------------------------------------
-// Each call site dispatches to a different generated guard function based on
-// __LINE__. The guard functions are regenerated on every build with randomized
-// names and check logic, so no static patch survives across releases.
-//
-// Usage: place SS_LICENSE_GUARD() at the top of any commercial feature gate.
-// It evaluates to true when the build salt is legitimate.
-//--------------------------------------------------------------------------------------------------
-
 // clang-format off
 #ifdef BUILD_COMMERCIAL
 #  include "LicenseGuards.generated.h"
@@ -84,11 +73,6 @@
 #  define SS_LICENSE_GUARD() (false)
 #endif
 // clang-format on
-
-//--------------------------------------------------------------------------------------------------
-// Compile-time salt — only defined when CMake has validated the license.
-// Without this, the build fails at the static_assert below.
-//--------------------------------------------------------------------------------------------------
 
 #ifndef COMMERCIAL_BUILD_SALT
 #  define COMMERCIAL_BUILD_SALT 0
@@ -103,15 +87,6 @@ namespace Licensing {
 
 /**
  * @brief Feature tier levels derived from the license variant.
- *
- * Tiers are strictly hierarchical — higher tiers include all features
- * of lower tiers.  Feature gates use >= comparisons:
- *   - >= Hobbyist: MQTT, Audio, FFT, XY plots, console export
- *   - >= Pro:      CAN Bus, Modbus, MDF4, 3D, ImageView, output widgets
- *   - Trial:       same as Pro (14-day full access)
- *
- * The tier is derived from the Lemon Squeezy variant name at
- * validation time, not from a simple boolean.
  */
 enum class FeatureTier : quint8 {
   None       = 0,
@@ -122,25 +97,8 @@ enum class FeatureTier : quint8 {
 };
 
 /**
- * @class CommercialToken
  * @brief Capability token produced by LemonSqueezy or Trial after successful
  *        validation.
- *
- * Pro features read fields from this token rather than checking a single
- * boolean.  The token carries an HMAC computed from its data fields and
- * the compile-time build salt, so:
- *
- *  - Patching isValid() to return true still leaves fields empty/zero,
- *    causing Pro code to misbehave or early-return.
- *  - Fabricating field values requires producing a matching HMAC, which
- *    needs COMMERCIAL_BUILD_SALT (only embedded after CMake-time license
- *    validation).
- *  - Commenting out the CMake validation removes the salt define, which
- *    triggers the static_assert above.
- *
- * Offline support: the cached encrypted license response still produces
- * a valid token via LemonSqueezy::readSettings(), with graceDaysRemaining
- * counting down from 30.
  */
 class CommercialToken {
 public:

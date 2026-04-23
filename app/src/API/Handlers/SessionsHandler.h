@@ -21,14 +21,7 @@ namespace API {
 namespace Handlers {
 
 /**
- * @class SessionsHandler
  * @brief Registers API commands for SQLite session recording (Pro).
- *
- * Commands:
- *  - sessions.getStatus            Return exportEnabled + isOpen flags
- *  - sessions.setExportEnabled     Turn session recording on/off
- *  - sessions.close                Finalize and close the current session
- *  - sessions.getCanonicalDbPath   Return the .db path for a given project title
  */
 class SessionsHandler {
 public:

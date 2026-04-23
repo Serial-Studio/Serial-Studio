@@ -38,61 +38,22 @@
 
 namespace Licensing {
 /**
- * @short Simple encryption and decryption of strings and byte arrays
- *
- * This class provides a simple implementation of encryption and decryption of
- * strings and byte arrays.
- *
- * @warning The encryption provided by this class is NOT strong encryption.
- * It may help to shield things from curious eyes, but it will NOT stand up to
- * someone determined to break the encryption. Don't say you were not warned.
- *
- * The class uses a 64 bit key. Simply create an instance of the class, set the
- * key, and use the encryptToString() method to calculate an encrypted version
- * of the input string. To decrypt that string again, use an instance of
- * SimpleCrypt initialized with the same key, and call the decryptToString()
- * method with the encrypted string. If the key matches, the decrypted version
- * of the string will be returned again.
- *
- * If you do not provide a key, or if something else is wrong, the encryption
- * and decryption function will return an empty string or will return a string
- * containing nonsense. lastError() will return a value indicating if the method
- * was succesful, and if not, why not.
- *
- * SimpleCrypt is prepared for the case that the encryption and decryption
- * algorithm is changed in a later version, by prepending a version identifier
- * to the cypertext.
+ * @brief Simple (non-strong) encryption and decryption of strings and byte arrays.
  */
 class SimpleCrypt {
 public:
-  /**
-   * CompressionMode describes if compression will be applied to the data to be
-   * encrypted.
-   */
   enum CompressionMode {
     CompressionAuto,
     CompressionAlways,
     CompressionNever
   };
 
-  /**
-   * IntegrityProtectionMode describes measures taken to make it possible to
-   * detect problems with the data or wrong decryption keys.
-   *
-   * Measures involve adding a checksum or a cryptograhpic hash to the data to
-   * be encrypted. This increases the length of the resulting cypertext, but
-   * makes it possible to check if the plaintext appears to be valid after
-   * decryption.
-   */
   enum IntegrityProtectionMode {
     ProtectionNone,
     ProtectionChecksum,
     ProtectionHash
   };
 
-  /**
-   * Error describes the type of error that occured.
-   */
   enum Error {
     ErrorNoError,
     ErrorNoKeySet,
@@ -100,11 +61,6 @@ public:
     ErrorIntegrityFailed,
   };
 
-  /**
-   * enum to describe options that have been used for the encryption.
-   * Currently only one, but that leaves room for future extensions like
-   * adding a cryptographic hash...
-   */
   enum CryptoFlag {
     CryptoFlagNone        = 0,
     CryptoFlagCompression = 0x01,

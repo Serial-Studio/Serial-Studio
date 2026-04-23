@@ -27,35 +27,18 @@
 namespace API {
 namespace Handlers {
 /**
- * @class CANBusHandler
- * @brief Registers API commands for IO::Drivers::CANBus operations
- *
- * Provides commands for:
- * - io.driver.canbus.setPluginIndex - Select CAN plugin
- * - io.driver.canbus.setInterfaceIndex - Select CAN interface
- * - io.driver.canbus.setBitrate - Set CAN bitrate
- * - io.driver.canbus.setCanFD - Enable/disable CAN FD
- * - io.driver.canbus.getConfiguration - Query configuration
- * - io.driver.canbus.getPluginList - Query available CAN plugins
- * - io.driver.canbus.getInterfaceList - Query available interfaces
- * - io.driver.canbus.getBitrateList - Query supported bitrates
- * - io.driver.canbus.getInterfaceError - Query interface error message
+ * @brief Registers API commands for IO::Drivers::CANBus operations.
  */
 class CANBusHandler {
 public:
-  /**
-   * @brief Register all CANBus commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Mutation commands
   static CommandResponse setPluginIndex(const QString& id, const QJsonObject& params);
   static CommandResponse setInterfaceIndex(const QString& id, const QJsonObject& params);
   static CommandResponse setBitrate(const QString& id, const QJsonObject& params);
   static CommandResponse setCanFD(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getConfiguration(const QString& id, const QJsonObject& params);
   static CommandResponse getPluginList(const QString& id, const QJsonObject& params);
   static CommandResponse getInterfaceList(const QString& id, const QJsonObject& params);

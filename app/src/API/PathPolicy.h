@@ -24,15 +24,5 @@
 #include <QString>
 
 namespace API {
-/**
- * @brief Validate a file path against the API allowlist, if configured.
- *
- * If the SERIAL_STUDIO_API_ALLOWED_PATHS environment variable is unset,
- * the path is allowed. When set, it must be inside one of the allowed roots.
- *
- * @param filePath Path to validate
- * @param allowNonexistent Allow non-existent paths (for save operations)
- * @return true if the path is allowed
- */
 bool isPathAllowed(const QString& filePath, bool allowNonexistent = false);
 }  // namespace API

@@ -29,14 +29,8 @@
 
 namespace Misc {
 /**
- * @brief Provides an in-app help center that fetches and displays
- *        documentation pages from GitHub with local caching.
- *
- * The HelpCenter class loads a manifest of help pages and allows users
- * to browse, search, and read documentation without leaving Serial Studio.
- *
- * Page content is delivered as raw markdown to QML, where a WebEngineView
- * renders it via showdown.js + highlight.js + KaTeX.
+ * @brief Provides an in-app help center that fetches and displays documentation
+ *        pages from GitHub with local caching.
  */
 class HelpCenter : public QObject {
   // clang-format off

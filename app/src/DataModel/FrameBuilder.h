@@ -34,11 +34,13 @@
 
 #include "DataModel/DataTable.h"
 #include "DataModel/Frame.h"
+#include "IO/HAL_Driver.h"
 #include "SerialStudio.h"
 
 namespace DataModel {
 
 /**
+ * @class FrameBuilder
  * @brief Assembles a DataModel::Frame from raw I/O bytes and distributes it
  * to the dashboard and export workers.
  *
@@ -76,22 +78,21 @@ public slots:
   void syncFromProjectModel();
   void registerQuickPlotHeaders(const QStringList& headers);
 
-  void hotpathRxFrame(const QByteArray& data);
-  void hotpathRxSourceFrame(int sourceId, const QByteArray& data);
+  void hotpathRxFrame(const IO::CapturedDataPtr& data);
+  void hotpathRxSourceFrame(int sourceId, const IO::CapturedDataPtr& data);
 
 private slots:
   void onSourceRemoved();
   void onConnectedChanged();
-  void updateTimestampedFramesEnabled();
 
 private:
-  void parseProjectFrame(const QByteArray& data);
-  void parseProjectFrame(int sourceId, const QByteArray& data);
-  void parseQuickPlotFrame(const QByteArray& data);
+  void parseProjectFrame(const IO::CapturedDataPtr& data);
+  void parseProjectFrame(int sourceId, const IO::CapturedDataPtr& data);
+  void parseQuickPlotFrame(const IO::CapturedDataPtr& data);
   void buildQuickPlotFrame(const QStringList& channels);
   void buildQuickPlotAudioFrame(const QStringList& channels);
 
-  void hotpathTxFrame(const DataModel::Frame& frame);
+  void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
 
   struct TransformEngine {
     lua_State* luaState = nullptr;
@@ -134,8 +135,6 @@ private:
   bool m_quickPlotHasHeader;
   QStringList m_quickPlotChannelNames;
   QStringList m_channelScratch;
-
-  bool m_timestampedFramesEnabled;
 };
 
 }  // namespace DataModel

@@ -42,7 +42,7 @@ class Export;
 
 #ifdef BUILD_COMMERCIAL
 /**
- * @brief Worker that handles MDF4 export file I/O on background thread
+ * @brief Worker that handles MDF4 export file I/O on a background thread.
  */
 class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   Q_OBJECT
@@ -86,32 +86,7 @@ private:
 #endif
 
 /**
- * @class Export
- * @brief Manages automatic export of telemetry data to MDF4 files.
- *
- * The Export class is a singleton that provides functionality to capture
- * and export telemetry data to MDF4/MF4 binary measurement files. This is
- * particularly useful for data logging, analysis with automotive tools,
- * and post-processing with professional measurement software.
- *
- * Key Features:
- * - **Binary Format**: Uses industry-standard MDF4 format
- * - **Hierarchical Structure**: One channel group per Serial Studio group
- * - **Efficient Storage**: Compressed binary storage for large datasets
- * - **Tool Compatibility**: Compatible with Vector CANape, ETAS INCA, etc.
- * - **Buffered Writing**: Buffers frames and writes periodically to reduce
- *   disk I/O
- * - **Pro Feature**: Available only in commercial builds with valid license
- * - **Singleton Pattern**: Single instance ensures consistent file handling
- *   across the application
- *
- * @note This feature is only available in commercial builds (BUILD_COMMERCIAL).
- *       In GPL builds, all methods return false/empty values and no export
- *       occurs.
- *
- * @warning Export functionality requires an active Serial Studio Pro license.
- *          The export will be automatically disabled if the license becomes
- *          invalid.
+ * @brief Manages automatic export of telemetry data to MDF4 files (Pro only).
  */
 class Export
 #ifdef BUILD_COMMERCIAL

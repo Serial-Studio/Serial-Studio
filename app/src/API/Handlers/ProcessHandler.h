@@ -17,22 +17,7 @@ namespace API {
 namespace Handlers {
 
 /**
- * @class ProcessHandler
- * @brief Registers API commands for IO::Drivers::Process operations (Pro
- *        feature).
- *
- * Provides commands for the Process I/O driver (child process or named pipe):
- *
- * Configuration:
- * - io.driver.process.setMode       - Set mode (0=Launch, 1=NamedPipe)
- * - io.driver.process.setExecutable - Set executable path (Launch mode)
- * - io.driver.process.setArguments  - Set command-line arguments (Launch mode)
- * - io.driver.process.setWorkingDir - Set working directory (Launch mode)
- * - io.driver.process.setPipePath   - Set named pipe / FIFO path (Pipe mode)
- *
- * Queries:
- * - io.driver.process.getRunningProcesses - List running processes
- * - io.driver.process.getConfiguration    - Get complete driver config
+ * @brief Registers API commands for IO::Drivers::Process operations (Pro feature).
  */
 class ProcessHandler {
 public:

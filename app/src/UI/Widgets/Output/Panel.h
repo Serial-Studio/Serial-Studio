@@ -17,12 +17,7 @@ namespace Widgets {
 namespace Output {
 
 /**
- * @class Widgets::Output::Panel
  * @brief Dashboard widget model for an output control panel.
- *
- * Exposes the list of output widgets and their computed layout geometry.
- * QML calls updateLayout() with the available size; the engine computes
- * optimal 2D bin-packed placement.
  */
 class Panel : public QQuickItem {
   // clang-format off

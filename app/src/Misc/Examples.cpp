@@ -123,8 +123,7 @@ const QString& Misc::Examples::selectedReadme() const noexcept
 }
 
 /**
- * @brief Returns a file:// URL to the cached screenshot for the selected
- *        example.
+ * @brief Returns a file URL to the cached screenshot for the selected example.
  */
 const QUrl& Misc::Examples::selectedScreenshot() const noexcept
 {

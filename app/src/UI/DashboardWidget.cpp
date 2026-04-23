@@ -46,9 +46,6 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Constructor function
- */
 UI::DashboardWidget::DashboardWidget(QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(-1)
@@ -65,9 +62,6 @@ UI::DashboardWidget::DashboardWidget(QQuickItem* parent)
           &UI::DashboardWidget::widgetColorChanged);
 }
 
-/**
- * Delete widget on class destruction
- */
 UI::DashboardWidget::~DashboardWidget()
 {
   if (m_dbWidget)
@@ -79,8 +73,7 @@ UI::DashboardWidget::~DashboardWidget()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns the global index of the widget (index of the current widget in
- * relation to all registered widgets).
+ * @brief Returns the global index of the widget.
  */
 int UI::DashboardWidget::widgetIndex() const
 {
@@ -88,8 +81,7 @@ int UI::DashboardWidget::widgetIndex() const
 }
 
 /**
- * Returns the relative index of the widget (e.g. index of a bar widget in
- * relation to the total number of bar widgets).
+ * @brief Returns the relative index of the widget within its type.
  */
 int UI::DashboardWidget::relativeIndex() const
 {
@@ -101,11 +93,10 @@ int UI::DashboardWidget::relativeIndex() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns the color of the widget based on the current theme & widget index.
+ * @brief Returns the color of the widget based on the current theme.
  */
 QColor UI::DashboardWidget::widgetColor() const
 {
-  // Return the dataset color for the current widget index
   if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex)) {
     if (SerialStudio::isDatasetWidget(m_widgetType)) {
       const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
@@ -117,11 +108,10 @@ QColor UI::DashboardWidget::widgetColor() const
 }
 
 /**
- * Returns the appropiate window title for the given widget
+ * @brief Returns the window title for the given widget.
  */
 QString UI::DashboardWidget::widgetTitle() const
 {
-  // Retrieve the title from the dataset or group widget
   if (VALIDATE_WIDGET(m_widgetType, m_relativeIndex)) {
     if (SerialStudio::isDatasetWidget(m_widgetType)) {
       const auto& dataset = GET_DATASET(m_widgetType, m_relativeIndex);
@@ -138,7 +128,7 @@ QString UI::DashboardWidget::widgetTitle() const
 }
 
 /**
- * Returns the type of the current widget (e.g. group, plot, bar, gauge, etc...)
+ * @brief Returns the type of the current widget.
  */
 SerialStudio::DashboardWidget UI::DashboardWidget::widgetType() const
 {
@@ -146,13 +136,10 @@ SerialStudio::DashboardWidget UI::DashboardWidget::widgetType() const
 }
 
 /**
- * Returns a stable string key identifying this specific widget instance.
- * Derived from widget type, group ID, and dataset index — all of which are
- * structural properties defined by the project file, not session-scoped IDs.
+ * @brief Returns a stable string key identifying this specific widget instance.
  */
 QString UI::DashboardWidget::widgetId() const
 {
-  // Build a stable key from widget type, group ID, and dataset index
   auto id   = UI::WidgetRegistry::instance().widgetIdByTypeAndIndex(m_widgetType, m_relativeIndex);
   auto info = UI::WidgetRegistry::instance().widgetInfo(id);
   return QStringLiteral("%1:%2:%3")
@@ -162,14 +149,10 @@ QString UI::DashboardWidget::widgetId() const
 }
 
 /**
- * @brief Returns the source/device index (sourceId) of the group this widget belongs to.
- *
- * Used by the dashboard MiniWindow to apply a per-device color tint to the caption.
- * Returns 0 when the widget has no group or belongs to the default source.
+ * @brief Returns the source/device index of the group this widget belongs to.
  */
 int UI::DashboardWidget::widgetSourceId() const
 {
-  // Validate widget and look up source ID from group or dataset
   if (!VALIDATE_WIDGET(m_widgetType, m_relativeIndex))
     return 0;
 
@@ -187,7 +170,7 @@ int UI::DashboardWidget::widgetSourceId() const
 }
 
 /**
- * Returns the QML path of the current widget.
+ * @brief Returns the QML path of the current widget.
  */
 QString UI::DashboardWidget::widgetQmlPath() const
 {
@@ -195,7 +178,7 @@ QString UI::DashboardWidget::widgetQmlPath() const
 }
 
 /**
- * Returns the model item of the current widget.
+ * @brief Returns the model item of the current widget.
  */
 QQuickItem* UI::DashboardWidget::widgetModel() const
 {
@@ -203,11 +186,10 @@ QQuickItem* UI::DashboardWidget::widgetModel() const
 }
 
 /**
- * Selects & configures the appropiate widget for the given @a index
+ * @brief Selects and configures the appropriate widget for the given @a index.
  */
 void UI::DashboardWidget::setWidgetIndex(const int index)
 {
-  // Resolve the widget type and relative index for the given global index
   if (index < UI::Dashboard::instance().totalWidgetCount() && index >= 0) {
     m_index         = index;
     m_widgetType    = UI::Dashboard::instance().widgetType(index);

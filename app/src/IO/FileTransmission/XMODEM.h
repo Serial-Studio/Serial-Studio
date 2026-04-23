@@ -30,17 +30,7 @@ namespace IO {
 namespace Protocols {
 
 /**
- * @brief XMODEM file transfer protocol implementation.
- *
- * Supports both 128-byte (XMODEM) and 1024-byte (XMODEM-1K) block sizes
- * with CRC-16 error detection. The sender waits for the receiver to
- * initiate the transfer with a 'C' character (CRC mode) or NAK
- * (checksum mode, not supported — we require CRC mode).
- *
- * Protocol flow:
- *   Receiver sends 'C' → Sender sends SOH/STX + block# + ~block# + data + CRC
- *   → Receiver replies ACK/NAK/CAN
- *   → Sender sends next block or EOT on completion
+ * @brief XMODEM / XMODEM-1K sender with CRC-16.
  */
 class XMODEM : public Protocol {
   Q_OBJECT
@@ -65,7 +55,6 @@ public:
   void setTimeoutMs(int ms);
 
 protected:
-  // XMODEM control characters
   static constexpr quint8 kSOH = 0x01;
   static constexpr quint8 kSTX = 0x02;
   static constexpr quint8 kEOT = 0x04;
@@ -101,8 +90,8 @@ protected:
   bool m_use1K;
   qint64 m_bytesSent;
   qint64 m_fileSize;
-  qint64 m_lastBlockStart;  ///< File offset of the block currently awaiting ACK/NAK.
-  qint64 m_lastBlockBytes;  ///< Actual bytes read for the block awaiting ACK/NAK.
+  qint64 m_lastBlockStart;
+  qint64 m_lastBlockBytes;
 
 private:
   void sendCancel();

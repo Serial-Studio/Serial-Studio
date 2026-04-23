@@ -385,10 +385,6 @@ QMqttClient& MQTT::Client::client()
 
 /**
  * @brief Opens a connection to the MQTT broker.
- *
- * Configures the internal QMqttClient instance with the current parameters and
- * attempts to establish a connection to the broker. If SSL is enabled, sets the
- * appropriate SSL configuration.
  */
 void MQTT::Client::openConnection()
 {
@@ -460,9 +456,6 @@ void MQTT::Client::openConnection()
 
 /**
  * @brief Closes the current connection to the broker.
- *
- * Gracefully disconnects the internal QMqttClient. This is a no-op if the
- * client is already disconnected.
  */
 void MQTT::Client::closeConnection()
 {
@@ -485,15 +478,6 @@ void MQTT::Client::toggleConnection()
 
 /**
  * @brief Regenerates and sets a new random MQTT client ID.
- *
- * This method creates a new client ID using a pseudo-random sequence of
- * lowercase alphanumeric characters. The generated ID is 16 characters long
- * and is assigned to the client using setClientId().
- *
- * This helps ensure uniqueness across MQTT client sessions and can be used
- * to recover or randomize identity without requiring external input.
- *
- * @note The character set used includes only lowercase letters and digits.
  */
 void MQTT::Client::regenerateClientId()
 {
@@ -747,9 +731,7 @@ void MQTT::Client::setPeerVerifyMode(const quint8 verifyMode)
   quint8 index = 0;
   for (auto i = m_peerVerifyModes.begin(); i != m_peerVerifyModes.end(); ++i) {
     if (index == verifyMode) {
-      // Warn operators when TLS peer verification is disabled — the dropdown
-      // is still user-facing on purpose (self-signed brokers exist) but this
-      // flips the connection into a MITM-vulnerable state.
+      // Warn when TLS peer verification is disabled
       if (i.value() == QSslSocket::VerifyNone) [[unlikely]]
         qWarning() << "[MQTT] TLS peer verification disabled — connection vulnerable to MITM";
 
@@ -783,12 +765,6 @@ void MQTT::Client::hotpathTxFrame(const QByteArray& data)
 
 /**
  * @brief Handles changes in the client's connection state.
- *
- * Emits the connectedChanged() signal whenever the connection state changes.
- * If the client transitions to the Connected state and is in subscriber mode,
- * this will attempt to subscribe to the configured topic filter with QoS 0.
- * Displays an error message if the subscription fails.
- *
  * @param state The new connection state of the QMqttClient.
  */
 void MQTT::Client::onStateChanged(QMqttClient::ClientState state)
@@ -942,16 +918,6 @@ void MQTT::Client::onAuthenticationRequested(const QMqttAuthenticationProperties
 
 /**
  * @brief Handles incoming MQTT messages.
- *
- * This slot is called when the client receives a message from the broker.
- * It processes the message only if:
- * - The message payload is non-empty
- * - The client is in subscriber mode
- * - The topic matches the currently configured subscription topic
- *
- * If all conditions are met, the message payload is passed to IO::ConnectionManager
- * for processing via a queued Qt method invocation.
- *
  * @param message The received MQTT message payload.
  * @param topic The topic associated with the received message.
  */

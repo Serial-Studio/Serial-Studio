@@ -23,12 +23,7 @@
 namespace Sessions {
 
 /**
- * @brief Singleton that owns the open .db file and provides session browsing,
- *        tag management, CSV export, and project metadata storage for the
- *        Database Explorer UI.
- *
- * Acts as the central coordinator between SQLite::Export (writes data),
- * SQLite::Player (replays data), and the QML Database Explorer window.
+ * @brief Owns the session database file and backs the Database Explorer UI.
  */
 class DatabaseManager : public QObject {
   // clang-format off

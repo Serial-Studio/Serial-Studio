@@ -27,21 +27,7 @@ namespace API {
 namespace Handlers {
 
 /**
- * @class DataTablesHandler
- * @brief Registers API commands for DataModel::ProjectModel's user-defined
- *        data tables (shared-memory tables exposed to transforms).
- *
- * Table commands:
- *  - project.tables.list                 List all user tables + register counts
- *  - project.tables.get                  Return full register list for a table
- *  - project.tables.add                  Create a new table with a unique name
- *  - project.tables.delete               Remove a table by name
- *  - project.tables.rename               Rename a table
- *
- * Register commands:
- *  - project.tables.register.add         Append a register (constant or computed)
- *  - project.tables.register.delete      Remove a register
- *  - project.tables.register.update      Modify type / default value / name
+ * @brief Registers API commands for project user-defined data tables.
  */
 class DataTablesHandler {
 public:

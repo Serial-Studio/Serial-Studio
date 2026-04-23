@@ -38,13 +38,7 @@ namespace IO {
 namespace Drivers {
 
 /**
- * @brief Process I/O driver supporting two modes: child-process and named pipe.
- *
- * In Launch mode, Serial Studio spawns a child process via QProcess and reads
- * its stdout+stderr (merged).
- *
- * In NamedPipe mode, Serial Studio opens a named pipe / FIFO written by an
- * external process and reads from it.
+ * @brief HAL driver for child processes and named pipes / FIFOs.
  */
 class Process : public HAL_Driver {
   // clang-format off

@@ -32,8 +32,7 @@
 namespace IO {
 namespace Drivers {
 /**
- * @brief The UART class
- * Serial Studio "driver" class to interact with serial port devices.
+ * @brief HAL driver for serial (UART) ports via QSerialPort.
  */
 class UART : public HAL_Driver {
   // clang-format off

@@ -30,12 +30,8 @@
 
 namespace DataModel {
 
-//--------------------------------------------------------------------------------------------------
-// Export column descriptor
-//--------------------------------------------------------------------------------------------------
-
 /**
- * @brief Describes a single exportable dataset column.
+ * @brief Descriptor for a single column in an exported dataset file.
  */
 struct ExportColumn {
   int uniqueId = 0;
@@ -49,15 +45,8 @@ struct ExportColumn {
   bool isVirtual = false;
 };
 
-//--------------------------------------------------------------------------------------------------
-// Export schema
-//--------------------------------------------------------------------------------------------------
-
 /**
- * @brief Pre-computed column layout shared by all export workers.
- *
- * Built once from a template Frame when an export file is created. Eliminates
- * duplicated header-derivation logic across CSV, MDF4, and session exporters.
+ * @brief Shared column layout used by CSV, MDF4 and session exporters.
  */
 struct ExportSchema {
   QString frameTitle;
@@ -65,26 +54,11 @@ struct ExportSchema {
   QMap<int, int> uniqueIdToColumnIndex;
 };
 
-//--------------------------------------------------------------------------------------------------
-// Schema builder
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Derives an ExportSchema from a Frame, sorted by uniqueId.
- *
- * Iterates groups and datasets, skipping Output groups. Each dataset becomes
- * one ExportColumn. The result is sorted by uniqueId for deterministic column
- * order across all export formats.
- *
- * @param frame  Template or first-data frame.
- * @return Fully populated ExportSchema.
- */
 [[nodiscard]] inline ExportSchema buildExportSchema(const Frame& frame)
 {
   ExportSchema schema;
   schema.frameTitle = frame.title;
 
-  // Collect columns from all input groups
   for (const auto& group : frame.groups) {
     if (group.groupType == GroupType::Output)
       continue;
@@ -104,12 +78,10 @@ struct ExportSchema {
     }
   }
 
-  // Sort by uniqueId for deterministic column order
   std::sort(schema.columns.begin(),
             schema.columns.end(),
             [](const ExportColumn& a, const ExportColumn& b) { return a.uniqueId < b.uniqueId; });
 
-  // Build reverse index
   for (int i = 0; i < static_cast<int>(schema.columns.size()); ++i)
     schema.uniqueIdToColumnIndex.insert(schema.columns[static_cast<size_t>(i)].uniqueId, i);
 

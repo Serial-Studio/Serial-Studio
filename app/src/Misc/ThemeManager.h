@@ -27,37 +27,6 @@
 #include <QPalette>
 #include <QSettings>
 
-//--------------------------------------------------------------------------------------------------
-// Qt Stylesheet utilties...not used on Serial Studio, but useful reference...
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Generates a styled QString using a format string and a variable number
- *        of QColor arguments.
- *
- * This function takes a QString representing a style (such as a CSS-like
- * string) and a variable number of QColor objects. It replaces placeholders in
- * the style string (e.g., %1, %2, etc.) with the hexadecimal color codes of the
- * provided QColor objects.
- *
- * The number of QColor arguments must match the number of placeholders in the
- * style string. If fewer colors are provided than placeholders, the
- * placeholders that are not matched will not be replaced. If more colors are
- * provided than placeholders, the extra colors will be ignored.
- *
- * @param style The format string that includes placeholders (e.g., %1, %2, ...)
- * @param colors A variable number of QColor objects to replace the placeholders
- *               in the format string.
- *
- * @return A QString with the placeholders replaced by the color codes.
- *
- * @note Example usage:
- * @code
- * QString styleString = QSS("background-color: %1; color: %2;", QColor("red"),
- * QColor("blue"));
- * // Result: "background-color: #ff0000; color: #0000ff;"
- * @endcode
- */
 template<typename... Colors>
 inline QString QSS(const QString& style, const Colors&... colors)
 {
@@ -70,33 +39,10 @@ inline QString QSS(const QString& style, const Colors&... colors)
   return result;
 }
 
-//--------------------------------------------------------------------------------------------------
-// ThemeManager class declaration
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @class ThemeManager
- * @brief Manages the application's color themes.
- *
- * ThemeManager is a singleton class that handles the loading, switching, and
- * providing of color themes for the application.
- *
- * It reads theme configurations from JSON files and applies them as needed,
- * also responding to system color scheme changes.
- *
- * Usage:
- * - Access the singleton instance via @c ThemeManager::instance().
- * - Retrieve available themes using @c availableThemes().
- * - Change the theme using @c setTheme().
- * - Get the current theme's color scheme with @c colors().
- *
- * The class emits a @c themeChanged signal when the application theme is
- * changed, either manually or automatically in response to system palette
- * changes.
- *
- * @extends QObject
- */
 namespace Misc {
+/**
+ * @brief Manages the application's color themes.
+ */
 class ThemeManager : public QObject {
   // clang-format off
   Q_OBJECT

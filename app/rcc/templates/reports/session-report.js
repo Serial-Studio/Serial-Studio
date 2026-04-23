@@ -200,20 +200,22 @@
     // Force explicit canvas dimensions before Chart.js inspects the element.
     // In a headless QWebEnginePage, cards past the initial viewport measure
     // as 0×0 at layout time, which leaves Chart.js with nothing to draw.
-    // The device-pixel-ratio bump keeps the trace sharp in print and on
-    // Retina — Chrome's printToPdf() rasterises canvas at the current DPR.
+    // Keep the backing store policy simple here — data shaping happens in
+    // C++, the report runtime should only render the provided series.
     const targetDpr = Math.max(2, window.devicePixelRatio || 1);
     canvas.style.width  = hostWidth  + "px";
     canvas.style.height = hostHeight + "px";
     canvas.width  = Math.floor(hostWidth  * targetDpr);
     canvas.height = Math.floor(hostHeight * targetDpr);
 
-    // Matplotlib-inspired palette — darker text + stronger gridlines so the
-    // chart stays legible when printed in grayscale on A4.
+    // Palette + sizes tuned for paper legibility in grayscale prints
     const axisTextColor   = "#1f1f1f";
     const axisBorderColor = "#1f1f1f";
-    const majorGridColor  = "#8a8f98";   // solid, prominent (prints dark)
-    const minorGridColor  = "#c8cdd4";   // subtle filler between majors
+    const majorGridColor  = "#9aa0a8";
+    const minorGridColor  = "#d0d4db";
+    const plotBgColor     = "#fafbfc";
+    const tickFontSize    = 13;
+    const axisTitleSize   = 14;
 
     const config = {
       type: "line",
@@ -225,24 +227,25 @@
           backgroundColor: colors.fill,
           borderWidth: lineWidth,
           borderDash: dashPattern,
+          borderJoinStyle: "round",
+          borderCapStyle: "round",
           pointRadius: 0,
           pointHoverRadius: 3,
-          tension: 0.0,
+          tension: 0,
           spanGaps: true,
-          fill: false                     // matplotlib lines don't fill
+          fill: false
         }]
       },
       options: {
-        // Responsive resizing fights the explicit canvas sizing we just did,
-        // and a PDF page never resizes anyway. Keep it off so Chart.js uses
-        // the canvas dimensions we set verbatim.
+        // Fixed canvas + DPR is what printToPdf captures cleanly
         responsive: false,
         maintainAspectRatio: false,
         devicePixelRatio: targetDpr,
         animation: { duration: 0 },
         interaction: { intersect: false, mode: "nearest", axis: "x" },
-        layout: { padding: { top: 8, right: 16, bottom: 4, left: 4 } },
+        layout: { padding: { top: 10, right: 18, bottom: 6, left: 6 } },
         plugins: {
+          decimation: { enabled: false },
           legend: { display: false },
           tooltip: {
             enabled: true,
@@ -270,11 +273,11 @@
               display: true,
               text: "Time (s)",
               color: axisTextColor,
-              font: { size: 11, weight: "500" }
+              font: { size: axisTitleSize, weight: "500" }
             },
             ticks: {
               color: axisTextColor,
-              font: { size: 10 },
+              font: { size: tickFontSize },
               stepSize: xBounds.step,
               callback: formatAxisValue
             },
@@ -293,7 +296,7 @@
             title: { display: false },   // heading + card title already identify the series
             ticks: {
               color: axisTextColor,
-              font: { size: 10 },
+              font: { size: tickFontSize },
               stepSize: yBounds.step,
               callback: formatAxisValue
             },
@@ -309,48 +312,74 @@
         }
       },
 
-      // Minor gridlines — subtle sub-ticks between each major tick so the
-      // chart reads like a matplotlib figure. Skipped when majors are too
-      // close to avoid visual mud.
-      plugins: [{
-        id: "minor-gridlines",
-        beforeDatasetsDraw(chart) {
-          const { ctx, chartArea, scales } = chart;
-          ctx.save();
-          ctx.strokeStyle = minorGridColor;
-          ctx.lineWidth = 0.3;
+      plugins: [
+        // Plot-area tint painted in beforeDraw so Chart.js's own gridlines
+        // render ON TOP — using beforeDatasetsDraw covered the major grid.
+        // The closed frame is drawn in afterDatasetsDraw, above the series.
+        {
+          id: "plot-area-frame",
+          beforeDraw(chart) {
+            const { ctx, chartArea } = chart;
+            if (!chartArea) return;
+            const { left, right, top, bottom } = chartArea;
+            ctx.save();
+            ctx.fillStyle = plotBgColor;
+            ctx.fillRect(left, top, right - left, bottom - top);
+            ctx.restore();
+          },
+          afterDatasetsDraw(chart) {
+            const { ctx, chartArea } = chart;
+            const { left, right, top, bottom } = chartArea;
+            ctx.save();
+            ctx.strokeStyle = axisBorderColor;
+            ctx.lineWidth = 1;
+            ctx.strokeRect(left + 0.5, top + 0.5,
+                           (right - left) - 1, (bottom - top) - 1);
+            ctx.restore();
+          }
+        },
 
-          const drawMinor = (scale, isVertical) => {
-            const ticks = scale.ticks;
-            if (ticks.length < 2) return;
-            const a0 = scale.getPixelForValue(ticks[0].value);
-            const a1 = scale.getPixelForValue(ticks[1].value);
-            const spacing = Math.abs(a1 - a0);
-            if (spacing < 40) return;   // too dense — skip minors
-            const subdivs = spacing >= 80 ? 5 : 2;
-            for (let i = 0; i < ticks.length - 1; ++i) {
-              const a = scale.getPixelForValue(ticks[i].value);
-              const b = scale.getPixelForValue(ticks[i + 1].value);
-              for (let k = 1; k < subdivs; ++k) {
-                const p = a + (b - a) * (k / subdivs);
-                ctx.beginPath();
-                if (isVertical) {
-                  ctx.moveTo(p, chartArea.top);
-                  ctx.lineTo(p, chartArea.bottom);
-                } else {
-                  ctx.moveTo(chartArea.left, p);
-                  ctx.lineTo(chartArea.right, p);
+        // Minor gridlines between each major tick (skipped if dense)
+        {
+          id: "minor-gridlines",
+          beforeDatasetsDraw(chart) {
+            const { ctx, chartArea, scales } = chart;
+            ctx.save();
+            ctx.strokeStyle = minorGridColor;
+            ctx.lineWidth = 0.3;
+
+            const drawMinor = (scale, isVertical) => {
+              const ticks = scale.ticks;
+              if (ticks.length < 2) return;
+              const a0 = scale.getPixelForValue(ticks[0].value);
+              const a1 = scale.getPixelForValue(ticks[1].value);
+              const spacing = Math.abs(a1 - a0);
+              if (spacing < 40) return;   // too dense — skip minors
+              const subdivs = spacing >= 80 ? 5 : 2;
+              for (let i = 0; i < ticks.length - 1; ++i) {
+                const a = scale.getPixelForValue(ticks[i].value);
+                const b = scale.getPixelForValue(ticks[i + 1].value);
+                for (let k = 1; k < subdivs; ++k) {
+                  const p = a + (b - a) * (k / subdivs);
+                  ctx.beginPath();
+                  if (isVertical) {
+                    ctx.moveTo(p, chartArea.top);
+                    ctx.lineTo(p, chartArea.bottom);
+                  } else {
+                    ctx.moveTo(chartArea.left, p);
+                    ctx.lineTo(chartArea.right, p);
+                  }
+                  ctx.stroke();
                 }
-                ctx.stroke();
               }
-            }
-          };
+            };
 
-          drawMinor(scales.x, true);
-          drawMinor(scales.y, false);
-          ctx.restore();
+            drawMinor(scales.x, true);
+            drawMinor(scales.y, false);
+            ctx.restore();
+          }
         }
-      }]
+      ]
     };
 
     return new Chart(canvas.getContext("2d"), config);
@@ -370,14 +399,12 @@
   // comparison, not absolute-value reading.
   // -----------------------------------------------------------------------
   function buildOverlayChart(canvas, seriesList, lineWidth, dashPattern) {
+    // Overlay is screen-only (hidden by @media print) so it runs in
+    // responsive mode — lets Chart.js size the backing store and, crucially,
+    // compute legend-click coordinates correctly. Manually setting
+    // canvas.width / style.width together breaks hit-testing on the legend.
     const host       = canvas.parentElement;
     const hostWidth  = host.clientWidth  || host.getBoundingClientRect().width  || 1000;
-    const hostHeight = host.clientHeight || host.getBoundingClientRect().height || 420;
-    const dpr        = Math.max(2, window.devicePixelRatio || 1);
-    canvas.style.width  = hostWidth  + "px";
-    canvas.style.height = hostHeight + "px";
-    canvas.width  = Math.floor(hostWidth  * dpr);
-    canvas.height = Math.floor(hostHeight * dpr);
 
     const datasets = seriesList.map((s, i) => {
       const c = paletteColor(i);
@@ -387,9 +414,11 @@
         backgroundColor: c.fill,
         borderWidth: lineWidth,
         borderDash: dashPattern,
+        borderJoinStyle: "round",
+        borderCapStyle: "round",
         pointRadius: 0,
         pointHoverRadius: 3,
-        tension: 0,
+          tension: 0,
         spanGaps: true,
         fill: false,
         data: s.times.map((t, j) => ({ x: t, y: s.values[j] }))
@@ -409,23 +438,29 @@
     const xTicksTarget = Math.max(2, Math.floor(hostWidth / 80));
     const xNice        = niceBounds(xMin, xMax, xTicksTarget);
 
+    const axisTextColor   = "#1f1f1f";
+    const axisBorderColor = "#1f1f1f";
+    const plotBgColor     = "#fafbfc";
+    const tickFontSize    = 13;
+    const axisTitleSize   = 14;
+
     return new Chart(canvas.getContext("2d"), {
       type: "line",
       data: { datasets: datasets },
       options: {
-        responsive: false,
+        responsive: true,
         maintainAspectRatio: false,
-        devicePixelRatio: dpr,
         animation: { duration: 0 },
         interaction: { intersect: false, mode: "nearest", axis: "x" },
         plugins: {
+          decimation: { enabled: false },
           legend: {
             display: true,
             position: "top",
             labels: {
-              color: "#1f1f1f",
-              font: { size: 11 },
-              boxWidth: 14,
+              color: axisTextColor,
+              font: { size: 13 },
+              boxWidth: 16,
               usePointStyle: true
             }
           },
@@ -450,30 +485,52 @@
             title: {
               display: true,
               text: "Time (s)",
-              color: "#1f1f1f",
-              font: { size: 11, weight: "500" }
+              color: axisTextColor,
+              font: { size: axisTitleSize, weight: "500" }
             },
             ticks: {
-              color: "#1f1f1f",
-              font: { size: 10 },
+              color: axisTextColor,
+              font: { size: tickFontSize },
               stepSize: xNice.step,
               callback: (v) => xNice.step >= 1 ? Number(v).toFixed(0) : Number(v).toFixed(1)
             },
-            grid:   { color: "#8a8f98", lineWidth: 0.5, tickLength: 6, tickColor: "#1f1f1f" },
-            border: { color: "#1f1f1f", width: 1 }
+            grid:   { color: "#9aa0a8", lineWidth: 0.6, tickLength: 6, tickColor: axisBorderColor },
+            border: { color: axisBorderColor, width: 1 }
           },
           y: {
             title: { display: false },
             ticks: {
-              color: "#1f1f1f",
-              font: { size: 10 },
+              color: axisTextColor,
+              font: { size: tickFontSize },
               callback: formatAxisValue
             },
-            grid:   { color: "#8a8f98", lineWidth: 0.5, tickLength: 6, tickColor: "#1f1f1f" },
-            border: { color: "#1f1f1f", width: 1 }
+            grid:   { color: "#9aa0a8", lineWidth: 0.6, tickLength: 6, tickColor: axisBorderColor },
+            border: { color: axisBorderColor, width: 1 }
           }
         }
-      }
+      },
+      plugins: [{
+        id: "plot-area-frame",
+        beforeDraw(chart) {
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return;
+          const { left, right, top, bottom } = chartArea;
+          ctx.save();
+          ctx.fillStyle = plotBgColor;
+          ctx.fillRect(left, top, right - left, bottom - top);
+          ctx.restore();
+        },
+        afterDatasetsDraw(chart) {
+          const { ctx, chartArea } = chart;
+          const { left, right, top, bottom } = chartArea;
+          ctx.save();
+          ctx.strokeStyle = axisBorderColor;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(left + 0.5, top + 0.5,
+                         (right - left) - 1, (bottom - top) - 1);
+          ctx.restore();
+        }
+      }]
     });
   }
 

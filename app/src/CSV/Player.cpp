@@ -39,9 +39,6 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Constructor function
- */
 CSV::Player::Player()
   : m_framePos(0)
   , m_playing(false)
@@ -55,9 +52,6 @@ CSV::Player::Player()
   connect(this, &CSV::Player::playerStateChanged, this, &CSV::Player::updateData);
 }
 
-/**
- * Returns the only instance of the class
- */
 CSV::Player& CSV::Player::instance()
 {
   static Player singleton;
@@ -68,16 +62,13 @@ CSV::Player& CSV::Player::instance()
 // Playback status queries
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Returns @c true if an CSV file is open for reading
- */
 bool CSV::Player::isOpen() const
 {
   return m_csvFile.isOpen();
 }
 
 /**
- * Returns the CSV playback progress in a range from 0.0 to 1.0
+ * @brief Returns the CSV playback progress in the range 0.0 to 1.0.
  */
 double CSV::Player::progress() const
 {
@@ -89,10 +80,6 @@ double CSV::Player::progress() const
   return static_cast<double>(framePosition()) / count;
 }
 
-/**
- * Returns @c true if the user is currently re-playing the CSV file at real-time
- * speed.
- */
 bool CSV::Player::isPlaying() const
 {
   return m_playing;
@@ -103,9 +90,7 @@ bool CSV::Player::isPlaying() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns the total number of frames in the CSV file. This can be calculated
- * by getting the number of rows of the CSV and substracting 1 (because the
- * title cells do not count as a valid frame).
+ * @brief Returns the total number of data frames in the CSV file.
  */
 int CSV::Player::frameCount() const
 {
@@ -113,8 +98,7 @@ int CSV::Player::frameCount() const
 }
 
 /**
- * Returns the current row that we are using to create the JSON data that is
- * feed to the JsonParser class.
+ * @brief Returns the current CSV row being replayed.
  */
 int CSV::Player::framePosition() const
 {
@@ -122,7 +106,7 @@ int CSV::Player::framePosition() const
 }
 
 /**
- * Returns the short filename of the current CSV file
+ * @brief Returns the base filename of the currently open CSV file.
  */
 QString CSV::Player::filename() const
 {
@@ -135,9 +119,6 @@ QString CSV::Player::filename() const
   return "";
 }
 
-/**
- * Returns the timestamp of the current data frame / row.
- */
 const QString& CSV::Player::timestamp() const
 {
   return m_timestamp;
@@ -148,8 +129,7 @@ const QString& CSV::Player::timestamp() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Enables CSV playback at 'live' speed (as it happened when CSV file was
- * saved to the computer).
+ * @brief Starts CSV playback at the original capture speed.
  */
 void CSV::Player::play()
 {
@@ -174,8 +154,7 @@ void CSV::Player::play()
 }
 
 /**
- * Pauses the CSV playback so that the user can see WTF happened at
- * certain point of the mission.
+ * @brief Pauses CSV playback.
  */
 void CSV::Player::pause()
 {
@@ -186,9 +165,6 @@ void CSV::Player::pause()
   Q_EMIT playerStateChanged();
 }
 
-/**
- * Toggles play/pause state
- */
 void CSV::Player::toggle()
 {
   if (m_playing)
@@ -202,7 +178,7 @@ void CSV::Player::toggle()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Lets the user select a CSV file
+ * @brief Prompts the user to select a CSV file to play back.
  */
 void CSV::Player::openFile()
 {
@@ -227,8 +203,7 @@ void CSV::Player::openFile()
 }
 
 /**
- * Closes the file & cleans up internal variables. This helps us to reduice
- * memory usage & prepare the module to load another CSV file.
+ * @brief Closes the current CSV file and resets playback state.
  */
 void CSV::Player::closeFile()
 {
@@ -257,11 +232,7 @@ void CSV::Player::closeFile()
 }
 
 /**
- * @brief Reads & processes the next CSV row, capped at the last row.
- *
- * Moves the frame position forward by one, up to the last frame in the CSV.
- * Clears plot data and repopulates the dashboard with the appropriate frames
- * for synchronized display.
+ * @brief Advances to the next CSV row, capped at the last row.
  */
 void CSV::Player::nextFrame()
 {
@@ -280,11 +251,7 @@ void CSV::Player::nextFrame()
 }
 
 /**
- * @brief Reads & processes the previous CSV row, capped at the first row.
- *
- * Moves the frame position backward by one, down to the first frame in the CSV.
- * Clears plot data and repopulates the dashboard with the appropriate frames
- * for synchronized display.
+ * @brief Steps back to the previous CSV row, capped at the first row.
  */
 void CSV::Player::previousFrame()
 {
@@ -303,13 +270,7 @@ void CSV::Player::previousFrame()
 }
 
 /**
- * @brief Reads all rows from a CSV text stream into m_csvData.
- *
- * Splits each line on commas, strips whitespace and quotes, and discards
- * rows that contain only empty cells. Stops after kMaxCsvRows to prevent
- * unbounded memory growth.
- *
- * @param stream The QTextStream positioned at the start of the CSV content.
+ * @brief Reads CSV rows from the stream into m_csvData up to kMaxCsvRows.
  */
 void CSV::Player::parseCsvRows(QTextStream& stream)
 {
@@ -339,16 +300,7 @@ void CSV::Player::parseCsvRows(QTextStream& stream)
 }
 
 /**
- * @brief Detects and initializes the timestamp strategy for the loaded CSV.
- *
- * Checks whether the first data cell is a high-precision numeric timestamp
- * or a parseable date/time string. If neither, prompts the user to select a
- * date/time column or provide a manual interval.
- *
- * On failure (user cancels the prompt), calls closeFile() and returns false.
- *
- * @return @c true if timestamps were successfully initialized, @c false if the
- *         user cancelled and the file was closed.
+ * @brief Detects the CSV timestamp format and initializes the cache.
  */
 void CSV::Player::initializeTimestamps()
 {
@@ -389,12 +341,7 @@ void CSV::Player::initializeTimestamps()
 }
 
 /**
- * @brief Opens a CSV file, processes its data, and prepares it for playback.
- *
- * Checks for active device connections, reads and parses the CSV content,
- * initializes timestamp handling, and emits signals to update the UI.
- *
- * @param filePath The file path of the CSV file to be opened.
+ * @brief Opens the CSV at filePath and prepares it for playback.
  */
 void CSV::Player::openFile(const QString& filePath)
 {
@@ -473,39 +420,7 @@ void CSV::Player::openFile(const QString& filePath)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Adjusts the playback position in the CSV data based on a normalized
- *        progress value.
- *
- * This function sets the playback position to a specified point within the CSV
- * file, where the position is defined by a normalized progress value between
- * 0 and 1. A value of 0 represents the start of the CSV file, and 1 represents
- * the end. When the new position differs from the current playback position,
- * this function processes the update by resetting and reloading the necessary
- * frames.
- *
- * If moving backward, the dashboard plots are reset silently and reloaded with
- * frames in the range leading up to the new position, effectively simulating a
- * rewind effect. For forward movement, the function caps the frame range to
- * prevent overshooting the end of the CSV.
- *
- * - **Backward Movement**: The dashboard is reset, and frames are reloaded from
- *   a range capped by the current position back to `UI::Dashboard::points()`
- *   frames earlier, or the start of the CSV, whichever comes first.
- * - **Forward Movement**: The dashboard is similarly reset, and frames are
- *   reloaded up to the new position, but capped to prevent going beyond the
- *   end of the CSV file.
- *
- * @param progress A normalized value between 0.0 and 1.0 representing the
- *                 desired position in the CSV file.
- *
- * This function ensures that:
- * - The playback position does not exceed the CSV boundaries.
- * - Plot data accurately reflects the new position on both forward and
- *   backward movements.
- * - Timestamp tracking remains synchronized with the current playback position.
- *
- * @note A silent reset is performed to refresh the dashboard plots without
- *       emitting unnecessary signals.
+ * @brief Seeks playback to a normalized position between 0.0 and 1.0.
  */
 void CSV::Player::setProgress(const double progress)
 {
@@ -675,14 +590,7 @@ void CSV::Player::updateData()
 }
 
 /**
- * @brief Processes a batch of frames synchronously for efficient scrollback.
- *
- * This function processes frames from startFrame to endFrame (inclusive)
- * without using timers, which is more efficient for scrollback operations
- * where we need to rebuild plot history.
- *
- * @param startFrame The first frame index to process.
- * @param endFrame The last frame index to process (inclusive).
+ * @brief Synchronously injects frames in [startFrame, endFrame] for scrollback.
  */
 void CSV::Player::processFrameBatch(int startFrame, int endFrame)
 {
@@ -697,12 +605,7 @@ void CSV::Player::processFrameBatch(int startFrame, int endFrame)
 }
 
 /**
- * @brief Registers CSV headers with Quick Plot
- *
- * Extracts column names from the CSV header row and explicitly registers
- * them with the FrameBuilder. Skips the first column (timestamp) as it
- * is not used for plotting. This should be called before the header row
- * is removed from m_csvData.
+ * @brief Registers CSV column names with Quick Plot (excluding the timestamp).
  */
 void CSV::Player::sendHeaderFrame()
 {
@@ -732,16 +635,7 @@ void CSV::Player::sendHeaderFrame()
 }
 
 /**
- * @brief Prompts the user to select how to handle date/time data in the CSV.
- *
- * This function checks if the CSV file has valid headers, then asks the user
- * to either select a date/time column or manually enter an interval between
- * rows in milliseconds. Depending on the user's choice, either date/time
- * values are generated based on the interval, or an existing column is
- * converted to date/time values.
- *
- * @return true if the user successfully provided a date/time option or
- *         interval, false if cancelled or invalid input.
+ * @brief Prompts the user to pick a date/time column or a manual row interval.
  */
 bool CSV::Player::promptUserForDateTimeOrInterval()
 {
@@ -813,13 +707,7 @@ bool CSV::Player::promptUserForDateTimeOrInterval()
 }
 
 /**
- * @brief Generates date/time values for each row based on a fixed interval.
- *
- * This function generates date/time strings starting from the current time
- * and increments them by a user-specified interval in milliseconds. It then
- * prepends the generated date/time string to each row of the CSV data.
- *
- * @param interval The interval in milliseconds between each row.
+ * @brief Prepends synthetic evenly-spaced date/time strings to each CSV row.
  */
 void CSV::Player::generateDateTimeForRows(int interval)
 {
@@ -834,21 +722,7 @@ void CSV::Player::generateDateTimeForRows(int interval)
 }
 
 /**
- * @brief Converts the specified column in the CSV data to a date/time format
- *        and moves it to the start of each row.
- *
- * This function processes the specified column (excluding the header row) in
- * the CSV data and converts each value to a `QDateTime` object using the
- * formats defined in the `getDateTime` function. If a valid `QDateTime` is not
- * found, the current date/time is used. The converted date/time string is then
- * moved to the start of each row.
- *
- * The header row (row 0) is excluded from this operation to ensure it remains
- * intact. The selected column is removed from its original position and moved
- * to the start of the row as a formatted date/time string.
- *
- * @param columnIndex The index of the column to convert and move to the start
- * of each row.
+ * @brief Moves the selected column to the start of each row as a date/time.
  */
 void CSV::Player::convertColumnToDateTime(int columnIndex)
 {
@@ -876,16 +750,7 @@ void CSV::Player::convertColumnToDateTime(int columnIndex)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Retrieves the date/time value from a specific cell in the CSV.
- *
- * This function attempts to parse the date/time value in the first column of
- * the specified cell. It tries several predefined date/time formats, returning
- * the first valid date/time it finds. If no valid date/time can be found, an
- * invalid QDateTime object is returned.
- *
- * @param cell The index of the cell to retrieve the date/time from.
- * @return QDateTime The parsed date/time value or an invalid QDateTime if
- *                   parsing fails.
+ * @brief Returns the parsed date/time from column 0 of the given row.
  */
 QDateTime CSV::Player::getDateTime(const int row)
 {
@@ -900,22 +765,7 @@ QDateTime CSV::Player::getDateTime(const int row)
 }
 
 /**
- * @brief Parses a date/time string from a given cell in the CSV data.
- *
- * This function attempts to convert a string into a `QDateTime` object using a
- * list of predefined date/time formats. It iterates through multiple formats to
- * find a valid match. If no valid format is found, an invalid `QDateTime`
- * object is returned.
- *
- * The function uses common date/time formats such as "yyyy/MM/dd HH:mm:ss::zzz"
- * and its variations to handle different possible formats that might be present
- * in the CSV file.
- *
- * @param cell The string representing the cell in the CSV that contains the
- *             date/time data.
- *
- * @return QDateTime The parsed `QDateTime` object. If no valid date/time format
- *                   is found, an invalid `QDateTime` is returned.
+ * @brief Parses the given cell as a date/time using common CSV formats.
  */
 QDateTime CSV::Player::getDateTime(const QString& cell)
 {
@@ -942,10 +792,7 @@ QDateTime CSV::Player::getDateTime(const QString& cell)
 }
 
 /**
- * @brief Parses a timestamp in fractional seconds format from the given @a row.
- *
- * @param row The row index to parse the timestamp from.
- * @return The timestamp in seconds, or -1.0 if invalid.
+ * @brief Returns the fractional-second timestamp for the given row.
  */
 double CSV::Player::getTimestampSeconds(int row)
 {
@@ -962,14 +809,7 @@ double CSV::Player::getTimestampSeconds(int row)
 }
 
 /**
- * @brief Parses a timestamp in fractional seconds format from the given @a
- * cell.
- *
- * This method attempts to parse the cell as a decimal number representing
- * seconds since Unix epoch with nanosecond precision.
- *
- * @param cell The cell string to parse.
- * @return The timestamp in seconds, or -1.0 if invalid.
+ * @brief Parses the cell as fractional seconds since the Unix epoch.
  */
 double CSV::Player::getTimestampSeconds(const QString& cell)
 {
@@ -984,10 +824,7 @@ double CSV::Player::getTimestampSeconds(const QString& cell)
 }
 
 /**
- * @brief Formats a timestamp in fractional seconds to HH:MM:SS.mmm format.
- *
- * @param seconds The timestamp in seconds.
- * @return Formatted timestamp string.
+ * @brief Formats fractional seconds as HH:MM:SS.mmm.
  */
 QString CSV::Player::formatTimestamp(double seconds) const
 {
@@ -1007,9 +844,7 @@ QString CSV::Player::formatTimestamp(double seconds) const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Generates a frame from the data at the given @a row. The first item of each
- * row is ignored because it contains the RX date/time, which is used to
- * regulate the interval at which the frames are parsed.
+ * @brief Builds a CSV frame byte array from the row, skipping the timestamp.
  */
 QByteArray CSV::Player::getFrame(const int row)
 {
@@ -1034,9 +869,7 @@ QByteArray CSV::Player::getFrame(const int row)
 }
 
 /**
- * Safely returns the value in the cell at the given @a row & @a column. If an
- * error occurs or the cell does not exist, the value of @a error shall be set
- * to @c true.
+ * @brief Safely reads the cell at (row, column), setting error on failure.
  */
 const QString CSV::Player::getCellValue(const int row, const int column, bool& error)
 {
@@ -1064,9 +897,6 @@ const QString CSV::Player::getCellValue(const int row, const int column, bool& e
 
 /**
  * @brief Builds a column-to-source mapping for multi-source CSV playback.
- *
- * Iterates all groups/datasets from the project sorted by uniqueId (matching
- * the export column order) and maps each CSV column index to its sourceId.
  */
 void CSV::Player::buildMultiSourceMapping()
 {
@@ -1098,13 +928,7 @@ void CSV::Player::buildMultiSourceMapping()
 }
 
 /**
- * @brief Injects a CSV frame through the appropriate pipeline path.
- *
- * For single-source or non-project mode, delegates to processPayload().
- * For multi-source project mode, splits the CSV row by source and calls
- * processMultiSourcePayload().
- *
- * @param frame CSV-formatted byte array (without timestamp column).
+ * @brief Injects a CSV frame, splitting per source when in multi-source mode.
  */
 void CSV::Player::injectFrame(const QByteArray& frame)
 {
@@ -1143,16 +967,7 @@ void CSV::Player::injectFrame(const QByteArray& frame)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Event filter to capture and handle key events for playback controls.
- *
- * This function intercepts key events when the CSV player is open and routes
- * them to `handleKeyPress` for processing. If the key event corresponds to a
- * playback control (e.g., play/pause, next, previous), the event is handled;
- * otherwise, it is passed to the default event filter.
- *
- * @param obj The object that the event is dispatched to.
- * @param event The event being processed.
- * @return true if the event was handled, false otherwise.
+ * @brief Captures key events and routes playback shortcuts to handleKeyPress.
  */
 bool CSV::Player::eventFilter(QObject* obj, QEvent* event)
 {
@@ -1166,20 +981,7 @@ bool CSV::Player::eventFilter(QObject* obj, QEvent* event)
 }
 
 /**
- * @brief Handles key press events to control playback actions.
- *
- * This function is called by the `eventFilter` when a key press event occurs.
- * It checks for specific keys related to media control (e.g., space for
- * play/pause, arrow keys for frame navigation) and invokes the corresponding
- * playback function.
- *
- * Supported keys:
- * - Space, MediaPlay, MediaPause, MediaTogglePlayPause: Toggles play/pause.
- * - Left, Down, MediaPrevious: Moves to the previous frame.
- * - Right, Up, MediaNext: Moves to the next frame.
- *
- * @param keyEvent The key event to handle.
- * @return true if the event was handled, false otherwise.
+ * @brief Maps media and arrow keys to playback actions.
  */
 bool CSV::Player::handleKeyPress(QKeyEvent* keyEvent)
 {

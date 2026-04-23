@@ -112,9 +112,6 @@ QuickPaintedItemCompatRenderer::QuickPaintedItemCompatRenderer()
 
 /**
  * @brief Copies the item pointer for use during paint().
- *
- * This is called on the render thread while the GUI thread is blocked, so
- * it is safe to read item state and call paint(QPainter*).
  */
 void QuickPaintedItemCompatRenderer::synchronize(QCanvasPainterItem* item)
 {

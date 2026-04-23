@@ -31,23 +31,7 @@
 
 namespace UI {
 /**
- * @brief QStandardItemModel used to represent dashboard widgets in a
- *        hierarchical UI.
- *
- * This model is used in two distinct contexts:
- * - `fullModel`: Holds the complete structure of all groups and widgets
- * - `taskbarButtons`: Holds the filtered subset currently visible in the
- * taskbar (based on active group)
- *
- * The model supports dynamic grouping and filtering based on:
- * - Group ID (user-defined dataset grouping)
- * - Widget type (FFT, Plot, etc.)
- *
- * Each item in the model exposes a consistent set of roles to QML, such as
- * `widgetName`, `widgetType`, `groupName`, and `windowState`.
- *
- * Custom enum `WindowState` defines whether a widget is shown, minimized, or
- * closed.
+ * @brief QStandardItemModel used to represent dashboard widgets in a hierarchical UI.
  */
 class TaskbarModel : public QStandardItemModel {
   Q_OBJECT
@@ -78,30 +62,6 @@ public:
 
 /**
  * @brief Controller that manages dashboard window state and taskbar UI models.
- *
- * The Taskbar class owns and maintains two synchronized models:
- * - `fullModel`: A complete hierarchical representation of all windows.
- * - `taskbarButtons`: A filtered view of widgets shown in the taskbar based on
- *                     the current group selected in a tab bar.
- *
- * It also manages runtime window state transitions such as:
- * - Showing, minimizing, or closing individual windows
- * - Registering QML window instances with internal IDs
- * - Tracking the currently active window and group
- *
- * QML can bind to:
- * - `taskbarButtons` for displaying current visible widgets
- * - `fullModel` for metadata access or diagnostics
- * - `groupTitles` to populate tabs or navigation
- *
- * Responsibilities:
- * - React to dashboard updates (`rebuildModel()`)
- * - Maintain per-window state using `WindowStateRole`
- * - Provide a clear interface to manipulate visibility from QML
- *
- * Usage:
- * - Exposed as a singleton via context property
- * - Interacts closely with UI::Dashboard and QML taskbar UI
  */
 class Taskbar : public QQuickItem {
   // clang-format off

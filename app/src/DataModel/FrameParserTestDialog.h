@@ -37,13 +37,7 @@ namespace DataModel {
 class FrameParser;
 
 /**
- * @brief Dialog for testing frame parser functions with sample data
- *
- * Provides an interface for users to:
- * - Input sample frame data (text or hex)
- * - Execute the parser function
- * - View the parsed output in a table
- * - Test multiple frames sequentially
+ * @brief Dialog for exercising a frame parser script against sample input.
  */
 class FrameParserTestDialog : public QDialog {
   Q_OBJECT

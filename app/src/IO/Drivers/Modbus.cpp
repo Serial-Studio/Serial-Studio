@@ -45,11 +45,6 @@
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructor function
- *
- * Initializes the Modbus driver with default settings.
- */
 IO::Drivers::Modbus::Modbus()
   : m_pollTimer(new QTimer(this))
   , m_device(nullptr)
@@ -137,9 +132,6 @@ IO::Drivers::Modbus::Modbus()
           &IO::Drivers::Modbus::configurationChanged);
 }
 
-/**
- * @brief Destructor — releases all Modbus resources without invoking virtual functions.
- */
 IO::Drivers::Modbus::~Modbus()
 {
   doClose();
@@ -151,8 +143,6 @@ IO::Drivers::Modbus::~Modbus()
 
 /**
  * @brief Closes the current Modbus connection.
- *
- * Delegates resource release to doClose() and emits state-change signals.
  */
 void IO::Drivers::Modbus::close()
 {
@@ -164,9 +154,6 @@ void IO::Drivers::Modbus::close()
 
 /**
  * @brief Non-virtual cleanup implementation shared by close() and ~Modbus().
- *
- * Stops the poll timer, cancels any pending reply, and disconnects/deletes
- * the device.  Safe to call when all pointers are null.
  */
 void IO::Drivers::Modbus::doClose()
 {
@@ -190,9 +177,6 @@ void IO::Drivers::Modbus::doClose()
   }
 }
 
-/**
- * @brief Returns true if a Modbus connection is currently open
- */
 bool IO::Drivers::Modbus::isOpen() const noexcept
 {
   if (m_device)
@@ -201,25 +185,18 @@ bool IO::Drivers::Modbus::isOpen() const noexcept
   return false;
 }
 
-/**
- * @brief Returns true if the current Modbus device is readable
- */
 bool IO::Drivers::Modbus::isReadable() const noexcept
 {
   return isOpen();
 }
 
-/**
- * @brief Returns true if the current Modbus device is writable
- */
 bool IO::Drivers::Modbus::isWritable() const noexcept
 {
   return isOpen();
 }
 
 /**
- * @brief Returns true if the user has selected appropriate controls & options
- *        to connect to a Modbus device
+ * @brief Returns true if the user has selected appropriate controls & options to connect to a Modbus device.
  */
 bool IO::Drivers::Modbus::configurationOk() const noexcept
 {
@@ -233,15 +210,7 @@ bool IO::Drivers::Modbus::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes data to the Modbus device
- *
- * The input data is expected to be in one of two formats:
- * - 4 bytes: [addr_hi, addr_lo, value_hi, value_lo] — single register write
- * - 6 bytes: [addr_hi, addr_lo, r1_hi, r1_lo, r2_hi, r2_lo] — two-register
- *   write (e.g. 32-bit IEEE-754 float across consecutive registers)
- *
- * @param data The data to write.
- * @return Number of bytes successfully written.
+ * @brief Writes a single- or double-register holding write to the Modbus device.
  */
 qint64 IO::Drivers::Modbus::write(const QByteArray& data)
 {
@@ -274,35 +243,7 @@ qint64 IO::Drivers::Modbus::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens the Modbus device with the given mode
- *
- * Establishes connection to Modbus device (RTU or TCP) with comprehensive
- * error handling and validation:
- *
- * For Modbus RTU:
- * - Validates serial port selection and availability
- * - Configures serial parameters (baud, parity, data/stop bits)
- * - Creates QModbusRtuSerialClient
- *
- * For Modbus TCP:
- * - Validates host address and port
- * - Creates QModbusTcpClient
- * - Initiates asynchronous connection
- *
- * Safety features:
- * - Closes existing connection before opening new one
- * - Validates all parameters before creating device
- * - Sets timeout and retry parameters
- * - Connects state change and error signals
- * - Starts polling timer only after successful connection
- * - Emits configurationChanged() to update UI
- *
- * @param mode The open mode (ReadOnly or ReadWrite) - currently unused
- * @return True if connection initiated successfully, false on error
- *
- * @note For TCP connections, true return means connection initiated,
- *       not necessarily completed. Use onStateChanged() to detect
- *       when connection actually completes.
+ * @brief Opens the Modbus device (RTU or TCP) with the given mode.
  */
 bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
 {
@@ -785,9 +726,6 @@ QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
 
 /**
  * @brief Generates a Serial Studio project from the configured register groups.
- *
- * Follows the DBC importer pattern: builds a complete project JSON, writes to a
- * temporary file, loads it into ProjectModel, then prompts the user to save.
  */
 void IO::Drivers::Modbus::generateProject()
 {
@@ -844,9 +782,6 @@ void IO::Drivers::Modbus::generateProject()
 
 /**
  * @brief Assembles the complete project JSON object.
- *
- * Creates a project with a single Modbus source, groups derived from the
- * configured register groups, and an auto-generated JavaScript frame parser.
  */
 QJsonObject IO::Drivers::Modbus::buildProject() const
 {
@@ -940,14 +875,6 @@ QJsonObject IO::Drivers::Modbus::buildProject() const
 
 /**
  * @brief Generates a JavaScript frame parser for the configured register groups.
- *
- * The Modbus driver emits one frame per register group in deterministic
- * sequential order. Each frame has a 3-byte header [slaveAddr, funcCode,
- * byteCount] followed by data. The parser uses a cycling counter to track
- * which group produced the current frame.
- *
- * For holding/input registers: data is 2 bytes per register (big-endian).
- * For coils/discrete inputs: data is bit-packed (LSB-first).
  */
 QString IO::Drivers::Modbus::buildFrameParser() const
 {
@@ -1135,18 +1062,7 @@ void IO::Drivers::Modbus::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Polls Modbus registers at the configured interval
- *
- * Reads holding registers and emits the data as a byte array compatible
- * with Serial Studio's frame parser.
- *
- * This function implements robust error handling:
- * - Checks if device is connected before attempting read
- * - Prevents overlapping requests by tracking pending replies
- * - Uses Qt::UniqueConnection to prevent duplicate signal connections
- * - Handles both synchronous and asynchronous reply completion
- *
- * @note This is called periodically by m_pollTimer
+ * @brief Polls Modbus registers at the configured interval.
  */
 void IO::Drivers::Modbus::pollRegisters()
 {
@@ -1167,7 +1083,7 @@ void IO::Drivers::Modbus::pollRegisters()
 }
 
 /**
- * @brief Polls the next register group in multi-group mode
+ * @brief Polls the next register group in multi-group mode.
  */
 void IO::Drivers::Modbus::pollNextGroup()
 {
@@ -1217,25 +1133,7 @@ void IO::Drivers::Modbus::pollNextGroup()
 }
 
 /**
- * @brief Handles completed Modbus read operations
- *
- * Converts Modbus register values to a byte array format compatible
- * with Serial Studio's JavaScript frame parser.
- *
- * Data format emitted:
- * - Byte 0: Slave address
- * - Byte 1: Function code (0x03 for holding registers)
- * - Byte 2: Byte count (register_count * 2)
- * - Bytes 3+: Register values (16-bit big-endian)
- *
- * Error handling:
- * - Validates reply pointer before use
- * - Checks for Modbus protocol errors
- * - Validates data unit before accessing values
- * - Safely deletes reply object
- * - Clears m_lastReply reference
- *
- * @note This slot is connected to QModbusReply::finished signal
+ * @brief Handles completed Modbus read operations and publishes the result as RTU-format bytes.
  */
 void IO::Drivers::Modbus::onReadReady()
 {
@@ -1328,7 +1226,7 @@ void IO::Drivers::Modbus::onReadReady()
       }
     }
 
-    Q_EMIT dataReceived(makeByteArray(std::move(data)));
+    publishReceivedData(std::move(data));
   }
 
   catch (...) {
@@ -1343,31 +1241,7 @@ void IO::Drivers::Modbus::onReadReady()
 }
 
 /**
- * @brief Handles Modbus device state changes
- *
- * Called when the Modbus device transitions between states:
- * - UnconnectedState: Device is not connected
- * - ConnectingState: Connection attempt in progress (TCP)
- * - ConnectedState: Device successfully connected
- * - ClosingState: Connection being closed
- *
- * ## Critical for Async Connections
- * For Modbus TCP, the connection is asynchronous:
- * 1. open() calls connectDevice() - returns true immediately
- * 2. Device state is Connecting
- * 3. Eventually transitions to Connected
- * 4. This handler is called with state=Connected
- * 5. We start the poll timer NOW (when actually connected)
- * 6. Emit configurationChanged() to update UI
- *
- * For Modbus RTU, connection is synchronous so the poll timer
- * is already started in open().
- *
- * @param state New device state
- *
- * @note Emits configurationChanged() which triggers Manager to
- *       re-query isOpen() and update the connected status in UI
- * @note Starts poll timer when connection completes (TCP only)
+ * @brief Handles Modbus device state changes by starting/stopping the poll timer.
  */
 void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
 {
@@ -1388,21 +1262,7 @@ void IO::Drivers::Modbus::onStateChanged(QModbusDevice::State state)
 }
 
 /**
- * @brief Handles Modbus device errors
- *
- * Called when Modbus protocol or communication errors occur:
- * - Connection failures
- * - Read/write timeouts
- * - Protocol violations
- * - Device disconnections
- *
- * Shows a message box with descriptive error message to inform user
- * of the problem.
- *
- * @param error The error code from QModbusDevice::Error enum
- *
- * @note Does not automatically disconnect - device may recover
- *       from transient errors automatically
+ * @brief Handles Modbus device errors by showing a message box.
  */
 void IO::Drivers::Modbus::onErrorOccurred(QModbusDevice::Error error)
 {
@@ -1421,18 +1281,7 @@ void IO::Drivers::Modbus::onErrorOccurred(QModbusDevice::Error error)
 }
 
 /**
- * @brief Refreshes the list of available serial ports
- *
- * Scans for available serial ports and updates the internal lists.
- * Uses the same filtering logic as UART driver:
- * - On macOS, filters out tty.* devices (only accepts cu.* devices)
- * - On Windows, shows port name with description
- * - On other platforms, shows port name only
- *
- * This is called periodically to detect newly connected or disconnected ports.
- *
- * @note The first item is always "Select Port" pointing to /dev/null
- * @note macOS filtering: https://stackoverflow.com/a/37688347
+ * @brief Refreshes the list of available serial ports.
  */
 void IO::Drivers::Modbus::refreshSerialPorts()
 {
@@ -1481,9 +1330,6 @@ void IO::Drivers::Modbus::refreshSerialPorts()
 
 /**
  * @brief Returns cross-platform hardware identifiers for the currently selected serial port.
- *
- * Only active in RTU mode (protocolIndex == 0). For TCP mode, host/port strings are already
- * cross-platform and stored via driverProperties().
  */
 QJsonObject IO::Drivers::Modbus::deviceIdentifier() const
 {
@@ -1535,8 +1381,6 @@ QJsonObject IO::Drivers::Modbus::deviceIdentifier() const
 
 /**
  * @brief Tries to find and select a serial port matching a previously saved identifier.
- *
- * Only active in RTU mode. Uses VID+PID+serial scoring (identical to UART).
  */
 bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
 {
@@ -1615,13 +1459,6 @@ bool IO::Drivers::Modbus::selectByIdentifier(const QJsonObject& id)
 
 /**
  * @brief Returns the Modbus configuration as a flat list of editable properties.
- *
- * Only the properties relevant to the current protocol are included:
- *   - RTU (index 0): serial port, baud rate, parity, data bits, stop bits.
- *   - TCP (index 1): host address, port.
- * Slave address and poll interval are common to both protocols.
- *
- * @return List of DriverProperty descriptors with current values.
  */
 QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
 {
@@ -1734,8 +1571,6 @@ QList<IO::DriverProperty> IO::Drivers::Modbus::driverProperties() const
 
 /**
  * @brief Applies a single Modbus configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& value)
 {

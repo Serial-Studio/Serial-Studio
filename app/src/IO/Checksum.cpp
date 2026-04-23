@@ -44,17 +44,6 @@
 
 /**
  * @brief Copies data in big-endian format to a frame buffer.
- *
- * This function ensures that data is stored in big-endian byte order,
- * regardless of the host machine's native endianness. On little-endian
- * systems, it reverses the byte order before copying.
- *
- * @param frame A pointer to the destination buffer.
- * @param data A pointer to the source data to copy.
- * @param size The number of bytes to copy.
- *
- * @pre `frame` and `data` must not be null.
- * @pre `size` must be greater than 0.
  */
 static void big_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 {
@@ -75,17 +64,6 @@ static void big_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 
 /**
  * @brief Copies data in little-endian format to a frame buffer.
- *
- * This function ensures that data is stored in little-endian byte order,
- * regardless of the host machine's native endianness. On big-endian
- * systems, it reverses the byte order before copying.
- *
- * @param frame A pointer to the destination buffer.
- * @param data A pointer to the source data to copy.
- * @param size The number of bytes to copy.
- *
- * @pre `frame` and `data` must not be null.
- * @pre `size` must be greater than 0.
  */
 static void little_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 {
@@ -110,17 +88,6 @@ static void little_endian_memcpy(uint8_t* frame, const void* data, size_t size)
 
 /**
  * @brief Computes an 8-bit XOR checksum.
- *
- * XORs all bytes in the input data. Useful for simple integrity checks in
- * lightweight protocols.
- *
- * **Performance:** O(n) where n = length, highly optimizable by compiler
- *
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed 8-bit XOR checksum
  */
 static constexpr uint8_t xor8(const char* data, const int length) noexcept
 {
@@ -133,16 +100,6 @@ static constexpr uint8_t xor8(const char* data, const int length) noexcept
 
 /**
  * @brief Computes an 8-bit CRC (CRC-8) using polynomial 0x31.
- *
- * Common in SMBus and lightweight communication protocols.
- *
- * **Algorithm:** CRC-8-SAE-J1850 variant
- * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed 8-bit CRC checksum
  */
 static constexpr uint8_t crc8(const char* data, const int length) noexcept
 {
@@ -160,15 +117,6 @@ static constexpr uint8_t crc8(const char* data, const int length) noexcept
 
 /**
  * @brief Computes an additive modulo-256 checksum.
- *
- * Sums all bytes in the input and returns the result modulo 256.
- *
- * **Performance:** O(n) where n = length (simple accumulation)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed 8-bit additive checksum
  */
 static constexpr uint8_t mod256(const char* data, const int length) noexcept
 {
@@ -180,15 +128,6 @@ static constexpr uint8_t mod256(const char* data, const int length) noexcept
 
 /**
  * @brief Computes a 16-bit CRC using a custom bitwise algorithm.
- *
- * This is not a standard CRC-16 variant. Rename if needed for clarity.
- *
- * **Performance:** O(n) where n = length (optimized bit manipulation)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed 16-bit CRC checksum
  */
 static constexpr uint16_t crc16(const char* data, const int length) noexcept
 {
@@ -206,17 +145,6 @@ static constexpr uint16_t crc16(const char* data, const int length) noexcept
 
 /**
  * @brief Computes a 32-bit CRC (CRC-32) using polynomial 0xEDB88320.
- *
- * Common in Ethernet, ZIP, PNG, and other file/integrity systems.
- *
- * **Algorithm:** CRC-32 (IEEE 802.3, used in Ethernet, ZIP, PNG)
- * **Polynomial:** 0x04C11DB7 (normal) / 0xEDB88320 (reflected)
- * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed 32-bit CRC checksum
  */
 static constexpr uint32_t crc32(const char* data, const int length) noexcept
 {
@@ -236,17 +164,6 @@ static constexpr uint32_t crc32(const char* data, const int length) noexcept
 
 /**
  * @brief Computes the Adler-32 checksum of the input data.
- *
- * Fast checksum algorithm defined in RFC 1950 (used in zlib).
- *
- * **Algorithm:** Adler-32 (faster than CRC-32, weaker error detection)
- * **Modulus:** 65521 (largest prime less than 2^16)
- * **Performance:** O(n) where n = length (two sums with modulo)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed 32-bit Adler-32 checksum
  */
 static constexpr uint32_t adler32(const char* data, const int length) noexcept
 {
@@ -263,17 +180,6 @@ static constexpr uint32_t adler32(const char* data, const int length) noexcept
 
 /**
  * @brief Computes a Fletcher-16 checksum.
- *
- * Offers stronger error detection than simple checksums, with low overhead.
- *
- * **Algorithm:** Fletcher-16 (similar to Adler but different modulus)
- * **Modulus:** 255
- * **Performance:** O(n) where n = length (two sums with modulo)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed Fletcher-16 checksum
  */
 static constexpr uint16_t fletcher16(const char* data, const int length) noexcept
 {
@@ -289,19 +195,7 @@ static constexpr uint16_t fletcher16(const char* data, const int length) noexcep
 }
 
 /**
- * @brief Computes a 16-bit CRC (CRC-16-MODBUS) using polynomial 0x8005
- * (reflected: 0xA001).
- *
- * Standard in industrial MODBUS RTU communications.
- *
- * **Algorithm:** CRC-16-MODBUS (reflected polynomial)
- * **Polynomial:** 0x8005 (normal) / 0xA001 (reflected)
- * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed 16-bit CRC-MODBUS checksum
+ * @brief Computes a 16-bit CRC (CRC-16-MODBUS) using polynomial 0x8005 (reflected: 0xA001).
  */
 static constexpr uint16_t crc16_modbus(const char* data, const int length) noexcept
 {
@@ -320,20 +214,7 @@ static constexpr uint16_t crc16_modbus(const char* data, const int length) noexc
 }
 
 /**
- * @brief Computes a 16-bit CRC (CRC-CCITT) using polynomial 0x1021 and initial
- * value 0x0000.
- *
- * Used in XModem, HDLC, and general-purpose data integrity.
- *
- * **Algorithm:** CRC-16-CCITT (also known as CRC-16-KERMIT)
- * **Polynomial:** 0x1021
- * **Init Value:** 0x0000 (XModem variant)
- * **Performance:** O(n × 8) where n = length (bit-by-bit computation)
- * **Thread Safety:** Pure function - safe for concurrent calls
- *
- * @param data Pointer to the input data array
- * @param length Length of the input data array
- * @return The computed CRC-16-CCITT checksum
+ * @brief Computes a 16-bit CRC (CRC-CCITT) using polynomial 0x1021 and initial value 0x0000.
  */
 static constexpr uint16_t crc16_ccitt(const char* data, const int length) noexcept
 {
@@ -387,12 +268,6 @@ static QByteArray packU32BE(uint32_t v)
 
 /**
  * @brief Returns a list of supported checksum and CRC algorithm names.
- *
- * The list is derived directly from the internal checksum function map.
- * It reflects all available algorithms that can be passed to IO::checksum().
- *
- * @return A reference to a static QStringList containing supported algorithm
- * names.
  */
 const QStringList& IO::availableChecksums()
 {
@@ -407,18 +282,7 @@ const QStringList& IO::availableChecksums()
 }
 
 /**
- * @brief Returns a static map of supported checksum algorithm names to their
- *        implementations.
- *
- * The map keys are canonical algorithm names (e.g., "CRC-16", "Adler-32") and
- * the values are function objects that compute the corresponding checksum over
- * raw input data. Each function returns the checksum as a QByteArray containing
- * the raw bytes (1, 2, or 4 bytes depending on the algorithm).
- *
- * This map is initialized once and reused for all checksum dispatch operations.
- *
- * @return A reference to the static QMap of checksum algorithm names to
- *         functions.
+ * @brief Returns a static map of supported checksum algorithm names to their implementations.
  */
 const QMap<QString, IO::ChecksumFunc>& IO::checksumFunctionMap()
 {
@@ -426,18 +290,15 @@ const QMap<QString, IO::ChecksumFunc>& IO::checksumFunctionMap()
   static const QMap<QString, IO::ChecksumFunc> map = {
     {QLatin1String(""),            [](const char*, int) { return QByteArray(); }},
 
-    // 8-bit checksums
     {QStringLiteral("XOR-8"),    [](const char* d, int l) { return packByte(xor8(d, l)); }},
     {QStringLiteral("MOD-256"),  [](const char* d, int l) { return packByte(mod256(d, l)); }},
     {QStringLiteral("CRC-8"),    [](const char* d, int l) { return packByte(crc8(d, l)); }},
 
-    // 16-bit checksums
     {QStringLiteral("CRC-16"),        [](const char* d, int l) { return packU16BE(crc16(d, l)); }},
     {QStringLiteral("CRC-16-MODBUS"), [](const char* d, int l) { return packU16LE(crc16_modbus(d, l)); }},
     {QStringLiteral("CRC-16-CCITT"),  [](const char* d, int l) { return packU16BE(crc16_ccitt(d, l)); }},
     {QStringLiteral("Fletcher-16"),   [](const char* d, int l) { return packU16BE(fletcher16(d, l)); }},
 
-    // 32-bit checksums
     {QStringLiteral("CRC-32"),   [](const char* d, int l) { return packU32BE(crc32(d, l)); }},
     {QStringLiteral("Adler-32"), [](const char* d, int l) { return packU32BE(adler32(d, l)); }},
   };
@@ -447,20 +308,7 @@ const QMap<QString, IO::ChecksumFunc>& IO::checksumFunctionMap()
 }
 
 /**
- * @brief Computes a checksum or CRC value for the given data using the
- * specified algorithm.
- *
- * This function supports multiple standard algorithms including CRC-8,
- * CRC-16 (various variants), CRC-32, XOR-8, MOD-256, Adler-32, and Fletcher-16.
- *
- * The algorithm name must match exactly one of the entries returned by
- * IO::availableChecksums(). The comparison is case-sensitive.
- *
- * @param name Name of the checksum or CRC algorithm.
- * @param data Input data buffer to be checksummed.
- *
- * @return Raw checksum result as a QByteArray, returns an empty QByteArray if
- *         the algorithm is unknown.
+ * @brief Computes a checksum or CRC value for the given data using the specified algorithm.
  */
 QByteArray IO::checksum(const QString& name, const QByteArray& data)
 {

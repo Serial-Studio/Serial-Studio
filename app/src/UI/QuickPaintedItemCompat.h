@@ -23,28 +23,11 @@
 
 #include <QtGlobal>
 
-//--------------------------------------------------------------------------------------------------
-// Qt Canvas Painter availability check
-//--------------------------------------------------------------------------------------------------
-
 #if QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
 #  define SS_HAS_CANVAS_PAINTER 1
 #else
 #  define SS_HAS_CANVAS_PAINTER 0
 #endif
-
-//--------------------------------------------------------------------------------------------------
-// Image-bridge base class
-//--------------------------------------------------------------------------------------------------
-//
-// On Qt >= 6.11, inherits QCanvasPainterItem and provides a renderer that
-// calls the subclass paint(QPainter*) onto an offscreen QImage, then blits
-// it via QCanvasPainter::drawImage(). Existing QPainter code works unchanged
-// while compositing is GPU-accelerated.
-//
-// On older Qt, this is just QQuickPaintedItem.
-//
-//--------------------------------------------------------------------------------------------------
 
 #if SS_HAS_CANVAS_PAINTER
 
@@ -54,12 +37,7 @@
 #  include <QPainter>
 
 /**
- * @class QuickPaintedItemCompat
  * @brief GPU-accelerated drop-in replacement for QQuickPaintedItem.
- *
- * Subclasses override paint(QPainter*) exactly as they would with
- * QQuickPaintedItem. The image-bridge renderer takes care of routing
- * the QPainter output through QCanvasPainter for GPU compositing.
  */
 class QuickPaintedItemCompat : public QCanvasPainterItem {
   Q_OBJECT
@@ -85,7 +63,6 @@ private:
 };
 
 /**
- * @class QuickPaintedItemCompatRenderer
  * @brief Renders QPainter output through QCanvasPainter via an offscreen image.
  */
 class QuickPaintedItemCompatRenderer : public QCanvasPainterItemRenderer {
@@ -107,9 +84,6 @@ private:
 
 #  include <QQuickPaintedItem>
 
-/**
- * @brief On older Qt versions, QuickPaintedItemCompat is QQuickPaintedItem.
- */
 using QuickPaintedItemCompat = QQuickPaintedItem;
 
 #endif  // SS_HAS_CANVAS_PAINTER

@@ -36,9 +36,6 @@ class Export;
 
 /**
  * @brief Worker object that performs CSV file I/O on a background thread.
- *
- * This class owns all file-related resources and performs disk writes
- * entirely on a dedicated worker thread to avoid blocking the main UI thread.
  */
 class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   Q_OBJECT
@@ -67,14 +64,6 @@ private:
 
 /**
  * @brief Handles CSV export of incoming data frames.
- *
- * The Export class collects incoming JSON frames tagged with a timestamp,
- * writes them asynchronously to a CSV file, and manages output buffering
- * and formatting.
- *
- * This class is implemented as a singleton and runs a background thread
- * to offload file I/O operations. It supports enabling/disabling export
- * dynamically and integrates with external modules (IO manager, MQTT, etc.).
  */
 class Export : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
   // clang-format off

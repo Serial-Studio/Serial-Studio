@@ -21,40 +21,15 @@
 namespace API {
 namespace GRPC {
 
-/**
- * @brief Conversion utilities between Qt/Serial Studio types and protobuf.
- */
 namespace ConversionUtils {
 
-/**
- * @brief Converts a Frame directly to a protobuf Struct (fast path).
- *
- * Bypasses the intermediate QJsonObject serialization for maximum
- * throughput on the hotpath. Only includes the fields that plugins
- * and streaming clients need.
- */
 [[nodiscard]] google::protobuf::Struct frameToProtoStruct(const DataModel::Frame& frame);
 
 constexpr int kMaxConversionDepth = 64;
 
-/**
- * @brief Converts a QJsonObject to a google.protobuf.Struct.
- */
 [[nodiscard]] google::protobuf::Struct toProtoStruct(const QJsonObject& json, int depth = 0);
-
-/**
- * @brief Converts a QJsonValue to a google.protobuf.Value.
- */
 [[nodiscard]] google::protobuf::Value toProtoValue(const QJsonValue& json, int depth = 0);
-
-/**
- * @brief Converts a google.protobuf.Struct to a QJsonObject.
- */
 [[nodiscard]] QJsonObject toQJsonObject(const google::protobuf::Struct& proto, int depth = 0);
-
-/**
- * @brief Converts a google.protobuf.Value to a QJsonValue.
- */
 [[nodiscard]] QJsonValue toQJsonValue(const google::protobuf::Value& proto, int depth = 0);
 
 }  // namespace ConversionUtils

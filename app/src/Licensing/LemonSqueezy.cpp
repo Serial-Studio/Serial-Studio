@@ -39,9 +39,6 @@ static constexpr quint64 PRDCT_ID = 496241;
 
 /**
  * @brief Derives a feature tier from the Lemon Squeezy variant name.
- *
- * The variant name typically has the form "Pro - Monthly", "Enterprise -
- * Yearly", etc.  We match the leading word to a tier level.
  */
 static Licensing::FeatureTier tierFromVariant(const QString& variant)
 {
@@ -69,9 +66,6 @@ static Licensing::FeatureTier tierFromVariant(const QString& variant)
 
 /**
  * @brief Constructor for the LemonSqueezy licensing handler.
- *
- * Initializes encryption with a machine-specific key and loads
- * any previously cached license state from settings.
  */
 Licensing::LemonSqueezy::LemonSqueezy()
   : m_busy(false)
@@ -92,7 +86,6 @@ Licensing::LemonSqueezy::LemonSqueezy()
 
 /**
  * @brief Provides access to the LemonSqueezy singleton instance.
- * @return Static instance of the licensing manager.
  */
 Licensing::LemonSqueezy& Licensing::LemonSqueezy::instance()
 {
@@ -106,9 +99,6 @@ Licensing::LemonSqueezy& Licensing::LemonSqueezy::instance()
 
 /**
  * @brief Returns whether a licensing operation is currently running.
- *
- * Useful to disable UI elements while the API is validating,
- * activating, or deactivating a license key.
  */
 bool Licensing::LemonSqueezy::busy() const
 {
@@ -117,8 +107,6 @@ bool Licensing::LemonSqueezy::busy() const
 
 /**
  * @brief Returns the total number of allowed device activations.
- *
- * A value of -1 indicates unlimited activations (e.g., Elite plan).
  */
 int Licensing::LemonSqueezy::seatLimit() const
 {
@@ -127,8 +115,6 @@ int Licensing::LemonSqueezy::seatLimit() const
 
 /**
  * @brief Returns the number of devices currently activated.
- *
- * This is the number of license instances used on Lemon Squeezy.
  */
 int Licensing::LemonSqueezy::seatUsage() const
 {
@@ -137,8 +123,6 @@ int Licensing::LemonSqueezy::seatUsage() const
 
 /**
  * @brief Returns true if the current license has been successfully activated.
- *
- * This flag is cached from the last successful validation or activation call.
  */
 bool Licensing::LemonSqueezy::isActivated() const
 {
@@ -147,9 +131,6 @@ bool Licensing::LemonSqueezy::isActivated() const
 
 /**
  * @brief Checks if the stored license key is valid in format.
- *
- * Does not verify against the server — only checks local formatting.
- * Typically, a valid Lemon Squeezy license key is 36 characters long (UUID).
  */
 bool Licensing::LemonSqueezy::canActivate() const
 {
@@ -157,9 +138,7 @@ bool Licensing::LemonSqueezy::canActivate() const
 }
 
 /**
- * @brief Returns the application name, which is constructed based on the
- *        payment plan selected by the user (e.g. "Serial Studio Pro" or
- *        "Serial Studio Enterprise").
+ * @brief Returns the application name.
  */
 const QString& Licensing::LemonSqueezy::appName() const
 {
@@ -168,8 +147,6 @@ const QString& Licensing::LemonSqueezy::appName() const
 
 /**
  * @brief Returns the license key currently stored.
- *
- * This key is sent when activating or validating the license.
  */
 const QString& Licensing::LemonSqueezy::license() const
 {
@@ -178,8 +155,6 @@ const QString& Licensing::LemonSqueezy::license() const
 
 /**
  * @brief Returns the current instance ID from Lemon Squeezy.
- *
- * This is a UUID assigned by Lemon Squeezy when a license is activated.
  */
 const QString& Licensing::LemonSqueezy::instanceId() const
 {
@@ -188,9 +163,6 @@ const QString& Licensing::LemonSqueezy::instanceId() const
 
 /**
  * @brief Returns the variant name of the purchased license.
- *
- * Examples: "Pro Monthly", "Enterprise Yearly", etc.
- * Used to conditionally enable features or UI.
  */
 const QString& Licensing::LemonSqueezy::variantName() const
 {
@@ -199,8 +171,6 @@ const QString& Licensing::LemonSqueezy::variantName() const
 
 /**
  * @brief Returns the machine-specific instance name.
- *
- * Typically based on the device's hashed hardware ID.
  */
 const QString& Licensing::LemonSqueezy::instanceName() const
 {
@@ -209,8 +179,6 @@ const QString& Licensing::LemonSqueezy::instanceName() const
 
 /**
  * @brief Returns the customer name as registered during purchase.
- *
- * Retrieved from Lemon Squeezy during activation/validation.
  */
 const QString& Licensing::LemonSqueezy::customerName() const
 {
@@ -219,8 +187,6 @@ const QString& Licensing::LemonSqueezy::customerName() const
 
 /**
  * @brief Returns the customer's email address tied to the license.
- *
- * Useful for showing account info or customer support context.
  */
 const QString& Licensing::LemonSqueezy::customerEmail() const
 {
@@ -229,8 +195,6 @@ const QString& Licensing::LemonSqueezy::customerEmail() const
 
 /**
  * @brief Returns the full licensing metadata received from the server.
- *
- * This includes product info, store ID, variant, customer data, etc.
  */
 const QJsonObject& Licensing::LemonSqueezy::licensingData() const
 {
@@ -253,9 +217,6 @@ void Licensing::LemonSqueezy::buy()
 
 /**
  * @brief Activates the license key using the Lemon Squeezy API.
- *
- * Sends the machine ID and license key to the API. On success,
- * a new instance is registered and validated.
  */
 void Licensing::LemonSqueezy::activate()
 {
@@ -295,9 +256,6 @@ void Licensing::LemonSqueezy::activate()
 
 /**
  * @brief Validates the current license key and instance ID.
- *
- * Checks with the Lemon Squeezy API whether the license is still valid,
- * not expired, and assigned to this machine.
  */
 void Licensing::LemonSqueezy::validate()
 {
@@ -339,8 +297,6 @@ void Licensing::LemonSqueezy::validate()
 
 /**
  * @brief Deactivates the license key instance on this machine.
- *
- * Frees up one activation seat on Lemon Squeezy. Useful when switching devices.
  */
 void Licensing::LemonSqueezy::deactivate()
 {
@@ -382,8 +338,6 @@ void Licensing::LemonSqueezy::deactivate()
 
 /**
  * @brief Opens the Lemon Squeezy customer portal in the default browser.
- *
- * The portal allows the user to manage licenses, billing, and view orders.
  */
 void Licensing::LemonSqueezy::openCustomerPortal()
 {
@@ -393,10 +347,6 @@ void Licensing::LemonSqueezy::openCustomerPortal()
 
 /**
  * @brief Updates the license key stored locally.
- *
- * This does not trigger activation — it's typically followed by a call
- * to validate() or activate(). Emits licenseChanged().
- *
  * @param license New license key to store (UUID format expected).
  */
 void Licensing::LemonSqueezy::setLicense(const QString& license)
@@ -415,9 +365,6 @@ void Licensing::LemonSqueezy::setLicense(const QString& license)
 
 /**
  * @brief Loads and decrypts cached licensing data from QSettings.
- *
- * If available, decrypts and parses the stored license key and metadata.
- * Automatically re-validates the data using readValidationResponse().
  */
 void Licensing::LemonSqueezy::readSettings()
 {
@@ -453,9 +400,6 @@ void Licensing::LemonSqueezy::readSettings()
 
 /**
  * @brief Encrypts and writes the current license key and metadata to QSettings.
- *
- * This stores the license key and API response securely using SimpleCrypt.
- * If no license or metadata is valid, clears the stored data.
  */
 void Licensing::LemonSqueezy::writeSettings()
 {
@@ -483,10 +427,6 @@ void Licensing::LemonSqueezy::writeSettings()
 /**
  * @brief Clears all in-memory licensing state and optionally the stored
  *        license key.
- *
- * Resets activation status, instance info, and cached metadata. Emits state
- * change signals for any bound UI or reactive logic.
- *
  * @param clearLicense If true, also removes the license key from memory.
  */
 void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
@@ -525,15 +465,6 @@ void Licensing::LemonSqueezy::clearLicenseCache(const bool clearLicense)
 
 /**
  * @brief Processes the response from the license validation request.
- *
- * Verifies that the license is valid and that it corresponds to the computer
- * executing Serial Studio.
- *
- * If successful, updates all internal licensing fields and persists the
- * validated state.
- *
- * If validation fails, resets cached license data and notifies the user.
- *
  * @param data Raw JSON payload returned by Lemon Squeezy API.
  */
 void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
@@ -738,14 +669,6 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
 
 /**
  * @brief Processes the response from the license activation request.
- *
- * Checks that activation succeeded, the license belongs to the correct
- * store/product, and that it's tied to the device executing Serial Studio.
- *
- * If valid, triggers a follow-up validation to finalize activation.
- *
- * Any mismatch or error results in user notification and local cleanup.
- *
  * @param data Raw JSON payload returned by Lemon Squeezy API.
  */
 void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
@@ -861,12 +784,6 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
 
 /**
  * @brief Processes the response from the license deactivation request.
- *
- * Ensures the license was successfully deactivated on the server,
- * and then clears all local activation data.
- *
- * Displays a final message confirming the deactivation to the user.
- *
  * @param data Raw JSON payload returned by Lemon Squeezy API.
  */
 void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)

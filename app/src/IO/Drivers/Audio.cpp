@@ -22,6 +22,8 @@
 
 #include "IO/Drivers/Audio.h"
 
+#include <algorithm>
+#include <chrono>
 #include <QtEndian>
 
 #include "IO/ConnectionManager.h"
@@ -34,13 +36,6 @@
 
 /**
  * @brief Compares two device lists to determine if they differ.
- *
- * This function checks whether two lists of `ma_device_info` entries are
- * different by comparing their sizes, device IDs, and device names.
- *
- * @param a First list of devices to compare.
- * @param b Second list of devices to compare.
- * @return true if the lists differ (in size, ID, or name); false otherwise.
  */
 static bool deviceListsDiffer(const QVector<ma_device_info>& a, const QVector<ma_device_info>& b)
 {
@@ -62,23 +57,6 @@ static bool deviceListsDiffer(const QVector<ma_device_info>& a, const QVector<ma
 
 /**
  * @brief Extracts audio device capabilities using MiniAudio's backend context.
- *
- * This function queries the backend via `ma_context_get_device_info()` to
- * retrieve a fully populated `ma_device_info` structure for the specified
- * device. It parses the `nativeDataFormats` array to extract supported sample
- * formats, sample rates, and channel counts. Wildcard entries (e.g., 0 sample
- * rate or channel count) are expanded using common defaults.
- *
- * If the backend fails to provide detailed format information, this function
- * falls back to a conservative set of standard sample formats, sample rates,
- * and channels.
- *
- * @param context The MiniAudio context used to query the device.
- * @param info    The basic `ma_device_info` from enumeration.
- * @param type    The device type (capture, playback or duplex)
- *
- * @return A populated `AudioDeviceInfo` structure listing supported formats,
- *         sample rates, and channel counts.
  */
 static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* context,
                                                                const ma_device_info& info,
@@ -142,28 +120,7 @@ static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* conte
 }
 
 /**
- * @brief Checks for changes in the audio device list and updates it if
- * necessary.
- *
- * This function compares the current device list with a newly detected list.
- * If no device is open, it updates the list and associated capabilities
- * immediately. If a device is open, it checks whether the currently selected
- * device is still available. If not, it triggers a disconnection and updates
- * internal state accordingly.
- *
- * @param currentList The current list of available devices (mutable).
- * @param newList The newly detected list of devices.
- * @param selectedIndex The index of the currently selected/active device.
- * @param isOpen Whether a device is currently open or in use.
- * @param settingsChanged Callback invoked if the settings/UI need to be
- *                        refreshed.
- * @param configurationChanged Callback invoked if the internal configuration
- *                             changed.
- * @param capabilities Mutable list of parsed capabilities for each device in
- *                     the list.
- *
- * @return @c true if the device list or configuration changed, @c false
- * otherwise.
+ * @brief Checks for changes in the audio device list and updates it if necessary.
  */
 static bool checkAndUpdateDeviceList(ma_context* context,
                                      ma_device_type type,
@@ -223,23 +180,6 @@ static bool checkAndUpdateDeviceList(ma_context* context,
 // Constructor, destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs and initializes the audio driver interface.
- *
- * This constructor sets up the MiniAudio backend depending on the host OS
- * (WASAPI on Windows, CoreAudio on macOS, ALSA on Linux). It initializes the
- * MiniAudio context and duplex device configuration, builds internal mappings
- * for UI-friendly labels to native audio parameters, and syncs audio settings
- * to match the configured selections.
- *
- * It also sets up recurring tasks such as:
- * - Refreshing the audio device list every second.
- * - Updating internal translation-sensitive lists when the application
- *   language changes.
- *
- * If MiniAudio fails to initialize, the system logs a warning and audio
- * functionality will be disabled until fixed.
- */
 IO::Drivers::Audio::Audio()
   : m_init(false)
   , m_isOpen(false)
@@ -304,12 +244,6 @@ IO::Drivers::Audio::Audio()
           &IO::Drivers::Audio::generateLists);
 }
 
-/**
- * @brief Destructor for the Audio driver.
- *
- * Shuts down any active audio device and deinitializes the MiniAudio context
- * if it was successfully initialized.
- */
 IO::Drivers::Audio::~Audio()
 {
   closeDevice();
@@ -323,16 +257,6 @@ IO::Drivers::Audio::~Audio()
 
 /**
  * @brief Closes the audio device and releases all associated resources.
- *
- * This function:
- * - Uninitializes the MiniAudio device
- * - Stops and deletes the worker timer used for input processing
- * - Gracefully shuts down the input worker thread
- * - Clears both the input buffer and output queue (thread-safe)
- * - Updates the internal state to reflect that the device is closed
- *
- * It ensures proper teardown of all audio-related resources to avoid memory
- * leaks or thread contention issues.
  */
 void IO::Drivers::Audio::closeDevice()
 {
@@ -370,30 +294,18 @@ void IO::Drivers::Audio::closeDevice()
   m_isOpen = false;
 }
 
-/**
- * @brief Closes the audio subsystem.
- *
- * Delegates to closeDevice() to clean up device and associated resources.
- */
 void IO::Drivers::Audio::close()
 {
   closeDevice();
 }
 
-/**
- * @brief Checks whether the audio device is currently open.
- * @return True if the device is open, false otherwise.
- */
 bool IO::Drivers::Audio::isOpen() const noexcept
 {
   return m_isOpen;
 }
 
 /**
- * @brief Determines if the current audio input configuration is valid and
- *        readable.
- *
- * @return True if input is configured and active, false otherwise.
+ * @brief Determines if the current audio input configuration is valid and readable.
  */
 bool IO::Drivers::Audio::isReadable() const noexcept
 {
@@ -405,10 +317,7 @@ bool IO::Drivers::Audio::isReadable() const noexcept
 }
 
 /**
- * @brief Determines if the current audio output configuration is valid and
- *        writable.
- *
- * @return True if output is configured and active, false otherwise.
+ * @brief Determines if the current audio output configuration is valid and writable.
  */
 bool IO::Drivers::Audio::isWritable() const noexcept
 {
@@ -421,8 +330,6 @@ bool IO::Drivers::Audio::isWritable() const noexcept
 
 /**
  * @brief Validates the currently selected input device configuration.
- * @return True if the selected parameters are within the supported capability
- *              ranges.
  */
 bool IO::Drivers::Audio::configurationOk() const noexcept
 {
@@ -443,9 +350,6 @@ bool IO::Drivers::Audio::configurationOk() const noexcept
 
 /**
  * @brief Writes a CSV-formatted audio frame into the internal output queue.
- *
- * @param data A comma-separated list of channel values (1 per channel).
- * @return Number of bytes written, or 0 if invalid.
  */
 qint64 IO::Drivers::Audio::write(const QByteArray& data)
 {
@@ -549,16 +453,6 @@ qint64 IO::Drivers::Audio::write(const QByteArray& data)
 
 /**
  * @brief Opens the audio I/O device with the current configuration.
- *
- * Initializes and starts a full-duplex MiniAudio device using selected input
- * and output parameters. If the mode includes `ReadOnly` or `WriteOnly`,
- * the capture/playback sections of the device are configured accordingly.
- *
- * This function also starts a dedicated thread and timer to process audio
- * input every 10ms (100 Hz).
- *
- * @param mode QIODevice::OpenMode flags indicating read/write access.
- * @return true if the device was opened successfully, false otherwise.
  */
 bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
 {
@@ -687,15 +581,6 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
 // Sample rate selection
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the currently selected sample rate index.
- *
- * This function retrieves the index of the sample rate currently selected
- * for the input audio device. This is used internally to look up the actual
- * numeric sample rate value from the capabilities list.
- *
- * @return The index of the selected sample rate.
- */
 int IO::Drivers::Audio::selectedSampleRate() const
 {
   return m_selectedSampleRate;
@@ -703,12 +588,6 @@ int IO::Drivers::Audio::selectedSampleRate() const
 
 /**
  * @brief Returns a list of supported input sample rates as strings.
- *
- * This function queries the capabilities of the currently selected input
- * device and returns a list of supported sample rates in human-readable
- * string format. If the input device is not valid, an empty list is returned.
- *
- * @return A QStringList containing the supported sample rates.
  */
 QStringList IO::Drivers::Audio::sampleRates() const
 {
@@ -727,42 +606,16 @@ QStringList IO::Drivers::Audio::sampleRates() const
 // Input device parameters
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the index of the currently selected input device.
- *
- * This function provides access to the internal index representing the
- * selected input audio device from the available list.
- *
- * @return Index of the selected input device.
- */
 int IO::Drivers::Audio::selectedInputDevice() const
 {
   return m_selectedInputDevice;
 }
 
-/**
- * @brief Returns the index of the selected input sample format.
- *
- * The sample format refers to the bit-depth/representation of audio samples
- * (e.g., 16-bit signed, 32-bit float). This index maps into the list of
- * supported formats for the selected input device.
- *
- * @return Index of the selected sample format for the input device.
- */
 int IO::Drivers::Audio::selectedInputSampleFormat() const
 {
   return m_selectedInputSampleFormat;
 }
 
-/**
- * @brief Returns the index of the selected input channel configuration.
- *
- * This refers to how many channels the selected input device is using
- * (e.g., mono, stereo). The returned index corresponds to the supported
- * channel counts list.
- *
- * @return Index of the selected channel configuration for the input device.
- */
 int IO::Drivers::Audio::selectedInputChannelConfiguration() const
 {
   return m_selectedInputChannelConfiguration;
@@ -772,42 +625,16 @@ int IO::Drivers::Audio::selectedInputChannelConfiguration() const
 // Output device parameters
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the index of the currently selected output device.
- *
- * This function retrieves the internal index representing the selected
- * output audio device from the list of available devices.
- *
- * @return Index of the selected output device.
- */
 int IO::Drivers::Audio::selectedOutputDevice() const
 {
   return m_selectedOutputDevice;
 }
 
-/**
- * @brief Returns the index of the selected output sample format.
- *
- * The sample format determines the audio data representation used by the
- * output device (e.g., unsigned 8-bit, signed 16-bit, float 32-bit).
- * The index corresponds to the supported formats for the output device.
- *
- * @return Index of the selected sample format for the output device.
- */
 int IO::Drivers::Audio::selectedOutputSampleFormat() const
 {
   return m_selectedOutputSampleFormat;
 }
 
-/**
- * @brief Returns the index of the selected output channel configuration.
- *
- * This value determines how many channels (e.g., mono, stereo) are used
- * by the output device. The index maps into the list of supported channel
- * configurations for the device.
- *
- * @return Index of the selected output channel configuration.
- */
 int IO::Drivers::Audio::selectedOutputChannelConfiguration() const
 {
   return m_selectedOutputChannelConfiguration;
@@ -819,11 +646,6 @@ int IO::Drivers::Audio::selectedOutputChannelConfiguration() const
 
 /**
  * @brief Returns a list of available input audio devices.
- *
- * Iterates over the internal list of detected input devices and returns
- * their names as a QStringList.
- *
- * @return List of input device names in UTF-8 format.
  */
 QStringList IO::Drivers::Audio::inputDeviceList() const
 {
@@ -836,14 +658,7 @@ QStringList IO::Drivers::Audio::inputDeviceList() const
 }
 
 /**
- * @brief Returns the list of supported sample formats for the selected input
- * device.
- *
- * Formats such as 8-bit unsigned, 16-bit signed, or 32-bit float are included
- * depending on what the selected device supports. Invalid or unknown formats
- * are filtered out.
- *
- * @return Human-readable list of supported sample formats.
+ * @brief Returns the list of supported sample formats for the selected input device.
  */
 QStringList IO::Drivers::Audio::inputSampleFormats() const
 {
@@ -861,11 +676,6 @@ QStringList IO::Drivers::Audio::inputSampleFormats() const
 
 /**
  * @brief Returns the list of supported input channel configurations.
- *
- * Common channel counts like mono or stereo are translated into user-friendly
- * labels. Unknown configurations are labeled as "<N> channels".
- *
- * @return List of supported input channel configurations.
  */
 QStringList IO::Drivers::Audio::inputChannelConfigurations() const
 {
@@ -889,11 +699,6 @@ QStringList IO::Drivers::Audio::inputChannelConfigurations() const
 
 /**
  * @brief Returns a list of available output audio devices.
- *
- * Iterates over the internal list of detected output devices and returns
- * their names in UTF-8 encoding.
- *
- * @return List of output device names.
  */
 QStringList IO::Drivers::Audio::outputDeviceList() const
 {
@@ -906,13 +711,7 @@ QStringList IO::Drivers::Audio::outputDeviceList() const
 }
 
 /**
- * @brief Returns a list of supported sample formats for the selected output
- * device.
- *
- * Converts device-specific format enums into user-friendly format names, like
- * "8-bit Unsigned", "16-bit Signed", or "32-bit Float".
- *
- * @return List of supported output sample formats.
+ * @brief Returns a list of supported sample formats for the selected output device.
  */
 QStringList IO::Drivers::Audio::outputSampleFormats() const
 {
@@ -930,11 +729,6 @@ QStringList IO::Drivers::Audio::outputSampleFormats() const
 
 /**
  * @brief Returns a list of supported output channel configurations.
- *
- * Converts known channel counts into human-readable descriptions (e.g., Mono,
- * Stereo). For unknown configurations, displays "<N> channels".
- *
- * @return List of supported output channel configurations.
  */
 QStringList IO::Drivers::Audio::outputChannelConfigurations() const
 {
@@ -958,12 +752,6 @@ QStringList IO::Drivers::Audio::outputChannelConfigurations() const
 
 /**
  * @brief Sets the selected sample rate index for the input device.
- *
- * This function updates the internal selection index used to determine
- * which sample rate to apply when configuring the input device.
- * If the device is currently open, the change is ignored.
- *
- * @param index Index of the desired sample rate in the list.
  */
 void IO::Drivers::Audio::setSelectedSampleRate(int index)
 {
@@ -983,11 +771,6 @@ void IO::Drivers::Audio::setSelectedSampleRate(int index)
 
 /**
  * @brief Sets the selected input device by index.
- *
- * If the device is open, the change is ignored. This also resets
- * the input sample rate, format, and channel configuration to defaults.
- *
- * @param index Index of the desired input device in the available list.
  */
 void IO::Drivers::Audio::setSelectedInputDevice(int index)
 {
@@ -1008,10 +791,6 @@ void IO::Drivers::Audio::setSelectedInputDevice(int index)
 
 /**
  * @brief Sets the selected sample format index for the input device.
- *
- * Ignores the call if the device is currently open.
- *
- * @param index Index of the desired sample format in the list.
  */
 void IO::Drivers::Audio::setSelectedInputSampleFormat(int index)
 {
@@ -1027,10 +806,6 @@ void IO::Drivers::Audio::setSelectedInputSampleFormat(int index)
 
 /**
  * @brief Sets the selected channel configuration for the input device.
- *
- * Ignores the call if the device is currently open.
- *
- * @param index Index of the desired channel configuration in the list.
  */
 void IO::Drivers::Audio::setSelectedInputChannelConfiguration(int index)
 {
@@ -1050,11 +825,6 @@ void IO::Drivers::Audio::setSelectedInputChannelConfiguration(int index)
 
 /**
  * @brief Sets the selected output device by index.
- *
- * If the audio device is currently open, the function does nothing.
- * Resets output format and channel configuration to defaults.
- *
- * @param index Index of the output device in the device list.
  */
 void IO::Drivers::Audio::setSelectedOutputDevice(int index)
 {
@@ -1074,10 +844,6 @@ void IO::Drivers::Audio::setSelectedOutputDevice(int index)
 
 /**
  * @brief Sets the selected sample format for the output device.
- *
- * Does nothing if the audio device is currently open.
- *
- * @param index Index of the desired format in the output sample formats list.
  */
 void IO::Drivers::Audio::setSelectedOutputSampleFormat(int index)
 {
@@ -1093,10 +859,6 @@ void IO::Drivers::Audio::setSelectedOutputSampleFormat(int index)
 
 /**
  * @brief Sets the selected output channel configuration.
- *
- * Skips update if device is open or index is invalid.
- *
- * @param index Index in the list of available output channel configurations.
  */
 void IO::Drivers::Audio::setSelectedOutputChannelConfiguration(int index)
 {
@@ -1115,13 +877,7 @@ void IO::Drivers::Audio::setSelectedOutputChannelConfiguration(int index)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Populates maps that associate MiniAudio constants with user-friendly
- *        strings.
- *
- * This includes supported sample formats and known channel configurations,
- * used throughout the UI for display purposes.
- *
- * Emits signals to update input and output settings in the UI.
+ * @brief Populates maps that associate MiniAudio constants with user-friendly strings.
  */
 void IO::Drivers::Audio::generateLists()
 {
@@ -1153,16 +909,6 @@ void IO::Drivers::Audio::generateLists()
 
 /**
  * @brief Applies the selected input device configuration.
- *
- * This method checks the validity of the selected input device and its
- * capabilities.
- *
- * It then clamps the selected configuration indices to valid ranges and
- * updates the MiniAudio device config accordingly.
- *
- * Emits the @c configurationChanged() signal after applying the new settings.
- *
- * If capabilities are missing, the method will issue a warning and abort.
  */
 void IO::Drivers::Audio::configureInput()
 {
@@ -1202,17 +948,6 @@ void IO::Drivers::Audio::configureInput()
 
 /**
  * @brief Applies the selected output device configuration.
- *
- * This method validates the selected output device and ensures its
- * capabilities are populated.
- *
- * It then clamps the selected sample format and channel configuration to
- * valid ranges, and applies them to the MiniAudio device configuration.
- *
- * Emits the @c configurationChanged() signal after updating the settings.
- *
- * If the capabilities for the selected output device are not available,
- * the function aborts with a warning.
  */
 void IO::Drivers::Audio::configureOutput()
 {
@@ -1253,26 +988,6 @@ void IO::Drivers::Audio::configureOutput()
 
 /**
  * @brief Converts raw audio input into CSV-formatted text and emits it.
- *
- * This function is periodically called by a high-resolution timer running
- * in a worker thread. It processes the raw audio buffer filled by the
- * MiniAudio callback, converts each frame to a CSV-like string, and emits
- * the result via the `dataReceived` signal.
- *
- * The function performs the following steps:
- * - Locks and swaps out the internal raw audio buffer (`m_rawInput`)
- *   to avoid contention.
- * - Validates audio configuration and buffer integrity.
- * - Parses each frame based on sample format (`u8`, `s16`, `s32`, or `f32`)
- *   and channel count.
- * - Writes parsed values into a reusable `QBuffer`-backed `QTextStream`
- *   (`m_csvStream`), avoiding dynamic allocations.
- * - Flushes the stream to ensure the data is written into `m_csvData`.
- * - Emits only the valid portion of the buffer via `dataReceived()`.
- *
- * @note This function is optimized for performance and minimal allocations.
- *       It assumes exclusive ownership of `m_rawInput` and reuses
- *       `m_csvData` to avoid repeated memory churn.
  */
 void IO::Drivers::Audio::processInputBuffer()
 {
@@ -1349,7 +1064,13 @@ void IO::Drivers::Audio::processInputBuffer()
   // Flush and emit only the portion we actually wrote
   m_csvStream.flush();
   const auto length = m_csvBuffer.pos();
-  Q_EMIT dataReceived(makeByteArray(m_csvData.left(length)));
+  const auto frameStep = std::max(
+    std::chrono::nanoseconds(1),
+    std::chrono::duration_cast<std::chrono::nanoseconds>(
+      std::chrono::duration<double>(1.0 / static_cast<double>(m_config.sampleRate))));
+  const auto now = IO::CapturedData::SteadyClock::now();
+  const auto timestamp = now - (frameStep * std::max(0, totalFrames - 1));
+  publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1358,17 +1079,6 @@ void IO::Drivers::Audio::processInputBuffer()
 
 /**
  * @brief Refreshes the list of available audio input/output devices.
- *
- * Queries the MiniAudio context for the current list of input and output
- * audio devices. If the device list has changed or a previously selected
- * device is no longer present, the internal device lists and capabilities
- * are updated accordingly.
- *
- * Also emits @c inputSettingsChanged(), @c outputSettingsChanged(),
- * and @c configurationChanged() signals if any updates are made.
- *
- * This function is typically called periodically (e.g., every second) to
- * detect hot-plugged or removed audio devices.
  */
 void IO::Drivers::Audio::refreshAudioDevices()
 {
@@ -1439,14 +1149,6 @@ void IO::Drivers::Audio::refreshAudioDevices()
 
 /**
  * @brief Synchronizes internal input parameters with the actual device config.
- *
- * This method updates internal indexes for input sample rate, sample format,
- * and channel configuration based on the current `ma_device_config`.
- *
- * If the current config is not found in the list of supported capabilities,
- * it falls back to 44.1 KHz or the first available option.
- *
- * Emits @c inputSettingsChanged() to update any dependent UI elements.
  */
 void IO::Drivers::Audio::syncInputParameters()
 {
@@ -1485,12 +1187,6 @@ void IO::Drivers::Audio::syncInputParameters()
 
 /**
  * @brief Synchronizes internal output parameters with the actual device config.
- *
- * Updates internal indexes for output sample format and channel configuration
- * using the current `ma_device_config`. Falls back to the first available
- * configuration if the currently selected format or channel count is not found.
- *
- * Emits @c outputSettingsChanged() to refresh the UI.
  */
 void IO::Drivers::Audio::syncOutputParameters()
 {
@@ -1522,14 +1218,6 @@ void IO::Drivers::Audio::syncOutputParameters()
 
 /**
  * @brief Audio callback handler for processing input and output streams.
- *
- * This method is invoked from the MiniAudio real-time thread. It processes
- * audio input by pushing raw bytes into a buffer and handles audio output
- * by streaming queued frames or zero-filling if empty.
- *
- * @param output Pointer to the output buffer (nullable).
- * @param input Pointer to the input buffer (nullable).
- * @param frameCount Number of audio frames to process.
  */
 void IO::Drivers::Audio::handleCallback(void* output, const void* input, ma_uint32 frameCount)
 {
@@ -1577,14 +1265,6 @@ void IO::Drivers::Audio::handleCallback(void* output, const void* input, ma_uint
 
 /**
  * @brief Static callback function for MiniAudio device I/O.
- *
- * This function is called by MiniAudio whenever audio input/output occurs.
- * It delegates the processing to the instance method @ref handleCallback().
- *
- * @param device Pointer to the MiniAudio device structure.
- * @param output Pointer to the output buffer for playback (can be null).
- * @param input Pointer to the input buffer for recording (can be null).
- * @param frameCount Number of audio frames in the input/output buffers.
  */
 void IO::Drivers::Audio::callback(ma_device* device,
                                   void* output,
@@ -1604,7 +1284,6 @@ void IO::Drivers::Audio::callback(ma_device* device,
 
 /**
  * @brief Returns the Audio configuration as a flat list of editable properties.
- * @return List of DriverProperty descriptors with current values.
  */
 QList<IO::DriverProperty> IO::Drivers::Audio::driverProperties() const
 {
@@ -1647,8 +1326,6 @@ QList<IO::DriverProperty> IO::Drivers::Audio::driverProperties() const
 
 /**
  * @brief Applies a single Audio configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::Audio::setDriverProperty(const QString& key, const QVariant& value)
 {
@@ -1667,9 +1344,6 @@ void IO::Drivers::Audio::setDriverProperty(const QString& key, const QVariant& v
 
 /**
  * @brief Returns a JSON identifier for the currently selected audio input device.
- *
- * Stores the device name and actual sample rate, format name, and channel count
- * so they can be restored by value across sessions.
  */
 QJsonObject IO::Drivers::Audio::deviceIdentifier() const
 {
@@ -1706,9 +1380,6 @@ QJsonObject IO::Drivers::Audio::deviceIdentifier() const
 
 /**
  * @brief Selects the input device and sub-settings matching a saved identifier.
- *
- * Matches device by name, then restores sample rate, format, and channel
- * configuration by looking up their actual values in the device's capability lists.
  */
 bool IO::Drivers::Audio::selectByIdentifier(const QJsonObject& id)
 {

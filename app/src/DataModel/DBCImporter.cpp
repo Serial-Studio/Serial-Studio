@@ -39,15 +39,8 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Private constructor for the singleton pattern.
- */
 DataModel::DBCImporter::DBCImporter() {}
 
-/**
- * @brief Returns the singleton instance of the DBC importer.
- * @return Reference to the DBCImporter singleton.
- */
 DataModel::DBCImporter& DataModel::DBCImporter::instance()
 {
   static DBCImporter instance;
@@ -58,42 +51,23 @@ DataModel::DBCImporter& DataModel::DBCImporter::instance()
 // Status queries
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the total number of signals across all messages.
- * @return Total signal count from the parsed DBC file.
- */
 int DataModel::DBCImporter::signalCount() const
 {
   return countTotalSignals(m_messages);
 }
 
-/**
- * @brief Returns the number of messages in the parsed DBC file.
- * @return Message count.
- */
 int DataModel::DBCImporter::messageCount() const
 {
   return m_messages.count();
 }
 
-/**
- * @brief Returns the filename of the currently loaded DBC file.
- * @return DBC filename without path.
- */
 QString DataModel::DBCImporter::dbcFileName() const
 {
   return QFileInfo(m_dbcFilePath).fileName();
 }
 
 /**
- * @brief Returns formatted information string for a specific message.
- *
- * The returned string contains the message index, name, CAN ID (in hex),
- * and signal count in the format: "N: MessageName @ 0xID (X signals)"
- *
- * @param index Index of the message in the parsed list.
- * @return Formatted message information string, or empty if index is
- *         invalid.
+ * @brief Returns a formatted "N: Name @ 0xID (X signals)" string.
  */
 QString DataModel::DBCImporter::messageInfo(int index) const
 {
@@ -116,11 +90,7 @@ QString DataModel::DBCImporter::messageInfo(int index) const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens a file dialog to select and import a DBC file.
- *
- * This function presents the user with a non-native file selection dialog
- * filtered for DBC files. Upon selection, it calls showPreview() to parse
- * and preview the file contents.
+ * @brief Opens a file dialog to select a DBC file and preview it.
  */
 void DataModel::DBCImporter::importDBC()
 {
@@ -140,10 +110,7 @@ void DataModel::DBCImporter::importDBC()
 }
 
 /**
- * @brief Cancels the current import operation and clears loaded data.
- *
- * This function clears the message list and file path, then emits signals
- * to update the UI. It's called when the user cancels the preview dialog.
+ * @brief Cancels the current import and clears loaded data.
  */
 void DataModel::DBCImporter::cancelImport()
 {
@@ -154,15 +121,7 @@ void DataModel::DBCImporter::cancelImport()
 }
 
 /**
- * @brief Parses a DBC file and emits a preview signal for UI display.
- *
- * This function uses Qt's QCanDbcFileParser to parse the DBC file at the
- * specified path. If parsing succeeds and messages are found, it stores
- * the message list and emits previewReady() to trigger the preview dialog.
- *
- * On failure, displays an error message box to the user.
- *
- * @param filePath Absolute path to the DBC file to parse.
+ * @brief Parses the DBC file at filePath and emits previewReady on success.
  */
 void DataModel::DBCImporter::showPreview(const QString& filePath)
 {
@@ -203,18 +162,7 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Confirms the import and generates a Serial Studio project.
- *
- * This function is called when the user confirms the import from the
- * preview dialog. It generates a complete project from the parsed DBC
- * messages, including:
- * - Groups for each CAN message
- * - Datasets for each signal with appropriate widgets
- * - JavaScript frame parser for extracting CAN signals
- *
- * The project is saved to a temporary file, loaded into the ProjectModel,
- * and the user is prompted to save it to a permanent location. On success,
- * the project editor opens automatically.
+ * @brief Generates a Serial Studio project from the parsed DBC messages.
  */
 void DataModel::DBCImporter::confirmImport()
 {
@@ -261,21 +209,7 @@ void DataModel::DBCImporter::confirmImport()
 }
 
 /**
- * @brief Generates a complete Serial Studio project from DBC messages.
- *
- * This function creates a QJsonObject representing a complete Serial Studio
- * project file (.ssproj) from the provided CAN message descriptions.
- *
- * The generated project includes:
- * - Project title: Based on DBC filename
- * - Decoder method: 3 (custom JavaScript parser)
- * - Frame detection: 2 (manual mode)
- * - Frame parser: JavaScript code for extracting CAN signals
- * - Groups: One group per CAN message with datasets for each signal
- * - Actions: Empty array (no actions defined)
- *
- * @param messages List of CAN message descriptions from the DBC file.
- * @return QJsonObject containing the complete project structure.
+ * @brief Builds a complete .ssproj QJsonObject from the DBC messages.
  */
 QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescription>& messages)
 {
@@ -313,34 +247,7 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
 }
 
 /**
- * @brief Generates group structures for all CAN messages.
- *
- * This function creates a Group object for each CAN message in the DBC
- * file. Each group contains:
- * - Group ID: Sequential starting from 0
- * - Title: CAN message name
- * - Widget: Auto-selected based on signal family detection
- * - Datasets: One dataset per signal in the message
- *
- * Each dataset is configured with:
- * - Index: Sequential dataset index across all groups
- * - Title: Signal name
- * - Units: Physical unit from DBC (e.g., "rpm", "°C")
- * - Widget: Conditionally assigned based on group widget type
- * - Min/Max: Signal range from DBC definition
- * - Flags: graph=true for numeric signals, led=true for boolean signals
- *
- * Widget Assignment Optimization:
- * Individual widgets are only assigned when the group widget cannot
- * adequately visualize the data. For example:
- * - MultiPlot groups: No individual widgets (plot shows all signals)
- * - DataGrid groups: Individual widgets assigned (grid is just a table)
- * - Boolean signals: Always get LED widgets (group can't show these)
- *
- * This significantly reduces widget count and improves dashboard clarity.
- *
- * @param messages List of CAN message descriptions from the DBC file.
- * @return Vector of Group structures ready for serialization.
+ * @brief Builds Group/Dataset structures from the DBC messages.
  */
 std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
   const QList<QCanMessageDescription>& messages)
@@ -413,29 +320,7 @@ std::vector<DataModel::Group> DataModel::DBCImporter::generateGroups(
 }
 
 /**
- * @brief Generates a JavaScript frame parser for extracting CAN signals.
- *
- * This function generates a complete JavaScript frame parser that:
- * 1. Extracts the CAN ID and DLC from the frame header
- * 2. Routes frames to message-specific decoders via switch statement
- * 3. Provides helper functions for signal extraction supporting:
- *    - Arbitrary bit positions and lengths
- *    - Both Intel (little-endian) and Motorola (big-endian) byte order
- *    - Signed and unsigned integers
- *    - Scaling and offset transformations
- *
- * Frame format expected:
- * - Bytes 0-1: CAN ID (big-endian, 16-bit)
- * - Byte 2: Data Length Code (DLC)
- * - Bytes 3+: CAN data payload
- *
- * The generated parser includes:
- * - Main parse() function that routes by CAN ID
- * - decode_XXXX() functions for each message
- * - extractSignal() helper for bit-level signal extraction
- *
- * @param messages List of CAN message descriptions from the DBC file.
- * @return JavaScript code as a QString ready for embedding in the project.
+ * @brief Generates the Lua frame parser script for the DBC messages.
  */
 QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescription>& messages)
 {
@@ -569,21 +454,7 @@ QString DataModel::DBCImporter::generateFrameParser(const QList<QCanMessageDescr
 }
 
 /**
- * @brief Generates a decoder function for a specific CAN message.
- *
- * This function generates JavaScript code for decoding all signals within
- * a CAN message. The generated function:
- * - Is named decode_XXXX where XXXX is the hex CAN ID
- * - Accepts the CAN data payload as a byte array
- * - Extracts each signal using the extractSignal() helper
- * - Applies scaling and offset transformations
- * - Updates the global values array at the appropriate indices
- *
- * @param message CAN message description from the DBC file.
- * @param datasetIndex Reference to the current dataset index, incremented
- *                     for each signal to maintain proper global array
- *                     indexing.
- * @return JavaScript function code as a QString.
+ * @brief Generates the decode_XXXX() Lua function for one CAN message.
  */
 QString DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescription& message,
                                                        int& datasetIndex)
@@ -641,19 +512,7 @@ QString DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescript
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Generates JavaScript code to extract a single CAN signal.
- *
- * This function generates two JavaScript statements:
- * 1. Extraction of the raw signal value using extractSignal()
- * 2. Application of scaling and offset: physical = (raw * factor) + offset
- *
- * The extraction accounts for:
- * - Signal bit position and length from the DBC definition
- * - Byte order (big-endian/little-endian)
- * - Signed vs unsigned interpretation
- *
- * @param signal CAN signal description from the DBC file.
- * @return JavaScript code for extracting and scaling the signal.
+ * @brief Generates the Lua code to extract and scale one CAN signal.
  */
 QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescription& signal)
 {
@@ -688,30 +547,7 @@ QString DataModel::DBCImporter::generateSignalExtraction(const QCanSignalDescrip
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Selects an appropriate group widget type for a CAN message.
- *
- * This function analyzes the signals in a CAN message to automatically
- * assign a suitable group widget type for dashboard visualization.
- *
- * The selection uses signal family detection to identify related signals
- * and choose the most appropriate visualization:
- *
- * - **NoGroupWidget**: Single signal or all boolean (1-bit) signals
- * - **GPS**: Messages with latitude and longitude signals
- * - **Accelerometer**: Exactly 3 signals with acceleration characteristics
- * - **Gyroscope**: Exactly 3 signals with gyroscope/rotation characteristics
- * - **MultiPlot**: Related signals that benefit from time-series visualization
- *   (wheel speeds, tire pressures, temperature series, voltage series, etc.)
- * - **DataGrid**: Mixed signal types (battery clusters) or non-plottable data
- *
- * Key improvements:
- * - Detects positional patterns (FL/FR/RL/RR)
- * - Detects numbered series (Temp_1, Temp_2, etc.)
- * - Groups related signals with similar units
- * - Reduces redundant widgets by smart group selection
- *
- * @param message CAN message description from the DBC file.
- * @return Group widget type string.
+ * @brief Picks a group widget type based on the message's signal family.
  */
 QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& message)
 {
@@ -819,14 +655,7 @@ QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sanitizes a string for use as a JavaScript identifier.
- *
- * This function replaces all non-alphanumeric characters (except
- * underscores) with underscores, ensuring the resulting string is a valid
- * JavaScript variable name.
- *
- * @param str Input string (e.g., signal name from DBC).
- * @return Sanitized string safe for use in JavaScript code.
+ * @brief Replaces non-alphanumeric characters so the string is a valid ident.
  */
 QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString& str)
 {
@@ -836,24 +665,7 @@ QString DataModel::DBCImporter::sanitizeJavaScriptString(const QString& str)
 }
 
 /**
- * @brief Selects an appropriate widget type for visualizing a signal.
- *
- * This function analyzes signal properties to automatically assign a
- * suitable widget type for dashboard visualization:
- *
- * - **Bar widget**: Percentage signals (0-100 range or "%" unit)
- * - **Gauge widget**: Automotive/industrial signals with units like rpm,
- *   km/h, mph, V, A, °C, °F, PSI, bar, Nm, kPa
- * - **Empty (no widget)**: Counters (odometer, trip, distance), status
- *   values, or signals without meaningful ranges
- *
- * The selection is based on:
- * 1. Signal name (to detect counters/status)
- * 2. Physical unit string (case-insensitive)
- * 3. Value range (min/max)
- *
- * @param signal CAN signal description from the DBC file.
- * @return Widget type string ("bar", "gauge", or empty).
+ * @brief Picks a dataset widget (bar/gauge/empty) for one CAN signal.
  */
 QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescription& signal)
 {
@@ -890,13 +702,7 @@ QString DataModel::DBCImporter::selectWidgetForSignal(const QCanSignalDescriptio
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Counts the total number of signals across all messages.
- *
- * This function iterates through all CAN messages and sums up the number
- * of signals in each message.
- *
- * @param messages List of CAN message descriptions.
- * @return Total number of signals across all messages.
+ * @brief Returns the total number of signals across all messages.
  */
 int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription>& messages) const
 {
@@ -908,15 +714,7 @@ int DataModel::DBCImporter::countTotalSignals(const QList<QCanMessageDescription
 }
 
 /**
- * @brief Checks if signals follow a positional naming pattern.
- *
- * Detects patterns like FL/FR/RL/RR (front-left, front-right, etc.) in
- * signal names, which typically indicate related sensors at different
- * positions.
- *
- * @param signalList List of signal descriptions to check.
- * @param positions List of position identifiers to look for.
- * @return true if at least 2 signals match the positional pattern.
+ * @brief Returns true if at least 2 signal names match a positional marker.
  */
 bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescription>& signalList,
                                                   const QStringList& positions) const
@@ -936,13 +734,7 @@ bool DataModel::DBCImporter::hasPositionalPattern(const QList<QCanSignalDescript
 }
 
 /**
- * @brief Checks if signals follow a numbered naming pattern.
- *
- * Detects patterns like Temp_1, Temp_2, Temp_3 or Cell1, Cell2, Cell3
- * which indicate a series of similar sensors.
- *
- * @param signalList List of signal descriptions to check.
- * @return true if at least 2 signals have numbered suffixes.
+ * @brief Returns true if at least 2 signal names use a numbered suffix.
  */
 bool DataModel::DBCImporter::hasNumberedPattern(
   const QList<QCanSignalDescription>& signalList) const
@@ -963,13 +755,7 @@ bool DataModel::DBCImporter::hasNumberedPattern(
 }
 
 /**
- * @brief Checks if all signals have similar or identical physical units.
- *
- * This helps identify related signals that should be visualized together,
- * such as multiple temperature sensors or multiple voltage readings.
- *
- * @param signalList List of signal descriptions to check.
- * @return true if all non-empty units are similar.
+ * @brief Returns true if all non-empty physical units are identical.
  */
 bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>& signalList) const
 {
@@ -987,14 +773,7 @@ bool DataModel::DBCImporter::allSimilarUnits(const QList<QCanSignalDescription>&
 }
 
 /**
- * @brief Detects if signals represent a battery monitoring cluster.
- *
- * Battery messages typically contain a mix of voltage, current, temperature,
- * and state of charge signals. These are best shown in a data grid rather
- * than a plot.
- *
- * @param signalList List of signal descriptions to check.
- * @return true if signals match battery cluster pattern.
+ * @brief Returns true if the signals look like a battery monitoring cluster.
  */
 bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription>& signalList) const
 {
@@ -1021,13 +800,7 @@ bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription
 }
 
 /**
- * @brief Checks if all signals are status/boolean flags.
- *
- * Messages with only boolean signals or status indicators don't need a
- * group widget since individual LEDs will handle visualization.
- *
- * @param signalList List of signal descriptions to check.
- * @return true if all signals are 1-bit or status indicators.
+ * @brief Returns true if all signals are 1-bit flags or status-named.
  */
 bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>& signalList) const
 {
@@ -1044,13 +817,7 @@ bool DataModel::DBCImporter::allStatusSignals(const QList<QCanSignalDescription>
 }
 
 /**
- * @brief Counts the number of plottable signals.
- *
- * Excludes counters, timestamps, and status fields that shouldn't be
- * plotted on time-series graphs.
- *
- * @param signalList List of signal descriptions to check.
- * @return Number of signals suitable for plotting.
+ * @brief Counts signals suitable for time-series plotting.
  */
 int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& signalList) const
 {
@@ -1071,14 +838,7 @@ int DataModel::DBCImporter::countPlottable(const QList<QCanSignalDescription>& s
 }
 
 /**
- * @brief Detects the family/category of related signals in a message.
- *
- * Analyzes signal names, units, and patterns to categorize the message,
- * which helps select appropriate group widgets and reduce redundant
- * individual widgets.
- *
- * @param signalList List of signal descriptions from a CAN message.
- * @return SignalFamily enum indicating the detected signal category.
+ * @brief Classifies the message's signals into a SignalFamily category.
  */
 DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
   const QList<QCanSignalDescription>& signalList) const
@@ -1119,15 +879,7 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
 }
 
 /**
- * @brief Determines if a signal is critical and should always have a widget.
- *
- * Critical signals are important values that users need to see at a glance
- * in the dashboard overview, such as RPM, speed, temperature, voltage, etc.
- * These should have individual gauges/bars even when a group-level MultiPlot
- * is showing trends.
- *
- * @param signal The signal description to check.
- * @return true if the signal is critical and should always get a widget.
+ * @brief Returns true for critical signals that always warrant an own widget.
  */
 bool DataModel::DBCImporter::isCriticalSignal(const QCanSignalDescription& signal) const
 {
@@ -1176,26 +928,7 @@ bool DataModel::DBCImporter::isCriticalSignal(const QCanSignalDescription& signa
 }
 
 /**
- * @brief Determines if a signal should get an individual widget.
- *
- * This function implements smart widget assignment that balances overview
- * visibility with dashboard clarity:
- *
- * Rules:
- * - Single-bit signals always get LEDs (group widgets don't show these)
- * - Critical signals (RPM, speed, temp, voltage, etc.) always get individual
- *   widgets for overview visibility, even with MultiPlot groups
- * - Non-critical signals in MultiPlot groups skip individual widgets (reduces
- *   clutter, group shows trends)
- * - Signals in DataGrid/NoGroupWidget always get individual widgets
- *
- * This ensures important values are visible in overview while reducing
- * redundant widgets for less critical signals.
- *
- * @param groupWidget The widget type assigned to the parent group.
- * @param signal The signal description.
- * @param isSingleBit Whether the signal is a 1-bit boolean.
- * @return true if an individual widget should be assigned.
+ * @brief Returns true if the signal should receive its own dataset widget.
  */
 bool DataModel::DBCImporter::shouldAssignIndividualWidget(const QString& groupWidget,
                                                           const QCanSignalDescription& signal,

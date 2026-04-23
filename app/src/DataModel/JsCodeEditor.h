@@ -32,11 +32,7 @@
 namespace DataModel {
 
 /**
- * @brief QML-embeddable code editor widget for the JavaScript frame parser.
- *
- * Renders a QCodeEditor inside a QQuickPaintedItem, forwarding all keyboard,
- * mouse and drag events to the underlying widget. Delegates JS execution and
- * script persistence entirely to the @c FrameParser singleton.
+ * @brief QML-embeddable code editor for the JavaScript / Lua frame parser.
  */
 class JsCodeEditor : public QQuickPaintedItem {
   // clang-format off

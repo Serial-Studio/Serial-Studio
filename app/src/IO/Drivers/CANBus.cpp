@@ -32,12 +32,6 @@
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructor function
- *
- * Initializes the CAN bus driver with default settings and populates
- * the list of available CAN bus plugins.
- */
 IO::Drivers::CANBus::CANBus()
   : m_device(nullptr), m_canFD(false), m_pluginIndex(0), m_interfaceIndex(0), m_bitrate(500000)
 {
@@ -67,9 +61,6 @@ IO::Drivers::CANBus::CANBus()
   QLoggingCategory::setFilterRules("qt.canbus* = false");
 }
 
-/**
- * @brief Destructor — releases the CAN bus device without invoking virtual functions.
- */
 IO::Drivers::CANBus::~CANBus()
 {
   doClose();
@@ -81,8 +72,6 @@ IO::Drivers::CANBus::~CANBus()
 
 /**
  * @brief Closes the current CAN bus connection.
- *
- * Delegates to doClose() and emits state-change signals so the UI updates.
  */
 void IO::Drivers::CANBus::close()
 {
@@ -95,9 +84,6 @@ void IO::Drivers::CANBus::close()
 
 /**
  * @brief Non-virtual cleanup implementation shared by close() and ~CANBus().
- *
- * Disconnects signals, calls disconnectDevice() on the Qt object if needed,
- * and schedules deletion.  Safe to call when m_device is null.
  */
 void IO::Drivers::CANBus::doClose()
 {
@@ -113,9 +99,6 @@ void IO::Drivers::CANBus::doClose()
   m_device = nullptr;
 }
 
-/**
- * @brief Returns true if a CAN bus connection is currently open
- */
 bool IO::Drivers::CANBus::isOpen() const noexcept
 {
   if (m_device)
@@ -124,25 +107,18 @@ bool IO::Drivers::CANBus::isOpen() const noexcept
   return false;
 }
 
-/**
- * @brief Returns true if the current CAN bus device is readable
- */
 bool IO::Drivers::CANBus::isReadable() const noexcept
 {
   return isOpen();
 }
 
-/**
- * @brief Returns true if the current CAN bus device is writable
- */
 bool IO::Drivers::CANBus::isWritable() const noexcept
 {
   return isOpen();
 }
 
 /**
- * @brief Returns true if the user has selected appropriate controls & options
- *        to connect to a CAN bus device
+ * @brief Returns true if the user has selected appropriate controls & options to connect to a CAN bus device.
  */
 bool IO::Drivers::CANBus::configurationOk() const noexcept
 {
@@ -154,31 +130,7 @@ bool IO::Drivers::CANBus::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes data to the CAN bus device
- *
- * Safely transmits a CAN frame to the bus. The input data must be in the
- * format: [ID_high, ID_low, DLC, data0, data1, ..., dataN]
- *
- * ## Frame Format
- * - Bytes 0-1: 16-bit CAN identifier (big-endian)
- * - Byte 2: Data Length Code (DLC, 0-8 for standard CAN, 0-64 for CAN FD)
- * - Bytes 3+: Payload data
- *
- * ## Safety Features
- * - Validates device is open and writable
- * - Validates minimum data length (3 bytes)
- * - Validates device pointer before writing
- * - Clamps DLC to valid range (0-8 for standard, 0-64 for CAN FD)
- * - Uses try/catch to prevent crashes during frame construction
- * - Validates write operation success
- *
- * @param data The data to write (CAN frame data)
- * @return Number of bytes successfully written (original data length), or 0 on
- * failure
- *
- * @note Returns 0 if device is not writable or data is invalid
- * @note DLC values exceeding valid range are automatically clamped
- * @note Emits dataSent signal only on successful transmission
+ * @brief Writes a CAN frame ([ID_hi, ID_lo, DLC, payload...]) to the bus.
  */
 qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 {
@@ -223,24 +175,7 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens the CAN bus device with the given mode
- *
- * Performs complete initialization of CAN bus connection:
- * - Closes any existing connection first (clean slate)
- * - Validates platform CAN support availability
- * - Checks configuration parameters are valid
- * - Creates QCanBusDevice using selected plugin and interface
- * - Configures bitrate and CAN FD mode if enabled
- * - Connects signal handlers with Qt::UniqueConnection
- * - Attempts device connection
- * - Handles errors with proper cleanup
- *
- * @param mode The open mode (ReadOnly or ReadWrite, currently unused)
- * @return True if successfully opened and connected
- *
- * @note Uses Qt::UniqueConnection to prevent duplicate signal connections
- * @note Always calls close() first to ensure clean state
- * @note Emits platform-specific error messages when CAN support unavailable
+ * @brief Opens the CAN bus device with the given mode.
  */
 bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
 {
@@ -440,10 +375,7 @@ QStringList IO::Drivers::CANBus::bitrateList() const
 }
 
 /**
- * @brief Converts a Qt CAN plugin name to a user-friendly display name
- *
- * @param plugin The Qt plugin identifier
- * @return User-friendly display name
+ * @brief Converts a Qt CAN plugin name to a user-friendly display name.
  */
 QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
 {
@@ -470,7 +402,7 @@ QString IO::Drivers::CANBus::pluginDisplayName(const QString& plugin) const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Sets whether CAN FD mode is enabled
+ * @brief Sets whether CAN FD mode is enabled.
  */
 void IO::Drivers::CANBus::setCanFD(const bool enabled)
 {
@@ -483,7 +415,7 @@ void IO::Drivers::CANBus::setCanFD(const bool enabled)
 }
 
 /**
- * @brief Sets the bitrate for the CAN bus
+ * @brief Sets the bitrate for the CAN bus.
  */
 void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
 {
@@ -496,7 +428,7 @@ void IO::Drivers::CANBus::setBitrate(const quint32 bitrate)
 }
 
 /**
- * @brief Sets the plugin index and refreshes available interfaces
+ * @brief Sets the plugin index and refreshes available interfaces.
  */
 void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
 {
@@ -509,7 +441,7 @@ void IO::Drivers::CANBus::setPluginIndex(const quint8 index)
 }
 
 /**
- * @brief Sets the interface index
+ * @brief Sets the interface index.
  */
 void IO::Drivers::CANBus::setInterfaceIndex(const quint8 index)
 {
@@ -521,10 +453,7 @@ void IO::Drivers::CANBus::setInterfaceIndex(const quint8 index)
 }
 
 /**
- * @brief Sets up external connections for timer events
- *
- * Connects to the 1Hz timer to periodically refresh the list of
- * available CAN bus plugins and interfaces.
+ * @brief Sets up external connections for timer events.
  */
 void IO::Drivers::CANBus::setupExternalConnections()
 {
@@ -539,27 +468,7 @@ void IO::Drivers::CANBus::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles incoming CAN bus frames
- *
- * Safely processes all available CAN frames and converts them to the format
- * expected by Serial Studio's frame parser.
- *
- * ## Frame Format
- * Output byte array format: [ID_high, ID_low, DLC, data0, data1, ..., data7]
- * - ID_high, ID_low: 16-bit CAN identifier (big-endian)
- * - DLC: Data Length Code (0-8 bytes)
- * - data0..data7: Payload bytes (padded with zeros to 11 total bytes)
- *
- * ## Safety Features
- * - Validates device pointer before processing
- * - Checks frame validity before conversion
- * - Uses try/catch to prevent crashes during data processing
- * - Validates payload size before accessing
- * - Pads short frames to ensure consistent length
- *
- * @note Called automatically when CAN frames are received
- * @note Silently skips invalid frames without emitting errors
- * @note All frames are padded to 11 bytes total (3 header + 8 data)
+ * @brief Handles incoming CAN bus frames and publishes them as [ID_hi, ID_lo, DLC, payload...].
  */
 void IO::Drivers::CANBus::onFramesReceived()
 {
@@ -598,38 +507,14 @@ void IO::Drivers::CANBus::onFramesReceived()
       while (data.size() < 11)
         data.append(static_cast<char>(0));
 
-      Q_EMIT dataReceived(makeByteArray(std::move(data)));
+      publishReceivedData(std::move(data));
     }
   } catch (...) {
   }
 }
 
 /**
- * @brief Handles CAN bus device state changes
- *
- * Monitors the CAN bus device connection state and emits configurationChanged()
- * signal to notify IO::ConnectionManager of state transitions.
- *
- * ## State Transitions
- * - UnconnectedState: Device is disconnected
- * - ConnectingState: Connection attempt in progress
- * - ConnectedState: Device successfully connected and operational
- * - ClosingState: Device is being closed
- *
- * ## Critical for UI Updates
- * This slot is ESSENTIAL for Serial Studio's UI to properly reflect the
- * connection state. The signal chain is:
- * 1. QCanBusDevice state changes
- * 2. onStateChanged() emits configurationChanged()
- * 3. IO::ConnectionManager catches configurationChanged()
- * 4. IO::ConnectionManager emits connectedChanged()
- * 5. UI updates connect/disconnect button state
- *
- * @param state The new CAN bus device state
- *
- * @note This slot is connected to QCanBusDevice::stateChanged signal
- * @note Always emits configurationChanged() on any state change
- * @note State changes occur asynchronously after open() returns
+ * @brief Handles CAN bus device state changes by emitting configurationChanged().
  */
 void IO::Drivers::CANBus::onStateChanged(QCanBusDevice::CanBusDeviceState state)
 {
@@ -638,27 +523,7 @@ void IO::Drivers::CANBus::onStateChanged(QCanBusDevice::CanBusDeviceState state)
 }
 
 /**
- * @brief Handles CAN bus errors
- *
- * Safely processes CAN bus device errors and shows appropriate error messages.
- *
- * ## Error Handling
- * - Ignores NoError events (normal operation)
- * - Validates device pointer before accessing error string
- * - Provides fallback error message if device is null
- * - Shows message box to inform user of error
- *
- * ## Error Types
- * - ReadError: Error reading from the device
- * - WriteError: Error writing to the device
- * - ConnectionError: Device connection lost
- * - ConfigurationError: Invalid device configuration
- * - UnknownError: Unspecified error condition
- *
- * @param error The CAN bus error code
- *
- * @note This slot is connected to QCanBusDevice::errorOccurred signal
- * @note Always validates m_device before accessing error strings
+ * @brief Handles CAN bus errors by showing a message box.
  */
 void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
 {
@@ -686,9 +551,7 @@ void IO::Drivers::CANBus::onErrorOccurred(QCanBusDevice::CanBusError error)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Refreshes the list of available CAN bus interfaces
- *
- * Called when the plugin selection changes.
+ * @brief Refreshes the list of available CAN bus interfaces.
  */
 void IO::Drivers::CANBus::refreshInterfaces()
 {
@@ -758,10 +621,7 @@ void IO::Drivers::CANBus::refreshInterfaces()
 }
 
 /**
- * @brief Refreshes the list of available CAN bus plugins
- *
- * Scans for available CAN bus plugins and updates the internal lists.
- * This is called periodically to detect newly loaded plugins.
+ * @brief Refreshes the list of available CAN bus plugins.
  */
 void IO::Drivers::CANBus::refreshPlugins()
 {
@@ -788,9 +648,7 @@ void IO::Drivers::CANBus::refreshPlugins()
 }
 
 /**
- * @brief Checks if CAN bus support is available on this platform
- *
- * @return True if at least one CAN bus plugin is available
+ * @brief Checks if CAN bus support is available on this platform.
  */
 bool IO::Drivers::CANBus::canSupportAvailable() const
 {
@@ -803,7 +661,6 @@ bool IO::Drivers::CANBus::canSupportAvailable() const
 
 /**
  * @brief Returns the CAN Bus configuration as a flat list of editable properties.
- * @return List of DriverProperty descriptors with current values.
  */
 QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
 {
@@ -846,8 +703,6 @@ QList<IO::DriverProperty> IO::Drivers::CANBus::driverProperties() const
 
 /**
  * @brief Applies a single CAN Bus configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& value)
 {
@@ -875,9 +730,6 @@ void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& 
 
 /**
  * @brief Returns a JSON identifier for the currently selected plugin and interface.
- *
- * Stores plugin and interface names so they can be matched by name on reload,
- * regardless of enumeration order.
  */
 QJsonObject IO::Drivers::CANBus::deviceIdentifier() const
 {
@@ -894,8 +746,6 @@ QJsonObject IO::Drivers::CANBus::deviceIdentifier() const
 
 /**
  * @brief Selects the plugin and interface matching a previously saved identifier.
- *
- * Matches by plugin name first, then by interface name within that plugin.
  */
 bool IO::Drivers::CANBus::selectByIdentifier(const QJsonObject& id)
 {

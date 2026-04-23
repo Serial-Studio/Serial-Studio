@@ -27,62 +27,19 @@
 
 namespace Concepts {
 /**
- * @concept Numeric
- * @brief Constrains template parameter to numeric types (integral or floating
- * point).
- *
- * **Satisfied by:**
- * - Integral types: char, short, int, long, long long, unsigned variants
- * - Floating point: float, double, long double
- * - bool (technically integral in C++)
- *
- * **Not satisfied by:**
- * - Pointers, references, arrays
- * - User-defined types (even with operator overloads)
- * - QString, QByteArray, or other complex types
- *
- * **Use Cases:**
- * - Generic mathematical algorithms
- * - Checksum computations
- * - Statistical calculations
- * - Numeric data processing
- *
- * @tparam T Type to check for numeric properties
+ * @brief Constrains a type to numeric (integral or floating-point).
  */
 template<typename T>
 concept Numeric = std::integral<T> || std::floating_point<T>;
 
 /**
- * @concept ByteLike
- * @brief Constrains template parameter to byte-sized integral types.
- *
- * **Satisfied by:**
- * - char, signed char, unsigned char
- * - uint8_t, int8_t
- * - std::byte (C++17+)
- *
- * **Use Cases:**
- * - Low-level data parsing
- * - Binary protocol implementations
- * - Checksum algorithms operating on bytes
- *
- * @tparam T Type to check for byte-like properties
+ * @brief Constrains a type to byte-sized integrals.
  */
 template<typename T>
 concept ByteLike = std::integral<T> && sizeof(T) == 1;
 
 /**
- * @concept Comparable
- * @brief Constrains template parameter to types supporting equality comparison.
- *
- * Ensures type T supports operator== and operator!=.
- *
- * **Use Cases:**
- * - Container search algorithms
- * - Deduplication logic
- * - Value comparison in generic code
- *
- * @tparam T Type to check for comparison support
+ * @brief Constrains a type to support equality comparison.
  */
 template<typename T>
 concept Comparable = requires(T a, T b) {
@@ -91,18 +48,7 @@ concept Comparable = requires(T a, T b) {
 };
 
 /**
- * @concept Hashable
- * @brief Constrains template parameter to types that can be hashed.
- *
- * Ensures type T has a std::hash specialization, making it usable in
- * std::unordered_map, std::unordered_set, and other hash-based containers.
- *
- * **Use Cases:**
- * - Generic hash table implementations
- * - Ensuring keys are hashable in templates
- * - Compile-time validation for container usage
- *
- * @tparam T Type to check for hash support
+ * @brief Constrains a type to be hashable via std::hash.
  */
 template<typename T>
 concept Hashable = requires(T a) {
@@ -110,19 +56,7 @@ concept Hashable = requires(T a) {
 };
 
 /**
- * @concept Serializable
- * @brief Constrains template parameter to types with read() and serialize()
- * methods.
- *
- * Ensures type T follows the Serial Studio serialization protocol used by
- * Frame, Group, Dataset, and Action structures.
- *
- * **Use Cases:**
- * - Generic JSON serialization/deserialization
- * - Template functions operating on project model structures
- * - Compile-time validation of serializable types
- *
- * @tparam T Type to check for serialization support
+ * @brief Constrains a type to Serial Studio's read()/serialize() protocol.
  */
 template<typename T>
 concept Serializable = requires(T obj) {
@@ -131,17 +65,7 @@ concept Serializable = requires(T obj) {
 };
 
 /**
- * @concept Frameable
- * @brief Constrains template parameter to types that represent data frames.
- *
- * Ensures type T has groups and actions members, matching the Frame structure.
- *
- * **Use Cases:**
- * - Generic frame processing algorithms
- * - Template functions expecting Frame-like structures
- * - Compile-time validation of frame types
- *
- * @tparam T Type to check for frame properties
+ * @brief Constrains a type to look like a data frame (groups, actions, title).
  */
 template<typename T>
 concept Frameable = requires(T frame) {
@@ -151,19 +75,7 @@ concept Frameable = requires(T frame) {
 };
 
 /**
- * @concept Driver
- * @brief Constrains template parameter to types implementing HAL_Driver
- * interface.
- *
- * Ensures type T provides the core I/O driver methods: open(), close(),
- * write(), and state queries.
- *
- * **Use Cases:**
- * - Generic driver management code
- * - Template functions expecting driver objects
- * - Compile-time validation of driver implementations
- *
- * @tparam T Type to check for driver interface compliance
+ * @brief Constrains a type to implement the HAL_Driver I/O interface.
  */
 template<typename T>
 concept Driver = requires(T driver) {

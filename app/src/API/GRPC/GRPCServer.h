@@ -24,9 +24,6 @@
 #  include "serialstudio.grpc.pb.h"
 #  include "ThirdParty/readerwriterqueue.h"
 
-/**
- * Default gRPC port for the Serial Studio API.
- */
 #  define API_GRPC_PORT 8888
 
 class SerialStudioServiceImpl;
@@ -36,9 +33,6 @@ namespace GRPC {
 
 /**
  * @brief Context for an active StreamFrames call.
- *
- * Each streaming client gets one of these. The gRPC thread writes frames
- * to the writer, and the main thread enqueues frames via the atomic queue.
  */
 struct FrameStreamContext {
   grpc::ServerWriter<serialstudio::FrameBatch>* writer = nullptr;
@@ -56,19 +50,7 @@ struct RawStreamContext {
 };
 
 /**
- * @class GRPCServer
  * @brief gRPC server that mirrors the TCP/JSON API on port 8888.
- *
- * Implements the SerialStudioAPI service defined in serialstudio.proto.
- * Uses google.protobuf.Struct for dynamic command parameters, reusing
- * the existing CommandRegistry for all command execution.
- *
- * The server respects the same externalConnections setting as the TCP
- * API server, binding to localhost or all interfaces accordingly.
- *
- * Frame streaming is implemented via server-streaming RPCs. The main
- * thread pushes frames to active stream contexts, which the gRPC
- * threads then write to their respective clients.
  */
 class GRPCServer : public QObject {
   // clang-format off

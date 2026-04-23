@@ -19,15 +19,6 @@ namespace Output {
 
 /**
  * @brief Computes 2D bin-packed layout for output panel widgets.
- *
- * Instead of a rigid grid, this engine places widgets into columns that
- * adapt to the available space. Tall widgets (knob, ramp) can fill a
- * full column while small widgets (button, slider, toggle, textfield)
- * stack vertically beside them.
- *
- * Each widget type has specific minimum width and height requirements.
- * The engine respects these minimums and overflows vertically when the
- * available width cannot fit all columns at their minimum widths.
  */
 class PanelLayout {
 public:
@@ -38,14 +29,6 @@ public:
     qreal h = 0;
   };
 
-  /**
-   * @brief Computes layout geometry for the given widgets.
-   * @param widgets The output widgets to lay out.
-   * @param width Available width in pixels.
-   * @param height Available height in pixels.
-   * @param gap Spacing between items in pixels.
-   * @return Vector of rectangles, one per widget, in input order.
-   */
   [[nodiscard]] static QVector<Rect> compute(const std::vector<DataModel::OutputWidget>& widgets,
                                              qreal width,
                                              qreal height,

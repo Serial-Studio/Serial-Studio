@@ -34,16 +34,6 @@
 
 /**
  * @brief Calculates an ideal read buffer size for a serial port.
- *
- * The buffer is sized to hold approximately 200 milliseconds worth of data
- * based on the given baud rate. This helps balance memory use and latency,
- * avoiding overflows without introducing unnecessary delay.
- *
- * The result is clamped between 256 bytes and 16 kilobytes, and aligned to
- * the nearest 256-byte boundary.
- *
- * @param baud The serial port baud rate in bits per second.
- * @return Ideal buffer size in bytes.
  */
 static size_t idealSerialBufferSize(const qint32 baud)
 {
@@ -61,9 +51,6 @@ static size_t idealSerialBufferSize(const qint32 baud)
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Constructor function
- */
 IO::Drivers::UART::UART()
   : m_port(nullptr)
   , m_dtrEnabled(true)
@@ -113,10 +100,6 @@ IO::Drivers::UART::UART()
   connect(this, &IO::Drivers::UART::languageChanged, this, &IO::Drivers::UART::populateErrors);
 }
 
-/**
- * Destructor function, closes the serial port before exiting the application
- * and saves the user's baud rate list settings.
- */
 IO::Drivers::UART::~UART()
 {
   if (port()) {
@@ -131,9 +114,6 @@ IO::Drivers::UART::~UART()
 // HAL-driver implementation
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Closes the current serial port connection
- */
 void IO::Drivers::UART::close()
 {
   // Release the serial port and its signal connections
@@ -157,9 +137,6 @@ void IO::Drivers::UART::close()
   Q_EMIT availablePortsChanged();
 }
 
-/**
- * Returns @c true if a serial port connection is currently open
- */
 bool IO::Drivers::UART::isOpen() const noexcept
 {
   if (port())
@@ -168,9 +145,6 @@ bool IO::Drivers::UART::isOpen() const noexcept
   return false;
 }
 
-/**
- * Returns @c true if the current serial device is readable
- */
 bool IO::Drivers::UART::isReadable() const noexcept
 {
   if (isOpen())
@@ -179,9 +153,6 @@ bool IO::Drivers::UART::isReadable() const noexcept
   return false;
 }
 
-/**
- * Returns @c true if the current serial device is writable
- */
 bool IO::Drivers::UART::isWritable() const noexcept
 {
   if (isOpen())
@@ -191,8 +162,7 @@ bool IO::Drivers::UART::isWritable() const noexcept
 }
 
 /**
- * Returns @c true if the user selects the appropiate controls & options to be
- * able to connect to a serial device
+ * @brief Returns @c true when the user has selected a non-placeholder port.
  */
 bool IO::Drivers::UART::configurationOk() const noexcept
 {
@@ -201,12 +171,6 @@ bool IO::Drivers::UART::configurationOk() const noexcept
 
 /**
  * @brief Writes data to the serial port.
- *
- * Sends the provided data to the serial port if it is writable.
- *
- * @param data The data to be written to the port.
- * @return The number of bytes written on success, or `-1` if the port is not
- *         writable.
  */
 qint64 IO::Drivers::UART::write(const QByteArray& data)
 {
@@ -218,13 +182,6 @@ qint64 IO::Drivers::UART::write(const QByteArray& data)
 
 /**
  * @brief Opens the currently selected serial port with the specified mode.
- *
- * This function initializes and configures a serial port based on the current
- * settings and attempts to open it. If successful, it connects the necessary
- * signals for data handling and error reporting.
- *
- * @param mode The mode in which to open the serial port (e.g., read/write).
- * @return `true` if the port is successfully opened, `false` otherwise.
  */
 bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
 {
@@ -293,83 +250,48 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
 // Driver specifics
 //--------------------------------------------------------------------------------------------------
 
-/**
- * Returns the pointer to the current serial port handler
- */
 QSerialPort* IO::Drivers::UART::port() const
 {
   return m_port;
 }
 
-/**
- * Returns @c true if auto-reconnect is enabled
- */
 bool IO::Drivers::UART::autoReconnect() const
 {
   return m_autoReconnect;
 }
 
-/**
- * Returns @c true if the module shall manually send the DTR
- * (Data Terminal Ready) signal to the connected device upon opening the
- * serial port connection.
- */
 bool IO::Drivers::UART::dtrEnabled() const
 {
   return m_dtrEnabled;
 }
 
-/**
- * Returns the index of the current serial device selected by the program.
- */
 quint8 IO::Drivers::UART::portIndex() const
 {
   return m_portIndex;
 }
 
-/**
- * Returns the correspoding index of the parity configuration in relation
- * to the @c QStringList returned by the @c parityList() function.
- */
 quint8 IO::Drivers::UART::parityIndex() const
 {
   return m_parityIndex;
 }
 
-/**
- * Returns the correspoding index of the data bits configuration in relation
- * to the @c QStringList returned by the @c dataBitsList() function.
- */
 quint8 IO::Drivers::UART::dataBitsIndex() const
 {
   return m_dataBitsIndex;
 }
 
-/**
- * Returns the correspoding index of the stop bits configuration in relation
- * to the @c QStringList returned by the @c stopBitsList() function.
- */
 quint8 IO::Drivers::UART::stopBitsIndex() const
 {
   return m_stopBitsIndex;
 }
 
-/**
- * Returns the correspoding index of the flow control config. in relation
- * to the @c QStringList returned by the @c flowControlList() function.
- */
 quint8 IO::Drivers::UART::flowControlIndex() const
 {
   return m_flowControlIndex;
 }
 
 /**
- * Returns a list with the available serial devices/ports to use.
- * This function can be used with a combo box to build nice UIs.
- *
- * @note The first item of the list will be invalid, since it's value will
- *       be "Select UART Device". This is inteded to make the user interface
- *       a little more friendly.
+ * @brief Returns a list with the available serial devices/ports (with "Select Port" placeholder at index 0).
  */
 QStringList IO::Drivers::UART::portList() const
 {
@@ -381,8 +303,7 @@ QStringList IO::Drivers::UART::portList() const
 }
 
 /**
- * Returns a list with the available baud rate configurations.
- * This function can be used with a combo-box to build UIs.
+ * @brief Returns a list with the available baud rate configurations.
  */
 QStringList IO::Drivers::UART::baudRateList() const
 {
@@ -416,8 +337,7 @@ QStringList IO::Drivers::UART::baudRateList() const
 }
 
 /**
- * Returns a list with the available parity configurations.
- * This function can be used with a combo-box to build UIs.
+ * @brief Returns a list with the available parity configurations.
  */
 QStringList IO::Drivers::UART::parityList() const
 {
@@ -431,8 +351,7 @@ QStringList IO::Drivers::UART::parityList() const
 }
 
 /**
- * Returns a list with the available data bits configurations.
- * This function can be used with a combo-box to build UIs.
+ * @brief Returns a list with the available data bits configurations.
  */
 QStringList IO::Drivers::UART::dataBitsList() const
 {
@@ -445,8 +364,7 @@ QStringList IO::Drivers::UART::dataBitsList() const
 }
 
 /**
- * Returns a list with the available stop bits configurations.
- * This function can be used with a combo-box to build UIs.
+ * @brief Returns a list with the available stop bits configurations.
  */
 QStringList IO::Drivers::UART::stopBitsList() const
 {
@@ -458,8 +376,7 @@ QStringList IO::Drivers::UART::stopBitsList() const
 }
 
 /**
- * Returns a list with the available flow control configurations.
- * This function can be used with a combo-box to build UIs.
+ * @brief Returns a list with the available flow control configurations.
  */
 QStringList IO::Drivers::UART::flowControlList() const
 {
@@ -470,54 +387,33 @@ QStringList IO::Drivers::UART::flowControlList() const
   return list;
 }
 
-/**
- * Returns the current parity configuration used by the serial port
- * handler object.
- */
 QSerialPort::Parity IO::Drivers::UART::parity() const
 {
   return m_parity;
 }
 
-/**
- * Returns the current baud rate configuration used by the serial port
- * handler object.
- */
 qint32 IO::Drivers::UART::baudRate() const
 {
   return m_baudRate;
 }
 
-/**
- * Returns the current data bits configuration used by the serial port
- * handler object.
- */
 QSerialPort::DataBits IO::Drivers::UART::dataBits() const
 {
   return m_dataBits;
 }
 
-/**
- * Returns the current stop bits configuration used by the serial port
- * handler object.
- */
 QSerialPort::StopBits IO::Drivers::UART::stopBits() const
 {
   return m_stopBits;
 }
 
-/**
- * Returns the current flow control configuration used by the serial
- * port handler object.
- */
 QSerialPort::FlowControl IO::Drivers::UART::flowControl() const
 {
   return m_flowControl;
 }
 
 /**
- * Configures the signal/slot connections with the rest of the modules of the
- * application.
+ * @brief Configures the signal/slot connections with the rest of the modules.
  */
 void IO::Drivers::UART::setupExternalConnections()
 {
@@ -535,7 +431,7 @@ void IO::Drivers::UART::setupExternalConnections()
 }
 
 /**
- * Changes the baud @a rate of the serial port
+ * @brief Changes the baud rate of the serial port.
  */
 void IO::Drivers::UART::setBaudRate(const qint32 rate)
 {
@@ -551,16 +447,7 @@ void IO::Drivers::UART::setBaudRate(const qint32 rate)
 }
 
 /**
- * Sets the Data Terminal Ready (DTR) signal state.
- *
- * This function is called when the DTR checkbox state is changed. It updates
- * the internal state to reflect whether DTR is enabled or disabled and
- * communicates this change to the serial port if it is open.
- *
- * If the serial port is currently open, the DTR signal is set accordingly.
- *
- * This change is also emitted as a signal to notify any connected slots of the
- * change.
+ * @brief Sets the Data Terminal Ready (DTR) signal state.
  */
 void IO::Drivers::UART::setDtrEnabled(const bool enabled)
 {
@@ -577,8 +464,7 @@ void IO::Drivers::UART::setDtrEnabled(const bool enabled)
 }
 
 /**
- * Changes the port index value, this value is later used by the @c
- * openSerialPort() function.
+ * @brief Changes the port index value, later used by openSerialPort().
  */
 void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 {
@@ -601,14 +487,7 @@ void IO::Drivers::UART::setPortIndex(const quint8 portIndex)
 }
 
 /**
- * @brief Registers a custom serial device.
- *
- * This function allows the registration of a custom serial device by verifying
- * the validity of the provided path and ensuring it is not already registered.
- * If the path is valid and not yet registered, it is added to the list of
- * custom devices.
- *
- * @param device The file path of the device to register.
+ * @brief Registers a custom serial device by path.
  */
 void IO::Drivers::UART::registerDevice(const QString& device)
 {
@@ -631,8 +510,7 @@ void IO::Drivers::UART::registerDevice(const QString& device)
 }
 
 /**
- * @brief IO::Drivers::UART::setParity
- * @param parityIndex
+ * @brief Sets the serial port parity by index from parityList().
  */
 void IO::Drivers::UART::setParity(const quint8 parityIndex)
 {
@@ -674,10 +552,7 @@ void IO::Drivers::UART::setParity(const quint8 parityIndex)
 }
 
 /**
- * Changes the data bits of the serial port.
- *
- * @note This function is meant to be used with a combobox in the
- *       QML interface
+ * @brief Changes the data bits of the serial port.
  */
 void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
 {
@@ -716,10 +591,7 @@ void IO::Drivers::UART::setDataBits(const quint8 dataBitsIndex)
 }
 
 /**
- * Changes the stop bits of the serial port.
- *
- * @note This function is meant to be used with a combobox in the
- *       QML interface
+ * @brief Changes the stop bits of the serial port.
  */
 void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
 {
@@ -755,7 +627,7 @@ void IO::Drivers::UART::setStopBits(const quint8 stopBitsIndex)
 }
 
 /**
- * Enables or disables the auto-reconnect feature
+ * @brief Enables or disables the auto-reconnect feature.
  */
 void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
 {
@@ -768,10 +640,7 @@ void IO::Drivers::UART::setAutoReconnect(const bool autoreconnect)
 }
 
 /**
- * Changes the flow control option of the serial port.
- *
- * @note This function is meant to be used with a combobox in the
- *       QML interface
+ * @brief Changes the flow control option of the serial port.
  */
 void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
 {
@@ -807,8 +676,7 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
 }
 
 /**
- * Scans for new serial ports available & generates a QStringList with current
- * serial ports.
+ * @brief Scans for available serial ports and rebuilds the device list.
  */
 void IO::Drivers::UART::refreshSerialDevices()
 {
@@ -877,8 +745,7 @@ void IO::Drivers::UART::refreshSerialDevices()
 }
 
 /**
- * @brief IO::Drivers::UART::handleError
- * @param error
+ * @brief Handles a serial port error by disconnecting and showing a message box.
  */
 void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 {
@@ -913,20 +780,16 @@ void IO::Drivers::UART::handleError(QSerialPort::SerialPortError error)
 }
 
 /**
- * Reads all the data from the serial port.
+ * @brief Reads all the data from the serial port.
  */
 void IO::Drivers::UART::onReadyRead()
 {
   if (isOpen())
-    Q_EMIT dataReceived(makeByteArray(port()->readAll()));
+    publishReceivedData(port()->readAll());
 }
 
 /**
  * @brief Populates the error descriptions for the serial port driver.
- *
- * This function initializes a mapping of QSerialPort error codes to their
- * corresponding human-readable descriptions. These descriptions provide
- * detailed context and, where applicable, suggestions for resolving the error.
  */
 void IO::Drivers::UART::populateErrors()
 {
@@ -947,7 +810,7 @@ void IO::Drivers::UART::populateErrors()
 }
 
 /**
- * Returns a list with all the valid serial port objects
+ * @brief Returns a list with all the valid serial port objects.
  */
 QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
 {
@@ -972,9 +835,6 @@ QVector<QSerialPortInfo> IO::Drivers::UART::validPorts() const
 
 /**
  * @brief Returns cross-platform hardware identifiers for the currently selected serial port.
- *
- * Uses QSerialPortInfo to extract VID, PID, serial number, port name, and description.
- * These identifiers allow the same project file to find the correct serial port on any OS.
  */
 QJsonObject IO::Drivers::UART::deviceIdentifier() const
 {
@@ -1013,10 +873,6 @@ QJsonObject IO::Drivers::UART::deviceIdentifier() const
 
 /**
  * @brief Tries to find and select a serial port matching a previously saved identifier.
- *
- * Scores each available port by VID+PID+serial (best), VID+PID only, description match,
- * then port name match (weakest). Selects the highest-scoring port. If no match is found,
- * the current selection is left unchanged.
  */
 bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
 {
@@ -1084,7 +940,6 @@ bool IO::Drivers::UART::selectByIdentifier(const QJsonObject& id)
 
 /**
  * @brief Returns the UART configuration as a flat list of editable properties.
- * @return List of DriverProperty descriptors with current values.
  */
 QList<IO::DriverProperty> IO::Drivers::UART::driverProperties() const
 {
@@ -1157,8 +1012,6 @@ QList<IO::DriverProperty> IO::Drivers::UART::driverProperties() const
 
 /**
  * @brief Applies a single UART configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::UART::setDriverProperty(const QString& key, const QVariant& value)
 {

@@ -30,7 +30,6 @@
 
 namespace Widgets {
 /**
- * @struct CharColor
  * @brief Stores foreground and background colors for a character.
  */
 struct CharColor {
@@ -43,17 +42,7 @@ struct CharColor {
 };
 
 /**
- * @class Terminal
- * @brief A QML terminal widget with optional VT-100 emulation.
- *
- * The Terminal class is a QQuickPaintedItem that implements a fully interactive
- * terminal emulator. It supports VT-100 emulation and provides features like
- * text selection, autoscroll, and customizable fonts and color palettes. The
- * terminal can process escape sequences, manage cursor positions, and handle
- * mouse and keyboard events effectively.
- *
- * This class is suitable for embedding a terminal interface in QML-based GUI
- * applications, with multiple customizable features exposed as properties.
+ * @brief QML terminal widget with optional VT-100 emulation.
  */
 class Terminal : public QuickPaintedItemCompat {
   // clang-format off

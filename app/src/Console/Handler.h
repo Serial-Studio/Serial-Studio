@@ -34,14 +34,7 @@
 
 namespace Console {
 /**
- * @brief The Console::Handler class
- *
- * The handler class receives data from the @c IO::ConnectionManager class and
- * processes it so that it can be easily appended to a text edit widget.
- *
- * The class also controls various UI-related factors, such as the display
- * format of the data (e.g. ASCII or HEX), history of sent commands and
- * exporting of the RX data.
+ * @brief Receives device data and formats it for the console text view.
  */
 class Handler : public QObject {
   // clang-format off

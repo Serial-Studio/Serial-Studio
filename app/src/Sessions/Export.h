@@ -30,30 +30,16 @@
 namespace Sessions {
 class Export;
 
-//--------------------------------------------------------------------------------------------------
-// Timestamped raw bytes for the second queue
-//--------------------------------------------------------------------------------------------------
-
 /**
- * @brief Lightweight struct for raw console bytes with timestamp.
+ * @brief Raw driver bytes paired with device id and capture timestamp.
  */
 struct TimestampedRawBytes {
   int deviceId;
-  IO::ByteArrayPtr data;
-  DataModel::TimestampedFrame::SteadyTimePoint timestamp;
+  IO::CapturedDataPtr data;
 };
 
-//--------------------------------------------------------------------------------------------------
-// SQLite export worker
-//--------------------------------------------------------------------------------------------------
-
 /**
- * @brief Worker that writes telemetry data and raw bytes to a SQLite database
- *        on a background thread.
- *
- * Drains two lock-free queues per processData() call: the frame queue (via
- * FrameConsumerWorker) and a second queue for raw console bytes. Both are
- * written within a single transaction for consistency and performance.
+ * @brief Background worker that persists frames and raw bytes to SQLite.
  */
 class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   Q_OBJECT
@@ -85,12 +71,7 @@ private:
   void writeRawBytes();
   void finalizeSession();
 
-  // Produces a replayable project JSON for the row we're about to insert.
-  // Prefers the main-thread snapshot staged by Sessions::Export; falls back
-  // to synthesising a minimal project from the live frame when no snapshot
-  // is available (QuickPlot mode, or Console-only) so Sessions::Player can
-  // still restore the widget layout on replay.
-  [[nodiscard]] QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;
+  QJsonObject buildReplayProjectJson(const DataModel::Frame& frame) const;
 
 private:
   bool m_dbOpen;
@@ -98,6 +79,7 @@ private:
   QSqlDatabase m_db;
   DataModel::ExportSchema m_schema;
   DataModel::TimestampedFrame::SteadyTimePoint m_steadyBaseline;
+  qint64 m_lastRawBytesNs;
 
   QSqlQuery m_readingQuery;
   QSqlQuery m_rawBytesQuery;
@@ -105,26 +87,12 @@ private:
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes>* m_rawQueue;
   std::atomic<int>* m_operationMode;
-
-  // Shared main-thread/worker-thread snapshot of ProjectModel::serializeToJson().
-  // The pointer and mutex are owned by Sessions::Export; the worker reads via
-  // the singleton without touching ProjectModel across threads.
   QMutex* m_projectSnapshotMutex;
   const QByteArray* m_projectSnapshot;
 };
 
-//--------------------------------------------------------------------------------------------------
-// SQLite export manager
-//--------------------------------------------------------------------------------------------------
-
 /**
- * @brief Singleton managing SQLite export of telemetry data (Pro only).
- *
- * Stores multiple sessions per project database. Each session records:
- * - Column definitions (from ExportSchema)
- * - Readings with raw and transformed values (numeric + string)
- * - Raw console bytes (from ConnectionManager)
- * - Data table snapshots (user-defined tables + computed values)
+ * @brief Session-database export controller (Pro) driving the SQLite worker.
  */
 class Export : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
   // clang-format off
@@ -162,7 +130,7 @@ public slots:
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
-  void hotpathTxRawBytes(int deviceId, const IO::ByteArrayPtr& data);
+  void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);
 
 protected:
   DataModel::FrameConsumerWorkerBase* createWorker() override;
@@ -171,9 +139,6 @@ private slots:
   void onWorkerOpenChanged();
 
 private:
-  // Snapshots the current project JSON from the main thread so the worker
-  // can build the replayable session row without touching ProjectModel
-  // across threads.
   void refreshProjectSnapshot();
 
 private:
@@ -184,9 +149,6 @@ private:
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawBytesQueue;
   std::atomic<int> m_operationMode;
 
-  // Main-thread-written, worker-thread-read. The worker's ExportWorker holds
-  // borrowed pointers to both members so it can read under the mutex without
-  // re-walking the Export singleton pointer chain.
   QMutex m_projectSnapshotMutex;
   QByteArray m_projectSnapshot;
 };

@@ -57,12 +57,6 @@
 // Constructor/destructor & singleton instance access
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructor for DataModel::ProjectModel.
- *
- * Sets default values and loads the current JSON map file, or starts a new
- * project if none is loaded.
- */
 DataModel::ProjectModel::ProjectModel()
   : m_title("")
   , m_frameEndSequence("")
@@ -94,9 +88,6 @@ DataModel::ProjectModel::ProjectModel()
   });
 }
 
-/**
- * @brief Returns the singleton instance of DataModel::ProjectModel.
- */
 DataModel::ProjectModel& DataModel::ProjectModel::instance()
 {
   static ProjectModel singleton;
@@ -107,25 +98,16 @@ DataModel::ProjectModel& DataModel::ProjectModel::instance()
 // Document status
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns true if the project has unsaved modifications.
- */
 bool DataModel::ProjectModel::modified() const noexcept
 {
   return m_modified;
 }
 
-/**
- * @brief Returns the current frame decoder method.
- */
 SerialStudio::DecoderMethod DataModel::ProjectModel::decoderMethod() const noexcept
 {
   return m_frameDecoder;
 }
 
-/**
- * @brief Returns the current frame detection method.
- */
 SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const noexcept
 {
   return m_frameDetection;
@@ -136,9 +118,7 @@ SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const noe
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the filename portion of the project file path.
- *
- * Returns "New Project" when no file is associated with the project.
+ * @brief Returns the project filename, or "New Project" when none is loaded.
  */
 QString DataModel::ProjectModel::jsonFileName() const
 {
@@ -148,18 +128,13 @@ QString DataModel::ProjectModel::jsonFileName() const
   return tr("New Project");
 }
 
-/**
- * @brief Returns the default directory for JSON project files.
- */
 QString DataModel::ProjectModel::jsonProjectsPath() const
 {
   return Misc::WorkspaceManager::instance().path("JSON Projects");
 }
 
 /**
- * @brief Returns all available X-axis data source names.
- *
- * Includes "Samples" plus every registered dataset, sorted by frame index.
+ * @brief Returns "Samples" plus every dataset label, sorted by frame index.
  */
 QStringList DataModel::ProjectModel::xDataSources() const
 {
@@ -192,35 +167,23 @@ void DataModel::ProjectModel::setSuppressMessageBoxes(const bool suppress)
   m_suppressMessageBoxes = suppress;
 }
 
-/**
- * @brief Returns whether modal dialogs are suppressed.
- */
 bool DataModel::ProjectModel::suppressMessageBoxes() const noexcept
 {
   return m_suppressMessageBoxes;
 }
 
-/**
- * @brief Returns the project title.
- */
 const QString& DataModel::ProjectModel::title() const noexcept
 {
   return m_title;
 }
 
-/**
- * @brief Returns the file path of the current project file.
- */
 const QString& DataModel::ProjectModel::jsonFilePath() const noexcept
 {
   return m_filePath;
 }
 
 /**
- * @brief Returns the frame parser JavaScript source code for the primary source.
- *
- * The code lives exclusively in sources[0].frameParserCode. Returns an empty
- * string when no sources exist.
+ * @brief Returns the frame parser source code from source 0.
  */
 QString DataModel::ProjectModel::frameParserCode() const
 {
@@ -232,8 +195,6 @@ QString DataModel::ProjectModel::frameParserCode() const
 
 /**
  * @brief Returns the scripting language for the global frame parser (source 0).
- *
- * @return SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
  */
 int DataModel::ProjectModel::frameParserLanguage() const
 {
@@ -244,12 +205,7 @@ int DataModel::ProjectModel::frameParserLanguage() const
 }
 
 /**
- * @brief Returns the scripting language for @p sourceId.
- *
- * Falls back to source 0's language if the requested source does not exist.
- *
- * @param sourceId Source identifier.
- * @return SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ * @brief Returns the scripting language for the source, or source 0's.
  */
 int DataModel::ProjectModel::frameParserLanguage(int sourceId) const
 {
@@ -261,9 +217,7 @@ int DataModel::ProjectModel::frameParserLanguage(int sourceId) const
 }
 
 /**
- * @brief Returns the active group ID for the dashboard tab bar.
- *
- * Returns -1 if none is persisted.
+ * @brief Returns the active group ID for the dashboard tab bar, or -1.
  */
 int DataModel::ProjectModel::activeGroupId() const
 {
@@ -272,8 +226,6 @@ int DataModel::ProjectModel::activeGroupId() const
 
 /**
  * @brief Returns the persisted layout for the given group ID.
- * @param groupId The group ID as used by the dashboard.
- * @return Saved layout object, or an empty object if none.
  */
 QJsonObject DataModel::ProjectModel::groupLayout(int groupId) const
 {
@@ -281,9 +233,7 @@ QJsonObject DataModel::ProjectModel::groupLayout(int groupId) const
 }
 
 /**
- * @brief Returns the persisted settings object for a specific widget.
- * @param widgetId Decimal string of the WidgetID.
- * @return Settings QJsonObject, or empty if none saved.
+ * @brief Returns the persisted settings object for the given widget.
  */
 QJsonObject DataModel::ProjectModel::widgetSettings(const QString& widgetId) const
 {
@@ -291,13 +241,7 @@ QJsonObject DataModel::ProjectModel::widgetSettings(const QString& widgetId) con
 }
 
 /**
- * @brief Returns the persisted state object for a plugin.
- *
- * Plugin states are stored under "plugin:<pluginId>" keys
- * in the widgetSettings section of the project file.
- *
- * @param pluginId The extension ID (e.g. "digital-indicator").
- * @return State QJsonObject, or empty if none saved.
+ * @brief Returns the persisted state object for the given plugin.
  */
 QJsonObject DataModel::ProjectModel::pluginState(const QString& pluginId) const
 {
@@ -305,8 +249,7 @@ QJsonObject DataModel::ProjectModel::pluginState(const QString& pluginId) const
 }
 
 /**
- * Returns @c true if the project uses features that require a commercial
- * license (e.g. the 3D plot widget).
+ * @brief Returns true if the project uses any commercial-only features.
  */
 bool DataModel::ProjectModel::containsCommercialFeatures() const
 {
@@ -314,24 +257,18 @@ bool DataModel::ProjectModel::containsCommercialFeatures() const
 }
 
 /**
- * @brief Returns the project's dashboard point count (0 = use global default).
+ * @brief Returns the dashboard point count (0 = use global default).
  */
 int DataModel::ProjectModel::pointCount() const noexcept
 {
   return m_pointCount;
 }
 
-/**
- * @brief Returns the total number of groups in the project.
- */
 int DataModel::ProjectModel::groupCount() const noexcept
 {
   return static_cast<int>(m_groups.size());
 }
 
-/**
- * @brief Returns the total number of datasets across all groups.
- */
 int DataModel::ProjectModel::datasetCount() const
 {
   int count = 0;
@@ -341,46 +278,28 @@ int DataModel::ProjectModel::datasetCount() const
   return count;
 }
 
-/**
- * @brief Returns a const reference to the vector of groups.
- */
 const std::vector<DataModel::Group>& DataModel::ProjectModel::groups() const noexcept
 {
   return m_groups;
 }
 
-/**
- * @brief Returns a const reference to the vector of actions.
- */
 const std::vector<DataModel::Action>& DataModel::ProjectModel::actions() const noexcept
 {
   return m_actions;
 }
 
-/**
- * @brief Returns a const reference to the vector of sources.
- */
 const std::vector<DataModel::Source>& DataModel::ProjectModel::sources() const noexcept
 {
   return m_sources;
 }
 
-/**
- * @brief Returns the number of sources in the project.
- */
 int DataModel::ProjectModel::sourceCount() const noexcept
 {
   return static_cast<int>(m_sources.size());
 }
 
 /**
- * @brief Returns the workspaces that represent the current dashboard layout.
- *
- * QuickPlot / ConsoleOnly return a session-scoped list built from the live
- * dashboard frame (m_sessionWorkspaces), so a loaded project's hand-edited
- * workspaces never leak into those modes. ProjectFile returns m_workspaces —
- * auto-regenerated from m_groups when customizeWorkspaces is off, or the
- * user's saved list when it's on.
+ * @brief Returns the workspace list appropriate for the current operation mode.
  */
 const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() const
 {
@@ -390,57 +309,33 @@ const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() c
   return m_workspaces;
 }
 
-/**
- * @brief Returns the set of auto-generated group IDs hidden by the user.
- */
 const QSet<int>& DataModel::ProjectModel::hiddenGroupIds() const noexcept
 {
   return m_hiddenGroupIds;
 }
 
-/**
- * @brief Returns the number of user-defined workspaces in the project.
- */
 int DataModel::ProjectModel::workspaceCount() const noexcept
 {
   return static_cast<int>(m_workspaces.size());
 }
 
-/**
- * @brief Returns true if the given group ID is hidden from the workspace list.
- */
 bool DataModel::ProjectModel::isGroupHidden(int groupId) const
 {
   return m_hiddenGroupIds.contains(groupId);
 }
 
-/**
- * @brief Returns the number of user-defined data tables.
- */
 int DataModel::ProjectModel::tableCount() const noexcept
 {
   return static_cast<int>(m_tables.size());
 }
 
-/**
- * @brief Returns a const reference to the vector of data tables.
- */
 const std::vector<DataModel::TableDef>& DataModel::ProjectModel::tables() const noexcept
 {
   return m_tables;
 }
 
 /**
- * @brief Stages a single key/value setting for a widget in the project.
- *
- * Updates the in-memory widget settings store and marks the project as
- * modified. The standard save workflow (Ctrl+S / dirty-project prompt on
- * close) is responsible for flushing to disk — this method never writes
- * to disk on its own.
- *
- * @param widgetId  Decimal string of the WidgetID.
- * @param key       Setting key (e.g. "interpolate").
- * @param value     Value to persist.
+ * @brief Stages a single widget setting and marks the project dirty.
  */
 void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
                                                 const QString& key,
@@ -462,15 +357,7 @@ void DataModel::ProjectModel::saveWidgetSetting(const QString& widgetId,
 }
 
 /**
- * @brief Stages a plugin's entire state in the project.
- *
- * Saves the state object under "plugin:<pluginId>" in the widgetSettings
- * section and marks the project as modified. The standard save workflow
- * is responsible for flushing to disk — this method never writes on its
- * own.
- *
- * @param pluginId The extension ID.
- * @param state    JSON object containing the plugin's state.
+ * @brief Stages a plugin's state in the project and marks it dirty.
  */
 void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJsonObject& state)
 {
@@ -486,10 +373,7 @@ void DataModel::ProjectModel::savePluginState(const QString& pluginId, const QJs
 }
 
 /**
- * @brief Adds a new source to the project with default settings.
- *
- * In GPL builds, a project may have at most one source. Attempting to add a
- * second source shows an informational message and is otherwise a no-op.
+ * @brief Adds a new source to the project (GPL: capped to one source).
  */
 void DataModel::ProjectModel::addSource()
 {
@@ -532,12 +416,7 @@ void DataModel::ProjectModel::addSource()
 }
 
 /**
- * @brief Deletes the source with the given @p sourceId.
- *
- * The default source (id == 0) cannot be deleted.
- * Any groups referencing the deleted source are reassigned to source 0.
- *
- * @param sourceId The id of the source to delete.
+ * @brief Deletes the source and reassigns dependent groups to source 0.
  */
 void DataModel::ProjectModel::deleteSource(int sourceId)
 {
@@ -717,12 +596,7 @@ void DataModel::ProjectModel::captureSourceSettings(int sourceId)
 }
 
 /**
- * @brief Restores driver settings from Source::connectionSettings for source @p sourceId.
- *
- * Calls setDriverProperty() on the live driver for every key stored in the JSON
- * snapshot. Works for both source 0 (singleton) and secondary sources.
- *
- * @param sourceId The source whose connectionSettings should be applied.
+ * @brief Applies the source's saved connectionSettings to its live driver.
  */
 void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
 {
@@ -750,14 +624,7 @@ void DataModel::ProjectModel::restoreSourceSettings(int sourceId)
 }
 
 /**
- * @brief Directly overwrites source[0].connectionSettings without triggering a
- *        rebuildDevices() cycle.
- *
- * Called by ConnectionManager::onUiDriverConfigurationChanged() to capture the
- * UI-config driver state back into the project model without emitting sourcesChanged()
- * (which would cause an infinite sync loop).
- *
- * @param settings Serialized driver properties to store.
+ * @brief Overwrites source[0].connectionSettings without emitting sourcesChanged.
  */
 void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& settings)
 {
@@ -769,12 +636,7 @@ void DataModel::ProjectModel::setSource0ConnectionSettings(const QJsonObject& se
 }
 
 /**
- * @brief Directly sets source[0].busType without emitting sourceStructureChanged.
- *
- * Used by ConnectionManager to keep the in-memory model in sync with the UI bus type
- * selection without triggering a full device rebuild cycle.
- *
- * @param busType New bus type as int.
+ * @brief Sets source[0].busType without emitting sourceStructureChanged.
  */
 void DataModel::ProjectModel::setSource0BusType(int busType)
 {
@@ -790,12 +652,7 @@ void DataModel::ProjectModel::setSource0BusType(int busType)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Prompts the user to save unsaved changes.
- *
- * In API mode, changes are silently discarded. Returns false only if the user
- * explicitly cancels the dialog.
- *
- * @return true if the caller may proceed, false if the user cancelled.
+ * @brief Prompts to save changes, returning false only on cancel.
  */
 bool DataModel::ProjectModel::askSave()
 {
@@ -853,13 +710,7 @@ bool DataModel::ProjectModel::askSave()
 }
 
 /**
- * @brief Saves the project to disk.
- *
- * Validates the project (title, groups, datasets) and saves the current state.
- * When @p askPath is true or no file path is set, a save-as dialog is shown.
- *
- * @param askPath  When true, always prompt for a save location.
- * @return true if the file was written successfully.
+ * @brief Validates and saves the project, optionally prompting for a path.
  */
 bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 {
@@ -934,14 +785,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 }
 
 /**
- * @brief Saves the project to the given @p path without showing a dialog.
- *
- * Runs the same validation as apiSaveJsonFile(bool), then writes directly to
- * @p path. Designed for headless / API automation where a file dialog is
- * not available.
- *
- * @param path  Absolute destination path for the project file.
- * @return true if the file was written successfully.
+ * @brief Headless save to the given path (no file dialog).
  */
 bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
 {
@@ -980,10 +824,6 @@ bool DataModel::ProjectModel::apiSaveJsonFile(const QString& path)
 
 /**
  * @brief Serializes the complete project state to a QJsonObject.
- *
- * Used for both file saving and API export.
- *
- * @return QJsonObject containing the full project configuration.
  */
 QJsonObject DataModel::ProjectModel::serializeToJson() const
 {
@@ -1055,10 +895,7 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Connects external signals to this model.
- *
- * Wires Dashboard::pointsChanged so the new point count is persisted into the
- * project file whenever the user changes it.
+ * @brief Wires Dashboard, ConnectionManager, and AppState signals to this model.
  */
 void DataModel::ProjectModel::setupExternalConnections()
 {
@@ -1127,7 +964,7 @@ void DataModel::ProjectModel::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Resets all project state to factory defaults and emits change signals.
+ * @brief Resets all project state to factory defaults.
  */
 void DataModel::ProjectModel::newJsonFile()
 {
@@ -1185,9 +1022,6 @@ void DataModel::ProjectModel::newJsonFile()
   setModified(false);
 }
 
-/**
- * @brief Sets the project title and marks the project as modified.
- */
 void DataModel::ProjectModel::setTitle(const QString& title)
 {
   if (m_title != title) {
@@ -1247,9 +1081,6 @@ void DataModel::ProjectModel::setFrameStartSequence(const QString& sequence)
 
 /**
  * @brief Sets the frame end delimiter sequence.
- *
- * Also syncs into sources[0].frameEnd in single-source mode so that
- * buildFrameConfig() uses the correct delimiter for the FrameReader.
  */
 void DataModel::ProjectModel::setFrameEndSequence(const QString& sequence)
 {
@@ -1267,9 +1098,6 @@ void DataModel::ProjectModel::setFrameEndSequence(const QString& sequence)
 
 /**
  * @brief Sets the checksum algorithm name.
- *
- * Also syncs into sources[0].checksumAlgorithm in single-source mode so that
- * buildFrameConfig() uses the correct checksum for the FrameReader.
  */
 void DataModel::ProjectModel::setChecksumAlgorithm(const QString& algorithm)
 {
@@ -1287,9 +1115,6 @@ void DataModel::ProjectModel::setChecksumAlgorithm(const QString& algorithm)
 
 /**
  * @brief Sets the frame detection strategy.
- *
- * Also syncs into sources[0].frameDetection in single-source mode so that
- * buildFrameConfig() uses the correct detection mode for the FrameReader.
  */
 void DataModel::ProjectModel::setFrameDetection(const SerialStudio::FrameDetection detection)
 {
@@ -1330,15 +1155,7 @@ void DataModel::ProjectModel::openJsonFile()
 }
 
 /**
- * @brief Opens and loads a project file from the given path.
- *
- * Reads all project settings, groups, actions, and widget settings from the
- * file. Emits groupsChanged(), actionsChanged(), titleChanged(),
- * jsonFileChanged(), frameDetectionChanged(), and frameParserCodeChanged()
- * after a successful load.
- *
- * @param path Absolute path to the .ssproj or .json project file.
- * @return true if the project was loaded successfully, false on error.
+ * @brief Loads a project from the given .ssproj/.json path.
  */
 bool DataModel::ProjectModel::openJsonFile(const QString& path)
 {
@@ -1373,12 +1190,6 @@ bool DataModel::ProjectModel::openJsonFile(const QString& path)
 
 /**
  * @brief Deserialises a project from an in-memory QJsonDocument.
- *
- * Shared back-end for openJsonFile() and every caller that already has the
- * document in hand (session replay, the project.loadFromJSON API command).
- * When @p sourcePath is non-empty it becomes @c m_filePath so subsequent
- * "Save" writes back to the right file; pass an empty string for sessions
- * or API uploads that shouldn't be tied to a file on disk.
  */
 bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document,
                                                    const QString& sourcePath)
@@ -1673,25 +1484,16 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 // Selection state (used internally by group/dataset/action operations)
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Records the currently selected group for data operations.
- */
 void DataModel::ProjectModel::setSelectedGroup(const DataModel::Group& group)
 {
   m_selectedGroup = group;
 }
 
-/**
- * @brief Records the currently selected action for data operations.
- */
 void DataModel::ProjectModel::setSelectedAction(const DataModel::Action& action)
 {
   m_selectedAction = action;
 }
 
-/**
- * @brief Records the currently selected dataset for data operations.
- */
 void DataModel::ProjectModel::setSelectedDataset(const DataModel::Dataset& dataset)
 {
   m_selectedDataset = dataset;
@@ -1699,8 +1501,6 @@ void DataModel::ProjectModel::setSelectedDataset(const DataModel::Dataset& datas
 
 /**
  * @brief Sets the frame decoder method and emits frameDetectionChanged.
- *
- * Also syncs into sources[0].decoderMethod in single-source mode.
  */
 void DataModel::ProjectModel::setDecoderMethod(const SerialStudio::DecoderMethod method)
 {
@@ -1717,9 +1517,7 @@ void DataModel::ProjectModel::setDecoderMethod(const SerialStudio::DecoderMethod
 }
 
 /**
- * @brief Toggles hexadecimal delimiter mode and converts existing sequences.
- *
- * Also syncs into sources[0].hexadecimalDelimiters in single-source mode.
+ * @brief Toggles hexadecimal delimiter mode.
  */
 void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
 {
@@ -1736,7 +1534,7 @@ void DataModel::ProjectModel::setHexadecimalDelimiters(const bool hexadecimal)
 }
 
 /**
- * @brief Replaces the group at @p groupId with @p group and emits groupsChanged.
+ * @brief Replaces the group at groupId and emits groupsChanged.
  */
 void DataModel::ProjectModel::updateGroup(const int groupId,
                                           const DataModel::Group& group,
@@ -1782,7 +1580,7 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
 }
 
 /**
- * @brief Replaces the action at @p actionId with @p action and emits actionsChanged.
+ * @brief Replaces the action at actionId and emits actionsChanged.
  */
 void DataModel::ProjectModel::updateAction(const int actionId,
                                            const DataModel::Action& action,
@@ -1890,10 +1688,7 @@ void DataModel::ProjectModel::deleteCurrentAction()
 }
 
 /**
- * @brief Deletes the currently selected dataset after user confirmation.
- *
- * Removes the parent group too when it becomes empty, then renumbers all
- * group and dataset IDs.
+ * @brief Deletes the selected dataset, removing the group if it becomes empty.
  */
 void DataModel::ProjectModel::deleteCurrentDataset()
 {
@@ -2033,9 +1828,6 @@ void DataModel::ProjectModel::duplicateCurrentAction()
 // Output widget CRUD
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Stores the given output widget as the current selection.
- */
 void DataModel::ProjectModel::setSelectedOutputWidget(const DataModel::OutputWidget& widget)
 {
   m_selectedOutputWidget = widget;
@@ -2105,10 +1897,7 @@ void DataModel::ProjectModel::addOutputPanel()
 }
 
 /**
- * @brief Adds an output control to the project, just like addDataset().
- *
- * If the selected group is an output group, adds to it. Otherwise
- * creates a new output group automatically.
+ * @brief Adds an output control, creating a new output group if needed.
  */
 void DataModel::ProjectModel::addOutputControl(const SerialStudio::OutputWidgetType type)
 {
@@ -2338,12 +2127,7 @@ void DataModel::ProjectModel::ensureValidGroup()
 }
 
 /**
- * @brief Adds a new dataset of the given type to the currently selected group.
- *
- * Calls ensureValidGroup() first to guarantee a compatible target group.
- * The dataset title is made unique within the group.
- *
- * @param option Type of dataset to create (Generic, Plot, FFT, Bar, etc.).
+ * @brief Adds a new dataset of the given type to the selected group.
  */
 void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption option)
 {
@@ -2431,11 +2215,6 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
 
 /**
  * @brief Toggles a dataset option flag on the currently selected dataset.
- *
- * Updates the dataset in its parent group and emits groupsChanged().
- *
- * @param option  The option to modify (Plot, FFT, Bar, Gauge, Compass, LED).
- * @param checked Whether to enable (true) or disable (false) the option.
  */
 void DataModel::ProjectModel::changeDatasetOption(const SerialStudio::DatasetOption option,
                                                   const bool checked)
@@ -2523,13 +2302,7 @@ void DataModel::ProjectModel::addAction()
 }
 
 /**
- * @brief Adds a new group with the given title and widget type.
- *
- * The title is made unique within the project. setGroupWidget() is called
- * to populate default datasets for complex widget types.
- *
- * @param title   Desired group title.
- * @param widget  Widget type to assign.
+ * @brief Adds a new group with a unique title and the given widget type.
  */
 void DataModel::ProjectModel::addGroup(const QString& title, const SerialStudio::GroupWidget widget)
 {
@@ -2572,17 +2345,7 @@ void DataModel::ProjectModel::addGroup(const QString& title, const SerialStudio:
 }
 
 /**
- * @brief Assigns a widget type to the specified group index.
- *
- * For widget types that carry a fixed dataset layout (Accelerometer, Gyroscope,
- * GPS, Plot3D), the existing datasets are replaced by a canonical set.
- *
- * When the group already has datasets and the new widget would replace them,
- * the user is asked to confirm. Returns false if the user declines.
- *
- * @param group   Index into m_groups.
- * @param widget  Widget type to assign.
- * @return true on success, false if the operation was cancelled.
+ * @brief Assigns a widget type to the group, replacing fixed-layout datasets.
  */
 bool DataModel::ProjectModel::setGroupWidget(const int group,
                                              const SerialStudio::GroupWidget widget)
@@ -2822,7 +2585,7 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the project's modification flag and emits modifiedChanged().
+ * @brief Updates the project's modification flag and emits modifiedChanged.
  */
 void DataModel::ProjectModel::setModified(const bool modified)
 {
@@ -2835,11 +2598,7 @@ void DataModel::ProjectModel::setModified(const bool modified)
 }
 
 /**
- * @brief Sets the frame parser JavaScript source code.
- *
- * The code is stored directly in sources[0].frameParserCode, which is the
- * single authoritative location. Emits frameParserCodeChanged() so that
- * FrameParser::readCode() and the JsCodeEditor are notified.
+ * @brief Sets source[0].frameParserCode and emits frameParserCodeChanged.
  */
 void DataModel::ProjectModel::setFrameParserCode(const QString& code)
 {
@@ -2854,12 +2613,6 @@ void DataModel::ProjectModel::setFrameParserCode(const QString& code)
 
 /**
  * @brief Sets the scripting language for the global frame parser (source 0).
- *
- * Preserved as the Q_PROPERTY writer for the source-0 binding used by the
- * top-level FrameParserView QML. Multi-source callers should use
- * @c updateSourceFrameParserLanguage instead.
- *
- * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
  */
 void DataModel::ProjectModel::setFrameParserLanguage(int language)
 {
@@ -2873,15 +2626,7 @@ void DataModel::ProjectModel::setFrameParserLanguage(int language)
 }
 
 /**
- * @brief Sets the scripting language for the source with id @p sourceId.
- *
- * Looks up the source by its logical sourceId field (not by vector index),
- * to stay correct after non-contiguous deletions. Emits the language-changed
- * and sources-changed notifications on real transitions so the FrameParser
- * engine map and the QML editor both pick up the new language.
- *
- * @param sourceId Source identifier whose language should change.
- * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ * @brief Sets the scripting language for the source with the given sourceId.
  */
 void DataModel::ProjectModel::updateSourceFrameParserLanguage(int sourceId, int language)
 {

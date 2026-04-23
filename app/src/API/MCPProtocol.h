@@ -28,24 +28,9 @@
 #include <QVariant>
 
 namespace API {
-/**
- * @brief Model Context Protocol (MCP) message types and structures
- *
- * MCP is Anthropic's protocol for connecting AI models to external tools
- * and data sources. This implementation supports the core MCP specification
- * and maps Serial Studio's existing API commands to MCP tools.
- *
- * Specification: https://spec.modelcontextprotocol.io/
- */
 namespace MCP {
-/**
- * @brief MCP protocol version
- */
 constexpr const char* kProtocolVersion = "2024-11-05";
 
-/**
- * @brief MCP method names
- */
 namespace Method {
 constexpr const char* Initialize           = "initialize";
 constexpr const char* Ping                 = "ping";
@@ -59,9 +44,6 @@ constexpr const char* PromptsList          = "prompts/list";
 constexpr const char* PromptsGet           = "prompts/get";
 }  // namespace Method
 
-/**
- * @brief MCP error codes
- */
 namespace ErrorCode {
 constexpr int ParseError     = -32700;
 constexpr int InvalidRequest = -32600;
@@ -71,8 +53,7 @@ constexpr int InternalError  = -32603;
 }  // namespace ErrorCode
 
 /**
- * @struct MCPRequest
- * @brief Represents an MCP JSON-RPC 2.0 request
+ * @brief Represents an MCP JSON-RPC 2.0 request.
  */
 struct MCPRequest {
   QString jsonrpc;
@@ -104,8 +85,7 @@ struct MCPRequest {
 };
 
 /**
- * @struct MCPResponse
- * @brief Represents an MCP JSON-RPC 2.0 response
+ * @brief Represents an MCP JSON-RPC 2.0 response.
  */
 struct MCPResponse {
   QString jsonrpc;
@@ -170,8 +150,7 @@ struct MCPResponse {
 };
 
 /**
- * @struct Tool
- * @brief Represents an MCP tool definition
+ * @brief Represents an MCP tool definition.
  */
 struct Tool {
   QString name;
@@ -198,8 +177,7 @@ struct Tool {
 };
 
 /**
- * @struct Resource
- * @brief Represents an MCP resource
+ * @brief Represents an MCP resource.
  */
 struct Resource {
   QString uri;
@@ -221,8 +199,7 @@ struct Resource {
 };
 
 /**
- * @struct Prompt
- * @brief Represents an MCP prompt template
+ * @brief Represents an MCP prompt template.
  */
 struct Prompt {
   QString name;
@@ -241,11 +218,6 @@ struct Prompt {
   }
 };
 
-/**
- * @brief Check if data appears to be an MCP message
- * @param data Raw data to check
- * @return true if data appears to be an MCP JSON-RPC 2.0 message
- */
 inline bool isMCPMessage(const QByteArray& data)
 {
   if (data.isEmpty())

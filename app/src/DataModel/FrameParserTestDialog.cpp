@@ -35,12 +35,6 @@
 // Constructor function
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the frame parser test dialog
- *
- * @param parser Pointer to the FrameParser instance to test
- * @param parent Parent widget
- */
 DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWidget* parent)
   : QDialog(parent), m_sourceId(0), m_parser(parser)
 {
@@ -141,7 +135,6 @@ DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWi
 
 /**
  * @brief Sets the source ID used when executing the parser.
- * @param sourceId Source whose engine is tested (0 = global).
  */
 void DataModel::FrameParserTestDialog::setSourceId(int sourceId)
 {
@@ -153,7 +146,7 @@ void DataModel::FrameParserTestDialog::setSourceId(int sourceId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Clears all results from the table
+ * @brief Clears the input, output table, and parser execution context.
  */
 void DataModel::FrameParserTestDialog::clear()
 {
@@ -165,9 +158,7 @@ void DataModel::FrameParserTestDialog::clear()
 }
 
 /**
- * @brief Handles the Parse button click
- *
- * Executes the parser function with the input data and displays results
+ * @brief Runs the parser on the current input and displays the results.
  */
 void DataModel::FrameParserTestDialog::parseData()
 {
@@ -224,9 +215,6 @@ void DataModel::FrameParserTestDialog::onThemeChanged()
 
 /**
  * @brief Retranslates all UI text when the application language changes.
- *
- * Updates all labels, tooltips, placeholders, and re-parses existing data
- * to reflect the new language.
  */
 void DataModel::FrameParserTestDialog::onLanguageChanged()
 {
@@ -252,14 +240,7 @@ void DataModel::FrameParserTestDialog::onLanguageChanged()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles hex mode checkbox state changes, updating placeholder text
- *        and formatting.
- *
- * When hex mode is enabled, sets hex-specific placeholder text and formats
- * existing input as hex. When disabled, restores default placeholder and
- * palette.
- *
- * @param state The new checkbox state (Qt::Checked or Qt::Unchecked)
+ * @brief Updates placeholder text and formatting when hex mode toggles.
  */
 void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
 {
@@ -278,15 +259,7 @@ void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
 }
 
 /**
- * @brief Handles input data changes, and formats & validates input in hex mode.
- *
- * In hex mode, automatically formats hex input with spaces, validates the data,
- * and highlights invalid input in red.  Maintains cursor position during
- * formatting.
- *
- * In text mode, it uses default palette always.
- *
- * @param t The new input text from the line edit
+ * @brief Formats and validates the input when hex mode is active.
  */
 void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
 {
@@ -323,29 +296,7 @@ void DataModel::FrameParserTestDialog::onInputDataChanged(const QString& t)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Formats user input text into properly spaced hexadecimal byte pairs
- *
- * Converts raw text input into formatted hexadecimal string with spaces
- * separating each byte pair. Non-hexadecimal characters are removed, and
- * letters are converted to uppercase.
- *
- * The formatting process:
- * 1. Removes all non-alphanumeric characters (including existing spaces)
- * 2. Converts all letters to uppercase
- * 3. Inserts a space after every 2 characters (one byte)
- *
- * Examples:
- *   - "01a2ff" → "01 A2 FF"
- *   - "1 2 3 4" → "12 34"
- *   - "abcdef123" → "AB CD EF 12 3"
- *
- * @param text Raw input text from the user
- * @return Formatted hexadecimal string with space-separated byte pairs
- *
- * @note Incomplete byte pairs (odd number of characters) are left without
- *       a trailing space
- *
- * @see validateHexInput()
+ * @brief Formats the input into uppercase space-separated hex byte pairs.
  */
 QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
 {
@@ -366,29 +317,7 @@ QString DataModel::FrameParserTestDialog::formatHexInput(const QString& text)
 }
 
 /**
- * @brief Validates that input text contains valid hexadecimal byte data
- *
- * Checks if the input string is valid hexadecimal data suitable for
- * parsing. Validation ensures:
- * 1. All characters (excluding spaces) are valid hex digits (0-9, A-F, a-f)
- * 2. The total number of hex digits forms complete byte pairs (even count)
- *
- * Empty strings are considered valid to allow progressive input.
- *
- * Examples:
- *   - "01 A2 FF" → true (3 complete bytes)
- *   - "1A2B" → true (2 complete bytes)
- *   - "01 A" → false (incomplete byte)
- *   - "01 GH" → false (invalid hex character 'G')
- *   - "" → true (empty input allowed)
- *
- * @param text Input text to validate
- * @return true if the text is valid hexadecimal with complete byte pairs,
- *         false otherwise
- *
- * @note This function is case-insensitive for hex letters (A-F, a-f)
- *
- * @see formatHexInput()
+ * @brief Returns true if the text is empty or forms valid complete hex bytes.
  */
 bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 {
@@ -410,10 +339,7 @@ bool DataModel::FrameParserTestDialog::validateHexInput(const QString& text)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Adds a result row to the results table
- *
- * @param input The input frame data
- * @param output The parsed output array
+ * @brief Populates the results table with the parsed frame output.
  */
 void DataModel::FrameParserTestDialog::displayOutput(const QString& input,
                                                      const QStringList& output)

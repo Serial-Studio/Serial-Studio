@@ -38,13 +38,6 @@
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Initialises the engine map (source 0 = global) and loads template
- * names.
- *
- * Cross-singleton connections to ProjectModel are deferred to
- * @c setupExternalConnections() to avoid static-init-order deadlocks.
- */
 DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
 {
   (void)engineForSource(0);
@@ -71,9 +64,6 @@ DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
   loadTemplateNames();
 }
 
-/**
- * @brief Returns the singleton instance.
- */
 DataModel::FrameParser& DataModel::FrameParser::instance()
 {
   static FrameParser singleton;
@@ -85,10 +75,7 @@ DataModel::FrameParser& DataModel::FrameParser::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Wires cross-singleton connections and performs the initial script load.
- *
- * Called by ModuleManager after all singletons are constructed so that
- * accessing ProjectModel::instance() here cannot deadlock.
+ * @brief Wires ProjectModel signals and runs the initial script load.
  */
 void DataModel::FrameParser::setupExternalConnections()
 {
@@ -105,12 +92,7 @@ void DataModel::FrameParser::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the source code of the default frame parser template for the
- * given @p language.
- *
- * @param language SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
- * @return The default template source code, or an empty string if the
- *         resource could not be read.
+ * @brief Returns the default frame parser template code for the language.
  */
 QString DataModel::FrameParser::defaultTemplateCode(int language)
 {
@@ -143,11 +125,7 @@ QString DataModel::FrameParser::defaultTemplateCode(int language)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the source code of the currently selected template for
- * @p sourceId.
- *
- * @param sourceId Source whose stored template index is used (default: 0).
- * @return Template source code, or an empty string if no template is selected.
+ * @brief Returns the template code currently selected for the source.
  */
 QString DataModel::FrameParser::templateCode(int sourceId) const
 {
@@ -167,14 +145,7 @@ QString DataModel::FrameParser::templateCode(int sourceId) const
 }
 
 /**
- * @brief Checks if @p code matches any known template (Lua or JS variant).
- *
- * Compares the trimmed code against both language variants of every
- * template. This enables language switching to find the equivalent
- * template even when the code was loaded from a previous session.
- *
- * @param code The frame parser code to match.
- * @return Template index (0-based into templateFiles) if found, or -1.
+ * @brief Returns the template index matching the code in either language.
  */
 int DataModel::FrameParser::detectTemplate(const QString& code) const
 {
@@ -203,17 +174,11 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
   return -1;
 }
 
-/**
- * @brief Returns the list of localised template display names.
- */
 const QStringList& DataModel::FrameParser::templateNames() const
 {
   return m_templateNames;
 }
 
-/**
- * @brief Returns the list of template file basenames.
- */
 const QStringList& DataModel::FrameParser::templateFiles() const
 {
   return m_templateFiles;
@@ -224,10 +189,7 @@ const QStringList& DataModel::FrameParser::templateFiles() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the scripting language configured for @p sourceId.
- *
- * @param sourceId Source identifier.
- * @return SerialStudio::ScriptLanguage value (0 = JS, 1 = Lua).
+ * @brief Returns the scripting language configured for the source.
  */
 int DataModel::FrameParser::languageForSource(int sourceId) const
 {
@@ -240,13 +202,7 @@ int DataModel::FrameParser::languageForSource(int sourceId) const
 }
 
 /**
- * @brief Returns (or lazily creates) the script engine for @p sourceId.
- *
- * The engine type is determined by the source's configured language.
- * Source 0 is the global engine shared by all single-source projects.
- *
- * @param sourceId Source identifier (0 = global).
- * @return Reference to the IScriptEngine for this source.
+ * @brief Returns (or lazily creates) the script engine for the source.
  */
 DataModel::IScriptEngine& DataModel::FrameParser::engineForSource(int sourceId)
 {
@@ -271,10 +227,7 @@ DataModel::IScriptEngine& DataModel::FrameParser::engineForSource(int sourceId)
 }
 
 /**
- * @brief Sets per-source code, loading it into the source engine.
- *
- * @param sourceId Source identifier (0 = global).
- * @param code     Script source code.
+ * @brief Loads per-source code into the source engine.
  */
 void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
 {
@@ -291,12 +244,7 @@ void DataModel::FrameParser::setSourceCode(int sourceId, const QString& code)
 }
 
 /**
- * @brief Removes and destroys the engine for @p sourceId.
- *
- * For source 0 this resets the global engine to a clean, unloaded state
- * rather than removing it from the map (source 0 is always present).
- *
- * @param sourceId Source identifier (0 = global).
+ * @brief Destroys the engine for the source (source 0 is reset in place).
  */
 void DataModel::FrameParser::clearSourceEngine(int sourceId)
 {
@@ -317,14 +265,7 @@ void DataModel::FrameParser::clearSourceEngine(int sourceId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Executes the engine for @p sourceId over text data, returning one
- * or more frames.
- *
- * Falls back to source 0 when the source has no dedicated engine loaded.
- *
- * @param frame    Decoded UTF-8 string frame.
- * @param sourceId Source identifier whose engine should be used.
- * @return List of QStringList, each representing one frame.
+ * @brief Runs the source's engine over a text frame, falling back to source 0.
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame, int sourceId)
 {
@@ -347,14 +288,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
 }
 
 /**
- * @brief Executes the engine for @p sourceId over binary data, returning
- * one or more frames.
- *
- * Falls back to source 0 when the source has no dedicated engine loaded.
- *
- * @param frame    Binary frame data.
- * @param sourceId Source identifier whose engine should be used.
- * @return List of QStringList, each representing one frame.
+ * @brief Runs the source's engine over a binary frame, falling back to source 0.
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& frame, int sourceId)
 {
@@ -381,15 +315,7 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Validates and loads a frame parser script into the engine for
- * @p sourceId.
- *
- * Delegates all language-specific validation to the concrete IScriptEngine.
- *
- * @param sourceId         Target source engine (0 = global).
- * @param script           The script source to validate and load.
- * @param showMessageBoxes When @c false, errors are logged instead of shown.
- * @return @c true on success, @c false if validation failed.
+ * @brief Validates and loads a frame parser script into the source's engine.
  */
 bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, bool showMessageBoxes)
 {
@@ -427,10 +353,6 @@ void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
 
 /**
  * @brief Loads the code stored in the project model into all engines.
- *
- * Destroys all engines except source 0 (which is reset in-place), then
- * reloads source 0 from the project and lazily loads each per-source engine
- * from its stored parser code.
  */
 void DataModel::FrameParser::readCode()
 {
@@ -538,11 +460,7 @@ void DataModel::FrameParser::loadTemplateNames()
 }
 
 /**
- * @brief Sets the active template index and saves the resulting code to the
- * project model.
- *
- * @param sourceId Target source engine (0 = global).
- * @param idx      Template index into @c m_templateFiles.
+ * @brief Loads the template at idx into the source and saves it to the project.
  */
 void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
 {
@@ -564,11 +482,7 @@ void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
 }
 
 /**
- * @brief Loads the default comma-separated-values template for @p sourceId.
- *
- * @param sourceId   Target source engine (0 = global).
- * @param guiTrigger When @c false, clears the project's modified flag after
- *                   loading (silent default reset).
+ * @brief Loads the default CSV template for the source.
  */
 void DataModel::FrameParser::loadDefaultTemplate(int sourceId, bool guiTrigger)
 {

@@ -51,7 +51,6 @@ QString IO::Protocols::YMODEM::protocolName() const
 
 /**
  * @brief Starts a YMODEM file transfer.
- * @param filePath Path to the file to transmit.
  */
 void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
 {
@@ -82,7 +81,6 @@ void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
 
 /**
  * @brief Processes bytes received from the remote device (YMODEM state machine).
- * @param data Raw bytes from the device.
  */
 void IO::Protocols::YMODEM::processInput(const QByteArray& data)
 {

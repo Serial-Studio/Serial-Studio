@@ -42,10 +42,6 @@
 // Constructor
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the dialog UI: code editor, language/template selectors,
- * test area, and action buttons.
- */
 DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   : QDialog(parent), m_language(SerialStudio::Lua), m_targetGroupId(-1), m_targetDatasetId(-1)
 {
@@ -146,20 +142,11 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
 
 /**
  * @brief Opens the dialog pre-populated with existing transform code.
- *
- * If @p currentCode is empty, the editor starts blank so the user can pick
- * a template or write from scratch. The language combo and syntax
- * highlighter are set to match the source's configured language.
- *
- * @param datasetTitle Display name shown in the window title bar.
- * @param currentCode  Existing transform expression (may be empty).
- * @param language     SerialStudio::ScriptLanguage (0 = JS, 1 = Lua).
  */
 void DataModel::DatasetTransformEditor::displayDialog(
   const QString& datasetTitle, const QString& currentCode, int language, int groupId, int datasetId)
 {
-  // Capture target dataset identity at open time so that Apply writes
-  // to the correct dataset even if the user navigates away in the tree
+  // Capture target dataset identity at open time
   m_targetGroupId   = groupId;
   m_targetDatasetId = datasetId;
 
@@ -172,10 +159,7 @@ void DataModel::DatasetTransformEditor::displayDialog(
   m_languageCombo->blockSignals(false);
   applyLanguage(language);
 
-  // Prefill the editor: if the dataset has no existing transform, load
-  // the default multiline-comment template so the user sees explanatory
-  // text instead of a blank editor. QTextEdit's placeholderText only
-  // renders the first line, which is useless for our multiline hint.
+  // Prefill the editor
   if (currentCode.isEmpty())
     m_editor->setPlainText(defaultPlaceholder(language));
   else
@@ -188,39 +172,28 @@ void DataModel::DatasetTransformEditor::displayDialog(
   // Reset test output
   m_testOutput->setText(QStringLiteral("—"));
 
+  // Display the window & focus the text editor
   showNormal();
   raise();
   activateWindow();
   m_editor->setFocus();
 }
 
-/**
- * @brief Returns the current editor text.
- */
 QString DataModel::DatasetTransformEditor::code() const
 {
   return m_editor->toPlainText();
 }
 
-/**
- * @brief Returns the currently selected language.
- */
 int DataModel::DatasetTransformEditor::language() const
 {
   return m_language;
 }
 
-/**
- * @brief Returns the group ID captured when the dialog was opened.
- */
 int DataModel::DatasetTransformEditor::targetGroupId() const noexcept
 {
   return m_targetGroupId;
 }
 
-/**
- * @brief Returns the dataset ID captured when the dialog was opened.
- */
 int DataModel::DatasetTransformEditor::targetDatasetId() const noexcept
 {
   return m_targetDatasetId;
@@ -231,29 +204,22 @@ int DataModel::DatasetTransformEditor::targetDatasetId() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Emits the accepted signal with the current code and language, then
- * closes the dialog.
- *
- * If the editor content does not define a transform() function, the code
- * is discarded (empty string emitted) so the dataset keeps its raw value
- * and no placeholder text ends up persisted in the project file.
+ * @brief Emits the transform if transform() is defined, otherwise emits empty.
  */
 void DataModel::DatasetTransformEditor::onApply()
 {
-  // Drop the code entirely if no transform() function is defined — this
-  // prevents placeholder comments (or random notes) from being saved and
-  // avoids spinning up a transform engine at runtime for nothing
+  // Drop the code entirely if no transform() function is defined
   QString code = m_editor->toPlainText();
   if (!definesTransformFunction(code, m_language))
     code.clear();
 
+  // Accept the transform code
   Q_EMIT transformApplied(code, m_language, m_targetGroupId, m_targetDatasetId);
   QDialog::accept();
 }
 
 /**
- * @brief Compiles and executes the current transform with the test input
- * value, displaying the result (or error) in the output label.
+ * @brief Runs the transform against the test input and shows the result.
  */
 void DataModel::DatasetTransformEditor::onTest()
 {
@@ -277,11 +243,7 @@ void DataModel::DatasetTransformEditor::onTest()
 }
 
 /**
- * @brief Clears the editor, test fields, and resets the template selector.
- *
- * The editor is reset to the default multiline-comment hint rather than
- * left empty, so the user always has the "how to define transform()"
- * guidance in front of them.
+ * @brief Clears test fields and resets the editor to the default placeholder.
  */
 void DataModel::DatasetTransformEditor::onClear()
 {
@@ -292,10 +254,7 @@ void DataModel::DatasetTransformEditor::onClear()
 }
 
 /**
- * @brief Loads the selected template code into the editor.
- *
- * Picks the Lua or JS variant based on the current language setting.
- * Resets the combo back to the placeholder text after loading.
+ * @brief Loads the selected template's code (Lua or JS) into the editor.
  */
 void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
 {
@@ -310,15 +269,7 @@ void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
 }
 
 /**
- * @brief Handles a language switch from the combo box.
- *
- * If the current editor content matches a known template in the old
- * language, automatically loads the equivalent template in the new
- * language. If the editor still holds the default placeholder hint,
- * swap it for the new language's placeholder so the user isn't left
- * staring at Lua syntax under a JavaScript highlighter (or vice versa).
- * Otherwise, only the syntax highlighter changes — the user's custom
- * code is left untouched.
+ * @brief Swaps the highlighter and, when recognised, the template or placeholder.
  */
 void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
 {
@@ -372,12 +323,7 @@ void DataModel::DatasetTransformEditor::onThemeChanged()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Switches the syntax highlighter and auto-completer for @p language.
- *
- * The editor contents are NOT touched here — swapping the highlighter
- * doesn't reinterpret existing text. Callers that want to swap the
- * default placeholder comment style should do so explicitly (see
- * onLanguageChanged).
+ * @brief Switches the syntax highlighter and auto-completer for the language.
  */
 void DataModel::DatasetTransformEditor::applyLanguage(int language)
 {
@@ -394,43 +340,38 @@ void DataModel::DatasetTransformEditor::applyLanguage(int language)
 }
 
 /**
- * @brief Returns the default editor placeholder for @p language.
- *
- * The placeholder is a multiline comment explaining how to define
- * transform(value) and how top-level globals persist between frames, just
- * like a frame parser script. Because it contains no transform() function,
- * onApply() treats it as "no transform configured" and avoids saving it.
+ * @brief Returns the default editor placeholder comment for the language.
  */
 QString DataModel::DatasetTransformEditor::defaultPlaceholder(int language)
 {
   if (language == SerialStudio::Lua)
-    return tr("--[[\n"
-              "  Define a transform(value) function that receives the live\n"
-              "  dataset reading and returns a transformed number. If no\n"
-              "  transform() function is defined, the raw value is kept\n"
-              "  and nothing is saved with the project.\n"
-              "\n"
-              "  Example:\n"
-              "    function transform(value)\n"
-              "      return value * 0.01 + 273.15\n"
-              "    end\n"
-              "\n"
-              "  Globals declared at the top level persist between frames,\n"
-              "  which is useful for filters, accumulators, and any other\n"
-              "  stateful transform — just like a frame parser script:\n"
-              "\n"
-              "    local alpha = 0.1\n"
-              "    local ema\n"
-              "\n"
-              "    function transform(value)\n"
-              "      ema = ema or value\n"
-              "      ema = alpha * value + (1 - alpha) * ema\n"
-              "      return ema\n"
-              "    end\n"
-              "\n"
-              "  Use the Template dropdown for ready-made examples, or\n"
-              "  click Test to try your function.\n"
-              "]]");
+    return tr("--\n"
+              "-- Define a transform(value) function that receives the live\n"
+              "-- dataset reading and returns a transformed number. If no\n"
+              "-- transform() function is defined, the raw value is kept\n"
+              "-- and nothing is saved with the project.\n"
+              "--\n"
+              "-- Example:\n"
+              "--    function transform(value)\n"
+              "--      return value * 0.01 + 273.15\n"
+              "--    end\n"
+              "--\n"
+              "-- Globals declared at the top level persist between frames,\n"
+              "-- which is useful for filters, accumulators, and any other\n"
+              "-- stateful transform, just like a frame parser script:\n"
+              "--\n"
+              "--    local alpha = 0.1\n"
+              "--    local ema\n"
+              "--\n"
+              "--    function transform(value)\n"
+              "--      ema = ema or value\n"
+              "--      ema = alpha * value + (1 - alpha) * ema\n"
+              "--      return ema\n"
+              "--    end\n"
+              "--\n"
+              "-- Use the Template dropdown for ready-made examples, or\n"
+              "-- click Test to try your function.\n"
+              "--\n");
 
   return tr("/*\n"
             " * Define a transform(value) function that receives the live\n"
@@ -462,12 +403,7 @@ QString DataModel::DatasetTransformEditor::defaultPlaceholder(int language)
 }
 
 /**
- * @brief Returns true if @p code is the default placeholder for @p language.
- *
- * Compared against both language variants (after trimming) so that a
- * language switch on the untouched placeholder can swap comment styles
- * cleanly. Any edit the user makes invalidates the match and leaves the
- * swap logic alone.
+ * @brief Returns true if code matches the default placeholder in either language.
  */
 bool DataModel::DatasetTransformEditor::isDefaultPlaceholder(const QString& code, int language)
 {
@@ -487,13 +423,7 @@ bool DataModel::DatasetTransformEditor::isDefaultPlaceholder(const QString& code
 }
 
 /**
- * @brief Returns true if @p code defines a top-level transform() function.
- *
- * The check compiles the code in a disposable engine and looks up a
- * global named "transform" that is callable. This is strict enough to
- * reject placeholder comments or unrelated notes, and lenient enough to
- * accept any stateful pattern the user might write (top-level globals,
- * closures bound to transform, etc.).
+ * @brief Returns true if the code defines a callable transform() global.
  */
 bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& code, int language)
 {
@@ -549,14 +479,7 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
 }
 
 /**
- * @brief Checks if the current editor text matches any known template.
- *
- * Compares the editor content (trimmed) against both the Lua and JS
- * variants of every template. This allows language switching to find the
- * equivalent template even when the code was loaded from a previous
- * session.
- *
- * @return Template index (0-based) if found, or -1 if no match.
+ * @brief Returns the template index matching the editor text, or -1.
  */
 int DataModel::DatasetTransformEditor::detectTemplate() const
 {
@@ -576,17 +499,7 @@ int DataModel::DatasetTransformEditor::detectTemplate() const
 }
 
 /**
- * @brief Executes a transform expression in a disposable engine and returns
- * the result as a display string.
- *
- * For Lua, creates a temporary lua_State with full standard libraries,
- * wraps the user code in a function, and calls it with the input value.
- * For JavaScript, uses a temporary QJSEngine.
- *
- * @param code       The transform expression body.
- * @param language   SerialStudio::ScriptLanguage.
- * @param inputValue The raw numeric value to transform.
- * @return The transformed value as a string, or an error message.
+ * @brief Runs the transform in a disposable engine and returns the result.
  */
 QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
                                                          int language,
@@ -677,12 +590,7 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads transform templates from the bundled JSON manifest and
- * resource script files.
- *
- * The manifest lives at `:/rcc/scripts/transforms/templates.json` and
- * lists each template's display name and base filename. Lua and JS
- * variants are loaded from the corresponding subdirectories.
+ * @brief Loads transform templates from the JSON manifest and resource files.
  */
 void DataModel::DatasetTransformEditor::buildTemplates()
 {

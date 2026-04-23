@@ -27,27 +27,16 @@
 namespace API {
 namespace Handlers {
 /**
- * @class MDF4ExportHandler
- * @brief Registers API commands for MDF4::Export operations
- *
- * Provides commands for:
- * - mdf4.export.setEnabled - Enable/disable MDF4 export
- * - mdf4.export.close - Close current MDF4 file
- * - mdf4.export.getStatus - Query export status
+ * @brief Registers API commands for MDF4::Export operations.
  */
 class MDF4ExportHandler {
 public:
-  /**
-   * @brief Register all MDF4 Export commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Mutation commands
   static CommandResponse setEnabled(const QString& id, const QJsonObject& params);
   static CommandResponse close(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 

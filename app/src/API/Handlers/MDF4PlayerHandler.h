@@ -16,33 +16,16 @@
 namespace API {
 namespace Handlers {
 /**
- * @class MDF4PlayerHandler
- * @brief Registers API commands for MDF4::Player operations (Pro feature)
- *
- * Provides commands for:
- * - mdf4.player.open - Open MDF4 file
- * - mdf4.player.close - Close MDF4 file
- * - mdf4.player.play - Start playback
- * - mdf4.player.pause - Pause playback
- * - mdf4.player.toggle - Toggle play/pause
- * - mdf4.player.nextFrame - Advance to next frame
- * - mdf4.player.previousFrame - Go to previous frame
- * - mdf4.player.setProgress - Seek to position
- * - mdf4.player.getStatus - Query player status
+ * @brief Registers API commands for MDF4::Player operations (Pro feature).
  */
 class MDF4PlayerHandler {
 public:
-  /**
-   * @brief Register all MDF4 Player commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // File operations
   static CommandResponse open(const QString& id, const QJsonObject& params);
   static CommandResponse close(const QString& id, const QJsonObject& params);
 
-  // Playback control
   static CommandResponse play(const QString& id, const QJsonObject& params);
   static CommandResponse pause(const QString& id, const QJsonObject& params);
   static CommandResponse toggle(const QString& id, const QJsonObject& params);
@@ -50,7 +33,6 @@ private:
   static CommandResponse previousFrame(const QString& id, const QJsonObject& params);
   static CommandResponse setProgress(const QString& id, const QJsonObject& params);
 
-  // Query commands
   static CommandResponse getStatus(const QString& id, const QJsonObject& params);
 };
 

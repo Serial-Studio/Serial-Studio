@@ -412,28 +412,34 @@ a:hover { text-decoration: underline; }
   padding: 16px 20px 14px;
   background: var(--bg);
   page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .chart-card + .chart-card { page-break-before: always; }
 
 .chart-card h3 {
   margin: 0 0 4px;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
   page-break-after: avoid;
+  break-after: avoid;
 }
 
 .chart-card .chart-sub {
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   margin-bottom: 10px;
   font-variant-numeric: tabular-nums;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .chart-card .chart-box {
   position: relative;
   width: 100%;
-  height: 340px;
+  height: 100%;
+  page-break-before: avoid;
+  break-before: avoid;
 }
 
 .chart-card .chart-box canvas {
@@ -451,17 +457,13 @@ a:hover { text-decoration: underline; }
     --bg-sunken: #ffffff;
   }
 
+  /* Size + margins are also enforced by the QPageLayout passed to
+     QWebEnginePage::printToPdf — Chromium ignores CSS @page size overrides
+     in headless PDF mode, so the C++ side is the source of truth. Keep the
+     numbers here in sync with HtmlReport::startPrinting(). */
   @page {
     size: {{PAGE_SIZE_CSS}};
-    margin: 16mm 14mm 18mm 14mm;
-  }
-
-  /* Chart pages rotate to landscape so the time-series fills a wide page
-     the natural way round — trying to fit a long X-axis signal into a
-     portrait frame squashes the trace vertically. */
-  @page chart-page {
-    size: {{PAGE_SIZE_CSS_LANDSCAPE}};
-    margin: 14mm 16mm 16mm 16mm;
+    margin: 16mm;
   }
 
   html, body { background: white; }
@@ -497,25 +499,36 @@ a:hover { text-decoration: underline; }
   .charts-grid { gap: 0; }
 
   .chart-card {
-    page: chart-page;
     border: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
     page-break-inside: avoid;
-    /* Force the card to exactly fill the landscape @page printable area so
-       the chart-box has a real target size to flex-grow into. Landscape A4
-       printable height = 210 - 14 - 16 = 180mm; likewise width = 297 - 32
-       = 265mm. Explicit dimensions are the only reliable way to get a full-
-       page chart in Chromium's print layout. */
-    width: 265mm;
-    height: 180mm;
+    break-inside: avoid;
+    /* Pin the card to the landscape printable area of the current paper
+       (width − 32 mm, height − 32 mm, matching the margins startPrinting
+       passes to printToPdf). Any overflow here causes Chromium to split the
+       chart across pages, which is exactly the bug this guards against. */
+    width: {{CHART_PAGE_WIDTH_MM}}mm;
+    height: {{CHART_PAGE_HEIGHT_MM}}mm;
+    overflow: hidden;
   }
   .chart-card + .chart-card { page-break-before: always; }
 
-  .chart-card h3         { margin: 0 0 2px; }
-  .chart-card .chart-sub { margin: 0 0 8px; }
+  /* Title + subtitle must stay on the same page as their chart. Combined
+     with chart-card break-inside:avoid this guarantees Chromium never puts
+     the heading on one page and the plot on the next. */
+  .chart-card h3 {
+    margin: 0 0 2px;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  .chart-card .chart-sub {
+    margin: 0 0 8px;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
 
   /* Chart-box claims every remaining pixel after the heading strip. */
   .chart-card .chart-box {
@@ -523,6 +536,8 @@ a:hover { text-decoration: underline; }
     height: auto;
     width: 100%;
     min-height: 0;
+    page-break-before: avoid;
+    break-before: avoid;
   }
 
   /* Bottom-left: doc title; bottom-right: page X of Y — supported by

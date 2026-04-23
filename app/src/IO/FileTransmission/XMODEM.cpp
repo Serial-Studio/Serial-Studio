@@ -69,7 +69,6 @@ bool IO::Protocols::XMODEM::isActive() const
 
 /**
  * @brief Starts an XMODEM file transfer.
- * @param filePath Path to the file to transmit.
  */
 void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
 {
@@ -118,7 +117,6 @@ void IO::Protocols::XMODEM::cancelTransfer()
 
 /**
  * @brief Processes bytes received from the remote device.
- * @param data Raw bytes from the device.
  */
 void IO::Protocols::XMODEM::processInput(const QByteArray& data)
 {
@@ -375,9 +373,6 @@ void IO::Protocols::XMODEM::handleTimeout()
 
 /**
  * @brief Builds a complete XMODEM block with header, data, and CRC.
- * @param data Block payload (must be exactly 128 or 1024 bytes).
- * @param blockNum Block sequence number (wraps at 256).
- * @return Framed block ready for transmission.
  */
 QByteArray IO::Protocols::XMODEM::buildBlock(const QByteArray& data, quint8 blockNum)
 {

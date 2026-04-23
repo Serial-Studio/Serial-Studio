@@ -27,40 +27,8 @@
 
 namespace UI {
 /**
- * @class DashboardWidget
  * @brief QML-exposed widget container that dynamically instantiates and
  *        manages dashboard visualization widgets.
- *
- * The DashboardWidget class acts as a bridge between the QML dashboard UI and
- * the C++ widget implementations. It dynamically creates the appropriate widget
- * type based on configuration, provides a consistent property interface to QML,
- * and manages widget lifecycle.
- *
- * Key Features:
- * - **Dynamic Widget Creation**: Instantiates C++ widgets based on widget type
- *   enum
- * - **Dual Rendering Support**: Handles both QQuickItem and QQuickPaintedItem
- *   widgets
- * - **QML Integration**: Exposes widget model and metadata as Qt properties
- * - **Color Theming**: Provides theme-aware color assignment per widget
- * - **Indexed Access**: Supports both absolute and relative widget indexing
- * - **Lazy Loading**: Creates widgets on-demand when index is set
- *
- * Widget Types Supported:
- * - Plot widgets (Plot, MultiPlot, FFTPlot, Plot3D)
- * - Instrument widgets (Bar, Gauge, Compass, Gyroscope, Accelerometer)
- * - Data display widgets (DataGrid, Terminal, LEDPanel)
- * - Geographic widgets (GPS)
- *
- * Usage Pattern:
- * 1. Create DashboardWidget instance in QML
- * 2. Set widgetIndex property (triggers widget creation)
- * 3. Bind to widgetModel property to access the C++ widget
- * 4. Use widgetQmlPath to load the corresponding QML visualization
- *
- * @note The widget type is determined by the UI::Dashboard based on the current
- *       project configuration. This class should not be instantiated directly
- *       outside of the dashboard system.
  */
 class DashboardWidget : public QQuickItem {
   // clang-format off

@@ -39,24 +39,7 @@ namespace IO {
 namespace Drivers {
 
 /**
- * @brief HID device driver using hidapi for cross-platform Human Interface
- *        Device access.
- *
- * Enumerates all HID devices every 2 seconds (via QTimer) and exposes them
- * in a "Select Device" + "VID:PID – Product" list. After the user selects a
- * device and calls open(), an interrupt read loop runs on a dedicated
- * QThread, forwarding 65-byte HID reports to the IO pipeline.
- *
- * Platform backends:
- *   Windows : WinAPI (hid.dll, no extra dependencies)
- *   macOS   : IOHIDManager / IOKit
- *   Linux   : hidraw kernel interface (no libusb; avoids conflict with
- *             the usb-1.0 Raw USB driver already in the build)
- *
- * Threading:
- *   m_readThread runs readLoop() with blocking hid_read_timeout() calls.
- *   Fatal read errors are marshalled back to the main thread via
- *   QMetaObject::invokeMethod() so close() can be called safely.
+ * @brief HAL driver for Human Interface Devices via hidapi.
  */
 class HID : public HAL_Driver {
   // clang-format off

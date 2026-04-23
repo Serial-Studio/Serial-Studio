@@ -60,20 +60,13 @@ static QString escapeCsvField(const QString& s)
 // ExportWorker implementation
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Checks whether a CSV file is currently open.
- *
- * @return true if file is open, false otherwise.
- */
 bool CSV::ExportWorker::isResourceOpen() const
 {
   return m_csvFile.isOpen();
 }
 
 /**
- * @brief Closes the currently open CSV file.
- *
- * Flushes any buffered data to disk, clears headers, and resets output.
+ * @brief Closes the currently open CSV file and resets worker state.
  */
 void CSV::ExportWorker::closeResources()
 {
@@ -88,12 +81,7 @@ void CSV::ExportWorker::closeResources()
 }
 
 /**
- * @brief Processes a batch of CSV frames.
- *
- * Writes frames to disk using the output stream.
- * If no file is open, a new file is created before writing.
- *
- * @param items Vector of timestamped frames to process.
+ * @brief Processes a batch of CSV frames, creating the file if needed.
  */
 void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFramePtr>& items)
 {
@@ -112,15 +100,14 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
       return;
 
     m_referenceTimestamp = (*items.begin())->timestamp;
+    resetMonotonicClock();
   }
 
   const int colCount = static_cast<int>(m_schema.columns.size());
 
   for (const auto& i : items) {
-    // Elapsed time column
-    const auto elapsed     = i->timestamp - m_referenceTimestamp;
-    const auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(elapsed).count();
-    const double seconds   = static_cast<double>(nanoseconds) / 1'000'000'000.0;
+    const qint64 nanoseconds = monotonicFrameNs(i->timestamp, m_referenceTimestamp);
+    const double seconds     = static_cast<double>(nanoseconds) / 1'000'000'000.0;
     m_textStream << QString::number(seconds, 'f', 9);
 
     // Collect post-transform values by uniqueId — CSV exports final values
@@ -147,13 +134,7 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
 }
 
 /**
- * @brief Creates a new CSV file and writes the header.
- *
- * Builds a sorted header based on dataset indices and opens the file
- * in the appropriate location.
- *
- * @param frame The frame used to extract header information.
- * @return List of index-title pairs for each dataset.
+ * @brief Creates a new CSV file and writes the header row from the frame schema.
  */
 void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 {
@@ -209,12 +190,6 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 // Export constructor, destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the CSV export manager.
- *
- * Initializes the worker object on a background thread with a timer
- * for periodic data export.
- */
 CSV::Export::Export()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
@@ -229,29 +204,14 @@ CSV::Export::Export()
           Qt::QueuedConnection);
 }
 
-/**
- * @brief Destructor for the export manager.
- *
- * Ensures all data is flushed to disk and stops the background thread.
- */
 CSV::Export::~Export() = default;
 
-/**
- * @brief Singleton access to the export manager.
- *
- * @return Reference to the global instance.
- */
 CSV::Export& CSV::Export::instance()
 {
   static Export singleton;
   return singleton;
 }
 
-/**
- * @brief Creates the CSV export worker instance.
- *
- * @return Pointer to newly created ExportWorker.
- */
 DataModel::FrameConsumerWorkerBase* CSV::Export::createWorker()
 {
   return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
@@ -261,21 +221,11 @@ DataModel::FrameConsumerWorkerBase* CSV::Export::createWorker()
 // State access functions
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Checks whether a CSV file is currently open.
- *
- * @return true if file is open, false otherwise.
- */
 bool CSV::Export::isOpen() const
 {
   return m_isOpen.load(std::memory_order_relaxed);
 }
 
-/**
- * @brief Checks whether CSV export is currently enabled.
- *
- * @return true if export is enabled, false otherwise.
- */
 bool CSV::Export::exportEnabled() const
 {
   return consumerEnabled();
@@ -286,10 +236,7 @@ bool CSV::Export::exportEnabled() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Closes the currently open CSV file.
- *
- * Flushes any remaining data in the queue before closing to prevent
- * creating small trailing files.
+ * @brief Flushes queued data and closes the currently open CSV file.
  */
 void CSV::Export::closeFile()
 {
@@ -298,9 +245,7 @@ void CSV::Export::closeFile()
 }
 
 /**
- * @brief Called when the worker's open state changes.
- *
- * Updates the cached state and emits the signal on the main thread.
+ * @brief Syncs cached open state from the worker and emits openChanged.
  */
 void CSV::Export::onWorkerOpenChanged()
 {
@@ -311,18 +256,14 @@ void CSV::Export::onWorkerOpenChanged()
 }
 
 /**
- * @brief Sets up connections with other modules.
- *
- * Links to IO and JSON frame events to control export behavior.
+ * @brief Wires IO and app-state signals that control export behaviour.
  */
 void CSV::Export::setupExternalConnections()
 {
   connect(
     &IO::ConnectionManager::instance(), &IO::ConnectionManager::connectedChanged, this, [this] {
       if (IO::ConnectionManager::instance().isConnected()) {
-        // Only cache the template in ProjectFile mode — QuickPlot/JSON
-        // builds the frame on the fly, so FrameBuilder::frame() may
-        // contain stale data from a previously loaded project.
+        // Only cache the template in ProjectFile mode
         auto* worker = static_cast<ExportWorker*>(m_worker);
         if (AppState::instance().operationMode() == SerialStudio::ProjectFile)
           worker->m_templateFrame = DataModel::FrameBuilder::instance().frame();
@@ -338,22 +279,28 @@ void CSV::Export::setupExternalConnections()
     if (IO::ConnectionManager::instance().paused())
       closeFile();
   });
+
+  // Force-off when the app enters Console-only mode
+  connect(&AppState::instance(), &AppState::operationModeChanged, this, [this] {
+    if (AppState::instance().operationMode() == SerialStudio::ConsoleOnly && exportEnabled())
+      setExportEnabled(false);
+  });
 }
 
 /**
- * @brief Enables or disables CSV export.
- *
- * When disabling, writes remaining data to disk and closes the file.
- *
- * @param enabled True to enable export, false to disable.
+ * @brief Enables or disables CSV export, closing the file on disable.
  */
 void CSV::Export::setExportEnabled(const bool enabled)
 {
+  // Refuse to enable while the app is in Console-only mode
+  const bool allow = enabled
+                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+
   // Close file first when disabling
-  if (!enabled && isOpen())
+  if (!allow && isOpen())
     closeFile();
 
-  setConsumerEnabled(enabled);
+  setConsumerEnabled(allow);
   Q_EMIT enabledChanged();
 }
 
@@ -362,13 +309,7 @@ void CSV::Export::setExportEnabled(const bool enabled)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Registers a new data frame for export.
- *
- * Pushes the frame into the pending queue for async export if conditions are
- * met. Triggers an early flush when the queue exceeds the threshold to prevent
- * unbounded memory growth during high-frequency data reception.
- *
- * @param frame The timestamped frame to export (shared pointer).
+ * @brief Enqueues a frame for asynchronous CSV export.
  */
 void CSV::Export::hotpathTxFrame(const DataModel::TimestampedFramePtr& frame)
 {

@@ -18,10 +18,15 @@
 #  include <algorithm>
 #  include <cmath>
 #  include <limits>
+#  include <map>
 #  include <QDateTime>
+#  include <QtDebug>
 #  include <QSqlDatabase>
+#  include <QSqlError>
 #  include <QSqlQuery>
 #  include <QVariantMap>
+
+#  include "DSP.h"
 
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
@@ -149,14 +154,14 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
     }
   }
 
-  // Fetch first numeric value per dataset (earliest timestamp)
+  // First numeric value per dataset (ties broken by reading_id)
   QSqlQuery firstQ(db);
   firstQ.prepare(
     "SELECT unique_id, final_numeric_value FROM readings "
-    "WHERE session_id = ? AND is_numeric = 1 AND timestamp_ns = "
-    "  (SELECT MIN(timestamp_ns) FROM readings r2 "
-    "   WHERE r2.session_id = readings.session_id AND r2.unique_id = readings.unique_id "
-    "   AND r2.is_numeric = 1)");
+    "WHERE reading_id IN ("
+    "  SELECT MIN(reading_id) FROM readings "
+    "  WHERE session_id = ? AND is_numeric = 1 "
+    "  GROUP BY unique_id)");
   firstQ.bindValue(0, sessionId);
   if (firstQ.exec()) {
     while (firstQ.next()) {
@@ -169,14 +174,14 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
     }
   }
 
-  // Fetch last numeric value per dataset (latest timestamp)
+  // Last numeric value per dataset (ties broken by reading_id)
   QSqlQuery lastQ(db);
   lastQ.prepare(
     "SELECT unique_id, final_numeric_value FROM readings "
-    "WHERE session_id = ? AND is_numeric = 1 AND timestamp_ns = "
-    "  (SELECT MAX(timestamp_ns) FROM readings r2 "
-    "   WHERE r2.session_id = readings.session_id AND r2.unique_id = readings.unique_id "
-    "   AND r2.is_numeric = 1)");
+    "WHERE reading_id IN ("
+    "  SELECT MAX(reading_id) FROM readings "
+    "  WHERE session_id = ? AND is_numeric = 1 "
+    "  GROUP BY unique_id)");
   lastQ.bindValue(0, sessionId);
   if (lastQ.exec()) {
     while (lastQ.next()) {
@@ -208,19 +213,287 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
 // loadChartSeries
 //--------------------------------------------------------------------------------------------------
 
+namespace {
+
 /**
- * @brief Loads decimated numeric time-series for every parameter.
- *
- * Uses per-bucket first/min/max/last decimation — the same algorithm as
- * @c DSP::downsampleMonotonic in the live widgets. The session timeline
- * is divided into equal-time buckets (@p maxSamples / 4) and each bucket
- * emits up to four chronologically-ordered points. That preserves the
- * signal envelope for fast-oscillating data where naive stride sampling
- * would alias to a dense noise band.
- *
- * Non-numeric datasets are skipped. The returned series are sorted by
- * parameter insertion order (matches the columns-table order), so charts
- * line up with the measurement summary.
+ * @brief Column metadata for one plotted parameter.
+ */
+struct ChartMeta {
+  int uid;
+  QString group;
+  QString title;
+  QString units;
+};
+
+/**
+ * @brief Reads a query result set into parallel DSP ring buffers.
+ */
+std::size_t readAxisData(QSqlQuery& rows, qint64 originNs, qint64 reservation, DSP::AxisData& x,
+                         DSP::AxisData& y, double& globalMin, double& globalMax)
+{
+  const std::size_t capacity = static_cast<std::size_t>(std::max<qint64>(reservation, 1));
+  x.resize(capacity);
+  y.resize(capacity);
+  x.clear();
+  y.clear();
+
+  globalMin         = std::numeric_limits<double>::infinity();
+  globalMax         = -std::numeric_limits<double>::infinity();
+  std::size_t count = 0;
+
+  while (rows.next()) {
+    const double val = rows.value(1).toDouble();
+    if (!std::isfinite(val))
+      continue;
+
+    const qint64 ts   = rows.value(0).toLongLong();
+    const double tSec = static_cast<double>(ts - originNs) / 1.0e9;
+    x.push(tSec);
+    y.push(val);
+
+    globalMin = std::min(globalMin, val);
+    globalMax = std::max(globalMax, val);
+    ++count;
+  }
+
+  return count;
+}
+
+/**
+ * @brief Appends @p index to @p indices when it is not already present.
+ */
+void appendUniqueIndex(std::vector<std::size_t>& indices, std::size_t index)
+{
+  Q_ASSERT(indices.size() <= 8);
+
+  for (const auto value : indices) {
+    if (value == index)
+      return;
+  }
+
+  indices.push_back(index);
+}
+
+/**
+ * @brief Appends one bucket's representative sample indices to @p indices.
+ */
+void appendBucketSamples(const DSP::AxisData& y,
+                         std::size_t begin,
+                         std::size_t end,
+                         int target,
+                         std::vector<std::size_t>& indices)
+{
+  Q_ASSERT(begin < end);
+  Q_ASSERT(target > 0);
+
+  const std::size_t bucketSize = end - begin;
+  const std::size_t goal =
+    std::min<std::size_t>(bucketSize, static_cast<std::size_t>(target));
+
+  std::size_t minIndex = begin;
+  std::size_t maxIndex = begin;
+  for (std::size_t i = begin + 1; i < end; ++i) {
+    if (y[i] < y[minIndex])
+      minIndex = i;
+
+    if (y[i] > y[maxIndex])
+      maxIndex = i;
+  }
+
+  std::vector<std::size_t> local;
+  local.reserve(goal);
+  appendUniqueIndex(local, begin);
+  appendUniqueIndex(local, minIndex);
+  appendUniqueIndex(local, maxIndex);
+  appendUniqueIndex(local, end - 1);
+
+  for (std::size_t i = begin + 1; i + 1 < end && local.size() < goal; ++i)
+    appendUniqueIndex(local, i);
+
+  std::sort(local.begin(), local.end());
+  indices.insert(indices.end(), local.begin(), local.end());
+}
+
+/**
+ * @brief Appends evenly-spaced samples until @p indices reaches @p budget.
+ */
+void appendBudgetFillSamples(std::size_t count,
+                             std::size_t budget,
+                             std::vector<std::size_t>& indices)
+{
+  Q_ASSERT(count >= budget);
+  Q_ASSERT(indices.size() <= budget);
+
+  std::vector<unsigned char> used(count, 0);
+  for (const auto index : indices) {
+    Q_ASSERT(index < count);
+    used[index] = 1;
+  }
+
+  const std::size_t divisor = budget - 1;
+  for (std::size_t i = 0; i < budget && indices.size() < budget; ++i) {
+    const std::size_t index = (i == divisor) ? count - 1 : (i * (count - 1)) / divisor;
+    if (used[index])
+      continue;
+
+    used[index] = 1;
+    indices.push_back(index);
+  }
+
+  for (std::size_t i = 0; i < count && indices.size() < budget; ++i) {
+    if (used[i])
+      continue;
+
+    used[i] = 1;
+    indices.push_back(i);
+  }
+}
+
+/**
+ * @brief Copies the selected samples into @p series in chronological order.
+ */
+void writeSelectedSamples(const DSP::AxisData& x,
+                          const DSP::AxisData& y,
+                          const std::vector<std::size_t>& indices,
+                          Sessions::DatasetSeries& series)
+{
+  Q_ASSERT(!indices.empty());
+  Q_ASSERT(series.timesSec.empty());
+  Q_ASSERT(series.values.empty());
+
+  series.timesSec.reserve(indices.size());
+  series.values.reserve(indices.size());
+
+  for (const auto index : indices) {
+    Q_ASSERT(index < x.size() && index < y.size());
+    series.timesSec.push_back(x[index]);
+    series.values.push_back(y[index]);
+  }
+}
+
+/**
+ * @brief Writes either the raw samples or a fixed-budget decimated series.
+ */
+void writeReportSamples(const DSP::AxisData& x,
+                        const DSP::AxisData& y,
+                        std::size_t count,
+                        int maxSamples,
+                        Sessions::DatasetSeries& series)
+{
+  Q_ASSERT(count > 0);
+  Q_ASSERT(maxSamples >= 2);
+  Q_ASSERT(count <= x.size() && count <= y.size());
+
+  const std::size_t budget = static_cast<std::size_t>(maxSamples);
+  if (count <= budget) {
+    std::vector<std::size_t> indices;
+    indices.reserve(count);
+    for (std::size_t i = 0; i < count; ++i)
+      indices.push_back(i);
+
+    writeSelectedSamples(x, y, indices, series);
+    return;
+  }
+
+  const std::size_t bucketCount = std::max<std::size_t>(1, budget / 4);
+  const std::size_t baseTarget  = budget / bucketCount;
+  const std::size_t remainder   = budget % bucketCount;
+  Q_ASSERT(bucketCount > 0);
+  Q_ASSERT(baseTarget > 0);
+
+  std::vector<std::size_t> indices;
+  indices.reserve(budget);
+
+  for (std::size_t bucket = 0; bucket < bucketCount; ++bucket) {
+    const std::size_t begin = (bucket * count) / bucketCount;
+    const std::size_t end   = ((bucket + 1) * count) / bucketCount;
+    if (begin >= end)
+      continue;
+
+    const int target = static_cast<int>(baseTarget + (bucket < remainder ? 1 : 0));
+    appendBucketSamples(y, begin, end, target, indices);
+  }
+
+  if (indices.size() < budget)
+    appendBudgetFillSamples(count, budget, indices);
+
+  std::sort(indices.begin(), indices.end());
+  writeSelectedSamples(x, y, indices, series);
+}
+
+/**
+ * @brief Enumerates numeric parameters for @p sessionId in column order.
+ */
+std::vector<ChartMeta> loadChartParameters(QSqlDatabase& db, int sessionId)
+{
+  std::vector<ChartMeta> metas;
+
+  QSqlQuery q(db);
+  q.prepare("SELECT unique_id, group_title, title, units FROM columns "
+            "WHERE session_id = ? ORDER BY column_id ASC");
+  q.bindValue(0, sessionId);
+
+  if (!q.exec()) {
+    qWarning() << "[Sessions::ReportData] column enumeration failed:" << q.lastError().text();
+    return metas;
+  }
+
+  while (q.next()) {
+    ChartMeta m;
+    m.uid   = q.value(0).toInt();
+    m.group = q.value(1).toString();
+    m.title = q.value(2).toString();
+    m.units = q.value(3).toString();
+    metas.push_back(std::move(m));
+  }
+
+  return metas;
+}
+
+/**
+ * @brief Returns the session's earliest and latest @c timestamp_ns values.
+ */
+std::pair<qint64, qint64> loadSessionTimeSpan(QSqlDatabase& db, int sessionId)
+{
+  QSqlQuery q(db);
+  q.prepare("SELECT MIN(timestamp_ns), MAX(timestamp_ns) FROM readings WHERE session_id = ?");
+  q.bindValue(0, sessionId);
+
+  if (!q.exec() || !q.next()) {
+    qWarning() << "[Sessions::ReportData] time-span query failed:" << q.lastError().text();
+    return {0, 0};
+  }
+
+  return {q.value(0).toLongLong(), q.value(1).toLongLong()};
+}
+
+/**
+ * @brief Numeric-sample count per parameter, keyed by @c unique_id.
+ */
+std::map<int, qint64> loadSampleCounts(QSqlDatabase& db, int sessionId)
+{
+  std::map<int, qint64> counts;
+
+  QSqlQuery q(db);
+  q.prepare("SELECT unique_id, COUNT(*) FROM readings "
+            "WHERE session_id = ? AND is_numeric = 1 GROUP BY unique_id");
+  q.bindValue(0, sessionId);
+
+  if (!q.exec()) {
+    qWarning() << "[Sessions::ReportData] sample-count query failed:" << q.lastError().text();
+    return counts;
+  }
+
+  while (q.next())
+    counts.emplace(q.value(0).toInt(), q.value(1).toLongLong());
+
+  return counts;
+}
+
+}  // namespace
+
+/**
+ * @brief Loads downsampled numeric time-series for every parameter.
  */
 std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
                                                                int sessionId,
@@ -230,159 +503,56 @@ std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
   if (!db.isOpen() || sessionId < 0 || maxSamples < 2)
     return out;
 
-  // Enumerate the numeric parameters in their table-declared order
-  QSqlQuery colQ(db);
-  colQ.prepare("SELECT unique_id, group_title, title, units FROM columns "
-               "WHERE session_id = ? ORDER BY column_id ASC");
-  colQ.bindValue(0, sessionId);
-  if (!colQ.exec())
+  Q_ASSERT(maxSamples >= 2);
+  Q_ASSERT(db.isOpen());
+
+  const auto metas = loadChartParameters(db, sessionId);
+  if (metas.empty())
     return out;
 
-  struct Meta {
-    int uid;
-    QString group;
-    QString title;
-    QString units;
-  };
+  const auto [originNs, _] = loadSessionTimeSpan(db, sessionId);
+  const auto counts        = loadSampleCounts(db, sessionId);
 
-  std::vector<Meta> metas;
-  while (colQ.next()) {
-    Meta m;
-    m.uid   = colQ.value(0).toInt();
-    m.group = colQ.value(1).toString();
-    m.title = colQ.value(2).toString();
-    m.units = colQ.value(3).toString();
-    metas.push_back(std::move(m));
-  }
+  DSP::AxisData x(16);
+  DSP::AxisData y(16);
 
-  // Find the session time span so buckets can be sized in nanoseconds
-  QSqlQuery spanQ(db);
-  spanQ.prepare("SELECT MIN(timestamp_ns), MAX(timestamp_ns) FROM readings "
-                "WHERE session_id = ?");
-  spanQ.bindValue(0, sessionId);
-  qint64 originNs = 0;
-  qint64 endNs    = 0;
-  if (spanQ.exec() && spanQ.next()) {
-    originNs = spanQ.value(0).toLongLong();
-    endNs    = spanQ.value(1).toLongLong();
-  }
-  const qint64 totalNs = std::max<qint64>(1, endNs - originNs);
-
-  // Four points per bucket — divide the point budget to size the bucket count
-  const int buckets = std::max(2, maxSamples / 4);
-
-  // One pass per parameter: fetch every numeric sample, walk buckets in order
   for (const auto& m : metas) {
-    QSqlQuery sQ(db);
-    sQ.setForwardOnly(true);
-    sQ.prepare("SELECT timestamp_ns, final_numeric_value FROM readings "
-               "WHERE session_id = ? AND unique_id = ? AND is_numeric = 1 "
-               "ORDER BY timestamp_ns");
-    sQ.bindValue(0, sessionId);
-    sQ.bindValue(1, m.uid);
-    if (!sQ.exec())
+    const auto it      = counts.find(m.uid);
+    const qint64 total = (it != counts.end()) ? it->second : 0;
+    if (total < 2)
       continue;
 
-    // Per-bucket accumulator — first/last define the polyline spine,
-    // min/max capture the envelope
-    struct Bucket {
-      bool hasData;
-      double firstV, lastV;
-      double minV, maxV;
-      qint64 firstTs, lastTs;
-      qint64 minTs, maxTs;
-    };
-
-    std::vector<Bucket> bins(static_cast<std::size_t>(buckets),
-                             Bucket{false, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0});
-
-    qint64 sampleCount = 0;
-    double globalMin   = std::numeric_limits<double>::infinity();
-    double globalMax   = -std::numeric_limits<double>::infinity();
-
-    while (sQ.next()) {
-      const qint64 ts  = sQ.value(0).toLongLong();
-      const double val = sQ.value(1).toDouble();
-      if (!std::isfinite(val))
-        continue;
-
-      // Map timestamp to a bucket index, clamped to the valid range
-      const qint64 rel = std::clamp<qint64>(ts - originNs, 0, totalNs);
-      int idx          = static_cast<int>((rel * buckets) / std::max<qint64>(totalNs, 1));
-      if (idx >= buckets)
-        idx = buckets - 1;
-
-      Bucket& b = bins[static_cast<std::size_t>(idx)];
-      if (!b.hasData) {
-        b.hasData = true;
-        b.firstV = b.lastV = b.minV = b.maxV = val;
-        b.firstTs = b.lastTs = b.minTs = b.maxTs = ts;
-      } else {
-        // Readings come in timestamp order so "last seen" is the latest
-        b.lastV  = val;
-        b.lastTs = ts;
-        if (val < b.minV) {
-          b.minV  = val;
-          b.minTs = ts;
-        }
-        if (val > b.maxV) {
-          b.maxV  = val;
-          b.maxTs = ts;
-        }
-      }
-
-      globalMin = std::min(globalMin, val);
-      globalMax = std::max(globalMax, val);
-      ++sampleCount;
+    QSqlQuery rows(db);
+    rows.setForwardOnly(true);
+    rows.prepare("SELECT timestamp_ns, final_numeric_value FROM readings "
+                 "WHERE session_id = ? AND unique_id = ? AND is_numeric = 1 "
+                 "ORDER BY timestamp_ns, reading_id");
+    rows.bindValue(0, sessionId);
+    rows.bindValue(1, m.uid);
+    if (!rows.exec()) {
+      qWarning() << "[Sessions::ReportData] readings query failed for uid" << m.uid
+                 << ":" << rows.lastError().text();
+      continue;
     }
 
-    if (sampleCount < 2)
+    double globalMin = 0.0;
+    double globalMax = 0.0;
+    const auto count = readAxisData(rows, originNs, total, x, y, globalMin, globalMax);
+    if (count < 2)
       continue;
 
     DatasetSeries series;
-    series.uniqueId = m.uid;
-    series.group    = m.group;
-    series.title    = m.title;
-    series.units    = m.units;
-    series.minValue = globalMin;
-    series.maxValue = globalMax;
-    series.timesSec.reserve(static_cast<std::size_t>(buckets * 4));
-    series.values.reserve(static_cast<std::size_t>(buckets * 4));
+    series.uniqueId     = m.uid;
+    series.totalSamples = total;
+    series.group        = m.group;
+    series.title        = m.title;
+    series.units        = m.units;
+    series.minValue     = globalMin;
+    series.maxValue     = globalMax;
+    writeReportSamples(x, y, count, maxSamples, series);
+    Q_ASSERT(series.timesSec.size() == series.values.size());
+    Q_ASSERT(series.values.size() == std::min<std::size_t>(count, maxSamples));
 
-    // Flatten buckets in chronological order, de-duped by timestamp
-    auto emitPoint = [&](qint64 ts, double v) {
-      series.timesSec.push_back(static_cast<double>(ts - originNs) / 1.0e9);
-      series.values.push_back(v);
-    };
-
-    for (const auto& b : bins) {
-      if (!b.hasData)
-        continue;
-
-      // Sort the four candidates by timestamp before emission
-      struct Pt {
-        qint64 ts;
-        double v;
-      };
-
-      Pt pts[4] = {
-        {b.firstTs, b.firstV},
-        {  b.minTs,   b.minV},
-        {  b.maxTs,   b.maxV},
-        { b.lastTs,  b.lastV},
-      };
-      std::sort(pts, pts + 4, [](const Pt& a, const Pt& c) { return a.ts < c.ts; });
-
-      qint64 lastTs = std::numeric_limits<qint64>::min();
-      for (const Pt& p : pts) {
-        if (p.ts == lastTs)
-          continue;
-        emitPoint(p.ts, p.v);
-        lastTs = p.ts;
-      }
-    }
-
-    // Drop parameters that produced no finite samples after decimation
     if (series.values.size() < 2)
       continue;
 

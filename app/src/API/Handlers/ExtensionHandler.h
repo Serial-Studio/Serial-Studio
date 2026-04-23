@@ -25,13 +25,7 @@
 
 namespace API::Handlers {
 /**
- * @brief Handler for extension management commands
- *
- * Provides API commands to manage extension repositories and installed extensions:
- * - List available and installed extensions
- * - Install/uninstall addons by ID
- * - Manage repository URLs
- * - Refresh repository catalogs
+ * @brief Handler for extension management commands.
  */
 class ExtensionHandler {
 public:

@@ -29,10 +29,6 @@ class WindowManager;
 
 /**
  * @brief Singleton registry tracking active Taskbar and WindowManager instances.
- *
- * Because Taskbar and WindowManager are QML-instantiated QQuickItems (not
- * singletons), this registry provides a stable access point for the API layer.
- * The primary instance is always the first one registered.
  */
 class UISessionRegistry : public QObject {
   Q_OBJECT

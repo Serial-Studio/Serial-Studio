@@ -39,42 +39,7 @@ class IChannelGroup;
 
 namespace MDF4 {
 /**
- * @class Player
- * @brief MDF4 file player for Serial Studio
- *
- * The MDF4::Player class provides playback functionality for MDF4/MF4 binary
- * measurement files. Unlike the CSV player, this implementation uses a
- * streaming architecture with sparse frame indexing to efficiently handle
- * large files (multi-GB) without loading everything into memory.
- *
- * ## Features
- * - Supports all MDF4 measurement types (CAN, LIN, FlexRay, analog, etc.)
- * - Memory-efficient streaming with sparse sampling
- * - Real-time playback with timestamp synchronization
- * - Manual frame navigation (next/previous)
- * - Seek/scrub support via progress slider
- * - Keyboard shortcuts (Space = play/pause, Arrow keys = next/prev frame)
- *
- * ## Architecture
- * The player builds a sparse frame index on file open, sampling every Nth
- * record to create a lightweight lookup table. During playback, frames are
- * streamed on-demand and sent through the standard IO::ConnectionManager pipeline for
- * processing, visualization, and export.
- *
- * ## Data Flow
- * MDF4 File → buildFrameIndex() → getFrame() → IO::ConnectionManager::processPayload()
- * → FrameBuilder → Dashboard
- *
- * ## Usage Example
- * @code
- * MDF4::Player::instance().openFile("/path/to/file.mf4");
- * MDF4::Player::instance().play();
- * @endcode
- *
- * @note This is a singleton class. Use MDF4::Player::instance() to access it.
- *
- * @see CSV::Player for similar functionality with CSV files
- * @see IO::ConnectionManager for data pipeline integration
+ * @brief MDF4 file player for Serial Studio.
  */
 class Player : public QObject {
   // clang-format off
@@ -177,7 +142,6 @@ private:
   std::map<uint64_t, std::vector<double>> m_sampleCache;
   std::map<uint64_t, std::vector<bool>> m_activeChannels;
 
-  // Multi-source playback mapping: channel index → sourceId
   QMap<int, int> m_channelToSource;
   QMap<int, int> m_sourceChannelCount;
 };

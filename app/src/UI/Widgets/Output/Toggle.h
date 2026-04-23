@@ -17,10 +17,7 @@ namespace Widgets {
 namespace Output {
 
 /**
- * @class Widgets::Output::Toggle
  * @brief Output widget with an on/off switch.
- *
- * Calls transmit(1) when toggled on and transmit(0) when toggled off.
  */
 class Toggle : public Base {
   // clang-format off

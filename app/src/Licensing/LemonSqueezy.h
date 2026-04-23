@@ -33,30 +33,8 @@
 
 namespace Licensing {
 /**
- * @class Licensing::LemonSqueezy
  * @brief Handles software activation, validation, and deactivation using the
  *        Lemon Squeezy API.
- *
- * This class manages all license-related operations for Serial Studio,
- * including:
- * - Activating new licenses on a per-device basis
- * - Validating license keys and assigned instances
- * - Deactivating licenses to free up seats
- * - Securely storing encrypted license data locally
- *
- * It communicates directly with the Lemon Squeezy licensing endpoints and
- * ensures that:
- * - Licenses match the expected product and store ID
- * - Activations are tied to a unique machine ID
- * - Only valid and active keys are accepted
- *
- * This class is implemented as a singleton and is fully integrated with Qt's
- * signal/slot system for reactive UI updates. All sensitive data is encrypted
- * using a machine-specific key.
- *
- * This implementation is designed to function correctly even in open-source
- * environments, where security and local enforcement are handled client-side
- * without exposing API keys or backend logic.
  */
 class LemonSqueezy : public QObject {
   // clang-format off

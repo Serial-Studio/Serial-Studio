@@ -50,21 +50,6 @@ constexpr int kHotplugFallbackIntervalMs = 2000;
 // Constructor, destructor & singleton
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Constructs the USB driver singleton.
- *
- * Initializes the libusb context, restores persisted settings, performs an
- * initial device enumeration, then sets up hotplug detection:
- *
- *   - If the platform supports libusb hotplug (macOS, Linux, Windows),
- *     registers arrival and departure callbacks so the device list updates
- *     immediately when a device is plugged or unplugged.
- *   - If hotplug is not available, falls back to a 2-second QTimer that
- *     re-scans the bus periodically.
- *
- * A permanent event thread runs libusb_handle_events_timeout() to service
- * both hotplug callbacks and isochronous transfer completions.
- */
 IO::Drivers::USB::USB()
   : m_ctx(nullptr)
   , m_handle(nullptr)
@@ -120,14 +105,6 @@ IO::Drivers::USB::USB()
   m_eventThread.start();
 }
 
-/**
- * @brief Destroys the USB driver.
- *
- * Cancels any in-flight isochronous transfers so the event thread can drain,
- * then stops both threads gracefully before freeing libusb resources. Each
- * thread is given 2 s to exit cleanly — the read loop and event loop both
- * check their atomic flags every ~100 ms, so this is always sufficient.
- */
 IO::Drivers::USB::~USB()
 {
   // Signal both threads to stop
@@ -179,25 +156,6 @@ IO::Drivers::USB::~USB()
 
 /**
  * @brief Opens the selected USB device and starts the appropriate transfer loop.
- *
- * Follows Serial Studio's "don't touch the device until Connect is clicked"
- * philosophy. All endpoint scanning happens here — after the user clicks
- * Connect — not in the pre-connect UI. The sequence is:
- *
- *   1. Open the libusb device handle.
- *   2. Scan all interfaces/endpoints via buildEndpointLists() and emit
- *      signals so the QML endpoint combos populate immediately.
- *   3. Verify that at least one IN endpoint was found.
- *   4. Claim the interface that owns the selected IN endpoint.
- *   5. Start either the synchronous bulk loop or the async isochronous loop
- *      on m_readThread.
- *
- * Each failure step presents a descriptive error dialog via
- * Misc::Utilities::showMessageBox() so the user understands what went wrong.
- *
- * @param mode  Ignored; USB transfers are always bidirectional at the endpoint
- *              level. The parameter is present only to satisfy HAL_Driver.
- * @return true on success, false if any step fails.
  */
 bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
 {
@@ -299,16 +257,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
 }
 
 /**
- * @brief Closes the device, tears down all active transfers, and stops the
- *        read thread.
- *
- * The sequence is safe to call from any state (open or already closed):
- *   1. Set m_running to false so the read loop exits on its next iteration.
- *   2. Cancel any pending isochronous transfers so the event loop can drain.
- *   3. Wait up to two seconds for the read thread to finish.
- *   4. Free the isochronous transfer pool.
- *   5. Release the claimed USB interface and close the device handle.
- *   6. Emit configurationChanged() so the toolbar updates.
+ * @brief Closes the device, tears down all active transfers, and stops the read thread.
  */
 void IO::Drivers::USB::close()
 {
@@ -352,10 +301,6 @@ void IO::Drivers::USB::close()
   Q_EMIT configurationChanged();
 }
 
-/**
- * @brief Returns true if the device handle is open.
- * @return true when a libusb device handle is held, false otherwise.
- */
 bool IO::Drivers::USB::isOpen() const noexcept
 {
   return m_handle != nullptr;
@@ -363,7 +308,6 @@ bool IO::Drivers::USB::isOpen() const noexcept
 
 /**
  * @brief Returns true if the device is open and an IN endpoint is active.
- * @return true when data can be received from the device.
  */
 bool IO::Drivers::USB::isReadable() const noexcept
 {
@@ -372,11 +316,6 @@ bool IO::Drivers::USB::isReadable() const noexcept
 
 /**
  * @brief Returns true if the device is open and an OUT endpoint is active.
- *
- * An OUT endpoint is optional — some devices expose only an IN endpoint for
- * one-way data streaming. write() returns -1 when this is false.
- *
- * @return true when data can be sent to the device.
  */
 bool IO::Drivers::USB::isWritable() const noexcept
 {
@@ -384,14 +323,7 @@ bool IO::Drivers::USB::isWritable() const noexcept
 }
 
 /**
- * @brief Returns true when a device is selected and the connect button should
- *        be enabled.
- *
- * Endpoint selection happens post-connect inside open(), so only the device
- * index needs to be valid here. This matches Serial Studio's philosophy of not
- * touching the device until the user clicks Connect.
- *
- * @return true when m_deviceIndex points to a valid entry in m_devicePtrs.
+ * @brief Returns true when a device is selected and the connect button should be enabled.
  */
 bool IO::Drivers::USB::configurationOk() const noexcept
 {
@@ -400,13 +332,6 @@ bool IO::Drivers::USB::configurationOk() const noexcept
 
 /**
  * @brief Sends @p data to the device via a synchronous bulk OUT transfer.
- *
- * Returns -1 immediately if no OUT endpoint is available or the device is not
- * open. Isochronous OUT is not supported in this driver revision — isochronous
- * mode is receive-only.
- *
- * @param data  Bytes to transmit.
- * @return Number of bytes actually transferred, or -1 on error.
  */
 qint64 IO::Drivers::USB::write(const QByteArray& data)
 {
@@ -435,13 +360,7 @@ qint64 IO::Drivers::USB::write(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the current transfer mode as an integer.
- *
- * The integer maps directly to the TransferMode enum: 0 = BulkStream,
- * 1 = AdvancedControl, 2 = Isochronous. Exposed as int so QML ComboBox
- * indices bind without conversion.
- *
- * @return Current TransferMode cast to int.
+ * @brief Returns the current transfer mode as an integer (0 = BulkStream, 1 = AdvancedControl, 2 = Isochronous).
  */
 int IO::Drivers::USB::transferMode() const
 {
@@ -450,10 +369,6 @@ int IO::Drivers::USB::transferMode() const
 
 /**
  * @brief Returns true when Advanced (Bulk + Control) mode is active.
- *
- * Used by QML to show the control-transfer warning notice.
- *
- * @return true when m_transferMode == TransferMode::AdvancedControl.
  */
 bool IO::Drivers::USB::advancedModeEnabled() const
 {
@@ -462,10 +377,6 @@ bool IO::Drivers::USB::advancedModeEnabled() const
 
 /**
  * @brief Returns true when Isochronous mode is active.
- *
- * Used by QML to show the packet-size spinbox and the isochronous info notice.
- *
- * @return true when m_transferMode == TransferMode::Isochronous.
  */
 bool IO::Drivers::USB::isoModeEnabled() const
 {
@@ -473,12 +384,7 @@ bool IO::Drivers::USB::isoModeEnabled() const
 }
 
 /**
- * @brief Returns the device list with a placeholder entry at index 0.
- *
- * Index 0 is always "Select Device"; real devices start at index 1,
- * mirroring the UART driver's pattern so the ComboBox binding is uniform.
- *
- * @return String list with placeholder prepended to m_deviceLabels.
+ * @brief Returns the device list with a "Select Device" placeholder at index 0.
  */
 QStringList IO::Drivers::USB::deviceList() const
 {
@@ -488,13 +394,6 @@ QStringList IO::Drivers::USB::deviceList() const
   return list;
 }
 
-/**
- * @brief Returns the currently selected device index.
- *
- * 0 means no device selected (placeholder); real selections start at 1.
- *
- * @return m_deviceIndex.
- */
 int IO::Drivers::USB::deviceIndex() const
 {
   return m_deviceIndex;
@@ -502,11 +401,6 @@ int IO::Drivers::USB::deviceIndex() const
 
 /**
  * @brief Returns the IN endpoint list with a placeholder entry at index 0.
- *
- * Populated by buildEndpointLists() after Connect is clicked. Index 0 is
- * always "Select IN Endpoint"; real endpoints start at index 1.
- *
- * @return String list with placeholder prepended to m_inEndpointLabels.
  */
 QStringList IO::Drivers::USB::inEndpointList() const
 {
@@ -517,12 +411,7 @@ QStringList IO::Drivers::USB::inEndpointList() const
 }
 
 /**
- * @brief Returns the OUT endpoint list with a "None" entry at index 0.
- *
- * Populated by buildEndpointLists() after Connect is clicked. Index 0
- * represents "no OUT endpoint" (receive-only); real endpoints start at 1.
- *
- * @return String list with "None (Read-only)" prepended to m_outEndpointLabels.
+ * @brief Returns the OUT endpoint list with a "None (Read-only)" entry at index 0.
  */
 QStringList IO::Drivers::USB::outEndpointList() const
 {
@@ -532,25 +421,11 @@ QStringList IO::Drivers::USB::outEndpointList() const
   return list;
 }
 
-/**
- * @brief Returns the currently selected IN endpoint index.
- *
- * 0 means none selected; real selections start at 1.
- *
- * @return m_inEndpointIndex.
- */
 int IO::Drivers::USB::inEndpointIndex() const
 {
   return m_inEndpointIndex;
 }
 
-/**
- * @brief Returns the currently selected OUT endpoint index.
- *
- * 0 means no OUT endpoint (receive-only); real selections start at 1.
- *
- * @return m_outEndpointIndex.
- */
 int IO::Drivers::USB::outEndpointIndex() const
 {
   return m_outEndpointIndex;
@@ -558,13 +433,6 @@ int IO::Drivers::USB::outEndpointIndex() const
 
 /**
  * @brief Returns the isochronous packet size in bytes.
- *
- * Should match the wMaxPacketSize reported by the selected isochronous
- * endpoint. buildEndpointLists() auto-fills this from the endpoint descriptor
- * when an isochronous endpoint is found. Typical values: 192 (USB FS audio),
- * 1024 (USB HS), 3072 (USB SS).
- *
- * @return m_isoPacketSize.
  */
 int IO::Drivers::USB::isoPacketSize() const
 {
@@ -577,13 +445,6 @@ int IO::Drivers::USB::isoPacketSize() const
 
 /**
  * @brief Selects a device by combo index and resets cached endpoint data.
- *
- * Endpoint lists are not scanned here — scanning happens inside open() after
- * the user clicks Connect. Changing the device resets the cached IN/OUT
- * endpoint indices and clears the endpoint lists so stale data from a previous
- * device does not carry over. All affected QML properties are notified.
- *
- * @param index  New device combo index (0 = placeholder, ≥1 = real device).
  */
 void IO::Drivers::USB::setDeviceIndex(const int index)
 {
@@ -614,20 +475,7 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
 }
 
 /**
- * @brief Sets the transfer mode, showing a confirmation dialog for
- *        AdvancedControl and clearing cached endpoint data on any change.
- *
- * Switching to AdvancedControl presents a warning dialog because control
- * transfers can crash or damage hardware if used incorrectly. The mode change
- * is only applied if the user confirms. Switching to any other mode takes
- * effect immediately.
- *
- * Any mode change clears the cached endpoint lists because BulkStream and
- * Isochronous modes scan different endpoint types; the new set will be
- * populated when the user next clicks Connect.
- *
- * @param mode  New mode as an integer (0 = BulkStream, 1 = AdvancedControl,
- *              2 = Isochronous).
+ * @brief Sets the transfer mode, prompting for confirmation on AdvancedControl.
  */
 void IO::Drivers::USB::setTransferMode(const int mode)
 {
@@ -669,12 +517,6 @@ void IO::Drivers::USB::setTransferMode(const int mode)
 
 /**
  * @brief Sets the active IN endpoint by combo index.
- *
- * Called from the QML IN endpoint ComboBox after the device is connected and
- * the endpoint list has been populated. The change is persisted to QSettings
- * so the same endpoint is pre-selected on the next connection attempt.
- *
- * @param index  New IN endpoint combo index (0 = placeholder, ≥1 = real endpoint).
  */
 void IO::Drivers::USB::setInEndpointIndex(const int index)
 {
@@ -689,13 +531,7 @@ void IO::Drivers::USB::setInEndpointIndex(const int index)
 }
 
 /**
- * @brief Sets the active OUT endpoint by combo index.
- *
- * Index 0 means receive-only (no OUT endpoint). Called from the QML OUT
- * endpoint ComboBox after the device is connected. The change is persisted
- * to QSettings.
- *
- * @param index  New OUT endpoint combo index (0 = none, ≥1 = real endpoint).
+ * @brief Sets the active OUT endpoint by combo index (0 = none, receive-only).
  */
 void IO::Drivers::USB::setOutEndpointIndex(const int index)
 {
@@ -711,13 +547,6 @@ void IO::Drivers::USB::setOutEndpointIndex(const int index)
 
 /**
  * @brief Sets the isochronous packet size in bytes.
- *
- * This value is passed to libusb_set_iso_packet_lengths() when the
- * isochronous transfer pool is allocated in isoReadLoop(). It should match
- * the wMaxPacketSize field of the selected isochronous endpoint. The value
- * is persisted to QSettings.
- *
- * @param size  Packet size in bytes. Must be > 0; values ≤ 0 are ignored.
  */
 void IO::Drivers::USB::setIsoPacketSize(const int size)
 {
@@ -733,10 +562,6 @@ void IO::Drivers::USB::setIsoPacketSize(const int size)
 
 /**
  * @brief Connects the driver to application-level lifecycle signals.
- *
- * Requests an early, orderly thread shutdown before QCoreApplication is
- * destroyed. The destructor also stops the threads unconditionally, so this
- * is an optimisation rather than the sole safeguard.
  */
 void IO::Drivers::USB::setupExternalConnections()
 {
@@ -773,9 +598,6 @@ void IO::Drivers::USB::setupExternalConnections()
 
 /**
  * @brief Handles a fatal read error by closing the device on the main thread.
- *
- * Called via QMetaObject::invokeMethod with Qt::QueuedConnection from the
- * read thread so that close() executes safely on the main thread.
  */
 void IO::Drivers::USB::onReadError()
 {
@@ -784,15 +606,6 @@ void IO::Drivers::USB::onReadError()
 
 /**
  * @brief Scans the USB bus and rebuilds the device list.
- *
- * Called on startup and every 2 seconds by the periodic timer to detect
- * hotplug events. String descriptors (manufacturer, product) are fetched by
- * briefly opening each device; devices that cannot be opened are still listed
- * with their VID:PID. Change signals are only emitted when the list content
- * actually differs from the previous scan to avoid spurious QML redraws.
- *
- * If the previously selected device index falls outside the new list it is
- * reset to 0 so the placeholder is shown.
  */
 void IO::Drivers::USB::enumerateDevices()
 {
@@ -877,15 +690,7 @@ void IO::Drivers::USB::enumerateDevices()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns true if the device's active configuration exposes at least one
- *        endpoint of @p targetType.
- *
- * Used by endpointErrorMessage() to detect whether switching transfer mode
- * would resolve the "no matching endpoint" situation.
- *
- * @param cfg         Active configuration descriptor (caller owns lifetime).
- * @param targetType  LIBUSB_TRANSFER_TYPE_BULK or LIBUSB_TRANSFER_TYPE_ISOCHRONOUS.
- * @return true if any endpoint matches targetType.
+ * @brief Returns true if the device's active configuration exposes at least one endpoint of @p targetType.
  */
 static bool configHasTransferType(const libusb_config_descriptor* cfg, uint8_t targetType)
 {
@@ -906,13 +711,6 @@ static bool configHasTransferType(const libusb_config_descriptor* cfg, uint8_t t
 
 /**
  * @brief Builds an actionable error message when no IN endpoint is found.
- *
- * Uses configHasTransferType() to detect whether endpoints of the opposite
- * transfer type exist. If they do, the message tells the user exactly which
- * transfer mode to switch to. If no data endpoints are found at all, a
- * generic message is returned.
- *
- * @return Translated error string ready for display in a message box.
  */
 QString IO::Drivers::USB::endpointErrorMessage() const
 {
@@ -944,15 +742,7 @@ QString IO::Drivers::USB::endpointErrorMessage() const
 }
 
 /**
- * @brief Inspects a single endpoint descriptor and appends it to the IN or OUT
- *        list if its transfer type matches the requested mode.
- *
- * Called from the triple-nested loop in buildEndpointLists() to keep that
- * function within the 3-level nesting limit.
- *
- * @param ep       Endpoint descriptor to inspect.
- * @param ifNum    Interface number the endpoint belongs to.
- * @param wantIso  true when Isochronous mode is active; false for bulk.
+ * @brief Inspects a single endpoint descriptor and appends it to the IN or OUT list if it matches the mode.
  */
 void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
                                        int ifNum,
@@ -993,26 +783,7 @@ void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
 }
 
 /**
- * @brief Scans all interfaces and endpoints of the selected device and
- *        populates the IN/OUT endpoint lists.
- *
- * Uses libusb_get_active_config_descriptor() which only requires a
- * libusb_device* pointer (no open handle) so it can be called immediately
- * after libusb_open() inside open(). Endpoints are filtered strictly by the
- * selected transfer mode: Isochronous mode lists only isochronous endpoints;
- * all other modes list only bulk endpoints. If no matching endpoints are found,
- * open() detects whether endpoints of the opposite type exist and surfaces a
- * targeted error message guiding the user to switch the transfer mode.
- *
- * After populating the lists the function:
- *   - Clamps any saved index that is now out of range back to 0.
- *   - Auto-selects the first available IN and OUT endpoints when no valid
- *     index is already set.
- *   - In Isochronous mode, auto-fills m_isoPacketSize from the endpoint's
- *     wMaxPacketSize if the current value differs.
- *
- * Callers are responsible for emitting endpointListChanged(),
- * inEndpointIndexChanged(), and outEndpointIndexChanged() after this returns.
+ * @brief Scans all interfaces and endpoints of the selected device and populates the IN/OUT lists.
  */
 void IO::Drivers::USB::buildEndpointLists()
 {
@@ -1069,11 +840,6 @@ void IO::Drivers::USB::buildEndpointLists()
 
 /**
  * @brief Runs the libusb event loop on m_eventThread.
- *
- * Calls libusb_handle_events_timeout() with a 100 ms timeout in a tight loop
- * for as long as m_eventLoopRunning is true. This drives both hotplug
- * callbacks (device arrived/left) and isochronous transfer completions without
- * any polling from the main thread.
  */
 void IO::Drivers::USB::eventLoop()
 {
@@ -1084,19 +850,7 @@ void IO::Drivers::USB::eventLoop()
 }
 
 /**
- * @brief Static libusb hotplug callback invoked when a device arrives or
- *        leaves.
- *
- * Marshals the re-enumeration onto the main thread via
- * QMetaObject::invokeMethod so that Qt signal/slot notifications and QML
- * property updates happen on the correct thread.
- *
- * @param ctx       libusb context (unused).
- * @param device    Device that triggered the event (unused; full re-scan
- *                  is cheaper and avoids partial list state).
- * @param event     LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED or _LEFT.
- * @param user_data Pointer to the USB driver instance.
- * @return 0 to keep the callback registered.
+ * @brief Static libusb hotplug callback invoked when a device arrives or leaves.
  */
 int LIBUSB_CALL IO::Drivers::USB::hotplugCallback(libusb_context*,
                                                   libusb_device*,
@@ -1110,10 +864,6 @@ int LIBUSB_CALL IO::Drivers::USB::hotplugCallback(libusb_context*,
 
 /**
  * @brief Clears all endpoint lists and their corresponding label lists.
- *
- * Called by setDeviceIndex(), setTransferMode(), and at the start of
- * buildEndpointLists() to ensure no stale endpoint data remains from a
- * previous device or mode.
  */
 void IO::Drivers::USB::clearEndpointLists()
 {
@@ -1125,12 +875,6 @@ void IO::Drivers::USB::clearEndpointLists()
 
 /**
  * @brief Claims @p ifaceNum on the open device handle.
- *
- * Stores the interface number in m_claimedInterface so releaseInterface()
- * can release it later without needing the caller to track it.
- *
- * @param ifaceNum  USB interface number to claim.
- * @return true on success, false if libusb_claim_interface() fails.
  */
 bool IO::Drivers::USB::claimInterface(int ifaceNum)
 {
@@ -1143,9 +887,6 @@ bool IO::Drivers::USB::claimInterface(int ifaceNum)
 
 /**
  * @brief Releases the currently claimed interface.
- *
- * No-op if no interface is claimed (m_claimedInterface < 0) or the handle
- * is null. Resets m_claimedInterface to -1 on success.
  */
 void IO::Drivers::USB::releaseInterface()
 {
@@ -1157,12 +898,6 @@ void IO::Drivers::USB::releaseInterface()
 
 /**
  * @brief Synchronous bulk read loop for BulkStream and AdvancedControl modes.
- *
- * Runs entirely on m_readThread. libusb_bulk_transfer() is called with a
- * 100 ms timeout so the loop remains responsive to m_running being cleared
- * by close(). Successful reads are dispatched to the HAL layer via
- * dataReceived(). Any non-timeout error triggers onReadError() via a queued
- * invocation on the main thread, which calls close() to clean up.
  */
 void IO::Drivers::USB::readLoop()
 {
@@ -1177,8 +912,7 @@ void IO::Drivers::USB::readLoop()
       continue;
 
     if (rc == 0 && transferred > 0) {
-      Q_EMIT dataReceived(
-        IO::makeByteArray(QByteArray(reinterpret_cast<const char*>(buf), transferred)));
+      publishReceivedData(QByteArray(reinterpret_cast<const char*>(buf), transferred));
       continue;
     }
 
@@ -1191,11 +925,6 @@ void IO::Drivers::USB::readLoop()
 
 /**
  * @brief Allocates and submits the isochronous transfer pool on the main thread.
- *
- * Called from open() before m_readThread starts, ensuring that m_isoTransfers
- * is written only from the main thread and is fully populated before
- * isoReadLoop() runs or close() reads it. Any transfer that fails allocation
- * or submission is freed immediately and not added to the pool.
  */
 void IO::Drivers::USB::allocateIsoTransfers()
 {
@@ -1235,16 +964,6 @@ void IO::Drivers::USB::allocateIsoTransfers()
 
 /**
  * @brief Async isochronous read loop for Isochronous mode.
- *
- * The transfer pool is allocated and submitted on the main thread by
- * allocateIsoTransfers() before this function runs, so m_isoTransfers is
- * never written from this thread. isoTransferCallback() resubmits each
- * completed transfer to keep the pool continuously in flight. Transfer
- * callbacks are driven by the permanent m_eventThread event loop.
- *
- * This function simply blocks until m_running is cleared by close().
- *
- * Runs on m_readThread.
  */
 void IO::Drivers::USB::isoReadLoop()
 {
@@ -1253,20 +972,7 @@ void IO::Drivers::USB::isoReadLoop()
 }
 
 /**
- * @brief Static libusb callback invoked for each completed isochronous
- *        transfer.
- *
- * Iterates all ISO packet descriptors in the transfer, concatenates non-empty
- * packets into a single QByteArray, and dispatches it to the HAL layer via
- * dataReceived() using a queued invocation on the main thread.
- *
- * If the driver is still running the transfer is immediately resubmitted so
- * the pool stays fully in flight. If m_running has been cleared the transfer
- * buffer is freed instead (the libusb_transfer struct itself is freed by
- * close() via the m_isoTransfers list).
- *
- * @param transfer  Completed libusb_transfer. user_data points to the USB
- *                  driver instance.
+ * @brief Static libusb callback invoked for each completed isochronous transfer.
  */
 void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer)
 {
@@ -1292,9 +998,11 @@ void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer
     }
 
     if (!received.isEmpty()) {
+      // Stamp at acquisition, before queueing to the main thread
+      const auto timestamp = IO::CapturedData::SteadyClock::now();
       QMetaObject::invokeMethod(
         self,
-        [self, received] { Q_EMIT self->dataReceived(IO::makeByteArray(received)); },
+        [self, received, timestamp] { self->publishReceivedData(received, timestamp); },
         Qt::QueuedConnection);
     }
   }
@@ -1307,19 +1015,6 @@ void LIBUSB_CALL IO::Drivers::USB::isoTransferCallback(libusb_transfer* transfer
 
 /**
  * @brief Issues a USB control transfer (AdvancedControl mode only).
- *
- * Control transfers allow the host to send setup packets to any endpoint,
- * including endpoint 0. They are disabled unless the user has explicitly
- * enabled AdvancedControl mode and confirmed the warning dialog.
- *
- * @param bmRequestType  Direction, type, and recipient fields per the USB spec.
- * @param bRequest       Request code.
- * @param wValue         Request-specific value field.
- * @param wIndex         Request-specific index field (often interface or endpoint).
- * @param data           Data stage payload (may be empty for zero-length transfers).
- * @param timeout_ms     Transfer timeout in milliseconds.
- * @return Number of bytes transferred, or -1 if the mode is wrong, the device
- *         is not open, or libusb reports an error.
  */
 qint64 IO::Drivers::USB::sendControlTransfer(uint8_t bmRequestType,
                                              uint8_t bRequest,
@@ -1450,7 +1145,6 @@ bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
 
 /**
  * @brief Returns the USB configuration as a flat list of editable properties.
- * @return List of DriverProperty descriptors with current values.
  */
 QList<IO::DriverProperty> IO::Drivers::USB::driverProperties() const
 {
@@ -1502,8 +1196,6 @@ QList<IO::DriverProperty> IO::Drivers::USB::driverProperties() const
 
 /**
  * @brief Applies a single USB configuration change by key.
- * @param key   The DriverProperty::key that was edited.
- * @param value The new value chosen by the user.
  */
 void IO::Drivers::USB::setDriverProperty(const QString& key, const QVariant& value)
 {

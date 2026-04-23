@@ -516,7 +516,6 @@ void Misc::ExtensionManager::browseLocalRepo()
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     dialog->deleteLater();
-
     if (!path.isEmpty())
       addRepository(path);
   });
@@ -538,10 +537,7 @@ void Misc::ExtensionManager::browseLocalRepo()
  */
 void Misc::ExtensionManager::installExtension()
 {
-  // Refuse to start a second install while one is already in flight.
-  // This can happen if the QML user clicks Install while an auto-update
-  // is mid-download, or if autoUpdate re-enters before applyFilter()
-  // has finished rebuilding m_filteredExtensions.
+  // Refuse to start a second install while one is already in progress
   if (m_loading)
     return;
 

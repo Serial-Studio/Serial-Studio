@@ -472,9 +472,6 @@ DataModel::ProjectEditor::ProjectEditor()
   buildProjectModel();
 }
 
-/**
- * @brief Returns the single ProjectEditor instance.
- */
 DataModel::ProjectEditor& DataModel::ProjectEditor::instance()
 {
   static ProjectEditor singleton;
@@ -485,9 +482,6 @@ DataModel::ProjectEditor& DataModel::ProjectEditor::instance()
 // View state accessors
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the currently active editor view.
- */
 DataModel::ProjectEditor::CurrentView DataModel::ProjectEditor::currentView() const
 {
   return m_currentView;
@@ -505,9 +499,6 @@ QString DataModel::ProjectEditor::selectedText() const
   return m_treeModel->data(index, TreeViewText).toString();
 }
 
-/**
- * @brief Returns the icon URL of the currently selected tree item.
- */
 QString DataModel::ProjectEditor::selectedIcon() const
 {
   if (!m_selectionModel || !m_treeModel)
@@ -517,27 +508,18 @@ QString DataModel::ProjectEditor::selectedIcon() const
   return m_treeModel->data(index, TreeViewIcon).toString();
 }
 
-/**
- * @brief Returns the icon identifier of the currently selected action.
- */
 const QString DataModel::ProjectEditor::actionIcon() const
 {
   return m_selectedAction.icon;
 }
 
-/**
- * @brief Returns the icon identifier of the currently selected output widget.
- */
 const QString DataModel::ProjectEditor::outputWidgetIcon() const
 {
   return m_selectedOutputWidget.icon;
 }
 
 /**
- * @brief Returns a sorted list of all available action icon base-names.
- *
- * Scanned once from the embedded @c :/rcc/actions/ resource directory on
- * first call; subsequent calls return the cached list.
+ * @brief Returns the cached list of action icon base-names from resources.
  */
 const QStringList& DataModel::ProjectEditor::availableActionIcons() const
 {
@@ -557,11 +539,7 @@ const QStringList& DataModel::ProjectEditor::availableActionIcons() const
 }
 
 /**
- * @brief Returns true when the selected group's dataset list may be freely edited.
- *
- * Groups that carry a fixed-layout widget (Accelerometer, GPS, etc.) are not
- * freely editable; only NoGroupWidget, MultiPlot, and DataGrid allow arbitrary
- * dataset additions and deletions.
+ * @brief Returns true when the selected group's dataset list is freely editable.
  */
 bool DataModel::ProjectEditor::currentGroupIsEditable() const
 {
@@ -575,10 +553,7 @@ bool DataModel::ProjectEditor::currentGroupIsEditable() const
 }
 
 /**
- * @brief Returns true when the selected dataset belongs to a freely editable group.
- *
- * Mirrors the logic of currentGroupIsEditable() but evaluated from the dataset
- * side: looks up the parent group's widget type in the live ProjectModel data.
+ * @brief Returns true when the selected dataset's parent group is editable.
  */
 bool DataModel::ProjectEditor::currentDatasetIsEditable() const
 {
@@ -596,10 +571,7 @@ bool DataModel::ProjectEditor::currentDatasetIsEditable() const
 }
 
 /**
- * @brief Returns a bitmask of the dataset option flags for the selected dataset.
- *
- * Each bit corresponds to a @c SerialStudio::DatasetOption value
- * (Plot, FFT, LED, Bar, Gauge, Compass).
+ * @brief Returns the DatasetOption bitmask for the selected dataset.
  */
 quint8 DataModel::ProjectEditor::datasetOptions() const
 {
@@ -628,57 +600,36 @@ quint8 DataModel::ProjectEditor::datasetOptions() const
 // Model accessors
 //--------------------------------------------------------------------------------------------------
 
-/**
- * @brief Returns the hierarchical tree model shown in the project structure pane.
- */
 DataModel::CustomModel* DataModel::ProjectEditor::treeModel() const
 {
   return m_treeModel;
 }
 
-/**
- * @brief Returns the selection model that tracks the active tree item.
- */
 QItemSelectionModel* DataModel::ProjectEditor::selectionModel() const
 {
   return m_selectionModel;
 }
 
-/**
- * @brief Returns the form model for the currently selected group.
- */
 DataModel::CustomModel* DataModel::ProjectEditor::groupModel() const
 {
   return m_groupModel;
 }
 
-/**
- * @brief Returns the form model for the currently selected source.
- */
 DataModel::CustomModel* DataModel::ProjectEditor::sourceModel() const
 {
   return m_sourceModel;
 }
 
-/**
- * @brief Returns the sourceId of the currently selected source.
- */
 int DataModel::ProjectEditor::selectedSourceId() const noexcept
 {
   return m_selectedSource.sourceId;
 }
 
-/**
- * @brief Returns the bus type (int) of the currently selected source.
- */
 int DataModel::ProjectEditor::selectedSourceBusType() const noexcept
 {
   return m_selectedSource.busType;
 }
 
-/**
- * @brief Returns the JavaScript frame parser code of the currently selected source.
- */
 QString DataModel::ProjectEditor::selectedSourceFrameParserCode() const
 {
   return m_selectedSource.frameParserCode;
@@ -686,7 +637,6 @@ QString DataModel::ProjectEditor::selectedSourceFrameParserCode() const
 
 /**
  * @brief Updates the frame parser code of the selected source.
- * @param code The new JavaScript source string.
  */
 void DataModel::ProjectEditor::setSelectedSourceFrameParserCode(const QString& code)
 {
@@ -699,12 +649,7 @@ void DataModel::ProjectEditor::setSelectedSourceFrameParserCode(const QString& c
 }
 
 /**
- * @brief Opens the dataset value transform editor dialog for the currently
- * selected dataset.
- *
- * Pre-populates the editor with the dataset's existing transform code and
- * the source's scripting language. When the user clicks Apply, updates the
- * dataset and project model.
+ * @brief Opens the dataset value transform editor for the selected dataset.
  */
 void DataModel::ProjectEditor::openTransformEditor()
 {
@@ -763,33 +708,21 @@ void DataModel::ProjectEditor::openTransformEditor()
                                    m_selectedDataset.datasetId);
 }
 
-/**
- * @brief Returns the form model for the currently selected action.
- */
 DataModel::CustomModel* DataModel::ProjectEditor::actionModel() const
 {
   return m_actionModel;
 }
 
-/**
- * @brief Returns the form model for the project-level settings.
- */
 DataModel::CustomModel* DataModel::ProjectEditor::projectModel() const
 {
   return m_projectModel;
 }
 
-/**
- * @brief Returns the form model for the currently selected dataset.
- */
 DataModel::CustomModel* DataModel::ProjectEditor::datasetModel() const
 {
   return m_datasetModel;
 }
 
-/**
- * @brief Returns the type enum value of the currently selected output widget.
- */
 int DataModel::ProjectEditor::outputWidgetType() const noexcept
 {
   return static_cast<int>(m_selectedOutputWidget.type);
@@ -806,17 +739,11 @@ bool DataModel::ProjectEditor::currentGroupIsOutputPanel() const
   return false;
 }
 
-/**
- * @brief Returns the form model for the currently selected output widget.
- */
 DataModel::CustomModel* DataModel::ProjectEditor::outputWidgetModel() const
 {
   return m_outputWidgetModel;
 }
 
-/**
- * @brief Returns a const ref to the currently selected output widget.
- */
 const DataModel::OutputWidget& DataModel::ProjectEditor::selectedOutputWidget() const noexcept
 {
   return m_selectedOutputWidget;
@@ -827,10 +754,7 @@ const DataModel::OutputWidget& DataModel::ProjectEditor::selectedOutputWidget() 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Selects the Frame Parser item for source 0 in the tree after a short delay.
- *
- * The delay allows any pending tree rebuild to complete before the selection
- * is applied, ensuring the item exists in the model.
+ * @brief Selects the Frame Parser tree item for the given source, deferred.
  */
 void DataModel::ProjectEditor::displayFrameParserView(int sourceId)
 {
@@ -854,12 +778,6 @@ void DataModel::ProjectEditor::displayFrameParserView(int sourceId)
 
 /**
  * @brief Coalesces rapid ProjectModel mutation bursts into a single rebuild.
- *
- * Many ProjectModel signals (groupsChanged, actionsChanged, tablesChanged,
- * workspacesChanged) fire once per keystroke during batch edits. Connecting
- * them directly to buildTreeModel() enqueues one rebuild per emission, even
- * when they all resolve on the same event-loop tick. Routing through this
- * single-shot zero-interval timer collapses the burst into one rebuild.
  */
 void DataModel::ProjectEditor::scheduleTreeRebuild()
 {
@@ -868,15 +786,7 @@ void DataModel::ProjectEditor::scheduleTreeRebuild()
 }
 
 /**
- * @brief Rebuilds the full project-structure tree model from scratch.
- *
- * Saves and restores per-item expanded state. After the new tree is emitted via
- * treeModelChanged(), the previously selected item is re-selected by matching
- * its groupId / datasetId / actionId against the fresh item maps, falling back
- * to the root project item when no match is found.
- *
- * Connected to ProjectModel::groupsChanged and ProjectModel::actionsChanged via
- * Qt::QueuedConnection so it always runs after the data mutation completes.
+ * @brief Rebuilds the project-structure tree, restoring expansion and selection.
  */
 void DataModel::ProjectEditor::buildTreeModel()
 {
@@ -947,8 +857,7 @@ void DataModel::ProjectEditor::buildTreeModel()
 }
 
 /**
- * @brief Populates the tree model with source, action, group, dataset, and
- * output widget items under the given @p root.
+ * @brief Populates the tree under root with sources, actions, groups, datasets.
  */
 void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
                                               QHash<QString, bool>& expandedStates)
@@ -1229,8 +1138,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 }
 
 /**
- * @brief Restores the tree selection to the previously active item by matching
- * IDs against the current view state.
+ * @brief Restores the tree selection by matching IDs against the current view.
  */
 void DataModel::ProjectEditor::restoreTreeSelection()
 {
@@ -1326,11 +1234,6 @@ void DataModel::ProjectEditor::restoreTreeSelection()
 
 /**
  * @brief Rebuilds the project-level settings form model.
- *
- * Populates frame detection, delimiter, checksum, and decoder rows.
- * Some rows are conditionally shown depending on the active FrameDetection
- * mode (e.g. start/end delimiter fields are hidden for End-Delimiter-only mode).
- * Connects itemChanged to onProjectItemChanged.
  */
 void DataModel::ProjectEditor::buildProjectModel()
 {
@@ -1370,12 +1273,7 @@ void DataModel::ProjectEditor::buildProjectModel()
 }
 
 /**
- * @brief Rebuilds the group-settings form model for @p group.
- *
- * Stores @p group as the selected group proxy, populates the Title and
- * Composite Widget rows, and connects itemChanged to onGroupItemChanged.
- *
- * @param group  The group whose properties should be displayed.
+ * @brief Rebuilds the group-settings form model for the given group.
  */
 void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
 {
@@ -1520,14 +1418,7 @@ void DataModel::ProjectEditor::buildGroupModel(const DataModel::Group& group)
 }
 
 /**
- * @brief Rebuilds the source-settings form model for @p source.
- *
- * Queries the live driver via SourceManager::driverForEditing() to get a
- * flat list of DriverProperty descriptors, then populates m_sourceModel with
- * one row per property (plus a bus-type ComboBox at the top). QML renders this
- * through the same TableDelegate used by group/dataset/action views.
- *
- * @param source The source whose properties should be displayed.
+ * @brief Rebuilds the source-settings form model from the live driver props.
  */
 void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 {
@@ -1752,14 +1643,7 @@ void DataModel::ProjectEditor::buildSourceModel(const DataModel::Source& source)
 }
 
 /**
- * @brief Handles edits from the source settings form model.
- *
- * Dispatches changes to either ProjectModel (for bus-type changes) or the live
- * driver via setDriverProperty() (for all other connection parameters). After a
- * driver property change the updated values are captured back into
- * Source::connectionSettings so they survive project save/load.
- *
- * @param item The QStandardItem whose data was changed.
+ * @brief Dispatches source form edits to ProjectModel or the live driver.
  */
 void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
 {
@@ -1888,13 +1772,7 @@ void DataModel::ProjectEditor::onSourceItemChanged(QStandardItem* item)
 }
 
 /**
- * @brief Rebuilds the action-settings form model for @p action.
- *
- * Stores @p action as the selected action proxy and populates title, icon,
- * transmit data, EOL sequence, auto-execute, timer mode, and interval rows.
- * Connects itemChanged to onActionItemChanged.
- *
- * @param action  The action whose properties should be displayed.
+ * @brief Rebuilds the action-settings form model for the given action.
  */
 void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
 {
@@ -2115,14 +1993,7 @@ void DataModel::ProjectEditor::buildActionModel(const DataModel::Action& action)
 }
 
 /**
- * @brief Rebuilds the dataset-settings form model for @p dataset.
- *
- * Stores @p dataset as the selected dataset proxy, then delegates section
- * construction to addGeneralSection(), addPlotSection(), addFFTSection(),
- * addWidgetSection(), addAlarmSection(), and addLEDSection().
- * Connects itemChanged to onDatasetItemChanged.
- *
- * @param dataset  The dataset whose properties should be displayed.
+ * @brief Rebuilds the dataset-settings form model for the given dataset.
  */
 void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& dataset)
 {
@@ -2155,9 +2026,7 @@ void DataModel::ProjectEditor::buildDatasetModel(const DataModel::Dataset& datas
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Appends the General section rows (title, frame index, units) to @p model.
- * @param model    Target dataset form model.
- * @param dataset  Source dataset values.
+ * @brief Appends the General section rows to the dataset form model.
  */
 void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
                                                  const DataModel::Dataset& dataset)
@@ -2220,9 +2089,7 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model,
 }
 
 /**
- * @brief Appends the Plot section rows (enable, X-axis source, min/max) to @p model.
- * @param model    Target dataset form model.
- * @param dataset  Source dataset values.
+ * @brief Appends the Plot section rows to the dataset form model.
  */
 void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
@@ -2308,9 +2175,7 @@ void DataModel::ProjectEditor::addPlotSection(CustomModel* model, const DataMode
 }
 
 /**
- * @brief Appends the FFT section rows (enable, sample count, rate, min/max) to @p model.
- * @param model    Target dataset form model.
- * @param dataset  Source dataset values.
+ * @brief Appends the FFT section rows to the dataset form model.
  */
 void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
@@ -2384,9 +2249,7 @@ void DataModel::ProjectEditor::addFFTSection(CustomModel* model, const DataModel
 }
 
 /**
- * @brief Appends the Widget section rows (widget type, min/max display values) to @p model.
- * @param model    Target dataset form model.
- * @param dataset  Source dataset values.
+ * @brief Appends the Widget section rows to the dataset form model.
  */
 void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
                                                 const DataModel::Dataset& dataset)
@@ -2450,9 +2313,7 @@ void DataModel::ProjectEditor::addWidgetSection(CustomModel* model,
 }
 
 /**
- * @brief Appends the Alarm section rows (enable, low/high thresholds) to @p model.
- * @param model    Target dataset form model.
- * @param dataset  Source dataset values.
+ * @brief Appends the Alarm section rows to the dataset form model.
  */
 void DataModel::ProjectEditor::addAlarmSection(CustomModel* model,
                                                const DataModel::Dataset& dataset)
@@ -2505,9 +2366,7 @@ void DataModel::ProjectEditor::addAlarmSection(CustomModel* model,
 }
 
 /**
- * @brief Appends the LED Display section rows (enable, high threshold) to @p model.
- * @param model    Target dataset form model.
- * @param dataset  Source dataset values.
+ * @brief Appends the LED Display section rows to the dataset form model.
  */
 void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel::Dataset& dataset)
 {
@@ -2548,13 +2407,7 @@ void DataModel::ProjectEditor::addLEDSection(CustomModel* model, const DataModel
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief (Re-)populates all combobox string lists used by the form models.
- *
- * Called once at construction and again whenever the application language
- * changes. Fills FFT sample counts, timer modes, decoder options, checksum
- * methods, frame detection methods, EOL sequences, group widgets, and
- * dataset widgets. Must be called before any build*Model() call to guarantee
- * that the lists are available for ComboBox rows.
+ * @brief Populates the combobox string lists used by the form models.
  */
 void DataModel::ProjectEditor::generateComboBoxModels()
 {
@@ -2634,11 +2487,7 @@ void DataModel::ProjectEditor::generateComboBoxModels()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Transitions the editor to @p view.
- *
- * Emits currentViewChanged() and selectedTextChanged() after the transition.
- *
- * @param view  The target editor view.
+ * @brief Transitions the editor to the given view.
  */
 void DataModel::ProjectEditor::setCurrentView(const DataModel::ProjectEditor::CurrentView view)
 {
@@ -2655,15 +2504,7 @@ void DataModel::ProjectEditor::setCurrentView(const DataModel::ProjectEditor::Cu
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles edits to the group form model.
- *
- * Reads the changed item's ParameterType role to identify which group
- * field was modified (title or widget), updates m_selectedGroup, and
- * propagates the change to ProjectModel via updateGroup() or setGroupWidget().
- * When setGroupWidget() returns false (user cancelled), the tree is rebuilt
- * and the group item is re-selected to keep the UI consistent.
- *
- * @param item  The QStandardItem that was edited.
+ * @brief Propagates group form edits to ProjectModel and the tree.
  */
 void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
 {
@@ -2862,14 +2703,7 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
 }
 
 /**
- * @brief Handles edits to the project-level settings form model.
- *
- * Dispatches title, frame delimiter, decoder method, hexadecimal delimiter,
- * frame detection, and checksum changes to the appropriate ProjectModel slots.
- * Rebuilds the project form after changes that affect row visibility
- * (frame detection mode, hexadecimal delimiter toggle).
- *
- * @param item  The QStandardItem that was edited.
+ * @brief Dispatches project-level form edits to ProjectModel.
  */
 void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
 {
@@ -2893,15 +2727,7 @@ void DataModel::ProjectEditor::onProjectItemChanged(QStandardItem* item)
 }
 
 /**
- * @brief Handles edits to the dataset form model.
- *
- * Maps the changed item's ParameterType to the corresponding m_selectedDataset
- * field. Calls ProjectModel::updateDataset() with rebuildTree=true only when
- * the title or frame index changed (the only fields visible in the tree).
- * All other field edits update in-place without triggering a tree rebuild,
- * keeping the UI stable while the user types.
- *
- * @param item  The QStandardItem that was edited.
+ * @brief Dispatches dataset form edits to ProjectModel, rebuilding only on tree-visible changes.
  */
 void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
 {
@@ -3073,15 +2899,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Responds to a new tree selection by switching the active editor view.
- *
- * Identifies the selected item against the four item maps (groups, datasets,
- * actions, root items) and calls the appropriate build*Model() function plus
- * setCurrentView(). Also notifies ProjectModel of the new selected proxy via
- * setSelectedGroup(), setSelectedDataset(), or setSelectedAction().
- *
- * @param current   Newly selected model index.
- * @param previous  Previously selected model index (unused).
+ * @brief Switches the active editor view based on the newly selected tree item.
  */
 void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& current,
                                                          const QModelIndex& previous)
@@ -3159,8 +2977,7 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
 //--------------------------------------------------------------------------------------------------
 // Private helpers: expanded state persistence
 /**
- * @brief Selects the source item with the given @p sourceId in the tree.
- * @param sourceId The source identifier to navigate to.
+ * @brief Selects the source item with the given sourceId in the tree.
  */
 void DataModel::ProjectEditor::selectSource(int sourceId)
 {
@@ -3176,8 +2993,7 @@ void DataModel::ProjectEditor::selectSource(int sourceId)
 }
 
 /**
- * @brief Selects the group item with the given @p groupId in the tree.
- * @param groupId The group identifier to navigate to.
+ * @brief Selects the group item with the given groupId in the tree.
  */
 void DataModel::ProjectEditor::selectGroup(int groupId)
 {
@@ -3193,9 +3009,7 @@ void DataModel::ProjectEditor::selectGroup(int groupId)
 }
 
 /**
- * @brief Selects the dataset item identified by @p groupId and @p datasetId in the tree.
- * @param groupId   The owning group identifier.
- * @param datasetId The dataset identifier within that group.
+ * @brief Selects the dataset item (groupId, datasetId) in the tree.
  */
 void DataModel::ProjectEditor::selectDataset(int groupId, int datasetId)
 {
@@ -3211,8 +3025,7 @@ void DataModel::ProjectEditor::selectDataset(int groupId, int datasetId)
 }
 
 /**
- * @brief Selects the action item with the given @p actionId in the tree.
- * @param actionId The action identifier to navigate to.
+ * @brief Selects the action item with the given actionId in the tree.
  */
 void DataModel::ProjectEditor::selectAction(int actionId)
 {
@@ -3227,16 +3040,13 @@ void DataModel::ProjectEditor::selectAction(int actionId)
   }
 }
 
-/**
- * @brief Selects the Frame Parser Code item in the tree.
- */
 void DataModel::ProjectEditor::selectFrameParser(int sourceId)
 {
   displayFrameParserView(sourceId);
 }
 
 /**
- * @brief Programmatically selects an output widget in the tree.
+ * @brief Selects the output widget (groupId, widgetId) in the tree.
  */
 void DataModel::ProjectEditor::selectOutputWidget(int groupId, int widgetId)
 {
@@ -3257,9 +3067,6 @@ void DataModel::ProjectEditor::selectOutputWidget(int groupId, int widgetId)
 
 /**
  * @brief Builds the form model for editing an output widget's properties.
- *
- * Creates form rows for title, type, value range, labels, and the JavaScript
- * transmit function. Connects itemChanged to onOutputWidgetItemChanged.
  */
 void DataModel::ProjectEditor::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
 {
@@ -3463,15 +3270,7 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Recursively records the TreeViewExpanded state of @p item and its children.
- *
- * Keys are slash-separated item text paths (e.g. "Root/Group A/Dataset 1").
- * Called before destroying the old tree model in buildTreeModel() so the
- * state can be restored on the freshly built model.
- *
- * @param item   Root item to start from.
- * @param map    Output map: path → expanded flag.
- * @param title  Accumulated path prefix for this call level.
+ * @brief Records TreeViewExpanded state of the subtree into a path-keyed map.
  */
 void DataModel::ProjectEditor::saveExpandedStateMap(QStandardItem* item,
                                                     QHash<QString, bool>& map,
@@ -3490,14 +3289,7 @@ void DataModel::ProjectEditor::saveExpandedStateMap(QStandardItem* item,
 }
 
 /**
- * @brief Recursively restores the TreeViewExpanded state of @p item and its children.
- *
- * Looks up each item's path in @p map. Items not found in the map default to
- * expanded (true). Counterpart to saveExpandedStateMap().
- *
- * @param item   Root item to start from.
- * @param map    Saved path → expanded flag mapping from saveExpandedStateMap().
- * @param title  Accumulated path prefix for this call level.
+ * @brief Restores TreeViewExpanded state from the saved path-keyed map.
  */
 void DataModel::ProjectEditor::restoreExpandedStateMap(QStandardItem* item,
                                                        QHash<QString, bool>& map,
@@ -3517,13 +3309,7 @@ void DataModel::ProjectEditor::restoreExpandedStateMap(QStandardItem* item,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns a read-only summary of all user-defined data tables and the
- *        auto-generated __datasets__ system table for display in QML.
- *
- * Each list entry is a QVariantMap with keys:
- *   - "name":         Table name (QString)
- *   - "isSystem":     True for the __datasets__ system table (bool)
- *   - "registerCount": Number of registers in the table (int)
+ * @brief Returns a summary of user tables plus the __datasets__ system table.
  */
 QVariantList DataModel::ProjectEditor::tablesSummary() const
 {
@@ -3556,9 +3342,6 @@ QVariantList DataModel::ProjectEditor::tablesSummary() const
   return result;
 }
 
-/**
- * @brief Returns the name of the currently selected user table (empty if none).
- */
 QString DataModel::ProjectEditor::selectedUserTable() const
 {
   return m_selectedUserTable;
@@ -3580,9 +3363,6 @@ void DataModel::ProjectEditor::selectUserTable(const QString& tableName)
   }
 }
 
-/**
- * @brief Returns the id of the workspace currently displayed in the editor.
- */
 int DataModel::ProjectEditor::selectedWorkspaceId() const noexcept
 {
   return m_selectedWorkspaceId;
@@ -3604,9 +3384,6 @@ void DataModel::ProjectEditor::selectWorkspace(int workspaceId)
   }
 }
 
-/**
- * @brief Returns the current tree search query (empty = no filter).
- */
 const QString& DataModel::ProjectEditor::treeSearchQuery() const noexcept
 {
   return m_treeSearchQuery;
@@ -3614,9 +3391,6 @@ const QString& DataModel::ProjectEditor::treeSearchQuery() const noexcept
 
 /**
  * @brief Updates the tree search query and rebuilds the tree to apply it.
- *
- * Matching is case-insensitive substring — rows whose title (or any ancestor's
- * title) contains the query survive. Empty string restores the full tree.
  */
 void DataModel::ProjectEditor::setTreeSearchQuery(const QString& query)
 {
@@ -3637,16 +3411,7 @@ void DataModel::ProjectEditor::setTreeSearchQuery(const QString& query)
 }
 
 /**
- * @brief Returns a read-only summary of the system __datasets__ table.
- *
- * Each list entry corresponds to one dataset and is a QVariantMap with keys:
- *   - "uniqueId":   Dataset unique identifier (int)
- *   - "groupTitle": Owning group title (QString)
- *   - "title":      Dataset title (QString)
- *   - "units":      Dataset units (QString)
- *   - "rawReg":     Register name for the raw value (QString)
- *   - "finalReg":   Register name for the final value (QString)
- *   - "isVirtual":  True if this is a virtual dataset (bool)
+ * @brief Returns a summary row per dataset for the __datasets__ table.
  */
 QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 {
@@ -3680,8 +3445,6 @@ QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 
 /**
  * @brief Returns a summary of every workspace defined in the project.
- *
- * Each entry: { id (int), title (QString), icon (QString), widgetCount (int) }.
  */
 QVariantList DataModel::ProjectEditor::workspacesSummary() const
 {
@@ -3701,13 +3464,7 @@ QVariantList DataModel::ProjectEditor::workspacesSummary() const
 }
 
 /**
- * @brief Returns the list of widget references attached to a workspace.
- *
- * Each entry: { widgetType (int), groupId (int), relativeIndex (int),
- *               groupTitle (QString), datasetTitle (QString) }.
- *
- * groupTitle/datasetTitle are resolved from the project so the editor can
- * display human-readable labels rather than raw numeric refs.
+ * @brief Returns the widget references attached to the given workspace.
  */
 QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) const
 {
@@ -3801,15 +3558,7 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
 }
 
 /**
- * @brief Returns every widget the project can show, with its (widgetType,
- *        groupId, relativeIndex) triple.
- *
- * Mirrors the walk performed by ProjectModel::autoGenerateWorkspaces() so the
- * per-type relativeIndex matches what Dashboard produces at runtime. Each
- * entry: { widgetType, groupId, relativeIndex, groupTitle, datasetTitle,
- *          isGroupWidget, widgetLabel (human-readable) }.
- *
- * Used by the "Add Widget" picker in WorkspaceView.
+ * @brief Returns every widget the project can show with its routing triple.
  */
 QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
 {

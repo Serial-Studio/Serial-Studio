@@ -26,27 +26,13 @@
 namespace API {
 namespace Handlers {
 /**
- * @class IOManagerHandler
- * @brief Registers API commands for IO::ConnectionManager operations
- *
- * Provides commands for:
- * - io.manager.connect - Connect to configured device
- * - io.manager.disconnect - Disconnect from device
- * - io.manager.setPaused - Pause/resume data streaming
- * - io.manager.setBusType - Set bus type (UART, Network, BLE)
- * - io.manager.writeData - Write raw data to device
- * - io.manager.getStatus - Query connection status
- * - io.manager.getAvailableBuses - Query available bus types
+ * @brief Registers API commands for IO::ConnectionManager operations.
  */
 class IOManagerHandler {
 public:
-  /**
-   * @brief Register all IO::ConnectionManager commands with the CommandRegistry
-   */
   static void registerCommands();
 
 private:
-  // Command handlers
   static CommandResponse connect(const QString& id, const QJsonObject& params);
   static CommandResponse disconnect(const QString& id, const QJsonObject& params);
   static CommandResponse setPaused(const QString& id, const QJsonObject& params);

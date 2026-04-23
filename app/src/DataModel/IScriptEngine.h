@@ -29,11 +29,7 @@
 namespace DataModel {
 
 /**
- * @brief Abstract interface for script engines used by the FrameParser.
- *
- * Each concrete implementation wraps a specific scripting language runtime
- * (e.g. QJSEngine for JavaScript, lua_State for Lua). The FrameParser
- * singleton delegates all language-specific work to IScriptEngine instances.
+ * @brief Abstract script engine interface used by the frame parser.
  */
 class IScriptEngine {
 public:

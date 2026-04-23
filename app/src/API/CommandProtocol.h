@@ -27,9 +27,6 @@
 #include <QString>
 
 namespace API {
-/**
- * @brief Message type identifiers for the API protocol
- */
 namespace MessageType {
 constexpr const char* Batch    = "batch";
 constexpr const char* Command  = "command";
@@ -37,9 +34,6 @@ constexpr const char* Raw      = "raw";
 constexpr const char* Response = "response";
 }  // namespace MessageType
 
-/**
- * @brief Error codes for API responses
- */
 namespace ErrorCode {
 constexpr const char* InvalidJson        = "INVALID_JSON";
 constexpr const char* InvalidParam       = "INVALID_PARAM";
@@ -52,8 +46,7 @@ constexpr const char* InvalidMessageType = "INVALID_MESSAGE_TYPE";
 }  // namespace ErrorCode
 
 /**
- * @struct CommandRequest
- * @brief Represents a single command request from a client
+ * @brief Represents a single command request from a client.
  */
 struct CommandRequest {
   QString id;
@@ -73,8 +66,7 @@ struct CommandRequest {
 };
 
 /**
- * @struct BatchRequest
- * @brief Represents a batch of commands to execute in order
+ * @brief Represents a batch of commands to execute in order.
  */
 struct BatchRequest {
   QString id;
@@ -96,8 +88,7 @@ struct BatchRequest {
 };
 
 /**
- * @struct CommandResponse
- * @brief Represents a response to a command request
+ * @brief Represents a response to a command request.
  */
 struct CommandResponse {
   QString id;
@@ -152,8 +143,7 @@ struct CommandResponse {
 };
 
 /**
- * @struct BatchResponse
- * @brief Represents a response to a batch request
+ * @brief Represents a response to a batch request.
  */
 struct BatchResponse {
   QString id;
@@ -181,13 +171,6 @@ struct BatchResponse {
   }
 };
 
-/**
- * @brief Parse incoming data to determine message type
- * @param data Raw JSON data
- * @param type Output: detected message type
- * @param json Output: parsed JSON object
- * @return true if parsing succeeded
- */
 inline bool parseMessage(const QByteArray& data, QString& type, QJsonObject& json)
 {
   QJsonParseError error;
@@ -205,22 +188,15 @@ inline bool parseMessage(const QByteArray& data, QString& type, QJsonObject& jso
   return !type.isEmpty();
 }
 
-/**
- * @brief Check if data looks like an API message
- * @param data Raw data to check
- * @return true if data appears to be a JSON API message
- */
 inline bool isApiMessage(const QByteArray& data)
 {
   if (data.isEmpty())
     return false;
 
-  // Quick check: API messages must start with '{'
   const auto trimmed = data.trimmed();
   if (trimmed.isEmpty() || trimmed.at(0) != '{')
     return false;
 
-  // Try to parse and check for "type" field
   QString type;
   QJsonObject json;
   if (!parseMessage(data, type, json))

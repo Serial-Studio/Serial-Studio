@@ -30,22 +30,7 @@
 
 namespace Widgets {
 /**
- * @class Widgets::GPS
- * @brief A custom QML widget for displaying GPS position on a tile-based map.
- *
- * This class implements a standalone, embeddable GPS map viewer using
- * ArcGIS/ESRI tile servers. It handles map tile rendering, zooming,
- * panning, and dynamic GPS data updates. The widget is based on
- * QQuickPaintedItem, requiring no external plugins or QtLocation support.
- *
- * Features:
- * - Fetches and caches tiles during runtime
- * - Supports zoom and drag interaction
- * - Draws an iOS-style indicator at the current GPS location
- * - Integrates with Serial Studio's dashboard system
- *
- * Designed to be lightweight, dependency-free (beyond QtNetwork),
- * and fully embeddable into any QML/QtQuick scene.
+ * @brief Custom QML widget for displaying GPS position on a tile-based map.
  */
 class GPS : public QuickPaintedItemCompat {
   // clang-format off

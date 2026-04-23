@@ -33,32 +33,7 @@
 
 namespace DataModel {
 /**
- * @brief Imports CAN Database (DBC) files and converts them to Serial Studio
- *        projects.
- *
- * The DBCImporter class provides functionality to parse DBC files using Qt's
- * QCanDbcFileParser and generate Serial Studio project files (.ssproj)
- * from the CAN message and signal definitions.
- *
- * The import process follows a two-phase workflow:
- * 1. Preview Phase: The DBC file is parsed and a preview dialog shows the
- *    user a summary of messages and signals that will be imported.
- * 2. Confirmation Phase: Upon user confirmation, a project file is
- *    generated with appropriate groups, datasets, and a JavaScript
- *    frame parser.
- *
- * Key features:
- * - Uses Qt's QCanDbcFileParser for robust DBC parsing
- * - Automatically generates JavaScript frame parsers for CAN signal extraction
- * - Smart widget assignment based on signal units and value ranges
- * - Supports both Intel (little-endian) and Motorola (big-endian) byte order
- * - Handles signal scaling and offset transformations
- * - Creates structured projects with groups for each CAN message
- *
- * This class follows the singleton pattern and is registered with QML for UI
- * interaction.
- *
- * @note This is a Pro-only feature (commercial license required).
+ * @brief Imports CAN Database (DBC) files and generates Serial Studio projects.
  */
 class DBCImporter : public QObject {
   // clang-format off
