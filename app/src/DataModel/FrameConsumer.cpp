@@ -26,10 +26,8 @@
 //--------------------------------------------------------------------------------------------------
 
 DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent)
-  : QObject(parent)
-  , m_lastFrameNs(-1)
-{
-}
+  : QObject(parent), m_lastFrameNs(-1)
+{}
 
 DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;
 

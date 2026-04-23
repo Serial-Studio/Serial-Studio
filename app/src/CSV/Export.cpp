@@ -293,8 +293,7 @@ void CSV::Export::setupExternalConnections()
 void CSV::Export::setExportEnabled(const bool enabled)
 {
   // Refuse to enable while the app is in Console-only mode
-  const bool allow = enabled
-                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+  const bool allow = enabled && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
 
   // Close file first when disabling
   if (!allow && isOpen())

@@ -196,7 +196,8 @@ bool IO::Drivers::Modbus::isWritable() const noexcept
 }
 
 /**
- * @brief Returns true if the user has selected appropriate controls & options to connect to a Modbus device.
+ * @brief Returns true if the user has selected appropriate controls & options to connect to a
+ * Modbus device.
  */
 bool IO::Drivers::Modbus::configurationOk() const noexcept
 {

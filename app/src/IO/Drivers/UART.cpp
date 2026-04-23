@@ -291,7 +291,8 @@ quint8 IO::Drivers::UART::flowControlIndex() const
 }
 
 /**
- * @brief Returns a list with the available serial devices/ports (with "Select Port" placeholder at index 0).
+ * @brief Returns a list with the available serial devices/ports (with "Select Port" placeholder at
+ * index 0).
  */
 QStringList IO::Drivers::UART::portList() const
 {

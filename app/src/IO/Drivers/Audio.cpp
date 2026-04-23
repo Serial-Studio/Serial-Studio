@@ -1064,11 +1064,11 @@ void IO::Drivers::Audio::processInputBuffer()
   // Flush and emit only the portion we actually wrote
   m_csvStream.flush();
   const auto length = m_csvBuffer.pos();
-  const auto frameStep = std::max(
-    std::chrono::nanoseconds(1),
-    std::chrono::duration_cast<std::chrono::nanoseconds>(
-      std::chrono::duration<double>(1.0 / static_cast<double>(m_config.sampleRate))));
-  const auto now = IO::CapturedData::SteadyClock::now();
+  const auto frameStep =
+    std::max(std::chrono::nanoseconds(1),
+             std::chrono::duration_cast<std::chrono::nanoseconds>(
+               std::chrono::duration<double>(1.0 / static_cast<double>(m_config.sampleRate))));
+  const auto now       = IO::CapturedData::SteadyClock::now();
   const auto timestamp = now - (frameStep * std::max(0, totalFrames - 1));
   publishReceivedData(m_csvData.left(length), timestamp, frameStep, totalFrames);
 }

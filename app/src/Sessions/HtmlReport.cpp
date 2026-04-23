@@ -292,8 +292,7 @@ QString Sessions::HtmlReport::buildHtml() const
 
   // Pin the chart card to the landscape printable area
   const auto chartMm = chartPagePrintableSize();
-  html.replace(QStringLiteral("{{CHART_PAGE_WIDTH_MM}}"),
-               QString::number(chartMm.width(), 'f', 1));
+  html.replace(QStringLiteral("{{CHART_PAGE_WIDTH_MM}}"), QString::number(chartMm.width(), 'f', 1));
   html.replace(QStringLiteral("{{CHART_PAGE_HEIGHT_MM}}"),
                QString::number(chartMm.height(), 'f', 1));
 

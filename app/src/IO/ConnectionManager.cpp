@@ -234,7 +234,7 @@ IO::HAL_Driver* IO::ConnectionManager::driver(int deviceId) const
 IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
 {
   // Find the matching source entry
-  const auto& sources = DataModel::ProjectModel::instance().sources();
+  const auto& sources             = DataModel::ProjectModel::instance().sources();
   const DataModel::Source* srcPtr = nullptr;
   for (const auto& src : sources) {
     if (src.sourceId == deviceId) {
@@ -575,7 +575,8 @@ void IO::ConnectionManager::resetFrameReader()
 }
 
 /**
- * @brief Wires a UI driver's configurationChanged to persist, sync-to-live, and QML-forward handlers.
+ * @brief Wires a UI driver's configurationChanged to persist, sync-to-live, and QML-forward
+ * handlers.
  */
 void IO::ConnectionManager::wireUiDriver(IO::HAL_Driver* driver)
 {

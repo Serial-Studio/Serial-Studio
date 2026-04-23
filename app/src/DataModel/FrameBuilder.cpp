@@ -50,7 +50,8 @@
 #endif
 
 /**
- * @brief Hotpath CSV split — comma delimiter only; users needing other delimiters write a custom parser.
+ * @brief Hotpath CSV split — comma delimiter only; users needing other delimiters write a custom
+ * parser.
  */
 void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveHint)
 {
@@ -96,9 +97,7 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-DataModel::FrameBuilder::FrameBuilder()
-  : m_quickPlotChannels(-1)
-  , m_quickPlotHasHeader(false)
+DataModel::FrameBuilder::FrameBuilder() : m_quickPlotChannels(-1), m_quickPlotHasHeader(false)
 {
   // JS transform watchdog — flips interrupt flag to unwind runaway scripts.
   m_jsTransformWatchdog.setSingleShot(true);
@@ -256,7 +255,8 @@ void DataModel::FrameBuilder::hotpathRxSourceFrame(int sourceId, const IO::Captu
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Wipes transform engines on source deletion — ProjectModel renumbers IDs and engines recompile lazily.
+ * @brief Wipes transform engines on source deletion — ProjectModel renumbers IDs and engines
+ * recompile lazily.
  */
 void DataModel::FrameBuilder::onSourceRemoved()
 {
@@ -437,7 +437,8 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
       continue;
 
     applyChannelData(channels, 0);
-    hotpathTxFrame(std::make_shared<DataModel::TimestampedFrame>(m_frame, data->timestamp + step * i));
+    hotpathTxFrame(
+      std::make_shared<DataModel::TimestampedFrame>(m_frame, data->timestamp + step * i));
   }
 }
 
@@ -471,7 +472,8 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
         multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toHex()), sourceId);
         break;
       case SerialStudio::Base64:
-        multiChannels = parser.parseMultiFrame(QString::fromLatin1(data->data->toBase64()), sourceId);
+        multiChannels =
+          parser.parseMultiFrame(QString::fromLatin1(data->data->toBase64()), sourceId);
         break;
       case SerialStudio::Binary:
         multiChannels = parser.parseMultiFrame(*data->data, sourceId);
@@ -874,7 +876,8 @@ static void openSafeLibsForTransform(lua_State* L)
 }
 
 /**
- * @brief Lua LUA_MASKCOUNT hook that aborts runaway transforms via luaL_error() when the per-engine deadline expires.
+ * @brief Lua LUA_MASKCOUNT hook that aborts runaway transforms via luaL_error() when the per-engine
+ * deadline expires.
  */
 void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* ar)
 {
@@ -895,7 +898,8 @@ void DataModel::FrameBuilder::transformLuaWatchdogHook(lua_State* L, lua_Debug* 
 }
 
 /**
- * @brief Compiles per-dataset transforms into one shared Lua/JS engine per source, caching function refs.
+ * @brief Compiles per-dataset transforms into one shared Lua/JS engine per source, caching function
+ * refs.
  */
 void DataModel::FrameBuilder::compileTransforms()
 {
@@ -942,7 +946,8 @@ void DataModel::FrameBuilder::compileTransforms()
 }
 
 /**
- * @brief Compiles per-dataset Lua transforms into a shared lua_State, caching refs for O(1) hotpath lookup.
+ * @brief Compiles per-dataset Lua transforms into a shared lua_State, caching refs for O(1) hotpath
+ * lookup.
  */
 void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
                                                    const std::vector<TransformEntry>& entries)
@@ -1015,7 +1020,8 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
 }
 
 /**
- * @brief Compiles per-dataset JavaScript transforms into a shared QJSEngine; code is IIFE-wrapped for isolation.
+ * @brief Compiles per-dataset JavaScript transforms into a shared QJSEngine; code is IIFE-wrapped
+ * for isolation.
  */
 void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
                                                   const std::vector<TransformEntry>& entries)
@@ -1088,7 +1094,8 @@ void DataModel::FrameBuilder::destroyTransformEngines()
 }
 
 /**
- * @brief Applies the pre-compiled transform for a dataset; returns @p rawValue on error or missing transform.
+ * @brief Applies the pre-compiled transform for a dataset; returns @p rawValue on error or missing
+ * transform.
  */
 QVariant DataModel::FrameBuilder::applyTransform(int sourceId,
                                                  int uniqueId,
@@ -1315,7 +1322,8 @@ static int luaDatasetGetFinal(lua_State* L)
 }
 
 /**
- * @brief Injects tableGet / tableSet / datasetGetRaw / datasetGetFinal into the Lua state as C closures.
+ * @brief Injects tableGet / tableSet / datasetGetRaw / datasetGetFinal into the Lua state as C
+ * closures.
  */
 void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
 {

@@ -360,7 +360,8 @@ qint64 IO::Drivers::USB::write(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the current transfer mode as an integer (0 = BulkStream, 1 = AdvancedControl, 2 = Isochronous).
+ * @brief Returns the current transfer mode as an integer (0 = BulkStream, 1 = AdvancedControl, 2 =
+ * Isochronous).
  */
 int IO::Drivers::USB::transferMode() const
 {
@@ -690,7 +691,8 @@ void IO::Drivers::USB::enumerateDevices()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns true if the device's active configuration exposes at least one endpoint of @p targetType.
+ * @brief Returns true if the device's active configuration exposes at least one endpoint of @p
+ * targetType.
  */
 static bool configHasTransferType(const libusb_config_descriptor* cfg, uint8_t targetType)
 {
@@ -742,7 +744,8 @@ QString IO::Drivers::USB::endpointErrorMessage() const
 }
 
 /**
- * @brief Inspects a single endpoint descriptor and appends it to the IN or OUT list if it matches the mode.
+ * @brief Inspects a single endpoint descriptor and appends it to the IN or OUT list if it matches
+ * the mode.
  */
 void IO::Drivers::USB::collectEndpoint(const libusb_endpoint_descriptor& ep,
                                        int ifNum,

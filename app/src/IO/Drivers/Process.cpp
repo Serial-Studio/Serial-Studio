@@ -691,7 +691,8 @@ QStringList IO::Drivers::Process::extraSearchPaths()
 }
 
 /**
- * @brief Resolves a bare executable name against the system PATH and common platform-specific directories.
+ * @brief Resolves a bare executable name against the system PATH and common platform-specific
+ * directories.
  */
 QString IO::Drivers::Process::resolveExecutable(const QString& name)
 {

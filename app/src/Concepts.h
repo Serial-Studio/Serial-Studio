@@ -27,19 +27,43 @@
 
 namespace Concepts {
 /**
- * @brief Constrains a type to numeric (integral or floating-point).
+ * @concept Numeric
+ * @brief Constrains template parameter to numeric types (integral or floating
+ * point).
+ *
+ * **Satisfied by:**
+ * - Integral types
+ * - Floating point types
+ *
+ * **Use Cases:**
+ * - Generic mathematical algorithms
+ * - Statistical calculations
+ * - Numeric data processing
+ *
+ * @tparam T Type to check for numeric properties
  */
 template<typename T>
 concept Numeric = std::integral<T> || std::floating_point<T>;
 
 /**
- * @brief Constrains a type to byte-sized integrals.
+ * @concept ByteLike
+ * @brief Constrains template parameter to byte-sized integral types.
+ *
+ * **Use Cases:**
+ * - Low-level data parsing
+ * - Binary protocol implementations
+ * - Checksum algorithms operating on bytes
+ *
+ * @tparam T Type to check for byte-like properties
  */
 template<typename T>
 concept ByteLike = std::integral<T> && sizeof(T) == 1;
 
 /**
- * @brief Constrains a type to support equality comparison.
+ * @concept Comparable
+ * @brief Constrains template parameter to types supporting equality comparison.
+ *
+ * @tparam T Type to check for comparison support
  */
 template<typename T>
 concept Comparable = requires(T a, T b) {
@@ -48,7 +72,10 @@ concept Comparable = requires(T a, T b) {
 };
 
 /**
- * @brief Constrains a type to be hashable via std::hash.
+ * @concept Hashable
+ * @brief Constrains template parameter to types that can be hashed.
+ *
+ * @tparam T Type to check for hash support
  */
 template<typename T>
 concept Hashable = requires(T a) {
@@ -56,7 +83,14 @@ concept Hashable = requires(T a) {
 };
 
 /**
- * @brief Constrains a type to Serial Studio's read()/serialize() protocol.
+ * @concept Serializable
+ * @brief Constrains template parameter to types with read() and serialize()
+ * methods.
+ *
+ * Ensures type T follows the Serial Studio serialization protocol used by
+ * Frame, Group, Dataset, and related structures.
+ *
+ * @tparam T Type to check for serialization support
  */
 template<typename T>
 concept Serializable = requires(T obj) {
@@ -65,7 +99,13 @@ concept Serializable = requires(T obj) {
 };
 
 /**
- * @brief Constrains a type to look like a data frame (groups, actions, title).
+ * @concept Frameable
+ * @brief Constrains template parameter to types that represent data frames.
+ *
+ * Ensures type T has groups, actions, and title members, matching the Frame
+ * structure.
+ *
+ * @tparam T Type to check for frame properties
  */
 template<typename T>
 concept Frameable = requires(T frame) {
@@ -75,7 +115,14 @@ concept Frameable = requires(T frame) {
 };
 
 /**
- * @brief Constrains a type to implement the HAL_Driver I/O interface.
+ * @concept Driver
+ * @brief Constrains template parameter to types implementing HAL_Driver
+ * interface.
+ *
+ * Ensures type T provides the core I/O driver methods: open(), close(),
+ * write(), and state queries.
+ *
+ * @tparam T Type to check for driver interface compliance
  */
 template<typename T>
 concept Driver = requires(T driver) {

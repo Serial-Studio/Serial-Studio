@@ -157,7 +157,8 @@ bool UI::Dashboard::available() const
 }
 
 /**
- * @brief Returns true if a rectangle with a list of actions should be displayed alongside the dashboard.
+ * @brief Returns true if a rectangle with a list of actions should be displayed alongside the
+ * dashboard.
  */
 bool UI::Dashboard::showActionPanel() const noexcept
 {

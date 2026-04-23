@@ -499,8 +499,7 @@ void MDF4::Export::setupExternalConnections()
 void MDF4::Export::setExportEnabled(const bool enabled)
 {
   // Refuse to enable while the app is in Console-only mode
-  const bool allow = enabled
-                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+  const bool allow = enabled && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
 
   // Validate license and apply the export state
 #ifdef BUILD_COMMERCIAL

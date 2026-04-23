@@ -126,8 +126,8 @@ void IO::FrameReader::discardPendingBytes(qsizetype size)
     return;
 
   while (size > 0 && !m_pendingChunks.empty()) {
-    auto& chunk           = m_pendingChunks.front();
-    const auto toConsume  = std::min(size, chunk.bytesRemaining);
+    auto& chunk          = m_pendingChunks.front();
+    const auto toConsume = std::min(size, chunk.bytesRemaining);
     chunk.bytesRemaining -= toConsume;
     size -= toConsume;
 

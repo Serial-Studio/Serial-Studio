@@ -20,10 +20,10 @@
 #  include <limits>
 #  include <map>
 #  include <QDateTime>
-#  include <QtDebug>
 #  include <QSqlDatabase>
 #  include <QSqlError>
 #  include <QSqlQuery>
+#  include <QtDebug>
 #  include <QVariantMap>
 
 #  include "DSP.h"
@@ -156,12 +156,11 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
 
   // First numeric value per dataset (ties broken by reading_id)
   QSqlQuery firstQ(db);
-  firstQ.prepare(
-    "SELECT unique_id, final_numeric_value FROM readings "
-    "WHERE reading_id IN ("
-    "  SELECT MIN(reading_id) FROM readings "
-    "  WHERE session_id = ? AND is_numeric = 1 "
-    "  GROUP BY unique_id)");
+  firstQ.prepare("SELECT unique_id, final_numeric_value FROM readings "
+                 "WHERE reading_id IN ("
+                 "  SELECT MIN(reading_id) FROM readings "
+                 "  WHERE session_id = ? AND is_numeric = 1 "
+                 "  GROUP BY unique_id)");
   firstQ.bindValue(0, sessionId);
   if (firstQ.exec()) {
     while (firstQ.next()) {
@@ -176,12 +175,11 @@ Sessions::ReportData Sessions::ReportData::buildFromSession(QSqlDatabase& db, in
 
   // Last numeric value per dataset (ties broken by reading_id)
   QSqlQuery lastQ(db);
-  lastQ.prepare(
-    "SELECT unique_id, final_numeric_value FROM readings "
-    "WHERE reading_id IN ("
-    "  SELECT MAX(reading_id) FROM readings "
-    "  WHERE session_id = ? AND is_numeric = 1 "
-    "  GROUP BY unique_id)");
+  lastQ.prepare("SELECT unique_id, final_numeric_value FROM readings "
+                "WHERE reading_id IN ("
+                "  SELECT MAX(reading_id) FROM readings "
+                "  WHERE session_id = ? AND is_numeric = 1 "
+                "  GROUP BY unique_id)");
   lastQ.bindValue(0, sessionId);
   if (lastQ.exec()) {
     while (lastQ.next()) {
@@ -228,8 +226,13 @@ struct ChartMeta {
 /**
  * @brief Reads a query result set into parallel DSP ring buffers.
  */
-std::size_t readAxisData(QSqlQuery& rows, qint64 originNs, qint64 reservation, DSP::AxisData& x,
-                         DSP::AxisData& y, double& globalMin, double& globalMax)
+std::size_t readAxisData(QSqlQuery& rows,
+                         qint64 originNs,
+                         qint64 reservation,
+                         DSP::AxisData& x,
+                         DSP::AxisData& y,
+                         double& globalMin,
+                         double& globalMax)
 {
   const std::size_t capacity = static_cast<std::size_t>(std::max<qint64>(reservation, 1));
   x.resize(capacity);
@@ -266,10 +269,9 @@ void appendUniqueIndex(std::vector<std::size_t>& indices, std::size_t index)
 {
   Q_ASSERT(indices.size() <= 8);
 
-  for (const auto value : indices) {
+  for (const auto value : indices)
     if (value == index)
       return;
-  }
 
   indices.push_back(index);
 }
@@ -287,8 +289,7 @@ void appendBucketSamples(const DSP::AxisData& y,
   Q_ASSERT(target > 0);
 
   const std::size_t bucketSize = end - begin;
-  const std::size_t goal =
-    std::min<std::size_t>(bucketSize, static_cast<std::size_t>(target));
+  const std::size_t goal = std::min<std::size_t>(bucketSize, static_cast<std::size_t>(target));
 
   std::size_t minIndex = begin;
   std::size_t maxIndex = begin;
@@ -530,8 +531,8 @@ std::vector<Sessions::DatasetSeries> Sessions::loadChartSeries(QSqlDatabase& db,
     rows.bindValue(0, sessionId);
     rows.bindValue(1, m.uid);
     if (!rows.exec()) {
-      qWarning() << "[Sessions::ReportData] readings query failed for uid" << m.uid
-                 << ":" << rows.lastError().text();
+      qWarning() << "[Sessions::ReportData] readings query failed for uid" << m.uid << ":"
+                 << rows.lastError().text();
       continue;
     }
 

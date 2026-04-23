@@ -30,7 +30,28 @@
 
 namespace IO {
 /**
- * @brief Lock-free SPSC circular buffer for byte streaming.
+ * @brief A lock-free circular buffer for high-throughput data streaming.
+ *
+ * This templated class provides a thread-safe circular buffer optimized for
+ * Single-Producer-Single-Consumer (SPSC) scenarios using atomic operations.
+ * Designed for high-frequency data acquisition.
+ *
+ * **Type Requirements:**
+ * - T: Must support `.size()`, `.data()` or similar container interface
+ * - StorageType: Must be byte-like (integral, size == 1 byte)
+ *
+ * **Thread Safety:**
+ * - SPSC safe: One producer thread (append), one consumer thread (read/peek)
+ * - Uses std::atomic with memory_order_acquire/release semantics
+ * - Lock-free for maximum throughput
+ *
+ * **Performance:**
+ * - O(1) append/read for small data
+ * - O(n) for pattern search (KMP algorithm)
+ * - Zero mutex overhead in hotpath
+ *
+ * @tparam T The type of elements exposed to the user (e.g., QByteArray).
+ * @tparam StorageType The type of elements used internally (default: uint8_t).
  */
 template<typename T, Concepts::ByteLike StorageType = uint8_t>
 class CircularBuffer {
@@ -59,6 +80,9 @@ public:
 
   [[nodiscard]] std::vector<int> buildKMPTable(const T& p) const { return computeKMPTable(p); }
 
+  /**
+   * @brief Single-pass multi-pattern scan result.
+   */
   struct MultiMatchResult {
     int position     = -1;
     int patternIndex = -1;
@@ -85,6 +109,14 @@ private:
 };
 }  // namespace IO
 
+/**
+ * @brief Constructs a CircularBuffer object with a given capacity.
+ *
+ * Initializes the circular buffer with the specified capacity, setting up
+ * internal variables with atomic initialization for thread safety.
+ *
+ * @param capacity The maximum capacity of the buffer in bytes.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 IO::CircularBuffer<T, StorageType>::CircularBuffer(qsizetype capacity)
   : m_head(0), m_tail(0), m_overflowCount(0), m_capacity(capacity)
@@ -92,6 +124,18 @@ IO::CircularBuffer<T, StorageType>::CircularBuffer(qsizetype capacity)
   m_buffer.resize(capacity);
 }
 
+/**
+ * @brief Provides direct access to elements in the circular buffer by index.
+ *
+ * This subscript operator allows accessing elements stored in the circular
+ * buffer at a specific logical index, taking the circular nature of the buffer
+ * into account.
+ *
+ * **Thread Safety:** Safe for SPSC if called from consumer thread only.
+ *
+ * @param index The logical index of the element to access (0-based).
+ * @return The element at the specified index.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 StorageType& IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
 {
@@ -105,6 +149,14 @@ StorageType& IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
   return m_buffer[effectiveIndex];
 }
 
+/**
+ * @brief Clears the circular buffer.
+ *
+ * Resets the buffer, removing all data and resetting internal variables.
+ * Uses release semantics to ensure visibility across threads.
+ *
+ * **Thread Safety:** Not safe during concurrent append/read operations.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 void IO::CircularBuffer<T, StorageType>::clear()
 {
@@ -113,6 +165,16 @@ void IO::CircularBuffer<T, StorageType>::clear()
   m_overflowCount.store(0, std::memory_order_relaxed);
 }
 
+/**
+ * @brief Appends data to the circular buffer (lock-free SPSC producer).
+ *
+ * Adds the given data to the buffer. If the data exceeds available space,
+ * the oldest data is overwritten and overflow counter is incremented.
+ *
+ * **Thread Safety:** SPSC safe - call only from producer thread.
+ *
+ * @param data The data to append to the buffer.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 void IO::CircularBuffer<T, StorageType>::append(const T& data)
 {
@@ -153,6 +215,11 @@ void IO::CircularBuffer<T, StorageType>::append(const T& data)
   m_tail.store(new_tail, std::memory_order_release);
 }
 
+/**
+ * @brief Clears the buffer and modifies its maximum capacity.
+ *
+ * **Thread Safety:** Not safe during concurrent operations.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 void IO::CircularBuffer<T, StorageType>::setCapacity(const qsizetype capacity)
 {
@@ -161,6 +228,15 @@ void IO::CircularBuffer<T, StorageType>::setCapacity(const qsizetype capacity)
   m_buffer.resize(capacity);
 }
 
+/**
+ * @brief Returns the current size of the buffer.
+ *
+ * Calculates size from head and tail atomics using acquire semantics.
+ *
+ * **Thread Safety:** Safe for SPSC from any thread.
+ *
+ * @return The number of bytes currently stored in the buffer.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 qsizetype IO::CircularBuffer<T, StorageType>::size() const noexcept
 {
@@ -173,12 +249,30 @@ qsizetype IO::CircularBuffer<T, StorageType>::size() const noexcept
     return m_capacity - head + tail;
 }
 
+/**
+ * @brief Returns the free space available in the buffer.
+ *
+ * **Thread Safety:** Safe for SPSC from any thread.
+ *
+ * @return The number of bytes of free space in the buffer.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 qsizetype IO::CircularBuffer<T, StorageType>::freeSpace() const noexcept
 {
   return m_capacity - size();
 }
 
+/**
+ * @brief Reads data from the circular buffer (lock-free SPSC consumer).
+ *
+ * Reads the specified number of bytes from the buffer. The read data is
+ * removed from the buffer.
+ *
+ * **Thread Safety:** SPSC safe - call only from consumer thread.
+ *
+ * @param size The number of bytes to read.
+ * @return Data read from the buffer.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
 {
@@ -203,12 +297,30 @@ T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
   return result;
 }
 
+/**
+ * @brief Retrieves data from the buffer without removing it.
+ *
+ * Extracts up to the specified number of bytes from the buffer, starting from
+ * the current head position, without modifying the buffer's head or tail
+ * positions.
+ *
+ * @param size The number of bytes to peek from the buffer.
+ * @return Data peeked from the buffer.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
 {
   return peekRange(0, size);
 }
 
+/**
+ * @brief Retrieves data from the buffer at the given logical offset without
+ *        removing it.
+ *
+ * @param offset The logical offset from the head position.
+ * @param size The number of bytes to peek.
+ * @return Data peeked from the buffer.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset, qsizetype size) const
 {
@@ -234,12 +346,31 @@ T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset, qsizetype size
   return result;
 }
 
+/**
+ * @brief Searches for a pattern in the circular buffer using the KMP algorithm.
+ *
+ * This function uses the Knuth-Morris-Pratt (KMP) string matching algorithm
+ * to efficiently find the first occurrence of a given pattern within the
+ * circular buffer.
+ *
+ * @param pattern The pattern to search for in the buffer.
+ * @param pos The starting position relative to the logical start of the buffer.
+ * @return The index of the first occurrence of the pattern, or -1 if not found.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern, const int pos)
 {
   return findPatternKMP(pattern, computeKMPTable(pattern), pos);
 }
 
+/**
+ * @brief Computes the KMP table for a given pattern.
+ *
+ * Prepares the longest prefix suffix (LPS) table used by the KMP algorithm.
+ *
+ * @param p The pattern.
+ * @return A vector of integers representing the LPS table.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
                                                        const std::vector<int>& lps,
@@ -277,6 +408,12 @@ int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
   return -1;
 }
 
+/**
+ * @brief Computes the KMP table for a given pattern.
+ *
+ * @param p The pattern to preprocess.
+ * @return The computed LPS table.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 std::vector<int> IO::CircularBuffer<T, StorageType>::computeKMPTable(const T& p) const
 {
@@ -301,6 +438,16 @@ std::vector<int> IO::CircularBuffer<T, StorageType>::computeKMPTable(const T& p)
   return lps;
 }
 
+/**
+ * @brief Single-pass multi-pattern scan over the circular buffer.
+ *
+ * Walks the buffer once from head to tail. At each byte position, tests every
+ * pattern for a full match. Returns the first (leftmost) match and the index
+ * of the matched pattern.
+ *
+ * @param patterns Ordered list of patterns to search for.
+ * @return {position, patternIndex} of the first match, or {-1, -1}.
+ */
 template<typename T, Concepts::ByteLike StorageType>
 typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer<T, StorageType>::
   findFirstOfPatterns(const QVector<T>& patterns) const

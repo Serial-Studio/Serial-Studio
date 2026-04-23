@@ -701,7 +701,8 @@ QByteArray IO::Protocols::ZMODEM::buildHexHeader(quint8 type, quint32 arg)
 }
 
 /**
- * @brief Builds a ZMODEM binary-32 header (ZPAD ZPAD ZDLE ZBIN32 type arg[4] crc32[4], ZDLE-encoded).
+ * @brief Builds a ZMODEM binary-32 header (ZPAD ZPAD ZDLE ZBIN32 type arg[4] crc32[4],
+ * ZDLE-encoded).
  */
 QByteArray IO::Protocols::ZMODEM::buildBin32Header(quint8 type, quint32 arg)
 {

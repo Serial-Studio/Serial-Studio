@@ -410,9 +410,8 @@ void Sessions::ExportWorker::prepareHotpathQueries()
 
   // Raw device bytes (separate stream, batched on its own queue)
   m_rawBytesQuery = QSqlQuery(m_db);
-  m_rawBytesQuery.prepare(
-    "INSERT INTO raw_bytes (session_id, timestamp_ns, device_id, data) "
-    "VALUES (?, ?, ?, ?)");
+  m_rawBytesQuery.prepare("INSERT INTO raw_bytes (session_id, timestamp_ns, device_id, data) "
+                          "VALUES (?, ?, ?, ?)");
 
   // Snapshots of user data tables taken per frame
   m_tableSnapshotQuery = QSqlQuery(m_db);
@@ -596,8 +595,7 @@ void Sessions::Export::setupExternalConnections()
 
   // Restore enabled state from settings (never enable in Console-only)
   const bool persisted = m_settings.value("SQLiteExport/Enabled", false).toBool();
-  const bool allow = persisted
-                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+  const bool allow = persisted && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
   m_exportEnabled.store(allow, std::memory_order_relaxed);
 }
 
@@ -627,8 +625,7 @@ void Sessions::Export::refreshProjectSnapshot()
 void Sessions::Export::setExportEnabled(const bool enabled)
 {
   // Refuse to enable while the app is in Console-only mode
-  const bool allow = enabled
-                     && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
+  const bool allow = enabled && AppState::instance().operationMode() != SerialStudio::ConsoleOnly;
 
   // No-op when state is unchanged
   if (m_exportEnabled.load(std::memory_order_relaxed) == allow)

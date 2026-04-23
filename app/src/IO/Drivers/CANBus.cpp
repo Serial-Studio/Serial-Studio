@@ -118,7 +118,8 @@ bool IO::Drivers::CANBus::isWritable() const noexcept
 }
 
 /**
- * @brief Returns true if the user has selected appropriate controls & options to connect to a CAN bus device.
+ * @brief Returns true if the user has selected appropriate controls & options to connect to a CAN
+ * bus device.
  */
 bool IO::Drivers::CANBus::configurationOk() const noexcept
 {
