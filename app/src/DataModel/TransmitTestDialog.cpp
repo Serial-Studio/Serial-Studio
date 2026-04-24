@@ -16,6 +16,7 @@
 #include <QJSEngine>
 #include <QMessageBox>
 
+#include "DataModel/FrameBuilder.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/Translator.h"
@@ -172,11 +173,15 @@ void DataModel::TransmitTestDialog::evaluate()
     return;
   }
 
-  // Spin up a temporary JS engine with protocol helpers
+  // Pick up uncommitted edits to shared tables
+  DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
+
+  // Temporary JS engine: protocol helpers + shared-memory table API
   QJSEngine engine;
 #ifdef BUILD_COMMERCIAL
   Widgets::Output::Base::installProtocolHelpers(engine);
 #endif
+  DataModel::FrameBuilder::instance().injectTableApiJS(&engine);
 
   // Compile and validate the transmit function
   const auto wrapped =

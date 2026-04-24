@@ -1238,6 +1238,16 @@ void DataModel::FrameBuilder::initializeTableStore()
   m_tableStore.initialize(pm.tables(), m_frame);
 }
 
+void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
+{
+  // Let Project Editor test dialogs see in-flight edits to shared tables
+  const auto& pm = DataModel::ProjectModel::instance();
+  DataModel::Frame scratch;
+  scratch.title  = pm.title();
+  scratch.groups = pm.groups();
+  m_tableStore.initialize(pm.tables(), scratch);
+}
+
 /**
  * @brief Lua C closure for tableGet(table, reg).
  */

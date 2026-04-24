@@ -2616,8 +2616,9 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
  */
 void DataModel::ProjectModel::setModified(const bool modified)
 {
-  // Don't mark empty projects (no groups) as modified
-  if (modified && m_groups.empty())
+  // Keep a truly empty project clean
+  if (modified && m_groups.empty() && m_actions.empty() && m_tables.empty()
+      && m_workspaces.empty())
     return;
 
   m_modified = modified;

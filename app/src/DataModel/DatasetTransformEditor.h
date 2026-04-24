@@ -85,7 +85,7 @@ private:
   QComboBox* m_templateCombo;
 
   QLineEdit* m_testInput;
-  QLabel* m_testOutput;
+  QLineEdit* m_testOutput;
   QPushButton* m_testButton;
 
   QPushButton* m_applyButton;

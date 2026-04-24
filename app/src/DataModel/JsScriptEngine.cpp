@@ -26,6 +26,7 @@
 #include <QRegularExpression>
 #include <QThread>
 
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "Misc/Utilities.h"
 
@@ -211,9 +212,11 @@ DataModel::JsScriptEngine::JsScriptEngine()
 {
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
-  // Expose the Serial Studio notification API (notify/notifyInfo/... + level
-  // constants) to parser scripts. The helper gates on the active license tier.
+  // Expose notify* + level constants (gated on the active license tier)
   DataModel::NotificationCenter::installScriptApi(&m_engine);
+
+  // Expose tableGet / tableSet / datasetGetRaw / datasetGetFinal
+  DataModel::FrameBuilder::instance().injectTableApiJS(&m_engine);
 
   m_watchdog.setSingleShot(true);
   m_watchdog.setInterval(kRuntimeWatchdogMs);

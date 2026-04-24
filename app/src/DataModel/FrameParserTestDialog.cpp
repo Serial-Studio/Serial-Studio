@@ -25,6 +25,7 @@
 #include <QHeaderView>
 #include <QMessageBox>
 
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameParser.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
@@ -172,6 +173,9 @@ void DataModel::FrameParserTestDialog::parseData()
                          tr("Please enter valid hexadecimal bytes.\n\nValid format: 01 A2 FF 3C"));
     return;
   }
+
+  // Pick up uncommitted edits to shared tables
+  DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
 
   QStringList result;
   if (m_hexCheckBox->isChecked()) {

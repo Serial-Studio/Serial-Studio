@@ -46,11 +46,23 @@ Widgets.Pane {
   property string tableName: Cpp_JSON_ProjectEditor.selectedUserTable
   property var registers: []
 
+  //
+  // Skip one external refresh after our own edit. Without this, updateRegister
+  // fires tablesChanged, refresh() rebuilds `registers`, the ListView destroys
+  // the delegate that emitted onTextEdited, and the user loses focus mid-type.
+  //
+  property int suppressRefresh: 0
+
   function refresh() {
     if (tableName.length > 0)
       registers = Cpp_JSON_ProjectModel.registersForTable(tableName)
     else
       registers = []
+  }
+
+  function commitRegister(oldName, newName, computed, value) {
+    suppressRefresh += 1
+    Cpp_JSON_ProjectModel.updateRegister(tableName, oldName, newName, computed, value)
   }
 
   onTableNameChanged: Qt.callLater(refresh)
@@ -59,7 +71,13 @@ Widgets.Pane {
 
   Connections {
     target: Cpp_JSON_ProjectModel
-    function onTablesChanged() { Qt.callLater(root.refresh) }
+    function onTablesChanged() {
+      if (root.suppressRefresh > 0) {
+        root.suppressRefresh -= 1
+        return
+      }
+      Qt.callLater(root.refresh)
+    }
   }
 
   //
@@ -309,6 +327,30 @@ Widgets.Pane {
               ToolTip.text: qsTr("Delete table")
               icon.source: "qrc:/rcc/icons/project-editor/actions/delete-table.svg"
             }
+
+            //
+            // Spacer
+            //
+            Rectangle {
+              implicitWidth: 1
+              Layout.fillHeight: true
+              Layout.maximumHeight: 48
+              Layout.alignment: Qt.AlignVCenter
+              color: Cpp_ThemeManager.colors["groupbox_border"]
+            }
+
+            //
+            // Help
+            //
+            Widgets.ToolbarButton {
+              iconSize: 24
+              text: qsTr("Help")
+              toolbarButton: false
+              Layout.alignment: Qt.AlignVCenter
+              onClicked: app.showHelpCenter("data-tables")
+              icon.source: "qrc:/rcc/icons/code-editor/help.svg"
+              ToolTip.text: qsTr("Open help documentation for shared memory")
+            }
           }
         }
 
@@ -437,13 +479,7 @@ Widgets.Pane {
               onActivated: (idx) => {
                 const computed = idx === 1
                 if (computed !== (modelData.type === "computed")) {
-                  Cpp_JSON_ProjectModel.updateRegister(
-                    root.tableName,
-                    modelData.name,
-                    modelData.name,
-                    computed,
-                    modelData.value
-                  )
+                  root.commitRegister(modelData.name, modelData.name, computed, modelData.value)
                 }
               }
             }
@@ -476,15 +512,12 @@ Widgets.Pane {
 
              background: Item {}
 
-              onEditingFinished: {
+              onTextEdited: {
                 if (text !== modelData.name && text.length > 0) {
-                  Cpp_JSON_ProjectModel.updateRegister(
-                    root.tableName,
-                    modelData.name,
-                    text,
-                    modelData.type === "computed",
-                    modelData.value
-                  )
+                  root.commitRegister(modelData.name,
+                                      text,
+                                      modelData.type === "computed",
+                                      modelData.value)
                 }
               }
             }
@@ -516,17 +549,14 @@ Widgets.Pane {
 
               background: Item {}
 
-              onEditingFinished: {
+              onTextEdited: {
                 const newVal = modelData.valueType === "number"
                                  ? parseFloat(text || "0")
                                  : text
-                Cpp_JSON_ProjectModel.updateRegister(
-                  root.tableName,
-                  modelData.name,
-                  modelData.name,
-                  modelData.type === "computed",
-                  newVal
-                )
+                root.commitRegister(modelData.name,
+                                    modelData.name,
+                                    modelData.type === "computed",
+                                    newVal)
               }
             }
 

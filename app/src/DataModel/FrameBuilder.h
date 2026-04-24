@@ -73,6 +73,10 @@ public:
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
   [[nodiscard]] const DataModel::Frame& quickPlotFrame() const noexcept;
 
+  void injectTableApiLua(lua_State* L);
+  void injectTableApiJS(QJSEngine* js);
+  void refreshTableStoreFromProjectModel();
+
 public slots:
   void setupExternalConnections();
   void syncFromProjectModel();
@@ -121,8 +125,6 @@ private:
                                         int uniqueId,
                                         const QVariant& rawValue);
   void initializeTableStore();
-  void injectTableApiLua(lua_State* L);
-  void injectTableApiJS(QJSEngine* js);
 
   struct EngineKey {
     int sourceId;

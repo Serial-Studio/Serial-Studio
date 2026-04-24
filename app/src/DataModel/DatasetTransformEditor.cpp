@@ -32,6 +32,7 @@
 #include <QLuaCompleter>
 #include <QLuaHighlighter>
 
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
@@ -78,8 +79,8 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   m_testInput = new QLineEdit(this);
   m_testInput->setPlaceholderText(tr("Enter raw value (e.g., 1024)"));
 
-  m_testOutput = new QLabel(QStringLiteral("—"), this);
-  m_testOutput->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+  m_testOutput = new QLineEdit(QStringLiteral("—"), this);
+  m_testOutput->setReadOnly(true);
   m_testOutput->setMinimumWidth(120);
 
   m_testButton  = new QPushButton(tr("Test"), this);
@@ -435,6 +436,9 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
   if (code.trimmed().isEmpty())
     return false;
 
+  // Pick up uncommitted edits to shared tables
+  DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
+
   // Lua: spin up a disposable state, run the code, check for transform()
   if (language == SerialStudio::Lua) {
     lua_State* L = luaL_newstate();
@@ -457,8 +461,9 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
       lua_pop(L, 1);
     }
 
-    // Install notify* so user code referencing it at top level doesn't fail
+    // Match the live hotpath: notify* + shared-memory table API
     DataModel::NotificationCenter::installScriptApi(L);
+    DataModel::FrameBuilder::instance().injectTableApiLua(L);
 
     // Run the chunk — if it fails to even load, there's definitely no
     // valid transform() defined
@@ -478,6 +483,7 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
   // JavaScript: evaluate in a disposable engine and look up transform
   QJSEngine jsEngine;
   DataModel::NotificationCenter::installScriptApi(&jsEngine);
+  DataModel::FrameBuilder::instance().injectTableApiJS(&jsEngine);
   auto evalResult = jsEngine.evaluate(code);
   if (evalResult.isError())
     return false;
@@ -516,6 +522,9 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
   if (code.trimmed().isEmpty())
     return QString::number(inputValue, 'g', 15);
 
+  // Pick up uncommitted edits to shared tables
+  DataModel::FrameBuilder::instance().refreshTableStoreFromProjectModel();
+
   if (language == SerialStudio::Lua) {
     // Disposable Lua state for a single test run
     lua_State* L = luaL_newstate();
@@ -536,8 +545,9 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
       lua_pop(L, 1);
     }
 
-    // Install the Serial Studio notification API + level constants
+    // Match the live hotpath: notify* + shared-memory table API
     DataModel::NotificationCenter::installScriptApi(L);
+    DataModel::FrameBuilder::instance().injectTableApiLua(L);
 
     // Execute the user's code which defines transform(value)
     const QByteArray utf8 = code.toUtf8();
@@ -576,6 +586,7 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
   // JavaScript: execute user code then call transform(inputValue)
   QJSEngine jsEngine;
   DataModel::NotificationCenter::installScriptApi(&jsEngine);
+  DataModel::FrameBuilder::instance().injectTableApiJS(&jsEngine);
   auto evalResult = jsEngine.evaluate(code);
   if (evalResult.isError())
     return tr("Error: %1").arg(evalResult.property("message").toString());

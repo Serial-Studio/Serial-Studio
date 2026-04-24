@@ -43,8 +43,6 @@ DataModel::DataTableStore::DataTableStore() : m_initialized(false) {}
 void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTables,
                                            const Frame& templateFrame)
 {
-  Q_ASSERT(!templateFrame.groups.empty() || userTables.empty());
-
   // Reset all state
   clear();
 
