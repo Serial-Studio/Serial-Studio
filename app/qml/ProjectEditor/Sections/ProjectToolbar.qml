@@ -286,16 +286,6 @@ Rectangle {
           icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-button.svg"
           onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputButton)
         }
-
-        Widgets.ToolbarButton {
-          text: qsTr("Ramp")
-          iconSize: 16
-          horizontalLayout: true
-          Layout.alignment: Qt.AlignLeft
-          ToolTip.text: qsTr("Add a ramp generator control")
-          icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-ramp.svg"
-          onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputRampGenerator)
-        }
       }
     }
 

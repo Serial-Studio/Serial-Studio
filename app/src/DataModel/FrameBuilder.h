@@ -116,13 +116,26 @@ private:
   void compileTransformsLua(TransformEngine& engine, const std::vector<TransformEntry>& entries);
   void compileTransformsJS(TransformEngine& engine, const std::vector<TransformEntry>& entries);
   void destroyTransformEngines();
-  [[nodiscard]] QVariant applyTransform(int sourceId, int uniqueId, const QVariant& rawValue);
+  [[nodiscard]] QVariant applyTransform(int sourceId,
+                                        int language,
+                                        int uniqueId,
+                                        const QVariant& rawValue);
   void initializeTableStore();
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
 
+  struct EngineKey {
+    int sourceId;
+    int language;
+
+    bool operator<(const EngineKey& other) const noexcept
+    {
+      return sourceId < other.sourceId || (sourceId == other.sourceId && language < other.language);
+    }
+  };
+
 private:
-  std::map<int, TransformEngine> m_transformEngines;
+  std::map<EngineKey, TransformEngine> m_transformEngines;
   QTimer m_jsTransformWatchdog;
   DataModel::DataTableStore m_tableStore;
 

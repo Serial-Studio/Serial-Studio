@@ -409,7 +409,6 @@ Item {
       case SerialStudio.OutputToggle:        return base + "output-toggle.svg"
       case SerialStudio.OutputTextField:     return base + "output-textfield.svg"
       case SerialStudio.OutputKnob:          return base + "output-knob.svg"
-      case SerialStudio.OutputRampGenerator: return base + "output-ramp.svg"
       default:                               return base + "output-button.svg"
     }
   }

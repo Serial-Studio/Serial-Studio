@@ -32,6 +32,7 @@
 #include <QLuaCompleter>
 #include <QLuaHighlighter>
 
+#include "DataModel/NotificationCenter.h"
 #include "DataModel/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
 #include "Misc/ThemeManager.h"
@@ -153,15 +154,18 @@ void DataModel::DatasetTransformEditor::displayDialog(
   // Update window title with dataset name
   setWindowTitle(tr("Transform — %1").arg(datasetTitle));
 
-  // Set language combo without triggering onLanguageChanged
+  // Sync combo + derive canonical language so m_language and highlighter can't disagree
+  const int comboIdx = (language == SerialStudio::Lua) ? 0 : 1;
   m_languageCombo->blockSignals(true);
-  m_languageCombo->setCurrentIndex(language == SerialStudio::Lua ? 0 : 1);
+  m_languageCombo->setCurrentIndex(comboIdx);
   m_languageCombo->blockSignals(false);
-  applyLanguage(language);
 
-  // Prefill the editor
+  const int resolvedLanguage = (comboIdx == 0) ? SerialStudio::Lua : SerialStudio::JavaScript;
+  applyLanguage(resolvedLanguage);
+
+  // Prefill the editor using the canonical language so placeholder matches highlighter
   if (currentCode.isEmpty())
-    m_editor->setPlainText(defaultPlaceholder(language));
+    m_editor->setPlainText(defaultPlaceholder(resolvedLanguage));
   else
     m_editor->setPlainText(currentCode);
 
@@ -453,6 +457,9 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
       lua_pop(L, 1);
     }
 
+    // Install notify* so user code referencing it at top level doesn't fail
+    DataModel::NotificationCenter::installScriptApi(L);
+
     // Run the chunk — if it fails to even load, there's definitely no
     // valid transform() defined
     const QByteArray utf8 = code.toUtf8();
@@ -470,6 +477,7 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
 
   // JavaScript: evaluate in a disposable engine and look up transform
   QJSEngine jsEngine;
+  DataModel::NotificationCenter::installScriptApi(&jsEngine);
   auto evalResult = jsEngine.evaluate(code);
   if (evalResult.isError())
     return false;
@@ -528,6 +536,9 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
       lua_pop(L, 1);
     }
 
+    // Install the Serial Studio notification API + level constants
+    DataModel::NotificationCenter::installScriptApi(L);
+
     // Execute the user's code which defines transform(value)
     const QByteArray utf8 = code.toUtf8();
     if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
@@ -564,6 +575,7 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
 
   // JavaScript: execute user code then call transform(inputValue)
   QJSEngine jsEngine;
+  DataModel::NotificationCenter::installScriptApi(&jsEngine);
   auto evalResult = jsEngine.evaluate(code);
   if (evalResult.isError())
     return tr("Error: %1").arg(evalResult.property("message").toString());

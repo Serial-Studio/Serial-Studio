@@ -215,6 +215,7 @@
         <file>icons/dashboard-large/image.svg</file>
         <file>icons/dashboard-large/led.svg</file>
         <file>icons/dashboard-large/multiplot.svg</file>
+        <file>icons/dashboard-large/notification-log.svg</file>
         <file>icons/dashboard-large/output-panel.svg</file>
         <file>icons/dashboard-large/plot.svg</file>
         <file>icons/dashboard-large/plot3d.svg</file>
@@ -231,13 +232,15 @@
         <file>icons/dashboard-small/image.svg</file>
         <file>icons/dashboard-small/led.svg</file>
         <file>icons/dashboard-small/multiplot.svg</file>
+        <file>icons/dashboard-small/notification-log.svg</file>
         <file>icons/dashboard-small/output-panel.svg</file>
         <file>icons/dashboard-small/plot.svg</file>
         <file>icons/dashboard-small/plot3d.svg</file>
         <file>icons/dashboard-small/terminal.svg</file>
         <file>icons/database/close.svg</file>
         <file>icons/database/delete.svg</file>
-        <file>icons/database/export.svg</file>
+        <file>icons/database/export-csv.svg</file>
+        <file>icons/database/export-pdf.svg</file>
         <file>icons/database/open.svg</file>
         <file>icons/database/replay.svg</file>
         <file>icons/database/restore.svg</file>
@@ -262,6 +265,9 @@
         <file>icons/miniwindow/maximize.svg</file>
         <file>icons/miniwindow/minimize.svg</file>
         <file>icons/miniwindow/restore.svg</file>
+        <file>icons/notifications/critical.svg</file>
+        <file>icons/notifications/info.svg</file>
+        <file>icons/notifications/warning.svg</file>
         <file>icons/panes/console.svg</file>
         <file>icons/panes/dashboard.svg</file>
         <file>icons/panes/details.svg</file>
@@ -278,7 +284,6 @@
         <file>icons/project-editor/actions/add-led.svg</file>
         <file>icons/project-editor/actions/add-output-button.svg</file>
         <file>icons/project-editor/actions/add-output-knob.svg</file>
-        <file>icons/project-editor/actions/add-output-ramp.svg</file>
         <file>icons/project-editor/actions/add-output-slider.svg</file>
         <file>icons/project-editor/actions/add-output-textfield.svg</file>
         <file>icons/project-editor/actions/add-output-toggle.svg</file>
@@ -302,7 +307,6 @@
         <file>icons/project-editor/actions/output-button.svg</file>
         <file>icons/project-editor/actions/output-knob.svg</file>
         <file>icons/project-editor/actions/output-panel.svg</file>
-        <file>icons/project-editor/actions/output-ramp.svg</file>
         <file>icons/project-editor/actions/output-slider.svg</file>
         <file>icons/project-editor/actions/output-textfield.svg</file>
         <file>icons/project-editor/actions/output-toggle.svg</file>
@@ -354,7 +358,6 @@
         <file>icons/project-editor/toolbar/add-output-button.svg</file>
         <file>icons/project-editor/toolbar/add-output-knob.svg</file>
         <file>icons/project-editor/toolbar/add-output-panel.svg</file>
-        <file>icons/project-editor/toolbar/add-output-ramp.svg</file>
         <file>icons/project-editor/toolbar/add-output-slider.svg</file>
         <file>icons/project-editor/toolbar/add-output-textfield.svg</file>
         <file>icons/project-editor/toolbar/add-output-toggle.svg</file>
@@ -386,7 +389,6 @@
         <file>icons/project-editor/treeview/output-button.svg</file>
         <file>icons/project-editor/treeview/output-knob.svg</file>
         <file>icons/project-editor/treeview/output-panel.svg</file>
-        <file>icons/project-editor/treeview/output-ramp.svg</file>
         <file>icons/project-editor/treeview/output-slider.svg</file>
         <file>icons/project-editor/treeview/output-textfield.svg</file>
         <file>icons/project-editor/treeview/output-toggle.svg</file>
@@ -408,17 +410,21 @@
         <file>icons/start/console-log.svg</file>
         <file>icons/start/console.svg</file>
         <file>icons/start/csv-log.svg</file>
+        <file>icons/start/database-export.svg</file>
         <file>icons/start/disconnect.svg</file>
+        <file>icons/start/export.svg</file>
         <file>icons/start/external-window.svg</file>
         <file>icons/start/full-screen.svg</file>
         <file>icons/start/groups.svg</file>
         <file>icons/start/help.svg</file>
         <file>icons/start/mf4-log.svg</file>
         <file>icons/start/normal-screen.svg</file>
+        <file>icons/start/notifications.svg</file>
         <file>icons/start/pause.svg</file>
         <file>icons/start/resume.svg</file>
         <file>icons/start/settings.svg</file>
         <file>icons/taskbar/console.svg</file>
+        <file>icons/taskbar/notifications.svg</file>
         <file>icons/taskbar/pause.svg</file>
         <file>icons/taskbar/resume.svg</file>
         <file>icons/taskbar/settings.svg</file>

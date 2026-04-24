@@ -1224,7 +1224,7 @@ void API::Server::acceptConnection()
  */
 void API::Server::onErrorOccurred(const QAbstractSocket::SocketError socketError)
 {
-  qDebug() << socketError;
+  qWarning() << socketError;
 }
 
 /**

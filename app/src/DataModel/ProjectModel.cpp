@@ -1308,6 +1308,23 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   }
 #endif
 
+  // Resolve unset transformLanguage (-1) so FrameBuilder hotpath never sees it
+  for (auto& group : m_groups) {
+    for (auto& dataset : group.datasets) {
+      if (dataset.transformLanguage >= 0 || dataset.transformCode.isEmpty())
+        continue;
+
+      int resolved = 0;
+      for (const auto& src : m_sources)
+        if (src.sourceId == dataset.sourceId) {
+          resolved = src.frameParserLanguage;
+          break;
+        }
+
+      dataset.transformLanguage = resolved;
+    }
+  }
+
   // Load widget settings
   m_widgetSettings = json.value(Keys::WidgetSettings).toObject();
 
@@ -1570,8 +1587,21 @@ void DataModel::ProjectModel::updateDataset(const int groupId,
   if (datasetId < 0 || static_cast<size_t>(datasetId) >= m_groups[groupId].datasets.size())
     return;
 
-  m_groups[groupId].datasets[datasetId] = dataset;
-  m_selectedDataset                     = dataset;
+  // Resolve any unset transform language (-1) to the source's parser language
+  DataModel::Dataset resolved = dataset;
+  if (resolved.transformLanguage < 0 && !resolved.transformCode.isEmpty()) {
+    for (const auto& src : m_sources)
+      if (src.sourceId == resolved.sourceId) {
+        resolved.transformLanguage = src.frameParserLanguage;
+        break;
+      }
+
+    if (resolved.transformLanguage < 0)
+      resolved.transformLanguage = 0;
+  }
+
+  m_groups[groupId].datasets[datasetId] = resolved;
+  m_selectedDataset                     = resolved;
 
   if (rebuildTree)
     Q_EMIT groupsChanged();
@@ -1849,7 +1879,7 @@ void DataModel::ProjectModel::setOutputWidgetType(int type)
     return;
 
   const auto newType = static_cast<DataModel::OutputWidgetType>(
-    qBound(0, type, static_cast<int>(DataModel::OutputWidgetType::RampGenerator)));
+    qBound(0, type, static_cast<int>(DataModel::OutputWidgetType::Knob)));
 
   if (widgets[wid].type == newType)
     return;
@@ -1935,9 +1965,6 @@ void DataModel::ProjectModel::addOutputControl(const SerialStudio::OutputWidgetT
       break;
     case SerialStudio::OutputKnob:
       title = tr("New Knob");
-      break;
-    case SerialStudio::OutputRampGenerator:
-      title = tr("New Ramp Generator");
       break;
   }
 

@@ -83,6 +83,13 @@ Widgets.SmartDialog {
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
+
+      TabButton {
+        text: qsTr("Notifications")
+        visible: Cpp_CommercialBuild
+        height: _tab.height + 3
+        width: visible ? implicitWidth + 2 * 8 : 0
+      }
     }
 
     //
@@ -99,7 +106,8 @@ Widgets.SmartDialog {
       implicitHeight: Math.max(
                         generalTab.implicitHeight,
                         dashboardTab.implicitHeight,
-                        consoleTab.implicitHeight
+                        consoleTab.implicitHeight,
+                        Cpp_CommercialBuild ? notificationsTab.implicitHeight : 0
                         )
 
       //
@@ -855,6 +863,133 @@ Widgets.SmartDialog {
               if (checked !== Cpp_Console_Handler.ansiColors)
                 Cpp_Console_Handler.ansiColors = checked
             }
+          }
+
+          Item { Layout.fillHeight: true }
+          Item { Layout.fillHeight: true }
+        }
+      }
+
+      //
+      // Notifications tab (Pro only) — empty Item in GPL builds so the
+      // StackLayout indices still line up with the visible TabButtons.
+      //
+      Item {
+        id: notificationsTab
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        implicitHeight: Cpp_CommercialBuild ? notificationsLayout.implicitHeight + 16 : 0
+
+        Rectangle {
+          radius: 2
+          border.width: 1
+          anchors.fill: parent
+          visible: Cpp_CommercialBuild
+          color: Cpp_ThemeManager.colors["groupbox_background"]
+          border.color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        GridLayout {
+          id: notificationsLayout
+          columns: 2
+          rowSpacing: 4
+          columnSpacing: 8
+          visible: Cpp_CommercialBuild
+          anchors.fill: parent
+          anchors.margins: 8
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 2
+            text: qsTr("Delivery")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            text: qsTr("System Notifications")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Notifications.systemNotificationsEnabled
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Notifications.systemNotificationsEnabled)
+                Cpp_Notifications.systemNotificationsEnabled = checked
+            }
+          }
+
+          Label {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.topMargin: -2
+            opacity: 0.7
+            wrapMode: Text.WordWrap
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Show Warning/Critical events as OS desktop notifications "
+                       + "when Serial Studio is not the foreground window.")
+          }
+
+          Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          } Label {
+            Layout.columnSpan: 2
+            Layout.topMargin: 6
+            text: qsTr("Application Logs")
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
+            Component.onCompleted: font.capitalization = Font.AllUppercase
+          } Rectangle {
+            implicitHeight: 1
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          } Item {
+            implicitHeight: 2
+            Layout.columnSpan: 2
+          }
+
+          Label {
+            text: qsTr("Route Warnings to Notifications")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            checked: Cpp_Notifications.routeWarningsToNotifications
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+            onCheckedChanged: {
+              if (checked !== Cpp_Notifications.routeWarningsToNotifications)
+                Cpp_Notifications.routeWarningsToNotifications = checked
+            }
+          }
+
+          Label {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            Layout.topMargin: -2
+            opacity: 0.7
+            wrapMode: Text.WordWrap
+            color: Cpp_ThemeManager.colors["text"]
+            font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
+            text: qsTr("Off by default — Qt and QML emit warnings frequently "
+                       + "and enabling this can drown out real alarms. Critical "
+                       + "messages are always routed regardless of this setting.")
           }
 
           Item { Layout.fillHeight: true }

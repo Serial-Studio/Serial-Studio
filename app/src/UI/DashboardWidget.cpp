@@ -264,6 +264,10 @@ void UI::DashboardWidget::setWidgetIndex(const int index)
         m_qmlPath =
           "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml";
         break;
+      case SerialStudio::DashboardNotificationLog:
+        m_dbWidget = nullptr;
+        m_qmlPath  = "qrc:/serial-studio.com/gui/qml/Widgets/Dashboard/NotificationLog.qml";
+        break;
 #endif
 
       default:

@@ -36,6 +36,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameParser.h"
 #include "DataModel/JsCodeEditor.h"
+#include "DataModel/NotificationCenter.h"
 #include "DataModel/OutputCodeEditor.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
@@ -151,6 +152,27 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
 
   // Print to console
   Console::Handler::instance().displayDebugData(output + "\n");
+
+  // Route Critical unconditionally; Warnings only when user opted in
+  const bool isCritical = (type == QtCriticalMsg || type == QtFatalMsg);
+  const bool isWarning  = (type == QtWarningMsg);
+  if (!isCritical && !isWarning)
+    return;
+
+  auto& nc = DataModel::NotificationCenter::instance();
+  if (isWarning && !nc.routeWarningsToNotifications())
+    return;
+
+  const QString channel = QStringLiteral("System");
+  const QString title   = isCritical ? QObject::tr("Critical") : QObject::tr("Warning");
+
+  // Forward on the GUI thread — post() asserts main-thread affinity
+  QMetaObject::invokeMethod(
+    &nc,
+    [level = isCritical ? 2 : 1, channel, title, msg]() {
+      DataModel::NotificationCenter::instance().post(level, channel, title, msg);
+    },
+    Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -368,6 +390,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto consoleExport        = &Console::Export::instance();
   auto ioNetwork            = ioManager->network();
   auto frameBuilder         = &DataModel::FrameBuilder::instance();
+  auto notificationCenter   = &DataModel::NotificationCenter::instance();
   auto projectModel         = &DataModel::ProjectModel::instance();
   auto projectEditor        = &DataModel::ProjectEditor::instance();
   auto consoleHandler       = &Console::Handler::instance();
@@ -467,6 +490,12 @@ void Misc::ModuleManager::initializeQmlInterface()
           miscExtensionManager,
           &Misc::ExtensionManager::onDashboardAvailableChanged);
 
+  // Clear notification history when the dashboard resets (disconnect/project reload)
+  connect(uiDashboard,
+          &UI::Dashboard::dataReset,
+          notificationCenter,
+          &DataModel::NotificationCenter::clearAll);
+
   // Install custom message handler to redirect qDebug output to console
   qInstallMessageHandler(MessageHandler);
 
@@ -513,6 +542,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_JSON_ProjectModel", projectModel);
   c->setContextProperty("Cpp_JSON_ProjectEditor", projectEditor);
   c->setContextProperty("Cpp_JSON_FrameBuilder", frameBuilder);
+  c->setContextProperty("Cpp_Notifications", notificationCenter);
   c->setContextProperty("Cpp_Misc_TimerEvents", miscTimerEvents);
   c->setContextProperty("Cpp_Misc_CommonFonts", miscCommonFonts);
   c->setContextProperty("Cpp_IO_FileTransmission", ioFileTransmission);

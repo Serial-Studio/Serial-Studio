@@ -155,7 +155,6 @@ public:
     OutputToggle,
     OutputTextField,
     OutputKnob,
-    OutputRampGenerator,
   };
   Q_ENUM(OutputWidgetType)
 
@@ -180,6 +179,7 @@ public:
 #ifdef BUILD_COMMERCIAL
     DashboardImageView,
     DashboardOutputPanel,
+    DashboardNotificationLog,
 #endif
   };
   Q_ENUM(DashboardWidget)
@@ -231,6 +231,7 @@ public:
   // clang-format on
 
   Q_INVOKABLE [[nodiscard]] static bool isAnyPlayerOpen();
+  Q_INVOKABLE [[nodiscard]] static bool isFinalValuePlayerOpen();
   Q_INVOKABLE [[nodiscard]] static QColor getDatasetColor(const int index);
   Q_INVOKABLE [[nodiscard]] static QColor getDeviceColor(const int sourceId);
   Q_INVOKABLE [[nodiscard]] static QColor getDeviceTopColor(const int sourceId);

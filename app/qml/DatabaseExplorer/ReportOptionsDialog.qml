@@ -367,8 +367,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["pane_section_label"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             Component.onCompleted: font.capitalization = Font.AllUppercase
-          }
-          Rectangle {
+          } Rectangle {
             implicitHeight: 1
             Layout.columnSpan: 2
             Layout.fillWidth: true
@@ -378,13 +377,10 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Page size")
             color: Cpp_ThemeManager.colors["text"]
-          }
-          ComboBox {
+          } ComboBox {
             id: _pageSizeCombo
-
             Layout.fillWidth: true
             model: root.pageSizes.map(p => p.label)
-            font: Cpp_Misc_CommonFonts.uiFont
           }
 
           //
@@ -415,8 +411,6 @@ Widgets.SmartDialog {
 
             SpinBox {
               id: _lineWidthSpin
-
-              // Stored value ×10 so SpinBox (int-only) can span 0.5..3.0 pt
               to: 30
               from: 5
               value: 14
@@ -424,7 +418,15 @@ Widgets.SmartDialog {
               editable: true
               font: Cpp_Misc_CommonFonts.uiFont
               textFromValue: (v) => (v / 10).toFixed(1) + " pt"
-              valueFromText: (text) => Math.round(parseFloat(text) * 10)
+              valueFromText: (text) => {
+                const parsed = parseFloat(String(text).replace(",", "."))
+                if (isNaN(parsed))
+                  return _lineWidthSpin.value
+                return Math.round(parsed * 10)
+              }
+              validator: RegularExpressionValidator {
+                regularExpression: /^\s*\d+([.,]\d*)?\s*(pt)?\s*$/
+              }
             }
             Item { Layout.fillWidth: true }
           }
@@ -432,13 +434,10 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Line style")
             color: Cpp_ThemeManager.colors["text"]
-          }
-          ComboBox {
+          } ComboBox {
             id: _lineStyleCombo
-
             Layout.fillWidth: true
             model: root.lineStyles.map(s => s.label)
-            font: Cpp_Misc_CommonFonts.uiFont
           }
 
           Item { Layout.fillHeight: true; Layout.columnSpan: 2 }
@@ -471,8 +470,8 @@ Widgets.SmartDialog {
 
           Label {
             text: qsTr("Include")
-            color: Cpp_ThemeManager.colors["pane_section_label"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
           }
 
@@ -484,30 +483,22 @@ Widgets.SmartDialog {
 
           CheckBox {
             id: _coverCheck
-
-            text: qsTr("Cover page — logo, document title, test subtitle")
-            font: Cpp_Misc_CommonFonts.uiFont
+            text: qsTr("Cover page (logo, document title, test subtitle)")
           }
 
           CheckBox {
             id: _metadataCheck
-
-            text: qsTr("Test information — project, timestamps, classification, notes")
-            font: Cpp_Misc_CommonFonts.uiFont
+            text: qsTr("Test information (project, timestamps, classification and notes)")
           }
 
           CheckBox {
             id: _statsCheck
-
-            text: qsTr("Measurement summary — min, max, mean, std. deviation per parameter")
-            font: Cpp_Misc_CommonFonts.uiFont
+            text: qsTr("Measurement summary (min, max, mean, std. deviation per parameter)")
           }
 
           CheckBox {
             id: _chartsCheck
-
-            text: qsTr("Parameter trends — time-series chart per numeric parameter")
-            font: Cpp_Misc_CommonFonts.uiFont
+            text: qsTr("Parameter trends (time-series chart per numeric parameter)")
           }
 
           Item { Layout.fillHeight: true }
@@ -528,12 +519,12 @@ Widgets.SmartDialog {
         text: qsTr("Cancel")
         icon.width: 16
         icon.height: 16
-        icon.source: "qrc:/rcc/icons/buttons/cancel.svg"
+        icon.source: "qrc:/rcc/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: root.close()
       }
 
-      Button {
+      /*Button {
         text: qsTr("Export HTML")
         icon.width: 16
         icon.height: 16
@@ -548,7 +539,7 @@ Widgets.SmartDialog {
           root.close()
           root.dispatchExport("html")
         }
-      }
+      }*/
 
       Button {
         highlighted: true

@@ -11,6 +11,7 @@
 
 #include "UI/Widgets/Output/Base.h"
 
+#include "DataModel/NotificationCenter.h"
 #include "IO/ConnectionManager.h"
 #include "Licensing/CommercialToken.h"
 
@@ -302,8 +303,11 @@ void Widgets::Output::Base::installProtocolHelpers(QJSEngine& engine)
   );
   // clang-format on
 
-  // Check for compilation errors
+  // Check for compilation errors on the protocol-helpers blob
   auto result = engine.evaluate(kHelpers);
   if (result.isError())
     qWarning() << "Failed to install protocol helpers:" << result.toString();
+
+  // Install notification API (notify/notifyInfo/... + level constants)
+  DataModel::NotificationCenter::installScriptApi(&engine);
 }

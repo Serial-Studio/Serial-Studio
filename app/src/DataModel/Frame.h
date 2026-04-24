@@ -55,32 +55,33 @@ inline constexpr auto SourceId        = "sourceId";
 inline constexpr auto SourceConn      = "connection";
 inline constexpr auto DatasetSourceId = "datasetSourceId";
 
-inline constexpr auto FFT             = "fft";
-inline constexpr auto LED             = "led";
-inline constexpr auto Log             = "log";
-inline constexpr auto Min             = "min";
-inline constexpr auto Max             = "max";
-inline constexpr auto Graph           = "graph";
-inline constexpr auto Index           = "index";
-inline constexpr auto XAxis           = "xAxis";
-inline constexpr auto Alarm           = "alarm";
-inline constexpr auto Units           = "units";
-inline constexpr auto Value           = "value";
-inline constexpr auto Widget          = "widget";
-inline constexpr auto FFTMin          = "fftMin";
-inline constexpr auto FFTMax          = "fftMax";
-inline constexpr auto PltMin          = "plotMin";
-inline constexpr auto PltMax          = "plotMax";
-inline constexpr auto LedHigh         = "ledHigh";
-inline constexpr auto WgtMin          = "widgetMin";
-inline constexpr auto WgtMax          = "widgetMax";
-inline constexpr auto AlarmLow        = "alarmLow";
-inline constexpr auto AlarmHigh       = "alarmHigh";
-inline constexpr auto FFTSamples      = "fftSamples";
-inline constexpr auto Overview        = "overviewDisplay";
-inline constexpr auto AlarmEnabled    = "alarmEnabled";
-inline constexpr auto FFTSamplingRate = "fftSamplingRate";
-inline constexpr auto TransformCode   = "transformCode";
+inline constexpr auto FFT               = "fft";
+inline constexpr auto LED               = "led";
+inline constexpr auto Log               = "log";
+inline constexpr auto Min               = "min";
+inline constexpr auto Max               = "max";
+inline constexpr auto Graph             = "graph";
+inline constexpr auto Index             = "index";
+inline constexpr auto XAxis             = "xAxis";
+inline constexpr auto Alarm             = "alarm";
+inline constexpr auto Units             = "units";
+inline constexpr auto Value             = "value";
+inline constexpr auto Widget            = "widget";
+inline constexpr auto FFTMin            = "fftMin";
+inline constexpr auto FFTMax            = "fftMax";
+inline constexpr auto PltMin            = "plotMin";
+inline constexpr auto PltMax            = "plotMax";
+inline constexpr auto LedHigh           = "ledHigh";
+inline constexpr auto WgtMin            = "widgetMin";
+inline constexpr auto WgtMax            = "widgetMax";
+inline constexpr auto AlarmLow          = "alarmLow";
+inline constexpr auto AlarmHigh         = "alarmHigh";
+inline constexpr auto FFTSamples        = "fftSamples";
+inline constexpr auto Overview          = "overviewDisplay";
+inline constexpr auto AlarmEnabled      = "alarmEnabled";
+inline constexpr auto FFTSamplingRate   = "fftSamplingRate";
+inline constexpr auto TransformCode     = "transformCode";
+inline constexpr auto TransformLanguage = "transformLanguage";
 
 inline constexpr auto Groups        = "groups";
 inline constexpr auto Actions       = "actions";
@@ -226,7 +227,6 @@ enum class OutputWidgetType : quint8 {
   Toggle,
   TextField,
   Knob,
-  RampGenerator,
 };
 
 /**
@@ -288,12 +288,11 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
   if (obj.isEmpty())
     return false;
 
-  w.icon             = ss_jsr(obj, Keys::Icon, "").toString().simplified();
-  w.title            = ss_jsr(obj, Keys::Title, "").toString().simplified();
-  w.sourceId         = ss_jsr(obj, Keys::SourceId, 0).toInt();
-  w.type             = static_cast<OutputWidgetType>(qBound(0,
-                                                ss_jsr(obj, Keys::OutputType, 0).toInt(),
-                                                static_cast<int>(OutputWidgetType::RampGenerator)));
+  w.icon     = ss_jsr(obj, Keys::Icon, "").toString().simplified();
+  w.title    = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  w.sourceId = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  w.type     = static_cast<OutputWidgetType>(
+    qBound(0, ss_jsr(obj, Keys::OutputType, 0).toInt(), static_cast<int>(OutputWidgetType::Knob)));
   w.minValue         = ss_jsr(obj, Keys::OutputMinValue, 0).toDouble();
   w.maxValue         = ss_jsr(obj, Keys::OutputMaxValue, 100).toDouble();
   w.stepSize         = ss_jsr(obj, Keys::OutputStepSize, 1).toDouble();
@@ -318,6 +317,7 @@ struct alignas(8) Dataset {
   int datasetId          = 0;      ///< Unique ID within group
   int fftSamples         = 256;    ///< Number of samples for FFT
   int fftSamplingRate    = 100;    ///< Sampling rate for FFT
+  int transformLanguage  = -1;     ///< Transform script language (-1 = unset, 0 = JS, 1 = Lua)
   bool fft               = false;  ///< Enables FFT processing
   bool led               = false;  ///< Enables LED widget
   bool log               = false;  ///< Enables logging
@@ -909,8 +909,10 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(QStringLiteral("datasetId"), d.datasetId);
   obj.insert(QStringLiteral("numericValue"), d.numericValue);
 
-  if (!d.transformCode.isEmpty())
+  if (!d.transformCode.isEmpty()) {
     obj.insert(Keys::TransformCode, d.transformCode);
+    obj.insert(Keys::TransformLanguage, d.transformLanguage);
+  }
 
   if (d.virtual_)
     obj.insert(Keys::Virtual, true);
@@ -1095,32 +1097,33 @@ void read_io_settings(QByteArray& frameStart,
   if (obj.isEmpty())
     return false;
 
-  d.index           = ss_jsr(obj, Keys::Index, -1).toInt();
-  d.fft             = ss_jsr(obj, Keys::FFT, false).toBool();
-  d.led             = ss_jsr(obj, Keys::LED, false).toBool();
-  d.log             = ss_jsr(obj, Keys::Log, false).toBool();
-  d.plt             = ss_jsr(obj, Keys::Graph, false).toBool();
-  d.xAxisId         = ss_jsr(obj, Keys::XAxis, -1).toInt();
-  d.fftMin          = ss_jsr(obj, Keys::FFTMin, 0).toDouble();
-  d.fftMax          = ss_jsr(obj, Keys::FFTMax, 0).toDouble();
-  d.pltMin          = ss_jsr(obj, Keys::PltMin, 0).toDouble();
-  d.pltMax          = ss_jsr(obj, Keys::PltMax, 0).toDouble();
-  d.wgtMin          = ss_jsr(obj, Keys::WgtMin, 0).toDouble();
-  d.wgtMax          = ss_jsr(obj, Keys::WgtMax, 0).toDouble();
-  d.fftSamples      = ss_jsr(obj, Keys::FFTSamples, -1).toInt();
-  d.title           = ss_jsr(obj, Keys::Title, "").toString().simplified();
-  d.value           = ss_jsr(obj, Keys::Value, "").toString().simplified();
-  d.units           = ss_jsr(obj, Keys::Units, "").toString().simplified();
-  d.overviewDisplay = ss_jsr(obj, Keys::Overview, false).toBool();
-  d.alarmEnabled    = ss_jsr(obj, Keys::AlarmEnabled, false).toBool();
-  d.ledHigh         = ss_jsr(obj, Keys::LedHigh, 0).toDouble();
-  d.widget          = ss_jsr(obj, Keys::Widget, "").toString().simplified();
-  d.alarmLow        = ss_jsr(obj, Keys::AlarmLow, 0).toDouble();
-  d.fftSamplingRate = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
-  d.alarmHigh       = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
-  d.sourceId        = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
-  d.transformCode   = obj.value(Keys::TransformCode).toString();
-  d.virtual_        = ss_jsr(obj, Keys::Virtual, false).toBool();
+  d.index             = ss_jsr(obj, Keys::Index, -1).toInt();
+  d.fft               = ss_jsr(obj, Keys::FFT, false).toBool();
+  d.led               = ss_jsr(obj, Keys::LED, false).toBool();
+  d.log               = ss_jsr(obj, Keys::Log, false).toBool();
+  d.plt               = ss_jsr(obj, Keys::Graph, false).toBool();
+  d.xAxisId           = ss_jsr(obj, Keys::XAxis, -1).toInt();
+  d.fftMin            = ss_jsr(obj, Keys::FFTMin, 0).toDouble();
+  d.fftMax            = ss_jsr(obj, Keys::FFTMax, 0).toDouble();
+  d.pltMin            = ss_jsr(obj, Keys::PltMin, 0).toDouble();
+  d.pltMax            = ss_jsr(obj, Keys::PltMax, 0).toDouble();
+  d.wgtMin            = ss_jsr(obj, Keys::WgtMin, 0).toDouble();
+  d.wgtMax            = ss_jsr(obj, Keys::WgtMax, 0).toDouble();
+  d.fftSamples        = ss_jsr(obj, Keys::FFTSamples, -1).toInt();
+  d.title             = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  d.value             = ss_jsr(obj, Keys::Value, "").toString().simplified();
+  d.units             = ss_jsr(obj, Keys::Units, "").toString().simplified();
+  d.overviewDisplay   = ss_jsr(obj, Keys::Overview, false).toBool();
+  d.alarmEnabled      = ss_jsr(obj, Keys::AlarmEnabled, false).toBool();
+  d.ledHigh           = ss_jsr(obj, Keys::LedHigh, 0).toDouble();
+  d.widget            = ss_jsr(obj, Keys::Widget, "").toString().simplified();
+  d.alarmLow          = ss_jsr(obj, Keys::AlarmLow, 0).toDouble();
+  d.fftSamplingRate   = ss_jsr(obj, Keys::FFTSamplingRate, -1).toInt();
+  d.alarmHigh         = ss_jsr(obj, Keys::AlarmHigh, 0).toDouble();
+  d.sourceId          = ss_jsr(obj, Keys::DatasetSourceId, 0).toInt();
+  d.transformCode     = obj.value(Keys::TransformCode).toString();
+  d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();
+  d.virtual_          = ss_jsr(obj, Keys::Virtual, false).toBool();
 
   if (d.value.isEmpty())
     d.value = QStringLiteral("--.--");

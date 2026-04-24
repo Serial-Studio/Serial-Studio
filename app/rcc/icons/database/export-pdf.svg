@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30pt" height="30pt" viewBox="0 0 30 30" version="1.1">
+<g id="surface32">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 2.625 28.125 L 2.625 1.875 L 16.34375 1.875 L 22.875 8.40625 L 22.875 28.125 Z M 2.625 28.125 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(47.058824%,54.509807%,61.176473%);fill-opacity:1;" d="M 16.191406 2.25 L 22.5 8.558594 L 22.5 27.75 L 3 27.75 L 3 2.25 L 16.191406 2.25 M 16.5 1.5 L 2.25 1.5 L 2.25 28.5 L 23.25 28.5 L 23.25 8.25 Z M 16.5 1.5 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 16.125 8.625 L 16.125 1.875 L 16.34375 1.875 L 22.875 8.40625 L 22.875 8.625 Z M 16.125 8.625 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(47.058824%,54.509807%,61.176473%);fill-opacity:1;" d="M 16.5 2.558594 L 22.191406 8.25 L 16.5 8.25 L 16.5 2.558594 M 16.5 1.5 L 15.75 1.5 L 15.75 9 L 23.25 9 L 23.25 8.25 Z M 16.5 1.5 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(83.92157%,89.019608%,92.941177%);fill-opacity:1;" d="M 22.5 15 L 22.5 27.75 L 20.707031 27.75 L 21.300781 28.5 L 23.25 28.5 L 23.25 15 Z M 22.5 15 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(61.176473%,67.450982%,74.117649%);fill-opacity:1;" d="M 18.78125 22.875 L 22.125 22.875 L 22.125 16.875 L 25.875 16.875 L 25.875 22.875 L 29.21875 22.875 L 24 29.398438 Z M 18.78125 22.875 "/>
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(21.176471%,25.098041%,30.19608%);fill-opacity:1;" d="M 25.5 17.25 L 25.5 23.25 L 28.4375 23.25 L 24 28.800781 L 19.5625 23.25 L 22.5 23.25 L 22.5 17.25 L 25.5 17.25 M 26.25 16.5 L 21.75 16.5 L 21.75 22.5 L 18 22.5 L 24 30 L 30 22.5 L 26.25 22.5 Z M 26.25 16.5 "/>
+<path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(78.039217%,26.274511%,26.274511%);stroke-opacity:1;stroke-miterlimit:10;" d="M 25.5 24.239583 C 25.5 21.1875 7.5 25.484375 7.5 28.203125 C 7.5 29.369792 8.411458 29.5 8.697917 29.5 C 12.473958 29.5 20.005208 11.5 14.609375 11.5 C 11.546875 11.5 19.505208 25.640625 23.911458 25.640625 C 25.010417 25.640625 25.5 25.067708 25.5 24.239583 Z M 25.5 24.239583 " transform="matrix(0.75,0,0,0.75,0,0)"/>
+</g>
+</svg>

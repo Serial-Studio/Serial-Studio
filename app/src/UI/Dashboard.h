@@ -60,6 +60,10 @@ class Dashboard : public QObject {
              READ  terminalEnabled
              WRITE setTerminalEnabled
              NOTIFY terminalEnabledChanged)
+  Q_PROPERTY(bool notificationLogEnabled
+             READ  notificationLogEnabled
+             WRITE setNotificationLogEnabled
+             NOTIFY notificationLogEnabledChanged)
   Q_PROPERTY(bool autoHideToolbar
              READ  autoHideToolbar
              WRITE setAutoHideToolbar
@@ -87,6 +91,7 @@ signals:
   void actionStatusChanged();
   void showActionPanelChanged();
   void terminalEnabledChanged();
+  void notificationLogEnabledChanged();
   void showTaskbarButtonsChanged();
   void autoHideToolbarChanged();
   void containsCommercialFeaturesChanged();
@@ -105,6 +110,7 @@ public:
   [[nodiscard]] bool showActionPanel() const noexcept;
   [[nodiscard]] bool streamAvailable() const;
   [[nodiscard]] bool terminalEnabled() const noexcept;
+  [[nodiscard]] bool notificationLogEnabled() const noexcept;
   [[nodiscard]] bool autoHideToolbar() const noexcept;
   [[nodiscard]] bool showTaskbarButtons() const noexcept;
   [[nodiscard]] bool pointsWidgetVisible() const;
@@ -151,6 +157,7 @@ public slots:
   void clearPlotData();
   void setShowActionPanel(const bool enabled);
   void setTerminalEnabled(const bool enabled);
+  void setNotificationLogEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
   void setShowTaskbarButtons(const bool enabled);
   void activateAction(const int index, const bool guiTrigger = false);
@@ -166,6 +173,7 @@ private:
   void reconfigureDashboard(const DataModel::Frame& frame);
   void processDatasetIntoWidgetMaps(const DataModel::Dataset& dataset, DataModel::Group& ledPanel);
   void removeTerminalWidget();
+  void removeNotificationLogWidget();
   void handleMissingDataset(const DataModel::Frame& frame);
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
 
@@ -194,6 +202,8 @@ private:
   bool m_showActionPanel;
   bool m_terminalEnabled;
   WidgetID m_terminalWidgetId;
+  bool m_notificationLogEnabled;
+  WidgetID m_notificationLogWidgetId;
   bool m_autoHideToolbar;
   bool m_showTaskbarButtons;
 

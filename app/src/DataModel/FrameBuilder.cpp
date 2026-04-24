@@ -34,6 +34,7 @@
 #include "AppState.h"
 #include "CSV/Export.h"
 #include "DataModel/FrameParser.h"
+#include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Export.h"
@@ -41,8 +42,10 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "IO/Drivers/Audio.h"
+#  include "Licensing/CommercialToken.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Sessions/Export.h"
+#  include "Sessions/Player.h"
 #endif
 
 #ifdef ENABLE_GRPC
@@ -158,6 +161,19 @@ void DataModel::FrameBuilder::setupExternalConnections()
           &DataModel::ProjectModel::sourceDeleted,
           this,
           &DataModel::FrameBuilder::onSourceRemoved);
+
+#ifdef BUILD_COMMERCIAL
+  // Session player opens don't go through ConnectionManager — rebuild transform
+  // engines on its openChanged so replay runs transforms with notify API intact
+  connect(&Sessions::Player::instance(), &Sessions::Player::openChanged, this, [this] {
+    if (Sessions::Player::instance().isOpen()
+        && AppState::instance().operationMode() == SerialStudio::ProjectFile
+        && !m_frame.title.isEmpty()) {
+      compileTransforms();
+      initializeTableStore();
+    }
+  });
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -406,11 +422,13 @@ void DataModel::FrameBuilder::parseProjectFrame(const IO::CapturedDataPtr& data)
           m_tableStore.setDatasetRaw(
             dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
-        // Apply transform (skip during playback — exported data is already transformed)
-        if (!dataset.transformCode.isEmpty() && !SerialStudio::isAnyPlayerOpen()) [[unlikely]] {
+        // Apply transform (skip for CSV/MDF4 playback — those stores hold transformed values)
+        if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen())
+          [[unlikely]] {
           const auto input =
             dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
-          const auto result = applyTransform(srcId, dataset.uniqueId, input);
+          const auto result =
+            applyTransform(srcId, dataset.transformLanguage, dataset.uniqueId, input);
 
           if (result.typeId() == QMetaType::Double) {
             dataset.numericValue = result.toDouble();
@@ -539,11 +557,13 @@ void DataModel::FrameBuilder::parseProjectFrame(int sourceId, const IO::Captured
           m_tableStore.setDatasetRaw(
             dataset.uniqueId, dataset.numericValue, dataset.value, dataset.isNumeric);
 
-        // Apply transform (skip during playback)
-        if (!dataset.transformCode.isEmpty() && !SerialStudio::isAnyPlayerOpen()) [[unlikely]] {
+        // Apply transform (skip for CSV/MDF4 playback — those stores hold transformed values)
+        if (!dataset.transformCode.isEmpty() && !SerialStudio::isFinalValuePlayerOpen())
+          [[unlikely]] {
           const auto input =
             dataset.isNumeric ? QVariant(dataset.numericValue) : QVariant(dataset.value);
-          const auto result = applyTransform(sourceId, dataset.uniqueId, input);
+          const auto result =
+            applyTransform(sourceId, dataset.transformLanguage, dataset.uniqueId, input);
 
           if (result.typeId() == QMetaType::Double) {
             dataset.numericValue = result.toDouble();
@@ -906,40 +926,33 @@ void DataModel::FrameBuilder::compileTransforms()
   destroyTransformEngines();
   Q_ASSERT(m_transformEngines.empty());
 
-  // Collect datasets with transforms, grouped by sourceId
-  std::map<int, std::vector<TransformEntry>> bySource;
-  for (const auto& group : m_frame.groups)
-    for (const auto& ds : group.datasets)
-      if (!ds.transformCode.isEmpty())
-        bySource[ds.sourceId].push_back({ds.uniqueId, ds.transformCode});
+  // Group transforms by (sourceId, transformLanguage). ProjectModel resolves unset (-1)
+  std::map<EngineKey, std::vector<TransformEntry>> byKey;
+  for (const auto& group : m_frame.groups) {
+    for (const auto& ds : group.datasets) {
+      if (ds.transformCode.isEmpty())
+        continue;
 
-  if (bySource.empty())
+      byKey[{ds.sourceId, ds.transformLanguage}].push_back({ds.uniqueId, ds.transformCode});
+    }
+  }
+
+  if (byKey.empty())
     return;
 
-  // Determine language for each source and compile
-  const auto& sources = DataModel::ProjectModel::instance().sources();
-
-  for (auto& [sourceId, entries] : bySource) {
-    // Resolve the scripting language for this source
-    int lang = SerialStudio::Lua;
-    for (const auto& src : sources)
-      if (src.sourceId == sourceId) {
-        lang = src.frameParserLanguage;
-        break;
-      }
-
-    // Insert first — the Lua watchdog hook captures &engine, so moving later would invalidate it.
-    auto [it, inserted] = m_transformEngines.emplace(sourceId, TransformEngine{});
+  // Compile one engine per (source, language) key
+  for (auto& [key, entries] : byKey) {
+    // Insert before compile — the Lua watchdog captures &engine by pointer
+    auto [it, inserted] = m_transformEngines.emplace(key, TransformEngine{});
     Q_ASSERT(inserted);
     TransformEngine& engine = it->second;
 
-    // Delegate to language-specific compiler
-    if (lang == SerialStudio::Lua)
+    if (key.language == SerialStudio::Lua)
       compileTransformsLua(engine, entries);
     else
       compileTransformsJS(engine, entries);
 
-    // Remove the engine entry if compilation produced nothing useful
+    // Drop empty entries when compilation produced nothing usable
     if (!engine.luaState && !engine.jsEngine)
       m_transformEngines.erase(it);
   }
@@ -962,6 +975,9 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
 
   // Inject table/dataset/variant API before any user code runs
   injectTableApiLua(L);
+
+  // Notification API — gated internally on the active license tier
+  DataModel::NotificationCenter::installScriptApi(L);
 
   // Store the engine pointer in the Lua registry so the watchdog
   // hook can look it up without needing a global singleton pointer
@@ -1032,6 +1048,9 @@ void DataModel::FrameBuilder::compileTransformsJS(TransformEngine& engine,
   // Inject table/dataset/variant API before any user code runs
   injectTableApiJS(js);
 
+  // Notification API — gated internally on the active license tier
+  DataModel::NotificationCenter::installScriptApi(js);
+
   for (const auto& entry : entries) {
     // Wrap the user's code in an IIFE for per-dataset closure isolation
     const QString wrapped =
@@ -1098,13 +1117,15 @@ void DataModel::FrameBuilder::destroyTransformEngines()
  * transform.
  */
 QVariant DataModel::FrameBuilder::applyTransform(int sourceId,
+                                                 int language,
                                                  int uniqueId,
                                                  const QVariant& rawValue)
 {
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(uniqueId >= 0);
 
-  auto engineIt = m_transformEngines.find(sourceId);
+  auto engineIt = m_transformEngines.find({sourceId, language});
+
   if (engineIt == m_transformEngines.end())
     return rawValue;
 

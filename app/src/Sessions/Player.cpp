@@ -771,9 +771,9 @@ QByteArray Sessions::Player::buildFrameAt(qint64 timestampNs)
   for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
     uidToCol.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
 
-  // Pull the row set for this timestamp (prefer final_*, ordered by reading_id)
+  // Pull raw values so dataset transforms re-run during replay (ordered by reading_id)
   QSqlQuery q(m_db);
-  q.prepare("SELECT unique_id, final_numeric_value, final_string_value, is_numeric "
+  q.prepare("SELECT unique_id, raw_numeric_value, raw_string_value, is_numeric "
             "FROM readings WHERE session_id = ? AND timestamp_ns = ? "
             "ORDER BY reading_id");
   q.bindValue(0, m_sessionId);

@@ -279,6 +279,7 @@ set(SOURCES
   src/DataModel/FrameConsumer.cpp
   src/DataModel/DataTable.cpp
   src/DataModel/DatasetTransformEditor.cpp
+  src/DataModel/NotificationCenter.cpp
   src/DataModel/FrameParserTestDialog.cpp
   src/DataModel/TransmitTestDialog.cpp
   src/CSV/Player.cpp
@@ -380,6 +381,7 @@ set(HEADERS
   src/DataModel/DataTable.h
   src/DataModel/ExportSchema.h
   src/DataModel/DatasetTransformEditor.h
+  src/DataModel/NotificationCenter.h
   src/DataModel/FrameParserTestDialog.h
   src/DataModel/TransmitTestDialog.h
   src/CSV/Export.h
@@ -504,6 +506,7 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/MDF4PlayerHandler.h
     src/API/Handlers/HIDHandler.h
     src/API/Handlers/USBHandler.h
+    src/API/Handlers/NotificationsHandler.h
     src/API/Handlers/ProcessHandler.h
     src/API/Handlers/SessionsHandler.h
     src/MQTT/Client.h
@@ -550,6 +553,7 @@ if(BUILD_COMMERCIAL)
     src/API/Handlers/USBHandler.cpp
     src/API/Handlers/ProcessHandler.cpp
     src/API/Handlers/LicensingHandler.cpp
+    src/API/Handlers/NotificationsHandler.cpp
     src/API/Handlers/SessionsHandler.cpp
     src/MQTT/Client.cpp
     src/IO/Drivers/Audio.cpp
@@ -599,6 +603,7 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
     qml/Widgets/Dashboard/Plot3D.qml
     qml/Widgets/Dashboard/ImageView.qml
+    qml/Widgets/Dashboard/NotificationLog.qml
     qml/Widgets/Dashboard/Output/DashboardButton.qml
     qml/Widgets/Dashboard/Output/DashboardSlider.qml
     qml/Widgets/Dashboard/Output/DashboardToggle.qml

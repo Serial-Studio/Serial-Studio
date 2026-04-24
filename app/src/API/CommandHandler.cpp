@@ -46,6 +46,7 @@
 #  include "API/Handlers/MDF4PlayerHandler.h"
 #  include "API/Handlers/ModbusHandler.h"
 #  include "API/Handlers/MQTTHandler.h"
+#  include "API/Handlers/NotificationsHandler.h"
 #  include "API/Handlers/ProcessHandler.h"
 #  include "API/Handlers/SessionsHandler.h"
 #  include "API/Handlers/USBHandler.h"
@@ -262,6 +263,7 @@ void API::CommandHandler::initializeHandlers()
   Handlers::USBHandler::registerCommands();
   Handlers::ProcessHandler::registerCommands();
   Handlers::LicensingHandler::registerCommands();
+  Handlers::NotificationsHandler::registerCommands();
   Handlers::SessionsHandler::registerCommands();
 #endif
 

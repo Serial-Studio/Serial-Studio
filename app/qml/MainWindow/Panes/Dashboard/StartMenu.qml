@@ -392,30 +392,91 @@ Popup {
     }
 
     Widgets.MenuButton {
-      expandable: false
-      Layout.fillWidth: true
-      text: qsTr("CSV Logging")
-      checked: Cpp_CSV_Export.exportEnabled
-      icon.source: "qrc:/rcc/icons/start/csv-log.svg"
-      onClicked: Cpp_CSV_Export.exportEnabled = !Cpp_CSV_Export.exportEnabled
-    }
+      id: _export
 
-    Widgets.MenuButton {
-      expandable: false
+      expandable: true
       Layout.fillWidth: true
-      text: qsTr("MDF4 Logging")
-      checked: Cpp_MDF4_Export.exportEnabled
-      icon.source: "qrc:/rcc/icons/start/mf4-log.svg"
-      onClicked: Cpp_MDF4_Export.exportEnabled = !Cpp_MDF4_Export.exportEnabled
-    }
+      text: qsTr("Export")
+      icon.source: "qrc:/rcc/icons/start/export.svg"
 
-    Widgets.MenuButton {
-      expandable: false
-      Layout.fillWidth: true
-      text: qsTr("Console Logging")
-      checked: Cpp_Console_Export.exportEnabled
-      icon.source: "qrc:/rcc/icons/start/console-log.svg"
-      onClicked: Cpp_Console_Export.exportEnabled = !Cpp_Console_Export.exportEnabled
+      readonly property string kCsv: "csv"
+      readonly property string kMdf4: "mdf4"
+      readonly property string kConsole: "console"
+      readonly property string kDatabase: "database"
+
+      property var popup: null
+      function showMenu() {
+        // Create the popup on first use
+        if (_export.popup === null) {
+          _export.popup = _subMenuComponent.createObject(root)
+          _export.popup.valueSelected.connect((value) => {
+            if (value === _export.kCsv)
+              Cpp_CSV_Export.exportEnabled = !Cpp_CSV_Export.exportEnabled
+            else if (value === _export.kMdf4)
+              Cpp_MDF4_Export.exportEnabled = !Cpp_MDF4_Export.exportEnabled
+            else if (value === _export.kConsole)
+              Cpp_Console_Export.exportEnabled = !Cpp_Console_Export.exportEnabled
+            else if (value === _export.kDatabase && Cpp_CommercialBuild)
+              Cpp_Sessions_Export.exportEnabled = !Cpp_Sessions_Export.exportEnabled
+          })
+        }
+
+        // Build model with per-row enabled state
+        var model = [
+          {
+            "id": _export.kCsv,
+            "text": qsTr("CSV File"),
+            "icon": "qrc:/rcc/icons/start/csv-log.svg",
+            "checked": Cpp_CSV_Export.exportEnabled
+          },
+          {
+            "id": _export.kMdf4,
+            "text": qsTr("MDF4 File"),
+            "icon": "qrc:/rcc/icons/start/mf4-log.svg",
+            "checked": Cpp_MDF4_Export.exportEnabled
+          },
+          {
+            "id": _export.kConsole,
+            "text": qsTr("Console Transcript"),
+            "icon": "qrc:/rcc/icons/start/console-log.svg",
+            "checked": Cpp_Console_Export.exportEnabled
+          }
+        ]
+
+        if (Cpp_CommercialBuild) {
+          model.push({
+            "id": _export.kDatabase,
+            "text": qsTr("Session Database"),
+            "icon": "qrc:/rcc/icons/start/database-export.svg",
+            "checked": Cpp_Sessions_Export.exportEnabled
+          })
+        }
+
+        // Update popup state
+        _export.popup.model = model
+        _export.popup.showCheckable = true
+        _export.popup.maximumHeight = root.height
+        _export.popup.x = root.x + root.width - 1
+        _export.popup.y = _export.y + _layout.y + root.y + 4
+        _export.popup.placeholderText = qsTr("No Export Formats Available")
+
+        // Open the popup
+        _export.popup.open()
+
+        // Close other menus
+        if (_groups.popup)
+          _groups.popup.close()
+        if (_actions.popup)
+          _actions.popup.close()
+        if (_plugins.popup)
+          _plugins.popup.close()
+      }
+
+      onClicked: _export.showMenu()
+      onContainsMouseChanged: {
+        if (containsMouse)
+          _export.showMenu()
+      }
     }
 
     Rectangle {
@@ -438,6 +499,22 @@ Popup {
         if (checked !== Cpp_UI_Dashboard.terminalEnabled) {
           root.close()
           Cpp_UI_Dashboard.terminalEnabled = checked
+        }
+      }
+    }
+
+    Widgets.MenuButton {
+      checkable: true
+      expandable: false
+      visible: Cpp_CommercialBuild
+      Layout.fillWidth: true
+      text: qsTr("Notifications")
+      checked: Cpp_UI_Dashboard.notificationLogEnabled
+      icon.source: "qrc:/rcc/icons/start/notifications.svg"
+      onCheckedChanged: {
+        if (checked !== Cpp_UI_Dashboard.notificationLogEnabled) {
+          root.close()
+          Cpp_UI_Dashboard.notificationLogEnabled = checked
         }
       }
     }

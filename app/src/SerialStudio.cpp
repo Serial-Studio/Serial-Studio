@@ -86,6 +86,17 @@ bool SerialStudio::proWidgetsEnabled()
  * @param groups A vector of JSON::Group objects to analyze.
  * @return true if any commercial-only features are detected; false otherwise.
  */
+static bool transformUsesNotifications(const QString& code)
+{
+  // Quick substring screen — matches notify( / notifyInfo( / notifyWarning( /
+  // notifyCritical( / notifyClear(. Any transform referencing these identifiers
+  // is a Pro-tier feature.
+  return code.contains(QStringLiteral("notify(")) || code.contains(QStringLiteral("notifyInfo("))
+      || code.contains(QStringLiteral("notifyWarning("))
+      || code.contains(QStringLiteral("notifyCritical("))
+      || code.contains(QStringLiteral("notifyClear("));
+}
+
 bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
 {
   for (const auto& group : std::as_const(g)) {
@@ -98,9 +109,13 @@ bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
     if (group.widget == QStringLiteral("image"))
       return true;
 
-    for (const auto& dataset : std::as_const((group.datasets)))
+    for (const auto& dataset : std::as_const((group.datasets))) {
       if (dataset.xAxisId > 0)
         return true;
+
+      if (!dataset.transformCode.isEmpty() && transformUsesNotifications(dataset.transformCode))
+        return true;
+    }
   }
 
   return false;
@@ -127,9 +142,13 @@ bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
     if (group.widget == QStringLiteral("image"))
       return true;
 
-    for (const auto& dataset : std::as_const((group.datasets)))
+    for (const auto& dataset : std::as_const((group.datasets))) {
       if (dataset.xAxisId > 0)
         return true;
+
+      if (!dataset.transformCode.isEmpty() && transformUsesNotifications(dataset.transformCode))
+        return true;
+    }
   }
 
   return false;
@@ -158,6 +177,7 @@ bool SerialStudio::isGroupWidget(const DashboardWidget widget)
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
     case DashboardOutputPanel:
+    case DashboardNotificationLog:
 #endif
       return true;
     default:
@@ -243,6 +263,9 @@ QString SerialStudio::dashboardWidgetIcon(const DashboardWidget w, const bool la
     case DashboardOutputPanel:
       return iconPath + "output-panel.svg";
       break;
+    case DashboardNotificationLog:
+      return iconPath + "notification-log.svg";
+      break;
 #endif
     case DashboardNoWidget:
       return iconPath + "group.svg";
@@ -273,7 +296,15 @@ bool SerialStudio::groupEligibleForWorkspace(const DataModel::Group& g)
  */
 bool SerialStudio::groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
 {
-  return w != DashboardNoWidget && w != DashboardTerminal;
+  if (w == DashboardNoWidget || w == DashboardTerminal)
+    return false;
+
+#ifdef BUILD_COMMERCIAL
+  if (w == DashboardNotificationLog)
+    return false;
+#endif
+
+  return true;
 }
 
 /**
@@ -284,7 +315,15 @@ bool SerialStudio::groupWidgetEligibleForWorkspace(SerialStudio::DashboardWidget
  */
 bool SerialStudio::datasetWidgetEligibleForWorkspace(SerialStudio::DashboardWidget w)
 {
-  return w != DashboardNoWidget && w != DashboardLED && w != DashboardTerminal;
+  if (w == DashboardNoWidget || w == DashboardLED || w == DashboardTerminal)
+    return false;
+
+#ifdef BUILD_COMMERCIAL
+  if (w == DashboardNotificationLog)
+    return false;
+#endif
+
+  return true;
 }
 
 /**
@@ -337,6 +376,9 @@ QString SerialStudio::dashboardWidgetTitle(const DashboardWidget w)
 #ifdef BUILD_COMMERCIAL
     case DashboardImageView:
       return tr("Image Views");
+      break;
+    case DashboardNotificationLog:
+      return tr("Notifications");
       break;
 #endif
     case DashboardNoWidget:
@@ -391,6 +433,9 @@ SerialStudio::DashboardWidget SerialStudio::getDashboardWidget(const DataModel::
 #ifdef BUILD_COMMERCIAL
   else if (widget == "image")
     return DashboardImageView;
+
+  else if (widget == "notification-log")
+    return DashboardNotificationLog;
 #endif
 
   return DashboardNoWidget;
@@ -576,6 +621,20 @@ bool SerialStudio::isAnyPlayerOpen()
 #else
   return csvPlayer.isOpen() || mdf4Player.isOpen();
 #endif
+}
+
+/**
+ * @brief Returns true when a player that stores post-transform values is open.
+ *
+ * CSV and MDF4 exports store already-transformed values so replaying them must
+ * skip the transform pipeline to avoid double-applying. Session Player stores
+ * raw values and re-runs transforms during replay, so it is excluded here.
+ */
+bool SerialStudio::isFinalValuePlayerOpen()
+{
+  static auto& csvPlayer  = CSV::Player::instance();
+  static auto& mdf4Player = MDF4::Player::instance();
+  return csvPlayer.isOpen() || mdf4Player.isOpen();
 }
 
 /**

@@ -307,10 +307,10 @@ void API::Handlers::ProjectHandler::registerCommands()
   {
     QJsonObject props;
     props[QStringLiteral("type")] = QJsonObject{
-      {       QStringLiteral("type"),QStringLiteral("integer")                    },
+      {       QStringLiteral("type"),QStringLiteral("integer")   },
       {QStringLiteral("description"),
        QStringLiteral("OutputWidgetType enum: 0=Button, 1=Slider, 2=Toggle, "
-       "3=TextField, 4=Knob, 5=RampGenerator")}
+       "3=TextField, 4=Knob")}
     };
     QJsonObject owSchema;
     owSchema[QStringLiteral("type")]       = QStringLiteral("object");
@@ -1014,7 +1014,7 @@ API::CommandResponse API::Handlers::ProjectHandler::outputWidgetAdd(const QStrin
   const int type = params.value(QStringLiteral("type")).toInt(0);
 
   DataModel::ProjectModel::instance().addOutputControl(static_cast<SerialStudio::OutputWidgetType>(
-    qBound(0, type, static_cast<int>(SerialStudio::OutputRampGenerator))));
+    qBound(0, type, static_cast<int>(SerialStudio::OutputKnob))));
 
   QJsonObject result;
   result[QStringLiteral("added")] = true;

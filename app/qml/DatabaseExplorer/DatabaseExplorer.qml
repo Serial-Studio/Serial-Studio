@@ -40,6 +40,19 @@ Widgets.SmartWindow {
 
   Component.onCompleted: Qt.callLater(Cpp_Sessions_Manager.restoreLastDatabase)
 
+  //
+  // Report options dialog — opened by the Export PDF toolbar button
+  //
+  ReportOptionsDialog {
+    id: _reportDialog
+  }
+
+  //
+  // Progress dialog — auto-opens on the pdfExportBusy signal, closes when done
+  //
+  ReportProgressDialog {
+  }
+
   Page {
     clip: true
     anchors.fill: parent
@@ -213,9 +226,14 @@ Widgets.SmartWindow {
                            Cpp_Sessions_Manager.selectedSessionId)
               icon.source: "qrc:/rcc/icons/database/delete.svg"
             }
+          }
 
+          //
+          // Export session
+          //
+          Widgets.RibbonSection {
             Widgets.ToolbarButton {
-              text: qsTr("Export")
+              text: qsTr("Export CSV")
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_Sessions_Manager.isOpen
                        && Cpp_Sessions_Manager.selectedSessionId >= 0
@@ -223,7 +241,18 @@ Widgets.SmartWindow {
               ToolTip.text: qsTr("Export selected session to CSV")
               onClicked: Cpp_Sessions_Manager.exportSessionToCsv(
                            Cpp_Sessions_Manager.selectedSessionId)
-              icon.source: "qrc:/rcc/icons/database/export.svg"
+              icon.source: "qrc:/rcc/icons/database/export-csv.svg"
+            }
+
+            Widgets.ToolbarButton {
+              text: qsTr("Export PDF")
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_Sessions_Manager.isOpen
+                       && Cpp_Sessions_Manager.selectedSessionId >= 0
+                       && !Cpp_Sessions_Manager.pdfExportBusy
+              ToolTip.text: qsTr("Generate a PDF report for the selected session")
+              onClicked: _reportDialog.openFor(Cpp_Sessions_Manager.selectedSessionId)
+              icon.source: "qrc:/rcc/icons/database/export-pdf.svg"
             }
           }
 
@@ -237,6 +266,7 @@ Widgets.SmartWindow {
               text: qsTr("Restore Project")
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_Sessions_Manager.isOpen
+                       && Cpp_Sessions_Manager.selectedSessionId >= 0
               ToolTip.text: qsTr("Restore the project file from this session file")
               onClicked: Cpp_Sessions_Manager.restoreProjectFromDb()
               icon.source: "qrc:/rcc/icons/database/restore.svg"

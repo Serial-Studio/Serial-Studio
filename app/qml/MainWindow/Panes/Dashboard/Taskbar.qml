@@ -300,6 +300,15 @@ Item {
         Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
       }
     } Widgets.TaskbarButton {
+      visible: Cpp_CommercialBuild
+      forceVisible: Cpp_CommercialBuild
+      focused: Cpp_UI_Dashboard.notificationLogEnabled
+      icon.source: "qrc:/rcc/icons/taskbar/notifications.svg"
+      onClicked: {
+        taskBar.activeWindow = null
+        Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
+      }
+    } Widgets.TaskbarButton {
       forceVisible: true
       focused: Cpp_IO_Manager.paused
       icon.source: Cpp_IO_Manager.paused ?

@@ -67,7 +67,6 @@ QSizeF PanelLayout::minSize(OWT type)
   const qreal inputH  = qMax(monoH + 10, 28.0);
   const qreal switchH = 24.0;
   const qreal sliderH = 24.0;
-  const qreal progH   = 16.0;
   const qreal rangeH  = std::ceil(fontH * 0.7);
   const qreal valueH  = std::ceil(monoH);
 
@@ -85,8 +84,6 @@ QSizeF PanelLayout::minSize(OWT type)
       return {charW * 24 + 2 * m, 2 * m + labelH + s + qMax(inputH, btnH)};
     case OWT::Knob:
       return {charW * 18 + 2 * m, 2 * m + labelH + s + charW * 12 + s + valueH};
-    case OWT::RampGenerator:
-      return {charW * 24 + 2 * m, 2 * m + labelH + s + progH + s + qMax(rangeH, valueH) + s + btnH};
     default:
       return {charW * 14 + 2 * m, 2 * m + btnH};
   }

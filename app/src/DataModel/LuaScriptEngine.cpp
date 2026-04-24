@@ -27,6 +27,7 @@
 
 #include <QMessageBox>
 
+#include "DataModel/NotificationCenter.h"
 #include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -103,6 +104,10 @@ void DataModel::LuaScriptEngine::createState()
   Q_ASSERT(m_state != nullptr);
 
   openSafeLibs(m_state);
+
+  // Expose the Serial Studio notification API (notify/notifyInfo/... + level
+  // constants) to parser scripts. The helper gates on the active license tier.
+  DataModel::NotificationCenter::installScriptApi(m_state);
 
   // Store 'this' pointer in the Lua registry for the watchdog hook
   lua_pushlightuserdata(m_state, this);

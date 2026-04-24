@@ -653,14 +653,16 @@ void DataModel::ProjectEditor::setSelectedSourceFrameParserCode(const QString& c
  */
 void DataModel::ProjectEditor::openTransformEditor()
 {
-  // Determine the scripting language from the dataset's source
-  int lang            = SerialStudio::Lua;
-  const auto& sources = DataModel::ProjectModel::instance().sources();
-  for (const auto& src : sources)
-    if (src.sourceId == m_selectedDataset.sourceId) {
-      lang = src.frameParserLanguage;
-      break;
-    }
+  // Prefer per-dataset transformLanguage; fall back to source parser language when unset
+  int lang = m_selectedDataset.transformLanguage;
+  if (lang < 0 || m_selectedDataset.transformCode.isEmpty()) {
+    const auto& sources = DataModel::ProjectModel::instance().sources();
+    for (const auto& src : sources)
+      if (src.sourceId == m_selectedDataset.sourceId) {
+        lang = src.frameParserLanguage;
+        break;
+      }
+  }
 
   // Create the dialog on first use (avoids destruction-order crash)
   if (!m_transformEditor) {
@@ -669,7 +671,7 @@ void DataModel::ProjectEditor::openTransformEditor()
     connect(m_transformEditor,
             &DatasetTransformEditor::transformApplied,
             this,
-            [this](const QString& code, int /*lang*/, int gId, int dId) {
+            [this](const QString& code, int lang, int gId, int dId) {
               // Update the authoritative data in ProjectModel
               auto& pm     = DataModel::ProjectModel::instance();
               auto& groups = pm.groups();
@@ -679,19 +681,23 @@ void DataModel::ProjectEditor::openTransformEditor()
               if (dId < 0 || static_cast<size_t>(dId) >= groups[gId].datasets.size())
                 return;
 
-              // Build updated dataset from the authoritative source
-              auto dataset          = groups[gId].datasets[dId];
-              dataset.transformCode = code;
+              // Reset language to -1 (unset) when code is cleared so stale flags don't stick
+              auto dataset              = groups[gId].datasets[dId];
+              dataset.transformCode     = code;
+              dataset.transformLanguage = code.isEmpty() ? -1 : lang;
               pm.updateDataset(gId, dId, dataset, false);
 
               // Update the current selection if it matches
-              if (m_selectedDataset.groupId == gId && m_selectedDataset.datasetId == dId)
-                m_selectedDataset.transformCode = code;
+              if (m_selectedDataset.groupId == gId && m_selectedDataset.datasetId == dId) {
+                m_selectedDataset.transformCode     = code;
+                m_selectedDataset.transformLanguage = dataset.transformLanguage;
+              }
 
               // Keep the tree-item cache in sync
               for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
                 if (it.value().groupId == gId && it.value().datasetId == dId) {
-                  it.value().transformCode = code;
+                  it.value().transformCode     = code;
+                  it.value().transformLanguage = dataset.transformLanguage;
                   break;
                 }
               }
@@ -1007,9 +1013,6 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
           break;
         case DataModel::OutputWidgetType::Knob:
           owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-knob.svg");
-          break;
-        case DataModel::OutputWidgetType::RampGenerator:
-          owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-ramp.svg");
           break;
         default:
           owIcon = QStringLiteral("qrc:/rcc/icons/project-editor/treeview/output-widget.svg");
@@ -2448,7 +2451,7 @@ void DataModel::ProjectEditor::generateComboBoxModels()
 
   m_outputWidgetTypes.clear();
   m_outputWidgetTypes << tr("Button") << tr("Slider") << tr("Toggle") << tr("Text Field")
-                      << tr("Knob") << tr("Ramp Generator");
+                      << tr("Knob");
 #endif
 
   // Group composite widgets

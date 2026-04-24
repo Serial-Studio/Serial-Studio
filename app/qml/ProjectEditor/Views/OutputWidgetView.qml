@@ -151,15 +151,6 @@ Widgets.Pane {
             onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputKnob)
             ToolTip.text: qsTr("Rotary input for setpoints")
             icon.source: "qrc:/rcc/icons/project-editor/actions/output-knob.svg"
-          } Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Ramp")
-            Layout.alignment: Qt.AlignVCenter
-            checked: Cpp_JSON_ProjectEditor.outputWidgetType === SerialStudio.OutputRampGenerator
-            onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputRampGenerator)
-            ToolTip.text: qsTr("Generate timed value sweeps")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/output-ramp.svg"
           }
 
           //

@@ -55,7 +55,6 @@ Widgets::Output::Panel::Panel(int index, QQuickItem* parent) : QQuickItem(parent
         break;
       case DataModel::OutputWidgetType::Slider:
       case DataModel::OutputWidgetType::Knob:
-      case DataModel::OutputWidgetType::RampGenerator:
         model = new Slider(ow, this);
         break;
       case DataModel::OutputWidgetType::Toggle:

@@ -56,6 +56,8 @@ UI::Dashboard::Dashboard()
   , m_showActionPanel(true)
   , m_terminalEnabled(false)
   , m_terminalWidgetId(kInvalidWidgetId)
+  , m_notificationLogEnabled(false)
+  , m_notificationLogWidgetId(kInvalidWidgetId)
   , m_autoHideToolbar(false)
   , m_showTaskbarButtons(false)
   , m_updateRetryInProgress(false)
@@ -132,6 +134,8 @@ UI::Dashboard::Dashboard()
   m_autoHideToolbar    = m_settings.value("Dashboard/AutoHideToolbar", false).toBool();
   m_showActionPanel    = m_settings.value("Dashboard/ShowActionPanel", true).toBool();
   m_showTaskbarButtons = m_settings.value("Dashboard/ShowTaskbarButtons", false).toBool();
+  m_terminalEnabled    = m_settings.value("Dashboard/TerminalEnabled", false).toBool();
+  m_notificationLogEnabled = m_settings.value("Dashboard/NotificationLogEnabled", false).toBool();
 }
 
 /**
@@ -153,7 +157,19 @@ UI::Dashboard& UI::Dashboard::instance()
  */
 bool UI::Dashboard::available() const
 {
-  return totalWidgetCount() > 0 && streamAvailable();
+  if (!streamAvailable())
+    return false;
+
+  if (totalWidgetCount() > 0)
+    return true;
+
+#ifdef BUILD_COMMERCIAL
+  // Promote an empty project to the dashboard when NotificationLog is the only widget
+  if (m_notificationLogEnabled)
+    return true;
+#endif
+
+  return false;
 }
 
 /**
@@ -203,6 +219,14 @@ bool UI::Dashboard::streamAvailable() const
 bool UI::Dashboard::terminalEnabled() const noexcept
 {
   return m_terminalEnabled;
+}
+
+/**
+ * @brief Returns true if the notification log widget should be displayed within the dashboard.
+ */
+bool UI::Dashboard::notificationLogEnabled() const noexcept
+{
+  return m_notificationLogEnabled;
 }
 
 /**
@@ -631,6 +655,9 @@ void UI::Dashboard::resetData(const bool notify)
 
   // Reset terminal widget ID
   m_terminalWidgetId = kInvalidWidgetId;
+#ifdef BUILD_COMMERCIAL
+  m_notificationLogWidgetId = kInvalidWidgetId;
+#endif
 
   // Clear plotting data
   m_fftValues.clear();
@@ -797,6 +824,7 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
     return;
 
   m_terminalEnabled = enabled;
+  m_settings.setValue("Dashboard/TerminalEnabled", m_terminalEnabled);
 
   // Use incremental update if we have an active dashboard with widgets
   if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
@@ -822,6 +850,88 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
 
   Q_EMIT widgetCountChanged();
   Q_EMIT terminalEnabledChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Notification log widget (Pro-only)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Removes the notification log widget from the registry and internal structures.
+ */
+void UI::Dashboard::removeNotificationLogWidget()
+{
+#ifdef BUILD_COMMERCIAL
+  auto& registry = WidgetRegistry::instance();
+
+  if (m_notificationLogWidgetId != kInvalidWidgetId) {
+    registry.destroyWidget(m_notificationLogWidgetId);
+    m_notificationLogWidgetId = kInvalidWidgetId;
+  }
+
+  m_widgetGroups.remove(SerialStudio::DashboardNotificationLog);
+
+  auto& groups = m_lastFrame.groups;
+  groups.erase(
+    std::remove_if(groups.begin(),
+                   groups.end(),
+                   [](const DataModel::Group& g) { return g.widget == "notification-log"; }),
+    groups.end());
+
+  // Rebuild contiguous widget map from remaining widgets
+  m_widgetMap.clear();
+  m_widgetCount = 0;
+  for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+  }
+  for (auto i = m_widgetDatasets.begin(); i != m_widgetDatasets.end(); ++i) {
+    const auto count = widgetCount(i.key());
+    for (int j = 0; j < count; ++j)
+      m_widgetMap.insert(m_widgetCount++, qMakePair(i.key(), j));
+  }
+#endif
+}
+
+/**
+ * @brief Enables or disables the notification log widget.
+ */
+void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
+{
+  if (m_notificationLogEnabled == enabled)
+    return;
+
+  m_notificationLogEnabled = enabled;
+  m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
+
+#ifdef BUILD_COMMERCIAL
+  // Unlike Terminal, NotificationLog can be the only widget — only a live source frame is required
+  if (!m_sourceRawFrames.isEmpty()) {
+    auto& registry = WidgetRegistry::instance();
+    if (enabled) {
+      DataModel::Group notif;
+      notif.widget  = "notification-log";
+      notif.title   = tr("Notifications");
+      notif.groupId = static_cast<int>(m_lastFrame.groups.size());
+
+      m_lastFrame.groups.push_back(notif);
+      m_widgetGroups[SerialStudio::DashboardNotificationLog].append(notif);
+
+      m_notificationLogWidgetId = registry.createWidget(
+        SerialStudio::DashboardNotificationLog, notif.title, notif.groupId, -1, true);
+      m_widgetMap.insert(m_widgetCount++, qMakePair(SerialStudio::DashboardNotificationLog, 0));
+    } else {
+      removeNotificationLogWidget();
+    }
+  }
+#endif
+
+  Q_EMIT widgetCountChanged();
+  Q_EMIT notificationLogEnabledChanged();
+
+  // Re-evaluate Setup → Dashboard transition in MainWindow
+  Q_EMIT updated();
 }
 
 /**
@@ -1162,6 +1272,18 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
     m_lastFrame.groups.push_back(terminal);
   }
 
+#ifdef BUILD_COMMERCIAL
+  // Add notification log group
+  if (m_notificationLogEnabled) {
+    DataModel::Group notif;
+    notif.widget  = "notification-log";
+    notif.title   = tr("Notifications");
+    notif.groupId = m_lastFrame.groups.size();
+
+    m_lastFrame.groups.push_back(notif);
+  }
+#endif
+
   // Build widget type -> group lists from the frame
   buildWidgetGroups(frame, pro);
 
@@ -1251,6 +1373,9 @@ void UI::Dashboard::registerWidgets()
 
   // Prepare for fresh widget registration
   m_terminalWidgetId = kInvalidWidgetId;
+#ifdef BUILD_COMMERCIAL
+  m_notificationLogWidgetId = kInvalidWidgetId;
+#endif
 
   // Register group-level widgets
   for (auto i = m_widgetGroups.begin(); i != m_widgetGroups.end(); ++i) {
@@ -1263,6 +1388,12 @@ void UI::Dashboard::registerWidgets()
       // Store terminal widget ID for incremental updates
       if (key == SerialStudio::DashboardTerminal)
         m_terminalWidgetId = widgetId;
+
+#ifdef BUILD_COMMERCIAL
+      // Store notification log widget ID for incremental updates
+      if (key == SerialStudio::DashboardNotificationLog)
+        m_notificationLogWidgetId = widgetId;
+#endif
 
       m_widgetMap.insert(m_widgetCount++, qMakePair(key, j));
     }

@@ -278,17 +278,6 @@ Widgets.Pane {
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-knob.svg"
           }
 
-          Widgets.ToolbarButton {
-            iconSize: 24
-            toolbarButton: false
-            text: qsTr("Ramp")
-            Layout.alignment: Qt.AlignVCenter
-            visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
-            onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputRampGenerator)
-            ToolTip.text: qsTr("Add a ramp generator for timed value sweeps")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/add-output-ramp.svg"
-          }
-
           //
           // Spacer
           //

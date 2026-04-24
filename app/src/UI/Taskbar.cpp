@@ -128,6 +128,12 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
           this,
           &UI::Taskbar::onTerminalToggled);
 
+  // Handle notification-log toggle incrementally (Pro-only, no-op in GPL)
+  connect(&UI::Dashboard::instance(),
+          &UI::Dashboard::notificationLogEnabledChanged,
+          this,
+          &UI::Taskbar::onNotificationLogToggled);
+
   // Sync active group selection with the project model
   auto* pm = &DataModel::ProjectModel::instance();
   connect(pm, &DataModel::ProjectModel::activeGroupIdChanged, this, [this, pm] {
@@ -433,6 +439,22 @@ void UI::Taskbar::setActiveGroupId(int groupId)
     }
   }
 
+#ifdef BUILD_COMMERCIAL
+  // Add notification-log widget next (global, not tied to any dataset group)
+  for (int i = 0; i < fullModel()->rowCount(); ++i) {
+    auto groupItem = fullModel()->item(i);
+    if (groupItem) {
+      const auto type = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
+      if (type == SerialStudio::DashboardNotificationLog) {
+        auto g = groupItem->clone();
+        setWindowState(g->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
+        m_taskbarButtons->appendRow(g);
+        break;
+      }
+    }
+  }
+#endif
+
   // User-defined workspace: populate from workspace's widgetRefs
   if (groupId >= 1000) {
     const auto& workspaces = DataModel::ProjectModel::instance().workspaces();
@@ -479,6 +501,12 @@ void UI::Taskbar::setActiveGroupId(int groupId)
       auto type = groupItem->data(TaskbarModel::WidgetTypeRole).toInt();
       if (type == SerialStudio::DashboardTerminal)
         continue;
+
+#ifdef BUILD_COMMERCIAL
+      // Skip notification log (already added above)
+      if (type == SerialStudio::DashboardNotificationLog)
+        continue;
+#endif
 
       // Filter by group ID when viewing a specific group
       if (groupId > -1) {
@@ -1258,6 +1286,116 @@ void UI::Taskbar::onTerminalToggled()
   Q_EMIT taskbarButtonsChanged();
   Q_EMIT windowStatesChanged();
   Q_EMIT searchResultsChanged();
+}
+
+/**
+ * @brief Incrementally adds or removes the notification-log widget from the models.
+ */
+void UI::Taskbar::onNotificationLogToggled()
+{
+#ifdef BUILD_COMMERCIAL
+  auto& db       = UI::Dashboard::instance();
+  const bool on  = db.notificationLogEnabled();
+  const auto& wm = db.widgetMap();
+
+  if (on) {
+    // Skip if already present
+    for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+      auto* item = m_fullModel->item(i);
+      if (item
+          && item->data(TaskbarModel::WidgetTypeRole).toInt()
+               == static_cast<int>(SerialStudio::DashboardNotificationLog))
+        return;
+    }
+
+    // Locate the widget map entry created by Dashboard::setNotificationLogEnabled
+    int logWindowId = -1;
+    for (auto it = wm.begin(); it != wm.end(); ++it) {
+      if (it.value().first == SerialStudio::DashboardNotificationLog) {
+        logWindowId = it.key();
+        break;
+      }
+    }
+
+    if (logWindowId < 0)
+      return;
+
+    // Resolve the synthetic group that Dashboard injected
+    const auto& frame = db.processedFrame();
+    int logGroupId    = -1;
+    QString logTitle;
+    for (const auto& g : frame.groups) {
+      if (g.widget == QStringLiteral("notification-log")) {
+        logGroupId = g.groupId;
+        logTitle   = g.title;
+        break;
+      }
+    }
+
+    // Build a row for the full model
+    auto icon = SerialStudio::dashboardWidgetIcon(SerialStudio::DashboardNotificationLog, true);
+    auto* groupItem = new QStandardItem();
+    groupItem->setData(logGroupId, TaskbarModel::GroupIdRole);
+    groupItem->setData(logTitle, TaskbarModel::GroupNameRole);
+    groupItem->setData(logTitle, TaskbarModel::WidgetNameRole);
+    groupItem->setData(static_cast<int>(SerialStudio::DashboardNotificationLog),
+                       TaskbarModel::WidgetTypeRole);
+    groupItem->setData(icon, TaskbarModel::WidgetIconRole);
+    groupItem->setData(logWindowId, TaskbarModel::WindowIdRole);
+    groupItem->setData(true, TaskbarModel::IsGroupRole);
+    groupItem->setData(true, TaskbarModel::OverviewRole);
+    groupItem->setData(static_cast<int>(TaskbarModel::WindowNormal), TaskbarModel::WindowStateRole);
+
+    // Place after Terminal (if present) so Terminal stays first
+    int insertRow = 0;
+    if (m_fullModel->rowCount() > 0) {
+      auto* first = m_fullModel->item(0);
+      if (first
+          && first->data(TaskbarModel::WidgetTypeRole).toInt()
+               == static_cast<int>(SerialStudio::DashboardTerminal))
+        insertRow = 1;
+    }
+    m_fullModel->insertRow(insertRow, groupItem);
+
+    // Mirror into taskbarButtons
+    auto* tbItem = groupItem->clone();
+    setWindowState(tbItem->data(TaskbarModel::WindowIdRole).toInt(), TaskbarModel::WindowNormal);
+    m_taskbarButtons->insertRow(insertRow, tbItem);
+  }
+
+  else {
+    // Remove from fullModel
+    for (int i = 0; i < m_fullModel->rowCount(); ++i) {
+      auto* item = m_fullModel->item(i);
+      if (item
+          && item->data(TaskbarModel::WidgetTypeRole).toInt()
+               == static_cast<int>(SerialStudio::DashboardNotificationLog)) {
+        m_fullModel->removeRow(i);
+        break;
+      }
+    }
+
+    // Remove from taskbarButtons and unregister window
+    for (int i = 0; i < m_taskbarButtons->rowCount(); ++i) {
+      auto* item = m_taskbarButtons->item(i);
+      if (item
+          && item->data(TaskbarModel::WidgetTypeRole).toInt()
+               == static_cast<int>(SerialStudio::DashboardNotificationLog)) {
+        const int wid = item->data(TaskbarModel::WindowIdRole).toInt();
+        auto* window  = windowData(wid);
+        if (window)
+          unregisterWindow(window);
+
+        m_taskbarButtons->removeRow(i);
+        break;
+      }
+    }
+  }
+
+  Q_EMIT taskbarButtonsChanged();
+  Q_EMIT windowStatesChanged();
+  Q_EMIT searchResultsChanged();
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
