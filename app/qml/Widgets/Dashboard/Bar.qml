@@ -94,8 +94,8 @@ Item {
     anchors.fill: parent
 
     Item {
-      Layout.fillHeight: true
       Layout.fillWidth: true
+      Layout.fillHeight: true
     }
 
     //
@@ -168,8 +168,8 @@ Item {
               width: 1
               anchors.top: parent.top
               anchors.left: parent.left
-              anchors.bottom: parent.bottom
               color: Qt.rgba(1, 1, 1, 0.3)
+              anchors.bottom: parent.bottom
             }
           }
         }
@@ -356,8 +356,8 @@ Item {
     }
 
     Item {
-      Layout.fillHeight: true
       Layout.fillWidth: true
+      Layout.fillHeight: true
     }
 
     //
@@ -372,8 +372,8 @@ Item {
       maxValue: model.maxValue
       minValue: model.minValue
       alarm: model.alarmTriggered
-      Layout.minimumWidth: implicitWidth
       Layout.alignment: Qt.AlignHCenter
+      Layout.minimumWidth: implicitWidth
       maximumWidth: Math.min(root.width * 0.8, 200)
     }
 

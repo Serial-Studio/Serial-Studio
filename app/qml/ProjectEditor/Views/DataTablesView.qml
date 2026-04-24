@@ -131,22 +131,22 @@ Widgets.Pane {
 
           spacing: 16
           anchors {
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
             leftMargin: 14
             rightMargin: 14
+            left: parent.left
+            right: parent.right
             topMargin: banner.topPad
             bottomMargin: banner.bottomPad
+            verticalCenter: parent.verticalCenter
           }
 
           Image {
             Layout.preferredWidth: 56
             Layout.preferredHeight: 56
+            sourceSize: Qt.size(56, 56)
             Layout.alignment: Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
             source: "qrc:/rcc/icons/project-editor/summary/shared-memory.svg"
-            sourceSize: Qt.size(56, 56)
           }
 
           ColumnLayout {
@@ -194,18 +194,18 @@ Widgets.Pane {
 
           clip: true
           contentHeight: height
-          boundsBehavior: Flickable.StopAtBounds
-          contentWidth: toolbarLayout.implicitWidth + 16
-          flickableDirection: Flickable.HorizontalFlick
           height: toolbarLayout.implicitHeight
+          boundsBehavior: Flickable.StopAtBounds
+          flickableDirection: Flickable.HorizontalFlick
+          contentWidth: toolbarLayout.implicitWidth + 16
 
           anchors {
             margins: 8
+            topMargin: 0
+            bottomMargin: 0
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            topMargin: 0
-            bottomMargin: 0
           }
 
           ScrollBar.horizontal: ScrollBar {
@@ -218,8 +218,8 @@ Widgets.Pane {
             id: toolbarLayout
 
             spacing: 4
-            width: Math.max(implicitWidth, toolbarFlick.width)
             anchors.verticalCenter: parent.verticalCenter
+            width: Math.max(implicitWidth, toolbarFlick.width)
 
             Widgets.ToolbarButton {
               iconSize: 24
@@ -258,10 +258,10 @@ Widgets.Pane {
 
         clip: true
         spacing: 0
+        interactive: true
+        model: root.summary
         Layout.fillWidth: true
         Layout.fillHeight: true
-        model: root.summary
-        interactive: true
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -273,8 +273,8 @@ Widgets.Pane {
 
             MouseArea {
               id: rowMouse
-              anchors.fill: parent
               hoverEnabled: true
+              anchors.fill: parent
               cursorShape: modelData.isSystem ? Qt.ArrowCursor : Qt.PointingHandCursor
               onClicked: {
                 if (!modelData.isSystem)
@@ -287,12 +287,12 @@ Widgets.Pane {
               anchors.fill: parent
 
               Label {
+                leftPadding: 8
+                text: modelData.name
+                elide: Text.ElideRight
+                color: rowDel.textColor
                 Layout.preferredWidth: 220
                 Layout.alignment: Qt.AlignVCenter
-                leftPadding: 8
-                elide: Text.ElideRight
-                text: modelData.name
-                color: rowDel.textColor
                 font: Cpp_Misc_CommonFonts.monoFont
               }
 
@@ -303,13 +303,13 @@ Widgets.Pane {
               }
 
               Label {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
-                leftPadding: 8
-                elide: Text.ElideRight
                 opacity: 0.75
-                text: modelData.description
+                leftPadding: 8
+                Layout.fillWidth: true
+                elide: Text.ElideRight
                 color: rowDel.textColor
+                text: modelData.description
+                Layout.alignment: Qt.AlignVCenter
               }
 
               Rectangle {
@@ -319,13 +319,13 @@ Widgets.Pane {
               }
 
               Label {
-                Layout.preferredWidth: 100
-                Layout.alignment: Qt.AlignVCenter
                 rightPadding: 8
-                horizontalAlignment: Text.AlignRight
-                text: modelData.entryCount
-                font: Cpp_Misc_CommonFonts.monoFont
                 color: rowDel.textColor
+                Layout.preferredWidth: 100
+                text: modelData.entryCount
+                Layout.alignment: Qt.AlignVCenter
+                font: Cpp_Misc_CommonFonts.monoFont
+                horizontalAlignment: Text.AlignRight
               }
             }
           }
@@ -334,8 +334,8 @@ Widgets.Pane {
           // Empty state (still shown alongside system table row)
           //
           footer: Item {
-            width: ListView.view ? ListView.view.width : 0
             height: 40
+            width: ListView.view ? ListView.view.width : 0
 
             Label {
               anchors.centerIn: parent

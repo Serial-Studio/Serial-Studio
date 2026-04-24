@@ -85,9 +85,9 @@ Widgets.SmartDialog {
       }
 
       TabButton {
+        height: _tab.height + 3
         text: qsTr("Notifications")
         visible: Cpp_CommercialBuild
-        height: _tab.height + 3
         width: visible ? implicitWidth + 2 * 8 : 0
       }
     }
@@ -134,8 +134,8 @@ Widgets.SmartDialog {
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
-          anchors.fill: parent
           anchors.margins: 8
+          anchors.fill: parent
 
           Item {
             implicitHeight: 2
@@ -328,11 +328,11 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Export Protobuf File")
           } Button {
+            text: qsTr("Export...")
             visible: Cpp_GrpcAvailable
             opacity: enabled ? 1 : 0.5
             enabled: _apiServer.checked
             Layout.alignment: Qt.AlignRight
-            text: qsTr("Export...")
             onClicked: _protoFileDialog.open()
           }
 
@@ -365,8 +365,8 @@ Widgets.SmartDialog {
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
-          anchors.fill: parent
           anchors.margins: 8
+          anchors.fill: parent
 
           Item {
             implicitHeight: 2
@@ -502,8 +502,8 @@ Widgets.SmartDialog {
             SpinBox {
               id: _widgetFontCustom
 
-              from: 50
               to: 300
+              from: 50
               editable: true
               visible: _widgetSizePreset.currentIndex === 4
               value: Math.round(Cpp_Misc_CommonFonts.widgetFontScale * 100)
@@ -640,8 +640,8 @@ Widgets.SmartDialog {
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
-          anchors.fill: parent
           anchors.margins: 8
+          anchors.fill: parent
 
           Item {
             implicitHeight: 2
@@ -697,8 +697,8 @@ Widgets.SmartDialog {
           } SpinBox {
             id: _consoleFontSize
 
-            from: 6
             to: 72
+            from: 6
             editable: true
             Layout.fillWidth: true
             value: Cpp_Console_Handler.fontSize
@@ -895,9 +895,9 @@ Widgets.SmartDialog {
           columns: 2
           rowSpacing: 4
           columnSpacing: 8
-          visible: Cpp_CommercialBuild
-          anchors.fill: parent
           anchors.margins: 8
+          anchors.fill: parent
+          visible: Cpp_CommercialBuild
 
           Item {
             implicitHeight: 2
@@ -1046,8 +1046,8 @@ Widgets.SmartDialog {
       Button {
         icon.width: 18
         icon.height: 18
-        horizontalPadding: 8
         text: qsTr("Close")
+        horizontalPadding: 8
         onClicked: root.hide()
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -1057,8 +1057,8 @@ Widgets.SmartDialog {
       Button {
         icon.width: 18
         icon.height: 18
-        horizontalPadding: 8
         text: qsTr("Apply")
+        horizontalPadding: 8
         onClicked: root.hide()
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]

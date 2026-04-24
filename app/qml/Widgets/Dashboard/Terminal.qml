@@ -77,8 +77,8 @@ Item {
   // Expose the live terminal dimensions (columns/rows) so parent items can
   // react to resize events and update the PTY size accordingly.
   //
-  readonly property int terminalColumns: terminal.terminalColumns
   readonly property int terminalRows: terminal.terminalRows
+  readonly property int terminalColumns: terminal.terminalColumns
 
   //
   // Function to send through serial port data
@@ -234,9 +234,9 @@ Item {
       ComboBox {
         id: deviceCombo
 
-        visible: Cpp_Console_Handler.multiDeviceMode
         Layout.alignment: Qt.AlignVCenter
         model: Cpp_Console_Handler.deviceNames
+        visible: Cpp_Console_Handler.multiDeviceMode
         onCurrentIndexChanged: {
           if (visible)
             Cpp_Console_Handler.setCurrentDeviceIndex(currentIndex)

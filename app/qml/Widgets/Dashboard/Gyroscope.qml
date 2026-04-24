@@ -93,9 +93,9 @@ Item {
       clip: true
       anchors.fill: parent
 
-      readonly property real instrumentHeight: height - (angles.visible ? angles.height + 4 : 0)
       readonly property real pixelsPerDegree: instrumentHeight / 90
       readonly property real dialSize: Math.min(width, instrumentHeight)
+      readonly property real instrumentHeight: height - (angles.visible ? angles.height + 4 : 0)
 
         //
         // Moving sky + ground + pitch marks (transforms with pitch/roll)
@@ -159,9 +159,9 @@ Item {
 
               required property int index
 
-              readonly property real pitch: root.maxPitch - (index * root.pitchStep)
-              readonly property bool majorMark: Math.abs(pitch % 10) < 0.001
               readonly property bool horizonMark: Math.abs(pitch) < 0.001
+              readonly property bool majorMark: Math.abs(pitch % 10) < 0.001
+              readonly property real pitch: root.maxPitch - (index * root.pitchStep)
 
               width: movingLayer.width
               height: majorMark ? 24 : 16
@@ -241,8 +241,8 @@ Item {
           blurMax: 64
           brightness: 0.6
           saturation: 0.1
-          blurEnabled: true
           source: rollDial
+          blurEnabled: true
           anchors.fill: rollDial
         }
 

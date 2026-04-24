@@ -51,9 +51,9 @@ Item {
       id: _protocolCombo
 
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.protocolList
-      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.protocolIndex
       onCurrentIndexChanged: {
         if (enabled) {
@@ -75,9 +75,9 @@ Item {
       id: _serialPortCombo
 
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.serialPortList
-      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
       currentIndex: Cpp_IO_Modbus.serialPortIndex
       onCurrentIndexChanged: {
@@ -101,9 +101,9 @@ Item {
 
       editable: true
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.baudRateList
-      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 0
 
       property bool _initializing: true
@@ -202,9 +202,9 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.parityList
-      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.parityIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
@@ -225,9 +225,9 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.dataBitsList
-      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.dataBitsIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
@@ -248,9 +248,9 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Modbus.stopBitsList
-      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Modbus.stopBitsIndex
       visible: Cpp_IO_Modbus.protocolIndex === 0
       onCurrentIndexChanged: {
@@ -273,9 +273,9 @@ Item {
       id: _hostField
 
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       placeholderText: qsTr("IP Address")
-      enabled: app.ioEnabled
       visible: Cpp_IO_Modbus.protocolIndex === 1
       Component.onCompleted: text = Cpp_IO_Modbus.host
 

@@ -44,8 +44,8 @@ Popup {
   property string valueRole: "id"
   property string iconRole: "icon"
   property string textRole: "text"
-  property string checkedRole: "checked"
   property bool showCheckable: false
+  property string checkedRole: "checked"
   property alias placeholderText: _placeholder.text
   property alias currentIndex: _listView.currentIndex
 
@@ -101,8 +101,8 @@ Popup {
       readonly property bool isSeparator: modelData[root.valueRole] === "__separator__"
                                         || modelData["separator"] === true
 
-      height: isSeparator ? 9 : 24
       width: root.width - 16
+      height: isSeparator ? 9 : 24
 
       //
       // Separator line
@@ -129,8 +129,8 @@ Popup {
         id: _layout
 
         spacing: 0
-        visible: !isSeparator
         anchors.fill: parent
+        visible: !isSeparator
 
         Component.onCompleted: {
           if (implicitWidth > root.width - 16)
@@ -180,8 +180,8 @@ Popup {
         id: _mouseArea
 
         hoverEnabled: true
-        enabled: !isSeparator
         anchors.fill: parent
+        enabled: !isSeparator
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: (mouse) => {
           if (mouse.button === Qt.RightButton) {

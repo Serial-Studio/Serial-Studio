@@ -208,15 +208,15 @@ Item {
 
           clip: true
           spacing: 2
-          implicitHeight: Math.min(contentHeight, 300)
           model: taskBar.searchResults
           boundsBehavior: Flickable.StopAtBounds
+          implicitHeight: Math.min(contentHeight, 300)
 
           delegate: Item {
             id: searchDelegate
 
-            width: searchResultsList.width
             height: 28
+            width: searchResultsList.width
 
             property bool hovered: _searchMa.containsMouse
 
@@ -333,8 +333,8 @@ Item {
       property bool showNavButtons: buttonsView.contentWidth > buttonsView.width
 
       RowLayout {
-        anchors.fill: parent
         spacing: 4
+        anchors.fill: parent
 
         Button {
           icon.width: 24
@@ -462,18 +462,18 @@ Item {
 
       popup.enter: Transition {
         NumberAnimation {
-          property: "opacity"
-          from: 0; to: 1
           duration: 150
+          from: 0; to: 1
+          property: "opacity"
           easing.type: Easing.OutCubic
         }
       }
 
       popup.exit: Transition {
         NumberAnimation {
-          property: "opacity"
-          from: 1; to: 0
           duration: 100
+          from: 1; to: 0
+          property: "opacity"
           easing.type: Easing.InCubic
         }
       }

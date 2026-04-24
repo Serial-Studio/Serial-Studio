@@ -27,8 +27,8 @@ RowLayout {
   //
   // Collapse configuration
   //
-  property bool collapsible: false
   property bool collapsed: false
+  property bool collapsible: false
   property string collapsedIcon: ""
   property string collapsedText: ""
 
@@ -70,8 +70,8 @@ RowLayout {
   AbstractButton {
     id: collapsedBtn
 
-    visible: root.collapsed && root.collapsible
     Layout.alignment: Qt.AlignVCenter
+    visible: root.collapsed && root.collapsible
     implicitWidth: collapsedCol.implicitWidth + 16
     implicitHeight: collapsedCol.implicitHeight + 8
     onClicked: sectionPopup.open()
@@ -128,10 +128,10 @@ RowLayout {
   Popup {
     id: sectionPopup
 
-    x: collapsedBtn.x
-    y: root.height
     padding: 8
     modal: false
+    y: root.height
+    x: collapsedBtn.x
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
     background: Item {
@@ -146,11 +146,11 @@ RowLayout {
 
         layer.enabled: true
         layer.effect: MultiEffect {
-          shadowEnabled: true
-          shadowColor: Qt.rgba(0, 0, 0, 0.35)
           shadowBlur: 0.5
+          shadowEnabled: true
           shadowVerticalOffset: 4
           shadowHorizontalOffset: 1
+          shadowColor: Qt.rgba(0, 0, 0, 0.35)
         }
       }
 

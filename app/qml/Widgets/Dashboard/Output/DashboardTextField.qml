@@ -22,8 +22,8 @@ Item {
 
   ColumnLayout {
     spacing: 8
-    anchors.fill: parent
     anchors.margins: 16
+    anchors.fill: parent
 
     Item { Layout.fillHeight: true }
 
@@ -41,9 +41,9 @@ Item {
       TextField {
         id: input
 
-        placeholderText: qsTr("Enter command...")
-        font: Cpp_Misc_CommonFonts.monoFont
         Layout.fillWidth: true
+        font: Cpp_Misc_CommonFonts.monoFont
+        placeholderText: qsTr("Enter command...")
 
         palette.highlight: root.color
 
@@ -68,11 +68,11 @@ Item {
     }
 
     Label {
-      visible: root.model && !root.model.hasTransmitFunction
-      text: qsTr("No transmit function defined")
       color: "#ff6666"
       font: Cpp_Misc_CommonFonts.uiFont
       Layout.alignment: Qt.AlignHCenter
+      text: qsTr("No transmit function defined")
+      visible: root.model && !root.model.hasTransmitFunction
     }
 
     Item { Layout.fillHeight: true }

@@ -103,7 +103,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>Zarządzaj Licencją</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>Donate</source>
         <translation>Przekaż darowiznę</translation>
     </message>
@@ -128,7 +128,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>Podziękowania</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="242"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Website</source>
         <translation>Strona internetowa</translation>
     </message>
@@ -259,12 +259,12 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="42"/>
         <source>Add Widget</source>
         <translation>Dodaj Widżet</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="210"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="209"/>
         <source>Available Widgets</source>
         <translation>Dostępne Widżety</translation>
     </message>
@@ -329,7 +329,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>%1 z %2 widżetów</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="389"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
@@ -923,7 +923,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="42"/>
         <source>Insert Constant</source>
         <translation>Wstaw Stałą</translation>
     </message>
@@ -1106,7 +1106,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>Złoty podział</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="208"/>
         <source>Physics Constants</source>
         <translation>Stałe Fizyczne</translation>
     </message>
@@ -1141,7 +1141,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>Kategoria</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="352"/>
         <source>No constants match.</source>
         <translation>Brak pasujących stałych.</translation>
     </message>
@@ -1156,7 +1156,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>%1 z %2 stałych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="380"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
@@ -1164,7 +1164,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 <context>
     <name>CsvPlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="34"/>
+        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
         <translation>Odtwarzacz CSV</translation>
     </message>
@@ -1264,7 +1264,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>Wyślij</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="62"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
         <translation>Nie zdefiniowano funkcji transmisji</translation>
     </message>
@@ -1344,7 +1344,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>Wyślij</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="261"/>
         <source>Enter command...</source>
         <translation>Wprowadź polecenie...</translation>
     </message>
@@ -1380,7 +1380,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 <context>
     <name>DashboardSlider</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
         <source>No transmit function defined</source>
         <translation>Nie zdefiniowano funkcji transmisji</translation>
     </message>
@@ -1388,7 +1388,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="44"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="46"/>
         <source>Enter command...</source>
         <translation>Wpisz polecenie...</translation>
     </message>
@@ -1398,7 +1398,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>Wyślij</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="72"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="74"/>
         <source>No transmit function defined</source>
         <translation>Nie zdefiniowano funkcji transmisji</translation>
     </message>
@@ -1416,7 +1416,7 @@ Włączaj tylko w zaufanych sieciach. Niezaufani klienci mogą odczytywać dane 
         <translation>WYŁĄCZ</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="68"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
         <source>No transmit function defined</source>
         <translation>Nie zdefiniowano funkcji transmisji</translation>
     </message>
@@ -4512,7 +4512,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="198"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="199"/>
         <source>Close session file</source>
         <translation>Zamknij plik sesji</translation>
     </message>
@@ -4619,7 +4619,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Wskaźnik</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="208"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>Przełącz widżet wskaźnika dla wyświetlania analogowego</translation>
     </message>
@@ -4639,7 +4639,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="246"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Przełącz wskaźnik LED dla wartości binarnych lub progowych</translation>
     </message>
@@ -5050,17 +5050,17 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Uruchomiony</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Update</source>
         <translation>Aktualizuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Installed</source>
         <translation>Zainstalowano</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="696"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="697"/>
         <source>Unavailable</source>
         <translation>Niedostępne</translation>
     </message>
@@ -5239,12 +5239,12 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Transmisja Pliku</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="93"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="94"/>
         <source>Transfer Protocol:</source>
         <translation>Protokół Transferu:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="126"/>
         <source>File Selection:</source>
         <translation>Wybór Pliku:</translation>
     </message>
@@ -5254,7 +5254,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Wybierz Plik...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="160"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="161"/>
         <source>Transmission Interval:</source>
         <translation>Interwał Transmisji:</translation>
     </message>
@@ -5300,7 +5300,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Błędy: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="447"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="448"/>
         <source>Activity Log</source>
         <translation>Dziennik Aktywności</translation>
     </message>
@@ -5604,7 +5604,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Wskaźnik</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="195"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>Dodaj widget wskaźnika do wizualizacji analogowej</translation>
     </message>
@@ -5669,7 +5669,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Dodaj pole tekstowe do wpisywania i wysyłania komend</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="272"/>
         <source>Knob</source>
         <translation>Pokrętło</translation>
     </message>
@@ -5784,7 +5784,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="31"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
         <translation>Centrum Pomocy</translation>
     </message>
@@ -7569,7 +7569,7 @@ Urządzenie może nie udostępniać punktów końcowych danych w swojej aktywnej
         <translation>Bursztyn</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="175"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="174"/>
         <source>Export Images</source>
         <translation>Eksportuj Obrazy</translation>
     </message>
@@ -7594,7 +7594,7 @@ Urządzenie może nie udostępniać punktów końcowych danych w swojej aktywnej
         <translation>Pokaż Celownik</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="540"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="541"/>
         <source>Waiting for Image...</source>
         <translation>Oczekiwanie na Obraz...</translation>
     </message>
@@ -9016,7 +9016,7 @@ Przykład (HEX):  48 65 6C 6C 6F</translation>
         <translation>Proszę czekać...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="117"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Aktywuj Serial Studio Pro</translation>
     </message>
@@ -9669,17 +9669,17 @@ Proszę podać niezbędne dane uwierzytelniające.</translation>
         <translation>Ogólne</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="117"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="118"/>
         <source>Authentication</source>
         <translation>Uwierzytelnianie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="123"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="124"/>
         <source>MQTT Options</source>
         <translation>Opcje MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="129"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="130"/>
         <source>SSL Properties</source>
         <translation>Właściwości SSL</translation>
     </message>
@@ -10197,7 +10197,7 @@ Czy chcesz otworzyć stronę pobierania?</translation>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
         <translation>Adres IP</translation>
     </message>
@@ -10334,7 +10334,7 @@ Czy chcesz otworzyć stronę pobierania?</translation>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="299"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
@@ -10414,7 +10414,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="207"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
@@ -10424,7 +10424,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Adres</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="222"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
@@ -10507,7 +10507,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Ustawienia Zakresu Osi</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="292"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="293"/>
         <source>Samples</source>
         <translation>Próbki</translation>
     </message>
@@ -10669,7 +10669,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Wpisz i wyślij dowolne polecenia</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
         <source>Knob</source>
         <translation>Pokrętło</translation>
     </message>
@@ -10868,7 +10868,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Anaglif 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="304"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="305"/>
         <source>Invert Eye Positions</source>
         <translation>Odwróć Pozycje Oczu</translation>
     </message>
@@ -11000,7 +11000,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Argumenty</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="154"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="155"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 value1 --arg2 value2</translation>
     </message>
@@ -11020,7 +11020,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Ścieżka Rury</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="274"/>
         <source>Pick Running Process…</source>
         <translation>Wybierz Działający Proces…</translation>
     </message>
@@ -11073,7 +11073,7 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
@@ -11204,7 +11204,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj nowy panel sterowania wyjściem z przyciskiem</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="241"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="242"/>
         <source>Slider</source>
         <translation>Suwak</translation>
     </message>
@@ -11214,7 +11214,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj suwak sterowania wyjściem</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="251"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="252"/>
         <source>Toggle</source>
         <translation>Przełącznik</translation>
     </message>
@@ -11224,7 +11224,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj kontrolkę przełącznika wyjściowego</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="261"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="262"/>
         <source>Knob</source>
         <translation>Pokrętło</translation>
     </message>
@@ -11234,7 +11234,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj kontrolkę pokrętła wyjściowego</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
         <source>Text Field</source>
         <translation>Pole tekstowe</translation>
     </message>
@@ -11244,7 +11244,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj kontrolkę pola tekstowego wyjściowego</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="281"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Button</source>
         <translation>Przycisk</translation>
     </message>
@@ -11273,7 +11273,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj ogólny zbiór danych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="317"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="318"/>
         <source>Plot</source>
         <translation>Wykres</translation>
     </message>
@@ -11283,7 +11283,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj zbiór danych wykresu 2D</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="328"/>
         <source>FFT Plot</source>
         <translation>Wykres FFT</translation>
     </message>
@@ -11293,7 +11293,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj wykres szybkiej transformaty Fouriera</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="337"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Gauge</source>
         <translation>Wskaźnik</translation>
     </message>
@@ -11303,7 +11303,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj widżet miernika dla danych liczbowych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
         <source>Level Indicator</source>
         <translation>Wskaźnik Poziomu</translation>
     </message>
@@ -11313,7 +11313,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj pionowy wskaźnik poziomu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
@@ -11323,7 +11323,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj widżet kompasu dla danych kierunkowych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="369"/>
         <source>LED Indicator</source>
         <translation>Wskaźnik LED</translation>
     </message>
@@ -11364,7 +11364,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Podgląd Obrazu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="412"/>
         <source>Table</source>
         <translation>Tabela</translation>
     </message>
@@ -11379,7 +11379,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Siatka Danych</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="423"/>
         <source>Multi-Plot</source>
         <translation>Multi-Wykres</translation>
     </message>
@@ -11394,7 +11394,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Wiele Wykresów</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="431"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="432"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
         <source>3D Plot</source>
         <translation>Wykres 3D</translation>
@@ -11405,7 +11405,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj wizualizację wykresu 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="441"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="443"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="447"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
@@ -11416,7 +11416,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Dodaj grupę dla danych z 3-osiowego akcelerometru</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="453"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="456"/>
         <source>Gyroscope</source>
         <translation>Żyroskop</translation>
@@ -11431,7 +11431,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation type="vanished">Dodaj grupę dla danych żyroskopu 3-osiowego (prędkości kątowe są automatycznie integrowane w orientację)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="461"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="462"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="467"/>
         <source>GPS Map</source>
         <translation>Mapa GPS</translation>
@@ -11447,7 +11447,7 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
         <translation>Centrum Pomocy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="485"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="484"/>
         <source>Open the Project Editor documentation</source>
         <translation>Otwórz dokumentację Edytora Projektu</translation>
     </message>
@@ -11943,22 +11943,22 @@ Parametr separatora nie jest już potrzebny.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="277"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="278"/>
         <source>Session Report</source>
         <translation>Raport Sesji</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="183"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="181"/>
         <source>Branding</source>
         <translation>Branding</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="189"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
         <source>Page</source>
         <translation>Strona</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="195"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
         <source>Sections</source>
         <translation>Sekcje</translation>
     </message>
@@ -11973,7 +11973,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Firma</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="265"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="266"/>
         <source>e.g. Acme Test Systems</source>
         <translation>np. Acme Test Systems</translation>
     </message>
@@ -11988,7 +11988,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Prepared by (optional)</source>
         <translation>Przygotowane przez (opcjonalnie)</translation>
     </message>
@@ -12003,7 +12003,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Plik</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="320"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG lub SVG (opcjonalnie)</translation>
     </message>
@@ -12306,7 +12306,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Tagi</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="249"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="250"/>
         <source>New tag...</source>
         <translation>Nowy tag...</translation>
     </message>
@@ -12988,7 +12988,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Rodzina Czcionek</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="88"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="89"/>
         <source>Notifications</source>
         <translation>Powiadomienia</translation>
     </message>
@@ -12998,7 +12998,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Eksportuj plik Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="331"/>
         <source>Export...</source>
         <translation>Eksportuj...</translation>
     </message>
@@ -13109,12 +13109,12 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Resetuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1050"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1049"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1061"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1060"/>
         <source>Apply</source>
         <translation>Zastosuj</translation>
     </message>
@@ -13372,7 +13372,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Duplikuj</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="109"/>
         <source>Create a copy of this data source</source>
         <translation>Utwórz kopię tego źródła danych</translation>
     </message>
@@ -13460,7 +13460,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation type="vanished">Rejestrowanie Konsoli</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="535"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
         <source>Help Center</source>
         <translation>Centrum Pomocy</translation>
     </message>
@@ -13494,7 +13494,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Brak Dostępnych Przestrzeni Roboczych</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
         <source>Export</source>
         <translation>Eksportuj</translation>
     </message>
@@ -13524,12 +13524,12 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Brak Dostępnych Formatów Eksportu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
         <source>Console</source>
         <translation>Konsola</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="511"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
         <source>Notifications</source>
         <translation>Powiadomienia</translation>
     </message>
@@ -13751,7 +13751,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation type="vanished">Odtwarzacz CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Odtwórz plik CSV, jakby to były dane z czujników na żywo</translation>
     </message>
@@ -13770,7 +13770,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Preferencje</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="307"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Open application settings and preferences</source>
         <translation>Otwórz ustawienia aplikacji i preferencje</translation>
     </message>
@@ -13785,7 +13785,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Otwórz CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Open MDF4</source>
         <translation>Otwórz MDF4</translation>
     </message>
@@ -13853,7 +13853,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="333"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Wybierz komunikację portu szeregowego (UART)</translation>
     </message>
@@ -13873,7 +13873,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Wybierz surową komunikację USB (Pro)</translation>
     </message>
@@ -13883,7 +13883,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Sieć</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Wybierz komunikację sieciową TCP/UDP</translation>
     </message>
@@ -13902,7 +13902,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Wybierz komunikację z urządzeniem HID (Pro)</translation>
     </message>
@@ -13912,7 +13912,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Wybierz komunikację Bluetooth Low Energy</translation>
     </message>
@@ -13932,7 +13932,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Wybierz komunikację przez potok procesów (Pro)</translation>
     </message>
@@ -13942,7 +13942,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Przykłady</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>Browse example projects</source>
         <translation>Przeglądaj przykładowe projekty</translation>
     </message>
@@ -14020,7 +14020,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation type="vanished">CANBus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
         <source>Show application info and license details</source>
         <translation>Pokaż informacje o aplikacji i szczegóły licencji</translation>
     </message>
@@ -14217,7 +14217,7 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Maksymalny rozmiar pakietu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="299"/>
         <source>Control Transfers Enabled</source>
         <translation>Transfery kontrolne włączone</translation>
     </message>
@@ -14764,7 +14764,7 @@ Rozumiem, że gdy się skończy, będę musiał kupić licencję lub zbudować w
 <context>
     <name>WorkspacesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
         <source>Workspaces</source>
         <translation>Przestrzenie Robocze</translation>
     </message>

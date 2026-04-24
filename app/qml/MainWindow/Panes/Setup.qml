@@ -446,8 +446,8 @@ Widgets.Pane {
 
               spacing: 0
               anchors {
-                fill: parent
                 margins: 12
+                fill: parent
               }
 
               Image {

@@ -28,12 +28,12 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
-  property var plotWidget: null
-  property var dataModel: null
   property real customXMin: 0
   property real customXMax: 0
   property real customYMin: 0
   property real customYMax: 0
+  property var dataModel: null
+  property var plotWidget: null
   property bool hasCustomRanges: false
 
   staysOnTop: true

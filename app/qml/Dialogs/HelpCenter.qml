@@ -28,8 +28,8 @@ import "../Widgets"
 
 SmartDialog {
   id: root
-  title: qsTr("Help Center")
   fixedSize: false
+  title: qsTr("Help Center")
 
   //
   // Allow resizing and maximizing
@@ -149,9 +149,9 @@ SmartDialog {
       //
       ColumnLayout {
         spacing: 4
+        Layout.fillHeight: true
         Layout.minimumWidth: 220
         Layout.maximumWidth: 220
-        Layout.fillHeight: true
 
         //
         // Search bar
@@ -179,8 +179,8 @@ SmartDialog {
             id: sidebarList
 
             clip: true
-            anchors.fill: parent
             anchors.margins: 4
+            anchors.fill: parent
             model: Cpp_HelpCenter.pages
             currentIndex: Cpp_HelpCenter.currentIndex
 
@@ -203,9 +203,9 @@ SmartDialog {
             }
 
             delegate: Rectangle {
+              radius: 2
               width: sidebarList.width
               height: pageLabel.implicitHeight + 8
-              radius: 2
               color: {
                 if (index === Cpp_HelpCenter.currentIndex)
                   return Cpp_ThemeManager.colors["highlight"]
@@ -285,11 +285,11 @@ SmartDialog {
         WebEngineView {
           id: contentView
 
-          anchors.fill: parent
           anchors.margins: 2
-          visible: Cpp_HelpCenter.pageContent !== ""
+          anchors.fill: parent
           backgroundColor: "transparent"
           url: "qrc:/rcc/markdown-viewer.html"
+          visible: Cpp_HelpCenter.pageContent !== ""
           settings.localContentCanAccessRemoteUrls: true
 
           //

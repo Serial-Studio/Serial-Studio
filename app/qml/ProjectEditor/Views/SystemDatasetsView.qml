@@ -156,13 +156,13 @@ Widgets.Pane {
 
           spacing: 16
           anchors {
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
             leftMargin: 14
             rightMargin: 14
+            left: parent.left
+            right: parent.right
             topMargin: banner.topPad
             bottomMargin: banner.bottomPad
+            verticalCenter: parent.verticalCenter
           }
 
           Image {
@@ -227,11 +227,11 @@ Widgets.Pane {
           spacing: 8
           anchors {
             margins: 8
+            topMargin: 0
+            bottomMargin: 0
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            topMargin: 0
-            bottomMargin: 0
           }
 
           Widgets.SearchField {
@@ -289,12 +289,12 @@ Widgets.Pane {
             anchors.fill: parent
 
             Label {
-              Layout.preferredWidth: root.colIdWidth
-              Layout.alignment: Qt.AlignVCenter
               leftPadding: 8
               text: modelData.uniqueId
-              font: Cpp_Misc_CommonFonts.monoFont
               color: rowDelegate.textColor
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
+              Layout.preferredWidth: root.colIdWidth
             }
 
             Rectangle {
@@ -304,13 +304,13 @@ Widgets.Pane {
             }
 
             Label {
-              Layout.preferredWidth: root.colGroupWidth
-              Layout.alignment: Qt.AlignVCenter
               leftPadding: 8
               elide: Text.ElideRight
               text: modelData.groupTitle
-              font: Cpp_Misc_CommonFonts.monoFont
               color: rowDelegate.textColor
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
+              Layout.preferredWidth: root.colGroupWidth
             }
 
             Rectangle {
@@ -337,14 +337,14 @@ Widgets.Pane {
             }
 
             Label {
-              Layout.preferredWidth: root.colUnitsWidth
-              Layout.alignment: Qt.AlignVCenter
-              leftPadding: 8
               opacity: 0.75
+              leftPadding: 8
               text: modelData.units
               elide: Text.ElideRight
-              font: Cpp_Misc_CommonFonts.monoFont
               color: rowDelegate.textColor
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
+              Layout.preferredWidth: root.colUnitsWidth
             }
 
             Rectangle {
@@ -376,14 +376,14 @@ Widgets.Pane {
               icon.color: "transparent"
 
               background: Rectangle {
-                color: "transparent"
                 border.width: 0
+                color: "transparent"
               }
 
               Timer {
                 id: resetCheck
-                interval: 1500
                 repeat: false
+                interval: 1500
                 onTriggered: copyBtn.justCopied = false
               }
 
@@ -397,8 +397,8 @@ Widgets.Pane {
         }
 
         footer: Item {
-          width: ListView.view ? ListView.view.width : 0
           height: 40
+          width: ListView.view ? ListView.view.width : 0
 
           Label {
             anchors.centerIn: parent

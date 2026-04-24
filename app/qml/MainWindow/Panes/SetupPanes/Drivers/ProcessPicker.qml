@@ -197,8 +197,8 @@ Window {
       Label {
         opacity: 0.7
         color: palette.text
-        wrapMode: Text.WordWrap
         Layout.fillWidth: true
+        wrapMode: Text.WordWrap
         text: qsTr("Select a running process to derive a named-pipe path suggestion.")
       }
 
@@ -275,8 +275,8 @@ Window {
               }
 
               Label {
-                color: palette.text
                 text: qsTr("PID")
+                color: palette.text
                 Layout.preferredWidth: 60
                 font: Cpp_Misc_CommonFonts.boldUiFont
               }

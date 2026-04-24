@@ -53,8 +53,8 @@ Item {
   DbItems.DashboardLayout {
     id: _mainLayout
 
-    taskBar: root.taskBar
     anchors.fill: parent
+    taskBar: root.taskBar
     onExternalWindowClicked: root.openExternalWindow()
   }
 

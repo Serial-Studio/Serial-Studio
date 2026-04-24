@@ -39,8 +39,8 @@ Window {
   width: 700
   height: 520
   minimumWidth: 600
-  minimumHeight: 420 + titlebarHeight
   title: qsTr("Insert Constant")
+  minimumHeight: 420 + titlebarHeight
 
   Component.onCompleted: {
     root.flags = Qt.Dialog |
@@ -205,8 +205,8 @@ Window {
       Label {
         color: palette.text
         Layout.fillWidth: true
-        font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
         text: qsTr("Physics Constants")
+        font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
       }
 
       Label {
@@ -236,8 +236,8 @@ Window {
 
       ColumnLayout {
         spacing: 0
-        anchors.fill: parent
         anchors.margins: 1
+        anchors.fill: parent
 
         Widgets.ProjectTableHeader {
           Layout.fillWidth: true
@@ -254,9 +254,9 @@ Window {
 
           clip: true
           spacing: 0
-          model: root.filteredConstants
           Layout.fillWidth: true
           Layout.fillHeight: true
+          model: root.filteredConstants
           boundsBehavior: Flickable.StopAtBounds
 
           ScrollBar.vertical: ScrollBar {
@@ -285,11 +285,11 @@ Window {
               anchors.fill: parent
 
               Label {
+                leftPadding: 8
+                color: palette.link
+                text: modelData.symbol
                 Layout.preferredWidth: 60
                 Layout.alignment: Qt.AlignVCenter
-                leftPadding: 8
-                text: modelData.symbol
-                color: palette.link
                 font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
@@ -300,12 +300,12 @@ Window {
               }
 
               Label {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
                 leftPadding: 8
-                color: constRow.textColor
-                elide: Text.ElideRight
                 text: modelData.name
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                color: constRow.textColor
+                Layout.alignment: Qt.AlignVCenter
               }
 
               Rectangle {
@@ -333,13 +333,13 @@ Window {
               }
 
               Label {
+                opacity: 0.6
+                leftPadding: 8
+                elide: Text.ElideRight
+                text: modelData.category
+                color: constRow.textColor
                 Layout.preferredWidth: 140
                 Layout.alignment: Qt.AlignVCenter
-                leftPadding: 8
-                opacity: 0.6
-                color: constRow.textColor
-                text: modelData.category
-                elide: Text.ElideRight
               }
             }
           }
@@ -349,8 +349,8 @@ Window {
             color: palette.text
             anchors.centerIn: parent
             visible: list.count === 0
-            horizontalAlignment: Text.AlignHCenter
             text: qsTr("No constants match.")
+            horizontalAlignment: Text.AlignHCenter
           }
         }
       }
@@ -377,8 +377,8 @@ Window {
         Button {
           icon.width: 18
           icon.height: 18
-          horizontalPadding: 8
           text: qsTr("Close")
+          horizontalPadding: 8
           icon.source: "qrc:/rcc/icons/buttons/close.svg"
           onClicked: root.close()
         }

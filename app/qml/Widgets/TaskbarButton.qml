@@ -198,8 +198,8 @@ Item {
 
         source: _icon
         anchors.fill: _icon
-        brightness: _mouseArea.containsMouse && root.enabled ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
         saturation: !root.open ? -1 : (_mouseArea.containsMouse && root.enabled ? 0.07 : 0)
+        brightness: _mouseArea.containsMouse && root.enabled ? (_mouseArea.containsPress ? -0.07 : 0.07) : 0
       }
     }
 

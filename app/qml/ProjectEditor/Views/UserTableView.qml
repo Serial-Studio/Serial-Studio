@@ -137,22 +137,22 @@ Widgets.Pane {
           id: bannerLayout
           spacing: 16
           anchors {
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
             leftMargin: 14
             rightMargin: 14
+            left: parent.left
+            right: parent.right
             topMargin: banner.topPad
             bottomMargin: banner.bottomPad
+            verticalCenter: parent.verticalCenter
           }
 
           Image {
             Layout.preferredWidth: 56
             Layout.preferredHeight: 56
+            sourceSize: Qt.size(56, 56)
             Layout.alignment: Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
             source: "qrc:/rcc/icons/project-editor/summary/shared-table.svg"
-            sourceSize: Qt.size(56, 56)
           }
 
           ColumnLayout {
@@ -208,18 +208,18 @@ Widgets.Pane {
 
           clip: true
           contentHeight: height
-          boundsBehavior: Flickable.StopAtBounds
-          contentWidth: toolbarLayout.implicitWidth + 16
-          flickableDirection: Flickable.HorizontalFlick
           height: toolbarLayout.implicitHeight
+          boundsBehavior: Flickable.StopAtBounds
+          flickableDirection: Flickable.HorizontalFlick
+          contentWidth: toolbarLayout.implicitWidth + 16
 
           anchors {
             margins: 8
+            topMargin: 0
+            bottomMargin: 0
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            topMargin: 0
-            bottomMargin: 0
           }
 
           ScrollBar.horizontal: ScrollBar {
@@ -232,8 +232,8 @@ Widgets.Pane {
             id: toolbarLayout
 
             spacing: 4
-            width: Math.max(implicitWidth, toolbarFlick.width)
             anchors.verticalCenter: parent.verticalCenter
+            width: Math.max(implicitWidth, toolbarFlick.width)
 
             //
             // Add register
@@ -318,9 +318,9 @@ Widgets.Pane {
         Rectangle {
           z: 10
           width: 16
-          visible: toolbarFlick.contentX > 4
-          anchors.left: toolbarFlick.left
           anchors.top: toolbarFlick.top
+          anchors.left: toolbarFlick.left
+          visible: toolbarFlick.contentX > 4
           anchors.bottom: toolbarFlick.bottom
 
           gradient: Gradient {
@@ -336,10 +336,10 @@ Widgets.Pane {
         Rectangle {
           z: 10
           width: 16
-          visible: toolbarFlick.contentX + toolbarFlick.width < toolbarFlick.contentWidth - 4
-          anchors.right: toolbarFlick.right
           anchors.top: toolbarFlick.top
+          anchors.right: toolbarFlick.right
           anchors.bottom: toolbarFlick.bottom
+          visible: toolbarFlick.contentX + toolbarFlick.width < toolbarFlick.contentWidth - 4
 
           gradient: Gradient {
             orientation: Gradient.Horizontal
@@ -371,10 +371,10 @@ Widgets.Pane {
         id: regList
         clip: true
         spacing: 0
+        interactive: true
+        model: root.registers
         Layout.fillWidth: true
         Layout.fillHeight: true
-        model: root.registers
-        interactive: true
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -422,15 +422,15 @@ Widgets.Pane {
                 }
 
                 Label {
-                  Layout.fillWidth: true
-                  Layout.alignment: Qt.AlignVCenter
                   leftPadding: 0
-                  text: typeCombo.displayText
-                  font: Cpp_Misc_CommonFonts.monoFont
-                  color: regRow.textColor
-                  verticalAlignment: Text.AlignVCenter
-                  horizontalAlignment: Text.AlignLeft
+                  Layout.fillWidth: true
                   elide: Text.ElideRight
+                  color: regRow.textColor
+                  text: typeCombo.displayText
+                  Layout.alignment: Qt.AlignVCenter
+                  font: Cpp_Misc_CommonFonts.monoFont
+                  horizontalAlignment: Text.AlignLeft
+                  verticalAlignment: Text.AlignVCenter
                 }
               }
 
@@ -462,17 +462,17 @@ Widgets.Pane {
             //
             TextField {
               id: nameField
-              Layout.preferredWidth: root.colNameWidth - 8
-              Layout.preferredHeight: 24
-              Layout.alignment: Qt.AlignVCenter
-              text: modelData.name
-              font: Cpp_Misc_CommonFonts.monoFont
-              color: regRow.textColor
+              topPadding: 0
               leftPadding: 0
               rightPadding: 0
-              topPadding: 0
               bottomPadding: 0
               selectByMouse: true
+              text: modelData.name
+              color: regRow.textColor
+              Layout.preferredHeight: 24
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
+              Layout.preferredWidth: root.colNameWidth - 8
 
              background: Item {}
 
@@ -502,17 +502,17 @@ Widgets.Pane {
             //
             TextField {
               id: valueField
-              Layout.fillWidth: true
-              Layout.preferredHeight: 24
-              Layout.alignment: Qt.AlignVCenter
-              text: String(modelData.value)
-              font: Cpp_Misc_CommonFonts.monoFont
-              color: regRow.textColor
+              topPadding: 0
               leftPadding: 0
               rightPadding: 0
-              topPadding: 0
               bottomPadding: 0
               selectByMouse: true
+              Layout.fillWidth: true
+              color: regRow.textColor
+              Layout.preferredHeight: 24
+              text: String(modelData.value)
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.monoFont
 
               background: Item {}
 
@@ -541,23 +541,23 @@ Widgets.Pane {
             //
             ToolButton {
               id: deleteRegBtn
-              Layout.preferredWidth: root.colActionWidth
-              Layout.preferredHeight: 26
               padding: 2
               flat: true
-              hoverEnabled: true
               icon.width: 16
               icon.height: 16
-              icon.source: "qrc:/rcc/icons/buttons/trash.svg"
+              hoverEnabled: true
               icon.color: "transparent"
+              Layout.preferredHeight: 26
+              Layout.preferredWidth: root.colActionWidth
+              icon.source: "qrc:/rcc/icons/buttons/trash.svg"
 
               background: Rectangle {
-                color: "transparent"
                 border.width: 0
+                color: "transparent"
               }
 
-              ToolTip.visible: hovered
               ToolTip.delay: 400
+              ToolTip.visible: hovered
               ToolTip.text: qsTr("Delete register")
 
               onClicked: Cpp_JSON_ProjectModel.confirmDeleteRegister(root.tableName, modelData.name)
@@ -566,8 +566,8 @@ Widgets.Pane {
         }
 
         footer: Item {
-          width: ListView.view ? ListView.view.width : 0
           height: 40
+          width: ListView.view ? ListView.view.width : 0
 
           Label {
             anchors.centerIn: parent

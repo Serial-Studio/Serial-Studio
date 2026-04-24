@@ -35,23 +35,23 @@ Popup {
   modal: true
   focus: true
   width: _layout.implicitWidth + gradientWidth + 32
-  height: Math.max(gradientHeight, _layout.implicitHeight + 16)
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+  height: Math.max(gradientHeight, _layout.implicitHeight + 16)
 
   enter: Transition {
     NumberAnimation {
-      property: "opacity"
-      from: 0; to: 1
       duration: 200
+      from: 0; to: 1
+      property: "opacity"
       easing.type: Easing.OutCubic
     }
   }
 
   exit: Transition {
     NumberAnimation {
-      property: "opacity"
-      from: 1; to: 0
       duration: 120
+      from: 1; to: 0
+      property: "opacity"
       easing.type: Easing.InCubic
     }
   }
@@ -285,8 +285,8 @@ Popup {
       expandable: true
       text: qsTr("Plugins")
       Layout.fillWidth: true
-      visible: Cpp_ExtensionManager.installedPlugins.length > 0
       icon.source: "qrc:/rcc/icons/toolbar/extensions.svg"
+      visible: Cpp_ExtensionManager.installedPlugins.length > 0
 
       property var popup: null
       function showMenu() {
@@ -395,8 +395,8 @@ Popup {
       id: _export
 
       expandable: true
-      Layout.fillWidth: true
       text: qsTr("Export")
+      Layout.fillWidth: true
       icon.source: "qrc:/rcc/icons/start/export.svg"
 
       readonly property string kCsv: "csv"
@@ -491,8 +491,8 @@ Popup {
 
       checkable: true
       expandable: false
-      Layout.fillWidth: true
       text: qsTr("Console")
+      Layout.fillWidth: true
       checked: Cpp_UI_Dashboard.terminalEnabled
       icon.source: "qrc:/rcc/icons/start/console.svg"
       onCheckedChanged: {
@@ -506,9 +506,9 @@ Popup {
     Widgets.MenuButton {
       checkable: true
       expandable: false
-      visible: Cpp_CommercialBuild
       Layout.fillWidth: true
       text: qsTr("Notifications")
+      visible: Cpp_CommercialBuild
       checked: Cpp_UI_Dashboard.notificationLogEnabled
       icon.source: "qrc:/rcc/icons/start/notifications.svg"
       onCheckedChanged: {
@@ -532,8 +532,8 @@ Popup {
 
     Widgets.MenuButton {
       expandable: false
-      text: qsTr("Help Center")
       Layout.fillWidth: true
+      text: qsTr("Help Center")
       icon.source: "qrc:/rcc/icons/start/help.svg"
       onClicked: {
         root.close()
@@ -636,4 +636,3 @@ Popup {
   }
 
 }
-

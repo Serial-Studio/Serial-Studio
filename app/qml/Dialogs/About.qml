@@ -192,8 +192,8 @@ SmartDialog {
       // Donate button (free & GPL3)
       //
       Button {
-        Layout.fillWidth: true
         text: qsTr("Donate")
+        Layout.fillWidth: true
         visible: !app.proVersion
         onClicked: donateDialog.show()
       }
@@ -238,8 +238,8 @@ SmartDialog {
       // Website
       //
       Button {
-        Layout.fillWidth: true
         text: qsTr("Website")
+        Layout.fillWidth: true
         onClicked: Qt.openUrlExternally("https://serial-studio.com/")
       }
 

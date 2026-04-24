@@ -33,14 +33,14 @@ Window {
   //
   // Window configuration
   //
-  property int titlebarHeight: 0
   property int workspaceId: -1
+  property int titlebarHeight: 0
 
   width: 720
   height: 540
   minimumWidth: 620
-  minimumHeight: 420 + titlebarHeight
   title: qsTr("Add Widget")
+  minimumHeight: 420 + titlebarHeight
 
   Component.onCompleted: {
     root.flags = Qt.Dialog |
@@ -206,8 +206,8 @@ Window {
       Label {
         color: palette.text
         Layout.fillWidth: true
-        font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
         text: qsTr("Available Widgets")
+        font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
       }
 
       Label {
@@ -241,9 +241,9 @@ Window {
         id: list
         clip: true
         spacing: 0
-        model: root.filteredWidgets
         Layout.fillWidth: true
         Layout.fillHeight: true
+        model: root.filteredWidgets
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -260,12 +260,12 @@ Window {
             anchors.fill: parent
 
             Label {
-              Layout.preferredWidth: 160
-              Layout.alignment: Qt.AlignVCenter
               leftPadding: 8
               elide: Text.ElideRight
-              text: modelData.widgetLabel
+              Layout.preferredWidth: 160
               color: widgetRow.textColor
+              text: modelData.widgetLabel
+              Layout.alignment: Qt.AlignVCenter
               opacity: widgetRow.alreadyAdded ? 0.4 : 1
             }
 
@@ -276,12 +276,12 @@ Window {
             }
 
             Label {
-              Layout.preferredWidth: 220
-              Layout.alignment: Qt.AlignVCenter
               leftPadding: 8
               elide: Text.ElideRight
+              Layout.preferredWidth: 220
               text: modelData.groupTitle
               color: widgetRow.textColor
+              Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
               opacity: widgetRow.alreadyAdded ? 0.4 : 1
             }
@@ -326,8 +326,8 @@ Window {
               icon.color: "transparent"
 
               background: Rectangle {
-                color: "transparent"
                 border.width: 0
+                color: "transparent"
               }
 
               ToolTip.visible: hovered
@@ -386,8 +386,8 @@ Window {
         Button {
           icon.width: 18
           icon.height: 18
-          horizontalPadding: 8
           text: qsTr("Close")
+          horizontalPadding: 8
           icon.source: "qrc:/rcc/icons/buttons/close.svg"
           onClicked: root.close()
         }

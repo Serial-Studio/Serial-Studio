@@ -32,8 +32,8 @@ Rectangle {
   property bool hidden: false
   property string titleText: ""
   property string subtitleText: ""
-  property bool activationFlag: false
   property bool expandSubtitle: true
+  property bool activationFlag: false
   property bool closeButtonEnabled: true
 
   //

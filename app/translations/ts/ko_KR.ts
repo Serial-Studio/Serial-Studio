@@ -103,7 +103,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>라이선스 관리</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>Donate</source>
         <translation>기부하기</translation>
     </message>
@@ -128,7 +128,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>감사의 글</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="242"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Website</source>
         <translation>웹사이트</translation>
     </message>
@@ -259,12 +259,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="42"/>
         <source>Add Widget</source>
         <translation>위젯 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="210"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="209"/>
         <source>Available Widgets</source>
         <translation>사용 가능한 위젯</translation>
     </message>
@@ -329,7 +329,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>%1 / %2 위젯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="389"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -923,7 +923,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="42"/>
         <source>Insert Constant</source>
         <translation>상수 삽입</translation>
     </message>
@@ -1106,7 +1106,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>황금비</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="208"/>
         <source>Physics Constants</source>
         <translation>물리 상수</translation>
     </message>
@@ -1141,7 +1141,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>카테고리</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="352"/>
         <source>No constants match.</source>
         <translation>일치하는 상수가 없습니다.</translation>
     </message>
@@ -1156,7 +1156,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>%2개의 상수 중 %1개</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="380"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -1164,7 +1164,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CsvPlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="34"/>
+        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
         <translation>CSV 플레이어</translation>
     </message>
@@ -1264,7 +1264,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="62"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
         <translation>전송 기능이 정의되지 않음</translation>
     </message>
@@ -1344,7 +1344,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="261"/>
         <source>Enter command...</source>
         <translation>명령 입력...</translation>
     </message>
@@ -1380,7 +1380,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardSlider</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
         <source>No transmit function defined</source>
         <translation>전송 기능이 정의되지 않음</translation>
     </message>
@@ -1388,7 +1388,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="44"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="46"/>
         <source>Enter command...</source>
         <translation>명령 입력...</translation>
     </message>
@@ -1398,7 +1398,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="72"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="74"/>
         <source>No transmit function defined</source>
         <translation>전송 기능이 정의되지 않음</translation>
     </message>
@@ -1416,7 +1416,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>꺼짐</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="68"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
         <source>No transmit function defined</source>
         <translation>전송 기능이 정의되지 않음</translation>
     </message>
@@ -4512,7 +4512,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="198"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="199"/>
         <source>Close session file</source>
         <translation>세션 파일 닫기</translation>
     </message>
@@ -4619,7 +4619,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="208"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>아날로그 스타일 디스플레이를 위한 게이지 위젯을 전환합니다</translation>
     </message>
@@ -4639,7 +4639,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="246"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>이진 또는 임계값의 LED 표시기 전환</translation>
     </message>
@@ -5050,17 +5050,17 @@ Valid format: 01 A2 FF 3C</source>
         <translation>실행 중</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Update</source>
         <translation>업데이트</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Installed</source>
         <translation>설치됨</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="696"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="697"/>
         <source>Unavailable</source>
         <translation>사용 불가</translation>
     </message>
@@ -5239,12 +5239,12 @@ Valid format: 01 A2 FF 3C</source>
         <translation>파일 전송</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="93"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="94"/>
         <source>Transfer Protocol:</source>
         <translation>전송 프로토콜:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="126"/>
         <source>File Selection:</source>
         <translation>파일 선택:</translation>
     </message>
@@ -5254,7 +5254,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>파일 선택...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="160"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="161"/>
         <source>Transmission Interval:</source>
         <translation>전송 간격:</translation>
     </message>
@@ -5300,7 +5300,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>오류: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="447"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="448"/>
         <source>Activity Log</source>
         <translation>활동 로그</translation>
     </message>
@@ -5604,7 +5604,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="195"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>아날로그 스타일 시각화를 위한 게이지 위젯 추가</translation>
     </message>
@@ -5669,7 +5669,7 @@ Valid format: 01 A2 FF 3C</source>
         <translation>명령을 입력하고 보내기 위한 텍스트 필드 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="272"/>
         <source>Knob</source>
         <translation>노브</translation>
     </message>
@@ -5784,7 +5784,7 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="31"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
         <translation>도움말 센터</translation>
     </message>
@@ -7569,7 +7569,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>호박색</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="175"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="174"/>
         <source>Export Images</source>
         <translation>이미지 내보내기</translation>
     </message>
@@ -7594,7 +7594,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>십자선 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="540"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="541"/>
         <source>Waiting for Image...</source>
         <translation>이미지 대기 중...</translation>
     </message>
@@ -9016,7 +9016,7 @@ Example (HEX):  48 65 6C 6C 6F</source>
         <translation>잠시 기다려 주세요...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="117"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Serial Studio Pro 활성화</translation>
     </message>
@@ -9672,17 +9672,17 @@ Please provide the necessary credentials.</source>
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="117"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="118"/>
         <source>Authentication</source>
         <translation>인증</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="123"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="124"/>
         <source>MQTT Options</source>
         <translation>MQTT 옵션</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="129"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="130"/>
         <source>SSL Properties</source>
         <translation>SSL 속성</translation>
     </message>
@@ -10200,7 +10200,7 @@ Would you like to open the download page?</source>
         <translation>호스트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
         <translation>IP 주소</translation>
     </message>
@@ -10337,7 +10337,7 @@ Would you like to open the download page?</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="299"/>
         <source>Type</source>
         <translation>유형</translation>
     </message>
@@ -10417,7 +10417,7 @@ Add groups above to poll multiple register types.</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="207"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
@@ -10427,7 +10427,7 @@ Add groups above to poll multiple register types.</source>
         <translation>주소</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="222"/>
         <source>Type</source>
         <translation>유형</translation>
     </message>
@@ -10510,7 +10510,7 @@ Add groups above to poll multiple register types.</source>
         <translation>축 범위 설정</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="292"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="293"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
@@ -10672,7 +10672,7 @@ Add groups above to poll multiple register types.</source>
         <translation>임의의 명령 입력 및 전송</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
         <source>Knob</source>
         <translation>노브</translation>
     </message>
@@ -10871,7 +10871,7 @@ Add groups above to poll multiple register types.</source>
         <translation>아나글리프 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="304"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="305"/>
         <source>Invert Eye Positions</source>
         <translation>눈 위치 반전</translation>
     </message>
@@ -11003,7 +11003,7 @@ Add groups above to poll multiple register types.</source>
         <translation>인수</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="154"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="155"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 value1 --arg2 value2</translation>
     </message>
@@ -11023,7 +11023,7 @@ Add groups above to poll multiple register types.</source>
         <translation>파이프 경로</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="274"/>
         <source>Pick Running Process…</source>
         <translation>실행 중인 프로세스 선택…</translation>
     </message>
@@ -11076,7 +11076,7 @@ Add groups above to poll multiple register types.</source>
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
@@ -11207,7 +11207,7 @@ Click Refresh to update the list.</source>
         <translation>버튼이 있는 새로운 출력 제어 패널 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="241"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="242"/>
         <source>Slider</source>
         <translation>슬라이더</translation>
     </message>
@@ -11217,7 +11217,7 @@ Click Refresh to update the list.</source>
         <translation>출력 슬라이더 제어 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="251"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="252"/>
         <source>Toggle</source>
         <translation>토글</translation>
     </message>
@@ -11227,7 +11227,7 @@ Click Refresh to update the list.</source>
         <translation>출력 토글 제어 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="261"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="262"/>
         <source>Knob</source>
         <translation>노브</translation>
     </message>
@@ -11237,7 +11237,7 @@ Click Refresh to update the list.</source>
         <translation>출력 노브 제어 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
         <source>Text Field</source>
         <translation>텍스트 필드</translation>
     </message>
@@ -11247,7 +11247,7 @@ Click Refresh to update the list.</source>
         <translation>출력 텍스트 필드 제어 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="281"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Button</source>
         <translation>버튼</translation>
     </message>
@@ -11276,7 +11276,7 @@ Click Refresh to update the list.</source>
         <translation>일반 데이터셋 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="317"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="318"/>
         <source>Plot</source>
         <translation>플롯</translation>
     </message>
@@ -11286,7 +11286,7 @@ Click Refresh to update the list.</source>
         <translation>2D 플롯 데이터셋 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="328"/>
         <source>FFT Plot</source>
         <translation>FFT 플롯</translation>
     </message>
@@ -11296,7 +11296,7 @@ Click Refresh to update the list.</source>
         <translation>고속 푸리에 변환 플롯 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="337"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Gauge</source>
         <translation>게이지</translation>
     </message>
@@ -11306,7 +11306,7 @@ Click Refresh to update the list.</source>
         <translation>숫자 데이터를 위한 게이지 위젯 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
         <source>Level Indicator</source>
         <translation>레벨 표시기</translation>
     </message>
@@ -11316,7 +11316,7 @@ Click Refresh to update the list.</source>
         <translation>수직 막대 레벨 표시기 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
         <source>Compass</source>
         <translation>나침반</translation>
     </message>
@@ -11326,7 +11326,7 @@ Click Refresh to update the list.</source>
         <translation>방향 데이터를 위한 나침반 위젯 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="369"/>
         <source>LED Indicator</source>
         <translation>LED 표시기</translation>
     </message>
@@ -11367,7 +11367,7 @@ Click Refresh to update the list.</source>
         <translation>이미지 보기</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="412"/>
         <source>Table</source>
         <translation>테이블</translation>
     </message>
@@ -11382,7 +11382,7 @@ Click Refresh to update the list.</source>
         <translation>데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="423"/>
         <source>Multi-Plot</source>
         <translation>다중 플롯</translation>
     </message>
@@ -11397,7 +11397,7 @@ Click Refresh to update the list.</source>
         <translation>다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="431"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="432"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
         <source>3D Plot</source>
         <translation>3D 플롯</translation>
@@ -11408,7 +11408,7 @@ Click Refresh to update the list.</source>
         <translation>3D 플롯 시각화 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="441"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="443"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="447"/>
         <source>Accelerometer</source>
         <translation>가속도계</translation>
@@ -11419,7 +11419,7 @@ Click Refresh to update the list.</source>
         <translation>3축 가속도계 데이터를 위한 그룹 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="453"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="456"/>
         <source>Gyroscope</source>
         <translation>자이로스코프</translation>
@@ -11434,7 +11434,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">3축 자이로스코프 데이터를 위한 그룹 추가 (각속도는 자동으로 방향으로 통합됨)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="461"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="462"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="467"/>
         <source>GPS Map</source>
         <translation>GPS 지도</translation>
@@ -11450,7 +11450,7 @@ Click Refresh to update the list.</source>
         <translation>도움말 센터</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="485"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="484"/>
         <source>Open the Project Editor documentation</source>
         <translation>프로젝트 편집기 설명서 열기</translation>
     </message>
@@ -11946,22 +11946,22 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="277"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="278"/>
         <source>Session Report</source>
         <translation>세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="183"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="181"/>
         <source>Branding</source>
         <translation>브랜딩</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="189"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
         <source>Page</source>
         <translation>페이지</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="195"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
         <source>Sections</source>
         <translation>섹션</translation>
     </message>
@@ -11976,7 +11976,7 @@ function parse(%1) { ... }
         <translation>회사</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="265"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="266"/>
         <source>e.g. Acme Test Systems</source>
         <translation>예: Acme Test Systems</translation>
     </message>
@@ -11991,7 +11991,7 @@ function parse(%1) { ... }
         <translation>작성자</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Prepared by (optional)</source>
         <translation>준비한 사람 (선택 사항)</translation>
     </message>
@@ -12006,7 +12006,7 @@ function parse(%1) { ... }
         <translation>파일</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="320"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG 또는 SVG (선택 사항)</translation>
     </message>
@@ -12309,7 +12309,7 @@ function parse(%1) { ... }
         <translation>태그</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="249"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="250"/>
         <source>New tag...</source>
         <translation>새 태그...</translation>
     </message>
@@ -12991,7 +12991,7 @@ function parse(%1) { ... }
         <translation>글꼴 종류</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="88"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="89"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
@@ -13001,7 +13001,7 @@ function parse(%1) { ... }
         <translation>Protobuf 파일 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="331"/>
         <source>Export...</source>
         <translation>내보내기...</translation>
     </message>
@@ -13112,12 +13112,12 @@ function parse(%1) { ... }
         <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1050"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1049"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1061"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1060"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
@@ -13375,7 +13375,7 @@ function parse(%1) { ... }
         <translation>복제</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="109"/>
         <source>Create a copy of this data source</source>
         <translation>이 데이터 소스의 복사본 만들기</translation>
     </message>
@@ -13463,7 +13463,7 @@ function parse(%1) { ... }
         <translation type="vanished">콘솔 로깅</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="535"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
         <source>Help Center</source>
         <translation>도움말 센터</translation>
     </message>
@@ -13497,7 +13497,7 @@ function parse(%1) { ... }
         <translation>사용 가능한 작업 공간 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
         <source>Export</source>
         <translation>내보내기</translation>
     </message>
@@ -13527,12 +13527,12 @@ function parse(%1) { ... }
         <translation>사용할 수 있는 내보내기 형식 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="511"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
@@ -13754,7 +13754,7 @@ function parse(%1) { ... }
         <translation type="vanished">CSV 플레이어</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>CSV 파일을 실시간 센서 데이터처럼 재생</translation>
     </message>
@@ -13773,7 +13773,7 @@ function parse(%1) { ... }
         <translation>환경 설정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="307"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Open application settings and preferences</source>
         <translation>애플리케이션 설정 및 환경 설정 열기</translation>
     </message>
@@ -13788,7 +13788,7 @@ function parse(%1) { ... }
         <translation>CSV 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Open MDF4</source>
         <translation>MDF4 열기</translation>
     </message>
@@ -13856,7 +13856,7 @@ function parse(%1) { ... }
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="333"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <source>Select Serial port (UART) communication</source>
         <translation>시리얼 포트(UART) 통신 선택</translation>
     </message>
@@ -13876,7 +13876,7 @@ function parse(%1) { ... }
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>원시 USB 통신 선택 (Pro)</translation>
     </message>
@@ -13886,7 +13886,7 @@ function parse(%1) { ... }
         <translation>네트워크</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>Select TCP/UDP network communication</source>
         <translation>TCP/UDP 네트워크 통신 선택</translation>
     </message>
@@ -13905,7 +13905,7 @@ function parse(%1) { ... }
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
         <source>Select HID device communication (Pro)</source>
         <translation>HID 장치 통신 선택 (Pro)</translation>
     </message>
@@ -13915,7 +13915,7 @@ function parse(%1) { ... }
         <translation>블루투스</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Bluetooth Low Energy 통신 선택</translation>
     </message>
@@ -13935,7 +13935,7 @@ function parse(%1) { ... }
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>프로세스 파이프 통신 선택 (Pro)</translation>
     </message>
@@ -13945,7 +13945,7 @@ function parse(%1) { ... }
         <translation>예제</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>Browse example projects</source>
         <translation>예제 프로젝트 찾아보기</translation>
     </message>
@@ -14023,7 +14023,7 @@ function parse(%1) { ... }
         <translation type="vanished">CANBus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
         <source>Show application info and license details</source>
         <translation>애플리케이션 정보 및 라이선스 세부 정보 보기</translation>
     </message>
@@ -14220,7 +14220,7 @@ function parse(%1) { ... }
         <translation>최대 패킷 크기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="299"/>
         <source>Control Transfers Enabled</source>
         <translation>제어 전송 활성화됨</translation>
     </message>
@@ -14767,7 +14767,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WorkspacesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
         <source>Workspaces</source>
         <translation>작업 공간</translation>
     </message>

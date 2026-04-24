@@ -174,9 +174,9 @@ Rectangle {
     }
 
     anchors {
+      rightMargin: 4
       left: parent.left
       right: connectSection.left
-      rightMargin: 4
       verticalCenter: parent.verticalCenter
       verticalCenterOffset: root.titlebarHeight / 2
     }
@@ -221,14 +221,14 @@ Rectangle {
           Layout.alignment: Qt.AlignLeft
           onClicked: Cpp_CSV_Player.openFile()
           icon.source: "qrc:/rcc/icons/toolbar/csv.svg"
-          ToolTip.text: qsTr("Play a CSV file as if it were live sensor data")
           enabled: !Cpp_CSV_Player.isOpen && !Cpp_IO_Manager.isConnected
+          ToolTip.text: qsTr("Play a CSV file as if it were live sensor data")
         }
 
         Widgets.ToolbarButton {
           iconSize: 16
-          text: qsTr("Open MDF4")
           horizontalLayout: true
+          text: qsTr("Open MDF4")
           Layout.alignment: Qt.AlignLeft
           onClicked: Cpp_MDF4_Player.openFile()
           icon.source: "qrc:/rcc/icons/toolbar/mf4.svg"
@@ -304,8 +304,8 @@ Rectangle {
         text: qsTr("Preferences")
         Layout.alignment: Qt.AlignLeft
         onClicked: app.showSettingsDialog()
-        ToolTip.text: qsTr("Open application settings and preferences")
         icon.source: "qrc:/rcc/icons/toolbar/settings.svg"
+        ToolTip.text: qsTr("Open application settings and preferences")
       }
 
       GridLayout {
@@ -329,8 +329,8 @@ Rectangle {
           enabled: driverGrid.driverSelectionEnabled
           onClicked: Cpp_IO_Manager.busType = SerialStudio.UART
           icon.source: "qrc:/rcc/icons/devices/drivers/uart.svg"
-          font: Cpp_IO_Manager.busType === SerialStudio.UART ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
           ToolTip.text: qsTr("Select Serial port (UART) communication")
+          font: Cpp_IO_Manager.busType === SerialStudio.UART ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
         }
 
         Loader {
@@ -363,8 +363,8 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              ToolTip.text: qsTr("Select raw USB communication (Pro)")
               icon.source: "qrc:/rcc/icons/devices/drivers/usb.svg"
+              ToolTip.text: qsTr("Select raw USB communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.RawUsb
               font: Cpp_IO_Manager.busType === SerialStudio.RawUsb ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }
@@ -377,8 +377,8 @@ Rectangle {
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           enabled: driverGrid.driverSelectionEnabled
-          ToolTip.text: qsTr("Select TCP/UDP network communication")
           icon.source: "qrc:/rcc/icons/devices/drivers/network.svg"
+          ToolTip.text: qsTr("Select TCP/UDP network communication")
           onClicked: Cpp_IO_Manager.busType = SerialStudio.Network
           font: Cpp_IO_Manager.busType === SerialStudio.Network ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
         }
@@ -413,8 +413,8 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              ToolTip.text: qsTr("Select HID device communication (Pro)")
               icon.source: "qrc:/rcc/icons/devices/drivers/hid.svg"
+              ToolTip.text: qsTr("Select HID device communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.HidDevice
               font: Cpp_IO_Manager.busType === SerialStudio.HidDevice ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }
@@ -427,8 +427,8 @@ Rectangle {
           text: qsTr("Bluetooth")
           Layout.alignment: Qt.AlignLeft
           enabled: driverGrid.driverSelectionEnabled
-          ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
           icon.source: "qrc:/rcc/icons/devices/drivers/bluetooth.svg"
+          ToolTip.text: qsTr("Select Bluetooth Low Energy communication")
           onClicked: Cpp_IO_Manager.busType = SerialStudio.BluetoothLE
           font: Cpp_IO_Manager.busType === SerialStudio.BluetoothLE ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
         }
@@ -463,8 +463,8 @@ Rectangle {
               horizontalLayout: true
               Layout.alignment: Qt.AlignLeft
               enabled: driverGrid.driverSelectionEnabled
-              ToolTip.text: qsTr("Select process pipe communication (Pro)")
               icon.source: "qrc:/rcc/icons/devices/drivers/process.svg"
+              ToolTip.text: qsTr("Select process pipe communication (Pro)")
               onClicked: Cpp_IO_Manager.busType = SerialStudio.Process
               font: Cpp_IO_Manager.busType === SerialStudio.Process ? Cpp_Misc_CommonFonts.boldUiFont : Cpp_Misc_CommonFonts.uiFont
             }
@@ -477,8 +477,8 @@ Rectangle {
     // Help section (collapsible)
     //
     Widgets.RibbonSection {
-      showSeparator: false
       collapsible: true
+      showSeparator: false
       collapsePriority: 30
       collapsedText: qsTr("About")
       collapsedIcon: "qrc:/rcc/icons/toolbar/about.svg"
@@ -487,8 +487,8 @@ Rectangle {
         text: qsTr("About")
         Layout.alignment: Qt.AlignLeft
         onClicked: app.showAboutDialog()
-        ToolTip.text: qsTr("Show application info and license details")
         icon.source: "qrc:/rcc/icons/toolbar/about.svg"
+        ToolTip.text: qsTr("Show application info and license details")
       }
 
       GridLayout {
@@ -503,8 +503,8 @@ Rectangle {
           text: qsTr("Examples")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
-          icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
           ToolTip.text: qsTr("Browse example projects")
+          icon.source: "qrc:/rcc/icons/toolbar/examples.svg"
           onClicked: app.showExamplesBrowser()
         }
 
@@ -549,8 +549,8 @@ Rectangle {
     }
 
     anchors {
-      right: parent.right
       rightMargin: 4
+      right: parent.right
       verticalCenter: parent.verticalCenter
       verticalCenterOffset: root.titlebarHeight / 2
     }

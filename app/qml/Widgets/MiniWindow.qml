@@ -41,8 +41,8 @@ Item {
   //
   // Properties used by the C++ window manager to detect where to drag window
   //
-  readonly property int captionHeight: root.headerVisible ? 28 : 0
   readonly property int externControlWidth: externalWinBt.width
+  readonly property int captionHeight: root.headerVisible ? 28 : 0
   readonly property int windowControlsWidth: minBtMa.width + maxBtMa.width + closeBtMa.width
 
   //
@@ -242,8 +242,8 @@ Item {
 
       NumberAnimation {
         duration: 200
-        easing.type: Easing.InOutQuad
         properties: "scale,opacity"
+        easing.type: Easing.InOutQuad
       }
     },
 
@@ -311,8 +311,8 @@ Item {
     id: _bg
 
     clip: true
-    radius: defaultRadius
     anchors.fill: parent
+    radius: defaultRadius
 
     //
     // Window caption background
@@ -603,8 +603,8 @@ Item {
       }
 
       NumberAnimation {
-        from: 0.2
         to: 1
+        from: 0.2
         duration: 400
         easing.type: Easing.InOutSine
       }

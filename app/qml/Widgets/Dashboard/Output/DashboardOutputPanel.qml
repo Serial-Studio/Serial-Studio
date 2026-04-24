@@ -33,8 +33,8 @@ Item {
     id: flickable
 
     clip: true
-    anchors.fill: parent
     contentWidth: width
+    anchors.fill: parent
     contentHeight: {
       if (!root.model || root.model.count === 0)
         return 0
@@ -92,10 +92,10 @@ Item {
 
           Label {
             text: parent.text
-            color: parent.labelColor
-            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             elide: Text.ElideRight
             Layout.fillWidth: true
+            color: parent.labelColor
+            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             Component.onCompleted: font.capitalization = Font.AllUppercase
           }
 
@@ -110,10 +110,10 @@ Item {
         // Button
         //
         ColumnLayout {
-          visible: cell.owType === SerialStudio.OutputButton
-          anchors.fill: parent
-          anchors.margins: 8
           spacing: 6
+          anchors.margins: 8
+          anchors.fill: parent
+          visible: cell.owType === SerialStudio.OutputButton
 
           Item { Layout.fillHeight: true }
 
@@ -144,10 +144,10 @@ Item {
         // Slider
         //
         ColumnLayout {
-          visible: cell.owType === SerialStudio.OutputSlider
-          anchors.fill: parent
-          anchors.margins: 8
           spacing: 4
+          anchors.margins: 8
+          anchors.fill: parent
+          visible: cell.owType === SerialStudio.OutputSlider
 
           SectionLabel {
             text: cell.owTitle
@@ -157,8 +157,8 @@ Item {
           Item { Layout.fillHeight: true }
 
           RowLayout {
-            Layout.fillWidth: true
             spacing: 4
+            Layout.fillWidth: true
 
             Label {
               text: cell.owData ? cell.owData.minValue.toFixed(0) : "0"
@@ -169,11 +169,11 @@ Item {
             Slider {
               id: slider
 
+              Layout.fillWidth: true
               from: cell.owData ? cell.owData.minValue : 0
               to: cell.owData ? cell.owData.maxValue : 100
-              value: cell.owData ? cell.owData.initialValue : 0
               stepSize: cell.owData ? cell.owData.stepSize : 1
-              Layout.fillWidth: true
+              value: cell.owData ? cell.owData.initialValue : 0
 
               palette.dark: cell.accentColor
               palette.highlight: cell.accentColor
@@ -192,10 +192,10 @@ Item {
           }
 
           Label {
-            text: slider.value.toFixed(slider.stepSize < 1 ? 2 : 0)
             color: cell.accentColor
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.8, true)
             Layout.alignment: Qt.AlignHCenter
+            font: Cpp_Misc_CommonFonts.customMonoFont(0.8, true)
+            text: slider.value.toFixed(slider.stepSize < 1 ? 2 : 0)
           }
 
           Item { Layout.fillHeight: true }
@@ -205,10 +205,10 @@ Item {
         // Toggle / Switch
         //
         ColumnLayout {
-          visible: cell.owType === SerialStudio.OutputToggle
-          anchors.fill: parent
-          anchors.margins: 8
           spacing: 4
+          anchors.margins: 8
+          anchors.fill: parent
+          visible: cell.owType === SerialStudio.OutputToggle
 
           SectionLabel {
             text: cell.owTitle
@@ -220,8 +220,8 @@ Item {
           Switch {
             id: toggle
 
-            checked: cell.owData ? cell.owData.initialValue !== 0 : false
             Layout.alignment: Qt.AlignHCenter
+            checked: cell.owData ? cell.owData.initialValue !== 0 : false
 
             palette.highlight: cell.accentColor
 
@@ -238,10 +238,10 @@ Item {
         // TextField
         //
         ColumnLayout {
-          visible: cell.owType === SerialStudio.OutputTextField
-          anchors.fill: parent
-          anchors.margins: 8
           spacing: 4
+          anchors.margins: 8
+          anchors.fill: parent
+          visible: cell.owType === SerialStudio.OutputTextField
 
           SectionLabel {
             text: cell.owTitle
@@ -251,15 +251,15 @@ Item {
           Item { Layout.fillHeight: true }
 
           RowLayout {
-            Layout.fillWidth: true
             spacing: 4
+            Layout.fillWidth: true
 
             TextField {
               id: textInput
 
+              Layout.fillWidth: true
               placeholderText: qsTr("Enter command...")
               font: Cpp_Misc_CommonFonts.customMonoFont(0.8, false)
-              Layout.fillWidth: true
 
               palette.highlight: cell.accentColor
 
@@ -292,10 +292,10 @@ Item {
         // Knob / Dial
         //
         ColumnLayout {
-          visible: cell.owType === SerialStudio.OutputKnob
-          anchors.fill: parent
-          anchors.margins: 8
           spacing: 4
+          anchors.margins: 8
+          anchors.fill: parent
+          visible: cell.owType === SerialStudio.OutputKnob
 
           SectionLabel {
             text: cell.owTitle
@@ -305,15 +305,15 @@ Item {
           Dial {
             id: knob
 
-            from: cell.owData ? cell.owData.minValue : 0
-            to: cell.owData ? cell.owData.maxValue : 100
-            value: cell.owData ? cell.owData.initialValue : 0
-            stepSize: cell.owData ? cell.owData.stepSize : 1
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.alignment: Qt.AlignHCenter
-            Layout.maximumWidth: height
             inputMode: Dial.Circular
+            Layout.maximumWidth: height
+            Layout.alignment: Qt.AlignHCenter
+            from: cell.owData ? cell.owData.minValue : 0
+            to: cell.owData ? cell.owData.maxValue : 100
+            stepSize: cell.owData ? cell.owData.stepSize : 1
+            value: cell.owData ? cell.owData.initialValue : 0
 
             palette.dark: cell.accentColor
             palette.highlight: cell.accentColor
@@ -324,15 +324,15 @@ Item {
             }
 
             background: Rectangle {
-              x: knob.width / 2 - width / 2
-              y: knob.height / 2 - height / 2
-              width: Math.min(knob.availableWidth, knob.availableHeight)
+              opacity: 0.5
               height: width
+              border.width: 2
               radius: width / 2
               color: "transparent"
+              x: knob.width / 2 - width / 2
               border.color: cell.accentColor
-              border.width: 2
-              opacity: 0.5
+              y: knob.height / 2 - height / 2
+              width: Math.min(knob.availableWidth, knob.availableHeight)
             }
           }
 

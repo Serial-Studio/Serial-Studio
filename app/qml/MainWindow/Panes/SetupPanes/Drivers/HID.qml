@@ -51,9 +51,9 @@ Item {
       id: deviceCombo
 
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_HID.deviceList
-      enabled: app.ioEnabled
       currentIndex: Cpp_IO_HID.deviceIndex
 
       onCurrentIndexChanged: {
@@ -78,8 +78,8 @@ Item {
       text: qsTr("Usage Page") + ":"
       visible: Cpp_IO_Manager.isConnected
     } TextField {
-      readOnly: true
       opacity: 0.8
+      readOnly: true
       Layout.fillWidth: true
       text: Cpp_IO_HID.usagePage
       visible: Cpp_IO_Manager.isConnected
@@ -94,8 +94,8 @@ Item {
       text: qsTr("Usage") + ":"
       visible: Cpp_IO_Manager.isConnected
     } TextField {
-      readOnly: true
       opacity: 0.8
+      readOnly: true
       Layout.fillWidth: true
       text: Cpp_IO_HID.usage
       visible: Cpp_IO_Manager.isConnected

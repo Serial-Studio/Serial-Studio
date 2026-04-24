@@ -196,9 +196,9 @@ Item {
     id: _metricsBold
 
     font {
+      bold: true
       family: _label.font.family
       pixelSize: _label.font.pixelSize
-      bold: true
     }
     text: " " + root.text + " "
   }
@@ -234,4 +234,3 @@ Item {
     }
   }
 }
-

@@ -91,9 +91,9 @@ Widgets.SmartWindow {
         id: toolbar
         z: 2
         Layout.fillWidth: true
+        Layout.minimumWidth: 720
         Layout.minimumHeight: titlebarHeight + 80
         Layout.maximumHeight: titlebarHeight + 80
-        Layout.minimumWidth: 720
 
         property int titlebarHeight: Cpp_NativeWindow.titlebarHeight(root)
 
@@ -195,8 +195,8 @@ Widgets.SmartWindow {
             Widgets.ToolbarButton {
               text: qsTr("Close")
               Layout.alignment: Qt.AlignVCenter
-              ToolTip.text: qsTr("Close session file")
               enabled: Cpp_Sessions_Manager.isOpen
+              ToolTip.text: qsTr("Close session file")
               onClicked: Cpp_Sessions_Manager.closeDatabase()
               icon.source: "qrc:/rcc/icons/database/close.svg"
             }
@@ -281,12 +281,12 @@ Widgets.SmartWindow {
       // Splitter: session list (left) + detail (right)
       //
       Widgets.PaneSplitter {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.topMargin: -1
-        settingsKey: "DatabaseExplorer"
         minLeftWidth: 300
         minRightWidth: 360
+        Layout.topMargin: -1
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        settingsKey: "DatabaseExplorer"
 
         leftPanel: Component {
           SessionList {}

@@ -103,7 +103,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>Gestionați Licența</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>Donate</source>
         <translation>Donează</translation>
     </message>
@@ -128,7 +128,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>Recunoașteri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="242"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Website</source>
         <translation>Website</translation>
     </message>
@@ -259,12 +259,12 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="42"/>
         <source>Add Widget</source>
         <translation>Adaugă Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="210"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="209"/>
         <source>Available Widgets</source>
         <translation>Widgeturi Disponibile</translation>
     </message>
@@ -329,7 +329,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>%1 din %2 widgeturi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="389"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
@@ -873,7 +873,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="42"/>
         <source>Insert Constant</source>
         <translation>Introduceți Constantă</translation>
     </message>
@@ -1056,7 +1056,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>Raportul de aur</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="208"/>
         <source>Physics Constants</source>
         <translation>Constante Fizice</translation>
     </message>
@@ -1091,7 +1091,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>Categorie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="352"/>
         <source>No constants match.</source>
         <translation>Nicio constantă nu se potrivește.</translation>
     </message>
@@ -1106,7 +1106,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>%1 din %2 constante</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="380"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
@@ -1114,7 +1114,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
 <context>
     <name>CsvPlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="34"/>
+        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
         <translation>Redare CSV</translation>
     </message>
@@ -1214,7 +1214,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>Trimite</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="62"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
         <translation>Nicio funcție de transmitere definită</translation>
     </message>
@@ -1294,7 +1294,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>Trimite</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="261"/>
         <source>Enter command...</source>
         <translation>Introduceți comanda...</translation>
     </message>
@@ -1330,7 +1330,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
 <context>
     <name>DashboardSlider</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
         <source>No transmit function defined</source>
         <translation>Nicio funcție de transmitere definită</translation>
     </message>
@@ -1338,7 +1338,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="44"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="46"/>
         <source>Enter command...</source>
         <translation>Introduceți comanda...</translation>
     </message>
@@ -1348,7 +1348,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>Trimite</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="72"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="74"/>
         <source>No transmit function defined</source>
         <translation>Nicio funcție de transmitere definită</translation>
     </message>
@@ -1366,7 +1366,7 @@ Activează doar pe rețele de încredere. Clienții nesiguri pot citi date în t
         <translation>OPRIT</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="68"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
         <source>No transmit function defined</source>
         <translation>Nicio funcție de transmitere definită</translation>
     </message>
@@ -4462,7 +4462,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="198"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="199"/>
         <source>Close session file</source>
         <translation>Închide fișierul de sesiune</translation>
     </message>
@@ -4569,7 +4569,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Indicator</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="208"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>Comută widgetul indicator pentru afișaj stil analogic</translation>
     </message>
@@ -4589,7 +4589,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="246"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Comută indicatorul LED pentru valori binare sau prag</translation>
     </message>
@@ -5000,17 +5000,17 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>În Execuție</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Update</source>
         <translation>Actualizare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Installed</source>
         <translation>Instalată</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="696"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="697"/>
         <source>Unavailable</source>
         <translation>Indisponibil</translation>
     </message>
@@ -5189,12 +5189,12 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Transmitere Fișier</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="93"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="94"/>
         <source>Transfer Protocol:</source>
         <translation>Protocol de Transfer:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="126"/>
         <source>File Selection:</source>
         <translation>Selecție Fișier:</translation>
     </message>
@@ -5204,7 +5204,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Selectați Fișierul...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="160"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="161"/>
         <source>Transmission Interval:</source>
         <translation>Interval de Transmitere:</translation>
     </message>
@@ -5250,7 +5250,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Erori: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="447"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="448"/>
         <source>Activity Log</source>
         <translation>Jurnal de Activitate</translation>
     </message>
@@ -5546,7 +5546,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Indicator</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="195"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>Adăugați un widget de indicator pentru vizualizare de tip analogic</translation>
     </message>
@@ -5611,7 +5611,7 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Adaugă un câmp text pentru tastare și trimitere comenzi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="272"/>
         <source>Knob</source>
         <translation>Buton Rotativ</translation>
     </message>
@@ -5726,7 +5726,7 @@ Format valid: 01 A2 FF 3C</translation>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="31"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
         <translation>Centrul De Ajutor</translation>
     </message>
@@ -7449,7 +7449,7 @@ Dispozitivul poate să nu expună puncte finale de date în configurația sa act
         <translation>Chihlimbar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="175"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="174"/>
         <source>Export Images</source>
         <translation>Exportați Imagini</translation>
     </message>
@@ -7474,7 +7474,7 @@ Dispozitivul poate să nu expună puncte finale de date în configurația sa act
         <translation>Afișați Reticulul</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="540"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="541"/>
         <source>Waiting for Image...</source>
         <translation>Așteptare Imagine...</translation>
     </message>
@@ -7508,7 +7508,7 @@ Dispozitivul poate să nu expună puncte finale de date în configurația sa act
         <translation>Vă rugăm să așteptați...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="117"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Activează Serial Studio Pro</translation>
     </message>
@@ -8146,17 +8146,17 @@ Vă rugăm să furnizați datele de autentificare necesare.</translation>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="117"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="118"/>
         <source>Authentication</source>
         <translation>Autentificare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="123"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="124"/>
         <source>MQTT Options</source>
         <translation>Opțiuni MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="129"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="130"/>
         <source>SSL Properties</source>
         <translation>Proprietăți SSL</translation>
     </message>
@@ -8663,7 +8663,7 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation>Gazdă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
         <translation>Adresă IP</translation>
     </message>
@@ -8776,7 +8776,7 @@ Doriți să deschideți pagina de descărcare?</translation>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="299"/>
         <source>Type</source>
         <translation>Tip</translation>
     </message>
@@ -8856,7 +8856,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="207"/>
         <source>Name</source>
         <translation>Nume</translation>
     </message>
@@ -8866,7 +8866,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>Adresă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="222"/>
         <source>Type</source>
         <translation>Tip</translation>
     </message>
@@ -8949,7 +8949,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>Setări Interval Axă</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="292"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="293"/>
         <source>Samples</source>
         <translation>Mostre</translation>
     </message>
@@ -9107,7 +9107,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>Tastează și trimite comenzi arbitrare</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
         <source>Knob</source>
         <translation>Buton rotativ</translation>
     </message>
@@ -9306,7 +9306,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>Anaglyph 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="304"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="305"/>
         <source>Invert Eye Positions</source>
         <translation>Inversare Poziții Ochi</translation>
     </message>
@@ -9430,7 +9430,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>Argumente</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="154"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="155"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 valoare1 --arg2 valoare2</translation>
     </message>
@@ -9450,7 +9450,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>Calea Conductei</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="274"/>
         <source>Pick Running Process…</source>
         <translation>Alegeți Procesul în Execuție…</translation>
     </message>
@@ -9503,7 +9503,7 @@ Adăugați grupuri mai sus pentru a interoga mai multe tipuri de registre.</tran
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
@@ -9634,7 +9634,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un nou panou de control al ieșirii cu un buton</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="241"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="242"/>
         <source>Slider</source>
         <translation>Glisor</translation>
     </message>
@@ -9644,7 +9644,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un control glisor pentru ieșire</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="251"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="252"/>
         <source>Toggle</source>
         <translation>Comutator</translation>
     </message>
@@ -9654,7 +9654,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un control de comutare a ieșirii</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="261"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="262"/>
         <source>Knob</source>
         <translation>Buton rotativ</translation>
     </message>
@@ -9664,7 +9664,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un control de buton rotativ pentru ieșire</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
         <source>Text Field</source>
         <translation>Câmp text</translation>
     </message>
@@ -9674,7 +9674,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un control de câmp text pentru ieșire</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="281"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Button</source>
         <translation>Buton</translation>
     </message>
@@ -9703,7 +9703,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un set de date generic</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="317"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="318"/>
         <source>Plot</source>
         <translation>Grafic</translation>
     </message>
@@ -9713,7 +9713,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un set de date grafic 2D</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="328"/>
         <source>FFT Plot</source>
         <translation>Grafic FFT</translation>
     </message>
@@ -9723,7 +9723,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un grafic Transformata Fourier Rapidă</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="337"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Gauge</source>
         <translation>Indicator</translation>
     </message>
@@ -9733,7 +9733,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un widget indicator pentru date numerice</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
         <source>Level Indicator</source>
         <translation>Indicator de Nivel</translation>
     </message>
@@ -9743,7 +9743,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un indicator de nivel cu bară verticală</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
         <source>Compass</source>
         <translation>Busolă</translation>
     </message>
@@ -9753,7 +9753,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un widget busolă pentru date direcționale</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="369"/>
         <source>LED Indicator</source>
         <translation>Indicator LED</translation>
     </message>
@@ -9794,7 +9794,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Vizualizare Imagine</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="412"/>
         <source>Table</source>
         <translation>Tabel</translation>
     </message>
@@ -9809,7 +9809,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Grilă de Date</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="423"/>
         <source>Multi-Plot</source>
         <translation>Multi-Grafic</translation>
     </message>
@@ -9824,7 +9824,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Grafic Multiplu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="431"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="432"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
         <source>3D Plot</source>
         <translation>Grafic 3D</translation>
@@ -9835,7 +9835,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă o vizualizare grafic 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="441"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="443"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="447"/>
         <source>Accelerometer</source>
         <translation>Accelerometru</translation>
@@ -9846,7 +9846,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Adaugă un grup pentru datele de la accelerometrul pe 3 axe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="453"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="456"/>
         <source>Gyroscope</source>
         <translation>Giroscop</translation>
@@ -9861,7 +9861,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation type="vanished">Adaugă un grup pentru datele de la giroscopul pe 3 axe (ratele unghiulare sunt integrate automat în orientare)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="461"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="462"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="467"/>
         <source>GPS Map</source>
         <translation>Hartă GPS</translation>
@@ -9877,7 +9877,7 @@ Faceți clic pe Reîmprospătează pentru a actualiza lista.</translation>
         <translation>Centru de Ajutor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="485"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="484"/>
         <source>Open the Project Editor documentation</source>
         <translation>Deschide documentația Editorului de Proiect</translation>
     </message>
@@ -10373,22 +10373,22 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="277"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="278"/>
         <source>Session Report</source>
         <translation>Raport Sesiune</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="183"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="181"/>
         <source>Branding</source>
         <translation>Branding</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="189"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
         <source>Page</source>
         <translation>Pagină</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="195"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
         <source>Sections</source>
         <translation>Secțiuni</translation>
     </message>
@@ -10403,7 +10403,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Companie</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="265"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="266"/>
         <source>e.g. Acme Test Systems</source>
         <translation>de exemplu, Acme Test Systems</translation>
     </message>
@@ -10418,7 +10418,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Prepared by (optional)</source>
         <translation>Pregătit de (opțional)</translation>
     </message>
@@ -10433,7 +10433,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Fișier</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="320"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG sau SVG (opțional)</translation>
     </message>
@@ -10736,7 +10736,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Etichete</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="249"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="250"/>
         <source>New tag...</source>
         <translation>Etichetă nouă...</translation>
     </message>
@@ -11398,7 +11398,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Familie de Fonturi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="88"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="89"/>
         <source>Notifications</source>
         <translation>Notificări</translation>
     </message>
@@ -11408,7 +11408,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Exportă Fișier Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="331"/>
         <source>Export...</source>
         <translation>Exportă...</translation>
     </message>
@@ -11519,12 +11519,12 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Resetează</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1050"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1049"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1061"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1060"/>
         <source>Apply</source>
         <translation>Aplică</translation>
     </message>
@@ -11782,7 +11782,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Duplică</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="109"/>
         <source>Create a copy of this data source</source>
         <translation>Creează o copie a acestei surse de date</translation>
     </message>
@@ -11872,7 +11872,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Adaugă Fereastră Externă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
@@ -11914,12 +11914,12 @@ Parametrul separator nu mai este necesar.</translation>
         <translation type="vanished">Înregistrare Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
         <source>Console</source>
         <translation>Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="511"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
         <source>Notifications</source>
         <translation>Notificări</translation>
     </message>
@@ -11929,7 +11929,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Preferințe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="535"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
         <source>Help Center</source>
         <translation>Centru de Ajutor</translation>
     </message>
@@ -12172,12 +12172,12 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Deschide CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Redă un fișier CSV ca și cum ar fi date de senzori în timp real</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Open MDF4</source>
         <translation>Deschide MDF4</translation>
     </message>
@@ -12224,7 +12224,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Preferințe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="307"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Open application settings and preferences</source>
         <translation>Deschide setările și preferințele aplicației</translation>
     </message>
@@ -12258,7 +12258,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="333"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Selectează comunicarea prin port serial (UART)</translation>
     </message>
@@ -12278,7 +12278,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Selectați comunicarea USB brută (Pro)</translation>
     </message>
@@ -12288,7 +12288,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Rețea</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Selectați comunicarea de rețea TCP/UDP</translation>
     </message>
@@ -12298,7 +12298,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>Browse example projects</source>
         <translation>Răsfoiește proiectele exemplu</translation>
     </message>
@@ -12335,7 +12335,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Selectați comunicarea dispozitivului HID (Pro)</translation>
     </message>
@@ -12345,7 +12345,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Selectați comunicarea Bluetooth Low Energy</translation>
     </message>
@@ -12365,7 +12365,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Selectați comunicarea prin conductă de proces (Pro)</translation>
     </message>
@@ -12376,7 +12376,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Despre</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
         <source>Show application info and license details</source>
         <translation>Afișați informații despre aplicație și detalii despre licență</translation>
     </message>
@@ -12591,7 +12591,7 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Dimensiune Maximă Pachet</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="299"/>
         <source>Control Transfers Enabled</source>
         <translation>Transferuri de Control Activat</translation>
     </message>
@@ -13138,7 +13138,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WorkspacesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
         <source>Workspaces</source>
         <translation>Spații de lucru</translation>
     </message>

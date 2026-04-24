@@ -113,8 +113,8 @@ SmartDialog {
 
             Label {
               Layout.fillWidth: true
-              font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
               text: qsTr("Activate Serial Studio Pro")
+              font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
             }
 
             Label {

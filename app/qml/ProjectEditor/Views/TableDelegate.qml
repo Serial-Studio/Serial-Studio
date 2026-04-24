@@ -395,11 +395,11 @@ ColumnLayout {
           active: model.widgetType === ProjectEditor.TextField
           visible: model.widgetType === ProjectEditor.TextField
 
+          property int modelRow: row
+          property int modelColumn: column
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
-          property int modelRow: row
-          property int modelColumn: column
 
           sourceComponent: TextField {
             text: textFieldLoader.editableValue
@@ -431,11 +431,11 @@ ColumnLayout {
           active: model.widgetType === ProjectEditor.IconPicker
           visible: model.widgetType === ProjectEditor.IconPicker
 
+          property int modelRow: row
+          property int modelColumn: column
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
-          property int modelRow: row
-          property int modelColumn: column
 
           sourceComponent: RowLayout {
             id: iconPickerRow
@@ -512,13 +512,13 @@ ColumnLayout {
           active: model.widgetType === ProjectEditor.IntField
           visible: model.widgetType === ProjectEditor.IntField
 
-          property var modelActive: model.active
-          property var editableValue: model.editableValue
-          property var modelPlaceholder: model.placeholderValue
           property int modelRow: row
           property int modelColumn: column
+          property var modelActive: model.active
           property int modelMin: model.minValue ?? 0
+          property var editableValue: model.editableValue
           property int modelMax: model.maxValue ?? 1000000
+          property var modelPlaceholder: model.placeholderValue
 
           sourceComponent: TextField {
             text: intFieldLoader.editableValue
@@ -540,8 +540,8 @@ ColumnLayout {
             }
 
             validator: IntValidator {
-              bottom: intFieldLoader.modelMin
               top: intFieldLoader.modelMax
+              bottom: intFieldLoader.modelMin
             }
 
             background: Item {}
@@ -559,13 +559,13 @@ ColumnLayout {
           active: model.widgetType === ProjectEditor.FloatField
           visible: model.widgetType === ProjectEditor.FloatField
 
-          property var modelActive: model.active
-          property var editableValue: model.editableValue
-          property var modelPlaceholder: model.placeholderValue
           property int modelRow: row
           property int modelColumn: column
-          property real modelMin: model.minValue ?? -1000000
+          property var modelActive: model.active
+          property var editableValue: model.editableValue
           property real modelMax: model.maxValue ?? 1000000
+          property real modelMin: model.minValue ?? -1000000
+          property var modelPlaceholder: model.placeholderValue
 
           sourceComponent: TextField {
             text: floatFieldLoader.editableValue
@@ -590,8 +590,8 @@ ColumnLayout {
             }
 
             validator: DoubleValidator {
-              bottom: floatFieldLoader.modelMin
               top: floatFieldLoader.modelMax
+              bottom: floatFieldLoader.modelMin
             }
 
             background: Item {}
@@ -609,11 +609,11 @@ ColumnLayout {
           active: model.widgetType === ProjectEditor.ComboBox
           visible: model.widgetType === ProjectEditor.ComboBox
 
+          property int modelRow: row
+          property int modelColumn: column
           property var modelActive: model.active
           property var comboBoxData: model.comboBoxData
           property var editableValue: model.editableValue
-          property int modelRow: row
-          property int modelColumn: column
 
           sourceComponent: ComboBox {
             flat: true
@@ -627,9 +627,9 @@ ColumnLayout {
                       ProjectEditor.EditableValue)
               }
             }
+            font: Cpp_Misc_CommonFonts.monoFont
             currentIndex: comboBoxLoader.editableValue
             opacity: comboBoxLoader.modelActive ? 1 : 0.5
-            font: Cpp_Misc_CommonFonts.monoFont
           }
         }
 
@@ -644,10 +644,10 @@ ColumnLayout {
           active: model.widgetType === ProjectEditor.CheckBox
           visible: model.widgetType === ProjectEditor.CheckBox
 
-          property var modelActive: model.active
-          property var editableValue: model.editableValue
           property int modelRow: row
           property int modelColumn: column
+          property var modelActive: model.active
+          property var editableValue: model.editableValue
 
           sourceComponent: ComboBox {
             flat: true
@@ -676,11 +676,11 @@ ColumnLayout {
           active: model.widgetType === ProjectEditor.HexTextField
           visible: model.widgetType === ProjectEditor.HexTextField
 
+          property int modelRow: row
+          property int modelColumn: column
           property var modelActive: model.active
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
-          property int modelRow: row
-          property int modelColumn: column
 
           sourceComponent: TextField {
             id: _hexComponent

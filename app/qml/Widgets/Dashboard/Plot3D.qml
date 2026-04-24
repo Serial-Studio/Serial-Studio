@@ -42,8 +42,8 @@ Item {
   //
   // Window flags
   //
-  readonly property bool hasToolbar: root.width >= toolbar.implicitWidth && root.height >= 220
   readonly property int toolbarHeight: windowRoot.objectName === "ExternalWindow" ? 47 : 48
+  readonly property bool hasToolbar: root.width >= toolbar.implicitWidth && root.height >= 220
 
   //
   // Disable navigation
@@ -301,8 +301,8 @@ Item {
       }
       enabled: model.anaglyphEnabled
       checked: model.invertEyePositions
-      ToolTip.text: qsTr("Invert Eye Positions")
       opacity: model.anaglyphEnabled ? 1 : 0
+      ToolTip.text: qsTr("Invert Eye Positions")
       icon.source: "qrc:/rcc/icons/dashboard-buttons/invert.svg"
     }
 

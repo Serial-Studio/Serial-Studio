@@ -61,8 +61,8 @@ Item {
         id: _deviceCombo
 
         Layout.fillWidth: true
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         model: Cpp_IO_Bluetooth_LE.deviceNames
         onCurrentIndexChanged: {
           if (currentIndex !== Cpp_IO_Bluetooth_LE.deviceIndex + 1)
@@ -84,8 +84,8 @@ Item {
         icon.height: 16
         implicitWidth: 24
         implicitHeight: 24
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Bluetooth_LE.startDiscovery()
         icon.source: "qrc:/rcc/icons/buttons/refresh.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
@@ -287,5 +287,4 @@ Item {
     }
   }
 }
-
 

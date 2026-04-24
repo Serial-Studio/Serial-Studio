@@ -30,11 +30,11 @@ SmartDialog {
   id: root
   title: qsTr("Extension Manager")
 
+  property bool showRepos: false
+  property bool readmeViewReady: false
   readonly property int toolbarHeight: 40
   property bool showDetail: Cpp_ExtensionManager.selectedIndex >= 0
-  property bool showRepos: false
   property bool fetchingData: Cpp_ExtensionManager.loading && Cpp_ExtensionManager.count === 0
-  property bool readmeViewReady: false
 
   function pushReadme() {
     if (!readmeViewReady || !readmeView.visible)
@@ -155,9 +155,9 @@ SmartDialog {
 
           delegate: ItemDelegate {
             width: typeFilter.width
-            text: Cpp_ExtensionManager.friendlyTypeName(modelData)
             font: Cpp_Misc_CommonFonts.uiFont
             highlighted: typeFilter.highlightedIndex === index
+            text: Cpp_ExtensionManager.friendlyTypeName(modelData)
           }
         }
 
@@ -224,8 +224,8 @@ SmartDialog {
 
       RowLayout {
         spacing: 4
-        anchors.fill: parent
         anchors.margins: 4
+        anchors.fill: parent
 
         ToolButton {
           icon.width: 18
@@ -436,9 +436,9 @@ SmartDialog {
       Item {
         id: gridPage
 
-        visible: !root.fetchingData
         width: parent.width
         height: parent.height
+        visible: !root.fetchingData
         x: (root.showDetail || root.showRepos) ? -width : 0
 
         Behavior on x {
@@ -457,18 +457,18 @@ SmartDialog {
         }
 
         Flickable {
-          anchors.fill: parent
-          anchors.margins: 8
-          contentHeight: gridColumn.implicitHeight
           clip: true
+          anchors.margins: 8
+          anchors.fill: parent
           boundsBehavior: Flickable.StopAtBounds
+          contentHeight: gridColumn.implicitHeight
           flickableDirection: Flickable.VerticalFlick
 
           Column {
             id: gridColumn
 
-            width: parent.width
             spacing: 4
+            width: parent.width
 
             Repeater {
               id: sectionRepeater
@@ -489,8 +489,8 @@ SmartDialog {
               }
 
               delegate: Column {
-                width: gridColumn.width
                 spacing: 4
+                width: gridColumn.width
 
                 required property string modelData
                 required property int index
@@ -505,10 +505,10 @@ SmartDialog {
                            || Cpp_ExtensionManager.filterType === "All"
 
                   RowLayout {
+                    spacing: 8
                     anchors.fill: parent
                     anchors.leftMargin: 4
                     anchors.rightMargin: 4
-                    spacing: 8
 
                     Label {
                       text: Cpp_ExtensionManager.friendlyTypeName(modelData)
@@ -529,8 +529,8 @@ SmartDialog {
                 // Cards grid for this type
                 //
                 Flow {
-                  width: parent.width
                   spacing: 10
+                  width: parent.width
 
                   Repeater {
                     model: {
@@ -568,8 +568,8 @@ SmartDialog {
 
               ColumnLayout {
                 spacing: 4
-                anchors.fill: parent
                 anchors.margins: 6
+                anchors.fill: parent
 
                 //
                 // Screenshot or gradient placeholder
@@ -579,9 +579,9 @@ SmartDialog {
                   Layout.fillHeight: true
 
                   Rectangle {
-                    anchors.fill: parent
                     radius: 4
                     clip: true
+                    anchors.fill: parent
                     color: "transparent"
 
                     gradient: Gradient {
@@ -615,8 +615,8 @@ SmartDialog {
                       mipmap: true
                       asynchronous: true
                       anchors.fill: parent
-                      fillMode: Image.PreserveAspectCrop
                       visible: status === Image.Ready
+                      fillMode: Image.PreserveAspectCrop
                       source: {
                         const ss = modelData.screenshot || ""
                         if (ss === "")
@@ -629,11 +629,11 @@ SmartDialog {
                     }
 
                     Label {
+                      opacity: 0.6
+                      color: "#ffffff"
                       anchors.centerIn: parent
                       text: (modelData.title || "?").charAt(0)
                       visible: (modelData.screenshot || "") === ""
-                      opacity: 0.6
-                      color: "#ffffff"
                       font: Cpp_Misc_CommonFonts.customMonoFont(2.5, true)
                     }
                   }
@@ -643,23 +643,23 @@ SmartDialog {
                   //
                   Row {
                     spacing: 4
+                    anchors.margins: 6
                     anchors.top: parent.top
                     anchors.right: parent.right
-                    anchors.margins: 6
 
                     Rectangle {
-                      visible: modelData.pluginRunning || false
-                      width: runLabel.implicitWidth + 8
-                      height: runLabel.implicitHeight + 4
                       radius: 3
                       color: "#2ecc71"
+                      width: runLabel.implicitWidth + 8
+                      height: runLabel.implicitHeight + 4
+                      visible: modelData.pluginRunning || false
 
                       Label {
                         id: runLabel
-                        anchors.centerIn: parent
-                        text: qsTr("Running")
-                        font: Cpp_Misc_CommonFonts.customUiFont(0.7, true)
                         color: "#ffffff"
+                        text: qsTr("Running")
+                        anchors.centerIn: parent
+                        font: Cpp_Misc_CommonFonts.customUiFont(0.7, true)
                       }
                     }
 
@@ -675,10 +675,10 @@ SmartDialog {
 
                       Label {
                         id: installedLabel
-                        anchors.centerIn: parent
-                        text: modelData.updateAvailable ? qsTr("Update") : qsTr("Installed")
-                        font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
                         color: "#ffffff"
+                        anchors.centerIn: parent
+                        font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
+                        text: modelData.updateAvailable ? qsTr("Update") : qsTr("Installed")
                       }
                     }
 
@@ -692,10 +692,10 @@ SmartDialog {
 
                       Label {
                         id: unavailLabel
+                        color: "#ffffff"
                         anchors.centerIn: parent
                         text: qsTr("Unavailable")
                         font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
-                        color: "#ffffff"
                       }
                     }
                   }
@@ -704,10 +704,10 @@ SmartDialog {
                   // Hover description overlay (slides up)
                   //
                   Item {
-                    anchors.fill: parent
-                    anchors.bottom: parent.bottom
-                    height: parent.height
                     clip: true
+                    anchors.fill: parent
+                    height: parent.height
+                    anchors.bottom: parent.bottom
 
                     Rectangle {
                       width: parent.width
@@ -728,8 +728,8 @@ SmartDialog {
 
                       ColumnLayout {
                         spacing: 4
-                        anchors.fill: parent
                         anchors.margins: 8
+                        anchors.fill: parent
 
                         Label {
                           text: modelData.title || ""
@@ -857,8 +857,8 @@ SmartDialog {
             WebEngineView {
               id: readmeView
 
-              anchors.fill: parent
               anchors.margins: 2
+              anchors.fill: parent
               backgroundColor: "transparent"
               url: "qrc:/rcc/markdown-viewer.html"
               settings.localContentCanAccessRemoteUrls: true
@@ -912,9 +912,9 @@ SmartDialog {
           //
           ColumnLayout {
             spacing: 8
+            Layout.fillHeight: true
             Layout.minimumWidth: 280
             Layout.maximumWidth: 280
-            Layout.fillHeight: true
 
             //
             // Details panel
@@ -935,8 +935,8 @@ SmartDialog {
                 id: detailsCol
 
                 spacing: 4
-                anchors.fill: parent
                 anchors.margins: 8
+                anchors.fill: parent
 
                 Item { implicitHeight: 2 }
 
@@ -1084,8 +1084,8 @@ SmartDialog {
 
               ColumnLayout {
                 spacing: 0
-                anchors.fill: parent
                 anchors.margins: 1
+                anchors.fill: parent
 
                 Label {
                   text: qsTr("  PLUGIN OUTPUT")
@@ -1104,9 +1104,9 @@ SmartDialog {
                 }
 
                 ScrollView {
+                  clip: true
                   Layout.fillWidth: true
                   Layout.fillHeight: true
-                  clip: true
 
                   TextArea {
                     id: pluginLogArea
@@ -1189,8 +1189,8 @@ SmartDialog {
 
         ColumnLayout {
           spacing: 4
-          anchors.fill: parent
           anchors.margins: 12
+          anchors.fill: parent
 
           Item {
             implicitHeight: 2
@@ -1225,10 +1225,10 @@ SmartDialog {
             id: repoList
 
             clip: true
+            spacing: 4
             Layout.fillWidth: true
             Layout.fillHeight: true
             model: Cpp_ExtensionManager.repositories
-            spacing: 4
 
             delegate: Rectangle {
               width: repoList.width
@@ -1242,8 +1242,8 @@ SmartDialog {
                 id: repoRow
 
                 spacing: 8
-                anchors.fill: parent
                 anchors.margins: 4
+                anchors.fill: parent
 
                 Label {
                   visible: Cpp_ExtensionManager.isLocalRepo(modelData)

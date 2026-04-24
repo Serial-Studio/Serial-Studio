@@ -146,12 +146,12 @@ Item {
   //
   // Visible range calculations for dynamic tick intervals
   //
+  readonly property real xVisibleMax: xVisibleMin + xVisibleRange
+  readonly property real yVisibleMax: yVisibleMin + yVisibleRange
   readonly property real xVisibleRange: (xMax - xMin) / _axisX.zoom
   readonly property real yVisibleRange: (yMax - yMin) / _axisY.zoom
   readonly property real xVisibleMin: xMin + (xMax - xMin) / 2 + _axisX.pan - xVisibleRange / 2
-  readonly property real xVisibleMax: xVisibleMin + xVisibleRange
   readonly property real yVisibleMin: yMin + (yMax - yMin) / 2 + _axisY.pan - yVisibleRange / 2
-  readonly property real yVisibleMax: yVisibleMin + yVisibleRange
 
   //
   // Dynamic tick intervals based on visible range and available space
@@ -545,8 +545,8 @@ Item {
       property real _startX: 0
       property real _startY: 0
       property bool _didDrag: false
-      property int _pressedButton: Qt.NoButton
       property var draggedCursor: null
+      property int _pressedButton: Qt.NoButton
       readonly property bool dragging: containsPress && _axisX.zoom > 1 && draggedCursor === null
 
       //
@@ -792,9 +792,9 @@ Item {
         color: root.cursorATextColor
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.9, true))
         background: Rectangle {
-          color: root.cursorAColor
-          opacity: 0.9
           radius: 3
+          opacity: 0.9
+          color: root.cursorAColor
         }
         anchors {
           topMargin: 5
@@ -895,9 +895,9 @@ Item {
         color: root.cursorBTextColor
         font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.9, true))
         background: Rectangle {
-          color: root.cursorBColor
-          opacity: 0.9
           radius: 3
+          opacity: 0.9
+          color: root.cursorBColor
         }
         anchors {
           topMargin: 5
@@ -931,9 +931,9 @@ Item {
       font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
+        radius: 3
         opacity: 0.9
         color: root.cursorAColor
-        radius: 3
       }
 
       x: Math.max(0, Math.min(parent.width - width, root.worldToPixelX(root.cursorAX) - width / 2))
@@ -956,9 +956,9 @@ Item {
       font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
+        radius: 3
         opacity: 0.9
         color: root.cursorAColor
-        radius: 3
       }
 
       y: Math.max(0, Math.min(parent.height - height, root.worldToPixelY(root.cursorAY) - height / 2))
@@ -981,9 +981,9 @@ Item {
       font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
+        radius: 3
         opacity: 0.9
         color: root.cursorBColor
-        radius: 3
       }
 
       x: Math.max(0, Math.min(parent.width - width, root.worldToPixelX(root.cursorBX) - width / 2))
@@ -1006,9 +1006,9 @@ Item {
       font: (Cpp_Misc_CommonFonts.widgetFontRevision, Cpp_Misc_CommonFonts.widgetFont(0.8))
 
       background: Rectangle {
+        radius: 3
         opacity: 0.9
         color: root.cursorBColor
-        radius: 3
       }
 
       y: Math.max(0, Math.min(parent.height - height, root.worldToPixelY(root.cursorBY) - height / 2))

@@ -22,8 +22,8 @@ Item {
 
   ColumnLayout {
     spacing: 8
-    anchors.fill: parent
     anchors.margins: 16
+    anchors.fill: parent
 
     Item { Layout.fillHeight: true }
 
@@ -37,8 +37,8 @@ Item {
     Switch {
       id: toggle
 
-      checked: root.model ? root.model.checked : false
       Layout.alignment: Qt.AlignHCenter
+      checked: root.model ? root.model.checked : false
 
       palette.highlight: root.color
 
@@ -64,11 +64,11 @@ Item {
     }
 
     Label {
-      visible: root.model && !root.model.hasTransmitFunction
-      text: qsTr("No transmit function defined")
       color: "#ff6666"
       font: Cpp_Misc_CommonFonts.uiFont
       Layout.alignment: Qt.AlignHCenter
+      text: qsTr("No transmit function defined")
+      visible: root.model && !root.model.hasTransmitFunction
     }
 
     Item { Layout.fillHeight: true }

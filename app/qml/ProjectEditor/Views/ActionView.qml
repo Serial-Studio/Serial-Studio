@@ -97,11 +97,11 @@ Widgets.Pane {
 
         anchors {
           margins: 8
+          topMargin: 0
+          bottomMargin: 0
           left: parent.left
           right: parent.right
           verticalCenter: parent.verticalCenter
-          topMargin: 0
-          bottomMargin: 0
         }
 
         height: layout.implicitHeight
@@ -119,8 +119,8 @@ Widgets.Pane {
           id: layout
 
           spacing: 4
-          width: Math.max(implicitWidth, flickable.width)
           anchors.verticalCenter: parent.verticalCenter
+          width: Math.max(implicitWidth, flickable.width)
 
         //
         // Change icon
@@ -181,9 +181,9 @@ Widgets.Pane {
       Rectangle {
         z: 10
         width: 16
-        visible: flickable.contentX > 4
-        anchors.left: flickable.left
         anchors.top: flickable.top
+        anchors.left: flickable.left
+        visible: flickable.contentX > 4
         anchors.bottom: flickable.bottom
 
         gradient: Gradient {
@@ -207,10 +207,10 @@ Widgets.Pane {
       Rectangle {
         z: 10
         width: 16
-        visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
-        anchors.right: flickable.right
         anchors.top: flickable.top
+        anchors.right: flickable.right
         anchors.bottom: flickable.bottom
+        visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
 
         gradient: Gradient {
           orientation: Gradient.Horizontal

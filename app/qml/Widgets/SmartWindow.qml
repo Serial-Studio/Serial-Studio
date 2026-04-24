@@ -29,9 +29,9 @@ Window {
   //
   // Custom properties
   //
-  property string category: ""
   property real previousX: 0
   property real previousY: 0
+  property string category: ""
   property real previousWidth: 0
   property real previousHeight: 0
   property bool isMaximized: false
@@ -200,9 +200,9 @@ Window {
     property alias ay: root.y
     property alias aw: root.width
     property alias ah: root.height
-    property alias am: root.isMaximized
     property alias px: root.previousX
     property alias py: root.previousY
+    property alias am: root.isMaximized
     property alias pw: root.previousWidth
     property alias ph: root.previousHeight
     property alias pn: root.previousScreenName

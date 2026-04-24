@@ -230,8 +230,8 @@ Widgets.Pane {
             ]
 
             delegate: Item {
-              width:  statsBar.width / 4
               height: statsBar.height
+              width:  statsBar.width / 4
 
               Rectangle {
                 width: 1
@@ -308,8 +308,8 @@ Widgets.Pane {
         Row {
           spacing: 2
           anchors {
-            right: parent.right
             rightMargin: 8
+            right: parent.right
             verticalCenter: parent.verticalCenter
           }
 
@@ -335,8 +335,8 @@ Widgets.Pane {
             MouseArea {
               id: zoomOutArea
 
-              anchors.fill: parent
               hoverEnabled: true
+              anchors.fill: parent
               cursorShape: Qt.PointingHandCursor
               onClicked: diagram.zoom = Math.max(diagram.minZoom, diagram.zoom - 0.15)
             }
@@ -364,8 +364,8 @@ Widgets.Pane {
             MouseArea {
               id: resetArea
 
-              anchors.fill: parent
               hoverEnabled: true
+              anchors.fill: parent
               cursorShape: Qt.PointingHandCursor
               onClicked: diagram.resetZoom()
             }
@@ -393,8 +393,8 @@ Widgets.Pane {
             MouseArea {
               id: zoomInArea
 
-              anchors.fill: parent
               hoverEnabled: true
+              anchors.fill: parent
               cursorShape: Qt.PointingHandCursor
               onClicked: diagram.zoom = Math.min(diagram.maxZoom, diagram.zoom + 0.15)
             }

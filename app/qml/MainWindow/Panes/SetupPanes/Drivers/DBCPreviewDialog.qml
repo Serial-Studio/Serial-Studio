@@ -252,9 +252,9 @@ Window {
             id: _messagesTable
 
             clip: true
-            model: Cpp_JSON_DBCImporter.messageCount
             Layout.fillWidth: true
             Layout.fillHeight: true
+            model: Cpp_JSON_DBCImporter.messageCount
 
             delegate: Rectangle {
               height: 36

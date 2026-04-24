@@ -21,10 +21,14 @@ background inline blocks) is skipped — the whole run containing the
 ambiguity is left untouched.
 
 Usage:
-    python3 scripts/qmlformat.py --check app/qml               # report-only
+    python3 scripts/qmlformat.py                               # fix everything under app/qml
+    python3 scripts/qmlformat.py --check                       # report-only, whole tree
+    python3 scripts/qmlformat.py --check app/qml               # report-only, explicit path
     python3 scripts/qmlformat.py --fix app/qml                 # rewrite files
     python3 scripts/qmlformat.py --check app/qml/Foo.qml       # single file
     python3 scripts/qmlformat.py --fix --diff app/qml          # show changes
+
+Called with no arguments the script defaults to --fix on <repo>/app/qml.
 
 Exit codes:
     0 - clean (check) or rewrote files (fix)
@@ -82,6 +86,143 @@ _CONTINUATION_PREFIX = re.compile(
     re.VERBOSE,
 )
 
+# Trailing tokens that imply the next physical line continues this one.
+# The base set omits `:` because a bare `:` at end-of-line on the first
+# physical line of a prop is the property separator after a blank value
+# (rare but possible).  Once we've already absorbed at least one
+# continuation line, a trailing `:` is almost certainly a ternary middle,
+# so _TRAILING_OPERATOR_INNER adds `:` back in.
+_TRAILING_OPERATOR_FIRST = re.compile(
+    r"""
+    (?:
+        [?+\-*/%&|^]      # single-char operators (no `:`)
+      | && | \|\|
+    )
+    \s* $
+    """,
+    re.VERBOSE,
+)
+
+_TRAILING_OPERATOR_INNER = re.compile(
+    r"""
+    (?:
+        [?:+\-*/%&|^]     # includes `:` for ternary continuations
+      | && | \|\|
+    )
+    \s* $
+    """,
+    re.VERBOSE,
+)
+
+
+def _strip_strings_and_comments(line: str) -> str:
+    """Return `line` with string literals and `//` comments blanked out, so
+    bracket-counting on the result ignores brackets that live inside strings
+    or end-of-line comments."""
+    result: list[str] = []
+    i = 0
+    n = len(line)
+    while i < n:
+        ch = line[i]
+
+        # Line comment — drop everything to end-of-line
+        if ch == "/" and i + 1 < n and line[i + 1] == "/":
+            break
+
+        # Double-quoted string
+        if ch == '"':
+            result.append(" ")
+            i += 1
+            while i < n:
+                if line[i] == "\\" and i + 1 < n:
+                    i += 2
+                    result.append("  ")
+                    continue
+                if line[i] == '"':
+                    result.append(" ")
+                    i += 1
+                    break
+                result.append(" ")
+                i += 1
+            continue
+
+        # Single-quoted string (JS string literal)
+        if ch == "'":
+            result.append(" ")
+            i += 1
+            while i < n:
+                if line[i] == "\\" and i + 1 < n:
+                    i += 2
+                    result.append("  ")
+                    continue
+                if line[i] == "'":
+                    result.append(" ")
+                    i += 1
+                    break
+                result.append(" ")
+                i += 1
+            continue
+
+        result.append(ch)
+        i += 1
+
+    return "".join(result)
+
+
+def _bracket_delta(line: str) -> int:
+    """Signed open/close bracket count, ignoring strings and line comments."""
+    sanitized = _strip_strings_and_comments(line)
+    opens = sanitized.count("(") + sanitized.count("[") + sanitized.count("{")
+    closes = sanitized.count(")") + sanitized.count("]") + sanitized.count("}")
+    return opens - closes
+
+
+def _brace_delta_raw(line: str) -> int:
+    """Signed curly-brace count on a raw string, ignoring strings/comments."""
+    sanitized = _strip_strings_and_comments(line)
+    return sanitized.count("{") - sanitized.count("}")
+
+
+def _has_trailing_operator(line: str, is_inner: bool) -> bool:
+    """True when the sanitized line ends with a continuation operator.
+
+    `is_inner` distinguishes the first physical line of a logical property
+    (where a trailing `:` is the prop separator) from absorbed continuation
+    lines (where `:` usually means ternary middle).
+
+    An extra guard handles ternary-middle on the FIRST line too:
+    `icon.source: checked ? "a" :` has a trailing `:` that is not the prop
+    separator (the prop-separator `:` comes after `icon.source` and is
+    followed by a non-empty value).  We detect this by counting unbalanced
+    `?`: if the sanitized text has more `?` than `:` after the prop
+    separator, a trailing `:` must be completing a ternary and we absorb.
+    """
+    sanitized = _strip_strings_and_comments(line).rstrip()
+    if not sanitized:
+        return False
+
+    pattern = _TRAILING_OPERATOR_INNER if is_inner else _TRAILING_OPERATOR_FIRST
+    if pattern.search(sanitized):
+        return True
+
+    # First-line ternary-middle: `prop: ... ? ... :`
+    if not is_inner and sanitized.endswith(":"):
+        # Strip the property-separator `:` and whatever precedes it, then
+        # check the remaining value text for unbalanced `?`.  The trailing
+        # `:` is the operator we're evaluating, so drop it before counting.
+        m = re.match(r"\s*(?:readonly\s+)?(?:property\s+\w+\s+)?[A-Za-z_][\w.]*\s*:(.*)$",
+                     sanitized)
+        if m:
+            value = m.group(1).rstrip()
+            if value.endswith(":"):
+                value = value[:-1]
+            q = value.count("?")
+            c = value.count(":")
+            if q > c:
+                return True
+
+    return False
+
 
 @dataclass
 class LogicalLine:
@@ -113,12 +254,20 @@ def physical_kind(raw: str) -> str:
         return "comment"
     if _ID_LINE.match(stripped):
         return "id"
-    # A line ending in `{` opens a nested block
-    if text.endswith("{"):
+
+    # Classify by net brace delta on the sanitized text so lines with
+    # balanced inline braces (`const x = {}`) aren't mistaken for closers.
+    delta = _brace_delta_raw(stripped)
+    if delta > 0:
         return "open"
-    # `}` or `} ...` closes a block
-    if text == "}" or text.rstrip().endswith("}") and not _SIMPLE_PROP.match(stripped):
+    if delta < 0:
         return "close"
+
+    # Net-zero lines — treat `}` or `} else {` style only if the only brace
+    # action on the line is a single close at the start.
+    if text == "}" and not _SIMPLE_PROP.match(stripped):
+        return "close"
+
     if _HANDLER.match(stripped):
         return "handler"
     if _SIMPLE_PROP.match(stripped):
@@ -126,8 +275,40 @@ def physical_kind(raw: str) -> str:
     return "other"
 
 
+def opens_js_body(raw: str) -> bool:
+    """True when `raw` ends with `{` and that `{` opens a JavaScript body.
+
+    Heuristic: the line matches a QML handler pattern (`onSomething: {`),
+    a Component.onXxx attachment, or a JavaScript `function ... {` or
+    arrow-function `... => {` body.  Anything of the form `Foo {` or
+    `Foo.Bar {` at the start of a line is a QML object declaration and is
+    NOT a JS body.
+    """
+    stripped = raw.rstrip()
+    if not stripped.endswith("{"):
+        return False
+
+    text = stripped.strip()
+    sanitized = _strip_strings_and_comments(text)
+
+    # JavaScript: `function name(args) {` or `function (args) {`
+    if re.match(r"^\s*function\b", sanitized):
+        return True
+
+    # Arrow function body: `... => {`
+    if "=>" in sanitized:
+        return True
+
+    # Handler or attachment with a body: `onClicked: {`, `Component.onCompleted: {`,
+    # `Keys.onPressed: {`, etc.  Anything that has `: {` at the end.
+    if re.search(r":\s*\{\s*$", sanitized):
+        return True
+
+    return False
+
+
 def is_continuation(prev_kind: str, raw: str) -> bool:
-    """True if `raw` is a continuation of the previous logical line."""
+    """True if `raw` begins with a token that can only be a continuation."""
     if prev_kind not in ("prop", "other"):
         return False
     stripped = raw.rstrip()
@@ -139,9 +320,15 @@ def is_continuation(prev_kind: str, raw: str) -> bool:
 def tokenize(raw_lines: list[str]) -> list[LogicalLine]:
     """Group physical lines into logical lines.
 
-    A simple-property or `other` line absorbs subsequent continuation lines
-    (ones starting with `?`, `:`, `+`, `&&`, etc.) until a non-continuation
-    physical line is seen.
+    A prop/other line absorbs subsequent physical lines while EITHER:
+      - bracket depth is still > 0 (unclosed `(`, `[`, or `{` in the value),
+      - the last absorbed line ends with a trailing operator (`?`, `:`, `+`, …),
+      - OR the next physical line starts with a continuation operator.
+
+    Comments and handlers are never absorbed into a property run. A `{` or `}`
+    that appears on the *absorbed* lines contributes to the bracket count, but
+    does not retrigger the `open`/`close` classification — the logical line is
+    still treated as a prop for run-sorting purposes, just an unsafe one.
     """
     logical: list[LogicalLine] = []
     i = 0
@@ -153,11 +340,52 @@ def tokenize(raw_lines: list[str]) -> list[LogicalLine]:
         line = LogicalLine(raws=[raw], kind=kind, start_idx=i)
         i += 1
 
-        # Absorb continuations onto prop/other lines
-        if kind in ("prop", "other"):
-            while i < n and is_continuation(kind, raw_lines[i]):
-                line.raws.append(raw_lines[i])
-                i += 1
+        if kind not in ("prop", "other"):
+            logical.append(line)
+            continue
+
+        # Track open-bracket balance across absorbed lines. If the property's
+        # value opens a list literal, object literal, or parenthesized group,
+        # keep absorbing physical lines until brackets rebalance.
+        depth = _bracket_delta(raw)
+        last = raw
+        inner = False  # True once we've absorbed at least one continuation line
+
+        while i < n:
+            next_raw = raw_lines[i]
+            next_kind = physical_kind(next_raw)
+
+            # Blank line always terminates the run — even an open bracket
+            # followed by a blank line is malformed source we won't touch.
+            if next_kind == "blank":
+                break
+
+            # A line whose net bracket delta is negative is a structural close
+            # of an OUTER block, not a continuation of this prop's value.
+            # Never absorb it, even if it happens to start with `)`, `]`, or `}`.
+            # Exception: when we're still inside an unclosed bracket run of our
+            # own — then the `)` / `]` / `}` closes our own literal.
+            next_bracket_delta = _bracket_delta(next_raw)
+            if next_bracket_delta < 0 and depth + next_bracket_delta < 0:
+                break
+
+            # Decide whether `next_raw` continues `last`.
+            absorb = False
+            if depth > 0:
+                absorb = True
+            elif _has_trailing_operator(last, is_inner=inner):
+                absorb = True
+            elif is_continuation(kind, next_raw):
+                absorb = True
+
+            if not absorb:
+                break
+
+            line.raws.append(next_raw)
+            depth += _bracket_delta(next_raw)
+            last = next_raw
+            inner = True
+            i += 1
 
         logical.append(line)
 
@@ -189,16 +417,17 @@ def _brace_delta(line: LogicalLine) -> int:
 
 def is_run_safe(run: list[LogicalLine]) -> bool:
     """Sorting is only safe when every logical line is a single physical
-    'prop' line with no inline braces.  Multi-line props (ternaries,
-    continuations) and property values opening nested blocks stay put."""
+    'prop' line with no inline braces or brackets.  The tokenizer already
+    absorbs multi-line props into one LogicalLine; any line with more than
+    one physical source line is therefore a multi-line value and skipped."""
     for line in run:
         if line.kind != "prop":
             return False
         if len(line.raws) != 1:
             return False
-        text = line.raws[0]
-        # Reject inline nested blocks on prop values (e.g. `background: Rectangle { ... }` spread across lines is already multi-line; this guards against any single-line case too)
-        if "{" in text or "}" in text:
+        sanitized = _strip_strings_and_comments(line.raws[0])
+        # Reject inline nested blocks or collection literals on the value.
+        if any(ch in sanitized for ch in "{}[]"):
             return False
     return True
 
@@ -209,21 +438,71 @@ def is_run_safe(run: list[LogicalLine]) -> bool:
 
 def find_property_runs(lines: list[LogicalLine]) -> list[tuple[int, int]]:
     """Return (start, end_exclusive) ranges of consecutive 'prop' logical
-    lines (length >= 2).  Blank lines, comments, handlers, or anything
-    non-prop terminates a run."""
+    lines (length >= 2) that are safe to reorder.
+
+    A run is collected only when the surrounding block is a QML object
+    declaration (`Foo { ... }` or `Rectangle { ... }`).  JavaScript bodies
+    (handler functions like `onClicked: { ... }`, `function foo() { ... }`,
+    arrow-body `=> { ... }`) are skipped entirely: the `identifier: value`
+    pattern inside a JS object literal has dangling-comma semantics, and
+    statements inside a JS statement block are not order-independent.
+
+    The walk tracks a stack of (is_js, depth) entries so nested `{ ... }`
+    inside a JS body stay in JS mode until brackets rebalance.
+    """
     runs: list[tuple[int, int]] = []
-    i = 0
     n = len(lines)
+
+    # Stack entries: True for JS body, False for QML body.  An open that
+    # occurs while the top of the stack is already JS inherits JS mode.
+    js_stack: list[bool] = []
+
+    def in_js() -> bool:
+        return any(js_stack)
+
+    i = 0
     while i < n:
-        if lines[i].kind == "prop":
+        line = lines[i]
+
+        if line.kind == "open":
+            # Classify the new block: an open line inside an already-JS block
+            # inherits JS mode (nested `{ ... }` inside a function body).
+            is_js = opens_js_body(line.raws[0]) or in_js()
+
+            # A single physical open line typically contributes one `{`, but
+            # pathological sources may have several.  Push one frame per `{`;
+            # all nested frames share the same JS classification.
+            net = _brace_delta_raw(line.raws[0])
+            frames_to_push = max(1, net)
+            for _ in range(frames_to_push):
+                js_stack.append(is_js)
+            i += 1
+            continue
+
+        if line.kind == "close":
+            net = _brace_delta_raw(line.raws[0])
+            pops = max(1, -net) if net < 0 else 1
+            for _ in range(pops):
+                if js_stack:
+                    js_stack.pop()
+            i += 1
+            continue
+
+        if in_js():
+            i += 1
+            continue
+
+        if line.kind == "prop":
             j = i
             while j < n and lines[j].kind == "prop":
                 j += 1
             if j - i >= 2:
                 runs.append((i, j))
             i = j
-        else:
-            i += 1
+            continue
+
+        i += 1
+
     return runs
 
 
@@ -410,17 +689,39 @@ def iter_qml_files(targets: list[Path]) -> Iterable[Path]:
 # CLI
 # ---------------------------------------------------------------------------
 
+def default_target() -> Path:
+    """Return the repo-level `app/qml` directory anchored to the script's location."""
+    # scripts/qmlformat.py  →  <repo>/app/qml
+    return Path(__file__).resolve().parent.parent / "app" / "qml"
+
+
 def main(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    group = parser.add_mutually_exclusive_group(required=True)
+    parser = argparse.ArgumentParser(
+        description=__doc__.splitlines()[0],
+        epilog="With no arguments, runs --fix on the repo's app/qml tree.",
+    )
+    group = parser.add_mutually_exclusive_group()
     group.add_argument("--check", action="store_true", help="report only, no writes")
-    group.add_argument("--fix", action="store_true", help="rewrite files in place")
+    group.add_argument("--fix", action="store_true", help="rewrite files in place (default)")
     parser.add_argument("--diff", action="store_true",
                         help="show unified diff of proposed changes")
-    parser.add_argument("paths", nargs="+", type=Path,
-                        help="files or directories to process")
+    parser.add_argument("paths", nargs="*", type=Path,
+                        help="files or directories to process (default: app/qml)")
 
     args = parser.parse_args(argv)
+
+    # Default to --fix when neither mode was explicitly requested
+    if not args.check and not args.fix:
+        args.fix = True
+
+    # Default to the repo's app/qml tree when no paths were supplied
+    if not args.paths:
+        target = default_target()
+        if not target.exists():
+            print(f"default target {target} does not exist; pass paths explicitly",
+                  file=sys.stderr)
+            return 2
+        args.paths = [target]
 
     files = sorted(set(iter_qml_files(args.paths)))
     if not files:

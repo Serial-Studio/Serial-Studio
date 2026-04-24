@@ -197,8 +197,8 @@ Item {
 
     ToolButton {
       icon.width: 24
-      icon.height: 24
       enabled: false
+      icon.height: 24
       icon.color: "transparent"
       icon.source: "qrc:/rcc/icons/dashboard-buttons/map.svg"
     }

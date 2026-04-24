@@ -30,8 +30,8 @@ Widgets.Pane {
 
   implicitWidth: 0
   implicitHeight: 0
-  icon: "qrc:/rcc/icons/project-editor/treeview/datagrid.svg"
   title: qsTr("Workspaces")
+  icon: "qrc:/rcc/icons/project-editor/treeview/datagrid.svg"
 
   property var summary: []
 
@@ -104,11 +104,11 @@ Widgets.Pane {
           spacing: 8
           anchors {
             margins: 8
+            topMargin: 0
+            bottomMargin: 0
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            topMargin: 0
-            bottomMargin: 0
           }
 
           //
@@ -121,8 +121,8 @@ Widgets.Pane {
             text: qsTr("Customize")
             Layout.alignment: Qt.AlignVCenter
             ToolTip.text: qsTr("Edit workspaces manually")
-            icon.source: "qrc:/rcc/icons/project-editor/actions/customize.svg"
             checked: Cpp_JSON_ProjectModel.customizeWorkspaces
+            icon.source: "qrc:/rcc/icons/project-editor/actions/customize.svg"
             onClicked: Cpp_JSON_ProjectModel.customizeWorkspaces =
                        !Cpp_JSON_ProjectModel.customizeWorkspaces
           }
@@ -157,9 +157,9 @@ Widgets.Pane {
         id: list
         clip: true
         spacing: 0
+        model: root.summary
         Layout.fillWidth: true
         Layout.fillHeight: true
-        model: root.summary
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -180,12 +180,12 @@ Widgets.Pane {
             anchors.fill: parent
 
             Label {
+              leftPadding: 8
+              text: modelData.title
+              elide: Text.ElideRight
+              color: wsRow.textColor
               Layout.preferredWidth: 280
               Layout.alignment: Qt.AlignVCenter
-              leftPadding: 8
-              elide: Text.ElideRight
-              text: modelData.title
-              color: wsRow.textColor
               font: Cpp_Misc_CommonFonts.uiFont
             }
 
@@ -196,11 +196,11 @@ Widgets.Pane {
             }
 
             Label {
-              Layout.fillWidth: true
-              Layout.alignment: Qt.AlignVCenter
               leftPadding: 8
-              text: modelData.widgetCount
+              Layout.fillWidth: true
               color: wsRow.textColor
+              text: modelData.widgetCount
+              Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
             }
           }

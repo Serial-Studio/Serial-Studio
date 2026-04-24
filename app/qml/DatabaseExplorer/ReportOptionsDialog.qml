@@ -35,15 +35,15 @@ Widgets.SmartDialog {
     id: _prefs
 
     category: "SessionPdfReport"
-    property string companyName: ""
-    property string authorName: ""
     property string logoPath: ""
+    property real lineWidth: 1.4
     property int pageSizeIndex: 0
+    property string authorName: ""
+    property string companyName: ""
     property bool includeCover: true
-    property bool includeMetadata: true
     property bool includeStats: true
     property bool includeCharts: true
-    property real lineWidth: 1.4
+    property bool includeMetadata: true
     property int lineStyleIndex: 0   // 0=Solid, 1=Dashed, 2=Dotted
   }
 
@@ -178,21 +178,21 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
 
       TabButton {
-        height: _tab.height + 3
-        width: implicitWidth + 2 * 8
         text: qsTr("Branding")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
       }
 
       TabButton {
-        height: _tab.height + 3
-        width: implicitWidth + 2 * 8
         text: qsTr("Page")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        text: qsTr("Sections")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
-        text: qsTr("Sections")
       }
     }
 
@@ -237,8 +237,8 @@ Widgets.SmartDialog {
           columns: 2
           rowSpacing: 6
           columnSpacing: 8
-          anchors.fill: parent
           anchors.margins: 12
+          anchors.fill: parent
 
           Label {
             Layout.columnSpan: 2
@@ -262,8 +262,8 @@ Widgets.SmartDialog {
             id: _companyField
 
             Layout.fillWidth: true
-            placeholderText: qsTr("e.g. Acme Test Systems")
             font: Cpp_Misc_CommonFonts.uiFont
+            placeholderText: qsTr("e.g. Acme Test Systems")
           }
 
           Label {
@@ -274,8 +274,8 @@ Widgets.SmartDialog {
             id: _titleField
 
             Layout.fillWidth: true
-            placeholderText: qsTr("Session Report")
             font: Cpp_Misc_CommonFonts.uiFont
+            placeholderText: qsTr("Session Report")
           }
 
           Label {
@@ -286,8 +286,8 @@ Widgets.SmartDialog {
             id: _authorField
 
             Layout.fillWidth: true
-            placeholderText: qsTr("Prepared by (optional)")
             font: Cpp_Misc_CommonFonts.uiFont
+            placeholderText: qsTr("Prepared by (optional)")
           }
 
           Item { implicitHeight: 4; Layout.columnSpan: 2 }
@@ -310,15 +310,15 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           }
           RowLayout {
-            Layout.fillWidth: true
             spacing: 6
+            Layout.fillWidth: true
 
             TextField {
               id: _logoField
 
               Layout.fillWidth: true
-              placeholderText: qsTr("PNG, JPG or SVG (optional)")
               font: Cpp_Misc_CommonFonts.uiFont
+              placeholderText: qsTr("PNG, JPG or SVG (optional)")
             }
             Button {
               text: qsTr("Browse…")
@@ -358,8 +358,8 @@ Widgets.SmartDialog {
           columns: 2
           rowSpacing: 6
           columnSpacing: 8
-          anchors.fill: parent
           anchors.margins: 12
+          anchors.fill: parent
 
           Label {
             Layout.columnSpan: 2
@@ -406,8 +406,8 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           }
           RowLayout {
-            Layout.fillWidth: true
             spacing: 8
+            Layout.fillWidth: true
 
             SpinBox {
               id: _lineWidthSpin
@@ -465,8 +465,8 @@ Widgets.SmartDialog {
           id: _sectionsLayout
 
           spacing: 6
-          anchors.fill: parent
           anchors.margins: 12
+          anchors.fill: parent
 
           Label {
             text: qsTr("Include")

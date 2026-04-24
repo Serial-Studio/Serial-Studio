@@ -103,7 +103,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>Spravovat Licenci</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>Donate</source>
         <translation>Darovat</translation>
     </message>
@@ -128,7 +128,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>Poděkování</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="242"/>
+        <location filename="../../qml/Dialogs/About.qml" line="241"/>
         <source>Website</source>
         <translation>Webová stránka</translation>
     </message>
@@ -259,12 +259,12 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="42"/>
         <source>Add Widget</source>
         <translation>Přidat Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="210"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="209"/>
         <source>Available Widgets</source>
         <translation>Dostupné Widgety</translation>
     </message>
@@ -329,7 +329,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>%1 z %2 widgetů</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="389"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -923,7 +923,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="42"/>
         <source>Insert Constant</source>
         <translation>Vložit Konstantu</translation>
     </message>
@@ -1106,7 +1106,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>Zlatý řez</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="208"/>
         <source>Physics Constants</source>
         <translation>Fyzikální Konstanty</translation>
     </message>
@@ -1141,7 +1141,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>Kategorie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="352"/>
         <source>No constants match.</source>
         <translation>Žádné odpovídající konstanty.</translation>
     </message>
@@ -1156,7 +1156,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>%1 z %2 konstant</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="380"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -1164,7 +1164,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
 <context>
     <name>CsvPlayer</name>
     <message>
-        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="34"/>
+        <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
         <translation>CSV Přehrávač</translation>
     </message>
@@ -1264,7 +1264,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>Odeslat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="62"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
         <translation>Není definována žádná funkce přenosu</translation>
     </message>
@@ -1344,7 +1344,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>Odeslat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="260"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="261"/>
         <source>Enter command...</source>
         <translation>Zadejte příkaz...</translation>
     </message>
@@ -1380,7 +1380,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
 <context>
     <name>DashboardSlider</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="88"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
         <source>No transmit function defined</source>
         <translation>Není definována funkce přenosu</translation>
     </message>
@@ -1388,7 +1388,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="44"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="46"/>
         <source>Enter command...</source>
         <translation>Zadejte příkaz...</translation>
     </message>
@@ -1398,7 +1398,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>Odeslat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="72"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="74"/>
         <source>No transmit function defined</source>
         <translation>Není definována funkce přenosu</translation>
     </message>
@@ -1416,7 +1416,7 @@ Povolte to pouze na důvěryhodných sítích. Nedůvěryhodní klienti mohou č
         <translation>VYP</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="68"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
         <source>No transmit function defined</source>
         <translation>Není definována funkce přenosu</translation>
     </message>
@@ -4512,7 +4512,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="198"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="199"/>
         <source>Close session file</source>
         <translation>Zavřít soubor relace</translation>
     </message>
@@ -4619,7 +4619,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Měřidlo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="207"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="208"/>
         <source>Toggle gauge widget for analog-style display</source>
         <translation>Přepnout widget měřidla pro analogové zobrazení</translation>
     </message>
@@ -4639,7 +4639,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>LED</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="246"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
         <translation>Přepnout LED indikátor pro binární nebo prahové hodnoty</translation>
     </message>
@@ -5050,17 +5050,17 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Běží</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Update</source>
         <translation>Aktualizace</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="679"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="681"/>
         <source>Installed</source>
         <translation>Nainstalováno</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="696"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="697"/>
         <source>Unavailable</source>
         <translation>Nedostupné</translation>
     </message>
@@ -5239,12 +5239,12 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Přenos Souboru</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="93"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="94"/>
         <source>Transfer Protocol:</source>
         <translation>Přenosový Protokol:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="126"/>
         <source>File Selection:</source>
         <translation>Výběr Souboru:</translation>
     </message>
@@ -5254,7 +5254,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Vybrat Soubor...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="160"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="161"/>
         <source>Transmission Interval:</source>
         <translation>Interval Přenosu:</translation>
     </message>
@@ -5300,7 +5300,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Chyby: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="447"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="448"/>
         <source>Activity Log</source>
         <translation>Protokol Aktivit</translation>
     </message>
@@ -5604,7 +5604,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Měřidlo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="195"/>
         <source>Add a gauge widget for analog-style visualization</source>
         <translation>Přidat měřidlo pro analogovou vizualizaci</translation>
     </message>
@@ -5669,7 +5669,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Přidejte textové pole pro psaní a odesílání příkazů</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="272"/>
         <source>Knob</source>
         <translation>Knoflík</translation>
     </message>
@@ -5784,7 +5784,7 @@ Platný formát: 01 A2 FF 3C</translation>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="31"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
         <translation>Centrum Nápovědy</translation>
     </message>
@@ -7569,7 +7569,7 @@ Zařízení nemusí v aktivní konfiguraci vystavovat datové koncové body, neb
         <translation>Jantarová</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="175"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="174"/>
         <source>Export Images</source>
         <translation>Exportovat obrázky</translation>
     </message>
@@ -7594,7 +7594,7 @@ Zařízení nemusí v aktivní konfiguraci vystavovat datové koncové body, neb
         <translation>Zobrazit zaměřovač</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="540"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="541"/>
         <source>Waiting for Image...</source>
         <translation>Čekání na obrázek...</translation>
     </message>
@@ -9016,7 +9016,7 @@ Příklad (HEX):  48 65 6C 6C 6F</translation>
         <translation>Prosím čekejte...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="117"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Aktivovat Serial Studio Pro</translation>
     </message>
@@ -9669,17 +9669,17 @@ Poskytněte prosím potřebné údaje.</translation>
         <translation>Obecné</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="117"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="118"/>
         <source>Authentication</source>
         <translation>Ověřování</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="123"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="124"/>
         <source>MQTT Options</source>
         <translation>Možnosti MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="129"/>
+        <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="130"/>
         <source>SSL Properties</source>
         <translation>Vlastnosti SSL</translation>
     </message>
@@ -10197,7 +10197,7 @@ Chcete otevřít stránku ke stažení?</translation>
         <translation>Hostitel</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
         <translation>IP Adresa</translation>
     </message>
@@ -10334,7 +10334,7 @@ Chcete otevřít stránku ke stažení?</translation>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="299"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
@@ -10414,7 +10414,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="207"/>
         <source>Name</source>
         <translation>Název</translation>
     </message>
@@ -10424,7 +10424,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Adresa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="222"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
@@ -10507,7 +10507,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Nastavení Rozsahu Os</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="292"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="293"/>
         <source>Samples</source>
         <translation>Vzorky</translation>
     </message>
@@ -10669,7 +10669,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Psát a odesílat libovolné příkazy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
         <source>Knob</source>
         <translation>Knoflík</translation>
     </message>
@@ -10868,7 +10868,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Anaglyf 3D</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="304"/>
+        <location filename="../../qml/Widgets/Dashboard/Plot3D.qml" line="305"/>
         <source>Invert Eye Positions</source>
         <translation>Obrátit pozice očí</translation>
     </message>
@@ -11000,7 +11000,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Argumenty</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="154"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="155"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 value1 --arg2 value2</translation>
     </message>
@@ -11020,7 +11020,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Cesta k potrubí</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="274"/>
         <source>Pick Running Process…</source>
         <translation>Vybrat běžící proces…</translation>
     </message>
@@ -11073,7 +11073,7 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
@@ -11204,7 +11204,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat nový ovládací panel výstupu s tlačítkem</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="241"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="242"/>
         <source>Slider</source>
         <translation>Posuvník</translation>
     </message>
@@ -11214,7 +11214,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat ovládací posuvník výstupu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="251"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="252"/>
         <source>Toggle</source>
         <translation>Přepínač</translation>
     </message>
@@ -11224,7 +11224,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat ovládání výstupního přepínače</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="261"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="262"/>
         <source>Knob</source>
         <translation>Knoflík</translation>
     </message>
@@ -11234,7 +11234,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat ovládání výstupního knoflíku</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="271"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
         <source>Text Field</source>
         <translation>Textové pole</translation>
     </message>
@@ -11244,7 +11244,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat ovládání výstupního textového pole</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="281"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
         <source>Button</source>
         <translation>Tlačítko</translation>
     </message>
@@ -11273,7 +11273,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat obecnou datovou sadu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="317"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="318"/>
         <source>Plot</source>
         <translation>Graf</translation>
     </message>
@@ -11283,7 +11283,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat 2D graf datové sady</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="328"/>
         <source>FFT Plot</source>
         <translation>FFT Graf</translation>
     </message>
@@ -11293,7 +11293,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat graf rychlé Fourierovy transformace</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="337"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Gauge</source>
         <translation>Měřidlo</translation>
     </message>
@@ -11303,7 +11303,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat měřicí widget pro numerická data</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
         <source>Level Indicator</source>
         <translation>Ukazatel Úrovně</translation>
     </message>
@@ -11313,7 +11313,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat svislý sloupcový ukazatel úrovně</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
@@ -11323,7 +11323,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat kompasový widget pro směrová data</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="367"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="369"/>
         <source>LED Indicator</source>
         <translation>LED Indikátor</translation>
     </message>
@@ -11364,7 +11364,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Zobrazení obrázku</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="412"/>
         <source>Table</source>
         <translation>Tabulka</translation>
     </message>
@@ -11379,7 +11379,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Datová Mřížka</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="423"/>
         <source>Multi-Plot</source>
         <translation>Multi-Graf</translation>
     </message>
@@ -11394,7 +11394,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Více Grafů</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="431"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="432"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
         <source>3D Plot</source>
         <translation>3D Graf</translation>
@@ -11405,7 +11405,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat 3D vizualizaci grafu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="441"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="443"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="447"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
@@ -11416,7 +11416,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat skupinu pro data 3-osého akcelerometru</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="453"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="456"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
@@ -11431,7 +11431,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation type="vanished">Přidejte skupinu pro data 3osého gyroskopu (úhlové rychlosti jsou automaticky integrovány do orientace)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="461"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="462"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="467"/>
         <source>GPS Map</source>
         <translation>GPS Mapa</translation>
@@ -11447,7 +11447,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Centrum nápovědy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="485"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="484"/>
         <source>Open the Project Editor documentation</source>
         <translation>Otevřít dokumentaci Editoru Projektů</translation>
     </message>
@@ -11943,22 +11943,22 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="277"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="278"/>
         <source>Session Report</source>
         <translation>Zpráva o relaci</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="183"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="181"/>
         <source>Branding</source>
         <translation>Branding</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="189"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
         <source>Page</source>
         <translation>Stránka</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="195"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
         <source>Sections</source>
         <translation>Sekce</translation>
     </message>
@@ -11973,7 +11973,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Společnost</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="265"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="266"/>
         <source>e.g. Acme Test Systems</source>
         <translation>např. Acme Test Systems</translation>
     </message>
@@ -11988,7 +11988,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Prepared by (optional)</source>
         <translation>Připravil (volitelné)</translation>
     </message>
@@ -12003,7 +12003,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Soubor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="320"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG nebo SVG (volitelné)</translation>
     </message>
@@ -12306,7 +12306,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Štítky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="249"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="250"/>
         <source>New tag...</source>
         <translation>Nový štítek...</translation>
     </message>
@@ -12988,7 +12988,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Písmo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="88"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="89"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
@@ -12998,7 +12998,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Exportovat Soubor Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="331"/>
         <source>Export...</source>
         <translation>Exportovat...</translation>
     </message>
@@ -13109,12 +13109,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1050"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1049"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="1061"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="1060"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
@@ -13372,7 +13372,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Duplikovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="109"/>
         <source>Create a copy of this data source</source>
         <translation>Vytvořit kopii tohoto zdroje dat</translation>
     </message>
@@ -13460,7 +13460,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">Konzolové Protokolování</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="535"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
         <source>Help Center</source>
         <translation>Centrum Nápovědy</translation>
     </message>
@@ -13494,7 +13494,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Žádná Pracoviště K Dispozici</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="399"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
         <source>Export</source>
         <translation>Exportovat</translation>
     </message>
@@ -13524,12 +13524,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Žádné Dostupné Formáty Exportu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="511"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
@@ -13751,7 +13751,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">CSV Přehrávač</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Přehrávat CSV soubor, jako by to byla živá data ze senzoru</translation>
     </message>
@@ -13770,7 +13770,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Předvolby</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="307"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Open application settings and preferences</source>
         <translation>Otevřete nastavení aplikace a předvolby</translation>
     </message>
@@ -13785,7 +13785,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Otevřít CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Open MDF4</source>
         <translation>Otevřít MDF4</translation>
     </message>
@@ -13853,7 +13853,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="333"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Vyberte sériovou komunikaci (UART)</translation>
     </message>
@@ -13873,7 +13873,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Vyberte surovou USB komunikaci (Pro)</translation>
     </message>
@@ -13883,7 +13883,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Síť</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Vyberte síťovou komunikaci TCP/UDP</translation>
     </message>
@@ -13902,7 +13902,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Vyberte komunikaci zařízení HID (Pro)</translation>
     </message>
@@ -13912,7 +13912,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Vyberte komunikaci Bluetooth Low Energy</translation>
     </message>
@@ -13932,7 +13932,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Vyberte komunikaci procesní roury (Pro)</translation>
     </message>
@@ -13942,7 +13942,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Příklady</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>Browse example projects</source>
         <translation>Procházet ukázkové projekty</translation>
     </message>
@@ -14020,7 +14020,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation type="vanished">CANBus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
         <source>Show application info and license details</source>
         <translation>Zobrazit informace o aplikaci a podrobnosti o licenci</translation>
     </message>
@@ -14217,7 +14217,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Maximální velikost paketu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="299"/>
         <source>Control Transfers Enabled</source>
         <translation>Řízené přenosy povoleny</translation>
     </message>
@@ -14764,7 +14764,7 @@ Rozumím, že až skončí, budu si muset koupit licenci nebo vytvořit verzi GP
 <context>
     <name>WorkspacesView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
         <source>Workspaces</source>
         <translation>Pracovní prostory</translation>
     </message>

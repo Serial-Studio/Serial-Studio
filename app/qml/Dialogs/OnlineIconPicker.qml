@@ -90,8 +90,8 @@ SmartDialog {
 
         onAccepted: Cpp_Misc_IconEngine.searchIcons(text)
 
-        Keys.onReturnPressed: Cpp_Misc_IconEngine.searchIcons(text)
         Keys.onEnterPressed: Cpp_Misc_IconEngine.searchIcons(text)
+        Keys.onReturnPressed: Cpp_Misc_IconEngine.searchIcons(text)
       }
 
       Button {
@@ -205,8 +205,8 @@ SmartDialog {
           }
 
           ToolTip.delay: 500
-          ToolTip.visible: iconDelegateArea.containsMouse
           ToolTip.text: iconDelegate.modelData
+          ToolTip.visible: iconDelegateArea.containsMouse
         }
       }
     }

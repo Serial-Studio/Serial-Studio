@@ -165,14 +165,14 @@ Item {
       id: toolbar
 
       spacing: 4
+      Layout.leftMargin: 8
       Layout.fillWidth: true
       Layout.preferredHeight: 48
-      Layout.leftMargin: 8
       visible: root.hasToolbar && model && model.frameCount > 0
 
       DashboardToolButton {
-        checked: model && model.exportEnabled
         ToolTip.text: qsTr("Export Images")
+        checked: model && model.exportEnabled
         icon.source: "qrc:/rcc/icons/dashboard-buttons/archive.svg"
         onClicked: {
           if (model)
@@ -305,11 +305,11 @@ Item {
         blurMultiplier: 10
         anchors.fill: parent
         visible: model && model.frameCount > 0
-        contrast:          root.currentFilter.cont
         saturation:        root.currentFilter.sat
+        contrast:          root.currentFilter.cont
+        colorizationColor: root.currentFilter.color
         brightness:        root.currentFilter.bright
         colorization:      root.currentFilter.colorize ? 1.0 : 0.0
-        colorizationColor: root.currentFilter.color
       }
 
       //
@@ -336,11 +336,11 @@ Item {
 
         layer.enabled: true
         layer.effect: MultiEffect {
-          contrast:          root.currentFilter.cont
           saturation:        root.currentFilter.sat
+          contrast:          root.currentFilter.cont
+          colorizationColor: root.currentFilter.color
           brightness:        root.currentFilter.bright
           colorization:      root.currentFilter.colorize ? 1.0 : 0.0
-          colorizationColor: root.currentFilter.color
         }
 
         Image {
@@ -394,9 +394,9 @@ Item {
 
           property real dragStartX: 0
           property real dragStartY: 0
+          property bool didDrag: false
           property real dragStartPanX: 0
           property real dragStartPanY: 0
-          property bool didDrag: false
 
           readonly property bool dragging: pressed && (root.panMode || root.zoom > 1)
 
@@ -480,8 +480,8 @@ Item {
           height: 1
           opacity: 0.7
           color: "white"
-          x: crosshairLayer.lpX
           width: root.paintedW
+          x: crosshairLayer.lpX
           y: crosshairLayer.cy - height / 2
         }
 
@@ -501,17 +501,17 @@ Item {
           x: crosshairLayer.cx + 8
           color: Qt.rgba(0, 0, 0, 0.65)
           y: crosshairLayer.cy - height / 2
-          height: coordLabel.implicitHeight + 6
           width: coordLabel.implicitWidth + 10
+          height: coordLabel.implicitHeight + 6
 
           Text {
             id: coordLabel
 
             color: "white"
             anchors.centerIn: parent
-            font.pixelSize: Math.max(9, Math.min(11, Math.min(root.width, root.height) / 28))
             text: root.cursorImgX + ", " + root.cursorImgY
             font.family: Cpp_Misc_CommonFonts.widgetFontFamily
+            font.pixelSize: Math.max(9, Math.min(11, Math.min(root.width, root.height) / 28))
           }
         }
       }
@@ -537,8 +537,8 @@ Item {
         Label {
           opacity: 0.55
           color: "white"
-          text: qsTr("Waiting for Image...")
           Layout.alignment: Qt.AlignHCenter
+          text: qsTr("Waiting for Image...")
           font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
         }
       }

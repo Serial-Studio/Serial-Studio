@@ -77,8 +77,8 @@ Item {
   //
   ColumnLayout {
     spacing: 4
-    anchors.fill: parent
     anchors.margins: 8
+    anchors.fill: parent
 
     Item {
       implicitHeight: 4
@@ -131,8 +131,8 @@ Item {
             radius: width / 2
             anchors.fill: parent
             color: "transparent"
-            anchors.margins: parent.border.width
             border.color: Qt.rgba(0, 0, 0, 0.1)
+            anchors.margins: parent.border.width
           }
 
           Rectangle {
@@ -140,8 +140,8 @@ Item {
             border.width: 2
             radius: width / 2
             width: parent.width
-            height: parent.height
             color: "transparent"
+            height: parent.height
             anchors.centerIn: parent
             Behavior on border.color {ColorAnimation{duration: 300}}
             border.color: fillColor
@@ -152,11 +152,11 @@ Item {
             delegate: Item {
               required property int index
               readonly property real frac: index / (tickCount - 1)
-              readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
-              readonly property real angleDeg: startAngleDeg + frac * angleRangeDeg
               readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
+              readonly property real angleDeg: startAngleDeg + frac * angleRangeDeg
               readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
               readonly property real labelRadius: gaugeFace.width / 2 + Math.max(24, fontSize * 2.8)
+              readonly property real tickValue: root.model.minValue + frac * (root.model.maxValue - root.model.minValue)
 
               Rectangle {
                 height: 2
@@ -188,10 +188,10 @@ Item {
 
           Item {
             visible: root.model.alarmsDefined
-            readonly property real alarmLowFrac: (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
-            readonly property real angleDeg: startAngleDeg + alarmLowFrac * angleRangeDeg
             readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
+            readonly property real angleDeg: startAngleDeg + alarmLowFrac * angleRangeDeg
             readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
+            readonly property real alarmLowFrac: (root.model.alarmLow - root.model.minValue) / (root.model.maxValue - root.model.minValue)
 
             Rectangle {
               height: 4
@@ -208,10 +208,10 @@ Item {
 
           Item {
             visible: root.model.alarmsDefined
-            readonly property real alarmHighFrac: (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
-            readonly property real angleDeg: startAngleDeg + alarmHighFrac * angleRangeDeg
             readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
+            readonly property real angleDeg: startAngleDeg + alarmHighFrac * angleRangeDeg
             readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
+            readonly property real alarmHighFrac: (root.model.alarmHigh - root.model.minValue) / (root.model.maxValue - root.model.minValue)
 
             Rectangle {
               height: 4
@@ -230,12 +230,12 @@ Item {
             model: (tickCount - 1) * subTicksPerMajor
             delegate: Item {
               required property int index
-              readonly property int majorIndex: Math.floor(index / subTicksPerMajor)
               readonly property int subIndex: (index % subTicksPerMajor) + 1
-              readonly property real frac: (majorIndex + subIndex / (subTicksPerMajor + 1)) / (tickCount - 1)
-              readonly property real angleDeg: startAngleDeg + frac * angleRangeDeg
               readonly property real angleRad: (angleDeg - 90) * Math.PI / 180
+              readonly property real angleDeg: startAngleDeg + frac * angleRangeDeg
+              readonly property int majorIndex: Math.floor(index / subTicksPerMajor)
               readonly property real tickRadius: gaugeFace.width / 2 - gaugeFace.border.width / 2
+              readonly property real frac: (majorIndex + subIndex / (subTicksPerMajor + 1)) / (tickCount - 1)
 
               Rectangle {
                 height: 1
@@ -295,8 +295,8 @@ Item {
             radius: width / 2
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.bottom: parent.bottom
             color: Qt.rgba(1, 1, 1, 0.4)
+            anchors.bottom: parent.bottom
           }
 
           Rectangle {
@@ -336,9 +336,9 @@ Item {
         width: control.background.gaugeSize
         height: control.background.gaugeSize
 
+        property bool isValidAngle: false
         property real cursorValue: model.minValue
         property real cursorAngleDeg: startAngleDeg
-        property bool isValidAngle: false
 
         onPositionChanged: (mouse) => {
           var centerX = width / 2

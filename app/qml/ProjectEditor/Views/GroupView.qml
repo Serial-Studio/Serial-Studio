@@ -108,11 +108,11 @@ Widgets.Pane {
 
           anchors {
             margins: 8
+            topMargin: 0
+            bottomMargin: 0
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            topMargin: 0
-            bottomMargin: 0
           }
 
           height: layout.implicitHeight
@@ -130,8 +130,8 @@ Widgets.Pane {
             id: layout
 
             spacing: 4
-            width: Math.max(implicitWidth, flickable.width)
             anchors.verticalCenter: parent.verticalCenter
+            width: Math.max(implicitWidth, flickable.width)
 
           //
           // Dataset add buttons (hidden for output groups)
@@ -141,8 +141,8 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Dataset")
             Layout.alignment: Qt.AlignVCenter
-            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             ToolTip.text: qsTr("Add a generic dataset to the current group")
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-dataset.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGeneric)
@@ -153,8 +153,8 @@ Widgets.Pane {
             text: qsTr("Plot")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             ToolTip.text: qsTr("Add a 2D plot to visualize numeric data")
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-plot.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetPlot)
@@ -165,8 +165,8 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("FFT Plot")
             Layout.alignment: Qt.AlignVCenter
-            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-fft.svg"
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetFFT)
             ToolTip.text: qsTr("Add an FFT plot for frequency domain visualization")
@@ -177,8 +177,8 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Bar/Level")
             Layout.alignment: Qt.AlignVCenter
-            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-bar.svg"
             ToolTip.text: qsTr("Add a bar or level indicator for scaled values")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
@@ -189,10 +189,10 @@ Widgets.Pane {
             text: qsTr("Gauge")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
-            ToolTip.text: qsTr("Add a gauge widget for analog-style visualization")
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-gauge.svg"
+            ToolTip.text: qsTr("Add a gauge widget for analog-style visualization")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetGauge)
           }
 
@@ -201,8 +201,8 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Compass")
             Layout.alignment: Qt.AlignVCenter
-            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-compass.svg"
             ToolTip.text: qsTr("Add a compass to display directional or angular data")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetCompass)
@@ -213,8 +213,8 @@ Widgets.Pane {
             text: qsTr("LED")
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
-            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
+            visible: !Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             icon.source: "qrc:/rcc/icons/project-editor/actions/add-led.svg"
             ToolTip.text: qsTr("Add an LED indicator for binary status signals")
             onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetLED)
@@ -269,8 +269,8 @@ Widgets.Pane {
 
           Widgets.ToolbarButton {
             iconSize: 24
-            toolbarButton: false
             text: qsTr("Knob")
+            toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             visible: Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel
             onClicked: Cpp_JSON_ProjectModel.addOutputControl(SerialStudio.OutputKnob)
@@ -320,9 +320,9 @@ Widgets.Pane {
         Rectangle {
           z: 10
           width: 16
-          visible: flickable.contentX > 4
-          anchors.left: flickable.left
           anchors.top: flickable.top
+          anchors.left: flickable.left
+          visible: flickable.contentX > 4
           anchors.bottom: flickable.bottom
 
           gradient: Gradient {
@@ -346,10 +346,10 @@ Widgets.Pane {
         Rectangle {
           z: 10
           width: 16
-          visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
-          anchors.right: flickable.right
           anchors.top: flickable.top
+          anchors.right: flickable.right
           anchors.bottom: flickable.bottom
+          visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
 
           gradient: Gradient {
             orientation: Gradient.Horizontal

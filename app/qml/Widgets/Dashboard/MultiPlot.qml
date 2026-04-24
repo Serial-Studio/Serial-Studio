@@ -54,9 +54,9 @@ Item {
   //
   // User-controlled visibility preferences (persisted, ANDed with size thresholds)
   //
-  property bool userShowLegends: true
   property bool userShowXLabel: true
   property bool userShowYLabel: true
+  property bool userShowLegends: true
 
   //
   // Set downsample size based on widget size & zoom factor
@@ -289,8 +289,8 @@ Item {
       xMax: root.model.maxX
       yMin: root.model.minY
       yMax: root.model.maxY
-      xLabel: qsTr("Samples")
       Layout.fillWidth: true
+      xLabel: qsTr("Samples")
       Layout.fillHeight: true
       yLabel: root.model.yLabel
       curveColors: root.model.colors

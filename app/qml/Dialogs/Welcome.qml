@@ -215,8 +215,8 @@ Window {
             }
 
             Item {
-              Layout.fillHeight: true
               implicitHeight: 12
+              Layout.fillHeight: true
             }
 
             RowLayout {
@@ -240,8 +240,8 @@ Window {
             }
 
             Item {
-              Layout.fillHeight: true
               implicitHeight: 12
+              Layout.fillHeight: true
             }
           }
 

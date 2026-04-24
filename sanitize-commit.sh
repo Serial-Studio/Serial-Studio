@@ -91,6 +91,12 @@ for dir in app doc examples; do
     fi
 done
 
+# Format QML files (christmas-tree property ordering + id placement)
+if [[ -f scripts/qmlformat.py ]]; then
+    echo "Running qmlformat..."
+    python3 scripts/qmlformat.py --fix || echo "qmlformat failed"
+fi
+
 # Get a list of changed files (unstaged + staged)
 echo "Checking for changes..."
 CHANGED=$(git status --short)

@@ -238,8 +238,8 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
 
         Widgets.ToolbarButton {
-          text: qsTr("Slider")
           iconSize: 16
+          text: qsTr("Slider")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output slider control")
@@ -248,8 +248,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Toggle")
           iconSize: 16
+          text: qsTr("Toggle")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output toggle control")
@@ -258,8 +258,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Knob")
           iconSize: 16
+          text: qsTr("Knob")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output knob control")
@@ -268,9 +268,9 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Text Field")
           iconSize: 16
           horizontalLayout: true
+          text: qsTr("Text Field")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output text field control")
           icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-output-textfield.svg"
@@ -278,8 +278,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Button")
           iconSize: 16
+          text: qsTr("Button")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an output button control")
@@ -314,8 +314,8 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
 
         Widgets.ToolbarButton {
-          text: qsTr("Plot")
           iconSize: 16
+          text: qsTr("Plot")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a 2D plot dataset")
@@ -324,8 +324,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("FFT Plot")
           iconSize: 16
+          text: qsTr("FFT Plot")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a Fast Fourier Transform plot")
@@ -334,8 +334,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Gauge")
           iconSize: 16
+          text: qsTr("Gauge")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a gauge widget for numeric data")
@@ -344,9 +344,9 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Level Indicator")
           iconSize: 16
           horizontalLayout: true
+          text: qsTr("Level Indicator")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a vertical bar level indicator")
           icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-bar.svg"
@@ -354,8 +354,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Compass")
           iconSize: 16
+          text: qsTr("Compass")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a compass widget for directional data")
@@ -364,9 +364,9 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("LED Indicator")
           iconSize: 16
           horizontalLayout: true
+          text: qsTr("LED Indicator")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add an LED-style status indicator")
           icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-led.svg"
@@ -408,8 +408,8 @@ Rectangle {
         Layout.alignment: Qt.AlignVCenter
 
         Widgets.ToolbarButton {
-          text: qsTr("Table")
           iconSize: 16
+          text: qsTr("Table")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a data table view")
@@ -418,9 +418,9 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Multi-Plot")
           iconSize: 16
           horizontalLayout: true
+          text: qsTr("Multi-Plot")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a 2D plot with multiple signals")
           icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-multiplot.svg"
@@ -428,8 +428,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("3D Plot")
           iconSize: 16
+          text: qsTr("3D Plot")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a 3D plot visualization")
@@ -438,9 +438,9 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Accelerometer")
           iconSize: 16
           horizontalLayout: true
+          text: qsTr("Accelerometer")
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a group for 3-axis accelerometer data")
           icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-accelerometer.svg"
@@ -448,9 +448,9 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("Gyroscope")
           iconSize: 16
           horizontalLayout: true
+          text: qsTr("Gyroscope")
           Layout.alignment: Qt.AlignLeft
           icon.source: "qrc:/rcc/icons/project-editor/toolbar/add-gyroscope.svg"
           onClicked: Cpp_JSON_ProjectModel.addGroup(qsTr("Gyroscope"), SerialStudio.Gyroscope)
@@ -458,8 +458,8 @@ Rectangle {
         }
 
         Widgets.ToolbarButton {
-          text: qsTr("GPS Map")
           iconSize: 16
+          text: qsTr("GPS Map")
           horizontalLayout: true
           Layout.alignment: Qt.AlignLeft
           ToolTip.text: qsTr("Add a map widget for GPS data")
@@ -481,8 +481,8 @@ Rectangle {
         text: qsTr("Help Center")
         Layout.alignment: Qt.AlignVCenter
         onClicked: app.showHelpCenter("project-editor")
-        icon.source: "qrc:/rcc/icons/project-editor/toolbar/help.svg"
         ToolTip.text: qsTr("Open the Project Editor documentation")
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/help.svg"
       }
     }
   }

@@ -79,7 +79,7 @@ Rectangle {
   Rectangle {
     height: 1
     width: parent.width
-    anchors.bottom: parent.bottom
     color: row.separatorColor
+    anchors.bottom: parent.bottom
   }
 }

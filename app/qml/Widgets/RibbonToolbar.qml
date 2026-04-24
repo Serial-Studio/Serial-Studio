@@ -52,8 +52,8 @@ Item {
     anchors.fill: parent
     contentHeight: height
     boundsBehavior: Flickable.StopAtBounds
-    contentWidth: sectionLayout.implicitWidth + 16
     flickableDirection: Flickable.HorizontalFlick
+    contentWidth: sectionLayout.implicitWidth + 16
 
     ScrollBar.horizontal: ScrollBar {
       height: 3
@@ -145,10 +145,10 @@ Item {
   Rectangle {
     z: 10
     width: 16
-    visible: flickable.contentX > 4
-    anchors.left: parent.left
     anchors.top: parent.top
+    anchors.left: parent.left
     anchors.bottom: parent.bottom
+    visible: flickable.contentX > 4
 
     gradient: Gradient {
       orientation: Gradient.Horizontal
@@ -171,10 +171,10 @@ Item {
   Rectangle {
     z: 10
     width: 16
-    visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
-    anchors.right: parent.right
     anchors.top: parent.top
+    anchors.right: parent.right
     anchors.bottom: parent.bottom
+    visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
 
     gradient: Gradient {
       orientation: Gradient.Horizontal

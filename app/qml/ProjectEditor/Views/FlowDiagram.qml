@@ -31,19 +31,19 @@ Item {
   // Layout metrics (logical pixels, unscaled)
   //
   readonly property int nodeW: 160   // card width
-  readonly property int nodeH: 48    // card height (fixed for all cards)
-  readonly property int chipH: 24    // dataset pill height
-  readonly property int chipW: 150   // dataset pill width
-  readonly property int hGap:  56    // horizontal gap between columns
-  readonly property int vGap:  12    // vertical gap between rows
   readonly property int pad:   24    // outer margin
+  readonly property int chipW: 150   // dataset pill width
+  readonly property int chipH: 24    // dataset pill height
+  readonly property int vGap:  12    // vertical gap between rows
+  readonly property int hGap:  56    // horizontal gap between columns
+  readonly property int nodeH: 48    // card height (fixed for all cards)
 
   //
   // Zoom state
   //
   property real zoom:    1.0
-  property real minZoom: 0.25
   property real maxZoom: 3.0
+  property real minZoom: 0.25
 
   //
   // Layout output
@@ -479,11 +479,11 @@ Item {
 
     // Middle-button drag → pan
     MouseArea {
+      property real lx: 0
+      property real ly: 0
       anchors.fill: parent
       acceptedButtons: Qt.MiddleButton
       cursorShape: pressed ? Qt.ClosedHandCursor : Qt.ArrowCursor
-      property real lx: 0
-      property real ly: 0
       onPressed:         (m) => { lx = m.x; ly = m.y }
       onPositionChanged: (m) => {
         flickable.contentX -= m.x - lx
@@ -573,11 +573,11 @@ Item {
           height: modelData.h * root.zoom
 
           property bool hovered:   false
-          property bool isDataset: modelData.type === "dataset"
+          property bool isPill:    isDataset || isOutput
           property bool isOutput:  modelData.type === "output"
           property bool isAction:  modelData.type === "action"
-          property bool isPill:    isDataset || isOutput
           property bool isSource:  modelData.type === "source"
+          property bool isDataset: modelData.type === "dataset"
           property bool isFP:      modelData.type === "frameparser"
 
           // ── Pill (dataset / output widget) ───────────────────────────
@@ -594,9 +594,9 @@ Item {
               : Cpp_ThemeManager.colors["groupbox_border"]
 
             Row {
+              spacing: 4 * root.zoom
               anchors.centerIn: parent
               width: parent.width - 12
-              spacing: 4 * root.zoom
 
               Image {
                 visible: (modelData.icon || "") !== ""
@@ -642,19 +642,19 @@ Item {
               anchors {
                 left: parent.left
                 right: parent.right
-                verticalCenter: parent.verticalCenter
                 leftMargin:  10 * root.zoom
                 rightMargin:  8 * root.zoom
+                verticalCenter: parent.verticalCenter
               }
               spacing: 8 * root.zoom
 
               Image {
+                smooth: true
                 width:  20 * root.zoom
                 height: 20 * root.zoom
-                anchors.verticalCenter: parent.verticalCenter
                 source: modelData.icon
                 sourceSize: Qt.size(20, 20)
-                smooth: true
+                anchors.verticalCenter: parent.verticalCenter
                 opacity: nd.isFP ? 0.7 : (nd.hovered ? 1.0 : 0.85)
               }
 
@@ -689,8 +689,8 @@ Item {
           }
 
           MouseArea {
-            anchors.fill: parent
             hoverEnabled: true
+            anchors.fill: parent
             cursorShape:  Qt.PointingHandCursor
             onEntered: nd.hovered = true
             onExited:  nd.hovered = false
@@ -727,15 +727,15 @@ Item {
   // ─────────────────────────────────────────────────────────────────────────
 
   Column {
-    anchors.centerIn: parent
     spacing: 8
+    anchors.centerIn: parent
     visible: root.nodes.length === 0
 
     Image {
+      opacity: 0.25
+      sourceSize: Qt.size(48, 48)
       anchors.horizontalCenter: parent.horizontalCenter
       source: "qrc:/rcc/icons/project-editor/treeview/group.svg"
-      sourceSize: Qt.size(48, 48)
-      opacity: 0.25
     }
 
     Text {

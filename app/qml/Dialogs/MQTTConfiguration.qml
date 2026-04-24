@@ -50,18 +50,18 @@ Widgets.SmartDialog {
     property alias username: _username.text
     property alias password: _password.text
 
-    property alias version: _version.currentIndex
-    property alias mode: _mode.currentIndex
     property alias topic: _topic.text
+    property alias mode: _mode.currentIndex
+    property alias version: _version.currentIndex
 
-    property alias willRetain: _willRetain.checked
-    property alias willQoS: _willQoS.currentIndex
     property alias willTopic: _willTopic.text
+    property alias willQoS: _willQoS.currentIndex
     property alias willMessage: _willMessage.text
+    property alias willRetain: _willRetain.checked
 
     property alias sslEnabled: _enableSSL.checked
-    property alias sslProtocol: _sslProtocol.currentIndex
     property alias sslVerifyDepth: _verifyDepth.text
+    property alias sslProtocol: _sslProtocol.currentIndex
     property alias sslVerifyMode: _verifyMode.currentIndex
   }
 
@@ -114,20 +114,20 @@ Widgets.SmartDialog {
         }
 
         TabButton {
+          height: _tab.height + 3
           text: qsTr("Authentication")
-          height: _tab.height + 3
           width: implicitWidth + 2 * 8
         }
 
         TabButton {
+          height: _tab.height + 3
           text: qsTr("MQTT Options")
-          height: _tab.height + 3
           width: implicitWidth + 2 * 8
         }
 
         TabButton {
-          text: qsTr("SSL Properties")
           height: _tab.height + 3
+          text: qsTr("SSL Properties")
           width: implicitWidth + 2 * 8
         }
       }
@@ -177,9 +177,9 @@ Widgets.SmartDialog {
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
-            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            enabled: app.proVersion
             opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Host") + ":" }
@@ -284,9 +284,9 @@ Widgets.SmartDialog {
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
-            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            enabled: app.proVersion
             opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Username") + ":" }
@@ -365,9 +365,9 @@ Widgets.SmartDialog {
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
-            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            enabled: app.proVersion
             opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Version") + ":" }
@@ -493,9 +493,9 @@ Widgets.SmartDialog {
             columns: 2
             rowSpacing: 4
             columnSpacing: 4
-            enabled: app.proVersion
             anchors.margins: 8
             anchors.fill: parent
+            enabled: app.proVersion
             opacity: enabled ? 1 : 0.8
 
             Label { text: qsTr("Enable SSL") + ":" }

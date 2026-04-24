@@ -92,10 +92,10 @@ Widgets.Pane {
         width: parent.width
 
         anchors {
+          margins: 16
           top: parent.top
           left: parent.left
           right: parent.right
-          margins: 16
         }
 
         //
@@ -103,8 +103,8 @@ Widgets.Pane {
         //
         GridLayout {
           columns: 2
-          columnSpacing: 16
           rowSpacing: 6
+          columnSpacing: 16
           Layout.fillWidth: true
 
           Label {
@@ -246,8 +246,8 @@ Widgets.Pane {
           TextField {
             id: tagField
             Layout.fillWidth: true
-            placeholderText: qsTr("New tag...")
             font: Cpp_Misc_CommonFonts.uiFont
+            placeholderText: qsTr("New tag...")
             onAccepted: addTagBtn.clicked()
           }
 

@@ -109,9 +109,9 @@ Item {
         id: execField
 
         Layout.fillWidth: true
+        enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
         text: Cpp_IO_Process.executable
-        enabled: app.ioEnabled
         placeholderText: qsTr("/path/to/executable")
 
         onTextChanged: {
@@ -130,8 +130,8 @@ Item {
 
       Button {
         text: qsTr("Browse")
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Process.browseExecutable()
       }
     }
@@ -148,11 +148,11 @@ Item {
       id: argsField
 
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: Cpp_IO_Process.arguments
-      enabled: app.ioEnabled
-      placeholderText: qsTr("--arg1 value1 --arg2 value2")
       visible: modeCombo.currentIndex === 0
+      placeholderText: qsTr("--arg1 value1 --arg2 value2")
 
       onTextChanged: {
         if (enabled && text !== Cpp_IO_Process.arguments)
@@ -185,9 +185,9 @@ Item {
         id: workDirField
 
         Layout.fillWidth: true
+        enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
         text: Cpp_IO_Process.workingDir
-        enabled: app.ioEnabled
         placeholderText: qsTr("(optional) /working/directory")
 
         onTextChanged: {
@@ -206,8 +206,8 @@ Item {
 
       Button {
         text: qsTr("Browse")
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Process.browseWorkingDir()
       }
     }
@@ -256,8 +256,8 @@ Item {
 
       Button {
         text: qsTr("Browse")
-        opacity: enabled ? 1 : 0.5
         enabled: app.ioEnabled
+        opacity: enabled ? 1 : 0.5
         onClicked: Cpp_IO_Process.browsePipePath()
       }
     }
@@ -269,9 +269,9 @@ Item {
       visible: modeCombo.currentIndex === 1
     } Button {
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       text: qsTr("Pick Running Process…")
-      enabled: app.ioEnabled
       visible: modeCombo.currentIndex === 1
       onClicked: {
         Cpp_IO_Process.refreshProcessList()

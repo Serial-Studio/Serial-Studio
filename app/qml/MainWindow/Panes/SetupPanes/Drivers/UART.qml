@@ -75,9 +75,9 @@ Item {
       id: _portCombo
 
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.portList
-      enabled: app.ioEnabled
       currentIndex: Cpp_IO_Serial.portIndex
       editable: Qt.platform.os !== "windows"
       onCurrentIndexChanged: {
@@ -105,8 +105,8 @@ Item {
 
       editable: true
       Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
 
       property bool _initializing: true
       property bool _updatingIndex: false
@@ -198,8 +198,8 @@ Item {
       id: _dataCombo
 
       Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.dataBitsList
       currentIndex: Cpp_IO_Serial.dataBitsIndex
       onCurrentIndexChanged: {
@@ -219,8 +219,8 @@ Item {
       id: _parityCombo
 
       Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.parityList
       currentIndex: Cpp_IO_Serial.parityIndex
       onCurrentIndexChanged: {
@@ -240,8 +240,8 @@ Item {
       id: _stopBitsCombo
 
       Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.stopBitsList
       currentIndex: Cpp_IO_Serial.stopBitsIndex
       onCurrentIndexChanged: {
@@ -261,8 +261,8 @@ Item {
       id: _flowCombo
 
       Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
       model: Cpp_IO_Serial.flowControlList
       currentIndex: Cpp_IO_Serial.flowControlIndex
       onCurrentIndexChanged: {
@@ -328,5 +328,4 @@ Item {
     }
   }
 }
-
 

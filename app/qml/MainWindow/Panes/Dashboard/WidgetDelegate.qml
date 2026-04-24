@@ -90,8 +90,8 @@ Widgets.MiniWindow {
     id: _timer
 
     repeat: false
-    running: false
     interval: 250
+    running: false
     onTriggered: windowManager.triggerLayoutUpdate()
   }
 

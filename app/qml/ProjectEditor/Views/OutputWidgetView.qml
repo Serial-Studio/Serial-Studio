@@ -144,8 +144,8 @@ Widgets.Pane {
             icon.source: "qrc:/rcc/icons/project-editor/actions/output-textfield.svg"
           } Widgets.ToolbarButton {
             iconSize: 24
-            toolbarButton: false
             text: qsTr("Knob")
+            toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             checked: Cpp_JSON_ProjectEditor.outputWidgetType === SerialStudio.OutputKnob
             onClicked: Cpp_JSON_ProjectModel.setOutputWidgetType(SerialStudio.OutputKnob)

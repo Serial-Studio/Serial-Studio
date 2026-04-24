@@ -51,9 +51,9 @@ Item {
       id: deviceCombo
 
       Layout.fillWidth: true
+      enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_USB.deviceList
-      enabled: app.ioEnabled
       currentIndex: Cpp_IO_USB.deviceIndex
 
       onCurrentIndexChanged: {
@@ -296,8 +296,8 @@ Item {
 
         Label {
           Layout.fillWidth: true
-          font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
           text: qsTr("Control Transfers Enabled")
+          font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
         }
 
         Label {

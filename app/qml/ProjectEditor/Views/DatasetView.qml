@@ -110,11 +110,11 @@ Widgets.Pane {
 
           anchors {
             margins: 8
+            topMargin: 0
+            bottomMargin: 0
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            topMargin: 0
-            bottomMargin: 0
           }
 
           height: layout.implicitHeight
@@ -132,8 +132,8 @@ Widgets.Pane {
             id: layout
 
             spacing: 4
-            width: Math.max(implicitWidth, flickable.width)
             anchors.verticalCenter: parent.verticalCenter
+            width: Math.max(implicitWidth, flickable.width)
 
           //
           // Add plot
@@ -204,8 +204,8 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-            ToolTip.text: qsTr("Toggle gauge widget for analog-style display")
             icon.source: "qrc:/rcc/icons/project-editor/actions/gauge.svg"
+            ToolTip.text: qsTr("Toggle gauge widget for analog-style display")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
           }
 
@@ -242,8 +242,8 @@ Widgets.Pane {
             toolbarButton: false
             Layout.alignment: Qt.AlignVCenter
             icon.source: "qrc:/rcc/icons/project-editor/actions/led.svg"
-            ToolTip.text: qsTr("Toggle LED indicator for binary or thresholded values")
             checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED
+            ToolTip.text: qsTr("Toggle LED indicator for binary or thresholded values")
           }
 
           //
@@ -314,9 +314,9 @@ Widgets.Pane {
         Rectangle {
           z: 10
           width: 16
-          visible: flickable.contentX > 4
-          anchors.left: flickable.left
           anchors.top: flickable.top
+          anchors.left: flickable.left
+          visible: flickable.contentX > 4
           anchors.bottom: flickable.bottom
 
           gradient: Gradient {
@@ -340,10 +340,10 @@ Widgets.Pane {
         Rectangle {
           z: 10
           width: 16
-          visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
-          anchors.right: flickable.right
           anchors.top: flickable.top
+          anchors.right: flickable.right
           anchors.bottom: flickable.bottom
+          visible: flickable.contentX + flickable.width < flickable.contentWidth - 4
 
           gradient: Gradient {
             orientation: Gradient.Horizontal

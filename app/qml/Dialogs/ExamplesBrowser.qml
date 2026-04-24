@@ -165,8 +165,8 @@ SmartDialog {
         id: toolbarRow
 
         spacing: 4
-        anchors.fill: parent
         anchors.margins: 4
+        anchors.fill: parent
 
         ToolButton {
           icon.width: 18
@@ -329,18 +329,18 @@ SmartDialog {
         }
 
         ScrollView {
-          anchors.fill: parent
           anchors.margins: 8
+          anchors.fill: parent
 
           GridView {
             id: gridView
 
+            clip: true
             cellWidth: 210
             cellHeight: 194
-            clip: true
-            model: Cpp_Examples.examples
             anchors.topMargin: 0
             anchors.leftMargin: 2
+            model: Cpp_Examples.examples
 
             delegate: Rectangle {
               id: card
@@ -366,8 +366,8 @@ SmartDialog {
 
               ColumnLayout {
                 spacing: 4
-                anchors.fill: parent
                 anchors.margins: 6
+                anchors.fill: parent
 
                 //
                 // Screenshot or gradient placeholder
@@ -379,9 +379,9 @@ SmartDialog {
                   Rectangle {
                     id: thumbRect
 
-                    anchors.fill: parent
                     radius: 4
                     clip: true
+                    anchors.fill: parent
                     color: "transparent"
 
                     gradient: Gradient {
@@ -434,11 +434,11 @@ SmartDialog {
                     }
 
                     Label {
+                      opacity: 0.6
+                      color: "#ffffff"
                       anchors.centerIn: parent
                       text: modelData.title.charAt(0)
                       visible: !modelData.hasScreenshot
-                      opacity: 0.6
-                      color: "#ffffff"
                       font: Cpp_Misc_CommonFonts.customMonoFont(2.5, true)
                     }
                   }
@@ -449,11 +449,11 @@ SmartDialog {
                   Item {
                     id: hoverOverlay
 
+                    clip: true
+                    height: parent.height
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
-                    height: parent.height
-                    clip: true
 
                     Rectangle {
                       id: overlayPanel
@@ -476,8 +476,8 @@ SmartDialog {
 
                       ColumnLayout {
                         spacing: 4
-                        anchors.fill: parent
                         anchors.margins: 8
+                        anchors.fill: parent
 
                         Label {
                           text: modelData.title
@@ -600,8 +600,8 @@ SmartDialog {
             WebEngineView {
               id: readmeView
 
-              anchors.fill: parent
               anchors.margins: 2
+              anchors.fill: parent
               backgroundColor: "transparent"
               url: "qrc:/rcc/markdown-viewer.html"
               settings.localContentCanAccessRemoteUrls: true
@@ -716,9 +716,9 @@ SmartDialog {
           //
           ColumnLayout {
             spacing: 8
+            Layout.fillHeight: true
             Layout.minimumWidth: 280
             Layout.maximumWidth: 280
-            Layout.fillHeight: true
 
             //
             // Screenshot
@@ -778,8 +778,8 @@ SmartDialog {
 
               ColumnLayout {
                 spacing: 4
-                anchors.fill: parent
                 anchors.margins: 8
+                anchors.fill: parent
 
                 Item {
                   implicitHeight: 2

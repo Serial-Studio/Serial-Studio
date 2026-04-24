@@ -112,11 +112,11 @@ Widgets.Pane {
           spacing: 4
           anchors {
             margins: 8
+            topMargin: 0
+            bottomMargin: 0
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-            topMargin: 0
-            bottomMargin: 0
           }
 
           Widgets.ToolbarButton {
@@ -186,9 +186,9 @@ Widgets.Pane {
         id: list
         clip: true
         spacing: 0
+        model: root.widgets
         Layout.fillWidth: true
         Layout.fillHeight: true
-        model: root.widgets
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -250,38 +250,38 @@ Widgets.Pane {
             }
 
             Rectangle {
-              visible: Cpp_JSON_ProjectModel.customizeWorkspaces
-              implicitWidth: visible ? 1 : 0
-              Layout.preferredWidth: visible ? 1 : 0
               Layout.fillHeight: true
               color: refRow.separatorColor
+              implicitWidth: visible ? 1 : 0
+              Layout.preferredWidth: visible ? 1 : 0
+              visible: Cpp_JSON_ProjectModel.customizeWorkspaces
             }
 
             Item {
-              visible: Cpp_JSON_ProjectModel.customizeWorkspaces
-              Layout.preferredWidth: visible ? 40 : 0
               Layout.fillHeight: true
+              Layout.preferredWidth: visible ? 40 : 0
+              visible: Cpp_JSON_ProjectModel.customizeWorkspaces
 
               ToolButton {
                 id: removeBtn
-                anchors.centerIn: parent
                 width: 40
                 height: 26
                 padding: 2
                 flat: true
-                hoverEnabled: true
                 icon.width: 16
                 icon.height: 16
-                icon.source: "qrc:/rcc/icons/buttons/trash.svg"
+                hoverEnabled: true
+                anchors.centerIn: parent
                 icon.color: "transparent"
+                icon.source: "qrc:/rcc/icons/buttons/trash.svg"
 
                 background: Rectangle {
-                  color: "transparent"
                   border.width: 0
+                  color: "transparent"
                 }
 
-                ToolTip.visible: hovered
                 ToolTip.delay: 400
+                ToolTip.visible: hovered
                 ToolTip.text: qsTr("Remove from workspace")
 
                 onClicked: Cpp_JSON_ProjectModel.removeWidgetFromWorkspace(

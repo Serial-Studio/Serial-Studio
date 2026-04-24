@@ -22,8 +22,8 @@ Item {
 
   ColumnLayout {
     spacing: 8
-    anchors.fill: parent
     anchors.margins: 16
+    anchors.fill: parent
 
     Item { Layout.fillHeight: true }
 
@@ -48,10 +48,10 @@ Item {
       Slider {
         id: slider
 
+        Layout.fillWidth: true
         from: root.model ? root.model.minValue : 0
         to: root.model ? root.model.maxValue : 100
         stepSize: root.model ? root.model.stepSize : 1
-        Layout.fillWidth: true
 
         palette.dark: root.color
         palette.highlight: root.color
@@ -79,16 +79,16 @@ Item {
         return val + (units.length > 0 ? " " + units : "")
       }
       color: root.color
-      font: Cpp_Misc_CommonFonts.boldUiFont
       Layout.alignment: Qt.AlignHCenter
+      font: Cpp_Misc_CommonFonts.boldUiFont
     }
 
     Label {
-      visible: root.model && !root.model.hasTransmitFunction
-      text: qsTr("No transmit function defined")
       color: "#ff6666"
       font: Cpp_Misc_CommonFonts.uiFont
       Layout.alignment: Qt.AlignHCenter
+      text: qsTr("No transmit function defined")
+      visible: root.model && !root.model.hasTransmitFunction
     }
 
     Item { Layout.fillHeight: true }

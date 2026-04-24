@@ -142,8 +142,8 @@ Item {
   //
   ColumnLayout {
     spacing: 6
-    anchors.fill: parent
     anchors.margins: 8
+    anchors.fill: parent
 
     //
     // Header row: channel filter + unread count + clear button
@@ -155,8 +155,8 @@ Item {
       TextField {
         id: filterField
 
-        Layout.fillWidth: true
         selectByMouse: true
+        Layout.fillWidth: true
         font: Cpp_Misc_CommonFonts.uiFont
         placeholderText: qsTr("Filter by channel…")
       }
@@ -205,9 +205,9 @@ Item {
 
         clip: true
         spacing: 0
+        anchors.margins: 1
         model: notifications
         anchors.fill: parent
-        anchors.margins: 1
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: ScrollBar {
@@ -247,9 +247,9 @@ Item {
             anchors.bottomMargin: 5
 
             Image {
-              sourceSize: Qt.size(18, 18)
               Layout.preferredWidth: 18
               Layout.preferredHeight: 18
+              sourceSize: Qt.size(18, 18)
               Layout.alignment: Qt.AlignTop
               source: root.iconForLevel(row.model.level)
             }
@@ -315,9 +315,9 @@ Item {
 
           Image {
             opacity: 0.35
-            sourceSize: Qt.size(64, 64)
             Layout.preferredWidth: 64
             Layout.preferredHeight: 64
+            sourceSize: Qt.size(64, 64)
             Layout.alignment: Qt.AlignHCenter
             fillMode: Image.PreserveAspectFit
             source: "qrc:/rcc/icons/dashboard-large/notification-log.svg"

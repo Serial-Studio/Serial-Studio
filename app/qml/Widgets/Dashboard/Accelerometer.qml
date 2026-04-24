@@ -44,12 +44,12 @@ Item {
   // Local properties bound to model values (EMA-filtered in C++)
   //
   property real currentG: root.model.g
-  property real currentPitch: root.model.pitch
   property real currentRoll: root.model.roll
-  property real currentMagnitude: root.model.magnitude
-  property real currentTheta: root.model.theta
   property real displayMaxG: root.model.maxG
   property bool inputInG: root.model.inputInG
+  property real currentPitch: root.model.pitch
+  property real currentTheta: root.model.theta
+  property real currentMagnitude: root.model.magnitude
   readonly property bool angleLabelsVisible: {
     const minGaugeSize = 200
     const labelMargin = 40
@@ -348,8 +348,8 @@ Item {
         // Radial dotted lines for each 30° angle
         //
         Canvas {
-          anchors.fill: parent
           opacity: 0.15
+          anchors.fill: parent
 
           onPaint: {
             var ctx = getContext("2d");
@@ -457,8 +457,8 @@ Item {
             required property int index
 
             readonly property real angle: index * 30
-            readonly property real angleRad: angle * Math.PI / 180
             readonly property real radius: rings.width / 2 + 18
+            readonly property real angleRad: angle * Math.PI / 180
 
             visible: rings.width >= 180
             x: rings.width / 2 + radius * Math.cos(angleRad) - width / 2
@@ -512,8 +512,8 @@ Item {
         acceptedButtons: Qt.NoButton
         propagateComposedEvents: true
 
-        property real cursorMagnitude: 0
         property real cursorAngle: 0
+        property real cursorMagnitude: 0
         property bool isInsideCircle: false
 
         onPositionChanged: (mouse) => {

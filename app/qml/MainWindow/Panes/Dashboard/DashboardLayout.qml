@@ -230,9 +230,9 @@ Widgets.Pane {
       DashboardCanvas {
         id: _canvas
 
+        Layout.topMargin: -1
         taskBar: root.taskBar
         taskbarView: _taskbar
-        Layout.topMargin: -1
         Layout.leftMargin: -1
         Layout.rightMargin: -1
         Layout.fillWidth: true

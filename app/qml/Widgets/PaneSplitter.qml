@@ -78,8 +78,8 @@ SplitView {
     property int preferredWidth: root._defaultLeftWidth
 
     SplitView.fillHeight: true
-    SplitView.minimumWidth: root.minLeftWidth
     SplitView.preferredWidth: preferredWidth
+    SplitView.minimumWidth: root.minLeftWidth
 
     sourceComponent: root.leftPanel
 

@@ -92,9 +92,9 @@ Item {
     columnSpacing: 4
     anchors.margins: 0
     anchors.fill: parent
+    enabled: app.ioEnabled
     visible: _inDev.count > 0
     opacity: enabled ? 1 : 0.5
-    enabled: app.ioEnabled
 
     //
     // Input device selection

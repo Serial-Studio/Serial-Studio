@@ -74,10 +74,10 @@ Widgets.Pane {
         onTextChanged: Cpp_JSON_ProjectEditor.treeSearchQuery = text
 
         anchors {
-          left: parent.left
-          right: parent.right
           leftMargin: 6
           rightMargin: 6
+          left: parent.left
+          right: parent.right
           verticalCenter: parent.verticalCenter
         }
       }
@@ -89,8 +89,8 @@ Widgets.Pane {
     TreeView {
       id: treeView
 
-      focus: true
       clip: true
+      focus: true
       reuseItems: false
       interactive: true
       Layout.fillWidth: true

@@ -85,8 +85,8 @@ Item {
       rowSpacing: 4
       columnSpacing: 4
       Layout.fillWidth: true
-      opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
+      opacity: enabled ? 1 : 0.5
 
       //
       // CAN Driver selector

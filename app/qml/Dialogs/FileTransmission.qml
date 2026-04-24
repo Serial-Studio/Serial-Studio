@@ -52,11 +52,11 @@ SmartDialog {
   //
   Core.Settings {
     category: "FileTransmission"
-    property alias interval: _interval.value
-    property alias transferMode: _modeCombo.currentIndex
-    property alias blockSize: _blockSize.value
     property alias timeout: _timeout.value
+    property alias interval: _interval.value
     property alias maxRetries: _retries.value
+    property alias blockSize: _blockSize.value
+    property alias transferMode: _modeCombo.currentIndex
   }
 
   //
@@ -90,8 +90,8 @@ SmartDialog {
         // Transfer mode selector
         //
         Label {
-          text: qsTr("Transfer Protocol:")
           opacity: enabled ? 1 : 0.5
+          text: qsTr("Transfer Protocol:")
           enabled: !Cpp_IO_FileTransmission.active
         } RowLayout {
           spacing: 4
@@ -122,8 +122,8 @@ SmartDialog {
         // File selection
         //
         Label {
-          text: qsTr("File Selection:")
           opacity: enabled ? 1 : 0.5
+          text: qsTr("File Selection:")
           enabled: !Cpp_IO_FileTransmission.active
         } RowLayout {
           spacing: 4
@@ -157,8 +157,8 @@ SmartDialog {
         // Interval (plain text / raw binary modes)
         //
         Label {
-          text: qsTr("Transmission Interval:")
           opacity: enabled ? 1 : 0.5
+          text: qsTr("Transmission Interval:")
           visible: _modeCombo.currentIndex <= 1
           enabled: !Cpp_IO_FileTransmission.active
         } RowLayout {
@@ -195,14 +195,14 @@ SmartDialog {
         Label {
           text: qsTr("Block Size:")
           opacity: enabled ? 1 : 0.5
-          visible: _modeCombo.currentIndex === 1 || _modeCombo.currentIndex === 5
           enabled: !Cpp_IO_FileTransmission.active
+          visible: _modeCombo.currentIndex === 1 || _modeCombo.currentIndex === 5
         } RowLayout {
           spacing: 4
           Layout.fillWidth: true
           opacity: enabled ? 1 : 0.5
-          visible: _modeCombo.currentIndex === 1 || _modeCombo.currentIndex === 5
           enabled: !Cpp_IO_FileTransmission.active
+          visible: _modeCombo.currentIndex === 1 || _modeCombo.currentIndex === 5
 
           SpinBox {
             id: _blockSize
@@ -243,8 +243,8 @@ SmartDialog {
 
           SpinBox {
             id: _timeout
-            from: 1000
             to: 60000
+            from: 1000
             stepSize: 1000
             editable: true
             Layout.fillWidth: true
@@ -395,8 +395,8 @@ SmartDialog {
 
           Button {
             Layout.fillWidth: true
-            enabled: Cpp_IO_FileTransmission.fileOpen
             opacity: enabled ? 1 : 0.5
+            enabled: Cpp_IO_FileTransmission.fileOpen
             Behavior on opacity {NumberAnimation{}}
             checked: Cpp_IO_FileTransmission.active
             text: {
@@ -444,8 +444,8 @@ SmartDialog {
           Layout.fillWidth: true
 
           Label {
-            text: qsTr("Activity Log")
             Layout.fillWidth: true
+            text: qsTr("Activity Log")
           }
 
           Button {

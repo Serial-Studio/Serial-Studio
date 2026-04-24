@@ -31,8 +31,8 @@ SmartDialog {
   //
   // Window options
   //
-  title: qsTr("CSV Player")
   staysOnTop: true
+  title: qsTr("CSV Player")
 
   //
   // Automatically display the window when the CSV file is opened

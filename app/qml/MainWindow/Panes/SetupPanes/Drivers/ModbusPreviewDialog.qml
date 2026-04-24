@@ -204,10 +204,10 @@ Window {
               }
 
               Label {
+                text: qsTr("Name")
                 color: palette.text
                 Layout.fillWidth: true
                 Layout.minimumWidth: 120
-                text: qsTr("Name")
                 font: Cpp_Misc_CommonFonts.boldUiFont
               }
 
@@ -219,8 +219,8 @@ Window {
               }
 
               Label {
-                color: palette.text
                 text: qsTr("Type")
+                color: palette.text
                 Layout.preferredWidth: 120
                 font: Cpp_Misc_CommonFonts.boldUiFont
               }

@@ -106,8 +106,8 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Duplicate")
             Layout.alignment: Qt.AlignVCenter
-            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
             ToolTip.text: qsTr("Create a copy of this data source")
+            icon.source: "qrc:/rcc/icons/project-editor/actions/duplicate.svg"
             onClicked: Cpp_JSON_ProjectModel.duplicateSource(
                          Cpp_JSON_ProjectEditor.selectedSourceId)
           }
