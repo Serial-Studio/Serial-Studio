@@ -648,8 +648,10 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
       auto& dataset = group.datasets[d];
       const int idx = dataset.index;
       if (idx > 0 && idx <= channelCount) [[likely]] {
-        dataset.value        = channelData[idx - 1];
-        dataset.numericValue = dataset.value.toDouble(&dataset.isNumeric);
+        dataset.value           = channelData[idx - 1];
+        dataset.numericValue    = dataset.value.toDouble(&dataset.isNumeric);
+        dataset.rawValue        = dataset.value;
+        dataset.rawNumericValue = dataset.numericValue;
       }
     }
   }
