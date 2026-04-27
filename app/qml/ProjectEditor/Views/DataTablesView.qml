@@ -233,20 +233,6 @@ Widgets.Pane {
 
             Item { Layout.fillWidth: true }
 
-            //
-            // Spacer
-            //
-            Rectangle {
-              implicitWidth: 1
-              Layout.fillHeight: true
-              Layout.maximumHeight: 48
-              Layout.alignment: Qt.AlignVCenter
-              color: Cpp_ThemeManager.colors["groupbox_border"]
-            }
-
-            //
-            // Help
-            //
             Widgets.ToolbarButton {
               iconSize: 24
               text: qsTr("Help")

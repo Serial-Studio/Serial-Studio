@@ -318,6 +318,7 @@ private:
   QString m_frameEndSequence;
   QString m_checksumAlgorithm;
   QString m_frameStartSequence;
+  QString m_writerVersionAtCreation;
   bool m_hexadecimalDelimiters;
 
   SerialStudio::DecoderMethod m_frameDecoder;

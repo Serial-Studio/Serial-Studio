@@ -353,21 +353,21 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
 
   // QuickPlot fallback — synthesise a minimal project from the frame
   QJsonObject json;
-  json.insert(QStringLiteral("title"), frame.title);
+  json.insert(Keys::Title, frame.title);
 
   // Frame detection settings (QuickPlot line-based CSV)
-  json.insert(QStringLiteral("frameDetection"), static_cast<int>(SerialStudio::EndDelimiterOnly));
-  json.insert(QStringLiteral("frameEnd"), QStringLiteral("\\n"));
-  json.insert(QStringLiteral("frameStart"), QStringLiteral(""));
-  json.insert(QStringLiteral("decoder"), static_cast<int>(SerialStudio::PlainText));
+  json.insert(Keys::FrameDetection, static_cast<int>(SerialStudio::EndDelimiterOnly));
+  json.insert(Keys::FrameEnd, QStringLiteral("\\n"));
+  json.insert(Keys::FrameStart, QStringLiteral(""));
+  json.insert(Keys::Decoder, static_cast<int>(SerialStudio::PlainText));
 
   // Groups from the live frame
   QJsonArray groupsArray;
   for (const auto& group : frame.groups)
     groupsArray.append(DataModel::serialize(group));
 
-  json.insert(QStringLiteral("groups"), groupsArray);
-  json.insert(QStringLiteral("actions"), QJsonArray());
+  json.insert(Keys::Groups, groupsArray);
+  json.insert(Keys::Actions, QJsonArray());
 
   // Build a default source with a working parser (prefer Lua, fall back to JS)
   int parserLanguage = static_cast<int>(SerialStudio::Lua);
@@ -378,19 +378,19 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
   }
 
   QJsonObject source;
-  source.insert(QStringLiteral("title"), QStringLiteral("Device A"));
-  source.insert(QStringLiteral("sourceId"), 0);
-  source.insert(QStringLiteral("busType"), static_cast<int>(SerialStudio::BusType::UART));
-  source.insert(QStringLiteral("frameDetection"), static_cast<int>(SerialStudio::EndDelimiterOnly));
-  source.insert(QStringLiteral("frameStart"), QString());
-  source.insert(QStringLiteral("frameEnd"), QStringLiteral("\\n"));
-  source.insert(QStringLiteral("decoder"), static_cast<int>(SerialStudio::PlainText));
-  source.insert(QStringLiteral("frameParserLanguage"), parserLanguage);
-  source.insert(QStringLiteral("frameParserCode"), parserCode);
+  source.insert(Keys::Title, QStringLiteral("Device A"));
+  source.insert(Keys::SourceId, 0);
+  source.insert(Keys::BusType, static_cast<int>(SerialStudio::BusType::UART));
+  source.insert(Keys::FrameDetection, static_cast<int>(SerialStudio::EndDelimiterOnly));
+  source.insert(Keys::FrameStart, QString());
+  source.insert(Keys::FrameEnd, QStringLiteral("\\n"));
+  source.insert(Keys::Decoder, static_cast<int>(SerialStudio::PlainText));
+  source.insert(Keys::FrameParserLanguage, parserLanguage);
+  source.insert(Keys::FrameParserCode, parserCode);
 
   QJsonArray sourcesArray;
   sourcesArray.append(source);
-  json.insert(QStringLiteral("sources"), sourcesArray);
+  json.insert(Keys::Sources, sourcesArray);
 
   return json;
 }

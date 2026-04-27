@@ -21,7 +21,17 @@
 
 #include "DataModel/Frame.h"
 
+#include "AppInfo.h"
 #include "SerialStudio.h"
+
+//--------------------------------------------------------------------------------------------------
+// Project version stamp
+//--------------------------------------------------------------------------------------------------
+
+QString DataModel::current_writer_version()
+{
+  return QString::fromUtf8(APP_VERSION);
+}
 
 //--------------------------------------------------------------------------------------------------
 // Frame processing
@@ -53,12 +63,16 @@ void DataModel::read_io_settings(QByteArray& frameStart,
                                  const QJsonObject& obj)
 {
   // Obtain frame delimiters
-  auto fEndStr   = ss_jsr(obj, "frameEnd", "").toString();
-  auto fStartStr = ss_jsr(obj, "frameStart", "").toString();
-  auto isHex     = ss_jsr(obj, "hexadecimalDelimiters", false).toBool();
+  auto fEndStr   = ss_jsr(obj, Keys::FrameEnd, "").toString();
+  auto fStartStr = ss_jsr(obj, Keys::FrameStart, "").toString();
+  auto isHex     = ss_jsr(obj, Keys::HexadecimalDelimiters, false).toBool();
 
-  // Read checksum method
-  checksum = ss_jsr(obj, "checksum", "").toString();
+  // Read checksum method, preferring the canonical "checksumAlgorithm" key and
+  // falling back to legacy "checksum" written by older Serial Studio versions
+  if (obj.contains(Keys::ChecksumAlgorithm))
+    checksum = obj.value(Keys::ChecksumAlgorithm).toString();
+  else
+    checksum = ss_jsr(obj, Keys::Checksum, "").toString();
 
   // Convert hex + escape strings (e.g. "0A 0D", or "\\n0D") to raw bytes
   if (isHex) {

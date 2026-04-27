@@ -75,7 +75,7 @@ void API::Handlers::SourceHandler::registerCommands()
       {       QStringLiteral("type"),                   QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("New title for the source")}
     };
-    props[QStringLiteral("busType")] = QJsonObject{
+    props[Keys::BusType] = QJsonObject{
       {       QStringLiteral("type"),                               QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Bus type index (0=UART, 1=Network, …)")}
     };
@@ -218,22 +218,22 @@ API::CommandResponse API::Handlers::SourceHandler::sourceList(const QString& id,
   QJsonArray arr;
   for (const auto& src : sources) {
     QJsonObject obj;
-    obj[QStringLiteral("sourceId")]              = src.sourceId;
-    obj[QStringLiteral("title")]                 = src.title;
-    obj[QStringLiteral("busType")]               = src.busType;
-    obj[QStringLiteral("frameStart")]            = src.frameStart;
-    obj[QStringLiteral("frameEnd")]              = src.frameEnd;
-    obj[QStringLiteral("checksumAlgorithm")]     = src.checksumAlgorithm;
-    obj[QStringLiteral("frameDetection")]        = src.frameDetection;
-    obj[QStringLiteral("decoderMethod")]         = src.decoderMethod;
-    obj[QStringLiteral("hexadecimalDelimiters")] = src.hexadecimalDelimiters;
-    obj[QStringLiteral("hasFrameParser")]        = !src.frameParserCode.isEmpty();
+    obj[Keys::SourceId]                   = src.sourceId;
+    obj[Keys::Title]                      = src.title;
+    obj[Keys::BusType]                    = src.busType;
+    obj[Keys::FrameStart]                 = src.frameStart;
+    obj[Keys::FrameEnd]                   = src.frameEnd;
+    obj[Keys::ChecksumAlgorithm]          = src.checksumAlgorithm;
+    obj[Keys::FrameDetection]             = src.frameDetection;
+    obj[Keys::DecoderMethod]              = src.decoderMethod;
+    obj[Keys::HexadecimalDelimiters]      = src.hexadecimalDelimiters;
+    obj[QStringLiteral("hasFrameParser")] = !src.frameParserCode.isEmpty();
     arr.append(obj);
   }
 
   QJsonObject result;
-  result[QStringLiteral("sources")] = arr;
-  result[QStringLiteral("count")]   = static_cast<int>(sources.size());
+  result[Keys::Sources]           = arr;
+  result[QStringLiteral("count")] = static_cast<int>(sources.size());
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -323,29 +323,29 @@ API::CommandResponse API::Handlers::SourceHandler::sourceUpdate(const QString& i
 
   DataModel::Source updated = sources[sourceId];
 
-  if (params.contains(QStringLiteral("title")))
-    updated.title = params[QStringLiteral("title")].toString();
+  if (params.contains(Keys::Title))
+    updated.title = params[Keys::Title].toString();
 
-  if (params.contains(QStringLiteral("busType")))
-    updated.busType = params[QStringLiteral("busType")].toInt(updated.busType);
+  if (params.contains(Keys::BusType))
+    updated.busType = params[Keys::BusType].toInt(updated.busType);
 
-  if (params.contains(QStringLiteral("frameStart")))
-    updated.frameStart = params[QStringLiteral("frameStart")].toString();
+  if (params.contains(Keys::FrameStart))
+    updated.frameStart = params[Keys::FrameStart].toString();
 
-  if (params.contains(QStringLiteral("frameEnd")))
-    updated.frameEnd = params[QStringLiteral("frameEnd")].toString();
+  if (params.contains(Keys::FrameEnd))
+    updated.frameEnd = params[Keys::FrameEnd].toString();
 
-  if (params.contains(QStringLiteral("checksumAlgorithm")))
-    updated.checksumAlgorithm = params[QStringLiteral("checksumAlgorithm")].toString();
+  if (params.contains(Keys::ChecksumAlgorithm))
+    updated.checksumAlgorithm = params[Keys::ChecksumAlgorithm].toString();
 
-  if (params.contains(QStringLiteral("frameDetection")))
-    updated.frameDetection = params[QStringLiteral("frameDetection")].toInt(updated.frameDetection);
+  if (params.contains(Keys::FrameDetection))
+    updated.frameDetection = params[Keys::FrameDetection].toInt(updated.frameDetection);
 
-  if (params.contains(QStringLiteral("decoderMethod")))
-    updated.decoderMethod = params[QStringLiteral("decoderMethod")].toInt(updated.decoderMethod);
+  if (params.contains(Keys::DecoderMethod))
+    updated.decoderMethod = params[Keys::DecoderMethod].toInt(updated.decoderMethod);
 
-  if (params.contains(QStringLiteral("hexadecimalDelimiters")))
-    updated.hexadecimalDelimiters = params[QStringLiteral("hexadecimalDelimiters")].toBool();
+  if (params.contains(Keys::HexadecimalDelimiters))
+    updated.hexadecimalDelimiters = params[Keys::HexadecimalDelimiters].toBool();
 
   QMetaObject::invokeMethod(&DataModel::ProjectModel::instance(),
                             "updateSource",

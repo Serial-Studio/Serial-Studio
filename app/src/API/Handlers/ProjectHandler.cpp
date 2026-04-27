@@ -231,15 +231,15 @@ void API::Handlers::ProjectHandler::registerCommands()
   // project.dataset.setVirtual — gate the frame-index field
   {
     QJsonObject props;
-    props[QStringLiteral("groupId")] = QJsonObject{
+    props[Keys::GroupId] = QJsonObject{
       {       QStringLiteral("type"),         QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Owning group id")}
     };
-    props[QStringLiteral("datasetId")] = QJsonObject{
+    props[Keys::DatasetId] = QJsonObject{
       {       QStringLiteral("type"),                     QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Dataset id within the group")}
     };
-    props[QStringLiteral("virtual")] = QJsonObject{
+    props[Keys::Virtual] = QJsonObject{
       {       QStringLiteral("type"),QStringLiteral("boolean")                                     },
       {QStringLiteral("description"),
        QStringLiteral("Mark dataset as virtual (computed by transform)")}
@@ -248,9 +248,9 @@ void API::Handlers::ProjectHandler::registerCommands()
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
     schema[QStringLiteral("required")]   = QJsonArray{
-      QStringLiteral("groupId"),
-      QStringLiteral("datasetId"),
-      QStringLiteral("virtual"),
+      QString(Keys::GroupId),
+      QString(Keys::DatasetId),
+      QString(Keys::Virtual),
     };
     registry.registerCommand(
       QStringLiteral("project.dataset.setVirtual"),
@@ -262,11 +262,11 @@ void API::Handlers::ProjectHandler::registerCommands()
   // project.dataset.setTransformCode — set Lua/JS transform source
   {
     QJsonObject props;
-    props[QStringLiteral("groupId")] = QJsonObject{
+    props[Keys::GroupId] = QJsonObject{
       {       QStringLiteral("type"),         QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Owning group id")}
     };
-    props[QStringLiteral("datasetId")] = QJsonObject{
+    props[Keys::DatasetId] = QJsonObject{
       {       QStringLiteral("type"),                     QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Dataset id within the group")}
     };
@@ -279,8 +279,8 @@ void API::Handlers::ProjectHandler::registerCommands()
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
     schema[QStringLiteral("required")]   = QJsonArray{
-      QStringLiteral("groupId"),
-      QStringLiteral("datasetId"),
+      QString(Keys::GroupId),
+      QString(Keys::DatasetId),
       QStringLiteral("code"),
     };
     registry.registerCommand(
@@ -433,11 +433,11 @@ void API::Handlers::ProjectHandler::registerCommands()
       {       QStringLiteral("type"),              QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Frame end delimiter")}
     };
-    props[QStringLiteral("checksumAlgorithm")] = QJsonObject{
+    props[Keys::ChecksumAlgorithm] = QJsonObject{
       {       QStringLiteral("type"),                  QStringLiteral("string")},
       {QStringLiteral("description"), QStringLiteral("Checksum algorithm name")}
     };
-    props[QStringLiteral("frameDetection")] = QJsonObject{
+    props[Keys::FrameDetection] = QJsonObject{
       {       QStringLiteral("type"),                    QStringLiteral("integer")},
       {QStringLiteral("description"), QStringLiteral("Frame detection mode (0-3)")}
     };
@@ -847,9 +847,9 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QStr
 {
   // Validate required parameters
   const QStringList required{
-    QStringLiteral("groupId"),
-    QStringLiteral("datasetId"),
-    QStringLiteral("virtual"),
+    QString(Keys::GroupId),
+    QString(Keys::DatasetId),
+    QString(Keys::Virtual),
   };
 
   for (const auto& key : required)
@@ -857,9 +857,9 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QStr
       return CommandResponse::makeError(
         id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: %1").arg(key));
 
-  const int groupId   = params.value(QStringLiteral("groupId")).toInt();
-  const int datasetId = params.value(QStringLiteral("datasetId")).toInt();
-  const bool isVirt   = params.value(QStringLiteral("virtual")).toBool();
+  const int groupId   = params.value(Keys::GroupId).toInt();
+  const int datasetId = params.value(Keys::DatasetId).toInt();
+  const bool isVirt   = params.value(Keys::Virtual).toBool();
 
   // Locate the group by logical id, then the dataset within it
   auto& pm           = DataModel::ProjectModel::instance();
@@ -888,10 +888,10 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetVirtual(const QStr
   pm.updateDataset(groupId, datasetId, updated, true);
 
   QJsonObject result;
-  result[QStringLiteral("groupId")]   = groupId;
-  result[QStringLiteral("datasetId")] = datasetId;
-  result[QStringLiteral("virtual")]   = isVirt;
-  result[QStringLiteral("updated")]   = true;
+  result[Keys::GroupId]             = groupId;
+  result[Keys::DatasetId]           = datasetId;
+  result[Keys::Virtual]             = isVirt;
+  result[QStringLiteral("updated")] = true;
   return CommandResponse::makeSuccess(id, result);
 }
 
@@ -906,8 +906,8 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
   const QString& id, const QJsonObject& params)
 {
   const QStringList required{
-    QStringLiteral("groupId"),
-    QStringLiteral("datasetId"),
+    QString(Keys::GroupId),
+    QString(Keys::DatasetId),
     QStringLiteral("code"),
   };
 
@@ -916,8 +916,8 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
       return CommandResponse::makeError(
         id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: %1").arg(key));
 
-  const int groupId   = params.value(QStringLiteral("groupId")).toInt();
-  const int datasetId = params.value(QStringLiteral("datasetId")).toInt();
+  const int groupId   = params.value(Keys::GroupId).toInt();
+  const int datasetId = params.value(Keys::DatasetId).toInt();
   const QString code  = params.value(QStringLiteral("code")).toString();
 
   // Locate the group by logical id, then the dataset within it
@@ -946,8 +946,8 @@ API::CommandResponse API::Handlers::ProjectHandler::datasetSetTransformCode(
   pm.updateDataset(groupId, datasetId, updated, false);
 
   QJsonObject result;
-  result[QStringLiteral("groupId")]    = groupId;
-  result[QStringLiteral("datasetId")]  = datasetId;
+  result[Keys::GroupId]                = groupId;
+  result[Keys::DatasetId]              = datasetId;
   result[QStringLiteral("codeLength")] = code.size();
   result[QStringLiteral("updated")]    = true;
   return CommandResponse::makeSuccess(id, result);
@@ -1428,15 +1428,15 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
       updated = true;
     }
 
-    if (params.contains(QStringLiteral("checksumAlgorithm"))) {
-      const QString checksumName = params.value(QStringLiteral("checksumAlgorithm")).toString();
+    if (params.contains(Keys::ChecksumAlgorithm)) {
+      const QString checksumName = params.value(Keys::ChecksumAlgorithm).toString();
       manager.setChecksumAlgorithm(checksumName);
       model.setChecksumAlgorithm(checksumName);
       updated = true;
     }
 
-    if (params.contains(QStringLiteral("frameDetection"))) {
-      const int detectionIdx = params.value(QStringLiteral("frameDetection")).toInt();
+    if (params.contains(Keys::FrameDetection)) {
+      const int detectionIdx = params.value(Keys::FrameDetection).toInt();
       if (detectionIdx >= 0 && detectionIdx <= 3) {
         model.setFrameDetection(static_cast<SerialStudio::FrameDetection>(detectionIdx));
         updated = true;
@@ -1456,13 +1456,13 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
       updated      = true;
     }
 
-    if (params.contains(QStringLiteral("checksumAlgorithm"))) {
-      src.checksumAlgorithm = params.value(QStringLiteral("checksumAlgorithm")).toString();
+    if (params.contains(Keys::ChecksumAlgorithm)) {
+      src.checksumAlgorithm = params.value(Keys::ChecksumAlgorithm).toString();
       updated               = true;
     }
 
-    if (params.contains(QStringLiteral("frameDetection"))) {
-      const int detectionIdx = params.value(QStringLiteral("frameDetection")).toInt();
+    if (params.contains(Keys::FrameDetection)) {
+      const int detectionIdx = params.value(Keys::FrameDetection).toInt();
       if (detectionIdx >= 0 && detectionIdx <= 3) {
         src.frameDetection = detectionIdx;
         updated            = true;
@@ -1507,13 +1507,13 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
 
   // Assemble the response
   QJsonObject result;
-  result[QStringLiteral("startSequence")]     = primaryStart;
-  result[QStringLiteral("endSequence")]       = primaryEnd;
-  result[QStringLiteral("startSequences")]    = startArr;
-  result[QStringLiteral("endSequences")]      = endArr;
-  result[QStringLiteral("checksumAlgorithm")] = cfg.checksumAlgorithm;
-  result[QStringLiteral("operationMode")]     = static_cast<int>(cfg.operationMode);
-  result[QStringLiteral("frameDetection")]    = static_cast<int>(cfg.frameDetection);
+  result[QStringLiteral("startSequence")]  = primaryStart;
+  result[QStringLiteral("endSequence")]    = primaryEnd;
+  result[QStringLiteral("startSequences")] = startArr;
+  result[QStringLiteral("endSequences")]   = endArr;
+  result[Keys::ChecksumAlgorithm]          = cfg.checksumAlgorithm;
+  result[QStringLiteral("operationMode")]  = static_cast<int>(cfg.operationMode);
+  result[Keys::FrameDetection]             = static_cast<int>(cfg.frameDetection);
 
   return CommandResponse::makeSuccess(id, result);
 }

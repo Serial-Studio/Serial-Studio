@@ -24,6 +24,7 @@
 #include <QJsonArray>
 
 #include "API/CommandRegistry.h"
+#include "DataModel/Frame.h"
 #include "IO/ConnectionManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -70,7 +71,7 @@ void API::Handlers::IOManagerHandler::registerCommands()
 
   {
     QJsonObject props;
-    props[QStringLiteral("busType")] = QJsonObject{
+    props[Keys::BusType] = QJsonObject{
       {       QStringLiteral("type"),QStringLiteral("integer")                                     },
       {QStringLiteral("description"),
        QStringLiteral(
@@ -81,7 +82,7 @@ void API::Handlers::IOManagerHandler::registerCommands()
     QJsonObject schema;
     schema[QStringLiteral("type")]       = QStringLiteral("object");
     schema[QStringLiteral("properties")] = props;
-    schema[QStringLiteral("required")]   = QJsonArray{QStringLiteral("busType")};
+    schema[QStringLiteral("required")]   = QJsonArray{QString(Keys::BusType)};
     registry.registerCommand(
       QStringLiteral("io.manager.setBusType"),
       QStringLiteral("Set the bus type (params: busType - 0=UART, 1=Network, 2=BLE)"),
@@ -201,12 +202,12 @@ API::CommandResponse API::Handlers::IOManagerHandler::setPaused(const QString& i
 API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& id,
                                                                  const QJsonObject& params)
 {
-  if (!params.contains(QStringLiteral("busType"))) {
+  if (!params.contains(Keys::BusType)) {
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: busType"));
   }
 
-  const int busType         = params.value(QStringLiteral("busType")).toInt();
+  const int busType         = params.value(Keys::BusType).toInt();
   const auto availableBuses = IO::ConnectionManager::instance().availableBuses();
 
   if (busType < 0 || busType >= availableBuses.count()) {
@@ -220,7 +221,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::setBusType(const QString& 
   IO::ConnectionManager::instance().setBusType(static_cast<SerialStudio::BusType>(busType));
 
   QJsonObject result;
-  result[QStringLiteral("busType")]     = busType;
+  result[Keys::BusType]                 = busType;
   result[QStringLiteral("busTypeName")] = availableBuses.at(busType);
   return CommandResponse::makeSuccess(id, result);
 }
@@ -277,7 +278,7 @@ API::CommandResponse API::Handlers::IOManagerHandler::getStatus(const QString& i
   QJsonObject result;
   result[QStringLiteral("isConnected")]     = manager.isConnected();
   result[QStringLiteral("paused")]          = manager.paused();
-  result[QStringLiteral("busType")]         = static_cast<int>(manager.busType());
+  result[Keys::BusType]                     = static_cast<int>(manager.busType());
   result[QStringLiteral("configurationOk")] = manager.configurationOk();
   result[QStringLiteral("readOnly")]        = manager.readOnly();
   result[QStringLiteral("readWrite")]       = manager.readWrite();

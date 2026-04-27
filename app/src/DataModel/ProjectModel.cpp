@@ -62,6 +62,7 @@ DataModel::ProjectModel::ProjectModel()
   , m_frameEndSequence("")
   , m_checksumAlgorithm("")
   , m_frameStartSequence("")
+  , m_writerVersionAtCreation("")
   , m_hexadecimalDelimiters(false)
   , m_frameDecoder(SerialStudio::PlainText)
   , m_frameDetection(SerialStudio::EndDelimiterOnly)
@@ -829,23 +830,31 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
 {
   // Project metadata
   QJsonObject json;
-  json.insert("title", m_title);
-  json.insert("pointCount", m_pointCount);
-  json.insert("hexadecimalDelimiters", m_hexadecimalDelimiters);
+  json.insert(Keys::Title, m_title);
+  json.insert(Keys::PointCount, m_pointCount);
+  json.insert(Keys::HexadecimalDelimiters, m_hexadecimalDelimiters);
+
+  // Stamp file with current schema version + writer app version. Preserve the
+  // original creator stamp if it was loaded from disk.
+  const QString writer  = DataModel::current_writer_version();
+  const QString creator = m_writerVersionAtCreation.isEmpty() ? writer : m_writerVersionAtCreation;
+  json.insert(Keys::SchemaVersion, DataModel::kSchemaVersion);
+  json.insert(Keys::WriterVersion, writer);
+  json.insert(Keys::WriterVersionAtCreation, creator);
 
   // Groups
   QJsonArray groupArray;
   for (const auto& group : std::as_const(m_groups))
     groupArray.append(DataModel::serialize(group));
 
-  json.insert("groups", groupArray);
+  json.insert(Keys::Groups, groupArray);
 
   // Actions
   QJsonArray actionsArray;
   for (const auto& action : std::as_const(m_actions))
     actionsArray.append(DataModel::serialize(action));
 
-  json.insert("actions", actionsArray);
+  json.insert(Keys::Actions, actionsArray);
 
   // Data sources
   QJsonArray sourcesArray;
@@ -977,15 +986,16 @@ void DataModel::ProjectModel::newJsonFile()
   m_customizeWorkspaces = false;
 
   // Reset to factory defaults
-  m_frameEndSequence      = "\\n";
-  m_checksumAlgorithm     = "";
-  m_frameStartSequence    = "$";
-  m_hexadecimalDelimiters = false;
-  m_title                 = tr("Untitled Project");
-  m_pointCount            = 100;
-  m_frameDecoder          = SerialStudio::PlainText;
-  m_frameDetection        = SerialStudio::EndDelimiterOnly;
-  m_widgetSettings        = QJsonObject();
+  m_frameEndSequence        = "\\n";
+  m_checksumAlgorithm       = "";
+  m_frameStartSequence      = "$";
+  m_writerVersionAtCreation = "";
+  m_hexadecimalDelimiters   = false;
+  m_title                   = tr("Untitled Project");
+  m_pointCount              = 100;
+  m_frameDecoder            = SerialStudio::PlainText;
+  m_frameDetection          = SerialStudio::EndDelimiterOnly;
+  m_widgetSettings          = QJsonObject();
 
   // Create the default data source (source 0)
   DataModel::Source defaultSource;
@@ -1208,21 +1218,35 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   m_filePath = sourcePath;
 
   auto json                      = document.object();
-  m_title                        = json.value("title").toString();
-  m_frameEndSequence             = json.value("frameEnd").toString();
-  m_checksumAlgorithm            = json.value("checksum").toString();
-  m_frameStartSequence           = json.value("frameStart").toString();
-  const QString legacyParserCode = json.value("frameParser").toString();
-  m_hexadecimalDelimiters        = json.value("hexadecimalDelimiters").toBool();
-  m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(json.value("decoder").toInt());
+  m_title                        = json.value(Keys::Title).toString();
+  m_frameEndSequence             = json.value(Keys::FrameEnd).toString();
+  m_frameStartSequence           = json.value(Keys::FrameStart).toString();
+  const QString legacyParserCode = json.value(QLatin1StringView("frameParser")).toString();
+  m_hexadecimalDelimiters        = json.value(Keys::HexadecimalDelimiters).toBool();
   m_frameDetection =
-    static_cast<SerialStudio::FrameDetection>(json.value("frameDetection").toInt());
+    static_cast<SerialStudio::FrameDetection>(json.value(Keys::FrameDetection).toInt());
 
-  if (!json.contains("frameDetection"))
+  // Prefer canonical "checksumAlgorithm" / "decoderMethod" keys, fall back to
+  // legacy "checksum" / "decoder" written by older Serial Studio versions
+  if (json.contains(Keys::ChecksumAlgorithm))
+    m_checksumAlgorithm = json.value(Keys::ChecksumAlgorithm).toString();
+  else
+    m_checksumAlgorithm = json.value(Keys::Checksum).toString();
+
+  if (json.contains(Keys::DecoderMethod))
+    m_frameDecoder =
+      static_cast<SerialStudio::DecoderMethod>(json.value(Keys::DecoderMethod).toInt());
+  else
+    m_frameDecoder = static_cast<SerialStudio::DecoderMethod>(json.value(Keys::Decoder).toInt());
+
+  // Capture creator stamp so we round-trip it on save without overwriting
+  m_writerVersionAtCreation = json.value(Keys::WriterVersionAtCreation).toString();
+
+  if (!json.contains(Keys::FrameDetection))
     m_frameDetection = SerialStudio::StartAndEndDelimiter;
 
   // Deserialize groups
-  auto groups = json.value("groups").toArray();
+  auto groups = json.value(Keys::Groups).toArray();
   for (int g = 0; g < groups.count(); ++g) {
     DataModel::Group group;
     group.groupId = g;
@@ -1231,7 +1255,7 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   }
 
   // Deserialize actions
-  auto actions = json.value("actions").toArray();
+  auto actions = json.value(Keys::Actions).toArray();
   for (int a = 0; a < actions.count(); ++a) {
     DataModel::Action action;
     action.actionId = a;
@@ -2617,8 +2641,7 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
 void DataModel::ProjectModel::setModified(const bool modified)
 {
   // Keep a truly empty project clean
-  if (modified && m_groups.empty() && m_actions.empty() && m_tables.empty()
-      && m_workspaces.empty())
+  if (modified && m_groups.empty() && m_actions.empty() && m_tables.empty() && m_workspaces.empty())
     return;
 
   m_modified = modified;

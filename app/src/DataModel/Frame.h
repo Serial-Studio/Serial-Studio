@@ -39,94 +39,125 @@
 //--------------------------------------------------------------------------------------------------
 
 namespace Keys {
-inline constexpr auto EOL           = "eol";
-inline constexpr auto Icon          = "icon";
-inline constexpr auto Title         = "title";
-inline constexpr auto TxData        = "txData";
-inline constexpr auto Binary        = "binary";
-inline constexpr auto TxEncoding    = "txEncoding";
-inline constexpr auto TimerMode     = "timerMode";
-inline constexpr auto RepeatCount   = "repeatCount";
-inline constexpr auto TimerInterval = "timerIntervalMs";
-inline constexpr auto AutoExecute   = "autoExecuteOnConnect";
+using KeyView = QLatin1StringView;
 
-inline constexpr auto Sources         = "sources";
-inline constexpr auto SourceId        = "sourceId";
-inline constexpr auto SourceConn      = "connection";
-inline constexpr auto DatasetSourceId = "datasetSourceId";
+// Action keys
+inline constexpr KeyView EOL("eol");
+inline constexpr KeyView Icon("icon");
+inline constexpr KeyView Title("title");
+inline constexpr KeyView TxData("txData");
+inline constexpr KeyView Binary("binary");
+inline constexpr KeyView TxEncoding("txEncoding");
+inline constexpr KeyView TimerMode("timerMode");
+inline constexpr KeyView RepeatCount("repeatCount");
+inline constexpr KeyView TimerInterval("timerIntervalMs");
+inline constexpr KeyView AutoExecute("autoExecuteOnConnect");
 
-inline constexpr auto FFT               = "fft";
-inline constexpr auto LED               = "led";
-inline constexpr auto Log               = "log";
-inline constexpr auto Min               = "min";
-inline constexpr auto Max               = "max";
-inline constexpr auto Graph             = "graph";
-inline constexpr auto Index             = "index";
-inline constexpr auto XAxis             = "xAxis";
-inline constexpr auto Alarm             = "alarm";
-inline constexpr auto Units             = "units";
-inline constexpr auto Value             = "value";
-inline constexpr auto Widget            = "widget";
-inline constexpr auto FFTMin            = "fftMin";
-inline constexpr auto FFTMax            = "fftMax";
-inline constexpr auto PltMin            = "plotMin";
-inline constexpr auto PltMax            = "plotMax";
-inline constexpr auto LedHigh           = "ledHigh";
-inline constexpr auto WgtMin            = "widgetMin";
-inline constexpr auto WgtMax            = "widgetMax";
-inline constexpr auto AlarmLow          = "alarmLow";
-inline constexpr auto AlarmHigh         = "alarmHigh";
-inline constexpr auto FFTSamples        = "fftSamples";
-inline constexpr auto Overview          = "overviewDisplay";
-inline constexpr auto AlarmEnabled      = "alarmEnabled";
-inline constexpr auto FFTSamplingRate   = "fftSamplingRate";
-inline constexpr auto TransformCode     = "transformCode";
-inline constexpr auto TransformLanguage = "transformLanguage";
+// Source / connection keys
+inline constexpr KeyView Sources("sources");
+inline constexpr KeyView SourceId("sourceId");
+inline constexpr KeyView SourceConn("connection");
+inline constexpr KeyView DatasetSourceId("datasetSourceId");
+inline constexpr KeyView BusType("busType");
+inline constexpr KeyView FrameStart("frameStart");
+inline constexpr KeyView FrameEnd("frameEnd");
+inline constexpr KeyView Checksum("checksum");
+inline constexpr KeyView ChecksumAlgorithm("checksumAlgorithm");
+inline constexpr KeyView FrameDetection("frameDetection");
+inline constexpr KeyView Decoder("decoder");
+inline constexpr KeyView DecoderMethod("decoderMethod");
+inline constexpr KeyView HexadecimalDelimiters("hexadecimalDelimiters");
+inline constexpr KeyView FrameParserCode("frameParserCode");
+inline constexpr KeyView FrameParserLanguage("frameParserLanguage");
 
-inline constexpr auto Groups        = "groups";
-inline constexpr auto Actions       = "actions";
-inline constexpr auto Datasets      = "datasets";
-inline constexpr auto OutputWidgets = "outputWidgets";
+// Dataset keys
+inline constexpr KeyView FFT("fft");
+inline constexpr KeyView LED("led");
+inline constexpr KeyView Log("log");
+inline constexpr KeyView Min("min");
+inline constexpr KeyView Max("max");
+inline constexpr KeyView Graph("graph");
+inline constexpr KeyView Index("index");
+inline constexpr KeyView XAxis("xAxis");
+inline constexpr KeyView Alarm("alarm");
+inline constexpr KeyView Units("units");
+inline constexpr KeyView Value("value");
+inline constexpr KeyView Widget("widget");
+inline constexpr KeyView FFTMin("fftMin");
+inline constexpr KeyView FFTMax("fftMax");
+inline constexpr KeyView PltMin("plotMin");
+inline constexpr KeyView PltMax("plotMax");
+inline constexpr KeyView LedHigh("ledHigh");
+inline constexpr KeyView WgtMin("widgetMin");
+inline constexpr KeyView WgtMax("widgetMax");
+inline constexpr KeyView AlarmLow("alarmLow");
+inline constexpr KeyView AlarmHigh("alarmHigh");
+inline constexpr KeyView FFTSamples("fftSamples");
+inline constexpr KeyView Overview("overviewDisplay");
+inline constexpr KeyView AlarmEnabled("alarmEnabled");
+inline constexpr KeyView FFTSamplingRate("fftSamplingRate");
+inline constexpr KeyView TransformCode("transformCode");
+inline constexpr KeyView TransformLanguage("transformLanguage");
+inline constexpr KeyView DatasetId("datasetId");
+inline constexpr KeyView NumericValue("numericValue");
 
-inline constexpr auto OutputType         = "outputType";
-inline constexpr auto OutputMinValue     = "outputMin";
-inline constexpr auto OutputMaxValue     = "outputMax";
-inline constexpr auto OutputStepSize     = "outputStep";
-inline constexpr auto OutputInitialValue = "initialValue";
-inline constexpr auto OutputOnLabel      = "onLabel";
-inline constexpr auto OutputOffLabel     = "offLabel";
-inline constexpr auto OutputMonoIcon     = "monoIcon";
-inline constexpr auto OutputColumns      = "outputColumns";
-inline constexpr auto TransmitFunction   = "transmitFunction";
-inline constexpr auto OutputTxEncoding   = "outputTxEncoding";
+// Frame container keys
+inline constexpr KeyView Groups("groups");
+inline constexpr KeyView Actions("actions");
+inline constexpr KeyView Datasets("datasets");
+inline constexpr KeyView OutputWidgets("outputWidgets");
 
-inline constexpr auto GroupId   = "groupId";
-inline constexpr auto GroupType = "groupType";
+// Output widget keys
+inline constexpr KeyView OutputType("outputType");
+inline constexpr KeyView OutputMinValue("outputMin");
+inline constexpr KeyView OutputMaxValue("outputMax");
+inline constexpr KeyView OutputStepSize("outputStep");
+inline constexpr KeyView OutputInitialValue("initialValue");
+inline constexpr KeyView OutputOnLabel("onLabel");
+inline constexpr KeyView OutputOffLabel("offLabel");
+inline constexpr KeyView OutputMonoIcon("monoIcon");
+inline constexpr KeyView OutputColumns("outputColumns");
+inline constexpr KeyView TransmitFunction("transmitFunction");
+inline constexpr KeyView OutputTxEncoding("outputTxEncoding");
 
-inline constexpr auto ImgMode  = "imgDetectionMode";
-inline constexpr auto ImgStart = "imgStartSequence";
-inline constexpr auto ImgEnd   = "imgEndSequence";
+// Group keys
+inline constexpr KeyView GroupId("groupId");
+inline constexpr KeyView GroupType("groupType");
 
-inline constexpr auto DashboardLayout = "dashboardLayout";
-inline constexpr auto ActiveGroupId   = "activeGroupId";
-inline constexpr auto WidgetSettings  = "widgetSettings";
+// Image-group keys
+inline constexpr KeyView ImgMode("imgDetectionMode");
+inline constexpr KeyView ImgStart("imgStartSequence");
+inline constexpr KeyView ImgEnd("imgEndSequence");
 
-inline constexpr auto PointCount         = "pointCount";
-inline constexpr auto kActiveGroupSubKey = "activeGroup";
-inline constexpr auto HiddenGroups       = "hiddenGroups";
+// Dashboard layout keys
+inline constexpr KeyView DashboardLayout("dashboardLayout");
+inline constexpr KeyView ActiveGroupId("activeGroupId");
+inline constexpr KeyView WidgetSettings("widgetSettings");
 
-inline constexpr auto Workspaces    = "workspaces";
-inline constexpr auto WorkspaceId   = "workspaceId";
-inline constexpr auto WidgetRefs    = "widgetRefs";
-inline constexpr auto WidgetType    = "widgetType";
-inline constexpr auto RelativeIndex = "relativeIndex";
+// Plot history keys
+inline constexpr KeyView PointCount("pointCount");
+inline constexpr KeyView kActiveGroupSubKey("activeGroup");
+inline constexpr KeyView HiddenGroups("hiddenGroups");
 
-inline constexpr auto Virtual = "virtual";
+// Workspace keys
+inline constexpr KeyView Workspaces("workspaces");
+inline constexpr KeyView WorkspaceId("workspaceId");
+inline constexpr KeyView WidgetRefs("widgetRefs");
+inline constexpr KeyView WidgetType("widgetType");
+inline constexpr KeyView RelativeIndex("relativeIndex");
 
-inline constexpr auto Tables           = "tables";
-inline constexpr auto Registers        = "registers";
-inline constexpr auto RegisterTypeName = "type";
-inline constexpr auto Name             = "name";
+inline constexpr KeyView Virtual("virtual");
+
+// Data table keys
+inline constexpr KeyView Tables("tables");
+inline constexpr KeyView Registers("registers");
+inline constexpr KeyView RegisterTypeName("type");
+inline constexpr KeyView Name("name");
+
+// Project metadata keys (file format / app version stamps)
+inline constexpr KeyView SchemaVersion("schemaVersion");
+inline constexpr KeyView WriterVersion("writerVersion");
+inline constexpr KeyView WriterVersionAtCreation("writerVersionAtCreation");
 
 inline QString layoutKey(int groupId)
 {
@@ -156,7 +187,7 @@ namespace DataModel {
  *         not present.
  */
 [[nodiscard]] inline QVariant ss_jsr(const QJsonObject& object,
-                                     const QString& key,
+                                     QLatin1StringView key,
                                      const QVariant& defaultValue)
 {
   if (object.contains(key))
@@ -439,23 +470,28 @@ struct TableDef {
   QJsonObject obj;
   obj.insert(Keys::SourceId, s.sourceId);
   obj.insert(Keys::Title, s.title.simplified());
-  obj.insert("busType", s.busType);
-  obj.insert("frameStart", s.frameStart);
-  obj.insert("frameEnd", s.frameEnd);
-  obj.insert("checksum", s.checksumAlgorithm);
-  obj.insert("checksumAlgorithm", s.checksumAlgorithm);
-  obj.insert("frameDetection", s.frameDetection);
-  obj.insert("decoder", s.decoderMethod);
-  obj.insert("decoderMethod", s.decoderMethod);
-  obj.insert("hexadecimalDelimiters", s.hexadecimalDelimiters);
+  obj.insert(Keys::BusType, s.busType);
+  obj.insert(Keys::FrameStart, s.frameStart);
+  obj.insert(Keys::FrameEnd, s.frameEnd);
+
+  // Write both legacy ("checksum"/"decoder") and canonical aliases so older
+  // Serial Studio versions can still load new project files. Read with
+  // fallback (see read(Source&)).
+  obj.insert(Keys::Checksum, s.checksumAlgorithm);
+  obj.insert(Keys::ChecksumAlgorithm, s.checksumAlgorithm);
+  obj.insert(Keys::FrameDetection, s.frameDetection);
+  obj.insert(Keys::Decoder, s.decoderMethod);
+  obj.insert(Keys::DecoderMethod, s.decoderMethod);
+
+  obj.insert(Keys::HexadecimalDelimiters, s.hexadecimalDelimiters);
   if (!s.connectionSettings.isEmpty())
     obj.insert(Keys::SourceConn, s.connectionSettings);
 
   if (!s.frameParserCode.isEmpty())
-    obj.insert("frameParserCode", s.frameParserCode);
+    obj.insert(Keys::FrameParserCode, s.frameParserCode);
 
   if (s.frameParserLanguage != 0)
-    obj.insert("frameParserLanguage", s.frameParserLanguage);
+    obj.insert(Keys::FrameParserLanguage, s.frameParserLanguage);
 
   return obj;
 }
@@ -637,18 +673,38 @@ struct Workspace {
 }
 
 /**
+ * @brief Current Serial Studio project schema version.
+ *
+ * Bump when the JSON layout changes incompatibly. Older Serial Studio versions
+ * loading a newer file will see this number and can warn the user instead of
+ * silently dropping fields. Files written before this field existed default to
+ * schemaVersion = 0 on read.
+ */
+inline constexpr int kSchemaVersion = 1;
+
+/**
  * @brief Represents a full data frame, including groups and actions.
  *        This is the root structure for each UI update.
  */
 struct alignas(8) Frame {
-  int sourceId = 0;                         ///< Source that produced this frame
+  int sourceId      = 0;                    ///< Source that produced this frame
+  int schemaVersion = 0;                    ///< File-format schema version (0 = unstamped/live)
   QString title;                            ///< Frame title
+  QString writerVersion;                    ///< App version that last wrote this file
+  QString writerVersionAtCreation;          ///< App version that first created this file
   std::vector<Group> groups;                ///< Sensor groups in this frame
   std::vector<Action> actions;              ///< Triggerable actions
   bool containsCommercialFeatures = false;  ///< Feature gating flag
 };
 
 static_assert(sizeof(Frame) % alignof(Frame) == 0, "Unaligned Frame struct");
+
+/**
+ * @brief Returns the current application version string for project stamps.
+ *
+ * Defined in Frame.cpp so Frame.h does not need to include AppInfo.h.
+ */
+[[nodiscard]] QString current_writer_version();
 
 /**
  * @brief Clears and resets a Frame object to its default state.
@@ -678,11 +734,14 @@ static_assert(sizeof(Frame) % alignof(Frame) == 0, "Unaligned Frame struct");
 inline void clear_frame(Frame& frame) noexcept
 {
   frame.title.clear();
+  frame.writerVersion.clear();
+  frame.writerVersionAtCreation.clear();
   frame.groups.clear();
   frame.actions.clear();
   frame.groups.shrink_to_fit();
   frame.actions.shrink_to_fit();
   frame.containsCommercialFeatures = false;
+  frame.schemaVersion              = 0;
 }
 
 /**
@@ -906,8 +965,8 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::AlarmHigh, qMax(d.alarmLow, d.alarmHigh));
 
   obj.insert(Keys::GroupId, d.groupId);
-  obj.insert(QStringLiteral("datasetId"), d.datasetId);
-  obj.insert(QStringLiteral("numericValue"), d.numericValue);
+  obj.insert(Keys::DatasetId, d.datasetId);
+  obj.insert(Keys::NumericValue, d.numericValue);
 
   if (!d.transformCode.isEmpty()) {
     obj.insert(Keys::TransformCode, d.transformCode);
@@ -994,6 +1053,21 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Title, f.title);
   obj.insert(Keys::Groups, groupArray);
   obj.insert(Keys::Actions, actionArray);
+
+  // Round-trip project-version metadata only if this Frame already carries a
+  // writer stamp (i.e. it was loaded from a project file). Live runtime frames
+  // emit hundreds-to-thousands per second over the API; injecting fresh
+  // version stamps on every live frame would balloon the broadcast payload.
+  // The canonical project save path is ProjectModel::serializeToJson(), which
+  // stamps explicitly.
+  if (!f.writerVersion.isEmpty() || !f.writerVersionAtCreation.isEmpty() || f.schemaVersion > 0) {
+    obj.insert(Keys::SchemaVersion, f.schemaVersion > 0 ? f.schemaVersion : kSchemaVersion);
+    if (!f.writerVersion.isEmpty())
+      obj.insert(Keys::WriterVersion, f.writerVersion);
+    if (!f.writerVersionAtCreation.isEmpty())
+      obj.insert(Keys::WriterVersionAtCreation, f.writerVersionAtCreation);
+  }
+
   return obj;
 }
 
@@ -1014,16 +1088,28 @@ void read_io_settings(QByteArray& frameStart,
 
   s.sourceId              = ss_jsr(obj, Keys::SourceId, 0).toInt();
   s.title                 = ss_jsr(obj, Keys::Title, "").toString().simplified();
-  s.busType               = ss_jsr(obj, "busType", 0).toInt();
-  s.frameStart            = ss_jsr(obj, "frameStart", "").toString();
-  s.frameEnd              = ss_jsr(obj, "frameEnd", "\\n").toString();
-  s.checksumAlgorithm     = ss_jsr(obj, "checksum", "").toString();
-  s.frameDetection        = ss_jsr(obj, "frameDetection", 0).toInt();
-  s.decoderMethod         = ss_jsr(obj, "decoder", 0).toInt();
-  s.hexadecimalDelimiters = ss_jsr(obj, "hexadecimalDelimiters", false).toBool();
+  s.busType               = ss_jsr(obj, Keys::BusType, 0).toInt();
+  s.frameStart            = ss_jsr(obj, Keys::FrameStart, "").toString();
+  s.frameEnd              = ss_jsr(obj, Keys::FrameEnd, "\\n").toString();
+  s.frameDetection        = ss_jsr(obj, Keys::FrameDetection, 0).toInt();
+  s.hexadecimalDelimiters = ss_jsr(obj, Keys::HexadecimalDelimiters, false).toBool();
   s.connectionSettings    = ss_jsr(obj, Keys::SourceConn, QJsonObject()).toJsonObject();
-  s.frameParserCode       = ss_jsr(obj, "frameParserCode", "").toString();
-  s.frameParserLanguage   = ss_jsr(obj, "frameParserLanguage", 0).toInt();
+  s.frameParserCode       = ss_jsr(obj, Keys::FrameParserCode, "").toString();
+  s.frameParserLanguage   = ss_jsr(obj, Keys::FrameParserLanguage, 0).toInt();
+
+  // Prefer canonical "checksumAlgorithm" / "decoderMethod" keys; fall back to
+  // legacy "checksum" / "decoder" aliases written by older Serial Studio
+  // versions. serialize() still writes both for downstream compatibility.
+  if (obj.contains(Keys::ChecksumAlgorithm))
+    s.checksumAlgorithm = obj.value(Keys::ChecksumAlgorithm).toString();
+  else
+    s.checksumAlgorithm = ss_jsr(obj, Keys::Checksum, "").toString();
+
+  if (obj.contains(Keys::DecoderMethod))
+    s.decoderMethod = obj.value(Keys::DecoderMethod).toInt();
+  else
+    s.decoderMethod = ss_jsr(obj, Keys::Decoder, 0).toInt();
+
   return true;
 }
 
@@ -1130,6 +1216,10 @@ void read_io_settings(QByteArray& frameStart,
   else
     d.numericValue = d.value.toDouble(&d.isNumeric);
 
+  // Legacy-project fallback: pre-3.x projects shared a single "min"/"max" pair
+  // for FFT, plot, and widget ranges. Apply only when the corresponding
+  // canonical key is missing from the JSON object (defaults are 0, never NaN,
+  // so the previous std::isnan check was dead code).
   if (!obj.contains(Keys::FFTMin) || !obj.contains(Keys::FFTMax)) {
     d.fftMin = ss_jsr(obj, Keys::Min, 0).toDouble();
     d.fftMax = ss_jsr(obj, Keys::Max, 0).toDouble();
@@ -1145,26 +1235,31 @@ void read_io_settings(QByteArray& frameStart,
     d.wgtMax = ss_jsr(obj, Keys::Max, 0).toDouble();
   }
 
-  if (obj.contains(Keys::Alarm)) {
-    if (std::isnan(d.alarmHigh) && std::isnan(d.alarmLow)) {
-      auto alarm  = ss_jsr(obj, Keys::Alarm, 0).toDouble();
-      d.alarmHigh = alarm;
-    }
+  // Legacy single-field "alarm" → seed alarmHigh when neither high nor low is
+  // present in the project file. Older code gated this on std::isnan, but the
+  // defaults are 0 — the gate must check JSON presence instead.
+  if (obj.contains(Keys::Alarm) && !obj.contains(Keys::AlarmLow) && !obj.contains(Keys::AlarmHigh))
+    d.alarmHigh = ss_jsr(obj, Keys::Alarm, 0).toDouble();
+
+  // Normalize swapped min/max pairs from legacy / hand-edited project files.
+  // serialize() already writes them sorted; this guards untrusted input.
+  // Use a temp so the qMax call doesn't see the already-overwritten min.
+  if (d.fftMin > d.fftMax) {
+    const double mn = d.fftMin;
+    d.fftMin        = d.fftMax;
+    d.fftMax        = mn;
   }
 
-  if (!std::isnan(d.fftMin) && !std::isnan(d.fftMax)) {
-    d.fftMin = qMin(d.fftMin, d.fftMax);
-    d.fftMax = qMax(d.fftMin, d.fftMax);
+  if (d.pltMin > d.pltMax) {
+    const double mn = d.pltMin;
+    d.pltMin        = d.pltMax;
+    d.pltMax        = mn;
   }
 
-  if (!std::isnan(d.pltMin) && !std::isnan(d.pltMax)) {
-    d.pltMin = qMin(d.pltMin, d.pltMax);
-    d.pltMax = qMax(d.pltMin, d.pltMax);
-  }
-
-  if (!std::isnan(d.wgtMin) && !std::isnan(d.wgtMax)) {
-    d.wgtMin = qMin(d.wgtMin, d.wgtMax);
-    d.wgtMax = qMax(d.wgtMin, d.wgtMax);
+  if (d.wgtMin > d.wgtMax) {
+    const double mn = d.wgtMin;
+    d.wgtMin        = d.wgtMax;
+    d.wgtMax        = mn;
   }
 
   return true;
@@ -1288,6 +1383,13 @@ void read_io_settings(QByteArray& frameStart,
     f.actions.clear();
     f.groups.reserve(groups.count());
     f.actions.reserve(actions.count());
+
+    // Read project-version metadata. Files written before these keys existed
+    // default to schemaVersion = 0 and empty writer strings — callers can
+    // detect "legacy file with no version stamp" via that.
+    f.schemaVersion           = ss_jsr(obj, Keys::SchemaVersion, 0).toInt();
+    f.writerVersion           = ss_jsr(obj, Keys::WriterVersion, "").toString();
+    f.writerVersionAtCreation = ss_jsr(obj, Keys::WriterVersionAtCreation, "").toString();
 
     bool ok = true;
     for (qsizetype i = 0; i < groups.count(); ++i) {

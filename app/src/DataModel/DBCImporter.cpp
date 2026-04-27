@@ -218,30 +218,30 @@ QJsonObject DataModel::DBCImporter::generateProject(const QList<QCanMessageDescr
   const auto dbcInfo      = QFileInfo(m_dbcFilePath);
   const auto projectTitle = dbcInfo.baseName();
 
-  project["title"]   = projectTitle;
-  project["actions"] = QJsonArray();
+  project[Keys::Title]   = projectTitle;
+  project[Keys::Actions] = QJsonArray();
 
   QJsonObject source;
-  source["sourceId"]              = 0;
-  source["title"]                 = tr("CAN Bus");
-  source["busType"]               = static_cast<int>(SerialStudio::BusType::CanBus);
-  source["frameStart"]            = QString("");
-  source["frameEnd"]              = QString("");
-  source["checksum"]              = QString("");
-  source["frameDetection"]        = static_cast<int>(SerialStudio::NoDelimiters);
-  source["decoder"]               = static_cast<int>(SerialStudio::Binary);
-  source["hexadecimalDelimiters"] = false;
-  source["frameParserCode"]       = generateFrameParser(messages);
-  source["frameParserLanguage"]   = static_cast<int>(SerialStudio::Lua);
+  source[Keys::SourceId]              = 0;
+  source[Keys::Title]                 = tr("CAN Bus");
+  source[Keys::BusType]               = static_cast<int>(SerialStudio::BusType::CanBus);
+  source[Keys::FrameStart]            = QString("");
+  source[Keys::FrameEnd]              = QString("");
+  source[Keys::Checksum]              = QString("");
+  source[Keys::FrameDetection]        = static_cast<int>(SerialStudio::NoDelimiters);
+  source[Keys::Decoder]               = static_cast<int>(SerialStudio::Binary);
+  source[Keys::HexadecimalDelimiters] = false;
+  source[Keys::FrameParserCode]       = generateFrameParser(messages);
+  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Lua);
 
-  project["sources"] = QJsonArray{source};
+  project[Keys::Sources] = QJsonArray{source};
 
   const auto groups = generateGroups(messages);
   QJsonArray groupArray;
   for (const auto& group : groups)
     groupArray.append(serialize(group));
 
-  project["groups"] = groupArray;
+  project[Keys::Groups] = groupArray;
 
   return project;
 }

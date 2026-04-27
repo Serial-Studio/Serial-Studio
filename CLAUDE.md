@@ -166,13 +166,11 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 
 ### BluetoothLE — Shared Static Discovery
 
-- Discovery state is **static** (`s_devices`, `s_deviceNames`, `s_discoveryAgent`, `s_localDevice`, `s_adapterAvailable`), shared across all `BluetoothLE` instances via `s_instances` list.
-- Each instance maintains its own connection state (`m_controller`, `m_service`, `m_characteristics`).
-- `startDiscovery()` is a no-op if already running. Device list is append-only (never cleared during rediscovery) — indices are stable.
-- `selectDevice(0)` is ignored when `m_deviceIndex >= 0` or `m_deviceConnected` (prevents QML combobox rebuild from resetting selection).
-- `selectService()` / `setCharacteristicIndex()`: if called on an instance without a controller/service, forwards to the instance that has one.
-- `onServiceDiscoveryFinished()` / `configureCharacteristics()`: propagate service/characteristic names to all other instances with the same `m_deviceIndex` so QML can display them.
-- `setDriverProperty()` sets `m_deviceIndex`/`m_selectedCharacteristic` directly (no placeholder compensation) since `driverProperties()` returns raw internal values.
+- Discovery state is **static** (`s_devices`, `s_discoveryAgent`, `s_adapterAvailable`), shared across all instances via `s_instances`. Connection state is per-instance (`m_controller`, `m_service`).
+- Device list is **append-only** during rediscovery — indices stay stable.
+- `selectDevice(0)` is ignored when already selected/connected (prevents QML combobox rebuilds from resetting selection).
+- `selectService()` / characteristic selection on an instance without a controller forwards to the instance that has one.
+- `setDriverProperty()` sets raw values directly; `driverProperties()` returns raw internals (no placeholder compensation).
 
 ### ProjectModel / ProjectEditor Split
 
@@ -189,7 +187,15 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 - `FrameParser`: per-source JS engine map keyed by `sourceId`.
 - GPL: `openJsonFile()` truncates `m_sources` to 1; `addSource()` gated by `BUILD_COMMERCIAL`.
 - Bus type change: `m_awaitingContextRebuild` flag → one-shot `contextsRebuilt` → `buildSourceModel`.
-- Source JSON keys: `title`, `sourceId`, `busType`, `frameStart`, `frameEnd`, `frameDetection`, `decoder`, `hexadecimalDelimiters`, `frameParserCode`, `connection`.
+- Source JSON keys: `title`, `sourceId`, `busType`, `frameStart`, `frameEnd`, `frameDetection`, `decoder`/`decoderMethod`, `checksum`/`checksumAlgorithm`, `hexadecimalDelimiters`, `frameParserCode`, `frameParserLanguage`, `connection`.
+
+### Project File JSON Keys — Keys:: Namespace
+
+- **Single source of truth**: every JSON key used in `.json`/`.ssproj` project files is declared in `namespace Keys` at the top of `app/src/DataModel/Frame.h` as `inline constexpr QLatin1StringView` (alias `KeyView`). Never hardcode `"busType"`, `"frameStart"`, etc. in writer/reader code — use `Keys::BusType`, `Keys::FrameStart`. This applies to MCP API handlers too (their param names mirror the file format).
+- `ss_jsr(obj, Keys::Foo, default)` is the canonical reader; takes `QLatin1StringView` so `Keys::*` doesn't allocate per call.
+- **Legacy aliases (read with fallback, write both)**: `checksum` ↔ `checksumAlgorithm`, `decoder` ↔ `decoderMethod`. `read(Source&)`, `read_io_settings`, `ProjectModel::loadFromJsonDocument` prefer canonical and fall back to legacy. Writers emit BOTH forms so older Serial Studio versions can still load files written by 3.3+.
+- **Schema versioning** (`kSchemaVersion = 1`): every project save stamps `schemaVersion`, `writerVersion`, `writerVersionAtCreation` at the JSON root. `Frame::serialize` only emits these when the Frame already carries a stamp — live runtime frames (broadcast over the API at kHz rates) keep `schemaVersion = 0` so the stamp is suppressed. The canonical project save path is `ProjectModel::serializeToJson()`, which always stamps.
+- `current_writer_version()` (declared in Frame.h, defined in Frame.cpp) returns the running app version so Frame.h doesn't need to include `AppInfo.h`.
 
 ### Frame Parser — Dual Language (JS + Lua)
 
@@ -226,26 +232,16 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 
 ### Output Widgets (Pro)
 
-- `app/src/UI/Widgets/Output/`: `Button`, `Toggle`, `Slider`, `TextField`, `Panel` (+ `PanelLayout`),
-  sharing a common `Base`. QML counterparts in `app/qml/Widgets/Dashboard/Output/`.
-- Output widgets run user-authored JS "output scripts" (`app/rcc/scripts/output/*.js`) to convert
-  UI state into bytes sent back to the device. `DataModel::OutputCodeEditor` edits the script;
-  `DataModel::TransmitTestDialog` previews the serialized frame.
-- Protocol helper functions (CRC, NMEA, Modbus, SLCAN, GRBL, GCode, SCPI, binary packet…) are
-  injected into the engine so templates can stay short.
-- Gated by `FeatureTier >= Pro` in `CommercialToken` — tier enum is
-  `None=0, Hobbyist=1, Trial=2, Pro=3, Enterprise=4`.
+- `app/src/UI/Widgets/Output/`: `Button`, `Toggle`, `Slider`, `TextField`, `Panel` (+ `PanelLayout`), sharing `Base`. QML in `app/qml/Widgets/Dashboard/Output/`.
+- User-authored JS "output scripts" (`app/rcc/scripts/output/*.js`) convert UI state → device bytes. `OutputCodeEditor` edits; `TransmitTestDialog` previews.
+- Protocol helpers (CRC, NMEA, Modbus, SLCAN, GRBL, GCode, SCPI, binary packet…) are injected into the engine.
+- Gated `FeatureTier >= Pro`. Tier enum: `None=0, Hobbyist=1, Trial=2, Pro=3, Enterprise=4`.
 
 ### Workspaces (Dashboard)
 
-- User-defined dashboard tabs that group selected widgets. Persisted in the project file under
-  `"workspaces"`. `UI::Taskbar` owns the active-workspace state.
-- **Workspace IDs ≥ 1000** (distinguishes them from group IDs). Group IDs stay below 1000;
-  `Taskbar::deleteWorkspace(id)` routes to `ProjectModel::deleteWorkspace()` for IDs ≥ 1000 and
-  `hideGroup()` for IDs ≥ 0 — do not cross-wire these branches.
-- Taskbar has a filter/search bar for large projects.
-- Workspace edits stage into memory + `setModified(true)` (no autosave to disk — matches
-  widget-layout persistence rule).
+- User-defined dashboard tabs grouping selected widgets. Persisted under `"workspaces"`. `UI::Taskbar` owns active-workspace state and has a filter/search bar.
+- **Workspace IDs ≥ 1000**, group IDs < 1000. `Taskbar::deleteWorkspace(id)` branches: ≥1000 → `ProjectModel::deleteWorkspace()`, ≥0 → `hideGroup()`. Don't cross-wire.
+- Workspace edits stage into memory + `setModified(true)` — no autosave to disk.
 
 ### Export Architecture
 
@@ -318,6 +314,10 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 | Calling `parseFunction.call(args)` directly on a JS parser | Always route through `IScriptEngine::guardedCall()` — watchdog-protected |
 | Mixing workspace IDs with group IDs | Workspace IDs are always `>= 1000`; `Taskbar::deleteWorkspace()` branches on that threshold |
 | `Q_INVOKABLE void` on output-widget helper | `public slots:` — same rule as every other QObject |
+| Hardcoded JSON keys (`"busType"`, `"frameDetection"`, `"datasetId"`…) in writers/readers | Use `Keys::BusType` etc. from `Frame.h`. New keys go there first, then propagate. |
+| Stamping `current_writer_version()` on every live `Frame::serialize` call | Live frames must have `schemaVersion = 0` and empty writer strings — only project-save flows (`ProjectModel::serializeToJson`) carry version metadata. |
+| Reading `"checksum"` or `"decoder"` directly | Prefer canonical `Keys::ChecksumAlgorithm` / `Keys::DecoderMethod`, fall back to legacy keys. Writers emit BOTH for back-compat. |
+| `std::isnan(...)` guards on fields read with non-NaN defaults (e.g. `ss_jsr(..., 0)`) | Dead code — use `obj.contains(Keys::Foo)` to detect "field absent in JSON". |
 
 ## Code Style
 
@@ -366,44 +366,18 @@ for (const auto& g : frame.groups())
 
 ### C++ Header Layout
 
-Reference: `app/src/IO/Drivers/BluetoothLE.h`. Required order:
+Reference: `app/src/IO/Drivers/BluetoothLE.h`. Section order: `Q_OBJECT` → `Q_PROPERTY` block (clang-format off, multi-line, one attribute per line) → `signals:` → private ctor + deleted copy/move (singletons) → `public:` (instance() first, then `[[nodiscard]]` getters) → `public slots:` → `private slots:` → `private:` helpers → `private:` member vars.
 
-```
-// clang-format off
-Q_OBJECT
-Q_PROPERTY(type name            ← multi-line, one attribute per line
-           READ  name
-           NOTIFY nameChanged)
-// clang-format on
-
-signals:                         ← immediately after Q_PROPERTY block
-
-private:                         ← constructor + deleted copy/move (singletons)
-
-public:                          ← instance() first, then [[nodiscard]] getters
-public slots:                    ← void methods callable from QML
-private slots:                   ← onXxx() handlers
-private:                         ← helpers
-private:                         ← member variables (separate block)
-```
-
-Key rules:
 - `[[nodiscard]]` on every non-void return, including `Q_INVOKABLE` getters.
-- **Never `Q_INVOKABLE void`** — use `public slots:` instead. `Q_INVOKABLE` is only for non-void returns.
-- Christmas-tree ordering (shortest line→longest line) within each block.
+- **Never `Q_INVOKABLE void`** — use `public slots:`. `Q_INVOKABLE` is for non-void returns only.
+- Christmas-tree ordering (shortest→longest line) within each block.
 - `noexcept` on trivial const getters that only read members.
-- Non-singleton: constructor in `public:`, deleted operators right after.
-- **No in-header member initialization** (e.g., `int m_foo = 0;`). Initialize in the constructor member init list.
+- Non-singleton: ctor in `public:`, deleted operators right after.
+- **No in-header member init** (`int m_foo = 0;` is forbidden). Initialize in the ctor member init list.
 
 ### Source File (.cpp) Layout
 
-Use 98-dash `//---` banners to separate concern groups. Reference: `BluetoothLE.cpp`.
-
-```cpp
-//--------------------------------------------------------------------------------------------------
-// Constructor & singleton access functions
-//--------------------------------------------------------------------------------------------------
-```
+Use 98-dash `//---` banners to separate concern groups (constructor, getters, slots…). Reference: `BluetoothLE.cpp`.
 
 ### Signals & Connections
 
@@ -414,91 +388,19 @@ Use 98-dash `//---` banners to separate concern groups. Reference: `BluetoothLE.
 
 ### Comments & Doxygen
 
-**Write like a programmer, not a novelist.** Code is the spec. Comments label sections; they do not narrate. Before writing a comment, ask: would removing it cost the reader anything? If no, don't write it.
+**Write like a programmer, not a novelist.** Code is the spec. Comments label sections; they do not narrate. Would removing the comment cost the reader anything? If no, don't write it.
 
-**Headers (.h) — strict rule:**
-Only two kinds of comments are allowed in a header:
-1. The SPDX license banner at the top of the file.
+**Headers (.h) — strict rule.** Only two comments allowed:
+1. SPDX license banner at the top.
 2. **One** class-level `/** @brief ... */` directly above the class declaration.
 
-Nothing else. No function doxygen. No member-variable comments. No signal/slot comments. No `@param`, `@return`, `@note`, `@see`. No inline `//`. Function names, argument names, and types are the documentation.
+No function doxygen, member-variable comments, signal/slot comments, `@param`/`@return`/`@note`/`@see`, or inline `//`. Names + types are the documentation.
 
-**Source (.cpp):**
-- One-line `//` section header above each logical block inside a function body. That's it.
+**Source (.cpp).**
+- One-line `//` section header above each logical block inside a function body. That's the only kind of in-body comment allowed.
 - Single-line `/** @brief ... */` on a non-trivial function is allowed when the name isn't self-explanatory. Default is no function doxygen.
-- 98-dash `//---` banners separate concern groups (constructor, getters, slots…). Reference: `BluetoothLE.cpp`.
-- No inline end-of-line comments, no `if (x) { // ...`, no multi-line `//` prose, no `/* ... */` inside function bodies.
-- Never restate what code literally does (`// Set m_foo to bar`). Never repeat the `@brief` as the first line of the body. If context is truly load-bearing, put it in the commit message.
-
-```cpp
-// Good header — license + class-level doxygen only
-/*
- * Serial Studio
- * ...
- * SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-SerialStudio-Commercial
- */
-
-#pragma once
-
-/**
- * @class ExportWorker
- * @brief Writes telemetry frames and raw bytes to SQLite on a worker thread.
- */
-class ExportWorker : public FrameConsumerWorker<TimestampedFramePtr> {
-  Q_OBJECT
-
-public:
-  ExportWorker(Queue* q, Enabled* e);
-
-  void closeResources() override;
-  bool isResourceOpen() const override;
-  [[nodiscard]] QJsonObject buildReplayProjectJson(const Frame& f) const;
-
-private:
-  bool m_dbOpen;
-  int m_sessionId;
-  qint64 m_lastFrameNs;
-  QMutex* m_projectSnapshotMutex;
-};
-```
-
-```cpp
-// Good source — one-line section headers, no narrative
-void LemonSqueezy::activate(const QString& key)
-{
-  // Skip invalid license-key format
-  if (!isValidKeyFormat(key))
-    return;
-
-  // Guard against repeat activation
-  if (m_busy)
-    return;
-
-  // Enable busy state
-  m_busy = true;
-  Q_EMIT busyChanged();
-
-  // Build the activation payload
-  QJsonObject payload;
-  payload["license_key"]   = key;
-  payload["instance_name"] = MachineID::instance().fingerprint();
-
-  // Fire the network request
-  QNetworkRequest request(activateUrl());
-  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-  auto* reply = m_nam.post(request, QJsonDocument(payload).toJson());
-  connect(reply, &QNetworkReply::finished, this, [this, reply] { onActivateReply(reply); });
-}
-```
-
-```cpp
-// Bad — multi-line narrative, inline comment, "why" prose
-// Only snapshot when ProjectFile mode is active — otherwise stale project
-// groups from a previous load would stamp QuickPlot/Console sessions.
-if (AppState::instance().operationMode() == SerialStudio::ProjectFile) { ... }
-
-QMutexLocker locker(&m_projectSnapshotMutex);   // lock for write
-```
+- 98-dash `//---` banners separate concern groups.
+- **Forbidden**: inline end-of-line comments, multi-line `//` prose, `/* ... */` inside function bodies, restating what code literally does (`// Set m_foo to bar`), repeating the `@brief` as the body's first line. Load-bearing context goes in the commit message.
 
 ### QML
 
@@ -527,110 +429,24 @@ Never hardcode as integers. Use `SerialStudio::BusType::UART` etc. In QML: `Seri
 Maintain SPDX headers: `GPL-3.0-only`, `LicenseRef-SerialStudio-Commercial`, or both.
 Validate at system boundaries only (API input, file I/O, network). Trust internal data.
 
-## Safety-Critical Code — NASA Power of Ten Rules
+## Safety-Critical Code — NASA Power of Ten
 
-This application is commonly used for mission-critical data acquisition.
-All code changes MUST be validated against these rules (adapted from NASA JPL's Power
-of Ten for C++ / Qt). Violations in hotpath code are blockers.
+Used for mission-critical telemetry. Hotpath violations are blockers.
 
-### Rule 1 — No Complex Control Flow
+1. **No `goto`/`setjmp`/`longjmp`.** No unbounded recursion — every recursive function has a hard depth cap. Existing limits: `FrameParser::parseMultiFrame` ≤2, `JsonValidator` ≤128, `Taskbar::findItemByWindowId` ≤3, `ConversionUtils` ≤64.
+2. **Loops have fixed upper bounds.** External-data loops use explicit `kMaxIterations` guards. `while(true)` only if termination is provable from invariants (e.g. "consumes ≥1 byte per iteration of a finite buffer") — document it.
+3. **No allocation after init on the hotpath.** No `new`/`make_shared`/`.append()` on the dashboard path. `FrameBuilder` creates one `TimestampedFramePtr` per parsed frame and shares it across consumers; don't add a second ownership layer.
+4. **Functions 40–80 lines.** Hard limit 100. Split bigger work into named helpers.
+5. **Assertion density ≥2 per function.** Pre-/post-conditions + loop invariants. `Q_ASSERT` for debug; `if (!cond) return` for release-mode safety. No `assert(true)`.
+6. **Smallest scope.** Declare at first use. No function-top var blocks.
+7. **Check return values at system boundaries** (driver/file/network/API). `[[nodiscard]]` everywhere. `try_enqueue()` results must be logged on failure. JS calls go through `IScriptEngine::guardedCall()`, never direct `parseFunction.call()`.
+8. **Minimal preprocessor.** Only `#include`, `#pragma once`, `#ifdef BUILD_COMMERCIAL`/`ENABLE_GRPC`, platform guards. No token pasting, no variadic macros.
+9. **No `reinterpret_cast`** except for byte-level access (`const uint8_t*`). Prefer `std::bit_cast`. No raw function pointers — type-safe `connect()` / `std::function`.
+10. **Zero warnings.** `-Wall -Wextra -Wpedantic`. `ENABLE_HARDENING` for production. Fix root cause; never suppress without justification.
 
-- **No `goto`, `setjmp`, `longjmp`.**
-- **No unbounded recursion.** All recursive functions must have a depth parameter
-  with a hard cap. Prefer iterative solutions. Document max depth at call site.
-- Existing bounded recursion: `FrameParser::parseMultiFrame` (depth ≤ 2),
-  `JsonValidator` (depth ≤ 128), `Taskbar::findItemByWindowId` (depth ≤ 3),
-  `ConversionUtils` (depth ≤ 64).
+## Modbus Map Importer & File Transmission (Pro)
 
-### Rule 2 — All Loops Must Have Fixed Upper Bounds
-
-- Every loop must have a provable upper bound. For `while(true)` loops, document
-  why termination is guaranteed (e.g., "consumes ≥1 byte per iteration from a
-  finite buffer").
-- Loops processing external data must have explicit `kMaxIterations` guards:
-  ```cpp
-  constexpr int kMaxIterations = 10000;
-  for (int i = 0; i < kMaxIterations && condition; ++i) { ... }
-  ```
-
-### Rule 3 — No Dynamic Memory Allocation After Initialization
-
-- Never add `new`, `malloc`, `make_shared`, or container growth (`.append()`,
-  `.push_back()`) in the dashboard hotpath. Pre-allocate in constructors.
-- `FrameBuilder` now creates one shared `TimestampedFramePtr` per parsed frame
-  and fans that same object out to dashboard/export/API consumers. Do not add a
-  second ownership layer or duplicate per-consumer frame copies on the tx path.
-
-### Rule 4 — Functions ≤60 Lines
-
-- Target 40–60 lines per function, hard limit 80 for new code. Split anything
-  over 100 lines. Extract logical blocks into named helper functions.
-
-### Rule 5 — Assertion Density ≥2 Per Function
-
-- Every new or modified function must have at least 2 meaningful assertions:
-  - Pre-conditions: validate parameters at entry.
-  - Post-conditions: validate return values and state after mutations.
-  - Loop invariants: assert expected state within loops.
-- Use `Q_ASSERT` for debug-only checks. For runtime safety in release builds,
-  use explicit `if (!condition) return error;` guards.
-- Never use `assert(true)` or trivially-true assertions.
-  ```cpp
-  void processFrame(const Frame& frame, int sourceId)
-  {
-    Q_ASSERT(!frame.groups.empty());
-    Q_ASSERT(sourceId >= 0);
-    // ... processing ...
-    Q_ASSERT(result.isValid());
-  }
-  ```
-
-### Rule 6 — Smallest Possible Scope
-
-- Declare variables at first use. No function-top declarations.
-
-### Rule 7 — Check Return Values, Validate Parameters
-
-- At system boundaries (driver I/O, file I/O, network, API input): always check
-  return values. Cast to `(void)` only with documented justification.
-- Every non-void function call at a system boundary must have its return value
-  checked. Use `[[nodiscard]]` on all non-void returns.
-- `try_enqueue()` return values must be checked and logged on failure.
-- File `seek()` return values must be checked in all protocol implementations.
-- `FrameParser::guardedCall()` provides a runtime watchdog timer for JS calls.
-  Always use `guardedCall()` instead of direct `parseFunction.call()`.
-
-### Rule 8 — Limited Preprocessor Use
-
-- Preprocessor limited to `#include`, `#pragma once`, `#ifdef BUILD_COMMERCIAL`,
-  `#ifdef ENABLE_GRPC`, and platform guards. No token pasting, no variadic macros.
-- Keep conditional compilation minimal. Each `#ifdef` doubles the test matrix.
-
-### Rule 9 — Restricted Pointer Use
-
-- Avoid `reinterpret_cast` except for byte-level access (`const uint8_t*` casts).
-  Prefer `std::bit_cast` (C++20) where possible.
-- No multi-level pointer dereferencing. No raw function pointers (use type-safe
-  `connect()` / `std::function`).
-
-### Rule 10 — All Warnings Enabled, Zero Warnings
-
-- Build with `-Wall -Wextra -Wpedantic` at minimum.
-- Enable `ENABLE_HARDENING` flag for production builds.
-- Run static analysis (clang-tidy, cppcheck) with zero warnings policy.
-- Fix the root cause of any warning. Never suppress without documented justification.
-
-### Modbus Map Importer (Pro)
-
-- `DataModel::ModbusMapImporter` (`ModbusMapImporter.h/.cpp`): imports CSV / XML / JSON register
-  maps and auto-generates a Modbus project (groups, datasets, polling). Preview UI in
-  `app/qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml`.
-- Paired with `IO::Drivers::Modbus` multi-group polling (see Modbus.cpp `generateRegisterGroupProject`).
-
-### File Transmission Protocols (Pro)
-
-- `IO::FileTransmission` controller + `IO::Protocols::{XMODEM,YMODEM,ZMODEM}` concrete protocols
-  (see section above). Plain text and raw binary modes still available without Pro.
+`DataModel::ModbusMapImporter` imports CSV/XML/JSON register maps → auto-generates Modbus project; preview in `ModbusPreviewDialog.qml`. Paired with `IO::Drivers::Modbus::generateRegisterGroupProject`. File transmission: see protocol section above.
 
 ## MCP / API Testing
 

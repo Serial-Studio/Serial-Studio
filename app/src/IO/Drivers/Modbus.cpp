@@ -788,30 +788,30 @@ QJsonObject IO::Drivers::Modbus::buildProject() const
 {
   // Project root with title and empty actions
   QJsonObject project;
-  project[QStringLiteral("title")]   = tr("Modbus Project");
-  project[QStringLiteral("actions")] = QJsonArray();
+  project[Keys::Title]   = tr("Modbus Project");
+  project[Keys::Actions] = QJsonArray();
 
   // Build the single Modbus source
   QJsonObject source;
-  source[QStringLiteral("sourceId")]              = 0;
-  source[QStringLiteral("title")]                 = tr("Modbus");
-  source[QStringLiteral("busType")]               = static_cast<int>(SerialStudio::BusType::ModBus);
-  source[QStringLiteral("frameStart")]            = QString();
-  source[QStringLiteral("frameEnd")]              = QString();
-  source[QStringLiteral("checksum")]              = QString();
-  source[QStringLiteral("frameDetection")]        = static_cast<int>(SerialStudio::NoDelimiters);
-  source[QStringLiteral("decoder")]               = static_cast<int>(SerialStudio::Binary);
-  source[QStringLiteral("hexadecimalDelimiters")] = false;
-  source[QStringLiteral("frameParserCode")]       = buildFrameParser();
-  source[QStringLiteral("frameParserLanguage")]   = static_cast<int>(SerialStudio::Lua);
+  source[Keys::SourceId]              = 0;
+  source[Keys::Title]                 = tr("Modbus");
+  source[Keys::BusType]               = static_cast<int>(SerialStudio::BusType::ModBus);
+  source[Keys::FrameStart]            = QString();
+  source[Keys::FrameEnd]              = QString();
+  source[Keys::Checksum]              = QString();
+  source[Keys::FrameDetection]        = static_cast<int>(SerialStudio::NoDelimiters);
+  source[Keys::Decoder]               = static_cast<int>(SerialStudio::Binary);
+  source[Keys::HexadecimalDelimiters] = false;
+  source[Keys::FrameParserCode]       = buildFrameParser();
+  source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Lua);
 
   // Embed current driver settings in the source
   QJsonObject conn_settings;
   for (const auto& prop : driverProperties())
     conn_settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
-  source[QStringLiteral("connection")] = conn_settings;
+  source[Keys::SourceConn] = conn_settings;
 
-  project[QStringLiteral("sources")] = QJsonArray{source};
+  project[Keys::Sources] = QJsonArray{source};
 
   // Create one group per register configuration
   static const QStringList type_names = {

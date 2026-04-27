@@ -432,10 +432,9 @@ void Sessions::Player::openSessionInternal(int sessionId)
   }
 
   // Cache uid→column once so buildFrameAt skips the per-tick rebuild
-  if (m_uidToColumn.isEmpty()) {
+  if (m_uidToColumn.isEmpty())
     for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
       m_uidToColumn.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
-  }
 
   m_framePos              = 0;
   m_startTimestampSeconds = m_timestampsNs.front() / 1e9;
