@@ -20,6 +20,7 @@
 #  include <QMap>
 #  include <QObject>
 #  include <QSqlDatabase>
+#  include <QSqlQuery>
 #  include <QString>
 #  include <vector>
 
@@ -106,6 +107,7 @@ private:
   void restorePreSessionState();
 
   void loadColumnOrder();
+  void alignColumnsToProject();
   void buildMultiSourceMapping();
 
   void buildTimestampIndex();
@@ -119,6 +121,8 @@ private:
 
 private:
   QSqlDatabase m_db;
+  QSqlQuery m_frameQuery;
+  bool m_frameQueryPrepared;
   QString m_filePath;
   QString m_connectionName;
   int m_sessionId;
@@ -132,6 +136,7 @@ private:
   QElapsedTimer m_elapsedTimer;
 
   std::vector<int> m_columnUniqueIds;
+  QMap<int, int> m_uidToColumn;
 
   std::vector<qint64> m_timestampsNs;
 

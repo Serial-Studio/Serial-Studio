@@ -130,7 +130,9 @@ def test_hotpath_byte_array_ptrs_are_null_guarded():
     server = _read("app/src/API/Server.cpp")
     console = _read("app/src/Console/Handler.cpp")
 
-    assert "if (!data || data->isEmpty())" in frame_reader
+    # FrameReader::processData receives an IO::CapturedDataPtr that wraps a
+    # ByteArrayPtr in `data->data`, so the null-guard checks both layers.
+    assert "if (!data || !data->data || data->data->isEmpty())" in frame_reader
     assert "if (!data || data->isEmpty() || m_sockets.isEmpty())" in server
     assert "if (!data)" in console
 
@@ -245,11 +247,13 @@ def test_license_guard_present_in_connection_manager():
 
 
 def test_license_guard_present_in_dashboard():
-    """UI::Dashboard::reconfigureDashboard() must check SS_LICENSE_GUARD()."""
+    """UI::Dashboard pro feature gates must check SS_LICENSE_GUARD()."""
     text = _read("app/src/UI/Dashboard.cpp")
 
+    # Dashboard binds the commercial token to a short local (`tk`), so accept
+    # either name as long as the guard is actually wired in.
     assert re.search(
-        r"token\.isValid\(\)\s*&&\s*SS_LICENSE_GUARD\(\)",
+        r"\b(?:token|tk)\.isValid\(\)\s*&&\s*SS_LICENSE_GUARD\(\)",
         text,
     ), "SS_LICENSE_GUARD() missing from Dashboard pro detection"
 

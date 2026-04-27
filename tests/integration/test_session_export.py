@@ -5,10 +5,8 @@ Covers the Sessions::Export worker:
  * Enable/disable the recording feature
  * End-to-end: connect loopback, stream frames, verify the .db file
    gets populated (sessions + readings rows)
- * ConsoleOnly regression: raw bytes must reach raw_bytes even when
-   no frame-mode parsing occurs (validates the m_isOpen gate removal
-   and the processData peek-and-open path in ExportWorker::processData)
- * Disabling closes the worker cleanly
+ * ConsoleOnly refusal: setExportEnabled is a no-op while the app is in
+   ConsoleOnly mode (dumb-terminal mode, no parsing, no DB recording)
 
 All tests are skipped on non-commercial builds via the `pro_only` fixture.
 
@@ -218,72 +216,14 @@ def test_session_records_project_file_frames(
 
 
 # ---------------------------------------------------------------------------
-# End-to-end: ConsoleOnly raw-bytes regression
-# ---------------------------------------------------------------------------
-
-@pytest.mark.project
-@pytest.mark.slow
-def test_console_only_raw_bytes_reach_db(
-    api_client, device_simulator, clean_state, pro_only
-):
-    """
-    Regression for the m_isOpen-gate bug: in ConsoleOnly mode, FrameBuilder
-    never produces frames, so the worker's first-frame DB-open path is
-    never triggered. The ExportWorker::processData override must peek at
-    the raw-bytes queue and lazily open the DB so console traffic is
-    captured in raw_bytes.
-    """
-    title = f"ConsoleOnly_{time.time_ns()}"
-    api_client.create_new_project(title)
-    time.sleep(0.2)
-
-    # Switch to ConsoleOnly mode — no project groups needed
-    api_client.command("dashboard.setOperationMode", {"mode": CONSOLE_ONLY_MODE})
-    time.sleep(0.2)
-
-    # In Console mode, the worker opens the DB under the hardcoded
-    # "ConsoleOnly" title, not the project title.
-    db_path = _db_path_for(api_client, "ConsoleOnly")
-    if db_path.exists():
-        db_path.unlink()
-
-    _enable_export(api_client, True)
-
-    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-    api_client.connect_device()
-    assert device_simulator.wait_for_connection(timeout=5.0)
-
-    # Send a recognisable raw payload — repeated so the queue isn't tiny
-    payload = b"raw session bytes " * 10
-    device_simulator.send_frame(payload)
-    time.sleep(0.2)
-    device_simulator.send_frame(payload)
-    time.sleep(2.5)
-
-    api_client.disconnect_device()
-    time.sleep(0.2)
-    _close_session(api_client)
-
-    assert db_path.exists(), (
-        f"Console-only session DB was not created at {db_path} — "
-        "raw bytes path may be gated on m_isOpen (BLOCKER regression)"
-    )
-
-    tables = _sqlite_tables(db_path)
-    assert "raw_bytes" in tables
-
-    # Must have at least one raw_bytes row
-    raw_rows = _row_count(db_path, "raw_bytes")
-    assert raw_rows >= 1, "raw_bytes table is empty — Console-only gate bug"
-
-    if db_path.exists():
-        db_path.unlink()
-    _enable_export(api_client, False)
-
-
-# ---------------------------------------------------------------------------
 # Lifecycle
 # ---------------------------------------------------------------------------
+#
+# NOTE: ConsoleOnly mode is a "dumb terminal" — no parsing, no dashboard, no
+# session DB recording. setExportEnabled(true) is a no-op in ConsoleOnly and
+# the worker never opens a database. Tests that asserted otherwise (raw-bytes
+# capture, project_json clearing, session close in console mode) were
+# removed when the old DeviceSendsJSON slot was repurposed in v3.3.
 
 @pytest.mark.project
 def test_close_is_idempotent(api_client, clean_state, pro_only):
@@ -297,107 +237,15 @@ def test_close_is_idempotent(api_client, clean_state, pro_only):
 
 
 @pytest.mark.project
-def test_disable_closes_open_session(
-    api_client, device_simulator, clean_state, pro_only
-):
-    """Flipping exportEnabled=false mid-session closes the DB."""
-    title = f"CloseTest_{time.time_ns()}"
-    api_client.create_new_project(title)
+def test_console_only_refuses_export(api_client, clean_state, pro_only):
+    """
+    ConsoleOnly is a dumb-terminal mode — session DB recording must stay off
+    and any setExportEnabled(true) must be a no-op while in this mode.
+    """
+    api_client.command("dashboard.setOperationMode", {"mode": CONSOLE_ONLY_MODE})
     time.sleep(0.2)
 
-    api_client.command("dashboard.setOperationMode", {"mode": CONSOLE_ONLY_MODE})
-    time.sleep(0.1)
-
     _enable_export(api_client, True)
-
-    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-    api_client.connect_device()
-    assert device_simulator.wait_for_connection(timeout=5.0)
-
-    device_simulator.send_frame(b"open me")
-    time.sleep(2.0)
-
-    # Disable — should close the file
-    _enable_export(api_client, False)
-    time.sleep(0.3)
-
     status = _status(api_client)
     assert status["exportEnabled"] is False
     assert status["isOpen"] is False
-
-
-# ---------------------------------------------------------------------------
-# REGRESSION — project JSON snapshot clears on operation-mode switch
-# ---------------------------------------------------------------------------
-
-@pytest.mark.project
-@pytest.mark.slow
-def test_session_project_json_empty_in_console_mode(
-    api_client, device_simulator, clean_state, pro_only
-):
-    """
-    ProjectModel retains a loaded project's groups across mode switches.
-    If refreshProjectSnapshot ignored the mode, a session recorded in
-    ConsoleOnly would be stamped with the stale project_json, and replay
-    would wrongly restore ProjectFile mode with the previous layout.
-
-    After switching to ConsoleOnly the snapshot MUST be cleared so
-    project_json ends up NULL or empty for the recorded session.
-    """
-    title = f"ProjectJsonClear_{time.time_ns()}"
-    api_client.create_new_project(title)
-    time.sleep(0.2)
-
-    # Build a real project in ProjectFile mode (groups populated)
-    api_client.command("project.group.add", {"title": "G", "widgetType": 0})
-    time.sleep(0.1)
-    api_client.command("project.dataset.add", {"options": 1})
-    time.sleep(0.1)
-
-    api_client.set_operation_mode("project")
-    time.sleep(0.2)
-
-    # Flip to ConsoleOnly — ProjectModel still holds the groups, but the
-    # snapshot must be cleared so the next session records as Console-only.
-    api_client.command("dashboard.setOperationMode", {"mode": CONSOLE_ONLY_MODE})
-    time.sleep(0.3)
-
-    db_path = _db_path_for(api_client, "ConsoleOnly")
-    if db_path.exists():
-        db_path.unlink()
-
-    _enable_export(api_client, True)
-
-    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
-    api_client.connect_device()
-    assert device_simulator.wait_for_connection(timeout=5.0)
-
-    device_simulator.send_frame(b"anything")
-    time.sleep(2.0)
-
-    api_client.disconnect_device()
-    time.sleep(0.2)
-    _close_session(api_client)
-
-    assert db_path.exists(), "Console-only session DB was not created"
-
-    with sqlite3.connect(str(db_path)) as conn:
-        rows = conn.execute(
-            "SELECT project_json FROM sessions ORDER BY session_id DESC LIMIT 1"
-        ).fetchall()
-
-    assert rows, "no session row recorded"
-    project_json = rows[0][0]
-
-    # Either NULL or a string that does not carry the stale project's groups
-    if project_json:
-        assert '"groups"' not in project_json, (
-            f"project_json carried stale project groups in ConsoleOnly mode: "
-            f"{project_json[:120]}..."
-        )
-
-    if db_path.exists():
-        db_path.unlink()
-    _enable_export(api_client, False)
-
-    api_client.disconnect_device()

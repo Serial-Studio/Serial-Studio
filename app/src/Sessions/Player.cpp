@@ -42,7 +42,8 @@
  * @brief Installs an application-wide event filter and wires state changes.
  */
 Sessions::Player::Player()
-  : m_sessionId(-1)
+  : m_frameQueryPrepared(false)
+  , m_sessionId(-1)
   , m_framePos(0)
   , m_playing(false)
   , m_multiSource(false)
@@ -225,6 +226,11 @@ void Sessions::Player::closeFile()
   m_playing  = false;
   m_framePos = 0;
 
+  // Drop the prepared statement before closing the database
+  m_frameQuery.clear();
+  m_frameQuery         = QSqlQuery();
+  m_frameQueryPrepared = false;
+
   // Close database connection
   if (m_db.isOpen())
     m_db.close();
@@ -242,6 +248,7 @@ void Sessions::Player::closeFile()
   m_startTimestampSeconds = 0.0;
   m_multiSource           = false;
   m_columnUniqueIds.clear();
+  m_uidToColumn.clear();
   m_timestampsNs.clear();
   m_columnToSource.clear();
   m_sourceColumnCount.clear();
@@ -408,6 +415,9 @@ void Sessions::Player::openSessionInternal(int sessionId)
   // ProjectFile mode uses the project's parser; QuickPlot needs synthetic headers
   const auto mode = AppState::instance().operationMode();
   if (mode == SerialStudio::ProjectFile) {
+    // Reorder columns to match FrameBuilder's per-source dataset.index walk
+    alignColumnsToProject();
+
     const auto& sources = DataModel::ProjectModel::instance().sources();
     if (sources.size() > 1)
       buildMultiSourceMapping();
@@ -419,6 +429,12 @@ void Sessions::Player::openSessionInternal(int sessionId)
       headers.append(QStringLiteral("uid_%1").arg(uid));
 
     DataModel::FrameBuilder::instance().registerQuickPlotHeaders(headers);
+  }
+
+  // Cache uid→column once so buildFrameAt skips the per-tick rebuild
+  if (m_uidToColumn.isEmpty()) {
+    for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
+      m_uidToColumn.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
   }
 
   m_framePos              = 0;
@@ -700,31 +716,80 @@ void Sessions::Player::loadColumnOrder()
 }
 
 /**
- * @brief Builds the column→sourceId map used by multi-source playback.
+ * @brief Reorders @c m_columnUniqueIds to match FrameBuilder's parsing order.
+ */
+void Sessions::Player::alignColumnsToProject()
+{
+  if (m_columnUniqueIds.empty())
+    return;
+
+  // Build uid → (sourceId, datasetIndex) from the restored project
+  QMap<int, QPair<int, int>> uidToSrcIndex;
+  const auto& groups = DataModel::ProjectModel::instance().groups();
+  for (const auto& g : groups)
+    for (const auto& d : g.datasets)
+      uidToSrcIndex.insert(d.uniqueId, qMakePair(d.sourceId, d.index));
+
+  // Bucket session columns by source so each source ends up index-sorted
+  QMap<int, std::vector<QPair<int, int>>> bySource;
+  std::vector<int> orphans;
+  for (int uid : m_columnUniqueIds) {
+    const auto it = uidToSrcIndex.constFind(uid);
+    if (it == uidToSrcIndex.constEnd()) {
+      orphans.push_back(uid);
+      continue;
+    }
+
+    bySource[it.value().first].push_back(qMakePair(it.value().second, uid));
+  }
+
+  // Sort each source's slice by dataset.index ascending
+  for (auto it = bySource.begin(); it != bySource.end(); ++it)
+    std::sort(it.value().begin(), it.value().end(), [](const auto& a, const auto& b) {
+      return a.first < b.first;
+    });
+
+  // Concatenate sources in ascending sourceId order, append unknown columns
+  std::vector<int> aligned;
+  aligned.reserve(m_columnUniqueIds.size());
+  for (auto it = bySource.constBegin(); it != bySource.constEnd(); ++it)
+    for (const auto& pair : it.value())
+      aligned.push_back(pair.second);
+
+  for (int uid : orphans)
+    aligned.push_back(uid);
+
+  m_columnUniqueIds.swap(aligned);
+
+  // Refresh the uid→column lookup so the per-frame hotpath skips rebuilding it
+  m_uidToColumn.clear();
+  for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
+    m_uidToColumn.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
+}
+
+/**
+ * @brief Builds the column→sourceId map; must run after alignColumnsToProject.
  */
 void Sessions::Player::buildMultiSourceMapping()
 {
   m_columnToSource.clear();
   m_sourceColumnCount.clear();
 
+  // Walk the (already aligned) column order and tag each column with its source
+  QMap<int, int> uidToSource;
   const auto& groups = DataModel::ProjectModel::instance().groups();
-
-  // Collect (uniqueId, sourceId) pairs for all datasets
-  QVector<QPair<int, int>> uidSourcePairs;
   for (const auto& g : groups)
     for (const auto& d : g.datasets)
-      uidSourcePairs.append(qMakePair(d.uniqueId, d.sourceId));
+      uidToSource.insert(d.uniqueId, d.sourceId);
 
-  // Sort by uniqueId to match export column order
-  std::sort(uidSourcePairs.begin(), uidSourcePairs.end(), [](const auto& a, const auto& b) {
-    return a.first < b.first;
-  });
+  for (int col = 0; col < static_cast<int>(m_columnUniqueIds.size()); ++col) {
+    const int uid    = m_columnUniqueIds[static_cast<size_t>(col)];
+    const auto srcIt = uidToSource.constFind(uid);
+    if (srcIt == uidToSource.constEnd())
+      continue;
 
-  // Use the project mapping so mismatched schemas still play back
-  for (int col = 0; col < uidSourcePairs.size(); ++col) {
-    const int srcId       = uidSourcePairs[col].second;
-    m_columnToSource[col] = srcId;
-    m_sourceColumnCount[srcId]++;
+    m_columnToSource[col] = srcIt.value();
+    m_sourceColumnCount[srcIt.value()]++;
   }
 
   m_multiSource = !m_columnToSource.isEmpty() && m_sourceColumnCount.size() > 1;
@@ -766,38 +831,40 @@ QByteArray Sessions::Player::buildFrameAt(qint64 timestampNs)
   for (size_t i = 0; i < m_columnUniqueIds.size(); ++i)
     cells.append(QString());
 
-  // Reverse index: uniqueId → column position
-  QMap<int, int> uidToCol;
-  for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
-    uidToCol.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
+  // Lazy-prepare the per-frame fetch query once and reuse it across ticks
+  if (!m_frameQueryPrepared) {
+    m_frameQuery = QSqlQuery(m_db);
+    m_frameQuery.setForwardOnly(true);
+    m_frameQuery.prepare("SELECT unique_id, raw_numeric_value, raw_string_value, is_numeric "
+                         "FROM readings WHERE session_id = ? AND timestamp_ns = ? "
+                         "ORDER BY reading_id");
+    m_frameQueryPrepared = true;
+  }
 
-  // Pull raw values so dataset transforms re-run during replay (ordered by reading_id)
-  QSqlQuery q(m_db);
-  q.prepare("SELECT unique_id, raw_numeric_value, raw_string_value, is_numeric "
-            "FROM readings WHERE session_id = ? AND timestamp_ns = ? "
-            "ORDER BY reading_id");
-  q.bindValue(0, m_sessionId);
-  q.bindValue(1, timestampNs);
+  m_frameQuery.bindValue(0, m_sessionId);
+  m_frameQuery.bindValue(1, timestampNs);
 
-  if (!q.exec()) [[unlikely]] {
-    qWarning() << "[Sessions::Player] frame query failed:" << q.lastError().text();
+  if (!m_frameQuery.exec()) [[unlikely]] {
+    qWarning() << "[Sessions::Player] frame query failed:" << m_frameQuery.lastError().text();
     return QByteArray();
   }
 
-  while (q.next()) {
-    const int uid = q.value(0).toInt();
-    const auto it = uidToCol.constFind(uid);
-    if (it == uidToCol.constEnd())
+  while (m_frameQuery.next()) {
+    const int uid = m_frameQuery.value(0).toInt();
+    const auto it = m_uidToColumn.constFind(uid);
+    if (it == m_uidToColumn.constEnd())
       continue;
 
-    const bool isNumeric = q.value(3).toInt() != 0;
+    const bool isNumeric = m_frameQuery.value(3).toInt() != 0;
     if (isNumeric) {
-      const double v    = q.value(1).toDouble();
+      const double v    = m_frameQuery.value(1).toDouble();
       cells[it.value()] = QString::number(v, 'g', 17);
     } else {
-      cells[it.value()] = q.value(2).toString();
+      cells[it.value()] = m_frameQuery.value(2).toString();
     }
   }
+
+  m_frameQuery.finish();
 
   QByteArray frame = cells.join(',').toUtf8();
   frame.append('\n');

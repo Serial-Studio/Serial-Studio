@@ -71,8 +71,13 @@ def clean_state(api_client):
     """
     Ensure Serial Studio is in a clean state.
 
-    Disconnects device, disables exports, creates new project.
-    Sets operation mode to "Device Sends JSON" for tests.
+    Disconnects device, disables exports, creates a new project, and parks
+    the app in ProjectFile mode. ProjectFile is the right default because
+    most integration tests exercise project-editor mutations, CSV export,
+    workspaces, datasets, etc. — all of which are gated off in ConsoleOnly
+    (the dumb-terminal mode that replaced the old "Device Sends JSON" slot
+    in v3.3). Tests that need QuickPlot or ConsoleOnly explicitly set their
+    own mode after this fixture runs.
 
     Handles server disconnections gracefully (e.g., from rate limiting).
     """
@@ -100,7 +105,7 @@ def clean_state(api_client):
     safe_command(api_client.disconnect_device)
     safe_command(api_client.disable_csv_export)
     safe_command(api_client.create_new_project)
-    safe_command(api_client.set_operation_mode, "json")
+    safe_command(api_client.set_operation_mode, "project")
 
     # Add delay to let server recover from any rate limiting
     time.sleep(0.5)
