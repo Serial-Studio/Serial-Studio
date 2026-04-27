@@ -113,7 +113,8 @@ QString DataModel::localizedTemplateName(const QJsonObject& object, const char* 
 }
 
 /**
- * @brief Parses a templates.json manifest into ScriptTemplateDefinition entries (file/name/default).
+ * @brief Parses a templates.json manifest into ScriptTemplateDefinition entries
+ * (file/name/default).
  */
 QList<DataModel::ScriptTemplateDefinition> DataModel::loadScriptTemplateManifest(
   const QString& manifestPath, const char* translationContext)

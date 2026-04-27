@@ -445,13 +445,13 @@ Widgets.Pane {
                 icon.width: 16
                 icon.height: 16
                 hoverEnabled: true
-                icon.color: "transparent"
                 ToolTip.delay: 400
                 ToolTip.visible: hovered
+                icon.color: "transparent"
                 Layout.preferredHeight: 26
                 Layout.preferredWidth: root.colActionWidth / 2
-                ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyRegBtn.accessCode)
                 icon.source: "qrc:/rcc/icons/buttons/copy.svg"
+                ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyRegBtn.accessCode)
 
                 background: Rectangle {
                   border.width: 0

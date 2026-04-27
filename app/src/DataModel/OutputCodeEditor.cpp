@@ -428,7 +428,8 @@ void DataModel::OutputCodeEditor::focusOutEvent(QFocusEvent* event)
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
-/** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::OutputCodeEditor::mousePressEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -443,7 +444,8 @@ void DataModel::OutputCodeEditor::mousePressEvent(QMouseEvent* event)
   forceActiveFocus();
 }
 
-/** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::OutputCodeEditor::mouseMoveEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -457,7 +459,8 @@ void DataModel::OutputCodeEditor::mouseMoveEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
-/** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::OutputCodeEditor::mouseReleaseEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -471,7 +474,8 @@ void DataModel::OutputCodeEditor::mouseReleaseEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
-/** @brief Forwards double-click events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards double-click events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::OutputCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();

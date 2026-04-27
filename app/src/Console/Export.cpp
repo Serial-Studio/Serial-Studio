@@ -77,7 +77,7 @@ void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items
 
   for (const auto& dataPtr : items) {
     const int devId = dataPtr->deviceId;
-    auto it = m_deviceFiles.find(devId);
+    auto it         = m_deviceFiles.find(devId);
     if (it == m_deviceFiles.end() || !it->second.file || !it->second.file->isOpen())
       createFile(devId);
 

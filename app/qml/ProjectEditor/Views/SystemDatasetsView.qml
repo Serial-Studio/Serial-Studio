@@ -213,11 +213,11 @@ Widgets.Pane {
 
             Label {
               leftPadding: 8
-              text: root.paddedId(modelData.uniqueId)
               color: rowDelegate.textColor
               Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
               Layout.preferredWidth: root.colIdWidth
+              text: root.paddedId(modelData.uniqueId)
             }
 
             Rectangle {
@@ -291,11 +291,11 @@ Widgets.Pane {
               ToolTip.delay: 400
               hoverEnabled: true
               ToolTip.visible: hovered
+              icon.color: "transparent"
               Layout.preferredHeight: 26
               Layout.preferredWidth: root.colActionWidth
-              ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyBtn.accessCode)
               icon.source: "qrc:/rcc/icons/buttons/copy.svg"
-              icon.color: "transparent"
+              ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyBtn.accessCode)
 
               background: Rectangle {
                 border.width: 0

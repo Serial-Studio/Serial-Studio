@@ -286,7 +286,8 @@ void DataModel::FrameBuilder::onSourceRemoved()
   destroyTransformEngines();
 }
 
-/** @brief Handles connect/disconnect transitions: recompiles transforms, reloads parser, fires auto-actions. */
+/** @brief Handles connect/disconnect transitions: recompiles transforms, reloads parser, fires
+ * auto-actions. */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile

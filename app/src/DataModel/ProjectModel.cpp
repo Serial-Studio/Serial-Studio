@@ -3750,13 +3750,13 @@ bool DataModel::ProjectModel::mergeAutoWorkspaceUpdates()
   };
 
   const auto findById = [](std::vector<DataModel::Workspace>& list, int id) {
-    return std::find_if(list.begin(), list.end(),
-                        [id](const auto& w) { return w.workspaceId == id; });
+    return std::find_if(
+      list.begin(), list.end(), [id](const auto& w) { return w.workspaceId == id; });
   };
 
   const auto findByIdConst = [](const std::vector<DataModel::Workspace>& list, int id) {
-    return std::find_if(list.begin(), list.end(),
-                        [id](const auto& w) { return w.workspaceId == id; });
+    return std::find_if(
+      list.begin(), list.end(), [id](const auto& w) { return w.workspaceId == id; });
   };
 
   for (const auto& cur : current) {
@@ -3776,12 +3776,14 @@ bool DataModel::ProjectModel::mergeAutoWorkspaceUpdates()
 
     for (const auto& r : cur.widgetRefs) {
       const bool inSnap = snapIt != m_autoSnapshot.end()
-                       && std::any_of(snapIt->widgetRefs.begin(), snapIt->widgetRefs.end(),
+                       && std::any_of(snapIt->widgetRefs.begin(),
+                                      snapIt->widgetRefs.end(),
                                       [&](const auto& s) { return refsEqual(s, r); });
       if (inSnap)
         continue;
 
-      const bool inUser = std::any_of(userIt->widgetRefs.begin(), userIt->widgetRefs.end(),
+      const bool inUser = std::any_of(userIt->widgetRefs.begin(),
+                                      userIt->widgetRefs.end(),
                                       [&](const auto& s) { return refsEqual(s, r); });
       if (inUser)
         continue;

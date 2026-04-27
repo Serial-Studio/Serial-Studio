@@ -536,7 +536,8 @@ void DataModel::JsCodeEditor::focusOutEvent(QFocusEvent* event)
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
-/** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -551,7 +552,8 @@ void DataModel::JsCodeEditor::mousePressEvent(QMouseEvent* event)
   forceActiveFocus();
 }
 
-/** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -565,7 +567,8 @@ void DataModel::JsCodeEditor::mouseMoveEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
-/** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -579,7 +582,8 @@ void DataModel::JsCodeEditor::mouseReleaseEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
-/** @brief Forwards double-click events to the backing widget after offsetting for the line-number gutter. */
+/** @brief Forwards double-click events to the backing widget after offsetting for the line-number
+ * gutter. */
 void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();

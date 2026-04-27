@@ -726,8 +726,8 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
     data.removeFirst();
 
   m_lastCharWasCR = data.endsWith('\r');
-  data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
-  data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
+  data            = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
+  data            = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
 
   QString timestamp;
   if (addTimestamp) {
