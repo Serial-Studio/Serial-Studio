@@ -25,6 +25,9 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs a DeviceManager owning a driver and FrameReader for the given device.
+ */
 IO::DeviceManager::DeviceManager(int deviceId,
                                  std::unique_ptr<HAL_Driver> driver,
                                  const FrameConfig& config,
@@ -40,6 +43,9 @@ IO::DeviceManager::DeviceManager(int deviceId,
   startFrameReader(config);
 }
 
+/**
+ * @brief Closes the device and tears down its FrameReader.
+ */
 IO::DeviceManager::~DeviceManager()
 {
   close();
@@ -49,21 +55,33 @@ IO::DeviceManager::~DeviceManager()
 // Status queries
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the device identifier.
+ */
 int IO::DeviceManager::deviceId() const noexcept
 {
   return m_deviceId;
 }
 
+/**
+ * @brief Returns true when the underlying driver is open.
+ */
 bool IO::DeviceManager::isOpen() const
 {
   return m_driver && m_driver->isOpen();
 }
 
+/**
+ * @brief Returns true when the device is open and writable.
+ */
 bool IO::DeviceManager::isWritable() const
 {
   return m_driver && m_driver->isOpen() && m_driver->isWritable();
 }
 
+/**
+ * @brief Returns the underlying HAL driver instance.
+ */
 IO::HAL_Driver* IO::DeviceManager::driver() const noexcept
 {
   return m_driver.get();
@@ -73,6 +91,9 @@ IO::HAL_Driver* IO::DeviceManager::driver() const noexcept
 // Data transmission
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Writes @p data to the underlying driver.
+ */
 qint64 IO::DeviceManager::write(const QByteArray& data)
 {
   Q_ASSERT(!data.isEmpty());
@@ -88,6 +109,9 @@ qint64 IO::DeviceManager::write(const QByteArray& data)
 // Connection lifecycle
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Opens the device in the given @p mode and ensures the FrameReader is running.
+ */
 void IO::DeviceManager::open(QIODevice::OpenMode mode)
 {
   Q_ASSERT(m_driver);
@@ -102,6 +126,9 @@ void IO::DeviceManager::open(QIODevice::OpenMode mode)
   (void)m_driver->open(mode);
 }
 
+/**
+ * @brief Closes the device and stops the FrameReader.
+ */
 void IO::DeviceManager::close()
 {
   Q_ASSERT(m_driver);
@@ -113,6 +140,9 @@ void IO::DeviceManager::close()
   Q_ASSERT(m_frameReader.isNull());
 }
 
+/**
+ * @brief Recreates the FrameReader with a new frame configuration.
+ */
 void IO::DeviceManager::reconfigure(const FrameConfig& config)
 {
   Q_ASSERT(m_driver);
@@ -126,6 +156,9 @@ void IO::DeviceManager::reconfigure(const FrameConfig& config)
 // Private slots
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Drains the FrameReader queue and forwards each frame as frameReady().
+ */
 void IO::DeviceManager::onReadyRead()
 {
   Q_ASSERT(m_driver);
@@ -138,6 +171,9 @@ void IO::DeviceManager::onReadyRead()
     Q_EMIT frameReady(m_deviceId, m_frameScratch);
 }
 
+/**
+ * @brief Re-emits raw bytes from the driver tagged with the device identifier.
+ */
 void IO::DeviceManager::onRawDataReceived(const IO::CapturedDataPtr& data)
 {
   Q_EMIT rawDataReceived(m_deviceId, data);
@@ -147,6 +183,9 @@ void IO::DeviceManager::onRawDataReceived(const IO::CapturedDataPtr& data)
 // Private helpers
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Creates a new FrameReader and wires it to the driver's data signal.
+ */
 void IO::DeviceManager::startFrameReader(const FrameConfig& config)
 {
   Q_ASSERT(m_driver);
@@ -169,6 +208,9 @@ void IO::DeviceManager::startFrameReader(const FrameConfig& config)
   connect(m_frameReader, &IO::FrameReader::readyRead, this, &IO::DeviceManager::onReadyRead);
 }
 
+/**
+ * @brief Disconnects and schedules deletion of the current FrameReader.
+ */
 void IO::DeviceManager::killFrameReader()
 {
   if (m_frameReader.isNull())

@@ -173,6 +173,9 @@ void API::Handlers::NotificationsHandler::registerCommands()
 // Post handlers
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Post a notification at the explicitly specified level.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::post(const QString& id,
                                                                const QJsonObject& params)
 {
@@ -192,6 +195,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::post(const QString& id
   });
 }
 
+/**
+ * @brief Post an Info-level notification.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::postInfo(const QString& id,
                                                                    const QJsonObject& params)
 {
@@ -206,6 +212,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::postInfo(const QString
   });
 }
 
+/**
+ * @brief Post a Warning-level notification.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::postWarning(const QString& id,
                                                                       const QJsonObject& params)
 {
@@ -220,6 +229,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::postWarning(const QStr
   });
 }
 
+/**
+ * @brief Post a Critical-level notification.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::postCritical(const QString& id,
                                                                        const QJsonObject& params)
 {
@@ -234,6 +246,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::postCritical(const QSt
   });
 }
 
+/**
+ * @brief Emit a companion Info-level event marking the issue as resolved.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::resolve(const QString& id,
                                                                   const QJsonObject& params)
 {
@@ -252,6 +267,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::resolve(const QString&
 // Query handlers
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Return historical events, newest first, optionally filtered by channel.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::list(const QString& id,
                                                                const QJsonObject& params)
 {
@@ -266,6 +284,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::list(const QString& id
   return CommandResponse::makeSuccess(id, result);
 }
 
+/**
+ * @brief List the distinct channel IDs currently present in history.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::channels(const QString& id,
                                                                    const QJsonObject& params)
 {
@@ -283,6 +304,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::channels(const QString
   return CommandResponse::makeSuccess(id, result);
 }
 
+/**
+ * @brief Return the number of unread Warning/Critical events.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::unreadCount(const QString& id,
                                                                       const QJsonObject& params)
 {
@@ -299,6 +323,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::unreadCount(const QStr
 // Mutation handlers
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Erase every event posted to the given channel.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::clearChannel(const QString& id,
                                                                        const QJsonObject& params)
 {
@@ -315,6 +342,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::clearChannel(const QSt
   return CommandResponse::makeSuccess(id, result);
 }
 
+/**
+ * @brief Erase the entire notification history.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::clearAll(const QString& id,
                                                                    const QJsonObject& params)
 {
@@ -328,6 +358,9 @@ API::CommandResponse API::Handlers::NotificationsHandler::clearAll(const QString
   });
 }
 
+/**
+ * @brief Clear the unread badge counter.
+ */
 API::CommandResponse API::Handlers::NotificationsHandler::markRead(const QString& id,
                                                                    const QJsonObject& params)
 {

@@ -49,6 +49,9 @@ constexpr int kDefaultPlotPoints = 100;
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the Dashboard, wires reset signals and loads persisted settings.
+ */
 UI::Dashboard::Dashboard()
   : m_points(kDefaultPlotPoints)
   , m_widgetCount(0)

@@ -38,6 +38,7 @@
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the FrameParser singleton and seeds the source-0 engine. */
 DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
 {
   (void)engineForSource(0);
@@ -52,8 +53,6 @@ DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
           this,
           &DataModel::FrameParser::loadTemplateNames);
 
-  // Tear down engines before static destruction — QJSEngine depends on the
-  // live QCoreApplication.
   if (auto* app = QCoreApplication::instance()) {
     connect(app, &QCoreApplication::aboutToQuit, this, [this]() {
       Q_ASSERT(QThread::currentThread() == this->thread());
@@ -64,6 +63,7 @@ DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
   loadTemplateNames();
 }
 
+/** @brief Returns the singleton FrameParser instance. */
 DataModel::FrameParser& DataModel::FrameParser::instance()
 {
   static FrameParser singleton;
@@ -135,7 +135,6 @@ QString DataModel::FrameParser::templateCode(int sourceId) const
   if (idx < 0 || idx >= m_templateFiles.count())
     return {};
 
-  // Resolve template path for the configured language
   const int lang   = languageForSource(sourceId);
   const bool isLua = (lang == SerialStudio::Lua);
   const auto directory =
@@ -156,14 +155,12 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
   for (int i = 0; i < m_templateFiles.size(); ++i) {
     const auto& file = m_templateFiles[i];
 
-    // Check Lua variant
     const auto luaPath = templateResourcePath(
       QStringLiteral(":/rcc/scripts/parser/lua"), file, QStringLiteral(".lua"));
     const QString luaCode = readTextResource(luaPath).trimmed();
     if (!luaCode.isEmpty() && luaCode == trimmed)
       return i;
 
-    // Check JS variant
     const auto jsPath =
       templateResourcePath(QStringLiteral(":/rcc/scripts/parser/js"), file, QStringLiteral(".js"));
     const QString jsCode = readTextResource(jsPath).trimmed();
@@ -174,11 +171,13 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
   return -1;
 }
 
+/** @brief Returns the localized display names of every available template. */
 const QStringList& DataModel::FrameParser::templateNames() const
 {
   return m_templateNames;
 }
 
+/** @brief Returns the resource file basenames of every available template. */
 const QStringList& DataModel::FrameParser::templateFiles() const
 {
   return m_templateFiles;
@@ -212,7 +211,6 @@ DataModel::IScriptEngine& DataModel::FrameParser::engineForSource(int sourceId)
   if (it != m_engines.end())
     return *it->second;
 
-  // Create a new engine for the configured language
   const int lang = languageForSource(sourceId);
   std::unique_ptr<IScriptEngine> engine;
   if (lang == SerialStudio::Lua)
@@ -272,7 +270,6 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QString& frame,
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!frame.isEmpty());
 
-  // Runtime guard for release builds (assertions stripped)
   if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
     return {};
 
@@ -295,7 +292,6 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!frame.isEmpty());
 
-  // Runtime guard for release builds (assertions stripped)
   if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
     return {};
 
@@ -322,7 +318,6 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
   Q_ASSERT(sourceId >= 0);
   Q_ASSERT(!script.isEmpty());
 
-  // Recreate engine if the language changed since last load
   auto it = m_engines.find(sourceId);
   if (it != m_engines.end()) {
     const int lang              = languageForSource(sourceId);
@@ -356,27 +351,24 @@ void DataModel::FrameParser::setSuppressMessageBoxes(const bool suppress)
  */
 void DataModel::FrameParser::readCode()
 {
-  // Remove all per-source engines (source 0 is recreated below)
   for (auto it = m_engines.begin(); it != m_engines.end();)
     if (it->first != 0)
       it = m_engines.erase(it);
     else
       ++it;
 
-  // Recreate source 0 engine if language changed
   const int lang0  = languageForSource(0);
   auto it0         = m_engines.find(0);
   const bool isLua = (lang0 == SerialStudio::Lua);
   const bool engineIsLua =
     it0 != m_engines.end() && dynamic_cast<LuaScriptEngine*>(it0->second.get()) != nullptr;
+
   if (it0 != m_engines.end() && isLua != engineIsLua)
     m_engines.erase(0);
 
-  // Load global script and per-source scripts
   const auto& model   = ProjectModel::instance();
-  const bool suppress = m_suppressMessageBoxes || model.suppressMessageBoxes();
-
   const auto& sources = model.sources();
+  const bool suppress = m_suppressMessageBoxes || model.suppressMessageBoxes();
   const QString code  = sources.empty() ? QString() : sources[0].frameParserCode;
 
   if (!code.isEmpty())
@@ -394,19 +386,18 @@ void DataModel::FrameParser::readCode()
  */
 void DataModel::FrameParser::clearContext()
 {
-  // Remove all per-source engines (source 0 is recreated below)
   for (auto it = m_engines.begin(); it != m_engines.end();)
     if (it->first != 0)
       it = m_engines.erase(it);
     else
       ++it;
 
-  // Recreate source 0 engine if language changed
-  const int lang0  = languageForSource(0);
   auto it0         = m_engines.find(0);
+  const int lang0  = languageForSource(0);
   const bool isLua = (lang0 == SerialStudio::Lua);
   const bool engineIsLua =
     it0 != m_engines.end() && dynamic_cast<LuaScriptEngine*>(it0->second.get()) != nullptr;
+
   if (it0 != m_engines.end() && isLua != engineIsLua)
     m_engines.erase(0);
 

@@ -35,6 +35,7 @@ static const QString kFinalPrefix = QStringLiteral("final:");
 // Initialization
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs an empty DataTableStore in the uninitialized state. */
 DataModel::DataTableStore::DataTableStore() : m_initialized(false) {}
 
 /**
@@ -127,6 +128,7 @@ void DataModel::DataTableStore::clear()
   m_initialized = false;
 }
 
+/** @brief Returns true once initialize() has built the register storage. */
 bool DataModel::DataTableStore::isInitialized() const noexcept
 {
   return m_initialized;

@@ -33,10 +33,6 @@ Widgets.Pane {
   title: Cpp_JSON_ProjectEditor.selectedUserTable
   icon: "qrc:/rcc/icons/project-editor/treeview/shared-table.svg"
 
-  //
-  // Table layout constants — match the ProjectEditor convention used by
-  // TableDelegate (ActionView, DatasetView, GroupView, SourceView).
-  //
   readonly property int rowHeight: 30
   readonly property int colTypeWidth: 140
   readonly property int colNameWidth: 220
@@ -46,13 +42,7 @@ Widgets.Pane {
   property string tableName: Cpp_JSON_ProjectEditor.selectedUserTable
   property var registers: []
 
-  //
-  // Skip one external refresh after our own edit. Without this, updateRegister
-  // fires tablesChanged, refresh() rebuilds `registers`, the ListView destroys
-  // the delegate that emitted onTextEdited, and the user loses focus mid-type.
-  //
   property int suppressRefresh: 0
-
   function refresh() {
     if (tableName.length > 0)
       registers = Cpp_JSON_ProjectModel.registersForTable(tableName)
@@ -80,10 +70,6 @@ Widgets.Pane {
     }
   }
 
-  //
-  // Constants library — preset physics/math values that can be inserted into
-  // this table as constant registers in one click.
-  //
   ConstantsLibraryDialog {
     id: constantsLibraryDialog
   }
@@ -123,89 +109,6 @@ Widgets.Pane {
       spacing: 0
       anchors.fill: parent
 
-      //
-      // Banner with icon on left, title/description, and action buttons
-      //
-      Rectangle {
-        id: banner
-        readonly property int topPad: 12
-        readonly property int bottomPad: 12
-
-        Layout.topMargin: -1
-        Layout.fillWidth: true
-        implicitHeight: Math.max(root.minBannerHeight,
-                                 bannerLayout.implicitHeight + topPad + bottomPad)
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-
-        Rectangle {
-          height: 1
-          width: parent.width
-          anchors.top: parent.top
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        Rectangle {
-          height: 1
-          width: parent.width
-          anchors.bottom: parent.bottom
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        RowLayout {
-          id: bannerLayout
-          spacing: 16
-          anchors {
-            leftMargin: 14
-            rightMargin: 14
-            left: parent.left
-            right: parent.right
-            topMargin: banner.topPad
-            bottomMargin: banner.bottomPad
-            verticalCenter: parent.verticalCenter
-          }
-
-          Image {
-            Layout.preferredWidth: 56
-            Layout.preferredHeight: 56
-            sourceSize: Qt.size(56, 56)
-            Layout.alignment: Qt.AlignVCenter
-            fillMode: Image.PreserveAspectFit
-            source: "qrc:/rcc/icons/project-editor/summary/shared-table.svg"
-          }
-
-          ColumnLayout {
-            spacing: 4
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-
-            Label {
-              text: root.tableName
-              color: Cpp_ThemeManager.colors["text"]
-              font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
-            }
-
-            Label {
-              opacity: 0.65
-              Layout.fillWidth: true
-              wrapMode: Text.WordWrap
-              color: Cpp_ThemeManager.colors["text"]
-              text: qsTr("Registers shared across all transforms in the project.")
-            }
-          }
-
-          Label {
-            Layout.alignment: Qt.AlignVCenter
-            opacity: 0.6
-            color: Cpp_ThemeManager.colors["text"]
-            text: qsTr("%1 registers").arg(root.registers.length)
-          }
-        }
-      }
-
-      //
-      // Secondary toolbar — ActionView-style horizontal Flickable with icon
-      // buttons and left/right fade indicators.
-      //
       Rectangle {
         id: toolbar
 
@@ -253,9 +156,6 @@ Widgets.Pane {
             anchors.verticalCenter: parent.verticalCenter
             width: Math.max(implicitWidth, toolbarFlick.width)
 
-            //
-            // Add register
-            //
             Widgets.ToolbarButton {
               iconSize: 24
               toolbarButton: false
@@ -266,9 +166,6 @@ Widgets.Pane {
               icon.source: "qrc:/rcc/icons/project-editor/actions/add-register.svg"
             }
 
-            //
-            // Insert preset constant
-            //
             Widgets.ToolbarButton {
               iconSize: 24
               toolbarButton: false
@@ -304,7 +201,6 @@ Widgets.Pane {
               Layout.minimumWidth: 16
             }
 
-            //
             Widgets.ToolbarButton {
               iconSize: 24
               toolbarButton: false
@@ -315,9 +211,6 @@ Widgets.Pane {
               icon.source: "qrc:/rcc/icons/project-editor/actions/rename-table.svg"
             }
 
-            //
-            // Delete table
-            //
             Widgets.ToolbarButton {
               iconSize: 24
               toolbarButton: false
@@ -328,9 +221,6 @@ Widgets.Pane {
               icon.source: "qrc:/rcc/icons/project-editor/actions/delete-table.svg"
             }
 
-            //
-            // Spacer
-            //
             Rectangle {
               implicitWidth: 1
               Layout.fillHeight: true
@@ -339,9 +229,6 @@ Widgets.Pane {
               color: Cpp_ThemeManager.colors["groupbox_border"]
             }
 
-            //
-            // Help
-            //
             Widgets.ToolbarButton {
               iconSize: 24
               text: qsTr("Help")
@@ -354,9 +241,6 @@ Widgets.Pane {
           }
         }
 
-        //
-        // Left fade indicator
-        //
         Rectangle {
           z: 10
           width: 16
@@ -372,9 +256,6 @@ Widgets.Pane {
           }
         }
 
-        //
-        // Right fade indicator
-        //
         Rectangle {
           z: 10
           width: 16
@@ -391,10 +272,6 @@ Widgets.Pane {
         }
       }
 
-      //
-      // Column headers — match the gradient + vertical-separator pattern
-      // used by ProjectTableHeader.
-      //
       Widgets.ProjectTableHeader {
         Layout.fillWidth: true
         rowHeight: root.rowHeight
@@ -406,9 +283,6 @@ Widgets.Pane {
         ]
       }
 
-      //
-      // Register list
-      //
       ListView {
         id: regList
         clip: true
@@ -433,12 +307,6 @@ Widgets.Pane {
 
             Item { width: 8 }
 
-            //
-            // Permissions picker — transparent background, drop-down arrow
-            // provided by ComboBox. The content is a small SVG glyph (R or
-            // R/W) followed by the label, matching the rest of the project
-            // editor's iconography.
-            //
             ComboBox {
               id: typeCombo
               Layout.preferredWidth: root.colTypeWidth - 8
@@ -492,10 +360,6 @@ Widgets.Pane {
 
             Item { width: 8 }
 
-            //
-            // Register name — transparent text field that merges visually with
-            // the row; focus ring is a thin highlight line along the bottom.
-            //
             TextField {
               id: nameField
               topPadding: 0
@@ -530,9 +394,6 @@ Widgets.Pane {
 
             Item { width: 8 }
 
-            //
-            // Default-value field — same transparent treatment as name.
-            //
             TextField {
               id: valueField
               topPadding: 0
@@ -566,9 +427,6 @@ Widgets.Pane {
               color: regRow.separatorColor
             }
 
-            //
-            // Delete register — transparent button, SVG icon.
-            //
             ToolButton {
               id: deleteRegBtn
               padding: 2

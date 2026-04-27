@@ -94,86 +94,6 @@ Widgets.Pane {
       spacing: 0
       anchors.fill: parent
 
-      //
-      // Header — explanatory banner
-      //
-      Rectangle {
-        id: banner
-
-        readonly property int topPad: 12
-        readonly property int bottomPad: 12
-        readonly property int minHeight: 84
-
-        Layout.topMargin: -1
-        Layout.fillWidth: true
-        implicitHeight: Math.max(
-          minHeight,
-          bannerLayout.implicitHeight + topPad + bottomPad
-        )
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-
-        Rectangle {
-          height: 1
-          width: parent.width
-          anchors.top: parent.top
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        Rectangle {
-          height: 1
-          width: parent.width
-          anchors.bottom: parent.bottom
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        RowLayout {
-          id: bannerLayout
-
-          spacing: 16
-          anchors {
-            leftMargin: 14
-            rightMargin: 14
-            left: parent.left
-            right: parent.right
-            topMargin: banner.topPad
-            bottomMargin: banner.bottomPad
-            verticalCenter: parent.verticalCenter
-          }
-
-          Image {
-            Layout.preferredWidth: 56
-            Layout.preferredHeight: 56
-            sourceSize: Qt.size(56, 56)
-            Layout.alignment: Qt.AlignVCenter
-            fillMode: Image.PreserveAspectFit
-            source: "qrc:/rcc/icons/project-editor/summary/shared-memory.svg"
-          }
-
-          ColumnLayout {
-            spacing: 4
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-
-            Label {
-              text: qsTr("Shared Memory")
-              color: Cpp_ThemeManager.colors["text"]
-              font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
-            }
-
-            Label {
-              opacity: 0.65
-              Layout.fillWidth: true
-              wrapMode: Text.WordWrap
-              color: Cpp_ThemeManager.colors["text"]
-              text: qsTr("Define constants and computed values shared across all transforms.")
-            }
-          }
-        }
-      }
-
-      //
-      // Secondary toolbar — matches ActionView/UserTableView style.
-      //
       Rectangle {
         id: toolbar
 
@@ -246,10 +166,6 @@ Widgets.Pane {
         }
       }
 
-      //
-      // Header — driven by ProjectTableHeader for visual consistency with
-      // the rest of the project editor's tables.
-      //
       Widgets.ProjectTableHeader {
         Layout.fillWidth: true
         columns: [
@@ -259,10 +175,6 @@ Widgets.Pane {
         ]
       }
 
-      //
-      // Table list (ListView flicks natively — no ScrollView wrapper to avoid
-      // QQmlComponent recursion warnings)
-      //
       ListView {
         id: tablesList
 
@@ -340,9 +252,6 @@ Widgets.Pane {
             }
           }
 
-          //
-          // Empty state (still shown alongside system table row)
-          //
           footer: Item {
             height: 40
             width: ListView.view ? ListView.view.width : 0

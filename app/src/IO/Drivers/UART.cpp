@@ -51,6 +51,9 @@ static size_t idealSerialBufferSize(const qint32 baud)
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the UART driver and restores persisted port settings.
+ */
 IO::Drivers::UART::UART()
   : m_port(nullptr)
   , m_dtrEnabled(true)
@@ -100,6 +103,9 @@ IO::Drivers::UART::UART()
   connect(this, &IO::Drivers::UART::languageChanged, this, &IO::Drivers::UART::populateErrors);
 }
 
+/**
+ * @brief Closes the active port and releases its handle.
+ */
 IO::Drivers::UART::~UART()
 {
   if (port()) {
@@ -114,6 +120,9 @@ IO::Drivers::UART::~UART()
 // HAL-driver implementation
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Closes the serial port and clears its signal/slot connections.
+ */
 void IO::Drivers::UART::close()
 {
   // Release the serial port and its signal connections
@@ -137,6 +146,9 @@ void IO::Drivers::UART::close()
   Q_EMIT availablePortsChanged();
 }
 
+/**
+ * @brief Returns true when the serial port is open.
+ */
 bool IO::Drivers::UART::isOpen() const noexcept
 {
   if (port())
@@ -145,6 +157,9 @@ bool IO::Drivers::UART::isOpen() const noexcept
   return false;
 }
 
+/**
+ * @brief Returns true when the serial port can be read.
+ */
 bool IO::Drivers::UART::isReadable() const noexcept
 {
   if (isOpen())
@@ -153,6 +168,9 @@ bool IO::Drivers::UART::isReadable() const noexcept
   return false;
 }
 
+/**
+ * @brief Returns true when the serial port can be written.
+ */
 bool IO::Drivers::UART::isWritable() const noexcept
 {
   if (isOpen())
@@ -250,41 +268,65 @@ bool IO::Drivers::UART::open(const QIODevice::OpenMode mode)
 // Driver specifics
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the underlying QSerialPort instance.
+ */
 QSerialPort* IO::Drivers::UART::port() const
 {
   return m_port;
 }
 
+/**
+ * @brief Returns true when auto-reconnect on resource loss is enabled.
+ */
 bool IO::Drivers::UART::autoReconnect() const
 {
   return m_autoReconnect;
 }
 
+/**
+ * @brief Returns true when the DTR signal is asserted.
+ */
 bool IO::Drivers::UART::dtrEnabled() const
 {
   return m_dtrEnabled;
 }
 
+/**
+ * @brief Returns the index of the currently selected serial port.
+ */
 quint8 IO::Drivers::UART::portIndex() const
 {
   return m_portIndex;
 }
 
+/**
+ * @brief Returns the index of the currently selected parity setting.
+ */
 quint8 IO::Drivers::UART::parityIndex() const
 {
   return m_parityIndex;
 }
 
+/**
+ * @brief Returns the index of the currently selected data bits setting.
+ */
 quint8 IO::Drivers::UART::dataBitsIndex() const
 {
   return m_dataBitsIndex;
 }
 
+/**
+ * @brief Returns the index of the currently selected stop bits setting.
+ */
 quint8 IO::Drivers::UART::stopBitsIndex() const
 {
   return m_stopBitsIndex;
 }
 
+/**
+ * @brief Returns the index of the currently selected flow control setting.
+ */
 quint8 IO::Drivers::UART::flowControlIndex() const
 {
   return m_flowControlIndex;
@@ -388,26 +430,41 @@ QStringList IO::Drivers::UART::flowControlList() const
   return list;
 }
 
+/**
+ * @brief Returns the active parity setting as a QSerialPort enum.
+ */
 QSerialPort::Parity IO::Drivers::UART::parity() const
 {
   return m_parity;
 }
 
+/**
+ * @brief Returns the configured baud rate.
+ */
 qint32 IO::Drivers::UART::baudRate() const
 {
   return m_baudRate;
 }
 
+/**
+ * @brief Returns the active data bits setting as a QSerialPort enum.
+ */
 QSerialPort::DataBits IO::Drivers::UART::dataBits() const
 {
   return m_dataBits;
 }
 
+/**
+ * @brief Returns the active stop bits setting as a QSerialPort enum.
+ */
 QSerialPort::StopBits IO::Drivers::UART::stopBits() const
 {
   return m_stopBits;
 }
 
+/**
+ * @brief Returns the active flow control setting as a QSerialPort enum.
+ */
 QSerialPort::FlowControl IO::Drivers::UART::flowControl() const
 {
   return m_flowControl;

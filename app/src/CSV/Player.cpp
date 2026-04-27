@@ -39,6 +39,9 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the CSV player and installs the global key-event filter.
+ */
 CSV::Player::Player()
   : m_framePos(0)
   , m_playing(false)
@@ -52,6 +55,9 @@ CSV::Player::Player()
   connect(this, &CSV::Player::playerStateChanged, this, &CSV::Player::updateData);
 }
 
+/**
+ * @brief Returns the singleton CSV Player instance.
+ */
 CSV::Player& CSV::Player::instance()
 {
   static Player singleton;
@@ -62,6 +68,9 @@ CSV::Player& CSV::Player::instance()
 // Playback status queries
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns whether a CSV file is currently open.
+ */
 bool CSV::Player::isOpen() const
 {
   return m_csvFile.isOpen();
@@ -80,6 +89,9 @@ double CSV::Player::progress() const
   return static_cast<double>(framePosition()) / count;
 }
 
+/**
+ * @brief Returns whether playback is currently active.
+ */
 bool CSV::Player::isPlaying() const
 {
   return m_playing;
@@ -119,6 +131,9 @@ QString CSV::Player::filename() const
   return "";
 }
 
+/**
+ * @brief Returns the formatted timestamp of the current frame.
+ */
 const QString& CSV::Player::timestamp() const
 {
   return m_timestamp;
@@ -165,6 +180,9 @@ void CSV::Player::pause()
   Q_EMIT playerStateChanged();
 }
 
+/**
+ * @brief Toggles between play and pause.
+ */
 void CSV::Player::toggle()
 {
   if (m_playing)

@@ -78,13 +78,7 @@ bool SerialStudio::proWidgetsEnabled()
 }
 
 /**
- * @brief Checks if a project configuration requires commercial features.
- *
- * This function inspects the provided list of JSON groups and determines
- * if any of them use features that are exclusive to the commercial license.
- *
- * @param groups A vector of JSON::Group objects to analyze.
- * @return true if any commercial-only features are detected; false otherwise.
+ * @brief Returns true if a transform script references the notify() API family.
  */
 static bool transformUsesNotifications(const QString& code)
 {
@@ -97,6 +91,9 @@ static bool transformUsesNotifications(const QString& code)
       || code.contains(QStringLiteral("notifyClear("));
 }
 
+/**
+ * @brief Checks if a project configuration (QVector form) requires commercial features.
+ */
 bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
 {
   for (const auto& group : std::as_const(g)) {
@@ -784,7 +781,7 @@ QString SerialStudio::stringToHex(const QString& str)
 }
 
 /**
- * Converts the given @a data in HEX format into real binary data.
+ * @brief Converts a hexadecimal string into a raw QByteArray.
  */
 QByteArray SerialStudio::hexToBytes(const QString& data)
 {

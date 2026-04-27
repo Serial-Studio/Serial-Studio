@@ -32,6 +32,9 @@
 
 #ifdef Q_OS_WIN
 // clang-format off
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#  endif
 #  include <windows.h>
 #  include <tlhelp32.h>
 // clang-format on
@@ -47,6 +50,9 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the Process driver and restores persisted launch/pipe settings.
+ */
 IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr), m_pipeRunning(false)
 {
   // Restore persisted settings
@@ -62,6 +68,9 @@ IO::Drivers::Process::Process() : m_mode(Mode::Launch), m_process(nullptr), m_pi
   connect(&m_pipeThread, &QThread::started, this, &Process::pipeReadLoop, Qt::DirectConnection);
 }
 
+/**
+ * @brief Tears down the spawned process or pipe reader thread.
+ */
 IO::Drivers::Process::~Process()
 {
   doClose();
@@ -71,6 +80,9 @@ IO::Drivers::Process::~Process()
 // HAL_Driver interface
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Closes the active process or pipe channel.
+ */
 void IO::Drivers::Process::close()
 {
   doClose();
@@ -100,6 +112,9 @@ void IO::Drivers::Process::doClose()
   }
 }
 
+/**
+ * @brief Returns true when the process or pipe channel is open.
+ */
 bool IO::Drivers::Process::isOpen() const noexcept
 {
   if (m_mode == Mode::Launch)
@@ -108,6 +123,9 @@ bool IO::Drivers::Process::isOpen() const noexcept
   return m_pipeRunning.load();
 }
 
+/**
+ * @brief Returns true when the channel can be read.
+ */
 bool IO::Drivers::Process::isReadable() const noexcept
 {
   return isOpen();
@@ -237,11 +255,17 @@ int IO::Drivers::Process::mode() const noexcept
   return static_cast<int>(m_mode);
 }
 
+/**
+ * @brief Returns the configured executable path.
+ */
 QString IO::Drivers::Process::executable() const
 {
   return m_executable;
 }
 
+/**
+ * @brief Returns the configured command-line arguments.
+ */
 QString IO::Drivers::Process::arguments() const
 {
   return m_arguments;
@@ -255,6 +279,9 @@ QString IO::Drivers::Process::workingDir() const
   return m_workingDir;
 }
 
+/**
+ * @brief Returns the configured named pipe / FIFO path.
+ */
 QString IO::Drivers::Process::pipePath() const
 {
   return m_pipePath;

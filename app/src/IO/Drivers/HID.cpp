@@ -41,6 +41,9 @@ constexpr int kEnumIntervalMs = 2000;
 // Constructor / destructor / singleton
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the HID driver and starts hotplug enumeration.
+ */
 IO::Drivers::HID::HID()
   : m_handle(nullptr), m_deviceInfoList(nullptr), m_running(false), m_deviceIndex(0)
 {
@@ -79,6 +82,9 @@ void IO::Drivers::HID::cleanupDevice()
   m_usage.clear();
 }
 
+/**
+ * @brief Closes the device and tears down the hidapi enumeration cache.
+ */
 IO::Drivers::HID::~HID()
 {
   cleanupDevice();
@@ -93,22 +99,34 @@ IO::Drivers::HID::~HID()
 // HAL_Driver interface
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Closes the HID device and notifies observers.
+ */
 void IO::Drivers::HID::close()
 {
   cleanupDevice();
   Q_EMIT deviceInfoChanged();
 }
 
+/**
+ * @brief Returns true when an HID device is currently open.
+ */
 bool IO::Drivers::HID::isOpen() const noexcept
 {
   return m_handle != nullptr;
 }
 
+/**
+ * @brief Returns true when the HID device can be read.
+ */
 bool IO::Drivers::HID::isReadable() const noexcept
 {
   return isOpen();
 }
 
+/**
+ * @brief Returns true when the HID device can be written.
+ */
 bool IO::Drivers::HID::isWritable() const noexcept
 {
   return isOpen();
@@ -196,6 +214,9 @@ QStringList IO::Drivers::HID::deviceList() const
   return m_deviceLabels;
 }
 
+/**
+ * @brief Returns the index of the currently selected device.
+ */
 int IO::Drivers::HID::deviceIndex() const
 {
   return m_deviceIndex;

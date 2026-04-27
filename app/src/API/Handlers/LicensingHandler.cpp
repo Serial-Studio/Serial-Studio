@@ -31,6 +31,9 @@
 // Command registration
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Register all licensing commands with the registry.
+ */
 void API::Handlers::LicensingHandler::registerCommands()
 {
   auto& registry = CommandRegistry::instance();
@@ -134,6 +137,9 @@ void API::Handlers::LicensingHandler::registerCommands()
 // Command implementations
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Store the supplied license key for later activation.
+ */
 API::CommandResponse API::Handlers::LicensingHandler::setLicense(const QString& id,
                                                                  const QJsonObject& params)
 {
@@ -148,6 +154,9 @@ API::CommandResponse API::Handlers::LicensingHandler::setLicense(const QString& 
   return CommandResponse::makeSuccess(id, {});
 }
 
+/**
+ * @brief Activate the stored license key against the LemonSqueezy server.
+ */
 API::CommandResponse API::Handlers::LicensingHandler::activate(const QString& id,
                                                                const QJsonObject&)
 {
@@ -167,6 +176,9 @@ API::CommandResponse API::Handlers::LicensingHandler::activate(const QString& id
   return CommandResponse::makeSuccess(id, {});
 }
 
+/**
+ * @brief Deactivate the current license on this machine, freeing a seat.
+ */
 API::CommandResponse API::Handlers::LicensingHandler::deactivate(const QString& id,
                                                                  const QJsonObject&)
 {
@@ -186,6 +198,9 @@ API::CommandResponse API::Handlers::LicensingHandler::deactivate(const QString& 
   return CommandResponse::makeSuccess(id, {});
 }
 
+/**
+ * @brief Re-validate the active license against the LemonSqueezy server.
+ */
 API::CommandResponse API::Handlers::LicensingHandler::validate(const QString& id,
                                                                const QJsonObject&)
 {
@@ -200,6 +215,9 @@ API::CommandResponse API::Handlers::LicensingHandler::validate(const QString& id
   return CommandResponse::makeSuccess(id, {});
 }
 
+/**
+ * @brief Get the current license activation state and customer info.
+ */
 API::CommandResponse API::Handlers::LicensingHandler::getStatus(const QString& id,
                                                                 const QJsonObject&)
 {
@@ -281,6 +299,9 @@ API::CommandResponse API::Handlers::LicensingHandler::guardStatus(const QString&
   return CommandResponse::makeSuccess(id, result);
 }
 
+/**
+ * @brief Get the current trial status and remaining days.
+ */
 API::CommandResponse API::Handlers::LicensingHandler::trialGetStatus(const QString& id,
                                                                      const QJsonObject&)
 {
@@ -297,6 +318,9 @@ API::CommandResponse API::Handlers::LicensingHandler::trialGetStatus(const QStri
   return CommandResponse::makeSuccess(id, result);
 }
 
+/**
+ * @brief Start the trial period for this machine.
+ */
 API::CommandResponse API::Handlers::LicensingHandler::trialEnable(const QString& id,
                                                                   const QJsonObject&)
 {

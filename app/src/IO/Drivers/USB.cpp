@@ -22,10 +22,6 @@
 
 #include "IO/Drivers/USB.h"
 
-#ifdef Q_OS_WIN
-#  include <winsock2.h>
-#endif
-
 #include <QApplication>
 #include <QJsonObject>
 #include <QMessageBox>
@@ -50,6 +46,9 @@ constexpr int kHotplugFallbackIntervalMs = 2000;
 // Constructor, destructor & singleton
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the USB driver, initializes libusb, and registers hotplug detection.
+ */
 IO::Drivers::USB::USB()
   : m_ctx(nullptr)
   , m_handle(nullptr)
@@ -105,6 +104,9 @@ IO::Drivers::USB::USB()
   m_eventThread.start();
 }
 
+/**
+ * @brief Stops worker threads, releases libusb resources, and closes the device.
+ */
 IO::Drivers::USB::~USB()
 {
   // Signal both threads to stop
@@ -301,6 +303,9 @@ void IO::Drivers::USB::close()
   Q_EMIT configurationChanged();
 }
 
+/**
+ * @brief Returns true when a USB device handle is open.
+ */
 bool IO::Drivers::USB::isOpen() const noexcept
 {
   return m_handle != nullptr;
@@ -395,6 +400,9 @@ QStringList IO::Drivers::USB::deviceList() const
   return list;
 }
 
+/**
+ * @brief Returns the index of the currently selected USB device.
+ */
 int IO::Drivers::USB::deviceIndex() const
 {
   return m_deviceIndex;
@@ -422,11 +430,17 @@ QStringList IO::Drivers::USB::outEndpointList() const
   return list;
 }
 
+/**
+ * @brief Returns the index of the currently selected IN endpoint.
+ */
 int IO::Drivers::USB::inEndpointIndex() const
 {
   return m_inEndpointIndex;
 }
 
+/**
+ * @brief Returns the index of the currently selected OUT endpoint.
+ */
 int IO::Drivers::USB::outEndpointIndex() const
 {
   return m_outEndpointIndex;

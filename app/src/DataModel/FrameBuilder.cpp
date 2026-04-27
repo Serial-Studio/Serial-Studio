@@ -88,6 +88,7 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
   }
 }
 
+/** @brief Returns the per-frame cadence carried by a captured chunk, clamped to >=1 ns. */
 [[nodiscard]] std::chrono::nanoseconds capturedFrameStep(const IO::CapturedDataPtr& data)
 {
   if (!data)
@@ -100,6 +101,7 @@ void parseCsvValues(const QByteArray& data, QStringList& out, const int reserveH
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the FrameBuilder singleton and wires its watchdog/license hooks. */
 DataModel::FrameBuilder::FrameBuilder() : m_quickPlotChannels(-1), m_quickPlotHasHeader(false)
 {
   // JS transform watchdog — flips interrupt flag to unwind runaway scripts.
@@ -123,6 +125,7 @@ DataModel::FrameBuilder::FrameBuilder() : m_quickPlotChannels(-1), m_quickPlotHa
     connect(app, &QCoreApplication::aboutToQuit, this, [this]() { destroyTransformEngines(); });
 }
 
+/** @brief Returns the singleton FrameBuilder instance. */
 DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 {
   static FrameBuilder singleton;
@@ -133,11 +136,13 @@ DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 // Public accessors
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns the current project-mode frame. */
 const DataModel::Frame& DataModel::FrameBuilder::frame() const noexcept
 {
   return m_frame;
 }
 
+/** @brief Returns the current Quick Plot frame. */
 const DataModel::Frame& DataModel::FrameBuilder::quickPlotFrame() const noexcept
 {
   return m_quickPlotFrame;
@@ -147,6 +152,7 @@ const DataModel::Frame& DataModel::FrameBuilder::quickPlotFrame() const noexcept
 // External connection setup
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Wires ConnectionManager and ProjectModel signals to the FrameBuilder. */
 void DataModel::FrameBuilder::setupExternalConnections()
 {
   connect(&IO::ConnectionManager::instance(),
@@ -208,6 +214,7 @@ void DataModel::FrameBuilder::syncFromProjectModel()
 // Quick Plot header registration
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Registers Quick Plot channel headers, or clears them when @p headers is empty. */
 void DataModel::FrameBuilder::registerQuickPlotHeaders(const QStringList& headers)
 {
   if (!headers.isEmpty()) {
@@ -279,6 +286,7 @@ void DataModel::FrameBuilder::onSourceRemoved()
   destroyTransformEngines();
 }
 
+/** @brief Handles connect/disconnect transitions: recompiles transforms, reloads parser, fires auto-actions. */
 void DataModel::FrameBuilder::onConnectedChanged()
 {
   Q_ASSERT(AppState::instance().operationMode() >= SerialStudio::ProjectFile
@@ -866,6 +874,9 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
 // Per-dataset value transforms
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Opens the safe Lua libraries needed by transforms and strips dangerous globals.
+ */
 static void openSafeLibsForTransform(lua_State* L)
 {
   static const luaL_Reg kSafeLibs[] = {
@@ -1234,12 +1245,14 @@ QVariant DataModel::FrameBuilder::applyTransform(int sourceId,
 // Data table store initialization and transform API injection
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Initializes the DataTableStore from the project model and current frame. */
 void DataModel::FrameBuilder::initializeTableStore()
 {
   const auto& pm = DataModel::ProjectModel::instance();
   m_tableStore.initialize(pm.tables(), m_frame);
 }
 
+/** @brief Re-initializes the DataTableStore from the project model's in-flight edits. */
 void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
 {
   // Let Project Editor test dialogs see in-flight edits to shared tables

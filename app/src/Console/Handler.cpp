@@ -62,9 +62,7 @@ Console::Handler::Handler()
   , m_fontFamilyIndex(0)
   , m_textBuffer(10 * 1024)
 {
-  // Restore persisted settings
   clear();
-
   const auto defaultFont = Misc::CommonFonts::instance().monoFont();
   m_fontFamily           = m_settings.value("Console/FontFamily", defaultFont.family()).toString();
   m_fontSize             = m_settings.value("Console/FontSize", defaultFont.pointSize()).toInt();
@@ -265,7 +263,6 @@ QStringList Console::Handler::textEncodings() const
  */
 QStringList Console::Handler::checksumMethods() const
 {
-  // Build method list once, replacing empty entry with "No Checksum"
   static QStringList list;
   if (list.isEmpty()) {
     list            = IO::availableChecksums();
@@ -318,11 +315,9 @@ int Console::Handler::fontFamilyIndex() const
  */
 QStringList Console::Handler::availableFonts() const
 {
-  // Collect all fixed-pitch fonts, sorted with default mono font first
   QStringList monospaceFonts;
   const auto allFonts = QFontDatabase::families();
   auto defaultFamily  = Misc::CommonFonts::instance().monoFont().family();
-
   for (const auto& family : allFonts) {
     QFontInfo fontInfo(family);
     if (fontInfo.fixedPitch() && !monospaceFonts.contains(family))
@@ -459,7 +454,6 @@ void Console::Handler::historyDown()
  */
 void Console::Handler::setupExternalConnections()
 {
-  // Wire language, project model, and connection signals
   connect(&Misc::Translator::instance(),
           &Misc::Translator::languageChanged,
           this,
@@ -483,13 +477,11 @@ void Console::Handler::setupExternalConnections()
           this,
           notifyTerminal);
 
-  // Rebuild device list when sources or connection state change
   connect(&DataModel::ProjectModel::instance(),
           &DataModel::ProjectModel::sourceStructureChanged,
           this,
           &Console::Handler::onDevicesChanged,
           Qt::QueuedConnection);
-
   connect(&IO::ConnectionManager::instance(),
           &IO::ConnectionManager::connectedChanged,
           this,
@@ -506,14 +498,12 @@ void Console::Handler::setupExternalConnections()
  */
 void Console::Handler::send(const QString& data)
 {
-  // Validate connection and record history
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
   if (!data.isEmpty())
     addToHistory(data);
 
-  // Encode data according to current mode and user-selected text encoding
   QByteArray bin;
   if (dataMode() == DataMode::DataHexadecimal)
     bin = SerialStudio::hexToBytes(data);
@@ -707,16 +697,13 @@ void Console::Handler::setDisplayMode(const Console::Handler::DisplayMode& mode)
  */
 void Console::Handler::setEncoding(const int encoding)
 {
-  // Clamp to a valid TextEncoding value
   if (encoding < 0 || encoding > SerialStudio::EncEucKr)
     return;
 
-  // Guard against no-op changes
   const auto newEncoding = static_cast<SerialStudio::TextEncoding>(encoding);
   if (m_encoding == newEncoding)
     return;
 
-  // Persist the new encoding and notify QML
   m_encoding = newEncoding;
   m_settings.setValue("Console/Encoding", static_cast<int>(m_encoding));
   Q_EMIT encodingChanged();
@@ -734,13 +721,11 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
   if (string.isEmpty())
     return;
 
-  // Normalize line endings
   auto data = string;
   if (m_lastCharWasCR && data.startsWith('\n'))
     data.removeFirst();
 
   m_lastCharWasCR = data.endsWith('\r');
-
   data = data.replace(QStringLiteral("\r\n"), QStringLiteral("\n"));
   data = data.replace(QStringLiteral("\r"), QStringLiteral("\n"));
 
@@ -762,14 +747,11 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
 
   QString processedString;
   processedString.reserve(data.length() + timestamp.length() * 4);
-
-  // Single-pass newline scan to avoid O(n^2) QStringList removal
   int pos = 0;
   while (pos < data.length()) {
     const int nlPos = data.indexOf('\n', pos);
     const int end   = (nlPos < 0) ? data.length() : nlPos;
 
-    // Process the segment before the newline (or remaining text)
     if (end > pos) {
       const auto segment = QStringView(data).mid(pos, end - pos);
       if (m_isStartingLine && !segment.trimmed().isEmpty())
@@ -779,7 +761,6 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
       m_isStartingLine = false;
     }
 
-    // Append the newline itself
     if (nlPos >= 0) {
       if (m_isStartingLine)
         processedString.append(timestamp);
@@ -794,8 +775,6 @@ void Console::Handler::append(const QString& string, const bool addTimestamp)
   }
 
   m_textBuffer.append(processedString.toUtf8());
-
-  // Buffer for throttled display
   m_pendingDisplay.append(processedString);
 }
 
@@ -832,10 +811,7 @@ void Console::Handler::hotpathRxDeviceData(int deviceId, const IO::ByteArrayPtr&
   if (str.isEmpty())
     return;
 
-  // Store in per-device buffer
   appendToDevice(deviceId, str, showTimestamp());
-
-  // Always emit for export
   Q_EMIT deviceDataReady(deviceId, str);
 }
 
@@ -896,13 +872,11 @@ const QStringList& Console::Handler::deviceNames() const noexcept
  */
 void Console::Handler::setCurrentDeviceId(int deviceId)
 {
-  // Guard against no-op changes
   if (m_currentDeviceId == deviceId)
     return;
 
   m_currentDeviceId = deviceId;
 
-  // Replay the selected device's buffer
   m_textBuffer.clear();
   m_isStartingLine = true;
   m_lastCharWasCR  = false;
@@ -1064,6 +1038,9 @@ void Console::Handler::appendToDevice(int deviceId, const QString& str, bool add
   }
 }
 
+/**
+ * @brief Returns whether the active project contains an image widget.
+ */
 bool Console::Handler::hasImageWidget() const
 {
   // Only check project groups when connected in project mode
@@ -1151,7 +1128,6 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
 {
   // Decode raw bytes using the user-selected text encoding
   QString utf8Data = SerialStudio::decodeText(data, m_encoding);
-
   if (vt100Emulation())
     return utf8Data;
 
@@ -1201,7 +1177,6 @@ QString Console::Handler::plainTextStr(QByteArrayView data)
  */
 QString Console::Handler::hexadecimalStr(QByteArrayView data)
 {
-  // Format data as hex dump with 16-byte rows and ASCII sidebar
   QString out;
   constexpr auto rowSize = 16;
 

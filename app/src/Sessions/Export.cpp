@@ -63,6 +63,9 @@ Sessions::ExportWorker::ExportWorker(
   Q_ASSERT(projectSnapshot);
 }
 
+/**
+ * @brief Default destructor.
+ */
 Sessions::ExportWorker::~ExportWorker() = default;
 
 /**
@@ -490,6 +493,9 @@ Sessions::Export::Export()
   initializeWorker();
 }
 
+/**
+ * @brief Default destructor.
+ */
 Sessions::Export::~Export() = default;
 
 /**

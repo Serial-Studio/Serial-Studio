@@ -185,6 +185,7 @@ Widgets::ImageExport::ImageExport()
   setConsumerEnabled(true);
 }
 
+/** @brief Default destructor. */
 Widgets::ImageExport::~ImageExport() = default;
 
 /**

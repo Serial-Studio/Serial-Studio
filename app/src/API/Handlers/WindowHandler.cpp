@@ -31,6 +31,9 @@
 // Helpers
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Build the standard "no dashboard session active" error response.
+ */
 static API::CommandResponse noSession(const QString& id)
 {
   return API::CommandResponse::makeError(

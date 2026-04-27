@@ -28,6 +28,7 @@
 // Project version stamp
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns the running application version used for project writer stamps. */
 QString DataModel::current_writer_version()
 {
   return QString::fromUtf8(APP_VERSION);
@@ -42,9 +43,7 @@ QString DataModel::current_writer_version()
  */
 void DataModel::finalize_frame(DataModel::Frame& frame)
 {
-  // Detect commercial features and assign stable unique IDs to each dataset
   frame.containsCommercialFeatures = SerialStudio::commercialCfg(frame.groups);
-
   for (auto& group : frame.groups) {
     for (auto& dataset : group.datasets) {
       dataset.sourceId = group.sourceId;
@@ -57,6 +56,10 @@ void DataModel::finalize_frame(DataModel::Frame& frame)
 // Configuration reading
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Reads frame delimiters and checksum algorithm from a source JSON object, resolving
+ *        hex/escape encodings and accepting the legacy "checksum" key as a fallback.
+ */
 void DataModel::read_io_settings(QByteArray& frameStart,
                                  QByteArray& frameEnd,
                                  QString& checksum,
@@ -67,8 +70,7 @@ void DataModel::read_io_settings(QByteArray& frameStart,
   auto fStartStr = ss_jsr(obj, Keys::FrameStart, "").toString();
   auto isHex     = ss_jsr(obj, Keys::HexadecimalDelimiters, false).toBool();
 
-  // Read checksum method, preferring the canonical "checksumAlgorithm" key and
-  // falling back to legacy "checksum" written by older Serial Studio versions
+  // Read checksum method
   if (obj.contains(Keys::ChecksumAlgorithm))
     checksum = obj.value(Keys::ChecksumAlgorithm).toString();
   else
@@ -93,20 +95,19 @@ void DataModel::read_io_settings(QByteArray& frameStart,
 // Data conversion
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Encodes an Action's TX payload (text/hex with optional EOL) to the on-wire byte array.
+ */
 QByteArray DataModel::get_tx_bytes(const Action& action)
 {
-  // Convert action payload to bytes: binary hex or escaped text in the
-  // user-selected encoding (defaults to UTF-8 for back-compat)
-  const auto enc = static_cast<SerialStudio::TextEncoding>(action.txEncoding);
-
+  // Convert action payload to bytes
   QByteArray b;
+  const auto enc = static_cast<SerialStudio::TextEncoding>(action.txEncoding);
   if (action.binaryData)
     b = SerialStudio::hexToBytes(action.txData);
   else
     b = SerialStudio::encodeText(SerialStudio::resolveEscapeSequences(action.txData), enc);
 
-  // Append the EOL sequence using the same encoding so multi-byte CR/LF
-  // representations line up with the rest of the payload
   if (!action.eolSequence.isEmpty()) {
     const auto eol = SerialStudio::resolveEscapeSequences(action.eolSequence);
     b.append(action.binaryData ? eol.toUtf8() : SerialStudio::encodeText(eol, enc));

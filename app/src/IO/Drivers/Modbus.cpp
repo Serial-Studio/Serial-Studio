@@ -45,6 +45,9 @@
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the Modbus driver and restores persisted settings and register groups.
+ */
 IO::Drivers::Modbus::Modbus()
   : m_pollTimer(new QTimer(this))
   , m_device(nullptr)
@@ -132,6 +135,9 @@ IO::Drivers::Modbus::Modbus()
           &IO::Drivers::Modbus::configurationChanged);
 }
 
+/**
+ * @brief Closes the Modbus device and tears down the poll timer.
+ */
 IO::Drivers::Modbus::~Modbus()
 {
   doClose();
@@ -177,6 +183,9 @@ void IO::Drivers::Modbus::doClose()
   }
 }
 
+/**
+ * @brief Returns true when the Modbus device is connected.
+ */
 bool IO::Drivers::Modbus::isOpen() const noexcept
 {
   if (m_device)
@@ -185,11 +194,17 @@ bool IO::Drivers::Modbus::isOpen() const noexcept
   return false;
 }
 
+/**
+ * @brief Returns true when the Modbus device can be read.
+ */
 bool IO::Drivers::Modbus::isReadable() const noexcept
 {
   return isOpen();
 }
 
+/**
+ * @brief Returns true when the Modbus device can be written.
+ */
 bool IO::Drivers::Modbus::isWritable() const noexcept
 {
   return isOpen();

@@ -32,6 +32,9 @@
 // Constructor/destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the CANBus driver and restores persisted settings.
+ */
 IO::Drivers::CANBus::CANBus()
   : m_device(nullptr), m_canFD(false), m_pluginIndex(0), m_interfaceIndex(0), m_bitrate(500000)
 {
@@ -61,6 +64,9 @@ IO::Drivers::CANBus::CANBus()
   QLoggingCategory::setFilterRules("qt.canbus* = false");
 }
 
+/**
+ * @brief Closes the CAN bus device.
+ */
 IO::Drivers::CANBus::~CANBus()
 {
   doClose();
@@ -99,6 +105,9 @@ void IO::Drivers::CANBus::doClose()
   m_device = nullptr;
 }
 
+/**
+ * @brief Returns true when the CAN bus device is connected.
+ */
 bool IO::Drivers::CANBus::isOpen() const noexcept
 {
   if (m_device)
@@ -107,11 +116,17 @@ bool IO::Drivers::CANBus::isOpen() const noexcept
   return false;
 }
 
+/**
+ * @brief Returns true when the CAN bus device can be read.
+ */
 bool IO::Drivers::CANBus::isReadable() const noexcept
 {
   return isOpen();
 }
 
+/**
+ * @brief Returns true when the CAN bus device can be written.
+ */
 bool IO::Drivers::CANBus::isWritable() const noexcept
 {
   return isOpen();

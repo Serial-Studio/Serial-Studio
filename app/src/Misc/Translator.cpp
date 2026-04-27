@@ -33,7 +33,7 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Constructor function
+ * @brief Constructs the Translator and applies the saved or system language.
  */
 Misc::Translator::Translator()
 {
@@ -44,7 +44,7 @@ Misc::Translator::Translator()
 }
 
 /**
- * Returns the only instance of the class
+ * @brief Returns the singleton Translator instance.
  */
 Misc::Translator& Misc::Translator::instance()
 {
@@ -57,6 +57,8 @@ Misc::Translator& Misc::Translator::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns the current language enum value.
+ *
  * Returns the current language ID, which corresponds to the indexes of the
  * languages returned by the \c availableLanguages() function.
  */
@@ -66,8 +68,7 @@ Misc::Translator::Language Misc::Translator::language() const
 }
 
 /**
- * Returns the appropiate language ID based on the current locale settings of
- * the host's operating system.
+ * @brief Returns the language enum that matches the host operating system locale.
  */
 Misc::Translator::Language Misc::Translator::systemLanguage() const
 {
@@ -141,7 +142,7 @@ Misc::Translator::Language Misc::Translator::systemLanguage() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns the welcome text displayed on the console
+ * @brief Returns the localized welcome text shown on the console.
  */
 QString Misc::Translator::welcomeConsoleText() const
 {
@@ -230,7 +231,7 @@ QString Misc::Translator::welcomeConsoleText() const
 }
 
 /**
- * Returns the acknowledgements text.
+ * @brief Returns the bundled acknowledgements text.
  */
 QString Misc::Translator::acknowledgementsText() const
 {
@@ -250,7 +251,7 @@ QString Misc::Translator::acknowledgementsText() const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns a list with the available translation languages.
+ * @brief Returns the list of available translation language names.
  */
 QStringList& Misc::Translator::availableLanguages()
 {
@@ -281,6 +282,8 @@ QStringList& Misc::Translator::availableLanguages()
 }
 
 /**
+ * @brief Sets the application language by enum value and reloads translations.
+ *
  * Changes the language of the application and emits the signals appropiate to
  * reload every string that uses the Qt translator system.
  *
@@ -378,6 +381,8 @@ void Misc::Translator::setLanguage(const Language language)
 }
 
 /**
+ * @brief Loads a specific .qm translation file for the given locale.
+ *
  * Changes the language of the application and emits the signals neccesary to
  * reload every string that uses the Qt translator system.
  *

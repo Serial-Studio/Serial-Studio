@@ -236,11 +236,17 @@ static constexpr uint16_t crc16_ccitt(const char* data, const int length) noexce
 // Checksum byte-packing helpers
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Packs a single byte into a QByteArray.
+ */
 static QByteArray packByte(uint8_t v)
 {
   return QByteArray(reinterpret_cast<const char*>(&v), sizeof(v));
 }
 
+/**
+ * @brief Packs a 16-bit unsigned integer into a big-endian QByteArray.
+ */
 static QByteArray packU16BE(uint16_t v)
 {
   uint8_t out[2];
@@ -248,6 +254,9 @@ static QByteArray packU16BE(uint16_t v)
   return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
 }
 
+/**
+ * @brief Packs a 16-bit unsigned integer into a little-endian QByteArray.
+ */
 static QByteArray packU16LE(uint16_t v)
 {
   uint8_t out[2];
@@ -255,6 +264,9 @@ static QByteArray packU16LE(uint16_t v)
   return QByteArray(reinterpret_cast<char*>(out), sizeof(out));
 }
 
+/**
+ * @brief Packs a 32-bit unsigned integer into a big-endian QByteArray.
+ */
 static QByteArray packU32BE(uint32_t v)
 {
   uint8_t out[4];

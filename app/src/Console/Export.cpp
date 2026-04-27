@@ -47,6 +47,9 @@
 
 #ifdef BUILD_COMMERCIAL
 
+/**
+ * @brief Default destructor.
+ */
 Console::ExportWorker::~ExportWorker() = default;
 
 /**
@@ -74,8 +77,6 @@ void Console::ExportWorker::processItems(const std::vector<ExportDataPtr>& items
 
   for (const auto& dataPtr : items) {
     const int devId = dataPtr->deviceId;
-
-    // Ensure a file is open for this device
     auto it = m_deviceFiles.find(devId);
     if (it == m_deviceFiles.end() || !it->second.file || !it->second.file->isOpen())
       createFile(devId);
@@ -216,6 +217,9 @@ Console::Export::Export()
   setExportEnabled(m_settings.value("ConsoleExport", false).toBool());
 }
 
+/**
+ * @brief Default destructor.
+ */
 Console::Export::~Export() = default;
 
 #ifdef BUILD_COMMERCIAL
@@ -295,7 +299,6 @@ void Console::Export::setupExternalConnections()
 void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
-  // Validate license
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Hobbyist) {
     if (!enabled && isOpen())
@@ -315,7 +318,6 @@ void Console::Export::setExportEnabled(const bool enabled)
   m_settings.setValue("ConsoleExport", false);
   Q_EMIT enabledChanged();
 
-  // Show license prompt for GPL or unlicensed builds
   if (enabled)
     Misc::Utilities::showMessageBox(
       tr("Console Export is a Pro feature."),

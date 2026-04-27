@@ -79,12 +79,14 @@ static void openSafeLibs(lua_State* L)
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the Lua script engine and creates its sandboxed state. */
 DataModel::LuaScriptEngine::LuaScriptEngine()
   : m_state(nullptr), m_loaded(false), m_deadline(QDeadlineTimer::Forever)
 {
   createState();
 }
 
+/** @brief Closes the Lua state on destruction. */
 DataModel::LuaScriptEngine::~LuaScriptEngine()
 {
   destroyState();
@@ -138,11 +140,13 @@ void DataModel::LuaScriptEngine::destroyState()
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
 }
 
+/** @brief Returns true once a parse() function has been loaded into the Lua state. */
 bool DataModel::LuaScriptEngine::isLoaded() const noexcept
 {
   return m_loaded;
 }
 
+/** @brief Runs one full Lua garbage-collection cycle. */
 void DataModel::LuaScriptEngine::collectGarbage()
 {
   if (m_state)

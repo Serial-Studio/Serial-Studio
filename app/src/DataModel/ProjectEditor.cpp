@@ -122,6 +122,7 @@ typedef enum {
 
 // clang-format on
 
+/** @brief Returns the QML icon path for a SerialStudio::BusType integer. */
 static QString busTypeIcon(int busType)
 {
   switch (static_cast<SerialStudio::BusType>(busType)) {
@@ -154,6 +155,7 @@ static QString busTypeIcon(int busType)
 // Constructor / singleton
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the ProjectEditor singleton and wires its ProjectModel signals. */
 DataModel::ProjectEditor::ProjectEditor()
   : m_currentView(ProjectView)
   , m_groupsRootItem(nullptr)
@@ -472,6 +474,7 @@ DataModel::ProjectEditor::ProjectEditor()
   buildProjectModel();
 }
 
+/** @brief Returns the singleton ProjectEditor instance. */
 DataModel::ProjectEditor& DataModel::ProjectEditor::instance()
 {
   static ProjectEditor singleton;
@@ -482,6 +485,7 @@ DataModel::ProjectEditor& DataModel::ProjectEditor::instance()
 // View state accessors
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns the editor's currently active view. */
 DataModel::ProjectEditor::CurrentView DataModel::ProjectEditor::currentView() const
 {
   return m_currentView;
@@ -499,6 +503,7 @@ QString DataModel::ProjectEditor::selectedText() const
   return m_treeModel->data(index, TreeViewText).toString();
 }
 
+/** @brief Returns the icon path of the currently selected tree item. */
 QString DataModel::ProjectEditor::selectedIcon() const
 {
   if (!m_selectionModel || !m_treeModel)
@@ -508,11 +513,13 @@ QString DataModel::ProjectEditor::selectedIcon() const
   return m_treeModel->data(index, TreeViewIcon).toString();
 }
 
+/** @brief Returns the icon path of the currently selected action. */
 const QString DataModel::ProjectEditor::actionIcon() const
 {
   return m_selectedAction.icon;
 }
 
+/** @brief Returns the icon path of the currently selected output widget. */
 const QString DataModel::ProjectEditor::outputWidgetIcon() const
 {
   return m_selectedOutputWidget.icon;
@@ -600,36 +607,43 @@ quint8 DataModel::ProjectEditor::datasetOptions() const
 // Model accessors
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns the tree model exposed to QML. */
 DataModel::CustomModel* DataModel::ProjectEditor::treeModel() const
 {
   return m_treeModel;
 }
 
+/** @brief Returns the QML-bound selection model for the project tree. */
 QItemSelectionModel* DataModel::ProjectEditor::selectionModel() const
 {
   return m_selectionModel;
 }
 
+/** @brief Returns the form model for the currently selected group. */
 DataModel::CustomModel* DataModel::ProjectEditor::groupModel() const
 {
   return m_groupModel;
 }
 
+/** @brief Returns the form model for the currently selected source. */
 DataModel::CustomModel* DataModel::ProjectEditor::sourceModel() const
 {
   return m_sourceModel;
 }
 
+/** @brief Returns the source ID of the currently selected source. */
 int DataModel::ProjectEditor::selectedSourceId() const noexcept
 {
   return m_selectedSource.sourceId;
 }
 
+/** @brief Returns the bus type of the currently selected source. */
 int DataModel::ProjectEditor::selectedSourceBusType() const noexcept
 {
   return m_selectedSource.busType;
 }
 
+/** @brief Returns the frame parser code of the currently selected source. */
 QString DataModel::ProjectEditor::selectedSourceFrameParserCode() const
 {
   return m_selectedSource.frameParserCode;
@@ -714,21 +728,25 @@ void DataModel::ProjectEditor::openTransformEditor()
                                    m_selectedDataset.datasetId);
 }
 
+/** @brief Returns the form model for the currently selected action. */
 DataModel::CustomModel* DataModel::ProjectEditor::actionModel() const
 {
   return m_actionModel;
 }
 
+/** @brief Returns the form model for the project-level settings view. */
 DataModel::CustomModel* DataModel::ProjectEditor::projectModel() const
 {
   return m_projectModel;
 }
 
+/** @brief Returns the form model for the currently selected dataset. */
 DataModel::CustomModel* DataModel::ProjectEditor::datasetModel() const
 {
   return m_datasetModel;
 }
 
+/** @brief Returns the type integer of the currently selected output widget. */
 int DataModel::ProjectEditor::outputWidgetType() const noexcept
 {
   return static_cast<int>(m_selectedOutputWidget.type);
@@ -745,11 +763,13 @@ bool DataModel::ProjectEditor::currentGroupIsOutputPanel() const
   return false;
 }
 
+/** @brief Returns the form model for the currently selected output widget. */
 DataModel::CustomModel* DataModel::ProjectEditor::outputWidgetModel() const
 {
   return m_outputWidgetModel;
 }
 
+/** @brief Returns the currently selected output widget descriptor. */
 const DataModel::OutputWidget& DataModel::ProjectEditor::selectedOutputWidget() const noexcept
 {
   return m_selectedOutputWidget;
@@ -3043,6 +3063,7 @@ void DataModel::ProjectEditor::selectAction(int actionId)
   }
 }
 
+/** @brief Selects the Frame Parser tree node for the given source. */
 void DataModel::ProjectEditor::selectFrameParser(int sourceId)
 {
   displayFrameParserView(sourceId);
@@ -3345,6 +3366,7 @@ QVariantList DataModel::ProjectEditor::tablesSummary() const
   return result;
 }
 
+/** @brief Returns the name of the currently selected user-defined table. */
 QString DataModel::ProjectEditor::selectedUserTable() const
 {
   return m_selectedUserTable;
@@ -3366,6 +3388,7 @@ void DataModel::ProjectEditor::selectUserTable(const QString& tableName)
   }
 }
 
+/** @brief Returns the ID of the currently selected workspace, or -1. */
 int DataModel::ProjectEditor::selectedWorkspaceId() const noexcept
 {
   return m_selectedWorkspaceId;
@@ -3387,6 +3410,7 @@ void DataModel::ProjectEditor::selectWorkspace(int workspaceId)
   }
 }
 
+/** @brief Returns the active tree search query (empty when no filter is set). */
 const QString& DataModel::ProjectEditor::treeSearchQuery() const noexcept
 {
   return m_treeSearchQuery;

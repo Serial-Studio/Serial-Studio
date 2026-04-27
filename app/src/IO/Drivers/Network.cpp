@@ -28,6 +28,9 @@
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the Network driver and restores persisted socket settings.
+ */
 IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_lookupActive(false)
 {
   // Restore persisted settings
@@ -92,6 +95,9 @@ void IO::Drivers::Network::close()
   m_udpSocket.disconnectFromHost();
 }
 
+/**
+ * @brief Returns true when the active socket is connected or bound.
+ */
 bool IO::Drivers::Network::isOpen() const noexcept
 {
   // Query the active socket for its connection state
@@ -111,6 +117,9 @@ bool IO::Drivers::Network::isOpen() const noexcept
   return open && (state == QUdpSocket::ConnectedState || state == QUdpSocket::BoundState);
 }
 
+/**
+ * @brief Returns true when the active socket can be read.
+ */
 bool IO::Drivers::Network::isReadable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
@@ -121,6 +130,9 @@ bool IO::Drivers::Network::isReadable() const noexcept
   return false;
 }
 
+/**
+ * @brief Returns true when the active socket can be written.
+ */
 bool IO::Drivers::Network::isWritable() const noexcept
 {
   if (socketType() == QAbstractSocket::UdpSocket)
@@ -206,26 +218,41 @@ bool IO::Drivers::Network::open(const QIODevice::OpenMode mode)
 // Driver specifics
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the configured TCP port.
+ */
 quint16 IO::Drivers::Network::tcpPort() const
 {
   return m_tcpPort;
 }
 
+/**
+ * @brief Returns the UDP local bind port.
+ */
 quint16 IO::Drivers::Network::udpLocalPort() const
 {
   return m_udpLocalPort;
 }
 
+/**
+ * @brief Returns the UDP remote port.
+ */
 quint16 IO::Drivers::Network::udpRemotePort() const
 {
   return m_udpRemotePort;
 }
 
+/**
+ * @brief Returns true when UDP multicast is enabled.
+ */
 bool IO::Drivers::Network::udpMulticast() const
 {
   return m_udpMulticast;
 }
 
+/**
+ * @brief Returns true when a DNS lookup is currently in flight.
+ */
 bool IO::Drivers::Network::lookupActive() const
 {
   return m_lookupActive;
@@ -249,6 +276,9 @@ int IO::Drivers::Network::socketTypeIndex() const
   }
 }
 
+/**
+ * @brief Returns the configured remote host address or hostname.
+ */
 const QString& IO::Drivers::Network::remoteAddress() const
 {
   return m_address;
@@ -265,6 +295,9 @@ QStringList IO::Drivers::Network::socketTypes() const
   return list;
 }
 
+/**
+ * @brief Returns the active socket type (TCP or UDP).
+ */
 QAbstractSocket::SocketType IO::Drivers::Network::socketType() const
 {
   return m_socketType;

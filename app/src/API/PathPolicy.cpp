@@ -28,6 +28,7 @@
 // Path validation
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns a canonical absolute path, optionally permitting non-existent files. */
 static QString normalizedPath(const QString& path, bool allowNonexistent)
 {
   QFileInfo info(path);

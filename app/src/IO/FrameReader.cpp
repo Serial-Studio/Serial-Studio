@@ -29,6 +29,9 @@
 // Constructor
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs a FrameReader with default operation mode and a 1 MiB buffer.
+ */
 IO::FrameReader::FrameReader(QObject* parent)
   : QObject(parent)
   , m_checksumLength(0)
@@ -41,6 +44,9 @@ IO::FrameReader::FrameReader(QObject* parent)
 // Data entry point
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Processes a chunk of received bytes and extracts complete frames.
+ */
 void IO::FrameReader::processData(const CapturedDataPtr& data)
 {
   Q_ASSERT(m_operationMode >= SerialStudio::ProjectFile
@@ -105,6 +111,9 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
     Q_EMIT readyRead();
 }
 
+/**
+ * @brief Appends a captured chunk and tracks its timing metadata.
+ */
 void IO::FrameReader::appendChunk(const CapturedDataPtr& data)
 {
   Q_ASSERT(data);
@@ -120,6 +129,9 @@ void IO::FrameReader::appendChunk(const CapturedDataPtr& data)
   m_pendingChunks.push_back(std::move(chunk));
 }
 
+/**
+ * @brief Drops timing-bookkeeping bytes for data lost to buffer overflow.
+ */
 void IO::FrameReader::discardPendingBytes(qsizetype size)
 {
   if (size <= 0)
@@ -136,6 +148,9 @@ void IO::FrameReader::discardPendingBytes(qsizetype size)
   }
 }
 
+/**
+ * @brief Removes consumed bytes from the buffer and the pending-chunk tracker.
+ */
 void IO::FrameReader::consumeBytes(qsizetype size)
 {
   if (size <= 0)
@@ -145,6 +160,9 @@ void IO::FrameReader::consumeBytes(qsizetype size)
   discardPendingBytes(size);
 }
 
+/**
+ * @brief Computes the source-derived timestamp for a frame ending at the given offset.
+ */
 IO::CapturedData::SteadyTimePoint IO::FrameReader::frameTimestamp(qsizetype endOffsetExclusive)
 {
   if (m_pendingChunks.empty())
@@ -169,6 +187,9 @@ IO::CapturedData::SteadyTimePoint IO::FrameReader::frameTimestamp(qsizetype endO
   return stamp;
 }
 
+/**
+ * @brief Wraps extracted frame bytes into a CapturedData with proper timing.
+ */
 IO::CapturedDataPtr IO::FrameReader::buildFrame(QByteArray&& data, qsizetype endOffsetExclusive)
 {
   return IO::makeCapturedData(std::move(data), frameTimestamp(endOffsetExclusive));
@@ -178,6 +199,9 @@ IO::CapturedDataPtr IO::FrameReader::buildFrame(QByteArray&& data, qsizetype end
 // Parameter setters
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Selects the checksum algorithm and caches its expected output length.
+ */
 void IO::FrameReader::setChecksum(const QString& checksum)
 {
   // Compute checksum output length from algorithm name
@@ -190,6 +214,9 @@ void IO::FrameReader::setChecksum(const QString& checksum)
     m_checksumLength = 0;
 }
 
+/**
+ * @brief Configures the frame start delimiters and precomputes their KMP tables.
+ */
 void IO::FrameReader::setStartSequences(const QList<QByteArray>& starts)
 {
   m_startSequences.clear();
@@ -207,6 +234,9 @@ void IO::FrameReader::setStartSequences(const QList<QByteArray>& starts)
   Q_ASSERT(m_startSequences.size() == m_startSequenceLps.size());
 }
 
+/**
+ * @brief Configures the frame end delimiters and precomputes their KMP tables.
+ */
 void IO::FrameReader::setFinishSequences(const QList<QByteArray>& finishes)
 {
   m_finishSequences.clear();
@@ -224,6 +254,9 @@ void IO::FrameReader::setFinishSequences(const QList<QByteArray>& finishes)
   Q_ASSERT(m_finishSequences.size() == m_finishSequenceLps.size());
 }
 
+/**
+ * @brief Sets the operation mode and resets checksum state outside ProjectFile.
+ */
 void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
 {
   m_operationMode = mode;
@@ -233,6 +266,9 @@ void IO::FrameReader::setOperationMode(const SerialStudio::OperationMode mode)
   }
 }
 
+/**
+ * @brief Sets the frame detection mode (start/end/start+end/no delimiters).
+ */
 void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection mode)
 {
   m_frameDetectionMode = mode;
@@ -242,6 +278,9 @@ void IO::FrameReader::setFrameDetectionMode(const SerialStudio::FrameDetection m
 // Frame detection
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Extracts frames terminated by an end delimiter from the buffer.
+ */
 void IO::FrameReader::readEndDelimitedFrames()
 {
   Q_ASSERT(m_circularBuffer.capacity() > 0);
@@ -302,6 +341,9 @@ void IO::FrameReader::readEndDelimitedFrames()
     qWarning() << "[FrameReader] Loop iteration limit reached in readEndDelimitedFrames";
 }
 
+/**
+ * @brief Extracts frames bounded by consecutive start delimiters.
+ */
 void IO::FrameReader::readStartDelimitedFrames()
 {
   Q_ASSERT(!m_startSequences.isEmpty());
@@ -372,6 +414,9 @@ void IO::FrameReader::readStartDelimitedFrames()
     qWarning() << "[FrameReader] Loop iteration limit reached in readStartDelimitedFrames";
 }
 
+/**
+ * @brief Extracts frames bounded by matching start and end delimiters.
+ */
 void IO::FrameReader::readStartEndDelimitedFrames()
 {
   Q_ASSERT(!m_startSequences.isEmpty());
@@ -438,6 +483,9 @@ void IO::FrameReader::readStartEndDelimitedFrames()
 // Checksum validation
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Validates the checksum trailing the frame against the configured algorithm.
+ */
 IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetype crcPosition)
 {
   Q_ASSERT(!frame.isEmpty());

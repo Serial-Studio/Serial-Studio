@@ -152,6 +152,9 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   UISessionRegistry::instance().registerTaskbar(this);
 }
 
+/**
+ * @brief Destroys the Taskbar and unregisters it from the UI session registry.
+ */
 UI::Taskbar::~Taskbar()
 {
   UISessionRegistry::instance().unregisterTaskbar(this);
@@ -810,6 +813,9 @@ void UI::Taskbar::setWindowState(const int id, const UI::TaskbarModel::WindowSta
  *
  * This is the authoritative source for all UI view models like tabs and
  * taskbars.
+ */
+/**
+ * @brief Records the bidirectional mapping between a widget ID and a window ID.
  */
 void UI::Taskbar::mapWidgetToWindow(UI::WidgetID wid, int windowId)
 {

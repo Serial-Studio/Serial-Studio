@@ -25,16 +25,21 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the base export worker with the monotonic clock unset. */
 DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent)
   : QObject(parent), m_lastFrameNs(-1)
 {}
 
+/** @brief Default destructor. */
 DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;
 
 //--------------------------------------------------------------------------------------------------
 // Monotonic clock tracker — shared by every export worker
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns a strictly-increasing offset (ns since baseline), bumping by 1 ns on collision.
+ */
 qint64 DataModel::FrameConsumerWorkerBase::monotonicFrameNs(
   std::chrono::steady_clock::time_point now, std::chrono::steady_clock::time_point baseline)
 {
@@ -46,6 +51,7 @@ qint64 DataModel::FrameConsumerWorkerBase::monotonicFrameNs(
   return ns;
 }
 
+/** @brief Resets the monotonic frame clock back to its initial state. */
 void DataModel::FrameConsumerWorkerBase::resetMonotonicClock()
 {
   m_lastFrameNs = -1;

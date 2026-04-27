@@ -21,6 +21,9 @@
 
 // clang-format off
 #ifdef _WIN32
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#  endif
 #  include <windows.h>
 #  include <shlobj.h>
 #endif
@@ -105,6 +108,7 @@ public:
   using QObject::QObject;
 
 protected:
+  /** @brief Routes QFileOpenEvent for .ssproj files into ProjectModel. */
   bool eventFilter(QObject* obj, QEvent* event) override
   {
     if (event->type() == QEvent::FileOpen) {
@@ -710,7 +714,7 @@ static char** injectPlatformArg(int& argc, char** argv, const char* platform)
 }
 
 /**
- * Prints the current application version to the console
+ * @brief Prints the current application name and version to the console.
  */
 static void cliShowVersion()
 {
@@ -719,7 +723,7 @@ static void cliShowVersion()
 }
 
 /**
- * Removes all application settings
+ * @brief Clears all persisted application settings from QSettings.
  */
 static void cliResetSettings()
 {

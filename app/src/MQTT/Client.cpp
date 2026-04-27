@@ -34,6 +34,9 @@
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the MQTT client and initializes default configuration.
+ */
 MQTT::Client::Client() : m_mode(0), m_publisher(false), m_sslEnabled(false)
 {
   // Generate initial random client ID

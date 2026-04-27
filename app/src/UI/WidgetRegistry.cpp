@@ -25,6 +25,9 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the widget registry with default counters and batch state.
+ */
 UI::WidgetRegistry::WidgetRegistry()
   : QObject(nullptr), m_nextId(1), m_batchDepth(0), m_batchHadChanges(false)
 {}

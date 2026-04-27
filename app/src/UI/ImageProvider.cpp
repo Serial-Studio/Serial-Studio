@@ -28,13 +28,22 @@ static UI::ImageProvider* s_globalProvider = nullptr;
 // Constructor & global access
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the QML image provider.
+ */
 UI::ImageProvider::ImageProvider() : QQuickImageProvider(QQuickImageProvider::Image) {}
 
+/**
+ * @brief Returns the globally registered image provider instance.
+ */
 UI::ImageProvider* UI::ImageProvider::global()
 {
   return s_globalProvider;
 }
 
+/**
+ * @brief Sets the globally registered image provider instance.
+ */
 void UI::ImageProvider::setGlobal(UI::ImageProvider* provider)
 {
   s_globalProvider = provider;
@@ -44,6 +53,9 @@ void UI::ImageProvider::setGlobal(UI::ImageProvider* provider)
 // QQuickImageProvider interface
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns a cached image scaled to the requested size, or an empty image if missing.
+ */
 QImage UI::ImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
   // Extract the provider key by stripping the version suffix
@@ -65,6 +77,9 @@ QImage UI::ImageProvider::requestImage(const QString& id, QSize* size, const QSi
   return img;
 }
 
+/**
+ * @brief Stores or replaces an image under the given identifier.
+ */
 void UI::ImageProvider::setImage(const QString& id, const QImage& image)
 {
   QWriteLocker locker(&m_lock);

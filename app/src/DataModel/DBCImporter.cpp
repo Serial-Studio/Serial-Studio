@@ -39,8 +39,10 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the DBCImporter singleton. */
 DataModel::DBCImporter::DBCImporter() {}
 
+/** @brief Returns the singleton DBCImporter instance. */
 DataModel::DBCImporter& DataModel::DBCImporter::instance()
 {
   static DBCImporter instance;
@@ -51,16 +53,19 @@ DataModel::DBCImporter& DataModel::DBCImporter::instance()
 // Status queries
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns the total number of signals across all loaded messages. */
 int DataModel::DBCImporter::signalCount() const
 {
   return countTotalSignals(m_messages);
 }
 
+/** @brief Returns the number of messages loaded from the DBC file. */
 int DataModel::DBCImporter::messageCount() const
 {
   return m_messages.count();
 }
 
+/** @brief Returns the file name of the loaded DBC file. */
 QString DataModel::DBCImporter::dbcFileName() const
 {
   return QFileInfo(m_dbcFilePath).fileName();

@@ -57,6 +57,7 @@
 // Constructor/destructor & singleton instance access
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the ProjectModel singleton and seeds an empty project. */
 DataModel::ProjectModel::ProjectModel()
   : m_title("")
   , m_frameEndSequence("")
@@ -89,6 +90,7 @@ DataModel::ProjectModel::ProjectModel()
   });
 }
 
+/** @brief Returns the singleton ProjectModel instance. */
 DataModel::ProjectModel& DataModel::ProjectModel::instance()
 {
   static ProjectModel singleton;
@@ -99,16 +101,19 @@ DataModel::ProjectModel& DataModel::ProjectModel::instance()
 // Document status
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns true when the project has unsaved edits. */
 bool DataModel::ProjectModel::modified() const noexcept
 {
   return m_modified;
 }
 
+/** @brief Returns the project-wide payload decoder method. */
 SerialStudio::DecoderMethod DataModel::ProjectModel::decoderMethod() const noexcept
 {
   return m_frameDecoder;
 }
 
+/** @brief Returns the project-wide frame detection strategy. */
 SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const noexcept
 {
   return m_frameDetection;
@@ -129,6 +134,7 @@ QString DataModel::ProjectModel::jsonFileName() const
   return tr("New Project");
 }
 
+/** @brief Returns the workspace folder used for project files. */
 QString DataModel::ProjectModel::jsonProjectsPath() const
 {
   return Misc::WorkspaceManager::instance().path("JSON Projects");
@@ -168,16 +174,19 @@ void DataModel::ProjectModel::setSuppressMessageBoxes(const bool suppress)
   m_suppressMessageBoxes = suppress;
 }
 
+/** @brief Returns true when modal dialogs are suppressed (API/headless mode). */
 bool DataModel::ProjectModel::suppressMessageBoxes() const noexcept
 {
   return m_suppressMessageBoxes;
 }
 
+/** @brief Returns the current project title. */
 const QString& DataModel::ProjectModel::title() const noexcept
 {
   return m_title;
 }
 
+/** @brief Returns the absolute path of the loaded project file, or empty. */
 const QString& DataModel::ProjectModel::jsonFilePath() const noexcept
 {
   return m_filePath;
@@ -265,11 +274,13 @@ int DataModel::ProjectModel::pointCount() const noexcept
   return m_pointCount;
 }
 
+/** @brief Returns the number of groups in the project. */
 int DataModel::ProjectModel::groupCount() const noexcept
 {
   return static_cast<int>(m_groups.size());
 }
 
+/** @brief Returns the total number of datasets across all groups. */
 int DataModel::ProjectModel::datasetCount() const
 {
   int count = 0;
@@ -279,21 +290,25 @@ int DataModel::ProjectModel::datasetCount() const
   return count;
 }
 
+/** @brief Returns the project's group list. */
 const std::vector<DataModel::Group>& DataModel::ProjectModel::groups() const noexcept
 {
   return m_groups;
 }
 
+/** @brief Returns the project's action list. */
 const std::vector<DataModel::Action>& DataModel::ProjectModel::actions() const noexcept
 {
   return m_actions;
 }
 
+/** @brief Returns the project's data-source list. */
 const std::vector<DataModel::Source>& DataModel::ProjectModel::sources() const noexcept
 {
   return m_sources;
 }
 
+/** @brief Returns the number of configured data sources. */
 int DataModel::ProjectModel::sourceCount() const noexcept
 {
   return static_cast<int>(m_sources.size());
@@ -310,26 +325,31 @@ const std::vector<DataModel::Workspace>& DataModel::ProjectModel::workspaces() c
   return m_workspaces;
 }
 
+/** @brief Returns the set of hidden auto-generated group IDs. */
 const QSet<int>& DataModel::ProjectModel::hiddenGroupIds() const noexcept
 {
   return m_hiddenGroupIds;
 }
 
+/** @brief Returns the number of workspaces defined in the project. */
 int DataModel::ProjectModel::workspaceCount() const noexcept
 {
   return static_cast<int>(m_workspaces.size());
 }
 
+/** @brief Returns true when the auto-generated group workspace is hidden. */
 bool DataModel::ProjectModel::isGroupHidden(int groupId) const
 {
   return m_hiddenGroupIds.contains(groupId);
 }
 
+/** @brief Returns the number of user-defined tables in the project. */
 int DataModel::ProjectModel::tableCount() const noexcept
 {
   return static_cast<int>(m_tables.size());
 }
 
+/** @brief Returns the project's user-defined data table list. */
 const std::vector<DataModel::TableDef>& DataModel::ProjectModel::tables() const noexcept
 {
   return m_tables;
@@ -1032,6 +1052,7 @@ void DataModel::ProjectModel::newJsonFile()
   setModified(false);
 }
 
+/** @brief Updates the project title and emits titleChanged. */
 void DataModel::ProjectModel::setTitle(const QString& title)
 {
   if (m_title != title) {
@@ -1525,16 +1546,19 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 // Selection state (used internally by group/dataset/action operations)
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Stores the editor's currently selected group. */
 void DataModel::ProjectModel::setSelectedGroup(const DataModel::Group& group)
 {
   m_selectedGroup = group;
 }
 
+/** @brief Stores the editor's currently selected action. */
 void DataModel::ProjectModel::setSelectedAction(const DataModel::Action& action)
 {
   m_selectedAction = action;
 }
 
+/** @brief Stores the editor's currently selected dataset. */
 void DataModel::ProjectModel::setSelectedDataset(const DataModel::Dataset& dataset)
 {
   m_selectedDataset = dataset;
@@ -1882,6 +1906,7 @@ void DataModel::ProjectModel::duplicateCurrentAction()
 // Output widget CRUD
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Stores the editor's currently selected output widget. */
 void DataModel::ProjectModel::setSelectedOutputWidget(const DataModel::OutputWidget& widget)
 {
   m_selectedOutputWidget = widget;

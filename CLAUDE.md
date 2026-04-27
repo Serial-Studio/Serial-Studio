@@ -397,9 +397,9 @@ Use 98-dash `//---` banners to separate concern groups (constructor, getters, sl
 No function doxygen, member-variable comments, signal/slot comments, `@param`/`@return`/`@note`/`@see`, or inline `//`. Names + types are the documentation.
 
 **Source (.cpp).**
-- One-line `//` section header above each logical block inside a function body. That's the only kind of in-body comment allowed.
-- Single-line `/** @brief ... */` on a non-trivial function is allowed when the name isn't self-explanatory. Default is no function doxygen.
+- **Every function definition gets a single-line `/** @brief ... */` directly above it.** No exceptions for ctors, dtors, `instance()` accessors, simple delegators, or short helpers — annotate them all. One sentence, no `@param`/`@return`/`@note`/`@see`, no multi-line prose.
 - 98-dash `//---` banners separate concern groups.
+- **In-body comments**: one-line `//` section header above a logical block, only when the block isn't self-explanatory from its code. That's the only kind of in-body comment allowed. Don't narrate, don't restate.
 - **Forbidden**: inline end-of-line comments, multi-line `//` prose, `/* ... */` inside function bodies, restating what code literally does (`// Set m_foo to bar`), repeating the `@brief` as the body's first line. Load-bearing context goes in the commit message.
 
 ### QML

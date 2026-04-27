@@ -180,6 +180,8 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Constructs the ModuleManager singleton.
+ *
  * Configures the application font and configures application signals/slots to
  * destroy singleton classes before the application quits.
  */
@@ -231,7 +233,7 @@ void Misc::ModuleManager::setAutomaticUpdates(const bool enabled)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns a pointer to the QML application engine
+ * @brief Returns a reference to the QML application engine.
  */
 const QQmlApplicationEngine& Misc::ModuleManager::engine() const noexcept
 {
@@ -239,7 +241,7 @@ const QQmlApplicationEngine& Misc::ModuleManager::engine() const noexcept
 }
 
 /**
- * Enables or disables the auto-updater system (QSimpleUpdater).
+ * @brief Returns whether the QSimpleUpdater auto-updater is enabled at build time.
  *
  * To disable QSimpleUpdater, you need to add DEFINES += DISABLE_QSU in the
  * qmake project file. This option is provided for package managers, users are
@@ -260,7 +262,7 @@ bool Misc::ModuleManager::autoUpdaterEnabled() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Calls the functions needed to safely quit the application
+ * @brief Stops every active module and exits the application event loop.
  */
 void Misc::ModuleManager::onQuit()
 {
@@ -292,6 +294,8 @@ void Misc::ModuleManager::onQuit()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Sets default options for QSimpleUpdater (notify on update, no close).
+ *
  * Sets the default options for QSimpleUpdater, which are:
  * - Notify user when a new update is found
  * - Do not notify user when we finish checking for updates
@@ -313,7 +317,7 @@ void Misc::ModuleManager::configureUpdater()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Register custom QML types, for the moment, we have:
+ * @brief Registers Serial Studio's custom QML types with the engine.
  */
 void Misc::ModuleManager::registerQmlTypes()
 {
@@ -361,6 +365,8 @@ void Misc::ModuleManager::registerQmlTypes()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Initializes all application modules and loads the root QML file.
+ *
  * Initializes all the application modules, registers them with the QML engine
  * and loads the "main.qml" file as the root QML file.
  */

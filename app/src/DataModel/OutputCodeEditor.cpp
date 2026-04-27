@@ -29,6 +29,7 @@
 // Constructor
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Constructs the QML-side output widget transmit-function editor. */
 DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent), m_readingCode(false), m_testDialog(nullptr)
 {
@@ -108,11 +109,13 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
 // Property getters
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Returns the editor's current text. */
 QString DataModel::OutputCodeEditor::text() const
 {
   return m_widget.toPlainText();
 }
 
+/** @brief Returns true when the editor document has unsaved edits. */
 bool DataModel::OutputCodeEditor::isModified() const noexcept
 {
   if (m_widget.document())
@@ -121,6 +124,7 @@ bool DataModel::OutputCodeEditor::isModified() const noexcept
   return false;
 }
 
+/** @brief Returns true when an undo step is available in the editor. */
 bool DataModel::OutputCodeEditor::undoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -129,6 +133,7 @@ bool DataModel::OutputCodeEditor::undoAvailable() const noexcept
   return false;
 }
 
+/** @brief Returns true when a redo step is available in the editor. */
 bool DataModel::OutputCodeEditor::redoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -141,31 +146,37 @@ bool DataModel::OutputCodeEditor::redoAvailable() const noexcept
 // Editor operations
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Cuts the current selection into the clipboard. */
 void DataModel::OutputCodeEditor::cut()
 {
   m_widget.cut();
 }
 
+/** @brief Undoes the last edit. */
 void DataModel::OutputCodeEditor::undo()
 {
   m_widget.undo();
 }
 
+/** @brief Redoes the previously undone edit. */
 void DataModel::OutputCodeEditor::redo()
 {
   m_widget.redo();
 }
 
+/** @brief Copies the current selection to the clipboard. */
 void DataModel::OutputCodeEditor::copy()
 {
   m_widget.copy();
 }
 
+/** @brief Pastes the clipboard contents into the editor. */
 void DataModel::OutputCodeEditor::paste()
 {
   m_widget.paste();
 }
 
+/** @brief Selects all editor text. */
 void DataModel::OutputCodeEditor::selectAll()
 {
   m_widget.selectAll();
@@ -303,6 +314,7 @@ QString DataModel::OutputCodeEditor::defaultTemplate()
     QStringLiteral(":/rcc/scripts/output"), defaultFile, QStringLiteral(".js")));
 }
 
+/** @brief Rebuilds the cached list of output-widget templates from resources. */
 void DataModel::OutputCodeEditor::loadTemplates()
 {
   m_defaultTemplateFile.clear();
@@ -379,37 +391,44 @@ void DataModel::OutputCodeEditor::resizeWidget()
 // Event forwarding
 //--------------------------------------------------------------------------------------------------
 
+/** @brief Paints the cached editor pixmap into the QML scene. */
 void DataModel::OutputCodeEditor::paint(QPainter* painter)
 {
   if (painter && isVisible())
     painter->drawPixmap(0, 0, m_pixmap);
 }
 
+/** @brief Forwards key-press events to the backing QCodeEditor widget. */
 void DataModel::OutputCodeEditor::keyPressEvent(QKeyEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
+/** @brief Forwards key-release events to the backing QCodeEditor widget. */
 void DataModel::OutputCodeEditor::keyReleaseEvent(QKeyEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
+/** @brief Forwards input-method events (IME composition) to the backing widget. */
 void DataModel::OutputCodeEditor::inputMethodEvent(QInputMethodEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
+/** @brief Forwards focus-in events to the backing widget. */
 void DataModel::OutputCodeEditor::focusInEvent(QFocusEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
+/** @brief Forwards focus-out events to the backing widget. */
 void DataModel::OutputCodeEditor::focusOutEvent(QFocusEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
+/** @brief Forwards mouse-press events to the backing widget after offsetting for the line-number gutter. */
 void DataModel::OutputCodeEditor::mousePressEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -424,6 +443,7 @@ void DataModel::OutputCodeEditor::mousePressEvent(QMouseEvent* event)
   forceActiveFocus();
 }
 
+/** @brief Forwards mouse-move events to the backing widget after offsetting for the line-number gutter. */
 void DataModel::OutputCodeEditor::mouseMoveEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -437,6 +457,7 @@ void DataModel::OutputCodeEditor::mouseMoveEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
+/** @brief Forwards mouse-release events to the backing widget after offsetting for the line-number gutter. */
 void DataModel::OutputCodeEditor::mouseReleaseEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -450,6 +471,7 @@ void DataModel::OutputCodeEditor::mouseReleaseEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
+/** @brief Forwards double-click events to the backing widget after offsetting for the line-number gutter. */
 void DataModel::OutputCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
 {
   const auto lineNumWidth = m_widget.lineNumberArea()->sizeHint().width();
@@ -463,26 +485,31 @@ void DataModel::OutputCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
+/** @brief Forwards wheel events to the editor viewport. */
 void DataModel::OutputCodeEditor::wheelEvent(QWheelEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
+/** @brief Forwards drag-enter events to the editor viewport. */
 void DataModel::OutputCodeEditor::dragEnterEvent(QDragEnterEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
+/** @brief Forwards drag-move events to the editor viewport. */
 void DataModel::OutputCodeEditor::dragMoveEvent(QDragMoveEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
+/** @brief Forwards drag-leave events to the editor viewport. */
 void DataModel::OutputCodeEditor::dragLeaveEvent(QDragLeaveEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
+/** @brief Forwards drop events to the editor viewport. */
 void DataModel::OutputCodeEditor::dropEvent(QDropEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);

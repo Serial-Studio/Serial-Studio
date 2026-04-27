@@ -68,6 +68,9 @@ UI::WindowManager::WindowManager(QQuickItem* parent)
   UISessionRegistry::instance().registerWindowManager(this);
 }
 
+/**
+ * @brief Destroys the WindowManager and unregisters it from the UI session registry.
+ */
 UI::WindowManager::~WindowManager()
 {
   UISessionRegistry::instance().unregisterWindowManager(this);

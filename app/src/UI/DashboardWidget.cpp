@@ -46,6 +46,9 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs a DashboardWidget with default state and theme bindings.
+ */
 UI::DashboardWidget::DashboardWidget(QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(-1)
@@ -62,6 +65,9 @@ UI::DashboardWidget::DashboardWidget(QQuickItem* parent)
           &UI::DashboardWidget::widgetColorChanged);
 }
 
+/**
+ * @brief Destroys the widget and schedules its inner model for deletion.
+ */
 UI::DashboardWidget::~DashboardWidget()
 {
   if (m_dbWidget)

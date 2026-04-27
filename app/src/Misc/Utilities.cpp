@@ -57,7 +57,7 @@ extern int Misc_Utilities_showNativeMessageBox(const QString& text,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Returns a pointer to the only instance of the class
+ * @brief Returns the singleton Utilities instance.
  */
 Misc::Utilities& Misc::Utilities::instance()
 {
@@ -70,7 +70,7 @@ Misc::Utilities& Misc::Utilities::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Restarts the application - with macOS specific code to make it work
+ * @brief Restarts the application by relaunching the executable.
  */
 void Misc::Utilities::rebootApplication()
 {
@@ -111,8 +111,7 @@ QPixmap Misc::Utilities::getHiDpiPixmap(const QString& path)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * Asks the user if he/she wants the application to check for updates
- * automatically
+ * @brief Prompts the user to enable automatic update checks.
  */
 bool Misc::Utilities::askAutomaticUpdates()
 {
@@ -249,7 +248,7 @@ int Misc::Utilities::showMessageBox(const QString& text,
 }
 
 /**
- * Displays the about Qt dialog
+ * @brief Displays the standard "About Qt" dialog.
  */
 void Misc::Utilities::aboutQt()
 {
@@ -269,6 +268,8 @@ void Misc::Utilities::copyText(const QString& text)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Reveals the given file in the host file manager (Explorer/Finder/desktop).
+ *
  * Reveals the file contained in @a pathToReveal in Explorer/Finder.
  * On GNU/Linux, this function shall open the file directly with the desktop
  * services.

@@ -31,6 +31,7 @@
 
 namespace {
 
+/** @brief Maps a Misc::Translator::Language enum to its IETF locale key. */
 QString localeKeyForLanguage(const Misc::Translator::Language language)
 {
   switch (language) {
@@ -76,6 +77,7 @@ QString localeKeyForLanguage(const Misc::Translator::Language language)
 
 }  // namespace
 
+/** @brief Reads a Qt resource file as UTF-8 text, or returns empty on failure. */
 QString DataModel::readTextResource(const QString& path)
 {
   QFile file(path);
@@ -85,6 +87,9 @@ QString DataModel::readTextResource(const QString& path)
   return {};
 }
 
+/**
+ * @brief Picks the manifest's translation for the active UI language, falling back to Qt tr().
+ */
 QString DataModel::localizedTemplateName(const QJsonObject& object, const char* translationContext)
 {
   const QString fallback  = object.value(QStringLiteral("name")).toString();
@@ -107,6 +112,9 @@ QString DataModel::localizedTemplateName(const QJsonObject& object, const char* 
   return fallback;
 }
 
+/**
+ * @brief Parses a templates.json manifest into ScriptTemplateDefinition entries (file/name/default).
+ */
 QList<DataModel::ScriptTemplateDefinition> DataModel::loadScriptTemplateManifest(
   const QString& manifestPath, const char* translationContext)
 {
@@ -142,6 +150,7 @@ QList<DataModel::ScriptTemplateDefinition> DataModel::loadScriptTemplateManifest
   return templates;
 }
 
+/** @brief Returns the resource path "<directory>/<file><suffix>" for a template. */
 QString DataModel::templateResourcePath(const QString& directory,
                                         const QString& file,
                                         const QString& suffix)

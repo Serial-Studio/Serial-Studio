@@ -739,6 +739,11 @@ if(WIN32)
     ${HEADERS}
     "src/Platform/CSD.h"
   )
+  add_compile_definitions(
+     WIN32_LEAN_AND_MEAN
+     NOMINMAX
+     _WINSOCKAPI_
+  )
 elseif(APPLE)
   if(BUILD_COMMERCIAL)
     set(INFO_MACOSX "${CMAKE_CURRENT_SOURCE_DIR}/deploy/macOS/info-pro.plist")

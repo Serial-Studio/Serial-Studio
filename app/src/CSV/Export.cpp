@@ -37,9 +37,11 @@
 
 namespace {
 
-// RFC 4180 CSV field escape: quote fields containing separators, quotes, or
-// newlines and double any embedded quotes. Returning the input unchanged for
-// safe values keeps the common-case hotpath allocation-free.
+/**
+ * RFC 4180 CSV field escape: quote fields containing separators, quotes, or
+ * newlines and double any embedded quotes. Returning the input unchanged for
+ * safe values keeps the common-case hotpath allocation-free.
+ **/
 static QString escapeCsvField(const QString& s)
 {
   // Bail early when no special characters are present
@@ -60,6 +62,9 @@ static QString escapeCsvField(const QString& s)
 // ExportWorker implementation
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns whether the CSV file is currently open.
+ */
 bool CSV::ExportWorker::isResourceOpen() const
 {
   return m_csvFile.isOpen();
@@ -70,7 +75,6 @@ bool CSV::ExportWorker::isResourceOpen() const
  */
 void CSV::ExportWorker::closeResources()
 {
-  // Nothing to do if the file isn't open
   if (!m_csvFile.isOpen())
     return;
 
@@ -110,18 +114,11 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::TimestampedFra
     const double seconds     = static_cast<double>(nanoseconds) / 1'000'000'000.0;
     m_textStream << QString::number(seconds, 'f', 9);
 
-    // Collect post-transform values by uniqueId — CSV exports final values
-    // only, matching what users see on the dashboard. Raw pre-transform
-    // values remain accessible via the SQLite session DB and MDF4 raw
-    // channels when byte-level fidelity is needed.
     QMap<int, QString> finalValues;
     for (const auto& g : i->data.groups)
       for (const auto& d : g.datasets)
         finalValues[d.uniqueId] = d.value.simplified();
 
-    // Write one column per dataset in schema order, escaping per RFC 4180
-    // so transform outputs containing commas/quotes/newlines don't corrupt
-    // the row layout for downstream consumers.
     for (int j = 0; j < colCount; ++j) {
       const int uid = m_schema.columns[static_cast<size_t>(j)].uniqueId;
       m_textStream << ',' << escapeCsvField(finalValues.value(uid, QString()));
@@ -190,12 +187,14 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 // Export constructor, destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the CSV export manager and initializes the worker.
+ */
 CSV::Export::Export()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
 {
-  // Set up background worker and connect state change signal
   initializeWorker();
   connect(m_worker,
           &ExportWorker::resourceOpenChanged,
@@ -204,14 +203,23 @@ CSV::Export::Export()
           Qt::QueuedConnection);
 }
 
+/**
+ * @brief Default destructor.
+ */
 CSV::Export::~Export() = default;
 
+/**
+ * @brief Returns the singleton CSV export instance.
+ */
 CSV::Export& CSV::Export::instance()
 {
   static Export singleton;
   return singleton;
 }
 
+/**
+ * @brief Factory method that creates the CSV export worker.
+ */
 DataModel::FrameConsumerWorkerBase* CSV::Export::createWorker()
 {
   return new ExportWorker(&m_pendingQueue, &m_consumerEnabled, &m_queueSize);
@@ -221,11 +229,17 @@ DataModel::FrameConsumerWorkerBase* CSV::Export::createWorker()
 // State access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns whether a CSV file is currently open for writing.
+ */
 bool CSV::Export::isOpen() const
 {
   return m_isOpen.load(std::memory_order_relaxed);
 }
 
+/**
+ * @brief Returns whether CSV export is enabled.
+ */
 bool CSV::Export::exportEnabled() const
 {
   return consumerEnabled();

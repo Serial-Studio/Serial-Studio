@@ -58,6 +58,9 @@
 // Constructor, destructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the ConnectionManager singleton.
+ */
 IO::ConnectionManager::ConnectionManager()
   : m_paused(false)
   , m_writeEnabled(true)
@@ -88,6 +91,9 @@ IO::ConnectionManager::ConnectionManager()
   connect(qApp, &QApplication::aboutToQuit, this, &ConnectionManager::disconnectAllDevices);
 }
 
+/**
+ * @brief Disconnects all UI drivers and tears down active connections.
+ */
 IO::ConnectionManager::~ConnectionManager()
 {
   for (auto* drv : {static_cast<QObject*>(m_uartUi.get()),
@@ -112,6 +118,9 @@ IO::ConnectionManager::~ConnectionManager()
   disconnectAllDevices();
 }
 
+/**
+ * @brief Returns the singleton ConnectionManager instance.
+ */
 IO::ConnectionManager& IO::ConnectionManager::instance()
 {
   static ConnectionManager singleton;
@@ -122,21 +131,33 @@ IO::ConnectionManager& IO::ConnectionManager::instance()
 // Status queries
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns true when data streaming is paused.
+ */
 bool IO::ConnectionManager::paused() const noexcept
 {
   return m_paused;
 }
 
+/**
+ * @brief Returns true when the connection is open but writes are disabled.
+ */
 bool IO::ConnectionManager::readOnly() const
 {
   return isConnected() && !m_writeEnabled;
 }
 
+/**
+ * @brief Returns true when the connection is open and writes are enabled.
+ */
 bool IO::ConnectionManager::readWrite() const
 {
   return isConnected() && m_writeEnabled;
 }
 
+/**
+ * @brief Returns true when at least one device is currently connected.
+ */
 bool IO::ConnectionManager::isConnected() const
 {
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
@@ -151,6 +172,9 @@ bool IO::ConnectionManager::isConnected() const
   return it != m_devices.end() && it->second && it->second->isOpen();
 }
 
+/**
+ * @brief Returns the number of currently open devices.
+ */
 int IO::ConnectionManager::connectedDeviceCount() const
 {
   int count = 0;
@@ -176,21 +200,33 @@ bool IO::ConnectionManager::configurationOk() const
   return false;
 }
 
+/**
+ * @brief Returns the currently selected bus type.
+ */
 SerialStudio::BusType IO::ConnectionManager::busType() const noexcept
 {
   return m_busType;
 }
 
+/**
+ * @brief Returns the configured frame start delimiter.
+ */
 const QByteArray& IO::ConnectionManager::startSequence() const noexcept
 {
   return m_startSequence;
 }
 
+/**
+ * @brief Returns the configured frame end delimiter.
+ */
 const QByteArray& IO::ConnectionManager::finishSequence() const noexcept
 {
   return m_finishSequence;
 }
 
+/**
+ * @brief Returns the name of the active checksum algorithm.
+ */
 const QString& IO::ConnectionManager::checksumAlgorithm() const noexcept
 {
   return m_checksumAlgorithm;
@@ -280,47 +316,74 @@ IO::HAL_Driver* IO::ConnectionManager::driverForEditing(int deviceId)
 // UI driver accessors
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the UI-config UART driver instance.
+ */
 IO::Drivers::UART* IO::ConnectionManager::uart() const noexcept
 {
   return m_uartUi.get();
 }
 
+/**
+ * @brief Returns the UI-config Network driver instance.
+ */
 IO::Drivers::Network* IO::ConnectionManager::network() const noexcept
 {
   return m_networkUi.get();
 }
 
+/**
+ * @brief Returns the UI-config BluetoothLE driver instance.
+ */
 IO::Drivers::BluetoothLE* IO::ConnectionManager::bluetoothLE() const noexcept
 {
   return m_bluetoothLEUi.get();
 }
 
 #ifdef BUILD_COMMERCIAL
+/**
+ * @brief Returns the UI-config Audio driver instance.
+ */
 IO::Drivers::Audio* IO::ConnectionManager::audio() const noexcept
 {
   return m_audioUi.get();
 }
 
+/**
+ * @brief Returns the UI-config CANBus driver instance.
+ */
 IO::Drivers::CANBus* IO::ConnectionManager::canBus() const noexcept
 {
   return m_canBusUi.get();
 }
 
+/**
+ * @brief Returns the UI-config HID driver instance.
+ */
 IO::Drivers::HID* IO::ConnectionManager::hid() const noexcept
 {
   return m_hidUi.get();
 }
 
+/**
+ * @brief Returns the UI-config Modbus driver instance.
+ */
 IO::Drivers::Modbus* IO::ConnectionManager::modbus() const noexcept
 {
   return m_modbusUi.get();
 }
 
+/**
+ * @brief Returns the UI-config Process driver instance.
+ */
 IO::Drivers::Process* IO::ConnectionManager::process() const noexcept
 {
   return m_processUi.get();
 }
 
+/**
+ * @brief Returns the UI-config USB driver instance.
+ */
 IO::Drivers::USB* IO::ConnectionManager::usb() const noexcept
 {
   return m_usbUi.get();
@@ -515,6 +578,9 @@ qint64 IO::ConnectionManager::writeDataToDevice(int deviceId, const QByteArray& 
 // Connection lifecycle
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Toggles between connected and disconnected states for the primary device.
+ */
 void IO::ConnectionManager::toggleConnection()
 {
   if (isConnected())
@@ -548,6 +614,9 @@ void IO::ConnectionManager::connectDevice()
   Q_EMIT connectedChanged();
 }
 
+/**
+ * @brief Disconnects the primary device and any other project sources.
+ */
 void IO::ConnectionManager::disconnectDevice()
 {
   disconnectDevice(0);
@@ -686,6 +755,9 @@ void IO::ConnectionManager::connectAllDevices()
       connectDevice(id);
 }
 
+/**
+ * @brief Disconnects every registered device.
+ */
 void IO::ConnectionManager::disconnectAllDevices()
 {
   for (auto& [id, dm] : m_devices)

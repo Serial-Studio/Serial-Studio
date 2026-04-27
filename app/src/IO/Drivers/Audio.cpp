@@ -180,6 +180,9 @@ static bool checkAndUpdateDeviceList(ma_context* context,
 // Constructor, destructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Constructs the Audio driver and initializes the MiniAudio backend.
+ */
 IO::Drivers::Audio::Audio()
   : m_init(false)
   , m_isOpen(false)
@@ -244,6 +247,9 @@ IO::Drivers::Audio::Audio()
           &IO::Drivers::Audio::generateLists);
 }
 
+/**
+ * @brief Closes the device and tears down the MiniAudio context.
+ */
 IO::Drivers::Audio::~Audio()
 {
   closeDevice();
@@ -294,11 +300,17 @@ void IO::Drivers::Audio::closeDevice()
   m_isOpen = false;
 }
 
+/**
+ * @brief Closes the audio device.
+ */
 void IO::Drivers::Audio::close()
 {
   closeDevice();
 }
 
+/**
+ * @brief Returns true when the audio device is currently open.
+ */
 bool IO::Drivers::Audio::isOpen() const noexcept
 {
   return m_isOpen;
@@ -581,6 +593,9 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
 // Sample rate selection
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the index of the currently selected sample rate.
+ */
 int IO::Drivers::Audio::selectedSampleRate() const
 {
   return m_selectedSampleRate;
@@ -606,16 +621,25 @@ QStringList IO::Drivers::Audio::sampleRates() const
 // Input device parameters
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the index of the currently selected input device.
+ */
 int IO::Drivers::Audio::selectedInputDevice() const
 {
   return m_selectedInputDevice;
 }
 
+/**
+ * @brief Returns the index of the currently selected input sample format.
+ */
 int IO::Drivers::Audio::selectedInputSampleFormat() const
 {
   return m_selectedInputSampleFormat;
 }
 
+/**
+ * @brief Returns the index of the currently selected input channel configuration.
+ */
 int IO::Drivers::Audio::selectedInputChannelConfiguration() const
 {
   return m_selectedInputChannelConfiguration;
@@ -625,16 +649,25 @@ int IO::Drivers::Audio::selectedInputChannelConfiguration() const
 // Output device parameters
 //--------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Returns the index of the currently selected output device.
+ */
 int IO::Drivers::Audio::selectedOutputDevice() const
 {
   return m_selectedOutputDevice;
 }
 
+/**
+ * @brief Returns the index of the currently selected output sample format.
+ */
 int IO::Drivers::Audio::selectedOutputSampleFormat() const
 {
   return m_selectedOutputSampleFormat;
 }
 
+/**
+ * @brief Returns the index of the currently selected output channel configuration.
+ */
 int IO::Drivers::Audio::selectedOutputChannelConfiguration() const
 {
   return m_selectedOutputChannelConfiguration;
