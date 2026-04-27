@@ -54,6 +54,24 @@ Widgets.Pane {
   property string searchText: ""
 
   //
+  // Pad uniqueIds to the digit count of the largest entry (min 5) so the
+  // ID column reads like a memory map. Display only — clipboard / search
+  // against the raw value remain unchanged.
+  //
+  readonly property int idPadWidth: {
+    let max = 0
+    for (let i = 0; i < datasets.length; ++i) {
+      const v = Number(datasets[i].uniqueId)
+      if (v > max) max = v
+    }
+    return Math.max(5, String(max).length)
+  }
+
+  function paddedId(id) {
+    return String(id).padStart(idPadWidth, '0')
+  }
+
+  //
   // Filtered view — recomputed whenever the search text or dataset list changes.
   //
   property var filteredDatasets: {
@@ -64,6 +82,7 @@ Widgets.Pane {
     const match = (s) => String(s || "").toLowerCase().indexOf(q) !== -1
     return datasets.filter(d =>
                            match(d.uniqueId) ||
+                           match(paddedId(d.uniqueId)) ||
                            match(d.groupTitle) ||
                            match(d.title) ||
                            match(d.units)
@@ -117,101 +136,11 @@ Widgets.Pane {
       spacing: 0
       anchors.fill: parent
 
-      //
-      // Banner — matches UserTableView / DataTablesView: icon on the left,
-      // title + description, match count on the right.
-      //
       Rectangle {
-        id: banner
-
-        readonly property int topPad: 12
-        readonly property int bottomPad: 12
-        readonly property int minHeight: 84
-
         z: 2
+        Layout.fillWidth: true
+        implicitHeight: 48
         Layout.topMargin: -1
-        Layout.fillWidth: true
-        implicitHeight: Math.max(
-          minHeight,
-          bannerLayout.implicitHeight + topPad + bottomPad
-        )
-        color: Cpp_ThemeManager.colors["groupbox_background"]
-
-        Rectangle {
-          height: 1
-          width: parent.width
-          anchors.top: parent.top
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        Rectangle {
-          height: 1
-          width: parent.width
-          anchors.bottom: parent.bottom
-          color: Cpp_ThemeManager.colors["groupbox_border"]
-        }
-
-        RowLayout {
-          id: bannerLayout
-
-          spacing: 16
-          anchors {
-            leftMargin: 14
-            rightMargin: 14
-            left: parent.left
-            right: parent.right
-            topMargin: banner.topPad
-            bottomMargin: banner.bottomPad
-            verticalCenter: parent.verticalCenter
-          }
-
-          Image {
-            Layout.preferredWidth: 56
-            Layout.preferredHeight: 56
-            sourceSize: Qt.size(56, 56)
-            Layout.alignment: Qt.AlignVCenter
-            fillMode: Image.PreserveAspectFit
-            source: "qrc:/rcc/icons/project-editor/summary/dataset-values.svg"
-          }
-
-          ColumnLayout {
-            spacing: 4
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-
-            Label {
-              text: qsTr("Dataset Values")
-              color: Cpp_ThemeManager.colors["text"]
-              font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
-            }
-
-            Label {
-              opacity: 0.65
-              Layout.fillWidth: true
-              wrapMode: Text.WordWrap
-              color: Cpp_ThemeManager.colors["text"]
-              text: qsTr("All datasets in the project, available for cross-referencing in transforms.")
-            }
-          }
-
-          Label {
-            Layout.alignment: Qt.AlignVCenter
-            opacity: 0.6
-            color: Cpp_ThemeManager.colors["text"]
-            text: root.datasets.length === root.filteredDatasets.length ? qsTr("%1 datasets").arg(root.datasets.length)
-                                                                        : qsTr("%1 of %2 datasets").arg(root.filteredDatasets.length).arg(root.datasets.length)
-          }
-        }
-      }
-
-      //
-      // Search bar — full-width row beneath the banner, same 36-px height as
-      // the secondary toolbars in UserTableView / DataTablesView.
-      //
-      Rectangle {
-        z: 2
-        Layout.fillWidth: true
-        height: searchBarLayout.implicitHeight + 12
         color: Cpp_ThemeManager.colors["groupbox_background"]
 
         Rectangle {
@@ -221,27 +150,21 @@ Widgets.Pane {
           color: Cpp_ThemeManager.colors["groupbox_border"]
         }
 
-        RowLayout {
-          id: searchBarLayout
+        Widgets.SearchField {
+          id: searchField
+          Layout.fillWidth: true
+          Layout.alignment: Qt.AlignVCenter
+          text: root.searchText
+          color: Cpp_ThemeManager.colors["base"]
+          placeholderText: qsTr("Search")
+          onTextChanged: root.searchText = text
 
-          spacing: 8
           anchors {
-            margins: 8
-            topMargin: 0
-            bottomMargin: 0
+            leftMargin: 6
+            rightMargin: 6
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
-          }
-
-          Widgets.SearchField {
-            id: searchField
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignVCenter
-            text: root.searchText
-            color: Cpp_ThemeManager.colors["base"]
-            placeholderText: qsTr("Search")
-            onTextChanged: root.searchText = text
           }
         }
       }
@@ -290,7 +213,7 @@ Widgets.Pane {
 
             Label {
               leftPadding: 8
-              text: modelData.uniqueId
+              text: root.paddedId(modelData.uniqueId)
               color: rowDelegate.textColor
               Layout.alignment: Qt.AlignVCenter
               font: Cpp_Misc_CommonFonts.monoFont
@@ -354,12 +277,12 @@ Widgets.Pane {
             }
 
             //
-            // Copy-ID button
+            // Copy-access-code button
             //
             ToolButton {
               id: copyBtn
 
-              property bool justCopied: false
+              readonly property string accessCode: "datasetGetFinal(" + modelData.uniqueId + ")"
 
               padding: 2
               flat: true
@@ -367,12 +290,11 @@ Widgets.Pane {
               icon.height: 16
               ToolTip.delay: 400
               hoverEnabled: true
+              ToolTip.visible: hovered
               Layout.preferredHeight: 26
-              ToolTip.visible: hovered && !justCopied
               Layout.preferredWidth: root.colActionWidth
-              ToolTip.text: qsTr("Copy ID %1 to clipboard").arg(modelData.uniqueId)
-              icon.source: copyBtn.justCopied ? "qrc:/rcc/icons/buttons/apply.svg"
-                                              : "qrc:/rcc/icons/buttons/copy.svg"
+              ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyBtn.accessCode)
+              icon.source: "qrc:/rcc/icons/buttons/copy.svg"
               icon.color: "transparent"
 
               background: Rectangle {
@@ -380,17 +302,9 @@ Widgets.Pane {
                 color: "transparent"
               }
 
-              Timer {
-                id: resetCheck
-                repeat: false
-                interval: 1500
-                onTriggered: copyBtn.justCopied = false
-              }
-
               onClicked: {
-                Cpp_Misc_Utilities.copyText(String(modelData.uniqueId))
-                copyBtn.justCopied = true
-                resetCheck.restart()
+                Cpp_Misc_Utilities.copyText(copyBtn.accessCode)
+                copyToast.show()
               }
             }
           }
@@ -410,6 +324,68 @@ Widgets.Pane {
                   : qsTr("No datasets match your search.")
           }
         }
+      }
+    }
+
+    //
+    // Floating "Dataset access code copied" toast.
+    //
+    Rectangle {
+      id: copyToast
+
+      z: 1000
+      opacity: 0
+      radius: 4
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 24
+      anchors.horizontalCenter: parent.horizontalCenter
+      width: copyToastLabel.implicitWidth + 24
+      height: copyToastLabel.implicitHeight + 12
+      color: Cpp_ThemeManager.colors["highlight"]
+      visible: opacity > 0
+
+      function show() {
+        copyToast.opacity = 1
+        copyToastTimer.restart()
+      }
+
+      RowLayout {
+        id: copyToastLabel
+
+        spacing: 8
+        anchors.centerIn: parent
+
+        ToolButton {
+          flat: true
+          padding: 0
+          enabled: false
+          icon.width: 14
+          icon.height: 14
+          Layout.preferredWidth: 14
+          Layout.preferredHeight: 14
+          Layout.alignment: Qt.AlignVCenter
+          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.color: Cpp_ThemeManager.colors["highlighted_text"]
+          background: Item {}
+        }
+
+        Label {
+          Layout.alignment: Qt.AlignVCenter
+          text: qsTr("Dataset access code copied")
+          font: Cpp_Misc_CommonFonts.uiFont
+          color: Cpp_ThemeManager.colors["highlighted_text"]
+        }
+      }
+
+      Timer {
+        id: copyToastTimer
+        repeat: false
+        interval: 1500
+        onTriggered: copyToast.opacity = 0
+      }
+
+      Behavior on opacity {
+        NumberAnimation { duration: 150 }
       }
     }
   }

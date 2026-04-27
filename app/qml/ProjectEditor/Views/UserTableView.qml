@@ -36,10 +36,13 @@ Widgets.Pane {
   readonly property int rowHeight: 30
   readonly property int colTypeWidth: 140
   readonly property int colNameWidth: 220
-  readonly property int colActionWidth: 40
-  readonly property int minBannerHeight: 84
+  readonly property int colActionWidth: 80
 
   property string tableName: Cpp_JSON_ProjectEditor.selectedUserTable
+
+  function registerAccessCode(regName) {
+    return "tableGet(" + JSON.stringify(root.tableName) + ", " + JSON.stringify(regName) + ")"
+  }
   property var registers: []
 
   property int suppressRefresh: 0
@@ -427,28 +430,63 @@ Widgets.Pane {
               color: regRow.separatorColor
             }
 
-            ToolButton {
-              id: deleteRegBtn
-              padding: 2
-              flat: true
-              icon.width: 16
-              icon.height: 16
-              hoverEnabled: true
-              icon.color: "transparent"
-              Layout.preferredHeight: 26
+            RowLayout {
+              spacing: 0
+              Layout.fillHeight: true
               Layout.preferredWidth: root.colActionWidth
-              icon.source: "qrc:/rcc/icons/buttons/trash.svg"
 
-              background: Rectangle {
-                border.width: 0
-                color: "transparent"
+              ToolButton {
+                id: copyRegBtn
+
+                readonly property string accessCode: root.registerAccessCode(modelData.name)
+
+                padding: 2
+                flat: true
+                icon.width: 16
+                icon.height: 16
+                hoverEnabled: true
+                icon.color: "transparent"
+                ToolTip.delay: 400
+                ToolTip.visible: hovered
+                Layout.preferredHeight: 26
+                Layout.preferredWidth: root.colActionWidth / 2
+                ToolTip.text: qsTr("Copy access code %1 to clipboard").arg(copyRegBtn.accessCode)
+                icon.source: "qrc:/rcc/icons/buttons/copy.svg"
+
+                background: Rectangle {
+                  border.width: 0
+                  color: "transparent"
+                }
+
+                onClicked: {
+                  Cpp_Misc_Utilities.copyText(copyRegBtn.accessCode)
+                  copyToast.show()
+                }
               }
 
-              ToolTip.delay: 400
-              ToolTip.visible: hovered
-              ToolTip.text: qsTr("Delete register")
+              ToolButton {
+                id: deleteRegBtn
+                padding: 2
+                flat: true
+                icon.width: 16
+                icon.height: 16
+                hoverEnabled: true
+                icon.color: "transparent"
+                Layout.preferredHeight: 26
+                Layout.preferredWidth: root.colActionWidth / 2
+                icon.source: "qrc:/rcc/icons/buttons/trash.svg"
 
-              onClicked: Cpp_JSON_ProjectModel.confirmDeleteRegister(root.tableName, modelData.name)
+                background: Rectangle {
+                  border.width: 0
+                  color: "transparent"
+                }
+
+                ToolTip.delay: 400
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Delete register")
+
+                onClicked: Cpp_JSON_ProjectModel.confirmDeleteRegister(root.tableName, modelData.name)
+              }
             }
           }
         }
@@ -465,6 +503,68 @@ Widgets.Pane {
             text: qsTr("No registers.")
           }
         }
+      }
+    }
+
+    //
+    // Floating "Register access code copied" toast.
+    //
+    Rectangle {
+      id: copyToast
+
+      z: 1000
+      opacity: 0
+      radius: 4
+      anchors.bottom: parent.bottom
+      anchors.bottomMargin: 24
+      anchors.horizontalCenter: parent.horizontalCenter
+      width: copyToastLabel.implicitWidth + 24
+      height: copyToastLabel.implicitHeight + 12
+      color: Cpp_ThemeManager.colors["highlight"]
+      visible: opacity > 0
+
+      function show() {
+        copyToast.opacity = 1
+        copyToastTimer.restart()
+      }
+
+      RowLayout {
+        id: copyToastLabel
+
+        spacing: 8
+        anchors.centerIn: parent
+
+        ToolButton {
+          flat: true
+          padding: 0
+          enabled: false
+          icon.width: 14
+          icon.height: 14
+          Layout.preferredWidth: 14
+          Layout.preferredHeight: 14
+          Layout.alignment: Qt.AlignVCenter
+          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+          icon.color: Cpp_ThemeManager.colors["highlighted_text"]
+          background: Item {}
+        }
+
+        Label {
+          Layout.alignment: Qt.AlignVCenter
+          text: qsTr("Register access code copied")
+          font: Cpp_Misc_CommonFonts.uiFont
+          color: Cpp_ThemeManager.colors["highlighted_text"]
+        }
+      }
+
+      Timer {
+        id: copyToastTimer
+        repeat: false
+        interval: 1500
+        onTriggered: copyToast.opacity = 0
+      }
+
+      Behavior on opacity {
+        NumberAnimation { duration: 150 }
       }
     }
   }

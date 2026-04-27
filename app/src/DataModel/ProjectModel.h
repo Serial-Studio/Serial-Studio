@@ -313,6 +313,8 @@ private:
 
   void shiftWorkspaceRefsAfterDatasetDelete(int groupId, const QMap<int, int>& datasetTypeCounts);
 
+  bool mergeAutoWorkspaceUpdates();
+
 private:
   QString m_title;
   QString m_frameEndSequence;
@@ -335,6 +337,7 @@ private:
   std::vector<DataModel::Source> m_sources;
   QSet<int> m_hiddenGroupIds;
   std::vector<DataModel::Workspace> m_workspaces;
+  std::vector<DataModel::Workspace> m_autoSnapshot;
   std::vector<DataModel::TableDef> m_tables;
 
   bool m_customizeWorkspaces;

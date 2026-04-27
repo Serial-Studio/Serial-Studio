@@ -79,11 +79,15 @@ DataModel::ProjectModel::ProjectModel()
   // which is itself mid-init on the very first ProjectModel::instance() call.
   newJsonFile();
 
-  // Any structural change rebuilds the auto-generated workspace list.
-  // When the user has opted into manual editing the list is theirs, so skip.
+  // Any structural change rebuilds the auto-generated workspace list. When
+  // the user has opted into manual editing, merge new auto refs into the
+  // hand-edited list instead so additions still propagate.
   connect(this, &ProjectModel::groupsChanged, this, [this] {
-    if (m_customizeWorkspaces)
+    if (m_customizeWorkspaces) {
+      if (mergeAutoWorkspaceUpdates())
+        Q_EMIT workspacesChanged();
       return;
+    }
 
     regenerateAutoWorkspaces();
     Q_EMIT workspacesChanged();
@@ -1002,6 +1006,7 @@ void DataModel::ProjectModel::newJsonFile()
   m_actions.clear();
   m_sources.clear();
   m_workspaces.clear();
+  m_autoSnapshot.clear();
   m_tables.clear();
   m_customizeWorkspaces = false;
 
@@ -1506,6 +1511,8 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
       return true;
     }
   }
+
+  m_autoSnapshot = buildAutoWorkspaces();
 
   // Notify all listeners that the project has been fully loaded
   Q_EMIT groupsChanged();
@@ -3715,7 +3722,81 @@ void DataModel::ProjectModel::regenerateAutoWorkspaces()
   if (m_customizeWorkspaces)
     return;
 
-  m_workspaces = buildAutoWorkspaces();
+  m_workspaces   = buildAutoWorkspaces();
+  m_autoSnapshot = m_workspaces;
+}
+
+/**
+ * @brief Merges newly-eligible auto refs into the user-customised workspace list.
+ *
+ * In customize mode the user owns m_workspaces, so we cannot wholesale
+ * regenerate it. Instead we diff the current auto layout against the last
+ * snapshot — refs and per-group workspaces that appear for the first time are
+ * merged in (preserving user-removed refs from prior generations), while
+ * existing per-group workspaces inherit the latest group title. Returns true
+ * when m_workspaces was modified.
+ */
+bool DataModel::ProjectModel::mergeAutoWorkspaceUpdates()
+{
+  if (!m_customizeWorkspaces)
+    return false;
+
+  const auto current = buildAutoWorkspaces();
+  bool dirty         = false;
+
+  const auto refsEqual = [](const WidgetRef& a, const WidgetRef& b) {
+    return a.widgetType == b.widgetType && a.groupId == b.groupId
+        && a.relativeIndex == b.relativeIndex;
+  };
+
+  const auto findById = [](std::vector<DataModel::Workspace>& list, int id) {
+    return std::find_if(list.begin(), list.end(),
+                        [id](const auto& w) { return w.workspaceId == id; });
+  };
+
+  const auto findByIdConst = [](const std::vector<DataModel::Workspace>& list, int id) {
+    return std::find_if(list.begin(), list.end(),
+                        [id](const auto& w) { return w.workspaceId == id; });
+  };
+
+  for (const auto& cur : current) {
+    auto userIt = findById(m_workspaces, cur.workspaceId);
+    auto snapIt = findByIdConst(m_autoSnapshot, cur.workspaceId);
+
+    if (userIt == m_workspaces.end()) {
+      m_workspaces.push_back(cur);
+      dirty = true;
+      continue;
+    }
+
+    if (cur.workspaceId >= 1002 && userIt->title != cur.title) {
+      userIt->title = cur.title;
+      dirty         = true;
+    }
+
+    for (const auto& r : cur.widgetRefs) {
+      const bool inSnap = snapIt != m_autoSnapshot.end()
+                       && std::any_of(snapIt->widgetRefs.begin(), snapIt->widgetRefs.end(),
+                                      [&](const auto& s) { return refsEqual(s, r); });
+      if (inSnap)
+        continue;
+
+      const bool inUser = std::any_of(userIt->widgetRefs.begin(), userIt->widgetRefs.end(),
+                                      [&](const auto& s) { return refsEqual(s, r); });
+      if (inUser)
+        continue;
+
+      userIt->widgetRefs.push_back(r);
+      dirty = true;
+    }
+  }
+
+  m_autoSnapshot = current;
+
+  if (dirty)
+    setModified(true);
+
+  return dirty;
 }
 
 /**
@@ -3740,6 +3821,7 @@ int DataModel::ProjectModel::autoGenerateWorkspaces()
   // Promote into customize mode so subsequent groupsChanged signals don't
   // overwrite the freshly materialised list.
   m_workspaces           = std::move(seed);
+  m_autoSnapshot         = m_workspaces;
   const bool flagChanged = !m_customizeWorkspaces;
   m_customizeWorkspaces  = true;
 
