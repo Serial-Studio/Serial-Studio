@@ -22,6 +22,7 @@
 #include "DataModel/ProjectModel.h"
 
 #include <algorithm>
+#include <QCryptographicHash>
 #include <QDirIterator>
 #include <QFile>
 #include <QFileDialog>
@@ -75,6 +76,8 @@ DataModel::ProjectModel::ProjectModel()
   , m_filePath("")
   , m_suppressMessageBoxes(false)
   , m_customizeWorkspaces(false)
+  , m_passwordHash("")
+  , m_locked(false)
 {
   // newJsonFile() must run before the auto-regen hook is wired — it emits
   // groupsChanged, and regenerateAutoWorkspaces() reaches into AppState,
@@ -137,6 +140,115 @@ SerialStudio::DecoderMethod DataModel::ProjectModel::decoderMethod() const noexc
 SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const noexcept
 {
   return m_frameDetection;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Project lock — operator/engineer separation in production dashboards
+//
+// This is a UX read-only flag, not crypto. The hash is plain MD5 with no salt:
+// anyone who can edit the JSON file with a text editor can lift the lock. Real
+// access control is the OS file permissions — this just stops operators from
+// accidentally clobbering a production dashboard's project structure.
+//--------------------------------------------------------------------------------------------------
+
+namespace {
+/**
+ * @brief Returns hex-encoded MD5 of @p password.
+ */
+QString hashPassword(const QString& password)
+{
+  return QString::fromLatin1(
+    QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex());
+}
+}  // namespace
+
+/**
+ * @brief Returns true when the editor body is gated behind the lock screen.
+ */
+bool DataModel::ProjectModel::locked() const noexcept
+{
+  return m_locked;
+}
+
+/**
+ * @brief Prompts for a password, hashes it, and locks the editor.
+ */
+void DataModel::ProjectModel::lockProject()
+{
+  bool ok           = false;
+  const auto first  = QInputDialog::getText(nullptr,
+                                           tr("Lock Project"),
+                                           tr("Choose a password to lock the Project Editor:"),
+                                           QLineEdit::Password,
+                                           QString(),
+                                           &ok);
+  if (!ok || first.isEmpty())
+    return;
+
+  const auto second = QInputDialog::getText(nullptr,
+                                            tr("Lock Project"),
+                                            tr("Confirm the password:"),
+                                            QLineEdit::Password,
+                                            QString(),
+                                            &ok);
+  if (!ok)
+    return;
+
+  if (first != second) {
+    Misc::Utilities::showMessageBox(tr("Passwords do not match"),
+                                    tr("The two passwords you entered do not match. The project was not locked."),
+                                    QMessageBox::Warning);
+    return;
+  }
+
+  m_passwordHash = hashPassword(first);
+
+  if (!m_locked) {
+    m_locked = true;
+    Q_EMIT lockedChanged();
+  }
+
+  setModified(true);
+}
+
+/**
+ * @brief Prompts for the password, verifies it, and clears the lock on success.
+ */
+void DataModel::ProjectModel::unlockProject()
+{
+  if (m_passwordHash.isEmpty()) {
+    if (m_locked) {
+      m_locked = false;
+      Q_EMIT lockedChanged();
+    }
+    return;
+  }
+
+  bool ok        = false;
+  const auto pwd = QInputDialog::getText(nullptr,
+                                         tr("Unlock Project"),
+                                         tr("Enter the project password:"),
+                                         QLineEdit::Password,
+                                         QString(),
+                                         &ok);
+  if (!ok)
+    return;
+
+  if (hashPassword(pwd) != m_passwordHash) {
+    Misc::Utilities::showMessageBox(tr("Incorrect password"),
+                                    tr("The password you entered does not match the one stored in the project file."),
+                                    QMessageBox::Warning);
+    return;
+  }
+
+  m_passwordHash.clear();
+
+  if (m_locked) {
+    m_locked = false;
+    Q_EMIT lockedChanged();
+  }
+
+  setModified(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -920,6 +1032,11 @@ QJsonObject DataModel::ProjectModel::serializeToJson() const
   json.insert(Keys::WriterVersion, writer);
   json.insert(Keys::WriterVersionAtCreation, creator);
 
+  // Persist the optional Project Editor lock as a plain MD5 hash of the
+  // password. UX read-only flag, not crypto.
+  if (!m_passwordHash.isEmpty())
+    json.insert(Keys::PasswordHash, m_passwordHash);
+
   // Groups
   QJsonArray groupArray;
   for (const auto& group : std::as_const(m_groups))
@@ -1064,6 +1181,11 @@ void DataModel::ProjectModel::newJsonFile()
   m_tables.clear();
   m_customizeWorkspaces = false;
 
+  // Clear the lock — a fresh project starts unlocked with no password set
+  const bool wasLocked = m_locked;
+  m_passwordHash.clear();
+  m_locked = false;
+
   // Reset to factory defaults
   m_frameEndSequence        = "\\n";
   m_checksumAlgorithm       = "";
@@ -1105,6 +1227,9 @@ void DataModel::ProjectModel::newJsonFile()
   Q_EMIT customizeWorkspacesChanged();
   Q_EMIT frameDetectionChanged();
   Q_EMIT frameParserCodeChanged();
+
+  if (wasLocked)
+    Q_EMIT lockedChanged();
 
   if (!m_silentReload)
     Q_EMIT sourceStructureChanged();
@@ -1329,6 +1454,14 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
 
   // Capture creator stamp so we round-trip it on save without overwriting
   m_writerVersionAtCreation = json.value(Keys::WriterVersionAtCreation).toString();
+
+  // Restore optional Project Editor lock — file with a hash opens read-only.
+  // No password prompt on load; user clicks Unlock when they want to edit.
+  m_passwordHash       = json.value(Keys::PasswordHash).toString();
+  const bool wasLocked = m_locked;
+  m_locked             = !m_passwordHash.isEmpty();
+  if (m_locked != wasLocked)
+    Q_EMIT lockedChanged();
 
   if (!json.contains(Keys::FrameDetection))
     m_frameDetection = SerialStudio::StartAndEndDelimiter;

@@ -194,11 +194,63 @@ Widgets.SmartWindow {
       }
 
       //
+      // Project locked placeholder — shown when the project carries a password
+      // and the user has not unlocked the editor for this session yet
+      //
+      ColumnLayout {
+        spacing: 16
+        visible: Cpp_JSON_ProjectModel.locked
+        Layout.topMargin: -1
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.minimumHeight: 480
+        Layout.alignment: Qt.AlignCenter
+
+        Item {
+          Layout.fillHeight: true
+        }
+
+        Image {
+          sourceSize: Qt.size(144, 144)
+          Layout.alignment: Qt.AlignHCenter
+          source: "qrc:/rcc/icons/project-editor/toolbar/locked.svg"
+        }
+
+        Item {
+          implicitHeight: 4
+        }
+
+        Label {
+          wrapMode: Label.WordWrap
+          Layout.alignment: Qt.AlignHCenter
+          Layout.maximumWidth: root.width - 96
+          horizontalAlignment: Label.AlignHCenter
+          text: qsTr("Project Locked")
+          font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+        }
+
+        Label {
+          opacity: 0.8
+          wrapMode: Label.WordWrap
+          Layout.alignment: Qt.AlignHCenter
+          Layout.maximumWidth: root.width - 96
+          horizontalAlignment: Label.AlignHCenter
+          font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+          text: qsTr("This project is password-protected. Click \"Unlock\" in the toolbar to enter the password and edit the project.")
+        }
+
+        Item {
+          Layout.fillHeight: true
+        }
+      }
+
+      //
       // Main Layout
       //
       Widgets.PaneSplitter {
         id: splitter
 
+        visible: !Cpp_JSON_ProjectModel.locked
         minLeftWidth: 256
         minRightWidth: 400
         Layout.topMargin: -1

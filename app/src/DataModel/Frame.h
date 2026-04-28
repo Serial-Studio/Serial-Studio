@@ -162,6 +162,11 @@ inline constexpr KeyView SchemaVersion("schemaVersion");
 inline constexpr KeyView WriterVersion("writerVersion");
 inline constexpr KeyView WriterVersionAtCreation("writerVersionAtCreation");
 
+// Project lock key — optional password gate on the Project Editor for
+// operator/engineer separation in production dashboards. Stored as MD5
+// of the password; this is a UX read-only flag, not crypto.
+inline constexpr KeyView PasswordHash("passwordHash");
+
 inline QString layoutKey(int groupId)
 {
   return QStringLiteral("layout:") + QString::number(groupId);

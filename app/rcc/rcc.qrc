@@ -366,11 +366,13 @@
         <file>icons/project-editor/toolbar/device.svg</file>
         <file>icons/project-editor/toolbar/help.svg</file>
         <file>icons/project-editor/toolbar/image.svg</file>
+        <file>icons/project-editor/toolbar/locked.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
         <file>icons/project-editor/toolbar/Opened Folder Office M.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
+        <file>icons/project-editor/toolbar/unlocked.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>

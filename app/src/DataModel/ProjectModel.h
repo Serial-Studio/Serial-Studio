@@ -78,6 +78,9 @@ class ProjectModel : public QObject {
              READ  customizeWorkspaces
              WRITE setCustomizeWorkspaces
              NOTIFY customizeWorkspacesChanged)
+  Q_PROPERTY(bool locked
+             READ locked
+             NOTIFY lockedChanged)
   // clang-format on
 
 signals:
@@ -101,6 +104,7 @@ signals:
   void activeWorkspacesChanged();
   void tablesChanged();
   void customizeWorkspacesChanged();
+  void lockedChanged();
 
   void groupAdded(int groupId);
   void groupDeleted();
@@ -162,6 +166,8 @@ public:
   [[nodiscard]] bool customizeWorkspaces() const noexcept;
   [[nodiscard]] const std::vector<TableDef>& tables() const noexcept;
 
+  [[nodiscard]] bool locked() const noexcept;
+
   Q_INVOKABLE [[nodiscard]] bool askSave();
   Q_INVOKABLE [[nodiscard]] QVariantList sourcesForDiagram() const;
   Q_INVOKABLE [[nodiscard]] QVariantList groupsForDiagram() const;
@@ -173,6 +179,9 @@ public:
   Q_INVOKABLE [[nodiscard]] QJsonObject pluginState(const QString& pluginId) const;
 
 public slots:
+  void lockProject();
+  void unlockProject();
+
   void savePluginState(const QString& pluginId, const QJsonObject& state);
   void saveWidgetSetting(const QString& widgetId, const QString& key, const QVariant& value);
 
@@ -343,6 +352,9 @@ private:
   std::vector<DataModel::TableDef> m_tables;
 
   bool m_customizeWorkspaces;
+
+  QString m_passwordHash;
+  bool m_locked;
 
   std::vector<DataModel::Workspace> m_sessionWorkspaces;
 
