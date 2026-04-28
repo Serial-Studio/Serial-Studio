@@ -142,6 +142,51 @@ SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const noe
   return m_frameDetection;
 }
 
+/**
+ * @brief Returns @c true if the project configuration is sufficient to generate a valid
+ *        dashboard configuration
+ */
+bool DataModel::ProjectModel::validateProject(const bool silent)
+{
+  // Title is required
+  if (m_title.isEmpty()) {
+    if (!silent) {
+      Misc::Utilities::showMessageBox(
+        tr("Project error"), tr("Project title cannot be empty!"), QMessageBox::Warning);
+    }
+
+    return false;
+  }
+
+  // At least one group is required
+  if (groupCount() <= 0) {
+    if (!silent) {
+      Misc::Utilities::showMessageBox(
+        tr("Project error"), tr("You need to add at least one group!"), QMessageBox::Warning);
+    }
+
+    return false;
+  }
+
+  // Check if we have at least one image group
+  const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
+    return g.widget == QLatin1String("image");
+  });
+
+  // At least one dataset is required (image groups are exempt)
+  if (datasetCount() <= 0 && !hasImageGroup) {
+    if (!silent) {
+      Misc::Utilities::showMessageBox(
+        tr("Project error"), tr("You need to add at least one dataset!"), QMessageBox::Warning);
+    }
+
+    return false;
+  }
+
+  // Everything ok
+  return true;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Project lock — operator/engineer separation in production dashboards
 //
@@ -150,17 +195,6 @@ SerialStudio::FrameDetection DataModel::ProjectModel::frameDetection() const noe
 // access control is the OS file permissions — this just stops operators from
 // accidentally clobbering a production dashboard's project structure.
 //--------------------------------------------------------------------------------------------------
-
-namespace {
-/**
- * @brief Returns hex-encoded MD5 of @p password.
- */
-QString hashPassword(const QString& password)
-{
-  return QString::fromLatin1(
-    QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex());
-}
-}  // namespace
 
 /**
  * @brief Returns true when the editor body is gated behind the lock screen.
@@ -198,17 +232,19 @@ void DataModel::ProjectModel::lockProject()
     return;
   }
 
-  m_passwordHash = hashPassword(first);
+  m_passwordHash = QString::fromLatin1(
+    QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
 
   if (!m_locked) {
     m_locked = true;
     Q_EMIT lockedChanged();
   }
 
-  setModified(true);
-
-  // Persist immediately so the lock state survives a crash/exit
-  (void)saveJsonFile(false);
+  // Save the project if its valid
+  if (validateProject(true)) {
+    setModified(true);
+    (void)saveJsonFile(false);
+  }
 }
 
 /**
@@ -234,7 +270,10 @@ void DataModel::ProjectModel::unlockProject()
   if (!ok)
     return;
 
-  if (hashPassword(pwd) != m_passwordHash) {
+  const auto hashPwd = QString::fromLatin1(
+    QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
+
+  if (hashPwd != m_passwordHash) {
     QTimer::singleShot(0, this, [] {
       Misc::Utilities::showMessageBox(
         tr("Incorrect password"),
@@ -251,10 +290,11 @@ void DataModel::ProjectModel::unlockProject()
     Q_EMIT lockedChanged();
   }
 
-  setModified(true);
-
-  // Persist immediately so the cleared hash hits disk
-  (void)saveJsonFile(false);
+  // Save the project if its valid
+  if (validateProject(true)) {
+    setModified(true);
+    (void)saveJsonFile(false);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -911,42 +951,9 @@ bool DataModel::ProjectModel::askSave()
  */
 bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
 {
-  // Title is required
-  if (m_title.isEmpty()) {
-    if (m_suppressMessageBoxes)
-      qWarning() << "[ProjectModel] Project title cannot be empty";
-    else
-      Misc::Utilities::showMessageBox(
-        tr("Project error"), tr("Project title cannot be empty!"), QMessageBox::Warning);
-
+  // Validate project configuration
+  if (!validateProject(m_suppressMessageBoxes))
     return false;
-  }
-
-  // At least one group is required
-  if (groupCount() <= 0) {
-    if (m_suppressMessageBoxes)
-      qWarning() << "[ProjectModel] Project needs at least one group";
-    else
-      Misc::Utilities::showMessageBox(
-        tr("Project error"), tr("You need to add at least one group!"), QMessageBox::Warning);
-
-    return false;
-  }
-
-  // At least one dataset is required (image groups are exempt)
-  const bool hasImageGroup = std::any_of(m_groups.begin(), m_groups.end(), [](const Group& g) {
-    return g.widget == QLatin1String("image");
-  });
-
-  if (datasetCount() <= 0 && !hasImageGroup) {
-    if (m_suppressMessageBoxes)
-      qWarning() << "[ProjectModel] Project needs at least one dataset";
-    else
-      Misc::Utilities::showMessageBox(
-        tr("Project error"), tr("You need to add at least one dataset!"), QMessageBox::Warning);
-
-    return false;
-  }
 
   // Prompt for a save location if no file path is set
   if (jsonFilePath().isEmpty() || askPath) {

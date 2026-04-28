@@ -167,6 +167,7 @@ public:
   [[nodiscard]] const std::vector<TableDef>& tables() const noexcept;
 
   [[nodiscard]] bool locked() const noexcept;
+  [[nodiscard]] bool validateProject(const bool silent);
 
   Q_INVOKABLE [[nodiscard]] bool askSave();
   Q_INVOKABLE [[nodiscard]] QVariantList sourcesForDiagram() const;
