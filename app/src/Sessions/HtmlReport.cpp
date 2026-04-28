@@ -629,9 +629,9 @@ QString Sessions::HtmlReport::buildReportDataJson() const
     const auto it = statsByUid.find(s.uniqueId);
     if (it != statsByUid.end() && it->second->numericSamples > 0) {
       QJsonObject stats;
-      stats["min"]  = std::isfinite(it->second->minValue) ? it->second->minValue : 0.0;
-      stats["max"]  = std::isfinite(it->second->maxValue) ? it->second->maxValue : 0.0;
-      stats["mean"] = std::isfinite(it->second->mean)     ? it->second->mean     : 0.0;
+      stats["min"]   = std::isfinite(it->second->minValue) ? it->second->minValue : 0.0;
+      stats["max"]   = std::isfinite(it->second->maxValue) ? it->second->maxValue : 0.0;
+      stats["mean"]  = std::isfinite(it->second->mean) ? it->second->mean : 0.0;
       entry["stats"] = stats;
     }
 
@@ -726,8 +726,7 @@ QString Sessions::HtmlReport::buildPrintFooterRight() const
   };
 
   // English fallback as a safe default if the translation is malformed
-  const QString fallback =
-    QStringLiteral("\"Page \" counter(page) \" of \" counter(pages)");
+  const QString fallback = QStringLiteral("\"Page \" counter(page) \" of \" counter(pages)");
 
   const QString tmpl = tr("Page %1 of %2");
   const int p1       = tmpl.indexOf(QLatin1String("%1"));

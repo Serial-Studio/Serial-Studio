@@ -430,13 +430,13 @@ Widgets.SmartWindow {
           }
 
           Button {
+            topPadding: 8
             icon.width: 18
             icon.height: 18
-            icon.color: palette.buttonText
-            topPadding: 8
-            bottomPadding: 8
             leftPadding: 16
+            bottomPadding: 8
             rightPadding: 16
+            icon.color: palette.buttonText
             visible: editorOverlay.lockMode
             text: qsTr("Create New Project")
             icon.source: "qrc:/rcc/icons/buttons/new.svg"
