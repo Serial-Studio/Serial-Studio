@@ -243,7 +243,7 @@ void Downloader::installUpdate()
   // Update labels
   m_ui->stopButton->setText(tr("Close"));
   m_ui->downloadLabel->setText(tr("Download complete!"));
-  m_ui->timeLabel->setText(tr("The installer will open separately") + "...");
+  m_ui->timeLabel->setText(tr("The installer opens separately") + "...");
 
   // Ask the user to install the download
   QMessageBox box;

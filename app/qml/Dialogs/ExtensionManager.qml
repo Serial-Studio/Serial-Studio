@@ -116,7 +116,7 @@ SmartDialog {
           background: Item {}
           Layout.fillWidth: true
           font: Cpp_Misc_CommonFonts.uiFont
-          placeholderText: qsTr("Search extensions...")
+          placeholderText: qsTr("Search extensions…")
           onTextChanged: Cpp_ExtensionManager.setSearchFilter(text)
         }
 
@@ -423,7 +423,7 @@ SmartDialog {
         }
 
         Label {
-          text: qsTr("Fetching extensions...")
+          text: qsTr("Fetching extensions…")
           font: Cpp_Misc_CommonFonts.boldUiFont
           color: Cpp_ThemeManager.colors["text"]
           Layout.alignment: Qt.AlignHCenter
@@ -1304,7 +1304,7 @@ SmartDialog {
                 background: Item {}
                 Layout.fillWidth: true
                 font: Cpp_Misc_CommonFonts.customMonoFont(0.85, false)
-                placeholderText: qsTr("URL or local path...")
+                placeholderText: qsTr("URL or local path…")
                 onAccepted: addRepoButton.clicked()
               }
 
@@ -1335,7 +1335,7 @@ SmartDialog {
 
               ToolButton {
                 background: Item {}
-                text: qsTr("Browse...")
+                text: qsTr("Browse…")
                 icon.width: 12
                 icon.height: 12
                 icon.color: Cpp_ThemeManager.colors["text"]

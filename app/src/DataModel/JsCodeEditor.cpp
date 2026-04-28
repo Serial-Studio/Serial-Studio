@@ -197,9 +197,9 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
   if (isModified()) {
     const auto answer = Misc::Utilities::showMessageBox(
       tr("Change Scripting Language?"),
-      tr("Switching the scripting language will replace the current "
+      tr("Switching the scripting language replaces the current "
          "parser code with the equivalent template in the new language."
-         "\n\nAny unsaved changes will be lost. Continue?"),
+         "\n\nAny unsaved changes are lost. Continue?"),
       QMessageBox::Warning,
       QString(),
       QMessageBox::Yes | QMessageBox::No);

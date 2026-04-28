@@ -178,7 +178,7 @@ bool IO::Drivers::USB::open(const QIODevice::OpenMode mode)
   if (m_deviceIndex <= 0 || (m_deviceIndex - 1) >= m_devicePtrs.size()) {
     Misc::Utilities::showMessageBox(
       tr("USB Error"),
-      tr("No USB device selected. Please select a device and try again."),
+      tr("No USB device selected. Select a device and try again."),
       QMessageBox::Critical);
     return false;
   }

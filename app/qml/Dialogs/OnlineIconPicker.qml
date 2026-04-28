@@ -85,7 +85,7 @@ SmartDialog {
 
         Layout.fillWidth: true
         font: Cpp_Misc_CommonFonts.uiFont
-        placeholderText: qsTr("Search icons (e.g. temperature, arrow, play)...")
+        placeholderText: qsTr("Search icons (e.g. temperature, arrow, play)…")
         color: Cpp_ThemeManager.colors["text"]
 
         onAccepted: Cpp_Misc_IconEngine.searchIcons(text)

@@ -328,7 +328,7 @@ const QStringList& MQTT::Client::caCertificates() const
   static QStringList list;
   if (list.isEmpty()) {
     list.append(tr("Use System Database"));
-    list.append(tr("Load From Folder..."));
+    list.append(tr("Load From Folder…"));
   }
 
   return list;

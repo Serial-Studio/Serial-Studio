@@ -4,12 +4,12 @@
 <context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="406"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="407"/>
         <source>Unable to start gRPC server</source>
-        <translation>Не удалось запустить сервер gRPC</translation>
+        <translation>Невозможно запустить GRPC-сервер</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="407"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="408"/>
         <source>Failed to bind to %1</source>
         <translation>Не удалось привязаться к %1</translation>
     </message>
@@ -17,38 +17,38 @@
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="454"/>
+        <location filename="../../src/API/Server.cpp" line="455"/>
         <source>Unable to start API TCP server</source>
-        <translation>Не удалось запустить API TCP сервер</translation>
-    </message>
-    <message>
-        <location filename="../../src/API/Server.cpp" line="505"/>
-        <source>Allow External API Connections?</source>
-        <translation>Разрешить Внешние Подключения К API?</translation>
+        <translation>Невозможно запустить TCP-сервер API</translation>
     </message>
     <message>
         <location filename="../../src/API/Server.cpp" line="506"/>
+        <source>Allow External API Connections?</source>
+        <translation>Разрешить Внешние Подключения к API?</translation>
+    </message>
+    <message>
+        <location filename="../../src/API/Server.cpp" line="507"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
-        <translation>Открытие сервера API для внешних хостов позволяет другим устройствам в вашей сети подключаться к Serial Studio на порту 7777.
+        <translation>Открытие API-сервера для внешних хостов позволяет другим устройствам в сети подключаться к Serial Studio через порт 7777.
 
-Включайте это только в доверенных сетях. Недоверенные клиенты могут читать данные в реальном времени или отправлять команды на ваше устройство.</translation>
+Включайте только в доверенных сетях. Недоверенные клиенты могут читать данные или отправлять команды на устройство.</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="537"/>
+        <location filename="../../src/API/Server.cpp" line="538"/>
         <source>Unable to restart API TCP server</source>
-        <translation>Не удалось перезапустить сервер API TCP</translation>
+        <translation>Невозможно перезапустить TCP-сервер API</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1178"/>
+        <location filename="../../src/API/Server.cpp" line="1179"/>
         <source>API server</source>
-        <translation>Сервер API</translation>
+        <translation>API-сервер</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1178"/>
+        <location filename="../../src/API/Server.cpp" line="1179"/>
         <source>Invalid pending connection</source>
-        <translation>Неверное ожидающее соединение</translation>
+        <translation>Недопустимое ожидающее подключение</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="39"/>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation>О Программе</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="88"/>
@@ -66,7 +66,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="98"/>
         <source>Copyright © %1 %2</source>
-        <translation>Авторское Право © %1 %2</translation>
+        <translation>Copyright © %1 %2</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="104"/>
@@ -78,24 +78,24 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
-        <translation>%1 — это свободное программное обеспечение: вы можете распространять и/или изменять его в соответствии с условиями GNU General Public License, опубликованной Free Software Foundation; либо версия 3 Лицензии, либо (по вашему выбору) любая более поздняя версия.
+        <translation>%1 является свободным программным обеспечением: вы можете распространять и/или изменять его на условиях GNU General Public License, опубликованной Free Software Foundation; либо версии 3 Лицензии, либо (по вашему выбору) любой более поздней версии.
 
-%1 распространяется в надежде, что будет полезным, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемой гарантии КОММЕРЧЕСКОЙ ПРИГОДНОСТИ или ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ. Подробнее смотрите в GNU General Public License.</translation>
+%1 распространяется в надежде, что будет полезным, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемой гарантии ТОВАРНОЙ ПРИГОДНОСТИ или ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЁННОЙ ЦЕЛИ. Подробности см. в GNU General Public License.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="138"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
-        <translation>Эта конфигурация лицензирована для коммерческого и проприетарного использования. Она может использоваться в закрытых и коммерческих приложениях при соблюдении условий коммерческой лицензии.</translation>
+        <translation>Данная конфигурация лицензирована для коммерческого и проприетарного использования. Может применяться в закрытых и коммерческих приложениях в соответствии с условиями коммерческой лицензии.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="152"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
-        <translation>Эта конфигурация предназначена только для личного и оценочного использования. Коммерческое использование запрещено, если не активирована действующая коммерческая лицензия.</translation>
+        <translation>Данная конфигурация предназначена только для личного использования и оценки. Коммерческое использование запрещено без активации действующей коммерческой лицензии.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="166"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
-        <translation>Это программное обеспечение предоставляется «как есть» без каких-либо гарантий, явных или подразумеваемых, включая, но не ограничиваясь, гарантии товарной пригодности или пригодности для конкретной цели. Автор ни при каких обстоятельствах не несет ответственности за любые убытки, возникшие в результате использования этого программного обеспечения.</translation>
+        <translation>Данное программное обеспечение предоставляется «как есть» без каких-либо гарантий, явных или подразумеваемых, включая, помимо прочего, гарантии товарной пригодности или пригодности для определённой цели. Ни при каких обстоятельствах автор не несёт ответственности за любой ущерб, возникший в результате использования данного программного обеспечения.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="187"/>
@@ -105,12 +105,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>Donate</source>
-        <translation>Пожертвовать</translation>
+        <translation>Поддержать Проект</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="206"/>
         <source>Check for Updates</source>
-        <translation>Проверить обновления</translation>
+        <translation>Проверить Обновления</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/About.qml" line="215"/>
@@ -149,7 +149,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="225"/>
         <source>G-FORCE</source>
-        <translation>УСКОРЕНИЕ G</translation>
+        <translation>ПЕРЕГРУЗКА</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Accelerometer.qml" line="258"/>
@@ -172,7 +172,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="69"/>
         <source>Configure the accelerometer display range and input units.</source>
-        <translation>Настройте диапазон отображения и единицы ввода акселерометра.</translation>
+        <translation>Настройка диапазона отображения и единиц измерения акселерометра.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="77"/>
@@ -182,7 +182,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="100"/>
         <source>Max G:</source>
-        <translation>Макс G:</translation>
+        <translation>Макс. G:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="114"/>
@@ -192,12 +192,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="128"/>
         <source>Input Configuration</source>
-        <translation>Конфигурация Ввода</translation>
+        <translation>Конфигурация Входа</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="150"/>
         <source>Input already in G</source>
-        <translation>Ввод уже в G</translation>
+        <translation>Вход уже в G</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="180"/>
@@ -219,8 +219,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Dialogs/Acknowledgements.qml" line="83"/>
-        <source>About Qt...</source>
-        <translation>О Qt...</translation>
+        <source>About Qt…</source>
+        <translation>О QT…</translation>
     </message>
 </context>
 <context>
@@ -271,7 +271,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="218"/>
         <source>Click a row to add it to the workspace.</source>
-        <translation>Щелкните по строке, чтобы добавить её в рабочую область.</translation>
+        <translation>Нажмите на строку, чтобы добавить её в рабочее пространство.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="226"/>
@@ -291,7 +291,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="235"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="301"/>
@@ -301,12 +301,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="336"/>
         <source>Already in workspace</source>
-        <translation>Уже в рабочей области</translation>
+        <translation>Уже в рабочем пространстве</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="337"/>
         <source>Add to workspace</source>
-        <translation>Добавить в рабочую область</translation>
+        <translation>Добавить в рабочее пространство</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="366"/>
@@ -321,7 +321,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="382"/>
         <source>%1 widgets</source>
-        <translation>%1 виджетов</translation>
+        <translation>Виджетов: %1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="383"/>
@@ -332,153 +332,6 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="389"/>
         <source>Close</source>
         <translation>Закрыть</translation>
-    </message>
-</context>
-<context>
-    <name>AddonManager</name>
-    <message>
-        <source>Addon Manager</source>
-        <translation type="vanished">Менеджер Аддонов</translation>
-    </message>
-    <message>
-        <source>Search addons...</source>
-        <translation type="vanished">Поиск аддонов...</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="vanished">Обновить</translation>
-    </message>
-    <message>
-        <source>Repos</source>
-        <translation type="vanished">Репозитории</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation type="vanished">Назад</translation>
-    </message>
-    <message>
-        <source>Repository Settings</source>
-        <translation type="vanished">Настройки Репозитория</translation>
-    </message>
-    <message>
-        <source>Install</source>
-        <translation type="vanished">Установить</translation>
-    </message>
-    <message>
-        <source>Uninstall</source>
-        <translation type="vanished">Удалить</translation>
-    </message>
-    <message>
-        <source>Run</source>
-        <translation type="vanished">Запустить</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Остановить</translation>
-    </message>
-    <message>
-        <source>Fetching addons...</source>
-        <translation type="vanished">Получение дополнений...</translation>
-    </message>
-    <message>
-        <source>Running</source>
-        <translation type="vanished">Выполняется</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="vanished">Обновить</translation>
-    </message>
-    <message>
-        <source>Installed</source>
-        <translation type="vanished">Установлено</translation>
-    </message>
-    <message>
-        <source>Details</source>
-        <translation type="vanished">Подробности</translation>
-    </message>
-    <message>
-        <source>Info</source>
-        <translation type="vanished">Информация</translation>
-    </message>
-    <message>
-        <source>Type:</source>
-        <translation type="vanished">Тип:</translation>
-    </message>
-    <message>
-        <source>Author:</source>
-        <translation type="vanished">Автор:</translation>
-    </message>
-    <message>
-        <source>Version:</source>
-        <translation type="vanished">Версия:</translation>
-    </message>
-    <message>
-        <source>License:</source>
-        <translation type="vanished">Лицензия:</translation>
-    </message>
-    <message>
-        <source>No preview</source>
-        <translation type="vanished">Нет предварительного просмотра</translation>
-    </message>
-    <message>
-        <source>  PLUGIN OUTPUT</source>
-        <translation type="vanished">ВЫВОД ПЛАГИНА</translation>
-    </message>
-    <message>
-        <source>No output yet. Run the plugin to see its log here.</source>
-        <translation type="vanished">Пока нет вывода. Запустите плагин, чтобы увидеть его журнал здесь.</translation>
-    </message>
-    <message>
-        <source>No preview available</source>
-        <translation type="vanished">Предварительный просмотр недоступен</translation>
-    </message>
-    <message>
-        <source>Repositories</source>
-        <translation type="vanished">Репозитории</translation>
-    </message>
-    <message>
-        <source>Add URLs to remote repositories or local folder paths for development.</source>
-        <translation type="vanished">Добавьте URL-адреса удаленных репозиториев или пути к локальным папкам для разработки.</translation>
-    </message>
-    <message>
-        <source>LOCAL</source>
-        <translation type="vanished">ЛОКАЛЬНЫЙ</translation>
-    </message>
-    <message>
-        <source>URL or local path...</source>
-        <translation type="vanished">URL или локальный путь...</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="vanished">Добавить</translation>
-    </message>
-    <message>
-        <source>Browse...</source>
-        <translation type="vanished">Обзор...</translation>
-    </message>
-    <message>
-        <source>No Results Found</source>
-        <translation type="vanished">Результаты не найдены</translation>
-    </message>
-    <message>
-        <source>Check the spelling or try a different search term.</source>
-        <translation type="vanished">Проверьте правописание или попробуйте другой поисковый запрос.</translation>
-    </message>
-    <message>
-        <source>No Addons Available</source>
-        <translation type="vanished">Нет доступных дополнений</translation>
-    </message>
-    <message>
-        <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
-        <translation type="vanished">Добавьте URL-адрес репозитория или локальный путь в настройках Repos, затем обновите.</translation>
-    </message>
-    <message>
-        <source>%1 addons</source>
-        <translation type="vanished">%1 дополнений</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Закрыть</translation>
     </message>
 </context>
 <context>
@@ -507,7 +360,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="148"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="226"/>
         <source>Sample Format</source>
-        <translation>Формат Образца</translation>
+        <translation>Формат Выборки</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="170"/>
@@ -522,35 +375,16 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
-    <name>AuthenticateDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Диалог</translation>
-    </message>
-    <message>
-        <source>Please provide the user name and password for the download location.</source>
-        <translation type="vanished">Пожалуйста, укажите имя пользователя и пароль для места загрузки.</translation>
-    </message>
-    <message>
-        <source>&amp;User name:</source>
-        <translation type="vanished">&amp;Имя пользователя:</translation>
-    </message>
-    <message>
-        <source>&amp;Password:</source>
-        <translation type="vanished">&amp;Пароль:</translation>
-    </message>
-</context>
-<context>
     <name>AxisRangeDialog</name>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="40"/>
         <source>Axis Range Configuration</source>
-        <translation>Настройка Диапазона Оси</translation>
+        <translation>Настройка Диапазона Осей</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="123"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
-        <translation>Настройте видимый диапазон для осей графика. Значения обновляются в реальном времени по мере ввода.</translation>
+        <translation>Настройте видимый диапазон для осей графика. Значения обновляются в реальном времени при вводе.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="131"/>
@@ -567,7 +401,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="166"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
         <source>Enter min value</source>
-        <translation>Введите мин. значение</translation>
+        <translation>Введите минимальное значение</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="175"/>
@@ -579,7 +413,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="187"/>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
         <source>Enter max value</source>
-        <translation>Введите макс. значение</translation>
+        <translation>Введите максимальное значение</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="202"/>
@@ -589,7 +423,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="279"/>
         <source>Reset</source>
-        <translation>Сброс</translation>
+        <translation>Сбросить</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="292"/>
@@ -607,7 +441,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="106"/>
         <source>Service</source>
-        <translation>Сервис</translation>
+        <translation>Служба</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="142"/>
@@ -616,40 +450,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="200"/>
-        <source>Scanning....</source>
-        <translation>Сканирование....</translation>
+        <source>Scanning…</source>
+        <translation>Сканирование…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="236"/>
         <source>No Bluetooth Adapter Detected</source>
-        <translation>Не Обнаружен Bluetooth Адаптер</translation>
+        <translation>Адаптер Bluetooth Не Обнаружен</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="247"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
-        <translation>Подключите Bluetooth адаптер или проверьте настройки системы</translation>
+        <translation>Подключите адаптер Bluetooth или проверьте системные настройки</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="274"/>
         <source>This OS is not Supported Yet.</source>
-        <translation>Эта операционная система пока не поддерживается.</translation>
+        <translation>Данная ОС Пока не Поддерживается.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="285"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
-        <translation>Мы обновим Serial Studio для работы с этой операционной системой, как только Qt официально её поддержит</translation>
-    </message>
-    <message>
-        <source>Sorry, this system is not supported yet. We'll update Serial Studio to work with this operating system as soon as Qt officially supports it.</source>
-        <translation type="vanished">Извините, эта система пока не поддерживается. Мы обновим Serial Studio для работы с этой операционной системой, как только Qt официально её поддержит.</translation>
+        <translation>Serial Studio будет обновлён для работы с этой операционной системой, как только QT официально её поддержит</translation>
     </message>
 </context>
 <context>
     <name>CANBus</name>
-    <message>
-        <source>CAN Plugin</source>
-        <translation type="vanished">CAN Плагин</translation>
-    </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="55"/>
         <source>No CAN Drivers Found</source>
@@ -673,7 +499,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="172"/>
         <source>Bitrate</source>
-        <translation>Скорость передачи</translation>
+        <translation>Битрейт</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="244"/>
@@ -687,163 +513,117 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="280"/>
-        <source>Import DBC File...</source>
-        <translation>Импортировать Файл DBC...</translation>
+        <source>Import DBC File…</source>
+        <translation>Импортировать Файл DBC…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="313"/>
         <source>No CAN Interfaces Found</source>
         <translation>Интерфейсы CAN Не Найдены</translation>
     </message>
-    <message>
-        <source>CAN FD</source>
-        <translation type="vanished">CAN FD</translation>
-    </message>
-</context>
-<context>
-    <name>CSV::Export</name>
-    <message>
-        <source>CSV File Error</source>
-        <translation type="vanished">Ошибка Файла CSV</translation>
-    </message>
-    <message>
-        <source>Cannot open CSV file for writing!</source>
-        <translation type="vanished">Невозможно открыть файл CSV для записи!</translation>
-    </message>
 </context>
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="187"/>
+        <location filename="../../src/CSV/Player.cpp" line="205"/>
         <source>Select CSV file</source>
         <translation>Выберите файл CSV</translation>
     </message>
     <message>
-        <source>CSV files</source>
-        <translation type="vanished">CSV файлы</translation>
-    </message>
-    <message>
-        <location filename="../../src/CSV/Player.cpp" line="189"/>
+        <location filename="../../src/CSV/Player.cpp" line="207"/>
         <source>CSV files (*.csv)</source>
-        <translation>CSV файлы (*.csv)</translation>
+        <translation>Файлы CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="360"/>
+        <location filename="../../src/CSV/Player.cpp" line="378"/>
         <source>Device Connection Active</source>
-        <translation>Подключение Устройства Активно</translation>
+        <translation>Активно Подключение к Устройству</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="361"/>
+        <location filename="../../src/CSV/Player.cpp" line="379"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation>Чтобы использовать эту функцию, необходимо отключиться от устройства. Вы хотите продолжить?</translation>
+        <translation>Для использования этой функции необходимо отключиться от устройства. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="410"/>
+        <location filename="../../src/CSV/Player.cpp" line="394"/>
+        <source>Check file permissions and location</source>
+        <translation>Проверьте права доступа и расположение файла</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="428"/>
         <source>Insufficient Data in CSV File</source>
-        <translation>Недостаточно данных в CSV файле</translation>
+        <translation>Недостаточно Данных в Файле CSV</translation>
     </message>
     <message>
-        <source>The CSV file must contain at least two frames (data rows) to proceed. Please check the file and try again.</source>
-        <translation type="vanished">CSV файл должен содержать как минимум два кадра (строки данных) для продолжения. Пожалуйста, проверьте файл и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/CSV/Player.cpp" line="411"/>
-        <source>The CSV file must contain at least one data row to proceed. Please check the file and try again.</source>
-        <translation>CSV-файл должен содержать хотя бы одну строку данных, чтобы продолжить. Пожалуйста, проверьте файл и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/CSV/Player.cpp" line="375"/>
+        <location filename="../../src/CSV/Player.cpp" line="393"/>
         <source>Cannot read CSV file</source>
-        <translation>Не удается прочитать CSV файл</translation>
+        <translation>Невозможно прочитать CSV-файл</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="376"/>
-        <source>Please check file permissions &amp; location</source>
-        <translation>Пожалуйста, проверьте разрешения и расположение файла</translation>
+        <location filename="../../src/CSV/Player.cpp" line="429"/>
+        <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
+        <translation>CSV-файл должен содержать хотя бы одну строку данных для продолжения. Проверьте файл и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="644"/>
+        <location filename="../../src/CSV/Player.cpp" line="662"/>
         <source>Invalid CSV</source>
-        <translation>Неверный CSV</translation>
+        <translation>Недопустимый CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="645"/>
+        <location filename="../../src/CSV/Player.cpp" line="663"/>
         <source>The CSV file does not contain any data or headers.</source>
-        <translation>CSV файл не содержит данных или заголовков.</translation>
+        <translation>CSV-файл не содержит данных или заголовков.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="654"/>
+        <location filename="../../src/CSV/Player.cpp" line="672"/>
         <source>Select a date/time column</source>
-        <translation>Выберите столбец с датой/временем</translation>
+        <translation>Выберите столбец даты/времени</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="654"/>
-        <location filename="../../src/CSV/Player.cpp" line="666"/>
+        <location filename="../../src/CSV/Player.cpp" line="672"/>
+        <location filename="../../src/CSV/Player.cpp" line="684"/>
         <source>Set interval manually</source>
-        <translation>Установить интервал вручную</translation>
+        <translation>Задать интервал вручную</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="656"/>
+        <location filename="../../src/CSV/Player.cpp" line="674"/>
         <source>CSV Date/Time Selection</source>
         <translation>Выбор Даты/времени CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="657"/>
+        <location filename="../../src/CSV/Player.cpp" line="675"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Выберите способ обработки данных даты/времени:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="669"/>
-        <source>Set Interval</source>
-        <translation>Установить Интервал</translation>
-    </message>
-    <message>
-        <location filename="../../src/CSV/Player.cpp" line="670"/>
-        <source>Please enter the interval between rows in milliseconds:</source>
-        <translation>Пожалуйста, введите интервал между строками в миллисекундах:</translation>
-    </message>
-    <message>
-        <location filename="../../src/CSV/Player.cpp" line="686"/>
-        <source>Select Date/Time Column</source>
-        <translation>Выберите Столбец Даты/времени</translation>
-    </message>
-    <message>
         <location filename="../../src/CSV/Player.cpp" line="687"/>
-        <source>Please select the column that contains the date/time data:</source>
-        <translation>Пожалуйста, выберите столбец, содержащий данные даты/времени:</translation>
+        <source>Set Interval</source>
+        <translation>Задать Интервал</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="697"/>
+        <location filename="../../src/CSV/Player.cpp" line="688"/>
+        <source>Please enter the interval between rows in milliseconds:</source>
+        <translation>Введите интервал между строками в миллисекундах:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="704"/>
+        <source>Select Date/Time Column</source>
+        <translation>Выбрать Столбец Даты/времени</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="705"/>
+        <source>Please select the column that contains the date/time data:</source>
+        <translation>Выберите столбец, содержащий данные даты/времени:</translation>
+    </message>
+    <message>
+        <location filename="../../src/CSV/Player.cpp" line="715"/>
         <source>Invalid Selection</source>
         <translation>Неверный Выбор</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="697"/>
+        <location filename="../../src/CSV/Player.cpp" line="715"/>
         <source>The selected column is not valid.</source>
         <translation>Выбранный столбец недействителен.</translation>
-    </message>
-</context>
-<context>
-    <name>Canvas</name>
-    <message>
-        <source>Set Wallpaper...</source>
-        <translation type="vanished">Установить Обои...</translation>
-    </message>
-    <message>
-        <source>Clear Wallpaper</source>
-        <translation type="vanished">Очистить Обои</translation>
-    </message>
-    <message>
-        <source>Tile Windows</source>
-        <translation type="vanished">Разместить Окна</translation>
-    </message>
-    <message>
-        <source>Pro features detected in this project.</source>
-        <translation type="vanished">В этом проекте обнаружены профессиональные функции.</translation>
-    </message>
-    <message>
-        <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation type="vanished">Активированы резервные виджеты. Приобретите лицензию для полной функциональности.</translation>
     </message>
 </context>
 <context>
@@ -857,65 +637,65 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="321"/>
+        <location filename="../../src/Console/Export.cpp" line="323"/>
         <source>Console Export is a Pro feature.</source>
-        <translation>Экспорт консоли - это функция Pro.</translation>
+        <translation>Экспорт Консоли — функция Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="322"/>
+        <location filename="../../src/Console/Export.cpp" line="324"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation>Для этой функции требуется лицензия. Пожалуйста, приобретите её для включения экспорта консоли.</translation>
+        <translation>Эта функция требует лицензию. Приобретите лицензию для активации экспорта консоли.</translation>
     </message>
 </context>
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="226"/>
+        <location filename="../../src/Console/Handler.cpp" line="224"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="227"/>
+        <location filename="../../src/Console/Handler.cpp" line="225"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="237"/>
+        <location filename="../../src/Console/Handler.cpp" line="235"/>
         <source>No Line Ending</source>
         <translation>Без Окончания Строки</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="238"/>
+        <location filename="../../src/Console/Handler.cpp" line="236"/>
         <source>New Line</source>
         <translation>Новая Строка</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="239"/>
+        <location filename="../../src/Console/Handler.cpp" line="237"/>
         <source>Carriage Return</source>
         <translation>Возврат Каретки</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="240"/>
+        <location filename="../../src/Console/Handler.cpp" line="238"/>
         <source>CR + NL</source>
-        <translation>ВК + НС</translation>
+        <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="250"/>
+        <location filename="../../src/Console/Handler.cpp" line="248"/>
         <source>Plain Text</source>
-        <translation>Обычный Текст</translation>
+        <translation>Простой Текст</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="251"/>
+        <location filename="../../src/Console/Handler.cpp" line="249"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="274"/>
+        <location filename="../../src/Console/Handler.cpp" line="271"/>
         <source>No Checksum</source>
         <translation>Без Контрольной Суммы</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Handler.cpp" line="946"/>
+        <location filename="../../src/Console/Handler.cpp" line="920"/>
         <source>Device %1</source>
         <translation>Устройство %1</translation>
     </message>
@@ -935,7 +715,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="127"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
         <source>Fundamental</source>
-        <translation>Фундаментальная</translation>
+        <translation>Фундаментальные</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="123"/>
@@ -965,7 +745,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
         <source>Stefan-Boltzmann constant</source>
-        <translation>Постоянная Стефана-Больцмана</translation>
+        <translation>Постоянная Стефана — Больцмана</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
@@ -1030,7 +810,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <source>Gases &amp; Fluids</source>
-        <translation>Газы и жидкости</translation>
+        <translation>Газы и Жидкости</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
@@ -1065,7 +845,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <source>Heat capacity ratio (dry air)</source>
-        <translation>Коэффициент теплоемкости (сухой воздух)</translation>
+        <translation>Показатель адиабаты (сухой воздух)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
@@ -1076,12 +856,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Vacuum permittivity</source>
-        <translation>Диэлектрическая проницаемость вакуума</translation>
+        <translation>Электрическая постоянная вакуума</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Vacuum permeability</source>
-        <translation>Магнитная проницаемость вакуума</translation>
+        <translation>Магнитная постоянная вакуума</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
@@ -1093,7 +873,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Pi</source>
-        <translation>Число Пи</translation>
+        <translation>Пи</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
@@ -1108,12 +888,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="208"/>
         <source>Physics Constants</source>
-        <translation>Константы Физики</translation>
+        <translation>Физические Константы</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="217"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
-        <translation>Значения предустановок СИ-единиц. Щелкните по строке, чтобы вставить в %1.</translation>
+        <translation>Предустановленные значения в единицах СИ. Нажмите на строку, чтобы вставить её в %1.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="226"/>
@@ -1128,7 +908,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="246"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="247"/>
@@ -1148,7 +928,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="373"/>
         <source>%1 constants</source>
-        <translation>%1 констант</translation>
+        <translation>Константы: %1</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="374"/>
@@ -1166,7 +946,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Dialogs/CsvPlayer.qml" line="35"/>
         <source>CSV Player</source>
-        <translation>CSV Проигрыватель</translation>
+        <translation>Проигрыватель CSV</translation>
     </message>
 </context>
 <context>
@@ -1183,8 +963,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="173"/>
-        <source>Review the CAN messages and signals that will be imported into a new Serial Studio project.</source>
-        <translation>Просмотрите CAN-сообщения и сигналы, которые будут импортированы в новый проект Serial Studio.</translation>
+        <source>Review the CAN messages and signals to import into a new Serial Studio project.</source>
+        <translation>Просмотрите сообщения CAN и сигналы для импорта в новый проект Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="181"/>
@@ -1199,12 +979,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="225"/>
         <source>Message Name</source>
-        <translation>Название Сообщения</translation>
+        <translation>Имя Сообщения</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="231"/>
         <source>CAN ID</source>
-        <translation>CAN ID</translation>
+        <translation>ИДЕНТИФИКАТОР CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="238"/>
@@ -1235,22 +1015,6 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Dashboard</name>
     <message>
-        <source>Dashboard</source>
-        <translation type="vanished">Панель управления</translation>
-    </message>
-    <message>
-        <source>API Server Active (%1)</source>
-        <translation type="vanished">Сервер API Активен (%1)</translation>
-    </message>
-    <message>
-        <source>API Server Ready</source>
-        <translation type="vanished">Сервер API Готов</translation>
-    </message>
-    <message>
-        <source>API Server Off</source>
-        <translation type="vanished">Сервер API Выключен</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="114"/>
         <source>Dashboard %1</source>
         <translation>Панель %1</translation>
@@ -1266,15 +1030,15 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
-        <translation>Не определена функция передачи</translation>
+        <translation>Функция передачи не определена</translation>
     </message>
 </context>
 <context>
     <name>DashboardCanvas</name>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="56"/>
-        <source>Set Wallpaper...</source>
-        <translation>Установить Обои...</translation>
+        <source>Set Wallpaper…</source>
+        <translation>Установить Обои…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="62"/>
@@ -1284,17 +1048,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="72"/>
         <source>Tile Windows</source>
-        <translation>Мозаика Окон</translation>
+        <translation>Расположить Окна</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="91"/>
         <source>Pro features detected in this project.</source>
-        <translation>Обнаружены профессиональные функции в этом проекте.</translation>
+        <translation>Обнаружены функции Pro в этом проекте.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="93"/>
         <source>Fallback widgets are active. Purchase a license for full functionality.</source>
-        <translation>Активированы резервные виджеты. Купите лицензию для полной функциональности.</translation>
+        <translation>Активны резервные виджеты. Приобретите лицензию для полной функциональности.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="192"/>
@@ -1304,7 +1068,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="206"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
-        <translation>Используйте строку поиска, чтобы найти и добавить виджеты, или щелкните правой кнопкой мыши на виджете в другом рабочем пространстве, чтобы добавить его сюда.</translation>
+        <translation>Используйте строку поиска для поиска и добавления виджетов или щёлкните правой кнопкой мыши по виджету в другом рабочем пространстве, чтобы добавить его сюда.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="220"/>
@@ -1317,22 +1081,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="36"/>
         <source>Dashboard</source>
-        <translation>Панель</translation>
+        <translation>Панель Управления</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="129"/>
         <source>API Server Active (%1)</source>
-        <translation>Сервер API Активен (%1)</translation>
+        <translation>API-Сервер Активен (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="130"/>
         <source>API Server Ready</source>
-        <translation>Сервер API Готов</translation>
+        <translation>API-Сервер Готов</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="131"/>
         <source>API Server Off</source>
-        <translation>Сервер API Выключен</translation>
+        <translation>API-Сервер Выключен</translation>
     </message>
 </context>
 <context>
@@ -1345,36 +1109,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="261"/>
-        <source>Enter command...</source>
-        <translation>Введите команду...</translation>
-    </message>
-    <message>
-        <source>Ramp Generator</source>
-        <translation type="vanished">Генератор Наклона</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Стоп</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation type="vanished">Старт</translation>
-    </message>
-    <message>
-        <source>Start Value</source>
-        <translation type="vanished">Начальное Значение</translation>
-    </message>
-    <message>
-        <source>Target Value</source>
-        <translation type="vanished">Целевое Значение</translation>
-    </message>
-    <message>
-        <source>Speed (units/sec)</source>
-        <translation type="vanished">Скорость (ед./сек)</translation>
-    </message>
-    <message>
-        <source>Cycles (0 = ∞)</source>
-        <translation type="vanished">Циклы (0 = ∞)</translation>
+        <source>Enter command…</source>
+        <translation>Введите команду…</translation>
     </message>
 </context>
 <context>
@@ -1389,8 +1125,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     <name>DashboardTextField</name>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="46"/>
-        <source>Enter command...</source>
-        <translation>Введите команду...</translation>
+        <source>Enter command…</source>
+        <translation>Введите команду…</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="55"/>
@@ -1439,73 +1175,73 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DBCImporter</name>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="99"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="104"/>
         <source>Import DBC File</source>
-        <translation>Импортировать DBC Файл</translation>
+        <translation>Импортировать Файл DBC</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="99"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="104"/>
         <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation>DBC Файлы (*.dbc);;Все Файлы (*)</translation>
+        <translation>Файлы DBC (*.DBC);;Все Файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="130"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="135"/>
         <source>Failed to parse DBC file: %1</source>
-        <translation>Не удалось разобрать DBC файл: %1</translation>
+        <translation>Не удалось разобрать файл DBC: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="131"/>
-        <source>Please verify the file format and try again.</source>
-        <translation>Пожалуйста, проверьте формат файла и попробуйте снова.</translation>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="136"/>
+        <source>Verify the file format and try again.</source>
+        <translation>Проверьте формат файла и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="133"/>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="184"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="138"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="189"/>
         <source>DBC Import Error</source>
         <translation>Ошибка Импорта DBC</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="140"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="145"/>
         <source>DBC file contains no messages</source>
-        <translation>DBC файл не содержит сообщений</translation>
+        <translation>Файл DBC не содержит сообщений</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="141"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="146"/>
         <source>The selected file does not contain any CAN message definitions.</source>
-        <translation>Выбранный файл не содержит определений CAN сообщений.</translation>
+        <translation>Выбранный файл не содержит определений сообщений CAN.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="143"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="148"/>
         <source>DBC Import Warning</source>
         <translation>Предупреждение Импорта DBC</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="181"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="186"/>
         <source>Failed to create temporary project file</source>
         <translation>Не удалось создать временный файл проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="182"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="187"/>
         <source>Check if the application has write permissions to the temporary directory.</source>
         <translation>Проверьте, есть ли у приложения права на запись во временный каталог.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="199"/>
-        <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
-        <translation>Успешно импортирован DBC файл с %1 сообщениями и %2 сигналами.</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="202"/>
-        <source>The project editor is now open for customization.</source>
-        <translation>Редактор проекта теперь открыт для настройки.</translation>
-    </message>
-    <message>
         <location filename="../../src/DataModel/DBCImporter.cpp" line="204"/>
-        <source>DBC Import Complete</source>
-        <translation>Импорт DBC Завершен</translation>
+        <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
+        <translation>Файл DBC успешно импортирован: сообщений — %1, сигналов — %2.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DBCImporter.cpp" line="226"/>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="207"/>
+        <source>The project editor is now open for customization.</source>
+        <translation>Редактор проекта открыт для настройки.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="209"/>
+        <source>DBC Import Complete</source>
+        <translation>Импорт DBC Завершён</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/DBCImporter.cpp" line="231"/>
         <source>CAN Bus</source>
         <translation>Шина CAN</translation>
     </message>
@@ -1513,82 +1249,82 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="49"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="51"/>
         <source>Dataset Value Transform</source>
         <translation>Преобразование Значения Набора Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="63"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="65"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="63"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="65"/>
         <source>JavaScript</source>
-        <translation>JavaScript</translation>
+        <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="71"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="73"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="74"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="76"/>
         <source>Template:</source>
         <translation>Шаблон:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="79"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="81"/>
         <source>Enter raw value (e.g., 1024)</source>
-        <translation>Введите необработанное значение (например, 1024)</translation>
+        <translation>Введите исходное значение (например, 1024)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="85"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="87"/>
         <source>Test</source>
-        <translation>Тест</translation>
+        <translation>Проверить</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="86"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="88"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="89"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="91"/>
         <source>Input:</source>
-        <translation>Ввод:</translation>
+        <translation>Вход:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="92"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="94"/>
         <source>Output:</source>
-        <translation>Вывод:</translation>
+        <translation>Выход:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="97"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="99"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="98"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="100"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="155"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="157"/>
         <source>Transform — %1</source>
         <translation>Преобразование — %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="233"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="239"/>
         <source>Enter a value</source>
         <translation>Введите значение</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="240"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="246"/>
         <source>Invalid number</source>
-        <translation>Неверное число</translation>
+        <translation>Недопустимое число</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="352"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="358"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -1620,8 +1356,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>--
 -- Определите функцию transform(value), которая получает текущее
 -- значение набора данных и возвращает преобразованное число. Если
--- функция transform() не определена, сохраняется сырое значение
--- и ничего не сохраняется с проектом.
+-- функция transform() не определена, сохраняется исходное значение
+-- и ничего не записывается в проект.
 --
 -- Пример:
 --    function transform(value)
@@ -1641,69 +1377,18 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 --      return ema
 --    end
 --
--- Используйте выпадающее меню Шаблон для готовых примеров или
--- нажмите Тест, чтобы попробовать свою функцию.
+-- Используйте выпадающий список шаблонов для готовых примеров или
+-- нажмите Проверить, чтобы протестировать функцию.
 --
 </translation>
     </message>
     <message>
-        <source>--[[
-  Define a transform(value) function that receives the live
-  dataset reading and returns a transformed number. If no
-  transform() function is defined, the raw value is kept
-  and nothing is saved with the project.
-
-  Example:
-    function transform(value)
-      return value * 0.01 + 273.15
-    end
-
-  Globals declared at the top level persist between frames,
-  which is useful for filters, accumulators, and any other
-  stateful transform — just like a frame parser script:
-
-    local alpha = 0.1
-    local ema
-
-    function transform(value)
-      ema = ema or value
-      ema = alpha * value + (1 - alpha) * ema
-      return ema
-    end
-
-  Use the Template dropdown for ready-made examples, or
-  click Test to try your function.
-]]</source>
-        <translation type="vanished">--[[
-  Определите функцию transform(value), которая получает
-  текущее значение набора данных и возвращает преобразованное число.
-  Если функция transform() не определена, сохраняется исходное значение,
-  и ничего не сохраняется в проекте.
-
-  Пример:
-    function transform(value)
-      return value * 0.01 + 273.15
-    end
-
-  Глобальные переменные, объявленные на верхнем уровне, сохраняются
-  между кадрами, что полезно для фильтров, накопителей и любых других
-  преобразований с состоянием — как скрипт для парсинга кадров:
-
-    local alpha = 0.1
-    local ema
-
-    function transform(value)
-      ema = ema or value
-      ema = alpha * value + (1 - alpha) * ema
-      return ema
-    end
-
-  Используйте выпадающее меню Шаблон для готовых примеров или
-  нажмите Тест, чтобы попробовать вашу функцию.
-]]</translation>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="659"/>
+        <source>Select Template…</source>
+        <translation>Выбрать Шаблон…</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="380"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="386"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -1732,10 +1417,10 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  * click Test to try your function.
  */</source>
         <translation>/*
- * Определите функцию transform(value), которая получает
- * текущее значение набора данных и возвращает преобразованное число.
- * Если функция transform() не определена, сохраняется исходное значение,
- * и ничего не сохраняется в проекте.
+ * Определите функцию transform(value), которая получает текущее
+ * значение набора данных и возвращает преобразованное число. Если
+ * функция transform() не определена, сохраняется исходное значение
+ * и ничего не записывается в проект.
  *
  * Пример:
  *   function transform(value) {
@@ -1743,8 +1428,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  *   }
  *
  * Глобальные переменные, объявленные на верхнем уровне, сохраняются
- * между кадрами, что полезно для фильтров, накопителей и любых других
- * преобразований с состоянием — как скрипт для парсинга кадров:
+ * между кадрами, что полезно для фильтров, аккумуляторов и других
+ * преобразований с состоянием — как в скрипте парсера кадров:
  *
  *   var alpha = 0.1;
  *   var ema;
@@ -1755,576 +1440,256 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  *     return ema;
  *   }
  *
- * Используйте выпадающее меню Шаблон для готовых примеров или
- * нажмите Тест, чтобы попробовать вашу функцию.
+ * Используйте выпадающий список Шаблон для готовых примеров или
+ * нажмите Тест для проверки функции.
  */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="523"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="537"/>
         <source>Engine error</source>
         <translation>Ошибка движка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="547"/>
         <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="562"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="581"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="592"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="577"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="597"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="608"/>
         <source>Error: %1</source>
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="554"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="585"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="569"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="601"/>
         <source>Error: transform() not defined</source>
-        <translation>Ошибка: transform() не определена</translation>
+        <translation>Ошибка: функция transform() не определена</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="568"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="583"/>
         <source>Error: transform() must return a number</source>
-        <translation>Ошибка: transform() должен возвращать число</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="643"/>
-        <source>Select Template...</source>
-        <translation>Выберите шаблон...</translation>
+        <translation>Ошибка: функция transform() должна возвращать число</translation>
     </message>
 </context>
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <source>Cannot read JSON file</source>
-        <translation type="vanished">Не удается прочитать JSON файл</translation>
-    </message>
-    <message>
-        <source>Please check file permissions &amp; location</source>
-        <translation type="vanished">Пожалуйста, проверьте разрешения и расположение файла</translation>
-    </message>
-    <message>
-        <source>JSON validation error</source>
-        <translation type="vanished">Ошибка проверки JSON</translation>
-    </message>
-    <message>
-        <source>This file isn't a valid project file</source>
-        <translation type="vanished">Этот файл не является допустимым файлом проекта</translation>
-    </message>
-    <message>
-        <source>Make sure it's a properly formatted JSON project.</source>
-        <translation type="vanished">Убедитесь, что это правильно отформатированный JSON проект.</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="695"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="805"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="706"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="816"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="816"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="827"/>
         <source>Audio Input</source>
-        <translation>Аудио Вход</translation>
+        <translation>Аудиовход</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="704"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="821"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="715"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="832"/>
         <source>Quick Plot</source>
         <translation>Быстрый График</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="709"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="720"/>
         <source>Quick Plot Data</source>
         <translation>Данные Быстрого Графика</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="720"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="731"/>
         <source>Multiple Plots</source>
         <translation>Несколько Графиков</translation>
     </message>
 </context>
 <context>
-    <name>DataModel::FrameParser</name>
-    <message>
-        <source>Frame parser code updated successfully!</source>
-        <translation type="vanished">Код парсера кадров успешно обновлен!</translation>
-    </message>
-    <message>
-        <source>No errors have been detected in the code.</source>
-        <translation type="vanished">Ошибки в коде не обнаружены.</translation>
-    </message>
-    <message>
-        <source>JavaScript Syntax Error</source>
-        <translation type="vanished">Ошибка Синтаксиса JavaScript</translation>
-    </message>
-    <message>
-        <source>The parser code contains a syntax error at line %1:
-
-%2</source>
-        <translation type="vanished">Код парсера содержит синтаксическую ошибку на строке %1:
-
-%2</translation>
-    </message>
-    <message>
-        <source>JavaScript Exception Occurred</source>
-        <translation type="vanished">Произошло Исключение JavaScript</translation>
-    </message>
-    <message>
-        <source>The parser code triggered the following exceptions:
-
-%1</source>
-        <translation type="vanished">Код парсера вызвал следующие исключения:
-
-%1</translation>
-    </message>
-    <message>
-        <source>Missing Parse Function</source>
-        <translation type="vanished">Отсутствует Функция Разбора</translation>
-    </message>
-    <message>
-        <source>The 'parse' function is not defined in the script.
-
-Please ensure your code includes:
-function parse(frame) { ... }</source>
-        <translation type="vanished">Функция 'parse' не определена в скрипте.
-
-Пожалуйста, убедитесь, что ваш код включает:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Parse Function</source>
-        <translation type="vanished">Недопустимая Функция Разбора</translation>
-    </message>
-    <message>
-        <source>The 'parse' property exists but is not a callable function.
-
-Please ensure 'parse' is declared as a function.</source>
-        <translation type="vanished">Свойство 'parse' существует, но не является вызываемой функцией.
-
-Пожалуйста, убедитесь, что 'parse' объявлена как функция.</translation>
-    </message>
-    <message>
-        <source>Invalid Function Declaration</source>
-        <translation type="vanished">Недопустимое Объявление Функции</translation>
-    </message>
-    <message>
-        <source>No valid 'parse' function declaration found.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">Не найдено допустимого объявления функции 'parse'.
-
-Ожидаемый формат:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Function Parameter</source>
-        <translation type="vanished">Недопустимый Параметр Функции</translation>
-    </message>
-    <message>
-        <source>The 'parse' function must have at least one parameter.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">Функция 'parse' должна иметь как минимум один параметр.
-
-Ожидаемый формат:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Deprecated Function Signature</source>
-        <translation type="vanished">Устаревшая Сигнатура Функции</translation>
-    </message>
-    <message>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
-
-This format is no longer supported. Please update to the new single-parameter format:
-function parse(%1) { ... }
-
-The separator parameter is no longer needed.</source>
-        <translation type="vanished">Функция 'parse' использует старый формат с двумя параметрами: parse(%1, %2)
-
-Этот формат больше не поддерживается. Пожалуйста, обновите до нового формата с одним параметром:
-function parse(%1) { ... }
-
-Параметр-разделитель больше не нужен.</translation>
-    </message>
-    <message>
-        <source>Parse Function Runtime Error</source>
-        <translation type="vanished">Ошибка Выполнения Функции Разбора</translation>
-    </message>
-    <message>
-        <source>The parse function contains an error at line %1:
-
-%2
-
-Please fix the error in the function body.</source>
-        <translation type="vanished">Функция разбора содержит ошибку на строке %1:
-
-%2
-
-Пожалуйста, исправьте ошибку в теле функции.</translation>
-    </message>
-    <message>
-        <source>The document has been modified.</source>
-        <translation type="vanished">Документ был изменен.</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to continue?</source>
-        <translation type="vanished">Вы уверены, что хотите продолжить?</translation>
-    </message>
-    <message>
-        <source>The document has been modified!</source>
-        <translation type="vanished">Документ был изменен!</translation>
-    </message>
-    <message>
-        <source>Select Javascript file to import</source>
-        <translation type="vanished">Выберите файл Javascript для импорта</translation>
-    </message>
-    <message>
-        <source>Code Validation Successful</source>
-        <translation type="vanished">Проверка Кода Успешна</translation>
-    </message>
-    <message>
-        <source>No syntax errors detected in the parser code.</source>
-        <translation type="vanished">Синтаксических ошибок в коде парсера не обнаружено.</translation>
-    </message>
-    <message>
-        <source>Select Frame Parser Template</source>
-        <translation type="vanished">Выберите Шаблон Парсера Фреймов</translation>
-    </message>
-    <message>
-        <source>Choose a template to load:</source>
-        <translation type="vanished">Выберите шаблон для загрузки:</translation>
-    </message>
-    <message>
-        <source>AT command responses</source>
-        <translation type="vanished">Ответы на AT-команды</translation>
-    </message>
-    <message>
-        <source>Base64-encoded data</source>
-        <translation type="vanished">Данные в кодировке Base64</translation>
-    </message>
-    <message>
-        <source>Batched sensor data (multi-frame)</source>
-        <translation type="vanished">Пакетированные данные датчика (многокадровый)</translation>
-    </message>
-    <message>
-        <source>Binary TLV (Tag-Length-Value)</source>
-        <translation type="vanished">Двоичный TLV (Тег-Длина-Значение)</translation>
-    </message>
-    <message>
-        <source>COBS-encoded frames</source>
-        <translation type="vanished">Кадры в кодировке COBS</translation>
-    </message>
-    <message>
-        <source>Comma-separated data</source>
-        <translation type="vanished">Данные, разделенные запятыми</translation>
-    </message>
-    <message>
-        <source>Fixed-width fields</source>
-        <translation type="vanished">Поля фиксированной ширины</translation>
-    </message>
-    <message>
-        <source>Hexadecimal bytes</source>
-        <translation type="vanished">Шестнадцатеричные байты</translation>
-    </message>
-    <message>
-        <source>INI/config format</source>
-        <translation type="vanished">Формат INI/конфигурации</translation>
-    </message>
-    <message>
-        <source>JSON data</source>
-        <translation type="vanished">Данные в формате JSON</translation>
-    </message>
-    <message>
-        <source>Key-value pairs</source>
-        <translation type="vanished">Пары ключ-значение</translation>
-    </message>
-    <message>
-        <source>MAVLink messages</source>
-        <translation type="vanished">Сообщения MAVLink</translation>
-    </message>
-    <message>
-        <source>MessagePack data</source>
-        <translation type="vanished">Данные MessagePack</translation>
-    </message>
-    <message>
-        <source>Modbus frames</source>
-        <translation type="vanished">Кадры Modbus</translation>
-    </message>
-    <message>
-        <source>NMEA 0183 sentences</source>
-        <translation type="vanished">Предложения NMEA 0183</translation>
-    </message>
-    <message>
-        <source>NMEA 2000 messages</source>
-        <translation type="vanished">Сообщения NMEA 2000</translation>
-    </message>
-    <message>
-        <source>Pipe-delimited data</source>
-        <translation type="vanished">Данные, разделенные вертикальной чертой</translation>
-    </message>
-    <message>
-        <source>Raw bytes</source>
-        <translation type="vanished">Сырые байты</translation>
-    </message>
-    <message>
-        <source>RTCM corrections</source>
-        <translation type="vanished">Коррекции RTCM</translation>
-    </message>
-    <message>
-        <source>Semicolon-separated data</source>
-        <translation type="vanished">Данные, разделенные точкой с запятой</translation>
-    </message>
-    <message>
-        <source>SiRF binary protocol</source>
-        <translation type="vanished">Бинарный протокол SiRF</translation>
-    </message>
-    <message>
-        <source>SLIP-encoded frames</source>
-        <translation type="vanished">Кадры, закодированные в SLIP</translation>
-    </message>
-    <message>
-        <source>Tab-separated data</source>
-        <translation type="vanished">Данные, разделенные табуляцией</translation>
-    </message>
-    <message>
-        <source>Time-series 2D arrays (multi-frame)</source>
-        <translation type="vanished">Временные ряды 2D массивы (многокадровый)</translation>
-    </message>
-    <message>
-        <source>UBX protocol (u-blox)</source>
-        <translation type="vanished">Протокол UBX (u-blox)</translation>
-    </message>
-    <message>
-        <source>URL-encoded data</source>
-        <translation type="vanished">Данные, закодированные в URL</translation>
-    </message>
-    <message>
-        <source>XML data</source>
-        <translation type="vanished">Данные XML</translation>
-    </message>
-    <message>
-        <source>YAML data</source>
-        <translation type="vanished">Данные YAML</translation>
-    </message>
-    <message>
-        <source>Loading a template will replace your current code.</source>
-        <translation type="vanished">Загрузка шаблона заменит ваш текущий код.</translation>
-    </message>
-</context>
-<context>
     <name>DataModel::FrameParserTestDialog</name>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="171"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="173"/>
         <source>Invalid Hex Input</source>
-        <translation>Неверный Ввод Hex</translation>
+        <translation>Недопустимый HEX-Ввод</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="172"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="174"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
-        <translation>Пожалуйста, введите допустимые шестнадцатеричные байты.
+        <translation>Введите корректные шестнадцатеричные байты.
 
 Допустимый формат: 01 A2 FF 3C</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="221"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="226"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="222"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="227"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="223"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="228"/>
         <source>Evaluate</source>
-        <translation>Оценить</translation>
+        <translation>Вычислить</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="224"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="229"/>
         <source>Frame Data Input</source>
         <translation>Ввод Данных Кадра</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="225"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="230"/>
         <source>Frame Parser Results</source>
         <translation>Результаты Парсера Кадров</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="226"/>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="256"/>
-        <source>Enter frame data here...</source>
-        <translation>Введите данные кадра здесь...</translation>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="231"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="261"/>
+        <source>Enter frame data here…</source>
+        <translation>Введите данные кадра здесь…</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="227"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="232"/>
         <source>Dataset Index</source>
         <translation>Индекс Набора Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="227"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="232"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="228"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="233"/>
         <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
 
 Example (Text): a,b,c,d,e,f
 Example (HEX):  48 65 6C 6C 6F</source>
-        <translation>Введите данные кадра выше, включите режим HEX, если нужно, затем нажмите "Оценить" для запуска парсера кадров.
+        <translation>Введите данные фрейма выше, включите режим HEX при необходимости, затем нажмите «Вычислить» для запуска парсера фрейма.
 
-Пример (Текст): a,b,c,d,e,f
+Пример (текст): a,b,c,d,e,f
 Пример (HEX):  48 65 6C 6C 6F</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="235"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="240"/>
         <source>Test Frame Parser</source>
-        <translation>Тест Парсера Кадров</translation>
+        <translation>Тестирование Парсера Фрейма</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="248"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="253"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation>Введите байты в HEX (например, 01 A2 FF)</translation>
+        <translation>Введите байты в шестнадцатеричном формате (например, 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="357"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="362"/>
         <source>(empty)</source>
         <translation>(пусто)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="358"/>
+        <location filename="../../src/DataModel/FrameParserTestDialog.cpp" line="363"/>
         <source>No data returned</source>
-        <translation>Нет данных</translation>
+        <translation>Данные не возвращены</translation>
     </message>
 </context>
 <context>
     <name>DataModel::JsCodeEditor</name>
     <message>
-        <source>The document has been modified!</source>
-        <translation type="vanished">Документ был изменён!</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to continue?</source>
-        <translation type="vanished">Вы уверены, что хотите продолжить?</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="195"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="199"/>
         <source>Change Scripting Language?</source>
-        <translation>Изменить язык сценариев?</translation>
+        <translation>Изменить Язык Сценариев?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="196"/>
-        <source>Switching the scripting language will replace the current parser code with the equivalent template in the new language.
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="200"/>
+        <source>Switching the scripting language replaces the current parser code with the equivalent template in the new language.
 
-Any unsaved changes will be lost. Continue?</source>
-        <translation>Переключение языка сценариев заменит текущий код парсера на эквивалентный шаблон на новом языке.
+Any unsaved changes are lost. Continue?</source>
+        <translation>Переключение языка сценариев заменяет текущий код парсера на эквивалентный шаблон на новом языке.
 
-Все несохраненные изменения будут потеряны. Продолжить?</translation>
+Все несохранённые изменения будут потеряны. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="303"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="314"/>
         <source>Select Javascript file to import</source>
         <translation>Выберите файл Javascript для импорта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="303"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="314"/>
         <source>Select Lua file to import</source>
         <translation>Выберите файл Lua для импорта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="330"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="341"/>
         <source>Code Validation Successful</source>
-        <translation>Проверка кода успешна</translation>
+        <translation>Проверка Кода Выполнена Успешно</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="331"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="342"/>
         <source>No syntax errors detected in the parser code.</source>
-        <translation>Синтаксических ошибок в коде парсера не обнаружено.</translation>
+        <translation>Синтаксические ошибки в коде парсера не обнаружены.</translation>
     </message>
     <message>
-        <source>Frame parser code has been modified!</source>
-        <translation type="vanished">Код парсера фрейма был изменен!</translation>
-    </message>
-    <message>
-        <source>Do you want to save your changes before switching?</source>
-        <translation type="vanished">Хотите сохранить изменения перед переключением?</translation>
-    </message>
-    <message>
-        <source>Loading a template will replace your current code.</source>
-        <translation type="vanished">Загрузка шаблона заменит ваш текущий код.</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="387"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="399"/>
         <source>Select Frame Parser Template</source>
-        <translation>Выберите шаблон парсера фреймов</translation>
+        <translation>Выбрать Шаблон Парсера Кадров</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="388"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="400"/>
         <source>Choose a template to load:</source>
         <translation>Выберите шаблон для загрузки:</translation>
-    </message>
-    <message>
-        <source>The document has been modified.</source>
-        <translation type="vanished">Документ был изменён.</translation>
     </message>
 </context>
 <context>
     <name>DataModel::ModbusMapImporter</name>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="105"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="110"/>
         <source>Import Modbus Register Map</source>
-        <translation>Импортировать Карту Регистров Modbus</translation>
+        <translation>Импорт Карты Регистров Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="108"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="113"/>
         <source>Modbus Register Maps (*.csv *.xml *.json);;CSV Files (*.csv);;XML Files (*.xml);;JSON Files (*.json);;All Files (*)</source>
-        <translation>Карты Регистров Modbus (*.csv *.xml *.json);;Файлы CSV (*.csv);;Файлы XML (*.xml);;Файлы JSON (*.json);;Все Файлы (*)</translation>
+        <translation>Карты регистров Modbus (*.CSV *.XML *.JSON);;Файлы CSV (*.CSV);;Файлы XML (*.XML);;Файлы JSON (*.JSON);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="141"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="146"/>
         <source>No registers found</source>
         <translation>Регистры не найдены</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="142"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="147"/>
         <source>The file could not be parsed or contains no register definitions.</source>
-        <translation>Файл не удалось разобрать или он не содержит определений регистров.</translation>
+        <translation>Не удалось разобрать файл или он не содержит определений регистров.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="144"/>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="182"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="149"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="187"/>
         <source>Modbus Import</source>
         <translation>Импорт Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="179"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="184"/>
         <source>Failed to create temporary project file</source>
         <translation>Не удалось создать временный файл проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="180"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="185"/>
         <source>Check write permissions to the temporary directory.</source>
-        <translation>Проверьте разрешения на запись во временный каталог.</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="196"/>
-        <source>Successfully imported %1 registers in %2 groups.</source>
-        <translation>Успешно импортировано %1 регистров в %2 группах.</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="199"/>
-        <source>The project editor is now open for customization.</source>
-        <translation>Редактор проекта теперь открыт для настройки.</translation>
+        <translation>Проверьте права на запись во временный каталог.</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="201"/>
-        <source>Modbus Import Complete</source>
-        <translation>Импорт Modbus Завершен</translation>
+        <source>Successfully imported %1 registers in %2 groups.</source>
+        <translation>Успешно импортировано регистров: %1 в группах: %2.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="549"/>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="204"/>
+        <source>The project editor is now open for customization.</source>
+        <translation>Редактор проекта открыт для настройки.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="206"/>
+        <source>Modbus Import Complete</source>
+        <translation>Импорт Modbus Завершён</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ModbusMapImporter.cpp" line="554"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
@@ -2332,77 +1697,17 @@ Any unsaved changes will be lost. Continue?</source>
 <context>
     <name>DataModel::OutputCodeEditor</name>
     <message>
-        <source>AT command</source>
-        <translation type="vanished">Команда AT</translation>
-    </message>
-    <message>
-        <source>Binary packet</source>
-        <translation type="vanished">Двоичный пакет</translation>
-    </message>
-    <message>
-        <source>CAN Bus frame</source>
-        <translation type="vanished">Кадр шины CAN</translation>
-    </message>
-    <message>
-        <source>Default template</source>
-        <translation type="vanished">Шаблон по умолчанию</translation>
-    </message>
-    <message>
-        <source>G-Code command</source>
-        <translation type="vanished">Команда G-Code</translation>
-    </message>
-    <message>
-        <source>GRBL command</source>
-        <translation type="vanished">Команда GRBL</translation>
-    </message>
-    <message>
-        <source>JSON command</source>
-        <translation type="vanished">Команда JSON</translation>
-    </message>
-    <message>
-        <source>Modbus write</source>
-        <translation type="vanished">Запись Modbus</translation>
-    </message>
-    <message>
-        <source>NMEA sentence</source>
-        <translation type="vanished">Предложение NMEA</translation>
-    </message>
-    <message>
-        <source>PID setpoint</source>
-        <translation type="vanished">Уставка PID</translation>
-    </message>
-    <message>
-        <source>PWM control</source>
-        <translation type="vanished">Управление PWM</translation>
-    </message>
-    <message>
-        <source>Relay toggle</source>
-        <translation type="vanished">Переключение реле</translation>
-    </message>
-    <message>
-        <source>SCPI command</source>
-        <translation type="vanished">Команда SCPI</translation>
-    </message>
-    <message>
-        <source>Simple command</source>
-        <translation type="vanished">Простая команда</translation>
-    </message>
-    <message>
-        <source>SLCAN command</source>
-        <translation type="vanished">Команда SLCAN</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/OutputCodeEditor.cpp" line="180"/>
+        <location filename="../../src/DataModel/OutputCodeEditor.cpp" line="191"/>
         <source>Select Javascript file to import</source>
-        <translation>Выберите файл Javascript для импорта</translation>
+        <translation>Выберите файл JavaScript для импорта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/OutputCodeEditor.cpp" line="234"/>
+        <location filename="../../src/DataModel/OutputCodeEditor.cpp" line="245"/>
         <source>Select Output Widget Template</source>
         <translation>Выберите Шаблон Виджета Вывода</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/OutputCodeEditor.cpp" line="235"/>
+        <location filename="../../src/DataModel/OutputCodeEditor.cpp" line="246"/>
         <source>Choose a template to load:</source>
         <translation>Выберите шаблон для загрузки:</translation>
     </message>
@@ -2410,1943 +1715,1379 @@ Any unsaved changes will be lost. Continue?</source>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <source>Frame Parser Code</source>
-        <translation type="vanished">Код Анализатора Кадров</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1255"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1275"/>
         <source>Project Information</source>
-        <translation>Информация О Проекте</translation>
+        <translation>Информация о Проекте</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1265"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1285"/>
         <source>Project Title</source>
         <translation>Название Проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1266"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1286"/>
         <source>Untitled Project</source>
         <translation>Проект Без Названия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1267"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1287"/>
         <source>Name or description of the project</source>
-        <translation>Имя Или Описание Проекта</translation>
+        <translation>Название или описание проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1531"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1551"/>
         <source>Frame Detection</source>
-        <translation>Обнаружение Кадра</translation>
+        <translation>Обнаружение Кадров</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1547"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1567"/>
         <source>Frame Detection Method</source>
-        <translation>Метод Обнаружения Кадра</translation>
+        <translation>Метод Обнаружения Кадров</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1548"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1568"/>
         <source>Select how incoming data frames are identified</source>
-        <translation>Выберите, Как Определяются Входящие Кадры Данных</translation>
+        <translation>Выберите способ идентификации входящих кадров данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1558"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1578"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Шестнадцатеричные Разделители</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1559"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1579"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
-        <translation>Введите Последовательности Начала/Конца Кадра В Виде Шестнадцатеричных Значений</translation>
+        <translation>Введите последовательности начала/конца кадра в шестнадцатеричном формате</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1575"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1595"/>
         <source>Frame Start Delimiter</source>
         <translation>Разделитель Начала Кадра</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1576"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1596"/>
         <source>e.g. /*</source>
-        <translation>например, /*</translation>
+        <translation>напр. /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1577"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1597"/>
         <source>Sequence that marks the beginning of a data frame</source>
-        <translation>Последовательность, которая обозначает начало кадра данных</translation>
+        <translation>Последовательность, обозначающая начало кадра данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1589"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1609"/>
         <source>Frame End Delimiter</source>
         <translation>Разделитель Конца Кадра</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1590"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1610"/>
         <source>e.g. */</source>
-        <translation>например, */</translation>
+        <translation>напр. */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1591"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1611"/>
         <source>Sequence that marks the end of a data frame</source>
-        <translation>Последовательность, которая обозначает конец кадра данных</translation>
+        <translation>Последовательность, обозначающая конец кадра данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1598"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1618"/>
         <source>Payload Processing &amp; Validation</source>
-        <translation>Обработка И Проверка Полезной Нагрузки</translation>
+        <translation>Обработка и Проверка Полезной Нагрузки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1629"/>
         <source>Data Conversion Method</source>
         <translation>Метод Преобразования Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1610"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1630"/>
         <source>Select how incoming binary data is decoded before parsing</source>
-        <translation>Выберите, как входящие двоичные данные декодируются перед анализом</translation>
+        <translation>Выберите способ декодирования входящих бинарных данных перед разбором</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1626"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1646"/>
         <source>Checksum Algorithm</source>
         <translation>Алгоритм Контрольной Суммы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1627"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1647"/>
         <source>Select the checksum algorithm used to validate frames</source>
-        <translation>Выберите алгоритм контрольной суммы, используемый для проверки кадров</translation>
+        <translation>Выберите алгоритм контрольной суммы для проверки кадров</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1294"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1314"/>
         <source>Group Information</source>
-        <translation>Информация о группе</translation>
+        <translation>Информация о Группе</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1304"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1324"/>
         <source>Group Title</source>
-        <translation>Название группы</translation>
+        <translation>Название Группы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1305"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1325"/>
         <source>Untitled Group</source>
-        <translation>Безымянная группа</translation>
+        <translation>Группа Без Названия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1306"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1326"/>
         <source>Title or description of this dataset group</source>
         <translation>Название или описание этой группы наборов данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1360"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1380"/>
         <source>Composite Widget</source>
-        <translation>Составной виджет</translation>
+        <translation>Составной Виджет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1361"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1381"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation>Выберите, как должна быть визуализирована эта группа наборов данных (необязательно)</translation>
+        <translation>Выберите способ визуализации этой группы наборов данных (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1371"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1391"/>
         <source>Image Configuration</source>
-        <translation>Конфигурация изображения</translation>
+        <translation>Конфигурация Изображения</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2064"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2084"/>
         <source>Virtual Dataset</source>
-        <translation>Виртуальный набор данных</translation>
+        <translation>Виртуальный Набор Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2065"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2085"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
-        <translation>Виртуальные наборы данных вычисляют свое значение из преобразований и таблиц данных, они не требуют индекса кадра</translation>
+        <translation>Виртуальные наборы данных вычисляют свои значения из преобразований и таблиц данных, им не требуется индекс кадра</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2470"/>
         <source>Auto-detect</source>
         <translation>Автоопределение</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2470"/>
         <source>Manual Delimiters</source>
-        <translation>Ручные разделители</translation>
+        <translation>Ручные Разделители</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1387"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1407"/>
         <source>Detection Mode</source>
         <translation>Режим Обнаружения</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="899"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="902"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="919"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="922"/>
         <source>Frame Parser</source>
-        <translation>Парсер кадров</translation>
+        <translation>Парсер Кадров</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="933"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="934"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1032"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="953"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="954"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1052"/>
         <source>Groups</source>
         <translation>Группы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1050"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1061"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1062"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1070"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1081"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1082"/>
         <source>Shared Memory</source>
-        <translation>Общая память</translation>
+        <translation>Общая Память</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1050"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1068"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1069"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3328"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1070"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1088"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1089"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3349"/>
         <source>Dataset Values</source>
-        <translation>Значения набора данных</translation>
+        <translation>Значения Набора Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1097"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1108"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1109"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1117"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1128"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1129"/>
         <source>Workspaces</source>
-        <translation>Рабочие пространства</translation>
+        <translation>Рабочие Пространства</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1315"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1825"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1335"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1845"/>
         <source>Device %1</source>
         <translation>Устройство %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1333"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1456"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1353"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1476"/>
         <source>Input Device</source>
-        <translation>Входное устройство</translation>
+        <translation>Устройство Ввода</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1334"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1354"/>
         <source>Select which connected device provides data for this group</source>
-        <translation>Выберите, какое подключенное устройство предоставляет данные для этой группы</translation>
+        <translation>Выберите подключенное устройство, которое предоставляет данные для этой группы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1389"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1409"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
-        <translation>Автообнаружение читает магические байты JPEG/PNG; Ручной использует явные последовательности начала/конца</translation>
+        <translation>Автоопределение читает магические байты JPEG/PNG; Ручной режим использует явные последовательности начала/конца</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1399"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1419"/>
         <source>Start Sequence (Hex)</source>
         <translation>Начальная Последовательность (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1400"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1420"/>
         <source>e.g. FF D8 FF</source>
         <translation>например, FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1401"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1421"/>
         <source>Hex bytes marking the start of an image frame</source>
-        <translation>Hex байты, обозначающие начало кадра изображения</translation>
+        <translation>Байты HEX, обозначающие начало кадра изображения</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1410"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1430"/>
         <source>End Sequence (Hex)</source>
-        <translation>Конечная Последовательность (Hex)</translation>
+        <translation>Конечная Последовательность (HEX)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1411"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1431"/>
         <source>e.g. FF D9</source>
         <translation>например, FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1412"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1432"/>
         <source>Hex bytes marking the end of an image frame</source>
-        <translation>Hex байты, обозначающие конец кадра изображения</translation>
+        <translation>Байты HEX, обозначающие конец кадра изображения</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1439"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1459"/>
         <source>Identity</source>
         <translation>Идентификация</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1449"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1469"/>
         <source>Device Name</source>
-        <translation>Имя устройства</translation>
+        <translation>Название Устройства</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1470"/>
         <source>Device 1</source>
         <translation>Устройство 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1451"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1471"/>
         <source>Human-readable name for this input device</source>
-        <translation>Читаемое имя для этого входного устройства</translation>
+        <translation>Понятное название для этого устройства ввода</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1466"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1486"/>
         <source>Bus Type</source>
-        <translation>Тип шины</translation>
+        <translation>Тип Шины</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1467"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1487"/>
         <source>Select the hardware interface for this input device</source>
         <translation>Выберите аппаратный интерфейс для этого входного устройства</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1469"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1489"/>
         <source>Serial Port</source>
-        <translation>Последовательный порт</translation>
+        <translation>Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1469"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1489"/>
         <source>Network Socket</source>
-        <translation>Сетевой сокет</translation>
+        <translation>Сетевой Сокет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1469"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1489"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1491"/>
         <source>Audio Input</source>
         <translation>Аудиовход</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1491"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1491"/>
         <source>CAN Bus</source>
-        <translation>CAN Bus</translation>
+        <translation>Шина CAN</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1491"/>
         <source>Raw USB</source>
-        <translation>Raw USB</translation>
+        <translation>Прямой USB</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1472"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1492"/>
         <source>HID Device</source>
         <translation>Устройство HID</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1472"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1492"/>
         <source>Process</source>
         <translation>Процесс</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1482"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1502"/>
         <source>Connection Settings</source>
         <translation>Настройки Подключения</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1794"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2040"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3090"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1814"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2060"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3111"/>
         <source>General Information</source>
         <translation>Общая Информация</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1803"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1823"/>
         <source>Action Title</source>
         <translation>Название Действия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1805"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1825"/>
         <source>Untitled Action</source>
-        <translation>Безымянное действие</translation>
+        <translation>Действие Без Названия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1806"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1826"/>
         <source>Name or description of this action</source>
         <translation>Название или описание этого действия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1815"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1835"/>
         <source>Action Icon</source>
-        <translation>Значок действия</translation>
+        <translation>Значок Действия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1816"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1836"/>
         <source>Default Icon</source>
-        <translation>Значок по умолчанию</translation>
+        <translation>Значок по Умолчанию</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1817"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1837"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>Значок, отображаемый для этого действия на панели управления</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1843"/>
-        <source>Target Device</source>
-        <translation>Целевое устройство</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1844"/>
-        <source>Select which connected device this action sends data to</source>
-        <translation>Выберите подключенное устройство, которому это действие отправляет данные</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1852"/>
-        <source>Data Payload</source>
-        <translation>Полезная нагрузка данных</translation>
-    </message>
-    <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1863"/>
-        <source>Send as Binary</source>
-        <translation>Отправить как двоичный</translation>
+        <source>Target Device</source>
+        <translation>Целевое Устройство</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1864"/>
-        <source>Send raw binary data when this action is triggered</source>
-        <translation>Отправить сырые двоичные данные при выполнении этого действия</translation>
+        <source>Select which connected device this action sends data to</source>
+        <translation>Выберите подключённое устройство, которому это действие отправляет данные</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1875"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1887"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1872"/>
+        <source>Data Payload</source>
+        <translation>Полезная Нагрузка Данных</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1883"/>
+        <source>Send as Binary</source>
+        <translation>Отправить как Двоичные Данные</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1884"/>
+        <source>Send raw binary data when this action is triggered</source>
+        <translation>Отправлять необработанные двоичные данные при активации этого действия</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1895"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1907"/>
         <source>Command</source>
         <translation>Команда</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1876"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1896"/>
         <source>Transmit Data (Hex)</source>
-        <translation>Передача данных (Hex)</translation>
+        <translation>Передать Данные (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1877"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1897"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation>Шестнадцатеричный полезный груз для отправки при срабатывании действия</translation>
+        <translation>Шестнадцатеричная полезная нагрузка для отправки при активации действия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1888"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1908"/>
         <source>Transmit Data</source>
-        <translation>Передача данных</translation>
+        <translation>Передать Данные</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1889"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1909"/>
         <source>Text payload to send when the action is triggered</source>
-        <translation>Текстовый полезный груз для отправки при срабатывании действия</translation>
+        <translation>Текстовая полезная нагрузка для отправки при активации действия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1900"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3148"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1920"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3169"/>
         <source>Text Encoding</source>
-        <translation>Кодировка текста</translation>
+        <translation>Кодировка Текста</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1901"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1921"/>
         <source>Character encoding used to serialize the text payload</source>
-        <translation>Кодировка символов, используемая для сериализации текстовой нагрузки</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1925"/>
-        <source>End-of-Line Sequence</source>
-        <translation>Последовательность конца строки</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1926"/>
-        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation>Символы конца строки для добавления в сообщение (например, </translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1933"/>
-        <source>Execution Behavior</source>
-        <translation>Поведение выполнения</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1944"/>
-        <source>Auto-Execute on Connect</source>
-        <translation>Автоматическое выполнение при подключении</translation>
+        <translation>Кодировка символов, используемая для сериализации текстовой полезной нагрузки</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="1945"/>
+        <source>End-of-Line Sequence</source>
+        <translation>Последовательность Окончания Строки</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1946"/>
+        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
+        <translation>Символы окончания строки, добавляемые к сообщению (например, </translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1953"/>
+        <source>Execution Behavior</source>
+        <translation>Поведение Выполнения</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1964"/>
+        <source>Auto-Execute on Connect</source>
+        <translation>Автовыполнение при Подключении</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1965"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>Автоматически запускать это действие при подключении устройства</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1952"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1972"/>
         <source>Timer Behavior</source>
-        <translation>Поведение таймера</translation>
+        <translation>Поведение Таймера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1961"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1981"/>
         <source>Timer Mode</source>
-        <translation>Режим таймера</translation>
+        <translation>Режим Таймера</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1964"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1984"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>Выберите, когда и как это действие должно повторяться автоматически</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1971"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1991"/>
         <source>Interval (ms)</source>
         <translation>Интервал (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1975"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1995"/>
         <source>Timer Interval (ms)</source>
-        <translation>Интервал таймера (мс)</translation>
+        <translation>Интервал Таймера (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1976"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1996"/>
         <source>Milliseconds between each repeated trigger of this action</source>
-        <translation>Миллисекунды между каждым повторным запуском этого действия</translation>
+        <translation>Миллисекунды между каждым повторным срабатыванием этого действия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1983"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1987"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2003"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2007"/>
         <source>Repeat Count</source>
-        <translation>Повторить Количество</translation>
+        <translation>Количество Повторений</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1988"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2008"/>
         <source>Number of times to send the command on each trigger</source>
-        <translation>Количество раз для отправки команды при каждом срабатывании</translation>
+        <translation>Количество отправок команды при каждом срабатывании</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2050"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2070"/>
         <source>Untitled Dataset</source>
-        <translation>Безымянный набор данных</translation>
+        <translation>Набор Данных Без Названия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2051"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2071"/>
         <source>Dataset Title</source>
-        <translation>Название набора данных</translation>
+        <translation>Название Набора Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2052"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2072"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>Имя набора данных, используемое для маркировки и идентификации</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3329"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3350"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
-        <translation>Исходные и преобразованные значения для каждого набора данных (только для чтения)</translation>
+        <translation>Исходные и преобразованные значения для каждого набора данных (только чтение)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3339"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3360"/>
         <source>Shared table defined in this project</source>
-        <translation>Общая таблица, определенная в этом проекте</translation>
+        <translation>Общая таблица, определённая в этом проекте</translation>
     </message>
     <message>
-        <source>Select which connected device provides this dataset's values</source>
-        <translation type="vanished">Выберите, какое подключенное устройство предоставляет значения для этого набора данных</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2077"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2097"/>
         <source>Frame Index</source>
-        <translation>Индекс кадра</translation>
+        <translation>Индекс Кадра</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2078"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2098"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>Позиция кадра, используемая для выравнивания наборов данных по времени</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2087"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2107"/>
         <source>Measurement Unit</source>
-        <translation>Единица измерения</translation>
+        <translation>Единица Измерения</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2088"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2108"/>
         <source>Volts, Amps, etc.</source>
-        <translation>Вольты, амперы и т.д.</translation>
+        <translation>Вольты, Амперы и т.д.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2089"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2109"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation>Единица измерения, такая как вольты или амперы (необязательно)</translation>
+        <translation>Единица измерения, например вольты или амперы (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2102"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2122"/>
         <source>Plot Settings</source>
         <translation>Настройки Графика</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2125"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2145"/>
         <source>Enable Plot Widget</source>
         <translation>Включить Виджет Графика</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2127"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2147"/>
         <source>Plot data in real-time</source>
         <translation>Отображать данные в реальном времени</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2152"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2172"/>
         <source>X-Axis Source</source>
         <translation>Источник Оси X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2153"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2173"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation>Выберите, какой набор данных использовать для Оси X в графиках</translation>
+        <translation>Выберите набор данных для использования в качестве оси X на графиках</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2164"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2184"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>Минимальное Значение Графика (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2165"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2185"/>
         <source>Lower bound for plot display range</source>
         <translation>Нижняя граница диапазона отображения графика</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2175"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2195"/>
         <source>Maximum Plot Value (optional)</source>
-        <translation>Максимальное Значение Графика (необязательно)</translation>
+        <translation>Максимальное Значение Графика (опционально)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2176"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2196"/>
         <source>Upper bound for plot display range</source>
         <translation>Верхняя граница диапазона отображения графика</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2188"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2208"/>
         <source>FFT Configuration</source>
         <translation>Конфигурация FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2199"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2219"/>
         <source>Enable FFT Analysis</source>
-        <translation>Включить анализ FFT</translation>
+        <translation>Включить Анализ FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2200"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2220"/>
         <source>Perform frequency-domain analysis of the dataset</source>
-        <translation>Выполнить анализ набора данных в частотной области</translation>
+        <translation>Выполнить частотный анализ набора данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2215"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2235"/>
         <source>FFT Window Size</source>
-        <translation>Размер окна FFT</translation>
+        <translation>Размер Окна FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2216"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2236"/>
         <source>Number of samples used for each FFT calculation window</source>
-        <translation>Количество образцов для каждого окна расчета FFT</translation>
+        <translation>Количество отсчётов, используемых для каждого окна вычисления FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2227"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2247"/>
         <source>FFT Sampling Rate (Hz, required)</source>
-        <translation>Частота дискретизации FFT (Гц, обязательно)</translation>
+        <translation>Частота Дискретизации FFT (Гц, обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2228"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2248"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation>Частота дискретизации для FFT (в Гц)</translation>
+        <translation>Частота дискретизации, используемая для FFT (в Гц)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2238"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2258"/>
         <source>Minimum Value (recommended)</source>
-        <translation>Минимальное значение (рекомендуется)</translation>
+        <translation>Минимальное Значение (рекомендуется)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2239"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2259"/>
         <source>Lower bound for data normalization</source>
         <translation>Нижняя граница для нормализации данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2249"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2269"/>
         <source>Maximum Value (recommended)</source>
-        <translation>Максимальное значение (рекомендуется)</translation>
+        <translation>Максимальное Значение (рекомендуется)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2250"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2270"/>
         <source>Upper bound for data normalization</source>
         <translation>Верхняя граница для нормализации данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2265"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2285"/>
         <source>Widget Settings</source>
-        <translation>Настройки виджета</translation>
+        <translation>Настройки Виджета</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2288"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2308"/>
         <source>Widget</source>
         <translation>Виджет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2289"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2309"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>Выберите визуальный виджет для отображения этого набора данных</translation>
     </message>
     <message>
-        <source>Show in Overview</source>
-        <translation type="vanished">Показать в обзоре</translation>
-    </message>
-    <message>
-        <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation type="vanished">Отображать этот виджет в обзоре панели (если включено)</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2302"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2322"/>
         <source>Minimum Display Value (required)</source>
-        <translation>Минимальное отображаемое значение (обязательно)</translation>
+        <translation>Минимальное Значение Отображения (обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2303"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2323"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>Нижняя граница диапазона отображения шкалы или полосы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2313"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2333"/>
         <source>Maximum Display Value (required)</source>
-        <translation>Максимальное отображаемое значение (обязательно)</translation>
+        <translation>Максимальное Значение Отображения (обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2314"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2334"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>Верхняя граница диапазона отображения шкалы или полосы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2330"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2350"/>
         <source>Alarm Settings</source>
         <translation>Настройки Сигнализации</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2341"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2361"/>
         <source>Enable Alarms</source>
         <translation>Включить Сигнализацию</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2342"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2362"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation>Вызывает визуальную сигнализацию, когда значение превышает пороговые значения</translation>
+        <translation>Запускает визуальную сигнализацию при превышении пороговых значений</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2353"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2373"/>
         <source>Low Threshold</source>
-        <translation>Низкий Порог</translation>
+        <translation>Нижний Порог</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2354"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2374"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation>Вызывает визуальную сигнализацию, когда значение опускается ниже этого порога</translation>
+        <translation>Запускает визуальную сигнализацию при падении значения ниже этого порога</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2365"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2385"/>
         <source>High Threshold</source>
-        <translation>Высокий Порог</translation>
+        <translation>Верхний Порог</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2366"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2386"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation>Вызывает визуальную сигнализацию, когда значение превышает этот порог</translation>
+        <translation>Запускает визуальную сигнализацию при превышении этого порога</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2379"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
         <source>LED Display Settings</source>
-        <translation>Настройки Дисплея LED</translation>
+        <translation>Настройки LED-Дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2390"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2410"/>
         <source>Show in LED Panel</source>
-        <translation>Показать на Панели LED</translation>
+        <translation>Показывать на LED-Панели</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2391"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2411"/>
         <source>Enable visual status monitoring using an LED display</source>
-        <translation>Включить мониторинг визуального статуса с использованием LED-дисплея</translation>
+        <translation>Включает визуальный мониторинг состояния с помощью LED-дисплея</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2422"/>
         <source>LED On Threshold (required)</source>
         <translation>Порог Включения LED (обязательно)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2403"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2423"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>LED загорается, когда значение достигает или превышает этот порог</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2444"/>
         <source>Off</source>
-        <translation>Выключено</translation>
+        <translation>Выкл</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2444"/>
         <source>Auto Start</source>
-        <translation>Автостарт</translation>
+        <translation>Автозапуск</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2444"/>
         <source>Start on Trigger</source>
         <translation>Запуск по Триггеру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2444"/>
         <source>Toggle on Trigger</source>
         <translation>Переключение по Триггеру</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2425"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2445"/>
         <source>Repeat N Times</source>
         <translation>Повторить N Раз</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2429"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2449"/>
         <source>Plain Text (UTF8)</source>
-        <translation>Обычный текст (UTF8)</translation>
+        <translation>Простой Текст (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2429"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2449"/>
         <source>Hexadecimal</source>
         <translation>Шестнадцатеричный</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2429"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2449"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2430"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2450"/>
         <source>Binary (Direct)</source>
-        <translation>Двоичный (Прямой)</translation>
+        <translation>Бинарный (Прямой)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2437"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2457"/>
         <source>No Checksum</source>
         <translation>Без Контрольной Суммы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2442"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2462"/>
         <source>End Delimiter Only</source>
         <translation>Только Конечный Разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2442"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2462"/>
         <source>Start Delimiter Only</source>
         <translation>Только Начальный Разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2443"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2463"/>
         <source>Start + End Delimiter</source>
         <translation>Начальный + Конечный Разделитель</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2443"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2463"/>
         <source>No Delimiters</source>
         <translation>Без Разделителей</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2473"/>
         <source>Button</source>
         <translation>Кнопка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2473"/>
         <source>Slider</source>
         <translation>Ползунок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2473"/>
         <source>Toggle</source>
         <translation>Переключатель</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2453"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2473"/>
         <source>Text Field</source>
-        <translation>Текстовое поле</translation>
+        <translation>Текстовое Поле</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2454"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2474"/>
         <source>Knob</source>
-        <translation>Ручка</translation>
+        <translation>Регулятор</translation>
     </message>
     <message>
-        <source>Ramp Generator</source>
-        <translation type="vanished">Генератор наклона</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2459"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2479"/>
         <source>Data Grid</source>
         <translation>Таблица Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2460"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2480"/>
         <source>GPS Map</source>
         <translation>Карта GPS</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2461"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2481"/>
         <source>Gyroscope</source>
         <translation>Гироскоп</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2462"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2482"/>
         <source>Multiple Plot</source>
-        <translation>Несколько Графиков</translation>
+        <translation>Множественный График</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2463"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2483"/>
         <source>Accelerometer</source>
         <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2464"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2484"/>
         <source>3D Plot</source>
         <translation>3D График</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2465"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2485"/>
         <source>Image View</source>
-        <translation>Просмотр Изображения</translation>
+        <translation>Просмотр Изображений</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2466"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2470"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2477"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2486"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2490"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2497"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2471"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2491"/>
         <source>Bar</source>
         <translation>Столбец</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2472"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2492"/>
         <source>Gauge</source>
-        <translation>Индикатор</translation>
+        <translation>Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2473"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2493"/>
         <source>Compass</source>
         <translation>Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2478"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
         <source>New Line (\n)</source>
         <translation>Новая Строка (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2479"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2499"/>
         <source>Carriage Return (\r)</source>
         <translation>Возврат Каретки (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2480"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2500"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2484"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2504"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2505"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3101"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3122"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3102"/>
-        <source>Display label</source>
-        <translation>Отображаемая метка</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3113"/>
-        <source>Button Icon</source>
-        <translation>Значок кнопки</translation>
-    </message>
-    <message>
         <location filename="../../src/DataModel/ProjectEditor.cpp" line="3123"/>
+        <source>Display label</source>
+        <translation>Отображаемая Метка</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3134"/>
+        <source>Button Icon</source>
+        <translation>Значок Кнопки</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3144"/>
         <source>Colorize Icon</source>
-        <translation>Закрасить Значок</translation>
+        <translation>Раскрасить Значок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3124"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3145"/>
         <source>Tint the icon with the button color</source>
-        <translation>Затонировать значок цветом кнопки</translation>
+        <translation>Окрасить значок цветом кнопки</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3136"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3157"/>
         <source>Initial Value</source>
         <translation>Начальное Значение</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3149"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3170"/>
         <source>Character encoding used when transmit() returns a string value</source>
-        <translation>Кодировка символов, используемая, когда transmit() возвращает строковое значение</translation>
+        <translation>Кодировка символов, используемая когда transmit() возвращает строковое значение</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3161"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3182"/>
         <source>Value Range</source>
         <translation>Диапазон Значений</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3172"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3193"/>
         <source>Minimum Value</source>
         <translation>Минимальное Значение</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3182"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3203"/>
         <source>Maximum Value</source>
         <translation>Максимальное Значение</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3192"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3213"/>
         <source>Step Size</source>
         <translation>Размер Шага</translation>
-    </message>
-    <message>
-        <source>Save changes to frame parser code?</source>
-        <translation type="vanished">Сохранить изменения в коде парсера кадров?</translation>
-    </message>
-    <message>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation type="vanished">Выберите «Сохранить», чтобы сохранить изменения, «Отменить», чтобы потерять их навсегда, или «Отмена», чтобы вернуться.</translation>
-    </message>
-    <message>
-        <source>Save Changes</source>
-        <translation type="vanished">Сохранить изменения</translation>
     </message>
 </context>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="128"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="138"/>
         <source>New Project</source>
         <translation>Новый Проект</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="143"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="154"/>
         <source>Samples</source>
         <translation>Образцы</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="385"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="410"/>
         <source>Multiple data sources require a Pro license</source>
-        <translation>Несколько источников данных требуют Pro-лицензии</translation>
+        <translation>Несколько источников данных требуют лицензию Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="386"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="411"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
-        <translation>Serial Studio Pro позволяет подключаться к нескольким устройствам одновременно. Пожалуйста, обновите версию, чтобы разблокировать эту функцию.</translation>
+        <translation>Serial Studio Pro позволяет подключаться к нескольким устройствам одновременно. Обновитесь, чтобы разблокировать эту функцию.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="399"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="424"/>
         <source>Device %1</source>
         <translation>Устройство %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="469"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="494"/>
         <source> (Copy)</source>
         <translation>(Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="686"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="711"/>
         <source>Do you want to save your changes?</source>
-        <translation>Хотите сохранить изменения?</translation>
+        <translation>Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="687"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="712"/>
         <source>You have unsaved modifications in this project!</source>
-        <translation>У вас есть несохраненные изменения в этом проекте!</translation>
+        <translation>В этом проекте есть несохранённые изменения!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="723"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="734"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="749"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="748"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="759"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="774"/>
         <source>Project error</source>
         <translation>Ошибка проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="723"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="748"/>
         <source>Project title cannot be empty!</source>
         <translation>Название проекта не может быть пустым!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="734"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="759"/>
         <source>You need to add at least one group!</source>
         <translation>Необходимо добавить хотя бы одну группу!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="749"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="774"/>
         <source>You need to add at least one dataset!</source>
         <translation>Необходимо добавить хотя бы один набор данных!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="757"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="782"/>
         <source>Save Serial Studio Project</source>
         <translation>Сохранить Проект Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="759"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="784"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файлы Проектов Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="984"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1019"/>
         <source>Untitled Project</source>
-        <translation>Безымянный Проект</translation>
+        <translation>Проект Без Названия</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="993"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1259"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1028"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1309"/>
         <source>Device A</source>
         <translation>Устройство A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1143"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1179"/>
         <source>Select Project File</source>
         <translation>Выберите Файл Проекта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1143"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1179"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Файлы Проектов (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1179"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1215"/>
         <source>JSON validation error</source>
-        <translation>Ошибка проверки JSON</translation>
+        <translation>Ошибка валидации JSON</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1301"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1351"/>
         <source>Multi-source projects require a Pro license</source>
-        <translation>Проекты с несколькими источниками требуют Pro-лицензии</translation>
+        <translation>Проекты с несколькими источниками требуют лицензию Pro</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1302"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1352"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Этот проект содержит несколько источников данных. Загружен только первый источник. Для использования проектов с несколькими источниками требуется лицензия Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1448"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1498"/>
         <source>Legacy frame parser function updated</source>
-        <translation>Функция парсера старого формата обновлена</translation>
+        <translation>Устаревшая функция парсера фреймов обновлена</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1449"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1499"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation>Ваш проект использовал функцию парсера старого формата с аргументом 'separator'. Он был автоматически преобразован в новый формат.</translation>
+        <translation>Ваш проект использовал устаревшую функцию парсера кадров с аргументом 'separator'. Она была автоматически перенесена в новый формат.</translation>
     </message>
     <message>
-        <source>Switch Serial Studio to Project Mode?</source>
-        <translation type="vanished">Переключить Serial Studio в режим проекта?</translation>
-    </message>
-    <message>
-        <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation type="vanished">Этот режим необходим для загрузки и отображения панелей управления из файлов проектов.</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1642"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1697"/>
         <source>Do you want to delete group "%1"?</source>
-        <translation>Вы хотите удалить группу "%1"?</translation>
+        <translation>Удалить группу "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1643"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1694"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1729"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1994"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1698"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1749"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1784"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2050"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation>Это действие нельзя отменить. Вы хотите продолжить?</translation>
+        <translation>Это действие невозможно отменить. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1693"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1748"/>
         <source>Do you want to delete action "%1"?</source>
-        <translation>Вы хотите удалить действие "%1"?</translation>
+        <translation>Удалить действие "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1728"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1783"/>
         <source>Do you want to delete dataset "%1"?</source>
-        <translation>Вы хотите удалить набор данных "%1"?</translation>
+        <translation>Удалить набор данных "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1818"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1847"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2052"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2097"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1873"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1902"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2108"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2153"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Копия)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1943"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1999"/>
         <source>Output Controls</source>
         <translation>Элементы Управления Выводом</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1955"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2011"/>
         <source>New Button</source>
         <translation>Новая Кнопка</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1958"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2014"/>
         <source>New Slider</source>
         <translation>Новый Ползунок</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1961"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2017"/>
         <source>New Toggle</source>
         <translation>Новый Переключатель</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1964"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2020"/>
         <source>New Text Field</source>
         <translation>Новое Текстовое Поле</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1967"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2023"/>
         <source>New Knob</source>
         <translation>Новая Ручка</translation>
     </message>
     <message>
-        <source>New Ramp Generator</source>
-        <translation type="vanished">Новый Генератор Пандуса</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1993"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2049"/>
         <source>Do you want to delete output widget "%1"?</source>
-        <translation>Вы хотите удалить виджет вывода "%1"?</translation>
+        <translation>Удалить виджет вывода "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2152"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2208"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2227"/>
         <source>New Dataset</source>
         <translation>Новый Набор Данных</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2174"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2230"/>
         <source>New Plot</source>
         <translation>Новый График</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2178"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2234"/>
         <source>New FFT Plot</source>
-        <translation>Новый График БПФ</translation>
+        <translation>Новый График FFT</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2182"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2238"/>
         <source>New Level Indicator</source>
         <translation>Новый Индикатор Уровня</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2186"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2242"/>
         <source>New Gauge</source>
         <translation>Новый Датчик</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2190"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2246"/>
         <source>New Compass</source>
         <translation>Новый Компас</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2198"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2254"/>
         <source>New LED Indicator</source>
         <translation>Новый Светодиодный Индикатор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2296"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2352"/>
         <source>New Action</source>
         <translation>Новое Действие</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2394"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2450"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Вы уверены, что хотите изменить виджет уровня группы?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2396"/>
-        <source>Existing datasets for this group will be deleted</source>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2452"/>
+        <source>Existing datasets for this group are deleted</source>
         <translation>Существующие наборы данных для этой группы будут удалены</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2457"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2458"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2459"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2513"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2514"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2515"/>
         <source>Accelerometer %1</source>
         <translation>Акселерометр %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2505"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2506"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2507"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2561"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2562"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2563"/>
         <source>Gyro %1</source>
         <translation>Гироскоп %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2550"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2606"/>
         <source>Latitude</source>
         <translation>Широта</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2551"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2607"/>
         <source>Longitude</source>
         <translation>Долгота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2552"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2608"/>
         <source>Altitude</source>
         <translation>Высота</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2591"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2647"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2592"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2648"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2593"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2649"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2793"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3460"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2849"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3516"/>
         <source>Workspace</source>
-        <translation>Рабочее пространство</translation>
+        <translation>Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2858"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3067"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2914"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3123"/>
         <source>Shared Table</source>
-        <translation>Общая таблица</translation>
+        <translation>Общая Таблица</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2940"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2996"/>
         <source>register</source>
-        <translation>зарегистрировать</translation>
+        <translation>регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3067"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3123"/>
         <source>New Shared Table</source>
         <translation>Новая Общая Таблица</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3067"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3086"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3107"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3131"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3460"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3123"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3142"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3163"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3187"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3537"/>
         <source>Name:</source>
-        <translation>Имя:</translation>
+        <translation>Название:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3086"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3142"/>
         <source>Rename Table</source>
         <translation>Переименовать Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3106"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3162"/>
         <source>New Register</source>
         <translation>Новый Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3131"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3187"/>
         <source>Rename Register</source>
         <translation>Переименовать Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3170"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3195"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3865"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3226"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3998"/>
         <source>This action cannot be undone.</source>
         <translation>Это действие нельзя отменить.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3171"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3227"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
-        <translation>Это удаляет %1 регистр(ов) вместе с таблицей. Это действие нельзя отменить.</translation>
+        <translation>Это удалит %1 регистр(ов) вместе с таблицей. Это действие нельзя отменить.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3174"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3194"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3864"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3230"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3250"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3997"/>
         <source>Delete "%1"?</source>
         <translation>Удалить "%1"?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3177"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3233"/>
         <source>Delete Table</source>
         <translation>Удалить Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3197"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3253"/>
         <source>Delete Register</source>
         <translation>Удалить Регистр</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3223"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3279"/>
         <source>Export Table</source>
-        <translation>Экспорт таблицы</translation>
+        <translation>Экспортировать Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3225"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3272"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3281"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3328"/>
         <source>CSV files (*.csv)</source>
-        <translation>CSV файлы (*.csv)</translation>
+        <translation>Файлы CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3270"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3326"/>
         <source>Import Table</source>
-        <translation>Импорт таблицы</translation>
+        <translation>Импортировать Таблицу</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3460"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3516"/>
         <source>New Workspace</source>
-        <translation>Новое рабочее пространство</translation>
+        <translation>Новое Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3481"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3537"/>
         <source>Rename Workspace</source>
-        <translation>Переименовать рабочее пространство</translation>
+        <translation>Переименовать Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3622"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3678"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3632"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3688"/>
         <source>All Data</source>
-        <translation>Все данные</translation>
+        <translation>Все Данные</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3867"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4000"/>
         <source>Delete Workspace</source>
-        <translation>Удалить рабочее пространство</translation>
+        <translation>Удалить Рабочее Пространство</translation>
     </message>
     <message>
-        <source>Frame Parser Code</source>
-        <translation type="vanished">Код Анализатора Кадров</translation>
-    </message>
-    <message>
-        <source>Project Information</source>
-        <translation type="vanished">Информация о Проекте</translation>
-    </message>
-    <message>
-        <source>Project Title</source>
-        <translation type="vanished">Название Проекта</translation>
-    </message>
-    <message>
-        <source>Name or description of the project</source>
-        <translation type="vanished">Название или описание проекта</translation>
-    </message>
-    <message>
-        <source>Frame Detection</source>
-        <translation type="vanished">Обнаружение Кадров</translation>
-    </message>
-    <message>
-        <source>Frame Detection Method</source>
-        <translation type="vanished">Метод Обнаружения Кадров</translation>
-    </message>
-    <message>
-        <source>Select how incoming data frames are identified</source>
-        <translation type="vanished">Выберите, как определяются входящие кадры данных</translation>
-    </message>
-    <message>
-        <source>Hexadecimal Delimiters</source>
-        <translation type="vanished">Шестнадцатеричные Разделители</translation>
-    </message>
-    <message>
-        <source>Use hex values to define frame boundaries</source>
-        <translation type="vanished">Используйте шестнадцатеричные значения для определения границ кадров</translation>
-    </message>
-    <message>
-        <source>Start Sequence</source>
-        <translation type="vanished">Начальная Последовательность</translation>
-    </message>
-    <message>
-        <source>Marks the beginning of each data frame</source>
-        <translation type="vanished">Отмечает начало каждого кадра данных</translation>
-    </message>
-    <message>
-        <source>End Sequence</source>
-        <translation type="vanished">Конечная Последовательность</translation>
-    </message>
-    <message>
-        <source>Marks the end of each data frame</source>
-        <translation type="vanished">Отмечает конец каждого кадра данных</translation>
-    </message>
-    <message>
-        <source>Payload Processing &amp; Validation</source>
-        <translation type="vanished">Обработка и Проверка Полезной Нагрузки</translation>
-    </message>
-    <message>
-        <source>Data Format</source>
-        <translation type="vanished">Формат Данных</translation>
-    </message>
-    <message>
-        <source>Format of raw data used for decoding each frame</source>
-        <translation type="vanished">Формат необработанных данных, используемый для декодирования каждого кадра</translation>
-    </message>
-    <message>
-        <source>Checksum Algorithm</source>
-        <translation type="vanished">Алгоритм Контрольной Суммы</translation>
-    </message>
-    <message>
-        <source>Method used to validate frame integrity</source>
-        <translation type="vanished">Метод, используемый для проверки целостности кадра</translation>
-    </message>
-    <message>
-        <source>Group Information</source>
-        <translation type="vanished">Информация о Группе</translation>
-    </message>
-    <message>
-        <source>Group Title</source>
-        <translation type="vanished">Название Группы</translation>
-    </message>
-    <message>
-        <source>Untitled Group</source>
-        <translation type="vanished">Группа Без Названия</translation>
-    </message>
-    <message>
-        <source>Title or description of this dataset group</source>
-        <translation type="vanished">Название или описание этой группы данных</translation>
-    </message>
-    <message>
-        <source>Composite Widget</source>
-        <translation type="vanished">Составной Виджет</translation>
-    </message>
-    <message>
-        <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation type="vanished">Выберите, как визуализировать эту группу данных (необязательно)</translation>
-    </message>
-    <message>
-        <source>General Information</source>
-        <translation type="vanished">Общая Информация</translation>
-    </message>
-    <message>
-        <source>Action Title</source>
-        <translation type="vanished">Название Действия</translation>
-    </message>
-    <message>
-        <source>Untitled Action</source>
-        <translation type="vanished">Действие Без Названия</translation>
-    </message>
-    <message>
-        <source>Name or description of this action</source>
-        <translation type="vanished">Имя или описание этого действия</translation>
-    </message>
-    <message>
-        <source>Action Icon</source>
-        <translation type="vanished">Значок Действия</translation>
-    </message>
-    <message>
-        <source>Default Icon</source>
-        <translation type="vanished">Значок по Умолчанию</translation>
-    </message>
-    <message>
-        <source>Icon displayed for this action in the dashboard</source>
-        <translation type="vanished">Значок, отображаемый для этого действия на панели управления</translation>
-    </message>
-    <message>
-        <source>Data Payload</source>
-        <translation type="vanished">Полезная Нагрузка Данных</translation>
-    </message>
-    <message>
-        <source>Send as Binary</source>
-        <translation type="vanished">Отправить как двоичные данные</translation>
-    </message>
-    <message>
-        <source>Send raw binary data when this action is triggered</source>
-        <translation type="vanished">Отправить необработанные двоичные данные, когда это действие активировано</translation>
-    </message>
-    <message>
-        <source>Command</source>
-        <translation type="vanished">Команда</translation>
-    </message>
-    <message>
-        <source>Transmit Data (Hex)</source>
-        <translation type="vanished">Передача Данных (Hex)</translation>
-    </message>
-    <message>
-        <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation type="vanished">Шестнадцатеричная полезная нагрузка для отправки при активации действия</translation>
-    </message>
-    <message>
-        <source>Transmit Data</source>
-        <translation type="vanished">Передача Данных</translation>
-    </message>
-    <message>
-        <source>Text payload to send when the action is triggered</source>
-        <translation type="vanished">Текстовая нагрузка для отправки при срабатывании действия</translation>
-    </message>
-    <message>
-        <source>End-of-Line Sequence</source>
-        <translation type="vanished">Последовательность Конца Строки</translation>
-    </message>
-    <message>
-        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation type="vanished">Символы конца строки для добавления к сообщению (например, </translation>
-    </message>
-    <message>
-        <source>Execution Behavior</source>
-        <translation type="vanished">Поведение Выполнения</translation>
-    </message>
-    <message>
-        <source>Auto-Execute on Connect</source>
-        <translation type="vanished">Автовыполнение при подключении</translation>
-    </message>
-    <message>
-        <source>Automatically trigger this action when the device connects</source>
-        <translation type="vanished">Автоматически запускать это действие при подключении устройства</translation>
-    </message>
-    <message>
-        <source>Timer Behavior</source>
-        <translation type="vanished">Поведение Таймера</translation>
-    </message>
-    <message>
-        <source>Timer Mode</source>
-        <translation type="vanished">Режим Таймера</translation>
-    </message>
-    <message>
-        <source>Choose when and how this action should repeat automatically</source>
-        <translation type="vanished">Выберите, когда и как это действие должно автоматически повторяться</translation>
-    </message>
-    <message>
-        <source>Interval (ms)</source>
-        <translation type="vanished">Интервал (мс)</translation>
-    </message>
-    <message>
-        <source>Timer Interval (ms)</source>
-        <translation type="vanished">Интервал Таймера (мс)</translation>
-    </message>
-    <message>
-        <source>Milliseconds between each repeated trigger of this action</source>
-        <translation type="vanished">Миллисекунды между каждым повторным запуском этого действия</translation>
-    </message>
-    <message>
-        <source>Untitled Dataset</source>
-        <translation type="vanished">Безымянный Набор Данных</translation>
-    </message>
-    <message>
-        <source>Dataset Title</source>
-        <translation type="vanished">Название Набора Данных</translation>
-    </message>
-    <message>
-        <source>Name of the dataset, used for labeling and identification</source>
-        <translation type="vanished">Имя набора данных, используемое для маркировки и идентификации</translation>
-    </message>
-    <message>
-        <source>Frame Index</source>
-        <translation type="vanished">Индекс Кадра</translation>
-    </message>
-    <message>
-        <source>Frame position used for aligning datasets in time</source>
-        <translation type="vanished">Позиция кадра, используемая для выравнивания наборов данных по времени</translation>
-    </message>
-    <message>
-        <source>Measurement Unit</source>
-        <translation type="vanished">Единица Измерения</translation>
-    </message>
-    <message>
-        <source>Volts, Amps, etc.</source>
-        <translation type="vanished">Вольты, Амперы и т.д.</translation>
-    </message>
-    <message>
-        <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation type="vanished">Единица измерения, например, вольты или амперы (необязательно)</translation>
-    </message>
-    <message>
-        <source>Plot Settings</source>
-        <translation type="vanished">Настройки Графика</translation>
-    </message>
-    <message>
-        <source>Enable Plot Widget</source>
-        <translation type="vanished">Включить Виджет Графика</translation>
-    </message>
-    <message>
-        <source>Plot data in real-time</source>
-        <translation type="vanished">Построение данных в реальном времени</translation>
-    </message>
-    <message>
-        <source>X-Axis Source</source>
-        <translation type="vanished">Источник Оси X</translation>
-    </message>
-    <message>
-        <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation type="vanished">Выберите набор данных для использования на оси X в графиках</translation>
-    </message>
-    <message>
-        <source>Minimum Plot Value (optional)</source>
-        <translation type="vanished">Минимальное Значение Графика (необязательно)</translation>
-    </message>
-    <message>
-        <source>Lower bound for plot display range</source>
-        <translation type="vanished">Нижняя граница диапазона отображения графика</translation>
-    </message>
-    <message>
-        <source>Maximum Plot Value (optional)</source>
-        <translation type="vanished">Максимальное Значение Графика (необязательно)</translation>
-    </message>
-    <message>
-        <source>Upper bound for plot display range</source>
-        <translation type="vanished">Верхняя граница диапазона отображения графика</translation>
-    </message>
-    <message>
-        <source>FFT Configuration</source>
-        <translation type="vanished">Конфигурация FFT</translation>
-    </message>
-    <message>
-        <source>Enable FFT Analysis</source>
-        <translation type="vanished">Включить Анализ FFT</translation>
-    </message>
-    <message>
-        <source>Perform frequency-domain analysis of the dataset</source>
-        <translation type="vanished">Выполнить частотный анализ набора данных</translation>
-    </message>
-    <message>
-        <source>FFT Window Size</source>
-        <translation type="vanished">Размер Окна FFT</translation>
-    </message>
-    <message>
-        <source>Number of samples used for each FFT calculation window</source>
-        <translation type="vanished">Количество образцов для каждого окна расчета FFT</translation>
-    </message>
-    <message>
-        <source>FFT Sampling Rate (Hz, required)</source>
-        <translation type="vanished">Частота дискретизации FFT (Гц, обязательно)</translation>
-    </message>
-    <message>
-        <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation type="vanished">Частота дискретизации для FFT (в Гц)</translation>
-    </message>
-    <message>
-        <source>Minimum Value (recommended)</source>
-        <translation type="vanished">Минимальное Значение (рекомендуется)</translation>
-    </message>
-    <message>
-        <source>Lower bound for data normalization</source>
-        <translation type="vanished">Нижняя граница для нормализации данных</translation>
-    </message>
-    <message>
-        <source>Maximum Value (recommended)</source>
-        <translation type="vanished">Максимальное Значение (рекомендуется)</translation>
-    </message>
-    <message>
-        <source>Upper bound for data normalization</source>
-        <translation type="vanished">Верхняя граница для нормализации данных</translation>
-    </message>
-    <message>
-        <source>Widget Settings</source>
-        <translation type="vanished">Настройки Виджета</translation>
-    </message>
-    <message>
-        <source>Widget</source>
-        <translation type="vanished">Виджет</translation>
-    </message>
-    <message>
-        <source>Select the visual widget used to display this dataset</source>
-        <translation type="vanished">Выберите визуальный виджет для отображения этого набора данных</translation>
-    </message>
-    <message>
-        <source>Show in Overview</source>
-        <translation type="vanished">Показать в обзоре</translation>
-    </message>
-    <message>
-        <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation type="vanished">Отобразить этот виджет в обзоре панели (если включено)</translation>
-    </message>
-    <message>
-        <source>Minimum Display Value (required)</source>
-        <translation type="vanished">Минимальное Значение Отображения (обязательно)</translation>
-    </message>
-    <message>
-        <source>Lower bound of the gauge or bar display range</source>
-        <translation type="vanished">Нижняя граница диапазона отображения шкалы или столбца</translation>
-    </message>
-    <message>
-        <source>Maximum Display Value (required)</source>
-        <translation type="vanished">Максимальное Значение Отображения (обязательно)</translation>
-    </message>
-    <message>
-        <source>Upper bound of the gauge or bar display range</source>
-        <translation type="vanished">Верхняя граница диапазона отображения шкалы или столбца</translation>
-    </message>
-    <message>
-        <source>Alarm Settings</source>
-        <translation type="vanished">Настройки Сигнализации</translation>
-    </message>
-    <message>
-        <source>Enable Alarms</source>
-        <translation type="vanished">Включить Сигнализацию</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation type="vanished">Включает визуальную сигнализацию, когда значение превышает пороги сигнализации</translation>
-    </message>
-    <message>
-        <source>Low Threshold</source>
-        <translation type="vanished">Нижний Порог</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation type="vanished">Включает визуальную сигнализацию, когда значение падает ниже этого порога</translation>
-    </message>
-    <message>
-        <source>High Threshold</source>
-        <translation type="vanished">Верхний Порог</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation type="vanished">Включает визуальную сигнализацию, когда значение превышает этот порог</translation>
-    </message>
-    <message>
-        <source>LED Display Settings</source>
-        <translation type="vanished">Настройки Светодиодного Дисплея</translation>
-    </message>
-    <message>
-        <source>Show in LED Panel</source>
-        <translation type="vanished">Показать на светодиодной панели</translation>
-    </message>
-    <message>
-        <source>Enable visual status monitoring using an LED display</source>
-        <translation type="vanished">Включить визуальный мониторинг состояния с помощью светодиодного дисплея</translation>
-    </message>
-    <message>
-        <source>LED On Threshold (required)</source>
-        <translation type="vanished">Порог Включения Светодиода (обязательно)</translation>
-    </message>
-    <message>
-        <source>LED lights up when value meets or exceeds this threshold</source>
-        <translation type="vanished">Светодиод загорается, когда значение достигает или превышает этот порог</translation>
-    </message>
-    <message>
-        <source>Off</source>
-        <translation type="vanished">Выключено</translation>
-    </message>
-    <message>
-        <source>Auto Start</source>
-        <translation type="vanished">Автозапуск</translation>
-    </message>
-    <message>
-        <source>Start on Trigger</source>
-        <translation type="vanished">Запуск по триггеру</translation>
-    </message>
-    <message>
-        <source>Toggle on Trigger</source>
-        <translation type="vanished">Переключение по триггеру</translation>
-    </message>
-    <message>
-        <source>Plain Text (UTF8)</source>
-        <translation type="vanished">Обычный Текст (UTF8)</translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation type="vanished">Шестнадцатеричный</translation>
-    </message>
-    <message>
-        <source>Base64</source>
-        <translation type="vanished">Base64</translation>
-    </message>
-    <message>
-        <source>Binary (Direct)</source>
-        <translation type="vanished">Двоичный (прямой)</translation>
-    </message>
-    <message>
-        <source>No Checksum</source>
-        <translation type="vanished">Нет Контрольной Суммы</translation>
-    </message>
-    <message>
-        <source>End Delimiter Only</source>
-        <translation type="vanished">Только Конечный Разделитель</translation>
-    </message>
-    <message>
-        <source>Start Delimiter Only</source>
-        <translation type="vanished">Только Начальный Разделитель</translation>
-    </message>
-    <message>
-        <source>Start + End Delimiter</source>
-        <translation type="vanished">Начальный + Конечный Разделитель</translation>
-    </message>
-    <message>
-        <source>No Delimiters</source>
-        <translation type="vanished">Без Разделителей</translation>
-    </message>
-    <message>
-        <source>Data Grid</source>
-        <translation type="vanished">Таблица Данных</translation>
-    </message>
-    <message>
-        <source>GPS Map</source>
-        <translation type="vanished">Карта GPS</translation>
-    </message>
-    <message>
-        <source>Gyroscope</source>
-        <translation type="vanished">Гироскоп</translation>
-    </message>
-    <message>
-        <source>Multiple Plot</source>
-        <translation type="vanished">Множественный График</translation>
-    </message>
-    <message>
-        <source>Accelerometer</source>
-        <translation type="vanished">Акселерометр</translation>
-    </message>
-    <message>
-        <source>3D Plot</source>
-        <translation type="vanished">3D График</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="vanished">Столбец</translation>
-    </message>
-    <message>
-        <source>Gauge</source>
-        <translation type="vanished">Шкала</translation>
-    </message>
-    <message>
-        <source>Compass</source>
-        <translation type="vanished">Компас</translation>
-    </message>
-    <message>
-        <source>New Line (\n)</source>
-        <translation type="vanished">Новая Строка (</translation>
-    </message>
-    <message>
-        <source>Carriage Return (\r)</source>
-        <translation type="vanished">Возврат Каретки (\r)</translation>
-    </message>
-    <message>
-        <source>CRLF (\r\n)</source>
-        <translation type="vanished">CRLF (\r</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Да</translation>
-    </message>
-    <message>
-        <source>Save changes to frame parser code?</source>
-        <translation type="vanished">Сохранить изменения в коде парсера фреймов?</translation>
-    </message>
-    <message>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation type="vanished">Выберите «Сохранить», чтобы сохранить изменения, «Отменить», чтобы потерять их навсегда, или «Отмена», чтобы вернуться.</translation>
-    </message>
-    <message>
-        <source>Save Changes</source>
-        <translation type="vanished">Сохранить Изменения</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4063"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4196"/>
         <source>File open error</source>
         <translation>Ошибка открытия файла</translation>
     </message>
@@ -4354,138 +3095,142 @@ Any unsaved changes will be lost. Continue?</source>
 <context>
     <name>DataModel::TransmitTestDialog</name>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="164"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="165"/>
         <source>Invalid Hex Input</source>
-        <translation>Неверный ввод Hex</translation>
+        <translation>Недопустимый HEX-Ввод</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="165"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="166"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
-        <translation>Пожалуйста, введите правильные шестнадцатеричные байты.
+        <translation>Введите корректные шестнадцатеричные байты.
 
-Правильный формат: 01 A2 FF 3C</translation>
+Допустимый формат: 01 A2 FF 3C</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="171"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="172"/>
         <source>No transmit function code to evaluate.</source>
-        <translation>Нет кода функции передачи для оценки.</translation>
+        <translation>Отсутствует код функции передачи для выполнения.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="187"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="192"/>
         <source>transmit function is not callable</source>
-        <translation>функция передачи не вызывается</translation>
+        <translation>функция transmit не вызываема</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="251"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="256"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="252"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="257"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="253"/>
-        <source>Evaluate</source>
-        <translation>Оценить</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="254"/>
-        <source>Input Value</source>
-        <translation>Входное значение</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="255"/>
-        <source>Transmit Function Output</source>
-        <translation>Выход функции передачи</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="256"/>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="282"/>
-        <source>Enter value to transmit...</source>
-        <translation>Введите значение для передачи...</translation>
-    </message>
-    <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="257"/>
-        <source>Raw string output will appear here</source>
-        <translation>Здесь появится вывод необработанной строки</translation>
-    </message>
-    <message>
         <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="258"/>
-        <source>Hex byte output will appear here</source>
-        <translation>Здесь появится вывод в виде шестнадцатеричных байтов</translation>
+        <source>Evaluate</source>
+        <translation>Вычислить</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="259"/>
+        <source>Input Value</source>
+        <translation>Входное Значение</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="260"/>
+        <source>Transmit Function Output</source>
+        <translation>Выход Функции Передачи</translation>
     </message>
     <message>
         <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="261"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="287"/>
+        <source>Enter value to transmit…</source>
+        <translation>Введите значение для передачи…</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="262"/>
+        <source>Raw string output appears here</source>
+        <translation>Здесь отображается вывод в виде строки</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="263"/>
+        <source>Hex byte output appears here</source>
+        <translation>Здесь отображается вывод в шестнадцатеричном формате</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="266"/>
         <source>Test Transmit Function</source>
-        <translation>Тест функции передачи</translation>
+        <translation>Тестировать Функцию Передачи</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="276"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="281"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation>Введите шестнадцатеричные байты (например, 01 A2 FF)</translation>
+        <translation>Введите байты в шестнадцатеричном формате (например, 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="398"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="403"/>
         <source>(empty) No data returned</source>
         <translation>(пусто) Данные не возвращены</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="400"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="405"/>
         <source>0 bytes</source>
         <translation>0 байт</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="433"/>
+        <location filename="../../src/DataModel/TransmitTestDialog.cpp" line="438"/>
         <source>%1 byte(s)</source>
-        <translation>%1 байт(а)</translation>
+        <translation>%1 байт</translation>
     </message>
 </context>
 <context>
     <name>DataTablesView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="33"/>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="158"/>
         <source>Shared Memory</source>
-        <translation>Общая память</translation>
+        <translation>Разделяемая Память</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="168"/>
-        <source>Define constants and computed values shared across all transforms.</source>
-        <translation>Определите константы и вычисленные значения, общие для всех преобразований.</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="227"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="147"/>
         <source>Add Shared Table</source>
-        <translation>Добавить Общую Таблицу</translation>
+        <translation>Добавить Разделяемую Таблицу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="229"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="149"/>
         <source>Add shared table</source>
-        <translation>Добавить общую таблицу</translation>
+        <translation>Добавить разделяемую таблицу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="158"/>
+        <source>Help</source>
+        <translation>Справка</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="163"/>
+        <source>Open help documentation for shared memory</source>
+        <translation>Открыть справочную документацию по разделяемой памяти</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="172"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="247"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="173"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="174"/>
         <source>Entries</source>
         <translation>Записи</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="345"/>
+        <location filename="../../qml/ProjectEditor/Views/DataTablesView.qml" line="264"/>
         <source>No shared tables.</source>
-        <translation>Нет общих таблиц.</translation>
+        <translation>Нет разделяемых таблиц.</translation>
     </message>
 </context>
 <context>
@@ -4514,17 +3259,17 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="199"/>
         <source>Close session file</source>
-        <translation>Закрыть файл сессии</translation>
+        <translation>Закрыть файл сеанса</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="210"/>
         <source>Replay</source>
-        <translation>Повтор</translation>
+        <translation>Воспроизвести</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="214"/>
         <source>Replay selected session on the dashboard</source>
-        <translation>Повтор выбранной сессии на панели управления</translation>
+        <translation>Воспроизвести выбранный сеанс на панели</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="220"/>
@@ -4534,16 +3279,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="224"/>
         <source>Delete the selected session</source>
-        <translation>Удалить выбранную сессию</translation>
+        <translation>Удалить выбранный сеанс</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="236"/>
         <source>Export CSV</source>
-        <translation>Экспорт CSV</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <translation type="vanished">Экспорт</translation>
+        <translation>Экспортировать CSV</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="241"/>
@@ -4558,12 +3299,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="253"/>
         <source>Generate a PDF report for the selected session</source>
-        <translation>Создать отчет в формате PDF для выбранной сессии</translation>
+        <translation>Создать PDF-отчёт для выбранной сессии</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="266"/>
         <source>Restore Project</source>
-        <translation>Восстановить проект</translation>
+        <translation>Восстановить Проект</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="270"/>
@@ -4576,12 +3317,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="83"/>
         <source>Pro features detected in this project.</source>
-        <translation>В этом проекте обнаружены профессиональные функции.</translation>
+        <translation>Обнаружены функции Pro в этом проекте.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="85"/>
-        <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Будут использоваться резервные виджеты. Купите лицензию, чтобы разблокировать полную функциональность.</translation>
+        <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
+        <translation>Используются резервные виджеты. Приобретите лицензию для полной функциональности.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="148"/>
@@ -4591,37 +3332,37 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="152"/>
         <source>Toggle 2D plot visualization for this dataset</source>
-        <translation>Переключить 2D визуализацию графика для этого набора данных</translation>
+        <translation>Переключить визуализацию 2D-графика для этого набора данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="167"/>
         <source>FFT Plot</source>
-        <translation>График БПФ</translation>
+        <translation>График FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="170"/>
         <source>Toggle FFT plot to visualize frequency content</source>
-        <translation>Переключить график БПФ для визуализации частотного содержания</translation>
+        <translation>Переключить график FFT для визуализации частотного содержимого</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="185"/>
         <source>Bar/Level</source>
-        <translation>Столбец/Уровень</translation>
+        <translation>Полоса/уровень</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="189"/>
         <source>Toggle bar/level indicator for this dataset</source>
-        <translation>Переключить индикатор столбца/уровня для этого набора данных</translation>
+        <translation>Переключить индикатор полосы/уровня для этого набора данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="203"/>
         <source>Gauge</source>
-        <translation>Шкала</translation>
+        <translation>Датчик</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="208"/>
         <source>Toggle gauge widget for analog-style display</source>
-        <translation>Переключить виджет шкалы для аналогового отображения</translation>
+        <translation>Переключить виджет датчика для аналогового отображения</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="223"/>
@@ -4636,22 +3377,22 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="241"/>
         <source>LED</source>
-        <translation>LED</translation>
+        <translation>СВЕТОДИОД</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="246"/>
         <source>Toggle LED indicator for binary or thresholded values</source>
-        <translation>Переключить индикатор LED для двоичных или пороговых значений</translation>
+        <translation>Переключить индикатор светодиода для бинарных или пороговых значений</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="263"/>
         <source>Transform</source>
-        <translation>Преобразовать</translation>
+        <translation>Преобразование</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="267"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
-        <translation>Редактировать выражение преобразования значения для калибровки, фильтрации или преобразования единиц</translation>
+        <translation>Редактировать выражение преобразования значения для калибровки, фильтрации или конвертации единиц измерения</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="287"/>
@@ -4679,7 +3420,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
         <source>Support Serial Studio</source>
-        <translation>Поддержите Serial Studio</translation>
+        <translation>Поддержать Serial Studio</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="96"/>
@@ -4689,7 +3430,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="107"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
-        <translation>Serial Studio — это бесплатное и открытое ПО, поддерживаемое волонтёрами. Подумайте о пожертвовании или приобретении Pro-лицензии для поддержки разработки :)</translation>
+        <translation>Serial Studio — это свободное программное обеспечение с открытым исходным кодом, поддерживаемое волонтёрами. Рассмотрите возможность пожертвования или приобретения лицензии Pro для поддержки разработки :)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="120"/>
@@ -4704,7 +3445,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
         <source>Donate</source>
-        <translation>Пожертвовать</translation>
+        <translation>Поддержать Проект</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Donate.qml" line="168"/>
@@ -4729,7 +3470,7 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="129"/>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="455"/>
         <source>Time remaining</source>
-        <translation>Оставшееся время</translation>
+        <translation>Осталось времени</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="129"/>
@@ -4744,7 +3485,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="228"/>
         <source>Cannot find downloaded update!</source>
-        <translation>Не удается найти загруженное обновление!</translation>
+        <translation>Не удалось найти загруженное обновление!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="244"/>
@@ -4757,33 +3498,29 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Загрузка завершена!</translation>
     </message>
     <message>
-        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="246"/>
-        <source>The installer will open separately</source>
-        <translation>Установщик откроется отдельно</translation>
-    </message>
-    <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="253"/>
         <source>Click "OK" to begin installing the update</source>
-        <translation>Нажмите "ОК", чтобы начать установку обновления</translation>
+        <translation>Нажмите «ОК», чтобы начать установку обновления</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="255"/>
         <source>In order to install the update, you may need to quit the application.</source>
-        <translation>Для установки обновления, возможно, потребуется выйти из приложения.</translation>
+        <translation>Для установки обновления может потребоваться закрыть приложение.</translation>
     </message>
     <message>
-        <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application</source>
-        <translation type="vanished">Для установки обновления, возможно, потребуется выйти из приложения. Это обязательное обновление, выход сейчас закроет приложение</translation>
+        <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="246"/>
+        <source>The installer opens separately</source>
+        <translation>Установщик открывается отдельно</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="259"/>
         <source>In order to install the update, you may need to quit the application. This is a mandatory update, exiting now will close the application.</source>
-        <translation>Чтобы установить обновление, возможно, потребуется выйти из приложения. Это обязательное обновление, выход сейчас закроет приложение.</translation>
+        <translation>Для установки обновления может потребоваться закрыть приложение. Это обязательное обновление, выход приведёт к закрытию приложения.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="275"/>
         <source>Click the "Open" button to apply the update</source>
-        <translation>Нажмите кнопку "Открыть", чтобы применить обновление</translation>
+        <translation>Нажмите кнопку «Открыть», чтобы применить обновление</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="288"/>
@@ -4793,12 +3530,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="292"/>
         <source>Are you sure you want to cancel the download?</source>
-        <translation>Вы уверены, что хотите отменить загрузку?</translation>
+        <translation>Отменить загрузку?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="294"/>
         <source>Are you sure you want to cancel the download? This is a mandatory update, exiting now will close the application</source>
-        <translation>Вы уверены, что хотите отменить загрузку? Это обязательное обновление, выход сейчас закроет приложение</translation>
+        <translation>Отменить загрузку? Это обязательное обновление, выход приведёт к закрытию приложения.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="349"/>
@@ -4831,7 +3568,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="407"/>
         <source>Time Remaining</source>
-        <translation>Оставшееся Время</translation>
+        <translation>Осталось Времени</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="407"/>
@@ -4841,7 +3578,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="431"/>
         <source>about %1 hours</source>
-        <translation>около %1 часов</translation>
+        <translation>около %1 ч</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="433"/>
@@ -4851,30 +3588,22 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="441"/>
         <source>%1 minutes</source>
-        <translation>%1 минут</translation>
+        <translation>%1 мин</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="443"/>
         <source>1 minute</source>
-        <translation>1 минута</translation>
+        <translation>1 мин</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="450"/>
         <source>%1 seconds</source>
-        <translation>%1 секунд</translation>
+        <translation>%1 с</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Downloader.cpp" line="452"/>
         <source>1 second</source>
         <translation>1 секунда</translation>
-    </message>
-    <message>
-        <source>Time remaining: 0 minutes</source>
-        <translation type="vanished">Оставшееся время: 0 минут</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation type="vanished">Открыть</translation>
     </message>
 </context>
 <context>
@@ -4882,12 +3611,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="33"/>
         <source>Examples Browser</source>
-        <translation>Обозреватель примеров</translation>
-    </message>
-    <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="131"/>
-        <source>Search in Examples...</source>
-        <translation>Поиск в примерах...</translation>
+        <translation>Обозреватель Примеров</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="174"/>
@@ -4902,7 +3626,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="227"/>
         <source>Download &amp;&amp; Open</source>
-        <translation>Скачать &amp;&amp; Открыть</translation>
+        <translation>Загрузить и Открыть</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="242"/>
@@ -4910,19 +3634,24 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Просмотреть на GitHub</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="131"/>
+        <source>Search in Examples…</source>
+        <translation>Поиск в Примерах…</translation>
+    </message>
+    <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="298"/>
-        <source>Fetching examples...</source>
-        <translation>Получение примеров...</translation>
+        <source>Fetching examples…</source>
+        <translation>Получение примеров…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="694"/>
         <source>Copied to Clipboard</source>
-        <translation>Скопировано в буфер обмена</translation>
+        <translation>Скопировано в Буфер Обмена</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="757"/>
         <source>No screenshot available</source>
-        <translation>Скриншот недоступен</translation>
+        <translation>Снимок экрана недоступен</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="789"/>
@@ -4952,34 +3681,22 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="914"/>
         <source>No Results Found</source>
-        <translation>Результаты не найдены</translation>
+        <translation>Результаты Не Найдены</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="925"/>
         <source>Check the spelling or try a different search term.</source>
-        <translation>Проверьте орфографию или попробуйте другой поисковый запрос.</translation>
+        <translation>Проверьте правописание или попробуйте другой поисковый запрос.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="940"/>
         <source>%1 examples</source>
-        <translation>%1 примеры</translation>
+        <translation>Примеров: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="951"/>
         <source>Close</source>
         <translation>Закрыть</translation>
-    </message>
-    <message>
-        <source>Screenshot Preview</source>
-        <translation type="vanished">Предварительный просмотр скриншота</translation>
-    </message>
-    <message>
-        <source>Loading...</source>
-        <translation type="vanished">Загрузка...</translation>
-    </message>
-    <message>
-        <source>No README available.</source>
-        <translation type="vanished">README недоступен.</translation>
     </message>
 </context>
 <context>
@@ -4987,12 +3704,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="31"/>
         <source>Extension Manager</source>
-        <translation>Менеджер расширений</translation>
-    </message>
-    <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
-        <source>Search extensions...</source>
-        <translation>Поиск расширений...</translation>
+        <translation>Менеджер Расширений</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="176"/>
@@ -5040,9 +3752,14 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Сбросить</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <source>Search extensions…</source>
+        <translation>Поиск расширений…</translation>
+    </message>
+    <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="426"/>
-        <source>Fetching extensions...</source>
-        <translation>Получение расширений...</translation>
+        <source>Fetching extensions…</source>
+        <translation>Получение расширений…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="660"/>
@@ -5102,7 +3819,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1121"/>
         <source>No output yet. Run the plugin to see its log here.</source>
-        <translation>Пока нет вывода. Запустите плагин, чтобы увидеть его журнал здесь.</translation>
+        <translation>Вывода пока нет. Запустите плагин, чтобы увидеть его журнал здесь.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1156"/>
@@ -5117,7 +3834,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1213"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
-        <translation>Добавьте URL-адреса удалённых репозиториев или пути к локальным папкам.</translation>
+        <translation>Добавьте URL удалённых репозиториев или пути к локальным папкам.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1250"/>
@@ -5126,8 +3843,13 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1307"/>
-        <source>URL or local path...</source>
-        <translation>URL или локальный путь...</translation>
+        <source>URL or local path…</source>
+        <translation>URL или локальный путь…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1338"/>
+        <source>Browse…</source>
+        <translation>Обзор…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1315"/>
@@ -5135,24 +3857,19 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1338"/>
-        <source>Browse...</source>
-        <translation>Обзор...</translation>
-    </message>
-    <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1375"/>
         <source>No Results Found</source>
-        <translation>Результаты не найдены</translation>
+        <translation>Результаты Не Найдены</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1386"/>
         <source>Check the spelling or try a different search term.</source>
-        <translation>Проверьте правописание или попробуйте другой поисковый запрос.</translation>
+        <translation>Проверьте правильность написания или попробуйте другой поисковый запрос.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1410"/>
         <source>No Extensions Available</source>
-        <translation>Нет доступных расширений</translation>
+        <translation>Расширения Недоступны</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1421"/>
@@ -5162,7 +3879,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1436"/>
         <source>%1 extensions</source>
-        <translation>%1 расширения</translation>
+        <translation>Расширений: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1447"/>
@@ -5175,22 +3892,22 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="141"/>
         <source>Show Area Under Plot</source>
-        <translation>Показать площадь под графиком</translation>
+        <translation>Показать Область Под Графиком</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="158"/>
         <source>Show X Axis Label</source>
-        <translation>Показать метку оси X</translation>
+        <translation>Показать Метку Оси X</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="170"/>
         <source>Show Y Axis Label</source>
-        <translation>Показать метку оси Y</translation>
+        <translation>Показать Метку Оси Y</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="188"/>
         <source>Show Crosshair</source>
-        <translation>Показать перекрестие</translation>
+        <translation>Показать Перекрестие</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="195"/>
@@ -5210,7 +3927,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="220"/>
         <source>Axis Range Settings</source>
-        <translation>Настройки Диапазона Оси</translation>
+        <translation>Настройки Диапазона Осей</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="249"/>
@@ -5228,7 +3945,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/FileDropArea.qml" line="126"/>
         <source>Drop Projects and CSV files here</source>
-        <translation>Перетащите проекты и файлы CSV сюда</translation>
+        <translation>Перетащите сюда файлы проектов и CSV</translation>
     </message>
 </context>
 <context>
@@ -5241,7 +3958,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="94"/>
         <source>Transfer Protocol:</source>
-        <translation>Протокол передачи:</translation>
+        <translation>Протокол Передачи:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="126"/>
@@ -5250,8 +3967,8 @@ Valid format: 01 A2 FF 3C</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="143"/>
-        <source>Select File...</source>
-        <translation>Выбрать Файл...</translation>
+        <source>Select File…</source>
+        <translation>Выбрать Файл…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="161"/>
@@ -5262,27 +3979,27 @@ Valid format: 01 A2 FF 3C</source>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="186"/>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="260"/>
         <source>msecs</source>
-        <translation>мсек</translation>
+        <translation>мс</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="196"/>
         <source>Block Size:</source>
-        <translation>Размер блока:</translation>
+        <translation>Размер Блока:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="223"/>
         <source>bytes</source>
-        <translation>байты</translation>
+        <translation>байт</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="233"/>
         <source>Timeout:</source>
-        <translation>Таймаут:</translation>
+        <translation>Тайм-аут:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="270"/>
         <source>Max Retries:</source>
-        <translation>Максимум повторов:</translation>
+        <translation>Макс. Попыток:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="327"/>
@@ -5297,21 +4014,17 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="368"/>
         <source>Errors: %1</source>
-        <translation>Ошибки: %1</translation>
+        <translation>Ошибок: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="448"/>
         <source>Activity Log</source>
-        <translation>Журнал активности</translation>
+        <translation>Журнал Активности</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="452"/>
         <source>Clear</source>
         <translation>Очистить</translation>
-    </message>
-    <message>
-        <source>Progress: %1</source>
-        <translation type="vanished">Прогресс: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/FileTransmission.qml" line="406"/>
@@ -5364,15 +4077,11 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
         <source>No groups defined yet</source>
-        <translation>Группы еще не определены</translation>
+        <translation>Группы ещё не определены</translation>
     </message>
 </context>
 <context>
     <name>FrameParserView</name>
-    <message>
-        <source>modified</source>
-        <translation type="vanished">изменено</translation>
-    </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="94"/>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="225"/>
@@ -5406,12 +4115,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="127"/>
         <source>Select All</source>
-        <translation>Выбрать Всё</translation>
+        <translation>Выделить Всё</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="199"/>
         <source>Reset</source>
-        <translation>Сброс</translation>
+        <translation>Сбросить</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="204"/>
@@ -5426,12 +4135,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="217"/>
         <source>Import a script file for data parsing</source>
-        <translation>Импортировать файл скрипта для разбора данных</translation>
+        <translation>Импортировать файл сценария для парсинга данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="319"/>
         <source>Open help documentation for data parsing</source>
-        <translation>Открыть справочную документацию по разбору данных</translation>
+        <translation>Открыть справочную документацию по парсингу данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="341"/>
@@ -5439,39 +4148,19 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation type="vanished">Сохранить</translation>
-    </message>
-    <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="397"/>
-        <source>Select Template...</source>
-        <translation>Выбрать Шаблон...</translation>
+        <source>Select Template…</source>
+        <translation>Выбрать Шаблон…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="413"/>
         <source>Test With Sample Data</source>
-        <translation>Тестировать с Примером Данных</translation>
+        <translation>Тестировать с Примерными Данными</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="423"/>
         <source>Evaluate</source>
-        <translation>Оценить</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <translation type="vanished">Импорт</translation>
-    </message>
-    <message>
-        <source>Import a JavaScript file for data parsing</source>
-        <translation type="vanished">Импортировать файл JavaScript для разбора данных</translation>
-    </message>
-    <message>
-        <source>Validate &amp; Save</source>
-        <translation type="vanished">Проверить и Сохранить</translation>
-    </message>
-    <message>
-        <source>Validate syntax and apply parsing changes</source>
-        <translation type="vanished">Проверить синтаксис и применить изменения разбора</translation>
+        <translation>Вычислить</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="230"/>
@@ -5481,31 +4170,27 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="245"/>
         <source>Redo the previously undone edit</source>
-        <translation>Повторить ранее отменённое изменение</translation>
+        <translation>Повторить отменённое изменение</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="269"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Вырезать выбранный код в буфер обмена</translation>
+        <translation>Вырезать выделенный код в буфер обмена</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="282"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Копировать выбранный код в буфер обмена</translation>
+        <translation>Скопировать Выбранный Код в Буфер Обмена</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="294"/>
         <source>Paste code from clipboard</source>
-        <translation>Вставить код из буфера обмена</translation>
+        <translation>Вставить Код из Буфера Обмена</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/FrameParserView.qml" line="314"/>
         <source>Help</source>
         <translation>Справка</translation>
-    </message>
-    <message>
-        <source>Open help documentation for JavaScript data parsing</source>
-        <translation type="vanished">Открыть документацию по разбору данных JavaScript</translation>
     </message>
 </context>
 <context>
@@ -5513,12 +4198,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="102"/>
         <source>Auto Center</source>
-        <translation>Автоцентровка</translation>
+        <translation>Автоцентрирование</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="118"/>
         <source>Plot Trajectory</source>
-        <translation>Построить Траекторию</translation>
+        <translation>Отображать Траекторию</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/GPS.qml" line="135"/>
@@ -5551,17 +4236,17 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
-        <translation>Обнаружены профессиональные функции в этом проекте.</translation>
+        <translation>Обнаружены функции Pro в этом проекте.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="83"/>
-        <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Будут использоваться резервные виджеты. Купите лицензию для разблокировки полной функциональности.</translation>
+        <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
+        <translation>Используются резервные виджеты. Приобретите лицензию для полной функциональности.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="142"/>
         <source>Dataset</source>
-        <translation>Набор данных</translation>
+        <translation>Набор Данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="146"/>
@@ -5576,37 +4261,37 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="158"/>
         <source>Add a 2D plot to visualize numeric data</source>
-        <translation>Добавьте 2D график для визуализации числовых данных</translation>
+        <translation>Добавить 2D-график для визуализации числовых данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="166"/>
         <source>FFT Plot</source>
-        <translation>График БПФ</translation>
+        <translation>График FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="172"/>
         <source>Add an FFT plot for frequency domain visualization</source>
-        <translation>Добавьте график БПФ для визуализации в частотной области</translation>
+        <translation>Добавить график FFT для визуализации в частотной области</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="178"/>
         <source>Bar/Level</source>
-        <translation>Гистограмма/Уровень</translation>
+        <translation>Полоса/уровень</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="183"/>
         <source>Add a bar or level indicator for scaled values</source>
-        <translation>Добавьте индикатор гистограммы или уровня для масштабированных значений</translation>
+        <translation>Добавить индикатор полосы или уровня для масштабированных значений</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="189"/>
         <source>Gauge</source>
-        <translation>Шкала</translation>
+        <translation>Индикатор</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="195"/>
         <source>Add a gauge widget for analog-style visualization</source>
-        <translation>Добавьте виджет шкалы для аналоговой визуализации</translation>
+        <translation>Добавить виджет индикатора для аналоговой визуализации</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="202"/>
@@ -5616,7 +4301,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="207"/>
         <source>Add a compass to display directional or angular data</source>
-        <translation>Добавьте компас для отображения направленных или угловых данных</translation>
+        <translation>Добавить компас для отображения направленных или угловых данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="213"/>
@@ -5626,7 +4311,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="219"/>
         <source>Add an LED indicator for binary status signals</source>
-        <translation>Добавьте светодиодный индикатор для бинарных сигналов состояния</translation>
+        <translation>Добавить светодиодный индикатор для бинарных сигналов состояния</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="229"/>
@@ -5636,7 +4321,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="233"/>
         <source>Add a button that sends a command on click</source>
-        <translation>Добавьте кнопку, которая отправляет команду при нажатии</translation>
+        <translation>Добавить кнопку, которая отправляет команду при нажатии</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="240"/>
@@ -5646,7 +4331,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="244"/>
         <source>Add a slider for sending scaled numeric values</source>
-        <translation>Добавьте ползунок для отправки масштабированных числовых значений</translation>
+        <translation>Добавить ползунок для отправки масштабированных числовых значений</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="251"/>
@@ -5656,7 +4341,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="255"/>
         <source>Add a toggle switch for on/off commands</source>
-        <translation>Добавить переключатель для команд включения/выключения</translation>
+        <translation>Добавить переключатель для команд вкл/выкл</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="262"/>
@@ -5676,15 +4361,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="277"/>
         <source>Add a rotary knob for setpoint control</source>
-        <translation>Добавить поворотную ручку для контроля уставки</translation>
-    </message>
-    <message>
-        <source>Ramp</source>
-        <translation type="vanished">Пандус</translation>
-    </message>
-    <message>
-        <source>Add a ramp generator for timed value sweeps</source>
-        <translation type="vanished">Добавить генератор пандуса для временных изменений значений</translation>
+        <translation>Добавить поворотную ручку для управления уставкой</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="295"/>
@@ -5694,7 +4371,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="298"/>
         <source>Duplicate the current group and its contents</source>
-        <translation>Дублируйте текущую группу и её содержимое</translation>
+        <translation>Дублировать текущую группу и её содержимое</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="308"/>
@@ -5704,15 +4381,11 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/GroupView.qml" line="312"/>
         <source>Delete the current group and all contained datasets</source>
-        <translation>Удалите текущую группу и все содержащиеся наборы данных</translation>
+        <translation>Удалить текущую группу и все содержащиеся в ней наборы данных</translation>
     </message>
 </context>
 <context>
     <name>Gyroscope</name>
-    <message>
-        <source>Integrate Angles</source>
-        <translation type="vanished">Интегрировать Углы</translation>
-    </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="368"/>
         <source>ROLL ↔</source>
@@ -5721,36 +4394,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="396"/>
         <source>YAW ↻</source>
-        <translation>РЫСКАНИЕ ↻</translation>
+        <translation>РЫСКАНЬЕ ↻</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Gyroscope.qml" line="424"/>
         <source>PITCH ↕</source>
         <translation>ТАНГАЖ ↕</translation>
-    </message>
-    <message>
-        <source>Roll: %1</source>
-        <translation type="vanished">Крен: %1</translation>
-    </message>
-    <message>
-        <source>Yaw: %1</source>
-        <translation type="vanished">Рысканье: %1</translation>
-    </message>
-    <message>
-        <source>Pitch: %1</source>
-        <translation type="vanished">Тангаж: %1</translation>
-    </message>
-    <message>
-        <source>ROLL</source>
-        <translation type="vanished">КРЕН</translation>
-    </message>
-    <message>
-        <source>YAW</source>
-        <translation type="vanished">РЫСКАНИЕ</translation>
-    </message>
-    <message>
-        <source>PITCH</source>
-        <translation type="vanished">ТАНГАЖ</translation>
     </message>
 </context>
 <context>
@@ -5763,7 +4412,7 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="78"/>
         <source>Usage Page</source>
-        <translation>Страница использования</translation>
+        <translation>Страница Использования</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="94"/>
@@ -5773,12 +4422,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="135"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
-        <translation>Подключите игровые контроллеры, джойстики, рулевые колеса, авиационные контроллеры и другие USB-устройства класса HID.</translation>
+        <translation>Подключение геймпадов, джойстиков, рулевых колёс, контроллеров полёта и других USB-устройств класса HID.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="143"/>
         <source>HID Usage Tables (USB.org)</source>
-        <translation>Таблицы использования HID (USB.org)</translation>
+        <translation>Таблицы Использования HID (USB.org)</translation>
     </message>
 </context>
 <context>
@@ -5786,46 +4435,42 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
         <source>Help Center</source>
-        <translation>Центр Помощи</translation>
+        <translation>Центр Справки</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="129"/>
-        <source>Fetching help pages...</source>
-        <translation>Получение страниц помощи...</translation>
+        <source>Fetching help pages…</source>
+        <translation>Загрузка страниц справки…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="163"/>
-        <source>Search...</source>
-        <translation>Поиск...</translation>
+        <source>Search…</source>
+        <translation>Поиск…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="275"/>
-        <source>Loading...</source>
-        <translation>Загрузка...</translation>
+        <source>Loading…</source>
+        <translation>Загрузка…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="387"/>
         <source>Select a page from the sidebar</source>
-        <translation>Выберите страницу из боковой панели</translation>
+        <translation>Выберите страницу на боковой панели</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="417"/>
         <source>Copied to Clipboard</source>
-        <translation>Скопировано в Буфер Обмена</translation>
+        <translation>Скопировано в буфер обмена</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="451"/>
         <source>View Online</source>
-        <translation>Смотреть Онлайн</translation>
-    </message>
-    <message>
-        <source>View on GitHub</source>
-        <translation type="vanished">Посмотреть на GitHub</translation>
+        <translation>Просмотреть Онлайн</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="471"/>
         <source>%1 pages</source>
-        <translation>%1 страниц</translation>
+        <translation>Страниц: %1</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/HelpCenter.qml" line="482"/>
@@ -5836,183 +4481,125 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="205"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="241"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="206"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="242"/>
         <source>Network Socket</source>
-        <translation>Сетевой сокет</translation>
+        <translation>Сетевой Сокет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="207"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="243"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="209"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="245"/>
         <source>Audio</source>
         <translation>Аудио</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="210"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="246"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="211"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="247"/>
         <source>CAN Bus</source>
         <translation>Шина CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="212"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="248"/>
         <source>USB Device</source>
-        <translation>Устройство USB</translation>
+        <translation>USB-устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="213"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="249"/>
         <source>HID Device</source>
-        <translation>Устройство HID</translation>
+        <translation>HID-устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="214"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="250"/>
         <source>Process</source>
         <translation>Процесс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="537"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="603"/>
         <source>Your trial period has ended.</source>
-        <translation>Ваш пробный период закончился.</translation>
+        <translation>Пробный период завершен.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/ConnectionManager.cpp" line="538"/>
+        <location filename="../../src/IO/ConnectionManager.cpp" line="604"/>
         <source>To continue using Serial Studio, please activate your license.</source>
-        <translation>Чтобы продолжить использование Serial Studio, пожалуйста, активируйте вашу лицензию.</translation>
-    </message>
-</context>
-<context>
-    <name>IO::Console</name>
-    <message>
-        <source>ASCII</source>
-        <translation type="vanished">ASCII</translation>
-    </message>
-    <message>
-        <source>HEX</source>
-        <translation type="vanished">HEX</translation>
-    </message>
-    <message>
-        <source>No Line Ending</source>
-        <translation type="vanished">Без Окончания Строки</translation>
-    </message>
-    <message>
-        <source>New Line</source>
-        <translation type="vanished">Новая Строка</translation>
-    </message>
-    <message>
-        <source>Carriage Return</source>
-        <translation type="vanished">Возврат Каретки</translation>
-    </message>
-    <message>
-        <source>CR + NL</source>
-        <translation type="vanished">ВК + НС</translation>
-    </message>
-    <message>
-        <source>Plain Text</source>
-        <translation type="vanished">Обычный Текст</translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation type="vanished">Шестнадцатеричный</translation>
-    </message>
-    <message>
-        <source>No Checksum</source>
-        <translation type="vanished">Без Контрольной Суммы</translation>
-    </message>
-</context>
-<context>
-    <name>IO::ConsoleExport</name>
-    <message>
-        <source>Console Export is a Pro feature.</source>
-        <translation type="vanished">Экспорт консоли - это платная функция.</translation>
-    </message>
-    <message>
-        <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation type="vanished">Эта функция требует лицензии. Пожалуйста, приобретите её для включения экспорта консоли.</translation>
-    </message>
-    <message>
-        <source>Console Output File Error</source>
-        <translation type="vanished">Ошибка Файла Вывода Консоли</translation>
-    </message>
-    <message>
-        <source>Cannot open file for writing!</source>
-        <translation type="vanished">Невозможно открыть файл для записи!</translation>
+        <translation>Для продолжения работы с Serial Studio активируйте лицензию.</translation>
     </message>
 </context>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="691"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="724"/>
         <source>channels</source>
-        <translation>каналы</translation>
+        <translation>каналов</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="744"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="777"/>
         <source> channels</source>
-        <translation>каналы</translation>
+        <translation>каналов</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="885"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="918"/>
         <source>Unsigned 8-bit</source>
         <translation>Беззнаковый 8-бит</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="886"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="919"/>
         <source>Signed 16-bit</source>
         <translation>Знаковый 16-бит</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="887"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="920"/>
         <source>Signed 24-bit</source>
         <translation>Знаковый 24-бит</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="888"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="921"/>
         <source>Signed 32-bit</source>
         <translation>Знаковый 32-бит</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="889"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="922"/>
         <source>Float 32-bit</source>
-        <translation>С Плавающей Запятой 32-бит</translation>
+        <translation>С Плавающей Точкой 32-бит</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="892"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="925"/>
         <source>Mono</source>
         <translation>Моно</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="893"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="926"/>
         <source>Stereo</source>
         <translation>Стерео</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1294"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1327"/>
         <source>Input Device</source>
-        <translation>Входное устройство</translation>
+        <translation>Устройство Ввода</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1302"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1335"/>
         <source>Sample Rate</source>
-        <translation>Частота дискретизации</translation>
+        <translation>Частота Дискретизации</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1310"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1343"/>
         <source>Sample Format</source>
-        <translation>Формат образца</translation>
+        <translation>Формат Выборки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Audio.cpp" line="1318"/>
+        <location filename="../../src/IO/Drivers/Audio.cpp" line="1351"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
@@ -6027,22 +4614,22 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="320"/>
         <source>Select Device</source>
-        <translation>Выберите Устройство</translation>
+        <translation>Выбрать Устройство</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="331"/>
         <source>Select Service</source>
-        <translation>Выберите Сервис</translation>
+        <translation>Выбрать Службу</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="342"/>
         <source>Select Characteristic</source>
-        <translation>Выберите Характеристику</translation>
+        <translation>Выбрать Характеристику</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="510"/>
         <source>Error while configuring BLE service</source>
-        <translation>Ошибка при настройке BLE сервиса</translation>
+        <translation>Ошибка при настройке службы BLE</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="672"/>
@@ -6067,12 +4654,12 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="684"/>
         <source>Characteristic read error</source>
-        <translation>Ошибка чтения характеристики</translation>
+        <translation>Ошибка Чтения Характеристики</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="687"/>
         <source>Descriptor read error</source>
-        <translation>Ошибка чтения дескриптора</translation>
+        <translation>Ошибка Чтения Дескриптора</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="943"/>
@@ -6082,209 +4669,189 @@ Valid format: 01 A2 FF 3C</source>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="951"/>
         <source>Service</source>
-        <translation>Сервис</translation>
+        <translation>Служба</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="970"/>
         <source>Characteristic</source>
         <translation>Характеристика</translation>
     </message>
-    <message>
-        <source>Bluetooth adapter is off!</source>
-        <translation type="vanished">Адаптер Bluetooth выключен!</translation>
-    </message>
-    <message>
-        <source>Invalid Bluetooth adapter!</source>
-        <translation type="vanished">Неверный адаптер Bluetooth!</translation>
-    </message>
-    <message>
-        <source>Unsuported platform or operating system</source>
-        <translation type="vanished">Неподдерживаемая платформа или операционная система</translation>
-    </message>
-    <message>
-        <source>Unsupported discovery method</source>
-        <translation type="vanished">Неподдерживаемый метод обнаружения</translation>
-    </message>
-    <message>
-        <source>General I/O error</source>
-        <translation type="vanished">Общая ошибка ввода/вывода</translation>
-    </message>
 </context>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="191"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="197"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="203"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="208"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="206"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="212"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="218"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="223"/>
         <source>CAN Bus Not Available</source>
-        <translation>CAN Шина Недоступна</translation>
+        <translation>Шина CAN Недоступна</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="192"/>
-        <source>No CAN bus plugins found on this system.
-
-On Linux, please ensure SocketCAN kernel modules are loaded.</source>
-        <translation>CAN шина не найдена в этой системе.
-
-На Linux, пожалуйста, убедитесь, что модули ядра SocketCAN загружены.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="198"/>
-        <source>No CAN bus plugins found on this system.
-
-On Windows, please install CAN hardware drivers (PEAK, Vector, etc.).</source>
-        <translation>CAN шина не найдена в этой системе.
-
-На Windows, пожалуйста, установите драйверы оборудования CAN (PEAK, Vector и т.д.).</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="204"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="219"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
-        <translation>CAN шина не найдена в этой системе.
+        <translation>Плагины шины CAN не найдены в системе.
 
-Поддержка CAN шины на macOS ограничена и может требовать драйверы стороннего оборудования.</translation>
+Поддержка шины CAN в macOS ограничена и может требовать сторонних драйверов оборудования.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="209"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="224"/>
         <source>No CAN bus plugins are available on this platform.</source>
-        <translation>CAN шина недоступна на этой платформе.</translation>
+        <translation>Плагины шины CAN недоступны на этой платформе.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="218"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="233"/>
         <source>Invalid CAN Configuration</source>
         <translation>Неверная Конфигурация CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="219"/>
-        <source>The CAN bus configuration is incomplete. Please select a valid plugin and interface.</source>
-        <translation>Конфигурация CAN-шины неполная. Пожалуйста, выберите действительный плагин и интерфейс.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="226"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="241"/>
         <source>Invalid Selection</source>
         <translation>Неверный Выбор</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="227"/>
-        <source>The selected plugin or interface is no longer available. Please refresh the lists and try again.</source>
-        <translation>Выбранный плагин или интерфейс больше недоступен. Пожалуйста, обновите списки и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="235"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="250"/>
         <source>No Devices Available</source>
-        <translation>Устройства Недоступны</translation>
+        <translation>Нет Доступных Устройств</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="236"/>
-        <source>The plugin or interface list is empty. Please refresh the lists and ensure your CAN hardware is connected.</source>
-        <translation>Список плагинов или интерфейсов пуст. Пожалуйста, обновите списки и убедитесь, что ваше CAN-оборудование подключено.</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="266"/>
+        <source>CAN Device Creation Failed</source>
+        <translation>Не Удалось Создать Устройство CAN</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
+        <source>CAN Connection Failed</source>
+        <translation>Не Удалось Подключиться к CAN</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="207"/>
+        <source>No CAN bus plugins found on this system.
+
+On Linux, ensure SocketCAN kernel modules are loaded.</source>
+        <translation>Плагины шины CAN не найдены в этой системе.
+
+В Linux убедитесь, что модули ядра SOCKETCAN загружены.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="213"/>
+        <source>No CAN bus plugins found on this system.
+
+On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
+        <translation>Плагины шины CAN не найдены в этой системе.
+
+В Windows установите драйверы оборудования CAN (PEAK, VECTOR и т.д.).</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="234"/>
+        <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
+        <translation>Конфигурация шины CAN неполная. Выберите действительный плагин и интерфейс.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="242"/>
+        <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
+        <translation>Выбранный плагин или интерфейс больше не доступен. Обновите списки и повторите попытку.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/CANBus.cpp" line="251"/>
-        <source>CAN Device Creation Failed</source>
-        <translation>Ошибка Создания Устройства CAN</translation>
+        <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
+        <translation>Список плагинов или интерфейсов пуст. Обновите списки и убедитесь, что оборудование CAN подключено.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="253"/>
-        <source>Unable to create CAN bus device. Please check your hardware and drivers.</source>
-        <translation>Не удалось создать устройство CAN-шины. Пожалуйста, проверьте ваше оборудование и драйверы.</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="268"/>
+        <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
+        <translation>Не удалось создать устройство шины CAN. Проверьте оборудование и драйверы.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="287"/>
-        <source>CAN Connection Failed</source>
-        <translation>Ошибка Подключения CAN</translation>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="304"/>
+        <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
+        <translation>Не удалось подключиться к устройству шины CAN. Проверьте подключение оборудования и настройки.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="289"/>
-        <source>Unable to connect to CAN bus device. Please check your hardware connection and settings.</source>
-        <translation>Не удалось подключиться к устройству CAN-шины. Пожалуйста, проверьте подключение оборудования и настройки.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="536"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="551"/>
         <source>CAN Bus Error</source>
-        <translation>Ошибка CAN-шины</translation>
+        <translation>Ошибка Шины CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="537"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="552"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>Произошла ошибка, но устройство CAN больше недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="544"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="559"/>
         <source>Error code: %1</source>
         <translation>Код ошибки: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="547"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="562"/>
         <source>CAN Bus Communication Error</source>
-        <translation>Ошибка Связи CAN-шины</translation>
+        <translation>Ошибка Связи Шины CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="564"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="579"/>
         <source>No CAN driver selected</source>
-        <translation>Не выбран драйвер CAN</translation>
+        <translation>Драйвер CAN не выбран</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="588"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="603"/>
         <source>Load SocketCAN kernel modules first</source>
-        <translation>Сначала загрузите модули ядра SocketCAN</translation>
+        <translation>Сначала загрузите модули ядра SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="590"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="605"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Сначала настройте виртуальный интерфейс CAN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="592"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="610"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="607"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="625"/>
         <source>No interfaces found for %1</source>
-        <translation>Не найдено интерфейсов для %1</translation>
+        <translation>Интерфейсы для %1 не найдены</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="596"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="611"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
-        <translation>Установите &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;драйверы PEAK CAN&lt;/a&gt;</translation>
+        <translation>Установите &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;драйверы PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="599"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="614"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
-        <translation>Установите &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;драйверы Vector CAN&lt;/a&gt;</translation>
+        <translation>Установите &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;драйверы VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="602"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="617"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Установите &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;драйверы SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="605"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="620"/>
         <source>Install %1 drivers</source>
         <translation>Установите драйверы %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="608"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="623"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Установите драйверы %1 для macOS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="672"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="687"/>
         <source>Plugin</source>
         <translation>Плагин</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="680"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="695"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="688"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="703"/>
         <source>Bitrate</source>
-        <translation>Скорость передачи</translation>
+        <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="697"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="712"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
@@ -6292,41 +4859,41 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 <context>
     <name>IO::Drivers::HID</name>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="155"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="173"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="158"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="176"/>
         <source>
 
 Check that your user is in the 'plugdev' group or that a udev rule grants access to this device.</source>
-        <translation>Проверьте, что ваш пользователь находится в группе 'plugdev' или что правило udev предоставляет доступ к этому устройству.
+        <translation>Убедитесь, что пользователь входит в группу 'plugdev' или что правило udev предоставляет доступ к этому устройству.
 
 </translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="162"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="180"/>
         <source>Failed to open "%1"</source>
         <translation>Не удалось открыть "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="265"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="286"/>
         <source>HID Device Error</source>
-        <translation>Ошибка устройства HID</translation>
+        <translation>Ошибка Устройства HID</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="266"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="287"/>
         <source>The HID device was disconnected or encountered a fatal read error.</source>
-        <translation>Устройство HID было отключено или возникла критическая ошибка чтения.</translation>
+        <translation>Устройство HID было отключено или произошла критическая ошибка чтения.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="341"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="362"/>
         <source>Select Device</source>
-        <translation>Выберите устройство</translation>
+        <translation>Выбрать Устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/HID.cpp" line="494"/>
+        <location filename="../../src/IO/Drivers/HID.cpp" line="515"/>
         <source>HID Device</source>
         <translation>Устройство HID</translation>
     </message>
@@ -6334,242 +4901,234 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="273"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="288"/>
         <source>Invalid Serial Port</source>
         <translation>Недействительный Последовательный Порт</translation>
     </message>
     <message>
-        <source>The selected serial port is no longer available. Please refresh the port list and try again.</source>
-        <translation type="vanished">Выбранный последовательный порт больше недоступен. Обновите список портов и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="337"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="352"/>
         <source>Modbus Initialization Failed</source>
         <translation>Ошибка Инициализации Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="338"/>
-        <source>Unable to create Modbus device. Please check your system configuration and try again.</source>
-        <translation>Не удалось создать устройство Modbus. Проверьте конфигурацию системы и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="366"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="381"/>
         <source>Modbus Connection Failed</source>
         <translation>Ошибка Подключения Modbus</translation>
     </message>
     <message>
-        <source>Unable to connect to the Modbus device. Please check your connection settings.</source>
-        <translation type="vanished">Не удалось подключиться к устройству Modbus. Проверьте настройки подключения.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="289"/>
+        <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
+        <translation>Выбранный последовательный порт "%1" больше недоступен. Обновите список портов и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="274"/>
-        <source>The selected serial port "%1" is no longer available. Please refresh the port list and try again.</source>
-        <translation>Выбранный последовательный порт "%1" больше недоступен. Пожалуйста, обновите список портов и попробуйте снова.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="353"/>
+        <source>Unable to create Modbus device. Check your system configuration and try again.</source>
+        <translation>Не удалось создать устройство Modbus. Проверьте конфигурацию системы и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="367"/>
-        <source>Unable to connect to "%1". Please check your connection settings.</source>
-        <translation>Не удалось подключиться к "%1". Пожалуйста, проверьте настройки подключения.</translation>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="382"/>
+        <source>Unable to connect to "%1". Check your connection settings.</source>
+        <translation>Не удалось подключиться к "%1". Проверьте настройки подключения.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="369"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="384"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="491"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="506"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="492"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="507"/>
         <source>Even</source>
         <translation>Чётный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="493"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="508"/>
         <source>Odd</source>
         <translation>Нечётный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="494"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="509"/>
         <source>Space</source>
         <translation>Пробел</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="495"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="510"/>
         <source>Mark</source>
-        <translation>Метка</translation>
+        <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="547"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="562"/>
         <source>Holding Registers (0x03)</source>
-        <translation>Регистр Хранения (0x03)</translation>
+        <translation>Регистры Хранения (0x03)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="548"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="563"/>
         <source>Input Registers (0x04)</source>
         <translation>Входные Регистры (0x04)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="564"/>
         <source>Coils (0x01)</source>
         <translation>Катушки (0x01)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="565"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Дискретные Входы (0x02)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="736"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="751"/>
         <source>No register groups configured</source>
         <translation>Группы регистров не настроены</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="737"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="752"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Добавьте хотя бы одну группу регистров перед созданием проекта.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="739"/>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="754"/>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="778"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="769"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="793"/>
         <source>Modbus Project Generator</source>
         <translation>Генератор Проектов Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="751"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="766"/>
         <source>Failed to create temporary project file</source>
         <translation>Не удалось создать временный файл проекта</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="752"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="767"/>
         <source>Check write permissions to the temporary directory.</source>
-        <translation>Проверьте права на запись в временный каталог.</translation>
+        <translation>Проверьте права на запись во временный каталог.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="773"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="788"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
-        <translation>Проект успешно создан с %1 группами и %2 наборами данных.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="776"/>
-        <source>The project editor is now open for customization.</source>
-        <translation>Редактор проекта теперь открыт для настройки.</translation>
+        <translation>Проект успешно создан: групп — %1, наборов данных — %2.</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/Modbus.cpp" line="791"/>
+        <source>The project editor is now open for customization.</source>
+        <translation>Редактор проекта открыт для настройки.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="806"/>
         <source>Modbus Project</source>
         <translation>Проект Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="797"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="812"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="818"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="833"/>
         <source>Holding Registers</source>
-        <translation>Регистры хранения</translation>
+        <translation>Holding-регистры</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="819"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="834"/>
         <source>Input Registers</source>
-        <translation>Входные регистры</translation>
+        <translation>Регистры Ввода</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="820"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="835"/>
         <source>Coils</source>
         <translation>Катушки</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="821"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="836"/>
         <source>Discrete Inputs</source>
-        <translation>Дискретные входы</translation>
+        <translation>Дискретные Входы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="836"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="851"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="851"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="866"/>
         <source>Register %1</source>
         <translation>Регистр %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="859"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="874"/>
         <source>Coil %1</source>
         <translation>Катушка %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="859"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="874"/>
         <source>Discrete %1</source>
         <translation>Дискретный %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1278"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1293"/>
         <source>Error code: %1</source>
         <translation>Код ошибки: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1281"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1296"/>
         <source>Modbus Communication Error</source>
         <translation>Ошибка Связи Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1294"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1309"/>
         <source>Select Port</source>
-        <translation>Выберите Порт</translation>
+        <translation>Выбрать Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1470"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1485"/>
         <source>Protocol</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1478"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1493"/>
         <source>Slave Address</source>
-        <translation>Адрес ведомого</translation>
+        <translation>Адрес Устройства</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1487"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1502"/>
         <source>Poll Interval (ms)</source>
-        <translation>Интервал опроса (мс)</translation>
+        <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1497"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1512"/>
         <source>Host / IP</source>
         <translation>Хост / IP</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1504"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1519"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1513"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1528"/>
         <source>Serial Port</source>
         <translation>Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1521"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1536"/>
         <source>Baud Rate</source>
-        <translation>Скорость передачи</translation>
+        <translation>Скорость Передачи</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1529"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1544"/>
         <source>Parity</source>
         <translation>Четность</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1537"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1552"/>
         <source>Data Bits</source>
-        <translation>Биты данных</translation>
+        <translation>Биты Данных</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1545"/>
+        <location filename="../../src/IO/Drivers/Modbus.cpp" line="1560"/>
         <source>Stop Bits</source>
         <translation>Стоповые Биты</translation>
     </message>
@@ -6577,490 +5136,478 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="463"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="496"/>
         <source>Network socket error</source>
         <translation>Ошибка сетевого сокета</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="480"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="513"/>
         <source>Socket Type</source>
         <translation>Тип Сокета</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="488"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="521"/>
         <source>Remote Address</source>
-        <translation>Удаленный Адрес</translation>
+        <translation>Удалённый Адрес</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="496"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="529"/>
         <source>TCP Port</source>
-        <translation>TCP Порт</translation>
+        <translation>TCP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="505"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="538"/>
         <source>UDP Local Port</source>
-        <translation>Локальный Порт UDP</translation>
+        <translation>Локальный UDP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="514"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="547"/>
         <source>UDP Remote Port</source>
-        <translation>UDP Удаленный Порт</translation>
+        <translation>Удалённый UDP-Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="523"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="556"/>
         <source>UDP Multicast</source>
-        <translation>UDP Мультикаст</translation>
+        <translation>UDP Multicast</translation>
     </message>
 </context>
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="171"/>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="215"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="189"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="233"/>
         <source>Failed to start process</source>
         <translation>Не удалось запустить процесс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="172"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="190"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>Исполняемый файл "%1" не найден в PATH.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="351"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="378"/>
         <source>Select Executable</source>
-        <translation>Выберите Исполняемый Файл</translation>
+        <translation>Выбрать Исполняемый Файл</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="376"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="403"/>
         <source>Select Working Directory</source>
-        <translation>Выберите Рабочую Директорию</translation>
+        <translation>Выбрать Рабочий Каталог</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="402"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="429"/>
         <source>Select Named Pipe / FIFO</source>
-        <translation>Выберите Именованную Канал / FIFO</translation>
+        <translation>Выбрать Именованный Канал / FIFO</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="501"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="528"/>
         <source>The process crashed.</source>
         <translation>Процесс завершился аварийно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="502"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="529"/>
         <source>Exit code: %1</source>
         <translation>Код завершения: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="505"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="532"/>
         <source>Process "%1" stopped</source>
         <translation>Процесс "%1" остановлен</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="521"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="548"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="522"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="549"/>
         <source>Process Error</source>
-        <translation>Ошибка процесса</translation>
+        <translation>Ошибка Процесса</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="533"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="560"/>
         <source>Pipe Error</source>
-        <translation>Ошибка канала</translation>
+        <translation>Ошибка Канала</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="533"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="560"/>
         <source>Could not open named pipe: %1</source>
         <translation>Не удалось открыть именованный канал: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="724"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="751"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="727"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="754"/>
         <source>Launch Process</source>
         <translation>Запустить Процесс</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="727"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="754"/>
         <source>Named Pipe</source>
-        <translation>Именованная Канал</translation>
+        <translation>Именованный Канал</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="759"/>
         <source>Executable</source>
         <translation>Исполняемый Файл</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="739"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="766"/>
         <source>Arguments</source>
         <translation>Аргументы</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="746"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="773"/>
         <source>Working Directory</source>
-        <translation>Рабочая Директория</translation>
+        <translation>Рабочий Каталог</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Process.cpp" line="753"/>
+        <location filename="../../src/IO/Drivers/Process.cpp" line="780"/>
         <source>Pipe Path</source>
-        <translation>Путь К Каналу</translation>
-    </message>
-    <message>
-        <source>The process has exited.</source>
-        <translation type="vanished">Процесс завершился.</translation>
+        <translation>Путь к Каналу</translation>
     </message>
 </context>
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="69"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="70"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="346"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="385"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="72"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="73"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="388"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="427"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <source>Failed to connect to serial port device</source>
-        <translation type="vanished">Не удалось подключиться к устройству последовательного порта</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="303"/>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="688"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="345"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="745"/>
         <source>Select Port</source>
-        <translation>Выберите Порт</translation>
+        <translation>Выбрать Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="347"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="389"/>
         <source>Even</source>
-        <translation>Четный</translation>
+        <translation>Чётность</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="348"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="390"/>
         <source>Odd</source>
-        <translation>Нечетный</translation>
+        <translation>Нечётность</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="349"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="391"/>
         <source>Space</source>
         <translation>Пробел</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="350"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="392"/>
         <source>Mark</source>
-        <translation>Метка</translation>
+        <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="386"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="428"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="387"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="429"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="508"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="565"/>
         <source>"%1" is not a valid path</source>
-        <translation>"%1" не является допустимым путем</translation>
+        <translation>"%1" не является допустимым путём</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="509"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="566"/>
         <source>Please type another path to register a custom serial device</source>
-        <translation>Пожалуйста, введите другой путь для регистрации пользовательского последовательного устройства</translation>
+        <translation>Введите другой путь для регистрации пользовательского последовательного устройства</translation>
     </message>
     <message>
-        <source>Critical serial port error</source>
-        <translation type="vanished">Критическая ошибка последовательного порта</translation>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="857"/>
+        <source>The specified device could not be found. Check the connection and try again.</source>
+        <translation>Указанное устройство не найдено. Проверьте подключение и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="238"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="864"/>
+        <source>An unknown error occurred. Check the device and try again.</source>
+        <translation>Произошла неизвестная ошибка. Проверьте устройство и повторите попытку.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="866"/>
+        <source>The device is not open. Open the device before attempting this operation.</source>
+        <translation>Устройство не открыто. Откройте устройство перед выполнением этой операции.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="256"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>Не удалось подключиться к последовательному порту "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="775"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="832"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="776"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="833"/>
         <source>Critical error on serial port "%1"</source>
-        <translation>Критическая ошибка на последовательном порту "%1"</translation>
+        <translation>Критическая ошибка последовательного порта "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="777"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="834"/>
         <source>Unknown error</source>
         <translation>Неизвестная ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="799"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="856"/>
         <source>No error occurred.</source>
-        <translation>Ошибок не произошло.</translation>
+        <translation>Ошибок не обнаружено.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="800"/>
-        <source>The specified device could not be found. Please check the connection and try again.</source>
-        <translation>Указанное устройство не найдено. Пожалуйста, проверьте подключение и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="801"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="858"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
-        <translation>Доступ запрещен. Убедитесь, что у приложения есть необходимые права доступа к устройству.</translation>
+        <translation>Доступ запрещён. Убедитесь, что приложение имеет необходимые права доступа к устройству.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="859"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Не удалось открыть устройство. Возможно, оно уже используется или недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="803"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="860"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Произошла ошибка при записи данных на устройство.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="804"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="861"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Произошла ошибка при чтении данных с устройства.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="805"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="862"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
-        <translation>Произошла критическая ошибка ресурса. Устройство могло быть отключено или больше недоступно.</translation>
+        <translation>Произошла критическая ошибка ресурса. Возможно, устройство было отключено или более недоступно.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="863"/>
         <source>The requested operation is not supported on this device.</source>
-        <translation>Запрашиваемая операция не поддерживается на этом устройстве.</translation>
+        <translation>Запрошенная операция не поддерживается данным устройством.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="807"/>
-        <source>An unknown error occurred. Please check the device and try again.</source>
-        <translation>Произошла неизвестная ошибка. Пожалуйста, проверьте устройство и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="808"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="865"/>
         <source>The operation timed out. The device may not be responding.</source>
-        <translation>Операция завершилась по тайм-ауту. Устройство может не отвечать.</translation>
+        <translation>Время ожидания операции истекло. Устройство может не отвечать.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="809"/>
-        <source>The device is not open. Please open the device before attempting this operation.</source>
-        <translation>Устройство не открыто. Пожалуйста, откройте устройство перед выполнением этой операции.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1008"/>
         <source>Serial Port</source>
         <translation>Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="959"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1016"/>
         <source>Baud Rate</source>
-        <translation>Скорость передачи данных</translation>
+        <translation>Скорость Передачи</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="967"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1024"/>
         <source>Parity</source>
         <translation>Четность</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="975"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1032"/>
         <source>Data Bits</source>
-        <translation>Биты данных</translation>
+        <translation>Биты Данных</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="983"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1040"/>
         <source>Stop Bits</source>
-        <translation>Стоповые биты</translation>
+        <translation>Стоповые Биты</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="991"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1048"/>
         <source>Flow Control</source>
-        <translation>Управление потоком</translation>
+        <translation>Управление Потоком</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="999"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1056"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/UART.cpp" line="1006"/>
+        <location filename="../../src/IO/Drivers/UART.cpp" line="1063"/>
         <source>Auto-Reconnect</source>
-        <translation>Авто-подключение</translation>
+        <translation>Автоматическое Переподключение</translation>
     </message>
 </context>
 <context>
     <name>IO::Drivers::USB</name>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="168"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="178"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="170"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="180"/>
         <source>USB Error</source>
         <translation>Ошибка USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="171"/>
         <source>Failed to initialize the USB subsystem. Check that libusb is available on your system.</source>
-        <translation>Не удалось инициализировать подсистему USB. Проверьте, что libusb доступен в вашей системе.</translation>
+        <translation>Не удалось инициализировать подсистему USB. Убедитесь, что libusb доступна в вашей системе.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="179"/>
-        <source>No USB device selected. Please select a device and try again.</source>
-        <translation>Устройство USB не выбрано. Пожалуйста, выберите устройство и попробуйте снова.</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="216"/>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="233"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="218"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="235"/>
         <source>USB Device Error</source>
-        <translation>Ошибка устройства USB</translation>
+        <translation>Ошибка USB-Устройства</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="192"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="194"/>
         <source>Could not open the USB device: %1.
 
 On Linux, ensure you have read/write permission on the device node (add a udev rule or run as root). On macOS, the kernel driver may need to be detached first.</source>
-        <translation>Не удалось открыть устройство USB: %1.
+        <translation>Не удалось открыть USB-устройство: %1.
 
-На Linux убедитесь, что у вас есть права чтения/записи на узле устройства (добавьте правило udev или запустите от имени root). На macOS может потребоваться сначала отключить драйвер ядра.</translation>
+В Linux убедитесь, что у вас есть права на чтение/запись узла устройства (добавьте правило udev или запустите от имени root). В macOS может потребоваться сначала отключить драйвер ядра.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="186"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="181"/>
+        <source>No USB device selected. Select a device and try again.</source>
+        <translation>USB-устройство не выбрано. Выберите устройство и повторите попытку.</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="188"/>
         <source>Unknown Device</source>
-        <translation>Неизвестное устройство</translation>
+        <translation>Неизвестное Устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="191"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="193"/>
         <source>Failed to open "%1"</source>
         <translation>Не удалось открыть "%1"</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="234"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="236"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
-        <translation>Не удалось захватить интерфейс %1 на устройстве USB.
+        <translation>Не удалось захватить интерфейс %1 на USB-устройстве.
 
-Другой драйвер или приложение могут уже использовать его. На Linux попробуйте выгрузить драйвер ядра (например, cdc_acm) или добавить правило udev.</translation>
+Другой драйвер или приложение могут уже использовать его. В Linux попробуйте выгрузить драйвер ядра (например, cdc_acm) или добавить правило udev.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="393"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="398"/>
         <source>Select Device</source>
-        <translation>Выберите устройство</translation>
+        <translation>Выбрать Устройство</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="409"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="417"/>
         <source>Select IN Endpoint</source>
-        <translation>Выберите конечную точку IN</translation>
+        <translation>Выбрать Входную Конечную Точку</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="420"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="428"/>
         <source>None (Read-only)</source>
-        <translation>Нет (только для чтения)</translation>
+        <translation>Нет (Только Чтение)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="489"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="503"/>
         <source>Enable Advanced USB Control Transfers?</source>
-        <translation>Включить расширенные управляющие передачи USB?</translation>
+        <translation>Включить Расширенные Управляющие Передачи USB?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="490"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="504"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
-        <translation>Это включает управляющие передачи в дополнение к пакетным. Отправка неправильных управляющих запросов может привести к сбою или повреждению подключенного оборудования. Включайте это только если вы знаете, что делаете.</translation>
+        <translation>Это включает управляющие передачи в дополнение к массовым передачам. Отправка неправильных управляющих запросов может привести к сбою или повреждению подключенного оборудования. Включайте только если знаете, что делаете.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="494"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="508"/>
         <source>Advanced USB Mode</source>
         <translation>Расширенный Режим USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="732"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="746"/>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
 Switch the Transfer Mode to "Bulk Stream" and try again.</source>
-        <translation>На этом устройстве не найден изохронный входной конечный узел, но доступны пакетные конечные узлы.
+        <translation>На этом устройстве не найдена изохронная конечная точка IN, но доступны массовые конечные точки.
 
-Переключите Режим Передачи на "Поток Пакетов" и попробуйте снова.</translation>
+Переключите Режим Передачи на «Массовый Поток» и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="737"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="751"/>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
-        <translation>На этом устройстве не найден пакетный входной конечный узел, но доступны изохронные конечные узлы.
+        <translation>На этом устройстве не найдена массовая конечная точка IN, но доступны изохронные конечные точки.
 
-Переключите Режим Передачи на "Изохронный" и попробуйте снова.</translation>
+Переключите Режим Передачи на «Изохронный» и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="741"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="755"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may require a specific driver.</source>
-        <translation>На этом устройстве не найден пригодный входной конечный узел.
+        <translation>На этом устройстве не найдена используемая конечная точка IN.
 
-Устройство может не предоставлять конечные узлы данных в своей активной конфигурации или может требовать специфический драйвер.</translation>
+Устройство может не предоставлять конечные точки данных в активной конфигурации или может требовать специальный драйвер.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1158"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1172"/>
         <source>USB Device</source>
         <translation>Устройство USB</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1166"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1180"/>
         <source>Transfer Mode</source>
-        <translation>Режим передачи</translation>
+        <translation>Режим Передачи</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1183"/>
         <source>Bulk Stream</source>
-        <translation>Поток Bulk</translation>
+        <translation>Массовый Поток</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1183"/>
         <source>Advanced Control</source>
         <translation>Расширенное Управление</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1169"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1183"/>
         <source>Isochronous</source>
         <translation>Изохронный</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1174"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1188"/>
         <source>IN Endpoint</source>
-        <translation>Входная Точка</translation>
+        <translation>Конечная Точка IN</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1182"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1196"/>
         <source>OUT Endpoint</source>
-        <translation>Выходная Точка</translation>
+        <translation>Конечная Точка OUT</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1190"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1204"/>
         <source>ISO Packet Size</source>
-        <translation>Размер Пакета ISO</translation>
+        <translation>Размер ISO-Пакета</translation>
     </message>
 </context>
 <context>
     <name>IO::FileTransmission</name>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="205"/>
-        <source>No file selected...</source>
-        <translation>Файл не выбран...</translation>
+        <source>No file selected…</source>
+        <translation>Файл не выбран…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="240"/>
         <source>Plain Text</source>
-        <translation>Простой текст</translation>
+        <translation>Простой Текст</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="241"/>
         <source>Raw Binary</source>
-        <translation>Необработанный двоичный</translation>
+        <translation>Двоичные Данные</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="242"/>
@@ -7099,8 +5646,8 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="372"/>
-        <source>Starting %1 transfer...</source>
-        <translation>Начало передачи %1...</translation>
+        <source>Starting %1 transfer…</source>
+        <translation>Начало передачи %1…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="595"/>
@@ -7116,7 +5663,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="617"/>
         <source>Raw binary transmission complete (%1 bytes)</source>
-        <translation>Передача необработанных данных завершена (%1 байт)</translation>
+        <translation>Передача необработанных двоичных данных завершена (%1 байт)</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="641"/>
@@ -7142,71 +5689,12 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="729"/>
         <source>%1 KB/s</source>
-        <translation>%1 КБ/с</translation>
+        <translation>%1 Кб/с</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission.cpp" line="731"/>
         <source>%1 MB/s</source>
-        <translation>%1 МБ/с</translation>
-    </message>
-</context>
-<context>
-    <name>IO::Manager</name>
-    <message>
-        <source>UART/COM</source>
-        <translation type="vanished">UART/COM</translation>
-    </message>
-    <message>
-        <source>Network Socket</source>
-        <translation type="vanished">Сетевой Сокет</translation>
-    </message>
-    <message>
-        <source>Bluetooth LE</source>
-        <translation type="vanished">Bluetooth LE</translation>
-    </message>
-    <message>
-        <source>Audio</source>
-        <translation type="vanished">Аудио</translation>
-    </message>
-    <message>
-        <source>CANBus</source>
-        <translation type="vanished">CANBus</translation>
-    </message>
-    <message>
-        <source>CAN</source>
-        <translation type="vanished">CAN</translation>
-    </message>
-    <message>
-        <source>Audio Stream</source>
-        <translation type="vanished">Аудиопоток</translation>
-    </message>
-    <message>
-        <source>Modbus</source>
-        <translation type="vanished">Modbus</translation>
-    </message>
-    <message>
-        <source>CAN Bus</source>
-        <translation type="vanished">CAN-шина</translation>
-    </message>
-    <message>
-        <source>USB Device</source>
-        <translation type="vanished">Устройство USB</translation>
-    </message>
-    <message>
-        <source>HID Device</source>
-        <translation type="vanished">Устройство HID</translation>
-    </message>
-    <message>
-        <source>Process</source>
-        <translation type="vanished">Процесс</translation>
-    </message>
-    <message>
-        <source>Your trial period has ended.</source>
-        <translation type="vanished">Ваш пробный период закончился.</translation>
-    </message>
-    <message>
-        <source>To continue using Serial Studio, please activate your license.</source>
-        <translation type="vanished">Чтобы продолжить использование Serial Studio, пожалуйста, активируйте вашу лицензию.</translation>
+        <translation>%1 Мб/с</translation>
     </message>
 </context>
 <context>
@@ -7214,12 +5702,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="85"/>
         <source>Cannot open file: %1</source>
-        <translation>Не удается открыть файл: %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="95"/>
-        <source>Waiting for receiver...</source>
-        <translation>Ожидание приемника...</translation>
+        <translation>Невозможно открыть файл: %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="114"/>
@@ -7232,40 +5715,45 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Передача отменена пользователем</translation>
     </message>
     <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="95"/>
+        <source>Waiting for receiver…</source>
+        <translation>Ожидание приёмника…</translation>
+    </message>
+    <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="135"/>
-        <source>Receiver ready (CRC mode), sending data...</source>
-        <translation>Приемник готов (режим CRC), отправка данных...</translation>
+        <source>Receiver ready (CRC mode), sending data…</source>
+        <translation>Приёмник готов (режим CRC), отправка данных…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="158"/>
         <source>Too many retries, transfer aborted</source>
-        <translation>Слишком много повторных попыток, передача прервана</translation>
+        <translation>Слишком много повторов, передача прервана</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="159"/>
         <source>Maximum retries exceeded</source>
-        <translation>Превышено максимальное количество повторных попыток</translation>
+        <translation>Превышено максимальное количество повторов</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="163"/>
         <source>NAK received, retrying block %1 (%2/%3)</source>
-        <translation>Получен NAK, повторная отправка блока %1 (%2/%3)</translation>
+        <translation>Получен NAK, повтор блока %1 (%2/%3)</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="172"/>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="365"/>
         <source>Failed to seek in file</source>
-        <translation>Ошибка поиска в файле</translation>
+        <translation>Не удалось выполнить поиск в файле</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="179"/>
         <source>Transfer cancelled by receiver</source>
-        <translation>Передача отменена приемником</translation>
+        <translation>Передача отменена получателем</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="180"/>
         <source>Receiver cancelled the transfer</source>
-        <translation>Приемник отменил передачу</translation>
+        <translation>Получатель отменил передачу</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="189"/>
@@ -7284,8 +5772,13 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="309"/>
-        <source>Sending EOT...</source>
-        <translation>Отправка EOT...</translation>
+        <source>Sending EOT…</source>
+        <translation>Отправка EOT…</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="356"/>
+        <source>Timeout, retrying (%1/%2)…</source>
+        <translation>Тайм-аут, повтор (%1/%2)…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="351"/>
@@ -7295,12 +5788,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="352"/>
         <source>Timeout: no response from receiver</source>
-        <translation>Тайм-аут: нет ответа от приемника</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="356"/>
-        <source>Timeout, retrying (%1/%2)...</source>
-        <translation>Тайм-аут, повторная попытка (%1/%2)...</translation>
+        <translation>Тайм-аут: нет ответа от приёмника</translation>
     </message>
 </context>
 <context>
@@ -7308,55 +5796,60 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="64"/>
         <source>Cannot open file: %1</source>
-        <translation>Не удается открыть файл: %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="76"/>
-        <source>Waiting for receiver...</source>
-        <translation>Ожидание приемника...</translation>
+        <translation>Невозможно открыть файл: %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="109"/>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="168"/>
         <source>Transfer cancelled by receiver</source>
-        <translation>Передача отменена приемником</translation>
+        <translation>Передача отменена приёмником</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="110"/>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="169"/>
         <source>Receiver cancelled the transfer</source>
-        <translation>Приемник отменил передачу</translation>
+        <translation>Приёмник отменил передачу</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="76"/>
+        <source>Waiting for receiver…</source>
+        <translation>Ожидание приёмника…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="134"/>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="291"/>
-        <source>Sending first EOT...</source>
-        <translation>Отправка первого EOT...</translation>
+        <source>Sending first EOT…</source>
+        <translation>Отправка первого EOT…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="148"/>
         <source>Too many retries, transfer aborted</source>
-        <translation>Слишком много попыток, передача прервана</translation>
+        <translation>Слишком много повторов, передача прервана</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="149"/>
         <source>Maximum retries exceeded</source>
-        <translation>Превышено максимальное количество попыток</translation>
+        <translation>Превышено максимальное количество повторов</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="153"/>
         <source>NAK received, retrying block %1</source>
-        <translation>Получен NAK, повторная попытка блока %1</translation>
+        <translation>Получен NAK, повтор блока %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="159"/>
         <source>Failed to seek in file</source>
-        <translation>Ошибка поиска в файле</translation>
+        <translation>Не удалось выполнить поиск в файле</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="179"/>
-        <source>Sending second EOT...</source>
-        <translation>Отправка второго EOT...</translation>
+        <source>Sending second EOT…</source>
+        <translation>Отправка второго EOT…</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="270"/>
+        <source>Sending end-of-batch marker…</source>
+        <translation>Отправка маркера конца пакета…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="210"/>
@@ -7369,11 +5862,6 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Отправка заголовка файла: %1 (%2 байт)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="270"/>
-        <source>Sending end-of-batch marker...</source>
-        <translation>Отправка маркера конца пакета...</translation>
-    </message>
-    <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="307"/>
         <source>Sending block %1 (%2/%3 bytes)</source>
         <translation>Отправка блока %1 (%2/%3 байт)</translation>
@@ -7384,7 +5872,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="88"/>
         <source>Cannot open file: %1</source>
-        <translation>Не удается открыть файл: %1</translation>
+        <translation>Невозможно открыть файл: %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="106"/>
@@ -7404,12 +5892,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="266"/>
         <source>Hex header CRC mismatch, dropping frame</source>
-        <translation>Несоответствие CRC заголовка Hex, пропуск кадра</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="426"/>
-        <source>Sending ZRQINIT, waiting for receiver...</source>
-        <translation>Отправка ZRQINIT, ожидание приёмника...</translation>
+        <translation>Несоответствие CRC шестнадцатеричного заголовка, кадр отброшен</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="453"/>
@@ -7419,7 +5902,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="469"/>
         <source>Failed to seek to offset %1</source>
-        <translation>Ошибка поиска по смещению %1</translation>
+        <translation>Не удалось переместиться к смещению %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="500"/>
@@ -7427,29 +5910,14 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Чтение файла вернуло больше данных, чем запрошено</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="528"/>
-        <source>File data sent, waiting for confirmation...</source>
-        <translation>Данные файла отправлены, ожидание подтверждения...</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="539"/>
-        <source>Sending ZFIN...</source>
-        <translation>Отправка ZFIN...</translation>
-    </message>
-    <message>
-        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="575"/>
-        <source>Receiver ready, sending file info...</source>
-        <translation>Приёмник готов, отправка информации о файле...</translation>
-    </message>
-    <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="587"/>
         <source>Receiver requests data from offset %1</source>
-        <translation>Приёмник запрашивает данные с офсета %1</translation>
+        <translation>Получатель запрашивает данные со смещения %1</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="596"/>
         <source>Receiver skipped the file</source>
-        <translation>Приёмник пропустил файл</translation>
+        <translation>Получатель пропустил файл</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="608"/>
@@ -7459,12 +5927,32 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="609"/>
         <source>Maximum retries exceeded</source>
-        <translation>Превышено максимальное количество попыток</translation>
+        <translation>Превышено максимальное количество повторных попыток</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="426"/>
+        <source>Sending ZRQINIT, waiting for receiver…</source>
+        <translation>Отправка ZRQINIT, ожидание получателя…</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="528"/>
+        <source>File data sent, waiting for confirmation…</source>
+        <translation>Данные файла отправлены, ожидание подтверждения…</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="539"/>
+        <source>Sending ZFIN…</source>
+        <translation>Отправка ZFIN…</translation>
+    </message>
+    <message>
+        <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="575"/>
+        <source>Receiver ready, sending file info…</source>
+        <translation>Приёмник готов, отправка информации о файле…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="614"/>
-        <source>NAK received, retrying (%1/%2)...</source>
-        <translation>Получен NAK, повторная попытка (%1/%2)...</translation>
+        <source>NAK received, retrying (%1/%2)…</source>
+        <translation>Получен NAK, повтор (%1/%2)…</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="632"/>
@@ -7474,33 +5962,33 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="642"/>
         <source>Transfer cancelled by receiver</source>
-        <translation>Передача отменена получателем</translation>
+        <translation>Передача отменена приёмником</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="643"/>
         <source>Receiver cancelled the transfer</source>
-        <translation>Получатель отменил передачу</translation>
+        <translation>Приёмник отменил передачу</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="651"/>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="652"/>
         <source>Receiver reported a file error</source>
-        <translation>Получатель сообщил об ошибке файла</translation>
+        <translation>Приёмник сообщил об ошибке файла</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="858"/>
         <source>Transfer timed out</source>
-        <translation>Время ожидания передачи истекло</translation>
+        <translation>Истекло время ожидания передачи</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="859"/>
         <source>Timeout: no response from receiver</source>
-        <translation>Тайм-аут: нет ответа от получателя</translation>
+        <translation>Тайм-аут: нет ответа от приёмника</translation>
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/ZMODEM.cpp" line="863"/>
-        <source>Timeout, retrying (%1/%2)...</source>
-        <translation>Тайм-аут, повторная попытка (%1/%2)...</translation>
+        <source>Timeout, retrying (%1/%2)…</source>
+        <translation>Тайм-аут, повтор (%1/%2)…</translation>
     </message>
 </context>
 <context>
@@ -7508,17 +5996,17 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
         <source>Select Icon</source>
-        <translation>Выбрать Иконку</translation>
+        <translation>Выбрать Значок</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="111"/>
-        <source>Search Online...</source>
-        <translation>Искать Онлайн...</translation>
+        <source>Search Online…</source>
+        <translation>Поиск Онлайн…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="129"/>
         <source>OK</source>
-        <translation>ОК</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/IconPicker.qml" line="142"/>
@@ -7531,17 +6019,17 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="67"/>
         <source>Normal</source>
-        <translation>Нормальный</translation>
+        <translation>Обычный</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="68"/>
         <source>Grayscale</source>
-        <translation>Оттенки серого</translation>
+        <translation>Оттенки Серого</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="69"/>
         <source>High Contrast</source>
-        <translation>Высокая контрастность</translation>
+        <translation>Высокая Контрастность</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="70"/>
@@ -7551,7 +6039,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="71"/>
         <source>Night Vision</source>
-        <translation>Ночное видение</translation>
+        <translation>Ночное Видение</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="72"/>
@@ -7561,7 +6049,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="73"/>
         <source>Deep Blue</source>
-        <translation>Глубокий синий</translation>
+        <translation>Тёмно-синий</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="74"/>
@@ -7571,7 +6059,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="174"/>
         <source>Export Images</source>
-        <translation>Экспорт Изображений</translation>
+        <translation>Экспортировать Изображения</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="184"/>
@@ -7595,1412 +6083,8 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="541"/>
-        <source>Waiting for Image...</source>
-        <translation>Ожидание Изображения...</translation>
-    </message>
-    <message>
-        <source>Waiting for image…</source>
-        <translation type="vanished">Ожидание изображения…</translation>
-    </message>
-    <message>
-        <source>Recording Images</source>
-        <translation type="vanished">Запись Изображений</translation>
-    </message>
-    <message>
-        <source>Saving</source>
-        <translation type="vanished">Сохранение</translation>
-    </message>
-    <message>
-        <source>Frame %1</source>
-        <translation type="vanished">Кадр %1</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::DBCImporter</name>
-    <message>
-        <source>Import DBC File</source>
-        <translation type="vanished">Импортировать Файл DBC</translation>
-    </message>
-    <message>
-        <source>DBC Files (*.dbc);;All Files (*)</source>
-        <translation type="vanished">DBC Файлы (*.dbc);;Все Файлы (*)</translation>
-    </message>
-    <message>
-        <source>Failed to parse DBC file: %1</source>
-        <translation type="vanished">Не удалось разобрать DBC файл: %1</translation>
-    </message>
-    <message>
-        <source>Please verify the file format and try again.</source>
-        <translation type="vanished">Пожалуйста, проверьте формат файла и попробуйте снова.</translation>
-    </message>
-    <message>
-        <source>DBC Import Error</source>
-        <translation type="vanished">Ошибка Импорта DBC</translation>
-    </message>
-    <message>
-        <source>DBC file contains no messages</source>
-        <translation type="vanished">DBC файл не содержит сообщений</translation>
-    </message>
-    <message>
-        <source>The selected file does not contain any CAN message definitions.</source>
-        <translation type="vanished">Выбранный файл не содержит определений CAN сообщений.</translation>
-    </message>
-    <message>
-        <source>DBC Import Warning</source>
-        <translation type="vanished">Предупреждение Импорта DBC</translation>
-    </message>
-    <message>
-        <source>Failed to create temporary project file</source>
-        <translation type="vanished">Не удалось создать временный файл проекта</translation>
-    </message>
-    <message>
-        <source>Check if the application has write permissions to the temporary directory.</source>
-        <translation type="vanished">Проверьте, есть ли у приложения права на запись в временный каталог.</translation>
-    </message>
-    <message>
-        <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
-        <translation type="vanished">Успешно импортирован DBC файл с %1 сообщениями и %2 сигналами.</translation>
-    </message>
-    <message>
-        <source>The project editor is now open for customization.</source>
-        <translation type="vanished">Редактор проекта теперь открыт для настройки.</translation>
-    </message>
-    <message>
-        <source>DBC Import Complete</source>
-        <translation type="vanished">Импорт DBC Завершен</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameBuilder</name>
-    <message>
-        <source>JSON parse error</source>
-        <translation type="vanished">Ошибка разбора JSON</translation>
-    </message>
-    <message>
-        <source>This file isn’t a valid project file</source>
-        <translation type="vanished">Этот файл не является допустимым файлом проекта</translation>
-    </message>
-    <message>
-        <source>Make sure it’s a properly formatted JSON project.</source>
-        <translation type="vanished">Убедитесь, что это правильно отформатированный JSON проект.</translation>
-    </message>
-    <message>
-        <source>Cannot read JSON file</source>
-        <translation type="vanished">Невозможно прочитать JSON файл</translation>
-    </message>
-    <message>
-        <source>Please check file permissions &amp; location</source>
-        <translation type="vanished">Пожалуйста, проверьте разрешения и расположение файла</translation>
-    </message>
-    <message>
-        <source>Channel %1</source>
-        <translation type="vanished">Канал %1</translation>
-    </message>
-    <message>
-        <source>Audio Input</source>
-        <translation type="vanished">Аудио Вход</translation>
-    </message>
-    <message>
-        <source>Multiple Plots</source>
-        <translation type="vanished">Несколько Графиков</translation>
-    </message>
-    <message>
-        <source>Quick Plot</source>
-        <translation type="vanished">Быстрый График</translation>
-    </message>
-    <message>
-        <source>Quick Plot Data</source>
-        <translation type="vanished">Данные Быстрого Графика</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameParser</name>
-    <message>
-        <source>Frame parser code updated successfully!</source>
-        <translation type="vanished">Код парсера кадров успешно обновлён!</translation>
-    </message>
-    <message>
-        <source>No errors have been detected in the code.</source>
-        <translation type="vanished">Ошибок в коде не обнаружено.</translation>
-    </message>
-    <message>
-        <source>Frame parser error!</source>
-        <translation type="vanished">Ошибка парсера кадров!</translation>
-    </message>
-    <message>
-        <source>The 'parse' function is not declared or is not callable!</source>
-        <translation type="vanished">Функция 'parse' не объявлена или не может быть вызвана!</translation>
-    </message>
-    <message>
-        <source>No valid 'parse' function declaration found in the script!</source>
-        <translation type="vanished">В скрипте не найдено действительное объявление функции 'parse'!</translation>
-    </message>
-    <message>
-        <source>Legacy frame parser function detected</source>
-        <translation type="vanished">Обнаружена устаревшая функция парсера кадров</translation>
-    </message>
-    <message>
-        <source>The 'parse' function has two arguments ('%1', '%2'), indicating use of the old format. Please update it to the new format, which only takes the frame data as an argument.</source>
-        <translation type="vanished">Функция 'parse' имеет два аргумента ('%1', '%2'), что указывает на использование старого формата. Обновите её до нового формата, который принимает только данные кадра в качестве аргумента.</translation>
-    </message>
-    <message>
-        <source>The document has been modified!</source>
-        <translation type="vanished">Документ был изменён!</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to continue?</source>
-        <translation type="vanished">Вы уверены, что хотите продолжить?</translation>
-    </message>
-    <message>
-        <source>JavaScript Syntax Error</source>
-        <translation type="vanished">Ошибка Синтаксиса JavaScript</translation>
-    </message>
-    <message>
-        <source>The parser code contains a syntax error at line %1:
-
-%2</source>
-        <translation type="vanished">Код парсера содержит синтаксическую ошибку на строке %1:
-
-%2</translation>
-    </message>
-    <message>
-        <source>JavaScript Exception Occurred</source>
-        <translation type="vanished">Произошло Исключение JavaScript</translation>
-    </message>
-    <message>
-        <source>The parser code triggered the following exceptions:
-
-%1</source>
-        <translation type="vanished">Код парсера вызвал следующие исключения:
-
-%1</translation>
-    </message>
-    <message>
-        <source>Missing Parse Function</source>
-        <translation type="vanished">Отсутствует Функция Разбора</translation>
-    </message>
-    <message>
-        <source>The 'parse' function is not defined in the script.
-
-Please ensure your code includes:
-function parse(frame) { ... }</source>
-        <translation type="vanished">Функция 'parse' не определена в скрипте.
-
-Пожалуйста, убедитесь, что ваш код включает:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Parse Function</source>
-        <translation type="vanished">Недопустимая Функция Разбора</translation>
-    </message>
-    <message>
-        <source>The 'parse' property exists but is not a callable function.
-
-Please ensure 'parse' is declared as a function.</source>
-        <translation type="vanished">Свойство 'parse' существует, но не является вызываемой функцией.
-
-Пожалуйста, убедитесь, что 'parse' объявлена как функция.</translation>
-    </message>
-    <message>
-        <source>Invalid Function Declaration</source>
-        <translation type="vanished">Недопустимое Объявление Функции</translation>
-    </message>
-    <message>
-        <source>No valid 'parse' function declaration found.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">Не найдено допустимого объявления функции 'parse'.
-
-Ожидаемый формат:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Invalid Function Parameter</source>
-        <translation type="vanished">Недопустимый Параметр Функции</translation>
-    </message>
-    <message>
-        <source>The 'parse' function must have at least one parameter.
-
-Expected format:
-function parse(frame) { ... }</source>
-        <translation type="vanished">Функция 'parse' должна иметь как минимум один параметр.
-
-Ожидаемый формат:
-function parse(frame) { ... }</translation>
-    </message>
-    <message>
-        <source>Deprecated Function Signature</source>
-        <translation type="vanished">Устаревший Сигнатура Функции</translation>
-    </message>
-    <message>
-        <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
-
-This format is no longer supported. Please update to the new single-parameter format:
-function parse(%1) { ... }
-
-The separator parameter is no longer needed.</source>
-        <translation type="vanished">Функция 'parse' использует старый формат с двумя параметрами: parse(%1, %2)
-
-Этот формат больше не поддерживается. Пожалуйста, обновите до нового формата с одним параметром:
-function parse(%1) { ... }
-
-Параметр разделителя больше не нужен.</translation>
-    </message>
-    <message>
-        <source>Parse Function Runtime Error</source>
-        <translation type="vanished">Ошибка Выполнения Функции Parse</translation>
-    </message>
-    <message>
-        <source>The parse function contains an error at line %1:
-
-%2
-
-Please fix the error in the function body.</source>
-        <translation type="vanished">Функция parse содержит ошибку на строке %1:
-
-%2
-
-Пожалуйста, исправьте ошибку в теле функции.</translation>
-    </message>
-    <message>
-        <source>The document has been modified.</source>
-        <translation type="vanished">Документ был изменён.</translation>
-    </message>
-    <message>
-        <source>Select Javascript file to import</source>
-        <translation type="vanished">Выберите файл Javascript для импорта</translation>
-    </message>
-    <message>
-        <source>Code Validation Successful</source>
-        <translation type="vanished">Проверка Кода Завершена Успешно</translation>
-    </message>
-    <message>
-        <source>No syntax errors detected in the parser code.</source>
-        <translation type="vanished">Синтаксических ошибок в коде парсера не обнаружено.</translation>
-    </message>
-    <message>
-        <source>Select Frame Parser Template</source>
-        <translation type="vanished">Выберите Шаблон Парсера Фреймов</translation>
-    </message>
-    <message>
-        <source>Choose a template to load:</source>
-        <translation type="vanished">Выберите шаблон для загрузки:</translation>
-    </message>
-    <message>
-        <source>AT command responses</source>
-        <translation type="vanished">Ответы на команды AT</translation>
-    </message>
-    <message>
-        <source>Base64-encoded data</source>
-        <translation type="vanished">Данные, закодированные в Base64</translation>
-    </message>
-    <message>
-        <source>Binary TLV (Tag-Length-Value)</source>
-        <translation type="vanished">Двоичный TLV (Tag-Length-Value)</translation>
-    </message>
-    <message>
-        <source>CAN bus frames</source>
-        <translation type="vanished">Кадры CAN шины</translation>
-    </message>
-    <message>
-        <source>COBS-encoded frames</source>
-        <translation type="vanished">Кадры, закодированные COBS</translation>
-    </message>
-    <message>
-        <source>Comma-separated data</source>
-        <translation type="vanished">Данные, разделенные запятыми</translation>
-    </message>
-    <message>
-        <source>Fixed-width fields</source>
-        <translation type="vanished">Поля фиксированной ширины</translation>
-    </message>
-    <message>
-        <source>Hexadecimal bytes</source>
-        <translation type="vanished">Шестнадцатеричные байты</translation>
-    </message>
-    <message>
-        <source>INI/config format</source>
-        <translation type="vanished">Формат INI/конфигурации</translation>
-    </message>
-    <message>
-        <source>JSON data</source>
-        <translation type="vanished">Данные JSON</translation>
-    </message>
-    <message>
-        <source>Key-value pairs</source>
-        <translation type="vanished">Пары ключ-значение</translation>
-    </message>
-    <message>
-        <source>MAVLink messages</source>
-        <translation type="vanished">Сообщения MAVLink</translation>
-    </message>
-    <message>
-        <source>MessagePack data</source>
-        <translation type="vanished">Данные MessagePack</translation>
-    </message>
-    <message>
-        <source>Modbus frames</source>
-        <translation type="vanished">Кадры Modbus</translation>
-    </message>
-    <message>
-        <source>Modbus ASCII frames</source>
-        <translation type="vanished">Кадры Modbus ASCII</translation>
-    </message>
-    <message>
-        <source>Modbus RTU frames</source>
-        <translation type="vanished">Кадры Modbus RTU</translation>
-    </message>
-    <message>
-        <source>NMEA 0183 sentences</source>
-        <translation type="vanished">Предложения NMEA 0183</translation>
-    </message>
-    <message>
-        <source>NMEA 2000 messages</source>
-        <translation type="vanished">Сообщения NMEA 2000</translation>
-    </message>
-    <message>
-        <source>Pipe-delimited data</source>
-        <translation type="vanished">Данные, разделённые трубой</translation>
-    </message>
-    <message>
-        <source>Raw bytes</source>
-        <translation type="vanished">Сырые байты</translation>
-    </message>
-    <message>
-        <source>RTCM corrections</source>
-        <translation type="vanished">Коррекции RTCM</translation>
-    </message>
-    <message>
-        <source>Semicolon-separated data</source>
-        <translation type="vanished">Данные, разделённые точкой с запятой</translation>
-    </message>
-    <message>
-        <source>SiRF binary protocol</source>
-        <translation type="vanished">Бинарный протокол SiRF</translation>
-    </message>
-    <message>
-        <source>SLIP-encoded frames</source>
-        <translation type="vanished">SLIP-кодированные кадры</translation>
-    </message>
-    <message>
-        <source>Tab-separated data</source>
-        <translation type="vanished">Данные, разделенные табуляцией</translation>
-    </message>
-    <message>
-        <source>UBX protocol (u-blox)</source>
-        <translation type="vanished">Протокол UBX (u-blox)</translation>
-    </message>
-    <message>
-        <source>URL-encoded data</source>
-        <translation type="vanished">URL-кодированные данные</translation>
-    </message>
-    <message>
-        <source>XML data</source>
-        <translation type="vanished">XML данные</translation>
-    </message>
-    <message>
-        <source>YAML data</source>
-        <translation type="vanished">YAML данные</translation>
-    </message>
-    <message>
-        <source>Loading a template will replace your current code.</source>
-        <translation type="vanished">Загрузка шаблона заменит ваш текущий код.</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::FrameParserTestDialog</name>
-    <message>
-        <source>Invalid Hex Input</source>
-        <translation type="vanished">Недопустимый Ввод Hex</translation>
-    </message>
-    <message>
-        <source>Please enter valid hexadecimal bytes.
-
-Valid format: 01 A2 FF 3C</source>
-        <translation type="vanished">Пожалуйста, введите допустимые шестнадцатеричные байты.
-
-Допустимый формат: 01 A2 FF 3C</translation>
-    </message>
-    <message>
-        <source>HEX</source>
-        <translation type="vanished">HEX</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="vanished">Очистить</translation>
-    </message>
-    <message>
-        <source>Evaluate</source>
-        <translation type="vanished">Оценить</translation>
-    </message>
-    <message>
-        <source>Frame Data Input</source>
-        <translation type="vanished">Ввод Данных Кадра</translation>
-    </message>
-    <message>
-        <source>Frame Parser Results</source>
-        <translation type="vanished">Результаты Парсера Кадров</translation>
-    </message>
-    <message>
-        <source>Enter frame data here...</source>
-        <translation type="vanished">Введите данные кадра здесь...</translation>
-    </message>
-    <message>
-        <source>Dataset Index</source>
-        <translation type="vanished">Индекс Набора Данных</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="vanished">Значение</translation>
-    </message>
-    <message>
-        <source>Enter frame data above, enable HEX mode if needed, then click "Evaluate" to run the frame parser.
-
-Example (Text): a,b,c,d,e,f
-Example (HEX):  48 65 6C 6C 6F</source>
-        <translation type="vanished">Введите данные кадра выше, включите режим HEX, если нужно, затем нажмите "Оценить", чтобы запустить парсер кадров.
-
-Пример (Текст): a,b,c,d,e,f
-Пример (HEX):  48 65 6C 6C 6F</translation>
-    </message>
-    <message>
-        <source>Test Frame Parser</source>
-        <translation type="vanished">Тест Парсера Кадров</translation>
-    </message>
-    <message>
-        <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation type="vanished">Введите байты в hex (например, 01 A2 FF)</translation>
-    </message>
-    <message>
-        <source>(empty)</source>
-        <translation type="vanished">(пусто)</translation>
-    </message>
-    <message>
-        <source>No data returned</source>
-        <translation type="vanished">Нет данных</translation>
-    </message>
-</context>
-<context>
-    <name>JSON::ProjectModel</name>
-    <message>
-        <source>New Project</source>
-        <translation type="vanished">Новый Проект</translation>
-    </message>
-    <message>
-        <source>Samples</source>
-        <translation type="vanished">Образцы</translation>
-    </message>
-    <message>
-        <source>Do you want to save your changes?</source>
-        <translation type="vanished">Хотите сохранить изменения?</translation>
-    </message>
-    <message>
-        <source>You have unsaved modifications in this project!</source>
-        <translation type="vanished">У вас есть несохраненные изменения в этом проекте!</translation>
-    </message>
-    <message>
-        <source>Project error</source>
-        <translation type="vanished">Ошибка проекта</translation>
-    </message>
-    <message>
-        <source>Project title cannot be empty!</source>
-        <translation type="vanished">Заголовок проекта не может быть пустым!</translation>
-    </message>
-    <message>
-        <source>You need to add at least one group!</source>
-        <translation type="vanished">Вам нужно добавить хотя бы одну группу!</translation>
-    </message>
-    <message>
-        <source>You need to add at least one dataset!</source>
-        <translation type="vanished">Вам нужно добавить хотя бы один набор данных!</translation>
-    </message>
-    <message>
-        <source>Save Serial Studio Project</source>
-        <translation type="vanished">Сохранить Проект Serial Studio</translation>
-    </message>
-    <message>
-        <source>Project Information</source>
-        <translation type="vanished">Информация о Проекте</translation>
-    </message>
-    <message>
-        <source>Project Title</source>
-        <translation type="vanished">Название Проекта</translation>
-    </message>
-    <message>
-        <source>Name or description of the project</source>
-        <translation type="vanished">Имя или описание проекта</translation>
-    </message>
-    <message>
-        <source>Frame Detection Method</source>
-        <translation type="vanished">Метод Обнаружения Кадров</translation>
-    </message>
-    <message>
-        <source>Select how incoming data frames are identified</source>
-        <translation type="vanished">Выберите, как идентифицируются входящие кадры данных</translation>
-    </message>
-    <message>
-        <source>Hexadecimal Delimiters</source>
-        <translation type="vanished">Шестнадцатеричные Разделители</translation>
-    </message>
-    <message>
-        <source>Use hex values to define frame boundaries</source>
-        <translation type="vanished">Используйте шестнадцатеричные значения для определения границ кадров</translation>
-    </message>
-    <message>
-        <source>Start Sequence</source>
-        <translation type="vanished">Начальная Последовательность</translation>
-    </message>
-    <message>
-        <source>Marks the beginning of each data frame</source>
-        <translation type="vanished">Обозначает начало каждого кадра данных</translation>
-    </message>
-    <message>
-        <source>End Sequence</source>
-        <translation type="vanished">Конечная Последовательность</translation>
-    </message>
-    <message>
-        <source>Marks the end of each data frame</source>
-        <translation type="vanished">Отмечает конец каждого кадра данных</translation>
-    </message>
-    <message>
-        <source>Payload Processing &amp; Validation</source>
-        <translation type="vanished">Обработка и Проверка Полезной Нагрузки</translation>
-    </message>
-    <message>
-        <source>Data Format</source>
-        <translation type="vanished">Формат Данных</translation>
-    </message>
-    <message>
-        <source>Format of raw data used for decoding each frame</source>
-        <translation type="vanished">Формат необработанных данных, используемых для декодирования каждого кадра</translation>
-    </message>
-    <message>
-        <source>Method used to validate frame integrity</source>
-        <translation type="vanished">Метод, используемый для проверки целостности кадра</translation>
-    </message>
-    <message>
-        <source>Group Information</source>
-        <translation type="vanished">Информация о Группе</translation>
-    </message>
-    <message>
-        <source>Group Title</source>
-        <translation type="vanished">Название Группы</translation>
-    </message>
-    <message>
-        <source>Title or description of this dataset group</source>
-        <translation type="vanished">Название или описание этой группы данных</translation>
-    </message>
-    <message>
-        <source>Composite Widget</source>
-        <translation type="vanished">Составной Виджет</translation>
-    </message>
-    <message>
-        <source>Select how this group of datasets should be visualized (optional)</source>
-        <translation type="vanished">Выберите, как должна быть визуализирована эта группа наборов данных (необязательно)</translation>
-    </message>
-    <message>
-        <source>Action Title</source>
-        <translation type="vanished">Название Действия</translation>
-    </message>
-    <message>
-        <source>Name or description of this action</source>
-        <translation type="vanished">Имя или описание этого действия</translation>
-    </message>
-    <message>
-        <source>Action Icon</source>
-        <translation type="vanished">Значок Действия</translation>
-    </message>
-    <message>
-        <source>Icon displayed for this action in the dashboard</source>
-        <translation type="vanished">Значок, отображаемый для этого действия на панели управления</translation>
-    </message>
-    <message>
-        <source>Data Payload</source>
-        <translation type="vanished">Полезная Нагрузка Данных</translation>
-    </message>
-    <message>
-        <source>Send as Binary</source>
-        <translation type="vanished">Отправить как двоичный</translation>
-    </message>
-    <message>
-        <source>Send raw binary data when this action is triggered</source>
-        <translation type="vanished">Отправить необработанные двоичные данные, когда это действие активировано</translation>
-    </message>
-    <message>
-        <source>Transmit Data (Hex)</source>
-        <translation type="vanished">Передача Данных (Hex)</translation>
-    </message>
-    <message>
-        <source>Hexadecimal payload to send when the action is triggered</source>
-        <translation type="vanished">Шестнадцатеричная полезная нагрузка для отправки при активации действия</translation>
-    </message>
-    <message>
-        <source>Transmit Data</source>
-        <translation type="vanished">Передача Данных</translation>
-    </message>
-    <message>
-        <source>Text payload to send when the action is triggered</source>
-        <translation type="vanished">Текстовая полезная нагрузка для отправки при активации действия</translation>
-    </message>
-    <message>
-        <source>End-of-Line Sequence</source>
-        <translation type="vanished">Последовательность Конца Строки</translation>
-    </message>
-    <message>
-        <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
-        <translation type="vanished">Символы конца строки для добавления к сообщению (например, </translation>
-    </message>
-    <message>
-        <source>Execution Behavior</source>
-        <translation type="vanished">Поведение Выполнения</translation>
-    </message>
-    <message>
-        <source>Auto-Execute on Connect</source>
-        <translation type="vanished">Авто-выполнение при подключении</translation>
-    </message>
-    <message>
-        <source>Automatically trigger this action when the device connects</source>
-        <translation type="vanished">Автоматически запускать это действие при подключении устройства</translation>
-    </message>
-    <message>
-        <source>Timer Behavior</source>
-        <translation type="vanished">Поведение Таймера</translation>
-    </message>
-    <message>
-        <source>Choose when and how this action should repeat automatically</source>
-        <translation type="vanished">Выберите, когда и как это действие должно повторяться автоматически</translation>
-    </message>
-    <message>
-        <source>Interval (ms)</source>
-        <translation type="vanished">Интервал (мс)</translation>
-    </message>
-    <message>
-        <source>Milliseconds between each repeated trigger of this action</source>
-        <translation type="vanished">Миллисекунды между каждым повторным запуском этого действия</translation>
-    </message>
-    <message>
-        <source>Dataset Title</source>
-        <translation type="vanished">Название Набора Данных</translation>
-    </message>
-    <message>
-        <source>Name of the dataset, used for labeling and identification</source>
-        <translation type="vanished">Имя набора данных, используется для маркировки и идентификации</translation>
-    </message>
-    <message>
-        <source>Frame position used for aligning datasets in time</source>
-        <translation type="vanished">Позиция кадра, используемая для выравнивания наборов данных по времени</translation>
-    </message>
-    <message>
-        <source>Unit of measurement, such as volts or amps (optional)</source>
-        <translation type="vanished">Единица измерения, такая как вольты или амперы (необязательно)</translation>
-    </message>
-    <message>
-        <source>Plot Settings</source>
-        <translation type="vanished">Настройки Графика</translation>
-    </message>
-    <message>
-        <source>Enable Plot Widget</source>
-        <translation type="vanished">Включить Виджет Графика</translation>
-    </message>
-    <message>
-        <source>Choose which dataset to use for the X-Axis in plots</source>
-        <translation type="vanished">Выберите, какой набор данных использовать для оси X на графиках</translation>
-    </message>
-    <message>
-        <source>Minimum Plot Value (optional)</source>
-        <translation type="vanished">Минимальное Значение Графика (необязательно)</translation>
-    </message>
-    <message>
-        <source>Lower bound for plot display range</source>
-        <translation type="vanished">Нижняя граница диапазона отображения графика</translation>
-    </message>
-    <message>
-        <source>Maximum Plot Value (optional)</source>
-        <translation type="vanished">Максимальное Значение Графика (необязательно)</translation>
-    </message>
-    <message>
-        <source>Upper bound for plot display range</source>
-        <translation type="vanished">Верхняя граница диапазона отображения графика</translation>
-    </message>
-    <message>
-        <source>FFT Configuration</source>
-        <translation type="vanished">Настройка FFT</translation>
-    </message>
-    <message>
-        <source>Enable FFT Analysis</source>
-        <translation type="vanished">Включить Анализ FFT</translation>
-    </message>
-    <message>
-        <source>Perform frequency-domain analysis of the dataset</source>
-        <translation type="vanished">Выполнить анализ набора данных в частотной области</translation>
-    </message>
-    <message>
-        <source>Number of samples used for each FFT calculation window</source>
-        <translation type="vanished">Количество образцов для каждого окна расчета FFT</translation>
-    </message>
-    <message>
-        <source>FFT Sampling Rate (Hz, required)</source>
-        <translation type="vanished">Частота дискретизации FFT (Гц, обязательно)</translation>
-    </message>
-    <message>
-        <source>Sampling frequency used for FFT (in Hz)</source>
-        <translation type="vanished">Частота дискретизации для FFT (в Гц)</translation>
-    </message>
-    <message>
-        <source>Minimum Value (recommended)</source>
-        <translation type="vanished">Минимальное Значение (рекомендуется)</translation>
-    </message>
-    <message>
-        <source>Lower bound for data normalization</source>
-        <translation type="vanished">Нижняя граница для нормализации данных</translation>
-    </message>
-    <message>
-        <source>Maximum Value (recommended)</source>
-        <translation type="vanished">Максимальное Значение (рекомендуется)</translation>
-    </message>
-    <message>
-        <source>Upper bound for data normalization</source>
-        <translation type="vanished">Верхняя граница для нормализации данных</translation>
-    </message>
-    <message>
-        <source>Widget Settings</source>
-        <translation type="vanished">Настройки Виджета</translation>
-    </message>
-    <message>
-        <source>Alarm Settings</source>
-        <translation type="vanished">Настройки Тревоги</translation>
-    </message>
-    <message>
-        <source>Enable Alarms</source>
-        <translation type="vanished">Включить Тревоги</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
-        <translation type="vanished">Вызывает визуальную тревогу, когда значение превышает пороги тревоги</translation>
-    </message>
-    <message>
-        <source>Low Threshold</source>
-        <translation type="vanished">Нижний Порог</translation>
-    </message>
-    <message>
-        <source>High Threshold</source>
-        <translation type="vanished">Верхний Порог</translation>
-    </message>
-    <message>
-        <source>Display Widget</source>
-        <translation type="vanished">Отображение Виджета</translation>
-    </message>
-    <message>
-        <source>Select the visual widget used to display this dataset</source>
-        <translation type="vanished">Выберите визуальный виджет для отображения этого набора данных</translation>
-    </message>
-    <message>
-        <source>Show in Overview</source>
-        <translation type="vanished">Показать в обзоре</translation>
-    </message>
-    <message>
-        <source>Display this widget in the dashboard overview (if enabled)</source>
-        <translation type="vanished">Отобразить этот виджет в обзоре панели управления (если включено)</translation>
-    </message>
-    <message>
-        <source>Minimum Display Value (required)</source>
-        <translation type="vanished">Минимальное Отображаемое Значение (обязательно)</translation>
-    </message>
-    <message>
-        <source>Lower bound of the gauge or bar display range</source>
-        <translation type="vanished">Нижняя граница диапазона отображения шкалы или полосы</translation>
-    </message>
-    <message>
-        <source>Maximum Display Value (required)</source>
-        <translation type="vanished">Максимальное Отображаемое Значение (обязательно)</translation>
-    </message>
-    <message>
-        <source>Upper bound of the gauge or bar display range</source>
-        <translation type="vanished">Верхняя граница диапазона отображения шкалы или полосы</translation>
-    </message>
-    <message>
-        <source>Alarm: Low Threshold (optional)</source>
-        <translation type="vanished">Сигнализация: Нижний Порог (необязательно)</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value drops below this threshold</source>
-        <translation type="vanished">Вызывает визуальную сигнализацию, когда значение падает ниже этого порога</translation>
-    </message>
-    <message>
-        <source>Alarm: High Threshold (optional)</source>
-        <translation type="vanished">Сигнализация: Верхний Порог (необязательно)</translation>
-    </message>
-    <message>
-        <source>Triggers a visual alarm when the value exceeds this threshold</source>
-        <translation type="vanished">Вызывает визуальную тревогу, когда значение превышает этот порог</translation>
-    </message>
-    <message>
-        <source>LED Display Settings</source>
-        <translation type="vanished">Настройки Светодиодного Дисплея</translation>
-    </message>
-    <message>
-        <source>Enable visual status monitoring using an LED display</source>
-        <translation type="vanished">Включить визуальный мониторинг состояния с использованием светодиодного дисплея</translation>
-    </message>
-    <message>
-        <source>LED On Threshold (required)</source>
-        <translation type="vanished">Порог Включения Светодиода (обязательно)</translation>
-    </message>
-    <message>
-        <source>LED lights up when value meets or exceeds this threshold</source>
-        <translation type="vanished">Светодиод загорается, когда значение достигает или превышает этот порог</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="vanished">Да</translation>
-    </message>
-    <message>
-        <source>File open error</source>
-        <translation type="vanished">Ошибка открытия файла</translation>
-    </message>
-    <message>
-        <source>Untitled Project</source>
-        <translation type="vanished">Безымянный Проект</translation>
-    </message>
-    <message>
-        <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="vanished">Файлы Проектов Serial Studio (*.ssproj)</translation>
-    </message>
-    <message>
-        <source>Select Project File</source>
-        <translation type="vanished">Выберите Файл Проекта</translation>
-    </message>
-    <message>
-        <source>Project Files (*.json *.ssproj)</source>
-        <translation type="vanished">Файлы Проектов (*.json *.ssproj)</translation>
-    </message>
-    <message>
-        <source>Legacy frame parser function updated</source>
-        <translation type="vanished">Обновлена функция парсера устаревших кадров</translation>
-    </message>
-    <message>
-        <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
-        <translation type="vanished">Ваш проект использовал устаревшую функцию парсера кадров с аргументом 'separator'. Она была автоматически преобразована в новый формат.</translation>
-    </message>
-    <message>
-        <source>Switch Serial Studio to Project Mode?</source>
-        <translation type="vanished">Переключить Serial Studio в режим проекта?</translation>
-    </message>
-    <message>
-        <source>This operation mode is required to load and display dashboards from project files.</source>
-        <translation type="vanished">Этот режим необходим для загрузки и отображения панелей управления из файлов проектов.</translation>
-    </message>
-    <message>
-        <source>Do you want to delete group "%1"?</source>
-        <translation type="vanished">Вы хотите удалить группу "%1"?</translation>
-    </message>
-    <message>
-        <source>This action cannot be undone. Do you wish to proceed?</source>
-        <translation type="vanished">Это действие нельзя отменить. Вы хотите продолжить?</translation>
-    </message>
-    <message>
-        <source>Do you want to delete action "%1"?</source>
-        <translation type="vanished">Вы хотите удалить действие "%1"?</translation>
-    </message>
-    <message>
-        <source>Do you want to delete dataset "%1"?</source>
-        <translation type="vanished">Вы хотите удалить набор данных "%1"?</translation>
-    </message>
-    <message>
-        <source>%1 (Copy)</source>
-        <translation type="vanished">%1 (Копия)</translation>
-    </message>
-    <message>
-        <source>Group</source>
-        <translation type="vanished">Группа</translation>
-    </message>
-    <message>
-        <source>New Dataset</source>
-        <translation type="vanished">Новый Набор Данных</translation>
-    </message>
-    <message>
-        <source>New Plot</source>
-        <translation type="vanished">Новый График</translation>
-    </message>
-    <message>
-        <source>New FFT Plot</source>
-        <translation type="vanished">Новый График БПФ</translation>
-    </message>
-    <message>
-        <source>New Level Indicator</source>
-        <translation type="vanished">Новый Индикатор Уровня</translation>
-    </message>
-    <message>
-        <source>New Gauge</source>
-        <translation type="vanished">Новый Датчик</translation>
-    </message>
-    <message>
-        <source>New Compass</source>
-        <translation type="vanished">Новый Компас</translation>
-    </message>
-    <message>
-        <source>New LED Indicator</source>
-        <translation type="vanished">Новый Светодиодный Индикатор</translation>
-    </message>
-    <message>
-        <source>New Action</source>
-        <translation type="vanished">Новое Действие</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to change the group-level widget?</source>
-        <translation type="vanished">Вы уверены, что хотите изменить виджет уровня группы?</translation>
-    </message>
-    <message>
-        <source>Existing datasets for this group will be deleted</source>
-        <translation type="vanished">Существующие наборы данных для этой группы будут удалены</translation>
-    </message>
-    <message>
-        <source>Accelerometer %1</source>
-        <translation type="vanished">Акселерометр %1</translation>
-    </message>
-    <message>
-        <source>Gyro %1</source>
-        <translation type="vanished">Гироскоп %1</translation>
-    </message>
-    <message>
-        <source>Latitude</source>
-        <translation type="vanished">Широта</translation>
-    </message>
-    <message>
-        <source>Longitude</source>
-        <translation type="vanished">Долгота</translation>
-    </message>
-    <message>
-        <source>Altitude</source>
-        <translation type="vanished">Высота</translation>
-    </message>
-    <message>
-        <source>X</source>
-        <translation type="vanished">X</translation>
-    </message>
-    <message>
-        <source>Y</source>
-        <translation type="vanished">Y</translation>
-    </message>
-    <message>
-        <source>Z</source>
-        <translation type="vanished">Z</translation>
-    </message>
-    <message>
-        <source>Frame Parser Code</source>
-        <translation type="vanished">Код Парсера Фреймов</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="vanished">Заголовок</translation>
-    </message>
-    <message>
-        <source>Project name/description</source>
-        <translation type="vanished">Название/описание проекта</translation>
-    </message>
-    <message>
-        <source>Data Conversion Method</source>
-        <translation type="vanished">Метод Преобразования Данных</translation>
-    </message>
-    <message>
-        <source>Input data format for frame parser</source>
-        <translation type="vanished">Формат входных данных для парсера фреймов</translation>
-    </message>
-    <message>
-        <source>Frame Detection</source>
-        <translation type="vanished">Обнаружение Фреймов</translation>
-    </message>
-    <message>
-        <source>Strategy used for identifying frame data</source>
-        <translation type="vanished">Стратегия, используемая для идентификации данных фрейма</translation>
-    </message>
-    <message>
-        <source>Frame Start Delimeter</source>
-        <translation type="vanished">Разделитель Начала Фрейма</translation>
-    </message>
-    <message>
-        <source>String marking the start of a frame</source>
-        <translation type="vanished">Строка, обозначающая начало фрейма</translation>
-    </message>
-    <message>
-        <source>Frame End Delimeter</source>
-        <translation type="vanished">Разделитель Конца Кадра</translation>
-    </message>
-    <message>
-        <source>String marking the end of a frame</source>
-        <translation type="vanished">Строка, обозначающая конец кадра</translation>
-    </message>
-    <message>
-        <source>Hexadecimal Delimeters</source>
-        <translation type="vanished">Шестнадцатеричные Разделители</translation>
-    </message>
-    <message>
-        <source>Use hexadecimal delimiters for data frames</source>
-        <translation type="vanished">Использовать шестнадцатеричные разделители для кадров данных</translation>
-    </message>
-    <message>
-        <source>Checksum Algorithm</source>
-        <translation type="vanished">Алгоритм Контрольной Суммы</translation>
-    </message>
-    <message>
-        <source>Checksum algorithm used for frame validation</source>
-        <translation type="vanished">Алгоритм контрольной суммы, используемый для проверки кадра</translation>
-    </message>
-    <message>
-        <source>Untitled Group</source>
-        <translation type="vanished">Безымянная Группа</translation>
-    </message>
-    <message>
-        <source>Name or description of the group</source>
-        <translation type="vanished">Имя или описание группы</translation>
-    </message>
-    <message>
-        <source>Visual Widget</source>
-        <translation type="vanished">Визуальный Виджет</translation>
-    </message>
-    <message>
-        <source>Widget</source>
-        <translation type="vanished">Виджет</translation>
-    </message>
-    <message>
-        <source>Group display widget (optional)</source>
-        <translation type="vanished">Виджет отображения группы (необязательно)</translation>
-    </message>
-    <message>
-        <source>Untitled Action</source>
-        <translation type="vanished">Безымянное Действие</translation>
-    </message>
-    <message>
-        <source>Name or description of the action</source>
-        <translation type="vanished">Имя или описание действия</translation>
-    </message>
-    <message>
-        <source>Icon</source>
-        <translation type="vanished">Значок</translation>
-    </message>
-    <message>
-        <source>Default Icon</source>
-        <translation type="vanished">Значок по Умолчанию</translation>
-    </message>
-    <message>
-        <source>Icon to display in the dashboard</source>
-        <translation type="vanished">Значок для отображения на панели управления</translation>
-    </message>
-    <message>
-        <source>Binary Data</source>
-        <translation type="vanished">Двоичные Данные</translation>
-    </message>
-    <message>
-        <source>Send binary data when the action is triggered.</source>
-        <translation type="vanished">Отправить двоичные данные при выполнении действия.</translation>
-    </message>
-    <message>
-        <source>TX Data (Hex)</source>
-        <translation type="vanished">Данные TX (Hex)</translation>
-    </message>
-    <message>
-        <source>Command</source>
-        <translation type="vanished">Команда</translation>
-    </message>
-    <message>
-        <source>Data to transmit when the action is triggered.</source>
-        <translation type="vanished">Данные для передачи при выполнении действия.</translation>
-    </message>
-    <message>
-        <source>TX Data</source>
-        <translation type="vanished">Данные TX</translation>
-    </message>
-    <message>
-        <source>EOL Sequence</source>
-        <translation type="vanished">Последовательность EOL</translation>
-    </message>
-    <message>
-        <source>End-of-line (EOL) sequence to use</source>
-        <translation type="vanished">Последовательность конца строки (EOL) для использования</translation>
-    </message>
-    <message>
-        <source>Auto Execute on Connect</source>
-        <translation type="vanished">Авто выполнение при подключении</translation>
-    </message>
-    <message>
-        <source>Trigger this action automatically when a device connects.</source>
-        <translation type="vanished">Выполнить это действие автоматически при подключении устройства.</translation>
-    </message>
-    <message>
-        <source>Timer Mode</source>
-        <translation type="vanished">Режим Таймера</translation>
-    </message>
-    <message>
-        <source>How and when the timer should activate.</source>
-        <translation type="vanished">Как и когда должен активироваться таймер.</translation>
-    </message>
-    <message>
-        <source>Timer Interval (ms)</source>
-        <translation type="vanished">Интервал Таймера (мс)</translation>
-    </message>
-    <message>
-        <source>Interval in milliseconds between each timer-triggered action.</source>
-        <translation type="vanished">Интервал в миллисекундах между каждым действием, вызванным таймером.</translation>
-    </message>
-    <message>
-        <source>General Information</source>
-        <translation type="vanished">Общая Информация</translation>
-    </message>
-    <message>
-        <source>Untitled Dataset</source>
-        <translation type="vanished">Неозаглавленный Набор Данных</translation>
-    </message>
-    <message>
-        <source>Name or description of the dataset</source>
-        <translation type="vanished">Имя или описание набора данных</translation>
-    </message>
-    <message>
-        <source>Frame Index</source>
-        <translation type="vanished">Индекс Кадра</translation>
-    </message>
-    <message>
-        <source>Position in the frame</source>
-        <translation type="vanished">Позиция в кадре</translation>
-    </message>
-    <message>
-        <source>Measurement Unit</source>
-        <translation type="vanished">Единица Измерения</translation>
-    </message>
-    <message>
-        <source>Volts, Amps, etc.</source>
-        <translation type="vanished">Вольты, амперы и т.д.</translation>
-    </message>
-    <message>
-        <source>Unit of measurement (optional)</source>
-        <translation type="vanished">Единица измерения (необязательно)</translation>
-    </message>
-    <message>
-        <source>Overview</source>
-        <translation type="vanished">Обзор</translation>
-    </message>
-    <message>
-        <source>Include widget in overview dashboard</source>
-        <translation type="vanished">Включить виджет в обзорную панель</translation>
-    </message>
-    <message>
-        <source>Display widget (optional)</source>
-        <translation type="vanished">Отображение виджета (необязательно)</translation>
-    </message>
-    <message>
-        <source>Oscilloscope Plot</source>
-        <translation type="vanished">Осциллографический График</translation>
-    </message>
-    <message>
-        <source>Plot data in real-time</source>
-        <translation type="vanished">Отображение данных в реальном времени</translation>
-    </message>
-    <message>
-        <source>FFT Plot</source>
-        <translation type="vanished">График БПФ</translation>
-    </message>
-    <message>
-        <source>Plot frequency-domain data</source>
-        <translation type="vanished">Отображение данных в частотной области</translation>
-    </message>
-    <message>
-        <source>Show in LED Panel</source>
-        <translation type="vanished">Показать на панели светодиодов</translation>
-    </message>
-    <message>
-        <source>Quick status monitoring</source>
-        <translation type="vanished">Быстрый мониторинг состояния</translation>
-    </message>
-    <message>
-        <source>X-Axis Source</source>
-        <translation type="vanished">Источник Оси X</translation>
-    </message>
-    <message>
-        <source>Data series for the X-Axis</source>
-        <translation type="vanished">Ряд данных для оси X</translation>
-    </message>
-    <message>
-        <source>Minimum Value</source>
-        <translation type="vanished">Минимальное Значение</translation>
-    </message>
-    <message>
-        <source>Required for range widgets, optional for plots</source>
-        <translation type="vanished">Обязательно для виджетов диапазона, необязательно для графиков</translation>
-    </message>
-    <message>
-        <source>Maximum Value</source>
-        <translation type="vanished">Максимальное Значение</translation>
-    </message>
-    <message>
-        <source>Alarm Low Value</source>
-        <translation type="vanished">Нижнее Значение Тревоги</translation>
-    </message>
-    <message>
-        <source>Alarm Value</source>
-        <translation type="vanished">Значение Тревоги</translation>
-    </message>
-    <message>
-        <source>Triggers alarm in bar widgets and LED panels</source>
-        <translation type="vanished">Запускает тревогу в виджетах полос и светодиодных панелях</translation>
-    </message>
-    <message>
-        <source>Alarm High Value</source>
-        <translation type="vanished">Верхнее Значение Тревоги</translation>
-    </message>
-    <message>
-        <source>FFT Window Size</source>
-        <translation type="vanished">Размер Окна БПФ</translation>
-    </message>
-    <message>
-        <source>Samples for FFT calculation</source>
-        <translation type="vanished">Образцы для расчета БПФ</translation>
-    </message>
-    <message>
-        <source>FFT Sampling Rate</source>
-        <translation type="vanished">Частота Дискретизации БПФ</translation>
-    </message>
-    <message>
-        <source>Sampling rate (Hz) for FFT calculation</source>
-        <translation type="vanished">Частота дискретизации (Гц) для расчета БПФ</translation>
-    </message>
-    <message>
-        <source>LED High (On) Value</source>
-        <translation type="vanished">Высокое Значение Светодиода (Вкл)</translation>
-    </message>
-    <message>
-        <source>Threshold for LED on</source>
-        <translation type="vanished">Порог для включения светодиода</translation>
-    </message>
-    <message>
-        <source>Off</source>
-        <translation type="vanished">Выкл</translation>
-    </message>
-    <message>
-        <source>Auto Start</source>
-        <translation type="vanished">Автозапуск</translation>
-    </message>
-    <message>
-        <source>Start on Trigger</source>
-        <translation type="vanished">Запуск по триггеру</translation>
-    </message>
-    <message>
-        <source>Toggle on Trigger</source>
-        <translation type="vanished">Переключение по триггеру</translation>
-    </message>
-    <message>
-        <source>Plain Text (UTF8)</source>
-        <translation type="vanished">Обычный Текст (UTF8)</translation>
-    </message>
-    <message>
-        <source>Hexadecimal</source>
-        <translation type="vanished">Шестнадцатеричный</translation>
-    </message>
-    <message>
-        <source>Base64</source>
-        <translation type="vanished">Base64</translation>
-    </message>
-    <message>
-        <source>Binary (Direct)</source>
-        <translation type="vanished">Двоичный (прямой)</translation>
-    </message>
-    <message>
-        <source>No Checksum</source>
-        <translation type="vanished">Без Контрольной Суммы</translation>
-    </message>
-    <message>
-        <source>End Delimiter Only</source>
-        <translation type="vanished">Только Конечный Разделитель</translation>
-    </message>
-    <message>
-        <source>Start Delimiter Only</source>
-        <translation type="vanished">Только Начальный Разделитель</translation>
-    </message>
-    <message>
-        <source>Start + End Delimiter</source>
-        <translation type="vanished">Начальный + Конечный Разделитель</translation>
-    </message>
-    <message>
-        <source>No Delimiters</source>
-        <translation type="vanished">Без Разделителей</translation>
-    </message>
-    <message>
-        <source>Data Grid</source>
-        <translation type="vanished">Таблица Данных</translation>
-    </message>
-    <message>
-        <source>GPS Map</source>
-        <translation type="vanished">Карта GPS</translation>
-    </message>
-    <message>
-        <source>Gyroscope</source>
-        <translation type="vanished">Гироскоп</translation>
-    </message>
-    <message>
-        <source>Multiple Plot</source>
-        <translation type="vanished">Множественный График</translation>
-    </message>
-    <message>
-        <source>Accelerometer</source>
-        <translation type="vanished">Акселерометр</translation>
-    </message>
-    <message>
-        <source>3D Plot</source>
-        <translation type="vanished">3D График</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
-        <source>Bar</source>
-        <translation type="vanished">Гистограмма</translation>
-    </message>
-    <message>
-        <source>Gauge</source>
-        <translation type="vanished">Индикатор</translation>
-    </message>
-    <message>
-        <source>Compass</source>
-        <translation type="vanished">Компас</translation>
-    </message>
-    <message>
-        <source>New Line (\n)</source>
-        <translation type="vanished">Новая Строка (</translation>
-    </message>
-    <message>
-        <source>Carriage Return (\r)</source>
-        <translation type="vanished">Возврат Каретки (\r)</translation>
-    </message>
-    <message>
-        <source>CRLF (\r\n)</source>
-        <translation type="vanished">CRLF (\r</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
-        <source>Linear Plot</source>
-        <translation type="vanished">Линейный График</translation>
-    </message>
-    <message>
-        <source>Save changes to frame parser code?</source>
-        <translation type="vanished">Сохранить изменения в коде парсера фреймов?</translation>
-    </message>
-    <message>
-        <source>Select 'Save' to keep your changes, 'Discard' to lose them permanently, or 'Cancel' to return.</source>
-        <translation type="vanished">Выберите «Сохранить», чтобы сохранить изменения, «Отменить», чтобы потерять их навсегда, или «Отмена», чтобы вернуться.</translation>
-    </message>
-    <message>
-        <source>Save Changes</source>
-        <translation type="vanished">Сохранить Изменения</translation>
-    </message>
-</context>
-<context>
-    <name>JSONDropArea</name>
-    <message>
-        <source>Drop Projects and CSV files here</source>
-        <translation type="vanished">Перетащите проекты и файлы CSV сюда</translation>
+        <source>Waiting for Image…</source>
+        <translation>Ожидание Изображения…</translation>
     </message>
 </context>
 <context>
@@ -9012,8 +6096,8 @@ Example (HEX):  48 65 6C 6C 6F</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="76"/>
-        <source>Please wait...</source>
-        <translation>Пожалуйста, подождите...</translation>
+        <source>Please wait…</source>
+        <translation>Подождите…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="116"/>
@@ -9023,14 +6107,14 @@ Example (HEX):  48 65 6C 6C 6F</source>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="123"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
-        <translation>Вставьте ваш лицензионный ключ ниже, чтобы разблокировать Pro-функции, такие как MQTT, 3D-графики и другие.</translation>
+        <translation>Вставьте ваш лицензионный ключ ниже, чтобы разблокировать функции Pro, такие как MQTT, 3D-графики и другие.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="130"/>
         <source>Your license includes 5 device activations.
 Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>Ваша лицензия включает 5 активаций устройств.
-Планы включают месячные, годовые и пожизненные опции.</translation>
+Доступны планы: Месячный, Годовой и Пожизненный.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="142"/>
@@ -9054,7 +6138,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="327"/>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="375"/>
         <source>Select All</source>
-        <translation>Выбрать Все</translation>
+        <translation>Выбрать Всё</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="224"/>
@@ -9074,22 +6158,22 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="261"/>
         <source>Licensee E-Mail</source>
-        <translation>E-Mail Лицензиата</translation>
+        <translation>E-mail Лицензиата</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="278"/>
         <source>Device Usage</source>
-        <translation>Использование Устройства</translation>
+        <translation>Использование Устройств</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="286"/>
         <source>%1 devices in use (Unlimited plan)</source>
-        <translation>%1 устройств используется (Безлимитный план)</translation>
+        <translation>%1 устройств используется (безлимитный план)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="287"/>
         <source>%1 of %2 devices used</source>
-        <translation>использовано %1 из %2 устройств</translation>
+        <translation>Использовано %1 из %2 устройств</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="297"/>
@@ -9099,7 +6183,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="343"/>
         <source>License Key</source>
-        <translation>Лицензионный Ключ</translation>
+        <translation>Ключ Лицензии</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="399"/>
@@ -9127,21 +6211,19 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="534"/>
         <source>There was an issue validating your license.</source>
-        <translation>Возникла проблема с проверкой вашей лицензии.</translation>
+        <translation>Возникла проблема при проверке вашей лицензии.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="724"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="830"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
-        <translation>Предоставленный вами лицензионный ключ не принадлежит Serial Studio.</translation>
+        <translation>Предоставленный лицензионный ключ не принадлежит Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="555"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
         <source>Please double-check that you purchased your license from the official Serial Studio store.</source>
-        <translation>Пожалуйста, проверьте, что вы приобрели лицензию в официальном магазине Serial Studio.</translation>
+        <translation>Пожалуйста, убедитесь, что вы приобрели лицензию в официальном магазине Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="568"/>
@@ -9152,8 +6234,8 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="569"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="737"/>
-        <source>Please deactivate it there first or contact support for help.</source>
-        <translation>Пожалуйста, сначала деактивируйте его там или свяжитесь с поддержкой для помощи.</translation>
+        <source>Deactivate it there first or contact support for help.</source>
+        <translation>Сначала деактивируйте его там или обратитесь в службу поддержки.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="581"/>
@@ -9165,30 +6247,41 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="582"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="749"/>
         <source>It may have expired or been deactivated (status: %1).</source>
-        <translation>Возможно, она истекла или была деактивирована (статус: %1).</translation>
+        <translation>Возможно, срок её действия истёк или она была деактивирована (статус: %1).</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="593"/>
         <source>Something went wrong on the server.</source>
-        <translation>На сервере произошла ошибка.</translation>
+        <translation>Произошла ошибка на сервере.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="594"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="760"/>
         <source>No activation ID was returned.</source>
-        <translation>Не был возвращен ID активации.</translation>
+        <translation>Идентификатор активации не был возвращён.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="605"/>
         <source>Could not validate your license at this time.</source>
-        <translation>Не удалось подтвердить вашу лицензию в данный момент.</translation>
+        <translation>Не удалось проверить вашу лицензию в данный момент.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="606"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="770"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="842"/>
-        <source>Please try again later.</source>
-        <translation>Пожалуйста, попробуйте позже.</translation>
+        <source>Try again later.</source>
+        <translation>Повторите попытку позже.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="725"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="831"/>
+        <source>Double-check that you purchased your license from the official Serial Studio store.</source>
+        <translation>Убедитесь, что лицензия приобретена в официальном магазине Serial Studio.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="759"/>
+        <source>Something went wrong on the server…</source>
+        <translation>Что-то пошло не так на сервере…</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="629"/>
@@ -9201,10 +6294,6 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <translation>%1 (%2)</translation>
     </message>
     <message>
-        <source>%1 Pro</source>
-        <translation type="vanished">%1 Pro</translation>
-    </message>
-    <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="664"/>
         <source>Your license has been successfully activated.</source>
         <translation>Ваша лицензия успешно активирована.</translation>
@@ -9214,27 +6303,22 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
         <source>Thank you for supporting Serial Studio!
 You now have access to all premium features.</source>
         <translation>Спасибо за поддержку Serial Studio!
-Теперь у вас есть доступ ко всем премиум-функциям.</translation>
+Теперь вам доступны все премиум-функции.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="715"/>
         <source>There was an issue activating your license.</source>
-        <translation>Возникла проблема с активацией вашей лицензии.</translation>
-    </message>
-    <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="759"/>
-        <source>Something went wrong on the server...</source>
-        <translation>На сервере что-то пошло не так...</translation>
+        <translation>Возникла проблема при активации лицензии.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="769"/>
         <source>Could not activate your license at this time.</source>
-        <translation>Не удалось активировать вашу лицензию в данный момент.</translation>
+        <translation>Не удалось активировать лицензию в данный момент.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="821"/>
         <source>There was an issue deactivating your license.</source>
-        <translation>Возникла проблема с деактивацией вашей лицензии.</translation>
+        <translation>Возникла проблема при деактивации лицензии.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="841"/>
@@ -9244,13 +6328,13 @@ You now have access to all premium features.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="852"/>
         <source>Your license has been deactivated.</source>
-        <translation>Ваша лицензия была деактивирована.</translation>
+        <translation>Ваша лицензия деактивирована.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="853"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
-        <translation>Доступ к Pro функциям был удален.
+        <translation>Доступ к функциям Pro удалён.
 Спасибо за поддержку Serial Studio!</translation>
     </message>
 </context>
@@ -9259,389 +6343,366 @@ Thank you again for supporting Serial Studio!</source>
     <message>
         <location filename="../../src/MDF4/Export.cpp" line="531"/>
         <source>MDF4 Export is a Pro feature.</source>
-        <translation>Экспорт MDF4 - это профессиональная функция.</translation>
+        <translation>Экспорт MDF4 — функция Pro.</translation>
     </message>
     <message>
         <location filename="../../src/MDF4/Export.cpp" line="532"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
-        <translation>Для этой функции требуется лицензия. Пожалуйста, приобретите её для включения экспорта MDF4.</translation>
+        <translation>Эта функция требует лицензию. Приобретите лицензию для активации экспорта MDF4.</translation>
     </message>
 </context>
 <context>
     <name>MDF4::Player</name>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="388"/>
+        <location filename="../../src/MDF4/Player.cpp" line="392"/>
         <source>Select MDF4 file</source>
         <translation>Выберите файл MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="390"/>
+        <location filename="../../src/MDF4/Player.cpp" line="394"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
         <translation>Файлы MDF4 (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="422"/>
+        <location filename="../../src/MDF4/Player.cpp" line="426"/>
         <source>Disconnect from device?</source>
         <translation>Отключиться от устройства?</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="423"/>
+        <location filename="../../src/MDF4/Player.cpp" line="427"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
-        <translation>Вы должны отключиться от текущего устройства перед открытием файла MDF4.</translation>
+        <translation>Необходимо отключиться от текущего устройства перед открытием файла MDF4.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="440"/>
+        <location filename="../../src/MDF4/Player.cpp" line="444"/>
         <source>Cannot open MDF4 file</source>
-        <translation>Не удается открыть файл MDF4</translation>
+        <translation>Не удалось открыть файл MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="441"/>
+        <location filename="../../src/MDF4/Player.cpp" line="445"/>
         <source>The file may be corrupted or in an unsupported format.</source>
-        <translation>Файл может быть поврежден или в неподдерживаемом формате.</translation>
+        <translation>Файл может быть поврежден или иметь неподдерживаемый формат.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="448"/>
+        <location filename="../../src/MDF4/Player.cpp" line="452"/>
         <source>Invalid MDF4 file</source>
-        <translation>Недопустимый файл MDF4</translation>
+        <translation>Недействительный Файл MDF4</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="449"/>
+        <location filename="../../src/MDF4/Player.cpp" line="453"/>
         <source>Failed to read file structure. The file may be corrupted.</source>
         <translation>Не удалось прочитать структуру файла. Файл может быть поврежден.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="466"/>
+        <location filename="../../src/MDF4/Player.cpp" line="470"/>
         <source>No data in file</source>
-        <translation>Нет данных в файле</translation>
+        <translation>Нет Данных в Файле</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Player.cpp" line="467"/>
+        <location filename="../../src/MDF4/Player.cpp" line="471"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>Файл MDF4 не содержит данных измерений.</translation>
-    </message>
-    <message>
-        <source>Author: %1
-Project: %2
-Subject: %3
-Channels: %4</source>
-        <translation type="vanished">Автор: %1 Проект: %2 Тема: %3 Каналы: %4</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="vanished">Неизвестно</translation>
     </message>
 </context>
 <context>
     <name>MQTT::Client</name>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="43"/>
+        <location filename="../../src/MQTT/Client.cpp" line="46"/>
         <source>MQTT 3.1</source>
         <translation>MQTT 3.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="44"/>
+        <location filename="../../src/MQTT/Client.cpp" line="47"/>
         <source>MQTT 3.1.1</source>
         <translation>MQTT 3.1.1</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="45"/>
+        <location filename="../../src/MQTT/Client.cpp" line="48"/>
         <source>MQTT 5.0</source>
         <translation>MQTT 5.0</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="48"/>
+        <location filename="../../src/MQTT/Client.cpp" line="51"/>
         <source>TLS 1.2</source>
         <translation>TLS 1.2</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="49"/>
+        <location filename="../../src/MQTT/Client.cpp" line="52"/>
         <source>TLS 1.3</source>
         <translation>TLS 1.3</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="50"/>
+        <location filename="../../src/MQTT/Client.cpp" line="53"/>
         <source>TLS 1.3 or Later</source>
-        <translation>TLS 1.3 или позже</translation>
+        <translation>TLS 1.3 или Новее</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="51"/>
+        <location filename="../../src/MQTT/Client.cpp" line="54"/>
         <source>DTLS 1.2 or Later</source>
-        <translation>DTLS 1.2 или новее</translation>
+        <translation>DTLS 1.2 или Новее</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="52"/>
+        <location filename="../../src/MQTT/Client.cpp" line="55"/>
         <source>Any Protocol</source>
         <translation>Любой Протокол</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="53"/>
+        <location filename="../../src/MQTT/Client.cpp" line="56"/>
         <source>Secure Protocols Only</source>
-        <translation>Только Защищенные Протоколы</translation>
+        <translation>Только Защищённые Протоколы</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="56"/>
+        <location filename="../../src/MQTT/Client.cpp" line="59"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="57"/>
+        <location filename="../../src/MQTT/Client.cpp" line="60"/>
         <source>Query Peer</source>
-        <translation>Запросить У Узла</translation>
+        <translation>Запросить Узел</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="58"/>
+        <location filename="../../src/MQTT/Client.cpp" line="61"/>
         <source>Verify Peer</source>
         <translation>Проверить Узел</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="59"/>
+        <location filename="../../src/MQTT/Client.cpp" line="62"/>
         <source>Auto Verify Peer</source>
-        <translation>Автоматическая Проверка Узла</translation>
+        <translation>Автопроверка Узла</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="327"/>
+        <location filename="../../src/MQTT/Client.cpp" line="330"/>
         <source>Use System Database</source>
         <translation>Использовать Системную Базу Данных</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="328"/>
-        <source>Load From Folder...</source>
-        <translation>Загрузить Из Папки...</translation>
-    </message>
-    <message>
-        <location filename="../../src/MQTT/Client.cpp" line="341"/>
+        <location filename="../../src/MQTT/Client.cpp" line="344"/>
         <source>MQTT Subscriber</source>
         <translation>Подписчик MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="342"/>
+        <location filename="../../src/MQTT/Client.cpp" line="345"/>
         <source>MQTT Publisher</source>
-        <translation>MQTT Публикатор</translation>
+        <translation>Издатель MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="403"/>
+        <location filename="../../src/MQTT/Client.cpp" line="406"/>
         <source>MQTT Feature Requires a Commercial License</source>
-        <translation>Функция MQTT требует коммерческой лицензии</translation>
+        <translation>Функция MQTT Требует Коммерческую Лицензию</translation>
     </message>
     <message>
-        <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license.
-
-To unlock this feature, please activate your license or visit the store.</source>
-        <translation type="vanished">Подключение к брокерам MQTT доступно только при наличии действующей коммерческой лицензии Serial Studio.
-
-Чтобы разблокировать эту функцию, активируйте лицензию или посетите магазин.</translation>
+        <location filename="../../src/MQTT/Client.cpp" line="331"/>
+        <source>Load From Folder…</source>
+        <translation>Загрузить Из Папки…</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="404"/>
+        <location filename="../../src/MQTT/Client.cpp" line="407"/>
         <source>Connecting to MQTT brokers is only available with a valid Serial Studio commercial license (Hobbyist tier or above).
 
 To unlock this feature, please activate your license or visit the store.</source>
-        <translation>Подключение к брокерам MQTT доступно только с действующей коммерческой лицензией Serial Studio (уровень Hobbyist или выше).
+        <translation>Подключение к брокерам MQTT доступно только при наличии действующей коммерческой лицензии Serial Studio (уровень Hobbyist или выше).
 
-Чтобы разблокировать эту функцию, активируйте свою лицензию или посетите магазин.</translation>
-    </message>
-    <message>
-        <location filename="../../src/MQTT/Client.cpp" line="415"/>
-        <source>Missing MQTT Topic</source>
-        <translation>Отсутствует Тема MQTT</translation>
-    </message>
-    <message>
-        <location filename="../../src/MQTT/Client.cpp" line="416"/>
-        <source>You must specify a topic before connecting as a publisher.</source>
-        <translation>Вы должны указать тему перед подключением в качестве публикатора.</translation>
+Для активации этой функции активируйте лицензию или посетите магазин.</translation>
     </message>
     <message>
         <location filename="../../src/MQTT/Client.cpp" line="418"/>
-        <location filename="../../src/MQTT/Client.cpp" line="440"/>
+        <source>Missing MQTT Topic</source>
+        <translation>Отсутствует Топик MQTT</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Client.cpp" line="419"/>
+        <source>You must specify a topic before connecting as a publisher.</source>
+        <translation>Необходимо указать топик перед подключением в качестве издателя.</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Client.cpp" line="421"/>
+        <location filename="../../src/MQTT/Client.cpp" line="443"/>
         <source>Configuration Error</source>
         <translation>Ошибка Конфигурации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="425"/>
-        <source>MQTT Topic Not Set</source>
-        <translation>Тема MQTT Не Установлена</translation>
-    </message>
-    <message>
-        <location filename="../../src/MQTT/Client.cpp" line="426"/>
-        <source>You won't receive any messages until a topic is configured.</source>
-        <translation>Вы не получите никаких сообщений, пока не будет настроена тема.</translation>
-    </message>
-    <message>
         <location filename="../../src/MQTT/Client.cpp" line="428"/>
+        <source>MQTT Topic Not Set</source>
+        <translation>Топик MQTT Не Установлен</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Client.cpp" line="429"/>
+        <source>You won't receive any messages until a topic is configured.</source>
+        <translation>Сообщения не будут получены до настройки топика.</translation>
+    </message>
+    <message>
+        <location filename="../../src/MQTT/Client.cpp" line="431"/>
         <source>Configuration Warning</source>
         <translation>Предупреждение Конфигурации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="437"/>
+        <location filename="../../src/MQTT/Client.cpp" line="440"/>
         <source>Invalid MQTT Topic</source>
         <translation>Недопустимая Тема MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="438"/>
+        <location filename="../../src/MQTT/Client.cpp" line="441"/>
         <source>The topic "%1" is not valid.</source>
-        <translation>Тема "%1" недействительна.</translation>
+        <translation>Тема «%1» недействительна.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="675"/>
+        <location filename="../../src/MQTT/Client.cpp" line="678"/>
         <source>Select PEM Certificates Directory</source>
-        <translation>Выберите Каталог Сертификатов PEM</translation>
+        <translation>Выбрать Каталог Сертификатов PEM</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="779"/>
+        <location filename="../../src/MQTT/Client.cpp" line="782"/>
         <source>Subscription Error</source>
         <translation>Ошибка Подписки</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="780"/>
+        <location filename="../../src/MQTT/Client.cpp" line="783"/>
         <source>Failed to subscribe to topic "%1".</source>
-        <translation>Не удалось подписаться на тему "%1".</translation>
+        <translation>Не удалось подписаться на тему «%1».</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="798"/>
+        <location filename="../../src/MQTT/Client.cpp" line="801"/>
         <source>Invalid MQTT Protocol Version</source>
-        <translation>Неверная Версия Протокола MQTT</translation>
+        <translation>Недопустимая Версия Протокола MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="799"/>
+        <location filename="../../src/MQTT/Client.cpp" line="802"/>
         <source>The MQTT broker rejected the connection due to an unsupported protocol version. Ensure that your client and broker support the same protocol version.</source>
-        <translation>MQTT-брокер отклонил подключение из-за неподдерживаемой версии протокола. Убедитесь, что ваш клиент и брокер поддерживают одну и ту же версию протокола.</translation>
+        <translation>MQTT-брокер отклонил соединение из-за неподдерживаемой версии протокола. Убедитесь, что клиент и брокер поддерживают одинаковую версию протокола.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="805"/>
+        <location filename="../../src/MQTT/Client.cpp" line="808"/>
         <source>Client ID Rejected</source>
-        <translation>Идентификатор Клиента Отклонен</translation>
+        <translation>Идентификатор Клиента Отклонён</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="806"/>
+        <location filename="../../src/MQTT/Client.cpp" line="809"/>
         <source>The broker rejected the client ID. It may be malformed, too long, or already in use. Try using a different client ID.</source>
-        <translation>Брокер отклонил идентификатор клиента. Возможно, он некорректен, слишком длинный или уже используется. Попробуйте использовать другой идентификатор клиента.</translation>
+        <translation>Брокер отклонил идентификатор клиента. Он может быть неправильно сформирован, слишком длинным или уже используется. Попробуйте использовать другой идентификатор клиента.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="811"/>
+        <location filename="../../src/MQTT/Client.cpp" line="814"/>
         <source>MQTT Server Unavailable</source>
-        <translation>Сервер MQTT Недоступен</translation>
+        <translation>MQTT-сервер Недоступен</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="812"/>
+        <location filename="../../src/MQTT/Client.cpp" line="815"/>
         <source>The network connection was established, but the broker is currently unavailable. Verify the broker status and try again later.</source>
-        <translation>Сетевое подключение установлено, но брокер в данный момент недоступен. Проверьте статус брокера и попробуйте позже.</translation>
+        <translation>Сетевое соединение установлено, но брокер в настоящее время недоступен. Проверьте состояние брокера и повторите попытку позже.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="817"/>
-        <location filename="../../src/MQTT/Client.cpp" line="881"/>
+        <location filename="../../src/MQTT/Client.cpp" line="820"/>
+        <location filename="../../src/MQTT/Client.cpp" line="884"/>
         <source>Authentication Error</source>
         <translation>Ошибка Аутентификации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="818"/>
+        <location filename="../../src/MQTT/Client.cpp" line="821"/>
         <source>The username or password provided is incorrect or malformed. Double-check your credentials and try again.</source>
-        <translation>Указанное имя пользователя или пароль неверны или имеют неверный формат. Проверьте свои учетные данные и попробуйте снова.</translation>
+        <translation>Указанное имя пользователя или пароль неверны или имеют неправильный формат. Проверьте учётные данные и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="823"/>
+        <location filename="../../src/MQTT/Client.cpp" line="826"/>
         <source>Authorization Error</source>
         <translation>Ошибка Авторизации</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="824"/>
+        <location filename="../../src/MQTT/Client.cpp" line="827"/>
         <source>The MQTT broker denied the connection due to insufficient permissions. Ensure that your account has the necessary access rights.</source>
-        <translation>MQTT брокер отклонил соединение из-за недостаточных прав. Убедитесь, что у вашей учетной записи есть необходимые права доступа.</translation>
+        <translation>MQTT-брокер отклонил соединение из-за недостаточных прав доступа. Убедитесь, что учётная запись имеет необходимые права доступа.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="829"/>
+        <location filename="../../src/MQTT/Client.cpp" line="832"/>
         <source>Network or Transport Error</source>
-        <translation>Ошибка сети или транспорта</translation>
+        <translation>Ошибка Сети или Транспортного Уровня</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="830"/>
+        <location filename="../../src/MQTT/Client.cpp" line="833"/>
         <source>A network or transport layer issue occurred, causing an unexpected connection failure. Check your network connection and broker settings.</source>
-        <translation>Произошла проблема на уровне сети или транспорта, что вызвало неожиданное разъединение. Проверьте ваше сетевое подключение и настройки брокера.</translation>
+        <translation>Произошла проблема на уровне сети или транспортного уровня, вызвавшая неожиданный сбой соединения. Проверьте сетевое подключение и настройки брокера.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="835"/>
+        <location filename="../../src/MQTT/Client.cpp" line="838"/>
         <source>MQTT Protocol Violation</source>
         <translation>Нарушение Протокола MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="837"/>
+        <location filename="../../src/MQTT/Client.cpp" line="840"/>
         <source>The client detected a violation of the MQTT protocol and closed the connection. Check your MQTT implementation for compliance.</source>
-        <translation>Клиент обнаружил нарушение протокола MQTT и закрыл соединение. Проверьте вашу реализацию MQTT на соответствие.</translation>
+        <translation>Клиент обнаружил нарушение протокола MQTT и закрыл соединение. Проверьте реализацию MQTT на соответствие стандарту.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="842"/>
+        <location filename="../../src/MQTT/Client.cpp" line="845"/>
         <source>Unknown Error</source>
         <translation>Неизвестная Ошибка</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="843"/>
+        <location filename="../../src/MQTT/Client.cpp" line="846"/>
         <source>An unexpected error occurred. Check the logs for more details or restart the application.</source>
-        <translation>Произошла неожиданная ошибка. Проверьте журналы для получения более подробной информации или перезапустите приложение.</translation>
+        <translation>Произошла непредвиденная ошибка. Проверьте журналы для получения подробностей или перезапустите приложение.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="848"/>
+        <location filename="../../src/MQTT/Client.cpp" line="851"/>
         <source>MQTT 5 Error</source>
         <translation>Ошибка MQTT 5</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="849"/>
+        <location filename="../../src/MQTT/Client.cpp" line="852"/>
         <source>An MQTT protocol level 5 error occurred. Check the broker logs or reason codes for more details.</source>
-        <translation>Произошла ошибка уровня протокола MQTT 5. Проверьте логи брокера или коды причин для получения дополнительной информации.</translation>
+        <translation>Произошла ошибка протокола MQTT уровня 5. Проверьте журналы брокера или коды причин для получения подробностей.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="867"/>
+        <location filename="../../src/MQTT/Client.cpp" line="870"/>
         <source>MQTT Authentication Failed</source>
         <translation>Ошибка Аутентификации MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="868"/>
+        <location filename="../../src/MQTT/Client.cpp" line="871"/>
         <source>Authentication failed: %1.</source>
-        <translation>Ошибка Аутентификации: %1.</translation>
+        <translation>Ошибка аутентификации: %1.</translation>
     </message>
     <message>
-        <source>Authentication failed: %.</source>
-        <translation type="vanished">Ошибка аутентификации: %.</translation>
-    </message>
-    <message>
-        <location filename="../../src/MQTT/Client.cpp" line="882"/>
+        <location filename="../../src/MQTT/Client.cpp" line="885"/>
         <source>Extended authentication is required, but MQTT 5.0 is not enabled.</source>
         <translation>Требуется расширенная аутентификация, но MQTT 5.0 не включен.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="890"/>
+        <location filename="../../src/MQTT/Client.cpp" line="893"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="894"/>
+        <location filename="../../src/MQTT/Client.cpp" line="897"/>
         <source>MQTT Authentication Required</source>
         <translation>Требуется Аутентификация MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="895"/>
+        <location filename="../../src/MQTT/Client.cpp" line="898"/>
         <source>The MQTT broker requires authentication using method: "%1".
 
 Please provide the necessary credentials.</source>
-        <translation>Брокер MQTT требует аутентификации с использованием метода: "%1".
+        <translation>Брокер MQTT требует аутентификацию с использованием метода: "%1".
 
-Пожалуйста, предоставьте необходимые учетные данные.</translation>
+Предоставьте необходимые учетные данные.</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="902"/>
+        <location filename="../../src/MQTT/Client.cpp" line="905"/>
         <source>Enter MQTT Username</source>
         <translation>Введите Имя Пользователя MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="902"/>
+        <location filename="../../src/MQTT/Client.cpp" line="905"/>
         <source>Username:</source>
-        <translation>Имя пользователя:</translation>
+        <translation>Имя Пользователя:</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="907"/>
+        <location filename="../../src/MQTT/Client.cpp" line="910"/>
         <source>Enter MQTT Password</source>
         <translation>Введите Пароль MQTT</translation>
     </message>
     <message>
-        <location filename="../../src/MQTT/Client.cpp" line="907"/>
+        <location filename="../../src/MQTT/Client.cpp" line="910"/>
         <source>Password:</source>
         <translation>Пароль:</translation>
     </message>
@@ -9656,12 +6717,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="97"/>
         <source>MQTT is a Pro Feature</source>
-        <translation>MQTT - это профессиональная функция</translation>
+        <translation>MQTT — Функция Pro</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="98"/>
         <source>Activate your license or visit the store to unlock MQTT support.</source>
-        <translation>Активируйте вашу лицензию или посетите магазин, чтобы разблокировать поддержку MQTT.</translation>
+        <translation>Активируйте лицензию или посетите магазин, чтобы разблокировать поддержку MQTT.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="111"/>
@@ -9701,17 +6762,17 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="228"/>
         <source>Keep Alive (s)</source>
-        <translation>Поддержание Связи (с)</translation>
+        <translation>Keep Alive (с)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="242"/>
         <source>Clean Session</source>
-        <translation>Очистить Сессию</translation>
+        <translation>Чистая Сессия</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="292"/>
         <source>Username</source>
-        <translation>Имя пользователя</translation>
+        <translation>Имя Пользователя</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="298"/>
@@ -9741,42 +6802,42 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="399"/>
         <source>Topic</source>
-        <translation>Тема</translation>
+        <translation>Топик</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="405"/>
         <source>e.g. sensors/temperature or home/+/status</source>
-        <translation>например, sensors/temperature или home/+/status</translation>
+        <translation>напр. sensors/temperature или home/+/status</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="412"/>
         <source>Will Retain</source>
-        <translation>Сохранить Завещание</translation>
+        <translation>Will Retain</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="424"/>
         <source>Will QoS</source>
-        <translation>Завещание QoS</translation>
+        <translation>Will QOS</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="437"/>
         <source>Will Topic</source>
-        <translation>Тема Завещания</translation>
+        <translation>Will Topic</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="443"/>
         <source>e.g. device/alerts/offline</source>
-        <translation>например, device/alerts/offline</translation>
+        <translation>напр. device/alerts/offline</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="450"/>
         <source>Will Message</source>
-        <translation>Сообщение Завещания</translation>
+        <translation>Will Message</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="456"/>
         <source>e.g. Device unexpectedly disconnected</source>
-        <translation>например, Устройство неожиданно отключено</translation>
+        <translation>напр. Device unexpectedly disconnected</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="501"/>
@@ -9791,12 +6852,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="533"/>
         <source>Verify Depth</source>
-        <translation>Проверить Глубину</translation>
+        <translation>Глубина Проверки</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="552"/>
         <source>Verify Mode</source>
-        <translation>Проверить Режим</translation>
+        <translation>Режим Проверки</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/MQTTConfiguration.qml" line="584"/>
@@ -9817,18 +6878,14 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <source>Device Defined Project</source>
-        <translation type="vanished">Проект, Определённый Устройством</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="106"/>
         <source>Console Only Mode</source>
-        <translation>Только режим консоли</translation>
+        <translation>Режим Только Консоль</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="109"/>
         <source>Quick Plot Mode</source>
-        <translation>Режим Быстрого Построения Графиков</translation>
+        <translation>Режим Быстрых Графиков</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/MainWindow.qml" line="115"/>
@@ -9858,7 +6915,7 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="214"/>
         <source> spaces</source>
-        <translation>пробелы</translation>
+        <translation>пробелов</translation>
     </message>
 </context>
 <context>
@@ -9887,12 +6944,12 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="225"/>
         <source>Frame Parser</source>
-        <translation>Парсер кадров</translation>
+        <translation>Парсер Кадров</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="228"/>
         <source>Project Template</source>
-        <translation>Шаблон проекта</translation>
+        <translation>Шаблон Проекта</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="231"/>
@@ -9902,27 +6959,27 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="234"/>
         <source>All Types</source>
-        <translation>Все типы</translation>
+        <translation>Все Типы</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="468"/>
         <source>Reset Extensions</source>
-        <translation>Сбросить расширения</translation>
+        <translation>Сбросить Расширения</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="469"/>
-        <source>This will uninstall all extensions, remove all custom repositories, and restore the default settings. Continue?</source>
+        <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>Это удалит все расширения, удалит все пользовательские репозитории и восстановит настройки по умолчанию. Продолжить?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="512"/>
         <source>Select Extension Repository Folder</source>
-        <translation>Выбрать папку репозитория расширений</translation>
+        <translation>Выберите Папку Репозитория Расширений</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1026"/>
         <source>Installed (repository no longer available)</source>
-        <translation>Установлено (репозиторий больше не доступен)</translation>
+        <translation>Установлено (репозиторий больше недоступен)</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1314"/>
@@ -9938,43 +6995,43 @@ Please provide the necessary credentials.</source>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1314"/>
         <source>Plugin "%1" is not installed.</source>
-        <translation>Плагин "%1" не установлен.</translation>
+        <translation>Плагин «%1» не установлен.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1326"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
-        <translation>Расширение "%1" не является плагином (тип: %2).</translation>
+        <translation>Расширение «%1» не является плагином (тип: %2).</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1339"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
-        <translation>Не удается прочитать файл метаданных плагина:
+        <translation>Невозможно прочитать файл метаданных плагина:
 %1/info.json</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1359"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
-        <translation>Плагин "%1" требует gRPC, но эта сборка не поддерживает gRPC.</translation>
+        <translation>Плагин «%1» требует GRPC, но эта сборка не включает поддержку GRPC.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1367"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
-        <translation>Этот плагин использует gRPC для высокопроизводительной передачи данных. Необходимо включить API-сервер.
+        <translation>Этот плагин использует GRPC для высокопроизводительной потоковой передачи данных. Необходимо включить API-сервер.
 
-Хотите включить его сейчас?</translation>
+Включить его сейчас?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1373"/>
         <source>API Server Required</source>
-        <translation>Требуется сервер API</translation>
+        <translation>Требуется API-Сервер</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
-        <translation>У плагина "%1" отсутствует поле 'entry' в info.json.</translation>
+        <translation>Плагин "%1" не содержит поле 'entry' в info.json.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1403"/>
@@ -9986,12 +7043,12 @@ Would you like to enable it now?</source>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1412"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
-        <translation>У плагина "%1" недопустимый путь к точке входа.</translation>
+        <translation>Плагин "%1" имеет недопустимый путь к точке входа.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1448"/>
         <source>Missing Dependency</source>
-        <translation>Отсутствующая Зависимость</translation>
+        <translation>Отсутствует Зависимость</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1449"/>
@@ -10000,12 +7057,12 @@ Would you like to enable it now?</source>
 Would you like to open the download page?</source>
         <translation>Этот плагин требует "%1", но он не найден в вашей системе.
 
-Хотите открыть страницу загрузки?</translation>
+Открыть страницу загрузки?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ExtensionManager.cpp" line="1370"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
-        <translation>Плагинам нужен сервер API для связи с Serial Studio. Хотите включить его сейчас?</translation>
+        <translation>Плагинам необходим API-сервер для связи с Serial Studio. Включить его сейчас?</translation>
     </message>
 </context>
 <context>
@@ -10021,7 +7078,7 @@ Would you like to open the download page?</source>
     <message>
         <location filename="../../src/Misc/IconEngine.cpp" line="166"/>
         <source>Invalid icon identifier</source>
-        <translation>Недействительный идентификатор иконки</translation>
+        <translation>Недопустимый идентификатор значка</translation>
     </message>
     <message>
         <location filename="../../src/Misc/IconEngine.cpp" line="245"/>
@@ -10030,125 +7087,114 @@ Would you like to open the download page?</source>
     </message>
 </context>
 <context>
-    <name>Misc::ModuleManager</name>
-    <message>
-        <source>To apply this change, %1 needs to restart.</source>
-        <translation type="vanished">Чтобы применить это изменение, %1 нужно перезапустить.</translation>
-    </message>
-    <message>
-        <source>Would you like to restart now?</source>
-        <translation type="vanished">Хотите перезапустить сейчас?</translation>
-    </message>
-</context>
-<context>
     <name>Misc::ThemeManager</name>
     <message>
         <location filename="../../src/Misc/ThemeManager.cpp" line="490"/>
         <source>System</source>
-        <translation>Система</translation>
+        <translation>Системная</translation>
     </message>
 </context>
 <context>
     <name>Misc::Utilities</name>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="120"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="119"/>
         <source>Check for updates automatically?</source>
         <translation>Проверять обновления автоматически?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="121"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="120"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>Должен ли %1 автоматически проверять обновления? Вы всегда можете проверить обновления вручную из диалога "О программе"</translation>
+        <translation>Должно ли приложение %1 автоматически проверять обновления? Проверку обновлений всегда можно выполнить вручную из диалога «О программе»</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="201"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
         <source>Ok</source>
         <translation>Ок</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="203"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="205"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
         <source>Save all</source>
-        <translation>Сохранить все</translation>
+        <translation>Сохранить всё</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="207"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
         <source>Open</source>
         <translation>Открыть</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="209"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="211"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
         <source>Yes to all</source>
         <translation>Да для всех</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="213"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="215"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
         <source>No to all</source>
         <translation>Нет для всех</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="217"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
         <source>Abort</source>
         <translation>Прервать</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="219"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
         <source>Retry</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="221"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
         <source>Ignore</source>
         <translation>Игнорировать</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="223"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="225"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="227"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="226"/>
         <source>Discard</source>
-        <translation>Отменить</translation>
+        <translation>Отклонить</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="229"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="228"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="231"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="230"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="233"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="232"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="235"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="234"/>
         <source>Restore defaults</source>
-        <translation>Восстановить настройки</translation>
+        <translation>Восстановить Значения по Умолчанию</translation>
     </message>
 </context>
 <context>
@@ -10156,7 +7202,7 @@ Would you like to open the download page?</source>
     <message>
         <location filename="../../src/Misc/WorkspaceManager.cpp" line="138"/>
         <source>Select Workspace Location</source>
-        <translation>Выберите Расположение Рабочей Области</translation>
+        <translation>Выбрать Расположение Рабочего Пространства</translation>
     </message>
 </context>
 <context>
@@ -10199,7 +7245,7 @@ Would you like to open the download page?</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="278"/>
         <source>IP Address</source>
-        <translation>IP-адрес</translation>
+        <translation>IP-Адрес</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="292"/>
@@ -10209,12 +7255,12 @@ Would you like to open the download page?</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="301"/>
         <source>TCP Port</source>
-        <translation>TCP-порт</translation>
+        <translation>TCP-Порт</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="329"/>
         <source>Slave Address</source>
-        <translation>Адрес Ведомого</translation>
+        <translation>Адрес Устройства</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="334"/>
@@ -10222,43 +7268,19 @@ Would you like to open the download page?</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <source>Multi-Group Mode</source>
-        <translation type="vanished">Режим Нескольких Групп</translation>
-    </message>
-    <message>
-        <source>Register Type</source>
-        <translation type="vanished">Тип Регистра</translation>
-    </message>
-    <message>
-        <source>Start Address</source>
-        <translation type="vanished">Начальный Адрес</translation>
-    </message>
-    <message>
-        <source>Register address</source>
-        <translation type="vanished">Адрес регистра</translation>
-    </message>
-    <message>
-        <source>Register Count</source>
-        <translation type="vanished">Количество Регистров</translation>
-    </message>
-    <message>
-        <source>Number of registers</source>
-        <translation type="vanished">Число регистров</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="382"/>
-        <source>Configure Register Groups...</source>
-        <translation>Настроить Группы Регистров...</translation>
+        <source>Configure Register Groups…</source>
+        <translation>Настроить Группы Регистров…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="392"/>
-        <source>Import Register Map...</source>
-        <translation>Импортировать Карту Регистр...</translation>
+        <source>Import Register Map…</source>
+        <translation>Импортировать Карту Регистров…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="407"/>
         <source>%1 group(s) configured</source>
-        <translation>настроено %1 группа(ы)</translation>
+        <translation>Настроено групп: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="408"/>
@@ -10331,7 +7353,7 @@ Would you like to open the download page?</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="292"/>
         <source>#</source>
-        <translation>#</translation>
+        <translation>№</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="299"/>
@@ -10363,7 +7385,7 @@ Would you like to open the download page?</source>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Группы не настроены.
-Добавьте группы выше, чтобы опрашивать несколько типов регистров.</translation>
+Добавьте группы выше для опроса нескольких типов регистров.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="426"/>
@@ -10373,12 +7395,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="430"/>
         <source>Generate Project</source>
-        <translation>Генерировать Проект</translation>
+        <translation>Создать Проект</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="436"/>
         <source>Clear All</source>
-        <translation>Очистить Все</translation>
+        <translation>Очистить Всё</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="442"/>
@@ -10400,8 +7422,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="158"/>
-        <source>Review the registers that will be imported into a new Serial Studio project.</source>
-        <translation>Просмотрите регистры, которые будут импортированы в новый проект Serial Studio.</translation>
+        <source>Review the registers to import into a new Serial Studio project.</source>
+        <translation>Проверьте регистры для импорта в новый проект Serial Studio.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="166"/>
@@ -10416,7 +7438,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="207"/>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="216"/>
@@ -10431,7 +7453,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="230"/>
         <source>Data Type</source>
-        <translation>Тип данных</translation>
+        <translation>Тип Данных</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="237"/>
@@ -10441,7 +7463,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="338"/>
         <source>No registers found in file.</source>
-        <translation>В файле не найдено регистров.</translation>
+        <translation>Регистры в файле не найдены.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="356"/>
@@ -10456,7 +7478,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="379"/>
         <source>Create Project</source>
-        <translation>Создать проект</translation>
+        <translation>Создать Проект</translation>
     </message>
 </context>
 <context>
@@ -10469,22 +7491,22 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="187"/>
         <source>Show Legends</source>
-        <translation>Показать легенды</translation>
+        <translation>Показать Легенды</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="204"/>
         <source>Show X Axis Label</source>
-        <translation>Показать метку оси X</translation>
+        <translation>Показать Метку Оси X</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="215"/>
         <source>Show Y Axis Label</source>
-        <translation>Показать метку оси Y</translation>
+        <translation>Показать Метку Оси Y</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="227"/>
         <source>Show Crosshair</source>
-        <translation>Показать перекрестие</translation>
+        <translation>Показать Перекрестие</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="234"/>
@@ -10499,12 +7521,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="253"/>
         <source>Reset View</source>
-        <translation>Сбросить вид</translation>
+        <translation>Сбросить Вид</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="259"/>
         <source>Axis Range Settings</source>
-        <translation>Настройки Диапазона Оси</translation>
+        <translation>Настройки Диапазона Осей</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="293"/>
@@ -10522,11 +7544,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="129"/>
         <source>Remote Address</source>
-        <translation>Удаленный Адрес</translation>
-    </message>
-    <message>
-        <source>Port</source>
-        <translation type="vanished">Порт</translation>
+        <translation>Удалённый Адрес</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="96"/>
@@ -10542,12 +7560,12 @@ Add groups above to poll multiple register types.</source>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="153"/>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="186"/>
         <source>Remote Port</source>
-        <translation>Удаленный Порт</translation>
+        <translation>Удалённый Порт</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="216"/>
         <source>Multicast</source>
-        <translation>Мультикаст</translation>
+        <translation>Multicast</translation>
     </message>
 </context>
 <context>
@@ -10565,7 +7583,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="270"/>
         <source>(no title)</source>
-        <translation>(без заголовка)</translation>
+        <translation>(без названия)</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="328"/>
@@ -10575,7 +7593,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="340"/>
         <source>Dataset transforms and output widget scripts can post events here via notifyInfo / notifyWarning / notifyCritical.</source>
-        <translation>Трансформации набора данных и скрипты виджетов вывода могут отправлять события здесь через notifyInfo / notifyWarning / notifyCritical.</translation>
+        <translation>Преобразования наборов данных и скрипты виджетов вывода могут публиковать события здесь через notifyInfo / notifyWarning / notifyCritical.</translation>
     </message>
 </context>
 <context>
@@ -10592,8 +7610,8 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="88"/>
-        <source>Search icons (e.g. temperature, arrow, play)...</source>
-        <translation>Искать иконки (например, температура, стрелка, воспроизведение)...</translation>
+        <source>Search icons (e.g. temperature, arrow, play)…</source>
+        <translation>Поиск иконок (например, temperature, arrow, play)…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="102"/>
@@ -10603,7 +7621,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="141"/>
         <source>Search for icons above to get started</source>
-        <translation>Найдите значки выше, чтобы начать</translation>
+        <translation>Найдите иконки выше, чтобы начать</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="244"/>
@@ -10621,12 +7639,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="78"/>
         <source>Output widgets require a Pro license.</source>
-        <translation>Виджеты вывода требуют лицензии Pro.</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="80"/>
-        <source>You can configure output widgets, but they will only appear on the dashboard with a Pro license.</source>
-        <translation>Вы можете настроить виджеты вывода, но они появятся на панели только с лицензией Pro.</translation>
+        <translation>Виджеты вывода требуют лицензию Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="112"/>
@@ -10636,7 +7649,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="116"/>
         <source>Send a command on click</source>
-        <translation>Отправить команду по клику</translation>
+        <translation>Отправить команду по нажатию</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="121"/>
@@ -10656,17 +7669,17 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="134"/>
         <source>Send on/off commands</source>
-        <translation>Отправить команды включения/выключения</translation>
+        <translation>Отправка команд вкл/выкл</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="139"/>
         <source>Text Field</source>
-        <translation>Текстовое поле</translation>
+        <translation>Текстовое Поле</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="143"/>
         <source>Type and send arbitrary commands</source>
-        <translation>Введите и отправьте произвольные команды</translation>
+        <translation>Ввод и отправка произвольных команд</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
@@ -10679,12 +7692,9 @@ Add groups above to poll multiple register types.</source>
         <translation>Поворотный ввод для уставок</translation>
     </message>
     <message>
-        <source>Ramp</source>
-        <translation type="vanished">Пандус</translation>
-    </message>
-    <message>
-        <source>Generate timed value sweeps</source>
-        <translation type="vanished">Создать временные последовательности значений</translation>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="80"/>
+        <source>You can configure output widgets, but they only appear on the dashboard with a Pro license.</source>
+        <translation>Вы можете настроить виджеты вывода, но они отображаются на панели только с лицензией Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="169"/>
@@ -10709,7 +7719,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="261"/>
         <source>Transmit Function</source>
-        <translation>Функция передачи</translation>
+        <translation>Функция Передачи</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="271"/>
@@ -10729,17 +7739,17 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="288"/>
         <source>Select a pre-built transmit function template</source>
-        <translation>Выбрать предустановленный шаблон функции передачи</translation>
+        <translation>Выбрать готовый шаблон функции передачи</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="293"/>
         <source>Test</source>
-        <translation>Тест</translation>
+        <translation>Проверить</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="299"/>
         <source>Test the transmit function with sample input</source>
-        <translation>Протестируйте функцию передачи с примерным вводом</translation>
+        <translation>Проверить функцию передачи с примером входных данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="339"/>
@@ -10769,7 +7779,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="370"/>
         <source>Select All</source>
-        <translation>Выбрать все</translation>
+        <translation>Выбрать Всё</translation>
     </message>
 </context>
 <context>
@@ -10777,7 +7787,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="162"/>
         <source>Interpolate</source>
-        <translation>Интерполяция</translation>
+        <translation>Интерполировать</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="176"/>
@@ -10807,7 +7817,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="223"/>
         <source>Resume</source>
-        <translation>Продолжить</translation>
+        <translation>Возобновить</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="242"/>
@@ -10817,7 +7827,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Plot.qml" line="248"/>
         <source>Axis Range Settings</source>
-        <translation>Настройки Диапазона Оси</translation>
+        <translation>Настройки Диапазона Осей</translation>
     </message>
 </context>
 <context>
@@ -10876,42 +7886,19 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <source>%1, %2</source>
-        <translation type="vanished">%1, %2</translation>
-    </message>
-    <message>
-        <source>ΔX: %1  ΔY: %2</source>
-        <translation type="vanished">ΔX: %1  ΔY: %2</translation>
-    </message>
-    <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1127"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
-        <translation>ΔX: %1  ΔY: %2 — Перетащите для перемещения, щелкните правой кнопкой для очистки</translation>
+        <translation>ΔX: %1  ΔY: %2 — Перетащите для перемещения, правый клик для очистки</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1129"/>
         <source>Click to place cursor</source>
-        <translation>Щелкните, чтобы установить курсор</translation>
+        <translation>Нажмите для размещения курсора</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/PlotWidget.qml" line="1131"/>
         <source>Click to place second cursor — Drag to move</source>
-        <translation>Щелкните, чтобы установить второй курсор — Перетащите для перемещения</translation>
-    </message>
-</context>
-<context>
-    <name>Plugins::Server</name>
-    <message>
-        <source>Unable to start plugin TCP server</source>
-        <translation type="vanished">Не удалось запустить плагин TCP-сервер</translation>
-    </message>
-    <message>
-        <source>Plugin server</source>
-        <translation type="vanished">Сервер плагинов</translation>
-    </message>
-    <message>
-        <source>Invalid pending connection</source>
-        <translation type="vanished">Неверное ожидающее соединение</translation>
+        <translation>Нажмите для размещения второго курсора — Перетащите для перемещения</translation>
     </message>
 </context>
 <context>
@@ -10919,7 +7906,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="121"/>
         <source>Visit Website</source>
-        <translation>Посетить Сайт</translation>
+        <translation>Посетить Веб-сайт</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/ProNotice.qml" line="132"/>
@@ -10935,18 +7922,6 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>Process</name>
     <message>
-        <source>Select Executable</source>
-        <translation type="vanished">Выберите Исполняемый Файл</translation>
-    </message>
-    <message>
-        <source>Select Working Directory</source>
-        <translation type="vanished">Выберите Рабочую Директорию</translation>
-    </message>
-    <message>
-        <source>Select Named Pipe / FIFO</source>
-        <translation type="vanished">Выберите Именованный Канал / FIFO</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="66"/>
         <source>Mode</source>
         <translation>Режим</translation>
@@ -10954,22 +7929,22 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="74"/>
         <source>Launch Process</source>
-        <translation>Запуск процесса</translation>
+        <translation>Запустить Процесс</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="74"/>
         <source>Named Pipe</source>
-        <translation>Именованный канал</translation>
+        <translation>Именованный Канал</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="100"/>
         <source>Executable</source>
-        <translation>Исполняемый файл</translation>
+        <translation>Исполняемый Файл</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="115"/>
         <source>/path/to/executable</source>
-        <translation>/путь/к/исполняемому_файлу</translation>
+        <translation>/путь/к/исполняемому/файлу</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="132"/>
@@ -10979,22 +7954,6 @@ Add groups above to poll multiple register types.</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <source>Capture</source>
-        <translation type="vanished">Захват</translation>
-    </message>
-    <message>
-        <source>Standard Output (stdout)</source>
-        <translation type="vanished">Стандартный вывод (stdout)</translation>
-    </message>
-    <message>
-        <source>Standard Error (stderr)</source>
-        <translation type="vanished">Стандартная ошибка (stderr)</translation>
-    </message>
-    <message>
-        <source>Stdout + Stderr (merged)</source>
-        <translation type="vanished">Stdout + Stderr (объединенные)</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="144"/>
         <source>Arguments</source>
         <translation>Аргументы</translation>
@@ -11002,7 +7961,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="155"/>
         <source>--arg1 value1 --arg2 value2</source>
-        <translation>--arg1 value1 --arg2 value2</translation>
+        <translation>--арг1 значение1 --арг2 значение2</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="176"/>
@@ -11012,12 +7971,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="191"/>
         <source>(optional) /working/directory</source>
-        <translation>(необязательно) /working/directory</translation>
+        <translation>(необязательно) /рабочий/каталог</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="224"/>
         <source>Pipe Path</source>
-        <translation>Путь К Каналу</translation>
+        <translation>Путь к Каналу</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="274"/>
@@ -11027,12 +7986,12 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="312"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
-        <translation>Запустите дочерний процесс и захватите его stdout или подключитесь к именованному каналу, записанному существующим процессом.</translation>
+        <translation>Запустить дочерний процесс и захватить его stdout, или подключиться к именованному каналу, созданному существующим процессом.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="320"/>
         <source>Learn about named pipes</source>
-        <translation>Узнайте об именованных каналах</translation>
+        <translation>Узнать об именованных каналах</translation>
     </message>
 </context>
 <context>
@@ -11040,22 +7999,22 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="51"/>
         <source>Select Running Process</source>
-        <translation>Выберите Запущенный Процесс</translation>
+        <translation>Выбрать Выполняющийся Процесс</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="202"/>
         <source>Select a running process to derive a named-pipe path suggestion.</source>
-        <translation>Выберите запущенный процесс, чтобы получить предложение пути к именованному каналу.</translation>
+        <translation>Выберите выполняющийся процесс для получения предлагаемого пути именованного канала.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="208"/>
         <source>Filter Processes</source>
-        <translation>Фильтровать процессы</translation>
+        <translation>Фильтр Процессов</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="222"/>
         <source>Type to filter by name…</source>
-        <translation>Введите для фильтрации по имени…</translation>
+        <translation>Введите для фильтрации по названию…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
@@ -11065,7 +8024,7 @@ Add groups above to poll multiple register types.</source>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="234"/>
         <source>Running Processes</source>
-        <translation>Запущенные процессы</translation>
+        <translation>Выполняющиеся Процессы</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="272"/>
@@ -11087,12 +8046,12 @@ Add groups above to poll multiple register types.</source>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>Запущенные процессы не найдены.
-Нажмите «Обновить», чтобы обновить список.</translation>
+Нажмите «Обновить» для обновления списка.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="384"/>
         <source>%1 process(es)</source>
-        <translation>%1 процесс(ов)</translation>
+        <translation>Процессов: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="388"/>
@@ -11110,7 +8069,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
         <source>modified</source>
-        <translation>изменено</translation>
+        <translation>изменён</translation>
     </message>
 </context>
 <context>
@@ -11125,22 +8084,18 @@ Click Refresh to update the list.</source>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
-    <message>
-        <source>IDX %1</source>
-        <translation type="vanished">IDX %1</translation>
-    </message>
 </context>
 <context>
     <name>ProjectToolbar</name>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="141"/>
         <source>New</source>
-        <translation>Новый</translation>
+        <translation>Создать</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="144"/>
         <source>Create a new JSON project</source>
-        <translation>Создать новый JSON проект</translation>
+        <translation>Создать новый JSON-проект</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="157"/>
@@ -11150,7 +8105,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="161"/>
         <source>Open an existing JSON project</source>
-        <translation>Открыть существующий JSON проект</translation>
+        <translation>Открыть существующий JSON-проект</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="167"/>
@@ -11196,12 +8151,12 @@ Click Refresh to update the list.</source>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="222"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="226"/>
         <source>Output</source>
-        <translation>Вывод</translation>
+        <translation>Выход</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="229"/>
         <source>Add a new output control panel with a button</source>
-        <translation>Добавить новую панель управления выводом с кнопкой</translation>
+        <translation>Добавить новую панель управления выходом с кнопкой</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="242"/>
@@ -11211,7 +8166,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="245"/>
         <source>Add an output slider control</source>
-        <translation>Добавить ползунок управления выводом</translation>
+        <translation>Добавить элемент управления выходом типа ползунок</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="252"/>
@@ -11221,27 +8176,27 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
         <source>Add an output toggle control</source>
-        <translation>Добавить элемент управления переключателем выхода</translation>
+        <translation>Добавить элемент управления выходом типа переключатель</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="262"/>
         <source>Knob</source>
-        <translation>Ручка</translation>
+        <translation>Регулятор</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="265"/>
         <source>Add an output knob control</source>
-        <translation>Добавить элемент управления ручкой выхода</translation>
+        <translation>Добавить элемент управления выходом типа регулятор</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
         <source>Text Field</source>
-        <translation>Текстовое поле</translation>
+        <translation>Текстовое Поле</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="275"/>
         <source>Add an output text field control</source>
-        <translation>Добавить элемент управления текстовым полем выхода</translation>
+        <translation>Добавить элемент управления выходом типа текстовое поле</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
@@ -11251,21 +8206,13 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="285"/>
         <source>Add an output button control</source>
-        <translation>Добавить элемент управления кнопкой выхода</translation>
-    </message>
-    <message>
-        <source>Ramp</source>
-        <translation type="vanished">Наклон</translation>
-    </message>
-    <message>
-        <source>Add a ramp generator control</source>
-        <translation type="vanished">Добавить элемент управления генератором наклона</translation>
+        <translation>Добавить элемент управления кнопкой вывода</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="298"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="302"/>
         <source>Dataset</source>
-        <translation>Набор данных</translation>
+        <translation>Набор Данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
@@ -11280,12 +8227,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="321"/>
         <source>Add a 2D plot dataset</source>
-        <translation>Добавить набор данных для 2D графика</translation>
+        <translation>Добавить набор данных 2D графика</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="328"/>
         <source>FFT Plot</source>
-        <translation>График БПФ</translation>
+        <translation>График FFT</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="331"/>
@@ -11295,12 +8242,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
         <source>Gauge</source>
-        <translation>Индикатор</translation>
+        <translation>Датчик</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
         <source>Add a gauge widget for numeric data</source>
-        <translation>Добавить виджет шкалы для числовых данных</translation>
+        <translation>Добавить виджет датчика для числовых данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
@@ -11325,7 +8272,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="369"/>
         <source>LED Indicator</source>
-        <translation>Индикатор LED</translation>
+        <translation>LED-Индикатор</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
@@ -11341,12 +8288,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="390"/>
         <source>Add a dataset container group</source>
-        <translation>Добавить группу контейнеров набора данных</translation>
+        <translation>Добавить группу-контейнер наборов данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
         <source>Dataset Container</source>
-        <translation>Контейнер Набора Данных</translation>
+        <translation>Контейнер Наборов Данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="396"/>
@@ -11356,12 +8303,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
         <source>Add an image/video stream viewer</source>
-        <translation>Добавить просмотрщик потока изображений/видео</translation>
+        <translation>Добавить просмотр потока изображений/видео</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
         <source>Image View</source>
-        <translation>Просмотр изображения</translation>
+        <translation>Просмотр Изображений</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="412"/>
@@ -11376,12 +8323,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="417"/>
         <source>Data Grid</source>
-        <translation>Сетка Данных</translation>
+        <translation>Таблица Данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="423"/>
         <source>Multi-Plot</source>
-        <translation>Мульти-график</translation>
+        <translation>Множественный График</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
@@ -11427,10 +8374,6 @@ Click Refresh to update the list.</source>
         <translation>Добавить группу для данных 3-осевого гироскопа</translation>
     </message>
     <message>
-        <source>Add a group for 3-axis gyroscope data (angular rates are integrated into orientation automatically)</source>
-        <translation type="vanished">Добавить группу для данных 3-осевого гироскопа (угловые скорости автоматически интегрируются в ориентацию)</translation>
-    </message>
-    <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="462"/>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="467"/>
         <source>GPS Map</source>
@@ -11444,20 +8387,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="481"/>
         <source>Help Center</source>
-        <translation>Центр Помощи</translation>
+        <translation>Центр Справки</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="484"/>
         <source>Open the Project Editor documentation</source>
-        <translation>Открыть документацию редактора проекта</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Справка</translation>
-    </message>
-    <message>
-        <source>Open the online Project Editor documentation</source>
-        <translation type="vanished">Открыть онлайн-документацию редактора проектов</translation>
+        <translation>Открыть документацию редактора проектов</translation>
     </message>
 </context>
 <context>
@@ -11465,12 +8400,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="81"/>
         <source>Pro features detected in this project.</source>
-        <translation>В этом проекте обнаружены профессиональные функции.</translation>
+        <translation>Обнаружены функции Pro в этом проекте.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="83"/>
-        <source>Fallback widgets will be used. Buy a license to unlock full functionality.</source>
-        <translation>Будут использоваться резервные виджеты. Купите лицензию для разблокировки полной функциональности.</translation>
+        <source>Using fallback widgets. Buy a license to unlock full functionality.</source>
+        <translation>Используются резервные виджеты. Приобретите лицензию для полной функциональности.</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="118"/>
@@ -11480,7 +8415,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="129"/>
         <source>Untitled Project</source>
-        <translation>Безымянный Проект</translation>
+        <translation>Проект Без Названия</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="149"/>
@@ -11510,12 +8445,12 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="221"/>
         <source>Dataset</source>
-        <translation>Набор данных</translation>
+        <translation>Набор Данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="222"/>
         <source>Datasets</source>
-        <translation>Наборы данных</translation>
+        <translation>Наборы Данных</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="227"/>
@@ -11531,14 +8466,14 @@ Click Refresh to update the list.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/Misc/Translator.cpp" line="211"/>
+        <location filename="../../src/Misc/Translator.cpp" line="212"/>
         <source>Failed to load welcome text :(</source>
         <translation>Не удалось загрузить приветственный текст :(</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="306"/>
         <source>Network error</source>
-        <translation>Сетевая ошибка</translation>
+        <translation>Ошибка сети</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="309"/>
@@ -11555,7 +8490,7 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="324"/>
         <source>The server returned malformed data: %1</source>
-        <translation>Сервер вернул поврежденные данные: %1</translation>
+        <translation>Сервер вернул некорректные данные: %1</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="356"/>
@@ -11565,22 +8500,22 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="357"/>
         <source>The server response is missing required fields.</source>
-        <translation>В ответе сервера отсутствуют необходимые поля.</translation>
+        <translation>В ответе сервера отсутствуют обязательные поля.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="163"/>
+        <location filename="../../src/Console/Export.cpp" line="164"/>
         <source>Console Output File Error</source>
         <translation>Ошибка Файла Вывода Консоли</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="164"/>
+        <location filename="../../src/Console/Export.cpp" line="165"/>
         <source>Cannot open file for writing!</source>
-        <translation>Не удается открыть файл для записи!</translation>
+        <translation>Невозможно открыть файл для записи!</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="806"/>
         <source>Invalid Bluetooth adapter!</source>
-        <translation>Недопустимый адаптер Bluetooth!</translation>
+        <translation>Недействительный адаптер Bluetooth!</translation>
     </message>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="809"/>
@@ -11595,15 +8530,15 @@ Click Refresh to update the list.</source>
     <message>
         <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="815"/>
         <source>General I/O error</source>
-        <translation>Общая ошибка ввода/вывода</translation>
+        <translation>Общая ошибка ввода-вывода</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="210"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="217"/>
         <source>Lua Syntax Error</source>
-        <translation>Ошибка синтаксиса Lua</translation>
+        <translation>Синтаксическая Ошибка Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="211"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="218"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -11612,12 +8547,12 @@ Click Refresh to update the list.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="229"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="236"/>
         <source>Lua Runtime Error</source>
-        <translation>Ошибка выполнения Lua</translation>
+        <translation>Ошибка Выполнения Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="230"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="237"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -11626,13 +8561,13 @@ Click Refresh to update the list.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="244"/>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="395"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="251"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="401"/>
         <source>Missing Parse Function</source>
-        <translation>Отсутствует функция Parse</translation>
+        <translation>Отсутствует Функция Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="245"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="252"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -11643,13 +8578,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="304"/>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="463"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="311"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="469"/>
         <source>Parse Function Runtime Error</source>
-        <translation>Ошибка выполнения функции Parse</translation>
+        <translation>Ошибка Выполнения Функции Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="305"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="312"/>
         <source>The parse function contains an error:
 
 %1
@@ -11659,29 +8594,29 @@ Please fix the error in the function body.</source>
 
 %1
 
-Пожалуйста, исправьте ошибку в теле функции.</translation>
+Исправьте ошибку в теле функции.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="353"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="359"/>
         <source>JavaScript Syntax Error</source>
-        <translation>Ошибка синтаксиса JavaScript</translation>
+        <translation>Синтаксическая Ошибка Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="354"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="360"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
-        <translation>Код парсера содержит синтаксическую ошибку на строке %1:
+        <translation>Код парсера содержит синтаксическую ошибку в строке %1:
 
 %2</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="369"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="375"/>
         <source>JavaScript Exception Occurred</source>
-        <translation>Произошло исключение JavaScript</translation>
+        <translation>Возникло Исключение Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="370"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="376"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -11690,68 +8625,68 @@ Please fix the error in the function body.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="396"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="402"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
 function parse(frame) { ... }</source>
         <translation>Функция 'parse' не определена в скрипте.
 
-Пожалуйста, убедитесь, что ваш код включает:
+Убедитесь, что ваш код включает:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="464"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="470"/>
         <source>The parse function contains an error at line %1:
 
 %2
 
 Please fix the error in the function body.</source>
-        <translation>Функция parse содержит ошибку на строке %1:
+        <translation>Функция parse содержит ошибку в строке %1:
 
 %2
 
-Пожалуйста, исправьте ошибку в теле функции.</translation>
+Исправьте ошибку в теле функции.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="518"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="524"/>
         <source>Invalid Function Declaration</source>
-        <translation>Неверное Объявление Функции</translation>
+        <translation>Недопустимое Объявление Функции</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="519"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="525"/>
         <source>No valid 'parse' function declaration found.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation>Не найдено корректное объявление функции 'parse'.
+        <translation>Не найдено допустимое объявление функции 'parse'.
 
 Ожидаемый формат:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="536"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="542"/>
         <source>Invalid Function Parameter</source>
-        <translation>Неверный Параметр Функции</translation>
+        <translation>Недопустимый Параметр Функции</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="537"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="543"/>
         <source>The 'parse' function must have at least one parameter.
 
 Expected format:
 function parse(frame) { ... }</source>
-        <translation>Функция 'parse' должна иметь как минимум один параметр.
+        <translation>Функция 'parse' должна иметь хотя бы один параметр.
 
 Ожидаемый формат:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="552"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="558"/>
         <source>Deprecated Function Signature</source>
         <translation>Устаревшая Сигнатура Функции</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="553"/>
+        <location filename="../../src/DataModel/JsScriptEngine.cpp" line="559"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -11760,10 +8695,10 @@ function parse(%1) { ... }
 The separator parameter is no longer needed.</source>
         <translation>Функция 'parse' использует старый формат с двумя параметрами: parse(%1, %2)
 
-Этот формат больше не поддерживается. Пожалуйста, обновите до нового формата с одним параметром:
+Этот формат больше не поддерживается. Обновите до нового формата с одним параметром:
 function parse(%1) { ... }
 
-Параметр-разделитель больше не нужен.</translation>
+Параметр разделителя больше не требуется.</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
@@ -11786,17 +8721,17 @@ function parse(%1) { ... }
     <message>
         <location filename="../../../lib/QuaZip/quazip/quagzipfile.cpp" line="66"/>
         <source>Opening gzip for both reading and writing is not supported</source>
-        <translation>Открытие gzip для чтения и записи одновременно не поддерживается</translation>
+        <translation>Открытие gzip одновременно для чтения и записи не поддерживается</translation>
     </message>
     <message>
         <location filename="../../../lib/QuaZip/quazip/quagzipfile.cpp" line="75"/>
         <source>You can open a gzip either for reading or for writing. Which is it?</source>
-        <translation>Вы можете открыть gzip либо для чтения, либо для записи. Какой вариант?</translation>
+        <translation>Можно открыть gzip либо для чтения, либо для записи. Что выбрано?</translation>
     </message>
     <message>
         <location filename="../../../lib/QuaZip/quazip/quagzipfile.cpp" line="81"/>
         <source>Could not gzopen() file</source>
-        <translation>Не удалось открыть файл с помощью gzopen()</translation>
+        <translation>Не удалось выполнить gzopen() файла</translation>
     </message>
 </context>
 <context>
@@ -11817,7 +8752,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../../lib/QuaZip/quazip/quazipfile.cpp" line="251"/>
         <source>ZIP/UNZIP API error %1</source>
-        <translation>Ошибка API ZIP/UNZIP %1</translation>
+        <translation>Ошибка ZIP/UNZIP API %1</translation>
     </message>
 </context>
 <context>
@@ -11825,46 +8760,22 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="24"/>
         <source>Generate PDF Report</source>
-        <translation>Создать отчет в формате PDF</translation>
+        <translation>Создать PDF-Отчёт</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="54"/>
         <source>Solid</source>
-        <translation>Сплошной</translation>
+        <translation>Сплошная</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="55"/>
         <source>Dashed</source>
-        <translation>Пунктирный</translation>
+        <translation>Штриховая</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="56"/>
         <source>Dotted</source>
-        <translation>Точечный</translation>
-    </message>
-    <message>
-        <source>A4</source>
-        <translation type="vanished">A4</translation>
-    </message>
-    <message>
-        <source>A3</source>
-        <translation type="vanished">A3</translation>
-    </message>
-    <message>
-        <source>Letter</source>
-        <translation type="vanished">Письмо</translation>
-    </message>
-    <message>
-        <source>Legal</source>
-        <translation type="vanished">Юридический</translation>
-    </message>
-    <message>
-        <source>Portrait</source>
-        <translation type="vanished">Портрет</translation>
-    </message>
-    <message>
-        <source>Landscape</source>
-        <translation type="vanished">Альбом</translation>
+        <translation>Пунктирная</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
@@ -11914,7 +8825,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="84"/>
         <source>Letter (8.5 × 11 in)</source>
-        <translation>Letter (8.5 × 11 дюймов)</translation>
+        <translation>Letter (8,5 × 11 дюймов)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="85"/>
@@ -11939,13 +8850,13 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>%1 — Session Report</source>
-        <translation>%1 — Отчет о Сессии</translation>
+        <translation>%1 — Отчёт Сессии</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="278"/>
         <source>Session Report</source>
-        <translation>Отчет о Сессии</translation>
+        <translation>Отчёт Сессии</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="181"/>
@@ -11965,7 +8876,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="245"/>
         <source>Identity</source>
-        <translation>Идентичность</translation>
+        <translation>Идентификация</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="258"/>
@@ -11975,12 +8886,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="266"/>
         <source>e.g. Acme Test Systems</source>
-        <translation>например, Acme Test Systems</translation>
+        <translation>напр. Acme Test Systems</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="270"/>
         <source>Document title</source>
-        <translation>Заголовок документа</translation>
+        <translation>Название Документа</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="282"/>
@@ -11990,7 +8901,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Prepared by (optional)</source>
-        <translation>Подготовлено (необязательно)</translation>
+        <translation>Подготовил (необязательно)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="296"/>
@@ -12035,7 +8946,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="491"/>
         <source>Test information (project, timestamps, classification and notes)</source>
-        <translation>Информация о тесте (проект, временные метки, классификация и заметки)</translation>
+        <translation>Информация о тесте (проект, временные метки, классификация и примечания)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="496"/>
@@ -12045,11 +8956,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="501"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
-        <translation>Тренды параметров (график временного ряда по числовому параметру)</translation>
-    </message>
-    <message>
-        <source>Orientation</source>
-        <translation type="vanished">Ориентация</translation>
+        <translation>Тренды параметров (график временных рядов по числовому параметру)</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="392"/>
@@ -12059,7 +8966,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="405"/>
         <source>Line width</source>
-        <translation>Ширина линии</translation>
+        <translation>Толщина линии</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="435"/>
@@ -12072,34 +8979,14 @@ function parse(%1) { ... }
         <translation>Включить</translation>
     </message>
     <message>
-        <source>Cover page — logo, document title, test subtitle</source>
-        <translation type="vanished">Титульная страница — логотип, название документа, подзаголовок теста</translation>
-    </message>
-    <message>
-        <source>Test information — project, timestamps, classification, notes</source>
-        <translation type="vanished">Информация о тесте — проект, временные метки, классификация, заметки</translation>
-    </message>
-    <message>
-        <source>Measurement summary — min, max, mean, std. deviation per parameter</source>
-        <translation type="vanished">Сводка измерений — мин., макс., среднее, стандартное отклонение по параметру</translation>
-    </message>
-    <message>
-        <source>Parameter trends — time-series chart per numeric parameter</source>
-        <translation type="vanished">Тренды параметров — временной график для каждого числового параметра</translation>
-    </message>
-    <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="519"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <source>Export HTML</source>
-        <translation type="vanished">Экспортировать HTML</translation>
-    </message>
-    <message>
         <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="546"/>
         <source>Export PDF</source>
-        <translation>Экспортировать PDF</translation>
+        <translation>Экспорт PDF</translation>
     </message>
 </context>
 <context>
@@ -12107,148 +8994,148 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="25"/>
         <source>Generating Report</source>
-        <translation>Генерация отчета</translation>
+        <translation>Создание Отчёта</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="66"/>
         <source>Working…</source>
-        <translation>Работаю…</translation>
+        <translation>Обработка…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="83"/>
-        <source>This can take a few seconds for sessions with many parameters. The window will close automatically when the report is ready.</source>
-        <translation>Это может занять несколько секунд для сессий с большим количеством параметров. Окно закроется автоматически, когда отчет будет готов.</translation>
+        <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
+        <translation>Это может занять несколько секунд для сессий с большим количеством параметров. Окно закроется автоматически, когда отчёт будет готов.</translation>
     </message>
 </context>
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="338"/>
+        <location filename="../../src/SerialStudio.cpp" line="335"/>
         <source>Data Grids</source>
         <translation>Таблицы Данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="341"/>
+        <location filename="../../src/SerialStudio.cpp" line="338"/>
         <source>Multiple Data Plots</source>
         <translation>Несколько Графиков Данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="344"/>
+        <location filename="../../src/SerialStudio.cpp" line="341"/>
         <source>Accelerometers</source>
         <translation>Акселерометры</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="347"/>
+        <location filename="../../src/SerialStudio.cpp" line="344"/>
         <source>Gyroscopes</source>
         <translation>Гироскопы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="350"/>
+        <location filename="../../src/SerialStudio.cpp" line="347"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="353"/>
+        <location filename="../../src/SerialStudio.cpp" line="350"/>
         <source>FFT Plots</source>
         <translation>Графики FFT</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="356"/>
+        <location filename="../../src/SerialStudio.cpp" line="353"/>
         <source>LED Panels</source>
-        <translation>Светодиодные Панели</translation>
+        <translation>Панели Светодиодов</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="359"/>
+        <location filename="../../src/SerialStudio.cpp" line="356"/>
         <source>Data Plots</source>
         <translation>Графики Данных</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="362"/>
+        <location filename="../../src/SerialStudio.cpp" line="359"/>
         <source>Bars</source>
-        <translation>Полосы</translation>
+        <translation>Гистограммы</translation>
+    </message>
+    <message>
+        <location filename="../../src/SerialStudio.cpp" line="362"/>
+        <source>Gauges</source>
+        <translation>Датчики</translation>
     </message>
     <message>
         <location filename="../../src/SerialStudio.cpp" line="365"/>
-        <source>Gauges</source>
-        <translation>Индикаторы</translation>
-    </message>
-    <message>
-        <location filename="../../src/SerialStudio.cpp" line="368"/>
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="371"/>
+        <location filename="../../src/SerialStudio.cpp" line="368"/>
         <source>Compasses</source>
         <translation>Компасы</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="374"/>
+        <location filename="../../src/SerialStudio.cpp" line="371"/>
         <source>3D Plots</source>
         <translation>3D Графики</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="378"/>
+        <location filename="../../src/SerialStudio.cpp" line="375"/>
         <source>Image Views</source>
-        <translation>Просмотры Изображений</translation>
+        <translation>Просмотр Изображений</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="381"/>
+        <location filename="../../src/SerialStudio.cpp" line="378"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="940"/>
+        <location filename="../../src/SerialStudio.cpp" line="937"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="941"/>
+        <location filename="../../src/SerialStudio.cpp" line="938"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="942"/>
+        <location filename="../../src/SerialStudio.cpp" line="939"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="943"/>
+        <location filename="../../src/SerialStudio.cpp" line="940"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="944"/>
+        <location filename="../../src/SerialStudio.cpp" line="941"/>
         <source>System</source>
-        <translation>Система</translation>
+        <translation>Системная</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="945"/>
+        <location filename="../../src/SerialStudio.cpp" line="942"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="946"/>
+        <location filename="../../src/SerialStudio.cpp" line="943"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="947"/>
+        <location filename="../../src/SerialStudio.cpp" line="944"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="948"/>
+        <location filename="../../src/SerialStudio.cpp" line="945"/>
         <source>Shift-JIS</source>
-        <translation>Shift-JIS</translation>
+        <translation>Shift-jis</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="949"/>
+        <location filename="../../src/SerialStudio.cpp" line="946"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="950"/>
+        <location filename="../../src/SerialStudio.cpp" line="947"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -12258,12 +9145,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="19"/>
         <source>Session Details</source>
-        <translation>Детали сессии</translation>
+        <translation>Подробности Сеанса</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="71"/>
         <source>Select a session to view details.</source>
-        <translation>Выберите сессию для просмотра деталей.</translation>
+        <translation>Выберите сеанс для просмотра подробностей.</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="112"/>
@@ -12273,12 +9160,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="125"/>
         <source>Started:</source>
-        <translation>Начато:</translation>
+        <translation>Начало:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="138"/>
         <source>Ended:</source>
-        <translation>Завершено:</translation>
+        <translation>Окончание:</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="144"/>
@@ -12297,18 +9184,18 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="178"/>
-        <source>Add session notes...</source>
-        <translation>Добавить заметки сеанса...</translation>
+        <source>Add session notes…</source>
+        <translation>Добавить заметки к сеансу…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="250"/>
+        <source>New tag…</source>
+        <translation>Новый тег…</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="196"/>
         <source>Tags</source>
         <translation>Теги</translation>
-    </message>
-    <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="250"/>
-        <source>New tag...</source>
-        <translation>Новый тег...</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="256"/>
@@ -12328,7 +9215,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="308"/>
         <source>Generate Report</source>
-        <translation>Создать отчет</translation>
+        <translation>Создать Отчёт</translation>
     </message>
     <message>
         <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="319"/>
@@ -12379,7 +9266,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="350"/>
         <source>Select logo image</source>
-        <translation>Выбрать изображение логотипа</translation>
+        <translation>Выберите изображение логотипа</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="350"/>
@@ -12389,7 +9276,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="384"/>
         <source>Open Session File</source>
-        <translation>Открыть файл сеанса</translation>
+        <translation>Открыть Файл Сеанса</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="386"/>
@@ -12399,22 +9286,17 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="418"/>
         <source>Cannot open session file</source>
-        <translation>Не удается открыть файл сеанса</translation>
+        <translation>Невозможно открыть файл сеанса</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="571"/>
         <source>Delete session from %1?</source>
-        <translation>Удалить сеанс из %1?</translation>
-    </message>
-    <message>
-        <location filename="../../src/Sessions/DatabaseManager.cpp" line="572"/>
-        <source>All readings and raw data for this session will be permanently removed.</source>
-        <translation>Все показания и необработанные данные для этого сеанса будут удалены навсегда.</translation>
+        <translation>Удалить сеанс от %1?</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="574"/>
         <source>Delete Session</source>
-        <translation>Удалить сессию</translation>
+        <translation>Удалить Сеанс</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="592"/>
@@ -12423,9 +9305,14 @@ function parse(%1) { ... }
         <translation>Нет данных проекта</translation>
     </message>
     <message>
+        <location filename="../../src/Sessions/DatabaseManager.cpp" line="572"/>
+        <source>All readings and raw data for this session are permanently removed.</source>
+        <translation>Все показания и необработанные данные этого сеанса будут удалены безвозвратно.</translation>
+    </message>
+    <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="593"/>
-        <source>This session does not contain an embedded project file — the dashboard will fall back to a quick-plot layout.</source>
-        <translation>Эта сессия не содержит встроенного файла проекта — панель управления перейдет к макету быстрого построения графиков.</translation>
+        <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
+        <translation>Эта сессия не содержит встроенного файла проекта — панель использует быстрый макет графиков.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="721"/>
@@ -12435,12 +9322,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="721"/>
         <source>CSV files (*.csv)</source>
-        <translation>Файлы CSV (*.csv)</translation>
+        <translation>Файлы CSV (*.CSV)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="836"/>
         <source>Export Complete</source>
-        <translation>Экспорт завершен</translation>
+        <translation>Экспорт Завершён</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="836"/>
@@ -12452,7 +9339,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="885"/>
         <source>Preparing export…</source>
-        <translation>Подготовка к экспорту…</translation>
+        <translation>Подготовка экспорта…</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="916"/>
@@ -12467,32 +9354,32 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="927"/>
         <source>Report Failed</source>
-        <translation>Ошибка отчета</translation>
+        <translation>Ошибка Отчёта</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="928"/>
         <source>Could not generate the report. Check the output path and try again.</source>
-        <translation>Не удалось создать отчет. Проверьте путь вывода и попробуйте снова.</translation>
+        <translation>Не удалось создать отчёт. Проверьте путь назначения и повторите попытку.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="946"/>
         <source>Save PDF Report</source>
-        <translation>Сохранить отчет в PDF</translation>
+        <translation>Сохранить PDF-Отчёт</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="946"/>
         <source>Save HTML Report</source>
-        <translation>Сохранить отчет в HTML</translation>
+        <translation>Сохранить HTML-Отчёт</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="947"/>
         <source>PDF files (*.pdf)</source>
-        <translation>Файлы PDF (*.pdf)</translation>
+        <translation>PDF-файлы (*.PDF)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="947"/>
         <source>HTML files (*.html)</source>
-        <translation>Файлы HTML (*.html)</translation>
+        <translation>HTML-файлы (*.HTML)</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="1039"/>
@@ -12502,12 +9389,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="1049"/>
         <source>Invalid project data</source>
-        <translation>Неверные данные проекта</translation>
+        <translation>Недопустимые данные проекта</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="1050"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
-        <translation>Встроенный проект JSON поврежден и не может быть восстановлен.</translation>
+        <translation>Встроенный JSON проекта повреждён и не может быть восстановлен.</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="1062"/>
@@ -12522,12 +9409,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="1070"/>
         <source>Cannot write file</source>
-        <translation>Не удается записать файл</translation>
+        <translation>Невозможно записать файл</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/DatabaseManager.cpp" line="1071"/>
-        <source>Please check file permissions and try again.</source>
-        <translation>Пожалуйста, проверьте разрешения на файл и попробуйте снова.</translation>
+        <source>Check file permissions and try again.</source>
+        <translation>Проверьте права доступа и повторите попытку.</translation>
     </message>
 </context>
 <context>
@@ -12535,24 +9422,24 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="200"/>
         <source>Assembling report…</source>
-        <translation>Сборка отчета…</translation>
+        <translation>Сборка отчёта…</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="209"/>
         <source>Writing output…</source>
-        <translation>Запись вывода…</translation>
+        <translation>Запись выходных данных…</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="282"/>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="331"/>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="668"/>
         <source>Session Report</source>
-        <translation>Отчет о Сессии</translation>
+        <translation>Отчёт о Сеансе</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="334"/>
         <source>Untitled project</source>
-        <translation>Безымянный проект</translation>
+        <translation>Проект без названия</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="342"/>
@@ -12562,17 +9449,17 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="345"/>
         <source>Generated on %1</source>
-        <translation>Создано на %1</translation>
+        <translation>Создано %1</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="368"/>
         <source>Test ID</source>
-        <translation>Идентификатор Теста</translation>
+        <translation>ID Теста</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="370"/>
         <source>Duration</source>
-        <translation>Продолжительность</translation>
+        <translation>Длительность</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="372"/>
@@ -12603,32 +9490,32 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="414"/>
         <source>Test identifier</source>
-        <translation>Идентификатор теста</translation>
+        <translation>Идентификатор Теста</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="415"/>
         <source>Start time</source>
-        <translation>Время начала</translation>
+        <translation>Время Начала</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="416"/>
         <source>End time</source>
-        <translation>Время окончания</translation>
+        <translation>Время Завершения</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="417"/>
         <source>Total duration</source>
-        <translation>Общая продолжительность</translation>
+        <translation>Общая Продолжительность</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="418"/>
         <source>Samples acquired</source>
-        <translation>Полученные образцы</translation>
+        <translation>Получено Образцов</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="419"/>
         <source>Parameters logged</source>
-        <translation>Зарегистрированные параметры</translation>
+        <translation>Зарегистрировано Параметров</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="437"/>
@@ -12638,12 +9525,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="445"/>
         <source>Notes</source>
-        <translation>Заметки</translation>
+        <translation>Примечания</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="453"/>
         <source>Test Information</source>
-        <translation>Информация О Тесте</translation>
+        <translation>Информация о Тесте</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="477"/>
@@ -12688,17 +9575,17 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="558"/>
         <source>%1 samples over %2 seconds</source>
-        <translation>%1 образцов за %2 секунд</translation>
+        <translation>%1 отсчётов за %2 секунд</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="578"/>
         <source>Combined Parameter View</source>
-        <translation>Объединенный Вид Параметров</translation>
+        <translation>Комбинированный Вид Параметров</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="579"/>
         <source>click legend items to toggle signals</source>
-        <translation>нажмите на элементы легенды, чтобы переключить сигналы</translation>
+        <translation>нажмите на элементы легенды для переключения сигналов</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="587"/>
@@ -12713,79 +9600,79 @@ function parse(%1) { ... }
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="759"/>
         <source>Rendering charts…</source>
-        <translation>Рендеринг диаграмм…</translation>
+        <translation>Рендеринг графиков…</translation>
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="811"/>
         <source>Generating PDF…</source>
-        <translation>Создание PDF…</translation>
+        <translation>Генерация PDF…</translation>
     </message>
 </context>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="198"/>
+        <location filename="../../src/Sessions/Player.cpp" line="199"/>
         <source>Open Session File</source>
-        <translation>Открыть Файл Сессии</translation>
+        <translation>Открыть Файл Сеанса</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="200"/>
+        <location filename="../../src/Sessions/Player.cpp" line="201"/>
         <source>Session files (*.db)</source>
-        <translation>Файлы сессий (*.db)</translation>
+        <translation>Файлы сеансов (*.db)</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="277"/>
-        <location filename="../../src/Sessions/Player.cpp" line="336"/>
+        <location filename="../../src/Sessions/Player.cpp" line="284"/>
+        <location filename="../../src/Sessions/Player.cpp" line="343"/>
         <source>Device Connection Active</source>
-        <translation>Подключение Устройства Активно</translation>
+        <translation>Активно Подключение к Устройству</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="278"/>
-        <location filename="../../src/Sessions/Player.cpp" line="337"/>
+        <location filename="../../src/Sessions/Player.cpp" line="285"/>
+        <location filename="../../src/Sessions/Player.cpp" line="344"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
-        <translation>Чтобы использовать эту функцию, необходимо отключиться от устройства. Хотите продолжить?</translation>
+        <translation>Для использования этой функции необходимо отключиться от устройства. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="298"/>
-        <location filename="../../src/Sessions/Player.cpp" line="356"/>
+        <location filename="../../src/Sessions/Player.cpp" line="305"/>
+        <location filename="../../src/Sessions/Player.cpp" line="363"/>
         <source>Cannot open session file</source>
-        <translation>Не удается открыть файл сессии</translation>
+        <translation>Не удалось открыть файл сеанса</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="299"/>
-        <location filename="../../src/Sessions/Player.cpp" line="357"/>
-        <source>Please check file permissions and try again.</source>
-        <translation>Пожалуйста, проверьте разрешения на файл и попробуйте снова.</translation>
+        <location filename="../../src/Sessions/Player.cpp" line="306"/>
+        <location filename="../../src/Sessions/Player.cpp" line="364"/>
+        <source>Check file permissions and try again.</source>
+        <translation>Проверьте права доступа и повторите попытку.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="380"/>
+        <location filename="../../src/Sessions/Player.cpp" line="387"/>
         <source>No sessions found</source>
         <translation>Сеансы не найдены</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="381"/>
+        <location filename="../../src/Sessions/Player.cpp" line="388"/>
         <source>This file does not contain any recording sessions.</source>
-        <translation>Этот файл не содержит сеансов записи.</translation>
+        <translation>Этот файл не содержит записанных сеансов.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="392"/>
+        <location filename="../../src/Sessions/Player.cpp" line="399"/>
         <source>Session has no columns</source>
-        <translation>В сеансе нет столбцов</translation>
+        <translation>Сеанс не содержит столбцов</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="393"/>
+        <location filename="../../src/Sessions/Player.cpp" line="400"/>
         <source>The selected session is missing its column definitions.</source>
         <translation>В выбранном сеансе отсутствуют определения столбцов.</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="401"/>
+        <location filename="../../src/Sessions/Player.cpp" line="408"/>
         <source>Session has no readings</source>
-        <translation>В сеансе нет показаний</translation>
+        <translation>Сеанс не содержит данных</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/Player.cpp" line="402"/>
+        <location filename="../../src/Sessions/Player.cpp" line="409"/>
         <source>The selected session does not contain any frames.</source>
-        <translation>Выбранный сеанс не содержит кадров.</translation>
+        <translation>Выбранный сеанс не содержит ни одного кадра.</translation>
     </message>
 </context>
 <context>
@@ -12813,34 +9700,27 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="212"/>
         <source>Workspace Folder</source>
-        <translation>Рабочая Папка</translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation type="vanished">Разное</translation>
-    </message>
-    <message>
-        <source>Enable TCP Plugins (Port 7777)</source>
-        <translation type="vanished">Включить TCP Плагины (порт 7777)</translation>
-    </message>
-    <message>
-        <source>Force Software Rendering</source>
-        <translation type="vanished">Принудительное Программное Рендеринг</translation>
+        <translation>Папка Рабочего Пространства</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="242"/>
         <source>Automatically Check for Updates</source>
-        <translation>Автоматически проверять обновления</translation>
+        <translation>Автоматически Проверять Обновления</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="76"/>
         <source>Dashboard</source>
-        <translation>Панель инструментов</translation>
+        <translation>Панель Управления</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="331"/>
+        <source>Export…</source>
+        <translation>Экспортировать…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="377"/>
         <source>Data Plotting</source>
-        <translation>Построение данных</translation>
+        <translation>Построение Графиков Данных</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="392"/>
@@ -12850,7 +9730,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="417"/>
         <source>UI Refresh Rate (Hz)</source>
-        <translation>Частота Обновления Интерфейса (Гц)</translation>
+        <translation>Частота Обновления UI (Гц)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="557"/>
@@ -12858,38 +9738,14 @@ function parse(%1) { ... }
         <translation>Всегда Показывать Кнопки на Панели Задач</translation>
     </message>
     <message>
-        <source>Decimal Precision</source>
-        <translation type="vanished">Точность Десятичных Знаков</translation>
-    </message>
-    <message>
-        <source>Threaded mode (better for high-rate data)</source>
-        <translation type="vanished">Потоковый режим (лучше для высокоскоростных данных)</translation>
-    </message>
-    <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="541"/>
         <source>Show Actions Panel</source>
-        <translation>Показать Панель Действий</translation>
-    </message>
-    <message>
-        <source>Always Show Tashbar Buttons</source>
-        <translation type="vanished">Всегда Показывать Кнопки Панели Задач</translation>
-    </message>
-    <message>
-        <source>Enable Console Widget</source>
-        <translation type="vanished">Включить Консольный Виджет</translation>
+        <translation>Показывать Панель Действий</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="292"/>
         <source>Enable API Server (Port 7777)</source>
-        <translation>Включить сервер API (Порт 7777)</translation>
-    </message>
-    <message>
-        <source>Auto-Hide Toolbar on Dashboard</source>
-        <translation type="vanished">Автоматически скрывать панель инструментов на панели</translation>
-    </message>
-    <message>
-        <source>Use Separate Thread for Frame Extraction</source>
-        <translation type="vanished">Использовать отдельный поток для извлечения кадров</translation>
+        <translation>Включить API-Сервер (Порт 7777)</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="82"/>
@@ -12904,42 +9760,22 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="196"/>
         <source>Files &amp; Updates</source>
-        <translation>Файлы И Обновления</translation>
+        <translation>Файлы и Обновления</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="260"/>
         <source>Advanced</source>
-        <translation>Дополнительно</translation>
+        <translation>Расширенные</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="310"/>
         <source>Allow External API Connections</source>
-        <translation>Разрешить Внешние Подключения К API</translation>
+        <translation>Разрешить Внешние Подключения к API</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="275"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Автоматически Скрывать Панель Инструментов</translation>
-    </message>
-    <message>
-        <source>Threaded Frame Extraction</source>
-        <translation type="vanished">Потоковая Обработка Кадров</translation>
-    </message>
-    <message>
-        <source>Plot</source>
-        <translation type="vanished">График</translation>
-    </message>
-    <message>
-        <source>Widget Fonts</source>
-        <translation type="vanished">Шрифты Виджетов</translation>
-    </message>
-    <message>
-        <source>Widget Font</source>
-        <translation type="vanished">Шрифт Виджета</translation>
-    </message>
-    <message>
-        <source>Widget Font Size</source>
-        <translation type="vanished">Размер Шрифта Виджета</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="479"/>
@@ -12949,7 +9785,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="479"/>
         <source>Normal</source>
-        <translation>Нормальный</translation>
+        <translation>Обычный</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="479"/>
@@ -12974,18 +9810,18 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="652"/>
         <source>Display</source>
-        <translation>Экран</translation>
+        <translation>Отображение</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="667"/>
         <source>Display Mode</source>
-        <translation>Режим отображения</translation>
+        <translation>Режим Отображения</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="454"/>
         <location filename="../../qml/Dialogs/Settings.qml" line="680"/>
         <source>Font Family</source>
-        <translation>Шрифт</translation>
+        <translation>Семейство Шрифта</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="89"/>
@@ -12995,17 +9831,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="329"/>
         <source>Export Protobuf File</source>
-        <translation>Экспортировать Файл Protobuf</translation>
-    </message>
-    <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="331"/>
-        <source>Export...</source>
-        <translation>Экспортировать...</translation>
+        <translation>Экспорт Файла Protobuf</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="439"/>
         <source>Dashboard Font</source>
-        <translation>Шрифт Панели</translation>
+        <translation>Шрифт Панели Управления</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="469"/>
@@ -13021,47 +9852,47 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="598"/>
         <source>Save Images by Default</source>
-        <translation>Сохранять Изображения По Умолчанию</translation>
+        <translation>Сохранять Изображения по Умолчанию</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="712"/>
         <source>Show Timestamps</source>
-        <translation>Показать временные метки</translation>
+        <translation>Показывать Временные Метки</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="731"/>
         <source>Data Transmission</source>
-        <translation>Передача данных</translation>
+        <translation>Передача Данных</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="746"/>
         <source>Line Ending</source>
-        <translation>Окончание строки</translation>
+        <translation>Окончание Строки</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="759"/>
         <source>Input Mode</source>
-        <translation>Режим ввода</translation>
+        <translation>Режим Входа</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="772"/>
         <source>Text Encoding</source>
-        <translation>Кодировка текста</translation>
+        <translation>Кодировка Текста</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="785"/>
         <source>Checksum</source>
-        <translation>Контрольная сумма</translation>
+        <translation>Контрольная Сумма</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="798"/>
         <source>Echo Sent Data</source>
-        <translation>Эхо отправленных данных</translation>
+        <translation>Эхо Отправленных Данных</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="817"/>
         <source>Escape Codes</source>
-        <translation>Escape-коды</translation>
+        <translation>Управляющие Последовательности</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="832"/>
@@ -13081,32 +9912,32 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="923"/>
         <source>System Notifications</source>
-        <translation>Системные уведомления</translation>
+        <translation>Системные Уведомления</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="944"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
-        <translation>Показывать предупреждения/критические события как уведомления ОС на рабочем столе, когда Serial Studio не является активным окном.</translation>
+        <translation>Показывать предупреждения и критические события как системные уведомления, когда Serial Studio не является активным окном.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="954"/>
         <source>Application Logs</source>
-        <translation>Журналы приложения</translation>
+        <translation>Журналы Приложения</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="969"/>
         <source>Route Warnings to Notifications</source>
-        <translation>Направлять предупреждения в уведомления</translation>
+        <translation>Направлять Предупреждения в Уведомления</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="990"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
-        <translation>Отключено по умолчанию — Qt и QML часто выдают предупреждения, и включение этой опции может заглушить настоящие сигналы тревоги. Критические сообщения всегда перенаправляются независимо от этой настройки.</translation>
+        <translation>Отключено по умолчанию — QT и QML часто выдают предупреждения, и включение этого параметра может заглушить реальные сигналы тревоги. Критические сообщения всегда маршрутизируются независимо от этой настройки.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="1012"/>
         <source>Reset</source>
-        <translation>Сброс</translation>
+        <translation>Сбросить</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Settings.qml" line="1049"/>
@@ -13130,17 +9961,17 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="146"/>
         <source>API Server Active (%1)</source>
-        <translation>Сервер API Активен (%1)</translation>
+        <translation>API-Сервер Активен (%1)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="147"/>
         <source>API Server Ready</source>
-        <translation>Сервер API Готов</translation>
+        <translation>API-Сервер Готов</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="148"/>
         <source>API Server Off</source>
-        <translation>Сервер API Выключен</translation>
+        <translation>API-Сервер Выключен</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="208"/>
@@ -13148,27 +9979,19 @@ function parse(%1) { ... }
         <translation>Разбор Кадров</translation>
     </message>
     <message>
-        <source>No Parsing (Device Sends JSON Data)</source>
-        <translation type="vanished">Без Разбора (устройство Отправляет Данные JSON)</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="218"/>
         <source>Console Only (No Parsing)</source>
-        <translation>Только консоль (без разбора)</translation>
+        <translation>Только Консоль (Без Разбора)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="231"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>Быстрый График (значения, Разделенные Запятыми)</translation>
-    </message>
-    <message>
-        <source>Parse via JSON Project File</source>
-        <translation type="vanished">Разобрать через JSON файл проекта</translation>
+        <translation>Быстрый График (Значения, Разделённые Запятыми)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="242"/>
         <source>Parse via Project File</source>
-        <translation>Разобрать через файл проекта</translation>
+        <translation>Разбор через Файл Проекта</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="265"/>
@@ -13178,7 +10001,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="266"/>
         <source>Select Project File</source>
-        <translation>Выбрать Файл Проекта</translation>
+        <translation>Выберите Файл Проекта</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
@@ -13188,7 +10011,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="295"/>
         <source>Create CSV File</source>
-        <translation>Создать CSV Файл</translation>
+        <translation>Создать Файл CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="314"/>
@@ -13198,45 +10021,41 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="335"/>
         <source>Create Session Log</source>
-        <translation>Создать журнал сеанса</translation>
+        <translation>Создать Журнал Сеанса</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="358"/>
         <source>Export Console Data</source>
-        <translation>Экспорт Данных Консоли</translation>
+        <translation>Экспортировать Данные Консоли</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="407"/>
         <source>I/O Interface: %1</source>
-        <translation>Интерфейс Ввода/вывода: %1</translation>
+        <translation>Интерфейс Ввода-вывода: %1</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="469"/>
         <source>Multi-Device Project</source>
-        <translation>Проект с несколькими устройствами</translation>
+        <translation>Многоустройственный Проект</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="482"/>
         <source>This project streams data from %1 independent devices.</source>
-        <translation>Этот проект передает данные с %1 независимых устройств.</translation>
+        <translation>Этот проект передаёт данные от %1 независимых устройств.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="495"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under the Sources tab.</source>
-        <translation>У каждого устройства свои настройки подключения. Настройте их в Редакторе проекта на вкладке Источники.</translation>
+        <translation>Каждое устройство имеет собственные настройки подключения. Настройте их в Редакторе Проектов на вкладке Источники.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="516"/>
         <source>Open Project Editor</source>
-        <translation>Открыть Редактор Проекта</translation>
+        <translation>Открыть Редактор Проектов</translation>
     </message>
 </context>
 <context>
     <name>SourceFrameParserView</name>
-    <message>
-        <source>modified</source>
-        <translation type="vanished">изменено</translation>
-    </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="102"/>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="218"/>
@@ -13270,7 +10089,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="135"/>
         <source>Select All</source>
-        <translation>Выбрать Все</translation>
+        <translation>Выделить Всё</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="198"/>
@@ -13280,7 +10099,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="203"/>
         <source>Reset to the default parsing script</source>
-        <translation>Сбросить до стандартного скрипта разбора</translation>
+        <translation>Сбросить до скрипта разбора по умолчанию</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="208"/>
@@ -13303,26 +10122,19 @@ function parse(%1) { ... }
         <translation>Язык:</translation>
     </message>
     <message>
-        <source>Import a JavaScript file for data parsing</source>
-        <translation type="vanished">Импортировать файл JavaScript для разбора данных</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="vanished">Сохранить</translation>
-    </message>
-    <message>
-        <source>Validate syntax and apply parsing changes</source>
-        <translation type="vanished">Проверить синтаксис и применить изменения разбора</translation>
+        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="356"/>
+        <source>Select Template…</source>
+        <translation>Выбрать Шаблон…</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="223"/>
         <source>Undo the last code edit</source>
-        <translation>Отменить последнее редактирование кода</translation>
+        <translation>Отменить последнее изменение кода</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="235"/>
         <source>Redo the previously undone edit</source>
-        <translation>Повторить ранее отмененное редактирование</translation>
+        <translation>Повторить отменённое изменение</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="253"/>
@@ -13332,7 +10144,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="263"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Копировать выделенный код в буфер обмена</translation>
+        <translation>Скопировать выбранный код в буфер обмена</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="272"/>
@@ -13345,23 +10157,14 @@ function parse(%1) { ... }
         <translation>Справка</translation>
     </message>
     <message>
-        <source>Open help documentation for JavaScript data parsing</source>
-        <translation type="vanished">Открыть справочную документацию по анализу данных JavaScript</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="356"/>
-        <source>Select Template...</source>
-        <translation>Выбрать шаблон...</translation>
-    </message>
-    <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="368"/>
         <source>Test With Sample Data</source>
-        <translation>Тестировать с образцом данных</translation>
+        <translation>Протестировать с Примерными Данными</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="378"/>
         <source>Evaluate</source>
-        <translation>Оценить</translation>
+        <translation>Вычислить</translation>
     </message>
 </context>
 <context>
@@ -13389,7 +10192,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceView.qml" line="127"/>
         <source>The primary data source cannot be removed</source>
-        <translation>Основной источник данных не может быть удален</translation>
+        <translation>Основной источник данных не может быть удалён</translation>
     </message>
 </context>
 <context>
@@ -13397,7 +10200,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/SqlitePlayer.qml" line="24"/>
         <source>Session Player</source>
-        <translation>Воспроизведение сеанса</translation>
+        <translation>Проигрыватель Сессий</translation>
     </message>
 </context>
 <context>
@@ -13405,11 +10208,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="171"/>
         <source>Workspaces</source>
-        <translation>Рабочие пространства</translation>
-    </message>
-    <message>
-        <source>No Groups Available</source>
-        <translation type="vanished">Нет Доступных Групп</translation>
+        <translation>Рабочие Пространства</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="243"/>
@@ -13427,47 +10226,29 @@ function parse(%1) { ... }
         <translation>Плагины</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="320"/>
-        <source>Manage Plugins...</source>
-        <translation>Управление плагинами...</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="328"/>
         <source>No Plugins Installed</source>
-        <translation>Плагины не установлены</translation>
+        <translation>Нет Установленных Плагинов</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="357"/>
         <source>Auto Layout</source>
-        <translation>Авторазметка</translation>
+        <translation>Автоматическая Компоновка</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="369"/>
         <source>Full Screen</source>
-        <translation>Полноэкранный Режим</translation>
+        <translation>Полный Экран</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="379"/>
         <source>Add External Window</source>
-        <translation>Добавить внешнее окно</translation>
-    </message>
-    <message>
-        <source>CSV Logging</source>
-        <translation type="vanished">Логирование в CSV</translation>
-    </message>
-    <message>
-        <source>Console Logging</source>
-        <translation type="vanished">Логирование в Консоль</translation>
+        <translation>Добавить Внешнее Окно</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
         <source>Help Center</source>
-        <translation>Центр помощи</translation>
-    </message>
-    <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="617"/>
-        <source>Edit...</source>
-        <translation>Редактировать...</translation>
+        <translation>Центр Справки</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="628"/>
@@ -13480,18 +10261,19 @@ function parse(%1) { ... }
         <translation>Скрыть</translation>
     </message>
     <message>
-        <source>MDF4 Logging</source>
-        <translation type="vanished">Логирование MDF4</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="210"/>
-        <source>New Workspace...</source>
-        <translation>Новое Рабочее Пространство...</translation>
+        <source>New Workspace…</source>
+        <translation>Новое Рабочее Пространство…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="220"/>
         <source>No Workspaces Available</source>
         <translation>Нет Доступных Рабочих Пространств</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="320"/>
+        <source>Manage Plugins…</source>
+        <translation>Управление Плагинами…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
@@ -13501,27 +10283,27 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="428"/>
         <source>CSV File</source>
-        <translation>CSV файл</translation>
+        <translation>Файл CSV</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
         <source>MDF4 File</source>
-        <translation>MDF4 файл</translation>
+        <translation>Файл MDF4</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
         <source>Console Transcript</source>
-        <translation>Транскрипция консоли</translation>
+        <translation>Транскрипт Консоли</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="449"/>
         <source>Session Database</source>
-        <translation>База данных сессии</translation>
+        <translation>База Данных Сеансов</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="461"/>
         <source>No Export Formats Available</source>
-        <translation>Нет доступных форматов экспорта</translation>
+        <translation>Форматы Экспорта Недоступны</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
@@ -13539,8 +10321,9 @@ function parse(%1) { ... }
         <translation>Настройки</translation>
     </message>
     <message>
-        <source>Help</source>
-        <translation type="vanished">Справка</translation>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="617"/>
+        <source>Edit…</source>
+        <translation>Изменить…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="560"/>
@@ -13568,76 +10351,65 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Widgets/SubMenuCombo.qml" line="81"/>
         <source>No Data Available</source>
-        <translation>Нет Доступных Данных</translation>
+        <translation>Данные Недоступны</translation>
     </message>
 </context>
 <context>
     <name>SystemDatasetsView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="33"/>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="183"/>
         <source>Dataset Values</source>
-        <translation>Значения набора данных</translation>
+        <translation>Значения Набора Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="193"/>
-        <source>All datasets in the project, available for cross-referencing in transforms.</source>
-        <translation>Все наборы данных в проекте, доступные для перекрестных ссылок в преобразованиях.</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="201"/>
-        <source>%1 datasets</source>
-        <translation>%1 наборов данных</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="202"/>
-        <source>%1 of %2 datasets</source>
-        <translation>%1 из %2 наборов данных</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="243"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="159"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="257"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="180"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="181"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="182"/>
         <source>Dataset</source>
-        <translation>Набор данных</translation>
+        <translation>Набор Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="183"/>
         <source>Units</source>
         <translation>Единицы</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="252"/>
         <source>(virtual)</source>
         <translation>(виртуальный)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="373"/>
-        <source>Copy ID %1 to clipboard</source>
-        <translation>Копировать ID %1 в буфер обмена</translation>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="298"/>
+        <source>Copy access code %1 to clipboard</source>
+        <translation>Скопировать код доступа %1 в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="409"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="374"/>
+        <source>Dataset access code copied</source>
+        <translation>Код доступа к набору данных скопирован</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="323"/>
         <source>No datasets defined in this project.</source>
         <translation>В этом проекте не определены наборы данных.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="410"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="324"/>
         <source>No datasets match your search.</source>
-        <translation>Наборы данных, соответствующие вашему запросу, не найдены.</translation>
+        <translation>Ни один набор данных не соответствует вашему запросу.</translation>
     </message>
 </context>
 <context>
@@ -13655,7 +10427,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="461"/>
         <source>(Custom Icon)</source>
-        <translation>(Пользовательский значок)</translation>
+        <translation>(Пользовательская Иконка)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="662"/>
@@ -13677,8 +10449,8 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="133"/>
-        <source>Search widgets...</source>
-        <translation>Поиск виджетов...</translation>
+        <source>Search widgets…</source>
+        <translation>Поиск виджетов…</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="671"/>
@@ -13696,7 +10468,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="151"/>
         <source>Select all</source>
-        <translation>Выбрать всё</translation>
+        <translation>Выделить Всё</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="157"/>
@@ -13706,12 +10478,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="256"/>
         <source>Send Data to Device</source>
-        <translation>Отправить данные на устройство</translation>
+        <translation>Отправить Данные на Устройство</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="422"/>
         <source>Show Timestamp</source>
-        <translation>Показать Временную Метку</translation>
+        <translation>Показать Метку Времени</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="430"/>
@@ -13721,7 +10493,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="447"/>
         <source>Emulate VT-100</source>
-        <translation>Эмуляция VT-100</translation>
+        <translation>Эмулировать VT-100</translation>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="460"/>
@@ -13731,7 +10503,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="484"/>
         <source>Display: %1</source>
-        <translation>Дисплей: %1</translation>
+        <translation>Отображение: %1</translation>
     </message>
 </context>
 <context>
@@ -13744,24 +10516,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="193"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
-        <translation>Открыть редактор проекта для создания или изменения вашей JSON-разметки</translation>
-    </message>
-    <message>
-        <source>CSV Player</source>
-        <translation type="vanished">CSV-плеер</translation>
+        <translation>Открыть Редактор Проекта для создания или изменения JSON-разметки</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Play a CSV file as if it were live sensor data</source>
-        <translation>Воспроизвести CSV-файл как данные с датчика в реальном времени</translation>
-    </message>
-    <message>
-        <source>Devices</source>
-        <translation type="vanished">Устройства</translation>
-    </message>
-    <message>
-        <source>Configure device connection via Serial, BLE, or network socket</source>
-        <translation type="vanished">Настройка подключения устройства через Serial, BLE или сетевой сокет</translation>
+        <translation>Воспроизвести CSV-файл как данные с датчиков в реальном времени</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
@@ -13772,7 +10532,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
         <source>Open application settings and preferences</source>
-        <translation>Открыть настройки приложения и предпочтения</translation>
+        <translation>Открыть настройки и параметры приложения</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
@@ -13792,12 +10552,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="250"/>
         <source>Sessions</source>
-        <translation>Сессии</translation>
+        <translation>Сеансы</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="252"/>
         <source>Browse, replay, and export recorded sessions</source>
-        <translation>Просмотр, воспроизведение и экспорт записанных сессий</translation>
+        <translation>Просмотр, воспроизведение и экспорт записанных сеансов</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
@@ -13813,39 +10573,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="288"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
-        <translation>Настроить подключение MQTT (публикация или подписка)</translation>
-    </message>
-    <message>
-        <source>CSV Export</source>
-        <translation type="vanished">Экспорт в CSV</translation>
-    </message>
-    <message>
-        <source>Toggle automatic CSV logging of incoming data frames</source>
-        <translation type="vanished">Переключить автоматическое логирование CSV входящих кадров данных</translation>
-    </message>
-    <message>
-        <source>MDF4 Export</source>
-        <translation type="vanished">Экспорт в MDF4</translation>
-    </message>
-    <message>
-        <source>Toggle automatic MDF4 logging of incoming data frames (Pro)</source>
-        <translation type="vanished">Переключить автоматическое логирование MDF4 входящих кадров данных (Pro)</translation>
-    </message>
-    <message>
-        <source>Console Export</source>
-        <translation type="vanished">Экспорт Консоли</translation>
-    </message>
-    <message>
-        <source>Toggle automatic plain-text logging of console output</source>
-        <translation type="vanished">Включить/Выключить Автоматическое Логирование Вывода Консоли в Текстовом Формате</translation>
-    </message>
-    <message>
-        <source>Setup</source>
-        <translation type="vanished">Настройки</translation>
-    </message>
-    <message>
-        <source>Configure device connection settings</source>
-        <translation type="vanished">Настроить параметры подключения устройства</translation>
+        <translation>Настроить MQTT-соединение (публикация или подписка)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="326"/>
@@ -13855,7 +10583,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
         <source>Select Serial port (UART) communication</source>
-        <translation>Выберите последовательный порт (UART) для связи</translation>
+        <translation>Выбрать последовательный порт (UART)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="343"/>
@@ -13865,7 +10593,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="347"/>
         <source>Select audio input device (Pro)</source>
-        <translation>Выберите аудиоустройство ввода (Pro)</translation>
+        <translation>Выбрать устройство аудиовхода (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
@@ -13875,7 +10603,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
         <source>Select raw USB communication (Pro)</source>
-        <translation>Выберите необработанную USB связь (Pro)</translation>
+        <translation>Выбрать прямой USB (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="376"/>
@@ -13885,16 +10613,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>Select TCP/UDP network communication</source>
-        <translation>Выберите сетевое соединение TCP/UDP</translation>
-    </message>
-    <message>
-        <source>ModBus</source>
-        <translation type="vanished">ModBus</translation>
+        <translation>Выбрать сетевое соединение TCP/UDP</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
         <source>Select MODBUS communication (Pro)</source>
-        <translation>Выберите соединение MODBUS (Pro)</translation>
+        <translation>Выбрать MODBUS-соединение (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
@@ -13904,7 +10628,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
         <source>Select HID device communication (Pro)</source>
-        <translation>Выберите связь с устройством HID (Pro)</translation>
+        <translation>Выбрать связь через устройство HID (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="427"/>
@@ -13914,17 +10638,17 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>Select Bluetooth Low Energy communication</source>
-        <translation>Выберите соединение Bluetooth Low Energy</translation>
+        <translation>Выбрать связь через Bluetooth Low Energy</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
         <source>CAN Bus</source>
-        <translation>CAN-шина</translation>
+        <translation>Шина CAN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="447"/>
         <source>Select CAN Bus communication (Pro)</source>
-        <translation>Выберите соединение CAN-шины (Pro)</translation>
+        <translation>Выбрать связь через шину CAN (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
@@ -13934,7 +10658,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
         <source>Select process pipe communication (Pro)</source>
-        <translation>Выберите связь через канал процесса (Pro)</translation>
+        <translation>Выбрать связь через канал процесса (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
@@ -13944,12 +10668,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>Browse example projects</source>
-        <translation>Просмотр примерных проектов</translation>
+        <translation>Просмотреть примеры проектов</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="514"/>
         <source>Help Center</source>
-        <translation>Центр помощи</translation>
+        <translation>Центр Справки</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
@@ -13957,31 +10681,15 @@ function parse(%1) { ... }
         <translation>Просмотр документации, FAQ и вики</translation>
     </message>
     <message>
-        <source>Browse example projects on GitHub</source>
-        <translation type="vanished">Просмотр примеров проектов на GitHub</translation>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="vanished">Помощь</translation>
-    </message>
-    <message>
-        <source>Open the online documentation for help and guidance</source>
-        <translation type="vanished">Открыть онлайн-документацию для помощи и руководства</translation>
-    </message>
-    <message>
-        <source>AI Help</source>
-        <translation type="vanished">Помощь ИИ</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="527"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
-        <translation>Просмотр подробной документации и задавайте вопросы на DeepWiki</translation>
+        <translation>Просмотр подробной документации и вопросы на DeepWiki</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="483"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="487"/>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation>О Программе</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="207"/>
@@ -13991,20 +10699,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="209"/>
         <source>Open an existing JSON project</source>
-        <translation>Открыть существующий проект JSON</translation>
-    </message>
-    <message>
-        <source>Load CSV</source>
-        <translation type="vanished">Загрузить CSV</translation>
-    </message>
-    <message>
-        <source>Load MDF4</source>
-        <translation type="vanished">Загрузить MDF4</translation>
+        <translation>Открыть существующий JSON-проект</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
-        <translation>Воспроизвести файл MDF4 как данные с датчика в реальном времени (Pro)</translation>
+        <translation>Воспроизвести файл MDF4 как живые данные датчиков (Pro)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
@@ -14012,21 +10712,9 @@ function parse(%1) { ... }
         <translation>Modbus</translation>
     </message>
     <message>
-        <source>CAN</source>
-        <translation type="vanished">CAN</translation>
-    </message>
-    <message>
-        <source>CANBus</source>
-        <translation type="vanished">CANBus</translation>
-    </message>
-    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
         <source>Show application info and license details</source>
-        <translation>Показать информацию о приложении и детали лицензии</translation>
-    </message>
-    <message>
-        <source>Getting Started</source>
-        <translation type="vanished">Начало Работы</translation>
+        <translation>Показать информацию о приложении и лицензии</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="524"/>
@@ -14042,26 +10730,22 @@ function parse(%1) { ... }
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="604"/>
         <source>Disconnect</source>
-        <translation>Отключить</translation>
+        <translation>Отключиться</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
         <source>Connect</source>
-        <translation>Подключить</translation>
+        <translation>Подключиться</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="583"/>
         <source>Connect or disconnect from device or MQTT broker</source>
-        <translation>Подключение или отключение от устройства или брокера MQTT</translation>
+        <translation>Подключиться или отключиться от устройства или MQTT-брокера</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="562"/>
         <source>Activate</source>
         <translation>Активировать</translation>
-    </message>
-    <message>
-        <source>Manage license and activate the application</source>
-        <translation type="vanished">Управление лицензией и активация приложения</translation>
     </message>
 </context>
 <context>
@@ -14069,12 +10753,12 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="72"/>
         <source>COM Port</source>
-        <translation>COM-порт</translation>
+        <translation>COM-Порт</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="101"/>
         <source>Baud Rate</source>
-        <translation>Скорость Передачи Данных</translation>
+        <translation>Скорость Передачи</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="194"/>
@@ -14099,7 +10783,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="289"/>
         <source>Auto Reconnect</source>
-        <translation>Автоподключение</translation>
+        <translation>Автоматическое Переподключение</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="307"/>
@@ -14110,56 +10794,45 @@ function parse(%1) { ... }
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="836"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1269"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="839"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1272"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="915"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1280"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="918"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1283"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1325"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1328"/>
         <source>%1 (Fallback)</source>
-        <translation>%1 (резервный)</translation>
+        <translation>%1 (Резервный)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1356"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1359"/>
         <source>LED Panel (%1)</source>
-        <translation>Панель LED (%1)</translation>
+        <translation>Панель Светодиодов (%1)</translation>
     </message>
 </context>
 <context>
     <name>UI::DashboardWidget</name>
     <message>
-        <location filename="../../src/UI/DashboardWidget.cpp" line="127"/>
+        <location filename="../../src/UI/DashboardWidget.cpp" line="133"/>
         <source>Invalid</source>
-        <translation>Недействительно</translation>
-    </message>
-</context>
-<context>
-    <name>UI::Taskbar</name>
-    <message>
-        <source>Overview</source>
-        <translation type="vanished">Обзор</translation>
-    </message>
-    <message>
-        <source>All Data</source>
-        <translation type="vanished">Все Данные</translation>
+        <translation>Недействительный</translation>
     </message>
 </context>
 <context>
     <name>UI::WindowManager</name>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="713"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="716"/>
         <source>Select Background Image</source>
-        <translation>Выберите Фоновое Изображение</translation>
+        <translation>Выбрать Фоновое Изображение</translation>
     </message>
     <message>
-        <location filename="../../src/UI/WindowManager.cpp" line="715"/>
+        <location filename="../../src/UI/WindowManager.cpp" line="718"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp)</source>
         <translation>Изображения (*.png *.jpg *.jpeg *.bmp)</translation>
     </message>
@@ -14174,17 +10847,17 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="78"/>
         <source>Transfer Mode</source>
-        <translation>Режим передачи</translation>
+        <translation>Режим Передачи</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="87"/>
         <source>Bulk Stream</source>
-        <translation>Поток Bulk</translation>
+        <translation>Массовый Поток</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="88"/>
         <source>Advanced (Bulk + Control)</source>
-        <translation>Расширенный (Bulk + Control)</translation>
+        <translation>Расширенный (Массовый + Управление)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
@@ -14194,7 +10867,7 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="141"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
-        <translation>Подключайтесь к USB-устройствам, используя bulk, control или изохронные передачи. Подходит для регистраторов данных, устройств с пользовательской прошивкой и USB-инструментов.</translation>
+        <translation>Подключение к USB-устройствам с использованием массовых, управляющих или изохронных передач. Подходит для регистраторов данных, устройств с пользовательской прошивкой и USB-инструментов.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="150"/>
@@ -14204,37 +10877,37 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="167"/>
         <source>IN Endpoint</source>
-        <translation>Входная конечная точка</translation>
+        <translation>Конечная Точка IN</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="203"/>
         <source>OUT Endpoint</source>
-        <translation>Выходная конечная точка</translation>
+        <translation>Конечная Точка OUT</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="239"/>
         <source>Max Packet Size</source>
-        <translation>Максимальный размер пакета</translation>
+        <translation>Максимальный Размер Пакета</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="299"/>
         <source>Control Transfers Enabled</source>
-        <translation>Передачи управления включены</translation>
+        <translation>Управляющие Передачи Включены</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="308"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
-        <translation>Отправка некорректных запросов управления может привести к сбою или повреждению подключенного оборудования. Используйте с осторожностью.</translation>
+        <translation>Отправка неправильных управляющих запросов может привести к сбою или повреждению подключенного оборудования. Используйте с осторожностью.</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="315"/>
         <source>Learn about USB control transfers</source>
-        <translation>Узнайте о передачах управления USB</translation>
+        <translation>Узнать об управляющих передачах USB</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="349"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
-        <translation>Размер пакета должен соответствовать максимальному размеру передачи, указанному конечной точкой. Типичные значения: 192 B (FS аудио), 1024 B (HS).</translation>
+        <translation>Размер пакета должен соответствовать максимальному размеру передачи, сообщаемому конечной точкой. Типичные значения: 192 Б (FS аудио), 1024 Б (HS).</translation>
     </message>
 </context>
 <context>
@@ -14242,31 +10915,27 @@ function parse(%1) { ... }
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="477"/>
         <source>Would you like to download the update now?</source>
-        <translation>Хотите скачать обновление сейчас?</translation>
-    </message>
-    <message>
-        <source>Would you like to download the update now? This is a mandatory update, exiting now will close the application</source>
-        <translation type="vanished">Хотите скачать обновление сейчас? Это обязательное обновление, выход приведет к закрытию приложения</translation>
+        <translation>Загрузить обновление сейчас?</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="479"/>
         <source>Would you like to download the update now?&lt;br /&gt;This is a mandatory update, exiting now will close the application.</source>
-        <translation>Хотите загрузить обновление сейчас?&lt;br /&gt;Это обязательное обновление, выход сейчас закроет приложение.</translation>
+        <translation>Загрузить обновление сейчас?&lt;br /&gt;Это обязательное обновление, выход приведёт к закрытию приложения.</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="485"/>
         <source>&lt;strong&gt;Change log:&lt;/strong&gt;&lt;br/&gt;%1</source>
-        <translation>&lt;strong&gt;Журнал изменений:&lt;/strong&gt;&lt;br/&gt;%1</translation>
+        <translation>&lt;strong&gt;Список изменений:&lt;/strong&gt;&lt;br/&gt;%1</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="488"/>
         <source>Version %1 of %2 has been released!</source>
-        <translation>Версия %1 для %2 выпущена!</translation>
+        <translation>Выпущена версия %1 для %2!</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="520"/>
         <source>No updates are available for the moment</source>
-        <translation>Обновления в данный момент недоступны</translation>
+        <translation>На данный момент обновления отсутствуют</translation>
     </message>
     <message>
         <location filename="../../../lib/QSimpleUpdater/src/Updater.cpp" line="522"/>
@@ -14277,109 +10946,119 @@ function parse(%1) { ... }
 <context>
     <name>UserTableView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="174"/>
-        <source>Registers shared across all transforms in the project.</source>
-        <translation>Регистры, общие для всех преобразований в проекте.</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="182"/>
-        <source>%1 registers</source>
-        <translation>%1 регистров</translation>
-    </message>
-    <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="244"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="165"/>
         <source>Add Register</source>
-        <translation>Добавить регистр</translation>
+        <translation>Добавить Регистр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="247"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="168"/>
         <source>Add register</source>
         <translation>Добавить регистр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="257"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="175"/>
         <source>Insert Constant</source>
-        <translation>Вставить константу</translation>
+        <translation>Вставить Константу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="178"/>
         <source>Insert constant</source>
         <translation>Вставить константу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="185"/>
         <source>Import</source>
-        <translation>Импорт</translation>
+        <translation>Импортировать</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="270"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="188"/>
         <source>Import registers from CSV</source>
-        <translation>Импортировать записи из CSV</translation>
+        <translation>Импортировать регистры из CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="195"/>
         <source>Export</source>
-        <translation>Экспорт</translation>
+        <translation>Экспортировать</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="280"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="198"/>
         <source>Export registers to CSV</source>
-        <translation>Экспортировать записи в CSV</translation>
+        <translation>Экспортировать регистры в CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="293"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="210"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="296"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="213"/>
         <source>Rename table</source>
         <translation>Переименовать таблицу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="306"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="220"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="309"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="223"/>
         <source>Delete table</source>
         <translation>Удалить таблицу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="360"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="237"/>
+        <source>Help</source>
+        <translation>Справка</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="242"/>
+        <source>Open help documentation for shared memory</source>
+        <translation>Открыть справочную документацию по разделяемой памяти</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="282"/>
         <source>Permissions</source>
         <translation>Разрешения</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="361"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="283"/>
         <source>Register Name</source>
-        <translation>Имя записи</translation>
+        <translation>Имя Регистра</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="284"/>
         <source>Default Value</source>
-        <translation>Значение по умолчанию</translation>
+        <translation>Значение по Умолчанию</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="318"/>
         <source>Read-Only</source>
-        <translation>Только для чтения</translation>
+        <translation>Только Чтение</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="405"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="318"/>
         <source>Read/Write</source>
-        <translation>Чтение/Запись</translation>
+        <translation>Чтение/запись</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="561"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="454"/>
+        <source>Copy access code %1 to clipboard</source>
+        <translation>Скопировать код доступа %1 в буфер обмена</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="486"/>
         <source>Delete register</source>
         <translation>Удалить регистр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="577"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="503"/>
         <source>No registers.</source>
-        <translation>Нет регистров.</translation>
+        <translation>Регистры отсутствуют.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="553"/>
+        <source>Register access code copied</source>
+        <translation>Код доступа к регистру скопирован</translation>
     </message>
 </context>
 <context>
@@ -14392,76 +11071,76 @@ function parse(%1) { ... }
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="185"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
-        <translation>Serial Studio — это мощный инструмент для визуализации в реальном времени, созданный для инженеров, студентов и разработчиков.</translation>
+        <translation>Serial Studio — это мощный инструмент визуализации в реальном времени, созданный для инженеров, студентов и разработчиков.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="196"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>Вы можете начать полностью функциональный 14-дневный пробный период, активировать его с помощью вашего лицензионного ключа или скачать и скомпилировать исходный код GPLv3 самостоятельно.</translation>
+        <translation>Вы можете начать полнофункциональную 14-дневную пробную версию, активировать её с помощью лицензионного ключа или загрузить и скомпилировать исходный код GPLv3 самостоятельно.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="206"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="385"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
-        <translation>Покупка Pro напрямую поддерживает автора и помогает финансировать дальнейшую разработку.</translation>
+        <translation>Покупка Pro напрямую поддерживает автора и помогает финансировать будущую разработку.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="214"/>
         <location filename="../../qml/Dialogs/Welcome.qml" line="393"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
-        <translation>Сборка версии GPLv3 самостоятельно помогает развивать сообщество и поощряет технические вклады.</translation>
+        <translation>Самостоятельная сборка версии GPLv3 помогает развивать сообщество и поощряет технический вклад.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="235"/>
-        <source>Please wait...</source>
-        <translation>Пожалуйста, подождите...</translation>
+        <source>Please wait…</source>
+        <translation>Подождите…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="269"/>
         <source>%1 days remaining in your trial.</source>
-        <translation>осталось %1 дней в вашем пробном периоде.</translation>
+        <translation>Осталось %1 дн. пробного периода.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="279"/>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
-        <translation>В настоящее время вы используете полнофункциональную пробную версию %1 Pro. Она действительна в течение 14 дней для личного, некоммерческого использования.</translation>
+        <translation>Вы используете полнофункциональную пробную версию %1 Pro. Она действительна 14 дней для личного некоммерческого использования.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="290"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
-        <translation>Обновитесь до платного плана, чтобы продолжать использовать Serial Studio Pro.</translation>
+        <translation>Перейдите на платный план, чтобы продолжить использование Serial Studio Pro.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="298"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
-        <translation>Или скомпилируйте исходный код GPLv3, чтобы использовать его бесплатно.</translation>
+        <translation>Или скомпилируйте исходный код GPLv3 для бесплатного использования.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="306"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Чтобы увидеть доступные планы подписки, нажмите "Обновить сейчас" ниже.</translation>
+        <translation>Чтобы увидеть доступные планы подписки, нажмите «Обновить сейчас» ниже.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="326"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
-        <translation>Не напоминайте мне о пробном периоде.
-Я понимаю, что когда он закончится, мне нужно будет купить лицензию или собрать версию GPLv3.</translation>
+        <translation>Не напоминать о пробной версии.
+Я понимаю, что после её окончания потребуется купить лицензию или собрать версию GPLv3.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="355"/>
         <source>Your %1 trial has expired.</source>
-        <translation>Ваш пробный период %1 истек.</translation>
+        <translation>Пробный период %1 истёк.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="365"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
-        <translation>Ваш пробный период завершился. Чтобы продолжить использовать %1 со всеми функциями Pro, пожалуйста, обновитесь до платного плана.</translation>
+        <translation>Пробный период завершен. Чтобы продолжить использование %1 со всеми функциями Pro, перейдите на платный план.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="376"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
-        <translation>Если вы предпочитаете, вы также можете скомпилировать версию с открытым исходным кодом под лицензией GPLv3.</translation>
+        <translation>При желании вы также можете скомпилировать версию с открытым исходным кодом по лицензии GPLv3.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="404"/>
@@ -14481,7 +11160,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
         <source>Open in Limited Mode</source>
-        <translation>Открыть в ограниченном режиме</translation>
+        <translation>Открыть в Ограниченном Режиме</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/Welcome.qml" line="479"/>
@@ -14499,7 +11178,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="77"/>
         <source>Remove from Workspace</source>
-        <translation>Удалить из Рабочей Области</translation>
+        <translation>Удалить из Рабочего Пространства</translation>
     </message>
 </context>
 <context>
@@ -14551,7 +11230,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="49"/>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="169"/>
         <source>Title</source>
-        <translation>Заголовок</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/DataGrid.cpp" line="49"/>
@@ -14570,12 +11249,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
         <source>Satellite Imagery with Labels</source>
-        <translation>Спутниковые снимки с метками</translation>
+        <translation>Спутниковые Снимки с Подписями</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="96"/>
         <source>Street Map</source>
-        <translation>Карта Улиц</translation>
+        <translation>Уличная Карта</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="97"/>
@@ -14595,7 +11274,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="98"/>
         <source>Dark Gray Canvas</source>
-        <translation>Темно-серый Холст</translation>
+        <translation>Тёмно-серый Холст</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="98"/>
@@ -14610,7 +11289,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/GPS.cpp" line="477"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
-        <translation>Мы не можем предоставить неограниченный доступ, так как ключ API ArcGIS влечет реальные затраты.</translation>
+        <translation>Мы не можем предоставить неограниченный доступ, поскольку использование API-ключа ArcGIS влечёт реальные затраты.</translation>
     </message>
 </context>
 <context>
@@ -14618,12 +11297,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/Output/Base.cpp" line="199"/>
         <source>Transmit script timed out after %1 ms</source>
-        <translation>Время выполнения скрипта передачи истекло через %1 мс</translation>
+        <translation>Время ожидания скрипта передачи истекло через %1 мс</translation>
     </message>
     <message>
         <location filename="../../src/UI/Widgets/Output/Base.cpp" line="219"/>
         <source>Payload exceeds maximum size</source>
-        <translation>Размер данных превышает максимальный размер</translation>
+        <translation>Полезная нагрузка превышает максимальный размер</translation>
     </message>
 </context>
 <context>
@@ -14639,7 +11318,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1217"/>
         <source>Grid Interval: %1 unit(s)</source>
-        <translation>Интервал сетки: %1 единица(ы)</translation>
+        <translation>Интервал Сетки: %1 ед.</translation>
     </message>
 </context>
 <context>
@@ -14647,22 +11326,22 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="51"/>
         <source>Edit Workspace</source>
-        <translation>Редактировать Рабочую Область</translation>
+        <translation>Изменить Рабочее Пространство</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="52"/>
         <source>New Workspace</source>
-        <translation>Новая Рабочая Область</translation>
+        <translation>Новое Рабочее Пространство</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="143"/>
         <source>Name:</source>
-        <translation>Имя:</translation>
+        <translation>Название:</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="152"/>
         <source>My Workspace</source>
-        <translation>Моя Рабочая Область</translation>
+        <translation>Моё Рабочее Пространство</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="167"/>
@@ -14671,8 +11350,8 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="173"/>
-        <source>Filter widgets...</source>
-        <translation>Фильтровать виджеты...</translation>
+        <source>Filter widgets…</source>
+        <translation>Фильтр виджетов…</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="290"/>
@@ -14682,7 +11361,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="299"/>
         <source>OK</source>
-        <translation>ОК</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -14690,7 +11369,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="39"/>
         <source>Workspace</source>
-        <translation>Рабочая область</translation>
+        <translation>Рабочее Пространство</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="125"/>
@@ -14700,7 +11379,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="127"/>
         <source>Add widget to workspace</source>
-        <translation>Добавить виджет в рабочую область</translation>
+        <translation>Добавить виджет в рабочее пространство</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="138"/>
@@ -14710,7 +11389,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="140"/>
         <source>Rename workspace</source>
-        <translation>Переименовать рабочую область</translation>
+        <translation>Переименовать рабочее пространство</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="149"/>
@@ -14766,7 +11445,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="33"/>
         <source>Workspaces</source>
-        <translation>Рабочие пространства</translation>
+        <translation>Рабочие Пространства</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="121"/>
@@ -14791,7 +11470,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="151"/>
         <source>Title</source>
-        <translation>Заголовок</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="152"/>

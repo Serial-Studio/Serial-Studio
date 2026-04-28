@@ -566,7 +566,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
     if (!cachedResponse)
       Misc::Utilities::showMessageBox(
         tr("This license key was activated on a different device."),
-        tr("Please deactivate it there first or contact support for help."),
+        tr("Deactivate it there first or contact support for help."),
         QMessageBox::Critical);
 
     clearLicenseCache();
@@ -603,7 +603,7 @@ void Licensing::LemonSqueezy::readValidationResponse(const QByteArray& data,
     qWarning() << "[LemonSqueezy] Validation failed";
     if (!cachedResponse)
       Misc::Utilities::showMessageBox(tr("Could not validate your license at this time."),
-                                      tr("Please try again later."),
+                                      tr("Try again later."),
                                       QMessageBox::Warning);
 
     clearLicenseCache();
@@ -723,7 +723,7 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
     Misc::Utilities::showMessageBox(
       tr("The license key you provided does not belong to Serial Studio."),
       tr(
-        "Please double-check that you purchased your license from the official Serial Studio store."),
+        "Double-check that you purchased your license from the official Serial Studio store."),
       QMessageBox::Critical);
     clearLicenseCache(true);
     return;
@@ -734,7 +734,7 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
     qWarning() << "[LemonSqueezy] Machine ID mismatch";
     Misc::Utilities::showMessageBox(
       tr("This license key was activated on a different device."),
-      tr("Please deactivate it there first or contact support for help."),
+      tr("Deactivate it there first or contact support for help."),
       QMessageBox::Critical);
     clearLicenseCache(true);
     return;
@@ -756,7 +756,7 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
   // Validate instance ID
   if (instanceId.isEmpty()) {
     qWarning() << "[LemonSqueezy] Activation response missing instance ID";
-    Misc::Utilities::showMessageBox(tr("Something went wrong on the server..."),
+    Misc::Utilities::showMessageBox(tr("Something went wrong on the server…"),
                                     tr("No activation ID was returned."),
                                     QMessageBox::Critical);
     clearLicenseCache();
@@ -767,7 +767,7 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
   if (!activated) {
     qWarning() << "[LemonSqueezy] Activation failed";
     Misc::Utilities::showMessageBox(tr("Could not activate your license at this time."),
-                                    tr("Please try again later."),
+                                    tr("Try again later."),
                                     QMessageBox::Warning);
     clearLicenseCache();
     return;
@@ -829,7 +829,7 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
     Misc::Utilities::showMessageBox(
       tr("The license key you provided does not belong to Serial Studio."),
       tr(
-        "Please double-check that you purchased your license from the official Serial Studio store."),
+        "Double-check that you purchased your license from the official Serial Studio store."),
       QMessageBox::Critical);
     clearLicenseCache();
     return;
@@ -839,7 +839,7 @@ void Licensing::LemonSqueezy::readDeactivationResponse(const QByteArray& data)
   if (!deactivated) {
     qWarning() << "[LemonSqueezy] Deactivation failed";
     Misc::Utilities::showMessageBox(tr("Could not deactivate your license at this time."),
-                                    tr("Please try again later."),
+                                    tr("Try again later."),
                                     QMessageBox::Warning);
     clearLicenseCache();
     return;

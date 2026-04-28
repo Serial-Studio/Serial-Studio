@@ -2449,7 +2449,7 @@ bool DataModel::ProjectModel::setGroupWidget(const int group,
       auto ret =
         Misc::Utilities::showMessageBox(tr("Are you sure you want to change the group-level "
                                            "widget?"),
-                                        tr("Existing datasets for this group will be deleted"),
+                                        tr("Existing datasets for this group are deleted"),
                                         QMessageBox::Question,
                                         APP_NAME,
                                         QMessageBox::Yes | QMessageBox::No);

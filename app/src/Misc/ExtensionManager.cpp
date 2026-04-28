@@ -466,8 +466,8 @@ void Misc::ExtensionManager::resetRepositories()
   // Confirm the destructive operation with the user
   const auto result = Misc::Utilities::showMessageBox(
     tr("Reset Extensions"),
-    tr("This will uninstall all extensions, remove all custom repositories, "
-       "and restore the default settings. Continue?"),
+    tr("This uninstalls all extensions, removes all custom repositories, "
+       "and restores the default settings. Continue?"),
     QMessageBox::Warning,
     QString(),
     QMessageBox::Yes | QMessageBox::No,

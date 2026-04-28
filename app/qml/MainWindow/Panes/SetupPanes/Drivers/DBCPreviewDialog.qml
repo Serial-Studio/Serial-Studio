@@ -170,7 +170,7 @@ Window {
         color: palette.text
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
-        text: qsTr("Review the CAN messages and signals that will be imported into a new Serial Studio project.")
+        text: qsTr("Review the CAN messages and signals to import into a new Serial Studio project.")
       }
 
       Item {

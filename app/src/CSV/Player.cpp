@@ -391,7 +391,7 @@ void CSV::Player::openFile(const QString& filePath)
   m_csvFile.setFileName(filePath);
   if (!m_csvFile.open(QIODevice::ReadOnly)) {
     Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
-                                    tr("Please check file permissions & location"),
+                                    tr("Check file permissions and location"),
                                     QMessageBox::Critical);
     closeFile();
     return;
@@ -427,7 +427,7 @@ void CSV::Player::openFile(const QString& filePath)
   } else {
     Misc::Utilities::showMessageBox(tr("Insufficient Data in CSV File"),
                                     tr("The CSV file must contain at least one data row to "
-                                       "proceed. Please check the file and try again."),
+                                       "proceed. Check the file and try again."),
                                     QMessageBox::Critical);
     closeFile();
   }

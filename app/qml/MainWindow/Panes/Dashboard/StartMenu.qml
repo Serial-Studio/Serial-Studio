@@ -198,7 +198,7 @@ Popup {
           })
         }
 
-        // Build model: workspace model + separator + "New Workspace..."
+        // Build model: workspace model + separator + "New Workspace…"
         var items = taskBar.workspaceModel
         var model = []
         for (var i = 0; i < items.length; ++i)
@@ -207,7 +207,7 @@ Popup {
         model.push({"id": "__separator__", "text": "",
                      "icon": "", "separator": true})
         model.push({"id": "__new_workspace__", "separator": false,
-                     "text": qsTr("New Workspace..."),
+                     "text": qsTr("New Workspace…"),
                      "icon": "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"})
 
         // Update popup state
@@ -307,7 +307,7 @@ Popup {
                                       })
         }
 
-        // Build model: plugins + separator + "Manage Plugins..."
+        // Build model: plugins + separator + "Manage Plugins…"
         var items = []
         var plugins = Cpp_ExtensionManager.installedPlugins
         for (var i = 0; i < plugins.length; ++i)
@@ -317,7 +317,7 @@ Popup {
           items.push({"id": "__separator__", "title": "", "icon": ""})
         items.push({
                      "id": "__manage_plugins__",
-                     "title": qsTr("Manage Plugins..."),
+                     "title": qsTr("Manage Plugins…"),
                      "icon": "qrc:/rcc/icons/toolbar/extensions.svg"
                    })
 
@@ -614,7 +614,7 @@ Popup {
     id: _wsContextMenu
 
     MenuItem {
-      text: qsTr("Edit...")
+      text: qsTr("Edit…")
       visible: root._wsContextId >= 1000
       height: visible ? implicitHeight : 0
       onTriggered: {

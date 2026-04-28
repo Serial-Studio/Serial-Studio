@@ -140,7 +140,7 @@ SmartDialog {
           }
 
           Button {
-            text: qsTr("Select File...")
+            text: qsTr("Select File…")
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_IO_FileTransmission.openFile()
           }

@@ -1,136 +1,146 @@
-# Translation manager
+# Translations
 
-`translation_manager.py` is a Python script for managing Qt translation files (`.ts` and `.qm`). It can:
+Two scripts live in this directory:
 
-1. Create a new translation source (`.ts`) file for a given language.
-2. Update existing `.ts` files by running `lupdate` and pruning obsolete strings.
-3. Compile `.ts` files into binary `.qm` files using `lrelease`.
+- `translation_manager.py` — wraps Qt's `lupdate`/`lrelease` and creates new `.ts` files.
+- `llm_translate.py` — fills missing translations across all `.ts` files using an LLM (Anthropic Claude by default; OpenAI optional).
+
+The `ts/` folder holds source `.ts` files; `qm/` holds the compiled `.qm` files the app loads at runtime.
 
 ## Prerequisites
 
-Before running this script, make sure you have:
+- **Qt Linguist tools.** `lupdate` and `lrelease` must be on your `PATH`:
 
-- **Qt Linguist.** The `lupdate` and `lrelease` commands come with the Qt toolchain. They need to be on your `PATH`.
+  ```bash
+  lupdate --version
+  lrelease --version
+  ```
 
-You can check the install with:
+- **Python 3.x.**
 
-```bash
-lupdate --version
-lrelease --version
-```
+- For `llm_translate.py`, install one of:
 
-You also need Python 3.x.
+  ```bash
+  pip3 install anthropic lxml      # Anthropic (default)
+  pip3 install openai lxml         # OpenAI
+  ```
 
-## Usage
+  And export the corresponding API key:
 
-The script exposes three main operations:
+  ```bash
+  export ANTHROPIC_API_KEY=sk-ant-...
+  # or
+  export OPENAI_API_KEY=sk-...
+  ```
 
-- Create a new `.ts` file for a language.
-- Update existing `.ts` files with `lupdate`.
-- Compile `.ts` files into `.qm` files with `lrelease`.
+## `translation_manager.py`
 
-### 1. Creating a new translation file
+The script exposes three operations: create a new `.ts` file, run `lupdate`, run `lrelease`.
 
-Pass `--new-ts` with the language code (for example `es_MX` for Mexican Spanish):
+### Create a new translation file
 
 ```bash
 python3 translation_manager.py --new-ts es_MX
 ```
 
-This creates `es_MX.ts` in `app/translations/ts`, with the source language set to `en_US`.
+Creates `ts/es_MX.ts` with the source language set to `en_US`.
 
-### 2. Updating existing `.ts` files
-
-To refresh `.ts` files and drop obsolete entries, use `--lupdate`:
+### Update existing `.ts` files
 
 ```bash
 python3 translation_manager.py --lupdate
 ```
 
-This scans `.cpp`, `.h`, and `.qml` sources in the `app` and `lib` directories and updates the `.ts` files in `app/translations/ts`.
+Scans `.cpp`, `.h`, and `.qml` sources under `app/` and `lib/`, updates the `.ts` files in `ts/`, and prunes obsolete entries.
 
-### 3. Compiling `.ts` into `.qm`
-
-To build the binary `.qm` files that the app loads at runtime, use `--lrelease`:
+### Compile `.ts` into `.qm`
 
 ```bash
 python3 translation_manager.py --lrelease
 ```
 
-The `.qm` files land in `app/translations/qm`.
+Writes binary `.qm` files into `qm/`.
 
-### 4. Running both `lupdate` and `lrelease`
-
-You can chain the two:
+### Both at once
 
 ```bash
 python3 translation_manager.py --lupdate --lrelease
 ```
 
-### 5. Help
+## `llm_translate.py`
 
-Running the script with no arguments prints help:
+Fills in missing translations across every `.ts` file in `ts/` (skipping `en_US.ts`, which is treated as the source). It runs `lupdate` first, then translates, then runs `lrelease`.
+
+The script defaults to **Anthropic Claude** (`claude-sonnet-4-5`). Pass `--provider openai` to switch to `gpt-4.1`.
+
+### Translate everything
 
 ```bash
-python3 translation_manager.py
+python3 llm_translate.py
 ```
 
-Output:
+### One language only
 
+```bash
+python3 llm_translate.py --lang fr_FR
 ```
-usage: translation_manager.py [-h] [--new-ts LANGUAGE] [--lupdate] [--lrelease]
 
-Manage translations with lupdate and lrelease.
+### Switch provider or model
 
-optional arguments:
-  -h, --help           show this help message and exit
-  --new-ts LANGUAGE    Create a new .ts file for the given language code (e.g., "es" for Spanish).
-  --lupdate            Run lupdate to update all existing .ts files.
-  --lrelease           Run lrelease to compile .ts files into .qm files.
+```bash
+python3 llm_translate.py --provider openai
+python3 llm_translate.py --provider anthropic --model claude-sonnet-4-5
 ```
+
+### Reset and re-translate
+
+```bash
+python3 llm_translate.py --reset                  # all languages
+python3 llm_translate.py --reset --lang fr_FR     # one language
+```
+
+`--reset` clears every translation in non-`en_US` `.ts` files. Combine with a normal run to re-translate from scratch.
+
+### Re-apply deterministic capitalization (no LLM)
+
+```bash
+python3 llm_translate.py --verify-only
+```
+
+Walks existing translations and re-applies the title-case / acronym / language-specific casing rules without calling the LLM.
+
+### Lint `en_US.ts` source strings (no LLM)
+
+```bash
+python3 llm_translate.py --lint-sources
+```
+
+Scans the English source strings for style violations (Apple-HIG voice: imperative actions, neutral labels, no filler politeness, technical acronyms uppercase, etc.).
+
+### Quality features
+
+- Domain glossary in the prompt — disambiguates `Will Topic` (MQTT field), `Holding Register` (Modbus), `Frame` (CAN/serial vs UI), `Dataset` (data series).
+- Translation memory — top-K most similar already-validated translations from the same `.ts` file are injected as few-shot examples per batch.
+- Confidence scoring — the LLM rates each translation 1–5; entries below `--min-score` (default 4) keep `type='unfinished'` so Qt Linguist surfaces them for human review.
+- Source-aware acronym enforcement — only acronyms present in the EN source get force-uppercased in the translation.
+- Language-aware title case — Spanish `Cuadrícula de Datos` (lowercase `de`), French `Grille de Données`, German capitalizes nouns.
 
 ## Folder structure
 
-The script expects a layout like this:
-
 ```
-app/
-├── translations/
-│   ├── ts/                      # Source .ts files
-│   │   ├── en_US.ts
-│   │   ├── es_MX.ts
-│   │   └── ru_RU.ts
-│   ├── qm/                      # Compiled .qm files
-│   └── translation_manager.py   # This script
-```
-
-## Example commands
-
-1. Create a new French translation file (`fr_FR.ts`):
-
-```bash
-python3 translation_manager.py --new-ts fr_FR
-```
-
-2. Update all existing `.ts` files:
-
-```bash
-python3 translation_manager.py --lupdate
-```
-
-3. Compile `.ts` files into `.qm`:
-
-```bash
-python3 translation_manager.py --lrelease
-```
-
-4. Update and compile in one go:
-
-```bash
-python3 translation_manager.py --lupdate --lrelease
+app/translations/
+├── ts/                       # Source .ts files
+│   ├── en_US.ts
+│   ├── es_MX.ts
+│   └── ...
+├── qm/                       # Compiled .qm files
+├── translations.qrc
+├── translation_manager.py
+└── llm_translate.py
 ```
 
 ## Notes
 
-- The source language is assumed to be `en_US`, and it's set automatically when you create a new `.ts` file.
-- The `lib` folder (which holds extra source files) needs to sit next to `app`.
+- The source language is `en_US`. `translation_manager.py --new-ts` sets it automatically.
+- `llm_translate.py` never sends `en_US.ts` to the LLM — it only translates the other locales.
+- The `lib/` folder needs to sit next to `app/` for `lupdate` to find third-party sources.

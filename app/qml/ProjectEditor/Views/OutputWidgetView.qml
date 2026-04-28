@@ -77,7 +77,7 @@ Widgets.Pane {
         closeButtonEnabled: false
         titleText: qsTr("Output widgets require a Pro license.")
         activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
-        subtitleText: qsTr("You can configure output widgets, but they will only appear on the dashboard with a Pro license.")
+        subtitleText: qsTr("You can configure output widgets, but they only appear on the dashboard with a Pro license.")
       }
 
       //

@@ -43,7 +43,7 @@ Item {
 
         Layout.fillWidth: true
         font: Cpp_Misc_CommonFonts.monoFont
-        placeholderText: qsTr("Enter command...")
+        placeholderText: qsTr("Enter command…")
 
         palette.highlight: root.color
 

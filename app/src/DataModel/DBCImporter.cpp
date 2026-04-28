@@ -133,7 +133,7 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
   QCanDbcFileParser parser;
   if (!parser.parse(filePath)) {
     Misc::Utilities::showMessageBox(tr("Failed to parse DBC file: %1").arg(parser.errorString()),
-                                    tr("Please verify the file format and try again."),
+                                    tr("Verify the file format and try again."),
                                     QMessageBox::Critical,
                                     tr("DBC Import Error"));
     return;

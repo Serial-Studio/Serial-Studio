@@ -379,7 +379,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         onClicked: _groupsDialog.show()
-        text: qsTr("Configure Register Groups...")
+        text: qsTr("Configure Register Groups…")
       }
 
       Button {
@@ -389,7 +389,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: _groupButton.bottom
-        text: qsTr("Import Register Map...")
+        text: qsTr("Import Register Map…")
         onClicked: Cpp_JSON_ModbusMapImporter.importRegisterMap()
       }
 

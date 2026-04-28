@@ -80,7 +80,7 @@ SmartDialog {
         Button {
           icon.width: 18
           icon.height: 18
-          text: qsTr("About Qt...")
+          text: qsTr("About Qt…")
           onClicked: Cpp_Misc_Utilities.aboutQt()
           icon.color: Cpp_ThemeManager.colors["button_text"]
           icon.source: "qrc:/rcc/icons/buttons/info.svg"

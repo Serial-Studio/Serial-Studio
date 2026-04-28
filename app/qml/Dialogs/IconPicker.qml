@@ -108,7 +108,7 @@ SmartDialog {
         icon.width: 14
         icon.height: 14
         horizontalPadding: 8
-        text: qsTr("Search Online...")
+        text: qsTr("Search Online…")
         icon.source: "qrc:/rcc/icons/buttons/search.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
         onClicked: {

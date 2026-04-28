@@ -328,7 +328,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             text: qsTr("Export Protobuf File")
           } Button {
-            text: qsTr("Export...")
+            text: qsTr("Export…")
             visible: Cpp_GrpcAvailable
             opacity: enabled ? 1 : 0.5
             enabled: _apiServer.checked

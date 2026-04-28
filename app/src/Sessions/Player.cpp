@@ -303,7 +303,7 @@ void Sessions::Player::openFile(const QString& filePath)
 
   if (!m_db.open()) {
     Misc::Utilities::showMessageBox(tr("Cannot open session file"),
-                                    tr("Please check file permissions and try again."),
+                                    tr("Check file permissions and try again."),
                                     QMessageBox::Critical);
     closeFile();
     return;
@@ -361,7 +361,7 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
 
   if (!m_db.open()) {
     Misc::Utilities::showMessageBox(tr("Cannot open session file"),
-                                    tr("Please check file permissions and try again."),
+                                    tr("Check file permissions and try again."),
                                     QMessageBox::Critical);
     closeFile();
     return;

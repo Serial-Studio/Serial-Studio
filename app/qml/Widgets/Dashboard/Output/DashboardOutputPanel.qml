@@ -258,7 +258,7 @@ Item {
               id: textInput
 
               Layout.fillWidth: true
-              placeholderText: qsTr("Enter command...")
+              placeholderText: qsTr("Enter command…")
               font: Cpp_Misc_CommonFonts.customMonoFont(0.8, false)
 
               palette.highlight: cell.accentColor

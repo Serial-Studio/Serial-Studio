@@ -73,7 +73,7 @@ SmartDialog {
           }
 
           Label {
-            text: qsTr("Please wait...")
+            text: qsTr("Please wait…")
             Layout.alignment: Qt.AlignHCenter
             font: Cpp_Misc_CommonFonts.customUiFont(1.33, true)
           }

@@ -258,9 +258,9 @@ void DataModel::TransmitTestDialog::onLanguageChanged()
   m_evaluateButton->setText(tr("Evaluate"));
   m_inputTitle->setText(tr("Input Value"));
   m_outputTitle->setText(tr("Transmit Function Output"));
-  m_userInput->setPlaceholderText(tr("Enter value to transmit..."));
-  m_rawOutput->setPlaceholderText(tr("Raw string output will appear here"));
-  m_hexOutput->setPlaceholderText(tr("Hex byte output will appear here"));
+  m_userInput->setPlaceholderText(tr("Enter value to transmit…"));
+  m_rawOutput->setPlaceholderText(tr("Raw string output appears here"));
+  m_hexOutput->setPlaceholderText(tr("Hex byte output appears here"));
 
   onInputModeChanged(m_hexCheckBox->checkState());
   setWindowTitle(tr("Test Transmit Function"));
@@ -284,7 +284,7 @@ void DataModel::TransmitTestDialog::onInputModeChanged(Qt::CheckState state)
       m_userInput->setText(formatted);
     }
   } else {
-    m_userInput->setPlaceholderText(tr("Enter value to transmit..."));
+    m_userInput->setPlaceholderText(tr("Enter value to transmit…"));
     m_userInput->setPalette(QPalette());
   }
 }

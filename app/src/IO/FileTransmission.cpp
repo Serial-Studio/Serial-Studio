@@ -202,7 +202,7 @@ qint64 IO::FileTransmission::bytesTotal() const noexcept
 QString IO::FileTransmission::fileName() const
 {
   if (!m_file.isOpen())
-    return tr("No file selected...");
+    return tr("No file selected…");
 
   return QFileInfo(m_file).fileName();
 }
@@ -369,7 +369,7 @@ void IO::FileTransmission::beginTransmission()
   m_speedTimer.start();
   m_speedUpdateTimer.start();
 
-  appendLog(tr("Starting %1 transfer...").arg(transferModes().at(m_transferMode)));
+  appendLog(tr("Starting %1 transfer…").arg(transferModes().at(m_transferMode)));
 
   // Wire timer to the correct slot for this mode
   disconnect(&m_timer, &QTimer::timeout, this, &FileTransmission::sendLine);

@@ -287,7 +287,7 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
     if (portId >= m_serialPortLocations.count()) {
       Misc::Utilities::showMessageBox(tr("Invalid Serial Port"),
                                       tr("The selected serial port \"%1\" is no longer available. "
-                                         "Please refresh the port list and try again.")
+                                         "Refresh the port list and try again.")
                                         .arg(ports.value(portId)),
                                       QMessageBox::Critical);
       return false;
@@ -350,7 +350,7 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
   if (!m_device) {
     Misc::Utilities::showMessageBox(
       tr("Modbus Initialization Failed"),
-      tr("Unable to create Modbus device. Please check your system configuration and try again."),
+      tr("Unable to create Modbus device. Check your system configuration and try again."),
       QMessageBox::Critical);
     return false;
   }
@@ -379,7 +379,7 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
 
     Misc::Utilities::showMessageBox(
       tr("Modbus Connection Failed"),
-      error.isEmpty() ? tr("Unable to connect to \"%1\". Please check your connection settings.")
+      error.isEmpty() ? tr("Unable to connect to \"%1\". Check your connection settings.")
                           .arg(connectionTarget)
                       : tr("\"%1\": %2").arg(connectionTarget, error),
       QMessageBox::Critical);

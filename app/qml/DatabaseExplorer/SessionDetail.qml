@@ -175,7 +175,7 @@ Widgets.Pane {
           Layout.fillWidth: true
           Layout.preferredHeight: 80
           wrapMode: TextEdit.Wrap
-          placeholderText: qsTr("Add session notes...")
+          placeholderText: qsTr("Add session notes…")
           text: Cpp_Sessions_Manager.selectedSessionNotes
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.uiFont
@@ -247,7 +247,7 @@ Widgets.Pane {
             id: tagField
             Layout.fillWidth: true
             font: Cpp_Misc_CommonFonts.uiFont
-            placeholderText: qsTr("New tag...")
+            placeholderText: qsTr("New tag…")
             onAccepted: addTagBtn.clicked()
           }
 

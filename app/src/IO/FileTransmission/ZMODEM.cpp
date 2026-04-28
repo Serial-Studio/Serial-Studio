@@ -423,7 +423,7 @@ void IO::Protocols::ZMODEM::sendZRQINIT()
   autoStart.append(buildHexHeader(kZRQINIT, 0));
   Q_EMIT writeRequested(autoStart);
 
-  Q_EMIT statusMessage(tr("Sending ZRQINIT, waiting for receiver..."));
+  Q_EMIT statusMessage(tr("Sending ZRQINIT, waiting for receiver…"));
   m_timeoutTimer.start(m_timeoutMs);
 }
 
@@ -525,7 +525,7 @@ void IO::Protocols::ZMODEM::sendZEOF()
 {
   m_state = State::SentZEOF;
   Q_EMIT writeRequested(buildBin32Header(kZEOF, static_cast<quint32>(m_fileSize)));
-  Q_EMIT statusMessage(tr("File data sent, waiting for confirmation..."));
+  Q_EMIT statusMessage(tr("File data sent, waiting for confirmation…"));
   m_timeoutTimer.start(m_timeoutMs);
 }
 
@@ -536,7 +536,7 @@ void IO::Protocols::ZMODEM::sendZFIN()
 {
   m_state = State::SentZFIN;
   Q_EMIT writeRequested(buildHexHeader(kZFIN, 0));
-  Q_EMIT statusMessage(tr("Sending ZFIN..."));
+  Q_EMIT statusMessage(tr("Sending ZFIN…"));
   m_timeoutTimer.start(m_timeoutMs);
 }
 
@@ -572,7 +572,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
     // Receiver ready — send file info or close session
     case kZRINIT:
       if (m_state == State::SentZRQINIT) {
-        Q_EMIT statusMessage(tr("Receiver ready, sending file info..."));
+        Q_EMIT statusMessage(tr("Receiver ready, sending file info…"));
         sendZFILE();
       } else if (m_state == State::SentZEOF) {
         // File accepted, send ZFIN to close session
@@ -611,7 +611,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       }
 
       Q_EMIT statusMessage(
-        tr("NAK received, retrying (%1/%2)...").arg(m_retryCount).arg(m_maxRetries));
+        tr("NAK received, retrying (%1/%2)…").arg(m_retryCount).arg(m_maxRetries));
 
       if (m_state == State::SentZRQINIT)
         sendZRQINIT();
@@ -860,7 +860,7 @@ void IO::Protocols::ZMODEM::handleTimeout()
     return;
   }
 
-  Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)...").arg(m_retryCount).arg(m_maxRetries));
+  Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)…").arg(m_retryCount).arg(m_maxRetries));
 
   switch (m_state) {
     case State::SentZRQINIT:

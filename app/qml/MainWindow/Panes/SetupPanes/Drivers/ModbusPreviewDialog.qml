@@ -155,7 +155,7 @@ Window {
         color: palette.text
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
-        text: qsTr("Review the registers that will be imported into a new Serial Studio project.")
+        text: qsTr("Review the registers to import into a new Serial Studio project.")
       }
 
       Item {

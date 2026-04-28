@@ -394,7 +394,7 @@ Widgets.Pane {
             icon.width: 18
             icon.height: 18
             horizontalPadding: 12
-            text: qsTr("Select Template...")
+            text: qsTr("Select Template…")
             Layout.alignment: Qt.AlignVCenter
             onClicked: frameParser.selectTemplate()
             icon.source: "qrc:/rcc/icons/buttons/code.svg"

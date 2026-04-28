@@ -73,7 +73,7 @@ void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
   m_yState      = YState::WaitingForInitialC;
   m_state       = State::WaitingForStart;
 
-  Q_EMIT statusMessage(tr("Waiting for receiver..."));
+  Q_EMIT statusMessage(tr("Waiting for receiver…"));
   Q_EMIT progressChanged(0, m_fileSize);
 
   m_timeoutTimer.start(m_timeoutMs);
@@ -131,7 +131,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
           if (m_file.atEnd()) {
             m_yState = YState::WaitingForFirstEOTResponse;
             Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
-            Q_EMIT statusMessage(tr("Sending first EOT..."));
+            Q_EMIT statusMessage(tr("Sending first EOT…"));
             m_timeoutTimer.start(m_timeoutMs);
           } else {
             m_yState = YState::SendingData;
@@ -176,7 +176,7 @@ void IO::Protocols::YMODEM::processInput(const QByteArray& data)
           m_timeoutTimer.stop();
           m_yState = YState::WaitingForSecondEOTAck;
           Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
-          Q_EMIT statusMessage(tr("Sending second EOT..."));
+          Q_EMIT statusMessage(tr("Sending second EOT…"));
           m_timeoutTimer.start(m_timeoutMs);
         }
         break;
@@ -267,7 +267,7 @@ void IO::Protocols::YMODEM::sendEndOfBatch()
   QByteArray packet = buildBlock(payload, 0);
 
   Q_EMIT writeRequested(packet);
-  Q_EMIT statusMessage(tr("Sending end-of-batch marker..."));
+  Q_EMIT statusMessage(tr("Sending end-of-batch marker…"));
 
   m_yState = YState::WaitingForEndBatchAck;
   m_timeoutTimer.start(m_timeoutMs);
@@ -288,7 +288,7 @@ void IO::Protocols::YMODEM::sendDataBlock()
   if (data.isEmpty()) {
     m_yState = YState::WaitingForFirstEOTResponse;
     Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
-    Q_EMIT statusMessage(tr("Sending first EOT..."));
+    Q_EMIT statusMessage(tr("Sending first EOT…"));
     m_timeoutTimer.start(m_timeoutMs);
     return;
   }

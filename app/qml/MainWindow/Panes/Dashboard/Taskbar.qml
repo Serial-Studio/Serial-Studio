@@ -130,7 +130,7 @@ Item {
         font: Cpp_Misc_CommonFonts.uiFont
         color: Cpp_ThemeManager.colors["text"]
         verticalAlignment: Text.AlignVCenter
-        placeholderText: qsTr("Search widgets...")
+        placeholderText: qsTr("Search widgets…")
         selectionColor: Cpp_ThemeManager.colors["highlight"]
         selectedTextColor: Cpp_ThemeManager.colors["highlighted_text"]
         placeholderTextColor: Cpp_ThemeManager.colors["placeholder_text"]

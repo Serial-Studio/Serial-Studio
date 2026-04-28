@@ -205,13 +205,13 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     Misc::Utilities::showMessageBox(
       tr("CAN Bus Not Available"),
       tr(
-        "No CAN bus plugins found on this system.\n\nOn Linux, please ensure SocketCAN kernel modules are loaded."),
+        "No CAN bus plugins found on this system.\n\nOn Linux, ensure SocketCAN kernel modules are loaded."),
       QMessageBox::Critical);
 #elif defined(Q_OS_WIN)
     Misc::Utilities::showMessageBox(
       tr("CAN Bus Not Available"),
       tr(
-        "No CAN bus plugins found on this system.\n\nOn Windows, please install CAN hardware drivers (PEAK, Vector, etc.)."),
+        "No CAN bus plugins found on this system.\n\nOn Windows, install CAN hardware drivers (PEAK, Vector, etc.)."),
       QMessageBox::Critical);
 #elif defined(Q_OS_MAC)
     Misc::Utilities::showMessageBox(
@@ -231,7 +231,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   if (!configurationOk()) {
     Misc::Utilities::showMessageBox(
       tr("Invalid CAN Configuration"),
-      tr("The CAN bus configuration is incomplete. Please select a valid plugin and interface."),
+      tr("The CAN bus configuration is incomplete. Select a valid plugin and interface."),
       QMessageBox::Critical);
     return false;
   }
@@ -240,7 +240,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     Misc::Utilities::showMessageBox(
       tr("Invalid Selection"),
       tr(
-        "The selected plugin or interface is no longer available. Please refresh the lists and try again."),
+        "The selected plugin or interface is no longer available. Refresh the lists and try again."),
       QMessageBox::Critical);
     return false;
   }
@@ -249,7 +249,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     Misc::Utilities::showMessageBox(
       tr("No Devices Available"),
       tr(
-        "The plugin or interface list is empty. Please refresh the lists and ensure your CAN hardware is connected."),
+        "The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected."),
       QMessageBox::Critical);
     return false;
   }
@@ -265,7 +265,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     Misc::Utilities::showMessageBox(
       tr("CAN Device Creation Failed"),
       error.isEmpty()
-        ? tr("Unable to create CAN bus device. Please check your hardware and drivers.")
+        ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
         : error,
       QMessageBox::Critical);
     return false;
@@ -302,7 +302,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
       tr("CAN Connection Failed"),
       error.isEmpty()
         ? tr(
-            "Unable to connect to CAN bus device. Please check your hardware connection and settings.")
+            "Unable to connect to CAN bus device. Check your hardware connection and settings.")
         : error,
       QMessageBox::Critical);
     return false;

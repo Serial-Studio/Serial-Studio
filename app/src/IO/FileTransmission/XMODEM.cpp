@@ -92,7 +92,7 @@ void IO::Protocols::XMODEM::startTransfer(const QString& filePath)
   m_retryCount  = 0;
   m_state       = State::WaitingForStart;
 
-  Q_EMIT statusMessage(tr("Waiting for receiver..."));
+  Q_EMIT statusMessage(tr("Waiting for receiver…"));
   Q_EMIT progressChanged(0, m_fileSize);
 
   m_timeoutTimer.start(m_timeoutMs);
@@ -132,7 +132,7 @@ void IO::Protocols::XMODEM::processInput(const QByteArray& data)
         if (ch == kCRC) {
           m_timeoutTimer.stop();
           m_state = State::SendingBlocks;
-          Q_EMIT statusMessage(tr("Receiver ready (CRC mode), sending data..."));
+          Q_EMIT statusMessage(tr("Receiver ready (CRC mode), sending data…"));
           sendBlock();
         }
         break;
@@ -306,7 +306,7 @@ void IO::Protocols::XMODEM::sendEOT()
 {
   m_state = State::WaitingForEOTAck;
   Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
-  Q_EMIT statusMessage(tr("Sending EOT..."));
+  Q_EMIT statusMessage(tr("Sending EOT…"));
   m_timeoutTimer.start(m_timeoutMs);
 }
 
@@ -353,7 +353,7 @@ void IO::Protocols::XMODEM::handleTimeout()
     return;
   }
 
-  Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)...").arg(m_retryCount).arg(m_maxRetries));
+  Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)…").arg(m_retryCount).arg(m_maxRetries));
 
   if (m_state == State::WaitingForEOTAck) {
     sendEOT();

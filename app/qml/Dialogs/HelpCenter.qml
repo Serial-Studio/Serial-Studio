@@ -126,7 +126,7 @@ SmartDialog {
       }
 
       Label {
-        text: qsTr("Fetching help pages...")
+        text: qsTr("Fetching help pages…")
         font: Cpp_Misc_CommonFonts.boldUiFont
         color: Cpp_ThemeManager.colors["text"]
         Layout.alignment: Qt.AlignHCenter
@@ -160,7 +160,7 @@ SmartDialog {
           id: searchField
 
           Layout.fillWidth: true
-          placeholderText: qsTr("Search...")
+          placeholderText: qsTr("Search…")
           onTextChanged: Cpp_HelpCenter.searchFilter = text
         }
 
@@ -272,7 +272,7 @@ SmartDialog {
           }
 
           Label {
-            text: qsTr("Loading...")
+            text: qsTr("Loading…")
             font: Cpp_Misc_CommonFonts.boldUiFont
             color: Cpp_ThemeManager.colors["text"]
             Layout.alignment: Qt.AlignHCenter

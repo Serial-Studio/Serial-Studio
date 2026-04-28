@@ -268,7 +268,7 @@ void DataModel::DatasetTransformEditor::onClear()
  */
 void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
 {
-  // Index 0 is the "Select Template..." placeholder
+  // Index 0 is the "Select Template…" placeholder
   if (index <= 0 || index > m_templates.size())
     return;
 
@@ -656,7 +656,7 @@ void DataModel::DatasetTransformEditor::buildTemplates()
   // Rebuild template combo
   m_templateCombo->blockSignals(true);
   m_templateCombo->clear();
-  m_templateCombo->addItem(tr("Select Template..."));
+  m_templateCombo->addItem(tr("Select Template…"));
   for (const auto& tmpl : std::as_const(m_templates))
     m_templateCombo->addItem(tmpl.name);
 

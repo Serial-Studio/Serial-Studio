@@ -170,7 +170,7 @@ Widgets.SmartDialog {
       Widgets.SearchField {
         Layout.fillWidth: true
         text: root.widgetFilter
-        placeholderText: qsTr("Filter widgets...")
+        placeholderText: qsTr("Filter widgets…")
         onTextChanged: root.widgetFilter = text
       }
 

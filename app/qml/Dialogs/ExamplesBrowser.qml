@@ -128,7 +128,7 @@ SmartDialog {
         anchors.leftMargin: 4
         font: Cpp_Misc_CommonFonts.uiFont
         rightPadding: searchIcon.width + 16
-        placeholderText: qsTr("Search in Examples...")
+        placeholderText: qsTr("Search in Examples…")
         onTextChanged: Cpp_Examples.searchFilter = text
 
         Button {
@@ -295,7 +295,7 @@ SmartDialog {
         }
 
         Label {
-          text: qsTr("Fetching examples...")
+          text: qsTr("Fetching examples…")
           font: Cpp_Misc_CommonFonts.boldUiFont
           color: Cpp_ThemeManager.colors["text"]
           Layout.alignment: Qt.AlignHCenter

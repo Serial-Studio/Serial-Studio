@@ -53,7 +53,7 @@ Item {
     id: contextMenu
 
     MenuItem {
-      text: qsTr("Set Wallpaper...")
+      text: qsTr("Set Wallpaper…")
       onTriggered: _wm.selectBackgroundImage()
     }
 

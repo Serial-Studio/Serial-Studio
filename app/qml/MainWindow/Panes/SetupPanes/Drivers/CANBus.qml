@@ -277,7 +277,7 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } Button {
         Layout.fillWidth: true
-        text: qsTr("Import DBC File...")
+        text: qsTr("Import DBC File…")
         visible: Cpp_IO_CANBus.interfaceList.length > 0
         onClicked: Cpp_JSON_DBCImporter.importDBC()
       }

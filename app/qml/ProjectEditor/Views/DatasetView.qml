@@ -82,7 +82,7 @@ Widgets.Pane {
         closeButtonEnabled: false
         titleText: qsTr("Pro features detected in this project.")
         activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
-        subtitleText: qsTr("Fallback widgets will be used. Buy a license to unlock full functionality.")
+        subtitleText: qsTr("Using fallback widgets. Buy a license to unlock full functionality.")
       }
 
       //

@@ -228,7 +228,7 @@ void DataModel::FrameParserTestDialog::onLanguageChanged()
   m_parseButton->setText(tr("Evaluate"));
   m_inputTitle->setText(tr("Frame Data Input"));
   m_outputTitle->setText(tr("Frame Parser Results"));
-  m_userInput->setPlaceholderText(tr("Enter frame data here..."));
+  m_userInput->setPlaceholderText(tr("Enter frame data here…"));
   m_table->setHorizontalHeaderLabels({tr("Dataset Index"), tr("Value")});
   m_inputDisplay->setPlaceholderText(tr(
     "Enter frame data above, enable HEX mode if needed, then click \"Evaluate\" to run the frame parser.\n\nExample (Text): a,b,c,d,e,f\nExample (HEX):  48 65 6C 6C 6F"));
@@ -258,7 +258,7 @@ void DataModel::FrameParserTestDialog::onInputModeChanged(Qt::CheckState state)
   }
 
   else {
-    m_userInput->setPlaceholderText(tr("Enter frame data here..."));
+    m_userInput->setPlaceholderText(tr("Enter frame data here…"));
     m_userInput->setPalette(QPalette());
   }
 }

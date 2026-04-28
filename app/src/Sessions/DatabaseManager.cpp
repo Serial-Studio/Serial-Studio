@@ -569,7 +569,7 @@ void Sessions::DatabaseManager::confirmDeleteSession(int sessionId)
 
   const int choice = Misc::Utilities::showMessageBox(
     tr("Delete session from %1?").arg(title),
-    tr("All readings and raw data for this session will be permanently removed."),
+    tr("All readings and raw data for this session are permanently removed."),
     QMessageBox::Warning,
     tr("Delete Session"),
     QMessageBox::Yes | QMessageBox::Cancel,
@@ -591,7 +591,7 @@ void Sessions::DatabaseManager::replaySelectedSession()
   if (sessionProjectJson(m_selectedSessionId).isEmpty()) {
     Misc::Utilities::showMessageBox(tr("No project data"),
                                     tr("This session does not contain an embedded project file — "
-                                       "the dashboard will fall back to a quick-plot layout."),
+                                       "the dashboard falls back to a quick-plot layout."),
                                     QMessageBox::Warning);
   }
 
@@ -1068,7 +1068,7 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
   QFile file(path);
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     Misc::Utilities::showMessageBox(tr("Cannot write file"),
-                                    tr("Please check file permissions and try again."),
+                                    tr("Check file permissions and try again."),
                                     QMessageBox::Critical);
     return;
   }

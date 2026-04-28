@@ -232,7 +232,7 @@ Window {
 
               Label {
                 Layout.fillWidth: true
-                text: qsTr("Please wait...")
+                text: qsTr("Please wait…")
                 Layout.alignment: Qt.AlignVCenter
                 horizontalAlignment: Qt.AlignVCenter
                 font: Cpp_Misc_CommonFonts.boldUiFont

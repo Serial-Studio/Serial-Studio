@@ -197,7 +197,7 @@ Item {
 
       Label {
         Layout.fillWidth: true
-        text: qsTr("Scanning....")
+        text: qsTr("Scanning…")
         Layout.alignment: Qt.AlignVCenter
       }
     }

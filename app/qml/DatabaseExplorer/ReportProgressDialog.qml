@@ -81,7 +81,7 @@ Widgets.SmartDialog {
       color: Cpp_ThemeManager.colors["text"]
       font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
       text: qsTr("This can take a few seconds for sessions with many "
-               + "parameters. The window will close automatically when "
+               + "parameters. The window closes automatically when "
                + "the report is ready.")
     }
   }

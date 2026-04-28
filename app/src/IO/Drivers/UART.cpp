@@ -854,16 +854,16 @@ void IO::Drivers::UART::populateErrors()
   // clang-format off
   m_errorDescriptions.clear();
   m_errorDescriptions.insert(QSerialPort::NoError, tr("No error occurred."));
-  m_errorDescriptions.insert(QSerialPort::DeviceNotFoundError, tr("The specified device could not be found. Please check the connection and try again."));
+  m_errorDescriptions.insert(QSerialPort::DeviceNotFoundError, tr("The specified device could not be found. Check the connection and try again."));
   m_errorDescriptions.insert(QSerialPort::PermissionError, tr("Permission denied. Ensure the application has the necessary access rights to the device."));
   m_errorDescriptions.insert(QSerialPort::OpenError, tr("Failed to open the device. It may already be in use or unavailable."));
   m_errorDescriptions.insert(QSerialPort::WriteError, tr("An error occurred while writing data to the device."));
   m_errorDescriptions.insert(QSerialPort::ReadError, tr("An error occurred while reading data from the device."));
   m_errorDescriptions.insert(QSerialPort::ResourceError, tr("A critical resource error occurred. The device may have been disconnected or is no longer accessible."));
   m_errorDescriptions.insert(QSerialPort::UnsupportedOperationError, tr("The requested operation is not supported on this device."));
-  m_errorDescriptions.insert(QSerialPort::UnknownError, tr("An unknown error occurred. Please check the device and try again."));
+  m_errorDescriptions.insert(QSerialPort::UnknownError, tr("An unknown error occurred. Check the device and try again."));
   m_errorDescriptions.insert(QSerialPort::TimeoutError, tr("The operation timed out. The device may not be responding."));
-  m_errorDescriptions.insert(QSerialPort::NotOpenError, tr("The device is not open. Please open the device before attempting this operation."));
+  m_errorDescriptions.insert(QSerialPort::NotOpenError, tr("The device is not open. Open the device before attempting this operation."));
   // clang-format on
 }
 
