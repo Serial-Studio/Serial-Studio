@@ -9073,27 +9073,27 @@ Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
         <translation>Seitengröße</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="450"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="451"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Min-, Max- und Mittelwerte in Diagrammen annotieren</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="496"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Deckblatt (Logo, Dokumenttitel, Test-Untertitel)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="501"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="502"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Testinformationen (Projekt, Zeitstempel, Klassifizierung und Notizen)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="506"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="507"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Messzusammenfassung (Min., Max., Mittelwert, Standardabweichung pro Parameter)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="511"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="512"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Parametertrends (Zeitreihendarstellung pro numerischem Parameter)</translation>
     </message>
@@ -9113,17 +9113,17 @@ Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
         <translation>Linienstil</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="482"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="483"/>
         <source>Include</source>
         <translation>Einschließen</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="529"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="530"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
         <source>Export PDF</source>
         <translation>PDF Exportieren</translation>
     </message>

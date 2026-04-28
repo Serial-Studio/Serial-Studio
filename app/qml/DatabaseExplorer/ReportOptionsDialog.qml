@@ -446,6 +446,7 @@ Widgets.SmartDialog {
 
           CheckBox {
             id: _annotateStatsCheck
+            checked: true
             Layout.columnSpan: 2
             text: qsTr("Annotate min, max, and mean values on plots")
           }

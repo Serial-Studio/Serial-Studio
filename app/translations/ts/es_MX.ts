@@ -9073,27 +9073,27 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Tamaño de página</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="450"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="451"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Anotar valores mínimos, máximos y promedio en gráficas</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="496"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Portada (logotipo, título del documento, subtítulo de prueba)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="501"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="502"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Información de prueba (proyecto, marcas de tiempo, clasificación y notas)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="506"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="507"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Resumen de mediciones (mín, máx, media, desv. estándar por parámetro)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="511"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="512"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Tendencias de parámetros (gráfica de series de tiempo por parámetro numérico)</translation>
     </message>
@@ -9113,17 +9113,17 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Estilo de Línea</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="482"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="483"/>
         <source>Include</source>
         <translation>Incluir</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="529"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="530"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
         <source>Export PDF</source>
         <translation>Exportar PDF</translation>
     </message>

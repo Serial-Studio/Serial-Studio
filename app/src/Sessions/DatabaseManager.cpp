@@ -982,7 +982,7 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   opts.includeMetadata     = options.value("includeMetadata", true).toBool();
   opts.includeStats        = options.value("includeStats", true).toBool();
   opts.includeCharts       = options.value("includeCharts", true).toBool();
-  opts.includeStatsOverlay = options.value("includeStatsOverlay", false).toBool();
+  opts.includeStatsOverlay = options.value("includeStatsOverlay", true).toBool();
   opts.lineWidth           = options.value("lineWidth", 1.4).toDouble();
   opts.lineStyle           = options.value("lineStyle", QStringLiteral("solid")).toString();
 
