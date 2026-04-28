@@ -160,7 +160,68 @@
     };
   }
 
-  function buildChart(canvas, series, colors, lineWidth, dashPattern) {
+  // Renders dashed horizontal lines at the dataset's min, max and mean,
+  // each labelled with its value at the right edge of the plot. The labels
+  // are stacked vertically near each line and clamped to the plot area so
+  // they never spill past the frame, and they swap above/below depending
+  // on which half of the y-axis the line lands in.
+  function makeStatsOverlayPlugin(stats, labels, units) {
+    return {
+      id: "stats-overlay",
+      afterDatasetsDraw(chart) {
+        if (!stats) return;
+        const { ctx, chartArea, scales } = chart;
+        if (!chartArea) return;
+        const { left, right, top, bottom } = chartArea;
+        const yScale = scales.y;
+        if (!yScale) return;
+        const unitSuffix = units ? ` ${units}` : "";
+        const drawLine = (value, label, color) => {
+          if (!Number.isFinite(value)) return;
+          if (value < yScale.min || value > yScale.max) return;
+          const yPx = yScale.getPixelForValue(value);
+          ctx.save();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 1.0;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.moveTo(left, yPx + 0.5);
+          ctx.lineTo(right, yPx + 0.5);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          // Label box: white fill + colored border + colored text. Above the
+          // line if it sits in the lower half of the plot, below otherwise.
+          const text = `${label}: ${formatAxisValue(value)}${unitSuffix}`;
+          ctx.font = "12px sans-serif";
+          ctx.textBaseline = "middle";
+          ctx.textAlign = "left";
+          const padX = 4, padY = 2;
+          const w = ctx.measureText(text).width + 2 * padX;
+          const h = 16;
+          const midY = (top + bottom) / 2;
+          let labelY = (yPx >= midY) ? (yPx - h - 3) : (yPx + 3);
+          labelY = Math.max(top + 1, Math.min(bottom - h - 1, labelY));
+          const labelX = right - w - 4;
+          ctx.fillStyle = "rgba(255, 255, 255, 0.92)";
+          ctx.fillRect(labelX, labelY, w, h);
+          ctx.lineWidth = 0.6;
+          ctx.strokeStyle = color;
+          ctx.strokeRect(labelX + 0.5, labelY + 0.5, w - 1, h - 1);
+          ctx.fillStyle = color;
+          ctx.fillText(text, labelX + padX, labelY + h / 2);
+          ctx.restore();
+          void padY;
+        };
+        // Colors chosen to print legibly in both color and grayscale.
+        drawLine(stats.min,  labels.min  || "Min",  "#1d6f42");
+        drawLine(stats.max,  labels.max  || "Max",  "#a00f0f");
+        drawLine(stats.mean, labels.mean || "Mean", "#1f4f9c");
+      }
+    };
+  }
+
+  function buildChart(canvas, series, colors, lineWidth, dashPattern,
+                      statsOverlay) {
     const points = series.times.map((t, i) => ({ x: t, y: series.values[i] }));
 
     // Compute data bounds
@@ -338,6 +399,11 @@
             ctx.restore();
           }
         },
+
+        // Optional min/max/mean horizontal-line annotations
+        makeStatsOverlayPlugin(statsOverlay && statsOverlay.stats,
+                               (statsOverlay && statsOverlay.labels) || {},
+                               series.units || ""),
 
         // Minor gridlines between each major tick (skipped if dense)
         {
@@ -542,23 +608,30 @@
     // Shared line appearance (width + dash pattern) — set by the export
     // dialog and inlined into the data blob.
     const style       = data.style || {};
+    const options     = data.options || {};
     const lineWidth   = Number.isFinite(+style.lineWidth) ? +style.lineWidth : 1.4;
     const lineStyle   = String(style.lineStyle || "solid").toLowerCase();
     const dashPattern = lineStyle === "dashed" ? [6, 4]
                       : lineStyle === "dotted" ? [1, 3]
                       : [];
+    const showStats   = !!options.showStatsOverlay;
+    const statsLabels = options.statsLabels || {};
 
     let built = 0;
     data.series.forEach((series, index) => {
       const canvas = document.getElementById("chart-" + series.uniqueId);
       if (!canvas) return;
+      const overlay = (showStats && series.stats)
+                    ? { stats: series.stats, labels: statsLabels }
+                    : null;
       const chart = buildChart(canvas, series, paletteColor(index),
-                               lineWidth, dashPattern);
+                               lineWidth, dashPattern, overlay);
       // Stash enough to rebuild on resize (tick count depends on canvas size)
       _charts.push({
         canvas: canvas, chart: chart, series: series,
         colors: paletteColor(index),
-        lineWidth: lineWidth, dashPattern: dashPattern
+        lineWidth: lineWidth, dashPattern: dashPattern,
+        statsOverlay: overlay
       });
       ++built;
     });
@@ -583,7 +656,8 @@
       _charts.forEach((entry) => {
         entry.chart.destroy();
         entry.chart = buildChart(entry.canvas, entry.series, entry.colors,
-                                 entry.lineWidth, entry.dashPattern);
+                                 entry.lineWidth, entry.dashPattern,
+                                 entry.statsOverlay);
       });
     });
 

@@ -17,6 +17,7 @@
 
 #  include <algorithm>
 #  include <cmath>
+#  include <map>
 #  include <QByteArray>
 #  include <QCoreApplication>
 #  include <QDateTime>
@@ -289,6 +290,7 @@ QString Sessions::HtmlReport::buildHtml() const
   // Expand the @media print placeholders last
   html.replace(QStringLiteral("{{PAGE_SIZE_CSS}}"), pageSizeCssValue());
   html.replace(QStringLiteral("{{PRINT_FOOTER_LEFT}}"), buildPrintFooterLeft());
+  html.replace(QStringLiteral("{{PRINT_FOOTER_RIGHT}}"), buildPrintFooterRight());
 
   // Pin the chart card to the landscape printable area
   const auto chartMm = chartPagePrintableSize();
@@ -599,6 +601,13 @@ QString Sessions::HtmlReport::buildChartsSection() const
  */
 QString Sessions::HtmlReport::buildReportDataJson() const
 {
+  // Index DatasetStats by uniqueId so each series can carry its
+  // population-wide min/max/mean (computed in SQL, not from the decimated
+  // sample window).
+  std::map<int, const DatasetStats*> statsByUid;
+  for (const auto& d : m_data.datasets)
+    statsByUid.emplace(d.uniqueId, &d);
+
   QJsonArray seriesArr;
   for (const auto& s : m_series) {
     QJsonArray times;
@@ -614,6 +623,18 @@ QString Sessions::HtmlReport::buildReportDataJson() const
     entry["units"]  = s.units;
     entry["times"]  = times;
     entry["values"] = values;
+
+    // Per-series stats payload — present only when the dataset has numeric
+    // samples; the JS plugin is no-op for any series missing this block.
+    const auto it = statsByUid.find(s.uniqueId);
+    if (it != statsByUid.end() && it->second->numericSamples > 0) {
+      QJsonObject stats;
+      stats["min"]  = std::isfinite(it->second->minValue) ? it->second->minValue : 0.0;
+      stats["max"]  = std::isfinite(it->second->maxValue) ? it->second->maxValue : 0.0;
+      stats["mean"] = std::isfinite(it->second->mean)     ? it->second->mean     : 0.0;
+      entry["stats"] = stats;
+    }
+
     seriesArr.append(entry);
   }
 
@@ -621,9 +642,20 @@ QString Sessions::HtmlReport::buildReportDataJson() const
   style["lineWidth"] = m_opts.lineWidth > 0 ? m_opts.lineWidth : 1.4;
   style["lineStyle"] = m_opts.lineStyle.isEmpty() ? QStringLiteral("solid") : m_opts.lineStyle;
 
+  // Per-chart annotation toggle + translated labels rendered by the JS plugin
+  QJsonObject statsLabels;
+  statsLabels["min"]  = tr("Min");
+  statsLabels["max"]  = tr("Max");
+  statsLabels["mean"] = tr("Mean");
+
+  QJsonObject options;
+  options["showStatsOverlay"] = m_opts.includeStatsOverlay;
+  options["statsLabels"]      = statsLabels;
+
   QJsonObject root;
-  root["series"] = seriesArr;
-  root["style"]  = style;
+  root["series"]  = seriesArr;
+  root["style"]   = style;
+  root["options"] = options;
 
   // Compact form — whitespace would bloat the inline blob for big sessions
   return QString::fromUtf8(QJsonDocument(root).toJson(QJsonDocument::Compact));
@@ -672,6 +704,43 @@ QString Sessions::HtmlReport::buildPrintFooterLeft() const
   s.replace('\\', QStringLiteral("\\\\"));
   s.replace('"', QStringLiteral("\\\""));
   return s;
+}
+
+/**
+ * @brief Builds the translated CSS @c content expression for the right-side
+ *        page footer ("Page X of Y").
+ *
+ * Returns the full @c content: value (interleaved string literals and
+ * @c counter() calls) so translators can reorder words around the page /
+ * total numbers without losing the live counters. The translation is
+ * @c "Page %1 of %2"; the @c %1 / @c %2 markers anchor the two counter
+ * calls when the string is split.
+ */
+QString Sessions::HtmlReport::buildPrintFooterRight() const
+{
+  // Escape characters that would break the CSS string literal we emit
+  auto cssEscape = [](QString s) {
+    s.replace('\\', QStringLiteral("\\\\"));
+    s.replace('"', QStringLiteral("\\\""));
+    return s;
+  };
+
+  // English fallback as a safe default if the translation is malformed
+  const QString fallback =
+    QStringLiteral("\"Page \" counter(page) \" of \" counter(pages)");
+
+  const QString tmpl = tr("Page %1 of %2");
+  const int p1       = tmpl.indexOf(QLatin1String("%1"));
+  const int p2       = tmpl.indexOf(QLatin1String("%2"));
+  if (p1 < 0 || p2 < 0 || p2 <= p1)
+    return fallback;
+
+  const QString before  = cssEscape(tmpl.left(p1));
+  const QString between = cssEscape(tmpl.mid(p1 + 2, p2 - p1 - 2));
+  const QString after   = cssEscape(tmpl.mid(p2 + 2));
+
+  return QStringLiteral("\"%1\" counter(page) \"%2\" counter(pages) \"%3\"")
+    .arg(before, between, after);
 }
 
 /**

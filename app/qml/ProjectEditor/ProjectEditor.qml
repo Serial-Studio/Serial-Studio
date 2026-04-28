@@ -428,6 +428,20 @@ Widgets.SmartWindow {
                 root.close()
             }
           }
+
+          Button {
+            icon.width: 18
+            icon.height: 18
+            icon.color: palette.buttonText
+            topPadding: 8
+            bottomPadding: 8
+            leftPadding: 16
+            rightPadding: 16
+            visible: editorOverlay.lockMode
+            text: qsTr("Create New Project")
+            icon.source: "qrc:/rcc/icons/buttons/new.svg"
+            onClicked: Cpp_JSON_ProjectModel.newJsonFile()
+          }
         }
       }
     }

@@ -550,7 +550,7 @@ a:hover { text-decoration: underline; }
       color: #6b7280;
     }
     @bottom-right {
-      content: "Page " counter(page) " of " counter(pages);
+      content: {{PRINT_FOOTER_RIGHT}};
       font-family: var(--font-sans);
       font-size: 9pt;
       color: #6b7280;

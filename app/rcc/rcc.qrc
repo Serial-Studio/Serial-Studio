@@ -686,5 +686,6 @@
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
         <file>icons/database/unlock.svg</file>
+        <file>icons/buttons/new.svg</file>
     </qresource>
 </RCC>

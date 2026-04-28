@@ -978,12 +978,13 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   opts.logoPath      = options.value("logoPath").toString();
   opts.pageSize =
     static_cast<QPageSize::PageSizeId>(options.value("pageSize", QPageSize::A4).toInt());
-  opts.includeCover    = options.value("includeCover", true).toBool();
-  opts.includeMetadata = options.value("includeMetadata", true).toBool();
-  opts.includeStats    = options.value("includeStats", true).toBool();
-  opts.includeCharts   = options.value("includeCharts", true).toBool();
-  opts.lineWidth       = options.value("lineWidth", 1.4).toDouble();
-  opts.lineStyle       = options.value("lineStyle", QStringLiteral("solid")).toString();
+  opts.includeCover        = options.value("includeCover", true).toBool();
+  opts.includeMetadata     = options.value("includeMetadata", true).toBool();
+  opts.includeStats        = options.value("includeStats", true).toBool();
+  opts.includeCharts       = options.value("includeCharts", true).toBool();
+  opts.includeStatsOverlay = options.value("includeStatsOverlay", false).toBool();
+  opts.lineWidth           = options.value("lineWidth", 1.4).toDouble();
+  opts.lineStyle           = options.value("lineStyle", QStringLiteral("solid")).toString();
 
   // Decode the output format string — defaults to PDF for backwards compat
   const QString fmtStr = options.value("outputFormat", QStringLiteral("pdf")).toString().toLower();

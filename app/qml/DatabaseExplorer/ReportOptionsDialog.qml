@@ -44,6 +44,7 @@ Widgets.SmartDialog {
     property bool includeStats: true
     property bool includeCharts: true
     property bool includeMetadata: true
+    property bool annotateChartStats: false
     property int lineStyleIndex: 0   // 0=Solid, 1=Dashed, 2=Dotted
   }
 
@@ -114,6 +115,7 @@ Widgets.SmartDialog {
 
     _lineWidthSpin.value      = Math.round(_prefs.lineWidth * 10)
     _lineStyleCombo.currentIndex = Math.max(0, _prefs.lineStyleIndex)
+    _annotateStatsCheck.checked  = _prefs.annotateChartStats
 
     root.show()
     root.raise()
@@ -131,8 +133,9 @@ Widgets.SmartDialog {
     _prefs.includeMetadata  = _metadataCheck.checked
     _prefs.includeStats     = _statsCheck.checked
     _prefs.includeCharts    = _chartsCheck.checked
-    _prefs.lineWidth        = _lineWidthSpin.value / 10
-    _prefs.lineStyleIndex   = _lineStyleCombo.currentIndex
+    _prefs.lineWidth           = _lineWidthSpin.value / 10
+    _prefs.lineStyleIndex      = _lineStyleCombo.currentIndex
+    _prefs.annotateChartStats  = _annotateStatsCheck.checked
   }
 
   //
@@ -151,9 +154,10 @@ Widgets.SmartDialog {
       "includeMetadata": _metadataCheck.checked,
       "includeStats":    _statsCheck.checked,
       "includeCharts":   _chartsCheck.checked,
-      "lineWidth":       _lineWidthSpin.value / 10,
-      "lineStyle":       root.lineStyles[_lineStyleCombo.currentIndex].value,
-      "outputFormat":    outputFormat
+      "lineWidth":           _lineWidthSpin.value / 10,
+      "lineStyle":           root.lineStyles[_lineStyleCombo.currentIndex].value,
+      "includeStatsOverlay": _annotateStatsCheck.checked,
+      "outputFormat":        outputFormat
     }
 
     Cpp_Sessions_Manager.exportSessionToPdf(root.sessionId, options)
@@ -438,6 +442,12 @@ Widgets.SmartDialog {
             id: _lineStyleCombo
             Layout.fillWidth: true
             model: root.lineStyles.map(s => s.label)
+          }
+
+          CheckBox {
+            id: _annotateStatsCheck
+            Layout.columnSpan: 2
+            text: qsTr("Annotate min, max, and mean values on plots")
           }
 
           Item { Layout.fillHeight: true; Layout.columnSpan: 2 }

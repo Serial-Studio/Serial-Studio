@@ -48,6 +48,7 @@ struct HtmlReportOptions {
   bool includeMetadata;
   bool includeStats;
   bool includeCharts;
+  bool includeStatsOverlay;
   double lineWidth;
   QString lineStyle;
   Format format;
@@ -84,6 +85,7 @@ private:
   [[nodiscard]] QString buildChartsSection() const;
   [[nodiscard]] QString buildReportDataJson() const;
   [[nodiscard]] QString buildPrintFooterLeft() const;
+  [[nodiscard]] QString buildPrintFooterRight() const;
   [[nodiscard]] QString pageSizeCssValue() const;
   [[nodiscard]] QSizeF chartPagePrintableSize() const;
   [[nodiscard]] QString encodeLogoAsDataUri(const QString& path) const;
