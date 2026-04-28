@@ -307,6 +307,30 @@ Widgets.SmartWindow {
       }
 
       //
+      // Subtle gradient to transition into the window caption
+      //
+      Rectangle {
+        height: toolbar.height
+        anchors {
+          top: parent.top
+          left: parent.left
+          right: parent.right
+        }
+
+        gradient: Gradient {
+          GradientStop {
+            position: 0.0
+            color: Cpp_ThemeManager.colors["toolbar_top"]
+          }
+
+          GradientStop {
+            position: 0.5
+            color: "transparent"
+          }
+        }
+      }
+
+      //
       // Centered content — lock or mode-required call-to-action. Pushed
       // down by half the titlebar height so it sits visually centered in
       // the area the user perceives as the editor body.
