@@ -34,6 +34,9 @@
 #include "ThirdParty/readerwriterqueue.h"
 
 namespace IO {
+/**
+ * @brief Outcome of validating a candidate frame's checksum bytes.
+ */
 enum class ValidationStatus {
   FrameOk,
   ChecksumError,

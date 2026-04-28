@@ -537,8 +537,8 @@ Item {
         Label {
           opacity: 0.55
           color: "white"
-          Layout.alignment: Qt.AlignHCenter
           text: qsTr("Waiting for Image…")
+          Layout.alignment: Qt.AlignHCenter
           font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
         }
       }

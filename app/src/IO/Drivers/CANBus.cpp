@@ -264,9 +264,8 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
   if (!m_device) {
     Misc::Utilities::showMessageBox(
       tr("CAN Device Creation Failed"),
-      error.isEmpty()
-        ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
-        : error,
+      error.isEmpty() ? tr("Unable to create CAN bus device. Check your hardware and drivers.")
+                      : error,
       QMessageBox::Critical);
     return false;
   }
@@ -301,8 +300,7 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     Misc::Utilities::showMessageBox(
       tr("CAN Connection Failed"),
       error.isEmpty()
-        ? tr(
-            "Unable to connect to CAN bus device. Check your hardware connection and settings.")
+        ? tr("Unable to connect to CAN bus device. Check your hardware connection and settings.")
         : error,
       QMessageBox::Critical);
     return false;

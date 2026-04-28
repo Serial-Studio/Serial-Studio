@@ -1067,9 +1067,8 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
   // Write the project file
   QFile file(path);
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    Misc::Utilities::showMessageBox(tr("Cannot write file"),
-                                    tr("Check file permissions and try again."),
-                                    QMessageBox::Critical);
+    Misc::Utilities::showMessageBox(
+      tr("Cannot write file"), tr("Check file permissions and try again."), QMessageBox::Critical);
     return;
   }
 

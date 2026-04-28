@@ -31,7 +31,9 @@
 
 namespace {
 
-/** @brief Maps a Misc::Translator::Language enum to its IETF locale key. */
+/**
+ * @brief Maps a Misc::Translator::Language enum to its IETF locale key.
+ */
 QString localeKeyForLanguage(const Misc::Translator::Language language)
 {
   switch (language) {
@@ -77,7 +79,9 @@ QString localeKeyForLanguage(const Misc::Translator::Language language)
 
 }  // namespace
 
-/** @brief Reads a Qt resource file as UTF-8 text, or returns empty on failure. */
+/**
+ * @brief Reads a Qt resource file as UTF-8 text, or returns empty on failure.
+ */
 QString DataModel::readTextResource(const QString& path)
 {
   QFile file(path);
@@ -151,7 +155,9 @@ QList<DataModel::ScriptTemplateDefinition> DataModel::loadScriptTemplateManifest
   return templates;
 }
 
-/** @brief Returns the resource path "<directory>/<file><suffix>" for a template. */
+/**
+ * @brief Returns the resource path "<directory>/<file><suffix>" for a template.
+ */
 QString DataModel::templateResourcePath(const QString& directory,
                                         const QString& file,
                                         const QString& suffix)

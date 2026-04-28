@@ -30,9 +30,15 @@
 #include "SerialStudio.h"
 
 namespace UI {
+/**
+ * @brief Stable session-scoped identifier for a registered dashboard widget.
+ */
 using WidgetID                      = quint64;
 constexpr WidgetID kInvalidWidgetId = 0;
 
+/**
+ * @brief Metadata describing a registered widget (type, group, dataset, title).
+ */
 struct WidgetInfo {
   WidgetID id                        = kInvalidWidgetId;
   SerialStudio::DashboardWidget type = SerialStudio::DashboardNoWidget;

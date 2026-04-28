@@ -44,7 +44,9 @@
 // Constructor
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Constructs the dataset value-transform editor dialog. */
+/**
+ * @brief Constructs the dataset value-transform editor dialog.
+ */
 DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   : QDialog(parent), m_language(SerialStudio::Lua), m_targetGroupId(-1), m_targetDatasetId(-1)
 {
@@ -185,25 +187,33 @@ void DataModel::DatasetTransformEditor::displayDialog(
   m_editor->setFocus();
 }
 
-/** @brief Returns the current editor text. */
+/**
+ * @brief Returns the current editor text.
+ */
 QString DataModel::DatasetTransformEditor::code() const
 {
   return m_editor->toPlainText();
 }
 
-/** @brief Returns the active scripting language (Lua or JavaScript). */
+/**
+ * @brief Returns the active scripting language (Lua or JavaScript).
+ */
 int DataModel::DatasetTransformEditor::language() const
 {
   return m_language;
 }
 
-/** @brief Returns the group ID the editor is currently targeting. */
+/**
+ * @brief Returns the group ID the editor is currently targeting.
+ */
 int DataModel::DatasetTransformEditor::targetGroupId() const noexcept
 {
   return m_targetGroupId;
 }
 
-/** @brief Returns the dataset ID the editor is currently targeting. */
+/**
+ * @brief Returns the dataset ID the editor is currently targeting.
+ */
 int DataModel::DatasetTransformEditor::targetDatasetId() const noexcept
 {
   return m_targetDatasetId;

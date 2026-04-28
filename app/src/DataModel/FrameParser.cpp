@@ -38,7 +38,9 @@
 // Constructor & singleton access functions
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Constructs the FrameParser singleton and seeds the source-0 engine. */
+/**
+ * @brief Constructs the FrameParser singleton and seeds the source-0 engine.
+ */
 DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
 {
   (void)engineForSource(0);
@@ -63,7 +65,9 @@ DataModel::FrameParser::FrameParser() : m_suppressMessageBoxes(false)
   loadTemplateNames();
 }
 
-/** @brief Returns the singleton FrameParser instance. */
+/**
+ * @brief Returns the singleton FrameParser instance.
+ */
 DataModel::FrameParser& DataModel::FrameParser::instance()
 {
   static FrameParser singleton;
@@ -171,13 +175,17 @@ int DataModel::FrameParser::detectTemplate(const QString& code) const
   return -1;
 }
 
-/** @brief Returns the localized display names of every available template. */
+/**
+ * @brief Returns the localized display names of every available template.
+ */
 const QStringList& DataModel::FrameParser::templateNames() const
 {
   return m_templateNames;
 }
 
-/** @brief Returns the resource file basenames of every available template. */
+/**
+ * @brief Returns the resource file basenames of every available template.
+ */
 const QStringList& DataModel::FrameParser::templateFiles() const
 {
   return m_templateFiles;

@@ -50,7 +50,9 @@ static const QString kSettingsKeyRouteWarnings =
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Constructs the NotificationCenter singleton and restores user preferences. */
+/**
+ * @brief Constructs the NotificationCenter singleton and restores user preferences.
+ */
 DataModel::NotificationCenter::NotificationCenter()
   : QObject(nullptr)
   , m_unreadCount(0)
@@ -68,7 +70,9 @@ DataModel::NotificationCenter::NotificationCenter()
   m_routeWarningsToNotifications = settings.value(kSettingsKeyRouteWarnings, false).toBool();
 }
 
-/** @brief Default destructor. */
+/**
+ * @brief Default destructor.
+ */
 DataModel::NotificationCenter::~NotificationCenter() = default;
 
 /**
@@ -84,13 +88,17 @@ DataModel::NotificationCenter& DataModel::NotificationCenter::instance()
 // Read-only getters
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Returns the count of unread non-Info notifications. */
+/**
+ * @brief Returns the count of unread non-Info notifications.
+ */
 int DataModel::NotificationCenter::unreadCount() const noexcept
 {
   return m_unreadCount;
 }
 
-/** @brief Returns the sorted list of channels that currently hold events. */
+/**
+ * @brief Returns the sorted list of channels that currently hold events.
+ */
 QStringList DataModel::NotificationCenter::channels() const
 {
   auto keys = m_channelCounts.keys();
@@ -98,19 +106,25 @@ QStringList DataModel::NotificationCenter::channels() const
   return keys;
 }
 
-/** @brief Returns true if system tray notifications are enabled. */
+/**
+ * @brief Returns true if system tray notifications are enabled.
+ */
 bool DataModel::NotificationCenter::systemNotificationsEnabled() const noexcept
 {
   return m_systemNotificationsEnabled;
 }
 
-/** @brief Returns true when qWarning() output should be mirrored as Warning notifications. */
+/**
+ * @brief Returns true when qWarning() output should be mirrored as Warning notifications.
+ */
 bool DataModel::NotificationCenter::routeWarningsToNotifications() const noexcept
 {
   return m_routeWarningsToNotifications;
 }
 
-/** @brief Returns the ring-buffer size cap for retained notifications. */
+/**
+ * @brief Returns the ring-buffer size cap for retained notifications.
+ */
 int DataModel::NotificationCenter::maxHistory() const noexcept
 {
   return kMaxHistory;
@@ -158,7 +172,9 @@ void DataModel::NotificationCenter::post(int level,
   appendEvent(std::move(e));
 }
 
-/** @brief Convenience wrapper that posts an Info-level event. */
+/**
+ * @brief Convenience wrapper that posts an Info-level event.
+ */
 void DataModel::NotificationCenter::postInfo(const QString& channel,
                                              const QString& title,
                                              const QString& subtitle)
@@ -166,7 +182,9 @@ void DataModel::NotificationCenter::postInfo(const QString& channel,
   post(Info, channel, title, subtitle);
 }
 
-/** @brief Convenience wrapper that posts a Warning-level event. */
+/**
+ * @brief Convenience wrapper that posts a Warning-level event.
+ */
 void DataModel::NotificationCenter::postWarning(const QString& channel,
                                                 const QString& title,
                                                 const QString& subtitle)
@@ -174,7 +192,9 @@ void DataModel::NotificationCenter::postWarning(const QString& channel,
   post(Warning, channel, title, subtitle);
 }
 
-/** @brief Convenience wrapper that posts a Critical-level event. */
+/**
+ * @brief Convenience wrapper that posts a Critical-level event.
+ */
 void DataModel::NotificationCenter::postCritical(const QString& channel,
                                                  const QString& title,
                                                  const QString& subtitle)

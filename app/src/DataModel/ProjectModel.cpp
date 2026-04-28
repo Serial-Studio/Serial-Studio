@@ -357,8 +357,7 @@ int DataModel::ProjectModel::sourceCount() const noexcept
 /**
  * @brief Returns the editor-owned workspace list (always m_workspaces).
  */
-const std::vector<DataModel::Workspace>&
-DataModel::ProjectModel::editorWorkspaces() const noexcept
+const std::vector<DataModel::Workspace>& DataModel::ProjectModel::editorWorkspaces() const noexcept
 {
   return m_workspaces;
 }

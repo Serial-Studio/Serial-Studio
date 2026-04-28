@@ -42,7 +42,9 @@
 #include "Misc/TimerEvents.h"
 #include "Misc/Utilities.h"
 
-/** @brief Constructs the QML-side frame parser code editor. */
+/**
+ * @brief Constructs the QML-side frame parser code editor.
+ */
 DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   : QQuickPaintedItem(parent)
   , m_sourceId(0)
@@ -132,13 +134,17 @@ DataModel::JsCodeEditor::JsCodeEditor(QQuickItem* parent)
   readCode();
 }
 
-/** @brief Returns the editor's current text. */
+/**
+ * @brief Returns the editor's current text.
+ */
 QString DataModel::JsCodeEditor::text() const
 {
   return m_widget.toPlainText();
 }
 
-/** @brief Returns the source ID this editor is bound to. */
+/**
+ * @brief Returns the source ID this editor is bound to.
+ */
 int DataModel::JsCodeEditor::sourceId() const noexcept
 {
   return m_sourceId;
@@ -157,7 +163,9 @@ void DataModel::JsCodeEditor::setSourceId(const int sourceId)
   readCode();
 }
 
-/** @brief Returns the active scripting language (0=JS, 1=Lua). */
+/**
+ * @brief Returns the active scripting language (0=JS, 1=Lua).
+ */
 int DataModel::JsCodeEditor::language() const noexcept
 {
   return m_language;
@@ -237,7 +245,9 @@ bool DataModel::JsCodeEditor::isModified() const noexcept
   return false;
 }
 
-/** @brief Returns true when an undo step is available in the editor. */
+/**
+ * @brief Returns true when an undo step is available in the editor.
+ */
 bool DataModel::JsCodeEditor::undoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -246,7 +256,9 @@ bool DataModel::JsCodeEditor::undoAvailable() const noexcept
   return false;
 }
 
-/** @brief Returns true when a redo step is available in the editor. */
+/**
+ * @brief Returns true when a redo step is available in the editor.
+ */
 bool DataModel::JsCodeEditor::redoAvailable() const noexcept
 {
   if (m_widget.document())
@@ -255,19 +267,25 @@ bool DataModel::JsCodeEditor::redoAvailable() const noexcept
   return false;
 }
 
-/** @brief Cuts the current selection into the clipboard. */
+/**
+ * @brief Cuts the current selection into the clipboard.
+ */
 void DataModel::JsCodeEditor::cut()
 {
   m_widget.cut();
 }
 
-/** @brief Undoes the last edit. */
+/**
+ * @brief Undoes the last edit.
+ */
 void DataModel::JsCodeEditor::undo()
 {
   m_widget.undo();
 }
 
-/** @brief Redoes the previously undone edit. */
+/**
+ * @brief Redoes the previously undone edit.
+ */
 void DataModel::JsCodeEditor::redo()
 {
   m_widget.redo();
@@ -283,13 +301,17 @@ void DataModel::JsCodeEditor::help()
   // clang-format on
 }
 
-/** @brief Copies the current selection to the clipboard. */
+/**
+ * @brief Copies the current selection to the clipboard.
+ */
 void DataModel::JsCodeEditor::copy()
 {
   m_widget.copy();
 }
 
-/** @brief Pastes the clipboard contents into the editor. */
+/**
+ * @brief Pastes the clipboard contents into the editor.
+ */
 void DataModel::JsCodeEditor::paste()
 {
   m_widget.paste();
@@ -381,7 +403,9 @@ void DataModel::JsCodeEditor::readCode()
   Q_EMIT modifiedChanged();
 }
 
-/** @brief Selects all editor text. */
+/**
+ * @brief Selects all editor text.
+ */
 void DataModel::JsCodeEditor::selectAll()
 {
   m_widget.selectAll();
@@ -499,38 +523,50 @@ void DataModel::JsCodeEditor::resizeWidget()
 // Event processing
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Paints the cached editor pixmap into the QML scene. */
+/**
+ * @brief Paints the cached editor pixmap into the QML scene.
+ */
 void DataModel::JsCodeEditor::paint(QPainter* painter)
 {
   if (painter && isVisible())
     painter->drawPixmap(0, 0, m_pixmap);
 }
 
-/** @brief Forwards key-press events to the backing QCodeEditor widget. */
+/**
+ * @brief Forwards key-press events to the backing QCodeEditor widget.
+ */
 void DataModel::JsCodeEditor::keyPressEvent(QKeyEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
-/** @brief Forwards key-release events to the backing QCodeEditor widget. */
+/**
+ * @brief Forwards key-release events to the backing QCodeEditor widget.
+ */
 void DataModel::JsCodeEditor::keyReleaseEvent(QKeyEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
-/** @brief Forwards input-method events (IME composition) to the backing widget. */
+/**
+ * @brief Forwards input-method events (IME composition) to the backing widget.
+ */
 void DataModel::JsCodeEditor::inputMethodEvent(QInputMethodEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
-/** @brief Forwards focus-in events to the backing widget. */
+/**
+ * @brief Forwards focus-in events to the backing widget.
+ */
 void DataModel::JsCodeEditor::focusInEvent(QFocusEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
 }
 
-/** @brief Forwards focus-out events to the backing widget. */
+/**
+ * @brief Forwards focus-out events to the backing widget.
+ */
 void DataModel::JsCodeEditor::focusOutEvent(QFocusEvent* event)
 {
   QCoreApplication::sendEvent(&m_widget, event);
@@ -597,31 +633,41 @@ void DataModel::JsCodeEditor::mouseDoubleClickEvent(QMouseEvent* event)
   QCoreApplication::sendEvent(m_widget.viewport(), &copy);
 }
 
-/** @brief Forwards wheel events to the editor viewport. */
+/**
+ * @brief Forwards wheel events to the editor viewport.
+ */
 void DataModel::JsCodeEditor::wheelEvent(QWheelEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
-/** @brief Forwards drag-enter events to the editor viewport. */
+/**
+ * @brief Forwards drag-enter events to the editor viewport.
+ */
 void DataModel::JsCodeEditor::dragEnterEvent(QDragEnterEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
-/** @brief Forwards drag-move events to the editor viewport. */
+/**
+ * @brief Forwards drag-move events to the editor viewport.
+ */
 void DataModel::JsCodeEditor::dragMoveEvent(QDragMoveEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
-/** @brief Forwards drag-leave events to the editor viewport. */
+/**
+ * @brief Forwards drag-leave events to the editor viewport.
+ */
 void DataModel::JsCodeEditor::dragLeaveEvent(QDragLeaveEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);
 }
 
-/** @brief Forwards drop events to the editor viewport. */
+/**
+ * @brief Forwards drop events to the editor viewport.
+ */
 void DataModel::JsCodeEditor::dropEvent(QDropEvent* event)
 {
   QCoreApplication::sendEvent(m_widget.viewport(), event);

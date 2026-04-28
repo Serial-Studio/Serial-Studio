@@ -28,7 +28,9 @@
 // Project version stamp
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Returns the running application version used for project writer stamps. */
+/**
+ * @brief Returns the running application version used for project writer stamps.
+ */
 QString DataModel::current_writer_version()
 {
   return QString::fromUtf8(APP_VERSION);

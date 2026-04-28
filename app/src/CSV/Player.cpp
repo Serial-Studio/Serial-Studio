@@ -390,9 +390,8 @@ void CSV::Player::openFile(const QString& filePath)
   // Open and read the CSV file
   m_csvFile.setFileName(filePath);
   if (!m_csvFile.open(QIODevice::ReadOnly)) {
-    Misc::Utilities::showMessageBox(tr("Cannot read CSV file"),
-                                    tr("Check file permissions and location"),
-                                    QMessageBox::Critical);
+    Misc::Utilities::showMessageBox(
+      tr("Cannot read CSV file"), tr("Check file permissions and location"), QMessageBox::Critical);
     closeFile();
     return;
   }

@@ -54,7 +54,9 @@ constexpr int kMaxApiBytesPerWindow    = 128 * 1024 * 1024;
 // Static functions
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Returns true if the JSON byte stream nests deeper than the given limit. */
+/**
+ * @brief Returns true if the JSON byte stream nests deeper than the given limit.
+ */
 bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
 {
   Q_ASSERT(!data.isEmpty());

@@ -36,7 +36,9 @@
 // Constructor function
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Constructs the frame-parser test dialog bound to @p parser. */
+/**
+ * @brief Constructs the frame-parser test dialog bound to @p parser.
+ */
 DataModel::FrameParserTestDialog::FrameParserTestDialog(FrameParser* parser, QWidget* parent)
   : QDialog(parent), m_sourceId(0), m_parser(parser)
 {

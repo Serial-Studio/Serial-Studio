@@ -287,7 +287,8 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 
 | Mistake | Fix |
 |---------|-----|
-| Function doxygen / member-variable comments / signal comments in a header | Headers hold only the license banner and **one** class-level `/** @brief */`. Everything else is names-as-documentation. |
+| Function doxygen / member-variable comments / signal comments in a header | Headers hold only the license banner and `/** @brief */` blocks above type-level definitions. Everything else is names-as-documentation. |
+| Header struct / typedef / `using`-alias / `enum` without its own `/** @brief */` | Every type-level definition gets a `@brief` — not just the primary class. The `ExportData` / `ExportDataPtr` pair next to `class Export` each need one. Forward decls and nested types are exempt. |
 | `.cpp` function definition without a `/** @brief */` above it | Every function in a `.cpp` file gets a single-line `@brief` doxygen — ctors, dtors, slots, lambdas-defined-as-methods, helpers, all of them. No exceptions. |
 | Multi-line `//` narrative blocks, inline comments on declarations/members | One-line `//` section headers in `.cpp`; no header comments except the two allowed above |
 | `QMetaObject::invokeMethod(...)` forwarding received data without a captured timestamp | Capture `SteadyClock::now()` in the callback, pass it to `publishReceivedData(data, timestamp)` so stamping stays at acquisition |
@@ -391,11 +392,17 @@ Use 98-dash `//---` banners to separate concern groups (constructor, getters, sl
 
 **Write like a programmer, not a novelist.** Code is the spec. Comments label sections; they do not narrate. Would removing the comment cost the reader anything? If no, don't write it.
 
-**Headers (.h) — strict rule.** Only two comments allowed:
+**Headers (.h) — strict rule.** Only two kinds of comments allowed:
 1. SPDX license banner at the top.
-2. **One** class-level `/** @brief ... */` directly above the class declaration.
+2. A `/** @brief ... */` directly above **every type-level definition**: classes, structs, `enum` / `enum class`, top-level `typedef`, top-level `using`-aliases. One @brief per definition — applies equally to the primary class AND to every helper struct, payload typedef, function-signature `using`, or POD that lives next to it. The `ExportData` / `ExportDataPtr` pair next to `class Export` each need their own @brief; documenting only the primary class is wrong.
 
 No function doxygen, member-variable comments, signal/slot comments, `@param`/`@return`/`@note`/`@see`, or inline `//`. Names + types are the documentation.
+
+**What does NOT need its own @brief in a header:**
+- Forward declarations (`class Foo;`) — the real definition carries the @brief, whether it lives in this file or another. Don't repeat.
+- Nested types declared inside a class/struct body — the enclosing class's @brief covers them.
+- `using` declarations that import a name (`using Base::Base;`, `using namespace X;`) — those don't define a type.
+- Type aliases declared inside a function body.
 
 **Source (.cpp).**
 - **Every function definition in a `.cpp` file MUST have a `/** @brief ... */` directly above it.** This is non-negotiable — ctors, dtors, `instance()` accessors, simple delegators, slot implementations, short helpers, every single one. One sentence, no `@param`/`@return`/`@note`/`@see`, no multi-line prose. Missing `@brief` is treated as a code review blocker.

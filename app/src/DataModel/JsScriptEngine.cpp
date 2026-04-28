@@ -208,7 +208,9 @@ static QList<QStringList> convertJsResult(const QJSValue& jsResult)
 // JsScriptEngine implementation
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Constructs the JS engine with safe extensions and the runtime watchdog. */
+/**
+ * @brief Constructs the JS engine with safe extensions and the runtime watchdog.
+ */
 DataModel::JsScriptEngine::JsScriptEngine()
 {
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
@@ -224,13 +226,17 @@ DataModel::JsScriptEngine::JsScriptEngine()
   QObject::connect(&m_watchdog, &QTimer::timeout, [this]() { m_engine.setInterrupted(true); });
 }
 
-/** @brief Returns true once a parse() function has been compiled into the engine. */
+/**
+ * @brief Returns true once a parse() function has been compiled into the engine.
+ */
 bool DataModel::JsScriptEngine::isLoaded() const noexcept
 {
   return m_parseFunction.isCallable();
 }
 
-/** @brief Runs one cycle of QJSEngine garbage collection. */
+/**
+ * @brief Runs one cycle of QJSEngine garbage collection.
+ */
 void DataModel::JsScriptEngine::collectGarbage()
 {
   m_engine.collectGarbage();

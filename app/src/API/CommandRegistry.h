@@ -29,6 +29,9 @@
 #include "API/CommandProtocol.h"
 
 namespace API {
+/**
+ * @brief Signature implemented by every API command handler.
+ */
 using CommandFunction =
   std::function<CommandResponse(const QString& id, const QJsonObject& params)>;
 

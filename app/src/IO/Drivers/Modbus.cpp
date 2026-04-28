@@ -379,9 +379,9 @@ bool IO::Drivers::Modbus::open(const QIODevice::OpenMode mode)
 
     Misc::Utilities::showMessageBox(
       tr("Modbus Connection Failed"),
-      error.isEmpty() ? tr("Unable to connect to \"%1\". Check your connection settings.")
-                          .arg(connectionTarget)
-                      : tr("\"%1\": %2").arg(connectionTarget, error),
+      error.isEmpty()
+        ? tr("Unable to connect to \"%1\". Check your connection settings.").arg(connectionTarget)
+        : tr("\"%1\": %2").arg(connectionTarget, error),
       QMessageBox::Critical);
     return false;
   }

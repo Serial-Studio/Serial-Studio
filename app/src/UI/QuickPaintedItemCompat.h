@@ -84,6 +84,9 @@ private:
 
 #  include <QQuickPaintedItem>
 
+/**
+ * @brief Pre-Qt-6.11 fallback alias when the canvas-painter shim is not built.
+ */
 using QuickPaintedItemCompat = QQuickPaintedItem;
 
 #endif  // SS_HAS_CANVAS_PAINTER

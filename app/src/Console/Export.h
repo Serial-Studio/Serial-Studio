@@ -32,6 +32,9 @@
 
 namespace Console {
 
+/**
+ * @brief Per-device console payload queued for asynchronous export.
+ */
 struct ExportData {
   int deviceId = -1;
   QString data;
@@ -46,6 +49,9 @@ struct ExportData {
   ExportData& operator=(const ExportData&) = delete;
 };
 
+/**
+ * @brief Shared-ownership pointer used to ferry ExportData onto worker threads.
+ */
 typedef std::shared_ptr<ExportData> ExportDataPtr;
 
 class Export;

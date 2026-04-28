@@ -25,6 +25,9 @@
 #include <QMessageBox>
 #include <QObject>
 
+/**
+ * @brief Maps QMessageBox standard buttons to their localized labels.
+ */
 typedef QMap<QMessageBox::StandardButton, QString> ButtonTextMap;
 
 namespace Misc {

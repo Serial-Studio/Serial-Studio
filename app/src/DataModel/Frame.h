@@ -39,6 +39,9 @@
 //--------------------------------------------------------------------------------------------------
 
 namespace Keys {
+/**
+ * @brief Non-allocating view alias used for inline-constexpr JSON key constants.
+ */
 using KeyView = QLatin1StringView;
 
 // Action keys

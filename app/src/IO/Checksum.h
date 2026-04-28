@@ -28,6 +28,9 @@
 #include "Concepts.h"
 
 namespace IO {
+/**
+ * @brief Signature implemented by every registered checksum algorithm.
+ */
 using ChecksumFunc = std::function<QByteArray(const char*, int)>;
 
 [[nodiscard]] const QStringList& availableChecksums();

@@ -108,7 +108,9 @@ public:
   using QObject::QObject;
 
 protected:
-  /** @brief Routes QFileOpenEvent for .ssproj files into ProjectModel. */
+  /**
+   * @brief Routes QFileOpenEvent for .ssproj files into ProjectModel.
+   */
   bool eventFilter(QObject* obj, QEvent* event) override
   {
     if (event->type() == QEvent::FileOpen) {

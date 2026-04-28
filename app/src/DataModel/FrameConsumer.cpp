@@ -25,12 +25,16 @@
 // Constructor & destructor
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Constructs the base export worker with the monotonic clock unset. */
+/**
+ * @brief Constructs the base export worker with the monotonic clock unset.
+ */
 DataModel::FrameConsumerWorkerBase::FrameConsumerWorkerBase(QObject* parent)
   : QObject(parent), m_lastFrameNs(-1)
 {}
 
-/** @brief Default destructor. */
+/**
+ * @brief Default destructor.
+ */
 DataModel::FrameConsumerWorkerBase::~FrameConsumerWorkerBase() = default;
 
 //--------------------------------------------------------------------------------------------------
@@ -51,7 +55,9 @@ qint64 DataModel::FrameConsumerWorkerBase::monotonicFrameNs(
   return ns;
 }
 
-/** @brief Resets the monotonic frame clock back to its initial state. */
+/**
+ * @brief Resets the monotonic frame clock back to its initial state.
+ */
 void DataModel::FrameConsumerWorkerBase::resetMonotonicClock()
 {
   m_lastFrameNs = -1;

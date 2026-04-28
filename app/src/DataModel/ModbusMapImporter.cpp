@@ -42,10 +42,14 @@
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Constructs the ModbusMapImporter singleton. */
+/**
+ * @brief Constructs the ModbusMapImporter singleton.
+ */
 DataModel::ModbusMapImporter::ModbusMapImporter() {}
 
-/** @brief Returns the singleton ModbusMapImporter instance. */
+/**
+ * @brief Returns the singleton ModbusMapImporter instance.
+ */
 DataModel::ModbusMapImporter& DataModel::ModbusMapImporter::instance()
 {
   static ModbusMapImporter inst;
@@ -56,19 +60,25 @@ DataModel::ModbusMapImporter& DataModel::ModbusMapImporter::instance()
 // Property getters
 //--------------------------------------------------------------------------------------------------
 
-/** @brief Returns the total number of imported registers. */
+/**
+ * @brief Returns the total number of imported registers.
+ */
 int DataModel::ModbusMapImporter::registerCount() const noexcept
 {
   return m_registers.count();
 }
 
-/** @brief Returns the number of contiguous register blocks the import would yield. */
+/**
+ * @brief Returns the number of contiguous register blocks the import would yield.
+ */
 int DataModel::ModbusMapImporter::groupCount() const noexcept
 {
   return computeBlocks().count();
 }
 
-/** @brief Returns the file name of the loaded register map. */
+/**
+ * @brief Returns the file name of the loaded register map.
+ */
 QString DataModel::ModbusMapImporter::fileName() const
 {
   return QFileInfo(m_filePath).fileName();

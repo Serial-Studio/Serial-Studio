@@ -45,7 +45,9 @@
  */
 class SerialStudioServiceImpl final : public serialstudio::SerialStudioAPI::Service {
 public:
-  /** @brief Constructs the service implementation bound to the given GRPCServer. */
+  /**
+   * @brief Constructs the service implementation bound to the given GRPCServer.
+   */
   explicit SerialStudioServiceImpl(API::GRPC::GRPCServer* server) : m_server(server) {}
 
   /**

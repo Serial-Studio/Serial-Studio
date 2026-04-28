@@ -67,7 +67,9 @@
  */
 class SampleCacheObserver : public mdf::ISampleObserver {
 public:
-  /** @brief Constructs the observer and indexes per-group channels for fast lookup. */
+  /**
+   * @brief Constructs the observer and indexes per-group channels for fast lookup.
+   */
   SampleCacheObserver(const mdf::IDataGroup& dataGroup,
                       std::map<uint64_t, std::vector<double>>& cache,
                       std::map<uint64_t, double>& timestampCache,
@@ -95,7 +97,9 @@ public:
     }
   }
 
-  /** @brief Caches per-channel sample values keyed by timestamp (or sample index as fallback). */
+  /**
+   * @brief Caches per-channel sample values keyed by timestamp (or sample index as fallback).
+   */
   bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
     // Only process records from our own channel group
@@ -174,7 +178,9 @@ private:
  */
 class LegacyTimestampObserver : public mdf::ISampleObserver {
 public:
-  /** @brief Constructs the observer bound to a master time channel and record ID. */
+  /**
+   * @brief Constructs the observer bound to a master time channel and record ID.
+   */
   LegacyTimestampObserver(const mdf::IDataGroup& dataGroup,
                           std::map<uint64_t, double>& timestampCache,
                           mdf::IChannel* masterTimeChannel,
@@ -185,7 +191,9 @@ public:
     , m_recordId(recordId)
   {}
 
-  /** @brief Records the master-channel timestamp for the given sample index. */
+  /**
+   * @brief Records the master-channel timestamp for the given sample index.
+   */
   bool OnSample(uint64_t sample, uint64_t record_id, const std::vector<uint8_t>& record) override
   {
     if (record_id != m_recordId)
