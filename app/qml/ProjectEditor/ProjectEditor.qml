@@ -47,11 +47,33 @@ Widgets.SmartWindow {
   onClosing: (close) => close.accepted = Cpp_JSON_ProjectModel.askSave()
 
   //
+  // Native title bar color tracks whether the toolbar is shown — when the
+  // user is in QuickPlot/ConsoleOnly the toolbar is hidden behind the mode
+  // placeholder and the title bar should match the page background instead.
+  //
+  readonly property bool toolbarVisible: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+  readonly property string nativeColor: toolbarVisible
+                                        ? Cpp_ThemeManager.colors["toolbar_top"]
+                                        : Cpp_ThemeManager.colors["base"]
+
+  function _refreshNativeColor() {
+    if (visible)
+      Cpp_NativeWindow.addWindow(root, nativeColor)
+  }
+
+  onNativeColorChanged: _refreshNativeColor()
+
+  Connections {
+    target: Cpp_ThemeManager
+    function onThemeChanged() { root._refreshNativeColor() }
+  }
+
+  //
   // Ensure that current JSON file is shown
   //
   onVisibleChanged: {
     if (visible) {
-      Cpp_NativeWindow.addWindow(root)
+      Cpp_NativeWindow.addWindow(root, nativeColor)
       Cpp_JSON_ProjectModel.openJsonFile(Cpp_AppState.projectFilePath)
     }
 
@@ -163,14 +185,19 @@ Widgets.SmartWindow {
 
         Button {
           highlighted: true
+          icon.width: 18
+          icon.height: 18
+          icon.color: palette.buttonText
+          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
           text: qsTr("Switch to Project Mode") + root._btSpacer
-          icon.source: "qrc:/rcc/icons/project-editor/treeview/project-setup.svg"
-          onClicked: {
-            Cpp_AppState.operationMode = SerialStudio.ProjectFile
-          }
+          onClicked: Cpp_AppState.operationMode = SerialStudio.ProjectFile
         }
 
         Button {
+          icon.width: 18
+          icon.height: 18
+          icon.color: palette.buttonText
+          icon.source: "qrc:/rcc/icons/buttons/close.svg"
           text: qsTr("Close") + root._btSpacer
           onClicked: root.close()
         }
@@ -236,7 +263,35 @@ Widgets.SmartWindow {
           Layout.maximumWidth: root.width - 96
           horizontalAlignment: Label.AlignHCenter
           font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
-          text: qsTr("This project is password-protected. Click \"Unlock\" in the toolbar to enter the password and edit the project.")
+          text: qsTr("This project is password-protected. Enter the password to edit it, or open a different project.")
+        }
+
+        Item {
+          implicitHeight: 8
+        }
+
+        RowLayout {
+          spacing: 8
+          Layout.alignment: Qt.AlignHCenter
+
+          Button {
+            highlighted: true
+            icon.width: 18
+            icon.height: 18
+            icon.color: palette.buttonText
+            icon.source: "qrc:/rcc/icons/buttons/apply.svg"
+            text: qsTr("Unlock") + root._btSpacer
+            onClicked: Cpp_JSON_ProjectModel.unlockProject()
+          }
+
+          Button {
+            icon.width: 18
+            icon.height: 18
+            icon.color: palette.buttonText
+            icon.source: "qrc:/rcc/icons/buttons/open.svg"
+            text: qsTr("Open Other Project") + root._btSpacer
+            onClicked: Cpp_JSON_ProjectModel.openJsonFile()
+          }
         }
 
         Item {
