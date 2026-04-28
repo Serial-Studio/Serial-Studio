@@ -16,15 +16,18 @@
 #  include "Sessions/DatabaseManager.h"
 
 #  include <QCoreApplication>
+#  include <QCryptographicHash>
 #  include <QDateTime>
 #  include <QDir>
 #  include <QFileDialog>
 #  include <QFileInfo>
+#  include <QInputDialog>
 #  include <QJsonDocument>
 #  include <QJsonObject>
 #  include <QJsonParseError>
 #  include <QSqlError>
 #  include <QSqlQuery>
+#  include <QTimer>
 
 #  include "AppState.h"
 #  include "DataModel/ProjectModel.h"
@@ -89,6 +92,7 @@ Sessions::DatabaseManager::DatabaseManager()
   : m_selectedSessionId(-1)
   , m_csvExportBusy(false)
   , m_pdfExportBusy(false)
+  , m_locked(false)
   , m_pdfExportProgress(0.0)
 {}
 
@@ -198,6 +202,14 @@ QString Sessions::DatabaseManager::pdfExportStatus() const
 double Sessions::DatabaseManager::pdfExportProgress() const
 {
   return m_pdfExportProgress;
+}
+
+/**
+ * @brief Returns @c true while the session file is password-protected against deletion.
+ */
+bool Sessions::DatabaseManager::locked() const
+{
+  return m_locked;
 }
 
 /**
@@ -431,6 +443,7 @@ void Sessions::DatabaseManager::openDatabase(const QString& filePath)
   // Populate caches and persist the path for next launch
   refreshSessionList();
   loadTagList();
+  loadLockState();
   m_settings.setValue("Sessions/LastDatabase", m_filePath);
 
   Q_EMIT openChanged();
@@ -445,6 +458,10 @@ void Sessions::DatabaseManager::closeDatabase(bool clearSavedPath)
   m_selectedSessionId = -1;
   m_sessionList.clear();
   m_tagList.clear();
+  m_passwordHash.clear();
+
+  const bool wasLocked = m_locked;
+  m_locked             = false;
 
   if (m_db.isOpen())
     m_db.close();
@@ -464,6 +481,100 @@ void Sessions::DatabaseManager::closeDatabase(bool clearSavedPath)
   Q_EMIT sessionsChanged();
   Q_EMIT tagsChanged();
   Q_EMIT selectedSessionChanged();
+  if (wasLocked)
+    Q_EMIT lockedChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Lock / unlock
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Prompts for a password, hashes it, and locks the open session file.
+ */
+void Sessions::DatabaseManager::lockDatabase()
+{
+  if (!isOpen() || m_locked)
+    return;
+
+  bool ok          = false;
+  const auto first = QInputDialog::getText(nullptr,
+                                           tr("Lock Session File"),
+                                           tr("Choose a password to lock the session file:"),
+                                           QLineEdit::Password,
+                                           QString(),
+                                           &ok);
+  if (!ok || first.isEmpty())
+    return;
+
+  const auto second = QInputDialog::getText(nullptr,
+                                            tr("Lock Session File"),
+                                            tr("Confirm the password:"),
+                                            QLineEdit::Password,
+                                            QString(),
+                                            &ok);
+
+  if (first != second || !ok) {
+    QTimer::singleShot(0, this, [] {
+      Misc::Utilities::showMessageBox(
+        tr("Passwords do not match"),
+        tr("The two passwords you entered do not match. The session file was not locked."),
+        QMessageBox::Warning);
+    });
+    return;
+  }
+
+  m_passwordHash = QString::fromLatin1(
+    QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
+  m_locked = true;
+
+  persistLockState();
+  Q_EMIT lockedChanged();
+}
+
+/**
+ * @brief Prompts for the password, verifies it, and clears the lock on success.
+ */
+void Sessions::DatabaseManager::unlockDatabase()
+{
+  if (!isOpen() || !m_locked)
+    return;
+
+  if (m_passwordHash.isEmpty()) {
+    m_locked = false;
+    persistLockState();
+    Q_EMIT lockedChanged();
+    return;
+  }
+
+  bool ok        = false;
+  const auto pwd = QInputDialog::getText(nullptr,
+                                         tr("Unlock Session File"),
+                                         tr("Enter the session file password:"),
+                                         QLineEdit::Password,
+                                         QString(),
+                                         &ok);
+  if (!ok)
+    return;
+
+  const auto hashPwd = QString::fromLatin1(
+    QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
+
+  if (hashPwd != m_passwordHash) {
+    QTimer::singleShot(0, this, [] {
+      Misc::Utilities::showMessageBox(
+        tr("Incorrect password"),
+        tr("The password you entered does not match the one stored in the session file."),
+        QMessageBox::Warning);
+    });
+    return;
+  }
+
+  m_passwordHash.clear();
+  m_locked = false;
+
+  persistLockState();
+  Q_EMIT lockedChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -509,7 +620,7 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
 {
   Q_ASSERT(sessionId >= 0);
 
-  if (!isOpen())
+  if (!isOpen() || m_locked)
     return;
 
   if (!m_db.transaction()) [[unlikely]] {
@@ -564,6 +675,14 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
  */
 void Sessions::DatabaseManager::confirmDeleteSession(int sessionId)
 {
+  if (m_locked) {
+    Misc::Utilities::showMessageBox(
+      tr("Session file locked"),
+      tr("Unlock the session file before deleting recorded sessions."),
+      QMessageBox::Information);
+    return;
+  }
+
   const auto meta  = sessionMetadata(sessionId);
   const auto title = meta.value("started_at").toString();
 
@@ -623,7 +742,7 @@ void Sessions::DatabaseManager::addTag(const QString& label)
  */
 void Sessions::DatabaseManager::deleteTag(int tagId)
 {
-  if (!isOpen())
+  if (!isOpen() || m_locked)
     return;
 
   m_db.transaction();
@@ -1166,6 +1285,50 @@ void Sessions::DatabaseManager::loadTagList()
   }
 
   Q_EMIT tagsChanged();
+}
+
+/**
+ * @brief Loads the password hash from project_metadata and updates the lock flag.
+ */
+void Sessions::DatabaseManager::loadLockState()
+{
+  m_passwordHash.clear();
+  const bool wasLocked = m_locked;
+  m_locked             = false;
+
+  if (isOpen()) {
+    QSqlQuery q(m_db);
+    q.prepare("SELECT value FROM project_metadata WHERE key = 'lock_password_hash'");
+    if (q.exec() && q.next())
+      m_passwordHash = q.value(0).toString();
+    m_locked = !m_passwordHash.isEmpty();
+  }
+
+  if (m_locked != wasLocked)
+    Q_EMIT lockedChanged();
+}
+
+/**
+ * @brief Writes the current password hash into project_metadata, or removes it.
+ */
+void Sessions::DatabaseManager::persistLockState()
+{
+  if (!isOpen())
+    return;
+
+  QSqlQuery q(m_db);
+  if (m_passwordHash.isEmpty()) {
+    q.prepare("DELETE FROM project_metadata WHERE key = 'lock_password_hash'");
+    if (!q.exec()) [[unlikely]]
+      qWarning() << "[Sessions] persistLockState clear failed:" << q.lastError().text();
+    return;
+  }
+
+  q.prepare(
+    "INSERT OR REPLACE INTO project_metadata (key, value) VALUES ('lock_password_hash', ?)");
+  q.bindValue(0, m_passwordHash);
+  if (!q.exec()) [[unlikely]]
+    qWarning() << "[Sessions] persistLockState write failed:" << q.lastError().text();
 }
 
 /**

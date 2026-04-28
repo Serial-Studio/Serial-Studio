@@ -243,6 +243,7 @@
         <file>icons/database/delete.svg</file>
         <file>icons/database/export-csv.svg</file>
         <file>icons/database/export-pdf.svg</file>
+        <file>icons/database/lock.svg</file>
         <file>icons/database/open.svg</file>
         <file>icons/database/replay.svg</file>
         <file>icons/database/restore.svg</file>
@@ -368,13 +369,12 @@
         <file>icons/project-editor/toolbar/device.svg</file>
         <file>icons/project-editor/toolbar/help.svg</file>
         <file>icons/project-editor/toolbar/image.svg</file>
-        <file>icons/project-editor/toolbar/locked.svg</file>
+        <file>icons/project-editor/toolbar/lock.svg</file>
         <file>icons/project-editor/toolbar/new.svg</file>
         <file>icons/project-editor/toolbar/open.svg</file>
         <file>icons/project-editor/toolbar/Opened Folder Office M.svg</file>
         <file>icons/project-editor/toolbar/save-as.svg</file>
         <file>icons/project-editor/toolbar/save.svg</file>
-        <file>icons/project-editor/toolbar/unlocked.svg</file>
         <file>icons/project-editor/treeview/accelerometer.svg</file>
         <file>icons/project-editor/treeview/action.svg</file>
         <file>icons/project-editor/treeview/code.svg</file>
@@ -457,6 +457,7 @@
         <file>images/drag-and-drop.svg</file>
         <file>images/driver.svg</file>
         <file>images/hammer.svg</file>
+        <file>images/locked.svg</file>
         <file>images/multi-device.svg</file>
         <file>images/no-bluetooth.svg</file>
         <file>images/no-mic.svg</file>
@@ -684,5 +685,6 @@
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
+        <file>icons/database/unlock.svg</file>
     </qresource>
 </RCC>

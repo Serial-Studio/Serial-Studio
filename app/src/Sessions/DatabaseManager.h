@@ -69,6 +69,9 @@ class DatabaseManager : public QObject {
   Q_PROPERTY(double pdfExportProgress
              READ pdfExportProgress
              NOTIFY pdfExportProgressChanged)
+  Q_PROPERTY(bool locked
+             READ locked
+             NOTIFY lockedChanged)
   // clang-format on
 
 signals:
@@ -83,6 +86,7 @@ signals:
   void pdfExportFinished(const QString& outputPath, bool success);
   void reportLogoPicked(const QString& path);
   void projectMetadataRestored();
+  void lockedChanged();
 
 private:
   explicit DatabaseManager();
@@ -100,6 +104,7 @@ public:
   [[nodiscard]] QString fileName() const;
   [[nodiscard]] int sessionCount() const;
   [[nodiscard]] int selectedSessionId() const;
+  [[nodiscard]] bool locked() const;
   [[nodiscard]] bool csvExportBusy() const;
   [[nodiscard]] bool pdfExportBusy() const;
   [[nodiscard]] QString pdfExportStatus() const;
@@ -118,6 +123,9 @@ public:
   static void createSchema(QSqlQuery& q);
 
 public slots:
+  void lockDatabase();
+  void unlockDatabase();
+
   void openDatabase();
   void openDatabase(const QString& filePath);
   void closeDatabase(bool clearSavedPath = true);
@@ -149,6 +157,8 @@ public slots:
 private:
   void ensureSchema();
   void loadTagList();
+  void loadLockState();
+  void persistLockState();
 
 private:
   QSqlDatabase m_db;
@@ -159,8 +169,10 @@ private:
   int m_selectedSessionId;
   bool m_csvExportBusy;
   bool m_pdfExportBusy;
+  bool m_locked;
   double m_pdfExportProgress;
   QString m_pdfExportStatus;
+  QString m_passwordHash;
 
   QVariantList m_sessionList;
   QVariantList m_tagList;

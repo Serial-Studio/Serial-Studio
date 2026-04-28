@@ -221,10 +221,38 @@ Widgets.SmartWindow {
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_Sessions_Manager.isOpen
                        && Cpp_Sessions_Manager.selectedSessionId >= 0
-              ToolTip.text: qsTr("Delete the selected session")
+                       && !Cpp_Sessions_Manager.locked
+              ToolTip.text: Cpp_Sessions_Manager.locked
+                            ? qsTr("Unlock the session file to delete sessions")
+                            : qsTr("Delete the selected session")
               onClicked: Cpp_Sessions_Manager.confirmDeleteSession(
                            Cpp_Sessions_Manager.selectedSessionId)
               icon.source: "qrc:/rcc/icons/database/delete.svg"
+            }
+          }
+
+          //
+          // Lock / unlock section
+          //
+          Widgets.RibbonSection {
+            Widgets.ToolbarButton {
+              Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_Sessions_Manager.isOpen
+              text: Cpp_Sessions_Manager.locked
+                    ? qsTr("Unlock")
+                    : qsTr("Lock")
+              icon.source: Cpp_Sessions_Manager.locked
+                           ? "qrc:/rcc/icons/database/unlock.svg"
+                           : "qrc:/rcc/icons/database/lock.svg"
+              ToolTip.text: Cpp_Sessions_Manager.locked
+                            ? qsTr("Unlock the session file to allow deletions")
+                            : qsTr("Set a password to prevent session deletions")
+              onClicked: {
+                if (Cpp_Sessions_Manager.locked)
+                  Cpp_Sessions_Manager.unlockDatabase()
+                else
+                  Cpp_Sessions_Manager.lockDatabase()
+              }
             }
           }
 

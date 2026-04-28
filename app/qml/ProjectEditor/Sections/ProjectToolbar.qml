@@ -186,26 +186,15 @@ Rectangle {
     }
 
     //
-    // Project lock section — operator/engineer separation. Acts as a UI-level
-    // read-only flag: locked projects open with the editor body hidden until
-    // the user enters the password. Password is hashed (MD5) into the file.
+    // Project lock section
     //
     Widgets.RibbonSection {
       Widgets.ToolbarButton {
+        text: qsTr("Lock")
         Layout.alignment: Qt.AlignVCenter
-        text: Cpp_JSON_ProjectModel.locked ? qsTr("Unlock") : qsTr("Lock")
-        ToolTip.text: Cpp_JSON_ProjectModel.locked
-                      ? qsTr("Unlock the Project Editor with the project password")
-                      : qsTr("Set a password and lock the Project Editor")
-        icon.source: Cpp_JSON_ProjectModel.locked
-                     ? "qrc:/rcc/icons/project-editor/toolbar/unlocked.svg"
-                     : "qrc:/rcc/icons/project-editor/toolbar/locked.svg"
-        onClicked: {
-          if (Cpp_JSON_ProjectModel.locked)
-            Cpp_JSON_ProjectModel.unlockProject()
-          else
-            Cpp_JSON_ProjectModel.lockProject()
-        }
+        onClicked: Cpp_JSON_ProjectModel.lockProject()
+        icon.source: "qrc:/rcc/icons/project-editor/toolbar/lock.svg"
+        ToolTip.text: qsTr("Set a password and lock the Project Editor")
       }
     }
 

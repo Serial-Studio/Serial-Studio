@@ -345,7 +345,7 @@ Widgets.SmartWindow {
           sourceSize: Qt.size(144, 144)
           Layout.alignment: Qt.AlignHCenter
           source: editorOverlay.lockMode
-                  ? "qrc:/rcc/icons/project-editor/toolbar/locked.svg"
+                  ? "qrc:/rcc/images/locked.svg"
                   : "qrc:/rcc/images/project-mode-required.svg"
         }
 

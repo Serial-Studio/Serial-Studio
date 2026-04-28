@@ -976,6 +976,15 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
       if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
         finalPath += QStringLiteral(".ssproj");
 
+      // Promote the chosen filename to the project title when the user never
+      // renamed the default — keeps "Untitled Project" from being persisted.
+      const QString chosenTitle = QFileInfo(finalPath).completeBaseName();
+      if (m_title == tr("Untitled Project") && !chosenTitle.isEmpty()
+          && chosenTitle != m_title) {
+        m_title = chosenTitle;
+        Q_EMIT titleChanged();
+      }
+
       m_filePath = finalPath;
       (void)finalizeProjectSave();
     });

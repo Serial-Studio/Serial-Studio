@@ -317,8 +317,11 @@ Widgets.Pane {
             icon.width: 18
             icon.height: 18
             text: qsTr("Delete")
+            enabled: !Cpp_Sessions_Manager.locked
             icon.source: "qrc:/rcc/icons/buttons/trash.svg"
             onClicked: Cpp_Sessions_Manager.confirmDeleteSession(root.sessionId)
+            ToolTip.visible: hovered && Cpp_Sessions_Manager.locked
+            ToolTip.text: qsTr("Unlock the session file to delete sessions")
           }
         }
       }
