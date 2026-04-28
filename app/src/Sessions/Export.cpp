@@ -587,7 +587,7 @@ void Sessions::Export::setupExternalConnections()
   connect(
     &pm, &DataModel::ProjectModel::tablesChanged, this, &Sessions::Export::refreshProjectSnapshot);
   connect(&pm,
-          &DataModel::ProjectModel::workspacesChanged,
+          &DataModel::ProjectModel::editorWorkspacesChanged,
           this,
           &Sessions::Export::refreshProjectSnapshot);
 

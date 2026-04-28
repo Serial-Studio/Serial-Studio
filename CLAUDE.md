@@ -288,6 +288,7 @@ buffer and queue, and `FrameBuilder::hotpathRxFrame` is a no-op for this mode.
 | Mistake | Fix |
 |---------|-----|
 | Function doxygen / member-variable comments / signal comments in a header | Headers hold only the license banner and **one** class-level `/** @brief */`. Everything else is names-as-documentation. |
+| `.cpp` function definition without a `/** @brief */` above it | Every function in a `.cpp` file gets a single-line `@brief` doxygen — ctors, dtors, slots, lambdas-defined-as-methods, helpers, all of them. No exceptions. |
 | Multi-line `//` narrative blocks, inline comments on declarations/members | One-line `//` section headers in `.cpp`; no header comments except the two allowed above |
 | `QMetaObject::invokeMethod(...)` forwarding received data without a captured timestamp | Capture `SteadyClock::now()` in the callback, pass it to `publishReceivedData(data, timestamp)` so stamping stays at acquisition |
 | Report/export worker calling `steady_clock::now()` to stamp a frame | Use the timestamp already on the shared `TimestampedFramePtr` via `monotonicFrameNs(frame->timestamp, baseline)` |
@@ -397,7 +398,7 @@ Use 98-dash `//---` banners to separate concern groups (constructor, getters, sl
 No function doxygen, member-variable comments, signal/slot comments, `@param`/`@return`/`@note`/`@see`, or inline `//`. Names + types are the documentation.
 
 **Source (.cpp).**
-- **Every function definition gets a single-line `/** @brief ... */` directly above it.** No exceptions for ctors, dtors, `instance()` accessors, simple delegators, or short helpers — annotate them all. One sentence, no `@param`/`@return`/`@note`/`@see`, no multi-line prose.
+- **Every function definition in a `.cpp` file MUST have a `/** @brief ... */` directly above it.** This is non-negotiable — ctors, dtors, `instance()` accessors, simple delegators, slot implementations, short helpers, every single one. One sentence, no `@param`/`@return`/`@note`/`@see`, no multi-line prose. Missing `@brief` is treated as a code review blocker.
 - 98-dash `//---` banners separate concern groups.
 - **In-body comments**: one-line `//` section header above a logical block, only when the block isn't self-explanatory from its code. That's the only kind of in-body comment allowed. Don't narrate, don't restate.
 - **Forbidden**: inline end-of-line comments, multi-line `//` prose, `/* ... */` inside function bodies, restating what code literally does (`// Set m_foo to bar`), repeating the `@brief` as the body's first line. Load-bearing context goes in the commit message.

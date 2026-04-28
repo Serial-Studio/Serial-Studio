@@ -51,8 +51,8 @@ Widgets.Pane {
 
   Connections {
     target: Cpp_JSON_ProjectModel
-    function onWorkspacesChanged() { Qt.callLater(root.refresh) }
-    function onGroupsChanged()     { Qt.callLater(root.refresh) }
+    function onEditorWorkspacesChanged() { Qt.callLater(root.refresh) }
+    function onGroupsChanged()           { Qt.callLater(root.refresh) }
   }
 
   Page {

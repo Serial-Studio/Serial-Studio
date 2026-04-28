@@ -63,7 +63,7 @@ class ProjectModel : public QObject {
              NOTIFY sourcesChanged)
   Q_PROPERTY(int workspaceCount
              READ workspaceCount
-             NOTIFY workspacesChanged)
+             NOTIFY editorWorkspacesChanged)
   Q_PROPERTY(int pointCount
              READ pointCount
              NOTIFY pointCountChanged)
@@ -97,7 +97,8 @@ signals:
   void sourceFrameParserLanguageChanged(int sourceId);
   void activeGroupIdChanged();
   void widgetSettingsChanged();
-  void workspacesChanged();
+  void editorWorkspacesChanged();
+  void activeWorkspacesChanged();
   void tablesChanged();
   void customizeWorkspacesChanged();
 
@@ -151,7 +152,8 @@ public:
   [[nodiscard]] const std::vector<Group>& groups() const noexcept;
   [[nodiscard]] const std::vector<Action>& actions() const noexcept;
   [[nodiscard]] const std::vector<Source>& sources() const noexcept;
-  [[nodiscard]] const std::vector<Workspace>& workspaces() const;
+  [[nodiscard]] const std::vector<Workspace>& editorWorkspaces() const noexcept;
+  [[nodiscard]] const std::vector<Workspace>& activeWorkspaces() const;
   [[nodiscard]] const QSet<int>& hiddenGroupIds() const noexcept;
   [[nodiscard]] int workspaceCount() const noexcept;
   [[nodiscard]] bool isGroupHidden(int groupId) const;

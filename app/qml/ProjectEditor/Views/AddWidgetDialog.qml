@@ -86,8 +86,8 @@ Window {
   //
   Connections {
     target: Cpp_JSON_ProjectModel
-    function onGroupsChanged()     { if (root.visible) Qt.callLater(root.refresh) }
-    function onWorkspacesChanged() { if (root.visible) Qt.callLater(root.refresh) }
+    function onGroupsChanged()           { if (root.visible) Qt.callLater(root.refresh) }
+    function onEditorWorkspacesChanged() { if (root.visible) Qt.callLater(root.refresh) }
   }
 
   //

@@ -141,8 +141,10 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   });
 
   // Update workspace model when workspaces or full model changes
-  connect(
-    pm, &DataModel::ProjectModel::workspacesChanged, this, &UI::Taskbar::workspaceModelChanged);
+  connect(pm,
+          &DataModel::ProjectModel::activeWorkspacesChanged,
+          this,
+          &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::workspaceModelChanged);
   connect(this, &UI::Taskbar::fullModelChanged, this, &UI::Taskbar::searchResultsChanged);
 
@@ -242,7 +244,7 @@ QVariantList UI::Taskbar::groupModel() const
   // were removed in v3.3 — users now explicitly create and manage their own
   // workspaces via the project editor. This method is retained for API
   // stability; workspaceModel() builds its result purely from user-defined
-  // entries in ProjectModel::workspaces().
+  // entries in ProjectModel::activeWorkspaces().
   return QVariantList();
 }
 
@@ -460,7 +462,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
 
   // User-defined workspace: populate from workspace's widgetRefs
   if (groupId >= 1000) {
-    const auto& workspaces = DataModel::ProjectModel::instance().workspaces();
+    const auto& workspaces = DataModel::ProjectModel::instance().activeWorkspaces();
     for (const auto& ws : workspaces) {
       if (ws.workspaceId != groupId)
         continue;
@@ -1591,7 +1593,7 @@ QVariantList UI::Taskbar::workspaceModel() const
   }
 
   // Append user-defined workspaces
-  const auto& workspaces = pm.workspaces();
+  const auto& workspaces = pm.activeWorkspaces();
   for (const auto& ws : workspaces) {
     QVariantMap entry;
     entry[QStringLiteral("id")]        = ws.workspaceId;
@@ -1672,7 +1674,7 @@ void UI::Taskbar::createWorkspace(const QString& name)
   auto* pm = &DataModel::ProjectModel::instance();
   pm->addWorkspace(name);
 
-  const auto& workspaces = pm->workspaces();
+  const auto& workspaces = pm->activeWorkspaces();
   if (!workspaces.empty())
     setActiveGroupId(workspaces.back().workspaceId);
 
@@ -1782,7 +1784,7 @@ void UI::Taskbar::removeWidgetFromActiveWorkspace(int windowId)
 
   // Find the ref index in the workspace
   auto* pm               = &DataModel::ProjectModel::instance();
-  const auto& workspaces = pm->workspaces();
+  const auto& workspaces = pm->activeWorkspaces();
   for (const auto& ws : workspaces) {
     if (ws.workspaceId != m_activeGroupId)
       continue;
@@ -1847,7 +1849,7 @@ QVariantList UI::Taskbar::workspaceWidgetIds(int workspaceId) const
   if (workspaceId < 1000)
     return ids;
 
-  const auto& workspaces = DataModel::ProjectModel::instance().workspaces();
+  const auto& workspaces = DataModel::ProjectModel::instance().activeWorkspaces();
   for (const auto& ws : workspaces) {
     if (ws.workspaceId != workspaceId)
       continue;
@@ -1891,7 +1893,7 @@ void UI::Taskbar::setWorkspaceWidgets(int workspaceId, const QVariantList& windo
   auto* pm = &DataModel::ProjectModel::instance();
 
   // Locate the workspace and clear its existing widget refs (iterate backwards)
-  const auto& workspaces = pm->workspaces();
+  const auto& workspaces = pm->activeWorkspaces();
   bool found             = false;
   for (const auto& ws : workspaces) {
     if (ws.workspaceId != workspaceId)

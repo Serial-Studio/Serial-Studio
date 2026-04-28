@@ -273,7 +273,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::list(const QString& id,
   Q_UNUSED(params)
 
   const auto& pm         = DataModel::ProjectModel::instance();
-  const auto& workspaces = pm.workspaces();
+  const auto& workspaces = pm.activeWorkspaces();
 
   QJsonArray arr;
   for (const auto& ws : workspaces) {
@@ -304,7 +304,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::get(const QString& id,
 
   const int wid = params.value(QStringLiteral("id")).toInt();
 
-  const auto& workspaces = DataModel::ProjectModel::instance().workspaces();
+  const auto& workspaces = DataModel::ProjectModel::instance().activeWorkspaces();
   const auto it          = findWorkspace(workspaces, wid);
   if (it == workspaces.end())
     return CommandResponse::makeError(
