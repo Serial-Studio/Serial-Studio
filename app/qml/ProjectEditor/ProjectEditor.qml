@@ -114,11 +114,75 @@ Widgets.SmartWindow {
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
+    //
+    // Project mode required placeholder — the Project Editor edits the loaded
+    // project file, which has no meaning while the dashboard is running
+    // QuickPlot or ConsoleOnly. Show a hint instead of half-working UI.
+    //
+    ColumnLayout {
+      spacing: 16
+      anchors.centerIn: parent
+      visible: Cpp_AppState.operationMode !== SerialStudio.ProjectFile
+
+      Image {
+        sourceSize: Qt.size(144, 144)
+        Layout.alignment: Qt.AlignHCenter
+        source: "qrc:/rcc/images/project-mode-required.svg"
+      }
+
+      Item {
+        implicitHeight: 4
+      }
+
+      Label {
+        wrapMode: Label.WordWrap
+        Layout.alignment: Qt.AlignHCenter
+        Layout.maximumWidth: root.width - 96
+        horizontalAlignment: Label.AlignHCenter
+        text: qsTr("Project Editor Unavailable")
+        font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+      }
+
+      Label {
+        opacity: 0.8
+        wrapMode: Label.WordWrap
+        Layout.alignment: Qt.AlignHCenter
+        Layout.maximumWidth: root.width - 96
+        horizontalAlignment: Label.AlignHCenter
+        font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+        text: qsTr("The Project Editor is only available in Project File mode. Switch modes to load and edit a project.")
+      }
+
+      Item {
+        implicitHeight: 8
+      }
+
+      RowLayout {
+        spacing: 8
+        Layout.alignment: Qt.AlignHCenter
+
+        Button {
+          highlighted: true
+          text: qsTr("Switch to Project Mode") + root._btSpacer
+          icon.source: "qrc:/rcc/icons/project-editor/treeview/project-setup.svg"
+          onClicked: {
+            Cpp_AppState.operationMode = SerialStudio.ProjectFile
+          }
+        }
+
+        Button {
+          text: qsTr("Close") + root._btSpacer
+          onClicked: root.close()
+        }
+      }
+    }
+
     ColumnLayout {
       id: layout
 
       spacing: 0
       anchors.fill: parent
+      visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile
 
       //
       // Toolbar

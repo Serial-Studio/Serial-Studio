@@ -1238,8 +1238,13 @@ void DataModel::ProjectModel::openJsonFile()
   dialog->setFileMode(QFileDialog::ExistingFile);
 
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
-    if (!path.isEmpty())
+    if (!path.isEmpty()) {
+      // Picking a file from the user-facing dialog implies "I want to edit a
+      // project" — ensure ProjectFile mode is active before loading so the
+      // dashboard and Project Editor reflect the freshly opened project.
+      AppState::instance().setOperationMode(SerialStudio::ProjectFile);
       openJsonFile(path);
+    }
 
     dialog->deleteLater();
   });
