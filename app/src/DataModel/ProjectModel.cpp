@@ -232,8 +232,8 @@ void DataModel::ProjectModel::lockProject()
     return;
   }
 
-  m_passwordHash = QString::fromLatin1(
-    QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
+  m_passwordHash =
+    QString::fromLatin1(QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
 
   if (!m_locked) {
     m_locked = true;
@@ -270,8 +270,8 @@ void DataModel::ProjectModel::unlockProject()
   if (!ok)
     return;
 
-  const auto hashPwd = QString::fromLatin1(
-    QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
+  const auto hashPwd =
+    QString::fromLatin1(QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
 
   if (hashPwd != m_passwordHash) {
     QTimer::singleShot(0, this, [] {
@@ -979,8 +979,7 @@ bool DataModel::ProjectModel::saveJsonFile(const bool askPath)
       // Promote the chosen filename to the project title when the user never
       // renamed the default — keeps "Untitled Project" from being persisted.
       const QString chosenTitle = QFileInfo(finalPath).completeBaseName();
-      if (m_title == tr("Untitled Project") && !chosenTitle.isEmpty()
-          && chosenTitle != m_title) {
+      if (m_title == tr("Untitled Project") && !chosenTitle.isEmpty() && chosenTitle != m_title) {
         m_title = chosenTitle;
         Q_EMIT titleChanged();
       }

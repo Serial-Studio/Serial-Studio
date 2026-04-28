@@ -524,8 +524,8 @@ void Sessions::DatabaseManager::lockDatabase()
     return;
   }
 
-  m_passwordHash = QString::fromLatin1(
-    QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
+  m_passwordHash =
+    QString::fromLatin1(QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
   m_locked = true;
 
   persistLockState();
@@ -557,8 +557,8 @@ void Sessions::DatabaseManager::unlockDatabase()
   if (!ok)
     return;
 
-  const auto hashPwd = QString::fromLatin1(
-    QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
+  const auto hashPwd =
+    QString::fromLatin1(QCryptographicHash::hash(pwd.toUtf8(), QCryptographicHash::Md5).toHex());
 
   if (hashPwd != m_passwordHash) {
     QTimer::singleShot(0, this, [] {
