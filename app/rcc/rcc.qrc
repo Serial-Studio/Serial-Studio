@@ -153,8 +153,10 @@
         <file>icons/buttons/save.svg</file>
         <file>icons/buttons/search.svg</file>
         <file>icons/buttons/send.svg</file>
+        <file>icons/buttons/switch.svg</file>
         <file>icons/buttons/test.svg</file>
         <file>icons/buttons/trash.svg</file>
+        <file>icons/buttons/unlock.svg</file>
         <file>icons/buttons/visible.svg</file>
         <file>icons/buttons/website.svg</file>
         <file>icons/buttons/wrench.svg</file>

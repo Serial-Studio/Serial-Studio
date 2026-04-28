@@ -22,6 +22,7 @@
 import QtCore
 import QtQuick
 import QtQuick.Window
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -47,33 +48,11 @@ Widgets.SmartWindow {
   onClosing: (close) => close.accepted = Cpp_JSON_ProjectModel.askSave()
 
   //
-  // Native title bar color tracks whether the toolbar is shown — when the
-  // user is in QuickPlot/ConsoleOnly the toolbar is hidden behind the mode
-  // placeholder and the title bar should match the page background instead.
-  //
-  readonly property bool toolbarVisible: Cpp_AppState.operationMode === SerialStudio.ProjectFile
-  readonly property string nativeColor: toolbarVisible
-                                        ? Cpp_ThemeManager.colors["toolbar_top"]
-                                        : Cpp_ThemeManager.colors["base"]
-
-  function _refreshNativeColor() {
-    if (visible)
-      Cpp_NativeWindow.addWindow(root, nativeColor)
-  }
-
-  onNativeColorChanged: _refreshNativeColor()
-
-  Connections {
-    target: Cpp_ThemeManager
-    function onThemeChanged() { root._refreshNativeColor() }
-  }
-
-  //
   // Ensure that current JSON file is shown
   //
   onVisibleChanged: {
     if (visible) {
-      Cpp_NativeWindow.addWindow(root, nativeColor)
+      Cpp_NativeWindow.addWindow(root)
       Cpp_JSON_ProjectModel.openJsonFile(Cpp_AppState.projectFilePath)
     }
 
@@ -137,175 +116,34 @@ Widgets.SmartWindow {
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     //
-    // Project mode required placeholder — the Project Editor edits the loaded
-    // project file, which has no meaning while the dashboard is running
-    // QuickPlot or ConsoleOnly. Show a hint instead of half-working UI.
+    // Editor body — always rendered so the lock/mode overlays have something
+    // to blur. Disabled when locked or when running outside ProjectFile mode
+    // so toolbar buttons can't be clicked through the overlay.
     //
-    ColumnLayout {
-      spacing: 16
-      anchors.centerIn: parent
-      visible: Cpp_AppState.operationMode !== SerialStudio.ProjectFile
-
-      Image {
-        sourceSize: Qt.size(144, 144)
-        Layout.alignment: Qt.AlignHCenter
-        source: "qrc:/rcc/images/project-mode-required.svg"
-      }
-
-      Item {
-        implicitHeight: 4
-      }
-
-      Label {
-        wrapMode: Label.WordWrap
-        Layout.alignment: Qt.AlignHCenter
-        Layout.maximumWidth: root.width - 96
-        horizontalAlignment: Label.AlignHCenter
-        text: qsTr("Project Editor Unavailable")
-        font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
-      }
-
-      Label {
-        opacity: 0.8
-        wrapMode: Label.WordWrap
-        Layout.alignment: Qt.AlignHCenter
-        Layout.maximumWidth: root.width - 96
-        horizontalAlignment: Label.AlignHCenter
-        font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
-        text: qsTr("The Project Editor is only available in Project File mode. Switch modes to load and edit a project.")
-      }
-
-      Item {
-        implicitHeight: 8
-      }
-
-      RowLayout {
-        spacing: 8
-        Layout.alignment: Qt.AlignHCenter
-
-        Button {
-          highlighted: true
-          icon.width: 18
-          icon.height: 18
-          icon.color: palette.buttonText
-          icon.source: "qrc:/rcc/icons/buttons/apply.svg"
-          text: qsTr("Switch to Project Mode") + root._btSpacer
-          onClicked: Cpp_AppState.operationMode = SerialStudio.ProjectFile
-        }
-
-        Button {
-          icon.width: 18
-          icon.height: 18
-          icon.color: palette.buttonText
-          icon.source: "qrc:/rcc/icons/buttons/close.svg"
-          text: qsTr("Close") + root._btSpacer
-          onClicked: root.close()
-        }
-      }
-    }
-
     ColumnLayout {
       id: layout
 
       spacing: 0
       anchors.fill: parent
-      visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+      enabled: Cpp_AppState.operationMode === SerialStudio.ProjectFile
+               && !Cpp_JSON_ProjectModel.locked
 
       //
       // Toolbar
       //
       Sections.ProjectToolbar {
+        id: toolbar
         z: 2
         Layout.fillWidth: true
         Layout.minimumWidth: 860
       }
 
       //
-      // Project locked placeholder — shown when the project carries a password
-      // and the user has not unlocked the editor for this session yet
-      //
-      ColumnLayout {
-        spacing: 16
-        visible: Cpp_JSON_ProjectModel.locked
-        Layout.topMargin: -1
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.minimumHeight: 480
-        Layout.alignment: Qt.AlignCenter
-
-        Item {
-          Layout.fillHeight: true
-        }
-
-        Image {
-          sourceSize: Qt.size(144, 144)
-          Layout.alignment: Qt.AlignHCenter
-          source: "qrc:/rcc/icons/project-editor/toolbar/locked.svg"
-        }
-
-        Item {
-          implicitHeight: 4
-        }
-
-        Label {
-          wrapMode: Label.WordWrap
-          Layout.alignment: Qt.AlignHCenter
-          Layout.maximumWidth: root.width - 96
-          horizontalAlignment: Label.AlignHCenter
-          text: qsTr("Project Locked")
-          font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
-        }
-
-        Label {
-          opacity: 0.8
-          wrapMode: Label.WordWrap
-          Layout.alignment: Qt.AlignHCenter
-          Layout.maximumWidth: root.width - 96
-          horizontalAlignment: Label.AlignHCenter
-          font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
-          text: qsTr("This project is password-protected. Enter the password to edit it, or open a different project.")
-        }
-
-        Item {
-          implicitHeight: 8
-        }
-
-        RowLayout {
-          spacing: 8
-          Layout.alignment: Qt.AlignHCenter
-
-          Button {
-            highlighted: true
-            icon.width: 18
-            icon.height: 18
-            icon.color: palette.buttonText
-            icon.source: "qrc:/rcc/icons/buttons/apply.svg"
-            text: qsTr("Unlock") + root._btSpacer
-            onClicked: Cpp_JSON_ProjectModel.unlockProject()
-          }
-
-          Button {
-            icon.width: 18
-            icon.height: 18
-            icon.color: palette.buttonText
-            icon.source: "qrc:/rcc/icons/buttons/open.svg"
-            text: qsTr("Open Other Project") + root._btSpacer
-            onClicked: Cpp_JSON_ProjectModel.openJsonFile()
-          }
-        }
-
-        Item {
-          Layout.fillHeight: true
-        }
-      }
-
-      //
-      // Main Layout
+      // Main Layout — kept visible when locked; the lock overlay sits on top
       //
       Widgets.PaneSplitter {
         id: splitter
 
-        visible: !Cpp_JSON_ProjectModel.locked
         minLeftWidth: 256
         minRightWidth: 400
         Layout.topMargin: -1
@@ -416,6 +254,154 @@ Widgets.SmartWindow {
             Views.WorkspaceView {
               anchors.fill: parent
               visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.WorkspaceView
+            }
+          }
+        }
+      }
+    }
+
+    //
+    // Lock + project mode-required overlay
+    //
+    Item {
+      id: editorOverlay
+      z: 3
+      anchors.fill: parent
+      visible: Cpp_JSON_ProjectModel.locked
+               || Cpp_AppState.operationMode !== SerialStudio.ProjectFile
+
+      readonly property bool lockMode: Cpp_JSON_ProjectModel.locked
+                                       && Cpp_AppState.operationMode === SerialStudio.ProjectFile
+
+      //
+      // Blur effect
+      //
+      MultiEffect {
+        blur: 1.0
+        blurMax: 64
+        source: layout
+        blurEnabled: true
+        anchors.fill: parent
+        autoPaddingEnabled: false
+      }
+
+      //
+      // Swallow clicks/wheel so the toolbar/splitter underneath stay quiet
+      //
+      MouseArea {
+        hoverEnabled: true
+        anchors.fill: parent
+        onWheel: function(wheel) { wheel.accepted = true }
+      }
+
+      //
+      // Preserve native-style window drag on the opaque top strip — the
+      // toolbar's own DragHandler is unreachable while the overlay is up
+      //
+      DragHandler {
+        target: null
+        onActiveChanged: {
+          if (active)
+            projectEditor.startSystemMove()
+        }
+      }
+
+      //
+      // Centered content — lock or mode-required call-to-action. Pushed
+      // down by half the titlebar height so it sits visually centered in
+      // the area the user perceives as the editor body.
+      //
+      ColumnLayout {
+        spacing: 16
+        anchors.centerIn: parent
+        width: Math.min(parent.width - 96, 520)
+        anchors.verticalCenterOffset: toolbar.titlebarHeight / 2
+
+        Image {
+          sourceSize: Qt.size(144, 144)
+          Layout.alignment: Qt.AlignHCenter
+          source: editorOverlay.lockMode
+                  ? "qrc:/rcc/icons/project-editor/toolbar/locked.svg"
+                  : "qrc:/rcc/images/project-mode-required.svg"
+        }
+
+        Item {
+          implicitHeight: 4
+        }
+
+        Label {
+          wrapMode: Label.WordWrap
+          Layout.alignment: Qt.AlignHCenter
+          Layout.fillWidth: true
+          horizontalAlignment: Label.AlignHCenter
+          font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+          text: editorOverlay.lockMode
+                ? qsTr("This project is password protected")
+                : qsTr("Editing is available in Project mode")
+        }
+
+        Label {
+          opacity: 0.8
+          wrapMode: Label.WordWrap
+          Layout.alignment: Qt.AlignHCenter
+          Layout.fillWidth: true
+          horizontalAlignment: Label.AlignHCenter
+          font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
+          text: editorOverlay.lockMode
+                ? qsTr("Enter the password to make changes, or open a different project.")
+                : qsTr("Switch to Project mode to load and edit a project.")
+        }
+
+        Item {
+          implicitHeight: 8
+        }
+
+        RowLayout {
+          spacing: 8
+          Layout.alignment: Qt.AlignHCenter
+
+          Button {
+            highlighted: true
+            icon.width: 18
+            icon.height: 18
+            icon.color: palette.buttonText
+            topPadding: 8
+            bottomPadding: 8
+            leftPadding: 16
+            rightPadding: 12
+            icon.source: editorOverlay.lockMode
+                         ? "qrc:/rcc/icons/buttons/unlock.svg"
+                         : "qrc:/rcc/icons/buttons/switch.svg"
+            text: editorOverlay.lockMode
+                  ? qsTr("Unlock")
+                  : qsTr("Switch to Project Mode")
+            onClicked: {
+              if (editorOverlay.lockMode)
+                Cpp_JSON_ProjectModel.unlockProject()
+              else
+                Cpp_AppState.operationMode = SerialStudio.ProjectFile
+            }
+          }
+
+          Button {
+            icon.width: 18
+            icon.height: 18
+            icon.color: palette.buttonText
+            topPadding: 8
+            bottomPadding: 8
+            leftPadding: 16
+            rightPadding: 16
+            icon.source: editorOverlay.lockMode
+                         ? "qrc:/rcc/icons/buttons/open.svg"
+                         : "qrc:/rcc/icons/buttons/close.svg"
+            text: editorOverlay.lockMode
+                  ? qsTr("Open Other Project")
+                  : qsTr("Close")
+            onClicked: {
+              if (editorOverlay.lockMode)
+                Cpp_JSON_ProjectModel.openJsonFile()
+              else
+                root.close()
             }
           }
         }

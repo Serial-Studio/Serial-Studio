@@ -175,29 +175,26 @@ bool DataModel::ProjectModel::locked() const noexcept
  */
 void DataModel::ProjectModel::lockProject()
 {
-  bool ok           = false;
-  const auto first  = QInputDialog::getText(nullptr,
+  bool ok          = false;
+  const auto first = QInputDialog::getText(nullptr,
                                            tr("Lock Project"),
-                                           tr("Choose a password to lock the Project Editor:"),
+                                           tr("Choose a password to lock the project:"),
                                            QLineEdit::Password,
                                            QString(),
                                            &ok);
   if (!ok || first.isEmpty())
     return;
 
-  const auto second = QInputDialog::getText(nullptr,
-                                            tr("Lock Project"),
-                                            tr("Confirm the password:"),
-                                            QLineEdit::Password,
-                                            QString(),
-                                            &ok);
-  if (!ok)
-    return;
+  const auto second = QInputDialog::getText(
+    nullptr, tr("Lock Project"), tr("Confirm the password:"), QLineEdit::Password, QString(), &ok);
 
-  if (first != second) {
-    Misc::Utilities::showMessageBox(tr("Passwords do not match"),
-                                    tr("The two passwords you entered do not match. The project was not locked."),
-                                    QMessageBox::Warning);
+  if (first != second || !ok) {
+    QTimer::singleShot(0, this, [] {
+      Misc::Utilities::showMessageBox(
+        tr("Passwords do not match"),
+        tr("The two passwords you entered do not match. The project was not locked."),
+        QMessageBox::Warning);
+    });
     return;
   }
 
@@ -209,6 +206,9 @@ void DataModel::ProjectModel::lockProject()
   }
 
   setModified(true);
+
+  // Persist immediately so the lock state survives a crash/exit
+  (void)saveJsonFile(false);
 }
 
 /**
@@ -235,9 +235,12 @@ void DataModel::ProjectModel::unlockProject()
     return;
 
   if (hashPassword(pwd) != m_passwordHash) {
-    Misc::Utilities::showMessageBox(tr("Incorrect password"),
-                                    tr("The password you entered does not match the one stored in the project file."),
-                                    QMessageBox::Warning);
+    QTimer::singleShot(0, this, [] {
+      Misc::Utilities::showMessageBox(
+        tr("Incorrect password"),
+        tr("The password you entered does not match the one stored in the project file."),
+        QMessageBox::Warning);
+    });
     return;
   }
 
@@ -249,6 +252,9 @@ void DataModel::ProjectModel::unlockProject()
   }
 
   setModified(true);
+
+  // Persist immediately so the cleared hash hits disk
+  (void)saveJsonFile(false);
 }
 
 //--------------------------------------------------------------------------------------------------

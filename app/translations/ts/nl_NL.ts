@@ -2687,407 +2687,453 @@ Niet-opgeslagen wijzigingen gaan verloren. Doorgaan?</translation>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="154"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="180"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="189"/>
+        <source>Lock Project</source>
+        <translation>Project Vergrendelen</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="181"/>
+        <source>Choose a password to lock the project:</source>
+        <translation>Kies een wachtwoord om het project te vergrendelen:</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="189"/>
+        <source>Confirm the password:</source>
+        <translation>Bevestig het wachtwoord:</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="194"/>
+        <source>Passwords do not match</source>
+        <translation>Wachtwoorden komen niet overeen</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="195"/>
+        <source>The two passwords you entered do not match. The project was not locked.</source>
+        <translation>De twee ingevoerde wachtwoorden komen niet overeen. Het project is niet vergrendeld.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="229"/>
+        <source>Unlock Project</source>
+        <translation>Project Ontgrendelen</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="230"/>
+        <source>Enter the project password:</source>
+        <translation>Voer het projectwachtwoord in:</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="240"/>
+        <source>Incorrect password</source>
+        <translation>Onjuist wachtwoord</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="241"/>
+        <source>The password you entered does not match the one stored in the project file.</source>
+        <translation>Het ingevoerde wachtwoord komt niet overeen met het wachtwoord in het projectbestand.</translation>
+    </message>
+    <message>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="272"/>
         <source>New Project</source>
         <translation>Nieuw Project</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="172"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="290"/>
         <source>Samples</source>
         <translation>Samples</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="464"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="582"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Meerdere gegevensbronnen vereisen een Pro-licentie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="583"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro maakt het mogelijk om gelijktijdig verbinding te maken met meerdere apparaten. Upgrade om deze functie te ontgrendelen.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="478"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="596"/>
         <source>Device %1</source>
         <translation>Apparaat %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="548"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="666"/>
         <source> (Copy)</source>
         <translation>(Kopie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="765"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="883"/>
         <source>Do you want to save your changes?</source>
         <translation>Wijzigingen opslaan?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="766"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="884"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Dit project bevat niet-opgeslagen wijzigingen!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="802"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="813"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="931"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="946"/>
         <source>Project error</source>
         <translation>Projectfout</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="802"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="920"/>
         <source>Project title cannot be empty!</source>
         <translation>Projecttitel mag niet leeg zijn!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="813"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="931"/>
         <source>You need to add at least one group!</source>
         <translation>Voeg minimaal één groep toe!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="828"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="946"/>
         <source>You need to add at least one dataset!</source>
         <translation>Voeg minimaal één dataset toe!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="836"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="954"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio-project Opslaan</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="838"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="956"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio-projectbestanden (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1073"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1201"/>
         <source>Untitled Project</source>
         <translation>Naamloos Project</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1082"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1366"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1210"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1510"/>
         <source>Device A</source>
         <translation>Apparaat A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1236"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1367"/>
         <source>Select Project File</source>
         <translation>Selecteer Projectbestand</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1236"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1367"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>Projectbestanden (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1272"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1408"/>
         <source>JSON validation error</source>
         <translation>JSON-validatiefout</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1408"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1552"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Multi-source-projecten vereisen een Pro-licentie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1409"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1553"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Dit project bevat meerdere gegevensbronnen. Alleen de eerste bron is geladen. Een Serial Studio Pro-licentie is vereist om multi-source-projecten te gebruiken.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1555"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1699"/>
         <source>Legacy frame parser function updated</source>
         <translation>Verouderde frame-parserfunctie bijgewerkt</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1556"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1700"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>Je project gebruikte een verouderde frame-parserfunctie met een 'separator'-argument. Deze is automatisch gemigreerd naar het nieuwe formaat.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1761"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1905"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Wil je groep "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1762"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1813"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1848"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2116"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1906"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1957"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1992"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2260"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Deze actie kan niet ongedaan worden gemaakt. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1812"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1956"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Wil je actie "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1847"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1991"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Wil je dataset "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1937"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1966"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2174"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2219"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2081"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2110"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2318"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2363"/>
         <source>%1 (Copy)</source>
         <translation>%1 (Kopie)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2065"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2209"/>
         <source>Output Controls</source>
         <translation>Uitvoerbesturing</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2077"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2221"/>
         <source>New Button</source>
         <translation>Nieuwe Knop</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2080"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2224"/>
         <source>New Slider</source>
         <translation>Nieuwe Schuifregelaar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2083"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2227"/>
         <source>New Toggle</source>
         <translation>Nieuwe Schakelaar</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2086"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2230"/>
         <source>New Text Field</source>
         <translation>Nieuw Tekstveld</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2089"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2233"/>
         <source>New Knob</source>
         <translation>Nieuwe Knop</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2115"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2259"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>Wilt u outputwidget "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2274"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2418"/>
         <source>Group</source>
         <translation>Groep</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2293"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2437"/>
         <source>New Dataset</source>
         <translation>Nieuwe Dataset</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2296"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2440"/>
         <source>New Plot</source>
         <translation>Nieuwe Plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2300"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2444"/>
         <source>New FFT Plot</source>
         <translation>Nieuwe FFT-plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2304"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2448"/>
         <source>New Level Indicator</source>
         <translation>Nieuwe Niveauindicator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2308"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2452"/>
         <source>New Gauge</source>
         <translation>Nieuwe Meter</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2312"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2456"/>
         <source>New Compass</source>
         <translation>Nieuw Kompas</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2320"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2464"/>
         <source>New LED Indicator</source>
         <translation>Nieuwe LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2418"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2562"/>
         <source>New Action</source>
         <translation>Nieuwe Actie</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2516"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2660"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Weet u zeker dat u de widget op groepsniveau wilt wijzigen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2518"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2662"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Bestaande datasets voor deze groep worden verwijderd</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2579"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2580"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2581"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2723"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2724"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2725"/>
         <source>Accelerometer %1</source>
         <translation>Accelerometer %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2627"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2628"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2629"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2771"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2772"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2773"/>
         <source>Gyro %1</source>
         <translation>GYRO %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2672"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2816"/>
         <source>Latitude</source>
         <translation>Breedtegraad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2673"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2817"/>
         <source>Longitude</source>
         <translation>Lengtegraad</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2674"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2818"/>
         <source>Altitude</source>
         <translation>Hoogte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2713"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2857"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2714"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2858"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2715"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2859"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2914"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3058"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3739"/>
         <source>Workspace</source>
         <translation>Werkruimte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2984"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3193"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3128"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
         <source>Shared Table</source>
         <translation>Gedeelde Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3066"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3210"/>
         <source>register</source>
         <translation>register</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3193"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
         <source>New Shared Table</source>
         <translation>Nieuwe Gedeelde Tabel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3193"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3212"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3233"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3257"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3595"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3616"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3337"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3356"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3377"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3401"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3739"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3760"/>
         <source>Name:</source>
         <translation>Naam:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3212"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3356"/>
         <source>Rename Table</source>
         <translation>Tabel Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3232"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3376"/>
         <source>New Register</source>
         <translation>Nieuw Register</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3257"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3401"/>
         <source>Rename Register</source>
         <translation>Register Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3296"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3321"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4085"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3440"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4229"/>
         <source>This action cannot be undone.</source>
         <translation>Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3297"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3441"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>Dit verwijdert %1 register(s) samen met de tabel. Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3300"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3320"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4084"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3444"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3464"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4228"/>
         <source>Delete "%1"?</source>
         <translation>"%1" Verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3303"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3447"/>
         <source>Delete Table</source>
         <translation>Tabel Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3323"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3467"/>
         <source>Delete Register</source>
         <translation>Register Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3349"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3493"/>
         <source>Export Table</source>
         <translation>Tabel Exporteren</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3351"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3398"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3495"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3542"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-bestanden (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3396"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3540"/>
         <source>Import Table</source>
         <translation>Tabel Importeren</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3595"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3739"/>
         <source>New Workspace</source>
         <translation>Nieuwe Werkruimte</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3616"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3760"/>
         <source>Rename Workspace</source>
         <translation>Werkruimte Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3761"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3905"/>
         <source>Overview</source>
         <translation>Overzicht</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3771"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3915"/>
         <source>All Data</source>
         <translation>Alle Gegevens</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4087"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4231"/>
         <source>Delete Workspace</source>
         <translation>Werkruimte Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4292"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4436"/>
         <source>File open error</source>
         <translation>Fout bij openen bestand</translation>
     </message>
@@ -8067,9 +8113,49 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="43"/>
         <source>modified</source>
         <translation>gewijzigd</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="339"/>
+        <source>This project is password protected</source>
+        <translation>Dit project is beveiligd met een wachtwoord</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="340"/>
+        <source>Editing is available in Project mode</source>
+        <translation>Bewerken is beschikbaar in Projectmodus</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="351"/>
+        <source>Enter the password to make changes, or open a different project.</source>
+        <translation>Voer het wachtwoord in om wijzigingen aan te brengen, of open een ander project.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="352"/>
+        <source>Switch to Project mode to load and edit a project.</source>
+        <translation>Schakel over naar Projectmodus om een project te laden en te bewerken.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="376"/>
+        <source>Unlock</source>
+        <translation>Ontgrendelen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="377"/>
+        <source>Switch to Project Mode</source>
+        <translation>Overschakelen naar Projectmodus</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="398"/>
+        <source>Open Other Project</source>
+        <translation>Ander Project Openen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="399"/>
+        <source>Close</source>
+        <translation>Sluiten</translation>
     </message>
 </context>
 <context>
@@ -8128,269 +8214,289 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
         <translation>Het huidige project opslaan onder een nieuwe naam</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="195"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="196"/>
+        <source>Unlock</source>
+        <translation>Ontgrendelen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="196"/>
+        <source>Lock</source>
+        <translation>Vergrendelen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="198"/>
+        <source>Unlock the Project Editor with the project password</source>
+        <translation>Ontgrendel de Projecteditor met het projectwachtwoord</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="199"/>
+        <source>Set a password and lock the Project Editor</source>
+        <translation>Stel een wachtwoord in en vergrendel de Projecteditor</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="219"/>
         <source>Add Device</source>
         <translation>Apparaat Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="198"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="222"/>
         <source>Add a new data source (device) to the project</source>
         <translation>Een nieuwe gegevensbron (apparaat) aan het project toevoegen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="208"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="232"/>
         <source>Action</source>
         <translation>Actie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="211"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="235"/>
         <source>Add a new action to the project</source>
         <translation>Een nieuwe actie aan het project toevoegen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="222"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="226"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="250"/>
         <source>Output</source>
         <translation>Uitvoer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="229"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="253"/>
         <source>Add a new output control panel with a button</source>
         <translation>Voeg een nieuw uitvoercontrolepaneel toe met een knop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="242"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="266"/>
         <source>Slider</source>
         <translation>Schuifregelaar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="269"/>
         <source>Add an output slider control</source>
         <translation>Voeg een uitvoerschuifregelaar toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="252"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="276"/>
         <source>Toggle</source>
         <translation>Schakelaar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="255"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="279"/>
         <source>Add an output toggle control</source>
         <translation>Voeg een uitvoerschakelaar toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="262"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="286"/>
         <source>Knob</source>
         <translation>Draaiknop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="265"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="289"/>
         <source>Add an output knob control</source>
         <translation>Voeg een uitvoerdraaiknop toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="297"/>
         <source>Text Field</source>
         <translation>Tekstveld</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="299"/>
         <source>Add an output text field control</source>
         <translation>Voeg een uitvoertekstveld toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="282"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="306"/>
         <source>Button</source>
         <translation>Knop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="309"/>
         <source>Add an output button control</source>
         <translation>Voeg een uitvoerknopbesturing toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="298"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="322"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="326"/>
         <source>Dataset</source>
         <translation>Dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="304"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="328"/>
         <source>Add a generic dataset</source>
         <translation>Voeg een generieke dataset toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="318"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="342"/>
         <source>Plot</source>
         <translation>Plot</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="321"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="345"/>
         <source>Add a 2D plot dataset</source>
         <translation>Voeg een 2D-plotdataset toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="328"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="352"/>
         <source>FFT Plot</source>
         <translation>FFT-plot</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="331"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="355"/>
         <source>Add a Fast Fourier Transform plot</source>
         <translation>Voeg een Fast Fourier Transform-plot toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="338"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="362"/>
         <source>Gauge</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="341"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="365"/>
         <source>Add a gauge widget for numeric data</source>
         <translation>Voeg een meterwidget voor numerieke gegevens toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="349"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="373"/>
         <source>Level Indicator</source>
         <translation>Niveauindicator</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="351"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="375"/>
         <source>Add a vertical bar level indicator</source>
         <translation>Voeg een verticale staafniveauindicator toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="358"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="382"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="361"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="385"/>
         <source>Add a compass widget for directional data</source>
         <translation>Voeg een kompaswidget toe voor richtingsgegevens</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="369"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="393"/>
         <source>LED Indicator</source>
         <translation>LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="371"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="395"/>
         <source>Add an LED-style status indicator</source>
         <translation>Voeg een LED-statusindicator toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="384"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="388"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="408"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="412"/>
         <source>Group</source>
         <translation>Groep</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="414"/>
         <source>Add a dataset container group</source>
         <translation>Voeg een datasetcontainergroep toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="392"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="416"/>
         <source>Dataset Container</source>
         <translation>Datasetcontainer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="396"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="420"/>
         <source>Image</source>
         <translation>Afbeelding</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="398"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="422"/>
         <source>Add an image/video stream viewer</source>
         <translation>Voeg een afbeeldings-/videostream-viewer toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="400"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="424"/>
         <source>Image View</source>
         <translation>Afbeeldingsweergave</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="436"/>
         <source>Table</source>
         <translation>Tabel</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="415"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="439"/>
         <source>Add a data table view</source>
         <translation>Voeg een datatabelweergave toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="417"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="441"/>
         <source>Data Grid</source>
         <translation>Gegevensraster</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="423"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="447"/>
         <source>Multi-Plot</source>
         <translation>Meervoudige Plot</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="425"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="449"/>
         <source>Add a 2D plot with multiple signals</source>
         <translation>Voeg een 2D-plot met meerdere signalen toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="427"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="451"/>
         <source>Multiple Plot</source>
         <translation>Meervoudige Plot</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="432"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="437"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="456"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="461"/>
         <source>3D Plot</source>
         <translation>3D-plot</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="435"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="459"/>
         <source>Add a 3D plot visualization</source>
         <translation>Voeg een 3D-plotvisualisatie toe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="443"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="447"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="467"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="471"/>
         <source>Accelerometer</source>
         <translation>Accelerometer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="445"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="469"/>
         <source>Add a group for 3-axis accelerometer data</source>
         <translation>Voeg een groep toe voor 3-assige accelerometergegevens</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="453"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="456"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="477"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="480"/>
         <source>Gyroscope</source>
         <translation>Gyroscoop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="457"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="481"/>
         <source>Add a group for 3-axis gyroscope data</source>
         <translation>Voeg een groep toe voor 3-assige gyroscoopgegevens</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="462"/>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="467"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="486"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="491"/>
         <source>GPS Map</source>
         <translation>GPS-kaart</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="465"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="489"/>
         <source>Add a map widget for GPS data</source>
         <translation>Voeg een kaartwidget toe voor GPS-gegevens</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="481"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="505"/>
         <source>Help Center</source>
         <translation>Helpcentrum</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="484"/>
+        <location filename="../../qml/ProjectEditor/Sections/ProjectToolbar.qml" line="508"/>
         <source>Open the Project Editor documentation</source>
         <translation>Open de documentatie van de Project Editor</translation>
     </message>
