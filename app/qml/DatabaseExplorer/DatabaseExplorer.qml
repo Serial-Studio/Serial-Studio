@@ -28,7 +28,7 @@ Widgets.SmartWindow {
   property alias preferredWidth: layout.implicitWidth
   property alias preferredHeight: layout.implicitHeight
   title: Cpp_Sessions_Manager.isOpen
-         ? qsTr("Sessions") + " — " + Cpp_Sessions_Manager.fileName
+         ? Cpp_Sessions_Manager.fileName
          : qsTr("Sessions")
 
   onVisibleChanged: {
