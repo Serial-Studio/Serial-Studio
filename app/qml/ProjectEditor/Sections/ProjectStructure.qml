@@ -347,9 +347,13 @@ Widgets.Pane {
 
             opacity: current ? 1.0 : 0.85
             font: Cpp_Misc_CommonFonts.monoFont
-            visible: depth > 1 && (model.treeViewFrameIndex >= 0
+            visible: depth > 1 && (model.treeViewVirtual === true
+                                   || model.treeViewFrameIndex >= 0
                                    || model.treeViewFrameIndex === -2)
             text: {
+              if (model.treeViewVirtual === true)
+                return "[VRT]"
+
               var letter = String.fromCharCode(65 + model.treeViewSourceId)
               if (model.treeViewFrameIndex === -2)
                 return "[" + letter + "]"

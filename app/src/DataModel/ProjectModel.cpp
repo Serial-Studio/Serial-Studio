@@ -2103,6 +2103,7 @@ void DataModel::ProjectModel::duplicateCurrentGroup()
   }
 
   m_groups.push_back(group);
+  m_selectedGroup = m_groups.back();
 
   Q_EMIT groupsChanged();
   Q_EMIT groupAdded(static_cast<int>(m_groups.size()) - 1);
@@ -2126,6 +2127,7 @@ void DataModel::ProjectModel::duplicateCurrentAction()
   action.autoExecuteOnConnect = m_selectedAction.autoExecuteOnConnect;
 
   m_actions.push_back(action);
+  m_selectedAction = action;
 
   Q_EMIT actionsChanged();
   Q_EMIT actionAdded(static_cast<int>(m_actions.size()) - 1);
@@ -2225,6 +2227,7 @@ void DataModel::ProjectModel::addOutputControl(const SerialStudio::OutputWidgetT
     auto& group     = m_groups.back();
     group.groupType = DataModel::GroupType::Output;
     groupId         = group.groupId;
+    m_selectedGroup = group;
   }
 
   auto& group = m_groups[groupId];
@@ -2258,6 +2261,7 @@ void DataModel::ProjectModel::addOutputControl(const SerialStudio::OutputWidgetT
   ow.transmitFunction = DataModel::OutputCodeEditor::defaultTemplate();
 
   group.outputWidgets.push_back(ow);
+  m_selectedOutputWidget = ow;
 
   Q_EMIT groupsChanged();
   Q_EMIT outputWidgetAdded(groupId, ow.widgetId);
@@ -2333,6 +2337,7 @@ void DataModel::ProjectModel::duplicateCurrentOutputWidget()
   ow.title                   = tr("%1 (Copy)").arg(ow.title);
 
   widgets.push_back(ow);
+  m_selectedOutputWidget = ow;
 
   Q_EMIT groupsChanged();
   Q_EMIT outputWidgetAdded(gid, ow.widgetId);
@@ -2379,6 +2384,7 @@ void DataModel::ProjectModel::duplicateCurrentDataset()
   dataset.datasetId = m_groups[dataset.groupId].datasets.size();
 
   m_groups[dataset.groupId].datasets.push_back(dataset);
+  m_selectedDataset = dataset;
 
   Q_EMIT groupsChanged();
   Q_EMIT datasetAdded(dataset.groupId,
@@ -2515,6 +2521,7 @@ void DataModel::ProjectModel::addDataset(const SerialStudio::DatasetOption optio
   dataset.datasetId = m_groups[groupId].datasets.size();
 
   m_groups[groupId].datasets.push_back(dataset);
+  m_selectedDataset = dataset;
 
   Q_EMIT groupsChanged();
   Q_EMIT datasetAdded(groupId, static_cast<int>(m_groups[groupId].datasets.size()) - 1);
@@ -2603,6 +2610,7 @@ void DataModel::ProjectModel::addAction()
   action.actionId = m_actions.size();
 
   m_actions.push_back(action);
+  m_selectedAction = action;
 
   Q_EMIT actionsChanged();
   Q_EMIT actionAdded(static_cast<int>(m_actions.size()) - 1);
@@ -2647,6 +2655,7 @@ void DataModel::ProjectModel::addGroup(const QString& title, const SerialStudio:
 
   m_groups.push_back(group);
   setGroupWidget(static_cast<int>(m_groups.size()) - 1, widget);
+  m_selectedGroup = m_groups.back();
 
   Q_EMIT groupAdded(static_cast<int>(m_groups.size()) - 1);
   setModified(true);
@@ -3878,10 +3887,19 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
       overviewRefs.push_back(r);
     }
 
-    // Dataset widgets
+    // Dataset widgets. LED is special: every dataset with `led=true` is
+    // aggregated by Dashboard into a single per-group LED panel, so we
+    // emit one synthetic LED ref per group (after the dataset walk has
+    // confirmed the group actually contains at least one LED dataset)
+    // rather than one ref per LED dataset.
+    bool groupHasLed = false;
     for (const auto& ds : group.datasets) {
       const auto keys = SerialStudio::getDashboardWidgets(ds);
       for (const auto& k : keys) {
+        if (k == SerialStudio::DashboardLED) {
+          groupHasLed = true;
+          continue;
+        }
         if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
           continue;
 
@@ -3894,6 +3912,23 @@ std::vector<DataModel::Workspace> DataModel::ProjectModel::buildAutoWorkspaces()
         groupRefs.push_back(r);
         allRefs.push_back(r);
       }
+    }
+
+    // Synthetic LED-panel ref. Mirrors Dashboard::buildWidgetGroups()
+    // which appends one led-panel entry to m_widgetGroups[DashboardLED]
+    // for every group that contains LED datasets. The relativeIndex
+    // tracker is shared with the group-widget loop so the per-type index
+    // sequence matches Dashboard's iteration order.
+    if (groupHasLed) {
+      DataModel::WidgetRef r;
+      r.widgetType                         = static_cast<int>(SerialStudio::DashboardLED);
+      r.groupId                            = group.groupId;
+      r.relativeIndex                      = groupIdx.value(SerialStudio::DashboardLED, 0);
+      groupIdx[SerialStudio::DashboardLED] = r.relativeIndex + 1;
+
+      groupRefs.push_back(r);
+      allRefs.push_back(r);
+      overviewRefs.push_back(r);
     }
 
     if (groupRefs.empty())
@@ -4108,16 +4143,27 @@ QMap<int, int> DataModel::ProjectModel::widgetTypeCountsForGroup(const Group& g)
   if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey))
     counts[static_cast<int>(groupKey)] += 1;
 
-  // Dataset-level widgets — filter identical to buildAutoWorkspaces
+  // Dataset-level widgets — filter identical to buildAutoWorkspaces.
+  // LED is special: every dataset with led=true is aggregated into a
+  // single per-group LED panel ref, so we count at most one LED entry
+  // per group regardless of how many LED datasets it contains.
+  bool groupHasLed = false;
   for (const auto& ds : g.datasets) {
     const auto keys = SerialStudio::getDashboardWidgets(ds);
     for (const auto& k : keys) {
+      if (k == SerialStudio::DashboardLED) {
+        groupHasLed = true;
+        continue;
+      }
       if (!SerialStudio::datasetWidgetEligibleForWorkspace(k))
         continue;
 
       counts[static_cast<int>(k)] += 1;
     }
   }
+
+  if (groupHasLed)
+    counts[static_cast<int>(SerialStudio::DashboardLED)] += 1;
 
   return counts;
 }

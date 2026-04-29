@@ -39,6 +39,67 @@ Item {
   //
   readonly property int iconSize: 18
   required property SS_Ui.TaskBar taskBar
+  property var startMenu: null
+  property var combinedSearchResults: []
+
+  //
+  // Rebuilds the unified search list — widget hits first, then start menu
+  // actions — whenever the filter or widget index changes.
+  //
+  function refreshCombinedSearchResults() {
+    var widgetHits = taskBar ? taskBar.searchResults : []
+    var menuHits = []
+    if (startMenu && typeof startMenu.searchableItems === "function") {
+      var items = startMenu.searchableItems(taskBar ? taskBar.searchFilter : "")
+      for (var i = 0; i < items.length; ++i) {
+        menuHits.push({
+          "isStartMenuAction": true,
+          "widgetName": items[i].name,
+          "widgetIcon": items[i].icon,
+          "groupName": qsTr("Start Menu"),
+          "run": items[i].run
+        })
+      }
+    }
+
+    combinedSearchResults = widgetHits.concat(menuHits)
+    if (searchResultsList)
+      searchResultsList.currentIndex = combinedSearchResults.length > 0 ? 0 : -1
+  }
+
+  //
+  // Fires the action behind a search result entry. Used by both mouse clicks
+  // and keyboard (Enter) navigation. Snapshot fields before dismissSearch()
+  // so the rebuilt model can't invalidate the entry mid-call.
+  //
+  function triggerSearchEntry(entry) {
+    if (!entry)
+      return
+
+    if (entry["isStartMenuAction"]) {
+      var run = entry["run"]
+      taskBar.dismissSearch()
+      if (typeof run === "function")
+        run()
+    } else if (entry["isWorkspace"]) {
+      var gid = entry["groupId"]
+      taskBar.dismissSearch()
+      taskBar.activeGroupId = gid
+    } else {
+      var wid = entry["windowId"]
+      var grp = entry["groupId"]
+      taskBar.dismissSearch()
+      taskBar.navigateToWidget(wid, grp)
+    }
+  }
+
+  Component.onCompleted: refreshCombinedSearchResults()
+  onStartMenuChanged: refreshCombinedSearchResults()
+  Connections {
+    target: taskBar
+    function onSearchResultsChanged() { refreshCombinedSearchResults() }
+    function onSearchFilterChanged()  { refreshCombinedSearchResults() }
+  }
 
   //
   // Signals
@@ -130,7 +191,7 @@ Item {
         font: Cpp_Misc_CommonFonts.uiFont
         color: Cpp_ThemeManager.colors["text"]
         verticalAlignment: Text.AlignVCenter
-        placeholderText: qsTr("Search widgets…")
+        placeholderText: qsTr("Search…")
         selectionColor: Cpp_ThemeManager.colors["highlight"]
         selectedTextColor: Cpp_ThemeManager.colors["highlighted_text"]
         placeholderTextColor: Cpp_ThemeManager.colors["placeholder_text"]
@@ -175,6 +236,34 @@ Item {
           focus = false
         }
 
+        Keys.onDownPressed: {
+          if (searchResultsList.count > 0) {
+            searchResultsList.currentIndex
+              = Math.min(searchResultsList.currentIndex + 1,
+                         searchResultsList.count - 1)
+          }
+        }
+
+        Keys.onUpPressed: {
+          if (searchResultsList.count > 0) {
+            searchResultsList.currentIndex
+              = Math.max(searchResultsList.currentIndex - 1, 0)
+          }
+        }
+
+        Keys.onEnterPressed: searchField.triggerSelection()
+        Keys.onReturnPressed: searchField.triggerSelection()
+
+        function triggerSelection() {
+          if (root.combinedSearchResults.length === 0)
+            return
+
+          var idx = searchResultsList.currentIndex >= 0
+                    ? searchResultsList.currentIndex : 0
+          var entry = root.combinedSearchResults[idx]
+          root.triggerSearchEntry(entry)
+        }
+
         Button {
           x: 2
           enabled: false
@@ -194,7 +283,7 @@ Item {
         padding: 4
         y: -height - searchContainer.y + 1
         visible: searchField.activeFocus
-                 && taskBar.searchResults.length > 0
+                 && root.combinedSearchResults.length > 0
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
         background: Rectangle {
@@ -208,17 +297,21 @@ Item {
 
           clip: true
           spacing: 2
-          model: taskBar.searchResults
+          model: root.combinedSearchResults
           boundsBehavior: Flickable.StopAtBounds
           implicitHeight: Math.min(contentHeight, 300)
 
           delegate: Item {
             id: searchDelegate
 
+            required property int index
+            required property var modelData
+
             height: 28
             width: searchResultsList.width
 
-            property bool hovered: _searchMa.containsMouse
+            readonly property bool hovered: _searchMa.containsMouse
+                                            || searchResultsList.currentIndex === index
 
             Rectangle {
               anchors.fill: parent
@@ -236,13 +329,13 @@ Item {
                 Layout.preferredWidth: 16
                 Layout.preferredHeight: 16
                 sourceSize: Qt.size(16, 16)
-                source: modelData["widgetIcon"]
+                source: searchDelegate.modelData["widgetIcon"]
               }
 
               Label {
                 elide: Text.ElideRight
                 Layout.fillWidth: true
-                text: modelData["widgetName"]
+                text: searchDelegate.modelData["widgetName"]
                 font: Cpp_Misc_CommonFonts.uiFont
                 color: searchDelegate.hovered
                        ? Cpp_ThemeManager.colors["start_menu_highlighted_text"]
@@ -253,7 +346,7 @@ Item {
                 opacity: 0.5
                 elide: Text.ElideRight
                 Layout.maximumWidth: 120
-                text: modelData["groupName"]
+                text: searchDelegate.modelData["groupName"]
                 font: Cpp_Misc_CommonFonts.uiFont
                 color: searchDelegate.hovered
                        ? Cpp_ThemeManager.colors["start_menu_highlighted_text"]
@@ -266,15 +359,8 @@ Item {
 
               hoverEnabled: true
               anchors.fill: parent
-              onClicked: {
-                if (modelData["isWorkspace"])
-                  taskBar.activeGroupId = modelData["groupId"]
-                else
-                  taskBar.navigateToWidget(modelData["windowId"],
-                                           modelData["groupId"])
-
-                taskBar.dismissSearch()
-              }
+              onEntered: searchResultsList.currentIndex = searchDelegate.index
+              onClicked: root.triggerSearchEntry(searchDelegate.modelData)
             }
           }
         }
@@ -293,7 +379,8 @@ Item {
         taskBar.activeWindow = null
       }
     } Widgets.TaskbarButton {
-      forceVisible: true
+      visible: !app.runtimeMode
+      forceVisible: !app.runtimeMode
       focused: Cpp_UI_Dashboard.terminalEnabled
       icon.source: "qrc:/rcc/icons/taskbar/console.svg"
       onClicked: {

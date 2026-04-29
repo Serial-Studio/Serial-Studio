@@ -247,6 +247,7 @@ Widgets.Pane {
         id: _taskbar
 
         taskBar: root.taskBar
+        startMenu: _startMenu
         Layout.fillWidth: true
 
         opacity: Cpp_UI_Dashboard.available ? 1 : 0

@@ -1045,6 +1045,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
       datasetItem->setData(dataset.index, TreeViewFrameIndex);
       datasetItem->setData(dataset.sourceId, TreeViewSourceId);
       datasetItem->setData(QString(), TreeViewSourceName);
+      datasetItem->setData(dataset.virtual_, TreeViewVirtual);
       groupItem->appendRow(datasetItem);
       m_datasetItems.insert(datasetItem, dataset);
     }
@@ -2762,6 +2763,17 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
     }
 
     Q_EMIT selectedTextChanged();
+  } else {
+    // updateAction() with rebuildTree=false skips the tree refresh, so the
+    // m_actionItems cache stays at last-rebuild state. Sync it here so the
+    // next selection of this action reads the current values, and a later
+    // edit doesn't reseed m_selectedAction with stale data.
+    for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
+      if (it.value().actionId == actionId) {
+        m_actionItems[it.key()] = m_selectedAction;
+        break;
+      }
+    }
   }
 }
 
@@ -2911,6 +2923,16 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     case kDatasetView_Virtual: {
       m_selectedDataset.virtual_ = value.toBool();
 
+      // Refresh the tree-item virtual flag so the [A-N] / [VRT] label swaps
+      // immediately rather than waiting for the next full tree rebuild.
+      for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+        if (it.value().groupId == m_selectedDataset.groupId
+            && it.value().datasetId == m_selectedDataset.datasetId) {
+          it.key()->setData(m_selectedDataset.virtual_, TreeViewVirtual);
+          break;
+        }
+      }
+
       // Defer the rebuild so we don't mutate the model mid-item-changed signal
       // emission. Guard against the user switching selection before the lambda
       // fires — if a different dataset is now selected, skip the rebuild.
@@ -2951,6 +2973,21 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
   } else {
     const bool rebuildTree = (idInt == kDatasetView_Index);
     pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
+
+    // Scalar edits skip the rebuildTree path, so groupsChanged never fires
+    // and the tree-item dataset cache stays at the snapshot captured during
+    // the last full rebuild. Sync it here — otherwise a later re-selection
+    // of this dataset (which reads from the cache) loses every wgt/alarm
+    // edit, AND the next field edit reseeds m_selectedDataset from the
+    // stale snapshot and silently rolls those values back into the project.
+    if (!rebuildTree) {
+      for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
+        if (it.value().groupId == groupId && it.value().datasetId == datasetId) {
+          m_datasetItems[it.key()] = m_selectedDataset;
+          break;
+        }
+      }
+    }
   }
 
   Q_EMIT datasetOptionsChanged();
@@ -3323,6 +3360,17 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
         it.key()->setData(newTitle, TreeViewText);
         m_outputWidgetItems[it.key()].title = newTitle;
         Q_EMIT selectedTextChanged();
+        break;
+      }
+    }
+  } else {
+    // updateOutputWidget() runs with rebuildTree=false, so the tree-item
+    // cache won't refresh. Sync it here so re-selecting this widget reads
+    // the current values instead of the snapshot from last tree rebuild.
+    for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
+      if (it.value().groupId == m_selectedOutputWidget.groupId
+          && it.value().widgetId == m_selectedOutputWidget.widgetId) {
+        m_outputWidgetItems[it.key()] = m_selectedOutputWidget;
         break;
       }
     }

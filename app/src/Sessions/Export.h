@@ -44,6 +44,9 @@ struct TimestampedRawBytes {
 class ExportWorker : public DataModel::FrameConsumerWorker<DataModel::TimestampedFramePtr> {
   Q_OBJECT
 
+signals:
+  void sessionIdAssigned(int sessionId);
+
 public:
   ExportWorker(moodycamel::ReaderWriterQueue<DataModel::TimestampedFramePtr>* frameQueue,
                std::atomic<bool>* enabled,
@@ -104,11 +107,15 @@ class Export : public DataModel::FrameConsumer<DataModel::TimestampedFramePtr> {
              READ exportEnabled
              WRITE setExportEnabled
              NOTIFY enabledChanged)
+  Q_PROPERTY(int currentSessionId
+             READ currentSessionId
+             NOTIFY currentSessionIdChanged)
   // clang-format on
 
 signals:
   void openChanged();
   void enabledChanged();
+  void currentSessionIdChanged();
 
 private:
   explicit Export();
@@ -124,6 +131,7 @@ public:
 
   [[nodiscard]] bool isOpen() const;
   [[nodiscard]] bool exportEnabled() const;
+  [[nodiscard]] int currentSessionId() const;
 
 public slots:
   void closeFile();
@@ -138,6 +146,7 @@ protected:
 
 private slots:
   void onWorkerOpenChanged();
+  void onWorkerSessionIdAssigned(int sessionId);
 
 private:
   void refreshProjectSnapshot();
@@ -146,6 +155,7 @@ private:
   QSettings m_settings;
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
+  std::atomic<int> m_currentSessionId;
   bool m_persistSettings;
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawBytesQueue;

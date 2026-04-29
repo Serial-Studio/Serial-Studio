@@ -65,6 +65,7 @@ Widgets.SmartWindow {
   function userToggleConnection() {
     if (Cpp_IO_Manager.isConnected)
       root.userInitiatedDisconnect = true
+
     Cpp_IO_Manager.toggleConnection()
   }
 
@@ -102,6 +103,7 @@ Widgets.SmartWindow {
   //
   Timer {
     id: runtimeFailGuard
+
     interval: 4000
     repeat: false
     running: app.runtimeMode
@@ -170,6 +172,7 @@ Widgets.SmartWindow {
 
   Timer {
     id: dashboardDelayTimer
+
     interval: 270
     repeat: false
     onTriggered: root.showDashboardNow()
@@ -475,6 +478,7 @@ Widgets.SmartWindow {
     //
     Rectangle {
       id: connectingOverlay
+
       z: 100
       anchors.fill: parent
       visible: opacity > 0

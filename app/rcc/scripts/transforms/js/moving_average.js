@@ -10,19 +10,23 @@
 // circular buffer for memory efficiency. Introduces N/2 frames of lag.
 // Adjust N to match your sensor.
 //
+// Implementation note: the running sum is maintained in O(1) per
+// sample by subtracting the value leaving the window and adding the
+// new one. This keeps the transform cheap even at audio rates where
+// N may be in the tens of thousands.
+//
 
 var N = 10;
-var history = [];
+var history = new Array(N).fill(0);
 var idx = 0;
+var count = 0;
+var sum = 0;
 
 function transform(value) {
+  sum = sum - history[idx] + value;
   history[idx] = value;
   idx = (idx + 1) % N;
-
-  var sum = 0;
-  var count = Math.min(history.length, N);
-  for (var i = 0; i < count; i++)
-    sum += history[i];
+  if (count < N) count++;
 
   return sum / count;
 }

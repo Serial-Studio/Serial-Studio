@@ -223,6 +223,7 @@ Item {
         icon.height: 18
         implicitHeight: 24
         Layout.maximumWidth: 24
+        visible: !app.runtimeMode
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter

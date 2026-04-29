@@ -87,6 +87,8 @@ public slots:
   void evaluate();
   void readCode();
   void selectAll();
+  void formatDocument();
+  void formatSelection();
   void selectTemplate();
   void testWithSampleData();
   void setSourceId(const int sourceId);

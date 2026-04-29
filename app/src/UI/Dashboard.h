@@ -160,6 +160,7 @@ public slots:
   void setNotificationLogEnabled(const bool enabled);
   void setAutoHideToolbar(const bool enabled);
   void setShowTaskbarButtons(const bool enabled);
+  void setSettingsPersistent(const bool persistent);
   void activateAction(const int index, const bool guiTrigger = false);
 
   void setPlotRunning(const int index, const bool enabled);
@@ -206,6 +207,7 @@ private:
   WidgetID m_notificationLogWidgetId;
   bool m_autoHideToolbar;
   bool m_showTaskbarButtons;
+  bool m_persistSettings;
 
   bool m_updateRetryInProgress;
 
@@ -248,30 +250,43 @@ inline QString FMT_VAL(double val, double min, double max)
     double abs = std::abs(v);
     if (DSP::isZero(abs))
       return 2;
+
     if (abs >= 1e6)
       return 0;
+
     if (abs >= 1e5)
       return 0;
+
     if (abs >= 1e4)
       return 0;
+
     if (abs >= 1e3)
       return 1;
+
     if (abs >= 1e2)
       return 2;
+
     if (abs >= 1e1)
       return 2;
+
     if (abs >= 1.0)
       return 3;
+
     if (abs >= 1e-1)
       return 4;
+
     if (abs >= 1e-2)
       return 5;
+
     if (abs >= 1e-3)
       return 6;
+
     if (abs >= 1e-4)
       return 7;
+
     if (abs >= 1e-5)
       return 8;
+
     if (abs >= 1e-6)
       return 9;
 

@@ -31,9 +31,11 @@
 #include <QLuaCompleter>
 #include <QLuaHighlighter>
 #include <QMessageBox>
+#include <QTextCursor>
 #include <QTextDocument>
 #include <QUrl>
 
+#include "DataModel/CodeFormatter.h"
 #include "DataModel/FrameParser.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
@@ -409,6 +411,61 @@ void DataModel::JsCodeEditor::readCode()
 void DataModel::JsCodeEditor::selectAll()
 {
   m_widget.selectAll();
+}
+
+/**
+ * @brief Reformats the entire editor contents.
+ */
+void DataModel::JsCodeEditor::formatDocument()
+{
+  const auto lang = (m_language == 1) ? CodeFormatter::Language::Lua
+                                      : CodeFormatter::Language::JavaScript;
+  const QString original = m_widget.toPlainText();
+  const QString formatted = CodeFormatter::formatDocument(original, lang);
+  if (formatted == original)
+    return;
+
+  QTextCursor cursor = m_widget.textCursor();
+  const int savedPos = cursor.position();
+  cursor.beginEditBlock();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(formatted);
+  cursor.endEditBlock();
+
+  cursor.setPosition(qMin(savedPos, formatted.size()));
+  m_widget.setTextCursor(cursor);
+}
+
+/**
+ * @brief Reformats the selected lines, or the current line when nothing is selected.
+ */
+void DataModel::JsCodeEditor::formatSelection()
+{
+  const auto lang = (m_language == 1) ? CodeFormatter::Language::Lua
+                                      : CodeFormatter::Language::JavaScript;
+  const QString original = m_widget.toPlainText();
+
+  QTextCursor cursor = m_widget.textCursor();
+  QTextCursor first(m_widget.document());
+  first.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
+  QTextCursor last(m_widget.document());
+  last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
+
+  const int firstLine = first.blockNumber();
+  const int lastLine = last.blockNumber();
+  const QString formatted =
+    CodeFormatter::formatLineRange(original, lang, firstLine, lastLine);
+  if (formatted == original)
+    return;
+
+  const int savedPos = cursor.position();
+  cursor.beginEditBlock();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(formatted);
+  cursor.endEditBlock();
+
+  cursor.setPosition(qMin(savedPos, formatted.size()));
+  m_widget.setTextCursor(cursor);
 }
 
 /**

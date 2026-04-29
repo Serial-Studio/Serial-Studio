@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QObject>
 #include <QSet>
+#include <QSettings>
 #include <QTextStream>
 #include <QVector>
 
@@ -100,6 +101,7 @@ public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
+  void setSettingsPersistent(const bool persistent);
 
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
 
@@ -110,6 +112,8 @@ private slots:
   void onWorkerOpenChanged();
 
 private:
+  QSettings m_settings;
   std::atomic<bool> m_isOpen;
+  bool m_persistSettings;
 };
 }  // namespace CSV

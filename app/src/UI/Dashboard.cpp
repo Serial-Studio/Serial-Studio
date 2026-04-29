@@ -63,6 +63,7 @@ UI::Dashboard::Dashboard()
   , m_notificationLogWidgetId(kInvalidWidgetId)
   , m_autoHideToolbar(false)
   , m_showTaskbarButtons(false)
+  , m_persistSettings(true)
   , m_updateRetryInProgress(false)
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
@@ -764,7 +765,9 @@ void UI::Dashboard::setShowActionPanel(const bool enabled)
 {
   if (m_showActionPanel != enabled) {
     m_showActionPanel = enabled;
-    m_settings.setValue("Dashboard/ShowActionPanel", m_showActionPanel);
+    if (m_persistSettings)
+      m_settings.setValue("Dashboard/ShowActionPanel", m_showActionPanel);
+
     Q_EMIT showActionPanelChanged();
   }
 }
@@ -819,6 +822,14 @@ void UI::Dashboard::removeTerminalWidget()
 }
 
 /**
+ * @brief Toggles whether dashboard preference changes are written to QSettings.
+ */
+void UI::Dashboard::setSettingsPersistent(const bool persistent)
+{
+  m_persistSettings = persistent;
+}
+
+/**
  * @brief Enables or disables the terminal widget.
  */
 void UI::Dashboard::setTerminalEnabled(const bool enabled)
@@ -827,7 +838,8 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
     return;
 
   m_terminalEnabled = enabled;
-  m_settings.setValue("Dashboard/TerminalEnabled", m_terminalEnabled);
+  if (m_persistSettings)
+    m_settings.setValue("Dashboard/TerminalEnabled", m_terminalEnabled);
 
   // Use incremental update if we have an active dashboard with widgets
   if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
@@ -906,7 +918,8 @@ void UI::Dashboard::setNotificationLogEnabled(const bool enabled)
     return;
 
   m_notificationLogEnabled = enabled;
-  m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
+  if (m_persistSettings)
+    m_settings.setValue("Dashboard/NotificationLogEnabled", m_notificationLogEnabled);
 
 #ifdef BUILD_COMMERCIAL
   // Unlike Terminal, NotificationLog can be the only widget — only a live source frame is required
@@ -1330,6 +1343,7 @@ void UI::Dashboard::buildWidgetGroups(const DataModel::Frame& frame, bool pro)
       for (size_t i = 0; i < m_lastFrame.groups.size(); ++i) {
         if (m_lastFrame.groups[i].groupId != group.groupId)
           continue;
+
         m_lastFrame.groups[i].title  = copy.title;
         m_lastFrame.groups[i].widget = "multiplot";
         break;
@@ -1640,10 +1654,13 @@ void UI::Dashboard::updateLineSeries(int sourceId)
     if (sourceId >= 0 && yDataset.sourceId != sourceId)
       continue;
 
-    // Shift Y-axis points
-    if (!yAxesMoved.contains(yDataset.index)) {
-      yAxesMoved.insert(yDataset.index);
-      m_yAxisData[yDataset.index].push(yDataset.numericValue);
+    // Shift Y-axis points. Keyed by uniqueId rather than index so two plot
+    // datasets that share the same source-frame column (e.g. raw audio +
+    // transformed dB on the same input) get independent ring buffers — and
+    // so the per-dataset transform output reaches the right plot widget.
+    if (!yAxesMoved.contains(yDataset.uniqueId)) {
+      yAxesMoved.insert(yDataset.uniqueId);
+      m_yAxisData[yDataset.uniqueId].push(yDataset.numericValue);
     }
 
     // Shift X-axis points
@@ -1768,10 +1785,12 @@ void UI::Dashboard::configureLineSeries()
       if (!d->plt)
         continue;
 
-      // Register Y-axis
+      // Register Y-axis. Keyed by uniqueId so each plot dataset has its
+      // own buffer, independent of any sibling dataset that may share the
+      // same source-frame index but apply a different transform.
       DSP::AxisData yAxis(points() + 1);
-      m_yAxisData.insert(d->index, yAxis);
-      m_yAxisData[d->index].fill(0);
+      m_yAxisData.insert(d->uniqueId, yAxis);
+      m_yAxisData[d->uniqueId].fill(0);
 
       // Register X-axis
       registerXAxisIfNeeded(*d);
@@ -1793,7 +1812,7 @@ void UI::Dashboard::configureLineSeries()
       const auto& xDataset = m_datasets[yDataset.xAxisId];
       DSP::LineSeries series;
       series.x = &m_xAxisData[xDataset.index];
-      series.y = &m_yAxisData[yDataset.index];
+      series.y = &m_yAxisData[yDataset.uniqueId];
       m_pltValues.append(series);
     }
 
@@ -1801,7 +1820,7 @@ void UI::Dashboard::configureLineSeries()
     else {
       DSP::LineSeries series;
       series.x = &m_pltXAxis;
-      series.y = &m_yAxisData[yDataset.index];
+      series.y = &m_yAxisData[yDataset.uniqueId];
       m_pltValues.append(series);
     }
 

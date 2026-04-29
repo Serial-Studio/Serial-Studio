@@ -195,6 +195,7 @@ public:
 
     TreeViewSourceName = Qt::UserRole + 14,
     TreeViewSourceId   = Qt::UserRole + 15,
+    TreeViewVirtual    = Qt::UserRole + 16,
   };
   Q_ENUM(CustomRoles)
 
@@ -375,6 +376,7 @@ public:
     names.insert(ProjectEditor::ParameterKey,         BAL("parameterKey"));
     names.insert(ProjectEditor::TreeViewSourceName,   BAL("treeViewSourceName"));
     names.insert(ProjectEditor::TreeViewSourceId,     BAL("treeViewSourceId"));
+    names.insert(ProjectEditor::TreeViewVirtual,      BAL("treeViewVirtual"));
 #undef BAL
     // clang-format on
 

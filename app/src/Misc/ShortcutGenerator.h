@@ -82,6 +82,7 @@ public slots:
                 const QString& iconPath,
                 const QString& projectFile,
                 bool fullscreen,
+                bool actionsPanel,
                 bool csvExport,
                 bool mdfExport,
                 bool sessionExport,
@@ -92,6 +93,7 @@ public slots:
 private:
   [[nodiscard]] QStringList buildArguments(const QString& projectFile,
                                            bool fullscreen,
+                                           bool actionsPanel,
                                            bool csvExport,
                                            bool mdfExport,
                                            bool sessionExport,

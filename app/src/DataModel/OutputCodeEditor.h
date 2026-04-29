@@ -59,6 +59,8 @@ public slots:
   void import();
   void selectAll();
   void readCode();
+  void formatDocument();
+  void formatSelection();
   void selectTemplate();
   void testTransmitFunction();
   void reload(bool guiTrigger = false);

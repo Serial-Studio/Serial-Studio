@@ -36,8 +36,14 @@ Loader {
   //
   asynchronous: true
 
+  //
+  // Pointer to the generated dialog
+  //
   property var dialog: null
 
+  //
+  // Utility function to show the dialog
+  //
   function activate() {
     if (!active)
       active = true
@@ -48,17 +54,42 @@ Loader {
     }
   }
 
+  //
+  // Utility function to hide the dialog
+  //
   function hide() {
     if (active && dialog)
       dialog.hide()
   }
 
+  //
+  // Utility function to close the dialog
+  //
+  function close() {
+    if (active && dialog) {
+      dialog.close()
+      dialog = null
+      active = false
+    }
+  }
+
+  //
+  // SmartWindow exposes displayWindow() which restores the previous geometry
+  // and raises the window; SmartDialog only has the inherited show(). Prefer
+  // displayWindow() when present so authoring windows reopen on the same
+  // screen with the correct size after each unload.
+  //
   onLoaded: {
     root.dialog = item
     dialog.onClosing.connect(function() {
       root.active = false;
     })
 
-    Qt.callLater(function() { dialog.show() })
+    Qt.callLater(function() {
+      if (typeof dialog.displayWindow === "function")
+        dialog.displayWindow()
+      else
+        dialog.show()
+    })
   }
 }

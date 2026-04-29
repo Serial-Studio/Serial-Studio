@@ -25,6 +25,24 @@ Widgets.Pane {
                          : ({})
 
   //
+  // True when the explorer is opened from a deployed shortcut. Edits are
+  // then restricted to the session currently being recorded.
+  //
+  readonly property bool operatorMode: typeof app !== "undefined"
+                                       && app.runtimeMode
+
+  //
+  // True when the user is allowed to mutate notes and tag assignments on
+  // the currently-displayed session. In author mode this is always true;
+  // in operator mode only the session being actively recorded is editable.
+  //
+  readonly property bool editsAllowed:
+    !operatorMode
+    || (Cpp_CommercialBuild
+        && root.sessionId >= 0
+        && root.sessionId === Cpp_Sessions_Export.currentSessionId)
+
+  //
   // Refresh when selected session changes
   //
   Connections {
@@ -175,7 +193,11 @@ Widgets.Pane {
           Layout.fillWidth: true
           Layout.preferredHeight: 80
           wrapMode: TextEdit.Wrap
-          placeholderText: qsTr("Add session notes…")
+          readOnly: !root.editsAllowed
+          opacity: root.editsAllowed ? 1 : 0.7
+          placeholderText: root.editsAllowed
+                           ? qsTr("Add session notes…")
+                           : qsTr("Notes are read-only for completed sessions.")
           text: Cpp_Sessions_Manager.selectedSessionNotes
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.uiFont
@@ -186,7 +208,10 @@ Widgets.Pane {
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
           }
 
-          onEditingFinished: Cpp_Sessions_Manager.selectedSessionNotes = text
+          onEditingFinished: {
+            if (root.editsAllowed)
+              Cpp_Sessions_Manager.selectedSessionNotes = text
+          }
         }
 
         //
@@ -229,6 +254,7 @@ Widgets.Pane {
                   icon.width: 12
                   icon.height: 12
                   background: Item {}
+                  visible: root.editsAllowed
                   anchors.verticalCenter: parent.verticalCenter
                   icon.source: "qrc:/rcc/icons/buttons/close.svg"
                   icon.color: Cpp_ThemeManager.colors["highlighted_text"]
@@ -242,6 +268,7 @@ Widgets.Pane {
         RowLayout {
           spacing: 8
           Layout.fillWidth: true
+          visible: root.editsAllowed
 
           TextField {
             id: tagField
@@ -288,6 +315,7 @@ Widgets.Pane {
             icon.width: 18
             icon.height: 18
             text: qsTr("Replay")
+            visible: !root.operatorMode
             enabled: (root.metadata.frame_count || 0) > 0
             icon.source: "qrc:/rcc/icons/buttons/play.svg"
             onClicked: Cpp_Sessions_Manager.replaySelectedSession()
@@ -317,6 +345,7 @@ Widgets.Pane {
             icon.width: 18
             icon.height: 18
             text: qsTr("Delete")
+            visible: !root.operatorMode
             enabled: !Cpp_Sessions_Manager.locked
             icon.source: "qrc:/rcc/icons/buttons/trash.svg"
             onClicked: Cpp_Sessions_Manager.confirmDeleteSession(root.sessionId)

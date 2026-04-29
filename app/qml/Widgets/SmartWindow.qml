@@ -37,6 +37,24 @@ Window {
   property bool isMaximized: false
   property bool isChangingSize: false
   property string previousScreenName: ""
+  property int preFullscreenVisibility: Window.AutomaticVisibility
+
+  //
+  // Toggles real OS fullscreen and remembers the prior visibility so it can
+  // restore Maximized vs. Normal when leaving fullscreen — otherwise the
+  // "Full Screen" entry in the start menu only hides the toolbar on Windows.
+  //
+  function toggleFullScreen() {
+    if (root.visibility === Window.FullScreen) {
+      if (root.preFullscreenVisibility === Window.Maximized)
+        root.showMaximized()
+      else
+        root.showNormal()
+    } else {
+      root.preFullscreenVisibility = root.visibility
+      root.showFullScreen()
+    }
+  }
 
   //
   // Save previous values for maximize/unmaximize cycle with delay
@@ -90,10 +108,13 @@ Window {
 
       if (root.x > g.x + g.width - root.minimumWidth || root.x < g.x)
         root.x = g.x + (g.width - root.minimumWidth) / 2
+
       if (root.y > g.y + g.height - root.minimumHeight || root.y < g.y)
         root.y = g.y + (g.height - root.minimumHeight) / 2
+
       if (root.width > g.width)
         root.width = root.minimumWidth
+
       if (root.height > g.height)
         root.height = root.minimumHeight
 
@@ -115,17 +136,20 @@ Window {
     // Snap inside screen bounds if needed
     if (root.x < g.x || root.x > g.x + g.width - root.width)
       root.x = g.x + (g.width - root.width) / 2
+
     if (root.y < g.y || root.y > g.y + g.height - root.height)
       root.y = g.y + (g.height - root.height) / 2
 
     if (root.width < root.minimumWidth)
       root.width = root.minimumWidth
+
     if (root.height < root.minimumHeight)
       root.height = root.minimumHeight
 
     // Make sure window is fully visible
     if (root.x < g.x)
       root.x = g.x
+
     if (root.y < g.y)
       root.y = g.y
   }

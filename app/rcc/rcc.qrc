@@ -412,7 +412,6 @@
         <file>icons/project-editor/open.svg</file>
         <file>icons/start/actions.svg</file>
         <file>icons/start/auto-layout.svg</file>
-        <file>icons/start/clear.svg</file>
         <file>icons/start/console-log.svg</file>
         <file>icons/start/console.svg</file>
         <file>icons/start/csv-log.svg</file>
@@ -691,5 +690,8 @@
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
         <file>icons/toolbar/deploy.svg</file>
+        <file>icons/start/reset.svg</file>
+        <file>icons/start/sessions.svg</file>
+        <file>icons/start/tools.svg</file>
     </qresource>
 </RCC>

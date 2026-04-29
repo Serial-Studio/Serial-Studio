@@ -15,8 +15,10 @@
 #include <QInputDialog>
 #include <QJavascriptHighlighter>
 #include <QLineNumberArea>
+#include <QTextCursor>
 #include <QTextDocument>
 
+#include "DataModel/CodeFormatter.h"
 #include "DataModel/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/ScriptTemplates.h"
@@ -202,6 +204,58 @@ void DataModel::OutputCodeEditor::paste()
 void DataModel::OutputCodeEditor::selectAll()
 {
   m_widget.selectAll();
+}
+
+/**
+ * @brief Reformats the entire transmit-function source.
+ */
+void DataModel::OutputCodeEditor::formatDocument()
+{
+  const QString original = m_widget.toPlainText();
+  const QString formatted =
+    CodeFormatter::formatDocument(original, CodeFormatter::Language::JavaScript);
+  if (formatted == original)
+    return;
+
+  QTextCursor cursor = m_widget.textCursor();
+  const int savedPos = cursor.position();
+  cursor.beginEditBlock();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(formatted);
+  cursor.endEditBlock();
+
+  cursor.setPosition(qMin(savedPos, formatted.size()));
+  m_widget.setTextCursor(cursor);
+}
+
+/**
+ * @brief Reformats the selected lines, or the current line when nothing is selected.
+ */
+void DataModel::OutputCodeEditor::formatSelection()
+{
+  const QString original = m_widget.toPlainText();
+
+  QTextCursor cursor = m_widget.textCursor();
+  QTextCursor first(m_widget.document());
+  first.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
+  QTextCursor last(m_widget.document());
+  last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
+
+  const int firstLine = first.blockNumber();
+  const int lastLine = last.blockNumber();
+  const QString formatted = CodeFormatter::formatLineRange(
+    original, CodeFormatter::Language::JavaScript, firstLine, lastLine);
+  if (formatted == original)
+    return;
+
+  const int savedPos = cursor.position();
+  cursor.beginEditBlock();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(formatted);
+  cursor.endEditBlock();
+
+  cursor.setPosition(qMin(savedPos, formatted.size()));
+  m_widget.setTextCursor(cursor);
 }
 
 /**

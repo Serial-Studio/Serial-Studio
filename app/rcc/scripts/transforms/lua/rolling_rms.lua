@@ -12,22 +12,34 @@
 -- the RMS is meaningful.
 -- Adjust N to match your sensor.
 --
+-- Implementation note: the running sum is maintained in O(1) per
+-- sample by subtracting the value leaving the window and adding the
+-- new one. This keeps the transform cheap even at audio rates where
+-- N may be in the tens of thousands.
+--
 
 local N = 32
 local history = {}
 local idx = 1
 local count = 0
+local sumSq = 0
+
+for i = 1, N do
+  history[i] = 0
+end
 
 function transform(value)
-  history[idx] = value * value
+  local sq = value * value
+  sumSq = sumSq - history[idx] + sq
+  history[idx] = sq
   idx = idx % N + 1
   if count < N then
     count = count + 1
   end
 
-  local sumSq = 0
-  for i = 1, count do
-    sumSq = sumSq + history[i]
+  -- Guard against tiny negative drift from float cancellation
+  if sumSq < 0 then
+    sumSq = 0
   end
 
   return math.sqrt(sumSq / count)

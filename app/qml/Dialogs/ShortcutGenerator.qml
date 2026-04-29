@@ -89,6 +89,7 @@ Widgets.SmartDialog {
             root.iconPathValue,
             root.projectPath,
             fullscreen.checked,
+            actionsPanel.checked,
             csvExport.checked,
             mdfExport.checked,
             sessionExport.checked,
@@ -341,6 +342,17 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
           } Switch {
             id: fullscreen
+            Layout.rightMargin: -8
+            Layout.alignment: Qt.AlignRight
+            palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+          }
+
+          Label {
+            text: qsTr("Actions Panel")
+            color: Cpp_ThemeManager.colors["text"]
+          } Switch {
+            id: actionsPanel
+            checked: true
             Layout.rightMargin: -8
             Layout.alignment: Qt.AlignRight
             palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]

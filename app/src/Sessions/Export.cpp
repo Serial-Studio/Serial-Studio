@@ -270,6 +270,7 @@ void Sessions::ExportWorker::insertSession(const DataModel::Frame& frame, const 
   }
 
   m_sessionId = q.lastInsertId().toInt();
+  Q_EMIT sessionIdAssigned(m_sessionId);
 }
 
 /**
@@ -486,6 +487,7 @@ Sessions::Export::Export()
       DataModel::FrameConsumerConfig{8192, 1024, 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
+  , m_currentSessionId(-1)
   , m_persistSettings(true)
   , m_rawBytesQueue(8192)
   , m_operationMode(static_cast<int>(AppState::instance().operationMode()))
@@ -524,6 +526,14 @@ bool Sessions::Export::exportEnabled() const
 }
 
 /**
+ * @brief Returns the row id of the session currently being recorded, or -1.
+ */
+int Sessions::Export::currentSessionId() const
+{
+  return m_currentSessionId.load(std::memory_order_relaxed);
+}
+
+/**
  * @brief Closes the current database file.
  */
 void Sessions::Export::closeFile()
@@ -535,6 +545,9 @@ void Sessions::Export::closeFile()
     m_isOpen.store(false, std::memory_order_relaxed);
     Q_EMIT openChanged();
   }
+
+  if (m_currentSessionId.exchange(-1, std::memory_order_relaxed) != -1)
+    Q_EMIT currentSessionIdChanged();
 }
 
 /**
@@ -701,7 +714,21 @@ DataModel::FrameConsumerWorkerBase* Sessions::Export::createWorker()
           &DataModel::FrameConsumerWorkerBase::resourceOpenChanged,
           this,
           &Export::onWorkerOpenChanged);
+  connect(w,
+          &ExportWorker::sessionIdAssigned,
+          this,
+          &Export::onWorkerSessionIdAssigned,
+          Qt::QueuedConnection);
   return w;
+}
+
+/**
+ * @brief Mirrors the worker's freshly-assigned session id onto the controller.
+ */
+void Sessions::Export::onWorkerSessionIdAssigned(int sessionId)
+{
+  if (m_currentSessionId.exchange(sessionId, std::memory_order_relaxed) != sessionId)
+    Q_EMIT currentSessionIdChanged();
 }
 
 /**
@@ -715,6 +742,11 @@ void Sessions::Export::onWorkerOpenChanged()
     m_isOpen.store(state, std::memory_order_relaxed);
     Q_EMIT openChanged();
   }
+
+  // Worker-driven close paths (disconnect, mode switch handled internally)
+  // also need to clear the cached session id so QML edit gates flip back off.
+  if (!state && m_currentSessionId.exchange(-1, std::memory_order_relaxed) != -1)
+    Q_EMIT currentSessionIdChanged();
 }
 
 #endif  // BUILD_COMMERCIAL

@@ -32,6 +32,19 @@ Widgets.Pane {
     }
   }
 
+  //
+  // Shortcuts
+  //
+  Shortcut {
+    enabled: outputEditor.activeFocus
+    onActivated: outputEditor.formatSelection()
+    sequences: ["Ctrl+I"]
+  } Shortcut {
+    enabled: outputEditor.activeFocus
+    onActivated: outputEditor.formatDocument()
+    sequences: ["Ctrl+Shift+I"]
+  }
+
   Page {
     palette.mid: Cpp_ThemeManager.colors["mid"]
     palette.dark: Cpp_ThemeManager.colors["dark"]
@@ -369,6 +382,18 @@ Widgets.Pane {
         MenuItem {
           text: qsTr("Select All")
           onTriggered: outputEditor.selectAll()
+        }
+
+        MenuSeparator {}
+
+        MenuItem {
+          text: qsTr("Format Document")
+          onTriggered: outputEditor.formatDocument()
+        }
+
+        MenuItem {
+          text: qsTr("Format Selection")
+          onTriggered: outputEditor.formatSelection()
         }
       }
     }

@@ -271,6 +271,7 @@ set(SOURCES
   src/DataModel/LuaScriptEngine.cpp
   src/DataModel/ScriptTemplates.cpp
   src/DataModel/JsCodeEditor.cpp
+  src/DataModel/CodeFormatter.cpp
   src/DataModel/OutputCodeEditor.cpp
   src/DataModel/ProjectModel.cpp
   src/DataModel/ProjectEditor.cpp
@@ -372,6 +373,7 @@ set(HEADERS
   src/DataModel/LuaScriptEngine.h
   src/DataModel/ScriptTemplates.h
   src/DataModel/JsCodeEditor.h
+  src/DataModel/CodeFormatter.h
   src/DataModel/OutputCodeEditor.h
   src/DataModel/ProjectModel.h
   src/DataModel/ProjectEditor.h

@@ -1048,7 +1048,7 @@ Widgets.SmartDialog {
         icon.height: 18
         text: qsTr("Close")
         horizontalPadding: 8
-        onClicked: root.hide()
+        onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/rcc/icons/buttons/close.svg"
@@ -1059,7 +1059,7 @@ Widgets.SmartDialog {
         icon.height: 18
         text: qsTr("Apply")
         horizontalPadding: 8
-        onClicked: root.hide()
+        onClicked: root.close()
         Layout.alignment: Qt.AlignVCenter
         icon.color: Cpp_ThemeManager.colors["button_text"]
         icon.source: "qrc:/rcc/icons/buttons/apply.svg"

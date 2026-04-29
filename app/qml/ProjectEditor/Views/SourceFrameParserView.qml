@@ -88,6 +88,14 @@ Widgets.Pane {
     enabled: frameParser.activeFocus
     onActivated: Cpp_JSON_ProjectModel.saveJsonFile()
     sequences: [StandardKey.Save, StandardKey.SaveAs]
+  } Shortcut {
+    enabled: frameParser.activeFocus
+    onActivated: frameParser.formatSelection()
+    sequences: ["Ctrl+I"]
+  } Shortcut {
+    enabled: frameParser.activeFocus
+    onActivated: frameParser.formatDocument()
+    sequences: ["Ctrl+Shift+I"]
   }
 
   //
@@ -135,6 +143,22 @@ Widgets.Pane {
       text: qsTr("Select All")
       opacity: enabled ? 1 : 0.5
       onTriggered: frameParser.selectAll()
+      enabled: frameParser.text.length > 0
+    }
+
+    MenuSeparator {}
+
+    MenuItem {
+      text: qsTr("Format Document")
+      opacity: enabled ? 1 : 0.5
+      onTriggered: frameParser.formatDocument()
+      enabled: frameParser.text.length > 0
+    }
+
+    MenuItem {
+      text: qsTr("Format Selection")
+      opacity: enabled ? 1 : 0.5
+      onTriggered: frameParser.formatSelection()
       enabled: frameParser.text.length > 0
     }
   }

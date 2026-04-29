@@ -221,6 +221,8 @@ Item {
           width: isHorizontal ? 3 : 12
           height: isHorizontal ? 12 : 3
           visible: root.model.alarmsDefined
+                   && root.model.alarmLow > root.model.minValue
+                   && root.model.alarmLow < root.model.maxValue
           color: Cpp_ThemeManager.colors["alarm"]
         }
 
@@ -245,6 +247,8 @@ Item {
           width: isHorizontal ? 3 : 12
           height: isHorizontal ? 12 : 3
           visible: root.model.alarmsDefined
+                   && root.model.alarmHigh > root.model.minValue
+                   && root.model.alarmHigh < root.model.maxValue
           color: Cpp_ThemeManager.colors["alarm"]
         }
       }

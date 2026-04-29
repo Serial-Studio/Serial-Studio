@@ -60,11 +60,14 @@ private slots:
   void onApply();
   void onTest();
   void onClear();
+  void onFormat();
+  void onFormatLine();
   void buildTemplates();
   void onThemeChanged();
   void applyLanguage(int language);
   void onTemplateSelected(int index);
   void onLanguageChanged(int index);
+  void showEditorContextMenu(const QPoint& localPos);
 
 private:
   [[nodiscard]] int detectTemplate() const;

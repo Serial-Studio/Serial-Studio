@@ -242,6 +242,7 @@ int main(int argc, char** argv)
   QCLO mdfExportOpt("mdf-export", "Enable MDF4 export immediately on startup (Pro)");
   QCLO sessionExportOpt("session-export", "Enable session database export on startup (Pro)");
   QCLO consoleExportOpt("console-export", "Enable console log export on startup (Pro)");
+  QCLO actionsPanelOpt("actions-panel", "Show the actions panel in operator runtime mode (Pro)");
   QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
   QCLO deactivateOpt("deactivate", "Deactivate the current license instance and exit (for CI cleanup)");
   QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
@@ -286,6 +287,7 @@ int main(int argc, char** argv)
   parser.addOption(mdfExportOpt);
   parser.addOption(sessionExportOpt);
   parser.addOption(consoleExportOpt);
+  parser.addOption(actionsPanelOpt);
   parser.addOption(activateOpt);
   parser.addOption(deactivateOpt);
   parser.addOption(modbusRtuOpt);
@@ -321,6 +323,7 @@ int main(int argc, char** argv)
   // Activate/deactivate Serial Studio
   if (parser.isSet(activateOpt))
     return cliActivateLicense(app, parser.value(activateOpt));
+
   if (parser.isSet(deactivateOpt))
     return cliDeactivateLicense(app);
 #endif
@@ -360,6 +363,7 @@ int main(int argc, char** argv)
       QAbstractButton* deleteBtn = nullptr;
       if (!shortcutPath.isEmpty())
         deleteBtn = box.addButton(QObject::tr("Delete Shortcut"), QMessageBox::DestructiveRole);
+
       box.addButton(QObject::tr("Quit"), QMessageBox::RejectRole);
       box.exec();
 
@@ -437,21 +441,30 @@ int main(int argc, char** argv)
   // behaviour: only enable when the flag is set.
 #ifdef BUILD_COMMERCIAL
   if (runtimeMode) {
+    CSV::Export::instance().setSettingsPersistent(false);
     MDF4::Export::instance().setSettingsPersistent(false);
     Sessions::Export::instance().setSettingsPersistent(false);
     Console::Export::instance().setSettingsPersistent(false);
+    UI::Dashboard::instance().setSettingsPersistent(false);
 
     CSV::Export::instance().setExportEnabled(parser.isSet(csvExportOpt));
     MDF4::Export::instance().setExportEnabled(parser.isSet(mdfExportOpt));
     Sessions::Export::instance().setExportEnabled(parser.isSet(sessionExportOpt));
     Console::Export::instance().setExportEnabled(parser.isSet(consoleExportOpt));
+
+    UI::Dashboard::instance().setTerminalEnabled(false);
+    UI::Dashboard::instance().setNotificationLogEnabled(false);
+    UI::Dashboard::instance().setShowActionPanel(parser.isSet(actionsPanelOpt));
   } else {
     if (parser.isSet(csvExportOpt))
       CSV::Export::instance().setExportEnabled(true);
+
     if (parser.isSet(mdfExportOpt))
       MDF4::Export::instance().setExportEnabled(true);
+
     if (parser.isSet(sessionExportOpt))
       Sessions::Export::instance().setExportEnabled(true);
+
     if (parser.isSet(consoleExportOpt))
       Console::Export::instance().setExportEnabled(true);
   }
@@ -941,6 +954,7 @@ static int cliActivateLicense(QApplication& app, const QString& licenseKey)
       qInfo() << "License activated successfully.";
     else
       qCritical() << "License activation failed.";
+
     app.quit();
   });
 
@@ -986,6 +1000,7 @@ static int cliDeactivateLicense(QApplication& app)
       qInfo() << "License deactivated successfully.";
     else
       qCritical() << "License deactivation failed.";
+
     app.quit();
   });
 

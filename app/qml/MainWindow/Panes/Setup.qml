@@ -72,7 +72,6 @@ Widgets.Pane {
   //
   Settings {
     category: "SetupPanel"
-    property alias csvExport: csvLogging.checked
     property alias paneWidth: root.userPaneWidth
   }
 
@@ -289,6 +288,7 @@ Widgets.Pane {
       //
       CheckBox {
         id: csvLogging
+
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
         opacity: enabled ? 1 : 0.5
@@ -414,6 +414,7 @@ Widgets.Pane {
 
           SetupPanes.Hardware {
             id: hardware
+
             Layout.fillWidth: true
             Layout.fillHeight: true
           }

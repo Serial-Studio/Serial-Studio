@@ -194,6 +194,7 @@ CSV::Export::Export()
   : DataModel::FrameConsumer<DataModel::TimestampedFramePtr>(
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
+  , m_persistSettings(true)
 {
   initializeWorker();
   connect(m_worker,
@@ -201,6 +202,9 @@ CSV::Export::Export()
           this,
           &Export::onWorkerOpenChanged,
           Qt::QueuedConnection);
+
+  // Restore persisted export preference
+  setExportEnabled(m_settings.value("CSVExport", false).toBool());
 }
 
 /**
@@ -302,6 +306,14 @@ void CSV::Export::setupExternalConnections()
 }
 
 /**
+ * @brief Toggles whether export-enabled changes get written to QSettings.
+ */
+void CSV::Export::setSettingsPersistent(const bool persistent)
+{
+  m_persistSettings = persistent;
+}
+
+/**
  * @brief Enables or disables CSV export, closing the file on disable.
  */
 void CSV::Export::setExportEnabled(const bool enabled)
@@ -314,6 +326,9 @@ void CSV::Export::setExportEnabled(const bool enabled)
     closeFile();
 
   setConsumerEnabled(allow);
+  if (m_persistSettings)
+    m_settings.setValue("CSVExport", allow);
+
   Q_EMIT enabledChanged();
 }
 

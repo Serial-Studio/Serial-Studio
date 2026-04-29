@@ -31,7 +31,11 @@
 #include <QJSEngine>
 #include <QLuaCompleter>
 #include <QLuaHighlighter>
+#include <QMenu>
+#include <QShortcut>
+#include <QTextCursor>
 
+#include "DataModel/CodeFormatter.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ScriptTemplates.h"
@@ -135,6 +139,20 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
           &Misc::Translator::languageChanged,
           this,
           &DatasetTransformEditor::buildTemplates);
+
+  // Format-document shortcut on the editor.
+  auto* formatShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), m_editor);
+  formatShortcut->setContext(Qt::WidgetShortcut);
+  connect(formatShortcut, &QShortcut::activated, this, &DatasetTransformEditor::onFormatLine);
+  auto* formatAllShortcut =
+    new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I), m_editor);
+  formatAllShortcut->setContext(Qt::WidgetShortcut);
+  connect(formatAllShortcut, &QShortcut::activated, this, &DatasetTransformEditor::onFormat);
+
+  // Custom context menu adds Format entries on top of the standard ones.
+  m_editor->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(m_editor, &QWidget::customContextMenuRequested, this,
+          &DatasetTransformEditor::showEditorContextMenu);
 
   // Apply initial theme and Lua highlighting
   onThemeChanged();
@@ -260,6 +278,74 @@ void DataModel::DatasetTransformEditor::onTest()
   // Run the transform and display the result
   const QString result = testTransform(m_editor->toPlainText(), m_language, inputVal);
   m_testOutput->setText(result);
+}
+
+/**
+ * @brief Reformats the entire transform script.
+ */
+void DataModel::DatasetTransformEditor::onFormat()
+{
+  const auto lang = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
+                                                      : CodeFormatter::Language::JavaScript;
+  const QString original = m_editor->toPlainText();
+  const QString formatted = CodeFormatter::formatDocument(original, lang);
+  if (formatted == original)
+    return;
+
+  QTextCursor cursor = m_editor->textCursor();
+  const int savedPos = cursor.position();
+  cursor.beginEditBlock();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(formatted);
+  cursor.endEditBlock();
+
+  cursor.setPosition(qMin(savedPos, formatted.size()));
+  m_editor->setTextCursor(cursor);
+}
+
+/**
+ * @brief Reformats the selected lines, or the current line when nothing is selected.
+ */
+void DataModel::DatasetTransformEditor::onFormatLine()
+{
+  const auto lang = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
+                                                      : CodeFormatter::Language::JavaScript;
+  const QString original = m_editor->toPlainText();
+
+  QTextCursor cursor = m_editor->textCursor();
+  QTextCursor first(m_editor->document());
+  first.setPosition(qMin(cursor.selectionStart(), cursor.selectionEnd()));
+  QTextCursor last(m_editor->document());
+  last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
+
+  const int firstLine = first.blockNumber();
+  const int lastLine = last.blockNumber();
+  const QString formatted =
+    CodeFormatter::formatLineRange(original, lang, firstLine, lastLine);
+  if (formatted == original)
+    return;
+
+  const int savedPos = cursor.position();
+  cursor.beginEditBlock();
+  cursor.select(QTextCursor::Document);
+  cursor.insertText(formatted);
+  cursor.endEditBlock();
+
+  cursor.setPosition(qMin(savedPos, formatted.size()));
+  m_editor->setTextCursor(cursor);
+}
+
+/**
+ * @brief Builds and shows the editor's right-click menu with format entries.
+ */
+void DataModel::DatasetTransformEditor::showEditorContextMenu(const QPoint& localPos)
+{
+  QMenu* menu = m_editor->createStandardContextMenu();
+  menu->addSeparator();
+  menu->addAction(tr("Format Document\tCtrl+Shift+I"), this, &DatasetTransformEditor::onFormat);
+  menu->addAction(tr("Format Selection\tCtrl+I"), this, &DatasetTransformEditor::onFormatLine);
+  menu->exec(m_editor->viewport()->mapToGlobal(localPos));
+  menu->deleteLater();
 }
 
 /**

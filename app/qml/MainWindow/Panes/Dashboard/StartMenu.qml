@@ -21,6 +21,7 @@
 
 import QtCore
 import QtQuick
+import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
@@ -74,7 +75,6 @@ Popup {
   Settings {
     property alias autoLayout: _autoLayoutBt.checked
     category: "WindowManagement" + app.settingsSuffix
-    property alias consoleEnabled: _consoleBt.checked
   }
 
   //
@@ -85,10 +85,95 @@ Popup {
   signal renameWorkspaceRequested(int workspaceId, string currentName)
 
   //
+  // Returns the list of currently-visible start menu actions whose name
+  // matches `filter`. Each entry is `{ name, icon, run }` — `run` is the
+  // closure that fires the action. Used by the taskbar's search popup.
+  //
+  function searchableItems(filter) {
+    var runtimeMode = (typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
+    var items = [
+      {
+        name: qsTr("Auto Layout"),
+        icon: "qrc:/rcc/icons/start/auto-layout.svg",
+        visible: true,
+        run: function() {
+          taskBar.windowManager.autoLayoutEnabled = !taskBar.windowManager.autoLayoutEnabled
+        }
+      },
+      {
+        name: qsTr("Full Screen"),
+        icon: "qrc:/rcc/icons/start/full-screen.svg",
+        visible: !root.isExternalWindow && !app.runtimeMode,
+        run: function() { mainWindow.toggleFullScreen() }
+      },
+      {
+        name: qsTr("Add External Window"),
+        icon: "qrc:/rcc/icons/start/external-window.svg",
+        visible: true,
+        run: function() { root.externalWindowClicked() }
+      },
+      {
+        name: qsTr("Console"),
+        icon: "qrc:/rcc/icons/start/console.svg",
+        visible: !app.runtimeMode,
+        run: function() { Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled }
+      },
+      {
+        name: qsTr("Notifications"),
+        icon: "qrc:/rcc/icons/start/notifications.svg",
+        visible: Cpp_CommercialBuild,
+        run: function() {
+          Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
+        }
+      },
+      {
+        name: qsTr("Preferences"),
+        icon: "qrc:/rcc/icons/start/settings.svg",
+        visible: !app.runtimeMode,
+        run: function() { app.showSettingsDialog() }
+      },
+      {
+        name: qsTr("Help Center"),
+        icon: "qrc:/rcc/icons/start/help.svg",
+        visible: true,
+        run: function() { app.showHelpCenter() }
+      },
+      {
+        name: qsTr("MQTT"),
+        icon: "qrc:/rcc/icons/toolbar/mqtt.svg",
+        visible: Cpp_CommercialBuild && !app.runtimeMode,
+        run: function() { app.showMqttConfiguration() }
+      },
+      {
+        name: qsTr("Sessions"),
+        icon: "qrc:/rcc/icons/start/sessions.svg",
+        visible: Cpp_CommercialBuild
+                 && (!app.runtimeMode || Cpp_Sessions_Export.exportEnabled),
+        run: function() { app.showDatabaseExplorer() }
+      }
+    ]
+
+    var f = (filter || "").trim().toLowerCase()
+    var out = []
+    for (var i = 0; i < items.length; ++i) {
+      if (!items[i].visible)
+        continue
+
+      if (f.length > 0 && items[i].name.toLowerCase().indexOf(f) === -1)
+        continue
+
+      out.push(items[i])
+    }
+
+    return out
+  }
+
+  //
   // Custom components
   //
   Component {
     id: _subMenuComponent
+
     Widgets.SubMenuCombo {}
   }
 
@@ -232,10 +317,15 @@ Popup {
         // Close other menus
         if (_actions.popup)
           _actions.popup.close()
+
         if (_plugins.popup)
           _plugins.popup.close()
+
         if (_export.popup)
           _export.popup.close()
+
+        if (_tools.popup)
+          _tools.popup.close()
       }
 
       onClicked: _groups.showMenu()
@@ -251,6 +341,7 @@ Popup {
       expandable: true
       text: qsTr("Actions")
       Layout.fillWidth: true
+      visible: Cpp_UI_Dashboard.actions.length > 0
       icon.source: "qrc:/rcc/icons/start/actions.svg"
 
       property var popup: null
@@ -277,10 +368,15 @@ Popup {
         // Close other menus
         if (_groups.popup)
           _groups.popup.close()
+
         if (_plugins.popup)
           _plugins.popup.close()
+
         if (_export.popup)
           _export.popup.close()
+
+        if (_tools.popup)
+          _tools.popup.close()
       }
 
       onClicked: _actions.showMenu()
@@ -326,6 +422,7 @@ Popup {
 
         if (plugins.length > 0)
           items.push({"id": "__separator__", "title": "", "icon": ""})
+
         items.push({
                      "id": "__manage_plugins__",
                      "title": qsTr("Manage Plugins…"),
@@ -341,10 +438,15 @@ Popup {
 
         if (_groups.popup)
           _groups.popup.close()
+
         if (_actions.popup)
           _actions.popup.close()
+
         if (_export.popup)
           _export.popup.close()
+
+        if (_tools.popup)
+          _tools.popup.close()
       }
 
       onClicked: _plugins.showMenu()
@@ -380,10 +482,13 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Full Screen")
-      checked: !mainWindow.toolbarVisible
       icon.source: "qrc:/rcc/icons/start/full-screen.svg"
       visible: !root.isExternalWindow && !app.runtimeMode
-      onClicked: mainWindow.toolbarVisible = !mainWindow.toolbarVisible
+      checked: mainWindow.visibility === Window.FullScreen
+      onClicked: {
+        root.close()
+        mainWindow.toggleFullScreen()
+      }
     }
 
     Widgets.MenuButton {
@@ -481,16 +586,144 @@ Popup {
         // Close other menus
         if (_groups.popup)
           _groups.popup.close()
+
         if (_actions.popup)
           _actions.popup.close()
+
         if (_plugins.popup)
           _plugins.popup.close()
+
+        if (_tools.popup)
+          _tools.popup.close()
       }
 
       onClicked: _export.showMenu()
       onContainsMouseChanged: {
         if (containsMouse)
           _export.showMenu()
+      }
+    }
+
+    Widgets.MenuButton {
+      id: _tools
+
+      expandable: true
+      text: qsTr("Tools")
+      Layout.fillWidth: true
+      icon.source: "qrc:/rcc/icons/start/tools.svg"
+      visible: !app.runtimeMode || Cpp_CommercialBuild
+
+      readonly property string kMqtt: "mqtt"
+      readonly property string kConsole: "console"
+      readonly property string kSessions: "sessions"
+      readonly property string kPreferences: "preferences"
+      readonly property string kNotifications: "notifications"
+
+      property var popup: null
+      function showMenu() {
+        // Create the popup on first use
+        if (_tools.popup === null) {
+          _tools.popup = _subMenuComponent.createObject(root)
+          _tools.popup.valueSelected.connect((value) => {
+            if (value === _tools.kConsole) {
+              root.close()
+              Cpp_UI_Dashboard.terminalEnabled = !Cpp_UI_Dashboard.terminalEnabled
+            } else if (value === _tools.kNotifications && Cpp_CommercialBuild) {
+              root.close()
+              Cpp_UI_Dashboard.notificationLogEnabled = !Cpp_UI_Dashboard.notificationLogEnabled
+            } else if (value === _tools.kPreferences) {
+              root.close()
+              app.showSettingsDialog()
+            } else if (value === _tools.kMqtt && Cpp_CommercialBuild) {
+              root.close()
+              app.showMqttConfiguration()
+            } else if (value === _tools.kSessions && Cpp_CommercialBuild) {
+              root.close()
+              app.showDatabaseExplorer()
+            }
+          })
+        }
+
+        // Build model conditionally — only items applicable to the current
+        // build/runtime mode are shown so the submenu doesn't dead-stub.
+        var model = []
+
+        if (!app.runtimeMode) {
+          model.push({
+            "id": _tools.kConsole,
+            "text": qsTr("Console"),
+            "icon": "qrc:/rcc/icons/start/console.svg",
+            "checked": Cpp_UI_Dashboard.terminalEnabled
+          })
+        }
+
+        if (Cpp_CommercialBuild) {
+          model.push({
+            "id": _tools.kNotifications,
+            "text": qsTr("Notifications"),
+            "icon": "qrc:/rcc/icons/start/notifications.svg",
+            "checked": Cpp_UI_Dashboard.notificationLogEnabled
+          })
+        }
+
+        if (!app.runtimeMode) {
+          model.push({
+            "id": _tools.kPreferences,
+            "text": qsTr("Preferences"),
+            "icon": "qrc:/rcc/icons/start/settings.svg"
+          })
+        }
+
+        if (Cpp_CommercialBuild && !app.runtimeMode) {
+          model.push({
+            "id": _tools.kMqtt,
+            "text": qsTr("MQTT"),
+            "icon": Cpp_MQTT_Client.isConnected
+                    ? (Cpp_MQTT_Client.isSubscriber
+                       ? "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg"
+                       : "qrc:/rcc/icons/toolbar/mqtt-publisher.svg")
+                    : "qrc:/rcc/icons/toolbar/mqtt.svg"
+          })
+        }
+
+        if (Cpp_CommercialBuild
+            && (!app.runtimeMode || Cpp_Sessions_Export.exportEnabled)) {
+          model.push({
+            "id": _tools.kSessions,
+            "text": qsTr("Sessions"),
+            "icon": "qrc:/rcc/icons/start/sessions.svg"
+          })
+        }
+
+        // Update popup state
+        _tools.popup.model = model
+        _tools.popup.showCheckable = true
+        _tools.popup.maximumHeight = root.height
+        _tools.popup.x = root.x + root.width - 1
+        _tools.popup.y = _tools.y + _layout.y + root.y + 4
+        _tools.popup.placeholderText = qsTr("No Tools Available")
+
+        // Open the popup
+        _tools.popup.open()
+
+        // Close other menus
+        if (_groups.popup)
+          _groups.popup.close()
+
+        if (_actions.popup)
+          _actions.popup.close()
+
+        if (_plugins.popup)
+          _plugins.popup.close()
+
+        if (_export.popup)
+          _export.popup.close()
+      }
+
+      onClicked: _tools.showMenu()
+      onContainsMouseChanged: {
+        if (containsMouse)
+          _tools.showMenu()
       }
     }
 
@@ -502,51 +735,6 @@ Popup {
     }
 
     Widgets.MenuButton {
-      id: _consoleBt
-
-      checkable: true
-      expandable: false
-      text: qsTr("Console")
-      Layout.fillWidth: true
-      checked: Cpp_UI_Dashboard.terminalEnabled
-      icon.source: "qrc:/rcc/icons/start/console.svg"
-      onCheckedChanged: {
-        if (checked !== Cpp_UI_Dashboard.terminalEnabled) {
-          root.close()
-          Cpp_UI_Dashboard.terminalEnabled = checked
-        }
-      }
-    }
-
-    Widgets.MenuButton {
-      checkable: true
-      expandable: false
-      Layout.fillWidth: true
-      text: qsTr("Notifications")
-      visible: Cpp_CommercialBuild
-      checked: Cpp_UI_Dashboard.notificationLogEnabled
-      icon.source: "qrc:/rcc/icons/start/notifications.svg"
-      onCheckedChanged: {
-        if (checked !== Cpp_UI_Dashboard.notificationLogEnabled) {
-          root.close()
-          Cpp_UI_Dashboard.notificationLogEnabled = checked
-        }
-      }
-    }
-
-    Widgets.MenuButton {
-      expandable: false
-      Layout.fillWidth: true
-      text: qsTr("Preferences")
-      visible: !app.runtimeMode
-      icon.source: "qrc:/rcc/icons/start/settings.svg"
-      onClicked: {
-        root.close()
-        app.showSettingsDialog()
-      }
-    }
-
-    Widgets.MenuButton {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Help Center")
@@ -554,36 +742,6 @@ Popup {
       onClicked: {
         root.close()
         app.showHelpCenter()
-      }
-    }
-
-    Loader {
-      Layout.fillWidth: true
-      active: Cpp_CommercialBuild && !app.runtimeMode
-      sourceComponent: Rectangle {
-        opacity: 0.5
-        implicitHeight: 1
-        color: Cpp_ThemeManager.colors["start_menu_text"]
-      }
-    }
-
-    Loader {
-      Layout.fillWidth: true
-      active: Cpp_CommercialBuild && !app.runtimeMode
-      sourceComponent: Component {
-        Widgets.MenuButton {
-          expandable: false
-          text: qsTr("MQTT")
-          icon.source: Cpp_MQTT_Client.isConnected ?
-                         (Cpp_MQTT_Client.isSubscriber ?
-                            "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
-                            "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
-                         "qrc:/rcc/icons/toolbar/mqtt.svg"
-          onClicked: {
-            root.close()
-            app.showMqttConfiguration()
-          }
-        }
       }
     }
 
@@ -603,6 +761,26 @@ Popup {
       text: Cpp_IO_Manager.paused ? qsTr("Resume") :
                                     qsTr("Pause")
       onClicked: Cpp_IO_Manager.paused = !Cpp_IO_Manager.paused
+    }
+
+    Widgets.MenuButton {
+      expandable: false
+      text: qsTr("Reset")
+      Layout.fillWidth: true
+      icon.source: "qrc:/rcc/icons/start/reset.svg"
+      onClicked: {
+        // Reset dashboard
+        root.close()
+        Cpp_UI_Dashboard.clearPlotData()
+
+        // Rotate any active recorders so the next frame opens a fresh file/session
+        Cpp_CSV_Export.closeFile()
+        Cpp_Console_Export.closeFile()
+        if (Cpp_CommercialBuild) {
+          Cpp_MDF4_Export.closeFile()
+          Cpp_Sessions_Export.closeFile()
+        }
+      }
     }
 
     Widgets.MenuButton {

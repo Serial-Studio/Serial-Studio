@@ -32,17 +32,37 @@ Item {
   implicitWidth: layout.implicitWidth + 16
 
   //
-  // Save settings
+  // Re-sync each combo when C++ revises its own selection (e.g. after a
+  // device change clamps the chosen sample format to one the new device
+  // actually supports). Without this the combo's display can drift from
+  // the applied value because writing currentIndex breaks its binding.
   //
-  Settings {
-    category: "AudioDriver"
-    property alias sampleRate: _rate.currentIndex
-    property alias inputDevice: _inDev.currentIndex
-    property alias outputDevice: _outDev.currentIndex
-    property alias inputSampleFormat: _inFmt.currentIndex
-    property alias outputSampleFormat: _outFmt.currentIndex
-    property alias inputChannelConfiguration: _inChan.currentIndex
-    property alias outputChannelConfiguration: _outChan.currentIndex
+  Connections {
+    target: Cpp_IO_Audio
+    function onInputSettingsChanged() {
+      if (_inDev.currentIndex !== Cpp_IO_Audio.selectedInputDevice)
+        _inDev.currentIndex = Cpp_IO_Audio.selectedInputDevice
+
+      if (_rate.currentIndex !== Cpp_IO_Audio.selectedSampleRate)
+        _rate.currentIndex = Cpp_IO_Audio.selectedSampleRate
+
+      if (_inFmt.currentIndex !== Cpp_IO_Audio.selectedInputSampleFormat)
+        _inFmt.currentIndex = Cpp_IO_Audio.selectedInputSampleFormat
+
+      if (_inChan.currentIndex !== Cpp_IO_Audio.selectedInputChannelConfiguration)
+        _inChan.currentIndex = Cpp_IO_Audio.selectedInputChannelConfiguration
+    }
+
+    function onOutputSettingsChanged() {
+      if (_outDev.currentIndex !== Cpp_IO_Audio.selectedOutputDevice)
+        _outDev.currentIndex = Cpp_IO_Audio.selectedOutputDevice
+
+      if (_outFmt.currentIndex !== Cpp_IO_Audio.selectedOutputSampleFormat)
+        _outFmt.currentIndex = Cpp_IO_Audio.selectedOutputSampleFormat
+
+      if (_outChan.currentIndex !== Cpp_IO_Audio.selectedOutputChannelConfiguration)
+        _outChan.currentIndex = Cpp_IO_Audio.selectedOutputChannelConfiguration
+    }
   }
 
   //

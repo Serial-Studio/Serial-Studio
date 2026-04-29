@@ -81,21 +81,36 @@ rm -f "$tempfile"
 #    fi
 #done
 
-# Format C/C++ files under known directories
-echo "Running clang-format..."
-for dir in app doc examples; do
-    if [[ -d "$dir" ]]; then
-        find "$dir" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.c' \) \
-            ! -name 'miniaudio.h' \
-            -print0 | xargs -0 clang-format -i || echo "clang-format failed in $dir"
-    fi
-done
+# Format C/C++ files under known directories. Two passes are run with the
+# code-format step in between because code-format inserts blank lines after
+# brace-free single-statement bodies; running clang-format afterwards lets
+# those new blank lines settle into clang-format's canonical layout (column
+# alignment, trailing whitespace, etc.) before we look at the diff.
+run_clang_format() {
+    for dir in app doc examples; do
+        if [[ -d "$dir" ]]; then
+            find "$dir" -type f \( -name '*.cpp' -o -name '*.h' -o -name '*.c' \) \
+                ! -name 'miniaudio.h' \
+                -print0 | xargs -0 clang-format -i || echo "clang-format failed in $dir"
+        fi
+    done
+}
 
-# Format QML files (christmas-tree property ordering + id placement)
-if [[ -f scripts/qmlformat.py ]]; then
-    echo "Running qmlformat..."
-    python3 scripts/qmlformat.py --fix || echo "qmlformat failed"
+echo "Running clang-format (pass 1)..."
+run_clang_format
+
+# code-format covers the rules clang-format can't express:
+# - QML property "christmas-tree" ordering (shortest line first)
+# - QML `id:` placement and the blank line that must follow it
+# - Blank line after brace-free single-statement control-flow bodies
+#   (applies to QML, .h, and .cpp under app/qml + app/src)
+if [[ -f scripts/code-format.py ]]; then
+    echo "Running code-format..."
+    python3 scripts/code-format.py --fix || echo "code-format failed"
 fi
+
+echo "Running clang-format (pass 2)..."
+run_clang_format
 
 # Get a list of changed files (unstaged + staged)
 echo "Checking for changes..."

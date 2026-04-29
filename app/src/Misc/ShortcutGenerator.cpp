@@ -130,6 +130,7 @@ QString Misc::ShortcutGenerator::iconFileFilter() const
  */
 QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
                                                     bool fullscreen,
+                                                    bool actionsPanel,
                                                     bool csvExport,
                                                     bool mdfExport,
                                                     bool sessionExport,
@@ -147,6 +148,9 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
   args << QStringLiteral("--runtime");
   if (fullscreen)
     args << QStringLiteral("--fullscreen");
+
+  if (actionsPanel)
+    args << QStringLiteral("--actions-panel");
 
   if (csvExport)
     args << QStringLiteral("--csv-export");
@@ -172,6 +176,7 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
                                        const QString& iconPath,
                                        const QString& projectFile,
                                        bool fullscreen,
+                                       bool actionsPanel,
                                        bool csvExport,
                                        bool mdfExport,
                                        bool sessionExport,
@@ -199,8 +204,13 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
   const QString resolvedProject =
     QUrl(projectFile).isLocalFile() ? QUrl(projectFile).toLocalFile() : projectFile;
 
-  QStringList args =
-    buildArguments(resolvedProject, fullscreen, csvExport, mdfExport, sessionExport, consoleExport);
+  QStringList args = buildArguments(resolvedProject,
+                                    fullscreen,
+                                    actionsPanel,
+                                    csvExport,
+                                    mdfExport,
+                                    sessionExport,
+                                    consoleExport);
 
   // Lets the relaunched app offer to delete the shortcut when its project is gone.
   args << QStringLiteral("--shortcut-path") << resolvedPath;

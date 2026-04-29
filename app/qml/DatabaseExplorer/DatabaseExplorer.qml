@@ -31,6 +31,15 @@ Widgets.SmartWindow {
          ? Cpp_Sessions_Manager.fileName
          : qsTr("Sessions")
 
+  //
+  // True when the explorer is opened from a deployed shortcut. The dialog
+  // is then pinned to the project's session DB and destructive controls
+  // (open/close/delete/lock/replay/restore) are hidden so the operator
+  // cannot reach for another file or mutate completed sessions.
+  //
+  readonly property bool operatorMode: typeof app !== "undefined"
+                                       && app.runtimeMode
+
   onVisibleChanged: {
     if (visible)
       Cpp_NativeWindow.addWindow(root)
@@ -184,6 +193,8 @@ Widgets.SmartWindow {
           // Database section
           //
           Widgets.RibbonSection {
+            visible: !root.operatorMode
+
             Widgets.ToolbarButton {
               text: qsTr("Open")
               Layout.alignment: Qt.AlignVCenter
@@ -206,6 +217,8 @@ Widgets.SmartWindow {
           // Session section
           //
           Widgets.RibbonSection {
+            visible: !root.operatorMode
+
             Widgets.ToolbarButton {
               text: qsTr("Replay")
               Layout.alignment: Qt.AlignVCenter
@@ -235,6 +248,8 @@ Widgets.SmartWindow {
           // Lock / unlock section
           //
           Widgets.RibbonSection {
+            visible: !root.operatorMode
+
             Widgets.ToolbarButton {
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_Sessions_Manager.isOpen
@@ -289,6 +304,7 @@ Widgets.SmartWindow {
           //
           Widgets.RibbonSection {
             showSeparator: false
+            visible: !root.operatorMode
 
             Widgets.ToolbarButton {
               text: qsTr("Restore Project")
