@@ -4,6 +4,8 @@
   { "id": "data-sources", "title": "Data Sources", "section": "Basics", "file": "Data-Sources.md" },
   { "id": "data-flow", "title": "Data Flow", "section": "Basics", "file": "Data-Flow.md" },
   { "id": "project-editor", "title": "Project Editor", "section": "Configuration", "file": "Project-Editor.md" },
+  { "id": "project-lock", "title": "Project Lock", "section": "Configuration", "file": "Project-Lock.md" },
+  { "id": "operator-shortcuts", "title": "Operator Shortcuts", "section": "Configuration", "file": "Operator-Shortcuts.md" },
   { "id": "actions", "title": "Actions", "section": "Configuration", "file": "Actions.md" },
   { "id": "widget-reference", "title": "Widget Reference", "section": "Configuration", "file": "Widget-Reference.md" },
   { "id": "output-controls", "title": "Output Controls", "section": "Configuration", "file": "Output-Controls.md" },
