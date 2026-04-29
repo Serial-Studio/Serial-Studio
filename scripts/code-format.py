@@ -29,7 +29,17 @@ ambiguity is left untouched.
 
 The brace-free body rule applies to QML, C++ headers (.h), and C++
 sources (.cpp). The id-placement and christmas-tree rules apply only to
-QML files.
+QML files. CRLF/CR line endings are normalized to LF on every processed
+file, regardless of suffix.
+
+Comment-style and AI-narration findings (multi-line `//` runs, `//` as
+the first line of a `{` body, tutorial voice, hedging, rot-references,
+restate-the-code openers, emoji, …) are flag-only — collapsing or
+hoisting comments is a judgement call. Findings are grouped by rule
+into `.code-report` at the repo root for a follow-up human or LLM pass.
+
+Wrap a region with `// code-format off` / `// code-format on` to disable
+every rule between the fences (the `/* ... */` equivalent works too).
 
 Usage:
     python3 scripts/code-format.py                          # fix everything under app/qml + app/src
@@ -824,18 +834,293 @@ def _check_shallow_id(
 
 
 # ---------------------------------------------------------------------------
+# Comment-style checks (flag-only — humans collapse / refactor)
+# ---------------------------------------------------------------------------
+
+# `// code-format off` and `// code-format on` fence raw lines out of every
+# rule the script enforces. The fence text is matched on a stripped line —
+# both `//` and `/*…*/` forms are accepted so QML and C++ can both opt out.
+_FENCE_OFF_RE = re.compile(r"^\s*(?://|/\*)\s*code-format\s+off\b")
+_FENCE_ON_RE  = re.compile(r"^\s*(?://|/\*)\s*code-format\s+on\b")
+
+
+def _compute_fence_mask(lines: list[str]) -> list[bool]:
+    """Return a per-line bitmap; True means the line sits inside a
+    `// code-format off` / `// code-format on` fence and must be skipped by
+    every rule. The fence lines themselves are masked too so they don't get
+    flagged as multi-line comment runs."""
+    mask = [False] * len(lines)
+    fenced = False
+    for i, line in enumerate(lines):
+        if _FENCE_OFF_RE.match(line):
+            fenced = True
+            mask[i] = True
+            continue
+        if _FENCE_ON_RE.match(line):
+            fenced = False
+            mask[i] = True
+            continue
+        mask[i] = fenced
+    return mask
+
+
+def _is_line_comment(line: str) -> bool:
+    """True when `line` is a `//` comment line (ignoring leading whitespace).
+    Doxygen `///` and `//!` lines count — they are still single-line `//`
+    style. Block comments (`/* */`, `/** */`) are not flagged here."""
+    stripped = line.lstrip()
+    return stripped.startswith("//")
+
+
+def find_comment_style_violations(
+    lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag two AI-typical patterns:
+
+    - `multi-line-comment`: ≥2 consecutive `//` comment lines. CLAUDE.md
+      caps in-body `//` comments at one line; multi-line narration is
+      flagged for human collapse / removal.
+    - `comment-after-brace`: a `//` line as the first non-blank content
+      inside a `{` block. Hoisting the comment above the block (and often
+      dropping the braces) reads better — see CLAUDE.md "Comments &
+      Doxygen" guidance.
+
+    Neither is auto-fixable: collapsing comments loses information,
+    hoisting requires judgement about the surrounding block."""
+    violations: list[Violation] = []
+    n = len(lines)
+
+    i = 0
+    while i < n:
+        if fence_mask[i] or not _is_line_comment(lines[i]):
+            i += 1
+            continue
+
+        run_start = i
+        while i < n and not fence_mask[i] and _is_line_comment(lines[i]):
+            i += 1
+        run_len = i - run_start
+
+        if run_len >= 2:
+            violations.append(
+                Violation(
+                    path,
+                    run_start + 1,
+                    "multi-line-comment",
+                    f"{run_len} consecutive `//` lines — collapse to one line "
+                    "or drop (CLAUDE.md: in-body comments are one-line section headers)",
+                )
+            )
+
+    for i, line in enumerate(lines):
+        if fence_mask[i]:
+            continue
+        sanitized = _strip_eol_comment(line)
+        if not sanitized.endswith("{"):
+            continue
+        # Find the next non-blank line
+        j = i + 1
+        while j < n and lines[j].strip() == "":
+            j += 1
+        if j >= n or fence_mask[j]:
+            continue
+        if _is_line_comment(lines[j]):
+            violations.append(
+                Violation(
+                    path,
+                    j + 1,
+                    "comment-after-brace",
+                    "`//` comment as first line of a `{` body — hoist the "
+                    "comment above the block opener (CLAUDE.md: comments label "
+                    "sections, they don't narrate from inside)",
+                )
+            )
+
+    return violations
+
+
+# AI-narration patterns — phrases and shapes that ship in AI-generated code
+# but rarely survive a hand-review against CLAUDE.md's comment guidance
+# ("Code is the spec. Comments label sections; they do not narrate.").
+# Matched case-insensitively against the text after the leading `//` markers.
+# Keep this list HIGH-PRECISION: a false positive that flags hand-written
+# comments will train people to ignore the report.
+_AI_PATTERNS: tuple[tuple[str, "re.Pattern[str]"], ...] = (
+    # First-person tutorial voice — "we", "let's", "let us"
+    (
+        "first-person",
+        re.compile(r"\b(?:we'(?:ll|ve|re)|we\s+(?:need|want|have|will|should|now|first|then|can)|let'?s\b|let\s+us\b)",
+                   re.IGNORECASE),
+    ),
+    # Throat-clearing prefixes that add no information
+    (
+        "throat-clearing",
+        re.compile(r"^\s*(?:note(?:\s+that)?|important|keep\s+in\s+mind|remember(?:\s+that)?|please\s+note|fyi|n\.?b\.?)\s*[:,]",
+                   re.IGNORECASE),
+    ),
+    # Tutorial step markers
+    (
+        "tutorial-voice",
+        re.compile(r"^\s*(?:now|here|first(?:ly)?|second(?:ly)?|next|then|finally)\s*,?\s*(?:we\b|you\b|i\b)",
+                   re.IGNORECASE),
+    ),
+    # "This is..." / "This does..." / "This function..." narration
+    (
+        "this-is-narration",
+        re.compile(r"^\s*this\s+(?:is|does|function|method|class|file|module|code|block|line)\b",
+                   re.IGNORECASE),
+    ),
+    # PR/fix/change self-references that rot the moment they're committed
+    (
+        "rot-reference",
+        re.compile(r"\b(?:this\s+(?:pr|patch|fix|commit|change|cl)|the\s+(?:recent|previous|above|aforementioned)\s+(?:change|fix|pr|commit)|as\s+(?:mentioned|noted|described)\s+above|see\s+(?:above|below))\b",
+                   re.IGNORECASE),
+    ),
+    # Hedging vocabulary — "for now", "for clarity", "for readability",
+    # "in theory", "ideally", "perhaps", "maybe should"
+    (
+        "hedging",
+        re.compile(r"\b(?:for\s+(?:now|clarity|readability|reference|completeness)|in\s+theory|ideally|perhaps|maybe\s+(?:should|we|this)|might\s+want\s+to)\b",
+                   re.IGNORECASE),
+    ),
+    # Restating-the-code openers — strongest signal of AI prose
+    (
+        "restate-obvious",
+        re.compile(r"^\s*(?:loop(?:s)?\s+(?:over|through)|iterate(?:s)?\s+(?:over|through)|check(?:s)?\s+(?:if|whether)|set(?:s)?\s+\w+\s+to|return(?:s)?\s+the|get(?:s)?\s+the|create(?:s)?\s+(?:a|an|the)|initialize(?:s)?\s+(?:a|an|the)|store(?:s)?\s+the|update(?:s)?\s+the)\b",
+                   re.IGNORECASE),
+    ),
+    # AI-typical TODO/FIXME without a ticket reference — "TODO: implement this"
+    (
+        "todo-no-context",
+        re.compile(r"^\s*(?:todo|fixme|xxx|hack)\s*[:!\-]?\s*(?:implement|handle|add|fix|consider|figure\s+out|deal\s+with|come\s+back\s+to)\b",
+                   re.IGNORECASE),
+    ),
+    # Emoji in comments — CLAUDE.md bans them outright
+    (
+        "emoji",
+        re.compile(r"[\U0001F300-\U0001FAFF\U00002600-\U000027BF\U0001F000-\U0001F2FF]"),
+    ),
+    # "Used by X" / "Called from Y" — caller references rot
+    (
+        "caller-reference",
+        re.compile(r"\b(?:used\s+by|called\s+(?:by|from)|invoked\s+(?:by|from)|added\s+for|needed\s+for)\s+(?:the\s+)?[A-Z]?\w",
+                   re.IGNORECASE),
+    ),
+    # Trailing ellipsis on `//` lines — typically AI hand-waving "...etc"
+    (
+        "trailing-ellipsis",
+        re.compile(r"\.{3,}\s*$"),
+    ),
+)
+
+
+def _comment_payload(line: str) -> str | None:
+    """Return the text after `//`/`///`/`//!` markers on a `//` comment line,
+    or None when the line isn't a single-line comment. Leading/trailing
+    whitespace is preserved on the payload so anchored patterns still see
+    the start of the prose."""
+    stripped = line.lstrip()
+    if not stripped.startswith("//"):
+        return None
+    # Strip up to three slashes plus an optional `!` (`///`, `//!`, `///!`)
+    # then a single space if present.
+    j = 2
+    while j < len(stripped) and stripped[j] == "/":
+        j += 1
+    if j < len(stripped) and stripped[j] == "!":
+        j += 1
+    if j < len(stripped) and stripped[j] == " ":
+        j += 1
+    return stripped[j:]
+
+
+def find_ai_narration_violations(
+    lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag `//` comment lines that match AI-narration patterns.
+
+    These are heuristics, not proof. The aim is to surface the comments
+    most likely to violate CLAUDE.md's "label, don't narrate" rule for a
+    human or LLM to review. The `.code-report` header explains the rules
+    so a follow-up LLM pass can decide per-line."""
+    violations: list[Violation] = []
+
+    for i, line in enumerate(lines):
+        if fence_mask[i]:
+            continue
+        payload = _comment_payload(line)
+        if payload is None:
+            continue
+        # Skip section-header style "//---" banners — those are intentional
+        # per CLAUDE.md "98-dash banners separate concern groups".
+        stripped_payload = payload.strip()
+        if not stripped_payload or set(stripped_payload) <= {"-", "="}:
+            continue
+        # Skip `// clang-format off/on` and other tooling pragmas.
+        if re.match(r"^\s*(?:clang-format|code-format|NOLINT|cppcheck-suppress)", payload, re.IGNORECASE):
+            continue
+
+        for kind, pattern in _AI_PATTERNS:
+            if pattern.search(payload):
+                violations.append(
+                    Violation(
+                        path,
+                        i + 1,
+                        f"ai-{kind}",
+                        f"AI-narration smell ({kind}): {payload.strip()[:80]}",
+                    )
+                )
+                # One violation per line is enough — the worst pattern wins
+                break
+
+    return violations
+
+
+# ---------------------------------------------------------------------------
 # File-level processing
 # ---------------------------------------------------------------------------
 
+def _is_first_party(path: Path) -> bool:
+    """True when `path` lives under app/qml or app/src — the only trees whose
+    sources own the project's structural style. Vendored libraries (lib/),
+    embedded examples, and generated artifacts keep their upstream layout
+    even when they happen to match a tracked suffix."""
+    parts = path.resolve().parts
+    return ("app", "qml") in zip(parts, parts[1:]) or ("app", "src") in zip(parts, parts[1:])
+
+
 def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
-    raw_text = path.read_text(encoding="utf-8")
+    # Read as bytes first so CRLF detection isn't masked by Python's universal
+    # newline translation in text mode — read_text() silently rewrites \r\n
+    # and bare \r to \n, hiding the very thing we want to flag.
+    raw_bytes = path.read_bytes()
+    raw_text = raw_bytes.decode("utf-8")
     raw_lines = raw_text.splitlines()
 
-    is_qml = path.suffix == ".qml"
+    first_party = _is_first_party(path)
+    is_qml = first_party and path.suffix == ".qml"
     violations: list[Violation] = []
     new_raws: list[str] = list(raw_lines)
     qml_changed = False
     id_blanks: list[int] = []
+
+    fence_mask = _compute_fence_mask(raw_lines)
+
+    # CRLF/CR line endings get normalized to LF on rewrite. `splitlines()`
+    # already discards \r\n / \r / \n uniformly, so the round-trip via
+    # "\n".join() at the bottom of this function strips them — we just need
+    # to register the change so the file actually gets written out.
+    crlf_changed = b"\r" in raw_bytes
+    if crlf_changed:
+        violations.append(
+            Violation(path, 1, "line-endings", "CRLF/CR line endings normalized to LF")
+        )
+
+    # Comment-style and AI-narration checks apply to first-party C/C++/QML
+    # only — vendored sources keep their upstream comment style.
+    if first_party and path.suffix in _BRACE_FREE_SUFFIXES:
+        violations.extend(find_comment_style_violations(raw_lines, path, fence_mask))
+        violations.extend(find_ai_narration_violations(raw_lines, path, fence_mask))
 
     # Christmas-tree property sort + id-placement check are QML-specific.
     if is_qml:
@@ -878,14 +1163,25 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
 
     # Brace-free body blank-line rule applies to QML and C++ alike. Run
     # after id-blank fixes so the indices we collect line up with the
-    # buffer we'll mutate.
-    bf_violations, insert_after = find_brace_free_violations(new_raws, path)
-    violations.extend(bf_violations)
-    bf_changed = bool(insert_after)
-    if bf_changed:
-        new_raws = apply_brace_free_fixes(new_raws, insert_after)
+    # buffer we'll mutate. Other suffixes (Python, JS, Lua, …) get only
+    # the CRLF normalization pass.
+    bf_changed = False
+    if first_party and path.suffix in _BRACE_FREE_SUFFIXES:
+        bf_violations, insert_after = find_brace_free_violations(new_raws, path)
+        # Re-derive the fence mask against the post-fix buffer (sort/id-blank
+        # fixes can shift line numbers). Drop violations and inserts that
+        # land inside a fenced range.
+        post_mask = _compute_fence_mask(new_raws)
+        bf_violations = [v for v in bf_violations
+                         if v.line - 1 < len(post_mask) and not post_mask[v.line - 1]]
+        insert_after = [idx for idx in insert_after
+                        if idx < len(post_mask) and not post_mask[idx]]
+        violations.extend(bf_violations)
+        bf_changed = bool(insert_after)
+        if bf_changed:
+            new_raws = apply_brace_free_fixes(new_raws, insert_after)
 
-    if not fix or (not qml_changed and not id_changed and not bf_changed):
+    if not fix or (not qml_changed and not id_changed and not bf_changed and not crlf_changed):
         return violations, None
 
     new_text = "\n".join(new_raws)
@@ -898,25 +1194,31 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
     return violations, new_text
 
 
-_TRACKED_SUFFIXES = (".qml", ".cpp", ".h")
+# Suffixes that get full structural processing (christmas-tree / id /
+# brace-free) plus CRLF normalization.
+_BRACE_FREE_SUFFIXES = (".qml", ".cpp", ".h", ".c", ".mm")
+
+# Suffixes that get CRLF normalization only — extend the structural-rule
+# set with text formats that frequently arrive from Windows editors.
+_TRACKED_SUFFIXES = _BRACE_FREE_SUFFIXES + (
+    ".txt", ".md", ".py", ".svg", ".ts", ".js", ".lua", ".html", ".rcc", ".yml",
+)
 
 
-_SKIP_DIRS = {"build", "_deps", "ThirdParty"}
+_SKIP_DIRS = {"build", "_deps", "ThirdParty", ".git", "node_modules", "qm"}
 
 
 def iter_source_files(targets: list[Path]) -> Iterable[Path]:
-    """Yield .qml / .cpp / .h files under each target (recursive for dirs).
-    Skips build / _deps directories so generated artifacts aren't touched,
-    plus app/src/ThirdParty/ so vendored sources keep their upstream style."""
+    """Yield tracked-suffix files under each target (recursive for dirs).
+    Skips build / _deps / .git / vendored directories so generated and
+    third-party artifacts aren't touched."""
     for target in targets:
         if target.is_file():
             if target.suffix in _TRACKED_SUFFIXES:
                 yield target
             continue
-        for root, _, files in os.walk(target):
-            parts = Path(root).parts
-            if any(skip in parts for skip in _SKIP_DIRS):
-                continue
+        for root, dirs, files in os.walk(target):
+            dirs[:] = [d for d in dirs if d not in _SKIP_DIRS]
             for name in files:
                 if name.endswith(_TRACKED_SUFFIXES):
                     yield Path(root) / name
@@ -927,25 +1229,123 @@ def iter_source_files(targets: list[Path]) -> Iterable[Path]:
 # ---------------------------------------------------------------------------
 
 def default_targets() -> list[Path]:
-    """Return the repo-level `app/qml` and `app/src` trees anchored to the
-    script's location."""
-    # scripts/code-format.py  ->  <repo>/app/{qml,src}
+    """Return the trees the formatter walks when no paths are given.
+
+    `app/qml` and `app/src` get the full structural rule set; the rest are
+    here so CRLF normalization reaches the wider tree of text/source files
+    that formerly went through `sanitize-commit.sh`'s shell pass. Repo-root
+    text files (CMakeLists.txt, *.md, *.yml) are picked up via individual
+    file paths — `os.walk` from `repo` would also descend `build/`, which
+    `_SKIP_DIRS` filters but at the cost of stat-ing every entry."""
+    # scripts/code-format.py  ->  <repo>
     repo = Path(__file__).resolve().parent.parent
-    return [repo / "app" / "qml", repo / "app" / "src"]
+    targets: list[Path] = [
+        repo / "app",
+        repo / "lib",
+        repo / "examples",
+        repo / "scripts",
+        repo / "doc",
+    ]
+    for entry in repo.iterdir():
+        if entry.is_file() and entry.suffix in _TRACKED_SUFFIXES:
+            targets.append(entry)
+    return targets
+
+
+# Kinds the script CAN auto-fix in place. Anything else (multi-line-comment,
+# comment-after-brace, ai-*, christmas-tree-once-merged) is flag-only and
+# lives in `.code-report` for human / LLM follow-up.
+_AUTO_FIXABLE_KINDS = frozenset({
+    "line-endings",
+    "id-blank-line",
+    "brace-free-blank",
+    "christmas-tree",
+})
+
+
+_REPORT_HEADER = """\
+# Code Quality Report
+
+Generated by `scripts/code-format.py`. Each entry below was flagged by a
+heuristic that often signals AI-generated narration or a CLAUDE.md style
+violation. The script will not auto-fix these — judgement calls belong
+to a human or an LLM that has read the surrounding context.
+
+## Rules to apply
+
+- **One-line `//` section headers only.** Multi-line `//` blocks should
+  collapse to one line or be deleted. Comments label sections; they do
+  not narrate. (CLAUDE.md → "Comments & Doxygen".)
+- **Hoist comments out of `{` bodies.** A `// ...` as the first line
+  inside a `{` block should move above the block. Often the block itself
+  can drop its braces.
+- **No tutorial voice.** "We", "let's", "now we", "first we", "this is
+  a function that..." — none of these belong in source comments.
+- **No throat-clearing.** "Note that...", "Important:", "Keep in mind",
+  "FYI" — drop the prefix or drop the comment.
+- **No rot-references.** "this PR", "the recent fix", "as mentioned
+  above", "see below" — these decay the moment they are committed; if
+  they are load-bearing, the reason goes in the commit message.
+- **No restating the code.** "Loops over X", "checks if Y", "sets X
+  to Y" — the code already says that.
+- **No emoji.** Banned outright by CLAUDE.md.
+- **No caller-references.** "Used by X", "Called from Y", "Added for
+  the Z flow" — those rot. If something is non-obvious, encode it in
+  the *invariant*, not in trivia about who calls it.
+- **No hedging.** "For now", "for clarity", "ideally", "perhaps",
+  "maybe should..." — be definite or delete.
+- **No empty TODOs.** "TODO: implement this" / "FIXME: handle edge
+  case" without a ticket reference is noise — write the issue or the
+  ticket, not the placeholder.
+
+## Opt-out
+
+Wrap a region with `// code-format off` / `// code-format on` (or the
+`/* ... */` equivalent) to disable every rule between the fences. Use
+sparingly and explain why in a one-line comment above the fence.
+
+## Findings
+"""
+
+
+def _write_report(report_path: Path, flag_only: list[Violation]) -> None:
+    """Write `.code-report` at the repo root grouping flag-only violations
+    by kind, then by file. Skips writing when there's nothing to report
+    and removes any stale report from a previous run."""
+    if not flag_only:
+        if report_path.exists():
+            report_path.unlink()
+        return
+
+    by_kind: dict[str, list[Violation]] = {}
+    for v in flag_only:
+        by_kind.setdefault(v.kind, []).append(v)
+
+    out: list[str] = [_REPORT_HEADER]
+    for kind in sorted(by_kind):
+        entries = by_kind[kind]
+        out.append(f"\n### `{kind}` ({len(entries)})\n")
+        for v in entries:
+            out.append(f"- `{v.path}:{v.line}` — {v.message}\n")
+
+    out.append(f"\n---\n\n_Total flagged: {len(flag_only)}_\n")
+    report_path.write_text("".join(out), encoding="utf-8", newline="\n")
 
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0],
-        epilog="With no arguments, runs --fix on the repo's app/qml + app/src trees.",
+        epilog="With no arguments, runs --fix on the repo's default trees.",
     )
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--check", action="store_true", help="report only, no writes")
     group.add_argument("--fix", action="store_true", help="rewrite files in place (default)")
     parser.add_argument("--diff", action="store_true",
                         help="show unified diff of proposed changes")
+    parser.add_argument("--no-report", action="store_true",
+                        help="skip writing .code-report at the repo root")
     parser.add_argument("paths", nargs="*", type=Path,
-                        help="files or directories to process (default: app/qml + app/src)")
+                        help="files or directories to process (default: repo trees)")
 
     args = parser.parse_args(argv)
 
@@ -953,7 +1353,7 @@ def main(argv: list[str]) -> int:
     if not args.check and not args.fix:
         args.fix = True
 
-    # Default to the repo's app/qml + app/src trees when no paths were supplied
+    # Default to the configured repo trees when no paths were supplied
     if not args.paths:
         targets = [t for t in default_targets() if t.exists()]
         if not targets:
@@ -968,6 +1368,7 @@ def main(argv: list[str]) -> int:
 
     total_violations = 0
     total_changed = 0
+    flag_only: list[Violation] = []
 
     for path in files:
         violations, new_text = process_file(path, fix=args.fix)
@@ -975,6 +1376,8 @@ def main(argv: list[str]) -> int:
 
         for v in violations:
             print(f"{v.path}:{v.line}: {v.kind}: {v.message}")
+            if v.kind not in _AUTO_FIXABLE_KINDS:
+                flag_only.append(v)
 
         if new_text is not None:
             if args.diff:
@@ -984,15 +1387,21 @@ def main(argv: list[str]) -> int:
                     difflib.unified_diff(before, after, str(path), str(path))
                 )
             if args.fix:
-                path.write_text(new_text, encoding="utf-8")
+                path.write_text(new_text, encoding="utf-8", newline="\n")
                 total_changed += 1
                 print(f"{path}: rewrote", file=sys.stderr)
 
+    if not args.no_report:
+        repo_root = Path(__file__).resolve().parent.parent
+        _write_report(repo_root / ".code-report", flag_only)
+
     if args.check:
-        print(f"\n{len(files)} files scanned, {total_violations} violations", file=sys.stderr)
+        print(f"\n{len(files)} files scanned, {total_violations} violations "
+              f"({len(flag_only)} flag-only)", file=sys.stderr)
         return 1 if total_violations else 0
 
-    print(f"\n{len(files)} files scanned, {total_changed} rewritten", file=sys.stderr)
+    print(f"\n{len(files)} files scanned, {total_changed} rewritten, "
+          f"{len(flag_only)} flag-only violations", file=sys.stderr)
     return 0
 
 

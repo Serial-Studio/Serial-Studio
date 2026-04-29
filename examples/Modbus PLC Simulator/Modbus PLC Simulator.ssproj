@@ -254,22 +254,26 @@
         }
     ],
     "hexadecimalDelimiters": false,
-    "passwordHash": "6897957a31f623715e3422e73253a4ae",
     "pointCount": 1000,
     "schemaVersion": 1,
     "sources": [
         {
-            "busType": 4,
+            "busType": 3,
             "checksum": "",
             "checksumAlgorithm": "",
             "connection": {
+                "host": "localhost",
+                "pollInterval": 100,
+                "port": 5020,
+                "protocolIndex": 1,
                 "registerGroups": [
                     {
                         "count": 9,
                         "start": 0,
                         "type": 0
                     }
-                ]
+                ],
+                "slaveAddress": 1
             },
             "decoder": 3,
             "decoderMethod": 3,
@@ -329,6 +333,23 @@
                 }
             ],
             "workspaceId": 1002
+        },
+        {
+            "icon": "qrc:/rcc/icons/panes/overview.svg",
+            "title": "Overview",
+            "widgetRefs": [
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 1
+                },
+                {
+                    "groupId": 0,
+                    "relativeIndex": 0,
+                    "widgetType": 8
+                }
+            ],
+            "workspaceId": 1000
         }
     ],
     "writerVersion": "3.2.7",

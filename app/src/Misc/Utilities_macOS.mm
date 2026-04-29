@@ -124,6 +124,7 @@ static QMessageBox::StandardButton mapNSAlertReturn(
     if (bt & b) {
       if (matched == index)
         return b;
+
       ++matched;
     }
   }
@@ -165,6 +166,7 @@ int Misc_Utilities_showNativeMessageBox(
       if (mapNSAlertReturn(NSAlertFirstButtonReturn + idx, bt) == defaultButton) {
         if (idx < static_cast<int>(alert.buttons.count))
           alert.window.defaultButtonCell = [alert.buttons[idx] cell];
+
         break;
       }
       ++idx;

@@ -150,6 +150,7 @@ Window {
     if (root.x < g.x)
       root.x = g.x
 
+
     if (root.y < g.y)
       root.y = g.y
   }

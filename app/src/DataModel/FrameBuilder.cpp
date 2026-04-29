@@ -34,6 +34,7 @@
 #include "AppState.h"
 #include "CSV/Export.h"
 #include "DataModel/FrameParser.h"
+#include "DataModel/LuaCompat.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
@@ -896,11 +897,13 @@ void DataModel::FrameBuilder::hotpathTxFrame(const DataModel::TimestampedFramePt
 static void openSafeLibsForTransform(lua_State* L)
 {
   static const luaL_Reg kSafeLibs[] = {
-    {    "_G",   luaopen_base},
-    { "table",  luaopen_table},
-    {"string", luaopen_string},
-    {  "math",   luaopen_math},
-    { nullptr,        nullptr}
+    {       "_G",      luaopen_base},
+    {    "table",     luaopen_table},
+    {   "string",    luaopen_string},
+    {     "math",      luaopen_math},
+    {     "utf8",      luaopen_utf8},
+    {"coroutine", luaopen_coroutine},
+    {    nullptr,           nullptr}
   };
 
   for (const luaL_Reg* lib = kSafeLibs; lib->func; ++lib) {
@@ -1001,6 +1004,9 @@ void DataModel::FrameBuilder::compileTransformsLua(TransformEngine& engine,
     return;
 
   openSafeLibsForTransform(L);
+
+  // Re-add Lua 5.1 / 5.2 names that 5.4 dropped (math.log10, math.pow, bit32, ...)
+  DataModel::installLuaCompat(L);
 
   // Inject table/dataset/variant API before any user code runs
   injectTableApiLua(L);

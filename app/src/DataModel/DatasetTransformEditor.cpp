@@ -37,6 +37,7 @@
 
 #include "DataModel/CodeFormatter.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/LuaCompat.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
@@ -562,7 +563,8 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
       lua_pop(L, 1);
     }
 
-    // Match the live hotpath: notify* + shared-memory table API
+    // Match the live hotpath: 5.1/5.2 compat shim + notify* + shared-memory table API
+    DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
     DataModel::FrameBuilder::instance().injectTableApiLua(L);
 
@@ -646,7 +648,8 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
       lua_pop(L, 1);
     }
 
-    // Match the live hotpath: notify* + shared-memory table API
+    // Match the live hotpath: 5.1/5.2 compat shim + notify* + shared-memory table API
+    DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
     DataModel::FrameBuilder::instance().injectTableApiLua(L);
 

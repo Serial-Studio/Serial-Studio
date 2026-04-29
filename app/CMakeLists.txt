@@ -269,6 +269,7 @@ set(SOURCES
   src/DataModel/FrameParser.cpp
   src/DataModel/JsScriptEngine.cpp
   src/DataModel/LuaScriptEngine.cpp
+  src/DataModel/LuaCompat.cpp
   src/DataModel/ScriptTemplates.cpp
   src/DataModel/JsCodeEditor.cpp
   src/DataModel/CodeFormatter.cpp
@@ -371,6 +372,7 @@ set(HEADERS
   src/DataModel/IScriptEngine.h
   src/DataModel/JsScriptEngine.h
   src/DataModel/LuaScriptEngine.h
+  src/DataModel/LuaCompat.h
   src/DataModel/ScriptTemplates.h
   src/DataModel/JsCodeEditor.h
   src/DataModel/CodeFormatter.h

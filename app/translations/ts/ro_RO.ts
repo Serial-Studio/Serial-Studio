@@ -1249,92 +1249,92 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="57"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="58"/>
         <source>Dataset Value Transform</source>
         <translation>Transformare Valoare Set de Date</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="71"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="72"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="71"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="72"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="79"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="80"/>
         <source>Language:</source>
         <translation>Limbaj:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="82"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="83"/>
         <source>Template:</source>
         <translation>Șablon:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="87"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="88"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>Introduceți valoarea brută (de ex., 1024)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="93"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="94"/>
         <source>Test</source>
         <translation>Testează</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="94"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="95"/>
         <source>Clear</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="97"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="98"/>
         <source>Input:</source>
         <translation>Intrare:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="100"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="101"/>
         <source>Output:</source>
         <translation>Ieșire:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="105"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="106"/>
         <source>Apply</source>
         <translation>Aplică</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="106"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="107"/>
         <source>Cancel</source>
         <translation>Anulează</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="178"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="179"/>
         <source>Transform — %1</source>
         <translation>Transformare — %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="268"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="269"/>
         <source>Enter a value</source>
         <translation>Introduceți o valoare</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="275"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="276"/>
         <source>Invalid number</source>
         <translation>Număr invalid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="345"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="346"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Formatează Documentul	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="346"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="347"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Formatează Selecția	ctrl+i</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="454"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="455"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -1393,12 +1393,12 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 --</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="755"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="758"/>
         <source>Select Template…</source>
         <translation>Selectează Șablon…</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="482"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="483"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -1455,26 +1455,26 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
  * fă clic pe Testează pentru a încerca funcția ta.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="633"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="635"/>
         <source>Engine error</source>
         <translation>Eroare motor</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="658"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="673"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="693"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="704"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="661"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="676"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="696"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="707"/>
         <source>Error: %1</source>
         <translation>Eroare: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="665"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="697"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="668"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="700"/>
         <source>Error: transform() not defined</source>
         <translation>Eroare: transform() nu este definită</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="682"/>
         <source>Error: transform() must return a number</source>
         <translation>Eroare: transform() trebuie să returneze un număr</translation>
     </message>
@@ -1482,29 +1482,29 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="721"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="831"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="722"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="832"/>
         <source>Channel %1</source>
         <translation>Canal %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="842"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="843"/>
         <source>Audio Input</source>
         <translation>Intrare Audio</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="730"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="847"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="731"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
         <source>Quick Plot</source>
         <translation>Grafic Rapid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="735"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="736"/>
         <source>Quick Plot Data</source>
         <translation>Date Grafic Rapid</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="746"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="747"/>
         <source>Multiple Plots</source>
         <translation>Grafice Multiple</translation>
     </message>
@@ -6969,32 +6969,32 @@ Furniză acreditările necesare.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="186"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="184"/>
         <source>Console Only Mode</source>
         <translation>Mod Doar Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="187"/>
         <source>Quick Plot Mode</source>
         <translation>Mod Grafic Rapid</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="195"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="193"/>
         <source>Empty Project</source>
         <translation>Proiect Gol</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="513"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="511"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="521"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="519"/>
         <source>Waiting for data…</source>
         <translation>Se așteaptă date…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="522"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="520"/>
         <source>Connecting to device…</source>
         <translation>Se conectează la dispozitiv…</translation>
     </message>
@@ -8141,17 +8141,17 @@ Adaugă grupuri mai sus pentru a interoga mai multe tipuri de registre.</transla
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1127"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1129"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — Trage pentru a muta, clic dreapta pentru a șterge</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1129"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1131"/>
         <source>Click to place cursor</source>
         <translation>Clic pentru a plasa cursorul</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1131"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1133"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Clic pentru a plasa al doilea cursor — Trage pentru a muta</translation>
     </message>
@@ -8851,12 +8851,12 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
         <translation>Eroare generală de I/O</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="225"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="230"/>
         <source>Lua Syntax Error</source>
         <translation>Eroare de Sintaxă Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="226"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="231"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -8865,12 +8865,12 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="244"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="249"/>
         <source>Lua Runtime Error</source>
         <translation>Eroare de Execuție Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="245"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="250"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -8879,13 +8879,13 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="259"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="264"/>
         <location filename="../../src/DataModel/JsScriptEngine.cpp" line="407"/>
         <source>Missing Parse Function</source>
         <translation>Funcție Parse Lipsă</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="260"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="265"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -8896,13 +8896,13 @@ Asigurați-vă că codul include:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="319"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="324"/>
         <location filename="../../src/DataModel/JsScriptEngine.cpp" line="475"/>
         <source>Parse Function Runtime Error</source>
         <translation>Eroare de Execuție A Funcției Parse</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="320"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="325"/>
         <source>The parse function contains an error:
 
 %1
@@ -11212,7 +11212,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
         <translation>Culori ANSI</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="485"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="481"/>
         <source>Display: %1</source>
         <translation>Afișare: %1</translation>
     </message>

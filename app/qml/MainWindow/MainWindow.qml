@@ -82,7 +82,6 @@ Widgets.SmartWindow {
         return
       }
 
-      // Ignore disconnects fired while the app is already shutting down.
       if (app.quitting)
         return
 
@@ -159,7 +158,6 @@ Widgets.SmartWindow {
       stack.push(dashboard)
       dashboard.loadLayout()
 
-      // Runtime mode handles the toolbar via the app.runtimeMode binding directly.
       if (!app.runtimeMode
           && typeof CLI_HIDE_TOOLBAR !== "undefined"
           && CLI_HIDE_TOOLBAR)

@@ -55,17 +55,6 @@ while IFS= read -r -d '' file; do
     [[ -d "$file" ]] && chmod 755 "$file"
 done < "$tempfile"
 
-# Normalize line endings to LF on text source files
-echo "Normalizing line endings (CRLF -> LF)..."
-git ls-files -z -- \
-    '*.txt' '*.md' '*.h' '*.cpp' '*.c' '*.mm' '*.qml' '*.py' '*.svg' '*.ts' '*.js' '*.lua' '*.html' '*.rcc' '*.yml'\
-    | while IFS= read -r -d '' file; do
-        [[ -f "$file" ]] || continue
-        if grep -lI $'\r' "$file" > /dev/null 2>&1; then
-            perl -i -pe 's/\r\n/\n/g; s/\r$/\n/g' "$file"
-        fi
-    done
-
 # Clean up the temporary file after use
 rm -f "$tempfile"
 

@@ -614,15 +614,17 @@ Item {
           const worldX = root.pixelToWorldX(mouse.x)
           const worldY = root.pixelToWorldY(mouse.y)
 
-          // Place cursor A if not visible, otherwise place cursor B
-          if (!root.cursorAVisible) {
+          // Place cursor A if not visible
+          if (!root.cursorAVisible)
             root.setCursorA(worldX, worldY)
-          } else if (!root.cursorBVisible) {
+
+          // Cursor A visible, place cursor B
+          else if (!root.cursorBVisible)
             root.setCursorB(worldX, worldY)
-          } else {
-            // Both cursors exist, replace cursor A
+
+          // Both cursors exist, replace cursor A
+          else
             root.setCursorA(worldX, worldY)
-          }
         }
 
         // Reset state

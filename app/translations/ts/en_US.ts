@@ -1249,92 +1249,92 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="57"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="58"/>
         <source>Dataset Value Transform</source>
         <translation>Dataset Value Transform</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="71"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="72"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="71"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="72"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="79"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="80"/>
         <source>Language:</source>
         <translation>Language:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="82"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="83"/>
         <source>Template:</source>
         <translation>Template:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="87"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="88"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>Enter raw value (e.g., 1024)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="93"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="94"/>
         <source>Test</source>
         <translation>Test</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="94"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="95"/>
         <source>Clear</source>
         <translation>Clear</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="97"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="98"/>
         <source>Input:</source>
         <translation>Input:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="100"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="101"/>
         <source>Output:</source>
         <translation>Output:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="105"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="106"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="106"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="107"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="178"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="179"/>
         <source>Transform — %1</source>
         <translation>Transform — %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="268"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="269"/>
         <source>Enter a value</source>
         <translation>Enter a value</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="275"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="276"/>
         <source>Invalid number</source>
         <translation>Invalid number</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="345"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="346"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Format Document	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="346"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="347"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Format Selection	Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="454"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="455"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -1393,7 +1393,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="482"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="483"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -1450,31 +1450,31 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="633"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="635"/>
         <source>Engine error</source>
         <translation>Engine error</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="658"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="673"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="693"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="704"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="661"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="676"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="696"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="707"/>
         <source>Error: %1</source>
         <translation>Error: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="665"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="697"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="668"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="700"/>
         <source>Error: transform() not defined</source>
         <translation>Error: transform() not defined</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="679"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="682"/>
         <source>Error: transform() must return a number</source>
         <translation>Error: transform() must return a number</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="755"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="758"/>
         <source>Select Template…</source>
         <translation>Select Template…</translation>
     </message>
@@ -1482,29 +1482,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="721"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="831"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="722"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="832"/>
         <source>Channel %1</source>
         <translation>Channel %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="842"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="843"/>
         <source>Audio Input</source>
         <translation>Audio Input</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="730"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="847"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="731"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
         <source>Quick Plot</source>
         <translation>Quick Plot</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="735"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="736"/>
         <source>Quick Plot Data</source>
         <translation>Quick Plot Data</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="746"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="747"/>
         <source>Multiple Plots</source>
         <translation>Multiple Plots</translation>
     </message>
@@ -6969,32 +6969,32 @@ Please provide the necessary credentials.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="186"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="184"/>
         <source>Console Only Mode</source>
         <translation>Console Only Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="187"/>
         <source>Quick Plot Mode</source>
         <translation>Quick Plot Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="195"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="193"/>
         <source>Empty Project</source>
         <translation>Empty Project</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="513"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="511"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="521"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="519"/>
         <source>Waiting for data…</source>
         <translation>Waiting for data…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="522"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="520"/>
         <source>Connecting to device…</source>
         <translation>Connecting to device…</translation>
     </message>
@@ -8141,17 +8141,17 @@ Add groups above to poll multiple register types.</translation>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1127"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1129"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1129"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1131"/>
         <source>Click to place cursor</source>
         <translation>Click to place cursor</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1131"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1133"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>Click to place second cursor — Drag to move</translation>
     </message>
@@ -8851,12 +8851,12 @@ Click Refresh to update the list.</translation>
         <translation>General I/O error</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="225"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="230"/>
         <source>Lua Syntax Error</source>
         <translation>Lua Syntax Error</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="226"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="231"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -8865,12 +8865,12 @@ Click Refresh to update the list.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="244"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="249"/>
         <source>Lua Runtime Error</source>
         <translation>Lua Runtime Error</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="245"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="250"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -8879,13 +8879,13 @@ Click Refresh to update the list.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="259"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="264"/>
         <location filename="../../src/DataModel/JsScriptEngine.cpp" line="407"/>
         <source>Missing Parse Function</source>
         <translation>Missing Parse Function</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="260"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="265"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -8896,13 +8896,13 @@ Please ensure your code includes:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="319"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="324"/>
         <location filename="../../src/DataModel/JsScriptEngine.cpp" line="475"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse Function Runtime Error</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="320"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="325"/>
         <source>The parse function contains an error:
 
 %1
@@ -11212,7 +11212,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>ANSI Colors</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="485"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="481"/>
         <source>Display: %1</source>
         <translation>Display: %1</translation>
     </message>

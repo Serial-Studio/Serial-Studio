@@ -28,6 +28,7 @@
 #include <QMessageBox>
 
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/LuaCompat.h"
 #include "DataModel/NotificationCenter.h"
 #include "Misc/Utilities.h"
 
@@ -39,12 +40,13 @@
  * @brief Sandboxed subset of Lua standard libraries.
  */
 static const luaL_Reg kSafeLibs[] = {
-  {    "_G",   luaopen_base},
-  { "table",  luaopen_table},
-  {"string", luaopen_string},
-  {  "math",   luaopen_math},
-  {  "utf8",   luaopen_utf8},
-  { nullptr,        nullptr}
+  {       "_G",      luaopen_base},
+  {    "table",     luaopen_table},
+  {   "string",    luaopen_string},
+  {     "math",      luaopen_math},
+  {     "utf8",      luaopen_utf8},
+  {"coroutine", luaopen_coroutine},
+  {    nullptr,           nullptr}
 };
 
 /**
@@ -111,6 +113,9 @@ void DataModel::LuaScriptEngine::createState()
   Q_ASSERT(m_state != nullptr);
 
   openSafeLibs(m_state);
+
+  // Re-add Lua 5.1 / 5.2 names that 5.4 dropped (math.log10, math.pow, bit32, ...)
+  DataModel::installLuaCompat(m_state);
 
   // Expose notify* + level constants (gated on the active license tier)
   DataModel::NotificationCenter::installScriptApi(m_state);

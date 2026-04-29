@@ -473,16 +473,17 @@ Item {
         id: displayModeCombo
 
         implicitHeight: 24
-        Layout.fillWidth: true
-        onCurrentIndexChanged: {
-          if (currentIndex !== Cpp_Console_Handler.displayMode)
-            Cpp_Console_Handler.displayMode = currentIndex
-        }
         Layout.maximumWidth: 164
+        Layout.fillWidth: true        
         Layout.alignment: Qt.AlignVCenter
         model: Cpp_Console_Handler.displayModes
         currentIndex: Cpp_Console_Handler.displayMode
         displayText: qsTr("Display: %1").arg(currentText)
+
+        onCurrentIndexChanged: {
+          if (currentIndex !== Cpp_Console_Handler.displayMode)
+            Cpp_Console_Handler.displayMode = currentIndex
+        }
       }
 
       Button {
