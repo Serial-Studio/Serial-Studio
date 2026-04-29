@@ -6949,19 +6949,34 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="106"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
         <source>Console Only Mode</source>
         <translation>केवल कंसोल मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="109"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
         <source>Quick Plot Mode</source>
         <translation>त्वरित प्लॉट मोड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="115"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="198"/>
         <source>Empty Project</source>
         <translation>खाली प्रोजेक्ट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="526"/>
+        <source>Serial Studio</source>
+        <translation>Serial Studio</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="534"/>
+        <source>Waiting for data…</source>
+        <translation>डेटा का इंतज़ार है…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="535"/>
+        <source>Connecting to device…</source>
+        <translation>डिवाइस से कनेक्ट हो रहा है…</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
@@ -7155,6 +7170,147 @@ Would you like to open the download page?</source>
         <location filename="../../src/Misc/IconEngine.cpp" line="245"/>
         <source>Empty SVG data received</source>
         <translation>खाली SVG डेटा प्राप्त हुआ</translation>
+    </message>
+</context>
+<context>
+    <name>Misc::ShortcutGenerator</name>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="73"/>
+        <source>Windows Shortcut (*.lnk)</source>
+        <translation>Windows शॉर्टकट (*.lnk)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="75"/>
+        <source>macOS Application (*.app)</source>
+        <translation>macOS एप्लिकेशन (*.app)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="77"/>
+        <source>Desktop Entry (*.desktop)</source>
+        <translation>Desktop एंट्री (*.desktop)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="101"/>
+        <source>Use a .icns icon for the sharpest result in Finder and the Dock.</source>
+        <translation>Finder और Dock में सबसे तेज़ रिज़ल्ट के लिए .icns आइकन का उपयोग करें।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="103"/>
+        <source>Leave the icon empty to inherit the Serial Studio executable icon.</source>
+        <translation>Serial Studio एक्ज़ीक्यूटेबल आइकन इनहेरिट करने के लिए आइकन को खाली छोड़ें।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="105"/>
+        <source>Place the file under ~/.local/share/applications/ to expose it in your application launcher.</source>
+        <translation>अपने एप्लिकेशन लॉन्चर में एक्सपोज़ करने के लिए फ़ाइल को ~/.local/share/applications/ के अंदर रखें।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="116"/>
+        <source>Apple Icon Image (*.icns)</source>
+        <translation>Apple आइकन इमेज (*.icns)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="118"/>
+        <source>Windows Icon (*.ico)</source>
+        <translation>Windows आइकन (*.ico)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="120"/>
+        <source>Vector or Raster Image (*.svg *.png)</source>
+        <translation>वेक्टर या रास्टर छवि (*.svg *.png)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="181"/>
+        <source>A Pro license is required to generate shortcuts.</source>
+        <translation>शॉर्टकट जनरेट करने के लिए Pro लाइसेंस आवश्यक है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="186"/>
+        <source>No output path was provided.</source>
+        <translation>कोई आउटपुट पथ प्रदान नहीं किया गया।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="218"/>
+        <source>Failed to write shortcut file.</source>
+        <translation>शॉर्टकट फ़ाइल लिखने में विफल।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="62"/>
+        <source>Could not replace the existing shortcut at %1.</source>
+        <translation>%1 पर मौजूदा शॉर्टकट को बदला नहीं जा सका।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="73"/>
+        <source>Could not create the .app bundle directory layout.</source>
+        <translation>.app बंडल डायरेक्टरी लेआउट नहीं बनाया जा सका।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="89"/>
+        <source>Could not write the bundle launcher: %1</source>
+        <translation>बंडल लॉन्चर नहीं लिखा जा सका: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="108"/>
+        <source>Could not mark the bundle launcher as executable.</source>
+        <translation>बंडल लॉन्चर को एक्ज़ीक्यूटेबल के रूप में चिह्नित नहीं किया जा सका।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="136"/>
+        <source>Could not write Info.plist: %1</source>
+        <translation>Info.plist नहीं लिखा जा सका: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="204"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="132"/>
+        <source>Windows shortcut writer is not available on this platform.</source>
+        <translation>Windows शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="218"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="169"/>
+        <source>Linux shortcut writer is not available on this platform.</source>
+        <translation>Linux शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="90"/>
+        <source>Could not initialise COM (required to write .lnk shortcuts).</source>
+        <translation>COM इनिशियलाइज़ नहीं हो सका (.lnk शॉर्टकट लिखने के लिए आवश्यक)।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="101"/>
+        <source>CoCreateInstance(IShellLink) failed (HRESULT 0x%1).</source>
+        <translation>CoCreateInstance(IShellLink) विफल (HRESULT 0x%1)।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="123"/>
+        <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
+        <translation>QueryInterface(IPersistFile) विफल (HRESULT 0x%1)।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="133"/>
+        <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
+        <translation>.lnk फ़ाइल सहेजना विफल (HRESULT 0x%1)।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="146"/>
+        <source>macOS shortcut writer is not available on this platform.</source>
+        <translation>macOS शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="77"/>
+        <source>Could not open the shortcut path for writing: %1</source>
+        <translation>शॉर्टकट पथ लिखने के लिए खोल नहीं सका: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="82"/>
+        <source>Serial Studio shortcut</source>
+        <translation>Serial Studio शॉर्टकट</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="103"/>
+        <source>Could not mark the shortcut as executable.</source>
+        <translation>शॉर्टकट को एक्ज़ीक्यूटेबल के रूप में मार्क नहीं कर सका।</translation>
     </message>
 </context>
 <context>
@@ -8835,14 +8991,43 @@ function parse(%1) { ... }
 सेपरेटर पैरामीटर की अब आवश्यकता नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Critical</source>
         <translation>गंभीर</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Warning</source>
         <translation>चेतावनी</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="343"/>
+        <source>Project file not found</source>
+        <translation>प्रोजेक्ट फ़ाइल नहीं मिली</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="344"/>
+        <source>The project file referenced by this shortcut could not be found:
+
+%1</source>
+        <translation>इस शॉर्टकट द्वारा संदर्भित प्रोजेक्ट फ़ाइल नहीं मिली:
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="347"/>
+        <source>Would you like to delete this shortcut?</source>
+        <translation>क्या आप यह शॉर्टकट डिलीट करना चाहते हैं?</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="351"/>
+        <source>Delete Shortcut</source>
+        <translation>शॉर्टकट डिलीट करें</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="352"/>
+        <source>Quit</source>
+        <translation>बंद करें</translation>
     </message>
 </context>
 <context>
@@ -9144,6 +9329,79 @@ function parse(%1) { ... }
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="83"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>अधिक पैरामीटर वाले सेशन के लिए इसमें कुछ सेकंड लग सकते हैं। रिपोर्ट तैयार होने पर विंडो स्वतः बंद हो जाएगी।</translation>
+    </message>
+</context>
+<context>
+    <name>RuntimeReconfigure</name>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="38"/>
+        <source>Connection Lost</source>
+        <translation>कनेक्शन खो गया</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="39"/>
+        <source>Device Unavailable</source>
+        <translation>डिवाइस उपलब्ध नहीं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="89"/>
+        <source>The connection to your device was lost.</source>
+        <translation>आपके डिवाइस का कनेक्शन खो गया।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="90"/>
+        <source>Serial Studio couldn't reach your device.</source>
+        <translation>Serial Studio आपके डिवाइस तक नहीं पहुँच सका।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
+        <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
+        <translation>केबल, पावर जाँचें और सुनिश्चित करें कि किसी अन्य एप्लिकेशन ने डिवाइस को नहीं लिया है। आप पुनः कनेक्ट करने का प्रयास कर सकते हैं, दूसरे डिवाइस पर स्विच कर सकते हैं, या बाहर निकल सकते हैं।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="101"/>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <translation>सुनिश्चित करें कि यह प्लग इन है, चालू है, और किसी अन्य ऐप द्वारा उपयोग में नहीं है। आप पुनः प्रयास कर सकते हैं, कोई अन्य डिवाइस चुन सकते हैं, या बंद कर सकते हैं।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="115"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
+        <source>Quit</source>
+        <translation>बंद करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="128"/>
+        <source>Pick Different Device</source>
+        <translation>दूसरा डिवाइस चुनें</translation>
+    </message>
+    <message>
+        <source>Reconfigure</source>
+        <translation type="vanished">पुनः कॉन्फ़िगर करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <source>Try Again</source>
+        <translation>पुनः प्रयास करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <source>Reconnect</source>
+        <translation>पुनः कनेक्ट करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
+        <source>Pick the correct device, then press Connect.</source>
+        <translation>सही डिवाइस चुनें, फिर कनेक्ट करें दबाएं।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
+        <source>I/O Interface: %1</source>
+        <translation>I/O इंटरफ़ेस: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="206"/>
+        <source>Connect</source>
+        <translation>कनेक्ट करें</translation>
     </message>
 </context>
 <context>
@@ -10271,6 +10529,137 @@ function parse(%1) { ... }
     </message>
 </context>
 <context>
+    <name>ShortcutGenerator</name>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
+        <source>New Shortcut</source>
+        <translation>नया शॉर्टकट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="68"/>
+        <source>Choose an Icon</source>
+        <translation>आइकन चुनें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
+        <source>Save Shortcut</source>
+        <translation>शॉर्टकट सहेजें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="114"/>
+        <source>General</source>
+        <translation>सामान्य</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="120"/>
+        <source>Logging</source>
+        <translation>लॉगिंग</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="175"/>
+        <source>Identity</source>
+        <translation>पहचान</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="229"/>
+        <source>Click to choose an icon</source>
+        <translation>आइकन चुनने के लिए क्लिक करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="238"/>
+        <source>Name:</source>
+        <translation>नाम:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="246"/>
+        <source>Shortcut Name</source>
+        <translation>शॉर्टकट नाम</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="255"/>
+        <source>Change Icon…</source>
+        <translation>आइकन बदलें…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="272"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="290"/>
+        <source>Project</source>
+        <translation>प्रोजेक्ट</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="300"/>
+        <source>Choose a project file to begin</source>
+        <translation>शुरू करने के लिए प्रोजेक्ट फ़ाइल चुनें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="325"/>
+        <source>Behavior</source>
+        <translation>व्यवहार</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="340"/>
+        <source>Fullscreen</source>
+        <translation>फ़ुलस्क्रीन</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation>इस शॉर्टकट पर डबल-क्लिक करने से कोई सीधे इस प्रोजेक्ट के लाइव डैशबोर्ड पर पहुँच जाता है। कोई टूलबार या सेटअप पेन नहीं, केवल डेटा, और डिवाइस डिस्कनेक्ट होते ही Serial Studio बंद हो जाता है।</translation>
+    </message>
+    <message>
+        <source>Embed Project</source>
+        <translation type="vanished">प्रोजेक्ट एम्बेड करें</translation>
+    </message>
+    <message>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+
+Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
+        <translation type="vanished">इस शॉर्टकट पर डबल-क्लिक करने से सीधे इस प्रोजेक्ट के लाइव डैशबोर्ड पर पहुँच जाता है। कोई टूलबार या सेटअप पैन नहीं, सिर्फ़ डेटा, और डिवाइस डिस्कनेक्ट होते ही Serial Studio बंद हो जाता है।
+
+शॉर्टकट में प्रोजेक्ट को बेक करने के लिए प्रोजेक्ट एम्बेड करें चालू करें, ताकि मूल फ़ाइल हटाने या स्थानांतरित करने पर भी यह काम करता रहे।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="399"/>
+        <source>Recorders</source>
+        <translation>रिकॉर्डर</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="414"/>
+        <source>CSV File</source>
+        <translation>CSV फ़ाइल</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="424"/>
+        <source>MDF4 File</source>
+        <translation>MDF4 फ़ाइल</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="434"/>
+        <source>Session Database</source>
+        <translation>सत्र डेटाबेस</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="444"/>
+        <source>Console Log</source>
+        <translation>कंसोल लॉग</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
+        <source>Recordings are saved to each module’s default location.</source>
+        <translation>रिकॉर्डिंग प्रत्येक मॉड्यूल के डिफ़ॉल्ट स्थान पर सहेजी जाती हैं।</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="491"/>
+        <source>Cancel</source>
+        <translation>रद्द करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="503"/>
+        <source>Save</source>
+        <translation>सहेजें</translation>
+    </message>
+</context>
+<context>
     <name>SourceFrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="102"/>
@@ -10432,17 +10821,17 @@ function parse(%1) { ... }
         <translation>कोई वर्कस्पेस उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="243"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="245"/>
         <source>Actions</source>
         <translation>एक्शन्स</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="265"/>
         <source>No Actions Available</source>
         <translation>कोई एक्शन उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="290"/>
         <source>Plugins</source>
         <translation>प्लगइन्स</translation>
     </message>
@@ -10452,112 +10841,112 @@ function parse(%1) { ... }
         <translation>नया वर्कस्पेस…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="324"/>
         <source>Manage Plugins…</source>
         <translation>प्लगइन प्रबंधित करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="328"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="332"/>
         <source>No Plugins Installed</source>
         <translation>कोई प्लगइन इंस्टॉल नहीं है</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="357"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="363"/>
         <source>Auto Layout</source>
         <translation>ऑटो लेआउट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="369"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="375"/>
         <source>Full Screen</source>
         <translation>पूर्ण स्क्रीन</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="385"/>
         <source>Add External Window</source>
         <translation>बाहरी विंडो जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
         <source>Export</source>
         <translation>एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
         <source>CSV File</source>
         <translation>CSV फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
         <source>MDF4 File</source>
         <translation>MDF4 फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="446"/>
         <source>Console Transcript</source>
         <translation>कंसोल ट्रांसक्रिप्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="449"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Session Database</source>
         <translation>सेशन डेटाबेस</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="467"/>
         <source>No Export Formats Available</source>
         <translation>कोई एक्सपोर्ट फॉर्मेट उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="617"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="627"/>
         <source>Edit…</source>
         <translation>एडिट करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="516"/>
         <source>Notifications</source>
         <translation>नोटिफिकेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
         <source>Preferences</source>
         <translation>प्रेफरेंस</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
         <source>Help Center</source>
         <translation>हेल्प सेंटर</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="628"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="638"/>
         <source>Delete</source>
         <translation>डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="629"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="639"/>
         <source>Hide</source>
         <translation>छुपाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="560"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="594"/>
         <source>Resume</source>
         <translation>फिर से शुरू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
         <source>Pause</source>
         <translation>रोकें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="602"/>
         <source>Disconnect</source>
         <translation>डिस्कनेक्ट करें</translation>
     </message>
@@ -10669,7 +11058,7 @@ function parse(%1) { ... }
         <translation>विजेट खोजें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="671"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="672"/>
         <source>Remove from Workspace</source>
         <translation>वर्कस्पेस से हटाएं</translation>
     </message>
@@ -10725,241 +11114,251 @@ function parse(%1) { ... }
 <context>
     <name>Toolbar</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="190"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="195"/>
         <source>Project Editor</source>
         <translation>प्रोजेक्ट एडिटर</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="198"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>अपना JSON लेआउट बनाने या संशोधित करने के लिए प्रोजेक्ट एडिटर खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="212"/>
         <source>Open Project</source>
         <translation>प्रोजेक्ट खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="214"/>
         <source>Open an existing JSON project</source>
         <translation>मौजूदा JSON प्रोजेक्ट खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
         <source>Open CSV</source>
         <translation>CSV खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>CSV फ़ाइल को लाइव सेंसर डेटा की तरह चलाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
         <source>Open MDF4</source>
         <translation>MDF4 खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>MDF4 फ़ाइल को लाइव सेंसर डेटा की तरह चलाएं (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="250"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
         <source>Sessions</source>
         <translation>सेशन</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>रिकॉर्ड किए गए सेशन ब्राउज़ करें, रीप्ले करें और एक्सपोर्ट करें</translation>
     </message>
     <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="262"/>
+        <source>Shortcuts</source>
+        <translation>शॉर्टकट</translation>
+    </message>
+    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="269"/>
+        <source>Create an operator shortcut for the current project</source>
+        <translation>वर्तमान प्रोजेक्ट के लिए ऑपरेटर शॉर्टकट बनाएं</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
         <source>Extensions</source>
         <translation>एक्सटेंशन</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="284"/>
         <source>Browse and install extensions</source>
         <translation>एक्सटेंशन ब्राउज़ करें और इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>MQTT कनेक्शन कॉन्फ़िगर करें (पब्लिश या सब्सक्राइब)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="316"/>
         <source>Preferences</source>
         <translation>प्राथमिकताएँ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="320"/>
         <source>Open application settings and preferences</source>
         <translation>एप्लिकेशन सेटिंग्स और प्राथमिकताएँ खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="326"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="338"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Select Serial port (UART) communication</source>
         <translation>सीरियल पोर्ट (UART) संचार चुनें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="355"/>
         <source>Audio</source>
         <translation>ऑडियो</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="347"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="359"/>
         <source>Select audio input device (Pro)</source>
         <translation>ऑडियो इनपुट डिवाइस चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="374"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="379"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>रॉ USB संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="388"/>
         <source>Network</source>
         <translation>नेटवर्क</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
         <source>Select TCP/UDP network communication</source>
         <translation>TCP/UDP नेटवर्क संचार चुनें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="405"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
         <source>Browse example projects</source>
         <translation>उदाहरण प्रोजेक्ट ब्राउज़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="526"/>
         <source>Help Center</source>
         <translation>सहायता केंद्र</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="530"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>दस्तावेज़ीकरण, FAQ और wiki ब्राउज़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="409"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>MODBUS संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="424"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="429"/>
         <source>Select HID device communication (Pro)</source>
         <translation>HID डिवाइस संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="439"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Bluetooth Low Energy संचार चुनें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="455"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="447"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>CAN Bus संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="474"/>
         <source>Process</source>
         <translation>प्रोसेस</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>प्रोसेस पाइप संचार चुनें (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="483"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="487"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="499"/>
         <source>About</source>
         <translation>परिचय</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
         <source>Show application info and license details</source>
         <translation>एप्लिकेशन जानकारी और लाइसेंस विवरण दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="515"/>
         <source>Examples</source>
         <translation>उदाहरण</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="524"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI विकी और चैट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="539"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>DeepWiki पर विस्तृत दस्तावेज़ देखें और प्रश्न पूछें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="562"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="574"/>
         <source>Activate</source>
         <translation>सक्रिय करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="566"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="578"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>लाइसेंस प्रबंधित करें और Serial Studio Pro सक्रिय करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="604"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="618"/>
         <source>Disconnect</source>
         <translation>डिस्कनेक्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
         <source>Connect</source>
         <translation>कनेक्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="583"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="595"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>डिवाइस या MQTT ब्रोकर से कनेक्ट या डिस्कनेक्ट करें</translation>
     </message>

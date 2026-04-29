@@ -248,6 +248,19 @@ Widgets.Pane {
 
         taskBar: root.taskBar
         Layout.fillWidth: true
+
+        opacity: Cpp_UI_Dashboard.available ? 1 : 0
+        Behavior on opacity {
+          NumberAnimation { duration: 350; easing.type: Easing.OutCubic }
+        }
+
+        transform: Translate {
+          y: Cpp_UI_Dashboard.available ? 0 : 24
+          Behavior on y {
+            NumberAnimation { duration: 350; easing.type: Easing.OutCubic }
+          }
+        }
+
         onNewWorkspaceRequested: _wsDialog.openNew(root.taskBar)
         onEditWorkspaceRequested: (wsId, name) => _wsDialog.openEdit(root.taskBar, wsId, name)
         onStartClicked: {

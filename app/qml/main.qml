@@ -80,8 +80,9 @@ Item {
     if (app.quitting)
       return
 
-    // Ask to save project (windows stay visible for the dialog)
-    if (!Cpp_JSON_ProjectModel.askSave())
+    // Skip the save prompt in runtime mode — operators have no project to save.
+    const runtimeMode = typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true
+    if (!runtimeMode && !Cpp_JSON_ProjectModel.askSave())
       return
 
     // Hide windows, then quit after they disappear
@@ -105,8 +106,10 @@ Item {
   // Launch welcome dialog or show main window during starup
   //
   Component.onCompleted: {
+    const runtimeMode = typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true
     if (Cpp_CommercialBuild) {
-      if (!Cpp_Licensing_LemonSqueezy.isActivated) {
+      // Runtime mode bypasses the welcome dialog — main window handles licensing UI.
+      if (!Cpp_Licensing_LemonSqueezy.isActivated && !runtimeMode) {
         app.showWelcomeDialog()
         return
       }
@@ -203,6 +206,24 @@ Item {
     DialogLoader {
       id: mqttConfiguration
       source: "qrc:/serial-studio.com/gui/qml/Dialogs/MQTTConfiguration.qml"
+    }
+
+    DialogLoader {
+      id: shortcutGeneratorDialog
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/ShortcutGenerator.qml"
+    }
+
+    DialogLoader {
+      id: runtimeReconfigureDialog
+      property string pendingMode: "failed"
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/RuntimeReconfigure.qml"
+      Connections {
+        target: runtimeReconfigureDialog
+        function onLoaded() {
+          if (runtimeReconfigureDialog.item)
+            runtimeReconfigureDialog.item.dialogMode = runtimeReconfigureDialog.pendingMode
+        }
+      }
     }
 
     DialogLoader {
@@ -304,6 +325,17 @@ Item {
   } function showMqttConfiguration() {
     if (Cpp_CommercialBuild)
       mqttConfiguration.activate()
+  } function showShortcutGenerator() {
+    if (Cpp_CommercialBuild)
+      shortcutGeneratorDialog.activate()
+  } function showRuntimeReconfigure(mode) {
+    if (Cpp_CommercialBuild) {
+      const resolved = mode || "failed"
+      runtimeReconfigureDialog.pendingMode = resolved
+      if (runtimeReconfigureDialog.item)
+        runtimeReconfigureDialog.item.dialogMode = resolved
+      runtimeReconfigureDialog.activate()
+    }
   } function showWelcomeDialog() {
     if (Cpp_CommercialBuild) {
       if (!Cpp_Licensing_Trial.trialExpired && Cpp_Licensing_Trial.trialEnabled && app.dontNag && Cpp_Licensing_Trial.daysRemaining > 1)

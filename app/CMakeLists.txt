@@ -540,6 +540,7 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/Output/TextField.h
     src/UI/Widgets/Output/Panel.h
     src/UI/Widgets/Output/PanelLayout.h
+    src/Misc/ShortcutGenerator.h
   )
   set(SOURCES
     ${SOURCES}
@@ -586,11 +587,22 @@ if(BUILD_COMMERCIAL)
     src/UI/Widgets/Output/TextField.cpp
     src/UI/Widgets/Output/Panel.cpp
     src/UI/Widgets/Output/PanelLayout.cpp
+    src/Misc/ShortcutGenerator.cpp
   )
+
+  if(WIN32)
+    list(APPEND SOURCES src/Misc/ShortcutGenerator_Windows.cpp)
+  elseif(APPLE)
+    list(APPEND SOURCES src/Misc/ShortcutGenerator_macOS.cpp)
+  elseif(UNIX)
+    list(APPEND SOURCES src/Misc/ShortcutGenerator_Linux.cpp)
+  endif()
   set(QML_SOURCES
     ${QML_SOURCES}
     qml/Dialogs/LicenseManagement.qml
     qml/Dialogs/MQTTConfiguration.qml
+    qml/Dialogs/ShortcutGenerator.qml
+    qml/Dialogs/RuntimeReconfigure.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml
@@ -1069,7 +1081,8 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 if(WIN32)
-  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE Dwmapi.lib Shell32.lib Advapi32.lib)
+  target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE
+    Dwmapi.lib Shell32.lib Advapi32.lib Ole32.lib Uuid.lib)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )

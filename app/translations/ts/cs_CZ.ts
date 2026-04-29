@@ -6949,19 +6949,34 @@ Zadejte potřebná pověření.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="106"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
         <source>Console Only Mode</source>
         <translation>Režim Pouze Konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="109"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
         <source>Quick Plot Mode</source>
         <translation>Režim Rychlého Grafu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="115"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="198"/>
         <source>Empty Project</source>
         <translation>Prázdný Projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="526"/>
+        <source>Serial Studio</source>
+        <translation>Serial Studio</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="534"/>
+        <source>Waiting for data…</source>
+        <translation>Čekání na data…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="535"/>
+        <source>Connecting to device…</source>
+        <translation>Připojování k zařízení…</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
@@ -7155,6 +7170,147 @@ Chcete otevřít stránku pro stažení?</translation>
         <location filename="../../src/Misc/IconEngine.cpp" line="245"/>
         <source>Empty SVG data received</source>
         <translation>Přijata prázdná SVG data</translation>
+    </message>
+</context>
+<context>
+    <name>Misc::ShortcutGenerator</name>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="73"/>
+        <source>Windows Shortcut (*.lnk)</source>
+        <translation>Zástupce Windows (*.lnk)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="75"/>
+        <source>macOS Application (*.app)</source>
+        <translation>Aplikace macOS (*.app)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="77"/>
+        <source>Desktop Entry (*.desktop)</source>
+        <translation>Položka Plochy (*.desktop)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="101"/>
+        <source>Use a .icns icon for the sharpest result in Finder and the Dock.</source>
+        <translation>Pro nejostřejší výsledek ve Finderu a Docku použijte ikonu .icns.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="103"/>
+        <source>Leave the icon empty to inherit the Serial Studio executable icon.</source>
+        <translation>Ponechte ikonu prázdnou pro zdědění ikony spustitelného souboru Serial Studio.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="105"/>
+        <source>Place the file under ~/.local/share/applications/ to expose it in your application launcher.</source>
+        <translation>Umístěte soubor do ~/.local/share/applications/ pro zobrazení ve spouštěči aplikací.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="116"/>
+        <source>Apple Icon Image (*.icns)</source>
+        <translation>Obraz Ikony Apple (*.icns)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="118"/>
+        <source>Windows Icon (*.ico)</source>
+        <translation>Ikona Windows (*.ico)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="120"/>
+        <source>Vector or Raster Image (*.svg *.png)</source>
+        <translation>Vektorový nebo Rastrový Obrázek (*.svg *.png)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="181"/>
+        <source>A Pro license is required to generate shortcuts.</source>
+        <translation>Pro generování zástupců je vyžadována licence Pro.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="186"/>
+        <source>No output path was provided.</source>
+        <translation>Nebyla poskytnuta výstupní cesta.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="218"/>
+        <source>Failed to write shortcut file.</source>
+        <translation>Nepodařilo se zapsat soubor zástupce.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="62"/>
+        <source>Could not replace the existing shortcut at %1.</source>
+        <translation>Nelze nahradit existující zástupce na %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="73"/>
+        <source>Could not create the .app bundle directory layout.</source>
+        <translation>Nelze vytvořit adresářovou strukturu balíčku .app.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="89"/>
+        <source>Could not write the bundle launcher: %1</source>
+        <translation>Nelze zapsat spouštěč balíčku: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="108"/>
+        <source>Could not mark the bundle launcher as executable.</source>
+        <translation>Nelze označit spouštěč balíčku jako spustitelný.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="136"/>
+        <source>Could not write Info.plist: %1</source>
+        <translation>Nelze zapsat Info.plist: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="204"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="132"/>
+        <source>Windows shortcut writer is not available on this platform.</source>
+        <translation>Zapisovač zástupců Windows není na této platformě dostupný.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="218"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="169"/>
+        <source>Linux shortcut writer is not available on this platform.</source>
+        <translation>Zapisovač zástupců Linux není na této platformě dostupný.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="90"/>
+        <source>Could not initialise COM (required to write .lnk shortcuts).</source>
+        <translation>Nelze inicializovat COM (vyžadováno pro zápis zástupců .lnk).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="101"/>
+        <source>CoCreateInstance(IShellLink) failed (HRESULT 0x%1).</source>
+        <translation>CoCreateInstance(IShellLink) selhalo (HRESULT 0x%1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="123"/>
+        <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
+        <translation>QueryInterface(IPersistFile) selhalo (HRESULT 0x%1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="133"/>
+        <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
+        <translation>Uložení souboru .lnk selhalo (HRESULT 0x%1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="146"/>
+        <source>macOS shortcut writer is not available on this platform.</source>
+        <translation>Zapisovač zástupců macOS není na této platformě dostupný.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="77"/>
+        <source>Could not open the shortcut path for writing: %1</source>
+        <translation>Nelze otevřít cestu zástupce pro zápis: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="82"/>
+        <source>Serial Studio shortcut</source>
+        <translation>Zástupce Serial Studio</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="103"/>
+        <source>Could not mark the shortcut as executable.</source>
+        <translation>Nelze označit zástupce jako spustitelný.</translation>
     </message>
 </context>
 <context>
@@ -8835,14 +8991,43 @@ function parse(%1) { ... }
 Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Critical</source>
         <translation>Kritické</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Warning</source>
         <translation>Varování</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="343"/>
+        <source>Project file not found</source>
+        <translation>Soubor projektu nenalezen</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="344"/>
+        <source>The project file referenced by this shortcut could not be found:
+
+%1</source>
+        <translation>Soubor projektu odkazovaný touto zástupcem nebyl nalezen:
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="347"/>
+        <source>Would you like to delete this shortcut?</source>
+        <translation>Chcete tento zástupce smazat?</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="351"/>
+        <source>Delete Shortcut</source>
+        <translation>Smazat Zástupce</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="352"/>
+        <source>Quit</source>
+        <translation>Ukončit</translation>
     </message>
 </context>
 <context>
@@ -9144,6 +9329,79 @@ Parametr oddělovače již není potřeba.</translation>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="83"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>Může to trvat několik sekund u relací s mnoha parametry. Okno se automaticky zavře, jakmile bude sestava připravena.</translation>
+    </message>
+</context>
+<context>
+    <name>RuntimeReconfigure</name>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="38"/>
+        <source>Connection Lost</source>
+        <translation>Připojení Ztraceno</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="39"/>
+        <source>Device Unavailable</source>
+        <translation>Zařízení Nedostupné</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="89"/>
+        <source>The connection to your device was lost.</source>
+        <translation>Připojení k vašemu zařízení bylo ztraceno.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="90"/>
+        <source>Serial Studio couldn't reach your device.</source>
+        <translation>Serial Studio se nemohlo připojit k vašemu zařízení.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
+        <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
+        <translation>Zkontrolujte kabel, napájení a zda zařízení nepřevzala jiná aplikace. Můžete zkusit znovu připojit, přepnout na jiné zařízení nebo ukončit.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="101"/>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <translation>Ujistěte se, že je zapojeno, zapnuté a není již používáno jinou aplikací. Můžete to zkusit znovu, vybrat jiné zařízení nebo ukončit.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="115"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
+        <source>Quit</source>
+        <translation>Ukončit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="128"/>
+        <source>Pick Different Device</source>
+        <translation>Vybrat Jiné Zařízení</translation>
+    </message>
+    <message>
+        <source>Reconfigure</source>
+        <translation type="vanished">Překonfigurovat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <source>Try Again</source>
+        <translation>Zkusit Znovu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <source>Reconnect</source>
+        <translation>Znovu Připojit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
+        <source>Pick the correct device, then press Connect.</source>
+        <translation>Vyberte správné zařízení a stiskněte Připojit.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
+        <source>I/O Interface: %1</source>
+        <translation>I/O Rozhraní: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="206"/>
+        <source>Connect</source>
+        <translation>Připojit</translation>
     </message>
 </context>
 <context>
@@ -10271,6 +10529,137 @@ Parametr oddělovače již není potřeba.</translation>
     </message>
 </context>
 <context>
+    <name>ShortcutGenerator</name>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
+        <source>New Shortcut</source>
+        <translation>Nová Zkratka</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="68"/>
+        <source>Choose an Icon</source>
+        <translation>Vyberte Ikonu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
+        <source>Save Shortcut</source>
+        <translation>Uložit Zkratku</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="114"/>
+        <source>General</source>
+        <translation>Obecné</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="120"/>
+        <source>Logging</source>
+        <translation>Protokolování</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="175"/>
+        <source>Identity</source>
+        <translation>Identita</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="229"/>
+        <source>Click to choose an icon</source>
+        <translation>Klikněte pro výběr ikony</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="238"/>
+        <source>Name:</source>
+        <translation>Název:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="246"/>
+        <source>Shortcut Name</source>
+        <translation>Název Zástupce</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="255"/>
+        <source>Change Icon…</source>
+        <translation>Změnit Ikonu…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="272"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="290"/>
+        <source>Project</source>
+        <translation>Projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="300"/>
+        <source>Choose a project file to begin</source>
+        <translation>Vyberte soubor projektu pro začátek</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="325"/>
+        <source>Behavior</source>
+        <translation>Chování</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="340"/>
+        <source>Fullscreen</source>
+        <translation>Celá Obrazovka</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation>Dvojité kliknutí na tuto zástupce přenese uživatele přímo na živý dashboard tohoto projektu. Není zde žádný panel nástrojů ani nastavení, pouze data, a Serial Studio se ukončí, jakmile se zařízení odpojí.</translation>
+    </message>
+    <message>
+        <source>Embed Project</source>
+        <translation type="vanished">Vložit Projekt</translation>
+    </message>
+    <message>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+
+Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
+        <translation type="vanished">Dvojklik na tento zástupce otevře přímo živý dashboard pro tento projekt. Není zde panel nástrojů ani nastavení, pouze data, a Serial Studio se ukončí, jakmile se zařízení odpojí.
+
+Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i po přesunutí nebo smazání původního souboru.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="399"/>
+        <source>Recorders</source>
+        <translation>Záznamníky</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="414"/>
+        <source>CSV File</source>
+        <translation>Soubor CSV</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="424"/>
+        <source>MDF4 File</source>
+        <translation>Soubor MDF4</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="434"/>
+        <source>Session Database</source>
+        <translation>Databáze Relací</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="444"/>
+        <source>Console Log</source>
+        <translation>Protokol Konzole</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
+        <source>Recordings are saved to each module’s default location.</source>
+        <translation>Záznamy jsou ukládány do výchozího umístění každého modulu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="491"/>
+        <source>Cancel</source>
+        <translation>Zrušit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="503"/>
+        <source>Save</source>
+        <translation>Uložit</translation>
+    </message>
+</context>
+<context>
     <name>SourceFrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="102"/>
@@ -10427,52 +10816,52 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Pracovní Prostory</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="243"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="245"/>
         <source>Actions</source>
         <translation>Akce</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="265"/>
         <source>No Actions Available</source>
         <translation>Žádné Dostupné Akce</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="290"/>
         <source>Plugins</source>
         <translation>Pluginy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="328"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="332"/>
         <source>No Plugins Installed</source>
         <translation>Žádné Nainstalované Pluginy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="357"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="363"/>
         <source>Auto Layout</source>
         <translation>Automatické Rozvržení</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="369"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="375"/>
         <source>Full Screen</source>
         <translation>Celá Obrazovka</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="385"/>
         <source>Add External Window</source>
         <translation>Přidat Externí Okno</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
         <source>Help Center</source>
         <translation>Centrum Nápovědy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="628"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="638"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="629"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="639"/>
         <source>Hide</source>
         <translation>Skrýt</translation>
     </message>
@@ -10487,77 +10876,77 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Žádné Pracovní Prostory Nejsou k Dispozici</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="324"/>
         <source>Manage Plugins…</source>
         <translation>Spravovat Pluginy…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
         <source>Export</source>
         <translation>Exportovat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
         <source>CSV File</source>
         <translation>Soubor CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
         <source>MDF4 File</source>
         <translation>Soubor MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="446"/>
         <source>Console Transcript</source>
         <translation>Přepis Konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="449"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Session Database</source>
         <translation>Databáze Relací</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="467"/>
         <source>No Export Formats Available</source>
         <translation>Žádné Exportní Formáty k Dispozici</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="516"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
         <source>Preferences</source>
         <translation>Předvolby</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="617"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="627"/>
         <source>Edit…</source>
         <translation>Upravit…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="560"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="594"/>
         <source>Resume</source>
         <translation>Pokračovat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="602"/>
         <source>Disconnect</source>
         <translation>Odpojit</translation>
     </message>
@@ -10669,7 +11058,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Hledat widgety…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="671"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="672"/>
         <source>Remove from Workspace</source>
         <translation>Odebrat z pracovního prostoru</translation>
     </message>
@@ -10725,241 +11114,251 @@ Parametr oddělovače již není potřeba.</translation>
 <context>
     <name>Toolbar</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="190"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="195"/>
         <source>Project Editor</source>
         <translation>Editor Projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="198"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Otevřít Editor projektu pro vytvoření nebo úpravu JSON layoutu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Přehrát CSV soubor, jako by se jednalo o živá data ze senzorů</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="316"/>
         <source>Preferences</source>
         <translation>Předvolby</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="320"/>
         <source>Open application settings and preferences</source>
         <translation>Otevřít nastavení a předvolby aplikace</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
         <source>Open CSV</source>
         <translation>Otevřít CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
         <source>Open MDF4</source>
         <translation>Otevřít MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="250"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
         <source>Sessions</source>
         <translation>Relace</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>Procházet, přehrávat a exportovat zaznamenané relace</translation>
     </message>
     <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="262"/>
+        <source>Shortcuts</source>
+        <translation>Zkratky</translation>
+    </message>
+    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="269"/>
+        <source>Create an operator shortcut for the current project</source>
+        <translation>Vytvořit zkratku operátora pro aktuální projekt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
         <source>Extensions</source>
         <translation>Rozšíření</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="284"/>
         <source>Browse and install extensions</source>
         <translation>Procházet a instalovat rozšíření</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>Konfigurovat připojení MQTT (publikovat nebo odebírat)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="326"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="338"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Vybrat komunikaci přes sériový port (UART)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="355"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="347"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="359"/>
         <source>Select audio input device (Pro)</source>
         <translation>Vybrat vstupní zvukové zařízení (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="374"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="379"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Vybrat přímou komunikaci USB (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="388"/>
         <source>Network</source>
         <translation>Síť</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Vybrat síťovou komunikaci TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="409"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Vybrat komunikaci MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="424"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="429"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Vybrat komunikaci se zařízením HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="439"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Vybrat komunikaci Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="455"/>
         <source>CAN Bus</source>
         <translation>Sběrnice CAN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="447"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Vybrat komunikaci po sběrnici CAN (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="474"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Vybrat komunikaci přes rouru procesu (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="515"/>
         <source>Examples</source>
         <translation>Příklady</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
         <source>Browse example projects</source>
         <translation>Procházet ukázkové projekty</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="526"/>
         <source>Help Center</source>
         <translation>Centrum Nápovědy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="530"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Procházet dokumentaci, FAQ a wiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="539"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Zobrazit podrobnou dokumentaci a klást otázky na DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="483"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="487"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="499"/>
         <source>About</source>
         <translation>O Aplikaci</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="212"/>
         <source>Open Project</source>
         <translation>Otevřít Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="214"/>
         <source>Open an existing JSON project</source>
         <translation>Otevřít existující JSON projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Přehrát MDF4 soubor jako živá data ze senzorů (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="405"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
         <source>Show application info and license details</source>
         <translation>Zobrazit informace o aplikaci a licenční údaje</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="524"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI Wiki a Chat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="566"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="578"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Spravovat licenci a aktivovat Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="604"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="618"/>
         <source>Disconnect</source>
         <translation>Odpojit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
         <source>Connect</source>
         <translation>Připojit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="583"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="595"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Připojit nebo odpojit od zařízení nebo MQTT brokeru</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="562"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="574"/>
         <source>Activate</source>
         <translation>Aktivovat</translation>
     </message>

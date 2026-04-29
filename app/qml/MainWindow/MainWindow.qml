@@ -47,18 +47,95 @@ Widgets.SmartWindow {
   // Custom properties
   //
   property int appLaunchCount: 0
+  property bool windowShown: false
   property string documentTitle: ""
+  property bool sawConnection: false
   property bool firstValidFrame: false
+  property bool userInitiatedDisconnect: false
   property alias toolbarVisible: toolbar.toolbarEnabled
 
   //
-  // Show window full screen when toolbar is hidden
+  // Cached CLI_RUNTIME_MODE — direct reads from inner scopes are unreliable.
   //
-  onToolbarVisibleChanged: {
-    if (toolbarVisible)
-      root.showNormal()
-    else
+  readonly property bool runtimeMode: typeof CLI_RUNTIME_MODE !== "undefined"
+                                       && CLI_RUNTIME_MODE === true
+
+  //
+  // Wraps any QML disconnect entry point so device-initiated drops can be told apart.
+  //
+  function userDisconnect() {
+    root.userInitiatedDisconnect = true
+    Cpp_IO_Manager.disconnectDevice()
+  }
+
+  function userToggleConnection() {
+    if (Cpp_IO_Manager.isConnected)
+      root.userInitiatedDisconnect = true
+    Cpp_IO_Manager.toggleConnection()
+  }
+
+  //
+  // Runtime mode: user-initiated disconnect quits the app, device drops pop the
+  // reconfigure dialog so the operator can recover instead of losing the session.
+  //
+  Connections {
+    target: Cpp_IO_Manager
+    function onConnectedChanged() {
+      if (Cpp_IO_Manager.isConnected) {
+        root.sawConnection = true
+        root.userInitiatedDisconnect = false
+        return
+      }
+
+      // Ignore disconnects fired while the app is already shutting down.
+      if (app.quitting)
+        return
+
+      if (!root.runtimeMode || !root.sawConnection)
+        return
+
+      if (root.userInitiatedDisconnect) {
+        root.userInitiatedDisconnect = false
+        app.quitApplication()
+      } else {
+        app.showRuntimeReconfigure("lost")
+      }
+    }
+  }
+
+  //
+  // Pops the reconfigure dialog when auto-connect doesn't settle in time.
+  //
+  Timer {
+    id: runtimeFailGuard
+    interval: 4000
+    repeat: false
+    running: root.runtimeMode
+             && !Cpp_IO_Manager.isConnected
+             && !root.sawConnection
+    onTriggered: {
+      if (root.runtimeMode && !Cpp_IO_Manager.isConnected && !root.sawConnection)
+        app.showRuntimeReconfigure("failed")
+    }
+  }
+
+  //
+  // Shows the window. Runtime mode lays the dashboard out up front so the
+  // connecting overlay covers it while the device handshake completes.
+  //
+  function presentWindow() {
+    if (windowShown)
+      return
+
+    windowShown = true
+
+    if (root.runtimeMode)
+      dashboard.loadLayout()
+
+    if (typeof CLI_START_FULLSCREEN !== "undefined" && CLI_START_FULLSCREEN)
       root.showFullScreen()
+    else
+      root.displayWindow()
   }
 
   //
@@ -86,8 +163,14 @@ Widgets.SmartWindow {
       stack.push(dashboard)
       dashboard.loadLayout()
 
-      if (CLI_START_FULLSCREEN)
+      // Runtime mode handles the toolbar via the runtimeMode binding directly.
+      if (!root.runtimeMode
+          && typeof CLI_HIDE_TOOLBAR !== "undefined"
+          && CLI_HIDE_TOOLBAR)
         mainWindow.toolbarVisible = false
+
+      if (typeof CLI_START_FULLSCREEN !== "undefined" && CLI_START_FULLSCREEN)
+        mainWindow.showFullScreen()
     }
   }
 
@@ -122,12 +205,19 @@ Widgets.SmartWindow {
     // Increment app launch count
     ++appLaunchCount
 
-    // Obtain document title from JSON project editor & display the window
+    // Obtain document title from JSON project editor
     root.updateDocumentTitle()
-    root.displayWindow()
+
+    // Always present the window immediately. The connecting overlay covers the
+    // empty dashboard while the device is handshaking.
+    root.presentWindow()
 
     // Defer dialogs and update checks until after window is fully rendered
     Qt.callLater(function() {
+      // Runtime mode is unattended — skip nags entirely.
+      if (root.runtimeMode)
+        return
+
       // Show donations dialog every 15 launches
       if (root.appLaunchCount % 15 == 0 && !Cpp_CommercialBuild)
         donateDialog.showAutomatically()
@@ -165,12 +255,15 @@ Widgets.SmartWindow {
   }
 
   //
-  // Show console tab on serial disconnect
+  // Show console tab on serial disconnect (runtime mode quits instead).
   //
   Connections {
     target: Cpp_UI_Dashboard
 
     function onDataReset() {
+      if (root.runtimeMode)
+        return
+
       setup.show()
       root.showConsole()
       root.firstValidFrame = false
@@ -197,7 +290,7 @@ Widgets.SmartWindow {
         }
       }
 
-      else {
+      else if (!root.runtimeMode) {
         setup.show()
         root.showConsole()
         root.toolbarVisible = true
@@ -210,8 +303,13 @@ Widgets.SmartWindow {
   // Handle platform-specific window initialization code
   //
   onVisibilityChanged: {
-    if (visible)
-      Cpp_NativeWindow.addWindow(root)
+    if (visible) {
+      const tint = root.runtimeMode
+                   ? Cpp_ThemeManager.colors["dashboard_background"]
+                   : ""
+      Cpp_NativeWindow.addWindow(root, tint)
+    }
+
     else
       Cpp_NativeWindow.removeWindow(root)
   }
@@ -220,12 +318,14 @@ Widgets.SmartWindow {
   // Shortcuts
   //
   Shortcut {
+    enabled: !root.runtimeMode
     sequences: [StandardKey.Preferences]
     onActivated: app.showSettingsDialog()
   } Shortcut {
     sequences: [StandardKey.Quit]
     onActivated: app.quitApplication()
   } Shortcut {
+    enabled: !root.runtimeMode
     sequences: [StandardKey.Open]
     onActivated: Cpp_CSV_Player.openFile()
   }
@@ -272,6 +372,7 @@ Widgets.SmartWindow {
 
         z: 2
         Layout.fillWidth: true
+        toolbarEnabled: !root.runtimeMode
         dashboardVisible: root.dashboardVisible
         autoHide: Cpp_UI_Dashboard.autoHideToolbar
       }
@@ -292,9 +393,9 @@ Widgets.SmartWindow {
         StackView {
           id: stack
 
-          initialItem: terminal
           Layout.fillWidth: true
           Layout.fillHeight: true
+          initialItem: root.runtimeMode ? dashboard : terminal
           Layout.minimumHeight: Math.max(terminal.implicitHeight, setup.implicitHeight)
           Layout.minimumWidth: terminal.implicitWidth + (setup.visible ? 0 : setup.kMinPaneWidth + 1)
 
@@ -369,9 +470,10 @@ Widgets.SmartWindow {
           id: setup
 
           Layout.fillHeight: true
+          visible: !root.runtimeMode
           Layout.rightMargin: setupMargin
-          Layout.minimumWidth: setup.kMinPaneWidth
-          Layout.preferredWidth: setup.displayedWidth
+          Layout.minimumWidth: root.runtimeMode ? 0 : setup.kMinPaneWidth
+          Layout.preferredWidth: root.runtimeMode ? 0 : setup.displayedWidth
           Layout.maximumWidth: mainLayout.width - stack.Layout.minimumWidth - 1
         }
       }
@@ -383,6 +485,58 @@ Widgets.SmartWindow {
     Widgets.FileDropArea {
       anchors.fill: parent
       enabled: !Cpp_IO_Manager.isConnected
+    }
+
+    //
+    // Runtime-mode "Connecting…" overlay shown until the first valid frame.
+    //
+    Rectangle {
+      id: connectingOverlay
+      z: 100
+      anchors.fill: parent
+      visible: opacity > 0
+      opacity: root.runtimeMode && !Cpp_UI_Dashboard.available ? 1 : 0
+      color: Cpp_ThemeManager.colors["dashboard_background"]
+
+      Behavior on opacity {
+        NumberAnimation { duration: 350; easing.type: Easing.InOutCubic }
+      }
+
+      MouseArea {
+        hoverEnabled: true
+        anchors.fill: parent
+        acceptedButtons: Qt.AllButtons
+      }
+
+      ColumnLayout {
+        spacing: 16
+        anchors.centerIn: parent
+
+        BusyIndicator {
+          implicitWidth: 64
+          implicitHeight: 64
+          Layout.alignment: Qt.AlignHCenter
+          running: connectingOverlay.visible
+        }
+
+        Label {
+          Layout.alignment: Qt.AlignHCenter
+          text: Cpp_JSON_ProjectModel.title.length > 0
+                ? Cpp_JSON_ProjectModel.title
+                : qsTr("Serial Studio")
+          font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
+          color: Cpp_ThemeManager.colors["text"]
+        }
+
+        Label {
+          Layout.alignment: Qt.AlignHCenter
+          text: Cpp_IO_Manager.isConnected
+                ? qsTr("Waiting for data…")
+                : qsTr("Connecting to device…")
+          font: Cpp_Misc_CommonFonts.uiFont
+          color: Cpp_ThemeManager.colors["placeholder_text"]
+        }
+      }
     }
   }
 }

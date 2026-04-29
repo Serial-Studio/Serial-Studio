@@ -6949,19 +6949,34 @@ Geef de benodigde inloggegevens op.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="106"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
         <source>Console Only Mode</source>
         <translation>Alleen Consolemodus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="109"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
         <source>Quick Plot Mode</source>
         <translation>Snelle Plotmodus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="115"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="198"/>
         <source>Empty Project</source>
         <translation>Leeg Project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="526"/>
+        <source>Serial Studio</source>
+        <translation>Serial Studio</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="534"/>
+        <source>Waiting for data…</source>
+        <translation>Wachten op gegevens…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="535"/>
+        <source>Connecting to device…</source>
+        <translation>Verbinden met apparaat…</translation>
     </message>
     <message>
         <location filename="../../../lib/QCodeEditor/example/src/MainWindow.cpp" line="146"/>
@@ -7155,6 +7170,147 @@ Wilt u de downloadpagina openen?</translation>
         <location filename="../../src/Misc/IconEngine.cpp" line="245"/>
         <source>Empty SVG data received</source>
         <translation>Lege SVG-gegevens ontvangen</translation>
+    </message>
+</context>
+<context>
+    <name>Misc::ShortcutGenerator</name>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="73"/>
+        <source>Windows Shortcut (*.lnk)</source>
+        <translation>Windows-snelkoppeling (*.lnk)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="75"/>
+        <source>macOS Application (*.app)</source>
+        <translation>macOS-applicatie (*.app)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="77"/>
+        <source>Desktop Entry (*.desktop)</source>
+        <translation>Bureaubladitem (*.desktop)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="101"/>
+        <source>Use a .icns icon for the sharpest result in Finder and the Dock.</source>
+        <translation>Gebruik een .icns-pictogram voor het scherpste resultaat in Finder en het Dock.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="103"/>
+        <source>Leave the icon empty to inherit the Serial Studio executable icon.</source>
+        <translation>Laat het pictogram leeg om het pictogram van het Serial Studio-uitvoerbare bestand over te nemen.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="105"/>
+        <source>Place the file under ~/.local/share/applications/ to expose it in your application launcher.</source>
+        <translation>Plaats het bestand onder ~/.local/share/applications/ om het beschikbaar te maken in de applicatiestarter.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="116"/>
+        <source>Apple Icon Image (*.icns)</source>
+        <translation>Apple Icon Image (*.icns)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="118"/>
+        <source>Windows Icon (*.ico)</source>
+        <translation>Windows-pictogram (*.ico)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="120"/>
+        <source>Vector or Raster Image (*.svg *.png)</source>
+        <translation>VECTOR- of rasterafbeelding (*.svg *.png)</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="181"/>
+        <source>A Pro license is required to generate shortcuts.</source>
+        <translation>Een Pro-licentie is vereist om snelkoppelingen te genereren.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="186"/>
+        <source>No output path was provided.</source>
+        <translation>Geen uitvoerpad opgegeven.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator.cpp" line="218"/>
+        <source>Failed to write shortcut file.</source>
+        <translation>Schrijven van snelkoppelingbestand mislukt.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="62"/>
+        <source>Could not replace the existing shortcut at %1.</source>
+        <translation>Kon de bestaande snelkoppeling op %1 niet vervangen.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="73"/>
+        <source>Could not create the .app bundle directory layout.</source>
+        <translation>Kon de .app-bundelmapstructuur niet aanmaken.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="89"/>
+        <source>Could not write the bundle launcher: %1</source>
+        <translation>Kon de bundellauncher niet schrijven: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="108"/>
+        <source>Could not mark the bundle launcher as executable.</source>
+        <translation>Kon de bundellauncher niet als uitvoerbaar markeren.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="136"/>
+        <source>Could not write Info.plist: %1</source>
+        <translation>Kon Info.plist niet schrijven: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="204"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="132"/>
+        <source>Windows shortcut writer is not available on this platform.</source>
+        <translation>Windows-snelkoppelingsschrijver is niet beschikbaar op dit platform.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="218"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="169"/>
+        <source>Linux shortcut writer is not available on this platform.</source>
+        <translation>Linux-snelkoppelingsschrijver is niet beschikbaar op dit platform.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="90"/>
+        <source>Could not initialise COM (required to write .lnk shortcuts).</source>
+        <translation>Kan COM niet initialiseren (vereist voor het schrijven van .lnk-snelkoppelingen).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="101"/>
+        <source>CoCreateInstance(IShellLink) failed (HRESULT 0x%1).</source>
+        <translation>CoCreateInstance(IShellLink) mislukt (HRESULT 0x%1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="123"/>
+        <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
+        <translation>QueryInterface(IPersistFile) mislukt (HRESULT 0x%1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="133"/>
+        <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
+        <translation>Opslaan van .lnk-bestand mislukt (HRESULT 0x%1).</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="146"/>
+        <source>macOS shortcut writer is not available on this platform.</source>
+        <translation>MacOS-snelkoppelingsschrijver is niet beschikbaar op dit platform.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="77"/>
+        <source>Could not open the shortcut path for writing: %1</source>
+        <translation>Kan snelkoppelingspad niet openen voor schrijven: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="82"/>
+        <source>Serial Studio shortcut</source>
+        <translation>Serial Studio-snelkoppeling</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="103"/>
+        <source>Could not mark the shortcut as executable.</source>
+        <translation>Kan snelkoppeling niet als uitvoerbaar markeren.</translation>
     </message>
 </context>
 <context>
@@ -8835,14 +8991,43 @@ function parse(%1) { ... }
 De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Critical</source>
         <translation>Kritiek</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="167"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="168"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="343"/>
+        <source>Project file not found</source>
+        <translation>Projectbestand niet gevonden</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="344"/>
+        <source>The project file referenced by this shortcut could not be found:
+
+%1</source>
+        <translation>Het projectbestand waarnaar deze snelkoppeling verwijst kon niet worden gevonden:
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="347"/>
+        <source>Would you like to delete this shortcut?</source>
+        <translation>Wilt u deze snelkoppeling verwijderen?</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="351"/>
+        <source>Delete Shortcut</source>
+        <translation>Snelkoppeling Verwijderen</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="352"/>
+        <source>Quit</source>
+        <translation>Afsluiten</translation>
     </message>
 </context>
 <context>
@@ -9144,6 +9329,79 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="83"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>Dit kan enkele seconden duren voor sessies met veel parameters. Het venster sluit automatisch wanneer het rapport gereed is.</translation>
+    </message>
+</context>
+<context>
+    <name>RuntimeReconfigure</name>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="38"/>
+        <source>Connection Lost</source>
+        <translation>Verbinding Verbroken</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="39"/>
+        <source>Device Unavailable</source>
+        <translation>Apparaat Niet Beschikbaar</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="89"/>
+        <source>The connection to your device was lost.</source>
+        <translation>De verbinding met uw apparaat is verbroken.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="90"/>
+        <source>Serial Studio couldn't reach your device.</source>
+        <translation>Serial Studio kon uw apparaat niet bereiken.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
+        <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
+        <translation>Controleer de kabel, voeding en of geen andere toepassing het apparaat heeft overgenomen. U kunt proberen opnieuw te verbinden, een ander apparaat kiezen of afsluiten.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="101"/>
+        <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
+        <translation>Controleer of het is aangesloten, ingeschakeld en niet al in gebruik is door een andere app. U kunt het opnieuw proberen, een ander apparaat kiezen of afsluiten.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="115"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
+        <source>Quit</source>
+        <translation>Afsluiten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="128"/>
+        <source>Pick Different Device</source>
+        <translation>Kies Ander Apparaat</translation>
+    </message>
+    <message>
+        <source>Reconfigure</source>
+        <translation type="vanished">Opnieuw Configureren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <source>Try Again</source>
+        <translation>Opnieuw Proberen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <source>Reconnect</source>
+        <translation>Opnieuw Verbinden</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
+        <source>Pick the correct device, then press Connect.</source>
+        <translation>Kies het juiste apparaat en druk op Verbinden.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
+        <source>I/O Interface: %1</source>
+        <translation>I/o-interface: %1</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="206"/>
+        <source>Connect</source>
+        <translation>Verbinden</translation>
     </message>
 </context>
 <context>
@@ -10271,6 +10529,137 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
 </context>
 <context>
+    <name>ShortcutGenerator</name>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
+        <source>New Shortcut</source>
+        <translation>Nieuwe Snelkoppeling</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="68"/>
+        <source>Choose an Icon</source>
+        <translation>Kies een Pictogram</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
+        <source>Save Shortcut</source>
+        <translation>Snelkoppeling Opslaan</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="114"/>
+        <source>General</source>
+        <translation>Algemeen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="120"/>
+        <source>Logging</source>
+        <translation>Logboekregistratie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="175"/>
+        <source>Identity</source>
+        <translation>Identiteit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="229"/>
+        <source>Click to choose an icon</source>
+        <translation>Klik om een pictogram te kiezen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="238"/>
+        <source>Name:</source>
+        <translation>Naam:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="246"/>
+        <source>Shortcut Name</source>
+        <translation>Snelkoppeling Naam</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="255"/>
+        <source>Change Icon…</source>
+        <translation>Pictogram Wijzigen…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="272"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="290"/>
+        <source>Project</source>
+        <translation>Project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="300"/>
+        <source>Choose a project file to begin</source>
+        <translation>Kies een projectbestand om te beginnen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="325"/>
+        <source>Behavior</source>
+        <translation>Gedrag</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="340"/>
+        <source>Fullscreen</source>
+        <translation>Volledig Scherm</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation>Dubbelklikken op deze snelkoppeling brengt iemand direct naar het live dashboard voor dit project. Er is geen werkbalk of instellingenpaneel, alleen de gegevens, en Serial Studio sluit zodra het apparaat de verbinding verbreekt.</translation>
+    </message>
+    <message>
+        <source>Embed Project</source>
+        <translation type="vanished">Project Insluiten</translation>
+    </message>
+    <message>
+        <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.
+
+Turn on Embed Project to bake the project into the shortcut, so it keeps working even if the original file is moved or deleted.</source>
+        <translation type="vanished">Dubbelklikken op deze snelkoppeling brengt iemand direct naar het live dashboard voor dit project. Er is geen werkbalk of instellingenpaneel, alleen de gegevens, en Serial Studio sluit zodra het apparaat wordt losgekoppeld.
+
+Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zodat het blijft werken zelfs als het oorspronkelijke bestand wordt verplaatst of verwijderd.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="399"/>
+        <source>Recorders</source>
+        <translation>Recorders</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="414"/>
+        <source>CSV File</source>
+        <translation>CSV-bestand</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="424"/>
+        <source>MDF4 File</source>
+        <translation>MDF4-bestand</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="434"/>
+        <source>Session Database</source>
+        <translation>Sessiedatabase</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="444"/>
+        <source>Console Log</source>
+        <translation>Consolelog</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
+        <source>Recordings are saved to each module’s default location.</source>
+        <translation>Opnames worden opgeslagen op de standaardlocatie van elke module.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="491"/>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="503"/>
+        <source>Save</source>
+        <translation>Opslaan</translation>
+    </message>
+</context>
+<context>
     <name>SourceFrameParserView</name>
     <message>
         <location filename="../../qml/ProjectEditor/Views/SourceFrameParserView.qml" line="102"/>
@@ -10432,17 +10821,17 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Geen Werkruimten Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="243"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="245"/>
         <source>Actions</source>
         <translation>Acties</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="265"/>
         <source>No Actions Available</source>
         <translation>Geen Acties Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="290"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
@@ -10452,112 +10841,112 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Nieuwe Werkruimte…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="324"/>
         <source>Manage Plugins…</source>
         <translation>Plugins Beheren…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="328"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="332"/>
         <source>No Plugins Installed</source>
         <translation>Geen Plugins Geïnstalleerd</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="357"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="363"/>
         <source>Auto Layout</source>
         <translation>Automatische Indeling</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="369"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="375"/>
         <source>Full Screen</source>
         <translation>Volledig Scherm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="385"/>
         <source>Add External Window</source>
         <translation>Extern Venster Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
         <source>Export</source>
         <translation>Exporteren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
         <source>CSV File</source>
         <translation>CSV-bestand</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
         <source>MDF4 File</source>
         <translation>MDF4-bestand</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="446"/>
         <source>Console Transcript</source>
         <translation>Console-transcript</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="449"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Session Database</source>
         <translation>Sessiedatabase</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="467"/>
         <source>No Export Formats Available</source>
         <translation>Geen Exportformaten Beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="617"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="627"/>
         <source>Edit…</source>
         <translation>Bewerken…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="510"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="516"/>
         <source>Notifications</source>
         <translation>Meldingen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
         <source>Preferences</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="536"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
         <source>Help Center</source>
         <translation>Helpcentrum</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="628"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="638"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="629"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="639"/>
         <source>Hide</source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="560"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="594"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
         <source>Pause</source>
         <translation>Pauzeren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="602"/>
         <source>Disconnect</source>
         <translation>Verbinding Verbreken</translation>
     </message>
@@ -10669,7 +11058,7 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Widgets zoeken…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="671"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="672"/>
         <source>Remove from Workspace</source>
         <translation>Verwijderen uit Werkruimte</translation>
     </message>
@@ -10725,241 +11114,251 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
 <context>
     <name>Toolbar</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="190"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="195"/>
         <source>Project Editor</source>
         <translation>Projecteditor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="198"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Open de Projecteditor om uw JSON-layout te maken of te wijzigen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="212"/>
         <source>Open Project</source>
         <translation>Project Openen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="209"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="214"/>
         <source>Open an existing JSON project</source>
         <translation>Een bestaand JSON-project openen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
         <source>Open CSV</source>
         <translation>CSV Openen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Een CSV-bestand afspelen alsof het live sensorgegevens zijn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
         <source>Open MDF4</source>
         <translation>MDF4 Openen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Een MDF4-bestand afspelen alsof het live sensorgegevens zijn (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="250"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>Opgenomen sessies bladeren, afspelen en exporteren</translation>
     </message>
     <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="262"/>
+        <source>Shortcuts</source>
+        <translation>Snelkoppelingen</translation>
+    </message>
+    <message>
         <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="269"/>
+        <source>Create an operator shortcut for the current project</source>
+        <translation>Maak een operatorsnelkoppeling voor het huidige project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
         <source>Extensions</source>
         <translation>Extensies</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="284"/>
         <source>Browse and install extensions</source>
         <translation>Extensies bladeren en installeren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>MQTT-verbinding configureren (publiceren of abonneren)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="316"/>
         <source>Preferences</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="308"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="320"/>
         <source>Open application settings and preferences</source>
         <translation>Applicatie-instellingen en voorkeuren openen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="326"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="338"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Seriële poort (UART) communicatie selecteren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="355"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="347"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="359"/>
         <source>Select audio input device (Pro)</source>
         <translation>Audio-invoerapparaat selecteren (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="374"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="379"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Raw USB-communicatie selecteren (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="388"/>
         <source>Network</source>
         <translation>Netwerk</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Selecteer TCP/UDP-netwerkcommunicatie</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="405"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
         <source>Browse example projects</source>
         <translation>Blader door voorbeeldprojecten</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="514"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="526"/>
         <source>Help Center</source>
         <translation>Helpcentrum</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="530"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Blader door documentatie, FAQ en wiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="409"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Selecteer Modbus-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="424"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="417"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="429"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Selecteer HID-apparaatcommunicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="439"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Selecteer Bluetooth Low Energy-communicatie</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="455"/>
         <source>CAN Bus</source>
         <translation>CAN-bus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="447"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Selecteer CAN-bus-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="474"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="467"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Selecteer proces-pipe-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="483"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="487"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="495"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="499"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="491"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
         <source>Show application info and license details</source>
         <translation>Toon applicatie-informatie en licentiedetails</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="515"/>
         <source>Examples</source>
         <translation>Voorbeelden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="524"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI Wiki &amp; Chat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="527"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="539"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Bekijk gedetailleerde documentatie en stel vragen op DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="562"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="574"/>
         <source>Activate</source>
         <translation>Activeren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="566"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="578"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Beheer licentie en activeer Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="604"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="618"/>
         <source>Disconnect</source>
         <translation>Verbinding Verbreken</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="583"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="595"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Verbind of verbreek verbinding met apparaat of MQTT-broker</translation>
     </message>

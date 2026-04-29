@@ -39,6 +39,7 @@
 #include <QSettings>
 #include <QStyleFactory>
 #include <QSysInfo>
+#include <QTimer>
 
 #ifdef Q_OS_LINUX
 #  include <QDir>
@@ -59,9 +60,18 @@
 #include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
-#  include <QTimer>
+#  include <QAbstractButton>
+#  include <QFileInfo>
+#  include <QMessageBox>
+#  include <QPushButton>
 
+#  include "Console/Export.h"
+#  include "CSV/Export.h"
 #  include "Licensing/LemonSqueezy.h"
+#  include "Licensing/Trial.h"
+#  include "MDF4/Export.h"
+#  include "Misc/ShortcutGenerator.h"
+#  include "Sessions/Export.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -214,6 +224,13 @@ int main(int argc, char** argv)
   QCLO udpRemoteOpt("udp-remote", "Specifies UDP remote target (e.g., 192.168.1.100:8080)", "host:port");
   QCLO udpMltcstOpt("udp-multicast", "Enables multicast mode for UDP");
 #ifdef BUILD_COMMERCIAL
+  QCLO noToolbarOpt("no-toolbar", "Hides the main window toolbar at startup (Pro)");
+  QCLO runtimeOpt("runtime", "Operator runtime mode: hides toolbar, quits on disconnect (Pro)");
+  QCLO shortcutPathOpt("shortcut-path", "Path of the shortcut that launched this process (Pro)", "path");
+  QCLO csvExportOpt("csv-export", "Enable CSV export immediately on startup (Pro)");
+  QCLO mdfExportOpt("mdf-export", "Enable MDF4 export immediately on startup (Pro)");
+  QCLO sessionExportOpt("session-export", "Enable session database export on startup (Pro)");
+  QCLO consoleExportOpt("console-export", "Enable console log export on startup (Pro)");
   QCLO activateOpt("activate", "Activate a license key and exit (for CI/headless setup)", "key");
   QCLO deactivateOpt("deactivate", "Deactivate the current license instance and exit (for CI cleanup)");
   QCLO modbusRtuOpt("modbus-rtu", "Connects to ModBus RTU device (e.g., /dev/ttyUSB0, COM3)", "port");
@@ -251,6 +268,13 @@ int main(int argc, char** argv)
   parser.addOption(udpRemoteOpt);
   parser.addOption(udpMltcstOpt);
 #ifdef BUILD_COMMERCIAL
+  parser.addOption(noToolbarOpt);
+  parser.addOption(runtimeOpt);
+  parser.addOption(shortcutPathOpt);
+  parser.addOption(csvExportOpt);
+  parser.addOption(mdfExportOpt);
+  parser.addOption(sessionExportOpt);
+  parser.addOption(consoleExportOpt);
   parser.addOption(activateOpt);
   parser.addOption(deactivateOpt);
   parser.addOption(modbusRtuOpt);
@@ -294,11 +318,63 @@ int main(int argc, char** argv)
   Q_INIT_RESOURCE(rcc);
   Q_INIT_RESOURCE(translations);
 
-  // Initialize the module manager & singleton classes
+  // Determine runtime / fullscreen / hide-toolbar flags.
+#ifdef BUILD_COMMERCIAL
+  const bool runtimeMode = parser.isSet(runtimeOpt);
+  const bool fullscreen  = parser.isSet(fOpt);
+  const bool hideToolbar = runtimeMode || parser.isSet(noToolbarOpt) || fullscreen;
+#else
+  const bool runtimeMode = false;
+  const bool fullscreen  = parser.isSet(fOpt);
+  const bool hideToolbar = fullscreen;
+#endif
+
+#ifdef BUILD_COMMERCIAL
+  // Handle a missing shortcut project file BEFORE bringing up QML — otherwise
+  // the runtime window flashes behind this prompt while the user reads it.
+  if (runtimeMode && parser.isSet(pOpt)) {
+    const QString projectPath = parser.value(pOpt);
+    if (!QFileInfo::exists(projectPath)) {
+      const QString shortcutPath =
+        parser.isSet(shortcutPathOpt) ? parser.value(shortcutPathOpt) : QString();
+
+      QMessageBox box;
+      box.setIcon(QMessageBox::Warning);
+      box.setWindowTitle(QObject::tr("Project file not found"));
+      box.setText(QObject::tr("The project file referenced by this shortcut "
+                              "could not be found:\n\n%1")
+                    .arg(projectPath));
+      box.setInformativeText(QObject::tr("Would you like to delete this shortcut?"));
+
+      QAbstractButton* deleteBtn = nullptr;
+      if (!shortcutPath.isEmpty())
+        deleteBtn = box.addButton(QObject::tr("Delete Shortcut"), QMessageBox::DestructiveRole);
+      box.addButton(QObject::tr("Quit"), QMessageBox::RejectRole);
+      box.exec();
+
+      if (deleteBtn != nullptr && box.clickedButton() == deleteBtn)
+        Misc::ShortcutGenerator::instance().deleteShortcut(shortcutPath);
+
+      return EXIT_SUCCESS;
+    }
+  }
+#endif
+
+  // Initialize the module manager
   Misc::ModuleManager moduleManager;
   moduleManager.setHeadless(headless);
   moduleManager.configureUpdater();
   moduleManager.registerQmlTypes();
+
+  // Publish CLI flags before main.qml loads (creation-time bindings need them).
+  {
+    const auto ctx = moduleManager.engine().rootContext();
+    ctx->setContextProperty("CLI_START_FULLSCREEN", fullscreen);
+    ctx->setContextProperty("CLI_HIDE_TOOLBAR", hideToolbar);
+    ctx->setContextProperty("CLI_RUNTIME_MODE", runtimeMode);
+  }
+
+  // Now load main.qml and the rest of the QML interface
   moduleManager.initializeQmlInterface();
   if (!headless && moduleManager.engine().rootObjects().isEmpty()) {
     qCritical() << "Critical QML error";
@@ -309,7 +385,7 @@ int main(int argc, char** argv)
   if (parser.isSet(apiServerOpt))
     API::Server::instance().setEnabled(true);
 
-  // Load a project
+  // Load a project from disk
   if (parser.isSet(pOpt)) {
     QString projectPath = parser.value(pOpt);
     AppState::instance().setOperationMode(SerialStudio::ProjectFile);
@@ -320,9 +396,31 @@ int main(int argc, char** argv)
   else if (parser.isSet(qOpt))
     AppState::instance().setOperationMode(SerialStudio::QuickPlot);
 
-  // Start full screen
-  const auto ctx = moduleManager.engine().rootContext();
-  ctx->setContextProperty("CLI_START_FULLSCREEN", parser.isSet(fOpt));
+  // Auto-connect runtime-mode launches once the bus type is wired up.
+  if (runtimeMode) {
+    QTimer::singleShot(0, &app, []() {
+#ifdef BUILD_COMMERCIAL
+      if (!Licensing::LemonSqueezy::instance().isActivated()
+          && !Licensing::Trial::instance().trialEnabled())
+        return;
+#endif
+      auto& cm = IO::ConnectionManager::instance();
+      if (cm.configurationOk() && !cm.isConnected())
+        cm.connectDevice();
+    });
+  }
+
+  // Apply CLI export toggles before any auto-connect
+#ifdef BUILD_COMMERCIAL
+  if (parser.isSet(csvExportOpt))
+    CSV::Export::instance().setExportEnabled(true);
+  if (parser.isSet(mdfExportOpt))
+    MDF4::Export::instance().setExportEnabled(true);
+  if (parser.isSet(sessionExportOpt))
+    Sessions::Export::instance().setExportEnabled(true);
+  if (parser.isSet(consoleExportOpt))
+    Console::Export::instance().setExportEnabled(true);
+#endif
 
   // Set dashboard FPS
   if (parser.isSet(fpsOpt)) {

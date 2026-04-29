@@ -77,6 +77,7 @@
 #  include "DataModel/ModbusMapImporter.h"
 #  include "Licensing/LemonSqueezy.h"
 #  include "Licensing/Trial.h"
+#  include "Misc/ShortcutGenerator.h"
 #  include "MQTT/Client.h"
 #  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
@@ -420,6 +421,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   auto sqliteDbManager             = &Sessions::DatabaseManager::instance();
   auto dbcImporter                 = &DataModel::DBCImporter::instance();
   auto modbusMapImporter           = &DataModel::ModbusMapImporter::instance();
+  auto shortcutGenerator           = &Misc::ShortcutGenerator::instance();
   auto audioDriver                 = ioManager->audio();
   auto canBusDriver                = ioManager->canBus();
   auto modbusDriver                = ioManager->modbus();
@@ -574,6 +576,7 @@ void Misc::ModuleManager::initializeQmlInterface()
   c->setContextProperty("Cpp_Sessions_Export", sqliteExport);
   c->setContextProperty("Cpp_Sessions_Player", sqlitePlayer);
   c->setContextProperty("Cpp_Sessions_Manager", sqliteDbManager);
+  c->setContextProperty("Cpp_ShortcutGenerator", shortcutGenerator);
 #endif
 
   // Register app info with QML

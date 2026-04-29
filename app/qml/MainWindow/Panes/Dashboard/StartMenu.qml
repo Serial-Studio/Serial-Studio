@@ -227,6 +227,8 @@ Popup {
           _actions.popup.close()
         if (_plugins.popup)
           _plugins.popup.close()
+        if (_export.popup)
+          _export.popup.close()
       }
 
       onClicked: _groups.showMenu()
@@ -270,6 +272,8 @@ Popup {
           _groups.popup.close()
         if (_plugins.popup)
           _plugins.popup.close()
+        if (_export.popup)
+          _export.popup.close()
       }
 
       onClicked: _actions.showMenu()
@@ -332,6 +336,8 @@ Popup {
           _groups.popup.close()
         if (_actions.popup)
           _actions.popup.close()
+        if (_export.popup)
+          _export.popup.close()
       }
 
       onClicked: _plugins.showMenu()
@@ -367,9 +373,9 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Full Screen")
-      visible: !root.isExternalWindow
       checked: !mainWindow.toolbarVisible
       icon.source: "qrc:/rcc/icons/start/full-screen.svg"
+      visible: !root.isExternalWindow && !mainWindow.runtimeMode
       onClicked: mainWindow.toolbarVisible = !mainWindow.toolbarVisible
     }
 
@@ -523,6 +529,7 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Preferences")
+      visible: !mainWindow.runtimeMode
       icon.source: "qrc:/rcc/icons/start/settings.svg"
       onClicked: {
         root.close()
@@ -543,7 +550,7 @@ Popup {
 
     Loader {
       Layout.fillWidth: true
-      active: Cpp_CommercialBuild
+      active: Cpp_CommercialBuild && !mainWindow.runtimeMode
       sourceComponent: Rectangle {
         opacity: 0.5
         implicitHeight: 1
@@ -553,7 +560,7 @@ Popup {
 
     Loader {
       Layout.fillWidth: true
-      active: Cpp_CommercialBuild
+      active: Cpp_CommercialBuild && !mainWindow.runtimeMode
       sourceComponent: Component {
         Widgets.MenuButton {
           expandable: false
@@ -596,7 +603,10 @@ Popup {
       icon.source: "qrc:/rcc/icons/start/disconnect.svg"
       onClicked: {
         root.close()
-        Cpp_IO_Manager.disconnectDevice()
+        if (typeof mainWindow !== "undefined" && mainWindow.userDisconnect)
+          mainWindow.userDisconnect()
+        else
+          Cpp_IO_Manager.disconnectDevice()
       }
     }
   }

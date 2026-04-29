@@ -286,6 +286,7 @@ Item {
     //
     Widgets.TaskbarButton {
       forceVisible: true
+      visible: !mainWindow.runtimeMode
       icon.source: "qrc:/rcc/icons/taskbar/settings.svg"
       onClicked: {
         app.showSettingsDialog()

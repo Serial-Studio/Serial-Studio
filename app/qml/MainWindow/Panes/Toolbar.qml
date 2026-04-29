@@ -80,7 +80,9 @@ Rectangle {
     }
 
     height: root.titlebarHeight
-    color: Cpp_ThemeManager.colors["toolbar_top"]
+    color: mainWindow.runtimeMode
+           ? Cpp_ThemeManager.colors["dashboard_background"]
+           : Cpp_ThemeManager.colors["toolbar_top"]
   }
 
   //
@@ -99,7 +101,9 @@ Rectangle {
 
     text: mainWindow.title
     visible: root.titlebarHeight > 0
-    color: Cpp_ThemeManager.colors["titlebar_text"]
+    color: mainWindow.runtimeMode
+           ? Cpp_ThemeManager.colors["text"]
+           : Cpp_ThemeManager.colors["titlebar_text"]
     font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
   }
 
@@ -142,6 +146,7 @@ Rectangle {
     }
 
     height: 1
+    visible: !mainWindow.runtimeMode
     color: Cpp_ThemeManager.colors["toolbar_border"]
   }
 
@@ -239,7 +244,7 @@ Rectangle {
     }
 
     //
-    // Sessions
+    // Sessions + Shortcut
     //
     Loader {
       active: Cpp_CommercialBuild
@@ -248,9 +253,16 @@ Rectangle {
         Widgets.RibbonSection {
           Widgets.ToolbarButton {
             text: qsTr("Sessions")
+            onClicked: app.showDatabaseExplorer()
             icon.source: "qrc:/rcc/icons/toolbar/sessions.svg"
             ToolTip.text: qsTr("Browse, replay, and export recorded sessions")
-            onClicked: app.showDatabaseExplorer()
+          }
+
+          Widgets.ToolbarButton {
+            text: qsTr("Shortcuts")
+            onClicked: app.showShortcutGenerator()
+            icon.source: "qrc:/rcc/icons/toolbar/shortcut.svg"
+            ToolTip.text: qsTr("Create an operator shortcut for the current project")
           }
         }
       }
@@ -594,6 +606,8 @@ Rectangle {
       onClicked: {
         if (app.mqttSubscriber)
           Cpp_MQTT_Client.toggleConnection()
+        else if (typeof mainWindow !== "undefined" && mainWindow.userToggleConnection)
+          mainWindow.userToggleConnection()
         else
           Cpp_IO_Manager.toggleConnection()
       }

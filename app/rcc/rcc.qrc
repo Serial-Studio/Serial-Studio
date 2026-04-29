@@ -142,6 +142,7 @@
         <file>icons/buttons/media-play.svg</file>
         <file>icons/buttons/media-prev.svg</file>
         <file>icons/buttons/media-stop.svg</file>
+        <file>icons/buttons/new.svg</file>
         <file>icons/buttons/open.svg</file>
         <file>icons/buttons/paypal.svg</file>
         <file>icons/buttons/pdf.svg</file>
@@ -247,6 +248,7 @@
         <file>icons/database/open.svg</file>
         <file>icons/database/replay.svg</file>
         <file>icons/database/restore.svg</file>
+        <file>icons/database/unlock.svg</file>
         <file>icons/devices/drivers/audio.svg</file>
         <file>icons/devices/drivers/bluetooth.svg</file>
         <file>icons/devices/drivers/canbus.svg</file>
@@ -451,6 +453,7 @@
         <file>icons/toolbar/project-setup.svg</file>
         <file>icons/toolbar/sessions.svg</file>
         <file>icons/toolbar/settings.svg</file>
+        <file>icons/toolbar/shortcut.svg</file>
         <file>images/buy-qr.svg</file>
         <file>images/code.svg</file>
         <file>images/dialog-banner.svg</file>
@@ -464,6 +467,9 @@
         <file>images/no-results.svg</file>
         <file>images/no-usb.svg</file>
         <file>images/project-mode-required.svg</file>
+        <file>images/shortcut.icns</file>
+        <file>images/shortcut.ico</file>
+        <file>images/shortcut.svg</file>
         <file>images/spinner.svg</file>
         <file>images/usb.svg</file>
         <file>instruments/attitude_crosshair.svg</file>
@@ -685,7 +691,5 @@
         <file>themes/fluent-dark.json</file>
         <file>themes/fluent-light.json</file>
         <file>markdown-viewer.html</file>
-        <file>icons/database/unlock.svg</file>
-        <file>icons/buttons/new.svg</file>
     </qresource>
 </RCC>
