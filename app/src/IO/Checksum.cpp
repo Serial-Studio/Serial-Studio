@@ -123,6 +123,7 @@ static constexpr uint8_t mod256(const char* data, const int length) noexcept
   uint16_t sum = 0;
   for (int i = 0; i < length; ++i)
     sum += static_cast<uint8_t>(data[i]);
+
   return static_cast<uint8_t>(sum & 0xFF);
 }
 

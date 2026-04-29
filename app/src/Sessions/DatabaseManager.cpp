@@ -78,6 +78,7 @@ static QString sanitiseTitleForPath(const QString& title)
   safe = safe.simplified();
   if (safe.isEmpty())
     safe = QStringLiteral("Untitled");
+
   return safe;
 }
 
@@ -402,6 +403,7 @@ void Sessions::DatabaseManager::openDatabase()
   connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
     if (!path.isEmpty())
       openDatabase(path);
+
     dialog->deleteLater();
   });
   connect(dialog, &QFileDialog::rejected, dialog, &QFileDialog::deleteLater);
@@ -645,14 +647,19 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
   // Cascade delete related rows
   if (!runDelete("DELETE FROM readings WHERE session_id = ?"))
     return;
+
   if (!runDelete("DELETE FROM raw_bytes WHERE session_id = ?"))
     return;
+
   if (!runDelete("DELETE FROM table_snapshots WHERE session_id = ?"))
     return;
+
   if (!runDelete("DELETE FROM session_tags WHERE session_id = ?"))
     return;
+
   if (!runDelete("DELETE FROM columns WHERE session_id = ?"))
     return;
+
   if (!runDelete("DELETE FROM sessions WHERE session_id = ?"))
     return;
 
@@ -867,6 +874,7 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
     auto label       = group + "/" + title;
     if (!units.isEmpty())
       label += " (" + units + ")";
+
     headerCells.append(label);
   }
 
@@ -911,6 +919,7 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
     out << QString::number(currentTs / 1e9, 'f', 9);
     for (const auto& cell : std::as_const(row))
       out << ',' << cell;
+
     out << '\n';
   };
 
@@ -1256,6 +1265,7 @@ void Sessions::DatabaseManager::refreshSessionList()
     QStringList labels;
     for (const auto& t : tags)
       labels.append(t.toMap().value("label").toString());
+
     row["tag_labels"] = labels.join(", ");
 
     m_sessionList.append(row);
@@ -1302,6 +1312,7 @@ void Sessions::DatabaseManager::loadLockState()
     q.prepare("SELECT value FROM project_metadata WHERE key = 'lock_password_hash'");
     if (q.exec() && q.next())
       m_passwordHash = q.value(0).toString();
+
     m_locked = !m_passwordHash.isEmpty();
   }
 

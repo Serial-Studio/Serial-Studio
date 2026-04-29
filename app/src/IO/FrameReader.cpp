@@ -325,6 +325,7 @@ void IO::FrameReader::readStartDelimitedFrames()
     int startIndex = m_circularBuffer.findPatternKMP(startSeq, startLps);
     if (startIndex == -1)
       break;
+
     if (startIndex > 0)
       consumeBytes(startIndex);
 

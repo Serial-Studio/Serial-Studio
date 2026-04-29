@@ -63,6 +63,7 @@ Item {
 
     RowLayout {
       id: sectionLayout
+
       width: implicitWidth
       anchors.verticalCenter: parent.verticalCenter
 

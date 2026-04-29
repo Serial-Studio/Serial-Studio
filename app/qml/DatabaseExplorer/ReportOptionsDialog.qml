@@ -415,6 +415,7 @@ Widgets.SmartDialog {
 
             SpinBox {
               id: _lineWidthSpin
+
               to: 30
               from: 5
               value: 14
@@ -426,6 +427,7 @@ Widgets.SmartDialog {
                 const parsed = parseFloat(String(text).replace(",", "."))
                 if (isNaN(parsed))
                   return _lineWidthSpin.value
+
                 return Math.round(parsed * 10)
               }
               validator: RegularExpressionValidator {
@@ -446,6 +448,7 @@ Widgets.SmartDialog {
 
           CheckBox {
             id: _annotateStatsCheck
+
             checked: true
             Layout.columnSpan: 2
             text: qsTr("Annotate min, max, and mean values on plots")
@@ -494,21 +497,25 @@ Widgets.SmartDialog {
 
           CheckBox {
             id: _coverCheck
+
             text: qsTr("Cover page (logo, document title, test subtitle)")
           }
 
           CheckBox {
             id: _metadataCheck
+
             text: qsTr("Test information (project, timestamps, classification and notes)")
           }
 
           CheckBox {
             id: _statsCheck
+
             text: qsTr("Measurement summary (min, max, mean, std. deviation per parameter)")
           }
 
           CheckBox {
             id: _chartsCheck
+
             text: qsTr("Parameter trends (time-series chart per numeric parameter)")
           }
 

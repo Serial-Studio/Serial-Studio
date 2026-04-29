@@ -204,6 +204,7 @@ void Widgets::Terminal::drawSegmentSelection(
   // Skip if no selection or this line is out of range
   if (m_selectionEnd.isNull())
     return;
+
   if (lineIndex < m_selectionStart.y() || lineIndex > m_selectionEnd.y())
     return;
 
@@ -959,6 +960,7 @@ int Widgets::Terminal::calcCursorPixelX(
   const int limit = qMin(cursorCol, segEnd);
   for (int j = segStart; j < limit; ++j)
     cursorX += painter->fontMetrics().horizontalAdvance(line[j]);
+
   return cursorX;
 }
 
@@ -978,6 +980,7 @@ QPoint Widgets::Terminal::positionToCursor(const QPoint& pos) const
   if (localY < 0) {
     if (m_scrollOffsetY < m_data.size())
       return QPoint(0, m_scrollOffsetY);
+
     return QPoint(0, 0);
   }
 
@@ -1394,10 +1397,12 @@ void Widgets::Terminal::append(const QString& data)
           m_state = Text;
         else if (byte.toLatin1() == 0x1b)
           m_state = Escape;
+
         break;
       case IgnoreSeq:
         if ((byte >= 'A' && byte <= 'Z') || (byte >= 'a' && byte <= 'z'))
           m_state = Text;
+
         break;
       default:
         break;
@@ -2188,30 +2193,35 @@ QString Widgets::Terminal::formatDebugMessage(QtMsgType type,
       prefix = QStringLiteral("[INFO]");
       if (useAnsiColors)
         ansiColor = QStringLiteral("\033[36m");
+
       break;
 
     case QtDebugMsg:
       prefix = QStringLiteral("[DEBG]");
       if (useAnsiColors)
         ansiColor = QStringLiteral("\033[32m");
+
       break;
 
     case QtWarningMsg:
       prefix = QStringLiteral("[WARN]");
       if (useAnsiColors)
         ansiColor = QStringLiteral("\033[33m");
+
       break;
 
     case QtCriticalMsg:
       prefix = QStringLiteral("[CRIT]");
       if (useAnsiColors)
         ansiColor = QStringLiteral("\033[31m");
+
       break;
 
     case QtFatalMsg:
       prefix = QStringLiteral("[FATL]");
       if (useAnsiColors)
         ansiColor = QStringLiteral("\033[91m");
+
       break;
 
     default:

@@ -60,6 +60,7 @@ SplitView {
   //
   Settings {
     id: settings
+
     property alias panelWidth: leftLoader.preferredWidth
     category: (root.settingsKey !== "" ? root.settingsKey : "PaneSplitter")
   }

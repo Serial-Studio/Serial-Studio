@@ -285,6 +285,7 @@ Item {
     //
     PlotWidget {
       id: plot
+
       xMin: root.model.minX
       xMax: root.model.maxX
       yMin: root.model.minY
@@ -366,6 +367,7 @@ Item {
 
           ColumnLayout {
             id: _legends
+
             spacing: 4
             width: parent.width
 

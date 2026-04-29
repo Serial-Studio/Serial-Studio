@@ -169,8 +169,10 @@ void Titlebar::paint(QPainter* painter)
   // Draw visible window control buttons
   if (shouldShowButton(Button::Close))
     drawButton(painter, Button::Close, closeSvg);
+
   if (shouldShowButton(Button::Minimize))
     drawButton(painter, Button::Minimize, minimizeSvg);
+
   if (shouldShowButton(Button::Maximize))
     drawButton(painter, Button::Maximize, maximizeSvg);
 }
@@ -315,6 +317,7 @@ bool Titlebar::shouldShowButton(Button button) const
     case Button::Minimize:
       if (!useCustomHints)
         return true;
+
       return flags & Qt::WindowMinimizeButtonHint;
 
     case Button::Maximize: {
@@ -324,12 +327,14 @@ bool Titlebar::shouldShowButton(Button button) const
       // Check window flags
       if (!useCustomHints)
         return true;
+
       return flags & Qt::WindowMaximizeButtonHint;
     }
 
     case Button::Close:
       if (!useCustomHints)
         return true;
+
       return flags & Qt::WindowCloseButtonHint;
 
     default:
@@ -355,18 +360,21 @@ QRectF Titlebar::buttonBackgroundRect(Button button) const
     case Button::Close:
       if (!showClose)
         return {};
+
       buttonIndex = 0;
       break;
 
     case Button::Maximize:
       if (!showMaximize)
         return {};
+
       buttonIndex = showClose ? 1 : 0;
       break;
 
     case Button::Minimize:
       if (!showMinimize)
         return {};
+
       buttonIndex = (showClose ? 1 : 0) + (showMaximize ? 1 : 0);
       break;
 
@@ -942,10 +950,13 @@ Window::~Window()
   if (root) {
     if (m_contentContainer)
       m_contentContainer->deleteLater();
+
     if (m_titleBar)
       m_titleBar->deleteLater();
+
     if (m_border)
       m_border->deleteLater();
+
     if (m_frame)
       m_frame->deleteLater();
   }
@@ -1088,6 +1099,7 @@ void Window::setupTitleBar()
   connect(m_titleBar, &Titlebar::maximizeClicked, this, [this]() {
     if (!m_window)
       return;
+
     if (m_window->windowStates() & Qt::WindowMaximized)
       m_window->showNormal();
     else
@@ -1205,6 +1217,7 @@ void Window::setupContentContainer()
   if (component.isError()) {
     for (const auto& error : component.errors())
       qWarning() << "CSD QML error:" << error.toString();
+
     return;
   }
 
@@ -1283,6 +1296,7 @@ QSize Window::preferredSize() const
   auto pHeight = quickWindow->property("preferredHeight");
   if (!pWidth.isNull() && pWidth.isValid())
     preferredSize.setWidth(pWidth.toInt());
+
   if (!pHeight.isNull() && pHeight.isValid())
     preferredSize.setHeight(pHeight.toInt());
 
@@ -1391,10 +1405,13 @@ Qt::Edges Window::qtEdgesFromResizeEdge(ResizeEdge edge) const
 
   if (e & static_cast<int>(ResizeEdge::Left))
     edges |= Qt::LeftEdge;
+
   if (e & static_cast<int>(ResizeEdge::Right))
     edges |= Qt::RightEdge;
+
   if (e & static_cast<int>(ResizeEdge::Top))
     edges |= Qt::TopEdge;
+
   if (e & static_cast<int>(ResizeEdge::Bottom))
     edges |= Qt::BottomEdge;
 
@@ -1432,6 +1449,7 @@ bool Window::eventFilter(QObject* watched, QEvent* event)
       auto* me = static_cast<QMouseEvent*>(event);
       if (!m_resizing)
         m_window->setCursor(cursorForEdge(edgeAt(me->position())));
+
       break;
     }
 
@@ -1457,6 +1475,7 @@ bool Window::eventFilter(QObject* watched, QEvent* event)
     case QEvent::Leave:
       if (!m_resizing)
         m_window->setCursor(Qt::ArrowCursor);
+
       break;
 
     default:

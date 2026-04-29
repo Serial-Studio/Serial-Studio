@@ -316,6 +316,7 @@ void Console::Export::setExportEnabled(const bool enabled)
     setConsumerEnabled(enabled);
     if (m_persistSettings)
       m_settings.setValue("ConsoleExport", enabled);
+
     Q_EMIT enabledChanged();
     return;
   }
@@ -327,6 +328,7 @@ void Console::Export::setExportEnabled(const bool enabled)
   m_exportEnabled.store(false, std::memory_order_relaxed);
   if (m_persistSettings)
     m_settings.setValue("ConsoleExport", false);
+
   Q_EMIT enabledChanged();
 
   if (enabled)

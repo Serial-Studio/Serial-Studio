@@ -1002,26 +1002,34 @@ SerialStudio::TextEncoding SerialStudio::textEncodingFromName(const QString& nam
   // Match against the canonical names and a few popular aliases
   if (n == QLatin1String("UTF-8") || n == QLatin1String("UTF8"))
     return EncUtf8;
+
   if (n == QLatin1String("UTF-16LE") || n == QLatin1String("UTF16LE"))
     return EncUtf16LE;
+
   if (n == QLatin1String("UTF-16BE") || n == QLatin1String("UTF16BE"))
     return EncUtf16BE;
+
   if (n == QLatin1String("ISO-8859-1") || n == QLatin1String("LATIN1")
       || n == QLatin1String("LATIN-1"))
     return EncLatin1;
   if (n == QLatin1String("SYSTEM") || n == QLatin1String("LOCALE"))
     return EncSystem;
+
   if (n == QLatin1String("GBK") || n == QLatin1String("CP936"))
     return EncGbk;
+
   if (n == QLatin1String("GB18030"))
     return EncGb18030;
+
   if (n == QLatin1String("BIG5") || n == QLatin1String("BIG-5"))
     return EncBig5;
+
   if (n == QLatin1String("SHIFT_JIS") || n == QLatin1String("SHIFT-JIS")
       || n == QLatin1String("SJIS") || n == QLatin1String("CP932"))
     return EncShiftJis;
   if (n == QLatin1String("EUC-JP") || n == QLatin1String("EUCJP"))
     return EncEucJp;
+
   if (n == QLatin1String("EUC-KR") || n == QLatin1String("EUCKR"))
     return EncEucKr;
 

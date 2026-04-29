@@ -38,14 +38,14 @@ enum class ScanIn : uint8_t {
 };
 
 struct ScanState {
-  ScanIn in = ScanIn::Code;
+  ScanIn in    = ScanIn::Code;
   int luaLevel = 0;
 };
 
 struct LineInfo {
   bool startsInsideMultiline = false;
-  int outdentLeading = 0;
-  int netDelta = 0;
+  int outdentLeading         = 0;
+  int netDelta               = 0;
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -57,10 +57,13 @@ bool isLuaIdentChar(QChar ch, bool first)
 {
   if (ch == QLatin1Char('_'))
     return true;
+
   if (ch.isLetter())
     return true;
+
   if (!first && ch.isDigit())
     return true;
+
   return false;
 }
 
@@ -71,9 +74,8 @@ bool tryLuaLongOpen(QStringView line, int i, int& outLevel, int& outConsume)
     return false;
 
   int level = 0;
-  int j = i + 1;
-  while (j < line.size() && line[j] == QLatin1Char('='))
-  {
+  int j     = i + 1;
+  while (j < line.size() && line[j] == QLatin1Char('=')) {
     ++level;
     ++j;
   }
@@ -81,7 +83,7 @@ bool tryLuaLongOpen(QStringView line, int i, int& outLevel, int& outConsume)
   if (j >= line.size() || line[j] != QLatin1Char('['))
     return false;
 
-  outLevel = level;
+  outLevel   = level;
   outConsume = (j - i) + 1;
   return true;
 }
@@ -92,16 +94,16 @@ bool tryLuaLongClose(QStringView line, int i, int level, int& outConsume)
   if (i >= line.size() || line[i] != QLatin1Char(']'))
     return false;
 
-  int j = i + 1;
+  int j    = i + 1;
   int seen = 0;
-  while (seen < level && j < line.size() && line[j] == QLatin1Char('='))
-  {
+  while (seen < level && j < line.size() && line[j] == QLatin1Char('=')) {
     ++seen;
     ++j;
   }
 
   if (seen != level)
     return false;
+
   if (j >= line.size() || line[j] != QLatin1Char(']'))
     return false;
 
@@ -113,17 +115,16 @@ bool tryLuaLongClose(QStringView line, int i, int level, int& outConsume)
 int skipQuotedString(QStringView line, int i)
 {
   const QChar quote = line[i];
-  int j = i + 1;
-  while (j < line.size())
-  {
+  int j             = i + 1;
+  while (j < line.size()) {
     const QChar c = line[j];
-    if (c == QLatin1Char('\\'))
-    {
+    if (c == QLatin1Char('\\')) {
       j += 2;
       continue;
     }
     if (c == quote)
       return j + 1;
+
     ++j;
   }
   return j;
@@ -140,6 +141,7 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
   auto registerCloser = [&](bool& sawCode) {
     if (!sawCode)
       ++info.outdentLeading;
+
     --info.netDelta;
     sawCode = true;
   };
@@ -163,32 +165,25 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
     QStringLiteral("elseif"),
   };
 
-  int i = 0;
+  int i       = 0;
   const int n = line.size();
-  while (i < n)
-  {
-    if (state.in == ScanIn::JsBlockComment)
-    {
-      if (i + 1 < n && line[i] == QLatin1Char('*') && line[i + 1] == QLatin1Char('/'))
-      {
+  while (i < n) {
+    if (state.in == ScanIn::JsBlockComment) {
+      if (i + 1 < n && line[i] == QLatin1Char('*') && line[i + 1] == QLatin1Char('/')) {
         state.in = ScanIn::Code;
         i += 2;
-      }
-      else
+      } else
         ++i;
       continue;
     }
 
-    if (state.in == ScanIn::JsTemplate)
-    {
+    if (state.in == ScanIn::JsTemplate) {
       const QChar c = line[i];
-      if (c == QLatin1Char('\\'))
-      {
+      if (c == QLatin1Char('\\')) {
         i += 2;
         continue;
       }
-      if (c == QLatin1Char('`'))
-      {
+      if (c == QLatin1Char('`')) {
         state.in = ScanIn::Code;
         ++i;
         continue;
@@ -197,16 +192,13 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
       continue;
     }
 
-    if (state.in == ScanIn::LuaLongString || state.in == ScanIn::LuaBlockComment)
-    {
+    if (state.in == ScanIn::LuaLongString || state.in == ScanIn::LuaBlockComment) {
       int consume = 0;
-      if (tryLuaLongClose(line, i, state.luaLevel, consume))
-      {
-        state.in = ScanIn::Code;
+      if (tryLuaLongClose(line, i, state.luaLevel, consume)) {
+        state.in       = ScanIn::Code;
         state.luaLevel = 0;
         i += consume;
-      }
-      else
+      } else
         ++i;
       continue;
     }
@@ -221,13 +213,11 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
 
     // Lua: line comment -- ... unless it's --[[ or --[==[
     if (lang == Language::Lua && c == QLatin1Char('-') && i + 1 < n
-        && line[i + 1] == QLatin1Char('-'))
-    {
-      int level = 0;
+        && line[i + 1] == QLatin1Char('-')) {
+      int level   = 0;
       int consume = 0;
-      if (i + 2 < n && tryLuaLongOpen(line, i + 2, level, consume))
-      {
-        state.in = ScanIn::LuaBlockComment;
+      if (i + 2 < n && tryLuaLongOpen(line, i + 2, level, consume)) {
+        state.in       = ScanIn::LuaBlockComment;
         state.luaLevel = level;
         i += 2 + consume;
         continue;
@@ -237,37 +227,32 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
 
     // JS: block comment /* ... */
     if (lang == Language::JavaScript && c == QLatin1Char('/') && i + 1 < n
-        && line[i + 1] == QLatin1Char('*'))
-    {
+        && line[i + 1] == QLatin1Char('*')) {
       state.in = ScanIn::JsBlockComment;
       i += 2;
       continue;
     }
 
     // Quoted string literal
-    if (c == QLatin1Char('"') || c == QLatin1Char('\''))
-    {
-      i = skipQuotedString(line, i);
+    if (c == QLatin1Char('"') || c == QLatin1Char('\'')) {
+      i               = skipQuotedString(line, i);
       sawOpenerOrCode = true;
       continue;
     }
 
     // JS template literal
-    if (lang == Language::JavaScript && c == QLatin1Char('`'))
-    {
+    if (lang == Language::JavaScript && c == QLatin1Char('`')) {
       state.in = ScanIn::JsTemplate;
       ++i;
       continue;
     }
 
     // Lua long string [[ ... ]] or [==[ ... ]==]
-    if (lang == Language::Lua && c == QLatin1Char('['))
-    {
-      int level = 0;
+    if (lang == Language::Lua && c == QLatin1Char('[')) {
+      int level   = 0;
       int consume = 0;
-      if (tryLuaLongOpen(line, i, level, consume))
-      {
-        state.in = ScanIn::LuaLongString;
+      if (tryLuaLongOpen(line, i, level, consume)) {
+        state.in       = ScanIn::LuaLongString;
         state.luaLevel = level;
         i += consume;
         continue;
@@ -275,40 +260,42 @@ LineInfo analyzeLine(QStringView line, Language lang, ScanState& state)
     }
 
     // Brace tokens
-    if (c == QLatin1Char('{'))
-    {
+    if (c == QLatin1Char('{')) {
       registerOpener(sawOpenerOrCode);
       ++i;
       continue;
     }
-    if (c == QLatin1Char('}'))
-    {
+    if (c == QLatin1Char('}')) {
       registerCloser(sawOpenerOrCode);
       ++i;
       continue;
     }
 
     // Lua keyword tokens
-    if (lang == Language::Lua && isLuaIdentChar(c, /*first=*/true))
-    {
+    if (lang == Language::Lua && isLuaIdentChar(c, /*first=*/true)) {
       int j = i;
       while (j < n && isLuaIdentChar(line[j], /*first=*/false))
         ++j;
+
       const QString word = line.mid(i, j - i).toString();
       const bool isClose = luaCloses.contains(word);
-      const bool isOpen = luaOpens.contains(word);
+      const bool isOpen  = luaOpens.contains(word);
       if (isClose)
         registerCloser(sawOpenerOrCode);
+
       if (isOpen)
         registerOpener(sawOpenerOrCode);
+
       if (!isClose && !isOpen)
         sawOpenerOrCode = true;
+
       i = j;
       continue;
     }
 
     if (!c.isSpace())
       sawOpenerOrCode = true;
+
     ++i;
   }
 
@@ -326,8 +313,9 @@ QStringList splitLines(const QString& text)
 QString rtrim(const QString& line)
 {
   int end = line.size();
-  while (end > 0 && (line[end - 1] == QLatin1Char(' ') || line[end - 1] == QLatin1Char('\t')
-                     || line[end - 1] == QLatin1Char('\r')))
+  while (end > 0
+         && (line[end - 1] == QLatin1Char(' ') || line[end - 1] == QLatin1Char('\t')
+             || line[end - 1] == QLatin1Char('\r')))
     --end;
   return line.left(end);
 }
@@ -338,6 +326,7 @@ int leadingWhitespaceCount(QStringView line)
   int i = 0;
   while (i < line.size() && (line[i] == QLatin1Char(' ') || line[i] == QLatin1Char('\t')))
     ++i;
+
   return i;
 }
 
@@ -355,10 +344,9 @@ ScanResult scanAllLines(const QStringList& lines, Language lang)
 
   ScanState state;
   int depth = 0;
-  for (const auto& raw : lines)
-  {
+  for (const auto& raw : lines) {
     const QString trimmed = rtrim(raw);
-    LineInfo info = analyzeLine(QStringView(trimmed), lang, state);
+    LineInfo info         = analyzeLine(QStringView(trimmed), lang, state);
     result.infos.append(info);
     result.depthAtStart.append(depth);
     depth += info.netDelta;
@@ -375,6 +363,7 @@ QString computeIndent(int depth, int outdentLeading, int indentSpaces)
   int rendered = depth - outdentLeading;
   if (rendered < 0)
     rendered = 0;
+
   return QString(rendered * indentSpaces, QLatin1Char(' '));
 }
 
@@ -409,7 +398,7 @@ QString formatDocument(const QString& source, Language language, int indentSpace
     return source;
 
   const QStringList lines = splitLines(source);
-  const ScanResult scan = scanAllLines(lines, language);
+  const ScanResult scan   = scanAllLines(lines, language);
 
   QStringList out;
   out.reserve(lines.size());
@@ -420,8 +409,8 @@ QString formatDocument(const QString& source, Language language, int indentSpace
 }
 
 /** @brief Reformats only the given inclusive line range, preserving everything else. */
-QString formatLineRange(const QString& source, Language language, int firstLine, int lastLine,
-                        int indentSpaces)
+QString formatLineRange(
+  const QString& source, Language language, int firstLine, int lastLine, int indentSpaces)
 {
   if (source.isEmpty())
     return source;
@@ -429,8 +418,10 @@ QString formatLineRange(const QString& source, Language language, int firstLine,
   QStringList lines = splitLines(source);
   if (firstLine < 0)
     firstLine = 0;
+
   if (lastLine >= lines.size())
     lastLine = lines.size() - 1;
+
   if (firstLine > lastLine)
     return source;
 

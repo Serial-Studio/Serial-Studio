@@ -102,6 +102,7 @@ Item {
   //
   ScrollView {
     id: container
+
     clip: true
     contentHeight: innerContainer.height
     ScrollBar.vertical.policy: innerContainer.height > container.height ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
@@ -115,6 +116,7 @@ Item {
 
     Item {
       id: innerContainer
+
       width: container.width
       height: model ? model.contentHeight : 0
     }

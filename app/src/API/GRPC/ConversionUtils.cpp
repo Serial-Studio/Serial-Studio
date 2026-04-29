@@ -81,6 +81,7 @@ google::protobuf::Value API::GRPC::ConversionUtils::toProtoValue(const QJsonValu
       const auto arr = json.toArray();
       for (const auto& elem : arr)
         *list->add_values() = toProtoValue(elem, depth + 1);
+
       break;
     }
 
@@ -148,6 +149,7 @@ QJsonValue API::GRPC::ConversionUtils::toQJsonValue(const google::protobuf::Valu
       QJsonArray arr;
       for (const auto& elem : proto.list_value().values())
         arr.append(toQJsonValue(elem, depth + 1));
+
       return QJsonValue(arr);
     }
 

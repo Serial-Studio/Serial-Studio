@@ -288,6 +288,7 @@ Widgets.Pane {
 
       ListView {
         id: regList
+
         clip: true
         spacing: 0
         interactive: true
@@ -302,6 +303,7 @@ Widgets.Pane {
 
         delegate: Widgets.ProjectTableRow {
           id: regRow
+
           rowHeight: root.rowHeight
 
           RowLayout {
@@ -312,6 +314,7 @@ Widgets.Pane {
 
             ComboBox {
               id: typeCombo
+
               Layout.preferredWidth: root.colTypeWidth - 8
               Layout.preferredHeight: 24
               Layout.alignment: Qt.AlignVCenter
@@ -365,6 +368,7 @@ Widgets.Pane {
 
             TextField {
               id: nameField
+
               topPadding: 0
               leftPadding: 0
               rightPadding: 0
@@ -399,6 +403,7 @@ Widgets.Pane {
 
             TextField {
               id: valueField
+
               topPadding: 0
               leftPadding: 0
               rightPadding: 0
@@ -466,6 +471,7 @@ Widgets.Pane {
 
               ToolButton {
                 id: deleteRegBtn
+
                 padding: 2
                 flat: true
                 icon.width: 16
@@ -558,6 +564,7 @@ Widgets.Pane {
 
       Timer {
         id: copyToastTimer
+
         repeat: false
         interval: 1500
         onTriggered: copyToast.opacity = 0

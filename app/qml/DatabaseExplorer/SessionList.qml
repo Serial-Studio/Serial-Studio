@@ -84,6 +84,7 @@ Widgets.Pane {
 
     ListView {
       id: sessionListView
+
       clip: true
       spacing: 0
       Layout.fillWidth: true

@@ -31,14 +31,17 @@ namespace DataModel {
 namespace CodeFormatter {
 
 /** @brief Selects which language grammar drives indentation. */
-enum class Language { JavaScript, Lua };
+enum class Language {
+  JavaScript,
+  Lua
+};
 
-[[nodiscard]] QString formatDocument(const QString& source, Language language,
+[[nodiscard]] QString formatDocument(const QString& source,
+                                     Language language,
                                      int indentSpaces = 2);
 
-[[nodiscard]] QString formatLineRange(const QString& source, Language language,
-                                      int firstLine, int lastLine,
-                                      int indentSpaces = 2);
+[[nodiscard]] QString formatLineRange(
+  const QString& source, Language language, int firstLine, int lastLine, int indentSpaces = 2);
 
 }  // namespace CodeFormatter
 }  // namespace DataModel

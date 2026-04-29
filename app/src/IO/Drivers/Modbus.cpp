@@ -824,6 +824,7 @@ QJsonObject IO::Drivers::Modbus::buildProject() const
   QJsonObject conn_settings;
   for (const auto& prop : driverProperties())
     conn_settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
+
   source[Keys::SourceConn] = conn_settings;
 
   project[Keys::Sources] = QJsonArray{source};
@@ -1238,6 +1239,7 @@ void IO::Drivers::Modbus::onReadReady()
         for (int bit = 0; bit < 8 && (i * 8 + bit) < unit.valueCount(); ++bit)
           if (unit.value(i * 8 + bit))
             byte |= (1 << bit);
+
         data.append(static_cast<char>(byte));
       }
     }

@@ -132,6 +132,7 @@ Widgets.SmartWindow {
       //
       Sections.ProjectToolbar {
         id: toolbar
+
         z: 2
         Layout.fillWidth: true
         Layout.minimumWidth: 860
@@ -194,6 +195,7 @@ Widgets.SmartWindow {
     //
     Item {
       id: editorOverlay
+
       z: 3
       anchors.fill: parent
       visible: Cpp_JSON_ProjectModel.locked

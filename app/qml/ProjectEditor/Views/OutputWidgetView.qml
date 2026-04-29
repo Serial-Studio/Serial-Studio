@@ -324,6 +324,7 @@ Widgets.Pane {
 
         OutputCodeEditor {
           id: outputEditor
+
           anchors.fill: parent
         }
 

@@ -89,6 +89,7 @@ Widgets.SmartWindow {
 
     ColumnLayout {
       id: layout
+
       spacing: 0
       anchors.fill: parent
 
@@ -98,6 +99,7 @@ Widgets.SmartWindow {
       //
       Rectangle {
         id: toolbar
+
         z: 2
         Layout.fillWidth: true
         Layout.minimumWidth: 720

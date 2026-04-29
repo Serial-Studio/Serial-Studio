@@ -338,8 +338,10 @@ void IO::FileTransmission::stopTransmission()
   // Cancel any active protocol transfer
   if (m_xmodem->isActive())
     m_xmodem->cancelTransfer();
+
   if (m_ymodem->isActive())
     m_ymodem->cancelTransfer();
+
   if (m_zmodem->isActive())
     m_zmodem->cancelTransfer();
 

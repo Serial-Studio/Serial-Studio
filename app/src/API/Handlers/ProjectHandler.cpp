@@ -1496,6 +1496,7 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserGetConfig(const Q
   QJsonArray startArr, endArr;
   for (const auto& s : cfg.startSequences)
     startArr.append(QString::fromUtf8(s));
+
   for (const auto& f : cfg.finishSequences)
     endArr.append(QString::fromUtf8(f));
 

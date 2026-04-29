@@ -28,6 +28,7 @@ import "../Widgets"
 
 SmartDialog {
   id: root
+
   title: qsTr("Extension Manager")
 
   property bool showRepos: false
@@ -621,9 +622,11 @@ SmartDialog {
                         const ss = modelData.screenshot || ""
                         if (ss === "")
                           return ""
+
                         const base = modelData._repoBase || ""
                         if (modelData._isLocal)
                           return "file://" + base + ss
+
                         return base + ss
                       }
                     }
@@ -656,6 +659,7 @@ SmartDialog {
 
                       Label {
                         id: runLabel
+
                         color: "#ffffff"
                         text: qsTr("Running")
                         anchors.centerIn: parent
@@ -675,6 +679,7 @@ SmartDialog {
 
                       Label {
                         id: installedLabel
+
                         color: "#ffffff"
                         anchors.centerIn: parent
                         font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
@@ -692,6 +697,7 @@ SmartDialog {
 
                       Label {
                         id: unavailLabel
+
                         color: "#ffffff"
                         anchors.centerIn: parent
                         text: qsTr("Unavailable")

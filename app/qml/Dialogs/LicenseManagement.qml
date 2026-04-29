@@ -41,6 +41,7 @@ SmartDialog {
   //
   dialogContent: ColumnLayout {
     id: column
+
     spacing: 12
     anchors.centerIn: parent
 
@@ -136,6 +137,7 @@ SmartDialog {
 
               TextField {
                 id: _key
+
                 Layout.fillWidth: true
                 echoMode: TextInput.Password
                 text: Cpp_Licensing_LemonSqueezy.license
@@ -300,6 +302,7 @@ SmartDialog {
 
           TextField {
             id: _uid
+
             readOnly: true
             Layout.fillWidth: true
             onTextChanged: cursorPosition = 0
@@ -347,6 +350,7 @@ SmartDialog {
 
           TextField {
             id: _lic
+
             readOnly: true
             Layout.fillWidth: true
             onTextChanged: cursorPosition = 0

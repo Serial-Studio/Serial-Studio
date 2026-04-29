@@ -76,6 +76,7 @@ Item {
 
   TextMetrics {
     id: labelMetrics
+
     font.pixelSize: fontSize
     font.family: Cpp_Misc_CommonFonts.widgetFontFamily
     text: {

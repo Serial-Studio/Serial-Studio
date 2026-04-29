@@ -144,14 +144,15 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   auto* formatShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_I), m_editor);
   formatShortcut->setContext(Qt::WidgetShortcut);
   connect(formatShortcut, &QShortcut::activated, this, &DatasetTransformEditor::onFormatLine);
-  auto* formatAllShortcut =
-    new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I), m_editor);
+  auto* formatAllShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I), m_editor);
   formatAllShortcut->setContext(Qt::WidgetShortcut);
   connect(formatAllShortcut, &QShortcut::activated, this, &DatasetTransformEditor::onFormat);
 
   // Custom context menu adds Format entries on top of the standard ones.
   m_editor->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(m_editor, &QWidget::customContextMenuRequested, this,
+  connect(m_editor,
+          &QWidget::customContextMenuRequested,
+          this,
           &DatasetTransformEditor::showEditorContextMenu);
 
   // Apply initial theme and Lua highlighting
@@ -285,9 +286,9 @@ void DataModel::DatasetTransformEditor::onTest()
  */
 void DataModel::DatasetTransformEditor::onFormat()
 {
-  const auto lang = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
-                                                      : CodeFormatter::Language::JavaScript;
-  const QString original = m_editor->toPlainText();
+  const auto lang         = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
+                                                              : CodeFormatter::Language::JavaScript;
+  const QString original  = m_editor->toPlainText();
   const QString formatted = CodeFormatter::formatDocument(original, lang);
   if (formatted == original)
     return;
@@ -308,8 +309,8 @@ void DataModel::DatasetTransformEditor::onFormat()
  */
 void DataModel::DatasetTransformEditor::onFormatLine()
 {
-  const auto lang = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
-                                                      : CodeFormatter::Language::JavaScript;
+  const auto lang        = (m_language == SerialStudio::Lua) ? CodeFormatter::Language::Lua
+                                                             : CodeFormatter::Language::JavaScript;
   const QString original = m_editor->toPlainText();
 
   QTextCursor cursor = m_editor->textCursor();
@@ -318,10 +319,9 @@ void DataModel::DatasetTransformEditor::onFormatLine()
   QTextCursor last(m_editor->document());
   last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
 
-  const int firstLine = first.blockNumber();
-  const int lastLine = last.blockNumber();
-  const QString formatted =
-    CodeFormatter::formatLineRange(original, lang, firstLine, lastLine);
+  const int firstLine     = first.blockNumber();
+  const int lastLine      = last.blockNumber();
+  const QString formatted = CodeFormatter::formatLineRange(original, lang, firstLine, lastLine);
   if (formatted == original)
     return;
 

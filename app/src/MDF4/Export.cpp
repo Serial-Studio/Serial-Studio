@@ -523,6 +523,7 @@ void MDF4::Export::setExportEnabled(const bool enabled)
     setConsumerEnabled(allow);
     if (m_persistSettings)
       m_settings.setValue("MDF4Export", allow);
+
     Q_EMIT enabledChanged();
     return;
   }
@@ -532,12 +533,14 @@ void MDF4::Export::setExportEnabled(const bool enabled)
   setConsumerEnabled(false);
   if (m_persistSettings)
     m_settings.setValue("MDF4Export", false);
+
   Q_EMIT enabledChanged();
 #else
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
   if (m_persistSettings)
     m_settings.setValue("MDF4Export", false);
+
   Q_EMIT enabledChanged();
 #endif
 

@@ -239,6 +239,7 @@ Window {
 
       ListView {
         id: list
+
         clip: true
         spacing: 0
         Layout.fillWidth: true

@@ -892,6 +892,7 @@ Widgets.SmartDialog {
 
         GridLayout {
           id: notificationsLayout
+
           columns: 2
           rowSpacing: 4
           columnSpacing: 8

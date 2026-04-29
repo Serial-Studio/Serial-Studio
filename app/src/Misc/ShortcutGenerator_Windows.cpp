@@ -69,6 +69,7 @@ QString joinForCmdLine(const QStringList& args, std::function<QString(const QStr
   quoted.reserve(args.size());
   for (const auto& a : args)
     quoted << quote(a);
+
   return quoted.join(QLatin1Char(' '));
 }
 

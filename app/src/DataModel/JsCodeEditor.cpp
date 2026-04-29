@@ -418,9 +418,9 @@ void DataModel::JsCodeEditor::selectAll()
  */
 void DataModel::JsCodeEditor::formatDocument()
 {
-  const auto lang = (m_language == 1) ? CodeFormatter::Language::Lua
-                                      : CodeFormatter::Language::JavaScript;
-  const QString original = m_widget.toPlainText();
+  const auto lang =
+    (m_language == 1) ? CodeFormatter::Language::Lua : CodeFormatter::Language::JavaScript;
+  const QString original  = m_widget.toPlainText();
   const QString formatted = CodeFormatter::formatDocument(original, lang);
   if (formatted == original)
     return;
@@ -441,8 +441,8 @@ void DataModel::JsCodeEditor::formatDocument()
  */
 void DataModel::JsCodeEditor::formatSelection()
 {
-  const auto lang = (m_language == 1) ? CodeFormatter::Language::Lua
-                                      : CodeFormatter::Language::JavaScript;
+  const auto lang =
+    (m_language == 1) ? CodeFormatter::Language::Lua : CodeFormatter::Language::JavaScript;
   const QString original = m_widget.toPlainText();
 
   QTextCursor cursor = m_widget.textCursor();
@@ -451,10 +451,9 @@ void DataModel::JsCodeEditor::formatSelection()
   QTextCursor last(m_widget.document());
   last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
 
-  const int firstLine = first.blockNumber();
-  const int lastLine = last.blockNumber();
-  const QString formatted =
-    CodeFormatter::formatLineRange(original, lang, firstLine, lastLine);
+  const int firstLine     = first.blockNumber();
+  const int lastLine      = last.blockNumber();
+  const QString formatted = CodeFormatter::formatLineRange(original, lang, firstLine, lastLine);
   if (formatted == original)
     return;
 

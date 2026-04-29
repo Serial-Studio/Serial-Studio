@@ -172,12 +172,16 @@ QString API::GRPC::ProtoGenerator::jsonTypeToProtoType(const QString& jsonType)
 {
   if (jsonType == QStringLiteral("string"))
     return QStringLiteral("string");
+
   if (jsonType == QStringLiteral("number"))
     return QStringLiteral("double");
+
   if (jsonType == QStringLiteral("integer"))
     return QStringLiteral("int64");
+
   if (jsonType == QStringLiteral("boolean"))
     return QStringLiteral("bool");
+
   if (jsonType == QStringLiteral("array"))
     return QStringLiteral("google.protobuf.ListValue");
 

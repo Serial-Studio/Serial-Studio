@@ -241,8 +241,8 @@ void DataModel::OutputCodeEditor::formatSelection()
   QTextCursor last(m_widget.document());
   last.setPosition(qMax(cursor.selectionStart(), cursor.selectionEnd()));
 
-  const int firstLine = first.blockNumber();
-  const int lastLine = last.blockNumber();
+  const int firstLine     = first.blockNumber();
+  const int lastLine      = last.blockNumber();
   const QString formatted = CodeFormatter::formatLineRange(
     original, CodeFormatter::Language::JavaScript, firstLine, lastLine);
   if (formatted == original)

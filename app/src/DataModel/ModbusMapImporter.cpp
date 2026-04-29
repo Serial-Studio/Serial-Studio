@@ -165,6 +165,7 @@ void DataModel::ModbusMapImporter::showPreview(const QString& filePath)
     m_registers.begin(), m_registers.end(), [](const RegisterEntry& a, const RegisterEntry& b) {
       if (a.registerType != b.registerType)
         return a.registerType < b.registerType;
+
       return a.address < b.address;
     });
 
@@ -431,8 +432,10 @@ bool DataModel::ModbusMapImporter::parseXML(const QString& path)
       if (entry.dataType.isEmpty())
         entry.dataType =
           (entry.registerType >= 2) ? QStringLiteral("bool") : QStringLiteral("uint16");
+
       if (entry.name.isEmpty())
         entry.name = QStringLiteral("Register %1").arg(entry.address);
+
       if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
         entry.max = 1;
 

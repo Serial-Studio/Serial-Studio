@@ -44,6 +44,7 @@ static QString escapeDesktopValue(const QString& value)
       out += QStringLiteral("\\t");
     else
       out += ch;
+
   return out;
 }
 

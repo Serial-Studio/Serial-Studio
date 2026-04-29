@@ -133,6 +133,7 @@ void Widgets::Gyroscope::updateData()
     angle = std::fmod(angle + 180.0, 360.0);
     if (angle < 0)
       angle += 360.0;
+
     return angle - 180.0;
   };
 
@@ -166,10 +167,13 @@ void Widgets::Gyroscope::updateData()
   if (!m_displayFilterInitialized) {
     if (hasYaw)
       m_yaw = yawInput;
+
     if (hasRoll)
       m_roll = rollInput;
+
     if (hasPitch)
       m_pitch = pitchInput;
+
     m_displayFilterInitialized = true;
   } else {
     auto angleEma = [](double input, double& state) {
@@ -178,13 +182,16 @@ void Widgets::Gyroscope::updateData()
         delta -= 360.0;
       else if (delta < -180.0)
         delta += 360.0;
+
       state += kAlpha * delta;
     };
 
     if (hasYaw)
       angleEma(yawInput, m_yaw);
+
     if (hasRoll)
       angleEma(rollInput, m_roll);
+
     if (hasPitch)
       angleEma(pitchInput, m_pitch);
   }

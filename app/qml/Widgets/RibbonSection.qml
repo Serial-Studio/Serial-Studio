@@ -89,6 +89,7 @@ RowLayout {
 
     contentItem: ColumnLayout {
       id: collapsedCol
+
       spacing: 4
 
       RowLayout {
@@ -114,6 +115,7 @@ RowLayout {
 
       Label {
         id: collapsedLabel
+
         text: root.collapsedText
         Layout.alignment: Qt.AlignHCenter
         font: Cpp_Misc_CommonFonts.uiFont
@@ -137,6 +139,7 @@ RowLayout {
     background: Item {
       Rectangle {
         id: bgRect
+
         anchors.fill: parent
         radius: 6
         opacity: 0.95
@@ -199,6 +202,7 @@ RowLayout {
 
     contentItem: RowLayout {
       id: popupContent
+
       spacing: 4
     }
 

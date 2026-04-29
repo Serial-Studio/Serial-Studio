@@ -31,6 +31,7 @@ import "../../Dialogs" as Dialogs
 
 Item {
   id: root
+
   clip: true
 
   //

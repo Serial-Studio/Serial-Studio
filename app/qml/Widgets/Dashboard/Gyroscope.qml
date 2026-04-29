@@ -32,6 +32,7 @@ import "../"
 
 Item {
   id: root
+
   clip: true
 
   //
@@ -173,6 +174,7 @@ Item {
                 var dist = Math.abs(pitch - root.pitchAngle);
                 if (dist > 180)
                   dist = 360 - dist;
+
                 return Math.max(0, 1.0 - dist / 45);
               }
 

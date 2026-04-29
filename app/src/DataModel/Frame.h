@@ -311,6 +311,7 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
   obj.insert(Keys::OutputInitialValue, w.initialValue);
   if (w.monoIcon)
     obj.insert(Keys::OutputMonoIcon, true);
+
   obj.insert(Keys::TransmitFunction, w.transmitFunction);
   obj.insert(Keys::OutputTxEncoding, w.txEncoding);
   return obj;
@@ -1072,6 +1073,7 @@ void read_io_settings(QByteArray& frameStart,
     obj.insert(Keys::SchemaVersion, f.schemaVersion > 0 ? f.schemaVersion : kSchemaVersion);
     if (!f.writerVersion.isEmpty())
       obj.insert(Keys::WriterVersion, f.writerVersion);
+
     if (!f.writerVersionAtCreation.isEmpty())
       obj.insert(Keys::WriterVersionAtCreation, f.writerVersionAtCreation);
   }

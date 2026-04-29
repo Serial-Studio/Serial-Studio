@@ -30,6 +30,7 @@ import "../Widgets"
 
 SmartDialog {
   id: root
+
   title: qsTr("Examples Browser")
 
   //
@@ -65,6 +66,7 @@ SmartDialog {
         readmeView.runJavaScript("document.getElementById('content').innerHTML = '<p style=\"opacity:0.5\">Loading...</p>';")
       else
         readmeView.runJavaScript("document.getElementById('content').innerHTML = '<p style=\"opacity:0.5\">No README available.</p>';")
+
       return
     }
 
@@ -307,6 +309,7 @@ SmartDialog {
       //
       Item {
         id: gridPage
+
         visible: !root.fetchingData
 
         width: parent.width

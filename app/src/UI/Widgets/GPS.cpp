@@ -650,8 +650,10 @@ void Widgets::GPS::updateData()
   // Update tracking values
   if (!std::isnan(lat))
     m_latitude = lat;
+
   if (!std::isnan(lon))
     m_longitude = lon;
+
   if (!std::isnan(alt))
     m_altitude = alt;
 
@@ -768,6 +770,7 @@ void Widgets::GPS::updateTiles()
       // Request tiles for weather and reference layers
       if (m_showNasaWeather && baseZoom <= WEATHER_GIBS_MAX_ZOOM)
         requestTileIfNeeded(nasaWeatherUrl(tx, ty, baseZoom));
+
       if (m_enableReferenceLayer)
         requestTileIfNeeded(referenceUrl(tx, ty, baseZoom));
 

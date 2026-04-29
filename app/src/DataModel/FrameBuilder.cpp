@@ -646,6 +646,7 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
       channel.toDouble(&isNumeric);
       if (!isNumeric)
         continue;
+
       allNonNumeric = false;
       break;
     }
@@ -1123,6 +1124,7 @@ void DataModel::FrameBuilder::destroyTransformEngines()
     if (engine.luaState)
       for (const auto& [uid, ref] : engine.luaRefs)
         luaL_unref(engine.luaState, LUA_REGISTRYINDEX, ref);
+
     engine.luaRefs.clear();
 
     // Release Lua state

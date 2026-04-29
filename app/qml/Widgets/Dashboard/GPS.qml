@@ -226,6 +226,7 @@ Item {
   //
   Item {
     id: container
+
     anchors.fill: parent
     anchors.topMargin: root.hasToolbar ? root.toolbarHeight : 0
   }

@@ -28,6 +28,7 @@ import SerialStudio
 
 ColumnLayout {
   id: root
+
   spacing: 0
 
   //
@@ -50,6 +51,7 @@ ColumnLayout {
   //
   Rectangle {
     id: header
+
     Layout.fillWidth: true
     implicitHeight: root.rowHeight
     visible: view.rows > 0 && headerVisible

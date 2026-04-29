@@ -891,6 +891,7 @@ void UI::Taskbar::rebuildModel()
         const auto dbGroup = db->getGroupWidget(widgetType, relativeIndex);
         if (dbGroup.groupId != groupId)
           continue;
+
         windowIds.append(windowId);
         widgetTypes.append(widgetType);
         relativeIds.append(relativeIndex);
@@ -900,6 +901,7 @@ void UI::Taskbar::rebuildModel()
         const auto dbDataset = db->getDatasetWidget(widgetType, relativeIndex);
         if (dbDataset.groupId != groupId)
           continue;
+
         windowIds.append(windowId);
         widgetTypes.append(widgetType);
         relativeIds.append(relativeIndex);
@@ -940,6 +942,7 @@ void UI::Taskbar::rebuildModel()
         auto info = registry.widgetInfo(wid);
         if (info.groupId != groupId || !info.isGroupWidget)
           continue;
+
         m_widgetIdToWindowId.insert(wid, mainWindowId);
         m_windowIdToWidgetId.insert(mainWindowId, wid);
         break;

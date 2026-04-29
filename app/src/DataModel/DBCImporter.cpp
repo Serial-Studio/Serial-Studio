@@ -502,6 +502,7 @@ QString DataModel::DBCImporter::generateMessageDecoder(const QCanMessageDescript
   for (const auto& signal : signalList) {
     if (!firstSignal)
       code += "\n";
+
     firstSignal = false;
 
     const auto unit = signal.physicalUnit();
@@ -594,6 +595,7 @@ QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& 
     case Voltages:
       if (signalCount <= 8)
         return SerialStudio::groupWidgetId(SerialStudio::MultiPlot);
+
       return SerialStudio::groupWidgetId(SerialStudio::DataGrid);
 
     case BatteryCluster:
@@ -623,6 +625,7 @@ QString DataModel::DBCImporter::selectGroupWidget(const QCanMessageDescription& 
       const auto name = signal.name().toLower();
       if (name.contains("lat"))
         hasLat = true;
+
       if (name.contains("lon") || name.contains("lng"))
         hasLon = true;
     }
@@ -805,8 +808,10 @@ bool DataModel::DBCImporter::hasBatterySignals(const QList<QCanSignalDescription
 
     if (name.contains("volt") || unit.contains("v"))
       hasVoltage = true;
+
     if (name.contains("current") || name.contains("amp") || unit.contains("a"))
       hasCurrent = true;
+
     if (name.contains("soc") || name.contains("charge") || unit.contains("%"))
       hasSoC = true;
   }
@@ -866,6 +871,7 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
       const auto unit = signal.physicalUnit().toLower();
       if (unit.contains("km/h") || unit.contains("mph") || unit.contains("m/s"))
         return WheelSpeeds;
+
       if (unit.contains("psi") || unit.contains("bar") || unit.contains("kpa"))
         return TirePressures;
     }
@@ -876,6 +882,7 @@ DataModel::DBCImporter::SignalFamily DataModel::DBCImporter::detectSignalFamily(
       const auto unit = signalList.first().physicalUnit().toLower();
       if (unit.contains("°") || unit.contains("deg"))
         return Temperatures;
+
       if (unit.contains("v") && !unit.contains("rev"))
         return Voltages;
     }

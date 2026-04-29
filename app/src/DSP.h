@@ -654,10 +654,13 @@ inline bool downsampleMonotonic(
     // Update data boundaries
     if (xv < xmin)
       xmin = xv;
+
     if (xv > xmax)
       xmax = xv;
+
     if (yv < ymin)
       ymin = yv;
+
     if (yv > ymax)
       ymax = yv;
 

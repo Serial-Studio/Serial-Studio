@@ -114,6 +114,7 @@ bool Misc::ShortcutGenerator::writeMacCommand(const QString& outputPath,
   QString iconSource = iconPath;
   if (QUrl(iconSource).isLocalFile())
     iconSource = QUrl(iconSource).toLocalFile();
+
   if (iconSource.startsWith(QStringLiteral("qrc:")))
     iconSource.clear();
 
@@ -170,6 +171,7 @@ bool Misc::ShortcutGenerator::writeMacCommand(const QString& outputPath,
     out << QStringLiteral("  <key>NSHighResolutionCapable</key><true/>\n");
     if (!iconFileName.isEmpty())
       out << QStringLiteral("  <key>CFBundleIconFile</key><string>%1</string>\n").arg(iconFileName);
+
     out << QStringLiteral("</dict>\n");
     out << QStringLiteral("</plist>\n");
     file.close();

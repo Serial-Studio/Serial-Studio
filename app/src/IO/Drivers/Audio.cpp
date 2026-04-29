@@ -101,8 +101,10 @@ static IO::Drivers::Audio::AudioDeviceInfo extractCapabilities(ma_context* conte
   // Apply fallback defaults for empty sets
   if (formats.isEmpty())
     formats = defaultFormats;
+
   if (sampleRates.isEmpty())
     sampleRates = defaultSampleRates;
+
   if (channelCounts.isEmpty())
     channelCounts = defaultChannels;
 
@@ -1132,6 +1134,7 @@ void IO::Drivers::Audio::refreshAudioDevices()
 
   if (result != MA_SUCCESS)
     return;
+
   // clang-format on
 
   // clang-format off

@@ -195,6 +195,7 @@ Widgets.Pane {
 
             MouseArea {
               id: rowMouse
+
               hoverEnabled: true
               anchors.fill: parent
               cursorShape: modelData.isSystem ? Qt.ArrowCursor : Qt.PointingHandCursor

@@ -1179,6 +1179,7 @@ void API::Server::acceptConnection()
     if (enabled())
       Misc::Utilities::showMessageBox(
         tr("API server"), tr("Invalid pending connection"), QMessageBox::Critical);
+
     return;
   }
 

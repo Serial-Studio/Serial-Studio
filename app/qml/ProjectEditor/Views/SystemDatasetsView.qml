@@ -152,6 +152,7 @@ Widgets.Pane {
 
         Widgets.SearchField {
           id: searchField
+
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           text: root.searchText
@@ -205,6 +206,7 @@ Widgets.Pane {
 
         delegate: Widgets.ProjectTableRow {
           id: rowDelegate
+
           rowHeight: root.rowHeight
 
           RowLayout {
@@ -379,6 +381,7 @@ Widgets.Pane {
 
       Timer {
         id: copyToastTimer
+
         repeat: false
         interval: 1500
         onTriggered: copyToast.opacity = 0

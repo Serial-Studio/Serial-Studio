@@ -52,6 +52,7 @@ Item {
 
       Button {
         id: sendButton
+
         text: qsTr("Send")
         Layout.preferredWidth: 80
 

@@ -65,6 +65,7 @@ Widgets.SmartDialog {
 
   FileDialog {
     id: iconPicker
+
     title: qsTr("Choose an Icon")
     fileMode: FileDialog.OpenFile
     currentFolder: StandardPaths.writableLocation(StandardPaths.DesktopLocation)
@@ -77,6 +78,7 @@ Widgets.SmartDialog {
 
   FileDialog {
     id: outputPicker
+
     title: qsTr("Save Deployment")
     fileMode: FileDialog.SaveFile
     currentFolder: StandardPaths.writableLocation(StandardPaths.DesktopLocation)
@@ -99,6 +101,7 @@ Widgets.SmartDialog {
 
   dialogContent: ColumnLayout {
     id: layout
+
     spacing: 12
     anchors.centerIn: parent
 
@@ -197,6 +200,7 @@ Widgets.SmartDialog {
 
             Item {
               id: iconTile
+
               implicitWidth: 96
               implicitHeight: 96
               Layout.alignment: Qt.AlignVCenter
@@ -218,6 +222,7 @@ Widgets.SmartDialog {
 
               HoverHandler {
                 id: iconHover
+
                 cursorShape: Qt.PointingHandCursor
               }
 
@@ -242,6 +247,7 @@ Widgets.SmartDialog {
 
               TextField {
                 id: titleField
+
                 Layout.fillWidth: true
                 text: root.shortcutTitle
                 placeholderText: qsTr("Deployment Name")

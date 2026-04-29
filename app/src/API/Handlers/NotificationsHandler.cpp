@@ -48,6 +48,7 @@ namespace {
   schema[QStringLiteral("properties")] = properties;
   if (!required.isEmpty())
     schema[QStringLiteral("required")] = required;
+
   return schema;
 }
 

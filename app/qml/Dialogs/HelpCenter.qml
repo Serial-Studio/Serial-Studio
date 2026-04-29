@@ -28,6 +28,7 @@ import "../Widgets"
 
 SmartDialog {
   id: root
+
   fixedSize: false
   title: qsTr("Help Center")
 

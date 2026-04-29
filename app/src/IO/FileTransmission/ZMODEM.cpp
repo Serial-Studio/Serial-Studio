@@ -548,6 +548,7 @@ void IO::Protocols::ZMODEM::sendCancel()
   QByteArray cancel;
   for (int i = 0; i < 5; ++i)
     cancel.append(static_cast<char>(0x18));
+
   for (int i = 0; i < 5; ++i)
     cancel.append(static_cast<char>(0x08));
 
@@ -605,6 +606,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
         m_state = State::Idle;
         if (m_file.isOpen())
           m_file.close();
+
         Q_EMIT statusMessage(tr("Too many errors, transfer aborted"));
         Q_EMIT finished(false, tr("Maximum retries exceeded"));
         return;
@@ -619,6 +621,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
         sendZFILE();
       else if (m_state == State::SentZEOF)
         sendDataSubpackets();
+
       break;
 
     // Session complete — send "OO" (Over and Out)
@@ -639,6 +642,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       m_state = State::Idle;
       if (m_file.isOpen())
         m_file.close();
+
       Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
       Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
       break;
@@ -648,6 +652,7 @@ void IO::Protocols::ZMODEM::parseReceivedHeader(quint8 type, quint32 arg)
       m_state = State::Idle;
       if (m_file.isOpen())
         m_file.close();
+
       Q_EMIT statusMessage(tr("Receiver reported a file error"));
       Q_EMIT finished(false, tr("Receiver reported a file error"));
       break;
@@ -855,6 +860,7 @@ void IO::Protocols::ZMODEM::handleTimeout()
     m_state = State::Idle;
     if (m_file.isOpen())
       m_file.close();
+
     Q_EMIT statusMessage(tr("Transfer timed out"));
     Q_EMIT finished(false, tr("Timeout: no response from receiver"));
     return;

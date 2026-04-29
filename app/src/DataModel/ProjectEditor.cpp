@@ -2641,6 +2641,7 @@ void DataModel::ProjectEditor::onGroupItemChanged(QStandardItem* item)
           if (m_selectionModel)
             m_selectionModel->setCurrentIndex(g.key()->index(),
                                               QItemSelectionModel::ClearAndSelect);
+
           break;
         }
       });
@@ -2723,6 +2724,7 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
       const int srcIdx    = value.toInt();
       if (srcIdx >= 0 && srcIdx < static_cast<int>(sources.size()))
         m_selectedAction.sourceId = sources[srcIdx].sourceId;
+
       break;
     }
     case kActionView_AutoExecute:

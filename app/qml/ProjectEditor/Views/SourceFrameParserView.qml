@@ -149,15 +149,15 @@ Widgets.Pane {
     MenuSeparator {}
 
     MenuItem {
-      text: qsTr("Format Document")
       opacity: enabled ? 1 : 0.5
+      text: qsTr("Format Document")
       onTriggered: frameParser.formatDocument()
       enabled: frameParser.text.length > 0
     }
 
     MenuItem {
-      text: qsTr("Format Selection")
       opacity: enabled ? 1 : 0.5
+      text: qsTr("Format Selection")
       onTriggered: frameParser.formatSelection()
       enabled: frameParser.text.length > 0
     }

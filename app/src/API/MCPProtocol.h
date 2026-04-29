@@ -192,8 +192,10 @@ struct Resource {
     json[QStringLiteral("name")] = name;
     if (!description.isEmpty())
       json[QStringLiteral("description")] = description;
+
     if (!mimeType.isEmpty())
       json[QStringLiteral("mimeType")] = mimeType;
+
     return json;
   }
 };
@@ -212,8 +214,10 @@ struct Prompt {
     json[QStringLiteral("name")] = name;
     if (!description.isEmpty())
       json[QStringLiteral("description")] = description;
+
     if (!arguments.isEmpty())
       json[QStringLiteral("arguments")] = arguments;
+
     return json;
   }
 };

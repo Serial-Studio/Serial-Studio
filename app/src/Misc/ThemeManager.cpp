@@ -392,6 +392,7 @@ void Misc::ThemeManager::setTheme(const int index)
       qApp->styleHints()->setColorScheme(Qt::ColorScheme::Dark);
     else
       qApp->styleHints()->setColorScheme(Qt::ColorScheme::Light);
+
     m_applyingTheme = false;
   });
 }

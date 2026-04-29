@@ -36,6 +36,7 @@ Item {
   //
   ProcessPicker {
     id: picker
+
     onAccepted: {
       // Suggest a pipe path derived from the chosen process name
       const raw = picker.selectedProcessName

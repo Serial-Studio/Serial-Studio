@@ -505,6 +505,7 @@ QString Sessions::HtmlReport::buildSummarySection() const
     auto numCell = [&](double v) {
       if (!numeric)
         return QStringLiteral("<td class=\"numeric dim\">%1</td>").arg(dash);
+
       return QStringLiteral("<td class=\"numeric\" data-sort-value=\"%1\">%2</td>")
         .arg(QString::number(v, 'g', 17), escapeHtml(formatNumber(v)));
     };
@@ -614,6 +615,7 @@ QString Sessions::HtmlReport::buildReportDataJson() const
     QJsonArray values;
     for (double t : s.timesSec)
       times.append(t);
+
     for (double v : s.values)
       values.append(std::isfinite(v) ? v : 0.0);
 
@@ -874,6 +876,7 @@ void Sessions::HtmlReport::startPrinting()
 {
   if (m_printStarted || !m_page)
     return;
+
   m_printStarted = true;
 
   Q_EMIT progress(tr("Generating PDF…"), 0.85);

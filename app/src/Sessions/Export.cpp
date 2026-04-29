@@ -445,6 +445,7 @@ void Sessions::ExportWorker::writeRawBytes()
       ns = 0;
     if (ns <= m_lastRawBytesNs)
       ns = m_lastRawBytesNs + 1;
+
     m_lastRawBytesNs = ns;
 
     m_rawBytesQuery.bindValue(0, m_sessionId);
@@ -659,6 +660,7 @@ void Sessions::Export::setExportEnabled(const bool enabled)
   setConsumerEnabled(allow);
   if (m_persistSettings)
     m_settings.setValue("SQLiteExport/Enabled", allow);
+
   Q_EMIT enabledChanged();
 }
 

@@ -30,6 +30,7 @@ import "../../Dialogs" as Dialogs
 
 Item {
   id: root
+
   clip: true
 
   //
@@ -180,6 +181,7 @@ Item {
   //
   RowLayout {
     id: container
+
     spacing: root.angleLabelsVisible ? 16 : 8
 
     anchors {
@@ -314,6 +316,7 @@ Item {
     //
     Item {
       id: polarArea
+
       Layout.fillWidth: true
       Layout.fillHeight: true
       property real margin: root.angleLabelsVisible ? 40 : 12
@@ -328,6 +331,7 @@ Item {
       //
       Rectangle {
         id: polarCircle
+
         radius: width / 2
         anchors.centerIn: parent
         width: polarArea.gaugeSize
@@ -340,6 +344,7 @@ Item {
       //
       Item {
         id: rings
+
         anchors.centerIn: parent
         width: polarArea.gaugeSize
         height: polarArea.gaugeSize
@@ -477,6 +482,7 @@ Item {
       //
       Rectangle {
         id: indicator
+
         radius: width / 2
         color: Cpp_ThemeManager.colors["polar_indicator"]
 

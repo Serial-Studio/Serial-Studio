@@ -154,10 +154,13 @@ QStringList Misc::ShortcutGenerator::buildArguments(const QString& projectFile,
 
   if (csvExport)
     args << QStringLiteral("--csv-export");
+
   if (mdfExport)
     args << QStringLiteral("--mdf-export");
+
   if (sessionExport)
     args << QStringLiteral("--session-export");
+
   if (consoleExport)
     args << QStringLiteral("--console-export");
 
@@ -204,13 +207,8 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
   const QString resolvedProject =
     QUrl(projectFile).isLocalFile() ? QUrl(projectFile).toLocalFile() : projectFile;
 
-  QStringList args = buildArguments(resolvedProject,
-                                    fullscreen,
-                                    actionsPanel,
-                                    csvExport,
-                                    mdfExport,
-                                    sessionExport,
-                                    consoleExport);
+  QStringList args = buildArguments(
+    resolvedProject, fullscreen, actionsPanel, csvExport, mdfExport, sessionExport, consoleExport);
 
   // Lets the relaunched app offer to delete the shortcut when its project is gone.
   args << QStringLiteral("--shortcut-path") << resolvedPath;
@@ -218,8 +216,10 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
   QString resolvedIcon = iconPath;
   if (QUrl(resolvedIcon).isLocalFile())
     resolvedIcon = QUrl(resolvedIcon).toLocalFile();
+
   if (resolvedIcon.startsWith(QStringLiteral("qrc:")))
     resolvedIcon.clear();
+
   if (resolvedIcon.isEmpty() || !QFileInfo::exists(resolvedIcon))
     resolvedIcon = extractDefaultIcon();
 

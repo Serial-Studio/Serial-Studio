@@ -126,6 +126,7 @@ Widgets.MiniWindow {
           if (widgetInstance) {
             if (widgetInstance.settings)
               widgetInstance.settings.sync()
+
             widgetInstance.destroy()
           }
 

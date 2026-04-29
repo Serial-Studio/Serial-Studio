@@ -106,6 +106,7 @@ Widgets.Pane {
 
       ColumnLayout {
         id: detailColumn
+
         spacing: 12
         width: parent.width
 
@@ -190,6 +191,7 @@ Widgets.Pane {
 
         TextArea {
           id: notesArea
+
           Layout.fillWidth: true
           Layout.preferredHeight: 80
           wrapMode: TextEdit.Wrap
@@ -239,6 +241,7 @@ Widgets.Pane {
 
               Row {
                 id: chipRow
+
                 spacing: 4
                 anchors.centerIn: parent
 
@@ -272,6 +275,7 @@ Widgets.Pane {
 
           TextField {
             id: tagField
+
             Layout.fillWidth: true
             font: Cpp_Misc_CommonFonts.uiFont
             placeholderText: qsTr("New tag…")
@@ -280,6 +284,7 @@ Widgets.Pane {
 
           Button {
             id: addTagBtn
+
             text: qsTr("Add")
             enabled: tagField.text.trim().length > 0
             onClicked: {

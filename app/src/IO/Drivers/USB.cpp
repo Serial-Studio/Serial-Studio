@@ -276,6 +276,7 @@ void IO::Drivers::USB::close()
   if (m_readThread.isRunning()) {
     if (!m_readThread.wait(2000))
       m_readThread.terminate();
+
     m_readThread.wait();
   }
 
@@ -468,6 +469,7 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
   // Populate device list if needed for validation
   if (m_devicePtrs.isEmpty())
     enumerateDevices();
+
   if (index > 0 && (index - 1) >= m_devicePtrs.size())
     return;
 
@@ -595,12 +597,14 @@ void IO::Drivers::USB::setupExternalConnections()
     if (m_readThread.isRunning()) {
       if (!m_readThread.wait(2000))
         m_readThread.terminate();
+
       m_readThread.wait();
     }
 
     if (m_eventThread.isRunning()) {
       if (!m_eventThread.wait(2000))
         m_eventThread.terminate();
+
       m_eventThread.wait();
     }
   });

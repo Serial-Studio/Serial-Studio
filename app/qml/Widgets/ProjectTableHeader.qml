@@ -89,6 +89,7 @@ Rectangle {
 
         Component {
           id: labelComponent
+
           Label {
             leftPadding: 8
             rightPadding: 8
@@ -102,6 +103,7 @@ Rectangle {
 
         Component {
           id: separatorComponent
+
           Rectangle {
             color: Cpp_ThemeManager.colors["table_separator"]
           }

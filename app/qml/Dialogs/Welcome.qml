@@ -122,6 +122,7 @@ Window {
         //
         Image {
           id: banner
+
           Layout.leftMargin: -1
           sourceSize.width: 164
           source: "qrc:/rcc/images/dialog-banner.svg"
@@ -169,6 +170,7 @@ Window {
 
             Label {
               id: titleA
+
               Layout.fillWidth: true
               Layout.maximumWidth: parent.width
               text: qsTr("Welcome to %1!").arg(Cpp_AppName)
@@ -263,6 +265,7 @@ Window {
 
             Label {
               id: titleB
+
               Layout.fillWidth: true
               Layout.maximumWidth: parent.width
               font: Cpp_Misc_CommonFonts.customUiFont(1.2, true)
@@ -315,6 +318,7 @@ Window {
 
               Switch {
                 id: dontNagMe
+
                 Layout.leftMargin: -6
                 visible: Cpp_Licensing_Trial.daysRemaining > 1
               }
@@ -349,6 +353,7 @@ Window {
 
             Label {
               id: titleC
+
               Layout.fillWidth: true
               Layout.maximumWidth: parent.width
               font: Cpp_Misc_CommonFonts.customUiFont(1.2, true)

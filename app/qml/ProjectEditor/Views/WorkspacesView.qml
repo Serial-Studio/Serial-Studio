@@ -87,6 +87,7 @@ Widgets.Pane {
       //
       Rectangle {
         id: toolbar
+
         z: 2
         Layout.fillWidth: true
         height: toolbarLayout.implicitHeight + 12
@@ -101,6 +102,7 @@ Widgets.Pane {
 
         RowLayout {
           id: toolbarLayout
+
           spacing: 8
           anchors {
             margins: 8
@@ -155,6 +157,7 @@ Widgets.Pane {
 
       ListView {
         id: list
+
         clip: true
         spacing: 0
         model: root.summary

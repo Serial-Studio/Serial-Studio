@@ -260,6 +260,7 @@ void Widgets::Accelerometer::updateData()
       thetaDelta -= 360.0;
     else if (thetaDelta < -180.0)
       thetaDelta += 360.0;
+
     m_theta += kAlpha * thetaDelta;
   }
 

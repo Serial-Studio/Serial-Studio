@@ -29,6 +29,7 @@ import "../Widgets"
 
 SmartDialog {
   id: root
+
   title: qsTr("File Transmission")
 
   //
@@ -101,6 +102,7 @@ SmartDialog {
 
           ComboBox {
             id: _modeCombo
+
             Layout.fillWidth: true
             model: Cpp_IO_FileTransmission.transferModes
             currentIndex: Cpp_IO_FileTransmission.transferMode
@@ -170,6 +172,7 @@ SmartDialog {
 
           SpinBox {
             id: _interval
+
             from: 0
             to: 10000
             editable: true
@@ -206,6 +209,7 @@ SmartDialog {
 
           SpinBox {
             id: _blockSize
+
             from: 64
             to: 8192
             stepSize: 64
@@ -243,6 +247,7 @@ SmartDialog {
 
           SpinBox {
             id: _timeout
+
             to: 60000
             from: 1000
             stepSize: 1000
@@ -280,6 +285,7 @@ SmartDialog {
 
           SpinBox {
             id: _retries
+
             from: 1
             to: 100
             editable: true
