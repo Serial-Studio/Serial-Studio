@@ -85,7 +85,7 @@ QString shortcutAumidFor(const QString& shortcutPath)
   const QByteArray digest =
     QCryptographicHash::hash(shortcutPath.toUtf8(), QCryptographicHash::Sha1);
   return QStringLiteral("AlexSpataru.SerialStudio.Shortcut.")
-         + QString::fromLatin1(digest.toHex().left(16));
+       + QString::fromLatin1(digest.toHex().left(16));
 }
 
 }  // namespace
@@ -141,8 +141,7 @@ bool Misc::ShortcutGenerator::writeWindowsLnk(const QString& outputPath,
   // derived from the shortcut's absolute path; main.cpp recomputes the same
   // value when launched via --shortcut-path.
   IPropertyStore* propStore = nullptr;
-  if (SUCCEEDED(link->QueryInterface(IID_IPropertyStore,
-                                     reinterpret_cast<void**>(&propStore)))
+  if (SUCCEEDED(link->QueryInterface(IID_IPropertyStore, reinterpret_cast<void**>(&propStore)))
       && propStore != nullptr) {
     const QString aumid = shortcutAumidFor(outputPath);
     PROPVARIANT pv;

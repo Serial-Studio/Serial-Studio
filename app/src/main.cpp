@@ -378,9 +378,9 @@ int main(int argc, char** argv)
   moduleManager.registerQmlTypes();
 
   // Compute per-shortcut settings suffix so each .lnk has its own QML state
-  const QString settingsSuffix =
-    earlyShortcutPath.isEmpty() ? QString()
-                                : QStringLiteral("_") + shortcutIdentityHash(earlyShortcutPath);
+  const QString settingsSuffix = earlyShortcutPath.isEmpty()
+                                 ? QString()
+                                 : QStringLiteral("_") + shortcutIdentityHash(earlyShortcutPath);
 
   // Publish CLI flags before main.qml loads (creation-time bindings need them).
   {
@@ -1183,17 +1183,14 @@ static void setWindowsAppUserModelId(const QString& shortcutPath)
  */
 static void enableWindowsPerformanceMode()
 {
-#if defined(PROCESS_POWER_THROTTLING_CURRENT_VERSION)
+#  if defined(PROCESS_POWER_THROTTLING_CURRENT_VERSION)
   // Opt out of EcoQoS execution-speed throttling
   PROCESS_POWER_THROTTLING_STATE state = {};
   state.Version                        = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
   state.ControlMask                    = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
   state.StateMask                      = 0;
-  SetProcessInformation(GetCurrentProcess(),
-                        ProcessPowerThrottling,
-                        &state,
-                        sizeof(state));
-#endif
+  SetProcessInformation(GetCurrentProcess(), ProcessPowerThrottling, &state, sizeof(state));
+#  endif
 
   // Prevent system sleep while Serial Studio is running
   SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);

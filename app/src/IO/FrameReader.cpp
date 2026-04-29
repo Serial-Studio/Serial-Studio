@@ -20,9 +20,10 @@
  */
 
 #include "FrameReader.h"
-#include "IO/Checksum.h"
 
 #include <utility>
+
+#include "IO/Checksum.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -59,7 +60,6 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
   // ConsoleOnly mode skips frame extraction
   if (m_operationMode == SerialStudio::ConsoleOnly)
     return;
-
 
   // Flag to decide if we should emit signals
   bool framesEnqueued = false;
@@ -510,4 +510,3 @@ IO::CapturedDataPtr IO::FrameReader::buildFrame(QByteArray&& data, qsizetype end
 {
   return IO::makeCapturedData(std::move(data), frameTimestamp(endOffsetExclusive));
 }
-

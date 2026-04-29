@@ -72,8 +72,8 @@ Popup {
   // Save settings
   //
   Settings {
-    category: "WindowManagement" + app.settingsSuffix
     property alias autoLayout: _autoLayoutBt.checked
+    category: "WindowManagement" + app.settingsSuffix
     property alias consoleEnabled: _consoleBt.checked
   }
 

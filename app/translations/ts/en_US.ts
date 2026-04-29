@@ -637,12 +637,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="323"/>
+        <location filename="../../src/Console/Export.cpp" line="334"/>
         <source>Console Export is a Pro feature.</source>
         <translation>Console Export is a Pro feature.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="324"/>
+        <location filename="../../src/Console/Export.cpp" line="335"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>This feature requires a license. Please purchase one to enable console export.</translation>
     </message>
@@ -3494,32 +3494,32 @@ Valid format: 01 A2 FF 3C</translation>
         <translation>Support Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="96"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="79"/>
         <source>Support the development of %1!</source>
         <translation>Support the development of %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="107"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="90"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="120"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="103"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>You can also support this project by sharing it, reporting bugs and proposing new features!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="136"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="119"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="133"/>
         <source>Donate</source>
         <translation>Donate</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="168"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="151"/>
         <source>Get Serial Studio Pro</source>
         <translation>Get Serial Studio Pro</translation>
     </message>
@@ -6412,12 +6412,12 @@ Thank you again for supporting Serial Studio!</translation>
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="531"/>
+        <location filename="../../src/MDF4/Export.cpp" line="546"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4 Export is a Pro feature.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="532"/>
+        <location filename="../../src/MDF4/Export.cpp" line="547"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>This feature requires a license. Please purchase one to enable MDF4 export.</translation>
     </message>
@@ -6949,32 +6949,32 @@ Please provide the necessary credentials.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="183"/>
         <source>Console Only Mode</source>
         <translation>Console Only Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="186"/>
         <source>Quick Plot Mode</source>
         <translation>Quick Plot Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="198"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
         <source>Empty Project</source>
         <translation>Empty Project</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="526"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="509"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="534"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="517"/>
         <source>Waiting for data…</source>
         <translation>Waiting for data…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="535"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="518"/>
         <source>Connecting to device…</source>
         <translation>Connecting to device…</translation>
     </message>
@@ -7267,32 +7267,32 @@ Would you like to open the download page?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="218"/>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="169"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="206"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Linux shortcut writer is not available on this platform.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="90"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="109"/>
         <source>Could not initialise COM (required to write .lnk shortcuts).</source>
         <translation>Could not initialise COM (required to write .lnk shortcuts).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="101"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="120"/>
         <source>CoCreateInstance(IShellLink) failed (HRESULT 0x%1).</source>
         <translation>CoCreateInstance(IShellLink) failed (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="123"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="160"/>
         <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
         <translation>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="133"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="170"/>
         <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
         <translation>Saving the .lnk file failed (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="192"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="146"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS shortcut writer is not available on this platform.</translation>
@@ -7324,102 +7324,100 @@ Would you like to open the download page?</translation>
 <context>
     <name>Misc::Utilities</name>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="119"/>
         <source>Check for updates automatically?</source>
-        <translation>Check for updates automatically?</translation>
+        <translation type="vanished">Check for updates automatically?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="120"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</translation>
+        <translation type="vanished">Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="184"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="186"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="188"/>
         <source>Save all</source>
         <translation>Save all</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
         <source>Open</source>
         <translation>Open</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
         <source>Yes</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
         <source>Yes to all</source>
         <translation>Yes to all</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
         <source>No to all</source>
         <translation>No to all</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
         <source>Abort</source>
         <translation>Abort</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
         <source>Retry</source>
         <translation>Retry</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
         <source>Ignore</source>
         <translation>Ignore</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="226"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
         <source>Discard</source>
         <translation>Discard</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="228"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="230"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
         <source>Apply</source>
         <translation>Apply</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="232"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
         <source>Reset</source>
         <translation>Reset</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="234"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
         <source>Restore defaults</source>
         <translation>Restore defaults</translation>
     </message>
@@ -8294,52 +8292,52 @@ Click Refresh to update the list.</translation>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
         <source>modified</source>
         <translation>modified</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="292"/>
         <source>This project is password protected</source>
         <translation>This project is password protected</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="364"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="293"/>
         <source>Editing is available in Project mode</source>
         <translation>Editing is available in Project mode</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="375"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="304"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Enter the password to make changes, or open a different project.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="376"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="305"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>Switch to Project mode to load and edit a project.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="400"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="329"/>
         <source>Unlock</source>
         <translation>Unlock</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="330"/>
         <source>Switch to Project Mode</source>
         <translation>Switch to Project Mode</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="422"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="351"/>
         <source>Open Other Project</source>
         <translation>Open Other Project</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="423"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="352"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="441"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="370"/>
         <source>Create New Project</source>
         <translation>Create New Project</translation>
     </message>
@@ -9001,12 +8999,12 @@ The separator parameter is no longer needed.</translation>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="343"/>
+        <location filename="../../src/main.cpp" line="354"/>
         <source>Project file not found</source>
         <translation>Project file not found</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="344"/>
+        <location filename="../../src/main.cpp" line="355"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9015,17 +9013,17 @@ The separator parameter is no longer needed.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="347"/>
+        <location filename="../../src/main.cpp" line="358"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Would you like to delete this shortcut?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="351"/>
+        <location filename="../../src/main.cpp" line="362"/>
         <source>Delete Shortcut</source>
         <translation>Delete Shortcut</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="352"/>
+        <location filename="../../src/main.cpp" line="363"/>
         <source>Quit</source>
         <translation>Quit</translation>
     </message>
@@ -10531,9 +10529,8 @@ The separator parameter is no longer needed.</translation>
 <context>
     <name>ShortcutGenerator</name>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
         <source>New Shortcut</source>
-        <translation>New Shortcut</translation>
+        <translation type="vanished">New Shortcut</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="68"/>
@@ -10541,9 +10538,18 @@ The separator parameter is no longer needed.</translation>
         <translation>Choose an Icon</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
         <source>Save Shortcut</source>
-        <translation>Save Shortcut</translation>
+        <translation type="vanished">Save Shortcut</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
+        <source>New Deployment</source>
+        <translation>New Deployment</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
+        <source>Save Deployment</source>
+        <translation>Save Deployment</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="114"/>
@@ -10572,8 +10578,22 @@ The separator parameter is no longer needed.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="246"/>
+        <source>Deployment Name</source>
+        <translation>Deployment Name</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
+        <source>Recordings are saved in the Serial Studio workspace folder</source>
+        <translation>Recordings are saved in the Serial Studio workspace folder</translation>
+    </message>
+    <message>
         <source>Shortcut Name</source>
-        <translation>Shortcut Name</translation>
+        <translation type="vanished">Shortcut Name</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="255"/>
@@ -10602,9 +10622,8 @@ The separator parameter is no longer needed.</translation>
         <translation>Fullscreen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
         <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
-        <translation>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</translation>
+        <translation type="vanished">Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</translation>
     </message>
     <message>
         <source>Embed Project</source>
@@ -10644,9 +10663,8 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Console Log</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
         <source>Recordings are saved to each module’s default location.</source>
-        <translation>Recordings are saved to each module’s default location.</translation>
+        <translation type="vanished">Recordings are saved to each module’s default location.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="491"/>
@@ -10816,137 +10834,137 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Workspaces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="216"/>
         <source>New Workspace…</source>
         <translation>New Workspace…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="252"/>
         <source>Actions</source>
         <translation>Actions</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="272"/>
         <source>No Actions Available</source>
         <translation>No Actions Available</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="290"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
         <source>No Plugins Installed</source>
         <translation>No Plugins Installed</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="363"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
         <source>Auto Layout</source>
         <translation>Auto Layout</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="382"/>
         <source>Full Screen</source>
         <translation>Full Screen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
         <source>Add External Window</source>
         <translation>Add External Window</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="552"/>
         <source>Help Center</source>
         <translation>Help Center</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="638"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="647"/>
         <source>Delete</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="639"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="648"/>
         <source>Hide</source>
         <translation>Hide</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="227"/>
         <source>No Workspaces Available</source>
         <translation>No Workspaces Available</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="331"/>
         <source>Manage Plugins…</source>
         <translation>Manage Plugins…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="412"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="443"/>
         <source>CSV File</source>
         <translation>CSV File</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="449"/>
         <source>MDF4 File</source>
         <translation>MDF4 File</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="446"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Console Transcript</source>
         <translation>Console Transcript</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="464"/>
         <source>Session Database</source>
         <translation>Session Database</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="467"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
         <source>No Export Formats Available</source>
         <translation>No Export Formats Available</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="509"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="516"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="525"/>
         <source>Notifications</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="540"/>
         <source>Preferences</source>
         <translation>Preferences</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="576"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="594"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="603"/>
         <source>Resume</source>
         <translation>Resume</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="604"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="602"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="611"/>
         <source>Disconnect</source>
         <translation>Disconnect</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="627"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="636"/>
         <source>Edit…</source>
         <translation>Edit…</translation>
     </message>
@@ -11058,7 +11076,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Search widgets…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="672"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="673"/>
         <source>Remove from Workspace</source>
         <translation>Remove from Workspace</translation>
     </message>
@@ -11114,251 +11132,259 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>Toolbar</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="196"/>
         <source>Project Editor</source>
         <translation>Project Editor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="199"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Open the Project Editor to create or modify your JSON layout</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Play a CSV file as if it were live sensor data</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="257"/>
         <source>Extensions</source>
         <translation>Extensions</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="284"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="260"/>
         <source>Browse and install extensions</source>
         <translation>Browse and install extensions</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="316"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="319"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>Preferences</source>
         <translation>Preferences</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="327"/>
         <source>Open application settings and preferences</source>
         <translation>Open application settings and preferences</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Open CSV</source>
         <translation>Open CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <source>Open MDF4</source>
         <translation>Open MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>Configure MQTT connection (publish or subscribe)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="515"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="291"/>
+        <source>Deploy</source>
+        <translation>Deploy</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="296"/>
+        <source>Build an operator deployment for the current project</source>
+        <translation>Build an operator deployment for the current project</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="522"/>
         <source>Examples</source>
         <translation>Examples</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="525"/>
         <source>Browse example projects</source>
         <translation>Browse example projects</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="526"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="533"/>
         <source>Help Center</source>
         <translation>Help Center</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="537"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Browse documentation, FAQ, and wiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="539"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="546"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>View detailed documentation and ask questions on DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="495"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="502"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>About</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="213"/>
         <source>Open Project</source>
         <translation>Open Project</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="215"/>
         <source>Open an existing JSON project</source>
         <translation>Open an existing JSON project</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Play an MDF4 file as if it were live sensor data (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="302"/>
         <source>Sessions</source>
         <translation>Sessions</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="306"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>Browse, replay, and export recorded sessions</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="262"/>
         <source>Shortcuts</source>
-        <translation>Shortcuts</translation>
+        <translation type="vanished">Shortcuts</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
         <source>Create an operator shortcut for the current project</source>
-        <translation>Create an operator shortcut for the current project</translation>
+        <translation type="vanished">Create an operator shortcut for the current project</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="345"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Select Serial port (UART) communication</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="355"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="366"/>
         <source>Select audio input device (Pro)</source>
         <translation>Select audio input device (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="374"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="386"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Select raw USB communication (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="388"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="395"/>
         <source>Network</source>
         <translation>Network</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="400"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Select TCP/UDP network communication</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Select MODBUS communication (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="424"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="429"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="436"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Select HID device communication (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="446"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="450"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Select Bluetooth Low Energy communication</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Select CAN Bus communication (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="474"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="481"/>
         <source>Process</source>
         <translation>Process</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="486"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Select process pipe communication (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="510"/>
         <source>Show application info and license details</source>
         <translation>Show application info and license details</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="543"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI Wiki &amp; Chat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="585"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Manage license and activate Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="618"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="600"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="625"/>
         <source>Disconnect</source>
         <translation>Disconnect</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="600"/>
         <source>Connect</source>
         <translation>Connect</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="602"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Connect or disconnect from device or MQTT broker</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="574"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
         <source>Activate</source>
         <translation>Activate</translation>
     </message>

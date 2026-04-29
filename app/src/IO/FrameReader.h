@@ -62,7 +62,9 @@ public:
   explicit FrameReader(QObject* parent = nullptr);
 
   inline void resetOverflowCount() { m_circularBuffer.resetOverflowCount(); }
+
   inline qsizetype overflowCount() const { return m_circularBuffer.overflowCount(); }
+
   inline moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>& queue() { return m_queue; }
 
 public slots:

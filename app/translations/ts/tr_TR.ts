@@ -637,12 +637,12 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="323"/>
+        <location filename="../../src/Console/Export.cpp" line="334"/>
         <source>Console Export is a Pro feature.</source>
         <translation>Konsol Dışa Aktarma bir Pro özelliğidir.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="324"/>
+        <location filename="../../src/Console/Export.cpp" line="335"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>Bu özellik lisans gerektirir. Konsol dışa aktarmayı etkinleştirmek için lütfen bir lisans satın alın.</translation>
     </message>
@@ -3494,32 +3494,32 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Serial Studio'yu Destekle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="96"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="79"/>
         <source>Support the development of %1!</source>
         <translation>%1 geliştirmesini destekle!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="107"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="90"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio, gönüllüler tarafından desteklenen ücretsiz ve açık kaynaklı bir yazılımdır. Geliştirme çalışmalarını desteklemek için bağış yapmayı veya Pro lisansı almayı düşünün :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="120"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="103"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Bu projeyi paylaşarak, hata bildirerek ve yeni özellikler önererek de destekleyebilirsiniz!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="136"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="119"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="133"/>
         <source>Donate</source>
         <translation>Bağış Yap</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="168"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="151"/>
         <source>Get Serial Studio Pro</source>
         <translation>Serial Studio Pro Edinin</translation>
     </message>
@@ -6412,12 +6412,12 @@ Serial Studio'yu desteklediğiniz için tekrar teşekkür ederiz!</translation>
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="531"/>
+        <location filename="../../src/MDF4/Export.cpp" line="546"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4 Dışa Aktarma bir Pro özelliğidir.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="532"/>
+        <location filename="../../src/MDF4/Export.cpp" line="547"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Bu özellik lisans gerektirir. MDF4 dışa aktarmayı etkinleştirmek için lütfen bir lisans satın alın.</translation>
     </message>
@@ -6949,32 +6949,32 @@ Lütfen gerekli kimlik bilgilerini sağlayın.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="183"/>
         <source>Console Only Mode</source>
         <translation>Yalnızca Konsol Modu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="186"/>
         <source>Quick Plot Mode</source>
         <translation>Hızlı Grafik Modu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="198"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
         <source>Empty Project</source>
         <translation>Boş Proje</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="526"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="509"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="534"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="517"/>
         <source>Waiting for data…</source>
         <translation>Veri bekleniyor…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="535"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="518"/>
         <source>Connecting to device…</source>
         <translation>Cihaza bağlanılıyor…</translation>
     </message>
@@ -7267,32 +7267,32 @@ Would you like to open the download page?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="218"/>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="169"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="206"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Linux kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="90"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="109"/>
         <source>Could not initialise COM (required to write .lnk shortcuts).</source>
         <translation>COM başlatılamadı (.lnk kısayolları yazmak için gerekli).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="101"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="120"/>
         <source>CoCreateInstance(IShellLink) failed (HRESULT 0x%1).</source>
         <translation>CoCreateInstance(IShellLink) başarısız oldu (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="123"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="160"/>
         <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
         <translation>QueryInterface(IPersistFile) başarısız oldu (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="133"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="170"/>
         <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
         <translation>.lnk dosyası kaydedilemedi (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="192"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="146"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS kısayol yazıcısı bu platformda kullanılamıyor.</translation>
@@ -7324,102 +7324,100 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::Utilities</name>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="119"/>
         <source>Check for updates automatically?</source>
-        <translation>Güncellemeler otomatik olarak denetlensin mi?</translation>
+        <translation type="vanished">Güncellemeler otomatik olarak denetlensin mi?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="120"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>%1 güncellemeleri otomatik olarak denetlemeli mi? Güncellemeleri her zaman "Hakkında" penceresinden elle denetleyebilirsiniz</translation>
+        <translation type="vanished">%1 güncellemeleri otomatik olarak denetlemeli mi? Güncellemeleri her zaman "Hakkında" penceresinden elle denetleyebilirsiniz</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="184"/>
         <source>Ok</source>
         <translation>Tamam</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="186"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="188"/>
         <source>Save all</source>
         <translation>Tümünü Kaydet</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
         <source>Open</source>
         <translation>Aç</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
         <source>Yes to all</source>
         <translation>Tümüne Evet</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
         <source>No</source>
         <translation>Hayır</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
         <source>No to all</source>
         <translation>Tümüne Hayır</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
         <source>Abort</source>
         <translation>Durdur</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
         <source>Retry</source>
         <translation>Yeniden Dene</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
         <source>Ignore</source>
         <translation>Yoksay</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="226"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
         <source>Discard</source>
         <translation>Vazgeç</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="228"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="230"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
         <source>Apply</source>
         <translation>Uygula</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="232"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
         <source>Reset</source>
         <translation>Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="234"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
         <source>Restore defaults</source>
         <translation>Varsayılanlara Dön</translation>
     </message>
@@ -8294,52 +8292,52 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
         <source>modified</source>
         <translation>değiştirildi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="292"/>
         <source>This project is password protected</source>
         <translation>Bu proje parola ile korunuyor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="364"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="293"/>
         <source>Editing is available in Project mode</source>
         <translation>Düzenleme Proje modunda kullanılabilir</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="375"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="304"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Değişiklik yapmak için parolayı girin veya farklı bir proje açın.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="376"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="305"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>Bir proje yüklemek ve düzenlemek için Proje moduna geçin.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="400"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="329"/>
         <source>Unlock</source>
         <translation>Kilidi Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="330"/>
         <source>Switch to Project Mode</source>
         <translation>Proje Moduna Geç</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="422"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="351"/>
         <source>Open Other Project</source>
         <translation>Başka Proje Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="423"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="352"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="441"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="370"/>
         <source>Create New Project</source>
         <translation>Yeni Proje Oluştur</translation>
     </message>
@@ -9001,12 +8999,12 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="343"/>
+        <location filename="../../src/main.cpp" line="354"/>
         <source>Project file not found</source>
         <translation>Proje dosyası bulunamadı</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="344"/>
+        <location filename="../../src/main.cpp" line="355"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9015,17 +9013,17 @@ Ayırıcı parametresine artık gerek yok.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="347"/>
+        <location filename="../../src/main.cpp" line="358"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Bu kısayolu silmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="351"/>
+        <location filename="../../src/main.cpp" line="362"/>
         <source>Delete Shortcut</source>
         <translation>Kısayolu Sil</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="352"/>
+        <location filename="../../src/main.cpp" line="363"/>
         <source>Quit</source>
         <translation>Çık</translation>
     </message>
@@ -10531,9 +10529,8 @@ Ayırıcı parametresine artık gerek yok.</translation>
 <context>
     <name>ShortcutGenerator</name>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
         <source>New Shortcut</source>
-        <translation>Yeni Kısayol</translation>
+        <translation type="vanished">Yeni Kısayol</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="68"/>
@@ -10541,9 +10538,18 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Simge Seç</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
         <source>Save Shortcut</source>
-        <translation>Kısayolu Kaydet</translation>
+        <translation type="vanished">Kısayolu Kaydet</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
+        <source>New Deployment</source>
+        <translation>Yeni Dağıtım</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
+        <source>Save Deployment</source>
+        <translation>Dağıtımı Kaydet</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="114"/>
@@ -10572,8 +10578,22 @@ Ayırıcı parametresine artık gerek yok.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="246"/>
+        <source>Deployment Name</source>
+        <translation>Dağıtım Adı</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation>Bu dağıtıma çift tıklamak, kullanıcıyı doğrudan bu proje için canlı gösterge paneline götürür. Araç çubuğu veya kurulum bölmesi yoktur, yalnızca veri vardır ve Serial Studio cihaz bağlantısı kesilir kesilmez kapanır.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
+        <source>Recordings are saved in the Serial Studio workspace folder</source>
+        <translation>Kayıtlar Serial Studio çalışma alanı klasörüne kaydedilir</translation>
+    </message>
+    <message>
         <source>Shortcut Name</source>
-        <translation>Kısayol Adı</translation>
+        <translation type="vanished">Kısayol Adı</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="255"/>
@@ -10602,9 +10622,8 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Tam Ekran</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
         <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
-        <translation>Bu kısayola çift tıklamak, kullanıcıyı doğrudan bu proje için canlı gösterge paneline götürür. Araç çubuğu veya kurulum bölmesi yoktur, yalnızca veri vardır ve Serial Studio cihaz bağlantısı kesilir kesilmez kapanır.</translation>
+        <translation type="vanished">Bu kısayola çift tıklamak, kullanıcıyı doğrudan bu proje için canlı gösterge paneline götürür. Araç çubuğu veya kurulum bölmesi yoktur, yalnızca veri vardır ve Serial Studio cihaz bağlantısı kesilir kesilmez kapanır.</translation>
     </message>
     <message>
         <source>Embed Project</source>
@@ -10644,9 +10663,8 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Konsol Günlüğü</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
         <source>Recordings are saved to each module’s default location.</source>
-        <translation>Kayıtlar her modülün varsayılan konumuna kaydedilir.</translation>
+        <translation type="vanished">Kayıtlar her modülün varsayılan konumuna kaydedilir.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="491"/>
@@ -10816,137 +10834,137 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Çalışma Alanları</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="252"/>
         <source>Actions</source>
         <translation>Eylemler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="272"/>
         <source>No Actions Available</source>
         <translation>Kullanılabilir Eylem Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="290"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
         <source>Plugins</source>
         <translation>Eklentiler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
         <source>No Plugins Installed</source>
         <translation>Yüklü Eklenti Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="363"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
         <source>Auto Layout</source>
         <translation>Otomatik Düzen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="382"/>
         <source>Full Screen</source>
         <translation>Tam Ekran</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
         <source>Add External Window</source>
         <translation>Harici Pencere Ekle</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="552"/>
         <source>Help Center</source>
         <translation>Yardım Merkezi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="638"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="647"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="639"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="648"/>
         <source>Hide</source>
         <translation>Gizle</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="216"/>
         <source>New Workspace…</source>
         <translation>Yeni Çalışma Alanı…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="227"/>
         <source>No Workspaces Available</source>
         <translation>Kullanılabilir Çalışma Alanı Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="331"/>
         <source>Manage Plugins…</source>
         <translation>Eklentileri Yönet…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="412"/>
         <source>Export</source>
         <translation>Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="443"/>
         <source>CSV File</source>
         <translation>CSV Dosyası</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="449"/>
         <source>MDF4 File</source>
         <translation>MDF4 Dosyası</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="446"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Console Transcript</source>
         <translation>Konsol Kaydı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="464"/>
         <source>Session Database</source>
         <translation>Oturum Veritabanı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="467"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
         <source>No Export Formats Available</source>
         <translation>Kullanılabilir Dışa Aktarma Formatı Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="509"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="516"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="525"/>
         <source>Notifications</source>
         <translation>Bildirimler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="540"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="627"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="636"/>
         <source>Edit…</source>
         <translation>Düzenle…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="576"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="594"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="603"/>
         <source>Resume</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="604"/>
         <source>Pause</source>
         <translation>Duraklat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="602"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="611"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
@@ -11058,7 +11076,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Widget'ları ara…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="672"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="673"/>
         <source>Remove from Workspace</source>
         <translation>Çalışma Alanından Kaldır</translation>
     </message>
@@ -11114,251 +11132,259 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
 <context>
     <name>Toolbar</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="196"/>
         <source>Project Editor</source>
         <translation>Proje Düzenleyici</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="199"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>JSON düzeninizi oluşturmak veya değiştirmek için Proje Düzenleyici'yi açın</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>CSV dosyasını canlı sensör verisi gibi oynat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="316"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="319"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>Preferences</source>
         <translation>Tercihler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="327"/>
         <source>Open application settings and preferences</source>
         <translation>Uygulama ayarlarını ve tercihlerini aç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Open CSV</source>
         <translation>CSV Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <source>Open MDF4</source>
         <translation>MDF4 Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="302"/>
         <source>Sessions</source>
         <translation>Oturumlar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="306"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>Kayıtlı oturumları gözat, tekrar oynat ve dışa aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="262"/>
         <source>Shortcuts</source>
-        <translation>Kısayollar</translation>
+        <translation type="vanished">Kısayollar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
         <source>Create an operator shortcut for the current project</source>
-        <translation>Mevcut proje için operatör kısayolu oluştur</translation>
+        <translation type="vanished">Mevcut proje için operatör kısayolu oluştur</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="257"/>
         <source>Extensions</source>
         <translation>Eklentiler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="284"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="260"/>
         <source>Browse and install extensions</source>
         <translation>Eklentileri gözat ve yükle</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>MQTT bağlantısını yapılandır (yayınla veya abone ol)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="291"/>
+        <source>Deploy</source>
+        <translation>Dağıt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="296"/>
+        <source>Build an operator deployment for the current project</source>
+        <translation>Mevcut proje için operatör dağıtımı oluştur</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="345"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Seri port (UART) iletişimini seç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="355"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
         <source>Audio</source>
         <translation>Ses</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="366"/>
         <source>Select audio input device (Pro)</source>
         <translation>Ses giriş cihazını seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="374"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="386"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Ham USB iletişimini seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="388"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="395"/>
         <source>Network</source>
         <translation>Ağ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="400"/>
         <source>Select TCP/UDP network communication</source>
         <translation>TCP/UDP ağ iletişimini seç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>MODBUS iletişimini seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="424"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="429"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="436"/>
         <source>Select HID device communication (Pro)</source>
         <translation>HID cihaz iletişimini seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="446"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="450"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Bluetooth Low Energy iletişimini seç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>CAN Bus iletişimini seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="474"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="481"/>
         <source>Process</source>
         <translation>Süreç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="486"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Süreç borusu iletişimini seç (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="515"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="522"/>
         <source>Examples</source>
         <translation>Örnekler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="525"/>
         <source>Browse example projects</source>
         <translation>Örnek projelere göz at</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="526"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="533"/>
         <source>Help Center</source>
         <translation>Yardım Merkezi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="537"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Dokümantasyon, SSS ve wiki'ye göz atın</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="539"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="546"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>DeepWiki'de detaylı dokümantasyonu görüntüleyin ve sorular sorun</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="495"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="502"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>About</source>
         <translation>Hakkında</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="213"/>
         <source>Open Project</source>
         <translation>Proje Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="215"/>
         <source>Open an existing JSON project</source>
         <translation>Mevcut bir JSON projesini açın</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Bir MDF4 dosyasını canlı sensör verisi gibi oynatın (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="510"/>
         <source>Show application info and license details</source>
         <translation>Uygulama bilgilerini ve lisans detaylarını gösterin</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="543"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>AI Wiki ve Sohbet</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="585"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Lisansı yönet ve Serial Studio Pro'yu etkinleştir</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="618"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="600"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="625"/>
         <source>Disconnect</source>
         <translation>Bağlantıyı Kes</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="600"/>
         <source>Connect</source>
         <translation>Bağlan</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="602"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Cihaza veya MQTT broker'a bağlan veya bağlantıyı kes</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="574"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
         <source>Activate</source>
         <translation>Etkinleştir</translation>
     </message>

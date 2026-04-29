@@ -195,7 +195,6 @@ Window {
   // Save settings
   //
   Settings {
-    category: root.category + app.settingsSuffix
     property alias ax: root.x
     property alias ay: root.y
     property alias aw: root.width
@@ -206,5 +205,6 @@ Window {
     property alias pw: root.previousWidth
     property alias ph: root.previousHeight
     property alias pn: root.previousScreenName
+    category: root.category + app.settingsSuffix
   }
 }

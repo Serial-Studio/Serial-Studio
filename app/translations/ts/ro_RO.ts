@@ -637,12 +637,12 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="323"/>
+        <location filename="../../src/Console/Export.cpp" line="334"/>
         <source>Console Export is a Pro feature.</source>
         <translation>Exportul Consolei este o funcție Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/Console/Export.cpp" line="324"/>
+        <location filename="../../src/Console/Export.cpp" line="335"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>Această funcție necesită o licență. Achiziționați una pentru a activa exportul consolei.</translation>
     </message>
@@ -3494,32 +3494,32 @@ Format valid: 01 A2 FF 3C</translation>
         <translation>Susține Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="96"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="79"/>
         <source>Support the development of %1!</source>
         <translation>Susține dezvoltarea %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="107"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="90"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio este un software gratuit și open-source susținut de voluntari. Ia în considerare o donație sau obținerea unei licențe Pro pentru a susține eforturile de dezvoltare :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="120"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="103"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Poți susține acest proiect și prin distribuire, raportarea erorilor și propunerea de funcționalități noi!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="136"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="119"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="133"/>
         <source>Donate</source>
         <translation>Donează</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="168"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="151"/>
         <source>Get Serial Studio Pro</source>
         <translation>Obține Serial Studio Pro</translation>
     </message>
@@ -6412,12 +6412,12 @@ Thank you again for supporting Serial Studio!</source>
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="531"/>
+        <location filename="../../src/MDF4/Export.cpp" line="546"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>Exportul MDF4 este o funcție Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="532"/>
+        <location filename="../../src/MDF4/Export.cpp" line="547"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>Această funcție necesită o licență. Achiziționați una pentru a activa exportul MDF4.</translation>
     </message>
@@ -6949,32 +6949,32 @@ Furniză acreditările necesare.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="189"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="183"/>
         <source>Console Only Mode</source>
         <translation>Mod Doar Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="186"/>
         <source>Quick Plot Mode</source>
         <translation>Mod Grafic Rapid</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="198"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="192"/>
         <source>Empty Project</source>
         <translation>Proiect Gol</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="526"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="509"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="534"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="517"/>
         <source>Waiting for data…</source>
         <translation>Se așteaptă date…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="535"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="518"/>
         <source>Connecting to device…</source>
         <translation>Se conectează la dispozitiv…</translation>
     </message>
@@ -7267,32 +7267,32 @@ Doriți să deschideți pagina de descărcare?</translation>
     </message>
     <message>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="218"/>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="169"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="206"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Scrierea de comenzi rapide Linux nu este disponibilă pe această platformă.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="90"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="109"/>
         <source>Could not initialise COM (required to write .lnk shortcuts).</source>
         <translation>Nu s-a putut inițializa COM (necesar pentru scrierea comenzilor rapide .lnk).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="101"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="120"/>
         <source>CoCreateInstance(IShellLink) failed (HRESULT 0x%1).</source>
         <translation>CoCreateInstance(IShellLink) a eșuat (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="123"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="160"/>
         <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
         <translation>QueryInterface(IPersistFile) a eșuat (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="133"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="170"/>
         <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
         <translation>Salvarea fișierului .lnk a eșuat (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="155"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="192"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="146"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Scrierea de comenzi rapide macOS nu este disponibilă pe această platformă.</translation>
@@ -7324,102 +7324,100 @@ Doriți să deschideți pagina de descărcare?</translation>
 <context>
     <name>Misc::Utilities</name>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="119"/>
         <source>Check for updates automatically?</source>
-        <translation>Verificare automată a actualizărilor?</translation>
+        <translation type="vanished">Verificare automată a actualizărilor?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="120"/>
         <source>Should %1 automatically check for updates? You can always check for updates manually from the "About" dialog</source>
-        <translation>%1 să verifice automat actualizările? Poți verifica manual actualizările oricând din dialogul „Despre"</translation>
+        <translation type="vanished">%1 să verifice automat actualizările? Poți verifica manual actualizările oricând din dialogul „Despre"</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="184"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="186"/>
         <source>Save</source>
         <translation>Salvează</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="188"/>
         <source>Save all</source>
         <translation>Salvează tot</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="190"/>
         <source>Open</source>
         <translation>Deschide</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="192"/>
         <source>Yes</source>
         <translation>Da</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="194"/>
         <source>Yes to all</source>
         <translation>Da la toate</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="196"/>
         <source>No</source>
         <translation>Nu</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="198"/>
         <source>No to all</source>
         <translation>Nu la toate</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="200"/>
         <source>Abort</source>
         <translation>Abandonează</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="202"/>
         <source>Retry</source>
         <translation>Reîncearcă</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="220"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="204"/>
         <source>Ignore</source>
         <translation>Ignoră</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="222"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="206"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="224"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="208"/>
         <source>Cancel</source>
         <translation>Anulează</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="226"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="210"/>
         <source>Discard</source>
         <translation>Renunță</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="228"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="212"/>
         <source>Help</source>
         <translation>Ajutor</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="230"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="214"/>
         <source>Apply</source>
         <translation>Aplică</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="232"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="216"/>
         <source>Reset</source>
         <translation>Resetează</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/Utilities.cpp" line="234"/>
+        <location filename="../../src/Misc/Utilities.cpp" line="218"/>
         <source>Restore defaults</source>
         <translation>Restabilește Valorile Implicite</translation>
     </message>
@@ -8294,52 +8292,52 @@ Faceți clic pe Reîmprospătare pentru a actualiza lista.</translation>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="43"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="42"/>
         <source>modified</source>
         <translation>modificat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="292"/>
         <source>This project is password protected</source>
         <translation>Acest proiect este protejat prin parolă</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="364"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="293"/>
         <source>Editing is available in Project mode</source>
         <translation>Editarea este disponibilă în modul Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="375"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="304"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Introduceți parola pentru a efectua modificări sau deschideți un alt proiect.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="376"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="305"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>Comutați la modul Proiect pentru a încărca și edita un proiect.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="400"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="329"/>
         <source>Unlock</source>
         <translation>Deblochează</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="330"/>
         <source>Switch to Project Mode</source>
         <translation>Comută la Modul Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="422"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="351"/>
         <source>Open Other Project</source>
         <translation>Deschide Alt Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="423"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="352"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="441"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="370"/>
         <source>Create New Project</source>
         <translation>Creează Proiect Nou</translation>
     </message>
@@ -9001,12 +8999,12 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Avertisment</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="343"/>
+        <location filename="../../src/main.cpp" line="354"/>
         <source>Project file not found</source>
         <translation>Fișier proiect negăsit</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="344"/>
+        <location filename="../../src/main.cpp" line="355"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9015,17 +9013,17 @@ Parametrul separator nu mai este necesar.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="347"/>
+        <location filename="../../src/main.cpp" line="358"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Șterge această comandă rapidă?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="351"/>
+        <location filename="../../src/main.cpp" line="362"/>
         <source>Delete Shortcut</source>
         <translation>Șterge Comanda Rapidă</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="352"/>
+        <location filename="../../src/main.cpp" line="363"/>
         <source>Quit</source>
         <translation>Închide</translation>
     </message>
@@ -10531,9 +10529,8 @@ Parametrul separator nu mai este necesar.</translation>
 <context>
     <name>ShortcutGenerator</name>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
         <source>New Shortcut</source>
-        <translation>Comandă Rapidă Nouă</translation>
+        <translation type="vanished">Comandă Rapidă Nouă</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="68"/>
@@ -10541,9 +10538,18 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Alege o Pictogramă</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
         <source>Save Shortcut</source>
-        <translation>Salvează Comanda Rapidă</translation>
+        <translation type="vanished">Salvează Comanda Rapidă</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="26"/>
+        <source>New Deployment</source>
+        <translation>Implementare Nouă</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="80"/>
+        <source>Save Deployment</source>
+        <translation>Salvează Implementarea</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="114"/>
@@ -10572,8 +10578,22 @@ Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="246"/>
+        <source>Deployment Name</source>
+        <translation>Nume Implementare</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
+        <source>Double-clicking this deployment takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
+        <translation>Dublu-clic pe această implementare deschide direct tabloul de bord live pentru acest proiect. Fără bară de instrumente sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
+        <source>Recordings are saved in the Serial Studio workspace folder</source>
+        <translation>Înregistrările sunt salvate în folderul workspace Serial Studio</translation>
+    </message>
+    <message>
         <source>Shortcut Name</source>
-        <translation>Nume Scurtătură</translation>
+        <translation type="vanished">Nume Scurtătură</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="255"/>
@@ -10602,9 +10622,8 @@ Parametrul separator nu mai este necesar.</translation>
         <translation>Ecran Complet</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="356"/>
         <source>Double-clicking this shortcut takes someone straight to the live dashboard for this project. There's no toolbar or setup pane, just the data, and Serial Studio quits as soon as the device disconnects.</source>
-        <translation>Dublu-clic pe această comandă rapidă deschide direct tabloul de bord live pentru acest proiect. Fără bară de instrumente sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.</translation>
+        <translation type="vanished">Dublu-clic pe această comandă rapidă deschide direct tabloul de bord live pentru acest proiect. Fără bară de instrumente sau panou de configurare, doar datele, iar Serial Studio se închide imediat ce dispozitivul se deconectează.</translation>
     </message>
     <message>
         <source>Embed Project</source>
@@ -10644,9 +10663,8 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
         <translation>Jurnal Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="460"/>
         <source>Recordings are saved to each module’s default location.</source>
-        <translation>Înregistrările sunt salvate în locația implicită a fiecărui modul.</translation>
+        <translation type="vanished">Înregistrările sunt salvate în locația implicită a fiecărui modul.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="491"/>
@@ -10816,137 +10834,137 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
         <translation>Spații de Lucru</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="227"/>
         <source>No Workspaces Available</source>
         <translation>Niciun Spațiu de Lucru Disponibil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="252"/>
         <source>Actions</source>
         <translation>Acțiuni</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="272"/>
         <source>No Actions Available</source>
         <translation>Nicio Acțiune Disponibilă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="290"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="297"/>
         <source>Plugins</source>
         <translation>Plugin-uri</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="210"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="216"/>
         <source>New Workspace…</source>
         <translation>Spațiu de Lucru Nou…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="331"/>
         <source>Manage Plugins…</source>
         <translation>Gestionare Plugin-uri…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="339"/>
         <source>No Plugins Installed</source>
         <translation>Niciun Plugin Instalat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="363"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="370"/>
         <source>Auto Layout</source>
         <translation>Aspect Automat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="382"/>
         <source>Full Screen</source>
         <translation>Ecran Complet</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
         <source>Add External Window</source>
         <translation>Adaugă Fereastră Externă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="404"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="412"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="443"/>
         <source>CSV File</source>
         <translation>Fișier CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="440"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="449"/>
         <source>MDF4 File</source>
         <translation>Fișier MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="446"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
         <source>Console Transcript</source>
         <translation>Transcriere Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="464"/>
         <source>Session Database</source>
         <translation>Bază de Date Sesiune</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="467"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
         <source>No Export Formats Available</source>
         <translation>Niciun Format de Export Disponibil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="627"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="636"/>
         <source>Edit…</source>
         <translation>Editează…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="509"/>
         <source>Console</source>
         <translation>Consolă</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="516"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="525"/>
         <source>Notifications</source>
         <translation>Notificări</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="531"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="540"/>
         <source>Preferences</source>
         <translation>Preferințe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="543"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="552"/>
         <source>Help Center</source>
         <translation>Centru de Ajutor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="638"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="647"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="639"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="648"/>
         <source>Hide</source>
         <translation>Ascunde</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="567"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="576"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="594"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="603"/>
         <source>Resume</source>
         <translation>Reia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="604"/>
         <source>Pause</source>
         <translation>Pauză</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="602"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="611"/>
         <source>Disconnect</source>
         <translation>Deconectează</translation>
     </message>
@@ -11058,7 +11076,7 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
         <translation>Căutare widget-uri…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="672"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="673"/>
         <source>Remove from Workspace</source>
         <translation>Elimină din Spațiul de Lucru</translation>
     </message>
@@ -11114,251 +11132,259 @@ Activează Încorporează Proiectul pentru a integra proiectul în scurtătură,
 <context>
     <name>Toolbar</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="196"/>
         <source>Project Editor</source>
         <translation>Editor de Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="199"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Deschide Editorul de Proiect pentru a crea sau modifica aspectul JSON</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="213"/>
         <source>Open Project</source>
         <translation>Deschide Proiect</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="215"/>
         <source>Open an existing JSON project</source>
         <translation>Deschide un proiect JSON existent</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="225"/>
         <source>Open CSV</source>
         <translation>Deschide CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="230"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="231"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>Redă un fișier CSV ca și cum ar fi date live de la senzori</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="237"/>
         <source>Open MDF4</source>
         <translation>Deschide MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="242"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>Redă un fișier MDF4 ca și cum ar fi date live de la senzori (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="302"/>
         <source>Sessions</source>
         <translation>Sesiuni</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="306"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>Navighează, redă și exportă sesiuni înregistrate</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="262"/>
         <source>Shortcuts</source>
-        <translation>Scurtături</translation>
+        <translation type="vanished">Scurtături</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="265"/>
         <source>Create an operator shortcut for the current project</source>
-        <translation>Creează o scurtătură operator pentru proiectul curent</translation>
+        <translation type="vanished">Creează o scurtătură operator pentru proiectul curent</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="257"/>
         <source>Extensions</source>
         <translation>Extensii</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="284"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="260"/>
         <source>Browse and install extensions</source>
         <translation>Navighează și instalează extensii</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="277"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="281"/>
         <source>Configure MQTT connection (publish or subscribe)</source>
         <translation>Configurează conexiunea MQTT (publicare sau abonare)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="312"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="316"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="319"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="323"/>
         <source>Preferences</source>
         <translation>Preferințe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="327"/>
         <source>Open application settings and preferences</source>
         <translation>Deschide setările și preferințele aplicației</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="345"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="351"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Selectează comunicarea prin port serial (UART)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="355"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="362"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="366"/>
         <source>Select audio input device (Pro)</source>
         <translation>Selectează dispozitivul de intrare audio (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="374"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="381"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="386"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Selectează comunicarea USB brută (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="388"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="395"/>
         <source>Network</source>
         <translation>Rețea</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="400"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Selectează comunicarea prin rețea TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="412"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="518"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="525"/>
         <source>Browse example projects</source>
         <translation>Răsfoiește proiectele exemplu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="526"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="533"/>
         <source>Help Center</source>
         <translation>Centru de Ajutor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="537"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Răsfoiește documentația, întrebările frecvente și wiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="416"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Selectează comunicarea MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="424"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="291"/>
+        <source>Deploy</source>
+        <translation>Implementează</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="296"/>
+        <source>Build an operator deployment for the current project</source>
+        <translation>Creează o implementare operator pentru proiectul curent</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="431"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="429"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="436"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Selectează comunicarea prin dispozitiv HID (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="446"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="450"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Selectează comunicația Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="462"/>
         <source>CAN Bus</source>
         <translation>Magistrala CAN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="466"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Selectează comunicația pe magistrala CAN (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="474"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="481"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="479"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="486"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Selectează comunicația prin conductă de proces (Pro)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="495"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="502"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="506"/>
         <source>About</source>
         <translation>Despre</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="503"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="510"/>
         <source>Show application info and license details</source>
         <translation>Afișează informații despre aplicație și detalii licență</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="515"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="522"/>
         <source>Examples</source>
         <translation>Exemple</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="536"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="543"/>
         <source>AI Wiki &amp; Chat</source>
         <translation>Wiki &amp; Chat AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="539"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="546"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Vizualizează documentația detaliată și pune întrebări pe DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="574"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="581"/>
         <source>Activate</source>
         <translation>Activează</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="585"/>
         <source>Manage license and activate Serial Studio Pro</source>
         <translation>Gestionează licența și activează Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="618"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="600"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="625"/>
         <source>Disconnect</source>
         <translation>Deconectează</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="593"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="600"/>
         <source>Connect</source>
         <translation>Conectează</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="595"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="602"/>
         <source>Connect or disconnect from device or MQTT broker</source>
         <translation>Conectează sau deconectează de la dispozitiv sau broker MQTT</translation>
     </message>

@@ -295,8 +295,8 @@ Widgets.SmartDialog {
             TextField {
               readOnly: true
               Layout.fillWidth: true
-              text: Cpp_AppState.projectFileName
               Layout.alignment: Qt.AlignVCenter
+              text: Cpp_AppState.projectFileName
               placeholderText: qsTr("Choose a project file to begin")
             }
 
