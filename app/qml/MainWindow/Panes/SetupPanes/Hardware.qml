@@ -42,7 +42,6 @@ Rectangle {
   property var buses: []
   readonly property int kPaddingV: 8
   readonly property int kFadeHeight: 12
-  readonly property int kMaxDriverHeight: 360
 
   function registerBus(item) {
     buses = buses.concat([item])
@@ -57,12 +56,6 @@ Rectangle {
     }
     return maxW
   }
-
-  // Pinned at the cap + spacers + border so the window's minimum height is
-  // stable across driver switches AND across driver-internal layout changes
-  // (e.g. Modbus TCP/RTU, Network TCP/UDP). The Flickable inside handles
-  // anything taller; anything shorter just gets whitespace at the bottom.
-  implicitHeight: root.kMaxDriverHeight + 2 * root.kPaddingV + 2
 
   //
   // Device configuration — wrapped in a Flickable so tall drivers (Modbus,
