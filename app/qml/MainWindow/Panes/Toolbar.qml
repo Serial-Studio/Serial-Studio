@@ -293,7 +293,7 @@ Rectangle {
               Layout.alignment: Qt.AlignLeft
               onClicked: app.showShortcutGenerator()
               icon.source: "qrc:/rcc/icons/toolbar/deploy.svg"
-              ToolTip.text: qsTr("Build an operator deployment for the current project")
+              ToolTip.text: qsTr("Build an operator app for the current project")
             }
 
             Widgets.ToolbarButton {

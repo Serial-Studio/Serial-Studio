@@ -866,6 +866,10 @@ qt_add_executable(
   MANUAL_FINALIZATION
 )
 
+if(MSVC)
+  target_compile_options(${PROJECT_EXECUTABLE} PRIVATE /W4)
+endif()
+
 target_link_libraries(
   ${PROJECT_EXECUTABLE} PUBLIC
 
@@ -1033,6 +1037,19 @@ if (BUILD_COMMERCIAL)
     MA_NO_CUSTOM
     MA_NO_NULL
   )
+
+  # Scope unused-function warnings to miniaudio.cpp only — the rest of the
+  # codebase still flags real unused functions. C4505 is MSVC's equivalent
+  # of -Wno-unused-function for static functions with internal linkage.
+  if(MSVC)
+    set_source_files_properties(src/ThirdParty/miniaudio.cpp
+      PROPERTIES COMPILE_OPTIONS "/wd4505"
+    )
+  else()
+    set_source_files_properties(src/ThirdParty/miniaudio.cpp
+      PROPERTIES COMPILE_OPTIONS "-Wno-unused-function"
+    )
+  endif()
 
   if(LINUX)
     target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE asound)

@@ -202,10 +202,17 @@ else()
 
   FetchContent_MakeAvailable(zlib)
 
-  target_compile_options(zlibstatic PRIVATE ${LIB_FLAGS})
-  if(NOT MSVC AND LIB_LINK_FLAGS)
-    target_link_options(zlibstatic PRIVATE ${LIB_LINK_FLAGS})
-  endif()
+  # zlib's CMakeLists creates BOTH zlibstatic and zlib (shared) and always
+  # builds both — we only link the static one but the shared one still
+  # compiles and emits warnings unless we silence it too.
+  foreach(_zlib_tgt zlibstatic zlib)
+    if(TARGET ${_zlib_tgt})
+      target_compile_options(${_zlib_tgt} PRIVATE ${LIB_FLAGS})
+      if(NOT MSVC AND LIB_LINK_FLAGS)
+        target_link_options(${_zlib_tgt} PRIVATE ${LIB_LINK_FLAGS})
+      endif()
+    endif()
+  endforeach()
 
   if(NOT TARGET ZLIB::ZLIB)
     add_library(ZLIB::ZLIB ALIAS zlibstatic)

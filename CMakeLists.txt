@@ -364,9 +364,6 @@ endif()
 #               (unused parameters, sign comparison, etc.)
 #   -pedantic - Enforce strict ISO C++ conformance
 #               (reject non-standard compiler extensions)
-#   -Wno-unused-function - Suppress unused function warnings
-#               Required for miniaudio.h single-header library
-#               which defines many internal functions
 #
 # Note: Third-party libraries in lib/ use -w to suppress all warnings
 #
@@ -376,13 +373,15 @@ if(MSVC)
   add_compile_options(
     /wd4324                        # Structure padding warning
     /wd4267                        # size_t to int conversion warning
+    /Zc:inline                     # Remove unreferenced COMDAT (smaller binary)
+    /Zc:lambda                     # Conformant lambda processor
+    /Zc:throwingNew                # Assume operator new throws on OOM
   )
 else()
   add_compile_options(
     -Wall                          # Enable common warning messages
     -Wextra                        # Enable extra warnings
     -pedantic                      # Enforce strict ISO C++ conformance
-    -Wno-unused-function           # Silence miniaudio warnings
   )
 endif()
 
@@ -445,17 +444,16 @@ if(PRODUCTION_OPTIMIZATION)
 
    # LLVM (MinGW) on Windows
    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND MINGW)
+      message(STATUS "Production branch: Clang/MinGW (Windows)")
       add_compile_options(
-         -O3                             # Aggressive optimization
+         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
          -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
-         -ftree-vectorize                # Enable automatic vectorization
-         -funroll-loops                  # Improve loop performance by unrolling
-         -fomit-frame-pointer            # Optimize function call overhead
-         -fno-fast-math                  # IEEE-compliant floating point
+         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
+         -fomit-frame-pointer            # Free up RBP for the register allocator
+         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -finline-functions              # Inline functions where possible
-         -ffunction-sections             # Place each function in its own section
-         -fdata-sections                 # Place each data item in its own section
+         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
+         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
       )
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto) # Link-time optimization with parallelization
@@ -466,22 +464,20 @@ if(PRODUCTION_OPTIMIZATION)
       if(NOT DISABLE_LTO)
          add_link_options(-flto=auto)    # Enable LTO at link time
       endif()
-   
+
    # GCC (MinGW) on Windows
    elseif(WIN32 AND MINGW)
+      message(STATUS "Production branch: GCC/MinGW (Windows)")
       add_compile_options(
-         -O3                             # Aggressive optimization
+         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
          -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
-         -ftree-vectorize                # Enable automatic vectorization
-         -funroll-loops                  # Improve loop performance by unrolling
-         -fomit-frame-pointer            # Optimize function call overhead
-         -frename-registers              # Better instruction scheduling
-         -fno-fast-math                  # IEEE-compliant floating point
+         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
+         -fomit-frame-pointer            # Free up RBP for the register allocator
+         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -fstack-reuse=all               # Reuse stack slots
-         -finline-functions              # Inline functions where possible
-         -ffunction-sections             # Place each function in its own section
-         -fdata-sections                 # Place each data item in its own section
+         -fno-semantic-interposition     # Allow inlining/devirt of own symbols (PIC perf win)
+         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
+         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
       )
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto) # Link-time optimization with parallelization
@@ -495,6 +491,22 @@ if(PRODUCTION_OPTIMIZATION)
 
    # MSVC (Visual Studio)
    elseif(WIN32 AND MSVC)
+      message(STATUS "Production branch: MSVC (Windows)")
+
+      # CMake injects /Ob2 in *_FLAGS_RELEASE / *_FLAGS_RELWITHDEBINFO and /W3
+      # in the unsuffixed *_FLAGS. Stripping them lets us force /Ob3 globally
+      # and /W4 per-target without 500+ "warning D9025: overriding" messages.
+      foreach(_lang CXX C)
+         string(REGEX REPLACE "[/-]W[0-9]" ""
+            CMAKE_${_lang}_FLAGS "${CMAKE_${_lang}_FLAGS}")
+         foreach(_cfg RELEASE RELWITHDEBINFO MINSIZEREL)
+            string(REGEX REPLACE "[/-]Ob[0-9]" ""
+               CMAKE_${_lang}_FLAGS_${_cfg} "${CMAKE_${_lang}_FLAGS_${_cfg}}")
+            string(REGEX REPLACE "[/-]W[0-9]" ""
+               CMAKE_${_lang}_FLAGS_${_cfg} "${CMAKE_${_lang}_FLAGS_${_cfg}}")
+         endforeach()
+      endforeach()
+
       add_compile_options(
          /permissive-                    # Enforce strict ISO C++ conformance
          /Zc:__cplusplus                 # Set __cplusplus to actual version value
@@ -502,12 +514,15 @@ if(PRODUCTION_OPTIMIZATION)
          /MP                             # Enable multi-core compilation
          /O2                             # Optimize for speed
          /Ot                             # Favor fast code over small code
-         /W4                             # High warning level
+         /Oi                             # Enable intrinsic functions
+         /Ob3                            # Aggressive inlining (VS2019 16.3+, forced over CMake's /Ob2)
          /fp:precise                     # IEEE-accurate floating-point math
-         /Qpar                           # Enable automatic parallelization of loops
          /Gw                             # Put functions/data into separate COMDATs
+         /Gy                             # Function-level linking (pairs with /OPT:REF)
          /DNDEBUG                        # Disable assertions
       )
+      # /W4 is applied per-target on PROJECT_EXECUTABLE in app/CMakeLists.txt
+      # so third-party libs in lib/ (which use /w) don't trigger D9025 overrides.
       if(NOT DISABLE_LTO)
          add_compile_options(/GL)        # Enable whole program optimization
       endif()
@@ -521,16 +536,15 @@ if(PRODUCTION_OPTIMIZATION)
 
    # macOS (Clang/AppleClang)
    elseif(APPLE)
+      message(STATUS "Production branch: AppleClang (macOS)")
       add_compile_options(
-         -O3                             # Aggressive optimization
-         -ftree-vectorize                # Enable automatic vectorization
-         -funroll-loops                  # Improve loop performance by unrolling
-         -fomit-frame-pointer            # Optimize function call overhead
-         -fno-fast-math                  # IEEE-compliant floating point
+         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
+         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
+         -fomit-frame-pointer            # Free up RBP/X29 for the register allocator
+         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -finline-functions              # Inline functions where possible
-         -ffunction-sections             # Place each function in its own section
-         -fdata-sections                 # Place each data item in its own section
+         -ffunction-sections             # Pair with -dead_strip for dead-code stripping
+         -fdata-sections                 # Pair with -dead_strip for dead-data stripping
       )
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto) # Link-time optimization with parallelization
@@ -548,20 +562,18 @@ if(PRODUCTION_OPTIMIZATION)
 
    # Intel LLVM Compiler (Linux or Windows)
    elseif(CMAKE_CXX_COMPILER_ID MATCHES "IntelLLVM")
+      message(STATUS "Production branch: IntelLLVM")
       add_compile_options(
-         -O3                             # Aggressive optimization
+         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
          -march=x86-64-v2                # Target modern CPUs (2012+) with SSE4.2
          -static                         # Include Intel dependencies
-         -ftree-vectorize                # Enable automatic vectorization
-         -funroll-loops                  # Improve loop performance by unrolling
-         -fomit-frame-pointer            # Optimize function call overhead
-         -frename-registers              # Better instruction scheduling
-         -fno-fast-math                  # IEEE-compliant floating point
+         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
+         -fomit-frame-pointer            # Free up RBP for the register allocator
+         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -fstack-reuse=all               # Reuse stack slots
-         -finline-functions              # Inline functions where possible
-         -ffunction-sections             # Place each function in its own section
-         -fdata-sections                 # Place each data item in its own section
+         -fno-semantic-interposition     # Allow inlining/devirt of own symbols (PIC perf win)
+         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
+         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
       )
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto) # Link-time optimization with parallelization
@@ -575,19 +587,20 @@ if(PRODUCTION_OPTIMIZATION)
 
    # Generic Linux (GCC or Clang)
    elseif(UNIX)
+      message(STATUS "Production branch: ${CMAKE_CXX_COMPILER_ID} (Linux/${CMAKE_SYSTEM_PROCESSOR})")
       add_compile_options(
-         -O3                             # Aggressive optimization
-         -ftree-vectorize                # Enable automatic vectorization
-         -funroll-loops                  # Improve loop performance by unrolling
-         -fomit-frame-pointer            # Optimize function call overhead
-         -frename-registers              # Better instruction scheduling
-         -fno-fast-math                  # IEEE-compliant floating point
+         -O3                             # Aggressive optimization (implies -ftree-vectorize, -finline-functions)
+         -funroll-loops                  # Loop unrolling (NOT implied by -O3)
+         -fomit-frame-pointer            # Free up RBP/X29 for the register allocator
+         -fno-fast-math                  # IEEE-compliant floating point (telemetry correctness)
          -fno-unsafe-math-optimizations  # Avoid unsafe math assumptions
-         -fstack-reuse=all               # Reuse stack slots
-         -finline-functions              # Inline functions where possible
-         -ffunction-sections             # Place each function in its own section
-         -fdata-sections                 # Place each data item in its own section
+         -ffunction-sections             # Pair with --gc-sections for dead-code stripping
+         -fdata-sections                 # Pair with --gc-sections for dead-data stripping
       )
+      # GCC-only: -fno-semantic-interposition is silently rejected by Clang on some versions
+      if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+         add_compile_options(-fno-semantic-interposition)
+      endif()
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto) # Link-time optimization with parallelization
       endif()
@@ -604,9 +617,18 @@ if(PRODUCTION_OPTIMIZATION)
          add_compile_options(-march=armv8-a)
          add_link_options(-latomic)
       elseif(CMAKE_SYSTEM_PROCESSOR STREQUAL "armv7l")
-         add_compile_options(-march=armv7-a -mfpu=neon)
+         # Pin hardfloat ABI explicitly so a soft-float toolchain can't silently
+         # produce an ABI-mismatched binary that runs but corrupts FP registers.
+         add_compile_options(-march=armv7-a -mfpu=neon -mfloat-abi=hard)
          add_link_options(-latomic)
       endif()
+   endif()
+
+   # Effective LTO state (after Flatpak/sandboxed override)
+   if(DISABLE_LTO)
+      message(STATUS "LTO: DISABLED (sandboxed build)")
+   else()
+      message(STATUS "LTO: ENABLED")
    endif()
 else()
    message("Disabling production optimization flags...")

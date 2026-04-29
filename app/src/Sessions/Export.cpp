@@ -220,7 +220,6 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
   insertSession(frame, dt);
   if (m_sessionId < 0) [[unlikely]] {
     qWarning() << "[SQLite] Aborting database open — session row was not inserted";
-    const auto connName = m_db.connectionName();
     m_db.close();
     m_db = QSqlDatabase();
     QSqlDatabase::removeDatabase(connName);
