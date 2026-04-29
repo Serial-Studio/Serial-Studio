@@ -14,10 +14,13 @@
 #if defined(BUILD_COMMERCIAL) && defined(Q_OS_WIN)
 
 #  include <objbase.h>
+#  include <propkey.h>
+#  include <propvarutil.h>
 #  include <shlobj.h>
 #  include <shobjidl.h>
 #  include <windows.h>
 
+#  include <QCryptographicHash>
 #  include <QDir>
 #  include <QFileInfo>
 
@@ -69,6 +72,22 @@ QString joinForCmdLine(const QStringList& args, std::function<QString(const QStr
   return quoted.join(QLatin1Char(' '));
 }
 
+/**
+ * @brief Computes the per-shortcut AppUserModelID that pairs with main.cpp.
+ *
+ * Uses SHA-1(absolute shortcut path) truncated to 16 hex chars so each .lnk
+ * pins under its own taskbar group, even when several shortcuts target the
+ * same project file. Must stay byte-identical to shortcutIdentityHash() in
+ * main.cpp — both sides need to derive the same string from the same path.
+ */
+QString shortcutAumidFor(const QString& shortcutPath)
+{
+  const QByteArray digest =
+    QCryptographicHash::hash(shortcutPath.toUtf8(), QCryptographicHash::Sha1);
+  return QStringLiteral("AlexSpataru.SerialStudio.Shortcut.")
+         + QString::fromLatin1(digest.toHex().left(16));
+}
+
 }  // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -115,6 +134,25 @@ bool Misc::ShortcutGenerator::writeWindowsLnk(const QString& outputPath,
   link->SetWorkingDirectory(reinterpret_cast<LPCWSTR>(workdir_native.utf16()));
   link->SetDescription(reinterpret_cast<LPCWSTR>(title.utf16()));
   link->SetIconLocation(reinterpret_cast<LPCWSTR>(resolved_icon.utf16()), 0);
+
+  // Stamp a per-shortcut AppUserModelID so this shortcut groups under its own
+  // taskbar entry (with its own custom icon) and so a normal Serial Studio
+  // launch never inherits a cached icon from this shortcut. The AUMID is
+  // derived from the shortcut's absolute path; main.cpp recomputes the same
+  // value when launched via --shortcut-path.
+  IPropertyStore* propStore = nullptr;
+  if (SUCCEEDED(link->QueryInterface(IID_IPropertyStore,
+                                     reinterpret_cast<void**>(&propStore)))
+      && propStore != nullptr) {
+    const QString aumid = shortcutAumidFor(outputPath);
+    PROPVARIANT pv;
+    if (SUCCEEDED(InitPropVariantFromString(reinterpret_cast<LPCWSTR>(aumid.utf16()), &pv))) {
+      propStore->SetValue(PKEY_AppUserModel_ID, pv);
+      propStore->Commit();
+      PropVariantClear(&pv);
+    }
+    propStore->Release();
+  }
 
   IPersistFile* persist = nullptr;
   hr = link->QueryInterface(IID_IPersistFile, reinterpret_cast<void**>(&persist));

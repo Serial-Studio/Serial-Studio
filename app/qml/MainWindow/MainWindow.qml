@@ -55,12 +55,6 @@ Widgets.SmartWindow {
   property alias toolbarVisible: toolbar.toolbarEnabled
 
   //
-  // Cached CLI_RUNTIME_MODE — direct reads from inner scopes are unreliable.
-  //
-  readonly property bool runtimeMode: typeof CLI_RUNTIME_MODE !== "undefined"
-                                       && CLI_RUNTIME_MODE === true
-
-  //
   // Wraps any QML disconnect entry point so device-initiated drops can be told apart.
   //
   function userDisconnect() {
@@ -91,7 +85,7 @@ Widgets.SmartWindow {
       if (app.quitting)
         return
 
-      if (!root.runtimeMode || !root.sawConnection)
+      if (!app.runtimeMode || !root.sawConnection)
         return
 
       if (root.userInitiatedDisconnect) {
@@ -110,11 +104,11 @@ Widgets.SmartWindow {
     id: runtimeFailGuard
     interval: 4000
     repeat: false
-    running: root.runtimeMode
+    running: app.runtimeMode
              && !Cpp_IO_Manager.isConnected
              && !root.sawConnection
     onTriggered: {
-      if (root.runtimeMode && !Cpp_IO_Manager.isConnected && !root.sawConnection)
+      if (app.runtimeMode && !Cpp_IO_Manager.isConnected && !root.sawConnection)
         app.showRuntimeReconfigure("failed")
     }
   }
@@ -129,7 +123,7 @@ Widgets.SmartWindow {
 
     windowShown = true
 
-    if (root.runtimeMode)
+    if (app.runtimeMode)
       dashboard.loadLayout()
 
     if (typeof CLI_START_FULLSCREEN !== "undefined" && CLI_START_FULLSCREEN)
@@ -163,8 +157,8 @@ Widgets.SmartWindow {
       stack.push(dashboard)
       dashboard.loadLayout()
 
-      // Runtime mode handles the toolbar via the runtimeMode binding directly.
-      if (!root.runtimeMode
+      // Runtime mode handles the toolbar via the app.runtimeMode binding directly.
+      if (!app.runtimeMode
           && typeof CLI_HIDE_TOOLBAR !== "undefined"
           && CLI_HIDE_TOOLBAR)
         mainWindow.toolbarVisible = false
@@ -215,26 +209,15 @@ Widgets.SmartWindow {
     // Defer dialogs and update checks until after window is fully rendered
     Qt.callLater(function() {
       // Runtime mode is unattended — skip nags entirely.
-      if (root.runtimeMode)
+      if (app.runtimeMode)
         return
 
-      // Show donations dialog every 15 launches
+      // Show donations dialog every 15 launches (GPL builds only — Pro skips it)
       if (root.appLaunchCount % 15 == 0 && !Cpp_CommercialBuild)
-        donateDialog.showAutomatically()
+        donateDialog.activate()
 
-      // Ask user if he/she wants to enable automatic updates
-      if (root.appLaunchCount == 2 && Cpp_UpdaterEnabled) {
-        if (Cpp_Misc_Utilities.askAutomaticUpdates()) {
-          Cpp_Misc_ModuleManager.automaticUpdates = true
-          Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
-        }
-
-        else
-          Cpp_Misc_ModuleManager.automaticUpdates = false
-      }
-
-      // Check for updates (if we are allowed)
-      else if (Cpp_Misc_ModuleManager.automaticUpdates && Cpp_UpdaterEnabled)
+      // Auto-update is opt-out: enabled by default, user can disable in Settings.
+      if (Cpp_Misc_ModuleManager.automaticUpdates && Cpp_UpdaterEnabled)
         Cpp_Updater.checkForUpdates(Cpp_AppUpdaterUrl)
     })
   }
@@ -261,7 +244,7 @@ Widgets.SmartWindow {
     target: Cpp_UI_Dashboard
 
     function onDataReset() {
-      if (root.runtimeMode)
+      if (app.runtimeMode)
         return
 
       setup.show()
@@ -290,7 +273,7 @@ Widgets.SmartWindow {
         }
       }
 
-      else if (!root.runtimeMode) {
+      else if (!app.runtimeMode) {
         setup.show()
         root.showConsole()
         root.toolbarVisible = true
@@ -304,7 +287,7 @@ Widgets.SmartWindow {
   //
   onVisibilityChanged: {
     if (visible) {
-      const tint = root.runtimeMode
+      const tint = app.runtimeMode
                    ? Cpp_ThemeManager.colors["dashboard_background"]
                    : ""
       Cpp_NativeWindow.addWindow(root, tint)
@@ -318,14 +301,14 @@ Widgets.SmartWindow {
   // Shortcuts
   //
   Shortcut {
-    enabled: !root.runtimeMode
+    enabled: !app.runtimeMode
     sequences: [StandardKey.Preferences]
     onActivated: app.showSettingsDialog()
   } Shortcut {
     sequences: [StandardKey.Quit]
     onActivated: app.quitApplication()
   } Shortcut {
-    enabled: !root.runtimeMode
+    enabled: !app.runtimeMode
     sequences: [StandardKey.Open]
     onActivated: Cpp_CSV_Player.openFile()
   }
@@ -372,7 +355,7 @@ Widgets.SmartWindow {
 
         z: 2
         Layout.fillWidth: true
-        toolbarEnabled: !root.runtimeMode
+        toolbarEnabled: !app.runtimeMode
         dashboardVisible: root.dashboardVisible
         autoHide: Cpp_UI_Dashboard.autoHideToolbar
       }
@@ -395,7 +378,7 @@ Widgets.SmartWindow {
 
           Layout.fillWidth: true
           Layout.fillHeight: true
-          initialItem: root.runtimeMode ? dashboard : terminal
+          initialItem: app.runtimeMode ? dashboard : terminal
           Layout.minimumHeight: Math.max(terminal.implicitHeight, setup.implicitHeight)
           Layout.minimumWidth: terminal.implicitWidth + (setup.visible ? 0 : setup.kMinPaneWidth + 1)
 
@@ -470,10 +453,10 @@ Widgets.SmartWindow {
           id: setup
 
           Layout.fillHeight: true
-          visible: !root.runtimeMode
+          visible: !app.runtimeMode
           Layout.rightMargin: setupMargin
-          Layout.minimumWidth: root.runtimeMode ? 0 : setup.kMinPaneWidth
-          Layout.preferredWidth: root.runtimeMode ? 0 : setup.displayedWidth
+          Layout.minimumWidth: app.runtimeMode ? 0 : setup.kMinPaneWidth
+          Layout.preferredWidth: app.runtimeMode ? 0 : setup.displayedWidth
           Layout.maximumWidth: mainLayout.width - stack.Layout.minimumWidth - 1
         }
       }
@@ -495,7 +478,7 @@ Widgets.SmartWindow {
       z: 100
       anchors.fill: parent
       visible: opacity > 0
-      opacity: root.runtimeMode && !Cpp_UI_Dashboard.available ? 1 : 0
+      opacity: app.runtimeMode && !Cpp_UI_Dashboard.available ? 1 : 0
       color: Cpp_ThemeManager.colors["dashboard_background"]
 
       Behavior on opacity {

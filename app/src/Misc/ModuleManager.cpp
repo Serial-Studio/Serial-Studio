@@ -187,7 +187,7 @@ static void MessageHandler(QtMsgType type, const QMessageLogContext& context, co
  * destroy singleton classes before the application quits.
  */
 Misc::ModuleManager::ModuleManager()
-  : m_headless(false), m_automaticUpdates(m_settings.value("App/AutomaticUpdates", true).toBool())
+  : m_headless(false), m_automaticUpdates(m_settings.value("App/CheckForUpdates", true).toBool())
 {
   // Init translator
   (void)Misc::Translator::instance();
@@ -224,7 +224,7 @@ void Misc::ModuleManager::setAutomaticUpdates(const bool enabled)
 {
   if (m_automaticUpdates != enabled) {
     m_automaticUpdates = enabled;
-    m_settings.setValue("App/AutomaticUpdates", m_automaticUpdates);
+    m_settings.setValue("App/CheckForUpdates", m_automaticUpdates);
     Q_EMIT automaticUpdatesChanged();
   }
 }

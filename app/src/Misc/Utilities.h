@@ -42,7 +42,6 @@ public:
   static void rebootApplication();
   static QPixmap getHiDpiPixmap(const QString& path);
 
-  [[nodiscard]] Q_INVOKABLE static bool askAutomaticUpdates();
   [[nodiscard]] Q_INVOKABLE static QString hdpiImagePath(const QString& path);
 
   // clang-format off

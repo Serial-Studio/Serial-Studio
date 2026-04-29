@@ -28,7 +28,6 @@ import QtQuick.Controls
 
 import SerialStudio
 
-import "Views" as Views
 import "Sections" as Sections
 import "../Widgets" as Widgets
 
@@ -159,101 +158,31 @@ Widgets.SmartWindow {
         }
 
         rightPanel: Component {
-          Item {
-            //
-            // Action view
-            //
-            Views.ActionView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.ActionView
-            }
-
-            //
-            // Project setup
-            //
-            Views.ProjectView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.ProjectView
-            }
-
-            //
-            // Group view
-            //
-            Views.GroupView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.GroupView
-            }
-
-            //
-            // Dataset view
-            //
-            Views.DatasetView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DatasetView
-            }
-
-            //
-            // Source view
-            //
-            Views.SourceView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.SourceView
-            }
-
-            //
-            // Per-source frame parser
-            //
-            Views.SourceFrameParserView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.SourceFrameParserView
-            }
-
-            //
-            // Output widget view
-            //
-            Views.OutputWidgetView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.OutputWidgetView
-            }
-
-            //
-            // Data tables overview
-            //
-            Views.DataTablesView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.DataTablesView
-            }
-
-            //
-            // System __datasets__ table viewer
-            //
-            Views.SystemDatasetsView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.SystemDatasetsView
-            }
-
-            //
-            // User-defined shared memory table editor
-            //
-            Views.UserTableView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.UserTableView
-            }
-
-            //
-            // Workspaces overview
-            //
-            Views.WorkspacesView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.WorkspacesView
-            }
-
-            //
-            // Single workspace editor
-            //
-            Views.WorkspaceView {
-              anchors.fill: parent
-              visible: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.WorkspaceView
+          //
+          // Right panel — only the currently selected view is parsed and
+          // instantiated. Tab switches destroy the previous view and load the
+          // new one; views read all state from Cpp_JSON_ProjectModel /
+          // Cpp_JSON_ProjectEditor, so nothing local is lost on switch.
+          //
+          Loader {
+            asynchronous: false
+            anchors.fill: parent
+            source: {
+              switch (Cpp_JSON_ProjectEditor.currentView) {
+              case ProjectEditor.ActionView:            return "Views/ActionView.qml"
+              case ProjectEditor.ProjectView:           return "Views/ProjectView.qml"
+              case ProjectEditor.GroupView:             return "Views/GroupView.qml"
+              case ProjectEditor.DatasetView:           return "Views/DatasetView.qml"
+              case ProjectEditor.SourceView:            return "Views/SourceView.qml"
+              case ProjectEditor.SourceFrameParserView: return "Views/SourceFrameParserView.qml"
+              case ProjectEditor.OutputWidgetView:      return "Views/OutputWidgetView.qml"
+              case ProjectEditor.DataTablesView:        return "Views/DataTablesView.qml"
+              case ProjectEditor.SystemDatasetsView:    return "Views/SystemDatasetsView.qml"
+              case ProjectEditor.UserTableView:         return "Views/UserTableView.qml"
+              case ProjectEditor.WorkspacesView:        return "Views/WorkspacesView.qml"
+              case ProjectEditor.WorkspaceView:         return "Views/WorkspaceView.qml"
+              }
+              return ""
             }
           }
         }

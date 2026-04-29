@@ -129,6 +129,7 @@ public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
+  void setSettingsPersistent(const bool persistent);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
 
 protected:
@@ -145,5 +146,6 @@ private:
   QSettings m_settings;
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
+  bool m_persistSettings;
 };
 }  // namespace MDF4

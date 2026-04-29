@@ -72,7 +72,7 @@ Popup {
   // Save settings
   //
   Settings {
-    category: "WindowManagement"
+    category: "WindowManagement" + app.settingsSuffix
     property alias autoLayout: _autoLayoutBt.checked
     property alias consoleEnabled: _consoleBt.checked
   }
@@ -190,7 +190,9 @@ Popup {
           })
 
           popup.valueRightClicked.connect((value, text, gx, gy) => {
-            if (value >= 0) {
+            // Suppress edit/hide/delete context menu in operator runtime mode
+            var runtimeMode = (typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
+            if (value >= 0 && !runtimeMode) {
               _wsContextId = value
               _wsContextName = text
               _wsContextMenu.popup()
@@ -199,16 +201,21 @@ Popup {
         }
 
         // Build model: workspace model + separator + "New Workspace…"
+        // (the "New Workspace…" entry is hidden in operator runtime mode so
+        //  shortcut-launched dashboards stay locked to the project's layout)
         var items = taskBar.workspaceModel
         var model = []
         for (var i = 0; i < items.length; ++i)
           model.push(items[i])
 
-        model.push({"id": "__separator__", "text": "",
-                     "icon": "", "separator": true})
-        model.push({"id": "__new_workspace__", "separator": false,
-                     "text": qsTr("New Workspace…"),
-                     "icon": "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"})
+        var runtimeMode = (typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
+        if (!runtimeMode) {
+          model.push({"id": "__separator__", "text": "",
+                       "icon": "", "separator": true})
+          model.push({"id": "__new_workspace__", "separator": false,
+                       "text": qsTr("New Workspace…"),
+                       "icon": "qrc:/rcc/icons/project-editor/toolbar/add-group.svg"})
+        }
 
         // Update popup state
         _groups.popup.y = root.y
@@ -375,7 +382,7 @@ Popup {
       text: qsTr("Full Screen")
       checked: !mainWindow.toolbarVisible
       icon.source: "qrc:/rcc/icons/start/full-screen.svg"
-      visible: !root.isExternalWindow && !mainWindow.runtimeMode
+      visible: !root.isExternalWindow && !app.runtimeMode
       onClicked: mainWindow.toolbarVisible = !mainWindow.toolbarVisible
     }
 
@@ -395,6 +402,7 @@ Popup {
       implicitHeight: 1
       Layout.fillWidth: true
       color: Cpp_ThemeManager.colors["start_menu_text"]
+      visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
     }
 
     Widgets.MenuButton {
@@ -404,6 +412,7 @@ Popup {
       text: qsTr("Export")
       Layout.fillWidth: true
       icon.source: "qrc:/rcc/icons/start/export.svg"
+      visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
 
       readonly property string kCsv: "csv"
       readonly property string kMdf4: "mdf4"
@@ -529,7 +538,7 @@ Popup {
       expandable: false
       Layout.fillWidth: true
       text: qsTr("Preferences")
-      visible: !mainWindow.runtimeMode
+      visible: !app.runtimeMode
       icon.source: "qrc:/rcc/icons/start/settings.svg"
       onClicked: {
         root.close()
@@ -550,7 +559,7 @@ Popup {
 
     Loader {
       Layout.fillWidth: true
-      active: Cpp_CommercialBuild && !mainWindow.runtimeMode
+      active: Cpp_CommercialBuild && !app.runtimeMode
       sourceComponent: Rectangle {
         opacity: 0.5
         implicitHeight: 1
@@ -560,7 +569,7 @@ Popup {
 
     Loader {
       Layout.fillWidth: true
-      active: Cpp_CommercialBuild && !mainWindow.runtimeMode
+      active: Cpp_CommercialBuild && !app.runtimeMode
       sourceComponent: Component {
         Widgets.MenuButton {
           expandable: false

@@ -195,7 +195,7 @@ Window {
   // Save settings
   //
   Settings {
-    category: root.category
+    category: root.category + app.settingsSuffix
     property alias ax: root.x
     property alias ay: root.y
     property alias aw: root.width

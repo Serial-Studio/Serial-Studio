@@ -36,23 +36,6 @@ SmartDialog {
   title: qsTr("Support Serial Studio")
 
   //
-  // This is used when the window is shown automatically
-  // every now and then to the user.
-  //
-  function showAutomatically() {
-    if (!app.proVersion)
-      showNormal()
-  }
-
-  //
-  // This is used when the user opens this dialog from
-  // the "about" window.
-  //
-  function show() {
-    showNormal()
-  }
-
-  //
   // Window controls
   //
   dialogContent: ColumnLayout {

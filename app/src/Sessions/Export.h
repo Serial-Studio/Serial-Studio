@@ -129,6 +129,7 @@ public slots:
   void closeFile();
   void setupExternalConnections();
   void setExportEnabled(const bool enabled);
+  void setSettingsPersistent(const bool persistent);
   void hotpathTxFrame(const DataModel::TimestampedFramePtr& frame);
   void hotpathTxRawBytes(int deviceId, const IO::CapturedDataPtr& data);
 
@@ -145,6 +146,7 @@ private:
   QSettings m_settings;
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
+  bool m_persistSettings;
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawBytesQueue;
   std::atomic<int> m_operationMode;

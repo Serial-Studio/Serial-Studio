@@ -111,22 +111,6 @@ QPixmap Misc::Utilities::getHiDpiPixmap(const QString& path)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Prompts the user to enable automatic update checks.
- */
-bool Misc::Utilities::askAutomaticUpdates()
-{
-  const int result = showMessageBox(
-    tr("Check for updates automatically?"),
-    tr(
-      "Should %1 automatically check for updates? You can always check for updates manually from the \"About\" dialog")
-      .arg(APP_NAME),
-    QMessageBox::Question,
-    APP_NAME,
-    QMessageBox::Yes | QMessageBox::No);
-  return result == QMessageBox::Yes;
-}
-
-/**
  * @brief Returns a @c file path for the image with the appropiate resolution
  *       for the screen.
  *
@@ -284,7 +268,7 @@ void Misc::Utilities::revealFile(const QString& pathToReveal)
   const QFileInfo fileInfo(pathToReveal);
   if (!fileInfo.isDir())
     param += QLatin1String("/select,");
-  param += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
+  param += QDir::toNativeSeparators(fileInfo.absoluteFilePath());
   QProcess::startDetached("explorer.exe", param);
 #elif defined(Q_OS_MAC)
   QString escaped = pathToReveal;

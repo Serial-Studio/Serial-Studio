@@ -39,7 +39,18 @@ Item {
   //
   property bool dontNag: false
   property bool quitting: false
-  readonly property bool proVersion: Cpp_CommercialBuild ? Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled : false
+  readonly property bool proVersion: Cpp_CommercialBuild ?
+                                       Cpp_Licensing_LemonSqueezy.isActivated ||
+                                       Cpp_Licensing_Trial.trialEnabled : false
+
+  //
+  // Runtime identification for unique settings for each shortcut
+  //
+  readonly property bool runtimeMode: typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true
+  readonly property string settingsSuffix: runtimeMode
+                                           ? (typeof CLI_SETTINGS_SUFFIX !== "undefined" ? CLI_SETTINGS_SUFFIX : "")
+                                           : ""
+
 
   //
   // IO options enabled/disabled
@@ -164,8 +175,9 @@ Item {
       }
     }
 
-    Dialogs.Settings {
+    DialogLoader {
       id: settingsDialog
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/Settings.qml"
     }
 
     Dialogs.IconPicker {
@@ -195,12 +207,14 @@ Item {
       source: "Dialogs/SqlitePlayer.qml"
     }
 
-    Dialogs.Donate {
+    DialogLoader {
       id: donateDialog
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/Donate.qml"
     }
 
-    Dialogs.FileTransmission {
+    DialogLoader {
       id: fileTransmissionDialog
+      source: "qrc:/serial-studio.com/gui/qml/Dialogs/FileTransmission.qml"
     }
 
     DialogLoader {
@@ -299,10 +313,10 @@ Item {
   // Dialog display functions (FOSS)
   //
   function showAboutDialog()       { aboutDialog.activate() }
-  function showSettingsDialog()    { settingsDialog.showNormal() }
+  function showSettingsDialog()    { settingsDialog.activate() }
   function showProjectEditor()     { projectEditor.displayWindow() }
   function showAcknowledgements()  { acknowledgementsDialog.activate() }
-  function showFileTransmission()  { fileTransmissionDialog.showNormal() }
+  function showFileTransmission()  { fileTransmissionDialog.activate() }
   function showExamplesBrowser()   { examplesBrowser.activate() }
   function showExtensionManager()  { extensionManager.activate() }
   function showDatabaseExplorer()  {

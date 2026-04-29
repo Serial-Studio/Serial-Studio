@@ -1082,7 +1082,7 @@ endif()
 
 if(WIN32)
   target_link_libraries(${PROJECT_EXECUTABLE} PRIVATE
-    Dwmapi.lib Shell32.lib Advapi32.lib Ole32.lib Uuid.lib)
+    Dwmapi.lib Shell32.lib Advapi32.lib Ole32.lib Uuid.lib Propsys.lib)
   set_target_properties(${PROJECT_EXECUTABLE} PROPERTIES
     WIN32_EXECUTABLE TRUE
   )

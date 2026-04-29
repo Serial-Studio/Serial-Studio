@@ -80,7 +80,7 @@ Rectangle {
     }
 
     height: root.titlebarHeight
-    color: mainWindow.runtimeMode
+    color: app.runtimeMode
            ? Cpp_ThemeManager.colors["dashboard_background"]
            : Cpp_ThemeManager.colors["toolbar_top"]
   }
@@ -101,10 +101,11 @@ Rectangle {
 
     text: mainWindow.title
     visible: root.titlebarHeight > 0
-    color: mainWindow.runtimeMode
+    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
+
+    color: app.runtimeMode
            ? Cpp_ThemeManager.colors["text"]
            : Cpp_ThemeManager.colors["titlebar_text"]
-    font: Cpp_Misc_CommonFonts.customUiFont(1.07, true)
   }
 
   //
@@ -146,7 +147,7 @@ Rectangle {
     }
 
     height: 1
-    visible: !mainWindow.runtimeMode
+    visible: !app.runtimeMode
     color: Cpp_ThemeManager.colors["toolbar_border"]
   }
 
@@ -244,36 +245,11 @@ Rectangle {
     }
 
     //
-    // Sessions + Shortcut
-    //
-    Loader {
-      active: Cpp_CommercialBuild
-      Layout.alignment: Qt.AlignVCenter
-      sourceComponent: Component {
-        Widgets.RibbonSection {
-          Widgets.ToolbarButton {
-            text: qsTr("Sessions")
-            onClicked: app.showDatabaseExplorer()
-            icon.source: "qrc:/rcc/icons/toolbar/sessions.svg"
-            ToolTip.text: qsTr("Browse, replay, and export recorded sessions")
-          }
-
-          Widgets.ToolbarButton {
-            text: qsTr("Shortcuts")
-            onClicked: app.showShortcutGenerator()
-            icon.source: "qrc:/rcc/icons/toolbar/shortcut.svg"
-            ToolTip.text: qsTr("Create an operator shortcut for the current project")
-          }
-        }
-      }
-    }
-
-    //
-    // Extensions + MQTT section (collapsible)
+    // Utilities
     //
     Widgets.RibbonSection {
-      collapsible: true
-      collapsePriority: 10
+      collapsePriority: 30
+      collapsible: Cpp_CommercialBuild
       collapsedText: qsTr("Extensions")
       collapsedIcon: "qrc:/rcc/icons/toolbar/extensions.svg"
 
@@ -286,18 +262,49 @@ Rectangle {
       }
 
       Loader {
+        Layout.fillHeight: true
         active: Cpp_CommercialBuild
         Layout.alignment: Qt.AlignVCenter
         sourceComponent: Component {
-          Widgets.ToolbarButton {
-            text: qsTr("MQTT")
-            onClicked: app.showMqttConfiguration()
-            icon.source: Cpp_MQTT_Client.isConnected ?
-                           (Cpp_MQTT_Client.isSubscriber ?
-                              "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
-                              "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
-                           "qrc:/rcc/icons/toolbar/mqtt.svg"
-            ToolTip.text: qsTr("Configure MQTT connection (publish or subscribe)")
+          GridLayout {
+            rows: 3
+            columns: 1
+            rowSpacing: 0
+            columnSpacing: 4
+
+            Widgets.ToolbarButton {
+              iconSize: 16
+              text: qsTr("MQTT")
+              horizontalLayout: true
+              Layout.alignment: Qt.AlignLeft
+              onClicked: app.showMqttConfiguration()
+              ToolTip.text: qsTr("Configure MQTT connection (publish or subscribe)")
+              icon.source: Cpp_MQTT_Client.isConnected ?
+                             (Cpp_MQTT_Client.isSubscriber ?
+                                "qrc:/rcc/icons/toolbar/mqtt-subscriber.svg" :
+                                "qrc:/rcc/icons/toolbar/mqtt-publisher.svg") :
+                             "qrc:/rcc/icons/toolbar/mqtt.svg"
+            }
+
+            Widgets.ToolbarButton {
+              iconSize: 16
+              text: qsTr("Deploy")
+              horizontalLayout: true
+              Layout.alignment: Qt.AlignLeft
+              onClicked: app.showShortcutGenerator()
+              icon.source: "qrc:/rcc/icons/toolbar/deploy.svg"
+              ToolTip.text: qsTr("Build an operator deployment for the current project")
+            }
+
+            Widgets.ToolbarButton {
+              iconSize: 16
+              horizontalLayout: true
+              text: qsTr("Sessions")
+              Layout.alignment: Qt.AlignLeft
+              onClicked: app.showDatabaseExplorer()
+              icon.source: "qrc:/rcc/icons/toolbar/sessions.svg"
+              ToolTip.text: qsTr("Browse, replay, and export recorded sessions")
+            }
           }
         }
       }
@@ -308,7 +315,7 @@ Rectangle {
     //
     Widgets.RibbonSection {
       collapsible: true
-      collapsePriority: 20
+      collapsePriority: 10
       collapsedText: qsTr("Preferences")
       collapsedIcon: "qrc:/rcc/icons/toolbar/settings.svg"
 

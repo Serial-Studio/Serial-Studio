@@ -286,7 +286,7 @@ Item {
     //
     Widgets.TaskbarButton {
       forceVisible: true
-      visible: !mainWindow.runtimeMode
+      visible: !app.runtimeMode
       icon.source: "qrc:/rcc/icons/taskbar/settings.svg"
       onClicked: {
         app.showSettingsDialog()
@@ -627,7 +627,7 @@ Item {
     }
 
     //
-    // New workspace button
+    // New workspace button (hidden in operator runtime mode)
     //
     Button {
       icon.width: 16
@@ -639,6 +639,7 @@ Item {
       icon.source: "qrc:/rcc/icons/buttons/plus.svg"
       icon.color: Cpp_ThemeManager.colors["taskbar_text"]
       onClicked: root.newWorkspaceRequested()
+      visible: !(typeof CLI_RUNTIME_MODE !== "undefined" && CLI_RUNTIME_MODE === true)
     }
 
     Item {

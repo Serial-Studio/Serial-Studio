@@ -20,10 +20,9 @@
  */
 
 #include "FrameReader.h"
-
-#include <algorithm>
-
 #include "IO/Checksum.h"
+
+#include <utility>
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -61,6 +60,8 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
   if (m_operationMode == SerialStudio::ConsoleOnly)
     return;
 
+
+  // Flag to decide if we should emit signals
   bool framesEnqueued = false;
 
   // Passthrough when no delimiters are configured
@@ -79,6 +80,7 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
       m_circularBuffer.resetOverflowCount();
     }
 
+    // Call corresponding frame extraction algorithms depending on delimiter configuration
     const auto initialSize = m_queue.size_approx();
     switch (m_operationMode) {
       case SerialStudio::QuickPlot:
@@ -103,6 +105,7 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
         break;
     }
 
+    // Check if we extracted any frames
     framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 
@@ -158,41 +161,6 @@ void IO::FrameReader::consumeBytes(qsizetype size)
 
   (void)m_circularBuffer.read(size);
   discardPendingBytes(size);
-}
-
-/**
- * @brief Computes the source-derived timestamp for a frame ending at the given offset.
- */
-IO::CapturedData::SteadyTimePoint IO::FrameReader::frameTimestamp(qsizetype endOffsetExclusive)
-{
-  if (m_pendingChunks.empty())
-    return IO::CapturedData::SteadyClock::now();
-
-  // Walk pending chunks until the offset lands inside one
-  qsizetype offset = std::max<qsizetype>(0, endOffsetExclusive - 1);
-  for (auto& chunk : m_pendingChunks) {
-    if (offset < chunk.bytesRemaining) {
-      const auto timestamp = chunk.nextFrameTimestamp;
-      chunk.nextFrameTimestamp += chunk.frameStep;
-      return timestamp;
-    }
-
-    offset -= chunk.bytesRemaining;
-  }
-
-  // Fall back to the last chunk's clock
-  auto& chunk      = m_pendingChunks.back();
-  const auto stamp = chunk.nextFrameTimestamp;
-  chunk.nextFrameTimestamp += chunk.frameStep;
-  return stamp;
-}
-
-/**
- * @brief Wraps extracted frame bytes into a CapturedData with proper timing.
- */
-IO::CapturedDataPtr IO::FrameReader::buildFrame(QByteArray&& data, qsizetype endOffsetExclusive)
-{
-  return IO::makeCapturedData(std::move(data), frameTimestamp(endOffsetExclusive));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,7 +256,7 @@ void IO::FrameReader::readEndDelimitedFrames()
   Q_ASSERT(m_operationMode == SerialStudio::QuickPlot
            || m_frameDetectionMode == SerialStudio::EndDelimiterOnly);
 
-  constexpr int kMaxFramesPerCall = 10000;
+  constexpr int kMaxFramesPerCall = 32768;
   int iterations                  = 0;
   while (iterations < kMaxFramesPerCall) {
     ++iterations;
@@ -296,7 +264,6 @@ void IO::FrameReader::readEndDelimitedFrames()
     int endIndex = -1;
     QByteArray delimiter;
 
-    // Locate the next finish delimiter
     if (m_finishSequences.size() == 1) [[likely]] {
       endIndex  = m_circularBuffer.findPatternKMP(m_finishSequences[0], m_finishSequenceLps[0]);
       delimiter = m_finishSequences[0];
@@ -311,17 +278,14 @@ void IO::FrameReader::readEndDelimitedFrames()
     if (endIndex == -1)
       break;
 
-    // Extract frame data
     auto frame             = m_circularBuffer.peek(endIndex);
     const auto crcPosition = endIndex + delimiter.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
-
-    // Validate checksum and enqueue if valid
     if (!frame.isEmpty()) {
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
         if (!m_queue.try_enqueue(buildFrame(std::move(frame), frameEndPos))) [[unlikely]]
-          qWarning() << "[FrameReader] Frame queue full — frame dropped";
+          qWarning() << "[FrameReader] Frame queue full - frame dropped";
 
         consumeBytes(frameEndPos);
       }
@@ -353,7 +317,7 @@ void IO::FrameReader::readStartDelimitedFrames()
   const auto& startSeq = m_startSequences[0];
   const auto& startLps = m_startSequenceLps[0];
 
-  constexpr int kMaxFramesPerCall = 10000;
+  constexpr int kMaxFramesPerCall = 32768;
   int iterations                  = 0;
   while (iterations < kMaxFramesPerCall) {
     ++iterations;
@@ -361,17 +325,13 @@ void IO::FrameReader::readStartDelimitedFrames()
     int startIndex = m_circularBuffer.findPatternKMP(startSeq, startLps);
     if (startIndex == -1)
       break;
-
-    // Discard bytes before the first start delimiter
     if (startIndex > 0)
       consumeBytes(startIndex);
 
-    // Wait for a second start delimiter to bound the frame
     int nextStartIndex = m_circularBuffer.findPatternKMP(startSeq, startLps, startSeq.size());
     if (nextStartIndex == -1)
       break;
 
-    // Compute frame payload extents
     qsizetype frameStart  = startSeq.size();
     qsizetype frameEndPos = nextStartIndex;
     qsizetype frameLength = frameEndPos - frameStart;
@@ -381,7 +341,6 @@ void IO::FrameReader::readStartDelimitedFrames()
       continue;
     }
 
-    // Sanity-check checksum position
     const auto crcPosition = frameEndPos - m_checksumLength;
     if (crcPosition < frameStart) {
       (void)m_circularBuffer.read(frameEndPos);
@@ -389,8 +348,6 @@ void IO::FrameReader::readStartDelimitedFrames()
     }
 
     auto frame = m_circularBuffer.peekRange(frameStart, frameLength - m_checksumLength);
-
-    // Validate checksum and enqueue if valid
     if (!frame.isEmpty()) {
       const auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
@@ -429,7 +386,7 @@ void IO::FrameReader::readStartEndDelimitedFrames()
   const auto& finishSeq = m_finishSequences[0];
   const auto& finishLps = m_finishSequenceLps[0];
 
-  constexpr int kMaxFramesPerCall = 10000;
+  constexpr int kMaxFramesPerCall = 32768;
   int iterations                  = 0;
   while (iterations < kMaxFramesPerCall) {
     ++iterations;
@@ -454,8 +411,6 @@ void IO::FrameReader::readStartEndDelimitedFrames()
     const auto crcPosition = finishIndex + finishSeq.size();
     const auto frameEndPos = crcPosition + m_checksumLength;
     auto frame             = m_circularBuffer.peekRange(frameStart, frameLength);
-
-    // Validate checksum and enqueue if valid
     if (!frame.isEmpty()) {
       auto result = checksum(frame, crcPosition);
       if (result == ValidationStatus::FrameOk) {
@@ -500,11 +455,13 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
   if (bufferSize < crcPosition + m_checksumLength)
     return ValidationStatus::ChecksumIncomplete;
 
+  // Compute the checksums & compare
   const auto calculated     = IO::checksum(m_checksum, frame);
   const QByteArray received = m_circularBuffer.peekRange(crcPosition, m_checksumLength);
   if (calculated == received)
     return ValidationStatus::FrameOk;
 
+  // Report checksum errors
   static constexpr qsizetype kMaxLogBytes = 128;
   qWarning() << "\n"
              << m_checksum << "failed:\n"
@@ -513,5 +470,44 @@ IO::ValidationStatus IO::FrameReader::checksum(const QByteArray& frame, qsizetyp
              << "\t- Frame:" << frame.left(kMaxLogBytes).toHex(' ')
              << (frame.size() > kMaxLogBytes ? "...(truncated)" : "");
 
+  // Return error status
   return ValidationStatus::ChecksumError;
 }
+
+//--------------------------------------------------------------------------------------------------
+// Frame finalization
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Computes the source-derived timestamp for a frame ending at the given offset.
+ */
+IO::CapturedData::SteadyTimePoint IO::FrameReader::frameTimestamp(qsizetype endOffsetExclusive)
+{
+  if (m_pendingChunks.empty())
+    return IO::CapturedData::SteadyClock::now();
+
+  qsizetype offset = std::max<qsizetype>(0, endOffsetExclusive - 1);
+  for (auto& chunk : m_pendingChunks) {
+    if (offset < chunk.bytesRemaining) {
+      const auto timestamp = chunk.nextFrameTimestamp;
+      chunk.nextFrameTimestamp += chunk.frameStep;
+      return timestamp;
+    }
+
+    offset -= chunk.bytesRemaining;
+  }
+
+  auto& chunk      = m_pendingChunks.back();
+  const auto stamp = chunk.nextFrameTimestamp;
+  chunk.nextFrameTimestamp += chunk.frameStep;
+  return stamp;
+}
+
+/**
+ * @brief Wraps extracted frame bytes into a CapturedData with proper timing.
+ */
+IO::CapturedDataPtr IO::FrameReader::buildFrame(QByteArray&& data, qsizetype endOffsetExclusive)
+{
+  return IO::makeCapturedData(std::move(data), frameTimestamp(endOffsetExclusive));
+}
+

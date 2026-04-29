@@ -23,7 +23,7 @@ Widgets.SmartDialog {
   fixedSize: false
   preferredWidth: 560
   preferredHeight: 480
-  title: qsTr("New Shortcut")
+  title: qsTr("New Deployment")
 
   property string shortcutTitle: ""
   property string iconPathValue: ""
@@ -77,7 +77,7 @@ Widgets.SmartDialog {
 
   FileDialog {
     id: outputPicker
-    title: qsTr("Save Shortcut")
+    title: qsTr("Save Deployment")
     fileMode: FileDialog.SaveFile
     currentFolder: StandardPaths.writableLocation(StandardPaths.DesktopLocation)
     defaultSuffix: Cpp_ShortcutGenerator.shortcutDefaultSuffix
@@ -243,7 +243,7 @@ Widgets.SmartDialog {
                 id: titleField
                 Layout.fillWidth: true
                 text: root.shortcutTitle
-                placeholderText: qsTr("Shortcut Name")
+                placeholderText: qsTr("Deployment Name")
                 onTextEdited: root.shortcutTitle = text
               }
 
@@ -295,7 +295,7 @@ Widgets.SmartDialog {
             TextField {
               readOnly: true
               Layout.fillWidth: true
-              text: root.projectPath
+              text: Cpp_AppState.projectFileName
               Layout.alignment: Qt.AlignVCenter
               placeholderText: qsTr("Choose a project file to begin")
             }
@@ -353,10 +353,10 @@ Widgets.SmartDialog {
             wrapMode: Label.Wrap
             font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
             color: Cpp_ThemeManager.colors["placeholder_text"]
-            text: qsTr("Double-clicking this shortcut takes someone straight to the "
-                       + "live dashboard for this project. There's no toolbar or "
-                       + "setup pane, just the data, and Serial Studio quits as "
-                       + "soon as the device disconnects.")
+            text: qsTr("Double-clicking this deployment takes someone straight to "
+                       + "the live dashboard for this project. There's no toolbar "
+                       + "or setup pane, just the data, and Serial Studio quits "
+                       + "as soon as the device disconnects.")
           }
 
           Item { Layout.fillHeight: true }
@@ -457,7 +457,7 @@ Widgets.SmartDialog {
             wrapMode: Label.Wrap
             font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
             color: Cpp_ThemeManager.colors["placeholder_text"]
-            text: qsTr("Recordings are saved to each module’s default location.")
+            text: qsTr("Recordings are saved in the Serial Studio workspace folder")
           }
 
           Item { Layout.fillHeight: true }
@@ -513,7 +513,7 @@ Widgets.SmartDialog {
           const sanitized = root.shortcutTitle.replace(/[\\/:*?"<>|]/g, "_").trim()
           const desktop = StandardPaths.writableLocation(StandardPaths.DesktopLocation)
           const suffix = "." + Cpp_ShortcutGenerator.shortcutDefaultSuffix
-          const fileName = (sanitized.length > 0 ? sanitized : "Untitled Shortcut") + suffix
+          const fileName = (sanitized.length > 0 ? sanitized : "Untitled Deployment") + suffix
           outputPicker.selectedFile = desktop + "/" + fileName
           outputPicker.open()
         }

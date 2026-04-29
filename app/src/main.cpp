@@ -32,6 +32,7 @@
 #include <cstring>
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QCryptographicHash>
 #include <QFileOpenEvent>
 #include <QLoggingCategory>
 #include <QQmlContext>
@@ -81,6 +82,8 @@
 static void cliShowVersion();
 static void cliResetSettings();
 static bool argvHasFlag(int argc, char** argv, const char* flag);
+static QString argvValueFor(int argc, char** argv, const char* flag);
+static QString shortcutIdentityHash(const QString& shortcutPath);
 static char** injectPlatformArg(int& argc, char** argv, const char* platform);
 
 #ifdef BUILD_COMMERCIAL
@@ -98,6 +101,8 @@ static void configureCanbusInterface(const QCommandLineParser& parser,
 
 #ifdef Q_OS_WINDOWS
 static void attachToConsole();
+static void setWindowsAppUserModelId(const QString& shortcutPath);
+static void enableWindowsPerformanceMode();
 static void registerWindowsFileAssociation();
 static char** adjustArgumentsForFreeType(int& argc, char** argv);
 #endif
@@ -171,9 +176,15 @@ int main(int argc, char** argv)
   if (headless)
     argv = injectPlatformArg(argc, argv, "offscreen");
 
+  // Peek at --shortcut-path before Qt parses CLI; needed early for taskbar identity
+  // and per-shortcut QML settings isolation
+  const QString earlyShortcutPath = argvValueFor(argc, argv, "--shortcut-path");
+
 #if defined(Q_OS_WIN)
   // Windows-specific fixes, attach to console and allow fonts to look decent on 1x scaling
   attachToConsole();
+  setWindowsAppUserModelId(earlyShortcutPath);
+  enableWindowsPerformanceMode();
   argv = adjustArgumentsForFreeType(argc, argv);
 #endif
 
@@ -366,12 +377,18 @@ int main(int argc, char** argv)
   moduleManager.configureUpdater();
   moduleManager.registerQmlTypes();
 
+  // Compute per-shortcut settings suffix so each .lnk has its own QML state
+  const QString settingsSuffix =
+    earlyShortcutPath.isEmpty() ? QString()
+                                : QStringLiteral("_") + shortcutIdentityHash(earlyShortcutPath);
+
   // Publish CLI flags before main.qml loads (creation-time bindings need them).
   {
     const auto ctx = moduleManager.engine().rootContext();
     ctx->setContextProperty("CLI_START_FULLSCREEN", fullscreen);
     ctx->setContextProperty("CLI_HIDE_TOOLBAR", hideToolbar);
     ctx->setContextProperty("CLI_RUNTIME_MODE", runtimeMode);
+    ctx->setContextProperty("CLI_SETTINGS_SUFFIX", settingsSuffix);
   }
 
   // Now load main.qml and the rest of the QML interface
@@ -410,16 +427,34 @@ int main(int argc, char** argv)
     });
   }
 
-  // Apply CLI export toggles before any auto-connect
+  // Apply CLI export toggles before any auto-connect.
+  //
+  // In runtime mode each export flag is set explicitly to true OR false (so a
+  // shortcut authoring CSV-only never inherits a stale MDF4 toggle from the
+  // user's normal Serial Studio settings), and persistence is suppressed so
+  // a rogue operator cannot mutate the user's main app preferences via a
+  // shortcut launch. Outside runtime mode we keep the existing opt-in
+  // behaviour: only enable when the flag is set.
 #ifdef BUILD_COMMERCIAL
-  if (parser.isSet(csvExportOpt))
-    CSV::Export::instance().setExportEnabled(true);
-  if (parser.isSet(mdfExportOpt))
-    MDF4::Export::instance().setExportEnabled(true);
-  if (parser.isSet(sessionExportOpt))
-    Sessions::Export::instance().setExportEnabled(true);
-  if (parser.isSet(consoleExportOpt))
-    Console::Export::instance().setExportEnabled(true);
+  if (runtimeMode) {
+    MDF4::Export::instance().setSettingsPersistent(false);
+    Sessions::Export::instance().setSettingsPersistent(false);
+    Console::Export::instance().setSettingsPersistent(false);
+
+    CSV::Export::instance().setExportEnabled(parser.isSet(csvExportOpt));
+    MDF4::Export::instance().setExportEnabled(parser.isSet(mdfExportOpt));
+    Sessions::Export::instance().setExportEnabled(parser.isSet(sessionExportOpt));
+    Console::Export::instance().setExportEnabled(parser.isSet(consoleExportOpt));
+  } else {
+    if (parser.isSet(csvExportOpt))
+      CSV::Export::instance().setExportEnabled(true);
+    if (parser.isSet(mdfExportOpt))
+      MDF4::Export::instance().setExportEnabled(true);
+    if (parser.isSet(sessionExportOpt))
+      Sessions::Export::instance().setExportEnabled(true);
+    if (parser.isSet(consoleExportOpt))
+      Console::Export::instance().setExportEnabled(true);
+  }
 #endif
 
   // Set dashboard FPS
@@ -782,6 +817,47 @@ static bool argvHasFlag(int argc, char** argv, const char* flag)
 }
 
 /**
+ * @brief Reads the value following @p flag in raw argv before Qt parses arguments.
+ *
+ * Used to read flags like @c --shortcut-path very early — before QApplication
+ * is constructed — so the per-shortcut taskbar identity and settings suffix
+ * can be configured before any window is created.
+ *
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @param flag The flag string to search for (e.g. "--shortcut-path").
+ * @return The value string if found, or an empty QString.
+ */
+static QString argvValueFor(int argc, char** argv, const char* flag)
+{
+  for (int i = 1; i < argc - 1; ++i)
+    if (std::strcmp(argv[i], flag) == 0)
+      return QString::fromLocal8Bit(argv[i + 1]);
+
+  return QString();
+}
+
+/**
+ * @brief Computes a stable short identity hash for a shortcut path.
+ *
+ * Returns the first 16 hex characters of SHA-1(path) — distinct enough to
+ * separate shortcuts that target the same project file, stable across launches,
+ * and short enough to fit cleanly into AUMID and QSettings category strings.
+ *
+ * @param shortcutPath The absolute path of the .lnk / .desktop / .command file.
+ * @return The 16-character hex identity, or an empty string if the path is empty.
+ */
+static QString shortcutIdentityHash(const QString& shortcutPath)
+{
+  if (shortcutPath.isEmpty())
+    return QString();
+
+  const QByteArray digest =
+    QCryptographicHash::hash(shortcutPath.toUtf8(), QCryptographicHash::Sha1);
+  return QString::fromLatin1(digest.toHex().left(16));
+}
+
+/**
  * @brief Injects "-platform <platform>" into argv before Qt reads it.
  *
  * Allocates a new argv array with two extra slots prepended after argv[0].
@@ -1074,6 +1150,53 @@ static void registerWindowsFileAssociation()
 
   // Notify the shell that file associations have changed
   SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
+}
+
+/**
+ * @brief Pins the process to a stable Windows AppUserModelID.
+ *
+ * Without an explicit AUMID, Windows derives one from the executable path and
+ * launch arguments — so normal launches and shortcut launches end up under
+ * different taskbar identities, and the taskbar can serve a stale cached icon
+ * (often the previous shortcut's custom icon) for the next normal launch.
+ * When @p shortcutPath is non-empty, a shortcut-specific AUMID is used so the
+ * running window groups under that shortcut's pinned taskbar entry alongside
+ * its custom icon; otherwise the default Serial Studio identity is used.
+ */
+static void setWindowsAppUserModelId(const QString& shortcutPath)
+{
+  QString aumid = QStringLiteral("AlexSpataru.SerialStudio");
+  if (!shortcutPath.isEmpty())
+    aumid += QStringLiteral(".Shortcut.") + shortcutIdentityHash(shortcutPath);
+
+  SetCurrentProcessExplicitAppUserModelID(reinterpret_cast<LPCWSTR>(aumid.utf16()));
+}
+
+/**
+ * @brief Opts the process out of Windows power throttling and prevents idle sleep.
+ *
+ * Disables EcoQoS execution-speed throttling for this process so the OS does not
+ * downclock telemetry-handling threads under power-saver heuristics, and signals
+ * that the system is in use to keep it from sleeping while a dashboard is live.
+ * Both calls are process-scoped, require no admin rights, and are reverted by
+ * Windows automatically when the process exits.
+ */
+static void enableWindowsPerformanceMode()
+{
+#if defined(PROCESS_POWER_THROTTLING_CURRENT_VERSION)
+  // Opt out of EcoQoS execution-speed throttling
+  PROCESS_POWER_THROTTLING_STATE state = {};
+  state.Version                        = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+  state.ControlMask                    = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
+  state.StateMask                      = 0;
+  SetProcessInformation(GetCurrentProcess(),
+                        ProcessPowerThrottling,
+                        &state,
+                        sizeof(state));
+#endif
+
+  // Prevent system sleep while Serial Studio is running
+  SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
 }
 
 /**

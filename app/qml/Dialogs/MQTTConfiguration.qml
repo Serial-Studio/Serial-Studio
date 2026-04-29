@@ -39,7 +39,7 @@ Widgets.SmartDialog {
   // Save settings
   //
   Settings {
-    category: "mqtt"
+    category: "mqtt" + app.settingsSuffix
 
     property alias host: _host.text
     property alias port: _port.text

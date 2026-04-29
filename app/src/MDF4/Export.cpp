@@ -367,8 +367,9 @@ MDF4::Export::Export()
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
+  , m_persistSettings(true)
 #else
-  : m_isOpen(false), m_exportEnabled(false)
+  : m_isOpen(false), m_exportEnabled(false), m_persistSettings(true)
 #endif
 {
 #ifdef BUILD_COMMERCIAL
@@ -494,6 +495,17 @@ void MDF4::Export::setupExternalConnections()
 }
 
 /**
+ * @brief Toggles whether export-enabled changes get written to QSettings.
+ *
+ * Set false at startup for shortcut/runtime-mode launches so that toggling
+ * export from a shortcut never bleeds back into the user's main app settings.
+ */
+void MDF4::Export::setSettingsPersistent(const bool persistent)
+{
+  m_persistSettings = persistent;
+}
+
+/**
  * Enables or disables data export.
  */
 void MDF4::Export::setExportEnabled(const bool enabled)
@@ -509,7 +521,8 @@ void MDF4::Export::setExportEnabled(const bool enabled)
       closeFile();
 
     setConsumerEnabled(allow);
-    m_settings.setValue("MDF4Export", allow);
+    if (m_persistSettings)
+      m_settings.setValue("MDF4Export", allow);
     Q_EMIT enabledChanged();
     return;
   }
@@ -517,12 +530,14 @@ void MDF4::Export::setExportEnabled(const bool enabled)
   // License invalid or missing — force disable
   closeFile();
   setConsumerEnabled(false);
-  m_settings.setValue("MDF4Export", false);
+  if (m_persistSettings)
+    m_settings.setValue("MDF4Export", false);
   Q_EMIT enabledChanged();
 #else
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
-  m_settings.setValue("MDF4Export", false);
+  if (m_persistSettings)
+    m_settings.setValue("MDF4Export", false);
   Q_EMIT enabledChanged();
 #endif
 

@@ -146,6 +146,6 @@ Yes. The dashboard, exports, reports, and notifications are completely independe
 ## See also
 
 - [Project Editor](Project-Editor.md): the editor that the lock gates.
-- [Operator Shortcuts](Operator-Shortcuts.md): pair the lock with a runtime-mode shortcut for a clean kiosk-style operator dashboard.
+- [Operator Deployments](Operator-Deployments.md): pair the lock with a runtime-mode deployment for a clean kiosk-style operator dashboard.
 - [Operation Modes](Operation-Modes.md): how Project mode, QuickPlot, and Console-Only relate to the editor overlay.
 - [Pro vs Free Features](Pro-vs-Free.md): what's included with a Pro license.

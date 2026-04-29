@@ -62,10 +62,8 @@ public:
   explicit FrameReader(QObject* parent = nullptr);
 
   inline void resetOverflowCount() { m_circularBuffer.resetOverflowCount(); }
-
-  inline moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>& queue() { return m_queue; }
-
   inline qsizetype overflowCount() const { return m_circularBuffer.overflowCount(); }
+  inline moodycamel::ReaderWriterQueue<IO::CapturedDataPtr>& queue() { return m_queue; }
 
 public slots:
   void processData(const IO::CapturedDataPtr& data);
@@ -87,14 +85,15 @@ private:
   void appendChunk(const IO::CapturedDataPtr& data);
   void discardPendingBytes(qsizetype size);
   void consumeBytes(qsizetype size);
-  [[nodiscard]] IO::CapturedData::SteadyTimePoint frameTimestamp(qsizetype endOffsetExclusive);
-  [[nodiscard]] IO::CapturedDataPtr buildFrame(QByteArray&& data, qsizetype endOffsetExclusive);
 
   void readEndDelimitedFrames();
   void readStartDelimitedFrames();
   void readStartEndDelimitedFrames();
 
   ValidationStatus checksum(const QByteArray& frame, qsizetype crcPosition);
+
+  IO::CapturedData::SteadyTimePoint frameTimestamp(qsizetype endOffsetExclusive);
+  IO::CapturedDataPtr buildFrame(QByteArray&& data, qsizetype endOffsetExclusive);
 
 private:
   QString m_checksum;
@@ -109,6 +108,6 @@ private:
   SerialStudio::FrameDetection m_frameDetectionMode;
   CircularBuffer<QByteArray, char> m_circularBuffer;
   std::deque<PendingChunk> m_pendingChunks;
-  moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue{4096};
+  moodycamel::ReaderWriterQueue<IO::CapturedDataPtr> m_queue{65536};
 };
 }  // namespace IO

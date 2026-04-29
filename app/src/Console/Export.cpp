@@ -190,8 +190,9 @@ Console::Export::Export()
       {.queueCapacity = 8192, .flushThreshold = 1024, .timerIntervalMs = 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
+  , m_persistSettings(true)
 #else
-  : m_isOpen(false), m_exportEnabled(false)
+  : m_isOpen(false), m_exportEnabled(false), m_persistSettings(true)
 #endif
 {
 #ifdef BUILD_COMMERCIAL
@@ -294,6 +295,14 @@ void Console::Export::setupExternalConnections()
 }
 
 /**
+ * @brief Toggles whether export-enabled changes get written to QSettings.
+ */
+void Console::Export::setSettingsPersistent(const bool persistent)
+{
+  m_persistSettings = persistent;
+}
+
+/**
  * @brief Enables or disables data export.
  */
 void Console::Export::setExportEnabled(const bool enabled)
@@ -305,7 +314,8 @@ void Console::Export::setExportEnabled(const bool enabled)
       closeFile();
 
     setConsumerEnabled(enabled);
-    m_settings.setValue("ConsoleExport", enabled);
+    if (m_persistSettings)
+      m_settings.setValue("ConsoleExport", enabled);
     Q_EMIT enabledChanged();
     return;
   }
@@ -315,7 +325,8 @@ void Console::Export::setExportEnabled(const bool enabled)
 
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
-  m_settings.setValue("ConsoleExport", false);
+  if (m_persistSettings)
+    m_settings.setValue("ConsoleExport", false);
   Q_EMIT enabledChanged();
 
   if (enabled)

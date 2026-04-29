@@ -487,6 +487,7 @@ Sessions::Export::Export()
       DataModel::FrameConsumerConfig{8192, 1024, 1000})
   , m_isOpen(false)
   , m_exportEnabled(false)
+  , m_persistSettings(true)
   , m_rawBytesQueue(8192)
   , m_operationMode(static_cast<int>(AppState::instance().operationMode()))
 {
@@ -644,8 +645,17 @@ void Sessions::Export::setExportEnabled(const bool enabled)
   // Apply and persist the new state
   m_exportEnabled.store(allow, std::memory_order_relaxed);
   setConsumerEnabled(allow);
-  m_settings.setValue("SQLiteExport/Enabled", allow);
+  if (m_persistSettings)
+    m_settings.setValue("SQLiteExport/Enabled", allow);
   Q_EMIT enabledChanged();
+}
+
+/**
+ * @brief Toggles whether export-enabled changes get written to QSettings.
+ */
+void Sessions::Export::setSettingsPersistent(const bool persistent)
+{
+  m_persistSettings = persistent;
 }
 
 /**

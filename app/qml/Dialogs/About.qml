@@ -195,7 +195,7 @@ SmartDialog {
         text: qsTr("Donate")
         Layout.fillWidth: true
         visible: !app.proVersion
-        onClicked: donateDialog.show()
+        onClicked: donateDialog.activate()
       }
 
       //
