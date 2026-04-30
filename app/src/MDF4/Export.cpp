@@ -93,7 +93,6 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   if (!IO::ConnectionManager::instance().isConnected())
     return;
 
-  // Create the output file on first batch
   if (!isResourceOpen() && !items.empty()) {
     createFile(items.front()->data);
     m_steadyBaseline = items.front()->timestamp;
@@ -129,8 +128,7 @@ void MDF4::ExportWorker::processItems(const std::vector<DataModel::TimestampedFr
   // Guard mdflib calls against exceptions propagating through Qt's event loop
   try {
     for (const auto& frame : items) {
-      // Monotonic offset from session start, shifted onto the system-clock
-      // epoch so downstream tools see wall-clock timestamps
+      // Monotonic offset from session start, shifted onto system-clock epoch
       const qint64 offsetNs = monotonicFrameNs(frame->timestamp, m_steadyBaseline);
       const auto systemEpochNs =
         std::chrono::duration_cast<std::chrono::nanoseconds>(m_systemBaseline.time_since_epoch())
@@ -309,9 +307,7 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
         info.channels.push_back(channel);
         info.isNumeric.push_back(isNum);
 
-        // Create raw (pre-transform) channel. Always push the pointer — null
-        // included — so info.rawChannels[i] stays aligned with info.channels[i]
-        // and the writer's null guard in writeDatasets() handles the miss.
+        // Raw (pre-transform) channel — always pushed (null included) to keep indices aligned
         auto* rawChannel = channelGroup->CreateChannel();
         if (rawChannel) {
           const auto rawName = dataset.title.toStdString() + " (raw)";

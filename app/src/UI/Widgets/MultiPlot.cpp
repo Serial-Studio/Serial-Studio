@@ -307,11 +307,10 @@ void Widgets::MultiPlot::updateData()
     const auto& data = UI::Dashboard::instance().multiplotData(m_index);
     const auto& X    = *data.x;
 
-    // Ensure output container has one QVector<QPointF> per series
-    // Only reallocate if size significantly different to avoid thrashing
+    // One QVector<QPointF> per series; resize only when count changes
     const qsizetype plotCount = data.y.size();
     if (m_data.size() != plotCount) {
-      // Only squeeze if we're shrinking significantly (>20% waste)
+      // Squeeze only when shrinking by >20% to avoid thrashing
       if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2) {
         m_data.clear();
         m_data.squeeze();
@@ -400,7 +399,6 @@ void Widgets::MultiPlot::calculateAutoScaleRange()
     m_minY = std::numeric_limits<double>::max();
     m_maxY = std::numeric_limits<double>::lowest();
 
-    // Loop through each dataset and find the min and max values
     auto accumulate = [this](const QList<QPointF>& curve) {
       for (auto i = 0; i < curve.count(); ++i) {
         const double value = curve[i].y();

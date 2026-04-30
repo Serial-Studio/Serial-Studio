@@ -162,7 +162,7 @@ void Widgets::Gyroscope::updateData()
     }
   }
 
-  // Update the values with EMA filtering for smooth display
+  // EMA filter for smooth display
   constexpr double kAlpha = 0.4;
   if (!m_displayFilterInitialized) {
     if (hasYaw)

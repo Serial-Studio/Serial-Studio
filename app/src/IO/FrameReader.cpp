@@ -61,7 +61,6 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
   if (m_operationMode == SerialStudio::ConsoleOnly)
     return;
 
-  // Flag to decide if we should emit signals
   bool framesEnqueued = false;
 
   // Passthrough when no delimiters are configured
@@ -105,7 +104,6 @@ void IO::FrameReader::processData(const CapturedDataPtr& data)
         break;
     }
 
-    // Check if we extracted any frames
     framesEnqueued = (m_queue.size_approx() > initialSize);
   }
 

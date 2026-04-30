@@ -25,13 +25,7 @@
 #include <QCryptographicHash>
 
 //--------------------------------------------------------------------------------------------------
-// Obfuscated salt storage
-//--------------------------------------------------------------------------------------------------
-// The salt is split into 4 XOR-masked 16-bit fragments stored in volatile
-// globals. This prevents the compiler from emitting the salt as a single
-// 64-bit immediate (mov/movk sequence), forcing an attacker to trace through
-// the reassembly logic to extract it. The masks are derived at build time
-// from the salt itself so they differ per build.
+// Obfuscated salt storage — split into 4 XOR-masked 16-bit volatiles to defeat constant folding
 //--------------------------------------------------------------------------------------------------
 
 // clang-format off
@@ -169,7 +163,7 @@ const QString& Licensing::CommercialToken::instanceName() const noexcept
 }
 
 //--------------------------------------------------------------------------------------------------
-// Token construction (used by LemonSqueezy / Trial)
+// Token construction
 //--------------------------------------------------------------------------------------------------
 
 /**

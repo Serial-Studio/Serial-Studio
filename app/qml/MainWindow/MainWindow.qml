@@ -203,8 +203,7 @@ Widgets.SmartWindow {
     // Obtain document title from JSON project editor
     root.updateDocumentTitle()
 
-    // Always present the window immediately. The connecting overlay covers the
-    // empty dashboard while the device is handshaking.
+    // Present immediately; the connecting overlay covers the dashboard during handshake.
     root.presentWindow()
 
     // Defer dialogs and update checks until after window is fully rendered

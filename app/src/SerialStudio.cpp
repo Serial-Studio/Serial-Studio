@@ -82,9 +82,7 @@ bool SerialStudio::proWidgetsEnabled()
  */
 static bool transformUsesNotifications(const QString& code)
 {
-  // Quick substring screen — matches notify( / notifyInfo( / notifyWarning( /
-  // notifyCritical( / notifyClear(. Any transform referencing these identifiers
-  // is a Pro-tier feature.
+  // Substring screen for the notify*( identifier family
   return code.contains(QStringLiteral("notify(")) || code.contains(QStringLiteral("notifyInfo("))
       || code.contains(QStringLiteral("notifyWarning("))
       || code.contains(QStringLiteral("notifyCritical("))
@@ -741,7 +739,7 @@ QColor SerialStudio::getDeviceColor(const int sourceId)
   const auto bg    = theme->getColor(QStringLiteral("base"));
   const bool dark  = bg.isValid() && bg.lightnessF() < 0.5;
 
-  // Saturate and adjust lightness for readability as text
+  // Saturate and pick a lightness suitable for text against the background
   float h, s, l, a;
   base.getHslF(&h, &s, &l, &a);
   s = qBound(0.45f, s * 2.5f, 0.85f);

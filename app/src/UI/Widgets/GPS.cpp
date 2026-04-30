@@ -187,7 +187,6 @@ void Widgets::GPS::paint(QPainter* painter)
   // Configure painter hints
   painter->setRenderHint(QPainter::Antialiasing);
 
-  // Get the dimenstions of the rendered widget in pixels
   const QSize viewport = size().toSize();
 
   // Paint widget data
@@ -736,8 +735,7 @@ void Widgets::GPS::updateTiles()
   const int tileSize          = 256;
   const double scaledTileSize = tileSize * scale;
 
-  // Current map center in tile coordinates (convert from fractional to base
-  // zoom)
+  // Current map center in tile coordinates at base zoom
   const QPointF center = m_centerTile / scale;
 
   // Viewport size in pixels
@@ -747,7 +745,6 @@ void Widgets::GPS::updateTiles()
   const int tilesX = qCeil(viewSize.width() / scaledTileSize) + 1;
   const int tilesY = qCeil(viewSize.height() / scaledTileSize) + 1;
 
-  // Loop through the visible tile range
   for (int dx = -tilesX / 2; dx <= tilesX / 2; ++dx) {
     for (int dy = -tilesY / 2; dy <= tilesY / 2; ++dy) {
       // Compute tile X/Y coordinates relative to the map center
@@ -774,8 +771,7 @@ void Widgets::GPS::updateTiles()
       if (m_enableReferenceLayer)
         requestTileIfNeeded(referenceUrl(tx, ty, baseZoom));
 
-      // Preload next zoom level tiles for smooth zoom transitions
-      // Only preload when we're close to the next zoom level (> 0.7)
+      // Preload next zoom level tiles when fractional zoom is near transition
       if (fractionalZoom > 0.7)
         preloadNextZoomTiles(tx, ty, baseZoom);
     }
@@ -999,18 +995,14 @@ void Widgets::GPS::paintMap(QPainter* painter, const QSize& view)
   const int tileSize          = 256;
   const double scaledTileSize = tileSize * scale;
 
-  // m_centerTile is at fractional zoom, we need base zoom coordinates for tile
-  // fetching Relationship: tileCoord_baseZoom = tileCoord_fractionalZoom /
-  // 2^(fractionalZoom)
+  // Convert m_centerTile from fractional zoom to base zoom for tile fetching
   const QPointF centerTileBase = m_centerTile / scale;
 
   // Integer tile coordinates of the center tile at base zoom
   const int centerX = static_cast<int>(centerTileBase.x());
   const int centerY = static_cast<int>(centerTileBase.y());
 
-  // Pixel offset (fractional part times scaled tile size for smooth
-  // positioning) Round to integer pixels to avoid tile seams during
-  // auto-tracking
+  // Pixel offset rounded to integer pixels to avoid seams during auto-tracking
   const int offsetX = qRound((centerTileBase.x() - centerX) * scaledTileSize);
   const int offsetY = qRound((centerTileBase.y() - centerY) * scaledTileSize);
 

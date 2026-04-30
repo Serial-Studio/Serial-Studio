@@ -877,8 +877,7 @@ SmartDialog {
                 }
               }
 
-              // Recover gracefully if the Chromium render process dies
-              // (e.g. GPU sandbox failure on Linux) instead of crashing SS.
+              // Survive Chromium render-process death instead of crashing.
               onRenderProcessTerminated: function(terminationStatus, exitCode) {
                 console.warn("ExtensionManager readme view: render process terminated",
                              terminationStatus, "exit", exitCode)

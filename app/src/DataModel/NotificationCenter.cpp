@@ -275,7 +275,6 @@ void DataModel::NotificationCenter::clearChannel(const QString& channel)
   m_channelCounts.remove(chan);
 
   // Reset dedup memory for this channel so identical events can post again.
-  // QHash::erase with iterator is valid mid-iteration on the same bucket.
   for (auto it = m_lastSeen.begin(); it != m_lastSeen.end();)
     if (it.key().channel == chan)
       it = m_lastSeen.erase(it);
@@ -435,8 +434,7 @@ void DataModel::NotificationCenter::appendEvent(Event&& e)
   if (!chan.isEmpty())
     m_channelCounts[chan] += 1;
 
-  // Bump unread only for non-Info levels so background Info chatter doesn't
-  // train users to ignore the badge
+  // Skip unread bumps for Info; background chatter shouldn't raise the badge.
   if (level != Info) {
     ++m_unreadCount;
     Q_EMIT unreadCountChanged();
@@ -636,8 +634,7 @@ void DataModel::NotificationCenter::installScriptApi(QJSEngine* js)
   js->evaluate(QStringLiteral("var Info = 0, Warning = 1, Critical = 2;\n"));
 
   if (isProTierActive()) {
-    // Route calls through the NotificationCenter singleton with CppOwnership
-    // so the engine can't accidentally delete it on destruction
+    // Route through the singleton with CppOwnership; the engine must not delete it.
     auto* nc = &instance();
     QQmlEngine::setObjectOwnership(nc, QQmlEngine::CppOwnership);
 

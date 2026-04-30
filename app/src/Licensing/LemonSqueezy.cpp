@@ -383,7 +383,7 @@ void Licensing::LemonSqueezy::readSettings()
   m_license          = m_simpleCrypt.decryptToString(license);
   auto decryptedData = m_simpleCrypt.decryptToByteArray(data);
 
-  // Check if we can use application offline
+  // Compute remaining offline grace period from last successful check
   m_gracePeriod = 0;
   if (!dt.isEmpty()) {
     auto dateTime  = m_simpleCrypt.decryptToString(dt);
@@ -770,7 +770,6 @@ void Licensing::LemonSqueezy::readActivationResponse(const QByteArray& data)
     return;
   }
 
-  // Create a validation call to save settings
   QMetaObject::invokeMethod(this, [=, this] {
     m_busy             = false;
     m_instanceId       = instanceId;

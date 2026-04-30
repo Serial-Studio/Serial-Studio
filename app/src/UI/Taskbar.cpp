@@ -240,11 +240,7 @@ int UI::Taskbar::activeGroupIndex() const
  */
 QVariantList UI::Taskbar::groupModel() const
 {
-  // Auto-generated workspaces (Overview, All Data, per-source group entries)
-  // were removed in v3.3 — users now explicitly create and manage their own
-  // workspaces via the project editor. This method is retained for API
-  // stability; workspaceModel() builds its result purely from user-defined
-  // entries in ProjectModel::activeWorkspaces().
+  // Retained for API stability; workspaces are now user-defined via workspaceModel()
   return QVariantList();
 }
 
@@ -544,9 +540,7 @@ void UI::Taskbar::setActiveGroupId(int groupId)
           m_taskbarButtons->appendRow(child);
         }
 
-        // Legacy "All Data" fallback — groupId == -2 is no longer produced by
-        // groupModel() in v3.3 but is still honoured here for settings that may
-        // reference it from older sessions.
+        // Legacy "All Data" fallback for older session settings (groupId == -2)
         else if (groupId == -2) {
           child->setData(QStringLiteral("%1 (%2)").arg(name, groupName),
                          TaskbarModel::WidgetNameRole);
@@ -712,7 +706,6 @@ void UI::Taskbar::setWindowManager(UI::WindowManager* manager)
   if (!manager)
     return;
 
-  // Store the manager and establish bidirectional link
   m_windowManager = manager;
   m_windowManager->setTaskbar(this);
 

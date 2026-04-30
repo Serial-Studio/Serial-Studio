@@ -53,10 +53,7 @@ Item {
   property real contentW: 0
   property real contentH: 0
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Public interface
-  // ─────────────────────────────────────────────────────────────────────────
-
+  // Public interface.
   function reloadDiagram() {
     layoutDiagram(
       Cpp_JSON_ProjectModel.sourcesForDiagram(),
@@ -71,27 +68,7 @@ Item {
     flickable.contentY = 0
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Layout engine
-  //
-  // Column layout (left → right):
-  //   Col 0  Device cards   (one per source; always shown)
-  //   Col 1  Frame Parser / Action cards (FP per source; actions below)
-  //   Col 2  Group cards   (one per group)
-  //   Col 3  Dataset pills (stacked per group)
-  //
-  // Each group occupies a "slot" of height:
-  //   slotH = max(nodeH, dsCount*(chipH+vGap) - vGap)
-  //
-  // The group card is vertically centred within its slot.
-  // The dataset block is vertically centred within the same slot.
-  // The frame-parser card for a source is centred over the total slot
-  // height of all groups belonging to that source.
-  // The device card is centred over the frame-parser card (same y).
-  // Action cards sit below all groups in the frame-parser column,
-  // with dashed arrows pointing from each action to its target device.
-  // ─────────────────────────────────────────────────────────────────────────
-
+  // Columns L→R: Device | Frame Parser/Actions | Groups | Dataset pills.
   function layoutDiagram(sources, groups, actions) {
     const newNodes  = []
     const newArrows = []
@@ -108,9 +85,7 @@ Item {
       return Math.max(nodeH, dsCount * (chipH + vGap) - vGap)
     }
 
-    // ── per-source vertical state ──────────────────────────────────────────
-    // groupY[sid]     = running y-cursor for placing next group in this source
-    // srcTotalH[sid]  = sum of all slot heights (incl inter-slot gaps) for source
+    // groupY[sid] = next-group y-cursor; srcTotalH[sid] = total slot height with gaps.
     const groupY    = {}
     const srcTotalH = {}
 
@@ -300,9 +275,7 @@ Item {
         groupY[sid] = slotTop + sh + vGap
     }
 
-    // ── place action cards ──────────────────────────────────────────────────
-    // Actions are placed at the frame-parser column, below all groups,
-    // with dashed arrows pointing from the action to the target device.
+    // Action cards stack below the frame-parser column with dashed arrows to the device.
     if (actions.length > 0) {
       // Find the y start for actions: below all content so far
       let maxGroupY = pad
@@ -358,10 +331,7 @@ Item {
     canvas.requestPaint()
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Icon helpers
-  // ─────────────────────────────────────────────────────────────────────────
-
+  // Icon helpers.
   function busTypeIcon(busType) {
     const base = "qrc:/rcc/icons/devices/drivers/"
     switch (busType) {
@@ -413,10 +383,7 @@ Item {
     }
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Reactive connections
-  // ─────────────────────────────────────────────────────────────────────────
-
+  // Reactive connections.
   Connections {
     target: Cpp_JSON_ProjectModel
     function onGroupsChanged()     { root.reloadDiagram() }
@@ -431,10 +398,7 @@ Item {
   onWidthChanged:   if (visible && width > 0) reloadDiagram()
   onHeightChanged:  if (visible && height > 0) reloadDiagram()
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Flickable + scaled canvas
-  // ─────────────────────────────────────────────────────────────────────────
-
+  // Flickable + scaled canvas.
   Flickable {
     id: flickable
 
@@ -528,8 +492,7 @@ Item {
             // Arrowhead length
             const hl  = 7 * z
 
-            // End the curve at the back of the arrowhead so the
-            // tip touches the target node cleanly.
+            // End curve at the arrowhead's back so the tip touches the target cleanly.
             const x2a = x2 - hl
             const mx  = (x1 + x2a) / 2
 
@@ -722,10 +685,7 @@ Item {
     }
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Empty-state placeholder
-  // ─────────────────────────────────────────────────────────────────────────
-
+  // Empty-state placeholder.
   Column {
     spacing: 8
     anchors.centerIn: parent

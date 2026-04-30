@@ -13,11 +13,7 @@ import QtQuick.Controls
 
 import "../Widgets" as Widgets
 
-//
-// Modal progress dialog shown while a report export is in flight.
-// Opens automatically whenever Cpp_Sessions_Manager.pdfExportBusy flips
-// to true and closes when it falls back to false.
-//
+// Modal progress dialog driven by Cpp_Sessions_Manager.pdfExportBusy.
 Widgets.SmartDialog {
   id: root
 

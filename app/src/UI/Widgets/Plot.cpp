@@ -443,7 +443,6 @@ bool Widgets::Plot::computeMinMaxValues(double& min,
     min = std::numeric_limits<double>::max();
     max = std::numeric_limits<double>::lowest();
 
-    // Loop through the plot data and update the min and max
     for (auto i = 0; i < m_data.size(); ++i) {
       const double value = extractor(m_data[i]);
       if (std::isfinite(value)) {

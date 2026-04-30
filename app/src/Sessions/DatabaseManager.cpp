@@ -434,7 +434,7 @@ void Sessions::DatabaseManager::openDatabase(const QString& filePath)
     return;
   }
 
-  // WAL lets the Export writer and this reader coexist without locks
+  // WAL: writer and reader coexist without locks
   QSqlQuery pragma(m_db);
   pragma.exec("PRAGMA journal_mode=WAL");
   pragma.exec("PRAGMA busy_timeout=5000");
@@ -1382,7 +1382,7 @@ void Sessions::DatabaseManager::createSchema(QSqlQuery& q)
          "  is_virtual  INTEGER NOT NULL DEFAULT 0"
          ")");
 
-  // One row per dataset per frame; surrogate PK lets same-ns frames coexist
+  // One row per dataset per frame; surrogate PK allows same-ns frames to coexist
   q.exec("CREATE TABLE IF NOT EXISTS readings ("
          "  reading_id          INTEGER PRIMARY KEY AUTOINCREMENT,"
          "  session_id          INTEGER NOT NULL,"

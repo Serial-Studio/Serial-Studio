@@ -136,11 +136,7 @@ bool Misc::ShortcutGenerator::writeWindowsLnk(const QString& outputPath,
   link->SetDescription(reinterpret_cast<LPCWSTR>(title.utf16()));
   link->SetIconLocation(reinterpret_cast<LPCWSTR>(resolved_icon.utf16()), 0);
 
-  // Stamp a per-shortcut AppUserModelID so this shortcut groups under its own
-  // taskbar entry (with its own custom icon) and so a normal Serial Studio
-  // launch never inherits a cached icon from this shortcut. The AUMID is
-  // derived from the shortcut's absolute path; main.cpp recomputes the same
-  // value when launched via --shortcut-path.
+  // Per-shortcut AppUserModelID — derived from path, recomputed in main.cpp via --shortcut-path
   IPropertyStore* propStore = nullptr;
   if (SUCCEEDED(link->QueryInterface(IID_IPropertyStore, reinterpret_cast<void**>(&propStore)))
       && propStore != nullptr) {

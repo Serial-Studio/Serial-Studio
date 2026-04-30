@@ -30,14 +30,7 @@
 // Compatibility shim for Lua 5.1 / 5.2 names removed in 5.3 / 5.4
 //--------------------------------------------------------------------------------------------------
 
-// Re-introduces math.log10, math.pow, math.atan2, math.frexp, math.ldexp,
-// math.cosh / sinh / tanh, math.mod, table.maxn, table.getn, unpack, and a
-// portable bit32 implementation (with bitwise ops mapped to // / // % / 2^k).
-//
-// Notes:
-// - math.atan in 5.4 already accepts a 2nd arg, so atan2(y, x) -> math.atan(y, x).
-// - bit32.* uses 32-bit unsigned wrap semantics, like the original library.
-// - Everything is pure Lua so the watchdog hook still applies.
+// Re-adds 5.1/5.2 math/table/unpack/bit32 names — pure Lua, watchdog applies.
 static const char* const kLuaCompat = R"LUA(
 -- math: removed/renamed in 5.3+
 if math.log10 == nil then math.log10 = function(x) return math.log(x, 10) end end

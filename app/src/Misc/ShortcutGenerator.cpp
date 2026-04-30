@@ -210,7 +210,7 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
   QStringList args = buildArguments(
     resolvedProject, fullscreen, actionsPanel, csvExport, mdfExport, sessionExport, consoleExport);
 
-  // Lets the relaunched app offer to delete the shortcut when its project is gone.
+  // Pass shortcut path so a relaunch can offer to delete it if the project is gone
   args << QStringLiteral("--shortcut-path") << resolvedPath;
 
   QString resolvedIcon = iconPath;

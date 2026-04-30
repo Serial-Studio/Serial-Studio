@@ -116,8 +116,7 @@ Item {
       return
     }
 
-    // Otherwise, figure out which to collapse by trying combinations.
-    // Sort by priority ascending (lowest priority collapses first).
+    // Sort by collapsePriority ascending (lowest collapses first).
     sections.sort(function(a, b) {
       return a.collapsePriority - b.collapsePriority
     })

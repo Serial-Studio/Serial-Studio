@@ -17,17 +17,17 @@
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../src/API/Server.cpp" line="457"/>
+        <location filename="../../src/API/Server.cpp" line="456"/>
         <source>Unable to start API TCP server</source>
         <translation>API TCP 서버를 시작할 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="508"/>
+        <location filename="../../src/API/Server.cpp" line="507"/>
         <source>Allow External API Connections?</source>
         <translation>외부 API 연결을 허용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="509"/>
+        <location filename="../../src/API/Server.cpp" line="508"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -36,17 +36,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 신뢰할 수 있는 네트워크에서만 활성화하십시오. 신뢰할 수 없는 클라이언트는 실시간 데이터를 읽거나 장치에 명령을 전송할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="540"/>
+        <location filename="../../src/API/Server.cpp" line="539"/>
         <source>Unable to restart API TCP server</source>
         <translation>API TCP 서버를 재시작할 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1181"/>
+        <location filename="../../src/API/Server.cpp" line="1180"/>
         <source>API server</source>
         <translation>API 서버</translation>
     </message>
     <message>
-        <location filename="../../src/API/Server.cpp" line="1181"/>
+        <location filename="../../src/API/Server.cpp" line="1180"/>
         <source>Invalid pending connection</source>
         <translation>잘못된 대기 중인 연결</translation>
     </message>
@@ -337,39 +337,39 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Audio</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="85"/>
         <source>No Microphone Detected</source>
         <translation>마이크가 감지되지 않음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="99"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="94"/>
         <source>Connect a mic or check your settings</source>
         <translation>마이크를 연결하거나 설정을 확인하세요</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="119"/>
         <source>Input Device</source>
         <translation>입력 장치</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="141"/>
         <source>Sample Rate</source>
         <translation>샘플 레이트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="168"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="246"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="241"/>
         <source>Sample Format</source>
         <translation>샘플 형식</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="190"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="268"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="263"/>
         <source>Channels</source>
         <translation>채널</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="219"/>
         <source>Output Device</source>
         <translation>출력 장치</translation>
     </message>
@@ -565,63 +565,63 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>CSV 파일에는 진행하려면 최소 하나의 데이터 행이 포함되어야 합니다. 파일을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="661"/>
+        <location filename="../../src/CSV/Player.cpp" line="660"/>
         <source>Invalid CSV</source>
         <translation>잘못된 CSV</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="662"/>
+        <location filename="../../src/CSV/Player.cpp" line="661"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV 파일에 데이터 또는 헤더가 포함되어 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="671"/>
+        <location filename="../../src/CSV/Player.cpp" line="670"/>
         <source>Select a date/time column</source>
         <translation>날짜/시간 열 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="671"/>
-        <location filename="../../src/CSV/Player.cpp" line="683"/>
+        <location filename="../../src/CSV/Player.cpp" line="670"/>
+        <location filename="../../src/CSV/Player.cpp" line="682"/>
         <source>Set interval manually</source>
         <translation>간격 수동 설정</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="673"/>
+        <location filename="../../src/CSV/Player.cpp" line="672"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV 날짜/시간 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="674"/>
+        <location filename="../../src/CSV/Player.cpp" line="673"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>날짜/시간 데이터 처리 방법 선택:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="686"/>
+        <location filename="../../src/CSV/Player.cpp" line="685"/>
         <source>Set Interval</source>
         <translation>간격 설정</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="687"/>
+        <location filename="../../src/CSV/Player.cpp" line="686"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>행 간 간격을 밀리초 단위로 입력하십시오:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="703"/>
+        <location filename="../../src/CSV/Player.cpp" line="702"/>
         <source>Select Date/Time Column</source>
         <translation>날짜/시간 열 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="704"/>
+        <location filename="../../src/CSV/Player.cpp" line="703"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>날짜/시간 데이터가 포함된 열을 선택하십시오:</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="714"/>
+        <location filename="../../src/CSV/Player.cpp" line="713"/>
         <source>Invalid Selection</source>
         <translation>잘못된 선택</translation>
     </message>
     <message>
-        <location filename="../../src/CSV/Player.cpp" line="714"/>
+        <location filename="../../src/CSV/Player.cpp" line="713"/>
         <source>The selected column is not valid.</source>
         <translation>선택한 열이 유효하지 않습니다.</translation>
     </message>
@@ -1334,7 +1334,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>선택 영역 서식 지정	Ctrl+I</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="455"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="453"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -1393,12 +1393,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="758"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="751"/>
         <source>Select Template…</source>
         <translation>템플릿 선택…</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="483"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="481"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -1455,26 +1455,26 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
  */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="635"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="628"/>
         <source>Engine error</source>
         <translation>엔진 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="661"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="676"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="696"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="707"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="654"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="669"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="689"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="700"/>
         <source>Error: %1</source>
         <translation>오류: %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="668"/>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="700"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="661"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="693"/>
         <source>Error: transform() not defined</source>
         <translation>오류: transform()이 정의되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="682"/>
+        <location filename="../../src/DataModel/DatasetTransformEditor.cpp" line="675"/>
         <source>Error: transform() must return a number</source>
         <translation>오류: transform()은 숫자를 반환해야 함</translation>
     </message>
@@ -1482,29 +1482,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="722"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="832"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="716"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="826"/>
         <source>Channel %1</source>
         <translation>채널 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="843"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="837"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="731"/>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="848"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="725"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="842"/>
         <source>Quick Plot</source>
         <translation>빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="736"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="730"/>
         <source>Quick Plot Data</source>
         <translation>빠른 플롯 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/FrameBuilder.cpp" line="747"/>
+        <location filename="../../src/DataModel/FrameBuilder.cpp" line="741"/>
         <source>Multiple Plots</source>
         <translation>다중 플롯</translation>
     </message>
@@ -1615,32 +1615,32 @@ Any unsaved changes are lost. Continue?</source>
 저장하지 않은 변경 사항은 손실됩니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="338"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="336"/>
         <source>Select Javascript file to import</source>
         <translation>가져올 Javascript 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="338"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="336"/>
         <source>Select Lua file to import</source>
         <translation>가져올 Lua 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="365"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="363"/>
         <source>Code Validation Successful</source>
         <translation>코드 검증 성공</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="366"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="364"/>
         <source>No syntax errors detected in the parser code.</source>
         <translation>파서 코드에서 구문 오류가 감지되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="479"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="477"/>
         <source>Select Frame Parser Template</source>
         <translation>프레임 파서 템플릿 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="480"/>
+        <location filename="../../src/DataModel/JsCodeEditor.cpp" line="478"/>
         <source>Choose a template to load:</source>
         <translation>로드할 템플릿 선택:</translation>
     </message>
@@ -1725,971 +1725,971 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::ProjectEditor</name>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1316"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1300"/>
         <source>Project Information</source>
         <translation>프로젝트 정보</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1326"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1310"/>
         <source>Project Title</source>
         <translation>프로젝트 제목</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1327"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1311"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1328"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1312"/>
         <source>Name or description of the project</source>
         <translation>프로젝트의 이름 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1592"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1576"/>
         <source>Frame Detection</source>
         <translation>프레임 감지</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1608"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1592"/>
         <source>Frame Detection Method</source>
         <translation>프레임 감지 방법</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1609"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1593"/>
         <source>Select how incoming data frames are identified</source>
         <translation>수신 데이터 프레임 식별 방법 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1619"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1603"/>
         <source>Hexadecimal Delimiters</source>
         <translation>16진수 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1620"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1604"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>프레임 시작/종료 시퀀스를 16진수 값으로 입력</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1636"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1620"/>
         <source>Frame Start Delimiter</source>
         <translation>프레임 시작 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1637"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1621"/>
         <source>e.g. /*</source>
         <translation>예: /*</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1638"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1622"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>데이터 프레임의 시작을 표시하는 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1650"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1634"/>
         <source>Frame End Delimiter</source>
         <translation>프레임 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1651"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1635"/>
         <source>e.g. */</source>
         <translation>예: */</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1652"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1636"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>데이터 프레임의 끝을 표시하는 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1659"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1643"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>페이로드 처리 및 검증</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1670"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1654"/>
         <source>Data Conversion Method</source>
         <translation>데이터 변환 방법</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1671"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1655"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>수신된 바이너리 데이터를 파싱하기 전에 디코딩하는 방법 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1687"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1671"/>
         <source>Checksum Algorithm</source>
         <translation>체크섬 알고리즘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1688"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1672"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>프레임 검증에 사용할 체크섬 알고리즘 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1355"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1339"/>
         <source>Group Information</source>
         <translation>그룹 정보</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1365"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1349"/>
         <source>Group Title</source>
         <translation>그룹 제목</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1366"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1350"/>
         <source>Untitled Group</source>
         <translation>제목 없는 그룹</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1367"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1351"/>
         <source>Title or description of this dataset group</source>
         <translation>이 데이터셋 그룹의 제목 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1421"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1405"/>
         <source>Composite Widget</source>
         <translation>복합 위젯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1422"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1406"/>
         <source>Select how this group of datasets should be visualized (optional)</source>
         <translation>이 데이터셋 그룹을 시각화할 방법 선택 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1432"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1416"/>
         <source>Image Configuration</source>
         <translation>이미지 구성</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2125"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2109"/>
         <source>Virtual Dataset</source>
         <translation>가상 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2126"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2110"/>
         <source>Virtual datasets compute their value from transforms and data tables, they do not require a frame index</source>
         <translation>가상 데이터셋은 변환 및 데이터 테이블에서 값을 계산하며 프레임 인덱스가 필요하지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2511"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2495"/>
         <source>Auto-detect</source>
         <translation>자동 감지</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2511"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2495"/>
         <source>Manual Delimiters</source>
         <translation>수동 구분 기호</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1448"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1432"/>
         <source>Detection Mode</source>
         <translation>감지 모드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="959"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="962"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="953"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="956"/>
         <source>Frame Parser</source>
         <translation>프레임 파서</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="993"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="994"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1093"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="984"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="985"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1081"/>
         <source>Groups</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1111"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1122"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1123"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1097"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1108"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1109"/>
         <source>Shared Memory</source>
         <translation>공유 메모리</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1111"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1129"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1130"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3441"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1097"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1115"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1116"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3407"/>
         <source>Dataset Values</source>
         <translation>데이터셋 값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1158"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1169"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1170"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1143"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1154"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1155"/>
         <source>Workspaces</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1376"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1886"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1360"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1870"/>
         <source>Device %1</source>
         <translation>장치 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1394"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1517"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1378"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1501"/>
         <source>Input Device</source>
         <translation>입력 장치</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1395"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1379"/>
         <source>Select which connected device provides data for this group</source>
         <translation>이 그룹에 데이터를 제공할 연결된 장치 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1450"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1434"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>자동 감지는 JPEG/PNG 매직 바이트를 읽고, 수동은 명시적 시작/종료 시퀀스 사용</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1460"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1444"/>
         <source>Start Sequence (Hex)</source>
         <translation>시작 시퀀스 (16진수)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1461"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1445"/>
         <source>e.g. FF D8 FF</source>
         <translation>예: FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1462"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1446"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>이미지 프레임의 시작을 표시하는 16진수 바이트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1471"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1455"/>
         <source>End Sequence (Hex)</source>
         <translation>종료 시퀀스 (16진수)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1472"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1456"/>
         <source>e.g. FF D9</source>
         <translation>예: FF D9</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1473"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1457"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>이미지 프레임의 끝을 표시하는 16진수 바이트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1500"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1484"/>
         <source>Identity</source>
         <translation>식별 정보</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1510"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1494"/>
         <source>Device Name</source>
         <translation>장치 이름</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1495"/>
         <source>Device 1</source>
         <translation>장치 1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1512"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1496"/>
         <source>Human-readable name for this input device</source>
         <translation>이 입력 장치의 사람이 읽을 수 있는 이름</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1527"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1511"/>
         <source>Bus Type</source>
         <translation>버스 유형</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1528"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1512"/>
         <source>Select the hardware interface for this input device</source>
         <translation>이 입력 장치의 하드웨어 인터페이스 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1514"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1514"/>
         <source>Network Socket</source>
         <translation>네트워크 소켓</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1530"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1514"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1516"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1516"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1516"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1516"/>
         <source>Raw USB</source>
         <translation>Raw USB</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1533"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1517"/>
         <source>HID Device</source>
         <translation>HID 장치</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1533"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1517"/>
         <source>Process</source>
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1543"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1527"/>
         <source>Connection Settings</source>
         <translation>연결 설정</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1855"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2101"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3192"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1839"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2085"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3161"/>
         <source>General Information</source>
         <translation>일반 정보</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1864"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1848"/>
         <source>Action Title</source>
         <translation>액션 제목</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1866"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1850"/>
         <source>Untitled Action</source>
         <translation>제목 없는 액션</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1867"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1851"/>
         <source>Name or description of this action</source>
         <translation>이 액션의 이름 또는 설명</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1876"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1860"/>
         <source>Action Icon</source>
         <translation>액션 아이콘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1877"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1861"/>
         <source>Default Icon</source>
         <translation>기본 아이콘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1878"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1862"/>
         <source>Icon displayed for this action in the dashboard</source>
         <translation>대시보드에서 이 액션에 표시되는 아이콘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1904"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1888"/>
         <source>Target Device</source>
         <translation>대상 장치</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1905"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1889"/>
         <source>Select which connected device this action sends data to</source>
         <translation>이 액션이 데이터를 전송할 연결된 장치 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1913"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1897"/>
         <source>Data Payload</source>
         <translation>데이터 페이로드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1924"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1908"/>
         <source>Send as Binary</source>
         <translation>바이너리로 전송</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1925"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1909"/>
         <source>Send raw binary data when this action is triggered</source>
         <translation>이 액션이 트리거될 때 원시 바이너리 데이터 전송</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1936"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1948"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1920"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1932"/>
         <source>Command</source>
         <translation>명령</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1937"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1921"/>
         <source>Transmit Data (Hex)</source>
         <translation>데이터 전송 (Hex)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1938"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1922"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>액션이 트리거될 때 전송할 16진수 페이로드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1949"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1933"/>
         <source>Transmit Data</source>
         <translation>데이터 전송</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1950"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1934"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>액션이 트리거될 때 전송할 텍스트 페이로드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1961"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3250"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1945"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3219"/>
         <source>Text Encoding</source>
         <translation>텍스트 인코딩</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1962"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1946"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>텍스트 페이로드 직렬화에 사용되는 문자 인코딩</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1986"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1970"/>
         <source>End-of-Line Sequence</source>
         <translation>줄 끝 시퀀스</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1987"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1971"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>메시지에 추가할 EOL 문자 (예: </translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1994"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1978"/>
         <source>Execution Behavior</source>
         <translation>실행 동작</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2005"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1989"/>
         <source>Auto-Execute on Connect</source>
         <translation>연결 시 자동 실행</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2006"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1990"/>
         <source>Automatically trigger this action when the device connects</source>
         <translation>장치 연결 시 이 액션을 자동으로 트리거</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2013"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="1997"/>
         <source>Timer Behavior</source>
         <translation>타이머 동작</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2022"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2006"/>
         <source>Timer Mode</source>
         <translation>타이머 모드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2025"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2009"/>
         <source>Choose when and how this action should repeat automatically</source>
         <translation>이 액션이 자동으로 반복되는 시기와 방법 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2032"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2016"/>
         <source>Interval (ms)</source>
         <translation>간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2036"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2020"/>
         <source>Timer Interval (ms)</source>
         <translation>타이머 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2037"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2021"/>
         <source>Milliseconds between each repeated trigger of this action</source>
         <translation>이 액션의 반복 트리거 간 밀리초 간격</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2044"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2048"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2028"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2032"/>
         <source>Repeat Count</source>
         <translation>반복 횟수</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2049"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2033"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>각 트리거마다 명령을 전송할 횟수</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2111"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2095"/>
         <source>Untitled Dataset</source>
         <translation>제목 없는 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2112"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2096"/>
         <source>Dataset Title</source>
         <translation>데이터셋 제목</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2113"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2097"/>
         <source>Name of the dataset, used for labeling and identification</source>
         <translation>레이블 지정 및 식별에 사용되는 데이터셋 이름</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3442"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3408"/>
         <source>Raw and transformed values for every dataset (read-only)</source>
         <translation>모든 데이터셋의 원시 값 및 변환된 값 (읽기 전용)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3452"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3418"/>
         <source>Shared table defined in this project</source>
         <translation>이 프로젝트에 정의된 공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2138"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2122"/>
         <source>Frame Index</source>
         <translation>프레임 인덱스</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2139"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2123"/>
         <source>Frame position used for aligning datasets in time</source>
         <translation>시간상 데이터셋 정렬에 사용되는 프레임 위치</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2148"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2132"/>
         <source>Measurement Unit</source>
         <translation>측정 단위</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2149"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2133"/>
         <source>Volts, Amps, etc.</source>
         <translation>볼트, 암페어 등</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2150"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2134"/>
         <source>Unit of measurement, such as volts or amps (optional)</source>
         <translation>볼트 또는 암페어와 같은 측정 단위 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2163"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2147"/>
         <source>Plot Settings</source>
         <translation>플롯 설정</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2186"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2170"/>
         <source>Enable Plot Widget</source>
         <translation>플롯 위젯 활성화</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2188"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2172"/>
         <source>Plot data in real-time</source>
         <translation>실시간으로 데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2213"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2197"/>
         <source>X-Axis Source</source>
         <translation>X축 소스</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2214"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2198"/>
         <source>Choose which dataset to use for the X-Axis in plots</source>
         <translation>플롯의 X축에 사용할 데이터셋 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2225"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2209"/>
         <source>Minimum Plot Value (optional)</source>
         <translation>최소 플롯 값 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2226"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2210"/>
         <source>Lower bound for plot display range</source>
         <translation>플롯 표시 범위의 하한값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2236"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2220"/>
         <source>Maximum Plot Value (optional)</source>
         <translation>최대 플롯 값 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2237"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2221"/>
         <source>Upper bound for plot display range</source>
         <translation>플롯 표시 범위의 상한값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2249"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2233"/>
         <source>FFT Configuration</source>
         <translation>FFT 구성</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2260"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2244"/>
         <source>Enable FFT Analysis</source>
         <translation>FFT 분석 활성화</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2261"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2245"/>
         <source>Perform frequency-domain analysis of the dataset</source>
         <translation>데이터셋의 주파수 영역 분석 수행</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2276"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2260"/>
         <source>FFT Window Size</source>
         <translation>FFT 윈도우 크기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2277"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2261"/>
         <source>Number of samples used for each FFT calculation window</source>
         <translation>각 FFT 계산 윈도우에 사용되는 샘플 수</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2288"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2272"/>
         <source>FFT Sampling Rate (Hz, required)</source>
         <translation>FFT 샘플링 레이트 (Hz, 필수)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2289"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2273"/>
         <source>Sampling frequency used for FFT (in Hz)</source>
         <translation>FFT에 사용되는 샘플링 주파수 (Hz 단위)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2299"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2283"/>
         <source>Minimum Value (recommended)</source>
         <translation>최소값 (권장)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2300"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2284"/>
         <source>Lower bound for data normalization</source>
         <translation>데이터 정규화의 하한값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2310"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2294"/>
         <source>Maximum Value (recommended)</source>
         <translation>최대값 (권장)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2311"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2295"/>
         <source>Upper bound for data normalization</source>
         <translation>데이터 정규화의 상한값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2326"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2310"/>
         <source>Widget Settings</source>
         <translation>위젯 설정</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2349"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2333"/>
         <source>Widget</source>
         <translation>위젯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2350"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2334"/>
         <source>Select the visual widget used to display this dataset</source>
         <translation>이 데이터셋을 표시하는 데 사용할 시각적 위젯 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2363"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2347"/>
         <source>Minimum Display Value (required)</source>
         <translation>최소 표시 값 (필수)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2364"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2348"/>
         <source>Lower bound of the gauge or bar display range</source>
         <translation>게이지 또는 막대 표시 범위의 하한값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2374"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2358"/>
         <source>Maximum Display Value (required)</source>
         <translation>최대 표시 값 (필수)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2359"/>
         <source>Upper bound of the gauge or bar display range</source>
         <translation>게이지 또는 막대 표시 범위의 상한값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2391"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2375"/>
         <source>Alarm Settings</source>
         <translation>알람 설정</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2402"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2386"/>
         <source>Enable Alarms</source>
         <translation>알람 활성화</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2403"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2387"/>
         <source>Triggers a visual alarm when the value exceeds alarm thresholds</source>
         <translation>값이 알람 임계값을 초과하면 시각적 알람 트리거</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2414"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2398"/>
         <source>Low Threshold</source>
         <translation>하한 임계값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2415"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2399"/>
         <source>Triggers a visual alarm when the value drops below this threshold</source>
         <translation>값이 이 임계값 아래로 떨어지면 시각적 알람 트리거</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2426"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2410"/>
         <source>High Threshold</source>
         <translation>상한 임계값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2427"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2411"/>
         <source>Triggers a visual alarm when the value exceeds this threshold</source>
         <translation>값이 이 임계값을 초과하면 시각적 알람 트리거</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2440"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2424"/>
         <source>LED Display Settings</source>
         <translation>LED 디스플레이 설정</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2451"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2435"/>
         <source>Show in LED Panel</source>
         <translation>LED 패널에 표시</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2452"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2436"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LED 디스플레이를 사용한 시각적 상태 모니터링 활성화</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2463"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2447"/>
         <source>LED On Threshold (required)</source>
         <translation>LED 켜짐 임계값 (필수)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2464"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2448"/>
         <source>LED lights up when value meets or exceeds this threshold</source>
         <translation>값이 이 임계값 이상일 때 LED가 켜집니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
         <source>Off</source>
         <translation>꺼짐</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
         <source>Auto Start</source>
         <translation>자동 시작</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
         <source>Start on Trigger</source>
         <translation>트리거 시 시작</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2485"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2469"/>
         <source>Toggle on Trigger</source>
         <translation>트리거 시 토글</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2486"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2470"/>
         <source>Repeat N Times</source>
         <translation>N회 반복</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2490"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2474"/>
         <source>Plain Text (UTF8)</source>
         <translation>일반 텍스트 (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2490"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2474"/>
         <source>Hexadecimal</source>
         <translation>16진수</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2490"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2474"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2491"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2475"/>
         <source>Binary (Direct)</source>
         <translation>바이너리 (직접)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2482"/>
         <source>No Checksum</source>
         <translation>체크섬 없음</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2503"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2487"/>
         <source>End Delimiter Only</source>
         <translation>종료 구분자만</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2503"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2487"/>
         <source>Start Delimiter Only</source>
         <translation>시작 구분자만</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2504"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2488"/>
         <source>Start + End Delimiter</source>
         <translation>시작 + 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2504"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2488"/>
         <source>No Delimiters</source>
         <translation>구분자 없음</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2514"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
         <source>Button</source>
         <translation>버튼</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2514"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
         <source>Slider</source>
         <translation>슬라이더</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2514"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
         <source>Toggle</source>
         <translation>토글</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2514"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2498"/>
         <source>Text Field</source>
         <translation>텍스트 필드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2515"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2499"/>
         <source>Knob</source>
         <translation>노브</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2520"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2504"/>
         <source>Data Grid</source>
         <translation>데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2521"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2505"/>
         <source>GPS Map</source>
         <translation>GPS 맵</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2522"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2506"/>
         <source>Gyroscope</source>
         <translation>자이로스코프</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2523"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2507"/>
         <source>Multiple Plot</source>
         <translation>다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2524"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2508"/>
         <source>Accelerometer</source>
         <translation>가속도계</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2525"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2509"/>
         <source>3D Plot</source>
         <translation>3D 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2526"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2510"/>
         <source>Image View</source>
         <translation>이미지 뷰</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2527"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2531"/>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2538"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2511"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2515"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2522"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2532"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2516"/>
         <source>Bar</source>
         <translation>바</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2533"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2517"/>
         <source>Gauge</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2534"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2518"/>
         <source>Compass</source>
         <translation>나침반</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2539"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2523"/>
         <source>New Line (\n)</source>
         <translation>새 줄 (</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2540"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2524"/>
         <source>Carriage Return (\r)</source>
         <translation>캐리지 리턴 (\r)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2541"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2525"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2545"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2529"/>
         <source>No</source>
         <translation>아니오</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2546"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="2530"/>
         <source>Yes</source>
         <translation>예</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3203"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3172"/>
         <source>Label</source>
         <translation>레이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3204"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3173"/>
         <source>Display label</source>
         <translation>레이블 표시</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3215"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3184"/>
         <source>Button Icon</source>
         <translation>버튼 아이콘</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3225"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3194"/>
         <source>Colorize Icon</source>
         <translation>아이콘 색상화</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3226"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3195"/>
         <source>Tint the icon with the button color</source>
         <translation>버튼 색상으로 아이콘 색조 적용</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3238"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3207"/>
         <source>Initial Value</source>
         <translation>초기값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3251"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3220"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>transmit()가 문자열 값을 반환할 때 사용되는 문자 인코딩</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3263"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3232"/>
         <source>Value Range</source>
         <translation>값 범위</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3274"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3243"/>
         <source>Minimum Value</source>
         <translation>최소값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3284"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3253"/>
         <source>Maximum Value</source>
         <translation>최대값</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3294"/>
+        <location filename="../../src/DataModel/ProjectEditor.cpp" line="3263"/>
         <source>Step Size</source>
         <translation>단계 크기</translation>
     </message>
@@ -2697,454 +2697,454 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="214"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="223"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="204"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="213"/>
         <source>Lock Project</source>
         <translation>프로젝트 잠금</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="215"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="205"/>
         <source>Choose a password to lock the project:</source>
         <translation>프로젝트를 잠글 비밀번호를 선택하세요:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="223"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="213"/>
         <source>Confirm the password:</source>
         <translation>비밀번호 확인:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="228"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="218"/>
         <source>Passwords do not match</source>
         <translation>비밀번호 불일치</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="229"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="219"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>입력한 두 비밀번호가 일치하지 않습니다. 프로젝트가 잠기지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="265"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="255"/>
         <source>Unlock Project</source>
         <translation>프로젝트 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="266"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="256"/>
         <source>Enter the project password:</source>
         <translation>프로젝트 비밀번호를 입력하세요:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="269"/>
         <source>Incorrect password</source>
         <translation>잘못된 비밀번호</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="280"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="270"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>입력한 비밀번호가 프로젝트 파일에 저장된 비밀번호와 일치하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="312"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="302"/>
         <source>New Project</source>
         <translation>새 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="330"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="320"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="622"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="612"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>여러 데이터 소스는 Pro 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="623"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="613"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro는 여러 장치에 동시 연결할 수 있습니다. 이 기능을 사용하려면 업그레이드하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="636"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="626"/>
         <source>Device %1</source>
         <translation>장치 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="706"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="696"/>
         <source> (Copy)</source>
         <translation>(사본)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="923"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="912"/>
         <source>Do you want to save your changes?</source>
         <translation>변경 사항을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="924"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="913"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>이 프로젝트에 저장되지 않은 수정 사항이 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="155"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="165"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="180"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="151"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="161"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="175"/>
         <source>Project error</source>
         <translation>프로젝트 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="155"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="151"/>
         <source>Project title cannot be empty!</source>
         <translation>프로젝트 제목은 비워둘 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="165"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="161"/>
         <source>You need to add at least one group!</source>
         <translation>최소 하나의 그룹을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="180"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="175"/>
         <source>You need to add at least one dataset!</source>
         <translation>최소 하나의 데이터셋을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="961"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="950"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="963"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="952"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio 프로젝트 파일 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="982"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1216"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="970"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1195"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1225"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1525"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1203"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1498"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1382"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1360"/>
         <source>Select Project File</source>
         <translation>프로젝트 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1382"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1360"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>프로젝트 파일 (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1423"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1399"/>
         <source>JSON validation error</source>
         <translation>JSON 유효성 검사 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1567"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1540"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>다중 소스 프로젝트는 Pro 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1568"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1541"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>이 프로젝트는 여러 데이터 소스를 포함하고 있습니다. 첫 번째 소스만 로드되었습니다. 다중 소스 프로젝트를 사용하려면 Serial Studio Pro 라이선스가 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1714"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1682"/>
         <source>Legacy frame parser function updated</source>
         <translation>레거시 프레임 파서 함수 업데이트됨</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1715"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1683"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>프로젝트에서 'separator' 인수를 사용하는 레거시 프레임 파서 함수가 사용되었습니다. 새 형식으로 자동 마이그레이션되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1920"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1885"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>그룹 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1921"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1972"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2007"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2279"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1886"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1933"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1968"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2234"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>이 작업은 취소할 수 없습니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="1971"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1932"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>액션 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2006"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="1967"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>데이터셋 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2096"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2126"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2337"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2383"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2051"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2081"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2292"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2338"/>
         <source>%1 (Copy)</source>
         <translation>%1 (사본)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2226"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2181"/>
         <source>Output Controls</source>
         <translation>출력 제어</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2239"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2194"/>
         <source>New Button</source>
         <translation>새 버튼</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2242"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2197"/>
         <source>New Slider</source>
         <translation>새 슬라이더</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2245"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2200"/>
         <source>New Toggle</source>
         <translation>새 토글</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2248"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2203"/>
         <source>New Text Field</source>
         <translation>새 텍스트 필드</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2251"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2206"/>
         <source>New Knob</source>
         <translation>새 노브</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2278"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2233"/>
         <source>Do you want to delete output widget "%1"?</source>
         <translation>출력 위젯 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2439"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2394"/>
         <source>Group</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2458"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2413"/>
         <source>New Dataset</source>
         <translation>새 데이터셋</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2461"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2416"/>
         <source>New Plot</source>
         <translation>새 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2420"/>
         <source>New FFT Plot</source>
         <translation>새 FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2469"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2424"/>
         <source>New Level Indicator</source>
         <translation>새 레벨 표시기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2473"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2428"/>
         <source>New Gauge</source>
         <translation>새 게이지</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2477"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2432"/>
         <source>New Compass</source>
         <translation>새 나침반</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2485"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2440"/>
         <source>New LED Indicator</source>
         <translation>새 LED 표시기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2584"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2538"/>
         <source>New Action</source>
         <translation>새 액션</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2684"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2637"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>그룹 수준 위젯을 변경하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2686"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2639"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>이 그룹의 기존 데이터셋이 삭제됩니다</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2747"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2748"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2749"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2700"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2701"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2702"/>
         <source>Accelerometer %1</source>
         <translation>가속도계 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2796"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2797"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2748"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2749"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2750"/>
         <source>Gyro %1</source>
         <translation>자이로 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2840"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2793"/>
         <source>Latitude</source>
         <translation>위도</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2841"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2794"/>
         <source>Longitude</source>
         <translation>경도</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2842"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2795"/>
         <source>Altitude</source>
         <translation>고도</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2881"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2834"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2882"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2835"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="2883"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="2836"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3082"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3034"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3710"/>
         <source>Workspace</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3152"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3104"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3313"/>
         <source>Shared Table</source>
         <translation>공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3234"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3186"/>
         <source>register</source>
         <translation>레지스터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3361"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3313"/>
         <source>New Shared Table</source>
         <translation>새 공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3361"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3380"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3401"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3425"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3763"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3784"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3313"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3352"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3375"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3710"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3731"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3380"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3331"/>
         <source>Rename Table</source>
         <translation>테이블 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3400"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3351"/>
         <source>New Register</source>
         <translation>새 레지스터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3425"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3375"/>
         <source>Rename Register</source>
         <translation>레지스터 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3464"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3489"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4290"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3414"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3439"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4208"/>
         <source>This action cannot be undone.</source>
         <translation>이 작업은 취소할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3465"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3415"/>
         <source>This removes %1 register(s) along with the table. This action cannot be undone.</source>
         <translation>테이블과 함께 %1개의 레지스터가 제거됩니다. 이 작업은 취소할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3468"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3488"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4289"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3418"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3438"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4207"/>
         <source>Delete "%1"?</source>
         <translation>"%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3471"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3421"/>
         <source>Delete Table</source>
         <translation>테이블 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3491"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3441"/>
         <source>Delete Register</source>
         <translation>레지스터 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3517"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3467"/>
         <source>Export Table</source>
         <translation>테이블 내보내기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3519"/>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3566"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3469"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3516"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 파일 (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3564"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3514"/>
         <source>Import Table</source>
         <translation>테이블 가져오기</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3763"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3710"/>
         <source>New Workspace</source>
         <translation>새 작업 공간</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3784"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3731"/>
         <source>Rename Workspace</source>
         <translation>작업 공간 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3955"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3887"/>
         <source>Overview</source>
         <translation>개요</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="3965"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="3897"/>
         <source>All Data</source>
         <translation>모든 데이터</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4292"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4210"/>
         <source>Delete Workspace</source>
         <translation>작업 공간 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/ProjectModel.cpp" line="4497"/>
+        <location filename="../../src/DataModel/ProjectModel.cpp" line="4415"/>
         <source>File open error</source>
         <translation>파일 열기 오류</translation>
     </message>
@@ -3298,97 +3298,97 @@ Valid format: 01 A2 FF 3C</source>
         <translation>세션</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="196"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="203"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="198"/>
         <source>Open a session file</source>
         <translation>세션 파일 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="209"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="204"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="212"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="207"/>
         <source>Close session file</source>
         <translation>세션 파일 닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="225"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="220"/>
         <source>Replay</source>
         <translation>재생</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="229"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="224"/>
         <source>Replay selected session on the dashboard</source>
         <translation>선택한 세션을 대시보드에서 재생</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="235"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="230"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="241"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="236"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>세션을 삭제하려면 세션 파일 잠금을 해제하세요</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="242"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="237"/>
         <source>Delete the selected session</source>
         <translation>선택한 세션 삭제</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="259"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="254"/>
         <source>Unlock</source>
         <translation>잠금 해제</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="260"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="255"/>
         <source>Lock</source>
         <translation>잠금</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="265"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="260"/>
         <source>Unlock the session file to allow deletions</source>
         <translation>삭제를 허용하려면 세션 파일 잠금을 해제하세요</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="266"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="261"/>
         <source>Set a password to prevent session deletions</source>
         <translation>세션 삭제를 방지하려면 비밀번호를 설정하세요</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="281"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="276"/>
         <source>Export CSV</source>
         <translation>CSV 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="286"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="281"/>
         <source>Export selected session to CSV</source>
         <translation>선택한 세션을 CSV로 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="293"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="288"/>
         <source>Export PDF</source>
         <translation>PDF 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="293"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>선택한 세션에 대한 PDF 보고서 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="312"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="307"/>
         <source>Restore Project</source>
         <translation>프로젝트 복원</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="316"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="311"/>
         <source>Restore the project file from this session file</source>
         <translation>이 세션 파일에서 프로젝트 파일 복원</translation>
     </message>
@@ -3725,57 +3725,57 @@ Valid format: 01 A2 FF 3C</source>
         <translation>예제 가져오는 중…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="697"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="696"/>
         <source>Copied to Clipboard</source>
         <translation>클립보드에 복사됨</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="760"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="759"/>
         <source>No screenshot available</source>
         <translation>사용 가능한 스크린샷 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="792"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="791"/>
         <source>Details</source>
         <translation>세부 정보</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="821"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="820"/>
         <source>Info</source>
         <translation>정보</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="844"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="843"/>
         <source>Category:</source>
         <translation>범주:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="857"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="856"/>
         <source>Difficulty:</source>
         <translation>난이도:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="875"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="874"/>
         <source>Project:</source>
         <translation>프로젝트:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="917"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="916"/>
         <source>No Results Found</source>
         <translation>결과 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="928"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="927"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>철자를 확인하거나 다른 검색어를 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="943"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="942"/>
         <source>%1 examples</source>
         <translation>%1개 예제</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="954"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="953"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -3863,107 +3863,107 @@ Valid format: 01 A2 FF 3C</source>
         <translation>사용 불가</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="950"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="949"/>
         <source>Details</source>
         <translation>세부 정보</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="971"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="970"/>
         <source>Type:</source>
         <translation>유형:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="984"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="983"/>
         <source>Author:</source>
         <translation>작성자:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="996"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="995"/>
         <source>Version:</source>
         <translation>버전:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1008"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1007"/>
         <source>License:</source>
         <translation>라이선스:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1069"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1068"/>
         <source>No preview</source>
         <translation>미리보기 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1097"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1096"/>
         <source>  PLUGIN OUTPUT</source>
         <translation>플러그인 출력</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1127"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1126"/>
         <source>No output yet. Run the plugin to see its log here.</source>
         <translation>아직 출력이 없습니다. 플러그인을 실행하면 여기에 로그가 표시됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1162"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1161"/>
         <source>No preview available</source>
         <translation>미리보기를 사용할 수 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1206"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1205"/>
         <source>Repositories</source>
         <translation>저장소</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1219"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1218"/>
         <source>Add URLs to remote repositories or local folder paths.</source>
         <translation>원격 저장소 URL 또는 로컬 폴더 경로를 추가합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1256"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1255"/>
         <source>LOCAL</source>
         <translation>로컬</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1313"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1312"/>
         <source>URL or local path…</source>
         <translation>URL 또는 로컬 경로…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1344"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1343"/>
         <source>Browse…</source>
         <translation>찾아보기…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1321"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1320"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1381"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1380"/>
         <source>No Results Found</source>
         <translation>결과 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1392"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1391"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>철자를 확인하거나 다른 검색어를 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1416"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1415"/>
         <source>No Extensions Available</source>
         <translation>사용 가능한 확장 기능 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1427"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1426"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>저장소 설정에서 저장소 URL 또는 로컬 경로를 추가한 후 새로고침하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1442"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1441"/>
         <source>%1 extensions</source>
         <translation>%1개의 확장 기능</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1453"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="1452"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -4131,32 +4131,32 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>FlowDiagram</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="172"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="147"/>
         <source>Frame Parser</source>
         <translation>프레임 파서</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="152"/>
         <source>Device %1</source>
         <translation>장치 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="216"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="191"/>
         <source>Control</source>
         <translation>제어</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="249"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="224"/>
         <source>Group</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="302"/>
         <source>Action</source>
         <translation>액션</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="743"/>
+        <location filename="../../qml/ProjectEditor/Views/FlowDiagram.qml" line="703"/>
         <source>No groups defined yet</source>
         <translation>아직 정의된 그룹이 없습니다</translation>
     </message>
@@ -4703,67 +4703,67 @@ Valid format: 01 A2 FF 3C</source>
         <translation>BLE I/O 모듈 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="320"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="319"/>
         <source>Select Device</source>
         <translation>장치 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="331"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="330"/>
         <source>Select Service</source>
         <translation>서비스 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="342"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="341"/>
         <source>Select Characteristic</source>
         <translation>특성 선택</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="510"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="508"/>
         <source>Error while configuring BLE service</source>
         <translation>BLE 서비스 구성 중 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="672"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="670"/>
         <source>Operation error</source>
         <translation>작업 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="675"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="673"/>
         <source>Characteristic write error</source>
         <translation>특성 쓰기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="678"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="676"/>
         <source>Descriptor write error</source>
         <translation>디스크립터 쓰기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="681"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="679"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="684"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="682"/>
         <source>Characteristic read error</source>
         <translation>특성 읽기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="687"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="685"/>
         <source>Descriptor read error</source>
         <translation>디스크립터 읽기 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="943"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="939"/>
         <source>BLE Device</source>
         <translation>BLE 장치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="951"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="947"/>
         <source>Service</source>
         <translation>서비스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="970"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="966"/>
         <source>Characteristic</source>
         <translation>특성</translation>
     </message>
@@ -4808,12 +4808,12 @@ macOS의 CAN bus 지원은 제한적이며 타사 하드웨어 드라이버가 �
         <translation>사용 가능한 장치 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="266"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="265"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN 장치 생성 실패</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="301"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="300"/>
         <source>CAN Connection Failed</source>
         <translation>CAN 연결 실패</translation>
     </message>
@@ -4851,98 +4851,98 @@ Windows에서는 CAN 하드웨어 드라이버(PEAK, VECTOR 등)를 설치하세
         <translation>플러그인 또는 인터페이스 목록이 비어 있습니다. 목록을 새로 고침하고 CAN 하드웨어가 연결되어 있는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="267"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="266"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>CAN 버스 장치를 생성할 수 없습니다. 하드웨어와 드라이버를 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="303"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="302"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>CAN 버스 장치에 연결할 수 없습니다. 하드웨어 연결 및 설정을 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="549"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="548"/>
         <source>CAN Bus Error</source>
         <translation>CAN Bus 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="550"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="549"/>
         <source>An error occurred but the CAN device is no longer available.</source>
         <translation>오류가 발생했지만 CAN 장치를 더 이상 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="557"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="556"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="560"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="559"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN Bus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="577"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="576"/>
         <source>No CAN driver selected</source>
         <translation>CAN 드라이버가 선택되지 않음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="601"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="600"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>먼저 SOCKETCAN 커널 모듈을 로드하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="603"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="602"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>먼저 가상 CAN 인터페이스를 설정하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="605"/>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="623"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="604"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="622"/>
         <source>No interfaces found for %1</source>
         <translation>%1에 대한 인터페이스를 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="609"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="608"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="612"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="611"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="615"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="614"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN 드라이버&lt;/a&gt; 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="618"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="617"/>
         <source>Install %1 drivers</source>
         <translation>%1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="621"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="620"/>
         <source>Install %1 drivers for macOS</source>
         <translation>macOS용 %1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="685"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="684"/>
         <source>Plugin</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="693"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="692"/>
         <source>Interface</source>
         <translation>인터페이스</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="701"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="700"/>
         <source>Bitrate</source>
         <translation>비트레이트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/CANBus.cpp" line="710"/>
+        <location filename="../../src/IO/Drivers/CANBus.cpp" line="709"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
@@ -5227,37 +5227,37 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Network</name>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="496"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="495"/>
         <source>Network socket error</source>
         <translation>네트워크 소켓 오류</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="513"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="512"/>
         <source>Socket Type</source>
         <translation>소켓 유형</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="521"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="520"/>
         <source>Remote Address</source>
         <translation>원격 주소</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="529"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="528"/>
         <source>TCP Port</source>
         <translation>TCP 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="538"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="537"/>
         <source>UDP Local Port</source>
         <translation>UDP 로컬 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="547"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="546"/>
         <source>UDP Remote Port</source>
         <translation>UDP 원격 포트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/Network.cpp" line="556"/>
+        <location filename="../../src/IO/Drivers/Network.cpp" line="555"/>
         <source>UDP Multicast</source>
         <translation>UDP 멀티캐스트</translation>
     </message>
@@ -5601,22 +5601,22 @@ Another driver or application may already have it open. On Linux, try unloading 
         <translation>없음(읽기 전용)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="504"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="503"/>
         <source>Enable Advanced USB Control Transfers?</source>
         <translation>고급 USB 제어 전송을 활성화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="505"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="504"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
         <translation>벌크 전송 외에 제어 전송을 활성화합니다. 잘못된 제어 요청을 전송하면 연결된 하드웨어가 손상되거나 충돌할 수 있습니다. 용도를 정확히 알고 있는 경우에만 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="509"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="508"/>
         <source>Advanced USB Mode</source>
         <translation>고급 USB 모드</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="749"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="748"/>
         <source>No isochronous IN endpoint was found on this device, but bulk endpoints are available.
 
 Switch the Transfer Mode to "Bulk Stream" and try again.</source>
@@ -5625,7 +5625,7 @@ Switch the Transfer Mode to "Bulk Stream" and try again.</source>
 전송 모드를 "벌크 스트림"으로 전환한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="754"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="753"/>
         <source>No bulk IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -5634,7 +5634,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 전송 모드를 "아이소크로너스"로 전환한 후 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="758"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="757"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may require a specific driver.</source>
@@ -5643,42 +5643,42 @@ The device may not expose data endpoints in its active configuration, or it may 
 장치가 활성 구성에서 데이터 엔드포인트를 노출하지 않거나 특정 드라이버가 필요할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1175"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1173"/>
         <source>USB Device</source>
         <translation>USB 장치</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1183"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1181"/>
         <source>Transfer Mode</source>
         <translation>전송 모드</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1186"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1184"/>
         <source>Bulk Stream</source>
         <translation>벌크 스트림</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1186"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1184"/>
         <source>Advanced Control</source>
         <translation>고급 제어</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1186"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1184"/>
         <source>Isochronous</source>
         <translation>동기식</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1191"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1189"/>
         <source>IN Endpoint</source>
         <translation>IN 엔드포인트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1199"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1197"/>
         <source>OUT Endpoint</source>
         <translation>OUT 엔드포인트</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/USB.cpp" line="1207"/>
+        <location filename="../../src/IO/Drivers/USB.cpp" line="1205"/>
         <source>ISO Packet Size</source>
         <translation>ISO 패킷 크기</translation>
     </message>
@@ -5832,7 +5832,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="172"/>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="365"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="363"/>
         <source>Failed to seek in file</source>
         <translation>파일 탐색 실패</translation>
     </message>
@@ -5852,32 +5852,32 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>전송 완료</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="281"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="279"/>
         <source>File read returned more data than requested</source>
         <translation>파일 읽기가 요청된 것보다 많은 데이터를 반환했습니다</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="297"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="295"/>
         <source>Sending block %1 (%2 bytes)</source>
         <translation>블록 %1 전송 중 (%2바이트)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="309"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="307"/>
         <source>Sending EOT…</source>
         <translation>EOT 전송 중…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="356"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="354"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>타임아웃, 재시도 중 (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="351"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="349"/>
         <source>Transfer timed out</source>
         <translation>전송 시간 초과</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="352"/>
+        <location filename="../../src/IO/FileTransmission/XMODEM.cpp" line="350"/>
         <source>Timeout: no response from receiver</source>
         <translation>시간 초과: 수신기 응답 없음</translation>
     </message>
@@ -5908,7 +5908,7 @@ The device may not expose data endpoints in its active configuration, or it may 
     </message>
     <message>
         <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="134"/>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="291"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="289"/>
         <source>Sending first EOT…</source>
         <translation>첫 번째 EOT 전송 중…</translation>
     </message>
@@ -5953,7 +5953,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>파일 헤더 전송 중: %1 (%2바이트)</translation>
     </message>
     <message>
-        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="307"/>
+        <location filename="../../src/IO/FileTransmission/YMODEM.cpp" line="305"/>
         <source>Sending block %1 (%2/%3 bytes)</source>
         <translation>블록 %1 전송 중 (%2/%3바이트)</translation>
     </message>
@@ -6148,32 +6148,32 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>앰버</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="174"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="163"/>
         <source>Export Images</source>
         <translation>이미지 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="184"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="173"/>
         <source>Open Export Folder</source>
         <translation>내보내기 폴더 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="200"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="189"/>
         <source>Zoom In</source>
         <translation>확대</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="213"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="202"/>
         <source>Zoom Out</source>
         <translation>축소</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="233"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="222"/>
         <source>Show Crosshair</source>
         <translation>십자선 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="540"/>
+        <location filename="../../qml/Widgets/Dashboard/ImageView.qml" line="529"/>
         <source>Waiting for Image…</source>
         <translation>이미지 대기 중…</translation>
     </message>
@@ -6307,7 +6307,7 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="554"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="723"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="827"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="826"/>
         <source>The license key you provided does not belong to Serial Studio.</source>
         <translation>제공된 라이선스 키는 Serial Studio에 속하지 않습니다.</translation>
     </message>
@@ -6359,13 +6359,13 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="605"/>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="767"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="838"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="837"/>
         <source>Try again later.</source>
         <translation>나중에 다시 시도하십시오.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/LemonSqueezy.cpp" line="724"/>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="828"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="827"/>
         <source>Double-check that you purchased your license from the official Serial Studio store.</source>
         <translation>공식 Serial Studio 스토어에서 라이선스를 구매했는지 다시 확인하십시오.</translation>
     </message>
@@ -6407,22 +6407,22 @@ You now have access to all premium features.</source>
         <translation>현재 라이선스를 활성화할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="818"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="817"/>
         <source>There was an issue deactivating your license.</source>
         <translation>라이선스 비활성화 중 문제가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="837"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="836"/>
         <source>Could not deactivate your license at this time.</source>
         <translation>현재 라이선스를 비활성화할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="848"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="847"/>
         <source>Your license has been deactivated.</source>
         <translation>라이선스가 비활성화되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="849"/>
+        <location filename="../../src/Licensing/LemonSqueezy.cpp" line="848"/>
         <source>Access to Pro features has been removed.
 Thank you again for supporting Serial Studio!</source>
         <translation>Pro 기능에 대한 액세스가 제거되었습니다.
@@ -6432,12 +6432,12 @@ Serial Studio를 지원해 주셔서 다시 한번 감사드립니다!</translat
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="549"/>
+        <location filename="../../src/MDF4/Export.cpp" line="545"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4 내보내기는 Pro 기능입니다.</translation>
     </message>
     <message>
-        <location filename="../../src/MDF4/Export.cpp" line="550"/>
+        <location filename="../../src/MDF4/Export.cpp" line="546"/>
         <source>This feature requires a license. Please purchase one to enable MDF4 export.</source>
         <translation>이 기능을 사용하려면 라이선스가 필요합니다. MDF4 내보내기를 활성화하려면 라이선스를 구매하십시오.</translation>
     </message>
@@ -6984,17 +6984,17 @@ Please provide the necessary credentials.</source>
         <translation>빈 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="511"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="510"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="519"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="518"/>
         <source>Waiting for data…</source>
         <translation>데이터 대기 중…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="520"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="519"/>
         <source>Connecting to device…</source>
         <translation>장치 연결 중…</translation>
     </message>
@@ -7068,60 +7068,60 @@ Please provide the necessary credentials.</source>
         <translation>모든 유형</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="468"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="466"/>
         <source>Reset Extensions</source>
         <translation>확장 기능 재설정</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="469"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="467"/>
         <source>This uninstalls all extensions, removes all custom repositories, and restores the default settings. Continue?</source>
         <translation>모든 확장 기능을 제거하고, 모든 사용자 저장소를 삭제하며, 기본 설정을 복원합니다. 계속하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="512"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="510"/>
         <source>Select Extension Repository Folder</source>
         <translation>확장 기능 저장소 폴더 선택</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1026"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1017"/>
         <source>Installed (repository no longer available)</source>
         <translation>설치됨 (저장소를 더 이상 사용할 수 없음)</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1314"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1325"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1338"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1358"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1392"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1403"/>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1411"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1305"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1316"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1329"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1349"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1383"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1394"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1402"/>
         <source>Plugin Error</source>
         <translation>플러그인 오류</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1314"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1305"/>
         <source>Plugin "%1" is not installed.</source>
         <translation>플러그인 "%1"이(가) 설치되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1326"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1317"/>
         <source>Extension "%1" is not a plugin (type: %2).</source>
         <translation>확장 기능 "%1"은(는) 플러그인이 아닙니다 (유형: %2).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1339"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1330"/>
         <source>Cannot read plugin metadata file:
 %1/info.json</source>
         <translation>플러그인 메타데이터 파일을 읽을 수 없음:
 %1/info.json</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1359"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1350"/>
         <source>Plugin "%1" requires gRPC but this build does not include gRPC support.</source>
         <translation>플러그인 "%1"은(는) GRPC가 필요하지만 이 빌드에는 GRPC 지원이 포함되어 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1367"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1358"/>
         <source>This plugin uses gRPC for high-performance data streaming. The API server needs to be enabled.
 
 Would you like to enable it now?</source>
@@ -7130,34 +7130,34 @@ Would you like to enable it now?</source>
 지금 활성화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1373"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1364"/>
         <source>API Server Required</source>
         <translation>API 서버 필요</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1393"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1384"/>
         <source>Plugin "%1" has no 'entry' field in info.json.</source>
         <translation>플러그인 "%1"의 info.json에 'entry' 필드가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1403"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1394"/>
         <source>Entry point not found:
 %1</source>
         <translation>진입점을 찾을 수 없음:
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1412"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1403"/>
         <source>Plugin "%1" has an invalid entry point path.</source>
         <translation>플러그인 "%1"의 진입점 경로가 유효하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1448"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1439"/>
         <source>Missing Dependency</source>
         <translation>종속성 누락</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1449"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1440"/>
         <source>This plugin requires "%1" but it was not found on your system.
 
 Would you like to open the download page?</source>
@@ -7166,7 +7166,7 @@ Would you like to open the download page?</source>
 다운로드 페이지를 여시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ExtensionManager.cpp" line="1370"/>
+        <location filename="../../src/Misc/ExtensionManager.cpp" line="1361"/>
         <source>Plugins need the API server to communicate with Serial Studio. Would you like to enable it now?</source>
         <translation>플러그인이 Serial Studio와 통신하려면 API 서버가 필요합니다. 지금 활성화하시겠습니까?</translation>
     </message>
@@ -7287,7 +7287,7 @@ Would you like to open the download page?</source>
     </message>
     <message>
         <location filename="../../src/Misc/ShortcutGenerator_macOS.cpp" line="220"/>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="207"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="203"/>
         <source>Linux shortcut writer is not available on this platform.</source>
         <translation>Linux 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -7302,17 +7302,17 @@ Would you like to open the download page?</source>
         <translation>CoCreateInstance(IShellLink) 실패(HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="161"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="157"/>
         <source>QueryInterface(IPersistFile) failed (HRESULT 0x%1).</source>
         <translation>QueryInterface(IPersistFile) 실패(HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="171"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="167"/>
         <source>Saving the .lnk file failed (HRESULT 0x%1).</source>
         <translation>.lnk 파일 저장 실패(HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="193"/>
+        <location filename="../../src/Misc/ShortcutGenerator_Windows.cpp" line="189"/>
         <location filename="../../src/Misc/ShortcutGenerator_Linux.cpp" line="147"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
@@ -7336,7 +7336,7 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::ThemeManager</name>
     <message>
-        <location filename="../../src/Misc/ThemeManager.cpp" line="491"/>
+        <location filename="../../src/Misc/ThemeManager.cpp" line="488"/>
         <source>System</source>
         <translation>시스템</translation>
     </message>
@@ -8141,17 +8141,17 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotWidget</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1129"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1098"/>
         <source>ΔX: %1  ΔY: %2 — Drag to move, right-click to clear</source>
         <translation>ΔX: %1  ΔY: %2 — 드래그하여 이동, 우클릭하여 지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1131"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1100"/>
         <source>Click to place cursor</source>
         <translation>클릭하여 커서 배치</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget.qml" line="1133"/>
+        <location filename="../../qml/Widgets/PlotWidget.qml" line="1102"/>
         <source>Click to place second cursor — Drag to move</source>
         <translation>클릭하여 두 번째 커서 배치 — 드래그하여 이동</translation>
     </message>
@@ -8192,59 +8192,59 @@ Add groups above to poll multiple register types.</source>
         <translation>명명된 파이프</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="101"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="99"/>
         <source>Executable</source>
         <translation>실행 파일</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="114"/>
         <source>/path/to/executable</source>
         <translation>/path/to/executable</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="133"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="209"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="131"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="255"/>
         <source>Browse</source>
         <translation>찾아보기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="143"/>
         <source>Arguments</source>
         <translation>인수</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="154"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 value1 --arg2 value2</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="175"/>
         <source>Working Dir</source>
         <translation>작업 디렉터리</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="192"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="190"/>
         <source>(optional) /working/directory</source>
         <translation>(선택 사항) /working/directory</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="221"/>
         <source>Pipe Path</source>
         <translation>파이프 경로</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="271"/>
         <source>Pick Running Process…</source>
         <translation>실행 중인 프로세스 선택…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="309"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>자식 프로세스를 실행하여 stdout을 캡처하거나, 기존 프로세스가 작성한 명명된 파이프에 연결합니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="321"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="317"/>
         <source>Learn about named pipes</source>
         <translation>명명된 파이프에 대해 알아보기</translation>
     </message>
@@ -8327,47 +8327,47 @@ Click Refresh to update the list.</source>
         <translation>수정됨</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="294"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="281"/>
         <source>This project is password protected</source>
         <translation>이 프로젝트는 비밀번호로 보호되어 있습니다</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="295"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="282"/>
         <source>Editing is available in Project mode</source>
         <translation>프로젝트 모드에서 편집 가능</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="306"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="293"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>변경하려면 비밀번호를 입력하거나 다른 프로젝트를 여십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="307"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="294"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>프로젝트를 불러오고 편집하려면 프로젝트 모드로 전환하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="331"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="318"/>
         <source>Unlock</source>
         <translation>잠금 해제</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="332"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="319"/>
         <source>Switch to Project Mode</source>
         <translation>프로젝트 모드로 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="340"/>
         <source>Open Other Project</source>
         <translation>다른 프로젝트 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="341"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="372"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="359"/>
         <source>Create New Project</source>
         <translation>새 프로젝트 생성</translation>
     </message>
@@ -8831,22 +8831,22 @@ Click Refresh to update the list.</source>
         <translation>쓰기용 파일을 열 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="806"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="802"/>
         <source>Invalid Bluetooth adapter!</source>
         <translation>잘못된 Bluetooth 어댑터!</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="809"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="805"/>
         <source>Unsuported platform or operating system</source>
         <translation>지원되지 않는 플랫폼 또는 운영 체제</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="812"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="808"/>
         <source>Unsupported discovery method</source>
         <translation>지원되지 않는 검색 방법</translation>
     </message>
     <message>
-        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="815"/>
+        <location filename="../../src/IO/Drivers/BluetoothLE.cpp" line="811"/>
         <source>General I/O error</source>
         <translation>일반 I/O 오류</translation>
     </message>
@@ -8865,12 +8865,12 @@ Click Refresh to update the list.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="249"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="248"/>
         <source>Lua Runtime Error</source>
         <translation>Lua 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="250"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="249"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -8879,13 +8879,13 @@ Click Refresh to update the list.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="264"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="263"/>
         <location filename="../../src/DataModel/JsScriptEngine.cpp" line="407"/>
         <source>Missing Parse Function</source>
         <translation>Parse 함수 누락</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="265"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="264"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -8896,13 +8896,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="324"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="323"/>
         <location filename="../../src/DataModel/JsScriptEngine.cpp" line="475"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse 함수 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="325"/>
+        <location filename="../../src/DataModel/LuaScriptEngine.cpp" line="324"/>
         <source>The parse function contains an error:
 
 %1
@@ -9029,12 +9029,12 @@ function parse(%1) { ... }
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="357"/>
+        <location filename="../../src/main.cpp" line="355"/>
         <source>Project file not found</source>
         <translation>프로젝트 파일을 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="358"/>
+        <location filename="../../src/main.cpp" line="356"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -9043,17 +9043,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="361"/>
+        <location filename="../../src/main.cpp" line="359"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>이 바로 가기를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="365"/>
+        <location filename="../../src/main.cpp" line="363"/>
         <source>Delete Shortcut</source>
         <translation>바로 가기 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="367"/>
+        <location filename="../../src/main.cpp" line="365"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
@@ -9125,218 +9125,218 @@ function parse(%1) { ... }
         <translation>점선</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="76"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="77"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="78"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="79"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="80"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="76"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="81"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="77"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="82"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="78"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="83"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="79"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="84"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="80"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="85"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="81"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="86"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="82"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="87"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="83"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="88"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="84"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="89"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="85"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>%1 — Session Report</source>
         <translation>%1 — 세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="282"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="272"/>
         <source>Session Report</source>
         <translation>세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="185"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="181"/>
         <source>Branding</source>
         <translation>브랜딩</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="191"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="187"/>
         <source>Page</source>
         <translation>페이지</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="197"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="193"/>
         <source>Sections</source>
         <translation>섹션</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="249"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="239"/>
         <source>Identity</source>
         <translation>식별 정보</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="262"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="252"/>
         <source>Company</source>
         <translation>회사</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="270"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="260"/>
         <source>e.g. Acme Test Systems</source>
         <translation>예: Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="274"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="264"/>
         <source>Document title</source>
         <translation>문서 제목</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="286"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="276"/>
         <source>Author</source>
         <translation>작성자</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="294"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="284"/>
         <source>Prepared by (optional)</source>
         <translation>작성자 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="300"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="290"/>
         <source>Logo</source>
         <translation>로고</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="313"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
         <source>File</source>
         <translation>파일</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="315"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG 또는 SVG (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="328"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="318"/>
         <source>Browse…</source>
         <translation>찾아보기…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="322"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="360"/>
         <source>Paper</source>
         <translation>용지</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="382"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="372"/>
         <source>Page size</source>
         <translation>페이지 크기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="454"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="444"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>플롯에 최소값, 최대값 및 평균값 주석 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="501"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="491"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>표지 (로고, 문서 제목, 테스트 부제목)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="507"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="497"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>테스트 정보 (프로젝트, 타임스탬프, 분류 및 메모)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="513"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="503"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>측정 요약 (매개변수별 최소값, 최대값, 평균, 표준 편차)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="519"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="509"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>매개변수 추세 (숫자 매개변수별 시계열 차트)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="396"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="386"/>
         <source>Plot appearance</source>
         <translation>플롯 모양</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="409"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="399"/>
         <source>Line width</source>
         <translation>선 두께</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="441"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="431"/>
         <source>Line style</source>
         <translation>선 스타일</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="486"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="476"/>
         <source>Include</source>
         <translation>포함</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="537"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="527"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="564"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="554"/>
         <source>Export PDF</source>
         <translation>PDF 내보내기</translation>
     </message>
@@ -9344,17 +9344,17 @@ function parse(%1) { ... }
 <context>
     <name>ReportProgressDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="21"/>
         <source>Generating Report</source>
         <translation>보고서 생성 중</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="66"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="62"/>
         <source>Working…</source>
         <translation>작업 중…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="83"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="79"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>매개변수가 많은 세션의 경우 몇 초가 걸릴 수 있습니다. 보고서가 준비되면 창이 자동으로 닫힙니다.</translation>
     </message>
@@ -9362,43 +9362,43 @@ function parse(%1) { ... }
 <context>
     <name>RuntimeReconfigure</name>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="38"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="37"/>
         <source>Connection Lost</source>
         <translation>연결 끊김</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="39"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="38"/>
         <source>Device Unavailable</source>
         <translation>장치 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="89"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="88"/>
         <source>The connection to your device was lost.</source>
         <translation>장치와의 연결이 끊어졌습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="90"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="89"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio가 장치에 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>케이블, 전원을 확인하고 다른 애플리케이션이 장치를 점유하지 않았는지 확인하세요. 재연결을 시도하거나 다른 장치로 전환하거나 종료할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="101"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="100"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>장치가 연결되어 있고 전원이 켜져 있으며 다른 앱에서 사용 중이 아닌지 확인하십시오. 다시 시도하거나 다른 장치를 선택하거나 종료할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="115"/>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="193"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="114"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="192"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="128"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="127"/>
         <source>Pick Different Device</source>
         <translation>다른 장치 선택</translation>
     </message>
@@ -9407,27 +9407,27 @@ function parse(%1) { ... }
         <translation type="vanished">재구성</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="138"/>
         <source>Try Again</source>
         <translation>다시 시도</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="139"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="138"/>
         <source>Reconnect</source>
         <translation>재연결</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="158"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>올바른 장치를 선택한 후 연결을 누르세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="167"/>
         <source>I/O Interface: %1</source>
         <translation>I/O 인터페이스: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="206"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="205"/>
         <source>Connect</source>
         <translation>연결</translation>
     </message>
@@ -9435,132 +9435,132 @@ function parse(%1) { ... }
 <context>
     <name>SerialStudio</name>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="335"/>
+        <location filename="../../src/SerialStudio.cpp" line="333"/>
         <source>Data Grids</source>
         <translation>데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="338"/>
+        <location filename="../../src/SerialStudio.cpp" line="336"/>
         <source>Multiple Data Plots</source>
         <translation>다중 데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="341"/>
+        <location filename="../../src/SerialStudio.cpp" line="339"/>
         <source>Accelerometers</source>
         <translation>가속도계</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="344"/>
+        <location filename="../../src/SerialStudio.cpp" line="342"/>
         <source>Gyroscopes</source>
         <translation>자이로스코프</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="347"/>
+        <location filename="../../src/SerialStudio.cpp" line="345"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="350"/>
+        <location filename="../../src/SerialStudio.cpp" line="348"/>
         <source>FFT Plots</source>
         <translation>FFT 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="353"/>
+        <location filename="../../src/SerialStudio.cpp" line="351"/>
         <source>LED Panels</source>
         <translation>LED 패널</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="356"/>
+        <location filename="../../src/SerialStudio.cpp" line="354"/>
         <source>Data Plots</source>
         <translation>데이터 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="359"/>
+        <location filename="../../src/SerialStudio.cpp" line="357"/>
         <source>Bars</source>
         <translation>바</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="362"/>
+        <location filename="../../src/SerialStudio.cpp" line="360"/>
         <source>Gauges</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="365"/>
+        <location filename="../../src/SerialStudio.cpp" line="363"/>
         <source>Terminal</source>
         <translation>터미널</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="368"/>
+        <location filename="../../src/SerialStudio.cpp" line="366"/>
         <source>Compasses</source>
         <translation>나침반</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="371"/>
+        <location filename="../../src/SerialStudio.cpp" line="369"/>
         <source>3D Plots</source>
         <translation>3D 플롯</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="375"/>
+        <location filename="../../src/SerialStudio.cpp" line="373"/>
         <source>Image Views</source>
         <translation>이미지 뷰</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="378"/>
+        <location filename="../../src/SerialStudio.cpp" line="376"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="937"/>
+        <location filename="../../src/SerialStudio.cpp" line="935"/>
         <source>UTF-8</source>
         <translation>UTF-8</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="938"/>
+        <location filename="../../src/SerialStudio.cpp" line="936"/>
         <source>UTF-16 LE</source>
         <translation>UTF-16 LE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="939"/>
+        <location filename="../../src/SerialStudio.cpp" line="937"/>
         <source>UTF-16 BE</source>
         <translation>UTF-16 BE</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="940"/>
+        <location filename="../../src/SerialStudio.cpp" line="938"/>
         <source>Latin-1</source>
         <translation>Latin-1</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="941"/>
+        <location filename="../../src/SerialStudio.cpp" line="939"/>
         <source>System</source>
         <translation>시스템</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="942"/>
+        <location filename="../../src/SerialStudio.cpp" line="940"/>
         <source>GBK</source>
         <translation>GBK</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="943"/>
+        <location filename="../../src/SerialStudio.cpp" line="941"/>
         <source>GB18030</source>
         <translation>GB18030</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="944"/>
+        <location filename="../../src/SerialStudio.cpp" line="942"/>
         <source>Big5</source>
         <translation>Big5</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="945"/>
+        <location filename="../../src/SerialStudio.cpp" line="943"/>
         <source>Shift-JIS</source>
         <translation>Shift-JIS</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="946"/>
+        <location filename="../../src/SerialStudio.cpp" line="944"/>
         <source>EUC-JP</source>
         <translation>EUC-JP</translation>
     </message>
     <message>
-        <location filename="../../src/SerialStudio.cpp" line="947"/>
+        <location filename="../../src/SerialStudio.cpp" line="945"/>
         <source>EUC-KR</source>
         <translation>EUC-KR</translation>
     </message>
@@ -9573,87 +9573,87 @@ function parse(%1) { ... }
         <translation>세션 세부 정보</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="89"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="85"/>
         <source>Select a session to view details.</source>
         <translation>세부 정보를 보려면 세션을 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="131"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="127"/>
         <source>Project:</source>
         <translation>프로젝트:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="144"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="140"/>
         <source>Started:</source>
         <translation>시작:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="157"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="153"/>
         <source>Ended:</source>
         <translation>종료:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="163"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="159"/>
         <source>(in progress)</source>
         <translation>(진행 중)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="170"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="166"/>
         <source>Frames:</source>
         <translation>프레임:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="186"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="182"/>
         <source>Notes</source>
         <translation>메모</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="197"/>
         <source>Add session notes…</source>
         <translation>세션 메모 추가…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="202"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="198"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>완료된 세션의 메모는 읽기 전용입니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="281"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="277"/>
         <source>New tag…</source>
         <translation>새 태그…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="358"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="354"/>
         <source>Unlock the session file to delete sessions</source>
         <translation>세션을 삭제하려면 세션 파일 잠금을 해제하세요</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="223"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="219"/>
         <source>Tags</source>
         <translation>태그</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="288"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="284"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="322"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="318"/>
         <source>Replay</source>
         <translation>재생</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="332"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="328"/>
         <source>Export CSV</source>
         <translation>CSV 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="341"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="337"/>
         <source>Generate Report</source>
         <translation>보고서 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="352"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="348"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
@@ -9922,195 +9922,195 @@ function parse(%1) { ... }
     </message>
     <message>
         <location filename="../../src/Sessions/HtmlReport.cpp" line="283"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="333"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="702"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="332"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="696"/>
         <source>Session Report</source>
         <translation>세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="336"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="335"/>
         <source>Untitled project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="344"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="343"/>
         <source>Prepared by</source>
         <translation>작성자</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="347"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="346"/>
         <source>Generated on %1</source>
         <translation>%1에 생성됨</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="370"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="369"/>
         <source>Test ID</source>
         <translation>테스트 ID</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="372"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="371"/>
         <source>Duration</source>
         <translation>지속 시간</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="374"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="490"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="373"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="488"/>
         <source>Samples</source>
         <translation>샘플</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="376"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="375"/>
         <source>Parameters</source>
         <translation>매개변수</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="378"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="377"/>
         <source>Started</source>
         <translation>시작됨</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="380"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="379"/>
         <source>Ended</source>
         <translation>종료됨</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="415"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="414"/>
         <source>Project</source>
         <translation>프로젝트</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="416"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="415"/>
         <source>Test identifier</source>
         <translation>테스트 식별자</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="417"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="416"/>
         <source>Start time</source>
         <translation>시작 시간</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="418"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="417"/>
         <source>End time</source>
         <translation>종료 시간</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="419"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="418"/>
         <source>Total duration</source>
         <translation>총 지속 시간</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="420"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="419"/>
         <source>Samples acquired</source>
         <translation>획득한 샘플</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="421"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="420"/>
         <source>Parameters logged</source>
         <translation>기록된 매개변수</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="439"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="438"/>
         <source>Classification</source>
         <translation>분류</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="447"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="446"/>
         <source>Notes</source>
         <translation>비고</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="455"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="454"/>
         <source>Test Information</source>
         <translation>테스트 정보</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="479"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="477"/>
         <source>Parameter</source>
         <translation>매개변수</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="482"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="480"/>
         <source>Units</source>
         <translation>단위</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="491"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="489"/>
         <source>Minimum</source>
         <translation>최소값</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="492"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="490"/>
         <source>Maximum</source>
         <translation>최대값</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="493"/>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="651"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="491"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="645"/>
         <source>Mean</source>
         <translation>평균</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="494"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="492"/>
         <source>Std. Deviation</source>
         <translation>표준 편차</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="536"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="534"/>
         <source>Measurement Summary</source>
         <translation>측정 요약</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="537"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="535"/>
         <source>click a column to sort</source>
         <translation>열을 클릭하여 정렬</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="561"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="559"/>
         <source>%1 samples over %2 seconds</source>
         <translation>%2초 동안 %1개 샘플</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="581"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="578"/>
         <source>Combined Parameter View</source>
         <translation>통합 파라미터 보기</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="582"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="579"/>
         <source>click legend items to toggle signals</source>
         <translation>범례 항목을 클릭하여 신호 전환</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="590"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="587"/>
         <source>Parameter Trends</source>
         <translation>파라미터 추세</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="649"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="643"/>
         <source>Min</source>
         <translation>최소값</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="650"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="644"/>
         <source>Max</source>
         <translation>최대값</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="733"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="727"/>
         <source>Page %1 of %2</source>
         <translation>%2 중 %1 페이지</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="807"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="801"/>
         <source>Loading rendering engine…</source>
         <translation>렌더링 엔진 로드 중…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="829"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="823"/>
         <source>Rendering charts…</source>
         <translation>차트 렌더링 중…</translation>
     </message>
     <message>
-        <location filename="../../src/Sessions/HtmlReport.cpp" line="882"/>
+        <location filename="../../src/Sessions/HtmlReport.cpp" line="876"/>
         <source>Generating PDF…</source>
         <translation>PDF 생성 중…</translation>
     </message>
@@ -10879,171 +10879,171 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="256"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="246"/>
         <source>Workspaces</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="342"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="329"/>
         <source>Actions</source>
         <translation>작업</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="363"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="349"/>
         <source>No Actions Available</source>
         <translation>사용 가능한 작업 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="379"/>
         <source>Plugins</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="436"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="422"/>
         <source>No Plugins Installed</source>
         <translation>설치된 플러그인 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="96"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="472"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="92"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="458"/>
         <source>Auto Layout</source>
         <translation>자동 레이아웃</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="104"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="484"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="470"/>
         <source>Full Screen</source>
         <translation>전체 화면</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="110"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="497"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="106"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="483"/>
         <source>Add External Window</source>
         <translation>외부 창 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="136"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="740"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="132"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="723"/>
         <source>Help Center</source>
         <translation>도움말 센터</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="611"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="596"/>
         <source>Tools</source>
         <translation>도구</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="704"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="687"/>
         <source>No Tools Available</source>
         <translation>사용 가능한 도구 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="768"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="751"/>
         <source>Reset</source>
         <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="825"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="808"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="826"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="809"/>
         <source>Hide</source>
         <translation>숨기기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="288"/>
         <source>New Workspace…</source>
         <translation>새 작업 공간…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="148"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="693"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="144"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="676"/>
         <source>Sessions</source>
         <translation>세션</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="299"/>
         <source>No Workspaces Available</source>
         <translation>사용 가능한 작업 공간 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="414"/>
         <source>Manage Plugins…</source>
         <translation>플러그인 관리…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="517"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="503"/>
         <source>Export</source>
         <translation>내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="548"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="533"/>
         <source>CSV File</source>
         <translation>CSV 파일</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="554"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="539"/>
         <source>MDF4 File</source>
         <translation>MDF4 파일</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="560"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="545"/>
         <source>Console Transcript</source>
         <translation>콘솔 기록</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="554"/>
         <source>Session Database</source>
         <translation>세션 데이터베이스</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="566"/>
         <source>No Export Formats Available</source>
         <translation>사용 가능한 내보내기 형식 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="116"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="654"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="112"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="637"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="122"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="663"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="118"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="646"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="130"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="672"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="126"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="655"/>
         <source>Preferences</source>
         <translation>환경설정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="814"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="797"/>
         <source>Edit…</source>
         <translation>편집…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="142"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="680"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="663"/>
         <source>MQTT</source>
         <translation>MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="761"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="744"/>
         <source>Resume</source>
         <translation>재개</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="762"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="745"/>
         <source>Pause</source>
         <translation>일시정지</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="789"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="772"/>
         <source>Disconnect</source>
         <translation>연결 해제</translation>
     </message>
@@ -11064,52 +11064,52 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>데이터셋 값</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="160"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="156"/>
         <source>Search</source>
         <translation>검색</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="181"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="177"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="182"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="178"/>
         <source>Group</source>
         <translation>그룹</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="179"/>
         <source>Dataset</source>
         <translation>데이터셋</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="184"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="180"/>
         <source>Units</source>
         <translation>단위</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="254"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="250"/>
         <source>(virtual)</source>
         <translation>(가상)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="300"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="296"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>액세스 코드 %1을 클립보드에 복사</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="376"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="372"/>
         <source>Dataset access code copied</source>
         <translation>데이터셋 액세스 코드 복사됨</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="325"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="321"/>
         <source>No datasets defined in this project.</source>
         <translation>이 프로젝트에 정의된 데이터셋이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="326"/>
+        <location filename="../../qml/ProjectEditor/Views/SystemDatasetsView.qml" line="322"/>
         <source>No datasets match your search.</source>
         <translation>검색 조건과 일치하는 데이터셋이 없습니다.</translation>
     </message>
@@ -11150,12 +11150,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>시작 메뉴</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="157"/>
         <source>Menu</source>
         <translation>메뉴</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="194"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="190"/>
         <source>Search…</source>
         <translation>검색…</translation>
     </message>
@@ -11164,7 +11164,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">위젯 검색…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="760"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="756"/>
         <source>Remove from Workspace</source>
         <translation>작업 공간에서 제거</translation>
     </message>
@@ -11172,47 +11172,47 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>Terminal</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="143"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="138"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="151"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="146"/>
         <source>Select all</source>
         <translation>모두 선택</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="157"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="152"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="257"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="252"/>
         <source>Send Data to Device</source>
         <translation>장치로 데이터 전송</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="423"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="415"/>
         <source>Show Timestamp</source>
         <translation>타임스탬프 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="431"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="423"/>
         <source>Echo</source>
         <translation>에코</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="448"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="440"/>
         <source>Emulate VT-100</source>
         <translation>VT-100 에뮬레이션</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="461"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="453"/>
         <source>ANSI Colors</source>
         <translation>ANSI 색상</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="481"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="473"/>
         <source>Display: %1</source>
         <translation>표시: %1</translation>
     </message>
@@ -11527,24 +11527,24 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="851"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1285"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="850"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1283"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="931"/>
-        <location filename="../../src/UI/Dashboard.cpp" line="1296"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="930"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1294"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1341"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1339"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (대체)</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Dashboard.cpp" line="1373"/>
+        <location filename="../../src/UI/Dashboard.cpp" line="1371"/>
         <source>LED Panel (%1)</source>
         <translation>LED 패널 (%1)</translation>
     </message>
@@ -12015,12 +12015,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>내셔널 지오그래픽</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="476"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="475"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>추가 지도 레이어는 Pro 사용자만 이용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/GPS.cpp" line="477"/>
+        <location filename="../../src/UI/Widgets/GPS.cpp" line="476"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>ArcGIS API 키에 실제 비용이 발생하므로 무제한 액세스를 제공할 수 없습니다.</translation>
     </message>
@@ -12033,7 +12033,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>전송 스크립트가 %1 ms 후 시간 초과됨</translation>
     </message>
     <message>
-        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="219"/>
+        <location filename="../../src/UI/Widgets/Output/Base.cpp" line="218"/>
         <source>Payload exceeds maximum size</source>
         <translation>페이로드가 최대 크기를 초과함</translation>
     </message>
@@ -12049,7 +12049,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Plot3D</name>
     <message>
-        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1217"/>
+        <location filename="../../src/UI/Widgets/Plot3D.cpp" line="1213"/>
         <source>Grid Interval: %1 unit(s)</source>
         <translation>그리드 간격: %1 단위</translation>
     </message>
@@ -12181,37 +12181,37 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="123"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="120"/>
         <source>Customize</source>
         <translation>사용자 지정</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="122"/>
         <source>Edit workspaces manually</source>
         <translation>작업 공간 수동 편집</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="134"/>
         <source>Add Workspace</source>
         <translation>작업 공간 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="136"/>
         <source>Add workspace</source>
         <translation>작업 공간 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="150"/>
         <source>Title</source>
         <translation>제목</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="151"/>
         <source>Widgets</source>
         <translation>위젯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="218"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="215"/>
         <source>No workspaces.</source>
         <translation>작업 공간이 없습니다.</translation>
     </message>

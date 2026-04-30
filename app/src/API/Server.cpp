@@ -33,8 +33,7 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/Utilities.h"
 
-// Monotonic counter for session IDs — avoids pointer-to-int casts which are
-// unsafe because addresses can be reused after socket deletion
+// Monotonic counter for session IDs — socket addresses can be reused.
 static QAtomicInteger<quintptr> s_nextSessionId{1};
 
 //--------------------------------------------------------------------------------------------------

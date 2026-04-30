@@ -162,9 +162,7 @@ inline constexpr KeyView SchemaVersion("schemaVersion");
 inline constexpr KeyView WriterVersion("writerVersion");
 inline constexpr KeyView WriterVersionAtCreation("writerVersionAtCreation");
 
-// Project lock key — optional password gate on the Project Editor for
-// operator/engineer separation in production dashboards. Stored as MD5
-// of the password; this is a UX read-only flag, not crypto.
+// Project lock — MD5 of optional Project Editor password (UX gate, not crypto).
 inline constexpr KeyView PasswordHash("passwordHash");
 
 inline QString layoutKey(int groupId)
@@ -483,9 +481,7 @@ struct TableDef {
   obj.insert(Keys::FrameStart, s.frameStart);
   obj.insert(Keys::FrameEnd, s.frameEnd);
 
-  // Write both legacy ("checksum"/"decoder") and canonical aliases so older
-  // Serial Studio versions can still load new project files. Read with
-  // fallback (see read(Source&)).
+  // Emit both legacy and canonical aliases for back-compat with older versions.
   obj.insert(Keys::Checksum, s.checksumAlgorithm);
   obj.insert(Keys::ChecksumAlgorithm, s.checksumAlgorithm);
   obj.insert(Keys::FrameDetection, s.frameDetection);
@@ -1063,12 +1059,7 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Groups, groupArray);
   obj.insert(Keys::Actions, actionArray);
 
-  // Round-trip project-version metadata only if this Frame already carries a
-  // writer stamp (i.e. it was loaded from a project file). Live runtime frames
-  // emit hundreds-to-thousands per second over the API; injecting fresh
-  // version stamps on every live frame would balloon the broadcast payload.
-  // The canonical project save path is ProjectModel::serializeToJson(), which
-  // stamps explicitly.
+  // Round-trip project-version metadata only when the Frame carries a writer stamp.
   if (!f.writerVersion.isEmpty() || !f.writerVersionAtCreation.isEmpty() || f.schemaVersion > 0) {
     obj.insert(Keys::SchemaVersion, f.schemaVersion > 0 ? f.schemaVersion : kSchemaVersion);
     if (!f.writerVersion.isEmpty())
@@ -1107,9 +1098,7 @@ void read_io_settings(QByteArray& frameStart,
   s.frameParserCode       = ss_jsr(obj, Keys::FrameParserCode, "").toString();
   s.frameParserLanguage   = ss_jsr(obj, Keys::FrameParserLanguage, 0).toInt();
 
-  // Prefer canonical "checksumAlgorithm" / "decoderMethod" keys; fall back to
-  // legacy "checksum" / "decoder" aliases written by older Serial Studio
-  // versions. serialize() still writes both for downstream compatibility.
+  // Prefer canonical keys; fall back to legacy aliases from older versions.
   if (obj.contains(Keys::ChecksumAlgorithm))
     s.checksumAlgorithm = obj.value(Keys::ChecksumAlgorithm).toString();
   else
@@ -1226,10 +1215,7 @@ void read_io_settings(QByteArray& frameStart,
   else
     d.numericValue = d.value.toDouble(&d.isNumeric);
 
-  // Legacy-project fallback: pre-3.x projects shared a single "min"/"max" pair
-  // for FFT, plot, and widget ranges. Apply only when the corresponding
-  // canonical key is missing from the JSON object (defaults are 0, never NaN,
-  // so the previous std::isnan check was dead code).
+  // Legacy fallback: pre-3.x projects used a shared min/max for FFT/plot/widget.
   if (!obj.contains(Keys::FFTMin) || !obj.contains(Keys::FFTMax)) {
     d.fftMin = ss_jsr(obj, Keys::Min, 0).toDouble();
     d.fftMax = ss_jsr(obj, Keys::Max, 0).toDouble();
@@ -1245,15 +1231,11 @@ void read_io_settings(QByteArray& frameStart,
     d.wgtMax = ss_jsr(obj, Keys::Max, 0).toDouble();
   }
 
-  // Legacy single-field "alarm" → seed alarmHigh when neither high nor low is
-  // present in the project file. Older code gated this on std::isnan, but the
-  // defaults are 0 — the gate must check JSON presence instead.
+  // Legacy single-field "alarm" seeds alarmHigh when high/low are absent.
   if (obj.contains(Keys::Alarm) && !obj.contains(Keys::AlarmLow) && !obj.contains(Keys::AlarmHigh))
     d.alarmHigh = ss_jsr(obj, Keys::Alarm, 0).toDouble();
 
   // Normalize swapped min/max pairs from legacy / hand-edited project files.
-  // serialize() already writes them sorted; this guards untrusted input.
-  // Use a temp so the qMax call doesn't see the already-overwritten min.
   if (d.fftMin > d.fftMax) {
     const double mn = d.fftMin;
     d.fftMin        = d.fftMax;
@@ -1394,9 +1376,7 @@ void read_io_settings(QByteArray& frameStart,
     f.groups.reserve(groups.count());
     f.actions.reserve(actions.count());
 
-    // Read project-version metadata. Files written before these keys existed
-    // default to schemaVersion = 0 and empty writer strings — callers can
-    // detect "legacy file with no version stamp" via that.
+    // Read project-version metadata; pre-stamp files default to 0 / empty.
     f.schemaVersion           = ss_jsr(obj, Keys::SchemaVersion, 0).toInt();
     f.writerVersion           = ss_jsr(obj, Keys::WriterVersion, "").toString();
     f.writerVersionAtCreation = ss_jsr(obj, Keys::WriterVersionAtCreation, "").toString();

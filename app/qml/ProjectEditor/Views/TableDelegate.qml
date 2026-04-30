@@ -699,16 +699,13 @@ ColumnLayout {
               // Add space automatically in hex view
               //
               onTextChanged: {
-                // Get the current cursor position
                 const currentCursorPosition = _hexComponent.cursorPosition;
                 const cursorAtEnd = (currentCursorPosition === _hexComponent.text.length);
 
-                // Format the text
                 const originalText = _hexComponent.text;
                 const formattedText = Cpp_Console_Handler.formatUserHex(_hexComponent.text);
                 const isValid = Cpp_Console_Handler.validateUserHex(formattedText);
 
-                // Update the text only if it has changed
                 if (originalText !== formattedText) {
                   _hexComponent.text = formattedText;
 
@@ -733,7 +730,6 @@ ColumnLayout {
                   }
                 }
 
-                // Update the palette based on validation
                 _hexComponent.color = isValid
                     ? Cpp_ThemeManager.colors["table_text"]
                     : Cpp_ThemeManager.colors["alarm"]

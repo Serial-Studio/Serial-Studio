@@ -99,12 +99,7 @@ Widgets.Pane {
       boundsBehavior: TreeView.DragAndOvershootBounds
       selectionModel: Cpp_JSON_ProjectEditor.selectionModel
 
-      //
-      // Preserve scroll position across tree rebuilds. The C++ side
-      // destroys and recreates the model, which resets contentY to 0.
-      // We snapshot the position just before the model swap and restore
-      // it once the new tree has laid out.
-      //
+      // Snapshot scroll position before the model swap and restore it after relayout.
       property real savedContentY: 0
 
       Connections {

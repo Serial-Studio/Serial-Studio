@@ -260,8 +260,7 @@ DataModel::ProjectEditor::ProjectEditor()
       if (!m_selectionModel)
         return;
 
-      // Fall back to the "Groups" parent category (the deleted group's parent
-      // in the tree) rather than jumping all the way to the project root.
+      // Fall back to the "Groups" parent category, not the project root.
       if (m_groupsRootItem) {
         m_selectionModel->setCurrentIndex(m_groupsRootItem->index(),
                                           QItemSelectionModel::ClearAndSelect);
@@ -309,8 +308,7 @@ DataModel::ProjectEditor::ProjectEditor()
       if (!m_selectionModel)
         return;
 
-      // Group was emptied and removed — fall back to the Groups parent node
-      // rather than the project root.
+      // Group was emptied and removed; fall back to the Groups parent.
       if (m_groupsRootItem) {
         m_selectionModel->setCurrentIndex(m_groupsRootItem->index(),
                                           QItemSelectionModel::ClearAndSelect);
@@ -706,7 +704,7 @@ void DataModel::ProjectEditor::openTransformEditor()
       }
   }
 
-  // Create the dialog on first use (avoids destruction-order crash)
+  // Lazy-create the dialog to dodge destruction-order issues.
   if (!m_transformEditor) {
     m_transformEditor = new DatasetTransformEditor(nullptr);
 
@@ -714,7 +712,6 @@ void DataModel::ProjectEditor::openTransformEditor()
             &DatasetTransformEditor::transformApplied,
             this,
             [this](const QString& code, int lang, int gId, int dId) {
-              // Update the authoritative data in ProjectModel
               auto& pm     = DataModel::ProjectModel::instance();
               auto& groups = pm.groups();
               if (gId < 0 || static_cast<size_t>(gId) >= groups.size())
@@ -729,7 +726,6 @@ void DataModel::ProjectEditor::openTransformEditor()
               dataset.transformLanguage = code.isEmpty() ? -1 : lang;
               pm.updateDataset(gId, dId, dataset, false);
 
-              // Update the current selection if it matches
               if (m_selectedDataset.groupId == gId && m_selectedDataset.datasetId == dId) {
                 m_selectedDataset.transformCode     = code;
                 m_selectedDataset.transformLanguage = dataset.transformLanguage;
@@ -936,16 +932,14 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   const auto& sources    = pm.sources();
   const bool multiSource = sources.size() > 1;
 
-  // Tree search query — when non-empty, limit items to those whose title (or
-  // one of their descendants' titles) matches the query (case-insensitive).
+  // Tree search query — non-empty filters items by title (case-insensitive).
   const QString q         = m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
   const auto matches      = [&q](const QString& s) {
     return s.contains(q, Qt::CaseInsensitive);
   };
 
-  // Add source items with their frame parser children (skip when filtering —
-  // search only spans actions, groups, and datasets)
+  // Add source items with their frame parser children (skipped when filtering).
   if (!filterActive) {
     for (const auto& source : sources) {
       auto* sourceItem = new QStandardItem(source.title);
@@ -981,10 +975,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     m_actionItems.insert(actionItem, action);
   }
 
-  // Build the "Groups" category parent — collects every group item as a child
-  // so the whole section can be collapsed/expanded as a unit. Created lazily
-  // so that an empty project (or a filter that hides all groups) doesn't leave
-  // a dangling empty parent node in the tree.
+  // Lazy-built "Groups" parent so empty projects don't leave a dangling node.
   QStandardItem* groupsRoot   = nullptr;
   const auto ensureGroupsRoot = [&]() {
     if (groupsRoot)
@@ -999,8 +990,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
 
   // Add group items with their dataset and output widget children
   for (const auto& group : groups) {
-    // Determine which datasets in this group match the query — a group is
-    // included if its own title matches OR at least one of its datasets matches.
+    // A group is included if its title matches or any dataset matches.
     const bool groupMatches = !filterActive || matches(group.title);
     bool anyDatasetMatches  = false;
     if (filterActive && !groupMatches) {
@@ -1028,8 +1018,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     if (filterActive)
       groupItem->setData(true, TreeViewExpanded);
 
-    // Add dataset children — if the group itself matched, show all datasets;
-    // otherwise only show the datasets that individually match the query.
+    // Show all datasets if the group matched, otherwise only matching datasets.
     for (const auto& dataset : group.datasets) {
       if (filterActive && !groupMatches && !matches(dataset.title))
         continue;
@@ -1050,8 +1039,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
       m_datasetItems.insert(datasetItem, dataset);
     }
 
-    // Add output widget children (skip when filtering — search is scoped to
-    // actions, groups, and datasets)
+    // Add output widget children (skipped when filtering).
     for (const auto& ow : group.outputWidgets) {
       if (filterActive)
         break;
@@ -1102,9 +1090,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
     m_groupsRootItem = groupsRoot;
   }
 
-  // Add "Shared Memory" category root (Pro only). When a tree search is
-  // active, include it only if the root name, "Dataset Values", or any
-  // user-table name matches.
+  // Add "Shared Memory" category root (Pro only); included if root or any child matches.
 #ifdef BUILD_COMMERCIAL
   const auto& userTables = pm.tables();
   bool includeSharedRoot =
@@ -1152,8 +1138,7 @@ void DataModel::ProjectEditor::buildTreeItems(QStandardItem* root,
   }
 #endif  // BUILD_COMMERCIAL
 
-  // Add "Workspaces" category root. Hidden when a tree search is active
-  // unless it or one of its children matches.
+  // Add "Workspaces" category root; hidden under search unless it or a child matches.
   const auto& workspaces = pm.editorWorkspaces();
   bool includeWorkspaces = !filterActive || matches(tr("Workspaces"));
   if (!includeWorkspaces) {
@@ -1263,8 +1248,7 @@ void DataModel::ProjectEditor::restoreTreeSelection()
       }
     }
 
-    // Table was deleted — fall back to its parent category rather than the
-    // project root.
+    // Table was deleted; fall back to its parent category, not the root.
     if (!toSelect)
       toSelect = m_tablesRootItem;
   } else if (m_currentView == WorkspacesView) {
@@ -2766,10 +2750,7 @@ void DataModel::ProjectEditor::onActionItemChanged(QStandardItem* item)
 
     Q_EMIT selectedTextChanged();
   } else {
-    // updateAction() with rebuildTree=false skips the tree refresh, so the
-    // m_actionItems cache stays at last-rebuild state. Sync it here so the
-    // next selection of this action reads the current values, and a later
-    // edit doesn't reseed m_selectedAction with stale data.
+    // updateAction(rebuildTree=false) skips the tree refresh — sync the cache here.
     for (auto it = m_actionItems.begin(); it != m_actionItems.end(); ++it) {
       if (it.value().actionId == actionId) {
         m_actionItems[it.key()] = m_selectedAction;
@@ -2863,9 +2844,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
       m_selectedDataset.ledHigh = value.toDouble();
       break;
     case kDatasetView_Overview:
-      // Deprecated — overview option removed in v3.3. Kept in enum to avoid
-      // renumbering downstream cases; never reached because the row is no
-      // longer added to the editor model.
+      // Deprecated in v3.3; enum kept to avoid renumbering. Row no longer added.
       break;
     case kDatasetView_Plot: {
       const int plotIdx = value.toInt();
@@ -2925,8 +2904,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     case kDatasetView_Virtual: {
       m_selectedDataset.virtual_ = value.toBool();
 
-      // Refresh the tree-item virtual flag so the [A-N] / [VRT] label swaps
-      // immediately rather than waiting for the next full tree rebuild.
+      // Refresh the tree-item virtual flag so the [A-N]/[VRT] label swaps now.
       for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
         if (it.value().groupId == m_selectedDataset.groupId
             && it.value().datasetId == m_selectedDataset.datasetId) {
@@ -2935,9 +2913,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
         }
       }
 
-      // Defer the rebuild so we don't mutate the model mid-item-changed signal
-      // emission. Guard against the user switching selection before the lambda
-      // fires — if a different dataset is now selected, skip the rebuild.
+      // Defer rebuild past this signal; skip if selection moved before it fires.
       const int uid = m_selectedDataset.uniqueId;
       QTimer::singleShot(0, this, [this, uid] {
         if (m_selectedDataset.uniqueId == uid)
@@ -2976,12 +2952,7 @@ void DataModel::ProjectEditor::onDatasetItemChanged(QStandardItem* item)
     const bool rebuildTree = (idInt == kDatasetView_Index);
     pm.updateDataset(groupId, datasetId, m_selectedDataset, rebuildTree);
 
-    // Scalar edits skip the rebuildTree path, so groupsChanged never fires
-    // and the tree-item dataset cache stays at the snapshot captured during
-    // the last full rebuild. Sync it here — otherwise a later re-selection
-    // of this dataset (which reads from the cache) loses every wgt/alarm
-    // edit, AND the next field edit reseeds m_selectedDataset from the
-    // stale snapshot and silently rolls those values back into the project.
+    // Sync the tree-item cache when rebuildTree=false; otherwise edits get rolled back.
     if (!rebuildTree) {
       for (auto it = m_datasetItems.begin(); it != m_datasetItems.end(); ++it) {
         if (it.value().groupId == groupId && it.value().datasetId == datasetId) {
@@ -3076,8 +3047,6 @@ void DataModel::ProjectEditor::onCurrentSelectionChanged(const QModelIndex& curr
   }
 }
 
-//--------------------------------------------------------------------------------------------------
-// Private helpers: expanded state persistence
 /**
  * @brief Selects the source item with the given sourceId in the tree.
  */
@@ -3353,7 +3322,6 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
       break;
   }
 
-  // Update the tree item title
   if (static_cast<OutputWidgetItem>(id.toInt()) == kOutputWidget_Title) {
     const auto newTitle = value.toString();
     for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
@@ -3366,9 +3334,7 @@ void DataModel::ProjectEditor::onOutputWidgetItemChanged(QStandardItem* item)
       }
     }
   } else {
-    // updateOutputWidget() runs with rebuildTree=false, so the tree-item
-    // cache won't refresh. Sync it here so re-selecting this widget reads
-    // the current values instead of the snapshot from last tree rebuild.
+    // Sync the tree-item cache; updateOutputWidget(rebuildTree=false) skips it.
     for (auto it = m_outputWidgetItems.begin(); it != m_outputWidgetItems.end(); ++it) {
       if (it.value().groupId == m_selectedOutputWidget.groupId
           && it.value().widgetId == m_selectedOutputWidget.widgetId) {
@@ -3525,9 +3491,7 @@ void DataModel::ProjectEditor::setTreeSearchQuery(const QString& query)
   m_treeSearchQuery = query;
   Q_EMIT treeSearchQueryChanged();
 
-  // Defer the rebuild so rapid typing doesn't rebuild on every keystroke
-  // mid-QML binding evaluation. Check the query is still current — if the
-  // user kept typing, a later setter invocation queued its own rebuild.
+  // Defer rebuild and re-check query freshness so rapid typing coalesces.
   const auto current = m_treeSearchQuery;
   QTimer::singleShot(0, this, [this, current] {
     if (m_treeSearchQuery == current)
@@ -3540,8 +3504,7 @@ void DataModel::ProjectEditor::setTreeSearchQuery(const QString& query)
  */
 QVariantList DataModel::ProjectEditor::systemDatasetsSummary() const
 {
-  // Recompute uniqueId using the finalize_frame encoding — ProjectModel's
-  // copy of groups is not finalized: sourceId*1000000 + groupId*10000 + datasetId
+  // Recompute uniqueId via finalize_frame encoding (ProjectModel copy isn't finalized).
   QVariantList result;
   const auto& groups = DataModel::ProjectModel::instance().groups();
 
@@ -3605,8 +3568,7 @@ QVariantList DataModel::ProjectEditor::widgetsForWorkspace(int workspaceId) cons
   if (wsIt == wsList.end())
     return result;
 
-  // Mirror buildAutoWorkspaces()'s walk — relativeIndex is a per-widget-type
-  // project-wide counter, NOT a dataset array index within the group.
+  // Mirror buildAutoWorkspaces(): relativeIndex is project-wide per widget type.
   struct ResolvedWidget {
     QString groupTitle;
     QString datasetTitle;
@@ -3698,8 +3660,7 @@ QVariantList DataModel::ProjectEditor::allWidgetsSummary() const
     if (!SerialStudio::groupEligibleForWorkspace(group))
       continue;
 
-    // Group-level widget — mirror Dashboard's non-Pro Plot3D fallback so the
-    // picker advertises the widget that will actually render.
+    // Group-level widget — mirror Dashboard's non-Pro Plot3D fallback.
     auto groupKey = SerialStudio::getDashboardWidget(group);
     if (groupKey == SerialStudio::DashboardPlot3D && !pro)
       groupKey = SerialStudio::DashboardMultiPlot;

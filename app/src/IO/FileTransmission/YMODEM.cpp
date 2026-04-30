@@ -278,9 +278,7 @@ void IO::Protocols::YMODEM::sendEndOfBatch()
  */
 void IO::Protocols::YMODEM::sendDataBlock()
 {
-  // Snapshot file position for precise rewind on NAK/timeout. See XMODEM
-  // for the full rationale — the final block is usually partial, so
-  // subtracting 1024 blindly over-rewinds past the true block boundary.
+  // Snapshot file position for precise rewind on NAK/timeout.
   m_lastBlockStart = m_file.pos();
 
   // Read next 1K block; send EOT if file is exhausted

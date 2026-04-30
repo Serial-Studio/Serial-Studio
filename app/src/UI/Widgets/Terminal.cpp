@@ -288,8 +288,7 @@ void Widgets::Terminal::renderAnsiSegment(QPainter* painter,
                                           int x,
                                           int y)
 {
-  // Coalesce consecutive characters with the same fg/bg color into runs,
-  // drawing each run with a single fillRect + drawText instead of per-char.
+  // Coalesce same-color runs into a single fillRect + drawText instead of per-char
   const auto& fm = painter->fontMetrics();
   int xPos       = x;
   int j          = 0;
@@ -1347,8 +1346,7 @@ void Widgets::Terminal::append(const QString& data)
   const int len = data.size();
 
   while (pos < len) {
-    // Fast path: in Text state, scan ahead for runs of printable chars
-    // that don't need per-char state-machine dispatch.
+    // Fast path: scan runs of printable chars without per-char state dispatch
     if (m_state == Text) [[likely]] {
       const int runStart = pos;
       while (pos < len) {
@@ -1963,8 +1961,7 @@ void Widgets::Terminal::updateAnsiColorPalette()
   const QColor consoleText = theme->getColor("console_text");
   const bool isDarkTheme   = consoleText.lightness() > consoleBase.lightness();
 
-  // Colors for dark backgrounds.
-  // Index order: 0=Black, 1=Red, 2=Green, 3=Yellow, 4=Blue, 5=Magenta, 6=Cyan, 7=White.
+  // Dark-theme palette; index order: 0=Black 1=Red 2=Green 3=Yellow 4=Blue 5=Magenta 6=Cyan 7=White
   if (isDarkTheme) {
     // Standard ANSI colors (dark theme)
     m_ansiStandardColors[0] = QColor(0, 0, 0);
@@ -1987,8 +1984,7 @@ void Widgets::Terminal::updateAnsiColorPalette()
     m_ansiBrightColors[7] = QColor(255, 255, 255);
   }
 
-  // Colors for light backgrounds.
-  // Index order: 0=Black, 1=Red, 2=Green, 3=Yellow, 4=Blue, 5=Magenta, 6=Cyan, 7=White.
+  // Light-theme palette; same index order as the dark palette above
   else {
     // Standard ANSI colors (light theme)
     m_ansiStandardColors[0] = QColor(0, 0, 0);
@@ -2455,7 +2451,7 @@ void Widgets::Terminal::mouseMoveEvent(QMouseEvent* event)
   // Determine the current cursor position based on the mouse event
   QPoint currentCursorPos = positionToCursor(event->pos());
 
-  // Check if selection is inverted (from bottom-right to top-left or similar)
+  // Inverted selection (cursor before anchor)
   if ((m_selectionStartCursor.y() > currentCursorPos.y())
       || (m_selectionStartCursor.y() == currentCursorPos.y()
           && m_selectionStartCursor.x() > currentCursorPos.x())) {

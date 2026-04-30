@@ -224,12 +224,10 @@ void DataModel::JsCodeEditor::switchLanguage(const int language)
   // Detect which template the current code matches BEFORE switching
   const int tmplIdx = parser.detectTemplate(text());
 
-  // Flip the project model language so templateCode() resolves to the
-  // new-language path when setTemplateIdx runs
+  // Switch project language first so templateCode() picks the new path.
   model.updateSourceFrameParserLanguage(m_sourceId, language);
 
-  // Load the equivalent template in the new language, or the default if
-  // the current code doesn't match any known template
+  // Load the matching template, or the default if the code matches none.
   if (tmplIdx >= 0)
     parser.setTemplateIdx(m_sourceId, tmplIdx);
   else

@@ -90,7 +90,6 @@ Widgets::Plot3D::Plot3D(const int index, QQuickItem* parent)
   setMipmap(true);
   setAntialiasing(false);
 
-  // Update the plot data
   connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this, &Widgets::Plot3D::updateData);
 
   // Mark everything as dirty when widget size changes
@@ -915,12 +914,11 @@ void Widgets::Plot3D::drawGrid()
  */
 void Widgets::Plot3D::drawBackground()
 {
-  // Create a transparent image at high DPI resolution
   QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
   img.setDevicePixelRatio(qApp->devicePixelRatio());
   img.fill(Qt::transparent);
 
-  // Set up a radial gradient centered in the widget
+  // Radial gradient centered in the widget
   QPointF center(width() * 0.5f, height() * 0.5f);
   double radius = qMax(width(), height()) * 0.25;
   QRadialGradient gradient(center, radius);
@@ -1162,7 +1160,6 @@ void Widgets::Plot3D::drawLine3D(QPainter& painter,
  */
 QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
 {
-  // Create the image and initialize it to the widget's size
   QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
   img.setDevicePixelRatio(qApp->devicePixelRatio());
   img.fill(Qt::transparent);
@@ -1210,8 +1207,7 @@ QImage Widgets::Plot3D::renderGrid(const QMatrix4x4& matrix)
   // Render axis lines
   drawLine3D(painter, matrix, xAxis.first, xAxis.second, m_xAxisColor, 1.5, Qt::SolidLine);
   drawLine3D(painter, matrix, yAxis.first, yAxis.second, m_yAxisColor, 1.5, Qt::SolidLine);
-  // drawLine3D(painter, matrix, zAxis.first, zAxis.second, m_zAxisColor, 1.5,
-  //            Qt::SolidLine);
+  // drawLine3D(painter, matrix, zAxis.first, zAxis.second, m_zAxisColor, 1.5, Qt::SolidLine);
 
   // Draw grid step label in lower-left corner
   const QString stepLabel = tr("Grid Interval: %1 unit(s)").arg(step);
@@ -1246,7 +1242,6 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4& matrix)
     QVector4D transformed;
   };
 
-  // Create the image and initialize it to the widget's size
   QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
   img.setDevicePixelRatio(qApp->devicePixelRatio());
   img.fill(Qt::transparent);
@@ -1328,7 +1323,6 @@ QImage Widgets::Plot3D::renderCameraIndicator(const QMatrix4x4& matrix)
  */
 QImage Widgets::Plot3D::renderData(const QMatrix4x4& matrix, const DSP::LineSeries3D& data)
 {
-  // Create the pixmap and initialize it to the widget's size
   QImage img(widgetSize(), QImage::Format_ARGB32_Premultiplied);
   img.setDevicePixelRatio(qApp->devicePixelRatio());
   img.fill(Qt::transparent);

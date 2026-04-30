@@ -32,11 +32,13 @@ sources (.cpp). The id-placement and christmas-tree rules apply only to
 QML files. CRLF/CR line endings are normalized to LF on every processed
 file, regardless of suffix.
 
-Comment-style and AI-narration findings (multi-line `//` runs, `//` as
-the first line of a `{` body, tutorial voice, hedging, rot-references,
-restate-the-code openers, emoji, …) are flag-only — collapsing or
-hoisting comments is a judgement call. Findings are grouped by rule
-into `.code-report` at the repo root for a follow-up human or LLM pass.
+Comment-style and AI-narration findings (multi-line `//` runs, tutorial
+voice, hedging, rot-references, restate-the-code openers, emoji, …) are
+flag-only — collapsing or rewriting comments is a judgement call. Banner
+shapes (`//---` rules, QML `//` / `// label` / `//` sandwich) and tooling
+pragmas (`// clang-format off/on`, `// NOLINT`, `// cppcheck-suppress`,
+`// fallthrough`) are skipped. Findings are grouped by rule into
+`.code-report` at the repo root for a follow-up human or LLM pass.
 
 Wrap a region with `// code-format off` / `// code-format on` to disable
 every rule between the fences (the `/* ... */` equivalent works too).
@@ -872,69 +874,115 @@ def _is_line_comment(line: str) -> bool:
     return stripped.startswith("//")
 
 
+_TOOLING_PRAGMA_RE = re.compile(
+    r"^\s*(?:clang-format|code-format|NOLINT|cppcheck-suppress|fallthrough)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_tooling_pragma(line: str) -> bool:
+    """True when `line` is a `//` comment that carries a tooling pragma
+    (`// clang-format off/on`, `// NOLINT...`, `// cppcheck-suppress ...`,
+    `// fallthrough`). Pragmas are never prose, so they neither start a
+    multi-line `//` run nor extend one.  Treating `// foo` followed by
+    `// clang-format off` as a 2-line comment block is wrong — the second
+    line is a directive, not narration."""
+    payload = _comment_payload(line)
+    if payload is None:
+        return False
+    return bool(_TOOLING_PRAGMA_RE.match(payload))
+
+
+def _is_banner_payload(payload: str) -> bool:
+    """True when a comment payload is a banner decorator: empty after the
+    `//`, or punctuation-only (`---`, `===`, `***`).  These are intentional
+    section markers per CLAUDE.md and are stripped from prose runs."""
+    s = payload.strip()
+    return s == "" or set(s) <= {"-", "=", "*"}
+
+
+def _is_banner_run(payloads: list[str]) -> bool:
+    """A run of consecutive `//` comment payloads is a banner when it follows
+    the project's section-marker shapes:
+
+      A) Decorators only — `//---`, `//===`, `//` (blank).  Flagging these
+         as multi-line narration is wrong; they're rules between sections.
+      B) Sandwich — the run starts AND ends with a decorator and every
+         non-decorator line is adjacent to one.  Catches both the C++ form
+         (`//---` / `// Section` / `//---`) and the QML form
+         (`//` / `// Section` / `//`)."""
+    if not payloads:
+        return False
+
+    if all(_is_banner_payload(p) for p in payloads):
+        return True
+
+    if not _is_banner_payload(payloads[0]) or not _is_banner_payload(payloads[-1]):
+        return False
+
+    for idx, p in enumerate(payloads):
+        if _is_banner_payload(p):
+            continue
+        prev_dec = idx > 0 and _is_banner_payload(payloads[idx - 1])
+        next_dec = idx + 1 < len(payloads) and _is_banner_payload(payloads[idx + 1])
+        if not (prev_dec or next_dec):
+            return False
+    return True
+
+
 def find_comment_style_violations(
     lines: list[str], path: Path, fence_mask: list[bool]
 ) -> list[Violation]:
-    """Flag two AI-typical patterns:
+    """Flag the AI-typical multi-line `//` narration pattern.
 
-    - `multi-line-comment`: ≥2 consecutive `//` comment lines. CLAUDE.md
-      caps in-body `//` comments at one line; multi-line narration is
-      flagged for human collapse / removal.
-    - `comment-after-brace`: a `//` line as the first non-blank content
-      inside a `{` block. Hoisting the comment above the block (and often
-      dropping the braces) reads better — see CLAUDE.md "Comments &
-      Doxygen" guidance.
+    A `multi-line-comment` is ≥2 consecutive `//` comment lines that are
+    NOT a banner.  CLAUDE.md caps in-body `//` comments at one line, so a
+    real prose run is flagged for human collapse or removal.
 
-    Neither is auto-fixable: collapsing comments loses information,
-    hoisting requires judgement about the surrounding block."""
+    Banner shapes are intentional and skipped:
+      - `//---` / `//===` decorator rules (with or without a label),
+      - QML `//` / `// label` / `//` sandwich.
+
+    Tooling pragmas (`// clang-format off/on`, `// NOLINT`,
+    `// cppcheck-suppress`, `// fallthrough`) are run-breakers — they're
+    directives, not prose, so a label line directly above one is still a
+    one-line comment, not a 2-line block.
+
+    Not auto-fixable: collapsing a real multi-line comment loses
+    information, so judgement belongs to a human or LLM follow-up."""
     violations: list[Violation] = []
     n = len(lines)
 
     i = 0
     while i < n:
-        if fence_mask[i] or not _is_line_comment(lines[i]):
+        if fence_mask[i] or not _is_line_comment(lines[i]) or _is_tooling_pragma(lines[i]):
             i += 1
             continue
 
         run_start = i
-        while i < n and not fence_mask[i] and _is_line_comment(lines[i]):
+        while (i < n and not fence_mask[i]
+               and _is_line_comment(lines[i])
+               and not _is_tooling_pragma(lines[i])):
             i += 1
         run_len = i - run_start
 
-        if run_len >= 2:
-            violations.append(
-                Violation(
-                    path,
-                    run_start + 1,
-                    "multi-line-comment",
-                    f"{run_len} consecutive `//` lines — collapse to one line "
-                    "or drop (CLAUDE.md: in-body comments are one-line section headers)",
-                )
-            )
+        if run_len < 2:
+            continue
 
-    for i, line in enumerate(lines):
-        if fence_mask[i]:
+        payloads = [_comment_payload(lines[k]) or ""
+                    for k in range(run_start, run_start + run_len)]
+        if _is_banner_run(payloads):
             continue
-        sanitized = _strip_eol_comment(line)
-        if not sanitized.endswith("{"):
-            continue
-        # Find the next non-blank line
-        j = i + 1
-        while j < n and lines[j].strip() == "":
-            j += 1
-        if j >= n or fence_mask[j]:
-            continue
-        if _is_line_comment(lines[j]):
-            violations.append(
-                Violation(
-                    path,
-                    j + 1,
-                    "comment-after-brace",
-                    "`//` comment as first line of a `{` body — hoist the "
-                    "comment above the block opener (CLAUDE.md: comments label "
-                    "sections, they don't narrate from inside)",
-                )
+
+        violations.append(
+            Violation(
+                path,
+                run_start + 1,
+                "multi-line-comment",
+                f"{run_len} consecutive `//` lines — collapse to one line "
+                "or drop (CLAUDE.md: in-body comments are one-line section headers)",
             )
+        )
 
     return violations
 
@@ -1253,8 +1301,8 @@ def default_targets() -> list[Path]:
 
 
 # Kinds the script CAN auto-fix in place. Anything else (multi-line-comment,
-# comment-after-brace, ai-*, christmas-tree-once-merged) is flag-only and
-# lives in `.code-report` for human / LLM follow-up.
+# ai-*, christmas-tree-once-merged) is flag-only and lives in `.code-report`
+# for human / LLM follow-up.
 _AUTO_FIXABLE_KINDS = frozenset({
     "line-endings",
     "id-blank-line",

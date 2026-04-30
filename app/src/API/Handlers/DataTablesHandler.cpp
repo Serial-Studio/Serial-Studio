@@ -368,8 +368,7 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString
 
   auto& pm = DataModel::ProjectModel::instance();
 
-  // Detect collision up front — renameTable silently no-ops, so a naive
-  // post-check against newName would mistake the existing table for success
+  // renameTable silently no-ops on collision; check up front.
   const auto& preTables = pm.tables();
   const bool hasOld     = std::any_of(
     preTables.begin(), preTables.end(), [&oldName](const auto& t) { return t.name == oldName; });

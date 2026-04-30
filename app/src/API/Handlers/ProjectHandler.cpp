@@ -162,8 +162,7 @@ void API::Handlers::ProjectHandler::registerCommands()
                            emptySchema,
                            &groupDuplicate);
 
-  // project.group.select — make the given group the "current" selection so
-  // subsequent operations (delete, duplicate) target it.
+  // project.group.select — set the current group for delete/duplicate.
   {
     QJsonObject props;
     props[QStringLiteral("groupId")] = QJsonObject{
@@ -724,9 +723,7 @@ API::CommandResponse API::Handlers::ProjectHandler::groupSelect(const QString& i
   const int groupId  = params.value(QStringLiteral("groupId")).toInt();
   const auto& groups = DataModel::ProjectModel::instance().groups();
 
-  // Look up by logical groupId instead of vector index — ProjectModel
-  // currently renumbers so they coincide, but looking up by id is robust
-  // against any future change.
+  // Look up by logical groupId rather than vector index.
   const auto it = std::find_if(
     groups.begin(), groups.end(), [groupId](const auto& g) { return g.groupId == groupId; });
 
@@ -1099,7 +1096,7 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetCode(const QString&
         ErrorCode::InvalidParam,
         QStringLiteral("Invalid language: must be 0 (JavaScript) or 1 (Lua)"));
 
-    // Remember the prior language so we can roll back on failure
+    // Snapshot prior language for rollback on validation failure.
     savedLanguage = model.frameParserLanguage(sourceId);
 
     // Flip the language so the engine dispatch picks the right implementation.
@@ -1206,14 +1203,9 @@ API::CommandResponse API::Handlers::ProjectHandler::parserSetLanguage(const QStr
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Unknown sourceId"));
 
-  // Update the project model language for the matching source
   model.updateSourceFrameParserLanguage(sourceId, language);
 
-  // Replace the parser code with the matching default template so that the
-  // script source actually parses under the new language. loadDefaultTemplate
-  // dispatches through the FrameParser engine map which reads the language
-  // we just set. Pass guiTrigger=true so the project stays flagged as
-  // modified (the caller explicitly asked for this change).
+  // Reset parser code to the default template for the new language.
   DataModel::FrameParser::instance().loadDefaultTemplate(sourceId, true);
 
   QJsonObject result;
@@ -1443,7 +1435,6 @@ API::CommandResponse API::Handlers::ProjectHandler::frameParserConfigure(const Q
       }
     }
   } else {
-    // Update the source struct directly and trigger a device reconfigure.
     DataModel::Source src = model.sources()[sourceId];
 
     if (params.contains(QStringLiteral("startSequence"))) {

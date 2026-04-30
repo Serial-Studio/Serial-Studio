@@ -132,7 +132,6 @@ API::CommandResponse API::Handlers::IOManagerHandler::connect(const QString& id,
 
   auto& manager = IO::ConnectionManager::instance();
 
-  // Check if already connected
   if (manager.isConnected()) {
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Already connected"));

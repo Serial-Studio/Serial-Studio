@@ -39,11 +39,7 @@ Window {
   property string previousScreenName: ""
   property int preFullscreenVisibility: Window.AutomaticVisibility
 
-  //
-  // Toggles real OS fullscreen and remembers the prior visibility so it can
-  // restore Maximized vs. Normal when leaving fullscreen — otherwise the
-  // "Full Screen" entry in the start menu only hides the toolbar on Windows.
-  //
+  // Toggle real OS fullscreen, remembering prior visibility for restore.
   function toggleFullScreen() {
     if (root.visibility === Window.FullScreen) {
       if (root.preFullscreenVisibility === Window.Maximized)

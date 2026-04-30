@@ -114,11 +114,7 @@ Widgets.SmartWindow {
     palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-    //
-    // Editor body — always rendered so the lock/mode overlays have something
-    // to blur. Disabled when locked or when running outside ProjectFile mode
-    // so toolbar buttons can't be clicked through the overlay.
-    //
+    // Always rendered so lock/mode overlays have something to blur; disabled when locked.
     ColumnLayout {
       id: layout
 
@@ -159,12 +155,7 @@ Widgets.SmartWindow {
         }
 
         rightPanel: Component {
-          //
-          // Right panel — only the currently selected view is parsed and
-          // instantiated. Tab switches destroy the previous view and load the
-          // new one; views read all state from Cpp_JSON_ProjectModel /
-          // Cpp_JSON_ProjectEditor, so nothing local is lost on switch.
-          //
+          // Only the active view loads; tab switches destroy and reinstantiate.
           Loader {
             asynchronous: false
             anchors.fill: parent
@@ -261,11 +252,7 @@ Widgets.SmartWindow {
         }
       }
 
-      //
-      // Centered content — lock or mode-required call-to-action. Pushed
-      // down by half the titlebar height so it sits visually centered in
-      // the area the user perceives as the editor body.
-      //
+      // Centered lock/mode call-to-action; offset to align with the perceived editor body.
       ColumnLayout {
         spacing: 16
         anchors.centerIn: parent

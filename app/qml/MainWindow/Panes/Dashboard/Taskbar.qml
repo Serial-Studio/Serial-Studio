@@ -67,11 +67,7 @@ Item {
       searchResultsList.currentIndex = combinedSearchResults.length > 0 ? 0 : -1
   }
 
-  //
-  // Fires the action behind a search result entry. Used by both mouse clicks
-  // and keyboard (Enter) navigation. Snapshot fields before dismissSearch()
-  // so the rebuilt model can't invalidate the entry mid-call.
-  //
+  // Snapshot entry fields before dismissSearch() rebuilds the model.
   function triggerSearchEntry(entry) {
     if (!entry)
       return

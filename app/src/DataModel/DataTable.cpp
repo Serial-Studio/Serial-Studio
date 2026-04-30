@@ -171,8 +171,7 @@ bool DataModel::DataTableStore::set(const QString& table,
   if (idx < 0) [[unlikely]]
     return false;
 
-  // O(1) read-only check — linear scan here would dominate the transform
-  // hotpath at high frame rates.
+  // O(1) read-only check; linear scan would dominate the transform hotpath.
   if (!m_isComputed[static_cast<size_t>(idx)]) [[unlikely]] {
     qWarning() << "[DataTableStore] Cannot write to non-computed register" << table << "/" << reg;
     return false;

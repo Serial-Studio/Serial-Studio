@@ -31,12 +31,7 @@ Item {
   implicitHeight: layout.implicitHeight
   implicitWidth: layout.implicitWidth + 16
 
-  //
-  // Re-sync each combo when C++ revises its own selection (e.g. after a
-  // device change clamps the chosen sample format to one the new device
-  // actually supports). Without this the combo's display can drift from
-  // the applied value because writing currentIndex breaks its binding.
-  //
+  // Resync combos when C++ clamps the selection (writing currentIndex breaks the binding).
   Connections {
     target: Cpp_IO_Audio
     function onInputSettingsChanged() {

@@ -31,12 +31,7 @@ Widgets.SmartWindow {
          ? Cpp_Sessions_Manager.fileName
          : qsTr("Sessions")
 
-  //
-  // True when the explorer is opened from a deployed shortcut. The dialog
-  // is then pinned to the project's session DB and destructive controls
-  // (open/close/delete/lock/replay/restore) are hidden so the operator
-  // cannot reach for another file or mutate completed sessions.
-  //
+  // Operator mode pins the explorer to the project DB and hides destructive controls.
   readonly property bool operatorMode: typeof app !== "undefined"
                                        && app.runtimeMode
 

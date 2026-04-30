@@ -188,9 +188,7 @@ API::CommandResponse API::Handlers::DashboardHandler::getOperationMode(const QSt
   QJsonObject result;
   result[QStringLiteral("mode")] = modeIndex;
 
-  // Bounds-guarded lookup — operationMode() is clamped at construction and
-  // the setter rejects out-of-range values, but a wire-level guard avoids
-  // any out-of-range read if enums grow in future versions.
+  // Bounds-guarded lookup in case the enum grows.
   static const QStringList kModeNames = {
     QStringLiteral("ProjectFile"), QStringLiteral("ConsoleOnly"), QStringLiteral("QuickPlot")};
   result[QStringLiteral("modeName")] = (modeIndex >= 0 && modeIndex < kModeNames.size())

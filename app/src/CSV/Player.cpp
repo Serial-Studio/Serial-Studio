@@ -634,8 +634,7 @@ void CSV::Player::sendHeaderFrame()
   if (headerRow.size() <= 1)
     return;
 
-  // In project mode with multiple sources, build multi-source mapping
-  // and skip QuickPlot header registration (project defines the structure)
+  // Multi-source project: build mapping and skip QuickPlot header registration
   if (AppState::instance().operationMode() == SerialStudio::ProjectFile) {
     const auto& sources = DataModel::ProjectModel::instance().sources();
     if (sources.size() > 1) {

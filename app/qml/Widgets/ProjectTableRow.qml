@@ -23,32 +23,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-//
-// Standard row container used by every project-editor table view.
-//
-// Wraps the user's row content in a Rectangle that paints `table_cell_bg` and
-// a 1-px bottom border. The actual cell layout is the user's responsibility —
-// they place their cells inside this component and bind widths to the same
-// values declared in the matching ProjectTableHeader's `columns` array.
-//
-// Usage as a ListView delegate:
-//
-//   ListView {
-//     model: items
-//     delegate: Widgets.ProjectTableRow {
-//       RowLayout {
-//         spacing: 0
-//         anchors.fill: parent
-//         Label { Layout.preferredWidth: 80;  text: modelData.id }
-//         Rectangle { width: 1; Layout.fillHeight: true; color: separatorColor }
-//         Label { Layout.preferredWidth: 200; text: modelData.group }
-//       }
-//     }
-//   }
-//
-// The row exposes `separatorColor` and `textColor` for delegates that draw
-// their own vertical separators or styled labels.
-//
+// Project table row: themed cell background plus a 1-px bottom border.
 Rectangle {
   id: row
 

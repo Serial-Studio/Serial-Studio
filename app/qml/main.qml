@@ -438,7 +438,7 @@ Item {
   }
 
   //
-  // Runtime reconfigure prompt — used by the runtime-mode reconnect path
+  // Runtime reconfigure prompt
   //
   function showRuntimeReconfigure(mode) {
     if (!Cpp_CommercialBuild)

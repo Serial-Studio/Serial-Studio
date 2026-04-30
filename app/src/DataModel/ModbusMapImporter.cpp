@@ -600,8 +600,7 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
     DataModel::Group group;
     group.groupId = group_id;
     group.widget  = QStringLiteral("datagrid");
-    // Drop the "@ address" suffix when there is only one block — the address
-    // is redundant noise in a single-group project.
+    // Drop the "@ address" suffix for single-block projects.
     if (blocks.size() == 1)
       group.title = registerTypeName(block.registerType);
     else

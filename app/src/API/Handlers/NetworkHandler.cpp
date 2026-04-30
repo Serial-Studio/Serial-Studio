@@ -398,7 +398,6 @@ API::CommandResponse API::Handlers::NetworkHandler::getConfiguration(const QStri
   result[QStringLiteral("isOpen")]          = network->isOpen();
   result[QStringLiteral("configurationOk")] = network->configurationOk();
 
-  // Default values for reference
   result[QStringLiteral("defaultAddress")]       = network->defaultAddress();
   result[QStringLiteral("defaultTcpPort")]       = network->defaultTcpPort();
   result[QStringLiteral("defaultUdpLocalPort")]  = network->defaultUdpLocalPort();

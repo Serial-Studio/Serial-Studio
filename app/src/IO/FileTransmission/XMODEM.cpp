@@ -264,9 +264,7 @@ void IO::Protocols::XMODEM::sendBlock()
   Q_ASSERT(m_file.isOpen());
   Q_ASSERT(m_state == State::SendingBlocks);
 
-  // Snapshot the file position so retries can seek back precisely. The last
-  // block is usually partial — tracking actual bytes read (vs. the padded
-  // block size) is what the NAK / timeout handlers need to rewind to.
+  // Snapshot file position so NAK/timeout retries seek back precisely.
   m_lastBlockStart = m_file.pos();
 
   // Read next block; send EOT if file is exhausted

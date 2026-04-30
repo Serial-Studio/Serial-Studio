@@ -47,7 +47,6 @@ Widgets::Output::Panel::Panel(int index, QQuickItem* parent) : QQuickItem(parent
     map[QStringLiteral("monoIcon")]     = ow.monoIcon;
     m_widgets.append(map);
 
-    // Create the corresponding C++ model for transmission
     Base* model = nullptr;
     switch (ow.type) {
       case DataModel::OutputWidgetType::Button:

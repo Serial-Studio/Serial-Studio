@@ -163,7 +163,7 @@ void Widgets::DataGrid::updateData()
     // Obtain the row index for the current dataset
     const int rowIndex = i + 1;
 
-    // Validate to table data to ensure we can update it (issue #307)
+    // Guard against stale row count (issue #307)
     if (rows.count() <= rowIndex || rows[rowIndex].count() <= valueIndex) {
       QList<QStringList> r;
       r.append({tr("Title"), tr("Value")});

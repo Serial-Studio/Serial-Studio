@@ -122,7 +122,6 @@ UI::Dashboard::Dashboard()
     Qt::QueuedConnection);
 #endif
 
-  // Update the dashboard widgets at defined refresh rate
   connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this, [=, this] {
     if (m_updateRequired) {
       m_updateRequired = false;
@@ -841,7 +840,7 @@ void UI::Dashboard::setTerminalEnabled(const bool enabled)
   if (m_persistSettings)
     m_settings.setValue("Dashboard/TerminalEnabled", m_terminalEnabled);
 
-  // Use incremental update if we have an active dashboard with widgets
+  // Incremental update path when a dashboard is already live
   if (!m_sourceRawFrames.isEmpty() && m_widgetCount > 0) {
     auto& registry = WidgetRegistry::instance();
     if (enabled) {
@@ -1110,7 +1109,6 @@ void UI::Dashboard::hotpathRxFrame(const DataModel::TimestampedFramePtr& frame)
   const int sid             = payload.sourceId;
   const bool hadProFeatures = containsCommercialFeatures();
 
-  // Check if this source's frame structure changed
   const auto it               = m_sourceRawFrames.find(sid);
   const bool structureChanged = it == m_sourceRawFrames.end()
                              || !DataModel::compare_frames(payload, it.value())
@@ -1654,10 +1652,7 @@ void UI::Dashboard::updateLineSeries(int sourceId)
     if (sourceId >= 0 && yDataset.sourceId != sourceId)
       continue;
 
-    // Shift Y-axis points. Keyed by uniqueId rather than index so two plot
-    // datasets that share the same source-frame column (e.g. raw audio +
-    // transformed dB on the same input) get independent ring buffers — and
-    // so the per-dataset transform output reaches the right plot widget.
+    // Shift Y-axis points; keyed by uniqueId so transformed siblings keep separate buffers
     if (!yAxesMoved.contains(yDataset.uniqueId)) {
       yAxesMoved.insert(yDataset.uniqueId);
       m_yAxisData[yDataset.uniqueId].push(yDataset.numericValue);
@@ -1785,9 +1780,7 @@ void UI::Dashboard::configureLineSeries()
       if (!d->plt)
         continue;
 
-      // Register Y-axis. Keyed by uniqueId so each plot dataset has its
-      // own buffer, independent of any sibling dataset that may share the
-      // same source-frame index but apply a different transform.
+      // Register Y-axis; keyed by uniqueId so transformed siblings keep separate buffers
       DSP::AxisData yAxis(points() + 1);
       m_yAxisData.insert(d->uniqueId, yAxis);
       m_yAxisData[d->uniqueId].fill(0);

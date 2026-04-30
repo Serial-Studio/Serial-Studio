@@ -23,22 +23,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
-//
-// Table header used by every project-editor table view.
-//
-// Renders a gradient rectangle filled with bold column labels separated by
-// 1-px vertical lines. Sized from a `columns` array:
-//
-//   columns: [
-//     { title: qsTr("ID"),      width: 80  },
-//     { title: qsTr("Group"),   width: 200 },
-//     { title: qsTr("Dataset"), width: -1  },  // -1 → fillWidth
-//     { title: qsTr("Units"),   width: 120 }
-//   ]
-//
-// One trailing fixed-width column may be left for an action area by appending
-// `{ title: "", width: <px> }` at the end.
-//
+// Project table header: gradient row of bold labels driven by `columns`.
 Rectangle {
   id: header
 
@@ -62,11 +47,7 @@ Rectangle {
     color: Cpp_ThemeManager.colors["table_border_header"]
   }
 
-  //
-  // Cell labels + separators laid out exactly like the row delegates:
-  // Label(width), Rectangle(1), Label(width), Rectangle(1), ... so the header
-  // separators land at the same x-coordinate as the row separators.
-  //
+  // Labels and 1-px separators interleaved to match the row delegate geometry.
   RowLayout {
     spacing: 0
     anchors.fill: parent

@@ -923,7 +923,6 @@ void Console::Handler::onDevicesChanged()
     }
   }
 
-  // Check if the list actually changed
   if (names == m_deviceNames && ids == m_deviceSourceIds)
     return;
 

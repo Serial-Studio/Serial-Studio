@@ -254,7 +254,6 @@ bool IO::Drivers::CANBus::open(const QIODevice::OpenMode mode)
     return false;
   }
 
-  // Create the CAN bus device from the selected plugin and interface
   QString plugin    = m_pluginList.at(m_pluginIndex);
   QString interface = m_interfaceList.at(m_interfaceIndex);
 

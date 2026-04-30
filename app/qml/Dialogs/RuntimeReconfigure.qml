@@ -27,8 +27,7 @@ Widgets.SmartDialog {
   // Page 0 is a compact summary; page 1 is the full driver picker.
   preferredHeight: pageIndex === 0 ? 240 : 480
 
-  // "failed" — initial auto-connect didn't settle.
-  // "lost"   — connection dropped while operator was working.
+  // dialogMode: "failed" = auto-connect never settled; "lost" = drop mid-session.
   property int pageIndex: 0
   property string dialogMode: "failed"
 

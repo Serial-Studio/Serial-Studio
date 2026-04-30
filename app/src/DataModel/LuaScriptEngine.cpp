@@ -236,8 +236,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     return false;
   }
 
-  // Execute the chunk to define the parse function, under the watchdog
-  // (a malicious or buggy script could put `while true do end` at file scope)
+  // Run the chunk under the watchdog — file-scope loops would hang otherwise.
   m_deadline.setRemainingTime(kRuntimeWatchdogMs);
   status     = lua_pcall(m_state, 0, 0, 0);
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);

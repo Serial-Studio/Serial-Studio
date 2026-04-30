@@ -31,11 +31,7 @@ Widgets.Pane {
   readonly property bool operatorMode: typeof app !== "undefined"
                                        && app.runtimeMode
 
-  //
-  // True when the user is allowed to mutate notes and tag assignments on
-  // the currently-displayed session. In author mode this is always true;
-  // in operator mode only the session being actively recorded is editable.
-  //
+  // Author mode: always editable. Operator mode: only the live session is editable.
   readonly property bool editsAllowed:
     !operatorMode
     || (Cpp_CommercialBuild

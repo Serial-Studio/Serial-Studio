@@ -229,7 +229,6 @@ void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
   // Build export schema and write column definitions
   writeColumnDefs(frame);
 
-  // Store the project JSON in project_metadata for offline reconstruction
   storeProjectMetadata(frame);
 
   // Prepare reusable queries for the hotpath
@@ -634,7 +633,6 @@ void Sessions::Export::refreshProjectSnapshot()
     }
   }
 
-  // Update the project snapshot
   QMutexLocker locker(&m_projectSnapshotMutex);
   m_projectSnapshot = std::move(payload);
 }
@@ -745,8 +743,7 @@ void Sessions::Export::onWorkerOpenChanged()
     Q_EMIT openChanged();
   }
 
-  // Worker-driven close paths (disconnect, mode switch handled internally)
-  // also need to clear the cached session id so QML edit gates flip back off.
+  // Worker-driven close also clears the cached session id so QML edit gates flip off
   if (!state && m_currentSessionId.exchange(-1, std::memory_order_relaxed) != -1)
     Q_EMIT currentSessionIdChanged();
 }

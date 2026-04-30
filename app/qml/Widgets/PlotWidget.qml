@@ -125,19 +125,13 @@ Item {
     if (visibleRange <= 0)
       return 2
 
-    // Calculate magnitude of the visible range
     const magnitude = Math.floor(Math.log10(visibleRange))
 
-    // For small ranges (high zoom), we need more decimal places
-    // For large ranges (low zoom), we need fewer decimal places
-    // We want roughly 3-4 significant digits in the displayed value
+    // Aim for ~3-4 significant digits across zoom levels.
     const precision = Math.max(0, 2 - magnitude)
     return Math.min(precision, 6)
   }
 
-  //
-  // Check if a point (in world coordinates) is within the visible area
-  //
   function isPointVisible(worldX, worldY) {
     return worldX >= xVisibleMin && worldX <= xVisibleMax &&
            worldY >= yVisibleMin && worldY <= yVisibleMax
@@ -211,9 +205,6 @@ Item {
   readonly property int xPrecision: smartPrecision(xVisibleRange)
   readonly property int yPrecision: smartPrecision(yVisibleRange)
 
-  //
-  // Check if cursors are within visible area (full and partial)
-  //
   readonly property bool cursorAInView: isPointVisible(cursorAX, cursorAY)
   readonly property bool cursorBInView: isPointVisible(cursorBX, cursorBY)
   readonly property bool cursorAXInRange: cursorAX >= xVisibleMin && cursorAX <= xVisibleMax
@@ -281,53 +272,36 @@ Item {
     return yViewStart + yVisibleRange * (1 - (pixelY / _graph.plotArea.height))
   }
 
-  //
-  // Updates the X and Y value labels to reflect the world coordinates under
-  // the mouse cursor.
-  //
   function updateCrosshairLabels(mouseX, mouseY) {
-    // Only update if mouse is inside the tracking area
     if (!_overlayMouse.containsMouse)
       return
 
     const x = pixelToWorldX(mouseX)
     const y = pixelToWorldY(mouseY)
 
-    // Update labels
     _xPosLabel.text = x.toFixed(2)
     _yPosLabel.text = y.toFixed(2)
   }
 
-  //
-  // Translates pixel movement into world units and adjusts the axis pan
-  // accordingly. It ensures that the visible window stays within the axis
-  // bounds, preventing overscroll.
-  //
+  // Pan axis by pixel delta, clamped to axis bounds.
   function adjustAxisPan(axis, axisLength, cursorPos, dPx, inverted) {
-    // Convert pixels to plot units (whatever they might be)
     const fullRange = axis.max - axis.min
     const visibleRange = fullRange / axis.zoom
     const unitPerPixel = fullRange / axisLength
 
-    // Calculate new pan
     const pxDiff = (inverted ? -dPx : dPx)
     const zoomDampeningFactor = 1 / axis.zoom
     let newPan = axis.pan + pxDiff * unitPerPixel * zoomDampeningFactor
 
-    // Clamp the pan so the view doesn't go beyond the axis bounds
+    // Clamp to axis bounds.
     const maxPan = (axis.max - (axis.min + visibleRange)) / 2
     const minPan = (axis.min - (axis.max - visibleRange)) / 2
     newPan = Math.min(Math.max(newPan, minPan), maxPan)
 
-    // Update the axis pan
     axis.pan = newPan
   }
 
-  //
-  // Applies zoom centered on the cursor position and adjusts pan to keep the
-  // same world point under the cursor, this results in a behavior similar
-  // to zooming in CAD programs.
-  //
+  // Cursor-centered zoom: keeps the world point under the cursor fixed.
   function applyCursorZoom(axis, oldZoom, newZoom, cursorPos, axisLength, inverted) {
     // Ensure that zoom level stays limited
     const minZoom = 1
@@ -549,9 +523,6 @@ Item {
       property int _pressedButton: Qt.NoButton
       readonly property bool dragging: containsPress && _axisX.zoom > 1 && draggedCursor === null
 
-      //
-      // Check if mouse is near a cursor (within 10 pixels)
-      //
       function getNearestCursor(mouseX, mouseY) {
         const threshold = 10
 
@@ -587,7 +558,6 @@ Item {
 
         // Handle cursor interactions when in cursor mode
         if (root.cursorMode) {
-          // Check if clicking near a cursor (for dragging)
           draggedCursor = getNearestCursor(mouse.x, mouse.y)
 
           // Right click to clear cursors (immediate action)
@@ -601,8 +571,7 @@ Item {
               root.clearAllCursors()
             }
           }
-          // Left click cursor placement is deferred to onReleased
-          // to allow panning when dragging
+          // Left-click placement deferred to onReleased so drag still pans.
         }
 
         mouse.accepted = true
@@ -679,7 +648,7 @@ Item {
         const dragDistSq = Math.pow(mouse.x - _startX, 2) + Math.pow(mouse.y - _startY, 2)
         const dragThreshold = 5
 
-        // Mark as drag if we've moved significantly
+        // Past the threshold, treat as a drag.
         if (containsPress && dragDistSq > dragThreshold * dragThreshold) {
           _didDrag = true
         }

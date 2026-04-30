@@ -466,7 +466,6 @@ void IO::Drivers::USB::setDeviceIndex(const int index)
   if (m_deviceIndex == index)
     return;
 
-  // Populate device list if needed for validation
   if (m_devicePtrs.isEmpty())
     enumerateDevices();
 
@@ -1113,7 +1112,6 @@ bool IO::Drivers::USB::selectByIdentifier(const QJsonObject& id)
   if (id.isEmpty() || !m_ctx)
     return false;
 
-  // Populate device list if needed for matching
   if (m_devicePtrs.isEmpty())
     enumerateDevices();
 

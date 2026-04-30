@@ -53,11 +53,7 @@ Widgets.Pane {
   //
   property string searchText: ""
 
-  //
-  // Pad uniqueIds to the digit count of the largest entry (min 5) so the
-  // ID column reads like a memory map. Display only — clipboard / search
-  // against the raw value remain unchanged.
-  //
+  // Pad uniqueIds to the largest entry's digit count (min 5); display only.
   readonly property int idPadWidth: {
     let max = 0
     for (let i = 0; i < datasets.length; ++i) {

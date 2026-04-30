@@ -771,10 +771,7 @@ void MDF4::Player::buildFrameIndex()
           continue;
         }
 
-        // Skip raw pre-transform channels during playback — they exist in the
-        // file so session export can reconstruct raw values, but the playback
-        // stream injects only the final (post-transform) values the dashboard
-        // and downstream consumers expect.
+        // Skip raw pre-transform channels — playback injects only final values
         const std::string& chName               = ch->Name();
         static constexpr const char* kRawSuffix = " (raw)";
         if (chName.size() >= 6 && chName.compare(chName.size() - 6, 6, kRawSuffix) == 0)
@@ -838,8 +835,7 @@ void MDF4::Player::buildFrameIndex()
           ci.timeCh = tit->second;
       }
 
-      // Skip master (time) channels and raw pre-transform channels — the
-      // playback stream injects only final values (see buildFrameIndex).
+      // Skip master (time) channels and raw pre-transform channels
       for (auto* ch : cgChannels) {
         if (!ch || ch->Type() == mdf::ChannelType::Master)
           continue;

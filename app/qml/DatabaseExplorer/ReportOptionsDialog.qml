@@ -67,11 +67,7 @@ Widgets.SmartDialog {
     }
   }
 
-  //
-  // Page size enum values (match QPageSize::PageSizeId). Reports always
-  // print landscape — a chart with a long X-axis looks squashed on a
-  // portrait page — so the dialog doesn't expose an orientation control.
-  //
+  // QPageSize::PageSizeId values; reports always print landscape.
   readonly property var pageSizes: [
     { label: qsTr("A4 (210 × 297 mm)"),         value: 0  },
     { label: qsTr("A3 (297 × 420 mm)"),         value: 8  },
@@ -200,13 +196,7 @@ Widgets.SmartDialog {
       }
     }
 
-    //
-    // Tab contents. A fixed preferred size pins the dialog so the window
-    // doesn't balloon on platforms whose system font renders taller than
-    // macOS (Windows Segoe UI, some Linux DE fonts). Each tab uses
-    // anchors.fill so its contents expand into the reserved box instead of
-    // pushing the container outward.
-    //
+    // Fixed preferred size keeps the dialog from ballooning on tall system fonts.
     StackLayout {
       id: _stack
 

@@ -281,7 +281,6 @@ QImage Misc::ActionIconProvider::requestImage(const QString& id,
     return {};
   }
 
-  // Initialize the SVG renderer
   QSvgRenderer renderer(svgData);
   if (!renderer.isValid()) {
     if (size)

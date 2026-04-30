@@ -372,9 +372,7 @@ QString reformatOne(const QString& raw, const LineInfo& info, int depthAtStart, 
 {
   const QString trimmed = rtrim(raw);
 
-  // Lines that start inside a multiline string/comment must keep their
-  // original leading whitespace — re-indenting them would corrupt the
-  // string contents.
+  // Preserve leading whitespace for lines inside a multiline string/comment.
   if (info.startsInsideMultiline)
     return trimmed;
 

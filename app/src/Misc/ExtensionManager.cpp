@@ -371,9 +371,7 @@ void Misc::ExtensionManager::refreshRepositories()
   if (m_loading)
     return;
 
-  // Abort any stale replies from a previous refresh so their callbacks
-  // don't append entries to the freshly-cleared catalog with a mismatched
-  // base URL. deleteLater() runs before the aborted-reply handler fires.
+  // Abort stale replies so their callbacks can't append to the cleared catalog
   for (auto* reply : std::as_const(m_activeReplies)) {
     if (reply) {
       reply->disconnect(this);
@@ -714,15 +712,10 @@ void Misc::ExtensionManager::autoUpdateExtensions()
     break;
   }
 
-  // Schedule next update (after current install completes or immediately).
-  // Both paths use a queued hop so autoUpdate always runs on a clean stack
-  // and m_filteredExtensions has been re-sorted by applyFilter() before
-  // we re-enter.
+  // Schedule next update via a queued hop so applyFilter() finishes before re-entry
   if (!m_autoUpdateQueue.isEmpty()) {
     if (found && m_loading) {
-      // Remote install in progress — wait for completion, then trampoline
-      // through a queued connection so the outer onFileDownloadReply has
-      // finished its applyFilter() before we re-enter.
+      // Remote install in progress — wait for completion, then queue
       connect(
         this,
         &ExtensionManager::extensionInstalled,
@@ -809,9 +802,7 @@ void Misc::ExtensionManager::onExtensionMetaReply()
   m_activeReplies.remove(reply);
   reply->deleteLater();
 
-  // Only append entries that parse to a non-empty object with a valid id.
-  // Skip entries whose info.json is missing, returned a 404 body, or is
-  // malformed — these would otherwise show up as blank cards in the grid.
+  // Only append entries that parse to a non-empty object with a valid id
   if (reply->error() == QNetworkReply::NoError) {
     const auto doc = QJsonDocument::fromJson(reply->readAll());
     auto obj       = doc.object();

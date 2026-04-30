@@ -50,8 +50,7 @@ static NSAlertStyle alertStyleFor(QMessageBox::Icon icon)
 static NSArray<NSString *> *buttonTitlesFor(QMessageBox::StandardButtons bt,
                                             const ButtonTextMap& overrides)
 {
-  // Preserve the order Qt renders these in so the user sees the same
-  // button sequence as on the other platforms.
+  // Preserve Qt's render order so button sequence matches other platforms
   static const QMessageBox::StandardButton kOrder[] = {
     QMessageBox::Ok, QMessageBox::Save, QMessageBox::SaveAll,
     QMessageBox::Yes, QMessageBox::YesToAll, QMessageBox::Retry,

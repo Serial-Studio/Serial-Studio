@@ -310,8 +310,7 @@ QString Sessions::HtmlReport::buildHtml() const
  */
 QString Sessions::HtmlReport::buildCoverSection() const
 {
-  // Resolve the logo markup — embed raster files as base64 data URIs so the
-  // HTML stays self-contained; SVG files are inlined verbatim.
+  // Logo markup: raster files become base64 data URIs, SVGs are inlined verbatim
   QString logoMarkup;
   if (!m_opts.logoPath.isEmpty() && QFileInfo::exists(m_opts.logoPath)) {
     const QFileInfo fi(m_opts.logoPath);
@@ -467,8 +466,7 @@ QString Sessions::HtmlReport::buildSummarySection() const
   if (m_data.datasets.empty())
     return QString();
 
-  // Units column is dropped entirely when no parameter carries a unit,
-  // so the table fits the remaining columns more naturally on the page.
+  // Drop the units column entirely when no parameter carries a unit
   const bool anyUnits = std::any_of(m_data.datasets.begin(),
                                     m_data.datasets.end(),
                                     [](const DatasetStats& d) { return !d.units.isEmpty(); });
@@ -570,8 +568,7 @@ QString Sessions::HtmlReport::buildChartsSection() const
                .arg(escapeHtml(fullName), units, escapeHtml(sub), QString::number(s.uniqueId));
   }
 
-  // Screen-only overlay chart — every signal on one plot, toggleable via
-  // Chart.js's built-in legend. Hidden in print via @media print.
+  // Screen-only overlay chart, hidden in print via @media print
   const QString overlay =
     m_series.size() >= 2
       ? QStringLiteral("<section class=\"section screen-only overlay-section\">"
@@ -602,9 +599,7 @@ QString Sessions::HtmlReport::buildChartsSection() const
  */
 QString Sessions::HtmlReport::buildReportDataJson() const
 {
-  // Index DatasetStats by uniqueId so each series can carry its
-  // population-wide min/max/mean (computed in SQL, not from the decimated
-  // sample window).
+  // Index DatasetStats by uniqueId so each series carries its population-wide stats
   std::map<int, const DatasetStats*> statsByUid;
   for (const auto& d : m_data.datasets)
     statsByUid.emplace(d.uniqueId, &d);
@@ -626,8 +621,7 @@ QString Sessions::HtmlReport::buildReportDataJson() const
     entry["times"]  = times;
     entry["values"] = values;
 
-    // Per-series stats payload — present only when the dataset has numeric
-    // samples; the JS plugin is no-op for any series missing this block.
+    // Per-series stats payload — only emitted when the dataset has numeric samples
     const auto it = statsByUid.find(s.uniqueId);
     if (it != statsByUid.end() && it->second->numericSamples > 0) {
       QJsonObject stats;

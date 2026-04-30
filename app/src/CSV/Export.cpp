@@ -169,9 +169,7 @@ void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
   // Build schema from frame
   m_schema = DataModel::buildExportSchema(frame);
 
-  // Write header. The first column is elapsed seconds from the first sample
-  // in this session — NOT a calendar timestamp — so the label must match.
-  // Escape titles in case group/dataset names contain commas or quotes.
+  // Header: elapsed seconds from session start (not wall-clock), then per-column titles
   m_textStream << "Elapsed (s)";
   for (const auto& col : m_schema.columns) {
     const auto label = QString("%1/%2").arg(col.groupTitle, col.title).simplified();

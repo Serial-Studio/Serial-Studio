@@ -110,12 +110,7 @@ Item {
     terminal.selectAll()
   }
 
-  //
-  // When VT-100 emulation is active in read-write mode, disable clipboard
-  // shortcuts so that Ctrl+C / Ctrl+A reach keyPressEvent() as control
-  // codes (SIGINT, SOH).  Copy / Select All remain available via the
-  // right-click context menu.
-  //
+  // VT-100 read-write mode forwards Ctrl+C / Ctrl+A as SIGINT / SOH.
   readonly property bool vt100Interactive: Cpp_Console_Handler.vt100Emulation
                                            && Cpp_IO_Manager.readWrite
 
@@ -277,7 +272,6 @@ Item {
         //
         onTextChanged: {
           if (hexCheckbox.checked) {
-            // Get the current cursor position
             const currentCursorPosition = send.cursorPosition;
             const cursorAtEnd = (currentCursorPosition === send.text.length);
 
@@ -286,7 +280,6 @@ Item {
             const formattedText = Cpp_Console_Handler.formatUserHex(send.text);
             const isValid = Cpp_Console_Handler.validateUserHex(formattedText);
 
-            // Update the text only if it has changed
             if (originalText !== formattedText) {
               send.text = formattedText;
 
@@ -311,7 +304,6 @@ Item {
               }
             }
 
-            // Update the palette based on validation
             send.palette.text = isValid
                 ? Cpp_ThemeManager.colors["console_text"]
                 : Cpp_ThemeManager.colors["alarm"];

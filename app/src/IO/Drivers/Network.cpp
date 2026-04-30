@@ -81,8 +81,7 @@ IO::Drivers::Network::Network() : m_hostExists(false), m_udpMulticast(false), m_
  */
 void IO::Drivers::Network::close()
 {
-  // Disconnect both socket types — avoids duplicate readyRead after a
-  // socketType flip between open() and close().
+  // Disconnect both socket types to avoid duplicate readyRead after a flip.
   disconnect(&m_tcpSocket, &QTcpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
   disconnect(&m_udpSocket, &QUdpSocket::readyRead, this, &IO::Drivers::Network::onReadyRead);
 

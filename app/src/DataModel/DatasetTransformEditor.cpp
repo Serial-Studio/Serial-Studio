@@ -384,8 +384,7 @@ void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
   if (newLang == m_language)
     return;
 
-  // Detect template and placeholder match against the OLD language
-  // before the highlighter is swapped
+  // Detect template and placeholder match against the OLD language.
   const int tmplIdx         = detectTemplate();
   const bool wasPlaceholder = isDefaultPlaceholder(m_editor->toPlainText(), m_language);
 
@@ -400,8 +399,7 @@ void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
     m_templateCombo->setCurrentIndex(tmplIdx + 1);
   }
 
-  // If the editor held the default placeholder, swap to the new
-  // language's version so the comment style matches the highlighter
+  // Swap default placeholder to the new language's comment style.
   else if (wasPlaceholder) {
     m_editor->setPlainText(defaultPlaceholder(newLang));
   }
@@ -522,9 +520,7 @@ bool DataModel::DatasetTransformEditor::isDefaultPlaceholder(const QString& code
   if (trimmed == defaultPlaceholder(language).trimmed())
     return true;
 
-  // Also match the other language's placeholder — covers the rare case
-  // where state got out of sync (e.g. the editor was re-opened on a
-  // project saved with the opposite language)
+  // Match the opposite language's placeholder too, in case state drifted.
   const int other = (language == SerialStudio::Lua) ? SerialStudio::JavaScript : SerialStudio::Lua;
   return trimmed == defaultPlaceholder(other).trimmed();
 }
@@ -547,9 +543,7 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
     if (!L)
       return false;
 
-    // Only load libraries that the user's code might reference at load
-    // time — we don't care about any side effects here, just whether
-    // transform() ends up defined
+    // Load only libs the chunk might reference at parse time.
     static const luaL_Reg kSafeLibs[] = {
       {    "_G",   luaopen_base},
       { "table",  luaopen_table},
@@ -568,8 +562,7 @@ bool DataModel::DatasetTransformEditor::definesTransformFunction(const QString& 
     DataModel::NotificationCenter::installScriptApi(L);
     DataModel::FrameBuilder::instance().injectTableApiLua(L);
 
-    // Run the chunk — if it fails to even load, there's definitely no
-    // valid transform() defined
+    // Load failure means no transform() exists.
     const QByteArray utf8 = code.toUtf8();
     if (luaL_dostring(L, utf8.constData()) != LUA_OK) {
       lua_close(L);

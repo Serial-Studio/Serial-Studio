@@ -38,9 +38,7 @@ Item {
   property bool shadowEnabled: true
   readonly property int defaultRadius: 0
 
-  //
-  // Properties used by the C++ window manager to detect where to drag window
-  //
+  // Drag-region geometry consumed by the C++ window manager.
   readonly property int externControlWidth: externalWinBt.width
   readonly property int captionHeight: root.headerVisible ? 28 : 0
   readonly property int windowControlsWidth: minBtMa.width + maxBtMa.width + closeBtMa.width
@@ -60,9 +58,7 @@ Item {
   property color backgroundColor: Cpp_ThemeManager.colors["widget_base"]
 
   property color captionTopColor: {
-    // Touch Cpp_ThemeManager.theme to make this binding re-evaluate on theme changes.
-    // getDeviceTopColor/Bottom are Q_INVOKABLE (not Q_PROPERTY) so they are not
-    // tracked automatically by the binding engine.
+    // Touch theme so binding re-evaluates; Q_INVOKABLEs aren't tracked.
     const _t = Cpp_ThemeManager.theme
     const singleDevice = Cpp_JSON_ProjectModel.sourceCount <= 1
                          || Cpp_AppState.operationMode !== SerialStudio.ProjectFile
