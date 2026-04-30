@@ -29,7 +29,7 @@ Widgets.SmartDialog {
   property int sessionId: -1
 
   //
-  // Persisted branding + layout preferences (QSettings, category "SessionPdfReport")
+  // Persisted branding + layout preferences
   //
   Settings {
     id: _prefs
@@ -38,6 +38,7 @@ Widgets.SmartDialog {
     property string logoPath: ""
     property real lineWidth: 1.4
     property int pageSizeIndex: 0
+    property int lineStyleIndex: 0
     property string authorName: ""
     property string companyName: ""
     property bool includeCover: true
@@ -45,7 +46,6 @@ Widgets.SmartDialog {
     property bool includeCharts: true
     property bool includeMetadata: true
     property bool annotateChartStats: false
-    property int lineStyleIndex: 0   // 0=Solid, 1=Dashed, 2=Dotted
   }
 
   //
@@ -67,31 +67,31 @@ Widgets.SmartDialog {
     }
   }
 
-  // QPageSize::PageSizeId values; reports always print landscape.
+  //
+  // QPageSize::PageSizeId values, reports always print landscape.
+  //
   readonly property var pageSizes: [
-    { label: qsTr("A4 (210 × 297 mm)"),         value: 0  },
-    { label: qsTr("A3 (297 × 420 mm)"),         value: 8  },
-    { label: qsTr("A2 (420 × 594 mm)"),         value: 7  },
-    { label: qsTr("A1 (594 × 841 mm)"),         value: 6  },
-    { label: qsTr("A0 (841 × 1189 mm)"),        value: 5  },
-    { label: qsTr("A5 (148 × 210 mm)"),         value: 9  },
-    { label: qsTr("A6 (105 × 148 mm)"),         value: 10 },
-    { label: qsTr("B4 (250 × 353 mm)"),         value: 16 },
-    { label: qsTr("B5 (176 × 250 mm)"),         value: 1  },
-    { label: qsTr("Letter (8.5 × 11 in)"),      value: 2  },
-    { label: qsTr("Legal (8.5 × 14 in)"),       value: 3  },
+    { label: qsTr("A4 (210 × 297 mm)"),          value: 0  },
+    { label: qsTr("A3 (297 × 420 mm)"),          value: 8  },
+    { label: qsTr("A2 (420 × 594 mm)"),          value: 7  },
+    { label: qsTr("A1 (594 × 841 mm)"),          value: 6  },
+    { label: qsTr("A0 (841 × 1189 mm)"),         value: 5  },
+    { label: qsTr("A5 (148 × 210 mm)"),          value: 9  },
+    { label: qsTr("A6 (105 × 148 mm)"),          value: 10 },
+    { label: qsTr("B4 (250 × 353 mm)"),          value: 16 },
+    { label: qsTr("B5 (176 × 250 mm)"),          value: 1  },
+    { label: qsTr("Letter (8.5 × 11 in)"),       value: 2  },
+    { label: qsTr("Legal (8.5 × 14 in)"),        value: 3  },
     { label: qsTr("Executive (7.25 × 10.5 in)"), value: 4  },
-    { label: qsTr("Tabloid (11 × 17 in)"),      value: 29 },
-    { label: qsTr("Ledger (17 × 11 in)"),       value: 28 }
+    { label: qsTr("Tabloid (11 × 17 in)"),       value: 29 },
+    { label: qsTr("Ledger (17 × 11 in)"),        value: 28 }
   ]
 
   //
-  // Public API — open the dialog for a given session
+  // Open the dialog for a given session
   //
   function openFor(id) {
     root.sessionId = id
-
-    // Title is derived fresh each time — never persisted across sessions
     const meta = Cpp_Sessions_Manager.sessionMetadata(id)
     if (meta && meta.project_title)
       _titleField.text = qsTr("%1 — Session Report").arg(meta.project_title)
@@ -121,14 +121,14 @@ Widgets.SmartDialog {
   // Save the form back into QSettings so next open pre-fills the branding
   //
   function persistPreferences() {
-    _prefs.companyName      = _companyField.text
-    _prefs.authorName       = _authorField.text
-    _prefs.logoPath         = _logoField.text
-    _prefs.pageSizeIndex    = _pageSizeCombo.currentIndex
-    _prefs.includeCover     = _coverCheck.checked
-    _prefs.includeMetadata  = _metadataCheck.checked
-    _prefs.includeStats     = _statsCheck.checked
-    _prefs.includeCharts    = _chartsCheck.checked
+    _prefs.companyName         = _companyField.text
+    _prefs.authorName          = _authorField.text
+    _prefs.logoPath            = _logoField.text
+    _prefs.pageSizeIndex       = _pageSizeCombo.currentIndex
+    _prefs.includeCover        = _coverCheck.checked
+    _prefs.includeMetadata     = _metadataCheck.checked
+    _prefs.includeStats        = _statsCheck.checked
+    _prefs.includeCharts       = _chartsCheck.checked
     _prefs.lineWidth           = _lineWidthSpin.value / 10
     _prefs.lineStyleIndex      = _lineStyleCombo.currentIndex
     _prefs.annotateChartStats  = _annotateStatsCheck.checked
@@ -140,16 +140,16 @@ Widgets.SmartDialog {
   //
   function dispatchExport(outputFormat) {
     const options = {
-      "outputPath":      "",
-      "companyName":     _companyField.text,
-      "documentTitle":   _titleField.text,
-      "authorName":      _authorField.text,
-      "logoPath":        _logoField.text,
-      "pageSize":        root.pageSizes[_pageSizeCombo.currentIndex].value,
-      "includeCover":    _coverCheck.checked,
-      "includeMetadata": _metadataCheck.checked,
-      "includeStats":    _statsCheck.checked,
-      "includeCharts":   _chartsCheck.checked,
+      "outputPath":          "",
+      "companyName":         _companyField.text,
+      "documentTitle":       _titleField.text,
+      "authorName":          _authorField.text,
+      "logoPath":            _logoField.text,
+      "pageSize":            root.pageSizes[_pageSizeCombo.currentIndex].value,
+      "includeCover":        _coverCheck.checked,
+      "includeMetadata":     _metadataCheck.checked,
+      "includeStats":        _statsCheck.checked,
+      "includeCharts":       _chartsCheck.checked,
       "lineWidth":           _lineWidthSpin.value / 10,
       "lineStyle":           root.lineStyles[_lineStyleCombo.currentIndex].value,
       "includeStatsOverlay": _annotateStatsCheck.checked,
@@ -196,7 +196,9 @@ Widgets.SmartDialog {
       }
     }
 
-    // Fixed preferred size keeps the dialog from ballooning on tall system fonts.
+    //
+    // Fixed preferred size keeps the dialog from ballooning on tall system fonts
+    //
     StackLayout {
       id: _stack
 
@@ -241,6 +243,7 @@ Widgets.SmartDialog {
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             Component.onCompleted: font.capitalization = Font.AllUppercase
           }
+
           Rectangle {
             implicitHeight: 1
             Layout.columnSpan: 2
@@ -251,8 +254,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Company")
             color: Cpp_ThemeManager.colors["text"]
-          }
-          TextField {
+          } TextField {
             id: _companyField
 
             Layout.fillWidth: true
@@ -263,8 +265,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Document title")
             color: Cpp_ThemeManager.colors["text"]
-          }
-          TextField {
+          } TextField {
             id: _titleField
 
             Layout.fillWidth: true
@@ -275,8 +276,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Author")
             color: Cpp_ThemeManager.colors["text"]
-          }
-          TextField {
+          } TextField {
             id: _authorField
 
             Layout.fillWidth: true
@@ -284,15 +284,18 @@ Widgets.SmartDialog {
             placeholderText: qsTr("Prepared by (optional)")
           }
 
-          Item { implicitHeight: 4; Layout.columnSpan: 2 }
+          Item {
+            implicitHeight: 4
+            Layout.columnSpan: 2
+          }
+
           Label {
             Layout.columnSpan: 2
             text: qsTr("Logo")
             color: Cpp_ThemeManager.colors["pane_section_label"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
             Component.onCompleted: font.capitalization = Font.AllUppercase
-          }
-          Rectangle {
+          } Rectangle {
             implicitHeight: 1
             Layout.columnSpan: 2
             Layout.fillWidth: true
@@ -302,8 +305,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("File")
             color: Cpp_ThemeManager.colors["text"]
-          }
-          RowLayout {
+          } RowLayout {
             spacing: 6
             Layout.fillWidth: true
 
@@ -313,19 +315,20 @@ Widgets.SmartDialog {
               Layout.fillWidth: true
               font: Cpp_Misc_CommonFonts.uiFont
               placeholderText: qsTr("PNG, JPG or SVG (optional)")
-            }
-            Button {
+            } Button {
               text: qsTr("Browse…")
               onClicked: Cpp_Sessions_Manager.pickReportLogo()
-            }
-            Button {
+            } Button {
               text: qsTr("Clear")
               enabled: _logoField.text.length > 0
               onClicked: _logoField.text = ""
             }
           }
 
-          Item { Layout.fillHeight: true; Layout.columnSpan: 2 }
+          Item {
+            Layout.columnSpan: 2
+            Layout.fillHeight: true
+          }
         }
       }
 
@@ -358,8 +361,8 @@ Widgets.SmartDialog {
           Label {
             Layout.columnSpan: 2
             text: qsTr("Paper")
-            color: Cpp_ThemeManager.colors["pane_section_label"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
           } Rectangle {
             implicitHeight: 1
@@ -377,17 +380,19 @@ Widgets.SmartDialog {
             model: root.pageSizes.map(p => p.label)
           }
 
-          //
-          // Plot appearance sub-section
-          //
-          Item { implicitHeight: 4; Layout.columnSpan: 2 }
+          Item {
+            implicitHeight: 4
+            Layout.columnSpan: 2
+          }
+
           Label {
             Layout.columnSpan: 2
             text: qsTr("Plot appearance")
-            color: Cpp_ThemeManager.colors["pane_section_label"]
             font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
+            color: Cpp_ThemeManager.colors["pane_section_label"]
             Component.onCompleted: font.capitalization = Font.AllUppercase
           }
+
           Rectangle {
             implicitHeight: 1
             Layout.columnSpan: 2
@@ -398,8 +403,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Line width")
             color: Cpp_ThemeManager.colors["text"]
-          }
-          RowLayout {
+          } RowLayout {
             spacing: 8
             Layout.fillWidth: true
 
@@ -423,8 +427,9 @@ Widgets.SmartDialog {
               validator: RegularExpressionValidator {
                 regularExpression: /^\s*\d+([.,]\d*)?\s*(pt)?\s*$/
               }
+            } Item {
+              Layout.fillWidth: true
             }
-            Item { Layout.fillWidth: true }
           }
 
           Label {
@@ -444,7 +449,10 @@ Widgets.SmartDialog {
             text: qsTr("Annotate min, max, and mean values on plots")
           }
 
-          Item { Layout.fillHeight: true; Layout.columnSpan: 2 }
+          Item {
+            Layout.columnSpan: 2
+            Layout.fillHeight: true
+          }
         }
       }
 
@@ -487,29 +495,21 @@ Widgets.SmartDialog {
 
           CheckBox {
             id: _coverCheck
-
             text: qsTr("Cover page (logo, document title, test subtitle)")
-          }
-
-          CheckBox {
+          } CheckBox {
             id: _metadataCheck
-
             text: qsTr("Test information (project, timestamps, classification and notes)")
-          }
-
-          CheckBox {
+          } CheckBox {
             id: _statsCheck
-
             text: qsTr("Measurement summary (min, max, mean, std. deviation per parameter)")
-          }
-
-          CheckBox {
+          } CheckBox {
             id: _chartsCheck
-
             text: qsTr("Parameter trends (time-series chart per numeric parameter)")
           }
 
-          Item { Layout.fillHeight: true }
+          Item {
+            Layout.fillHeight: true
+          }
         }
       }
     }
@@ -521,15 +521,17 @@ Widgets.SmartDialog {
       spacing: 8
       Layout.fillWidth: true
 
-      Item { Layout.fillWidth: true }
+      Item {
+        Layout.fillWidth: true
+      }
 
       Button {
-        text: qsTr("Cancel")
         icon.width: 16
         icon.height: 16
+        text: qsTr("Cancel")
+        onClicked: root.close()
         icon.source: "qrc:/rcc/icons/buttons/close.svg"
         icon.color: Cpp_ThemeManager.colors["button_text"]
-        onClicked: root.close()
       }
 
       /*Button {
@@ -550,12 +552,12 @@ Widgets.SmartDialog {
       }*/
 
       Button {
-        highlighted: true
-        text: qsTr("Export PDF")
         icon.width: 16
         icon.height: 16
-        icon.color: Cpp_ThemeManager.colors["button_text"]
+        highlighted: true
+        text: qsTr("Export PDF")
         icon.source: "qrc:/rcc/icons/buttons/pdf.svg"
+        icon.color: Cpp_ThemeManager.colors["button_text"]
         enabled: _coverCheck.checked
                  || _metadataCheck.checked
                  || _statsCheck.checked

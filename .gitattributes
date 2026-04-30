@@ -1,9 +1,38 @@
-deploy/* linguist-vendored
-libs/* linguist-vendored
-lib/* linguist-vendored
-tests/* linguist-vendored
-doc/* linguist-vendored
-examples/* linguist-vendored
-licenses/* linguist-vendored
-scripts/* linguist-vendored
-.github/* linguist-vendored
+# Force LF in the repository AND the working tree on every platform.
+# Overrides any per-user core.autocrlf / core.eol setting so contributors
+# on Windows don't accidentally check in CRLFs.
+* text=auto eol=lf
+
+# Windows-only scripts genuinely require CRLF for cmd.exe.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Binary assets — never normalize.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.bmp   binary
+*.ico   binary
+*.icns  binary
+*.car   binary
+*.ttf   binary
+*.otf   binary
+*.woff  binary
+*.woff2 binary
+*.zip   binary
+*.gz    binary
+*.tar   binary
+*.pdf   binary
+*.qm    binary
+
+# Linguist annotations (vendored / generated trees not authored here).
+deploy/*    linguist-vendored
+libs/*      linguist-vendored
+lib/*       linguist-vendored
+tests/*     linguist-vendored
+doc/*       linguist-vendored
+examples/*  linguist-vendored
+licenses/*  linguist-vendored
+scripts/*   linguist-vendored
+.github/*   linguist-vendored

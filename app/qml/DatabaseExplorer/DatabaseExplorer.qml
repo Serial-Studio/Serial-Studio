@@ -22,6 +22,9 @@ import "../Widgets" as Widgets
 Widgets.SmartWindow {
   id: root
 
+  //
+  // Window geometry & title
+  //
   minimumWidth: 880
   minimumHeight: 560
   category: "DatabaseExplorer"
@@ -31,10 +34,15 @@ Widgets.SmartWindow {
          ? Cpp_Sessions_Manager.fileName
          : qsTr("Sessions")
 
-  // Operator mode pins the explorer to the project DB and hides destructive controls.
+  //
+  // Operator mode pins the explorer to the project DB and hides destructive controls
+  //
   readonly property bool operatorMode: typeof app !== "undefined"
                                        && app.runtimeMode
 
+  //
+  // Native window management
+  //
   onVisibleChanged: {
     if (visible)
       Cpp_NativeWindow.addWindow(root)
@@ -42,21 +50,28 @@ Widgets.SmartWindow {
       Cpp_NativeWindow.removeWindow(root)
   }
 
+  //
+  // Load database when window opens
+  //
   Component.onCompleted: Qt.callLater(Cpp_Sessions_Manager.restoreLastDatabase)
 
   //
-  // Report options dialog — opened by the Export PDF toolbar button
+  // Report options dialog
   //
   ReportOptionsDialog {
     id: _reportDialog
   }
 
   //
-  // Progress dialog — auto-opens on the pdfExportBusy signal, closes when done
+  // Progress dialog, auto-opens on the pdfExportBusy signal, closes when done
   //
   ReportProgressDialog {
+    id: _reportProgressDialog
   }
 
+  //
+  // User interface controls
+  //
   Page {
     clip: true
     anchors.fill: parent
@@ -89,8 +104,7 @@ Widgets.SmartWindow {
       anchors.fill: parent
 
       //
-      // Toolbar — titlebar band + gradient background + RibbonToolbar,
-      // same structure as ProjectEditor/Sections/ProjectToolbar.qml.
+      // Toolbar
       //
       Rectangle {
         id: toolbar
@@ -101,8 +115,10 @@ Widgets.SmartWindow {
         Layout.minimumHeight: titlebarHeight + 80
         Layout.maximumHeight: titlebarHeight + 80
 
+        //
+        // Display window title on macOS
+        //
         property int titlebarHeight: Cpp_NativeWindow.titlebarHeight(root)
-
         Connections {
           target: root
           function onVisibilityChanged() {
@@ -337,7 +353,6 @@ Widgets.SmartWindow {
           SessionDetail {}
         }
       }
-
     }
   }
 }

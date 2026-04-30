@@ -37,7 +37,6 @@
  */
 Misc::Translator::Translator()
 {
-  // Load saved language preference or fall back to system language
   const auto sysLang  = static_cast<int>(systemLanguage());
   const auto language = m_settings.value("language", sysLang).toInt();
   setLanguage(static_cast<Language>(language));

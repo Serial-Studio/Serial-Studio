@@ -28,11 +28,20 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
-  property var accelModel: null
-
+  //
+  // Window properties
+  //
   staysOnTop: true
   title: qsTr("Accelerometer Configuration")
 
+  //
+  // Accelerometer data model pointer
+  //
+  property var accelModel: null
+
+  //
+  // Display the dialog & load data model properties into the UI
+  //
   function openDialog(model) {
     root.accelModel = model
 
@@ -45,6 +54,9 @@ Widgets.SmartDialog {
     root.raise()
   }
 
+  //
+  // Modify the accelerometer g-force range
+  //
   function applyMaxG() {
     if (!accelModel)
       return
@@ -56,9 +68,15 @@ Widgets.SmartDialog {
       maxGField.text = accelModel.maxG.toFixed(1)
   }
 
+  //
+  // Dialog controls
+  //
   dialogContent: ColumnLayout {
     spacing: 4
 
+    //
+    // Help text
+    //
     Label {
       opacity: 0.7
       Layout.fillWidth: true
@@ -69,18 +87,22 @@ Widgets.SmartDialog {
       text: qsTr("Configure the accelerometer display range and input units.")
     }
 
+    //
+    // Spacer
+    //
     Item {
       implicitHeight: 4
     }
 
+    //
+    // Display range configuration
+    //
     Label {
       text: qsTr("Display Range")
       font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
       color: Cpp_ThemeManager.colors["pane_section_label"]
       Component.onCompleted: font.capitalization = Font.AllUppercase
-    }
-
-    GroupBox {
+    } GroupBox {
       Layout.fillWidth: true
 
       background: Rectangle {
@@ -120,18 +142,22 @@ Widgets.SmartDialog {
       }
     }
 
+    //
+    // Spacer
+    //
     Item {
       implicitHeight: 4
     }
 
+    //
+    // Input Configuration
+    //
     Label {
       text: qsTr("Input Configuration")
       font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
       color: Cpp_ThemeManager.colors["pane_section_label"]
       Component.onCompleted: font.capitalization = Font.AllUppercase
-    }
-
-    GroupBox {
+    } GroupBox {
       Layout.fillWidth: true
 
       background: Rectangle {
@@ -162,10 +188,16 @@ Widgets.SmartDialog {
       }
     }
 
+    //
+    // Spacer
+    //
     Item {
       implicitHeight: 8
     }
 
+    //
+    // Dialog buttons
+    //
     RowLayout {
       spacing: 8
       Layout.alignment: Qt.AlignRight

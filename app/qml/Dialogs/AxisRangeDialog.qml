@@ -28,6 +28,9 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  //
+  // Custom properties
+  //
   property real customXMin: 0
   property real customXMax: 0
   property real customYMin: 0
@@ -36,9 +39,15 @@ Widgets.SmartDialog {
   property var plotWidget: null
   property bool hasCustomRanges: false
 
+  //
+  // Window properties
+  //
   staysOnTop: true
   title: qsTr("Axis Range Configuration")
 
+  //
+  // Display the dialog & load information from data model pointer
+  //
   function openDialog(plot, model) {
     root.plotWidget = plot
     root.dataModel = model
@@ -56,6 +65,9 @@ Widgets.SmartDialog {
     root.raise()
   }
 
+  //
+  // Update UI values based on plot widget data
+  //
   function updateFields() {
     if (plotWidget) {
       xMinField.text = plotWidget.xMin.toFixed(4)
@@ -65,6 +77,9 @@ Widgets.SmartDialog {
     }
   }
 
+  //
+  // Apply the changes to the plot widget
+  //
   function applyChanges() {
     if (!plotWidget)
       return
@@ -97,6 +112,9 @@ Widgets.SmartDialog {
     }
   }
 
+  //
+  // Reset the plot widget configuration to initial state
+  //
   function resetToAuto() {
     if (!plotWidget || !dataModel)
       return
@@ -110,6 +128,9 @@ Widgets.SmartDialog {
     updateFields()
   }
 
+  //
+  // Dialog controls
+  //
   dialogContent: ColumnLayout {
     spacing: 4
 

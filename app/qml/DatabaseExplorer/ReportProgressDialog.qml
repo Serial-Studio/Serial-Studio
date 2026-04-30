@@ -13,7 +13,6 @@ import QtQuick.Controls
 
 import "../Widgets" as Widgets
 
-// Modal progress dialog driven by Cpp_Sessions_Manager.pdfExportBusy.
 Widgets.SmartDialog {
   id: root
 

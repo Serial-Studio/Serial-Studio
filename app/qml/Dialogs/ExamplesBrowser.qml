@@ -103,6 +103,9 @@ SmartDialog {
     Cpp_Examples.searchFilter = ""
   }
 
+  //
+  // Window controls
+  //
   dialogContent: ColumnLayout {
     spacing: 8
     anchors.centerIn: parent

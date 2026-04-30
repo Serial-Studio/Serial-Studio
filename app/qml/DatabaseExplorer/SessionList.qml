@@ -19,8 +19,10 @@ Widgets.Pane {
   title: qsTr("Sessions")
   icon: "qrc:/rcc/icons/panes/sessions.svg"
 
+  //
+  // Custom properties
+  //
   property string searchText: ""
-
   readonly property var filteredSessions: {
     const q = searchText.toLowerCase().trim()
     if (!q)
@@ -34,6 +36,9 @@ Widgets.Pane {
     })
   }
 
+  //
+  // Main layout
+  //
   ColumnLayout {
     spacing: 0
     anchors {
@@ -44,6 +49,9 @@ Widgets.Pane {
       bottomMargin: -9
     }
 
+    //
+    // Search field
+    //
     Rectangle {
       implicitHeight: 48
       Layout.topMargin: -1
@@ -73,6 +81,9 @@ Widgets.Pane {
       }
     }
 
+    //
+    // Table header
+    //
     Widgets.ProjectTableHeader {
       Layout.fillWidth: true
       columns: [
@@ -82,6 +93,9 @@ Widgets.Pane {
       ]
     }
 
+    //
+    // Session list
+    //
     ListView {
       id: sessionListView
 

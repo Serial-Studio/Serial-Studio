@@ -39,7 +39,9 @@ Window {
   property string previousScreenName: ""
   property int preFullscreenVisibility: Window.AutomaticVisibility
 
-  // Toggle real OS fullscreen, remembering prior visibility for restore.
+  //
+  // Toggle real OS fullscreen, remembering prior visibility for restore
+  //
   function toggleFullScreen() {
     if (root.visibility === Window.FullScreen) {
       if (root.preFullscreenVisibility === Window.Maximized)

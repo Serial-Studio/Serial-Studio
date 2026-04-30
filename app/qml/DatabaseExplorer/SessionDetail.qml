@@ -19,6 +19,9 @@ Widgets.Pane {
   title: qsTr("Session Details")
   icon: "qrc:/rcc/icons/panes/details.svg"
 
+  //
+  // Custom properties
+  //
   property int sessionId: Cpp_Sessions_Manager.selectedSessionId
   property var metadata: sessionId >= 0
                          ? Cpp_Sessions_Manager.sessionMetadata(sessionId)
@@ -62,8 +65,12 @@ Widgets.Pane {
   // Progress dialog — auto-opens on the busy signal, closes when done
   //
   ReportProgressDialog {
+    id: _progressDialog
   }
 
+  //
+  // Main layout
+  //
   ColumnLayout {
     spacing: 0
     anchors {
@@ -222,6 +229,9 @@ Widgets.Pane {
           Component.onCompleted: font.capitalization = Font.AllUppercase
         }
 
+        //
+        // Session tags
+        //
         Flow {
           spacing: 6
           Layout.fillWidth: true
@@ -264,6 +274,9 @@ Widgets.Pane {
           }
         }
 
+        //
+        // Add new tag
+        //
         RowLayout {
           spacing: 8
           Layout.fillWidth: true
@@ -304,10 +317,15 @@ Widgets.Pane {
         }
 
         //
+        // Spacer
+        //
+        Item {
+          implicitHeight: 8
+        }
+
+        //
         // Action buttons
         //
-        Item { implicitHeight: 8 }
-
         RowLayout {
           spacing: 8
           Layout.fillWidth: true
@@ -340,7 +358,9 @@ Widgets.Pane {
             enabled: (root.metadata.frame_count || 0) > 0 && !Cpp_Sessions_Manager.pdfExportBusy
           }
 
-          Item { Layout.fillWidth: true }
+          Item {
+            Layout.fillWidth: true
+          }
 
           Button {
             icon.width: 18
@@ -349,9 +369,9 @@ Widgets.Pane {
             visible: !root.operatorMode
             enabled: !Cpp_Sessions_Manager.locked
             icon.source: "qrc:/rcc/icons/buttons/trash.svg"
-            onClicked: Cpp_Sessions_Manager.confirmDeleteSession(root.sessionId)
             ToolTip.visible: hovered && Cpp_Sessions_Manager.locked
             ToolTip.text: qsTr("Unlock the session file to delete sessions")
+            onClicked: Cpp_Sessions_Manager.confirmDeleteSession(root.sessionId)
           }
         }
       }

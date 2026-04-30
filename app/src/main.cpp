@@ -123,9 +123,6 @@ public:
   using QObject::QObject;
 
 protected:
-  /**
-   * @brief Routes QFileOpenEvent for .ssproj files into ProjectModel.
-   */
   bool eventFilter(QObject* obj, QEvent* event) override
   {
     if (event->type() == QEvent::FileOpen) {
@@ -373,6 +370,7 @@ int main(int argc, char** argv)
   }
 #endif
 
+  // Initialize application modules
   Misc::ModuleManager moduleManager;
   moduleManager.setHeadless(headless);
   moduleManager.configureUpdater();
@@ -787,15 +785,19 @@ int main(int argc, char** argv)
   }
 #endif
 
+  // Start the application event loop
   const auto status = app.exec();
 
 #ifdef Q_OS_WIN
+  // Free memory used by the injected font configuration arguments in Windows
   for (int i = 0; i < argc; ++i)
     free(argv[i]);
 
+  // Free the memory used by the arguments array
   free(argv);
 #endif
 
+  // Return exist status to the operating system
   return status;
 }
 
@@ -879,8 +881,6 @@ static char** injectPlatformArg(int& argc, char** argv, const char* platform)
     return argv;
 
   newArgv[0] = argv[0];
-
-  // const_cast is safe: Qt copies argv strings during QApplication init
   newArgv[1] = const_cast<char*>("-platform");
   newArgv[2] = const_cast<char*>(platform);
 
