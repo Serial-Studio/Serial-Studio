@@ -23,6 +23,7 @@
 #  include <QJsonParseError>
 #  include <QSqlError>
 #  include <QSqlQuery>
+#  include <QThread>
 #  include <QTimer>
 #  include <QtMath>
 
@@ -39,11 +40,15 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Installs an application-wide event filter and wires state changes.
+ * @brief Initializes member state, installs a global event filter, spins up the loader worker.
  */
 Sessions::Player::Player()
-  : m_frameQueryPrepared(false)
+  : m_workerThread(nullptr)
+  , m_worker(nullptr)
+  , m_frameQueryPrepared(false)
   , m_sessionId(-1)
+  , m_pendingSessionId(-1)
+  , m_loading(false)
   , m_framePos(0)
   , m_playing(false)
   , m_multiSource(false)
@@ -52,8 +57,12 @@ Sessions::Player::Player()
   , m_preSessionCaptured(false)
   , m_preSessionOperationMode(SerialStudio::QuickPlot)
 {
+  qRegisterMetaType<Sessions::PlayerSessionPayloadPtr>("Sessions::PlayerSessionPayloadPtr");
+
   qApp->installEventFilter(this);
   connect(this, &Sessions::Player::playerStateChanged, this, &Sessions::Player::updateData);
+
+  initWorker();
 }
 
 /**
@@ -61,7 +70,7 @@ Sessions::Player::Player()
  */
 Sessions::Player::~Player()
 {
-  closeFile();
+  shutdown();
 }
 
 /**
@@ -74,6 +83,50 @@ Sessions::Player& Sessions::Player::instance()
 }
 
 //--------------------------------------------------------------------------------------------------
+// Worker lifecycle
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Spins up the loader worker on a dedicated thread and wires its signal.
+ */
+void Sessions::Player::initWorker()
+{
+  m_workerThread = new QThread;
+  m_workerThread->setObjectName(QStringLiteral("Sessions::PlayerLoader"));
+
+  m_worker = new PlayerLoaderWorker;
+  m_worker->moveToThread(m_workerThread);
+
+  connect(m_worker, &PlayerLoaderWorker::loaded, this, &Player::onLoadFinished);
+
+  m_workerThread->start();
+}
+
+/**
+ * @brief Closes the active database, cancels pending loads, joins the worker thread.
+ */
+void Sessions::Player::shutdown()
+{
+  closeFile();
+
+  if (!m_workerThread)
+    return;
+
+  if (m_worker)
+    m_worker->requestCancel();
+
+  m_workerThread->quit();
+  m_workerThread->wait(5000);
+
+  // Worker thread has exited; safe to delete the worker directly from here.
+  delete m_worker;
+  m_worker = nullptr;
+
+  delete m_workerThread;
+  m_workerThread = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Playback status queries
 //--------------------------------------------------------------------------------------------------
 
@@ -83,6 +136,14 @@ Sessions::Player& Sessions::Player::instance()
 bool Sessions::Player::isOpen() const
 {
   return m_db.isOpen() && m_sessionId >= 0 && !m_timestampsNs.empty();
+}
+
+/**
+ * @brief Returns @c true while the worker is loading a session.
+ */
+bool Sessions::Player::loading() const
+{
+  return m_loading;
 }
 
 /**
@@ -152,7 +213,6 @@ void Sessions::Player::play()
   if (!isOpen())
     return;
 
-  // Wrap to the first frame if parked at the end
   if (m_framePos >= frameCount() - 1)
     m_framePos = 0;
 
@@ -214,49 +274,30 @@ void Sessions::Player::openFile()
 }
 
 /**
- * @brief Closes the active database, frees cached frames, and resets state.
+ * @brief Closes the active database, cancels any pending load, restores prior state.
  */
 void Sessions::Player::closeFile()
 {
-  // Nothing to do if no database was opened
-  if (!m_db.isValid() && m_connectionName.isEmpty())
-    return;
+  if (m_worker)
+    m_worker->requestCancel();
 
-  // Stop playback before tearing resources down
+  const bool wasLoading = m_loading;
+
+  // Reset playback state
   m_playing  = false;
   m_framePos = 0;
+  m_loading  = false;
 
-  // Drop the prepared statement before closing the database
-  m_frameQuery.clear();
-  m_frameQuery         = QSqlQuery();
-  m_frameQueryPrepared = false;
-
-  // Close database connection
-  if (m_db.isOpen())
-    m_db.close();
-
-  const auto connName = m_connectionName;
-  m_db                = QSqlDatabase();
-  if (!connName.isEmpty())
-    QSqlDatabase::removeDatabase(connName);
-
-  // Reset per-session caches
-  m_filePath.clear();
-  m_connectionName.clear();
-  m_sessionId             = -1;
-  m_timestamp             = "--.--";
-  m_startTimestampSeconds = 0.0;
-  m_multiSource           = false;
-  m_columnUniqueIds.clear();
-  m_uidToColumn.clear();
-  m_timestampsNs.clear();
-  m_columnToSource.clear();
-  m_sourceColumnCount.clear();
+  teardownLocalDb();
+  clearLocalState();
 
   DataModel::FrameBuilder::instance().registerQuickPlotHeaders(QStringList());
 
   // Restore project + operation mode that existed before the session
   restorePreSessionState();
+
+  if (wasLoading)
+    Q_EMIT loadingChanged();
 
   Q_EMIT openChanged();
   Q_EMIT timestampChanged();
@@ -264,80 +305,32 @@ void Sessions::Player::closeFile()
 }
 
 /**
- * @brief Opens @p filePath, loads the latest session, and emits @c openChanged.
+ * @brief Opens @p filePath, queues an async session load (latest session).
  */
 void Sessions::Player::openFile(const QString& filePath)
 {
   Q_ASSERT(!filePath.isEmpty());
 
-  if (filePath.isEmpty())
-    return;
-
-  closeFile();
-
-  // Snapshot mode + project path before restoreProjectFromSession mutates them
-  capturePreSessionState();
-
-  // Ask the user to disconnect live devices
-  if (IO::ConnectionManager::instance().isConnected()) {
-    auto response =
-      Misc::Utilities::showMessageBox(tr("Device Connection Active"),
-                                      tr("To use this feature, you must disconnect from the "
-                                         "device. Do you want to proceed?"),
-                                      QMessageBox::Warning,
-                                      qAppName(),
-                                      QMessageBox::No | QMessageBox::Yes);
-
-    if (response == QMessageBox::Yes)
-      IO::ConnectionManager::instance().disconnectDevice();
-    else
-      return;
-  }
-
-  // Open the database with a unique connection name
-  m_filePath       = filePath;
-  m_connectionName = QStringLiteral("ss_sqlite_player_%1").arg(QDateTime::currentMSecsSinceEpoch());
-
-  m_db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
-  m_db.setDatabaseName(filePath);
-
-  if (!m_db.open()) {
-    Misc::Utilities::showMessageBox(tr("Cannot open session file"),
-                                    tr("Check file permissions and try again."),
-                                    QMessageBox::Critical);
-    closeFile();
-    return;
-  }
-
-  // WAL + busy_timeout to coexist with a live Export writer
-  QSqlQuery pragma(m_db);
-  pragma.exec("PRAGMA journal_mode=WAL");
-  pragma.exec("PRAGMA busy_timeout=5000");
-
-  // Pick the newest session and restore its embedded project
-  const int newestId = latestSessionId();
-  if (newestId >= 0)
-    (void)restoreProjectFromSession(newestId);
-
-  openSessionInternal(newestId);
+  openFile(filePath, -1);
 }
 
 /**
- * @brief Opens a specific session from @p filePath — called by DatabaseManager.
+ * @brief Opens a specific session from @p filePath via the loader worker.
  */
 void Sessions::Player::openFile(const QString& filePath, int sessionId)
 {
   Q_ASSERT(!filePath.isEmpty());
-  Q_ASSERT(sessionId >= 0);
 
   if (filePath.isEmpty())
     return;
 
+  // Cancel any in-flight load and tear down whatever is currently open
   closeFile();
 
-  // Snapshot pre-session state before any mutation.
+  // Snapshot mode + project path before restoreProjectFromJson mutates them
   capturePreSessionState();
 
+  // Prompt to disconnect live devices — must happen on main thread
   if (IO::ConnectionManager::instance().isConnected()) {
     auto response =
       Misc::Utilities::showMessageBox(tr("Device Connection Active"),
@@ -353,76 +346,93 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
       return;
   }
 
-  m_filePath       = filePath;
-  m_connectionName = QStringLiteral("ss_sqlite_player_%1").arg(QDateTime::currentMSecsSinceEpoch());
+  m_filePath         = filePath;
+  m_pendingSessionId = sessionId;
+  m_loading          = true;
+  Q_EMIT loadingChanged();
 
-  m_db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
-  m_db.setDatabaseName(filePath);
-
-  if (!m_db.open()) {
-    Misc::Utilities::showMessageBox(tr("Cannot open session file"),
-                                    tr("Check file permissions and try again."),
-                                    QMessageBox::Critical);
-    closeFile();
-    return;
-  }
-
-  // WAL + busy_timeout so we coexist with a live Export writer
-  QSqlQuery pragma(m_db);
-  pragma.exec("PRAGMA journal_mode=WAL");
-  pragma.exec("PRAGMA busy_timeout=5000");
-
-  // Restore the project stored inside this session so widgets render
-  (void)restoreProjectFromSession(sessionId);
-
-  openSessionInternal(sessionId);
+  QMetaObject::invokeMethod(m_worker, "openAndLoad", Qt::QueuedConnection,
+                            Q_ARG(QString, filePath), Q_ARG(int, sessionId));
 }
 
 /**
- * @brief Common session-loading logic shared by both openFile overloads.
+ * @brief Worker shipped session bundle — finalize setup on the main thread.
  */
-void Sessions::Player::openSessionInternal(int sessionId)
+void Sessions::Player::onLoadFinished(const PlayerSessionPayloadPtr& payload)
 {
-  if (sessionId < 0) {
-    Misc::Utilities::showMessageBox(tr("No sessions found"),
-                                    tr("This file does not contain any recording sessions."),
-                                    QMessageBox::Critical);
-    closeFile();
+  // If the load was cancelled or superseded, the path may have been cleared
+  if (!payload || m_filePath.isEmpty()) {
+    if (m_loading) {
+      m_loading = false;
+      Q_EMIT loadingChanged();
+    }
+
     return;
   }
 
-  m_sessionId = sessionId;
+  // Drop stale results from a load that was superseded by a fresh openFile()
+  if (payload->filePath != m_filePath)
+    return;
 
-  // Load column order, build the timestamp index, wire sources if needed
-  loadColumnOrder();
-  if (m_columnUniqueIds.empty()) {
-    Misc::Utilities::showMessageBox(tr("Session has no columns"),
-                                    tr("The selected session is missing its column definitions."),
-                                    QMessageBox::Critical);
-    closeFile();
+  if (m_pendingSessionId >= 0 && payload->sessionId != m_pendingSessionId) {
+    if (m_loading) {
+      m_loading = false;
+      Q_EMIT loadingChanged();
+    }
+
     return;
   }
 
-  buildTimestampIndex();
-  if (m_timestampsNs.empty()) {
-    Misc::Utilities::showMessageBox(tr("Session has no readings"),
-                                    tr("The selected session does not contain any frames."),
+  if (!payload->ok) {
+    Misc::Utilities::showMessageBox(tr("Cannot open session file"),
+                                    payload->error.isEmpty() ? tr("Unknown error")
+                                                              : payload->error,
                                     QMessageBox::Critical);
-    closeFile();
+
+    m_loading = false;
+    Q_EMIT loadingChanged();
+    teardownLocalDb();
+    clearLocalState();
+    restorePreSessionState();
+    Q_EMIT openChanged();
+    Q_EMIT playerStateChanged();
     return;
   }
 
-  // ProjectFile mode uses the project's parser; QuickPlot needs synthetic headers
+  // Restore project — must happen on the main thread before column alignment
+  if (!payload->projectJson.isEmpty()) {
+    (void)restoreProjectFromJson(payload->projectJson);
+  } else {
+    // Inform the user the embedded project is missing
+    Misc::Utilities::showMessageBox(tr("No project data"),
+                                    tr("This session does not contain an embedded project file — "
+                                       "the dashboard falls back to a quick-plot layout."),
+                                    QMessageBox::Warning);
+  }
+
+  // Open the main-thread DB connection used for per-frame fetches
+  if (!openLocalDb(m_filePath)) {
+    m_loading = false;
+    Q_EMIT loadingChanged();
+    clearLocalState();
+    restorePreSessionState();
+    Q_EMIT openChanged();
+    Q_EMIT playerStateChanged();
+    return;
+  }
+
+  m_sessionId       = payload->sessionId;
+  m_columnUniqueIds = payload->columnUniqueIds;
+  m_timestampsNs    = payload->timestampsNs;
+
   const auto mode = AppState::instance().operationMode();
   if (mode == SerialStudio::ProjectFile) {
-    // Reorder columns to match FrameBuilder's per-source dataset.index walk
     alignColumnsToProject();
 
     const auto& sources = DataModel::ProjectModel::instance().sources();
     if (sources.size() > 1)
       buildMultiSourceMapping();
   } else {
-    // QuickPlot fallback — register synthetic headers
     QStringList headers;
     headers.reserve(static_cast<int>(m_columnUniqueIds.size()));
     for (int uid : m_columnUniqueIds)
@@ -431,7 +441,6 @@ void Sessions::Player::openSessionInternal(int sessionId)
     DataModel::FrameBuilder::instance().registerQuickPlotHeaders(headers);
   }
 
-  // Cache uid→column once so buildFrameAt skips the per-tick rebuild
   if (m_uidToColumn.isEmpty())
     for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
       m_uidToColumn.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
@@ -439,10 +448,146 @@ void Sessions::Player::openSessionInternal(int sessionId)
   m_framePos              = 0;
   m_startTimestampSeconds = m_timestampsNs.front() / 1e9;
 
-  // Push the first frame so the dashboard shows something before Play
+  m_loading = false;
+  Q_EMIT loadingChanged();
+
   updateData();
   Q_EMIT openChanged();
   Q_EMIT playerStateChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Local DB connection (per-frame fetch — main thread)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Opens a main-thread @c QSqlDatabase connection used for per-frame queries.
+ */
+bool Sessions::Player::openLocalDb(const QString& filePath)
+{
+  m_connectionName =
+    QStringLiteral("ss_sqlite_player_%1").arg(QDateTime::currentMSecsSinceEpoch());
+
+  m_db = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
+  m_db.setDatabaseName(filePath);
+  if (!m_db.open()) {
+    Misc::Utilities::showMessageBox(tr("Cannot open session file"),
+                                    tr("Check file permissions and try again."),
+                                    QMessageBox::Critical);
+    const QString conn = m_connectionName;
+    m_db               = QSqlDatabase();
+    if (!conn.isEmpty())
+      QSqlDatabase::removeDatabase(conn);
+
+    m_connectionName.clear();
+    return false;
+  }
+
+  QSqlQuery pragma(m_db);
+  pragma.exec("PRAGMA journal_mode=WAL");
+  pragma.exec("PRAGMA busy_timeout=5000");
+  return true;
+}
+
+/**
+ * @brief Closes the per-frame DB connection and removes the named connection.
+ */
+void Sessions::Player::teardownLocalDb()
+{
+  m_frameQuery.clear();
+  m_frameQuery         = QSqlQuery();
+  m_frameQueryPrepared = false;
+
+  if (m_db.isOpen())
+    m_db.close();
+
+  const QString conn = m_connectionName;
+  m_db               = QSqlDatabase();
+  if (!conn.isEmpty())
+    QSqlDatabase::removeDatabase(conn);
+
+  m_connectionName.clear();
+}
+
+/**
+ * @brief Resets all per-session caches.
+ */
+void Sessions::Player::clearLocalState()
+{
+  m_filePath.clear();
+  m_sessionId             = -1;
+  m_pendingSessionId      = -1;
+  m_timestamp             = "--.--";
+  m_startTimestampSeconds = 0.0;
+  m_multiSource           = false;
+  m_columnUniqueIds.clear();
+  m_uidToColumn.clear();
+  m_timestampsNs.clear();
+  m_columnToSource.clear();
+  m_sourceColumnCount.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Pre-session state capture / restore
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Snapshots the active operation mode and project file path.
+ */
+void Sessions::Player::capturePreSessionState()
+{
+  if (m_preSessionCaptured)
+    return;
+
+  m_preSessionOperationMode = AppState::instance().operationMode();
+  m_preSessionProjectPath   = DataModel::ProjectModel::instance().jsonFilePath();
+  m_preSessionCaptured      = true;
+}
+
+/**
+ * @brief Restores the operation mode and project captured before the session.
+ */
+void Sessions::Player::restorePreSessionState()
+{
+  if (!m_preSessionCaptured)
+    return;
+
+  auto& pm = DataModel::ProjectModel::instance();
+  if (!m_preSessionProjectPath.isEmpty() && QFileInfo::exists(m_preSessionProjectPath))
+    (void)pm.openJsonFile(m_preSessionProjectPath);
+  else
+    pm.newJsonFile();
+
+  AppState::instance().setOperationMode(m_preSessionOperationMode);
+
+  m_preSessionCaptured = false;
+  m_preSessionProjectPath.clear();
+  m_preSessionOperationMode = SerialStudio::QuickPlot;
+}
+
+/**
+ * @brief Loads the project JSON shipped by the worker.
+ */
+bool Sessions::Player::restoreProjectFromJson(const QString& json)
+{
+  if (json.isEmpty())
+    return false;
+
+  QJsonParseError parseError{};
+  const auto doc = QJsonDocument::fromJson(json.toUtf8(), &parseError);
+  if (parseError.error != QJsonParseError::NoError || doc.isEmpty()) {
+    qWarning() << "[Sessions::Player] Embedded project JSON is malformed:"
+               << parseError.errorString();
+    return false;
+  }
+
+  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
+  if (!DataModel::ProjectModel::instance().loadFromJsonDocument(doc)) {
+    qWarning() << "[Sessions::Player] ProjectModel rejected the embedded JSON";
+    return false;
+  }
+
+  return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -469,7 +614,6 @@ void Sessions::Player::setProgress(const double progress)
 
   UI::Dashboard::instance().clearPlotData();
 
-  // Rehydrate the plot buffer so scrolling backwards shows history
   const int toLoad   = UI::Dashboard::instance().points();
   const int startIdx = std::max(0, m_framePos - toLoad);
   processFrameBatch(startIdx, m_framePos);
@@ -597,122 +741,8 @@ void Sessions::Player::processFrameBatch(int startFrame, int endFrame)
 }
 
 //--------------------------------------------------------------------------------------------------
-// Session / schema loading
+// Column alignment / source mapping
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Returns the most recent session_id in the database, or -1 if none.
- */
-int Sessions::Player::latestSessionId() const
-{
-  QSqlQuery q(m_db);
-  q.prepare("SELECT session_id FROM sessions ORDER BY started_at DESC LIMIT 1");
-  if (!q.exec() || !q.next())
-    return -1;
-
-  return q.value(0).toInt();
-}
-
-/**
- * @brief Loads the project JSON embedded in a session row.
- */
-bool Sessions::Player::restoreProjectFromSession(int sessionId)
-{
-  Q_ASSERT(m_db.isOpen());
-  Q_ASSERT(sessionId >= 0);
-
-  // Read the per-session snapshot, falling back to the global metadata row
-  QString projectJson;
-  {
-    QSqlQuery q(m_db);
-    q.prepare("SELECT project_json FROM sessions WHERE session_id = ?");
-    q.bindValue(0, sessionId);
-    if (q.exec() && q.next())
-      projectJson = q.value(0).toString();
-  }
-
-  if (projectJson.isEmpty()) {
-    QSqlQuery q(m_db);
-    q.prepare("SELECT value FROM project_metadata WHERE key = 'project_json'");
-    if (q.exec() && q.next())
-      projectJson = q.value(0).toString();
-  }
-
-  if (projectJson.isEmpty())
-    return false;
-
-  // Parse the blob and hand the document to ProjectModel
-  QJsonParseError parseError{};
-  const auto doc = QJsonDocument::fromJson(projectJson.toUtf8(), &parseError);
-  if (parseError.error != QJsonParseError::NoError || doc.isEmpty()) {
-    qWarning() << "[Sessions::Player] Embedded project JSON is malformed:"
-               << parseError.errorString();
-    return false;
-  }
-
-  // Flip to ProjectFile mode before loading
-  AppState::instance().setOperationMode(SerialStudio::ProjectFile);
-  if (!DataModel::ProjectModel::instance().loadFromJsonDocument(doc)) {
-    qWarning() << "[Sessions::Player] ProjectModel rejected the embedded JSON";
-    return false;
-  }
-
-  return true;
-}
-
-/**
- * @brief Snapshots the active operation mode and project file path.
- */
-void Sessions::Player::capturePreSessionState()
-{
-  if (m_preSessionCaptured)
-    return;
-
-  m_preSessionOperationMode = AppState::instance().operationMode();
-  m_preSessionProjectPath   = DataModel::ProjectModel::instance().jsonFilePath();
-  m_preSessionCaptured      = true;
-}
-
-/**
- * @brief Restores the operation mode and project captured before the session.
- */
-void Sessions::Player::restorePreSessionState()
-{
-  if (!m_preSessionCaptured)
-    return;
-
-  auto& pm = DataModel::ProjectModel::instance();
-  if (!m_preSessionProjectPath.isEmpty() && QFileInfo::exists(m_preSessionProjectPath))
-    (void)pm.openJsonFile(m_preSessionProjectPath);
-  else
-    pm.newJsonFile();
-
-  AppState::instance().setOperationMode(m_preSessionOperationMode);
-
-  m_preSessionCaptured = false;
-  m_preSessionProjectPath.clear();
-  m_preSessionOperationMode = SerialStudio::QuickPlot;
-}
-
-/**
- * @brief Reads the session's column order into @c m_columnUniqueIds.
- */
-void Sessions::Player::loadColumnOrder()
-{
-  m_columnUniqueIds.clear();
-
-  QSqlQuery q(m_db);
-  q.prepare("SELECT unique_id FROM columns WHERE session_id = ? ORDER BY column_id ASC");
-  q.bindValue(0, m_sessionId);
-
-  if (!q.exec()) {
-    qWarning() << "[Sessions::Player] column query failed:" << q.lastError().text();
-    return;
-  }
-
-  while (q.next())
-    m_columnUniqueIds.push_back(q.value(0).toInt());
-}
 
 /**
  * @brief Reorders @c m_columnUniqueIds to match FrameBuilder's parsing order.
@@ -760,7 +790,6 @@ void Sessions::Player::alignColumnsToProject()
 
   m_columnUniqueIds.swap(aligned);
 
-  // Refresh the uid→column lookup so the per-frame hotpath skips rebuilding it
   m_uidToColumn.clear();
   for (int i = 0; i < static_cast<int>(m_columnUniqueIds.size()); ++i)
     m_uidToColumn.insert(m_columnUniqueIds[static_cast<size_t>(i)], i);
@@ -792,28 +821,6 @@ void Sessions::Player::buildMultiSourceMapping()
   }
 
   m_multiSource = !m_columnToSource.isEmpty() && m_sourceColumnCount.size() > 1;
-}
-
-/**
- * @brief Populates @c m_timestampsNs with every distinct timestamp, ascending.
- */
-void Sessions::Player::buildTimestampIndex()
-{
-  m_timestampsNs.clear();
-
-  QSqlQuery q(m_db);
-  q.setForwardOnly(true);
-  q.prepare("SELECT DISTINCT timestamp_ns FROM readings "
-            "WHERE session_id = ? ORDER BY timestamp_ns ASC");
-  q.bindValue(0, m_sessionId);
-
-  if (!q.exec()) {
-    qWarning() << "[Sessions::Player] timestamp index query failed:" << q.lastError().text();
-    return;
-  }
-
-  while (q.next())
-    m_timestampsNs.push_back(q.value(0).toLongLong());
 }
 
 //--------------------------------------------------------------------------------------------------

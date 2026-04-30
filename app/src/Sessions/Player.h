@@ -25,6 +25,9 @@
 #  include <vector>
 
 #  include "SerialStudio.h"
+#  include "Sessions/PlayerLoaderWorker.h"
+
+class QThread;
 
 namespace Sessions {
 
@@ -37,6 +40,9 @@ class Player : public QObject {
   Q_PROPERTY(bool isOpen
              READ isOpen
              NOTIFY openChanged)
+  Q_PROPERTY(bool loading
+             READ loading
+             NOTIFY loadingChanged)
   Q_PROPERTY(double progress
              READ progress
              NOTIFY timestampChanged)
@@ -56,6 +62,7 @@ class Player : public QObject {
 
 signals:
   void openChanged();
+  void loadingChanged();
   void timestampChanged();
   void playerStateChanged();
 
@@ -71,12 +78,15 @@ public:
   [[nodiscard]] static Player& instance();
 
   [[nodiscard]] bool isOpen() const;
+  [[nodiscard]] bool loading() const;
   [[nodiscard]] bool isPlaying() const;
   [[nodiscard]] int frameCount() const;
   [[nodiscard]] int framePosition() const;
   [[nodiscard]] double progress() const;
   [[nodiscard]] QString filename() const;
   [[nodiscard]] const QString& timestamp() const;
+
+  void shutdown();
 
 public slots:
   void play();
@@ -92,25 +102,25 @@ public slots:
 
 private slots:
   void updateData();
+  void onLoadFinished(const Sessions::PlayerSessionPayloadPtr& payload);
 
 protected:
   bool eventFilter(QObject* obj, QEvent* event) override;
   bool handleKeyPress(QKeyEvent* keyEvent);
 
 private:
-  void openSessionInternal(int sessionId);
-  [[nodiscard]] int latestSessionId() const;
+  void initWorker();
+  void clearLocalState();
+  void teardownLocalDb();
+  bool openLocalDb(const QString& filePath);
 
-  [[nodiscard]] bool restoreProjectFromSession(int sessionId);
+  [[nodiscard]] bool restoreProjectFromJson(const QString& json);
 
   void capturePreSessionState();
   void restorePreSessionState();
 
-  void loadColumnOrder();
   void alignColumnsToProject();
   void buildMultiSourceMapping();
-
-  void buildTimestampIndex();
 
   [[nodiscard]] QByteArray buildFrameAt(qint64 timestampNs);
   void injectFrame(const QByteArray& frame);
@@ -120,12 +130,18 @@ private:
   [[nodiscard]] QString formatTimestamp(double seconds) const;
 
 private:
+  QThread* m_workerThread;
+  PlayerLoaderWorker* m_worker;
+
   QSqlDatabase m_db;
   QSqlQuery m_frameQuery;
   bool m_frameQueryPrepared;
   QString m_filePath;
   QString m_connectionName;
   int m_sessionId;
+  int m_pendingSessionId;
+
+  bool m_loading;
 
   int m_framePos;
   bool m_playing;

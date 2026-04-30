@@ -19,6 +19,7 @@
 #  include <QCryptographicHash>
 #  include <QDateTime>
 #  include <QDir>
+#  include <QFile>
 #  include <QFileDialog>
 #  include <QFileInfo>
 #  include <QGuiApplication>
@@ -28,6 +29,7 @@
 #  include <QJsonParseError>
 #  include <QSqlError>
 #  include <QSqlQuery>
+#  include <QThread>
 #  include <QTimer>
 
 #  include "AppState.h"
@@ -43,21 +45,6 @@
 //--------------------------------------------------------------------------------------------------
 // File-local helpers
 //--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Formats an ISO 8601 date string into a user-friendly display string.
- */
-static QString formatDateForDisplay(const QString& isoDate)
-{
-  if (isoDate.isEmpty())
-    return {};
-
-  const auto dt = QDateTime::fromString(isoDate, Qt::ISODate);
-  if (!dt.isValid())
-    return isoDate;
-
-  return dt.toString(QStringLiteral("MMM d, yyyy — h:mm AP"));
-}
 
 /**
  * @brief Scrubs a project title for use as a folder/file name component.
@@ -88,22 +75,33 @@ static QString sanitiseTitleForPath(const QString& title)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Initializes member variables.
+ * @brief Initializes member variables and spins up the worker thread.
  */
 Sessions::DatabaseManager::DatabaseManager()
-  : m_selectedSessionId(-1)
-  , m_csvExportBusy(false)
-  , m_pdfExportBusy(false)
+  : m_thread(nullptr)
+  , m_worker(nullptr)
+  , m_open(false)
+  , m_selectedSessionId(-1)
   , m_locked(false)
+  , m_csvExportBusy(false)
+  , m_csvExportProgress(0.0)
+  , m_pdfExportBusy(false)
   , m_pdfExportProgress(0.0)
-{}
+  , m_pendingPdfSessionId(-1)
+  , m_pendingPdfActive(false)
+  , m_nextToken(1)
+  , m_outstandingMutations(0)
+{
+  qRegisterMetaType<Sessions::ReportPayloadPtr>("Sessions::ReportPayloadPtr");
+  initWorker();
+}
 
 /**
- * @brief Closes the database before the singleton destructs.
+ * @brief Stops the worker thread and tears the singleton down.
  */
 Sessions::DatabaseManager::~DatabaseManager()
 {
-  closeDatabase(false);
+  shutdown();
 }
 
 /**
@@ -113,6 +111,76 @@ Sessions::DatabaseManager& Sessions::DatabaseManager::instance()
 {
   static DatabaseManager singleton;
   return singleton;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Worker lifecycle
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs the worker, parks it on a dedicated thread, wires signals.
+ */
+void Sessions::DatabaseManager::initWorker()
+{
+  m_thread = new QThread;
+  m_thread->setObjectName(QStringLiteral("Sessions::DatabaseWorker"));
+
+  m_worker = new DatabaseWorker;
+  m_worker->moveToThread(m_thread);
+
+  connect(m_worker, &DatabaseWorker::opened,
+          this, &DatabaseManager::onWorkerOpened);
+  connect(m_worker, &DatabaseWorker::openFailed,
+          this, &DatabaseManager::onWorkerOpenFailed);
+  connect(m_worker, &DatabaseWorker::closed,
+          this, &DatabaseManager::onWorkerClosed);
+  connect(m_worker, &DatabaseWorker::sessionListRefreshed,
+          this, &DatabaseManager::onWorkerSessionListRefreshed);
+  connect(m_worker, &DatabaseWorker::tagListRefreshed,
+          this, &DatabaseManager::onWorkerTagListRefreshed);
+  connect(m_worker, &DatabaseWorker::lockStateChanged,
+          this, &DatabaseManager::onWorkerLockStateChanged);
+  connect(m_worker, &DatabaseWorker::notesUpdated,
+          this, &DatabaseManager::onWorkerNotesUpdated);
+  connect(m_worker, &DatabaseWorker::mutationFinished,
+          this, &DatabaseManager::onWorkerMutationFinished);
+  connect(m_worker, &DatabaseWorker::csvExportProgress,
+          this, &DatabaseManager::onWorkerCsvProgress);
+  connect(m_worker, &DatabaseWorker::csvExportFinished,
+          this, &DatabaseManager::onWorkerCsvFinished);
+  connect(m_worker, &DatabaseWorker::reportDataReady,
+          this, &DatabaseManager::onWorkerReportDataReady);
+  connect(m_worker, &DatabaseWorker::globalProjectJsonReady,
+          this, &DatabaseManager::onWorkerGlobalProjectJsonReady);
+
+  m_thread->start();
+}
+
+/**
+ * @brief Synchronously closes the worker DB and joins the worker thread.
+ */
+void Sessions::DatabaseManager::shutdown()
+{
+  if (!m_thread)
+    return;
+
+  if (m_worker)
+    m_worker->requestCancel();
+
+  if (m_thread->isRunning() && m_worker) {
+    QMetaObject::invokeMethod(m_worker, "closeDatabase", Qt::BlockingQueuedConnection);
+    m_thread->quit();
+    m_thread->wait(5000);
+  }
+
+  // Thread has exited — its event loop is dead, so deleteLater would never
+  // fire. Delete the worker directly from this thread now that nothing else
+  // can be running on it.
+  delete m_worker;
+  m_worker = nullptr;
+
+  delete m_thread;
+  m_thread = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -139,7 +207,15 @@ void Sessions::DatabaseManager::setupExternalConnections()
  */
 bool Sessions::DatabaseManager::isOpen() const
 {
-  return m_db.isOpen();
+  return m_open;
+}
+
+/**
+ * @brief Returns @c true while a worker mutation or open is in flight.
+ */
+bool Sessions::DatabaseManager::busy() const
+{
+  return m_outstandingMutations > 0;
 }
 
 /**
@@ -199,11 +275,19 @@ QString Sessions::DatabaseManager::pdfExportStatus() const
 }
 
 /**
- * @brief Returns the active export's progress as a fraction in [0, 1].
+ * @brief Returns the active PDF export's progress as a fraction in [0, 1].
  */
 double Sessions::DatabaseManager::pdfExportProgress() const
 {
   return m_pdfExportProgress;
+}
+
+/**
+ * @brief Returns the active CSV export's progress as a fraction in [0, 1].
+ */
+double Sessions::DatabaseManager::csvExportProgress() const
+{
+  return m_csvExportProgress;
 }
 
 /**
@@ -246,137 +330,61 @@ QVariantList Sessions::DatabaseManager::selectedSessionTags() const
  */
 QString Sessions::DatabaseManager::selectedSessionNotes() const
 {
-  if (m_selectedSessionId < 0 || !isOpen())
+  if (m_selectedSessionId < 0)
     return {};
 
-  QSqlQuery q(m_db);
-  q.prepare("SELECT notes FROM sessions WHERE session_id = ?");
-  q.bindValue(0, m_selectedSessionId);
-  if (q.exec() && q.next())
-    return q.value(0).toString();
+  for (const auto& v : m_sessionList) {
+    const auto m = v.toMap();
+    if (m.value("session_id").toInt() == m_selectedSessionId)
+      return m.value("notes").toString();
+  }
 
   return {};
 }
 
 //--------------------------------------------------------------------------------------------------
-// Q_INVOKABLE queries
+// Cache lookups (Q_INVOKABLE)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the tags for a specific session as a QVariantList.
+ * @brief Returns the tags assigned to a specific session from the cache.
  */
 QVariantList Sessions::DatabaseManager::tagsForSession(int sessionId) const
 {
-  QVariantList result;
-  if (!isOpen())
-    return result;
-
-  QSqlQuery q(m_db);
-  q.prepare("SELECT t.tag_id, t.label FROM tags t "
-            "JOIN session_tags st ON st.tag_id = t.tag_id "
-            "WHERE st.session_id = ? ORDER BY t.label");
-  q.bindValue(0, sessionId);
-  if (!q.exec())
-    return result;
-
-  while (q.next()) {
-    QVariantMap tag;
-    tag["tag_id"] = q.value(0).toInt();
-    tag["label"]  = q.value(1).toString();
-    result.append(tag);
+  for (const auto& v : m_sessionList) {
+    const auto m = v.toMap();
+    if (m.value("session_id").toInt() == sessionId)
+      return m.value("tags").toList();
   }
 
-  return result;
+  return {};
 }
 
 /**
- * @brief Returns full metadata for a session as a QVariantMap.
+ * @brief Returns full metadata for a session from the cached list.
  */
 QVariantMap Sessions::DatabaseManager::sessionMetadata(int sessionId) const
 {
   QVariantMap result;
-  if (!isOpen())
-    return result;
+  for (const auto& v : m_sessionList) {
+    const auto m = v.toMap();
+    if (m.value("session_id").toInt() != sessionId)
+      continue;
 
-  QSqlQuery q(m_db);
-  q.prepare(
-    "SELECT s.project_title, s.started_at, s.ended_at, s.notes, "
-    "       (SELECT COUNT(DISTINCT timestamp_ns) FROM readings WHERE session_id = s.session_id) "
-    "FROM sessions s WHERE s.session_id = ?");
-  q.bindValue(0, sessionId);
-  if (!q.exec() || !q.next())
+    result["session_id"]    = sessionId;
+    result["project_title"] = m.value("project_title");
+    result["started_at"]    = m.value("started_at");
+    result["ended_at"]      = m.value("ended_at");
+    result["notes"]         = m.value("notes");
+    result["frame_count"]   = m.value("frame_count");
     return result;
-
-  result["session_id"]    = sessionId;
-  result["project_title"] = q.value(0).toString();
-  result["started_at"]    = formatDateForDisplay(q.value(1).toString());
-  result["ended_at"]      = formatDateForDisplay(q.value(2).toString());
-  result["notes"]         = q.value(3).toString();
-  result["frame_count"]   = q.value(4).toInt();
+  }
 
   return result;
 }
 
 /**
- * @brief Returns the latest project JSON stored in project_metadata, or empty.
- */
-QString Sessions::DatabaseManager::projectJsonFromDb() const
-{
-  if (!isOpen())
-    return {};
-
-  QSqlQuery q(m_db);
-  q.prepare("SELECT value FROM project_metadata WHERE key = 'project_json'");
-  if (q.exec() && q.next())
-    return q.value(0).toString();
-
-  return {};
-}
-
-/**
- * @brief Returns the project JSON embedded in a specific session row.
- */
-QString Sessions::DatabaseManager::sessionProjectJson(int sessionId) const
-{
-  if (!isOpen())
-    return {};
-
-  // Try the per-session snapshot first
-  QSqlQuery q(m_db);
-  q.prepare("SELECT project_json FROM sessions WHERE session_id = ?");
-  q.bindValue(0, sessionId);
-  if (q.exec() && q.next()) {
-    const auto json = q.value(0).toString();
-    if (!json.isEmpty())
-      return json;
-  }
-
-  // Fall back to the global metadata table
-  return projectJsonFromDb();
-}
-
-/**
- * @brief Opens a native QFileDialog to pick a logo for the report.
- */
-void Sessions::DatabaseManager::pickReportLogo()
-{
-  auto* dialog = new QFileDialog(
-    nullptr, tr("Select logo image"), QString(), tr("Images (*.png *.jpg *.jpeg *.svg)"));
-  dialog->setAcceptMode(QFileDialog::AcceptOpen);
-  dialog->setFileMode(QFileDialog::ExistingFile);
-
-  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
-    dialog->deleteLater();
-    if (!path.isEmpty())
-      Q_EMIT reportLogoPicked(path);
-  });
-
-  dialog->open();
-}
-
-/**
- * @brief Returns the canonical .db path for a project title. Export uses this
- * to decide whether to create a new file or append to an existing one.
+ * @brief Returns the canonical .db path for a project title. Pure path arithmetic.
  */
 QString Sessions::DatabaseManager::canonicalDbPath(const QString& projectTitle)
 {
@@ -412,85 +420,31 @@ void Sessions::DatabaseManager::openDatabase()
 }
 
 /**
- * @brief Opens the given .db file, migrates the schema if needed, and loads
- * the session and tag lists.
+ * @brief Dispatches an asynchronous open + initial cache fetch to the worker.
  */
 void Sessions::DatabaseManager::openDatabase(const QString& filePath)
 {
   if (filePath.isEmpty())
     return;
 
-  // Wait cursor for the synchronous SQL setup that follows
-  QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-
-  // Close without clearing the saved path
-  closeDatabase(false);
-
-  // Open with a unique connection name to coexist with Export/Player
-  m_filePath       = filePath;
-  m_connectionName = QStringLiteral("ss_dbmgr_%1").arg(QDateTime::currentMSecsSinceEpoch());
-  m_db             = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
-  m_db.setDatabaseName(filePath);
-  if (!m_db.open()) {
-    QGuiApplication::restoreOverrideCursor();
-    Misc::Utilities::showMessageBox(
-      tr("Cannot open session file"), m_db.lastError().text(), QMessageBox::Critical);
-    closeDatabase(true);
-    return;
-  }
-
-  // WAL: writer and reader coexist without locks
-  QSqlQuery pragma(m_db);
-  pragma.exec("PRAGMA journal_mode=WAL");
-  pragma.exec("PRAGMA busy_timeout=5000");
-
-  // Ensure the full schema exists before querying
-  ensureSchema();
-
-  // Populate caches and persist the path for next launch
-  refreshSessionList();
-  loadTagList();
-  loadLockState();
-  m_settings.setValue("Sessions/LastDatabase", m_filePath);
-
-  QGuiApplication::restoreOverrideCursor();
-  Q_EMIT openChanged();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "openDatabase", Qt::QueuedConnection,
+                            Q_ARG(QString, filePath));
 }
 
 /**
- * @brief Closes the database and resets all cached state.
- * @param clearSavedPath True to forget the path (user close), false to keep it (app quit).
+ * @brief Dispatches an async close to the worker; main-thread cache clears on reply.
  */
 void Sessions::DatabaseManager::closeDatabase(bool clearSavedPath)
 {
-  m_selectedSessionId = -1;
-  m_sessionList.clear();
-  m_tagList.clear();
-  m_passwordHash.clear();
-
-  const bool wasLocked = m_locked;
-  m_locked             = false;
-
-  if (m_db.isOpen())
-    m_db.close();
-
-  const auto conn = m_connectionName;
-  m_db            = QSqlDatabase();
-  if (!conn.isEmpty())
-    QSqlDatabase::removeDatabase(conn);
-
-  m_filePath.clear();
-  m_connectionName.clear();
+  if (m_worker)
+    m_worker->requestCancel();
 
   if (clearSavedPath)
     m_settings.remove("Sessions/LastDatabase");
 
-  Q_EMIT openChanged();
-  Q_EMIT sessionsChanged();
-  Q_EMIT tagsChanged();
-  Q_EMIT selectedSessionChanged();
-  if (wasLocked)
-    Q_EMIT lockedChanged();
+  if (m_worker)
+    QMetaObject::invokeMethod(m_worker, "closeDatabase", Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -498,7 +452,7 @@ void Sessions::DatabaseManager::closeDatabase(bool clearSavedPath)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Prompts for a password, hashes it, and locks the open session file.
+ * @brief Prompts for a password, hashes it, and dispatches the lock write.
  */
 void Sessions::DatabaseManager::lockDatabase()
 {
@@ -532,16 +486,16 @@ void Sessions::DatabaseManager::lockDatabase()
     return;
   }
 
-  m_passwordHash =
+  const QString hash =
     QString::fromLatin1(QCryptographicHash::hash(first.toUtf8(), QCryptographicHash::Md5).toHex());
-  m_locked = true;
 
-  persistLockState();
-  Q_EMIT lockedChanged();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "persistLock", Qt::QueuedConnection,
+                            Q_ARG(QString, hash), Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Prompts for the password, verifies it, and clears the lock on success.
+ * @brief Prompts for the password, verifies it locally, and dispatches the unlock write.
  */
 void Sessions::DatabaseManager::unlockDatabase()
 {
@@ -549,9 +503,9 @@ void Sessions::DatabaseManager::unlockDatabase()
     return;
 
   if (m_passwordHash.isEmpty()) {
-    m_locked = false;
-    persistLockState();
-    Q_EMIT lockedChanged();
+    setBusy(true);
+    QMetaObject::invokeMethod(m_worker, "persistLock", Qt::QueuedConnection,
+                              Q_ARG(QString, QString()), Q_ARG(quint64, nextToken()));
     return;
   }
 
@@ -578,11 +532,9 @@ void Sessions::DatabaseManager::unlockDatabase()
     return;
   }
 
-  m_passwordHash.clear();
-  m_locked = false;
-
-  persistLockState();
-  Q_EMIT lockedChanged();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "persistLock", Qt::QueuedConnection,
+                            Q_ARG(QString, QString()), Q_ARG(quint64, nextToken()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -602,7 +554,7 @@ void Sessions::DatabaseManager::setSelectedSessionId(int sessionId)
 }
 
 /**
- * @brief Persists the notes for the currently selected session.
+ * @brief Updates the cached notes locally and dispatches the SQL update.
  */
 void Sessions::DatabaseManager::setSelectedSessionNotes(const QString& notes)
 {
@@ -612,17 +564,27 @@ void Sessions::DatabaseManager::setSelectedSessionNotes(const QString& notes)
   if (selectedSessionNotes() == notes)
     return;
 
-  QSqlQuery q(m_db);
-  q.prepare("UPDATE sessions SET notes = ? WHERE session_id = ?");
-  q.bindValue(0, notes);
-  q.bindValue(1, m_selectedSessionId);
-  if (!q.exec()) [[unlikely]]
-    qWarning() << "[Sessions] setSelectedSessionNotes failed:" << q.lastError().text();
+  // Optimistic local update so QML rebinds without waiting for the worker
+  for (auto& v : m_sessionList) {
+    auto m = v.toMap();
+    if (m.value("session_id").toInt() == m_selectedSessionId) {
+      m["notes"] = notes;
+      v          = m;
+      break;
+    }
+  }
+
+  Q_EMIT sessionsChanged();
+  Q_EMIT selectedSessionChanged();
+
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "setSessionNotes", Qt::QueuedConnection,
+                            Q_ARG(int, m_selectedSessionId), Q_ARG(QString, notes),
+                            Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Deletes a session and its associated readings, raw bytes, tags,
- * and table snapshots.
+ * @brief Dispatches an async cascade-delete to the worker.
  */
 void Sessions::DatabaseManager::deleteSession(int sessionId)
 {
@@ -631,56 +593,14 @@ void Sessions::DatabaseManager::deleteSession(int sessionId)
   if (!isOpen() || m_locked)
     return;
 
-  if (!m_db.transaction()) [[unlikely]] {
-    qWarning() << "[Sessions] deleteSession: transaction() failed:" << m_db.lastError().text();
-    return;
-  }
-
-  // Run each delete and roll back on failure
-  const auto runDelete = [&](const char* sql) -> bool {
-    QSqlQuery q(m_db);
-    q.prepare(QString::fromLatin1(sql));
-    q.bindValue(0, sessionId);
-    if (!q.exec()) [[unlikely]] {
-      qWarning() << "[Sessions] deleteSession:" << sql << "failed:" << q.lastError().text();
-      m_db.rollback();
-      return false;
-    }
-
-    return true;
-  };
-
-  // Cascade delete related rows
-  if (!runDelete("DELETE FROM readings WHERE session_id = ?"))
-    return;
-
-  if (!runDelete("DELETE FROM raw_bytes WHERE session_id = ?"))
-    return;
-
-  if (!runDelete("DELETE FROM table_snapshots WHERE session_id = ?"))
-    return;
-
-  if (!runDelete("DELETE FROM session_tags WHERE session_id = ?"))
-    return;
-
-  if (!runDelete("DELETE FROM columns WHERE session_id = ?"))
-    return;
-
-  if (!runDelete("DELETE FROM sessions WHERE session_id = ?"))
-    return;
-
-  if (!m_db.commit()) [[unlikely]] {
-    qWarning() << "[Sessions] deleteSession: commit() failed:" << m_db.lastError().text();
-    m_db.rollback();
-    return;
-  }
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "deleteSession", Qt::QueuedConnection,
+                            Q_ARG(int, sessionId), Q_ARG(quint64, nextToken()));
 
   if (m_selectedSessionId == sessionId) {
     m_selectedSessionId = -1;
     Q_EMIT selectedSessionChanged();
   }
-
-  refreshSessionList();
 }
 
 /**
@@ -712,20 +632,12 @@ void Sessions::DatabaseManager::confirmDeleteSession(int sessionId)
 }
 
 /**
- * @brief Restores the project embedded in the selected session and starts playback.
+ * @brief Hands the selected session off to the SQLite player for replay.
  */
 void Sessions::DatabaseManager::replaySelectedSession()
 {
   if (m_selectedSessionId < 0 || m_filePath.isEmpty())
     return;
-
-  // Warn early if this session lacks an embedded snapshot
-  if (sessionProjectJson(m_selectedSessionId).isEmpty()) {
-    Misc::Utilities::showMessageBox(tr("No project data"),
-                                    tr("This session does not contain an embedded project file — "
-                                       "the dashboard falls back to a quick-plot layout."),
-                                    QMessageBox::Warning);
-  }
 
   Sessions::Player::instance().openFile(m_filePath, m_selectedSessionId);
 }
@@ -735,96 +647,71 @@ void Sessions::DatabaseManager::replaySelectedSession()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Creates a new tag label in the database.
+ * @brief Dispatches a tag insert to the worker.
  */
 void Sessions::DatabaseManager::addTag(const QString& label)
 {
   if (!isOpen() || label.trimmed().isEmpty())
     return;
 
-  QSqlQuery q(m_db);
-  q.prepare("INSERT OR IGNORE INTO tags (label) VALUES (?)");
-  q.bindValue(0, label.trimmed());
-  q.exec();
-
-  loadTagList();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "addTag", Qt::QueuedConnection,
+                            Q_ARG(QString, label), Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Permanently removes a tag and all its session associations.
+ * @brief Dispatches a tag delete to the worker.
  */
 void Sessions::DatabaseManager::deleteTag(int tagId)
 {
   if (!isOpen() || m_locked)
     return;
 
-  m_db.transaction();
-  QSqlQuery q(m_db);
-  q.prepare("DELETE FROM session_tags WHERE tag_id = ?");
-  q.bindValue(0, tagId);
-  q.exec();
-
-  q.prepare("DELETE FROM tags WHERE tag_id = ?");
-  q.bindValue(0, tagId);
-  q.exec();
-  m_db.commit();
-
-  loadTagList();
-  Q_EMIT selectedSessionChanged();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "deleteTag", Qt::QueuedConnection,
+                            Q_ARG(int, tagId), Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Renames an existing tag.
+ * @brief Dispatches a tag rename to the worker.
  */
 void Sessions::DatabaseManager::renameTag(int tagId, const QString& newLabel)
 {
   if (!isOpen() || newLabel.trimmed().isEmpty())
     return;
 
-  QSqlQuery q(m_db);
-  q.prepare("UPDATE tags SET label = ? WHERE tag_id = ?");
-  q.bindValue(0, newLabel.trimmed());
-  q.bindValue(1, tagId);
-  q.exec();
-
-  loadTagList();
-  Q_EMIT selectedSessionChanged();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "renameTag", Qt::QueuedConnection,
+                            Q_ARG(int, tagId), Q_ARG(QString, newLabel),
+                            Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Assigns a tag to a session.
+ * @brief Dispatches a session/tag association insert to the worker.
  */
 void Sessions::DatabaseManager::assignTagToSession(int sessionId, int tagId)
 {
   if (!isOpen())
     return;
 
-  QSqlQuery q(m_db);
-  q.prepare("INSERT OR IGNORE INTO session_tags (session_id, tag_id) VALUES (?, ?)");
-  q.bindValue(0, sessionId);
-  q.bindValue(1, tagId);
-  q.exec();
-
-  Q_EMIT selectedSessionChanged();
-  refreshSessionList();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "assignTag", Qt::QueuedConnection,
+                            Q_ARG(int, sessionId), Q_ARG(int, tagId),
+                            Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Removes a tag assignment from a session.
+ * @brief Dispatches a session/tag association delete to the worker.
  */
 void Sessions::DatabaseManager::removeTagFromSession(int sessionId, int tagId)
 {
   if (!isOpen())
     return;
 
-  QSqlQuery q(m_db);
-  q.prepare("DELETE FROM session_tags WHERE session_id = ? AND tag_id = ?");
-  q.bindValue(0, sessionId);
-  q.bindValue(1, tagId);
-  q.exec();
-
-  Q_EMIT selectedSessionChanged();
-  refreshSessionList();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "unassignTag", Qt::QueuedConnection,
+                            Q_ARG(int, sessionId), Q_ARG(int, tagId),
+                            Q_ARG(quint64, nextToken()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -832,14 +719,13 @@ void Sessions::DatabaseManager::removeTagFromSession(int sessionId, int tagId)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Exports a single session to a CSV file in the workspace folder.
+ * @brief Picks an output path and dispatches a streaming CSV export to the worker.
  */
 void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
 {
   if (!isOpen() || m_csvExportBusy)
     return;
 
-  // Nest the output under the project title, like the PDF/HTML reports do
   const auto meta         = sessionMetadata(sessionId);
   const QString projTitle = meta.value("project_title").toString();
   const QString safeProj  = sanitiseTitleForPath(projTitle);
@@ -847,143 +733,34 @@ void Sessions::DatabaseManager::exportSessionToCsv(int sessionId)
     QStringLiteral("%1/%2").arg(Misc::WorkspaceManager::instance().path("CSV"), safeProj);
   QDir().mkpath(dir);
 
-  // Prompt for the final file path
   const QString suggested = QStringLiteral("%1/session_%2.csv").arg(dir).arg(sessionId);
   const auto path         = QFileDialog::getSaveFileName(
     nullptr, tr("Export Session to CSV"), suggested, tr("CSV files (*.csv)"));
   if (path.isEmpty())
     return;
 
-  m_csvExportBusy = true;
+  m_csvExportBusy     = true;
+  m_csvExportProgress = 0.0;
+  m_pendingCsvPath    = path;
   Q_EMIT csvExportBusyChanged();
+  Q_EMIT csvExportProgressChanged();
 
-  // Load column order for this session
-  QSqlQuery colQ(m_db);
-  colQ.prepare("SELECT unique_id, group_title, title, units FROM columns "
-               "WHERE session_id = ? ORDER BY column_id ASC");
-  colQ.bindValue(0, sessionId);
-  if (!colQ.exec()) {
-    m_csvExportBusy = false;
-    Q_EMIT csvExportBusyChanged();
-    return;
-  }
-
-  // Build the CSV header from the column metadata
-  std::vector<int> uniqueIds;
-  QStringList headerCells;
-  headerCells.append("Timestamp (s)");
-  while (colQ.next()) {
-    uniqueIds.push_back(colQ.value(0).toInt());
-    const auto group = colQ.value(1).toString();
-    const auto title = colQ.value(2).toString();
-    const auto units = colQ.value(3).toString();
-    auto label       = group + "/" + title;
-    if (!units.isEmpty())
-      label += " (" + units + ")";
-
-    headerCells.append(label);
-  }
-
-  // Fetch readings in (timestamp, reading_id) order
-  QSqlQuery readQ(m_db);
-  readQ.setForwardOnly(true);
-  readQ.prepare(
-    "SELECT timestamp_ns, unique_id, final_numeric_value, final_string_value, is_numeric "
-    "FROM readings WHERE session_id = ? ORDER BY timestamp_ns, reading_id");
-  readQ.bindValue(0, sessionId);
-  if (!readQ.exec()) {
-    m_csvExportBusy = false;
-    Q_EMIT csvExportBusyChanged();
-    return;
-  }
-
-  // uniqueId → column index for fast placement while streaming
-  QMap<int, int> uidToCol;
-  for (int i = 0; i < static_cast<int>(uniqueIds.size()); ++i)
-    uidToCol.insert(uniqueIds[static_cast<size_t>(i)], i);
-
-  // Open the output file
-  QFile file(path);
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    m_csvExportBusy = false;
-    Q_EMIT csvExportBusyChanged();
-    return;
-  }
-
-  QTextStream out(&file);
-  out << headerCells.join(',') << '\n';
-
-  // Row state + helpers for the streaming write
-  qint64 currentTs = -1;
-  QStringList row;
-  const int colCount = static_cast<int>(uniqueIds.size());
-
-  auto flushRow = [&]() {
-    if (currentTs < 0 || row.isEmpty())
-      return;
-
-    out << QString::number(currentTs / 1e9, 'f', 9);
-    for (const auto& cell : std::as_const(row))
-      out << ',' << cell;
-
-    out << '\n';
-  };
-
-  auto startRow = [&](qint64 ts) {
-    currentTs = ts;
-    row.clear();
-    row.reserve(colCount);
-    for (int i = 0; i < colCount; ++i)
-      row.append(QString());
-  };
-
-  // Emit one CSV row per distinct timestamp
-  while (readQ.next()) {
-    const qint64 ts  = readQ.value(0).toLongLong();
-    const int uid    = readQ.value(1).toInt();
-    const auto colIt = uidToCol.constFind(uid);
-    if (colIt == uidToCol.constEnd())
-      continue;
-
-    if (ts != currentTs) {
-      flushRow();
-      startRow(ts);
-    }
-
-    const bool isNumeric = readQ.value(4).toInt() != 0;
-    const int col        = colIt.value();
-    if (isNumeric)
-      row[col] = QString::number(readQ.value(2).toDouble(), 'g', 17);
-    else
-      row[col] = readQ.value(3).toString();
-  }
-
-  // Flush the last in-flight row and close
-  flushRow();
-  file.close();
-
-  m_csvExportBusy = false;
-  Q_EMIT csvExportBusyChanged();
-  Q_EMIT csvExportFinished(path, true);
-
-  Misc::Utilities::revealFile(path);
+  QMetaObject::invokeMethod(m_worker, "runCsvExport", Qt::QueuedConnection,
+                            Q_ARG(int, sessionId), Q_ARG(QString, path));
 }
 
 //--------------------------------------------------------------------------------------------------
-// Session report export (HTML + PDF via QWebEngine)
+// PDF / HTML report export
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Renders a session report using the options bundle from QML.
- * @param sessionId Session to export.
- * @param options   QVariantMap populated by @c ReportOptionsDialog.qml.
+ * @brief Translates QML options + path picker into a worker fetch + main-thread render.
  */
 void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariantMap& options)
 {
   if (!isOpen() || m_pdfExportBusy)
     return;
 
-  // Translate the QVariantMap into typed options
   HtmlReportOptions opts;
   opts.outputPath    = options.value("outputPath").toString();
   opts.companyName   = options.value("companyName").toString();
@@ -1000,7 +777,6 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   opts.lineWidth           = options.value("lineWidth", 1.4).toDouble();
   opts.lineStyle           = options.value("lineStyle", QStringLiteral("solid")).toString();
 
-  // Decode the output format string — defaults to PDF for backwards compat
   const QString fmtStr = options.value("outputFormat", QStringLiteral("pdf")).toString().toLower();
   if (fmtStr == QStringLiteral("html"))
     opts.format = HtmlReportOptions::Format::Html;
@@ -1009,112 +785,28 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   else
     opts.format = HtmlReportOptions::Format::Pdf;
 
-  // Run the export once the output path is known. Heavy work (SQL data
-  // assembly + chart-series load) is chained through QTimer::singleShot so
-  // each stage yields to the event loop — the progress dialog gets a chance
-  // to paint and refresh its status text instead of freezing for seconds.
-  auto startExport = [this, sessionId](HtmlReportOptions opts) {
-    // HTML-only is synchronous — skip the progress dialog
-    const bool reportBusy = (opts.format != HtmlReportOptions::Format::Html);
-    if (reportBusy) {
-      // Wait cursor while the progress dialog is preparing to paint
-      QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+  auto launch = [this, sessionId](HtmlReportOptions opts) {
+    m_pendingPdfOpts      = std::move(opts);
+    m_pendingPdfSessionId = sessionId;
+    m_pendingPdfActive    = true;
 
+    const bool reportBusy = (m_pendingPdfOpts.format != HtmlReportOptions::Format::Html);
+    if (reportBusy) {
       m_pdfExportBusy     = true;
       m_pdfExportProgress = 0.0;
-      m_pdfExportStatus   = tr("Preparing export…");
+      m_pdfExportStatus   = tr("Loading session data…");
       Q_EMIT pdfExportBusyChanged();
       Q_EMIT pdfExportProgressChanged();
     }
 
-    // Stage 3: kick off rendering once data + series are ready
-    auto runRender = [this, reportBusy](ReportData data,
-                                        std::vector<DatasetSeries> series,
-                                        HtmlReportOptions opts) {
-      auto* renderer = new HtmlReport(this);
-
-      if (reportBusy) {
-        connect(renderer,
-                &HtmlReport::progress,
-                this,
-                [this](const QString& status, double percent) {
-                  m_pdfExportStatus   = status;
-                  m_pdfExportProgress = percent;
-                  Q_EMIT pdfExportProgressChanged();
-                });
-      }
-
-      connect(renderer,
-              &HtmlReport::finished,
-              this,
-              [this, renderer, reportBusy](const QString& outputPath, bool ok) {
-                if (reportBusy) {
-                  m_pdfExportBusy     = false;
-                  m_pdfExportProgress = 1.0;
-                  m_pdfExportStatus   = ok ? tr("Done") : tr("Failed");
-                  Q_EMIT pdfExportBusyChanged();
-                  Q_EMIT pdfExportProgressChanged();
-                }
-                Q_EMIT pdfExportFinished(outputPath, ok);
-
-                if (ok) {
-                  // Reveal in Finder/Explorer
-                  Misc::Utilities::revealFile(outputPath);
-                } else {
-                  Misc::Utilities::showMessageBox(
-                    tr("Report Failed"),
-                    tr("Could not generate the report. Check the output path and try again."),
-                    QMessageBox::Warning);
-                }
-
-                renderer->deleteLater();
-              });
-
-      renderer->render(std::move(data), std::move(series), opts);
-    };
-
-    // Stage 2: load chart series (also heavy when many samples are stored)
-    auto runChartLoad = [this, sessionId, reportBusy, runRender](ReportData data,
-                                                                 HtmlReportOptions opts) {
-      std::vector<DatasetSeries> series;
-      if (opts.includeCharts) {
-        if (reportBusy) {
-          m_pdfExportStatus = tr("Loading chart data…");
-          Q_EMIT pdfExportProgressChanged();
-        }
-
-        QTimer::singleShot(
-          0,
-          this,
-          [this, sessionId, data = std::move(data), opts = std::move(opts), runRender]() mutable {
-            auto series = loadChartSeries(m_db, sessionId, 10000);
-            runRender(std::move(data), std::move(series), std::move(opts));
-          });
-      } else {
-        runRender(std::move(data), std::move(series), std::move(opts));
-      }
-    };
-
-    // Stage 1: assemble the data bundle from SQL — defer so the dialog paints
-    QTimer::singleShot(
-      0,
-      this,
-      [this, sessionId, reportBusy, opts = std::move(opts), runChartLoad]() mutable {
-        if (reportBusy) {
-          // Dialog has painted; the progress bar takes over from the wait cursor
-          QGuiApplication::restoreOverrideCursor();
-          m_pdfExportStatus = tr("Loading session data…");
-          Q_EMIT pdfExportProgressChanged();
-        }
-
-        auto data = ReportData::buildFromSession(m_db, sessionId);
-        runChartLoad(std::move(data), std::move(opts));
-      });
+    QMetaObject::invokeMethod(m_worker, "runReportDataLoad", Qt::QueuedConnection,
+                              Q_ARG(int, sessionId),
+                              Q_ARG(bool, m_pendingPdfOpts.includeCharts),
+                              Q_ARG(int, 10000));
   };
 
-  // Preset path skips the picker
   if (!opts.outputPath.isEmpty()) {
-    startExport(std::move(opts));
+    launch(std::move(opts));
     return;
   }
 
@@ -1123,7 +815,6 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   const QString title  = wantsPdf ? tr("Save PDF Report") : tr("Save HTML Report");
   const QString filter = wantsPdf ? tr("PDF files (*.pdf)") : tr("HTML files (*.html)");
 
-  // Default directory matches the per-project nesting of other exporters
   const auto meta         = sessionMetadata(sessionId);
   const QString projTitle = meta.value("project_title").toString();
   const QString safeProj  = sanitiseTitleForPath(projTitle);
@@ -1132,19 +823,18 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
   QDir().mkpath(dir);
 
   const QString baseName  = opts.documentTitle.isEmpty()
-                            ? QStringLiteral("session_%1").arg(sessionId)
-                            : sanitiseTitleForPath(opts.documentTitle);
+                              ? QStringLiteral("session_%1").arg(sessionId)
+                              : sanitiseTitleForPath(opts.documentTitle);
   const QString suggested = QStringLiteral("%1/%2.%3").arg(dir, baseName, ext);
 
   auto* dialog = new QFileDialog(nullptr, title, suggested, filter);
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setFileMode(QFileDialog::AnyFile);
 
-  // fileSelected also fires on cancel (empty path re-enables the QML button)
   connect(dialog,
           &QFileDialog::fileSelected,
           this,
-          [this, dialog, opts, ext, startExport](const QString& path) mutable {
+          [this, dialog, opts, ext, launch](const QString& path) mutable {
             dialog->deleteLater();
 
             if (path.isEmpty()) {
@@ -1152,15 +842,110 @@ void Sessions::DatabaseManager::exportSessionToPdf(int sessionId, const QVariant
               return;
             }
 
-            // Enforce the expected extension
             QString finalPath = path;
             const QString dot = QStringLiteral(".") + ext;
             if (!finalPath.endsWith(dot, Qt::CaseInsensitive))
               finalPath += dot;
 
             opts.outputPath = finalPath;
-            startExport(std::move(opts));
+            launch(std::move(opts));
           });
+
+  dialog->open();
+}
+
+/**
+ * @brief Continues the PDF flow on the main thread once the worker has shipped data.
+ */
+void Sessions::DatabaseManager::renderReportFromPayload(const ReportPayloadPtr& payload)
+{
+  // Stale payload from a superseded request — drop silently
+  if (!m_pendingPdfActive)
+    return;
+
+  if (!payload || payload->sessionId != m_pendingPdfSessionId)
+    return;
+
+  if (!payload->ok) {
+    if (m_pdfExportBusy) {
+      m_pdfExportBusy     = false;
+      m_pdfExportProgress = 0.0;
+      m_pdfExportStatus   = tr("Failed");
+      Q_EMIT pdfExportBusyChanged();
+      Q_EMIT pdfExportProgressChanged();
+    }
+
+    Misc::Utilities::showMessageBox(
+      tr("Report Failed"),
+      payload->error.isEmpty()
+        ? tr("Could not generate the report. Check the output path and try again.")
+        : payload->error,
+      QMessageBox::Warning);
+
+    Q_EMIT pdfExportFinished(QString(), false);
+    m_pendingPdfActive = false;
+    return;
+  }
+
+  const bool reportBusy = (m_pendingPdfOpts.format != HtmlReportOptions::Format::Html);
+
+  auto* renderer = new HtmlReport(this);
+
+  if (reportBusy) {
+    connect(renderer,
+            &HtmlReport::progress,
+            this,
+            [this](const QString& status, double percent) {
+              m_pdfExportStatus   = status;
+              m_pdfExportProgress = percent;
+              Q_EMIT pdfExportProgressChanged();
+            });
+  }
+
+  connect(renderer,
+          &HtmlReport::finished,
+          this,
+          [this, renderer, reportBusy](const QString& outputPath, bool ok) {
+            if (reportBusy) {
+              m_pdfExportBusy     = false;
+              m_pdfExportProgress = 1.0;
+              m_pdfExportStatus   = ok ? tr("Done") : tr("Failed");
+              Q_EMIT pdfExportBusyChanged();
+              Q_EMIT pdfExportProgressChanged();
+            }
+            Q_EMIT pdfExportFinished(outputPath, ok);
+
+            if (ok) {
+              Misc::Utilities::revealFile(outputPath);
+            } else {
+              Misc::Utilities::showMessageBox(
+                tr("Report Failed"),
+                tr("Could not generate the report. Check the output path and try again."),
+                QMessageBox::Warning);
+            }
+
+            m_pendingPdfActive = false;
+            renderer->deleteLater();
+          });
+
+  renderer->render(payload->data, payload->series, m_pendingPdfOpts);
+}
+
+/**
+ * @brief Opens a native QFileDialog to pick a logo for the report.
+ */
+void Sessions::DatabaseManager::pickReportLogo()
+{
+  auto* dialog = new QFileDialog(
+    nullptr, tr("Select logo image"), QString(), tr("Images (*.png *.jpg *.jpeg *.svg)"));
+  dialog->setAcceptMode(QFileDialog::AcceptOpen);
+  dialog->setFileMode(QFileDialog::ExistingFile);
+
+  connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString& path) {
+    dialog->deleteLater();
+    if (!path.isEmpty())
+      Q_EMIT reportLogoPicked(path);
+  });
 
   dialog->open();
 }
@@ -1179,38 +964,30 @@ void Sessions::DatabaseManager::storeProjectMetadata()
 
   const auto& pm  = DataModel::ProjectModel::instance();
   const auto json = QJsonDocument(pm.serializeToJson()).toJson(QJsonDocument::Compact);
-  const auto now  = QDateTime::currentDateTime().toString(Qt::ISODate);
 
-  m_db.transaction();
-  QSqlQuery q(m_db);
-
-  q.prepare("INSERT OR REPLACE INTO project_metadata (key, value) VALUES ('project_json', ?)");
-  q.bindValue(0, QString::fromUtf8(json));
-  q.exec();
-
-  q.prepare("INSERT OR REPLACE INTO project_metadata (key, value) VALUES ('project_title', ?)");
-  q.bindValue(0, pm.title());
-  q.exec();
-
-  q.prepare("INSERT OR REPLACE INTO project_metadata (key, value) VALUES ('last_modified_at', ?)");
-  q.bindValue(0, now);
-  q.exec();
-
-  // created_at only set once
-  q.prepare("INSERT OR IGNORE INTO project_metadata (key, value) VALUES ('created_at', ?)");
-  q.bindValue(0, now);
-  q.exec();
-
-  m_db.commit();
+  setBusy(true);
+  QMetaObject::invokeMethod(m_worker, "storeProjectMetadata", Qt::QueuedConnection,
+                            Q_ARG(QString, QString::fromUtf8(json)),
+                            Q_ARG(QString, pm.title()),
+                            Q_ARG(quint64, nextToken()));
 }
 
 /**
- * @brief Restores the project from the stored JSON in the database.
+ * @brief Dispatches the JSON fetch to the worker; reply continues in onWorkerGlobalProjectJsonReady.
  */
 void Sessions::DatabaseManager::restoreProjectFromDb()
 {
-  // Read the stored project JSON
-  const auto json = projectJsonFromDb();
+  if (!isOpen())
+    return;
+
+  QMetaObject::invokeMethod(m_worker, "fetchGlobalProjectJson", Qt::QueuedConnection);
+}
+
+/**
+ * @brief Worker handed back the global project JSON — finish the restore on the main thread.
+ */
+void Sessions::DatabaseManager::runRestoreProjectFromJson(const QString& json)
+{
   if (json.isEmpty()) {
     Misc::Utilities::showMessageBox(tr("No project data"),
                                     tr("This session file does not contain an embedded project."),
@@ -1218,7 +995,6 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
     return;
   }
 
-  // Parse to validate before asking the user where to save
   QJsonParseError parseError{};
   const auto doc = QJsonDocument::fromJson(json.toUtf8(), &parseError);
   if (parseError.error != QJsonParseError::NoError || doc.isEmpty()) {
@@ -1229,19 +1005,16 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
     return;
   }
 
-  // Suggest a filename based on the stored project title
   const auto title       = doc.object().value("title").toString("Restored Project");
   const auto projectsDir = DataModel::ProjectModel::instance().jsonProjectsPath();
   const auto suggested   = QStringLiteral("%1/%2.ssproj").arg(projectsDir, title);
 
-  // Let the user pick the output path
   const auto path = QFileDialog::getSaveFileName(
     nullptr, tr("Restore Project"), suggested, tr("Serial Studio projects (*.ssproj *.json)"));
 
   if (path.isEmpty())
     return;
 
-  // Write the project file
   QFile file(path);
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     Misc::Utilities::showMessageBox(
@@ -1252,7 +1025,6 @@ void Sessions::DatabaseManager::restoreProjectFromDb()
   file.write(doc.toJson(QJsonDocument::Indented));
   file.close();
 
-  // Open the saved project as the active project
   AppState::instance().setOperationMode(SerialStudio::ProjectFile);
   DataModel::ProjectModel::instance().openJsonFile(path);
 
@@ -1268,7 +1040,6 @@ void Sessions::DatabaseManager::restoreLastDatabase()
   if (path.isEmpty())
     return;
 
-  // Clear stale setting if the file was deleted externally
   if (!QFileInfo::exists(path)) {
     m_settings.remove("Sessions/LastDatabase");
     return;
@@ -1278,130 +1049,215 @@ void Sessions::DatabaseManager::restoreLastDatabase()
 }
 
 //--------------------------------------------------------------------------------------------------
-// Internal helpers
+// Refresh + helpers
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reloads the session list from the database.
+ * @brief Triggers a full cache refresh on the worker.
  */
 void Sessions::DatabaseManager::refreshSessionList()
 {
-  m_sessionList.clear();
   if (!isOpen())
     return;
 
-  QSqlQuery q(m_db);
-  q.prepare("SELECT s.session_id, s.project_title, s.started_at, s.ended_at, s.notes, "
-            "       (SELECT COUNT(DISTINCT timestamp_ns) FROM readings "
-            "        WHERE session_id = s.session_id) "
-            "FROM sessions s ORDER BY s.started_at DESC");
+  QMetaObject::invokeMethod(m_worker, "refreshAll", Qt::QueuedConnection);
+}
 
-  if (!q.exec())
-    return;
+/**
+ * @brief Returns the next mutation token used to correlate worker replies.
+ */
+quint64 Sessions::DatabaseManager::nextToken()
+{
+  return ++m_nextToken;
+}
 
-  while (q.next()) {
-    QVariantMap row;
-    row["session_id"]    = q.value(0).toInt();
-    row["project_title"] = q.value(1).toString();
-    row["started_at"]    = formatDateForDisplay(q.value(2).toString());
-    row["ended_at"]      = formatDateForDisplay(q.value(3).toString());
-    row["notes"]         = q.value(4).toString();
-    row["frame_count"]   = q.value(5).toInt();
+/**
+ * @brief Toggles the busy counter and emits busyChanged on transitions.
+ */
+void Sessions::DatabaseManager::setBusy(bool busy)
+{
+  const bool was = m_outstandingMutations > 0;
+  if (busy)
+    ++m_outstandingMutations;
+  else if (m_outstandingMutations > 0)
+    --m_outstandingMutations;
 
-    // Collect tag labels for this session
-    const auto tags = tagsForSession(q.value(0).toInt());
-    QStringList labels;
-    for (const auto& t : tags)
-      labels.append(t.toMap().value("label").toString());
+  const bool now = m_outstandingMutations > 0;
+  if (was != now)
+    Q_EMIT busyChanged();
+}
 
-    row["tag_labels"] = labels.join(", ");
+//--------------------------------------------------------------------------------------------------
+// Worker reply slots
+//--------------------------------------------------------------------------------------------------
 
-    m_sessionList.append(row);
-  }
+/**
+ * @brief Worker finished opening the file — populate caches and emit signals.
+ */
+void Sessions::DatabaseManager::onWorkerOpened(const QString& filePath,
+                                                const QVariantList& sessionList,
+                                                const QVariantList& tagList,
+                                                bool locked, const QString& passwordHash)
+{
+  m_filePath        = filePath;
+  m_open            = true;
+  m_sessionList     = sessionList;
+  m_tagList         = tagList;
+  const bool wasLck = m_locked;
+  m_locked          = locked;
+  m_passwordHash    = passwordHash;
 
+  m_settings.setValue("Sessions/LastDatabase", filePath);
+
+  setBusy(false);
+
+  Q_EMIT openChanged();
   Q_EMIT sessionsChanged();
-}
-
-/**
- * @brief Reloads the tag list from the database.
- */
-void Sessions::DatabaseManager::loadTagList()
-{
-  m_tagList.clear();
-  if (!isOpen())
-    return;
-
-  QSqlQuery q(m_db);
-  q.prepare("SELECT tag_id, label FROM tags ORDER BY label COLLATE NOCASE");
-  if (!q.exec())
-    return;
-
-  while (q.next()) {
-    QVariantMap tag;
-    tag["tag_id"] = q.value(0).toInt();
-    tag["label"]  = q.value(1).toString();
-    m_tagList.append(tag);
-  }
-
   Q_EMIT tagsChanged();
-}
-
-/**
- * @brief Loads the password hash from project_metadata and updates the lock flag.
- */
-void Sessions::DatabaseManager::loadLockState()
-{
-  m_passwordHash.clear();
-  const bool wasLocked = m_locked;
-  m_locked             = false;
-
-  if (isOpen()) {
-    QSqlQuery q(m_db);
-    q.prepare("SELECT value FROM project_metadata WHERE key = 'lock_password_hash'");
-    if (q.exec() && q.next())
-      m_passwordHash = q.value(0).toString();
-
-    m_locked = !m_passwordHash.isEmpty();
-  }
-
-  if (m_locked != wasLocked)
+  Q_EMIT selectedSessionChanged();
+  if (m_locked != wasLck)
     Q_EMIT lockedChanged();
 }
 
 /**
- * @brief Writes the current password hash into project_metadata, or removes it.
+ * @brief Worker reported an open failure — surface it to the user.
  */
-void Sessions::DatabaseManager::persistLockState()
+void Sessions::DatabaseManager::onWorkerOpenFailed(const QString& filePath, const QString& error)
 {
-  if (!isOpen())
-    return;
+  Q_UNUSED(filePath)
+  setBusy(false);
 
-  QSqlQuery q(m_db);
-  if (m_passwordHash.isEmpty()) {
-    q.prepare("DELETE FROM project_metadata WHERE key = 'lock_password_hash'");
-    if (!q.exec()) [[unlikely]]
-      qWarning() << "[Sessions] persistLockState clear failed:" << q.lastError().text();
-    return;
-  }
-
-  q.prepare(
-    "INSERT OR REPLACE INTO project_metadata (key, value) VALUES ('lock_password_hash', ?)");
-  q.bindValue(0, m_passwordHash);
-  if (!q.exec()) [[unlikely]]
-    qWarning() << "[Sessions] persistLockState write failed:" << q.lastError().text();
+  Misc::Utilities::showMessageBox(
+    tr("Cannot open session file"), error, QMessageBox::Critical);
 }
 
 /**
- * @brief Runs the shared CREATE TABLE IF NOT EXISTS block on the open database.
+ * @brief Worker confirmed the file is closed — clear caches and notify QML.
  */
-void Sessions::DatabaseManager::ensureSchema()
+void Sessions::DatabaseManager::onWorkerClosed()
 {
-  if (!isOpen())
-    return;
+  const bool wasOpen   = m_open;
+  const bool wasLocked = m_locked;
 
-  QSqlQuery q(m_db);
-  createSchema(q);
+  m_open              = false;
+  m_filePath.clear();
+  m_sessionList.clear();
+  m_tagList.clear();
+  m_passwordHash.clear();
+  m_locked            = false;
+  m_selectedSessionId = -1;
+
+  if (wasOpen)
+    Q_EMIT openChanged();
+
+  Q_EMIT sessionsChanged();
+  Q_EMIT tagsChanged();
+  Q_EMIT selectedSessionChanged();
+  if (wasLocked)
+    Q_EMIT lockedChanged();
 }
+
+/**
+ * @brief Worker shipped a refreshed session list — rebroadcast to QML.
+ */
+void Sessions::DatabaseManager::onWorkerSessionListRefreshed(const QVariantList& sessionList)
+{
+  m_sessionList = sessionList;
+  Q_EMIT sessionsChanged();
+  Q_EMIT selectedSessionChanged();
+}
+
+/**
+ * @brief Worker shipped a refreshed tag list — rebroadcast to QML.
+ */
+void Sessions::DatabaseManager::onWorkerTagListRefreshed(const QVariantList& tagList)
+{
+  m_tagList = tagList;
+  Q_EMIT tagsChanged();
+  Q_EMIT selectedSessionChanged();
+}
+
+/**
+ * @brief Worker reported a lock-state change — update local mirror.
+ */
+void Sessions::DatabaseManager::onWorkerLockStateChanged(bool locked, const QString& passwordHash)
+{
+  const bool was = m_locked;
+  m_locked       = locked;
+  m_passwordHash = passwordHash;
+  if (was != locked)
+    Q_EMIT lockedChanged();
+}
+
+/**
+ * @brief Worker confirmed the notes write — propagate to any QML waiting on signal.
+ */
+void Sessions::DatabaseManager::onWorkerNotesUpdated(int sessionId, const QString& notes)
+{
+  Q_UNUSED(notes)
+  if (sessionId == m_selectedSessionId)
+    Q_EMIT selectedSessionChanged();
+}
+
+/**
+ * @brief Worker finished a mutation — clear the busy bit and report errors.
+ */
+void Sessions::DatabaseManager::onWorkerMutationFinished(quint64 token, bool ok,
+                                                          const QString& error)
+{
+  Q_UNUSED(token)
+  setBusy(false);
+
+  if (!ok && !error.isEmpty())
+    qWarning() << "[Sessions] mutation failed:" << error;
+}
+
+/**
+ * @brief Worker is streaming CSV — update the percentage cache.
+ */
+void Sessions::DatabaseManager::onWorkerCsvProgress(double percent)
+{
+  m_csvExportProgress = percent;
+  Q_EMIT csvExportProgressChanged();
+}
+
+/**
+ * @brief Worker finished writing the CSV — report status, reveal in the OS shell.
+ */
+void Sessions::DatabaseManager::onWorkerCsvFinished(const QString& outputPath, bool ok,
+                                                     const QString& error)
+{
+  Q_UNUSED(error)
+  m_csvExportBusy     = false;
+  m_csvExportProgress = ok ? 1.0 : 0.0;
+  m_pendingCsvPath.clear();
+  Q_EMIT csvExportBusyChanged();
+  Q_EMIT csvExportProgressChanged();
+  Q_EMIT csvExportFinished(outputPath, ok);
+
+  if (ok)
+    Misc::Utilities::revealFile(outputPath);
+}
+
+/**
+ * @brief Worker shipped the report data bundle — kick off rendering on the main thread.
+ */
+void Sessions::DatabaseManager::onWorkerReportDataReady(const ReportPayloadPtr& payload)
+{
+  renderReportFromPayload(payload);
+}
+
+/**
+ * @brief Worker handed back the global project JSON — finish the restore flow.
+ */
+void Sessions::DatabaseManager::onWorkerGlobalProjectJsonReady(const QString& json)
+{
+  runRestoreProjectFromJson(json);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Schema (shared with Sessions::Export at session creation time)
+//--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Creates or upgrades the session-log schema on the open database.

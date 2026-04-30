@@ -15,15 +15,25 @@
 
 #ifdef BUILD_COMMERCIAL
 
+#  include <QHash>
 #  include <QObject>
 #  include <QSettings>
-#  include <QSqlDatabase>
+#  include <QSqlQuery>
 #  include <QVariantList>
+
+#  include "Sessions/DatabaseWorker.h"
+#  include "Sessions/HtmlReport.h"
+
+class QThread;
 
 namespace Sessions {
 
 /**
  * @brief Owns the session database file and backs the Database Explorer UI.
+ *
+ * The actual SQLite connection is owned by a @c DatabaseWorker that runs on a
+ * dedicated thread. This object keeps the QML-facing caches and dispatches
+ * mutating operations to the worker via queued slots.
  */
 class DatabaseManager : public QObject {
   // clang-format off
@@ -31,6 +41,9 @@ class DatabaseManager : public QObject {
   Q_PROPERTY(bool isOpen
              READ isOpen
              NOTIFY openChanged)
+  Q_PROPERTY(bool busy
+             READ busy
+             NOTIFY busyChanged)
   Q_PROPERTY(QString filePath
              READ filePath
              NOTIFY openChanged)
@@ -69,6 +82,9 @@ class DatabaseManager : public QObject {
   Q_PROPERTY(double pdfExportProgress
              READ pdfExportProgress
              NOTIFY pdfExportProgressChanged)
+  Q_PROPERTY(double csvExportProgress
+             READ csvExportProgress
+             NOTIFY csvExportProgressChanged)
   Q_PROPERTY(bool locked
              READ locked
              NOTIFY lockedChanged)
@@ -76,10 +92,12 @@ class DatabaseManager : public QObject {
 
 signals:
   void openChanged();
+  void busyChanged();
   void sessionsChanged();
   void selectedSessionChanged();
   void tagsChanged();
   void csvExportBusyChanged();
+  void csvExportProgressChanged();
   void csvExportFinished(const QString& outputPath, bool success);
   void pdfExportBusyChanged();
   void pdfExportProgressChanged();
@@ -100,6 +118,7 @@ public:
   [[nodiscard]] static DatabaseManager& instance();
 
   [[nodiscard]] bool isOpen() const;
+  [[nodiscard]] bool busy() const;
   [[nodiscard]] QString filePath() const;
   [[nodiscard]] QString fileName() const;
   [[nodiscard]] int sessionCount() const;
@@ -109,6 +128,7 @@ public:
   [[nodiscard]] bool pdfExportBusy() const;
   [[nodiscard]] QString pdfExportStatus() const;
   [[nodiscard]] double pdfExportProgress() const;
+  [[nodiscard]] double csvExportProgress() const;
   [[nodiscard]] QVariantList sessionList() const;
   [[nodiscard]] QVariantList tagList() const;
   [[nodiscard]] QVariantList selectedSessionTags() const;
@@ -116,11 +136,11 @@ public:
 
   Q_INVOKABLE [[nodiscard]] QVariantList tagsForSession(int sessionId) const;
   Q_INVOKABLE [[nodiscard]] QVariantMap sessionMetadata(int sessionId) const;
-  Q_INVOKABLE [[nodiscard]] QString projectJsonFromDb() const;
-  Q_INVOKABLE [[nodiscard]] QString sessionProjectJson(int sessionId) const;
   Q_INVOKABLE [[nodiscard]] static QString canonicalDbPath(const QString& projectTitle);
 
   static void createSchema(QSqlQuery& q);
+
+  void shutdown();
 
 public slots:
   void lockDatabase();
@@ -154,28 +174,60 @@ public slots:
 public slots:
   void refreshSessionList();
 
-private:
-  void ensureSchema();
-  void loadTagList();
-  void loadLockState();
-  void persistLockState();
+private slots:
+  void onWorkerOpened(const QString& filePath, const QVariantList& sessionList,
+                      const QVariantList& tagList, bool locked, const QString& passwordHash);
+  void onWorkerOpenFailed(const QString& filePath, const QString& error);
+  void onWorkerClosed();
+  void onWorkerSessionListRefreshed(const QVariantList& sessionList);
+  void onWorkerTagListRefreshed(const QVariantList& tagList);
+  void onWorkerLockStateChanged(bool locked, const QString& passwordHash);
+  void onWorkerNotesUpdated(int sessionId, const QString& notes);
+  void onWorkerMutationFinished(quint64 token, bool ok, const QString& error);
+  void onWorkerCsvProgress(double percent);
+  void onWorkerCsvFinished(const QString& outputPath, bool ok, const QString& error);
+  void onWorkerReportDataReady(const Sessions::ReportPayloadPtr& payload);
+  void onWorkerGlobalProjectJsonReady(const QString& json);
 
 private:
-  QSqlDatabase m_db;
+  void initWorker();
+  [[nodiscard]] quint64 nextToken();
+  void setBusy(bool busy);
+  void renderReportFromPayload(const ReportPayloadPtr& payload);
+  void runRestoreProjectFromJson(const QString& json);
+
+private:
+  QThread* m_thread;
+  DatabaseWorker* m_worker;
+
+  bool m_open;
   QString m_filePath;
   QSettings m_settings;
-  QString m_connectionName;
 
   int m_selectedSessionId;
-  bool m_csvExportBusy;
-  bool m_pdfExportBusy;
   bool m_locked;
+  QString m_passwordHash;
+
+  bool m_csvExportBusy;
+  double m_csvExportProgress;
+  bool m_pdfExportBusy;
   double m_pdfExportProgress;
   QString m_pdfExportStatus;
-  QString m_passwordHash;
 
   QVariantList m_sessionList;
   QVariantList m_tagList;
+
+  // Pending PDF render context — paired with worker reply by sessionId
+  HtmlReportOptions m_pendingPdfOpts;
+  int m_pendingPdfSessionId;
+  bool m_pendingPdfActive;
+
+  // CSV export tracking
+  QString m_pendingCsvPath;
+
+  // Outstanding mutation tokens awaiting worker confirmation
+  quint64 m_nextToken;
+  int m_outstandingMutations;
 };
 
 }  // namespace Sessions

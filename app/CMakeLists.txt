@@ -533,9 +533,11 @@ if(BUILD_COMMERCIAL)
     src/Licensing/LemonSqueezy.h
     src/Licensing/CommercialToken.h
     src/Sessions/DatabaseManager.h
+    src/Sessions/DatabaseWorker.h
     src/Sessions/Export.h
     src/Sessions/HtmlReport.h
     src/Sessions/Player.h
+    src/Sessions/PlayerLoaderWorker.h
     src/Sessions/ReportData.h
     src/ThirdParty/miniaudio.h
     src/UI/Widgets/Output/Base.h
@@ -578,9 +580,11 @@ if(BUILD_COMMERCIAL)
     src/Licensing/Trial.cpp
     src/Licensing/CommercialToken.cpp
     src/Sessions/DatabaseManager.cpp
+    src/Sessions/DatabaseWorker.cpp
     src/Sessions/Export.cpp
     src/Sessions/HtmlReport.cpp
     src/Sessions/Player.cpp
+    src/Sessions/PlayerLoaderWorker.cpp
     src/Sessions/ReportData.cpp
     src/ThirdParty/miniaudio.cpp
     src/Licensing/MachineID.cpp

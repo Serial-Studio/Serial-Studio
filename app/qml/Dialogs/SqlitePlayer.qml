@@ -30,23 +30,34 @@ SmartDialog {
   preferredHeight: layout.implicitHeight
 
   //
-  // Auto show/hide as the database is opened/closed
+  // Auto show/hide as the database is opened/closed (or while it's loading,
+  // so the user gets visible feedback while the worker thread builds the
+  // timestamp index of a large recording)
   //
   Connections {
     target: Cpp_Sessions_Player
     function onOpenChanged() {
       if (Cpp_Sessions_Player.isOpen)
         root.showNormal()
-      else
+      else if (!Cpp_Sessions_Player.loading)
+        root.hide()
+    }
+
+    function onLoadingChanged() {
+      if (Cpp_Sessions_Player.loading)
+        root.showNormal()
+      else if (!Cpp_Sessions_Player.isOpen)
         root.hide()
     }
   }
 
   //
-  // Close the file when the dialog is dismissed
+  // Close the file when the dialog is dismissed (also aborts an in-flight
+  // load so the worker thread doesn't keep building a timestamp index for
+  // a session the user already abandoned)
   //
   onVisibilityChanged: {
-    if (!visible && Cpp_Sessions_Player.isOpen)
+    if (!visible && (Cpp_Sessions_Player.isOpen || Cpp_Sessions_Player.loading))
       Cpp_Sessions_Player.closeFile()
   }
 
@@ -59,14 +70,45 @@ SmartDialog {
     spacing: 4
     anchors.centerIn: parent
 
+    //
+    // Loading placeholder — shown while the worker thread is loading the
+    // session, hidden once isOpen flips true
+    //
+    ColumnLayout {
+      spacing: 12
+      Layout.fillWidth: true
+      Layout.preferredWidth: 280
+      Layout.alignment: Qt.AlignHCenter
+      visible: Cpp_Sessions_Player.loading && !Cpp_Sessions_Player.isOpen
+
+      BusyIndicator {
+        running: parent.visible
+        Layout.alignment: Qt.AlignHCenter
+        Layout.preferredWidth: 48
+        Layout.preferredHeight: 48
+      }
+
+      Label {
+        Layout.alignment: Qt.AlignHCenter
+        color: Cpp_ThemeManager.colors["text"]
+        font: Cpp_Misc_CommonFonts.uiFont
+        text: qsTr("Loading session…")
+      }
+    }
+
+    //
+    // Playback controls — visible only once the worker has finished loading
+    //
     Label {
       Layout.alignment: Qt.AlignLeft
+      visible: Cpp_Sessions_Player.isOpen
       text: Cpp_Sessions_Player.timestamp
       font: Cpp_Misc_CommonFonts.monoFont
     }
 
     Slider {
       Layout.fillWidth: true
+      visible: Cpp_Sessions_Player.isOpen
       value: Cpp_Sessions_Player.progress
       onValueChanged: {
         if (!isNaN(value) && value !== Cpp_Sessions_Player.progress)
@@ -74,13 +116,14 @@ SmartDialog {
       }
     }
 
-    Item { implicitHeight: 4 }
+    Item { implicitHeight: 4; visible: Cpp_Sessions_Player.isOpen }
 
     RowLayout {
       spacing: 8
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.alignment: Qt.AlignHCenter
+      visible: Cpp_Sessions_Player.isOpen
 
       Button {
         icon.width: 18

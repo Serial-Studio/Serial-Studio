@@ -361,6 +361,7 @@ Widgets.Pane {
             icon.width: 18
             icon.height: 18
             text: qsTr("Delete")
+            opacity: enabled ? 1 : 0.5
             visible: !root.operatorMode
             enabled: !Cpp_Sessions_Manager.locked
             icon.source: "qrc:/icons/buttons/trash.svg"

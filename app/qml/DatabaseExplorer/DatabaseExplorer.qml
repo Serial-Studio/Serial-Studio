@@ -37,8 +37,12 @@ Widgets.SmartWindow {
   //
   // Operator mode pins the explorer to the project DB and hides destructive controls
   //
-  readonly property bool operatorMode: typeof app !== "undefined"
-                                       && app.runtimeMode
+  readonly property bool operatorMode: typeof app !== "undefined" && app.runtimeMode
+
+  //
+  // Database busy indicator
+  //
+  readonly property bool busy: Cpp_Sessions_Manager.busy || (Cpp_CommercialBuild && Cpp_Sessions_Player.loading)
 
   //
   // Native window management
@@ -104,16 +108,18 @@ Widgets.SmartWindow {
       anchors.fill: parent
 
       //
-      // Toolbar
+      // Toolbar — hidden entirely in operator mode (deployed shortcuts) so the
+      // explorer becomes a read-only viewer with no destructive controls
       //
       Rectangle {
         id: toolbar
 
         z: 2
+        visible: !root.operatorMode
         Layout.fillWidth: true
         Layout.minimumWidth: 720
-        Layout.minimumHeight: titlebarHeight + 80
-        Layout.maximumHeight: titlebarHeight + 80
+        Layout.minimumHeight: visible ? titlebarHeight + 80 : 0
+        Layout.maximumHeight: visible ? titlebarHeight + 80 : 0
 
         //
         // Display window title on macOS
@@ -337,20 +343,65 @@ Widgets.SmartWindow {
       //
       // Splitter: session list (left) + detail (right)
       //
-      Widgets.PaneSplitter {
-        minLeftWidth: 300
-        minRightWidth: 360
+      Item {
         Layout.topMargin: -1
         Layout.fillWidth: true
         Layout.fillHeight: true
-        settingsKey: "DatabaseExplorer"
 
-        leftPanel: Component {
-          SessionList {}
+        Widgets.PaneSplitter {
+          minLeftWidth: 300
+          minRightWidth: 360
+          anchors.fill: parent
+          settingsKey: "DatabaseExplorer"
+
+          leftPanel: Component {
+            SessionList {}
+          }
+
+          rightPanel: Component {
+            SessionDetail {}
+          }
         }
 
-        rightPanel: Component {
-          SessionDetail {}
+        //
+        // Busy overlay covers the splitter while the worker thread is loading
+        //
+        Rectangle {
+          id: busyOverlay
+
+          z: 100
+          visible: root.busy
+          anchors.fill: parent
+          color: Cpp_ThemeManager.colors["window"]
+
+          MouseArea {
+            anchors.fill: parent
+            preventStealing: true
+            acceptedButtons: Qt.AllButtons
+            cursorShape: Qt.WaitCursor
+            onWheel: function(w) { w.accepted = true }
+          }
+
+          ColumnLayout {
+            spacing: 12
+            anchors.centerIn: parent
+
+            BusyIndicator {
+              running: busyOverlay.visible
+              Layout.alignment: Qt.AlignHCenter
+              Layout.preferredWidth: 48
+              Layout.preferredHeight: 48
+            }
+
+            Label {
+              Layout.alignment: Qt.AlignHCenter
+              color: Cpp_ThemeManager.colors["text"]
+              font: Cpp_Misc_CommonFonts.uiFont
+              text: (Cpp_CommercialBuild && Cpp_Sessions_Player.loading)
+                    ? qsTr("Loading session…")
+                    : qsTr("Working…")
+            }
+          }
         }
       }
     }

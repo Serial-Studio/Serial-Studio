@@ -278,7 +278,9 @@ void Misc::ModuleManager::onQuit()
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().closeFile();
   Sessions::Player::instance().closeFile();
+  Sessions::Player::instance().shutdown();
   Sessions::DatabaseManager::instance().closeDatabase(false);
+  Sessions::DatabaseManager::instance().shutdown();
 #endif
   IO::ConnectionManager::instance().disconnectAllDevices();
   API::Server::instance().removeConnection();

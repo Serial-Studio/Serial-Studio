@@ -290,8 +290,10 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   // Initial theme/font snapshot
   onThemeChanged();
 
-  // Repaint at the dashboard UI tick rate
-  connect(&Misc::TimerEvents::instance(), &Misc::TimerEvents::uiTimeout, this,
+  // Push a new spectrogram row only when the dashboard reports new data this
+  // tick — keeps the waterfall in sync with disconnect / pause / per-widget
+  // pause without falsely scrolling the same FFT row over and over
+  connect(&UI::Dashboard::instance(), &UI::Dashboard::updated, this,
           &Widgets::Waterfall::updateData);
 
   // React to theme + dashboard-font changes (axis labels follow the global scale)

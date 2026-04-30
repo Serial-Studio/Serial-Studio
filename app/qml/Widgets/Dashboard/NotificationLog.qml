@@ -330,16 +330,6 @@ Item {
             font: Cpp_Misc_CommonFonts.customUiFont(1.1, true)
             horizontalAlignment: Text.AlignHCenter
           }
-
-          Label {
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            horizontalAlignment: Text.AlignHCenter
-            color: Cpp_ThemeManager.colors["placeholder_text"]
-            font: Cpp_Misc_CommonFonts.customUiFont(0.9, false)
-            text: qsTr("Dataset transforms and output widget scripts can post events "
-                       + "here via notifyInfo / notifyWarning / notifyCritical.")
-          }
         }
       }
     }
