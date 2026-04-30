@@ -272,6 +272,9 @@ void Misc::ModuleManager::onQuit()
   Misc::ExtensionManager::instance().stopAllPlugins();
   Misc::TimerEvents::instance().stopTimers();
 
+  // Flush any pending project autosave so a last-second layout drag survives quit
+  DataModel::ProjectModel::instance().flushAutoSave();
+
   CSV::Export::instance().closeFile();
   CSV::Player::instance().closeFile();
   MDF4::Export::instance().closeFile();

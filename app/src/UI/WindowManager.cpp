@@ -170,27 +170,27 @@ int UI::WindowManager::zOrder(QQuickItem* item) const
  */
 QJsonObject UI::WindowManager::serializeLayout() const
 {
-  // Serialize window geometries in manual mode
+  // Always capture geometries (even in auto mode) — restoreLayout still tiles
+  // when autoLayout=true, but storing the positions means a later auto→manual
+  // flip restores the cached layout instead of cascading from scratch.
   QJsonObject layout;
-  if (!m_autoLayoutEnabled) {
-    QJsonArray geometries;
-    for (int id : m_windowOrder) {
-      auto* win = m_windows.value(id);
-      if (!win)
-        continue;
+  QJsonArray geometries;
+  for (int id : m_windowOrder) {
+    auto* win = m_windows.value(id);
+    if (!win)
+      continue;
 
-      QJsonObject winGeom;
-      winGeom["id"]     = id;
-      winGeom["x"]      = win->x();
-      winGeom["y"]      = win->y();
-      winGeom["width"]  = win->width();
-      winGeom["height"] = win->height();
-      winGeom["state"]  = win->state();
-      geometries.append(winGeom);
-    }
-
-    layout["geometries"] = geometries;
+    QJsonObject winGeom;
+    winGeom["id"]     = id;
+    winGeom["x"]      = win->x();
+    winGeom["y"]      = win->y();
+    winGeom["width"]  = win->width();
+    winGeom["height"] = win->height();
+    winGeom["state"]  = win->state();
+    geometries.append(winGeom);
   }
+
+  layout["geometries"] = geometries;
 
   // Save window order and layout mode
   QJsonArray orderArray;
@@ -1475,17 +1475,26 @@ void UI::WindowManager::mouseReleaseEvent(QMouseEvent* event)
 {
   // Finalize drag/resize: apply snap, swap order, or commit geometry
   if (autoLayoutEnabled()) {
+    bool reordered = false;
     if (m_dragWindow && m_targetWindow && m_snapIndicatorVisible) {
       const int draggedId    = getIdForWindow(m_dragWindow);
       const int targetId     = getIdForWindow(m_targetWindow);
       const int newIndex     = m_windowOrder.indexOf(targetId);
       const int currentIndex = m_windowOrder.indexOf(draggedId);
       if (draggedId >= 0 && targetId >= 0 && currentIndex >= 0 && newIndex >= 0
-          && newIndex != currentIndex)
+          && newIndex != currentIndex) {
         std::swap(m_windowOrder[currentIndex], m_windowOrder[newIndex]);
+        reordered = true;
+      }
     }
 
     loadLayout();
+
+    // Persist the reordered windowOrder via Taskbar's geometryChanged hook —
+    // auto-mode drags otherwise never reach saveLayout and the new order is
+    // lost on the next connect cycle.
+    if (reordered && m_dragWindow)
+      Q_EMIT geometryChanged(m_dragWindow);
   }
 
   // Manual layout: snap window to indicator region or emit geometry change

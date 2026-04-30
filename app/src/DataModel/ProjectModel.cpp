@@ -78,7 +78,24 @@ DataModel::ProjectModel::ProjectModel()
   , m_customizeWorkspaces(false)
   , m_passwordHash("")
   , m_locked(false)
+  , m_autoSaveTimer(new QTimer(this))
+  , m_autoSaveSuspended(false)
 {
+  // Debounce widgetSettings autosave so a flurry of drag/resize/workspace
+  // events coalesces into a single disk write
+  m_autoSaveTimer->setSingleShot(true);
+  m_autoSaveTimer->setInterval(1500);
+  connect(m_autoSaveTimer, &QTimer::timeout, this, &ProjectModel::autoSave);
+
+  connect(this, &ProjectModel::widgetSettingsChanged, this, [this] {
+    if (m_autoSaveSuspended || m_filePath.isEmpty() || m_locked)
+      return;
+    if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+      return;
+
+    m_autoSaveTimer->start();
+  });
+
   // newJsonFile() before wiring auto-regen — it emits groupsChanged and AppState is mid-init
   newJsonFile();
 
@@ -1444,6 +1461,12 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
   if (document.isEmpty())
     return false;
 
+  // Suspend the debounced autosave so the load itself doesn't immediately
+  // schedule a write of freshly-loaded data
+  m_autoSaveSuspended = true;
+  if (m_autoSaveTimer)
+    m_autoSaveTimer->stop();
+
   // Clear internal data without emitting intermediate signals
   m_groups.clear();
   m_actions.clear();
@@ -1754,6 +1777,10 @@ bool DataModel::ProjectModel::loadFromJsonDocument(const QJsonDocument& document
       f.close();
     }
   }
+
+  // Resume autosave now that load is complete; setModified(false) above already
+  // cleared the dirty flag so the timer won't fire on its own.
+  m_autoSaveSuspended = false;
 
   return true;
 }
@@ -3008,9 +3035,11 @@ void DataModel::ProjectModel::setActiveGroupId(const int groupId)
   else
     m_widgetSettings.remove(Keys::kActiveGroupSubKey);
 
-  // Mark the project dirty and notify listeners
+  // Mark the project dirty and notify listeners — widgetSettingsChanged drives
+  // the debounced autosave so workspace selection persists across reconnects
   setModified(true);
   Q_EMIT activeGroupIdChanged();
+  Q_EMIT widgetSettingsChanged();
 }
 
 /**
@@ -4428,6 +4457,48 @@ QVariantList DataModel::ProjectModel::actionsForDiagram() const
   }
 
   return result;
+}
+
+/**
+ * @brief Silently writes the current project to disk; called from the debounce timer.
+ *
+ * Bypasses validateProject and the @c jsonFileChanged / @c sourceStructureChanged
+ * cascade because nothing structural changed — autosave only flushes layout
+ * and widget-setting edits that already live in @c m_widgetSettings.
+ */
+void DataModel::ProjectModel::autoSave()
+{
+  if (m_autoSaveSuspended)
+    return;
+
+  if (m_filePath.isEmpty() || m_locked || !m_modified)
+    return;
+
+  if (AppState::instance().operationMode() != SerialStudio::ProjectFile)
+    return;
+
+  QFile file(m_filePath);
+  if (!file.open(QFile::WriteOnly)) {
+    qWarning() << "[ProjectModel] Auto-save failed:" << file.errorString();
+    return;
+  }
+
+  const QJsonObject json = serializeToJson();
+  file.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
+  file.close();
+
+  setModified(false);
+}
+
+/**
+ * @brief Flushes any pending debounced autosave synchronously (called on app quit).
+ */
+void DataModel::ProjectModel::flushAutoSave()
+{
+  if (m_autoSaveTimer && m_autoSaveTimer->isActive()) {
+    m_autoSaveTimer->stop();
+    autoSave();
+  }
 }
 
 /**

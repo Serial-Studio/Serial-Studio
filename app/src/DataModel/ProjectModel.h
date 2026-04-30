@@ -29,6 +29,8 @@
 #include "DataModel/Frame.h"
 #include "SerialStudio.h"
 
+class QTimer;
+
 namespace DataModel {
 
 /**
@@ -311,10 +313,14 @@ public slots:
                           const DataModel::OutputWidget& widget,
                           bool rebuildTree = false);
 
+public:
+  void flushAutoSave();
+
 private:
   int nextDatasetIndex();
   bool finalizeProjectSave();
   void clearTransientState();
+  void autoSave();
 
   [[nodiscard]] std::vector<Workspace> buildAutoWorkspaces() const;
 
@@ -357,6 +363,9 @@ private:
 
   QString m_passwordHash;
   bool m_locked;
+
+  QTimer* m_autoSaveTimer;
+  bool m_autoSaveSuspended;
 
   std::vector<DataModel::Workspace> m_sessionWorkspaces;
 
