@@ -702,6 +702,13 @@ void UI::Dashboard::resetData(const bool notify)
   m_pltValues.squeeze();
   m_multipltValues.squeeze();
 
+  // Drop pre-resolved hotpath push tables; they hold pointers into the
+  // m_yAxisData/m_xAxisData/m_activePlots maps cleared below.
+  m_yLinePushes.clear();
+  m_xLinePushes.clear();
+  m_yLinePushes.shrink_to_fit();
+  m_xLinePushes.shrink_to_fit();
+
   // Clear data for 3D plots
 #ifdef BUILD_COMMERCIAL
   m_plotData3D.clear();
@@ -1697,43 +1704,29 @@ void UI::Dashboard::updatePlot3DSeries(int sourceId)
  */
 void UI::Dashboard::updateLineSeries(int sourceId)
 {
-  const int plotCount = widgetCount(SerialStudio::DashboardPlot);
-  Q_ASSERT(m_pltValues.size() == plotCount);
-  Q_ASSERT(m_activePlots.size() == plotCount);
+  Q_ASSERT(m_pltValues.size() == widgetCount(SerialStudio::DashboardPlot));
+  Q_ASSERT(m_activePlots.size() == widgetCount(SerialStudio::DashboardPlot));
 
-  // Track which axes have been pushed to prevent duplicate shifts
-  QSet<int> xAxesMoved;
-  QSet<int> yAxesMoved;
-  for (int i = 0; i < plotCount; ++i) {
-    if (!m_activePlots[i])
-      continue;
-
-    const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
-    if (sourceId >= 0 && yDataset.sourceId != sourceId)
-      continue;
-
-    // Shift Y-axis points; keyed by uniqueId so transformed siblings keep separate buffers
-    if (!yAxesMoved.contains(yDataset.uniqueId)) {
-      yAxesMoved.insert(yDataset.uniqueId);
-      m_yAxisData[yDataset.uniqueId].push(yDataset.numericValue);
+  // Hotpath: walk pre-resolved push tables built in configureLineSeries.
+  // No QSet/QHash allocations, no map lookups, no getDatasetWidget calls.
+  // Fires the push iff at least one consuming plot widget passes BOTH
+  // (sourceId match) and (active) — same conjunction as the original loop.
+  auto fire = [sourceId](const LinePush& p) {
+    for (const auto& c : p.consumers) {
+      if (sourceId >= 0 && c.sourceId != sourceId)
+        continue;
+      if (*c.activeFlag) {
+        p.buf->push(*p.value);
+        return;
+      }
     }
+  };
 
-    // Shift X-axis points
-#ifdef BUILD_COMMERCIAL
-    const auto& tk = Licensing::CommercialToken::current();
-    auto xAxisId =
-      (tk.isValid() && SS_LICENSE_GUARD() && tk.featureTier() >= Licensing::FeatureTier::Trial)
-        ? yDataset.xAxisId
-        : 0;
-#else
-    auto xAxisId = 0;
-#endif
-    if (m_datasets.contains(xAxisId) && !xAxesMoved.contains(xAxisId)) {
-      xAxesMoved.insert(xAxisId);
-      const auto& xDataset = m_datasets[xAxisId];
-      m_xAxisData[xAxisId].push(xDataset.numericValue);
-    }
-  }
+  for (const auto& p : m_yLinePushes)
+    fire(p);
+
+  for (const auto& p : m_xLinePushes)
+    fire(p);
 }
 
 /**
@@ -1868,6 +1861,8 @@ void UI::Dashboard::configureLineSeries()
   m_pltValues.clear();
   m_pltValues.squeeze();
   m_activePlots.clear();
+  m_yLinePushes.clear();
+  m_xLinePushes.clear();
 
   // Reset default X-axis data
   m_pltXAxis = DSP::AxisData(points() + 1);
@@ -1921,6 +1916,62 @@ void UI::Dashboard::configureLineSeries()
 
     // Enable real-time updates for the plot
     m_activePlots.insert(i, true);
+  }
+
+  // Build the pre-resolved push tables consumed by the per-frame hotpath.
+  // Each unique ring buffer (Y keyed by uniqueId, X keyed by xAxisId) becomes
+  // one entry. Multiple plot widgets that share a buffer collapse into the
+  // same entry and each contribute one Consumer{sourceId, activeFlag} record;
+  // the hotpath fires the push as soon as one Consumer passes both checks.
+  QHash<int, std::size_t> yByUid;
+  QHash<int, std::size_t> xByXAxisId;
+  for (int i = 0; i < widgetCount(SerialStudio::DashboardPlot); ++i) {
+    const auto& yDataset   = getDatasetWidget(SerialStudio::DashboardPlot, i);
+    const LinePush::Consumer consumer{yDataset.sourceId, &m_activePlots[i]};
+
+    // Y push entry — one per uniqueId
+    auto yIt = m_yAxisData.find(yDataset.uniqueId);
+    if (yIt != m_yAxisData.end()) {
+      auto cacheIt = yByUid.find(yDataset.uniqueId);
+      if (cacheIt == yByUid.end()) {
+        LinePush push;
+        push.consumers.push_back(consumer);
+        push.buf   = &yIt.value();
+        push.value = &yDataset.numericValue;
+        yByUid.insert(yDataset.uniqueId, m_yLinePushes.size());
+        m_yLinePushes.push_back(std::move(push));
+      } else {
+        m_yLinePushes[cacheIt.value()].consumers.push_back(consumer);
+      }
+    }
+
+    // X push entry — one per xAxisId
+#ifdef BUILD_COMMERCIAL
+    const auto& tk    = Licensing::CommercialToken::current();
+    const int xAxisId = (tk.isValid() && SS_LICENSE_GUARD()
+                         && tk.featureTier() >= Licensing::FeatureTier::Trial)
+                          ? yDataset.xAxisId
+                          : 0;
+#else
+    const int xAxisId = 0;
+#endif
+
+    auto xDsIt = m_datasets.find(xAxisId);
+    if (xDsIt == m_datasets.end())
+      continue;
+
+    auto& xBuf   = m_xAxisData[xAxisId];
+    auto cacheIt = xByXAxisId.find(xAxisId);
+    if (cacheIt == xByXAxisId.end()) {
+      LinePush push;
+      push.consumers.push_back(consumer);
+      push.buf   = &xBuf;
+      push.value = &xDsIt.value().numericValue;
+      xByXAxisId.insert(xAxisId, m_xLinePushes.size());
+      m_xLinePushes.push_back(std::move(push));
+    } else {
+      m_xLinePushes[cacheIt.value()].consumers.push_back(consumer);
+    }
   }
 }
 

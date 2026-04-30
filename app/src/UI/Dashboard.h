@@ -209,6 +209,19 @@ private:
   void buildDatasetReferences();
 
 private:
+  /**
+   * @brief Pre-resolved descriptor that pushes one value into one ring buffer.
+   */
+  struct LinePush {
+    struct Consumer {
+      int sourceId;
+      const bool* activeFlag;
+    };
+    std::vector<Consumer> consumers;
+    DSP::AxisData* buf;
+    const double* value;
+  };
+
   QSettings m_settings;
   int m_points;
   int m_widgetCount;
@@ -241,6 +254,9 @@ private:
   QVector<DSP::AxisData> m_fftValues;
   QVector<DSP::LineSeries> m_pltValues;
   QVector<DSP::MultiLineSeries> m_multipltValues;
+
+  std::vector<LinePush> m_yLinePushes;
+  std::vector<LinePush> m_xLinePushes;
 #ifdef BUILD_COMMERCIAL
   QVector<DSP::LineSeries3D> m_plotData3D;
   QVector<DSP::AxisData> m_waterfallValues;
